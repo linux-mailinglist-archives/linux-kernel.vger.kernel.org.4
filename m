@@ -2,107 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EB466E33B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AE966E33F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjAQQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S229609AbjAQQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAQQQp (ORCPT
+        with ESMTP id S231216AbjAQQR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:16:45 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E593BDBF
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:16:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673972204; x=1705508204;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XwlxHdD5rlND5VEwSoVAqP7En/H6Ew9PGTb3n39d0Xs=;
-  b=XJzAC11eKR/wiyYbgj1fXwbybnUpxZSD2eivKYeUXsXXA4G0lc6NqLIV
-   CuE9JL4rjNUObAbcJsKp/v63KiQ9+9dKXIpDTXSsgaIowKP/OxFgQ2NbB
-   0pCanuKWrauA96dO80GGG42meaYd++/uCDG8U7QKABWPUrOYxy2AqlCE7
-   PD2o44xZQDK5WXNDiso7LCdp0UuMdUr5zNYPx2SKqLKNlA7PttTSQDY2h
-   TUjhh8MmGa6kD6m2a2R0z4K8e/4efkLX5qSBd4Xqvf9CboLfjUZ8d/nDz
-   L0usbcjbfBziixL3PU4l90GsUfSI8fEU7d9OfppaU5AmM84cv1kJSjI3p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="410973909"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="410973909"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:16:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="833226900"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="833226900"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2023 08:16:43 -0800
-Received: from [10.212.252.43] (kliang2-mobl1.ccr.corp.intel.com [10.212.252.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1C81E580DA6;
-        Tue, 17 Jan 2023 08:16:43 -0800 (PST)
-Message-ID: <7760ae92-e713-603a-217a-25035523b1b2@linux.intel.com>
-Date:   Tue, 17 Jan 2023 11:16:42 -0500
+        Tue, 17 Jan 2023 11:17:29 -0500
+X-Greylist: delayed 2894 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 08:17:26 PST
+Received: from MTA-06-3.privateemail.com (mta-06-3.privateemail.com [198.54.127.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83713D082
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:17:26 -0800 (PST)
+Received: from mta-06.privateemail.com (localhost [127.0.0.1])
+        by mta-06.privateemail.com (Postfix) with ESMTP id C01FD18000A0;
+        Tue, 17 Jan 2023 11:17:25 -0500 (EST)
+Received: from bpappas-XPS-13-9310.ucf.edu (050-088-208-136.res.spectrum.com [50.88.208.136])
+        by mta-06.privateemail.com (Postfix) with ESMTPA id 33D7418000AA;
+        Tue, 17 Jan 2023 11:17:14 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1673972245;
+        bh=2SmQASqnGnVtA5Kz3u+Cb46Sf35Z/fNjuOekQAR+6fI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lFROjVOR69QpsJhr6SmMOchJrEhs1Zog59GnudKjzVLI8LcYH2khYP6v6y5NWngA0
+         p/OFzS07M/QPDyyxlE1RAN8pk5wnf2f2XZV7+DssRBUrT6Kto8YRMl5diB/ttDMNnj
+         IgHbQZ9F5n0sbgUJ6soy4hqIIkze9J50ctLimJtV4gPvJbPDoj6EjlIUOElzUHRmGd
+         uvoGYX2ryVbmOrIFx7nRdkoFq+gq+vzHtlrInKRk9C3oBbOwRDOkxN802Bf/9nRV2M
+         Maf3aMWhHXpT8hLdcyqKmpL4vBjxZdR3vV2kAI98vY+UJDBewN2q1RC8XdOT3TE3cQ
+         MnKuXqhS5NEqw==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     andy@kernel.org
+Cc:     ailus@linux.intel.com, bpappas@pappasbrent.com, error27@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org
+Subject: [PATCH v2] media: atomisp: pci: Replace bytes macros with functions
+Date:   Tue, 17 Jan 2023 11:16:59 -0500
+Message-Id: <20230117161659.31232-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y8bARLuFubMVILIN@smile.fi.intel.com>
+References: <Y8bARLuFubMVILIN@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/4] perf/x86/intel: Add Emerald Rapids
-Content-Language: en-US
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com
-References: <20230106160449.3566477-1-kan.liang@linux.intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230106160449.3566477-1-kan.liang@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo,
+Thank you for the advice Andy.
+I took a look in overflow.h and found the size_mul function, I assume this
+is what I should be using to prevent accidental overflow.
+I also removed the inline keyword from the function definitions because
+Dan (error27@gmail.com) recommended that I do so in reply to an earlier
+patch I submitted.
 
-It seems that only the last two patches of the series are merged into
-the tip.git perf/urgent branch.
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+Changelog:
+V1 -> V2: Use size_mul to perform size_t multiplication without risk of
+		  overflow.
+		  Remove the inline keyword from function definitions.
 
-Could you please take the first two patches as well? They similarly add
-the CPU model number for perf core driver and perf cstate driver.
+ .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-Please let me know if you have any questions regarding the first two
-patches. If you want me to resend the patches, please let me know as well.
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index f08564f58242..7e111df5c09d 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -98,17 +98,27 @@
+ #include "sh_css_frac.h"
+ #include "ia_css_bufq.h"
+ 
+-#define FPNTBL_BYTES(binary) \
+-	(sizeof(char) * (binary)->in_frame_info.res.height * \
+-	 (binary)->in_frame_info.padded_width)
++static size_t fpntbl_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(sizeof(char),
++			size_mul(binary->in_frame_info.res.height,
++				 binary->in_frame_info.padded_width));
++}
+ 
+-#define SCTBL_BYTES(binary) \
+-	(sizeof(unsigned short) * (binary)->sctbl_height * \
+-	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
++static size_t sctbl_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(sizeof(unsigned short),
++				size_mul(binary->sctbl_height,
++					 size_mul(binary->sctbl_aligned_width_per_color,
++						  IA_CSS_SC_NUM_COLORS)));
++}
+ 
+-#define MORPH_PLANE_BYTES(binary) \
+-	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
+-	 (binary)->morph_tbl_height)
++static size_t morph_plane_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(SH_CSS_MORPH_TABLE_ELEM_BYTES,
++					size_mul(binary->morph_tbl_aligned_width,
++						 binary->morph_tbl_height));
++}
+ 
+ /* We keep a second copy of the ptr struct for the SP to access.
+    Again, this would not be necessary on the chip. */
+@@ -3279,7 +3289,7 @@ sh_css_params_write_to_ddr_internal(
+ 	if (binary->info->sp.enable.fpnr) {
+ 		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
+ 						   &ddr_map_size->fpn_tbl,
+-						   (size_t)(FPNTBL_BYTES(binary)),
++						   fpntbl_bytes(binary),
+ 						   params->config_changed[IA_CSS_FPN_ID],
+ 						   &err);
+ 		if (err) {
+@@ -3304,7 +3314,7 @@ sh_css_params_write_to_ddr_internal(
+ 
+ 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
+ 						   &ddr_map_size->sc_tbl,
+-						   SCTBL_BYTES(binary),
++						   sctbl_bytes(binary),
+ 						   params->sc_table_changed,
+ 						   &err);
+ 		if (err) {
+@@ -3538,8 +3548,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_x[i],
+ 					    virt_size_tetra_x[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
+@@ -3549,8 +3558,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_y[i],
+ 					    virt_size_tetra_y[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
+-- 
+2.34.1
 
-Thanks,
-Kan
-
-On 2023-01-06 11:04 a.m., kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> From core PMU's perspective, Emerald Rapids is the same as the Sapphire
-> Rapids. The only difference is the event list, which will be
-> supported in the perf tool later.
-> 
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  arch/x86/events/intel/core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 29d2d0411caf..72943243c95c 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -6487,6 +6487,7 @@ __init int intel_pmu_init(void)
->  		break;
->  
->  	case INTEL_FAM6_SAPPHIRERAPIDS_X:
-> +	case INTEL_FAM6_EMERALDRAPIDS_X:
->  		pmem = true;
->  		x86_pmu.late_ack = true;
->  		memcpy(hw_cache_event_ids, spr_hw_cache_event_ids, sizeof(hw_cache_event_ids));
