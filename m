@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E0966D5B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7068566D5B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbjAQFmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 00:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S229477AbjAQFnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 00:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjAQFmk (ORCPT
+        with ESMTP id S235442AbjAQFnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:42:40 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DB318B0D;
-        Mon, 16 Jan 2023 21:42:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=/WKOGoBxBJ7e9eHs1d/Wh7HfUyq9RNCraETWyfvIuN4=; b=RERJfXS4VIkaB3Go+ku9pr/fo5
-        6+TYiTA2e6th8ndw1sLQ2VFzq51ZTp9I55eF1kqXd+SsQ92OTY/hU1dquGLvf5Gx09tOJjRA3kw6Y
-        1pubaq+16KKv8jFjE6bLj9sVyy9FdianTkSAFu30W/5fGbTguX6iWQwv1XX6L/co9xjiOLfLPVZxW
-        1ehDLrCV+bzSuZcVXcWF5HYBXPwjJkI/6FTTevATBM7qrOdcqBdFSUU38ieTVZQ+mipMdwaMoHts0
-        3PytaHowkV6c3EFF0sq81+IRMjGzNDHKe+dSma1HH1wjVzL6kaW5FFca0tGBssR0n0X2TDbNRDlFE
-        +Q4hdnGA==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHejy-00Czpc-PB; Tue, 17 Jan 2023 05:42:34 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: sunplus: fix printk format warning
-Date:   Mon, 16 Jan 2023 21:42:32 -0800
-Message-Id: <20230117054232.24023-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 00:43:08 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819141EFDA;
+        Mon, 16 Jan 2023 21:43:07 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id i28so1883589qkl.6;
+        Mon, 16 Jan 2023 21:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=10fg20WmnP4mWOYcGw2ELSTfNyC1aYUzasENYBg+S6s=;
+        b=Z48+V+FonNrENMrfv6Uzm6hPkqHaQMp9vyrgkkg7CDgs1rajGNGLf4vD7AgjbKNTUA
+         bPLeJvkPIlBVnjLRPLuNyHnX05pIcqz1AovVSeAGSgZp7iNSeXXToMXkB9EwpvmfIVRM
+         6ghPrXMCLmVlUe0Pt9uZWbkLosudBgaUlSFbYu3bgcjTJKwGX7UTRGQoFnN1LCkwPX5c
+         PQRclFx57uh9rzJD3GxIw+Cj3pzkcnUVkYLsHAUnlkFH/W3qQ8Hf8KYRObSlqGDrhWVq
+         LS7bVwlUK8p7K+OBEIRcHNXrE5/E0ODMoYs75BA6VXMSL7WXDLs1SM7XR5Gc7+j5p9Lo
+         5L4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=10fg20WmnP4mWOYcGw2ELSTfNyC1aYUzasENYBg+S6s=;
+        b=xl3LYQZRxwLrqzxzxSNAZKGbMZ6pAuEUUuJ2U9LNPTh4KivhT8QZnuH841gKQ9LaYB
+         4/P7vLFtsMzkFzJdf09yxngR5f3o2tZTQhV9t/Ap7yMXV8/ksFbfQIKh+6K6tbjzHl4T
+         m38S2P8FoWmcNfleAGJm/XblKoQM/o/mYCo5xRt+OEOnygCZG/ZQURmXMZ4Bzfm1zZTK
+         1HO/Ixa7cpGI5M5D1rkY2ey+z0kW5UxE/C3EFZmh+AY9X6aT7TdQ+l8uNXgqBfvOCIqh
+         1jdmo/ykAz+ZkNuRyblP2YH3CZzCRDWwcvA3dSZWVGhl31qcuiwb8tfWtCvkhR4JmN5z
+         2O2w==
+X-Gm-Message-State: AFqh2kofLTOL5nEsxABVFLY7MheOduYIiWxOdY1m+wQ2wHHZxUuq4aHa
+        oRezYoMJYY0VMwUliGtuKdijiaDLy+LMc9n56g1s01rabL7hG1+iZAA=
+X-Google-Smtp-Source: AMrXdXsiG3nLbyq0OQonXYvwUpYbN97DeSptXwQL30DhfTywlNZ9k4IZrkDk/96iy+UACwwO2fXqdJYPdRHynfjejko=
+X-Received: by 2002:a05:620a:667:b0:702:be9:9915 with SMTP id
+ a7-20020a05620a066700b007020be99915mr95345qkh.400.1673934186333; Mon, 16 Jan
+ 2023 21:43:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHbf0-EHP0cRDhOD_3Mf4aRzndoVYGbd3j3vxwUOh9_cHp+h1Q@mail.gmail.com>
+In-Reply-To: <CAHbf0-EHP0cRDhOD_3Mf4aRzndoVYGbd3j3vxwUOh9_cHp+h1Q@mail.gmail.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Tue, 17 Jan 2023 10:42:55 +0500
+Message-ID: <CABXGCsMz6qs0qSMoF6F3B_kJt+UwULtfpp2pCNxUuWAqAryniA@mail.gmail.com>
+Subject: Re: [6.2][regression] after commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae
+ stopping working wifi mt7921e
+To:     Mike Lothian <mike@fireburn.co.uk>
+Cc:     nbd@nbd.name,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-wireless@vger.kernel.org, lorenzo@kernel.org,
+        sujuan.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use %pap to satisfy the printk format warning:
+On Tue, Jan 17, 2023 at 5:33 AM Mike Lothian <mike@fireburn.co.uk> wrote:
+>
+> Hi
+>
+> I'm struggling to find these patches on Patchwork, or apply the saved
+> raw patches to rc4
+>
+> If I'm missing them, would you mind posting the link
 
-drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
-drivers/rtc/rtc-sunplus.c:243:33: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-  243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
-      |                                          ~^
+https://patchwork.kernel.org/project/linux-wireless/patch/20230113105848.34642-3-nbd@nbd.name/
 
-Fixes: fad6cbe9b2b4 ("rtc: Add driver for RTC in Sunplus SP7021")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Vincent Shih <vincent.sunplus@gmail.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
----
- drivers/rtc/rtc-sunplus.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff -- a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
---- a/drivers/rtc/rtc-sunplus.c
-+++ b/drivers/rtc/rtc-sunplus.c
-@@ -240,8 +240,8 @@ static int sp_rtc_probe(struct platform_
- 	if (IS_ERR(sp_rtc->reg_base))
- 		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->reg_base),
- 					    "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
--	dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
--		sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
-+	dev_dbg(&plat_dev->dev, "res = %pap, reg_base = 0x%lx\n",
-+		&sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
- 
- 	sp_rtc->irq = platform_get_irq(plat_dev, 0);
- 	if (sp_rtc->irq < 0)
+-- 
+Best Regards,
+Mike Gavrilov.
