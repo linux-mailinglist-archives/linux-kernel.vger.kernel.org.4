@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF80B66D9F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B0066D9F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbjAQJ3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
+        id S235845AbjAQJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236632AbjAQJ3S (ORCPT
+        with ESMTP id S236598AbjAQJaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:29:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3699A14EA7;
-        Tue, 17 Jan 2023 01:28:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C465F60F5F;
-        Tue, 17 Jan 2023 09:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845AAC433EF;
-        Tue, 17 Jan 2023 09:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673947679;
-        bh=HzoUFm8ZxWGesE/t2Wsdhufc0IfoxeX6Yxj4yw1QEE4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RwresCdD2gZb2ccmm56KzhKpTU5FytxFpwTm6HJ4lVilx0RkwqpxLIEGXthBQYeY/
-         LiDe/jXmTSIbB8vHa1/CaJhHHDrESKjwXtLaTRgcb4kSGwuNlZ7f41BE5a7Bk+DUVI
-         ylu3U/2i+vjvdVwnsDoKXE5eLGRmaCjm27KaQBAe/GeXoNlXJYK4VVaXbYCzi8aOTl
-         tH+C8q2IJf+p1yffjTdq0RpowJ3rPKTc/matYz5mYhvMHWG8H1+goapIvHAKdkDOP0
-         GBrI/e9UVu94CJ+dMVXBK7lJsr5BFaWVify1rmsZDr6a5HAJnnwTrvVwapVP4mL31M
-         dIesoweRf3dOg==
-Message-ID: <55308aa9-029d-8f00-7781-8841e3911e1c@kernel.org>
-Date:   Tue, 17 Jan 2023 11:27:53 +0200
+        Tue, 17 Jan 2023 04:30:18 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2D02F79B;
+        Tue, 17 Jan 2023 01:28:54 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id tz11so9504776ejc.0;
+        Tue, 17 Jan 2023 01:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jn2DB03+zQz9YkRWZcTUuqN6EwsjvQ9H80/PTg1Q3xc=;
+        b=mt43Ik9DaqYec+BGI5vs1pyXnQg1sn6Pa6JrQt5XGWgbzaY0xaTaPqi43HjuYXUFbm
+         wPvl/+ibsbxMl91qcC0hfXrZbgtCFQMo/sekdOJmELK7xalN6dAIU1KbP7MXjnzcD6p/
+         f0OANhmUWZdPwGgQD/51SsfOT3/kZr0JFPfROlAxXUvwBf/Pg3CGcKalJRUtls4Tuw7p
+         /Up6enmv9yjrgDWk7mKr4IHBxHQO5zxyKprVPwFFbi8W8c9sOwVJYdJgKVjdYPlAMVm+
+         DYHPMklo3CJCV0KeQMnWfEdjFErTgBr6Zq01pk9l9d0W2N9GFLKwDCqGhZlARP5VfohM
+         Aolg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jn2DB03+zQz9YkRWZcTUuqN6EwsjvQ9H80/PTg1Q3xc=;
+        b=tiBNub6pPQx9g/K12azvKFji8ZABDPVUq45UI4RvIaTdrEVDGvvkOgwv1lP1m+N2uM
+         4w36GO+EbzasJmoQQltSsZEya1ElMu1aDq6FE1suEosf12CfsiR1xtvGewBuLbkbbFcT
+         sAacKlXmKlDo+HvUtPN5IY56J4e5dJUfoQyrUdr5yGurk5K+HuuFJZaOby5nx//5Cro1
+         77gduYrFfgZUrE82iPH5ueSK0UmFw4td/T8tgO3A2rJz/yjsIQQQYsGSAB+nawOFBQWy
+         XKZp92F2sad71kNB1ViqZ55GLQwrEFErPU0uxWjw4LuWniNUbSV63G5EBQtQwQHzTOoF
+         G+PQ==
+X-Gm-Message-State: AFqh2krbGpU5LBR+OBkhVxllqwBGL6Xaj5GDF4UBwt/8ZJ5iSwYo10pV
+        TLU813+pXmNEW0MVCES/j2X6B3pElQ+DhT0Y/vE=
+X-Google-Smtp-Source: AMrXdXuA93WO+IMVhM0pq3YPloZN4oMOrSL1EXDmhihlX79PLc7Vpo7cau2bsGQMrarARaqibi8O0Z1TFFtMD4jWYho=
+X-Received: by 2002:a17:906:86cc:b0:872:1ad9:460b with SMTP id
+ j12-20020a17090686cc00b008721ad9460bmr143128ejy.152.1673947733463; Tue, 17
+ Jan 2023 01:28:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vigneshr@ti.com, srk@ti.com
-References: <20230116044517.310461-1-s-vadapalli@ti.com>
- <Y8T8+rWrvv6gfNxa@unreal> <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
- <b33c25c5-c93f-6860-b0a5-58279022a91c@kernel.org>
- <aebaa171-bf4e-c143-a186-a37cd34b724e@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <aebaa171-bf4e-c143-a186-a37cd34b724e@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230116225343.26336-1-iuliana.prodan@oss.nxp.com>
+In-Reply-To: <20230116225343.26336-1-iuliana.prodan@oss.nxp.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Tue, 17 Jan 2023 11:28:41 +0200
+Message-ID: <CAEnQRZDXPtE096aPHRcggdzeha5MeUaWsXqncYE33cdYBByV6Q@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: add module parameter to ignore
+ ready flag from remote processor
+To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        SOF-Team <sof-team@msteams.nxp.com>,
+        Mpuaudiosw <Mpuaudiosw@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,195 +79,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Siddharth,
+On Tue, Jan 17, 2023 at 1:21 AM Iuliana Prodan (OSS)
+<iuliana.prodan@oss.nxp.com> wrote:
+>
+> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+>
+> There are cases when we want to test a simple "hello world"
+> application on the DSP and we don't have IPC between the cores.
+> Therefore, skip the wait for remote processor to start.
+>
+> Added "ignoreready" flag while inserting the module to ignore
+> remote processor reply after start.
+> By default, this is off - do not ignore reply from rproc.
 
-On 17/01/2023 07:00, Siddharth Vadapalli wrote:
-> Roger, Leon,
-> 
-> On 16/01/23 21:31, Roger Quadros wrote:
->> Hi Siddharth,
->>
->> On 16/01/2023 09:43, Siddharth Vadapalli wrote:
->>>
->>>
->>> On 16/01/23 13:00, Leon Romanovsky wrote:
->>>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
->>>>> The am65_cpts_release() function is registered as a devm_action in the
->>>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
->>>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
->>>>> actions associated with the am65-cpsw driver's device.
->>>>>
->>>>> In the event of probe failure or probe deferral, the platform_drv_probe()
->>>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
->>>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
->>>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
->>>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
->>>>> hardware is assumed to be powered on at this point. However, the hardware
->>>>> is powered off before the devm actions are executed.
->>>>>
->>>>> Fix this by getting rid of the devm action for am65_cpts_release() and
->>>>> invoking it directly on the cleanup and exit paths.
->>>>>
->>>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
->>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>>>> ---
->>>>> Changes from v1:
->>>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
->>>>>    error was reported by kernel test robot <lkp@intel.com> at:
->>>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
->>>>> 2. Collect Reviewed-by tag from Roger Quadros.
->>>>>
->>>>> v1:
->>>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
->>>>>
->>>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
->>>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
->>>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
->>>>>  3 files changed, 18 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>> index 5cac98284184..00f25d8a026b 100644
->>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
->>>>>  	return 0;
->>>>>  }
->>>>>  
->>>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
->>>>> +{
->>>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
->>>>
->>>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
->>>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
->>>>
->>>> How is it possible to have common->cpts == NULL?
->>>
->>> Thank you for reviewing the patch. I realize now that checking
->>> CONFIG_TI_K3_AM65_CPTS is unnecessary.
->>>
->>> common->cpts remains NULL in the following cases:
-> 
-> I realized that the cases I mentioned are not explained clearly. Therefore, I
-> will mention the cases again, along with the section of code they correspond to,
-> in order to make it clear.
-> 
-> Case-1: am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not
-> enabled. This corresponds to the following section within am65_cpsw_init_cpts():
-> 
-> if (!IS_ENABLED(CONFIG_TI_K3_AM65_CPTS))
-> 	return 0;
-> 
-> In this case, common->cpts remains NULL, but it is not a problem even if the
-> am65_cpsw_nuss_probe() fails later, since the am65_cpts_release() function is
-> NOP. Thus, this case is not an issue.
-> 
-> Case-2: am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not present
-> in the device tree. This corresponds to the following section within
-> am65_cpsw_init_cpts():
-> 
-> node = of_get_child_by_name(dev->of_node, "cpts");
-> if (!node) {
-> 	dev_err(dev, "%s cpts not found\n", __func__);
-> 	return -ENOENT;
-> }
-> 
-> In this case as well, common->cpts remains NULL, but it is not a problem because
-> the probe fails and the execution jumps to "err_of_clear", which doesn't invoke
-> am65_cpsw_cpts_cleanup(). Therefore, common->cpts being NULL is not a problem.
-> 
-> Case-3 and Case-4 are described later in this mail.
-> 
->>> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
->>> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
->>> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
->>> function with a return value of 0 when cpts is disabled.
->>
->> In this case common->cpts is not NULL and is set to error pointer.
->> Probe will continue normally.
->> Is it OK to call any of the cpts APIs with invalid handle?
->> Also am65_cpts_release() will be called with invalid handle.
-> 
-> Yes Roger, thank you for pointing it out. When I wrote "cpts is disabled", I had
-> meant that the following section is executed within the am65_cpsw_init_cpts()
-> function:
-> 
-> Case-3:
-> 
-> cpts = am65_cpts_create(dev, reg_base, node);
-> if (IS_ERR(cpts)) {
-> 	int ret = PTR_ERR(cpts);
-> 
-> 	of_node_put(node);
-> 	if (ret == -EOPNOTSUPP) {
-> 		dev_info(dev, "cpts disabled\n");
-> 		return 0;
-> 	}
-> 
-> ......
-> }
-> 
-> Leon,
-> 
-> In the above code, when the section corresponding to:
-> dev_info(dev, "cpts disabled\n");
-> 
-> is executed, CONFIG_TI_K3_AM65_CPTS is enabled. Therefore, the
-> am65_cpts_release() is not NOP. If the probe fails after the call to
-> am65_cpsw_init_cpts(), then the am65_cpsw_cpts_cleanup() function will be called
-> in the cleanup path of probe, which needs to check for common->cpts not being
-> NULL. This is because common->cpts is NULL after returning 0 from the
-> am65_cpsw_init_cpts() function at the
-> dev_info(dev, "cpts disabled\n");
-> 
-> section. Thus, I believe that in this case, am65_cpts_release() shouldn't be
-> invoked from the am65_cpsw_cpts_cleanup() function, since it would have already
-> been invoked from am65_cpts_create()'s cleanup path. This can be ensured by
-> checking whether common->cpts is NULL or not, before invoking
-> am65_cpts_release() within am65_cpsw_cpts_cleanup().
-> 
-
-Yes, I agree.
-
->>
->>> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
->>> fails with an error.
->>
->> In this case common->cpts is not NULL and will invoke am65_cpts_release() with
->> invalid handle.
-> 
-> Case-4: The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
-> fails with an error. This corresponds to the following section within
-> am65_cpsw_init_cpts():
-> 
-> cpts = am65_cpts_create(dev, reg_base, node);
-> if (IS_ERR(cpts)) {
-> ......
-> 	dev_err(dev, "cpts create err %d\n", ret);
-> 	return ret;
-> }
-> 	
-> 
-> Roger,
-> 
-> If the call to am65_cpts_create() fails with an error other than -EOPNOTSUPP,
-> which corresponds to Case-4, the call to am65_cpts_release() would have been
-> invoked within the am65_cpts_create()'s cleanup path itself if necessary. Also,
-> when the error is not -EOPNOTSUPP, the am65_cpsw_init_cpts() function returns an
-> error, due to which the execution jumps to "err_of_clear" in
-> am65_cpsw_nuss_probe(). Therefore, am65_cpsw_cpts_cleanup() is not invoked in
-> this case, due to which common->cpts being NULL is not a problem.
-
-Correct.
-
-> 
-> 
-> Roger, Leon, please review my comments and let me know. I think that Case-3
-> demands checking whether common->cpts is NULL or not, within the
-> am65_cpsw_cpts_cleanup() function.
-
-Do you really need a separate am65_cpsw_cpts_cleanup() or can just add
-the NULL check in am65_cpts_release()?
-
-cheers,
--roger
+I think that ignore_dsp_ready would be a clearer name flag.
