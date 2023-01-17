@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3234A66DFC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B5566DFD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjAQOCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S230502AbjAQODN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjAQOCC (ORCPT
+        with ESMTP id S229830AbjAQODJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:02:02 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B9538EAB;
-        Tue, 17 Jan 2023 06:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=iSq1n6fp+pgT1otyTi5I8F7lSDNIWrwaaMFHeTyn+qU=; b=1zA/3Nsyc+B66S/JfzShWC0dPM
-        6BYykR2G0bL45VrfcDV1kscfdJfvgFWxfLyN7eXcE6OYcNMUkF2z0DUugdVRQHEyuDAYo0mOLd4jI
-        zBlm+H+W2e9gCJxoNge2ZPu1vavnmiUnpzSilCsal/AHGPEDNCrVqVhKc2ffZnphN0K0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pHmX6-002KQU-Aa; Tue, 17 Jan 2023 15:01:48 +0100
-Date:   Tue, 17 Jan 2023 15:01:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>
-Cc:     Pierluigi Passaro <pierluigi.passaro@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eran Matityahu <eran.m@variscite.com>,
-        Nate Drude <Nate.D@variscite.com>,
-        Francesco Ferraro <francesco.f@variscite.com>
-Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
-Message-ID: <Y8aqTHyoFfzMILjl@lunn.ch>
-References: <20230115161006.16431-1-pierluigi.p@variscite.com>
- <Y8QzI2VUY6//uBa/@lunn.ch>
- <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
- <CAJ=UCjUo3t+D9S=J_yEhxCOo5OMj3d-UW6Z6HdwY+O+Q6JO0+A@mail.gmail.com>
- <Y8SWPwM7V8yj9s+v@lunn.ch>
- <AM6PR08MB437630CD49B50D66543EC3BDFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
+        Tue, 17 Jan 2023 09:03:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F538B78;
+        Tue, 17 Jan 2023 06:03:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C143B8163C;
+        Tue, 17 Jan 2023 14:03:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9463AC433D2;
+        Tue, 17 Jan 2023 14:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673964185;
+        bh=009ZkaKNNYtdbuuDx1qA9wZr22kzjPWN7yIb2q0DdEA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dktz/WYJgv4QvyvDV2LbvZmxjtWZWLprYGVoku3jmdDH79C6Rr5ME968EUSWwVcih
+         5aouenxh36cnXsIEEFum2DRiZ7fyRn287tGrUNutJWRRQ9eRLncilq/HkQXZU5sozk
+         8LVH6IgiWeLZgkrL7aYIXc530jWklLqfNIt+Ic1JMHjSrXVsqoZ7oFOFwzvsYZ8Hb4
+         w9nXQds86zFR3FsxlHzM0KN0ABftoBpbKaEfnsnLlY4dXA4e6Zt4junWySb0wHm9nL
+         PPm5Gg7QZWrH9fxX7gsLBKdVJk/MWjV9FiUWvahoFRggZnIrjvjjyj5yJP5IzIB6dZ
+         Ai7kQS9PV+BNA==
+Date:   Tue, 17 Jan 2023 15:03:03 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+Message-ID: <Y8aql+vHNcdth0T1@lothringen>
+References: <20230117074443.1982347-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM6PR08MB437630CD49B50D66543EC3BDFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117074443.1982347-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 09:44:01AM +0000, Pierluigi Passaro wrote:
-> On Mon, Jan 16, 2023 at 1:11 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> > > IMHO, since the framework allows defining the reset GPIO, it does not sound
-> > > reasonable to manage it only after checking if the PHY can communicate:
-> > > if the reset is asserted, the PHY cannot communicate at all.
-> > > This patch just ensures that, if the reset GPIO is defined, it's not asserted
-> > > while checking the communication.
-> >
-> > The problem is, you are only solving 1/4 of the problem. What about
-> > the clock the PHY needs? And the regulator, and the linux reset
-> > controller? And what order to do enable these, and how long do you
-> > wait between each one?
-> >
-> Interesting point of view: I was thinking about solving one of 4 problems ;)
+On Tue, Jan 17, 2023 at 03:44:43PM +0800, Zqiang wrote:
+> When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's ->
+> grpmask has not been cleared from the corresponding rcu_node structure's
+> ->qsmask, after that will clear and report quiescent state, but in this
+> time, this also means that current grace period is not end, the current
+> grace period is ongoing, because the rcu_gp_in_progress() currently return
+> true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossible
+> to return true.
+> 
+> This commit therefore remove impossible rcu_gp_kthread_wake() calling.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index b2c204529478..c78d48482583 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  {
+>  	unsigned long flags;
+>  	unsigned long mask;
+> -	bool needwake = false;
+>  	bool needacc = false;
+>  	struct rcu_node *rnp;
+>  
+> @@ -1988,7 +1987,7 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		 * NOCB kthreads have their own way to deal with that...
+>  		 */
+>  		if (!rcu_rdp_is_offloaded(rdp)) {
+> -			needwake = rcu_accelerate_cbs(rnp, rdp);
+> +			WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
 
-Lots of small incremental 'improvements' sometimes get you into a real
-mess because you loose track of the big picture. And i do think we are
-now in a mess. But i also think we have a better understanding of the
-problem space. We know there can be arbitrate number of resources
-which need to be enabled before you can enumerate the bus. We need a
-generic solution to that problem. And Linux is good at solving a
-problem once and reusing it other places. So the generic solution
-should be applicable to other bus types.
+Please also add a comment explaining why we don't expect to have
+to wake up the GP kthread.
 
-We also have a well understood workaround, put the IDs in DT. So as
-far as i'm concerned we don't need to add more incremental
-'improvements', we can wait for somebody to put in the effort to solve
-this properly with generic code.
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 
-So i don't want to merge this change. Sorry.
+Thanks!
 
-	Andrew
+
+>  		} else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
+>  			/*
+>  			 * ...but NOCB kthreads may miss or delay callbacks acceleration
+> @@ -2000,8 +1999,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		rcu_disable_urgency_upon_qs(rdp);
+>  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>  		/* ^^^ Released rnp->lock */
+> -		if (needwake)
+> -			rcu_gp_kthread_wake();
+>  
+>  		if (needacc) {
+>  			rcu_nocb_lock_irqsave(rdp, flags);
+> -- 
+> 2.25.1
+> 
