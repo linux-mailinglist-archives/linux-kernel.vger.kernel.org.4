@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF3766E086
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EF766E085
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjAQO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S232621AbjAQOZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjAQOZa (ORCPT
+        with ESMTP id S232112AbjAQOZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:25:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA023D096;
-        Tue, 17 Jan 2023 06:23:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4FBB81608;
-        Tue, 17 Jan 2023 14:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B43EC433D2;
-        Tue, 17 Jan 2023 14:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673965432;
-        bh=u56oOvHn1abIyGGrd813HPzm5FZKrLOcjdyEY+gy1tk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B6jxdyArFoI74Ae425v1M1ZkQR5oSOZ5P4lNU6uYN47WaGkAqNUUAkcCDbh+CJJyT
-         AOdGgePV6RFQgXyD8fB7AwSgIeH+hnyvUJwEHv12R5xrkO5SYCeCd3du2Qigm8BWRg
-         5WhfR2wxDdYCLj0FTXyJ4BBPwnWW9TK9lBNxIGHk2cCGjMHXqW5LIsuQf/X3JspzL9
-         t9K9dqorJ7m4VKRAPuzLkEIA9vUjVVgnYmQexbebDaFX1dooRs5YeL0/9bf+SKOVwN
-         /Sy5NSsLiPLMOVlroArNsiLWJmLvA20tiyRdmzow7++yAdGfikECAd6z0gvFKxOBEK
-         DZZPgWoyPz32w==
-Date:   Tue, 17 Jan 2023 07:23:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 5.15 00/86] 5.15.89-rc1 review
-Message-ID: <Y8avdat8Jk+CaE8D@dev-arch.thelio-3990X>
-References: <20230116154747.036911298@linuxfoundation.org>
- <CA+G9fYtpsFtS=1gECq97PWPK8uA6-3B-NY0Vkk8Vgd04BskONQ@mail.gmail.com>
+        Tue, 17 Jan 2023 09:25:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744253D08F;
+        Tue, 17 Jan 2023 06:23:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QdqcFyVr8K0bup5NOO0aq0lzzZUH+Wzn1LDI5nJW77c=; b=mxTYTDSKj/goJrJLHb58cdw9tT
+        ltWEFXNkv2h+QwO6+wa951yVIN2Ne2cAd/sL1NcQBFjDgSh0Z5Yxbzm7vqkdHTQxhDynpGX3W4ojD
+        BZZMKmdbqJ8mZ9bv6x2ITjaDUD4ixBchGeDLZ2mRhHynzgZhjqgbRL2mMEguCaxMwVVAdSOB9SF6F
+        wOu3B+/o7udidpfKTD0ewrLsnpSSZqJbmFd6rHc/8oQEVK7ol9EsNwq1H/GJsC3Qc711MH8wFJgGB
+        plQQf08SB3V51oZbhdP0hOzaUzu8+m0Q7le2pM8BN16PE0mv8Yo2LdUy6lmeY21Ts5rRCRvjPKqhk
+        K9g8FxsQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHmsY-009kDG-01; Tue, 17 Jan 2023 14:23:58 +0000
+Date:   Tue, 17 Jan 2023 14:23:57 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Amy Parker <apark0006@student.cerritos.edu>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dax: use switch statement over chained ifs
+Message-ID: <Y8avfR1Q4BzDe9sH@casper.infradead.org>
+References: <CAPOgqxF_xEgKspetRJ=wq1_qSG3h8mkyXC58TXkUvx0agzEm_A@mail.gmail.com>
+ <Y8YK4c6KQg2xjM+E@casper.infradead.org>
+ <CAPOgqxEYzDkfX9re+yZry4BNV8PGAd_G-qsWdpePAOC4dNcAgQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYtpsFtS=1gECq97PWPK8uA6-3B-NY0Vkk8Vgd04BskONQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPOgqxEYzDkfX9re+yZry4BNV8PGAd_G-qsWdpePAOC4dNcAgQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+On Mon, Jan 16, 2023 at 09:07:23PM -0800, Amy Parker wrote:
+> On Mon, Jan 16, 2023 at 6:41 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > CAUTION: This email originated from outside your organization. Exercise caution when opening attachments or clicking links, especially from unknown senders.
 
-On Tue, Jan 17, 2023 at 04:57:52PM +0530, Naresh Kamboju wrote:
-> On Mon, 16 Jan 2023 at 21:33, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.15.89 release.
-> > There are 86 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.89-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+Muahaha.  I am evil.
+
+> > Thanks for the patch!  Two problems.  First, your mailer seems to have
+> > mangled the patch; in my tree these are tab indents, and the patch has
+> > arrived with four-space indents, so it can't be applied.
 > 
-> Results from Linaro’s test farm.
-> No regressions on arm64, arm, x86_64, and i386.
+> Ah, gotcha. Next time I'll just use git send-email, was hoping this
+> time I'd be able to use my normal mailing system directly. (Also
+> hoping my mail server isn't applying anything outgoing that messes it
+> up... should probably check on that)
+
+Feel free to send me the patch again, off-list, and I can check if it
+arrived correctly.
+
+> > The second problem is that this function should simply not exist.
+> > I forget how we ended up with enum page_entry_size, but elsewhere
+> > we simply pass 'order' around.  So what I'd really like to see is
+> > a patch series that eliminates page_entry_size everywhere.
 > 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Hmm, alright... I'm not really familiar with the enum/how it's used, I
+> pretty much just added this as a cleanup. If you've got any
+> information on it so I know how to actually work with it, that'd be
+> great!
+
+The intent is to describe which "layer" of the page tables we're trying
+to hadle a fault for -- PTE, PMD or PUD.  But as you can see by this
+pe_order() function, the rest of the kernel tends to use the order
+to communicate this information, so pass in 0, PMD_ORDER or PUD_ORDER.
+Also PMD_ORDER and PUD_ORDER should exist in mm.h ;-)
+
+> > I can outline a way to do that in individual patches if that would be
+> > helpful.
 > 
-> NOTE:
-> clang-nightly build errors noticed on defconfig of arm64. arm. x86_64,
-> i386, riscv, s390 and powerpc.
-> 
-> include/trace/events/initcall.h:38:3: error: 'struct (unnamed at
-> include/trace/events/initcall.h:27:1)' cannot be defined in
-> '__builtin_offsetof'
->                 __field_struct(initcall_t, func)
->                 ^
-> include/trace/events/initcall.h:38:3: error: initializer element is
-> not a compile-time constant
->                 __field_struct(initcall_t, func)
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Alright - although, would it actually need to be individual patches?
+> I'm not 100% sure whether the page_entry_size used across the kernel
+> is the same enum or different enums, my guess looking at the grep
+> context summary is that they are the same, but the number of usages (I
+> count 18) should fit in a single patch just fine...
 
-Thanks for the report! I sent backports to avoid this issue and the one
-reported on the 5.4 review but it appears they did not make this round
-of stable updates.
+I'd take it step by step.  First, I'd lift pe_order() to mm.h.
+Second patch, convert dax_finish_sync_fault() to take an order instead
+of a pe_size, making each caller call pe_order().  And do it at
+the start of each function, eg the very first line of
+__xfs_filemap_fault() should be
 
-https://lore.kernel.org/Y8TWrJpb6Vn6E4+v@dev-arch.thelio-3990X/
+	unsigned int order = pe_order(pe_size);
 
-Hopefully it will be cleared up next round.
+Third, convert dax_iomap_fault() to take an order instead of a pe_size.
+Fourth, convert huge_fault() to take an order.  Fifth, remove the
+enum and pe_order.
 
-Cheers,
-Nathan
+This makes it easier to review, as well as looking good for your
+contribution stats ;-)
