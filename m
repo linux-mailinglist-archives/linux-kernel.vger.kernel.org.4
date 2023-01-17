@@ -2,347 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207CE66D4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4E266D4F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjAQDU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 22:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S235293AbjAQDVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 22:21:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234327AbjAQDU4 (ORCPT
+        with ESMTP id S230301AbjAQDV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 22:20:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F31EFE9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DE6B61195
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6D7C433F1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673925653;
-        bh=wriUBgicTaC+t8IkV16XbM7mUlfFrKd1Nr42jZaqoUY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wyp9nwrle5LCPrnI5asouXCAgK/2sPXHMTkc4fKL1vhaodYcp9OgUYX7OyMfwDZ5H
-         /7SShDJGutLG6hKF2cWEwzO9PMv5YYl4kfhu3RUCnKmNhPPpp8k9QoiKGxxDWu3rst
-         nY10u1KPR7vtHVeH+f0DfshgZaMXRS/ObOrTheHkYjy7BJV5I8Oa6TwNW3nE2nDeD8
-         qHUMnfD15ni4VctUMIk0jSBzdUQxj0NaEZCdlH/Xlft4sVgNE2uHI0EX/9KDxdJrSh
-         DR2fB/OcBjLuYteGLXhBAajX8VrEiNyo8FWPZDT3FIHpf1Yb5Xr/NecRHRA/3CVR5j
-         WPGp9avl9+Atg==
-Received: by mail-ed1-f54.google.com with SMTP id b4so23707365edf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:20:53 -0800 (PST)
-X-Gm-Message-State: AFqh2kp6X6vVt84VJYCitsjPGx3sdaXXt+L5fI1dZ1gowmvrk+2Nk8mH
-        7LZ3u+nU8J+m0CSCtM+zeK1Xgi4LuInzzzX59R0=
-X-Google-Smtp-Source: AMrXdXsjijdmnxaYDVxGSsrWYrO+VMZMTXKVy28Nf83PY6STDnn/HbqXlWFcLrh14iVSsb2wkjMjcEZYLp725h3BVvc=
-X-Received: by 2002:a05:6402:22f7:b0:49b:651d:7930 with SMTP id
- dn23-20020a05640222f700b0049b651d7930mr146650edb.79.1673925651961; Mon, 16
- Jan 2023 19:20:51 -0800 (PST)
+        Mon, 16 Jan 2023 22:21:27 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611E41ABCC;
+        Mon, 16 Jan 2023 19:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673925685; x=1705461685;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dHN1vav1t5EnRUr6UdHotg6czTkkjwNiQkXgUEZ1z7k=;
+  b=SQ76ztvQGzjauPOfWo3ZTEkYmOqHokdrJW5YQD8U7Wd6iPIoUE/FqTun
+   7W9j6F2W3waLWAz2THxOG7bZuErHnj6MRWhZbj+SJJBxrHK4m1vIZTyGh
+   PHeqHJ/zJOce2T9jFWIu7e0J/LLx3xV1mOPSIHXmADJAH8R2XkPqsCLxe
+   KALbmIIXdO7qmFiMatGEpZxgvMuzrR7B+5+K3K1P8CwRfv0ZkkQrozTjD
+   G/rG+VlAwCfXeGx4SNDtocXeTXbReEWqYp5gsKLSUCF2SE67D31O/7BZi
+   DMR5MRWAUwcxxjp6aJbVhrjSJ3ryavTts7kfnBWzu20hsVLnaJhyWwHqJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="323298309"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="323298309"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 19:21:24 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="783096609"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="783096609"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.170.151]) ([10.249.170.151])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 19:21:13 -0800
+Message-ID: <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
+Date:   Tue, 17 Jan 2023 11:21:10 +0800
 MIME-Version: 1.0
-References: <20230107133549.4192639-1-guoren@kernel.org> <20230107133549.4192639-8-guoren@kernel.org>
- <CAAYs2=h464Fx8ix4f_aJWBfRaz8BipfvxzAZoGDnBQkPrY_nNQ@mail.gmail.com> <CAAYs2=jiOF8qrurRx20Hfu9e=5YSw+ONeLQPM7xV7-igiCG+7Q@mail.gmail.com>
-In-Reply-To: <CAAYs2=jiOF8qrurRx20Hfu9e=5YSw+ONeLQPM7xV7-igiCG+7Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 17 Jan 2023 11:20:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRnu_05mvPoaCbw+sSMpSE=dV7n1inH4cw-wCUM8WXFwQ@mail.gmail.com>
-Message-ID: <CAJF2gTRnu_05mvPoaCbw+sSMpSE=dV7n1inH4cw-wCUM8WXFwQ@mail.gmail.com>
-Subject: Re: [PATCH -next V6 7/7] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     anup@brainfault.org, e.shatokhin@yadro.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, andy.chiu@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 6:48 PM Song Shuai <suagrfillet@gmail.com> wrote:
->
-> Hi,Guo:
->
-> Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=8811=E6=
-=97=A5=E5=91=A8=E4=B8=89 09:50=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > <guoren@kernel.org> =E4=BA=8E2023=E5=B9=B41=E6=9C=887=E6=97=A5=E5=91=A8=
-=E5=85=AD 13:36=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > From: Song Shuai <suagrfillet@gmail.com>
-> > >
-> > > select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-> > > for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-> > > the ftrace-direct*.c files in samples/ftrace/.
-> > >
-> > > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > > Tested-by: Guo Ren <guoren@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > Hi,Guo && Evgenii:
-> >
-> > As Evgenii comments, this patch has two problems to fix:
-> >
-> > 1. the modification of Kconfig is missing
-> > So we should add it back
-> >
-> > 2. the build error resulted by including of nospec-branch.h file
-> > This including is exclusive for x86 architecture, moving it under
-> > x86 #ifdef seems better to fix this error
-> >
-> > I fixed them in my GitHub repo, but I can't find a reasonable target
-> > branch in your repo to PR.
-> > So I paste the link of my branch here, you can pick the first 2
-> > commits in the next series.
-> >
-> > - samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-> > - samples: ftrace: Include the nospec-branch.h only for x86
-> This patch for the 2nd problem mentioned above seems to be omitted in
-> the V7 series.
-> I paste the raw patch link here. Hope you can add it in the next.
->
-> https://github.com/sugarfillet/linux/commit/9539a80dc6e7d1137ec7a96ebef2a=
-b912a694bd7.patch
-Why do we need an x86 patchset in a riscv series? Without the patch,
-what's compile error in riscv?
 
-> >
-> > Link: https://github.com/sugarfillet/linux/commits/song_ftrace_fix_up_v=
-6
-> >
-> > >  samples/ftrace/ftrace-direct-modify.c       | 33 ++++++++++++++++++
-> > >  samples/ftrace/ftrace-direct-multi-modify.c | 37 +++++++++++++++++++=
-++
-> > >  samples/ftrace/ftrace-direct-multi.c        | 22 ++++++++++++
-> > >  samples/ftrace/ftrace-direct-too.c          | 26 +++++++++++++++
-> > >  samples/ftrace/ftrace-direct.c              | 22 ++++++++++++
-> > >  5 files changed, 140 insertions(+)
-> > >
-> > > diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/f=
-trace-direct-modify.c
-> > > index de5a0f67f320..be7bf472c3c7 100644
-> > > --- a/samples/ftrace/ftrace-direct-modify.c
-> > > +++ b/samples/ftrace/ftrace-direct-modify.c
-> > > @@ -23,6 +23,39 @@ extern void my_tramp2(void *);
-> > >
-> > >  static unsigned long my_ip =3D (unsigned long)schedule;
-> > >
-> > > +#ifdef CONFIG_RISCV
-> > > +
-> > > +asm (" .pushsection    .text, \"ax\", @progbits\n"
-> > > +"      .type           my_tramp1, @function\n"
-> > > +"      .globl          my_tramp1\n"
-> > > +"   my_tramp1:\n"
-> > > +"      addi sp,sp,-16\n"
-> > > +"      sd   t0,0(sp)\n"
-> > > +"      sd   ra,8(sp)\n"
-> > > +"      call my_direct_func1\n"
-> > > +"      ld   t0,0(sp)\n"
-> > > +"      ld   ra,8(sp)\n"
-> > > +"      addi sp,sp,16\n"
-> > > +"      jr t0\n"
-> > > +"      .size           my_tramp1, .-my_tramp1\n"
-> > > +
-> > > +"      .type           my_tramp2, @function\n"
-> > > +"      .globl          my_tramp2\n"
-> > > +"   my_tramp2:\n"
-> > > +"      addi sp,sp,-16\n"
-> > > +"      sd   t0,0(sp)\n"
-> > > +"      sd   ra,8(sp)\n"
-> > > +"      call my_direct_func2\n"
-> > > +"      ld   t0,0(sp)\n"
-> > > +"      ld   ra,8(sp)\n"
-> > > +"      addi sp,sp,16\n"
-> > > +"      jr t0\n"
-> > > +"      .size           my_tramp2, .-my_tramp2\n"
-> > > +"      .popsection\n"
-> > > +);
-> > > +
-> > > +#endif /* CONFIG_RISCV */
-> > > +
-> > >  #ifdef CONFIG_X86_64
-> > >
-> > >  #include <asm/ibt.h>
-> > > diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ft=
-race/ftrace-direct-multi-modify.c
-> > > index d52370cad0b6..10884bf418f7 100644
-> > > --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> > > +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> > > @@ -21,6 +21,43 @@ void my_direct_func2(unsigned long ip)
-> > >  extern void my_tramp1(void *);
-> > >  extern void my_tramp2(void *);
-> > >
-> > > +#ifdef CONFIG_RISCV
-> > > +
-> > > +asm (" .pushsection    .text, \"ax\", @progbits\n"
-> > > +"      .type           my_tramp1, @function\n"
-> > > +"      .globl          my_tramp1\n"
-> > > +"   my_tramp1:\n"
-> > > +"       addi sp,sp,-24\n"
-> > > +"       sd   a0,0(sp)\n"
-> > > +"       sd   t0,8(sp)\n"
-> > > +"       sd   ra,16(sp)\n"
-> > > +"       call my_direct_func1\n"
-> > > +"       ld   a0,0(sp)\n"
-> > > +"       ld   t0,8(sp)\n"
-> > > +"       ld   ra,16(sp)\n"
-> > > +"       addi sp,sp,24\n"
-> > > +"      jr t0\n"
-> > > +"      .size           my_tramp1, .-my_tramp1\n"
-> > > +
-> > > +"      .type           my_tramp2, @function\n"
-> > > +"      .globl          my_tramp2\n"
-> > > +"   my_tramp2:\n"
-> > > +"       addi sp,sp,-24\n"
-> > > +"       sd   a0,0(sp)\n"
-> > > +"       sd   t0,8(sp)\n"
-> > > +"       sd   ra,16(sp)\n"
-> > > +"       call my_direct_func2\n"
-> > > +"       ld   a0,0(sp)\n"
-> > > +"       ld   t0,8(sp)\n"
-> > > +"       ld   ra,16(sp)\n"
-> > > +"       addi sp,sp,24\n"
-> > > +"      jr t0\n"
-> > > +"      .size           my_tramp2, .-my_tramp2\n"
-> > > +"      .popsection\n"
-> > > +);
-> > > +
-> > > +#endif /* CONFIG_RISCV */
-> > > +
-> > >  #ifdef CONFIG_X86_64
-> > >
-> > >  #include <asm/ibt.h>
-> > > diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ft=
-race-direct-multi.c
-> > > index ec1088922517..a35bf43bf6d7 100644
-> > > --- a/samples/ftrace/ftrace-direct-multi.c
-> > > +++ b/samples/ftrace/ftrace-direct-multi.c
-> > > @@ -16,6 +16,28 @@ void my_direct_func(unsigned long ip)
-> > >
-> > >  extern void my_tramp(void *);
-> > >
-> > > +#ifdef CONFIG_RISCV
-> > > +
-> > > +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> > > +"       .type           my_tramp, @function\n"
-> > > +"       .globl          my_tramp\n"
-> > > +"   my_tramp:\n"
-> > > +"       addi sp,sp,-24\n"
-> > > +"       sd   a0,0(sp)\n"
-> > > +"       sd   t0,8(sp)\n"
-> > > +"       sd   ra,16(sp)\n"
-> > > +"       call my_direct_func\n"
-> > > +"       ld   a0,0(sp)\n"
-> > > +"       ld   t0,8(sp)\n"
-> > > +"       ld   ra,16(sp)\n"
-> > > +"       addi sp,sp,24\n"
-> > > +"       jr t0\n"
-> > > +"       .size           my_tramp, .-my_tramp\n"
-> > > +"       .popsection\n"
-> > > +);
-> > > +
-> > > +#endif /* CONFIG_RISCV */
-> > > +
-> > >  #ifdef CONFIG_X86_64
-> > >
-> > >  #include <asm/ibt.h>
-> > > diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftra=
-ce-direct-too.c
-> > > index e13fb59a2b47..3b62e33c2e6d 100644
-> > > --- a/samples/ftrace/ftrace-direct-too.c
-> > > +++ b/samples/ftrace/ftrace-direct-too.c
-> > > @@ -18,6 +18,32 @@ void my_direct_func(struct vm_area_struct *vma,
-> > >
-> > >  extern void my_tramp(void *);
-> > >
-> > > +#ifdef CONFIG_RISCV
-> > > +
-> > > +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> > > +"       .type           my_tramp, @function\n"
-> > > +"       .globl          my_tramp\n"
-> > > +"   my_tramp:\n"
-> > > +"       addi sp,sp,-40\n"
-> > > +"       sd   a0,0(sp)\n"
-> > > +"       sd   a1,8(sp)\n"
-> > > +"       sd   a2,16(sp)\n"
-> > > +"       sd   t0,24(sp)\n"
-> > > +"       sd   ra,32(sp)\n"
-> > > +"       call my_direct_func\n"
-> > > +"       ld   a0,0(sp)\n"
-> > > +"       ld   a1,8(sp)\n"
-> > > +"       ld   a2,16(sp)\n"
-> > > +"       ld   t0,24(sp)\n"
-> > > +"       ld   ra,32(sp)\n"
-> > > +"       addi sp,sp,40\n"
-> > > +"       jr t0\n"
-> > > +"       .size           my_tramp, .-my_tramp\n"
-> > > +"       .popsection\n"
-> > > +);
-> > > +
-> > > +#endif /* CONFIG_RISCV */
-> > > +
-> > >  #ifdef CONFIG_X86_64
-> > >
-> > >  #include <asm/ibt.h>
-> > > diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-d=
-irect.c
-> > > index 1f769d0db20f..2cfe5a7d2d70 100644
-> > > --- a/samples/ftrace/ftrace-direct.c
-> > > +++ b/samples/ftrace/ftrace-direct.c
-> > > @@ -15,6 +15,28 @@ void my_direct_func(struct task_struct *p)
-> > >
-> > >  extern void my_tramp(void *);
-> > >
-> > > +#ifdef CONFIG_RISCV
-> > > +
-> > > +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> > > +"       .type           my_tramp, @function\n"
-> > > +"       .globl          my_tramp\n"
-> > > +"   my_tramp:\n"
-> > > +"       addi sp,sp,-24\n"
-> > > +"       sd   a0,0(sp)\n"
-> > > +"       sd   t0,8(sp)\n"
-> > > +"       sd   ra,16(sp)\n"
-> > > +"       call my_direct_func\n"
-> > > +"       ld   a0,0(sp)\n"
-> > > +"       ld   t0,8(sp)\n"
-> > > +"       ld   ra,16(sp)\n"
-> > > +"       addi sp,sp,24\n"
-> > > +"       jr t0\n"
-> > > +"       .size           my_tramp, .-my_tramp\n"
-> > > +"       .popsection\n"
-> > > +);
-> > > +
-> > > +#endif /* CONFIG_RISCV */
-> > > +
-> > >  #ifdef CONFIG_X86_64
-> > >
-> > >  #include <asm/ibt.h>
-> > > --
-> > > 2.36.1
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > Song
+On 12/2/2022 2:13 PM, Chao Peng wrote:
+> In confidential computing usages, whether a page is private or shared is
+> necessary information for KVM to perform operations like page fault
+> handling, page zapping etc. There are other potential use cases for
+> per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> or exec-only, etc.) without having to modify memslots.
 >
+> Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
+> userspace to operate on the per-page memory attributes.
+>    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
+>      a guest memory range.
+>    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
+>      memory attributes.
 >
+> KVM internally uses xarray to store the per-page memory attributes.
 >
-> --
-> Thanks,
-> Song
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
+> ---
+>   Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
+>   arch/x86/kvm/Kconfig           |  1 +
+>   include/linux/kvm_host.h       |  3 ++
+>   include/uapi/linux/kvm.h       | 17 ++++++++
+
+Should the changes introduced in this file also need to be added in 
+tools/include/uapi/linux/kvm.h ?
 
 
 
---=20
-Best Regards
- Guo Ren
+>   virt/kvm/Kconfig               |  3 ++
+>   virt/kvm/kvm_main.c            | 76 ++++++++++++++++++++++++++++++++++
+>   6 files changed, 163 insertions(+)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 5617bc4f899f..bb2f709c0900 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5952,6 +5952,59 @@ delivery must be provided via the "reg_aen" struct.
+>   The "pad" and "reserved" fields may be used for future extensions and should be
+>   set to 0s by userspace.
+>   
+> +4.138 KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES
+> +-----------------------------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: vm ioctl
+> +:Parameters: u64 memory attributes bitmask(out)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Returns supported memory attributes bitmask. Supported memory attributes will
+> +have the corresponding bits set in u64 memory attributes bitmask.
+> +
+> +The following memory attributes are defined::
+> +
+> +  #define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
+> +  #define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
+> +  #define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
+> +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> +
+> +4.139 KVM_SET_MEMORY_ATTRIBUTES
+> +-----------------------------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: vm ioctl
+> +:Parameters: struct kvm_memory_attributes(in/out)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Sets memory attributes for pages in a guest memory range. Parameters are
+> +specified via the following structure::
+> +
+> +  struct kvm_memory_attributes {
+> +	__u64 address;
+> +	__u64 size;
+> +	__u64 attributes;
+> +	__u64 flags;
+> +  };
+> +
+> +The user sets the per-page memory attributes to a guest memory range indicated
+> +by address/size, and in return KVM adjusts address and size to reflect the
+> +actual pages of the memory range have been successfully set to the attributes.
+> +If the call returns 0, "address" is updated to the last successful address + 1
+> +and "size" is updated to the remaining address size that has not been set
+> +successfully. The user should check the return value as well as the size to
+> +decide if the operation succeeded for the whole range or not. The user may want
+> +to retry the operation with the returned address/size if the previous range was
+> +partially successful.
+> +
+> +Both address and size should be page aligned and the supported attributes can be
+> +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
+> +
+> +The "flags" field may be used for future extensions and should be set to 0s.
+> +
+>   5. The kvm_run structure
+>   ========================
+>   
+> @@ -8270,6 +8323,16 @@ structure.
+>   When getting the Modified Change Topology Report value, the attr->addr
+>   must point to a byte where the value will be stored or retrieved from.
+>   
+> +8.40 KVM_CAP_MEMORY_ATTRIBUTES
+> +------------------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: vm
+> +
+> +This capability indicates KVM supports per-page memory attributes and ioctls
+> +KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES are available.
+> +
+>   9. Known KVM API problems
+>   =========================
+>   
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index fbeaa9ddef59..a8e379a3afee 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -49,6 +49,7 @@ config KVM
+>   	select SRCU
+>   	select INTERVAL_TREE
+>   	select HAVE_KVM_PM_NOTIFIER if PM
+> +	select HAVE_KVM_MEMORY_ATTRIBUTES
+>   	help
+>   	  Support hosting fully virtualized guest machines using hardware
+>   	  virtualization extensions.  You will need a fairly recent
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 8f874a964313..a784e2b06625 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -800,6 +800,9 @@ struct kvm {
+>   
+>   #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+>   	struct notifier_block pm_notifier;
+> +#endif
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	struct xarray mem_attr_array;
+>   #endif
+>   	char stats_id[KVM_STATS_NAME_SIZE];
+>   };
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 64dfe9c07c87..5d0941acb5bb 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1182,6 +1182,7 @@ struct kvm_ppc_resize_hpt {
+>   #define KVM_CAP_S390_CPU_TOPOLOGY 222
+>   #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+>   #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+> +#define KVM_CAP_MEMORY_ATTRIBUTES 225
+>   
+>   #ifdef KVM_CAP_IRQ_ROUTING
+>   
+> @@ -2238,4 +2239,20 @@ struct kvm_s390_zpci_op {
+>   /* flags for kvm_s390_zpci_op->u.reg_aen.flags */
+>   #define KVM_S390_ZPCIOP_REGAEN_HOST    (1 << 0)
+>   
+> +/* Available with KVM_CAP_MEMORY_ATTRIBUTES */
+> +#define KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES    _IOR(KVMIO,  0xd2, __u64)
+> +#define KVM_SET_MEMORY_ATTRIBUTES              _IOWR(KVMIO,  0xd3, struct kvm_memory_attributes)
+> +
+> +struct kvm_memory_attributes {
+> +	__u64 address;
+> +	__u64 size;
+> +	__u64 attributes;
+> +	__u64 flags;
+> +};
+> +
+> +#define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
+> +#define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
+> +#define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
+> +#define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> +
+>   #endif /* __LINUX_KVM_H */
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index 800f9470e36b..effdea5dd4f0 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -19,6 +19,9 @@ config HAVE_KVM_IRQ_ROUTING
+>   config HAVE_KVM_DIRTY_RING
+>          bool
+>   
+> +config HAVE_KVM_MEMORY_ATTRIBUTES
+> +       bool
+> +
+>   # Only strongly ordered architectures can select this, as it doesn't
+>   # put any explicit constraint on userspace ordering. They can also
+>   # select the _ACQ_REL version.
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 1782c4555d94..7f0f5e9f2406 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1150,6 +1150,9 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>   	spin_lock_init(&kvm->mn_invalidate_lock);
+>   	rcuwait_init(&kvm->mn_memslots_update_rcuwait);
+>   	xa_init(&kvm->vcpu_array);
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	xa_init(&kvm->mem_attr_array);
+> +#endif
+>   
+>   	INIT_LIST_HEAD(&kvm->gpc_list);
+>   	spin_lock_init(&kvm->gpc_lock);
+> @@ -1323,6 +1326,9 @@ static void kvm_destroy_vm(struct kvm *kvm)
+>   		kvm_free_memslots(kvm, &kvm->__memslots[i][0]);
+>   		kvm_free_memslots(kvm, &kvm->__memslots[i][1]);
+>   	}
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	xa_destroy(&kvm->mem_attr_array);
+> +#endif
+>   	cleanup_srcu_struct(&kvm->irq_srcu);
+>   	cleanup_srcu_struct(&kvm->srcu);
+>   	kvm_arch_free_vm(kvm);
+> @@ -2323,6 +2329,49 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+>   }
+>   #endif /* CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT */
+>   
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +static u64 kvm_supported_mem_attributes(struct kvm *kvm)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
+> +{
+> +	gfn_t start, end;
+> +	unsigned long i;
+> +	void *entry;
+> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~supported_attrs)
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> +		return -EINVAL;
+> +
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> +
+> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> +
+> +	mutex_lock(&kvm->lock);
+> +	for (i = start; i < end; i++)
+> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> +				    GFP_KERNEL_ACCOUNT)))
+> +			break;
+> +	mutex_unlock(&kvm->lock);
+> +
+> +	attrs->address = i << PAGE_SHIFT;
+> +	attrs->size = (end - i) << PAGE_SHIFT;
+> +
+> +	return 0;
+> +}
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> +
+>   struct kvm_memory_slot *gfn_to_memslot(struct kvm *kvm, gfn_t gfn)
+>   {
+>   	return __gfn_to_memslot(kvm_memslots(kvm), gfn);
+> @@ -4459,6 +4508,9 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>   #ifdef CONFIG_HAVE_KVM_MSI
+>   	case KVM_CAP_SIGNAL_MSI:
+>   #endif
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	case KVM_CAP_MEMORY_ATTRIBUTES:
+> +#endif
+>   #ifdef CONFIG_HAVE_KVM_IRQFD
+>   	case KVM_CAP_IRQFD:
+>   	case KVM_CAP_IRQFD_RESAMPLE:
+> @@ -4804,6 +4856,30 @@ static long kvm_vm_ioctl(struct file *filp,
+>   		break;
+>   	}
+>   #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	case KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES: {
+> +		u64 attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +		r = -EFAULT;
+> +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
+> +			goto out;
+> +		r = 0;
+> +		break;
+> +	}
+> +	case KVM_SET_MEMORY_ATTRIBUTES: {
+> +		struct kvm_memory_attributes attrs;
+> +
+> +		r = -EFAULT;
+> +		if (copy_from_user(&attrs, argp, sizeof(attrs)))
+> +			goto out;
+> +
+> +		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
+> +
+> +		if (!r && copy_to_user(argp, &attrs, sizeof(attrs)))
+> +			r = -EFAULT;
+> +		break;
+> +	}
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+>   	case KVM_CREATE_DEVICE: {
+>   		struct kvm_create_device cd;
+>   
