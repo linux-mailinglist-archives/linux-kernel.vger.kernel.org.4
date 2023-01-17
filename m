@@ -2,179 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D21670B1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9529B670B33
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjAQWER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S229612AbjAQWGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjAQWDT (ORCPT
+        with ESMTP id S229910AbjAQWET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:03:19 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2975B461
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ud5so78156149ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
+        Tue, 17 Jan 2023 17:04:19 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B97E16307
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:07 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id k6so24590147vsk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
-        b=ee9ZsxFH0+TOnSXcPrEGkTd9TlTqtZr8Jzdq1Pc/ZubpNyLzAegr1AYxHJ163b0TUy
-         dQQCDckhQGbOqH/LVs697vIWIUgWVjqkezi+1Fb/X67JNEVsvTfG8taaSxj9XMcdqnat
-         wuxIENu4lgwtZL3RwMb9XYuzJ3VDaPaHclj4No3S72WGGpkquszBpdzpLTRm/m/xuDVV
-         8T7LsomWI6BDi0D4N0JCzOZLjGpkxVUV7UVosfuwrrCZ162QSbHBlAOAjs9iM/HTdmIY
-         jo+76qdlqTimsnv4Ll2PCZmWskdhr9cuU2EFxMkUFQGntxOtxZich/LI1zMt8fJgl3Xn
-         Cgpw==
+        d=soleen.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1zg9S1unmML51wggskQ/tkuvQeGqpwGJV4esxPGJRUo=;
+        b=JLJdOl009aot+nrMeCM5C1JKpOsuZ+h6D/BvkaK2hT/o43mwon77NvHBk8/izyWUU/
+         i4GDL4FiTOUIKYQ4bY45laKBk9oKN7aZpQIRNjxGZ9HWQBNJmj1ofpDh6TszP7ypZnl1
+         5agrjCZEJqDVIH2sSO9SvqiiCoxwoTmtlW2u5LR3aFl48S3ayOug2Z/AOa44qng1KUXZ
+         mbw7zcRzH78ACfXIbaHsVHG4bpojz6Ij2lq+oWV1KXyw7iLFr1kGonrvPuJSSaAnBXNJ
+         hr8OpSHmTW49bkLzLu8cjybfTO2H0269g4qYuuteaekUdDRV6GT0COSq81Wodp7bbWhQ
+         NFMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
-        b=CgWX7dJHUDxqcyAoiIw8AajYv/GYMfNYmkWyhFyqEJb+7M8JeMVLZMao37rQuIs67w
-         HSZgSH8JTnNOYU6GaKqk4Xr+WqKxbThCRN+8V0Mcjfbgo+DtPeDL1DpioxIDUZrwz81i
-         tNSBczliBrJU8juusT6f5imzil6oDyY5lpquswj6ogBk1ElNHC9529t0QVgwBSHCNiD4
-         be8hrgw+fbiiNTFoaQyBB0bUagzFXjIaoX86C10OEgeVks6pNq6Z1Xmt6WRdPnc3xYXQ
-         FdDqJLaUwunPbSLWLeYNqcDYATRE/UvMqXBNG4sOjaJjBJaAZFPbK7o+9H/jRMSWZwVX
-         +CDg==
-X-Gm-Message-State: AFqh2krVQ4weHAC5EndMQWU5gJiNEBo4L3UCgoG7WjqoS7rgu7OPAOST
-        AJqcAAJvvzlF6gcAAPEMYaWZ3w==
-X-Google-Smtp-Source: AMrXdXs9uRo49QUx37/1Ds+MJCE8jo71WpvZDXyr3NVprgNsVLSvnGgypIdXZ+kNkxM/vZUXmVO/Fw==
-X-Received: by 2002:a17:907:a710:b0:7c0:f71b:8b3 with SMTP id vw16-20020a170907a71000b007c0f71b08b3mr4253213ejc.57.1673986858902;
-        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id k14-20020a17090632ce00b00871ac327db6sm2238452ejk.45.2023.01.17.12.20.57
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1zg9S1unmML51wggskQ/tkuvQeGqpwGJV4esxPGJRUo=;
+        b=GN2EpqxjP3Rxi6lbUMuXBUgmj8jSECIxpiGAppIgbUhwAgt5BNihbeFjFbKzsYqa1X
+         asp5wbDA104bHRmAdXR6XyXxGnTnolA/3wvjKanJtSUJExxdM/oI3j8BIicEKUxqJMuc
+         fhm4X2JZf9kYcbtYMVop7ga2zBI8SyjUs8ZvSfrxKSZ1pkpLpGuCHuk3+Oim5bJLxzGi
+         X2nOYc/KpUWE5cdabETPekZXRjNw61JFlqYCFy4HdBQ5lSmtifaM3/5ID1ik/vtbV0fv
+         DobC5uquti2YT+zhv0dvo2by7XAFcQX5Nr5Uia7GAQxSRz5vsBBQlyKucvsJp3Y2222F
+         RAzA==
+X-Gm-Message-State: AFqh2kqm3W/gddXIARs93Ppcu9CJ11VGGQjCtOR5Jx3cDDNkdbllSAWc
+        edAtmZNpAhgTIf1pst8DOWC4FQ==
+X-Google-Smtp-Source: AMrXdXs6SG+Ub80KW1QWuDv3yN7xOZkTR5LMb4bbNvgE4IDL8MMconCg45Kq7GyVqxf+E5jUhPr8jw==
+X-Received: by 2002:a67:ffd3:0:b0:3d0:a5f0:bee5 with SMTP id w19-20020a67ffd3000000b003d0a5f0bee5mr2177202vsq.18.1673986866455;
+        Tue, 17 Jan 2023 12:21:06 -0800 (PST)
+Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id 195-20020a370ccc000000b007023fc46b64sm20688193qkm.113.2023.01.17.12.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
-Date:   Tue, 17 Jan 2023 20:20:56 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230117202056.zx2pl22miufcrcu3@airbuntu>
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
- <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+        Tue, 17 Jan 2023 12:21:06 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, rppt@kernel.org,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        david@redhat.com, quic_charante@quicinc.com,
+        lizhe.67@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v4] mm/page_ext: Do not allocate space for page_ext->flags if not needed
+Date:   Tue, 17 Jan 2023 20:21:03 +0000
+Message-Id: <20230117202103.1412449-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/16/23 14:56, Dietmar Eggemann wrote:
-> On 16/01/2023 12:23, Vincent Guittot wrote:
-> > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >>
-> >> On 13/01/2023 14:40, Vincent Guittot wrote:
-> 
-> [...]
-> 
-> >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
-> >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
-> >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
-> >>>
-> >>> +     /* Return true only if the utlization doesn't fit its capacity */
-> >>
-> >> s/utlization/utilization
-> >> s/its/CPU ?
-> >>
-> >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
-> >>>  }
-> >>
-> >> cpu_overutilized() is the only place where we now only test for
-> >> !util_fits_cpu(). The new comment says we only care about utilization
-> >> not fitting CPU capacity.
-> >>
-> >> Does this mean the rq uclamp values are not important here and we could
-> >> go back to use fits_capacity()?
-> >>
-> >> Not sure since util_fits_cpu() is still coded differently:
-> > 
-> > uclamp_min is not important but uclamp_max still cap the utilization
-> 
-> OK, makes sense.
-> 
-> I.e. we could pass in `rq_util_min = 0` to avoid fetching it
-> unnecessary? In case `fits == 1` before the uclamp_min condition in
-> util_fits_cpu() it doesn't matter if we switch to return `-1` when
-> called from cpu_overutilized(). Detail though ...
-> 
-> [...]
-> 
-> >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
-> >>>
-> >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
-> >>>                       continue;
-> >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
-> >>> +
-> >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
-> >>> +
-> >>> +             /* This CPU fits with all capacity and performance requirements */
-> >>
-> >> In task_fits_cpu() `utilization and performance (better uclamp)
-> >> requirements` term was used. I assume it's the same thing here?
-> >>
-> >>> +             if (fits > 0)
-> >>>                       return cpu;
-> >>> +             /*
-> >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
-> >>> +              * for the CPU with highest performance capacity.
-> >>                                             ^^^^^^^^^^^^^^^^^^^^
-> >>
-> >> Do we use a new CPU capacity value `performance capacity (1)` here?
-> >>
-> >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
-> >>
-> >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
-> >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
-> >> to return -1. Shouldn't (1) and (2) be the same?
-> > 
-> > I'm all in favor of both being capacity_orig_of(cpu) -
-> > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
-> 
-> I think we need a handy name for this new capacity value, which seems to
-> be `capacity_orig - capacity reduced by thermal`. And we should either
-> use `thermal_load_avg` or `thermal pressure` for the latter part. And
-> then we should use this consistently in all these places:
-> util_fits_cpu(), feec(), sic().
+There is 8 byte page_ext->flags field allocated per page whenever
+CONFIG_PAGE_EXTENSION is enabled. However, not every user of page_ext
+uses flags. Therefore, check whether flags is needed at least by one
+user and if so allocate space for it.
 
-So we had reports from Xuewen that not using instantaneous pressure causes
-problems.
+For example when page_table_check is enabled, on a machine with 128G
+of memory before the fix:
 
-Lukasz came up with this patch to help address the problem, but it's still
-waiting discussions. I think we need to discuss this problem more there.
+[    2.244288] allocated 536870912 bytes of page_ext
+after the fix:
+[    2.160154] allocated 268435456 bytes of page_ext
 
-	https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/
+Also, add a kernel-doc comment before page_ext_operations that describes
+the fields, and remove check if need() is set, as that is now a required
+field.
 
-At the moment there's no good solution and either comes with its own set of
-caveat(s). Being consistent is not an option now AFAICT? We need to improve
-thermal_load_avg() response time first somehow.
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Acked-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/page_ext.h | 18 ++++++++++++++++++
+ mm/page_ext.c            | 14 ++++++++++++--
+ mm/page_owner.c          |  1 +
+ mm/page_table_check.c    |  1 +
+ 4 files changed, 32 insertions(+), 2 deletions(-)
 
-For now, to make best decision - we look at instantaneous. But when falling
-back - I think using the long term pressure signal makes more sense because we
-wouldn't be doing this fallback path if everything works as expected thermal
-wise.
+Changelog:
+v4: Addressed comments from Mike Rapoport, added Acked-by's.
+v3: Added comment before page_ext_operations, removed check if
+    need is null.
+v2: Fixed field name in page_owner.c that caused build error.
 
-At least, that's what I think is a good trade-of for now :)
+diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+index 22be4582faae..67314f648aeb 100644
+--- a/include/linux/page_ext.h
++++ b/include/linux/page_ext.h
+@@ -7,15 +7,33 @@
+ #include <linux/stackdepot.h>
+ 
+ struct pglist_data;
++
++/**
++ * struct page_ext_operations - per page_ext client operations
++ * @offset: Offset to the client's data within page_ext. Offset is returned to
++ *          the client by page_ext_init.
++ * @size: The size of the client data within page_ext.
++ * @need: Function that returns true if client requires page_ext.
++ * @init: (optional) Called to initialize client once page_exts are allocated.
++ * @need_shared_flags: True when client is using shared page_ext->flags
++ *                     field.
++ *
++ * Each Page Extension client must define page_ext_operations in
++ * page_ext_ops array.
++ */
+ struct page_ext_operations {
+ 	size_t offset;
+ 	size_t size;
+ 	bool (*need)(void);
+ 	void (*init)(void);
++	bool need_shared_flags;
+ };
+ 
+ #ifdef CONFIG_PAGE_EXTENSION
+ 
++/*
++ * The page_ext_flags users must set need_shared_flags to true.
++ */
+ enum page_ext_flags {
+ 	PAGE_EXT_OWNER,
+ 	PAGE_EXT_OWNER_ALLOCATED,
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 4ee522fd381c..e2c22ffdbb81 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -71,6 +71,7 @@ static bool need_page_idle(void)
+ }
+ static struct page_ext_operations page_idle_ops __initdata = {
+ 	.need = need_page_idle,
++	.need_shared_flags = true,
+ };
+ #endif
+ 
+@@ -86,7 +87,7 @@ static struct page_ext_operations *page_ext_ops[] __initdata = {
+ #endif
+ };
+ 
+-unsigned long page_ext_size = sizeof(struct page_ext);
++unsigned long page_ext_size;
+ 
+ static unsigned long total_usage;
+ static struct page_ext *lookup_page_ext(const struct page *page);
+@@ -106,7 +107,16 @@ static bool __init invoke_need_callbacks(void)
+ 	bool need = false;
+ 
+ 	for (i = 0; i < entries; i++) {
+-		if (page_ext_ops[i]->need && page_ext_ops[i]->need()) {
++		if (page_ext_ops[i]->need()) {
++			if (page_ext_ops[i]->need_shared_flags) {
++				page_ext_size = sizeof(struct page_ext);
++				break;
++			}
++		}
++	}
++
++	for (i = 0; i < entries; i++) {
++		if (page_ext_ops[i]->need()) {
+ 			page_ext_ops[i]->offset = page_ext_size;
+ 			page_ext_size += page_ext_ops[i]->size;
+ 			need = true;
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 2d27f532df4c..f0553bedb39d 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -99,6 +99,7 @@ struct page_ext_operations page_owner_ops = {
+ 	.size = sizeof(struct page_owner),
+ 	.need = need_page_owner,
+ 	.init = init_page_owner,
++	.need_shared_flags = true,
+ };
+ 
+ static inline struct page_owner *get_page_owner(struct page_ext *page_ext)
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index 93e633c1d587..25d8610c0042 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -45,6 +45,7 @@ struct page_ext_operations page_table_check_ops = {
+ 	.size = sizeof(struct page_table_check),
+ 	.need = need_page_table_check,
+ 	.init = init_page_table_check,
++	.need_shared_flags = false,
+ };
+ 
+ static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-
-Thanks!
-
---
-Qais Yousef
