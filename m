@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14DF66DC69
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4105266DC6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236412AbjAQLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 06:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S236879AbjAQLb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbjAQLa0 (ORCPT
+        with ESMTP id S236322AbjAQLbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:30:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF9C2DE57;
-        Tue, 17 Jan 2023 03:30:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C22CCB815A2;
-        Tue, 17 Jan 2023 11:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7455FC433F0;
-        Tue, 17 Jan 2023 11:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673955017;
-        bh=uanmQl0XnnvrdM4uz2qfuTOC8CnMz0HQVeFeBnzZoqo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mMO8keSE91RebTkdCrhFdEGaW6K0pOB1KBkM9iSVijwttzY6TMfVTKos2ud5+dVYQ
-         GqbX56S766aM4/AYPPw6cYUivV4DKI+pslV9vAERAGlCsb1tutjlY7bNtcULDUv/6q
-         0QA5AyfjF1cs8Yir/oCFHrS+/hC/w/6sxGE2fKoOllibS7UH2A8i5jshxAZrmbpAQ0
-         1xKvwMCx7qxBDzPi8cfyyFvF+q1DV16Vr948HW4ICBpgbXGvqaN43J2oZP2uEhCxpj
-         fU8lT1SnDpzzEkCQX+9H1IEcflabpvy1aFswvQidC6fqzLA9m+SEeWIq5q84hTsIFt
-         m3rqA/HAZBV4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56D5DC41670;
-        Tue, 17 Jan 2023 11:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 17 Jan 2023 06:31:00 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057E634576;
+        Tue, 17 Jan 2023 03:30:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673955036; x=1705491036;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=i3BuCS+pJ4oTm89xGBP/zNyMeh4Xwhz1HQ+sE6hvKJk=;
+  b=QBdLyISQYjMmpbkrNJZ0FbehE0L80WY9IVHYKC34ad5ZeK4erkGmj1ai
+   5OlgvQxAQwDZCBW3VlXPYsyUXGbzss/oUOZoX2n01Pay/VbOmJWuSuaty
+   gKYTA99frlzQwxaVF91cxkQZ/MEmQEH5NGuz3STcbgAHvaQvnriRlN5gz
+   4Y4K5VJoRhbqwFKuce6mkQevVRC0upKR/mAOVImGlUCvD7ERwPokB5J1N
+   IkCKSwqJd5iCu9Ha2XnOVbZwgpnxjdwRvV6Xzs+SzrbYxMU1RKyHu1YN4
+   GhpMUeYoydVFZ721LXnNZJShjClb/TO1UIFAh5Y06k3ZiSKvIcFvtWZo8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="323369006"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="323369006"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 03:30:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="904615098"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="904615098"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.10.213]) ([10.213.10.213])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 03:30:29 -0800
+Message-ID: <309b58d6-3b4f-36ec-d68e-f0fc60790118@intel.com>
+Date:   Tue, 17 Jan 2023 12:30:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] inet: fix fast path in __inet_hash_connect()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167395501735.22351.17426243090589547369.git-patchwork-notify@kernel.org>
-Date:   Tue, 17 Jan 2023 11:30:17 +0000
-References: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
-In-Reply-To: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
-To:     Pietro Borrello <borrello@diag.uniroma1.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        c.giuffrida@vu.nl, h.j.bos@vu.nl, jkl820.git@gmail.com,
-        kuniyu@amazon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH v11 1/5] dt-bindings: display: bridge: Convert
+ cdns,dsi.txt to yaml
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, dri-devel@lists.freedesktop.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     narmstrong@baylibre.com, robert.foss@linaro.org, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        p.zabel@pengutronix.de, tomi.valkeinen@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        jpawar@cadence.com, sjakhade@cadence.com, mparab@cadence.com,
+        a-bhatia1@ti.com, devicetree@vger.kernel.org, vigneshr@ti.com,
+        lee.jones@linaro.org, Rob Herring <robh@kernel.org>
+References: <20230103101951.10963-1-r-ravikumar@ti.com>
+ <20230103101951.10963-2-r-ravikumar@ti.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230103101951.10963-2-r-ravikumar@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
 
-On Sat, 14 Jan 2023 13:11:41 +0000 you wrote:
-> __inet_hash_connect() has a fast path taken if sk_head(&tb->owners) is
-> equal to the sk parameter.
-> sk_head() returns the hlist_entry() with respect to the sk_node field.
-> However entries in the tb->owners list are inserted with respect to the
-> sk_bind_node field with sk_add_bind_node().
-> Thus the check would never pass and the fast path never execute.
-> 
-> [...]
+On 03.01.2023 11:19, Rahul T R wrote:
+> Convert cdns,dsi.txt binding to yaml format
+>
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Here is the summary with links:
-  - [net-next,v3] inet: fix fast path in __inet_hash_connect()
-    https://git.kernel.org/netdev/net-next/c/21cbd90a6fab
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Regards
+Andrzej
 
