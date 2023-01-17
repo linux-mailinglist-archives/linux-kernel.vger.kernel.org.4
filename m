@@ -2,144 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBFE66E4DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1C866E4D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjAQRYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S230359AbjAQRYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235415AbjAQRXl (ORCPT
+        with ESMTP id S232191AbjAQRW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:23:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAB74B742;
-        Tue, 17 Jan 2023 09:23:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=d4WBILilzYsNGArsge+y5s7v2GX865hdolZPV6TRt7I=; b=Em7g0qDcz7bEafI6aNIe2D0so+
-        Cg9kajB3XyiKTQiPy5XroTuGTnsQUOza+shC4LCIflse5oQMU9Uh0ycYhT5GDpVrxrOXCQAwdTQrJ
-        YHe/LqCUWDKmGtqzJieWDu7sMXEtSzFLVjVT0zWHy2eTapJOrzmfcZUXly1zP/kUY/V2+ATItLS24
-        0l+PABRuPUz68XY8uU9OOE1ZIK9IgIJr8Yg5zh+aOf6wkperDZYMdPid1ERuvYyX+cPfMOXCh0Djx
-        DI1mTyDKFHWBhae2IB11pVz8AAUyVITlkzhZ27g2KyLmuhs4LAEMlWXP/hYdcp3901yQpJq7e9RQr
-        Swg5WMlQ==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHpeg-00FF2u-Rl; Tue, 17 Jan 2023 17:21:50 +0000
-Message-ID: <cc20a76f-6de5-b850-2c54-1e2a535feca6@infradead.org>
-Date:   Tue, 17 Jan 2023 09:21:48 -0800
+        Tue, 17 Jan 2023 12:22:58 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40B149948
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:43 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id r15so4538018qtx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1wkcBqmofA04c9jcFvMRG1CTfOla63rohknUm+bkZuI=;
+        b=Zmv4mLxdPkwdhWU2+KlKPYPoZDU6vd0YR886xdzB2ZdFVWwZ7UsXLPBqUCQ5n6wYYE
+         y0hvuwyht3n0D8zLJaoqZVhYMTBx2N7uzU/ATZlotJwwW+DUFZUe2jp4bU6MoXlnRS+k
+         ytr/2zUVDgyKjFAIvGfwsLtQpvUe+dSwwG/oU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1wkcBqmofA04c9jcFvMRG1CTfOla63rohknUm+bkZuI=;
+        b=OR77pB59Kt0gxYmEd0pfxBbFYusI9e7hV2o11Tj7U0/9PHNJ65oG0rWBFlS5/La8Fi
+         E7AEa61eNg7xHj9JQ44OyYyl1LWnxH61PApZjgBKbVU+TBm0Gb9rzLRi+vM/j+gKCGg0
+         LO1dWSSH2kGdZr9VHQuX25e+JebrnBsYix5cEEJpU4DmTPPbFcxgkgTN4Jb0jjeAkGqd
+         LoWKs2fonJWK5aO0G+tw3w7m9obUiM9V7nnT0NhlosyUVq14fN50g2kxP7IFYGa95cMz
+         YmKV8sDJgYOT9/YbRy4+5+WniZTM99Khq9oOi05O7rkvPoMycY+3/7PQrYkmMA7WRnlw
+         CM2A==
+X-Gm-Message-State: AFqh2kqVE+8Xp3u9ji2PUzm2bBltyWIVDMkVlHY6QoDrYsIhXGB22QfK
+        I3kbM6CSDtng5JyZ7VyTM3xLgpxjt+uK9ZY5
+X-Google-Smtp-Source: AMrXdXvM6MkFCoyuLltu5sVD2Ozw2G9Jx/PIZnXd6Clqaz+CvYICTV3UVwmFhOKbxPPn2T/cIuz0dw==
+X-Received: by 2002:a05:622a:4a0f:b0:3b0:b9a4:a20f with SMTP id fv15-20020a05622a4a0f00b003b0b9a4a20fmr5413903qtb.4.1673976162702;
+        Tue, 17 Jan 2023 09:22:42 -0800 (PST)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com. [209.85.219.42])
+        by smtp.gmail.com with ESMTPSA id m5-20020ac86885000000b0039cba52974fsm16255085qtq.94.2023.01.17.09.22.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 09:22:42 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id j9so22110954qvt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:42 -0800 (PST)
+X-Received: by 2002:a05:6214:5d11:b0:531:7593:f551 with SMTP id
+ me17-20020a0562145d1100b005317593f551mr193396qvb.89.1673976162017; Tue, 17
+ Jan 2023 09:22:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 01/19] bus/cdx: add the cdx bus driver
-Content-Language: en-US
-To:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, eric.auger@redhat.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
-        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
-        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
-        yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com,
-        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
-        masahiroy@kernel.org, ndesaulniers@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, git@amd.com
-References: <20230117134139.1298-1-nipun.gupta@amd.com>
- <20230117134139.1298-2-nipun.gupta@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230117134139.1298-2-nipun.gupta@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <d101b94f-cbd6-dac0-f5d1-f6cb32585d0c@I-love.SAKURA.ne.jp>
+In-Reply-To: <d101b94f-cbd6-dac0-f5d1-f6cb32585d0c@I-love.SAKURA.ne.jp>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 17 Jan 2023 09:22:26 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whpViMCG7aN-e0fsdJmSdpNVqTyvCWhzS_XkD-u2jxm_Q@mail.gmail.com>
+Message-ID: <CAHk-=whpViMCG7aN-e0fsdJmSdpNVqTyvCWhzS_XkD-u2jxm_Q@mail.gmail.com>
+Subject: Re: [GIT PULL] tomoyo update for v6.2
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Tue, Jan 17, 2023 at 2:58 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+>   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git tags/tomoyo-pr-20230117
 
-On 1/17/23 05:41, Nipun Gupta wrote:
-> Introduce AMD CDX bus, which provides a mechanism for scanning
-> and probing CDX devices. These devices are memory mapped on
-> system bus for Application Processors(APUs).
-> 
-> CDX devices can be changed dynamically in the Fabric and CDX
-> bus interacts with CDX controller to rescan the bus and
-> rediscover the devices.
-> 
-> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> Signed-off-by: Tarak Reddy <tarak.reddy@amd.com>
-> ---
->  Documentation/ABI/testing/sysfs-bus-cdx |  12 +
->  MAINTAINERS                             |   7 +
->  drivers/bus/Kconfig                     |   1 +
->  drivers/bus/Makefile                    |   2 +
->  drivers/bus/cdx/Kconfig                 |  14 +
->  drivers/bus/cdx/Makefile                |   8 +
->  drivers/bus/cdx/cdx.c                   | 433 ++++++++++++++++++++++++
->  drivers/bus/cdx/cdx.h                   |  62 ++++
->  include/linux/cdx/cdx_bus.h             | 153 +++++++++
->  include/linux/mod_devicetable.h         |  15 +
->  scripts/mod/devicetable-offsets.c       |   4 +
->  scripts/mod/file2alias.c                |  12 +
->  12 files changed, 723 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-cdx
->  create mode 100644 drivers/bus/cdx/Kconfig
->  create mode 100644 drivers/bus/cdx/Makefile
->  create mode 100644 drivers/bus/cdx/cdx.c
->  create mode 100644 drivers/bus/cdx/cdx.h
->  create mode 100644 include/linux/cdx/cdx_bus.h
-> 
+Pulled, but I really would have liked a proper pull request with shortlog etc.
 
-> diff --git a/drivers/bus/cdx/Kconfig b/drivers/bus/cdx/Kconfig
-> new file mode 100644
-> index 000000000000..54e0623ebcff
-> --- /dev/null
-> +++ b/drivers/bus/cdx/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# CDX bus configuration
-> +#
-> +# Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-> +#
-> +
-> +config CDX_BUS
-> +	bool "CDX Bus driver"
-> +	help
-> +	  Driver to enable CDX Bus. CDX bus provides a mechanism for
-> +	  scanning and probing of CDX devices. CDX devices are memory
-> +	  mapped on system bus for embedded CPUs. CDX bus uses CDX
-> +	  controller and firmware to scan the CDX devices.
-
-Would you mind telling people who use 'make *config' what CDX means,
-either in the bool prompt string or in the help text?
-
-
-> +/**
-> + * cdx_unregister_device - Unregister a CDX device
-> + * @dev: CDX device
-> + * @data: This is always passed as NULL, and is not used in this API,
-> + *	  but is required here as the bus_for_each_dev() API expects
-> + *	  the passed function (cdx_unregister_device) to have this
-> + *	  as an argument.
-> + *
-> + * @return: -errno on failure, 0 on success.
-
-The syntax (or spelling) for a function's return value in kernel-doc is just:
- * Return: -errno on failure, 0 on success.
-
-That should be changed in many places throughout.
-
-Thanks.
-
--- 
-~Randy
+               Linus
