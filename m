@@ -2,155 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEB866DA31
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC6066DABC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbjAQJmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S236681AbjAQKQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235875AbjAQJlP (ORCPT
+        with ESMTP id S236111AbjAQKQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:41:15 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E008189;
-        Tue, 17 Jan 2023 01:40:31 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A480810C;
-        Tue, 17 Jan 2023 10:40:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673948428;
-        bh=pwcY+nhMvG/TRw/6a23Tkmw05fU7m9erKXgldfhdtKs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cYB3srwjuy25uquA3HfrV9XgcNNZC0uzFWAmKVLDC88prn2l7TdA8UdpW1riCiTUw
-         bI7W0xJvy84evkSzMYe0tyfBuelwxCmVcMXGkmy4d+7CMcOeg1y+z6HIrRxe+eBvlq
-         onJ8cV9jePy0uL5vg5jixJwRgV8Kxw5xOa3+GE5c=
-Message-ID: <367fba29-bc08-1f27-249c-09e406adfbbb@ideasonboard.com>
-Date:   Tue, 17 Jan 2023 11:40:24 +0200
+        Tue, 17 Jan 2023 05:16:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42E972BE;
+        Tue, 17 Jan 2023 02:16:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C21661262;
+        Tue, 17 Jan 2023 10:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C4AC433EF;
+        Tue, 17 Jan 2023 10:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673950569;
+        bh=u/S51Y0ZVFM2rAt14Mto0M3SNi0/tggtICQ+tGQ+MWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UfT+IvldhVv0HqJEoOCbfJUxTclSDqVjcCzzZEHYeZIqjnWbJRcgE0zCJSCVtM0PN
+         SqSlu+mebbf2hdSeApH57cRbvFxYTMIvgIgLitzywdNG34a/XY5GNIwxADETptzo6c
+         MeWs/Vr+IdeZitXN+CfOGtCqJ2NS7QPETglkuilA=
+Date:   Tue, 17 Jan 2023 10:44:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/658] 5.4.229-rc1 review
+Message-ID: <Y8Zt42qAQ2BQdxL2@kroah.com>
+References: <20230116154909.645460653@linuxfoundation.org>
+ <20230116202025.GA3397667@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: clock: fixed-factor: Add TI AM62 SoC
- OLDI clock
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linux Clock List <linux-clk@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>, Jai Luthra <j-luthra@ti.com>
-References: <20221226095745.19757-1-a-bhatia1@ti.com>
- <20221226095745.19757-2-a-bhatia1@ti.com>
- <8980856c1138571976f00413b94cfeb8.sboyd@kernel.org>
- <1856e963-4514-92f3-5d43-d5b711083193@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <1856e963-4514-92f3-5d43-d5b711083193@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230116202025.GA3397667@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 11:51, Aradhya Bhatia wrote:
-> Hi Stephen,
+On Mon, Jan 16, 2023 at 12:20:25PM -0800, Guenter Roeck wrote:
+> On Mon, Jan 16, 2023 at 04:41:28PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.4.229 release.
+> > There are 658 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> > Anything received after that time might be too late.
+> > 
 > 
-> Thanks for taking a look at the patch.
+> Note: Exactly the same failures are seen in v4.19.269-522-gc75d2b5524ab,
+> so I won't bother sending test results for that branch.
 > 
-> On 12-Jan-23 01:14, Stephen Boyd wrote:
->> Quoting Aradhya Bhatia (2022-12-26 01:57:44)
->>> Add "ti,k3-am62-oldi-clk-div" to the fixed factor clock compatible enum
->>> list.
->>>
->>> "ti,k3-am62-oldi-clk-div" is a fixed-factor clock that helps the TI
->>> display subsystem request a pixel clock for itself and a corresponding
->>> serial clock for its OLDI Transmitters. The serial clock is 7 times the
->>> pixel clock. This clock needs the clock set rate request to be
->>> propagated to the parent clock provider.
->>>
->>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->>> ---
->>>   Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml 
->>> b/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
->>> index 8f71ab300470..0696237530f7 100644
->>> --- a/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
->>> @@ -14,6 +14,7 @@ properties:
->>>     compatible:
->>>       enum:
->>>         - fixed-factor-clock
->>> +      - ti,k3-am62-oldi-clk-div
->>
->> I don't see this compatible anywhere in the kernel tree. Is there a
->> patch that adds a node using this? I wonder why the display subsystem
->> can't add this fixed factor clk directly in the driver. Does the OLDI
->> Transmitter send a clk to the display subsystem?
->>
->> I'm asking all these questions because we got rid of vendor compatibles
->> here in hopes of simplifying the logic. Maybe the problem can be
->> approached differently, but I don't know all the details.
+> ---
 > 
+> Build results:
+> 	total: 159 pass: 153 fail: 6
+> Failed builds:
+> 	i386:tools/perf
+> 	riscv:defconfig
+> 	s390:allnoconfig
+> 	s390:tinyconfig
+> 	um:defconfig
+> 	x86_64:tools/perf
+> Qemu test results:
+> 	total: 449 pass: 413 fail: 36
+> Failed tests:
+> 	<all ppc64:pseries>
+> 	<all riscv>
 > 
-> +--------+                       +------------------+
-> |        |                       |                  |
-> |  PLL   +---+----+------------->| OLDI Transmitter |
-> |        |   |    |              |                  |
-> +--------+   |    |              +------------------+
->               |    |
->               |    |              +------------------+
->               |    |              |                  |
->               |    +------------->| OLDI Transmitter |
->               |                   |                  |
->               |                   +------------------+
->               |
->               |                   +------------------+
->               |   +----------+    |                  |
->               |   |    /7    |    |      Display     |
->               +-->|   Clock  +--->| Sub-System (DSS) |
->                   |    Div   |    |                  |
->                   +----------+    +------------------+
+> Details follow.
 > 
-> This is how the the clock architecture for DSS looks like.
+> Guenter
 > 
-> The clock divider is not a part of DSS, but outside it.
+> ========
 > 
-> The clock request flow is initiated by the DSS driver because it has the
-> required timing parameter information. It requests a certain pixel
-> frequency. But the frequency required by the OLDI TXes is 7 times
-> that pixel frequency.
-> 
-> (Just for clarification, in some cases, the OLDI TX does require only
-> 3.5 times the pixel frequency, but in those situations there is another
-> divider in-front of OLDI TX that gets activated with a signal and
-> divides the incoming frequency by 2, thereby requiring the PLL to still
-> generate a 7x frequency.)
-> 
-> Hence, the idea is that the clock divider is able to propagate the set
-> rate request back to PLL, asking for a frequency 7 times more than the
-> DSS's asking rate.
-> 
-> If this is something less than ideal and should not go up, then I can
-> implement a new clock device with a separate but similar clock driver.
-> 
-> Let me know what you think!
+> Building i386:tools/perf ... failed
+> Building x86_64:tools/perf ... failed
+> --------------
+> Error log:
+> util/debug.c: In function ‘perf_quiet_option’:
+> util/debug.c:237:2: error: ‘debug_peo_args’ undeclared
 
-As a clarification I would also add to the above that on other TI SoCs 
-with DSS, and also for the second video port on AM62, the clock 
-framework provides DSS a clock using the pclk frequency.
+Offending commit now dropped.
 
-  Tomi
+> Building riscv:defconfig ... failed
+> --------------
+> Error log:
+> arch/riscv/kernel/stacktrace.c: In function 'walk_stackframe':
+> arch/riscv/kernel/stacktrace.c:58:36: error: 'struct pt_regs' has no member named 'epc'
 
+Patch dropped.
+
+> 
+> Building s390:allnoconfig ... failed
+> Building s390:tinyconfig ... failed
+> --------------
+> Error log:
+> s390-linux-ld: drivers/base/platform.o: in function `devm_platform_get_and_ioremap_resource':
+> platform.c:(.text+0x594): undefined reference to `devm_ioremap_resource'
+> s390-linux-ld: platform.c:(.text+0x5c2): undefined reference to `devm_ioremap_resource'
+> 
+> Building um:defconfig ... failed
+> --------------
+> Error log:
+> ld: drivers/base/platform.o: in function `devm_platform_get_and_ioremap_resource':
+> drivers/base/platform.c:82: undefined reference to `devm_ioremap_resource'
+
+Same patches now dropped.
+
+> 
+> Runtime:
+> 
+> Building ppc64:pseries:pseries_defconfig:smp2:net,pcnet:initrd ... running ......R... failed (crashed)
+> 
+> BUG: Kernel NULL pointer dereference at 0x00000000
+> Faulting instruction address: 0xc000000000046cc8
+> Oops: Kernel access of bad area, sig: 11 [#1]
+> BE SMP NR_CPUS=2048 NUMA pSeries
+> Modules linked in:
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 4.19.270-rc1-00522-gc75d2b5524ab #1
+> NIP:  c000000000046cc8 LR: c000000000046ca4 CTR: 0000000000000000
+> REGS: c00000003e6878f0 TRAP: 0380   Not tainted  (4.19.270-rc1-00522-gc75d2b5524ab)
+> MSR:  8000000002009032 <SF,VEC,EE,ME,IR,DR,RI>  CR: 84000882  XER: 00000000
+> CFAR: c000000000162cf8 IRQMASK: 0
+> GPR00: c000000000046ca4 c00000003e687b70 c000000001772000 0000000000000000
+> GPR04: 0000000000000001 0000000000000001 c00000003e687990 00000000bc24d52c
+> GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000003
+> GPR12: 0000000024000882 c00000003ffff300 c000000000010e34 0000000000000000
+> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR20: 0000000000000000 0000000000000000 c00000000125eea8 0000000000000001
+> GPR24: c000000001379cd8 c000000001419f20 c0000000017b7d68 c0000000017b7d68
+> GPR28: 0000000000000000 0000000000000002 c00000000160efe8 c00000000168ac60
+> NIP [c000000000046cc8] .eeh_init+0x48/0x220
+> LR [c000000000046ca4] .eeh_init+0x24/0x220
+> Call Trace:
+> [c00000003e687b70] [c000000000046ca4] .eeh_init+0x24/0x220 (unreliable)
+> [c00000003e687c00] [c00000000001065c] .do_one_initcall+0x7c/0x430
+> [c00000003e687ce0] [c000000001394db4] .kernel_init_freeable+0x538/0x62c
+> [c00000003e687dc0] [c000000000010e4c] .kernel_init+0x18/0x14c
+> [c00000003e687e30] [c00000000000c0d0] .ret_from_kernel_thread+0x58/0x68
+> Instruction dump:
+> 3c62ffd7 38631c10 4811c021 60000000 2c030000 408201c8 3d22000b e92904e0
+> 2c290000 41820198 f8410028 e9290008 <e9490000> 7d4903a6 e8490008 4e800421
+> ---[ end trace 8912d02d3e80c4ae ]---
+
+This is odd, and I don't know how to track that down.  Any hints?
+
+thanks,
+
+greg k-h
