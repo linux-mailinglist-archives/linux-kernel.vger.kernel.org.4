@@ -2,118 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E812066E4BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6532766E4BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbjAQRUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S234641AbjAQRVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbjAQRT4 (ORCPT
+        with ESMTP id S233268AbjAQRU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:19:56 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A4C4B767
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:11 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id x26so3318697qkj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=06UlRa9qoCSN0KxTaeOEMXbLBq36exmUoY5DZI2ecZ0=;
-        b=pPnAHaRiZz2oMe5Yon/YcD/l34YoYVe7lYC8X8CeMN1X+Vj7PUIUAlkFbVEQ4R2qbH
-         Eow/19XdM9p/GmXXF16h4Qzcs+mP7YVR5obqZY0BGUw4oo+W+BQeJ34YIPekQIcAChy6
-         BROSiSElXgqj8yAkhpQVM6cntfhTlpJGIqr3jo+6MmV3zVT1n7lvzZR8J1lJnuxDEHjc
-         FMKtBYDoXlpSEbTHPHHPwYXTw8k7fvGyqct78MOw/VJT1n/ht8WfX4o9iRq8MbJLROyj
-         R8hfjO5tyKUaoUR37ZhoVjhamEsvv8/AfT9HRvGfp+bF4HoJlXIISWgUgYinKY/CQG9k
-         ZfPA==
+        Tue, 17 Jan 2023 12:20:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AEF1EFDF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673975963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ewfumNS1FYmWl7FUU1gFFTcCMXASO4AeNvtcvaqR0WA=;
+        b=QxPO6vvNAjwf9CpHCm18jQaoPGa+QcX+HETd5pzBnXKu/FsbO/MEXXVaPFGgUC6yJQiqu+
+        eeKK6rkZRxb5WYMLCwsbEak1FgIHe7KILqAKYdCQWYiwAhF3twEs7iqLUBLomQ78CPddbd
+        QA8L58e8ZqfzXi52Q/3Fn3b9qKyHIXQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-287--r8ogUmyOp6BOlXERnyMiA-1; Tue, 17 Jan 2023 12:19:21 -0500
+X-MC-Unique: -r8ogUmyOp6BOlXERnyMiA-1
+Received: by mail-ed1-f71.google.com with SMTP id g14-20020a056402090e00b0046790cd9082so22016538edz.21
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=06UlRa9qoCSN0KxTaeOEMXbLBq36exmUoY5DZI2ecZ0=;
-        b=z06sSwq05L/oc7ilTM9AIYOyrY6z2vbUvDHW5Xc81H0zPWek3DCVLzV0xsptqqcfo1
-         Qm1KneSdzhOTKN7lVwSH3OFxyUXkXvdoRXpWe6wrz7j7g7sM/lg/hc8JkfWo+WL/Yyti
-         j2u+l8qVcjmRekHQiSeUJJwfE/0CbjIDJdNADuZAyqUGFY8kDk75HuaCXU4FUam2iVQf
-         sIhXW/IjltAT1KzE7IXyk7b5fTTyuY7V5dPaY31+Qq5NzJeatJG1GfHsxReLwk8pItQ8
-         eud7olYToRUV5c+qz2ktD7UnUhp9Aelh+C50qVM8kh/Gy/ozIf76W4wFfToF6BmLO2Wz
-         GQPQ==
-X-Gm-Message-State: AFqh2koAeuxfT7TC20qf7pS3ifKAvjBxuVOyKNaQ/NWWpsBKTXRc1re6
-        WmvmpysfXOWc2lJCKDtK0Ju2BIOghrKP2Gt8W5k=
-X-Google-Smtp-Source: AMrXdXtka5YaMVLNI+mzHwlBB3TJF0Ykj9QFK6P0G2icoLGL2NRSxu+br/z0FrhZampkgecCjVUIG6WkPXwfNqHgqHE=
-X-Received: by 2002:a05:620a:66d:b0:706:17d4:aac1 with SMTP id
- a13-20020a05620a066d00b0070617d4aac1mr215240qkh.13.1673975950642; Tue, 17 Jan
- 2023 09:19:10 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ewfumNS1FYmWl7FUU1gFFTcCMXASO4AeNvtcvaqR0WA=;
+        b=viv0PwcJfmxL2x4DoLyyUTLKfRdzRbBqQ0fFiw6DD9NNwCSOB8eOXtdmLtjq0a+L4Y
+         /n1ESAyLfOF4qo1m42iqifByqLHIGJRT8e1PTg8VFbTc0AVUWN30Y18HGF24ZvwfTXQ/
+         qcMb5YR2fGgjfVgM1PvbGyzwl0/veleobpHAG+NYtZOoGVdKe/OcpFtMyLfTbkxKX68o
+         zjvrHdsgg84kTyO6pu/+ACuzFZ5l7mZYph/zo3BZCbK3GpF+yXzBqr0qgiKquNw07JqC
+         3SmHsm7gYMjr1WkhAQZ1GedkXogRzv3EPIIyVDi0pz9L2aEYJ6RPyRGvK7fCjs4pptvL
+         SBFw==
+X-Gm-Message-State: AFqh2kpkn7k3SzcSCXobVnFVodjXPjft3Ev94pYF860TQScpX28FbC6/
+        YJORvjQyUztV2ZNATySZpZe8VEmXIokwvuDgJIxvwL6+dgCxhjxA8d9PmY7+G8ibuBpiRq1Rfmb
+        kyttroEn1wli/xpZOheEJ/c4Q
+X-Received: by 2002:a17:906:4684:b0:86f:b99c:ac8d with SMTP id a4-20020a170906468400b0086fb99cac8dmr3783656ejr.44.1673975960612;
+        Tue, 17 Jan 2023 09:19:20 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtAZJ8m8Lta0dHgrvmfc7q8aPjIVicIKus68iWmBIaT/AmiMxP7pYPNDX7CjgN5HodtbJTYdg==
+X-Received: by 2002:a17:906:4684:b0:86f:b99c:ac8d with SMTP id a4-20020a170906468400b0086fb99cac8dmr3783645ejr.44.1673975960446;
+        Tue, 17 Jan 2023 09:19:20 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id hq15-20020a1709073f0f00b0084c4b87a69csm13425121ejc.153.2023.01.17.09.19.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 09:19:19 -0800 (PST)
+Message-ID: <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
+Date:   Tue, 17 Jan 2023 18:19:19 +0100
 MIME-Version: 1.0
-Sender: belloabubakar20002@gmail.com
-Received: by 2002:ac8:4e56:0:0:0:0:0 with HTTP; Tue, 17 Jan 2023 09:19:10
- -0800 (PST)
-From:   Bello Abubakar <belloabubaka94@gmail.com>
-Date:   Tue, 17 Jan 2023 09:19:10 -0800
-X-Google-Sender-Auth: J9JzNJ-lAQnAZPXEKR_MTjY2xOg
-Message-ID: <CAM5VdHHj3jP1Zpo-L7DmzL9itdWsDaAXqSOZ5ekKXF0YFCR5dQ@mail.gmail.com>
-Subject: URGENT REPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:732 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5468]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [belloabubakar20002[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [belloabubaka94[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] iio: light: cm32181: Fix PM support on system with 2 I2C
+ resources
+Content-Language: en-US, nl
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
+Cc:     Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230117160951.282581-1-kai.heng.feng@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230117160951.282581-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
-I am a relative of a politically exposed person (PEP) that is in
-financial regulation. Due to my present health condition, I'd decided
-to write through this email for the security reason.
+Hi,
 
-Therefore, kindly treat this as top secret for the security reason.
-I'd after fasting and prayer choose to write not you particularly but
-I believing in probability of you being a confidant chosen by chance;
-luck to help and share in this noble cause.
+On 1/17/23 17:09, Kai-Heng Feng wrote:
+> Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
+> with 2 I2C resources") creates a second client for the actual I2C
+> address, but the "struct device" passed to PM ops is the first client
+> that can't talk to the sensor.
+> 
+> That means the I2C transfers in both suspend and resume routines can
+> fail and blocking the whole suspend process.
+> 
+> Instead of using the first client for I2C transfer, store the cm32181
+> private struct on both cases so the PM ops can get the correct I2C
+> client to perfrom suspend and resume.
+> 
+> Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
+> Tested-by: Wahaj <wahajaved@protonmail.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-I need your assistant to conduct secret transfers of family's funds
-worth =E2=82=AC90.5 millions Euros. It was deposited in bank clandestinely.
+Thank you for this fix. I had looking into this on my todo list,
+since I have been seeing some bug reports about this too.
 
-I am in grave condition and I expect my death any moment now and I
-want to donate the fund to less privilege and you will be rewarded
-with reasonable percentage of the fund if you can assist.
+One remark inline:
 
-Please contact me back for more details,
+> ---
+>  drivers/iio/light/cm32181.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+> index 001055d097509..0f319c891353c 100644
+> --- a/drivers/iio/light/cm32181.c
+> +++ b/drivers/iio/light/cm32181.c
+> @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
+>  	if (!indio_dev)
+>  		return -ENOMEM;
+>  
+> +	i2c_set_clientdata(client, indio_dev);
+> +
 
-Yours truly,
-Bello Abubakar
+Why move this up, the suspend/resume callbacks cannot run until
+probe() completes, so no need for this change.
+
+>  	/*
+>  	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
+>  	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
+> @@ -458,9 +460,9 @@ static int cm32181_probe(struct i2c_client *client)
+>  		client = i2c_acpi_new_device(dev, 1, &board_info);
+>  		if (IS_ERR(client))
+>  			return PTR_ERR(client);
+> -	}
+>  
+> -	i2c_set_clientdata(client, indio_dev);
+> +		i2c_set_clientdata(client, indio_dev);
+> +	}
+
+And moving it inside the if block here (instead of just dropping it)
+is also weird. I guess you meant to just delete it since you moved it up.
+
+>  
+>  	cm32181 = iio_priv(indio_dev);
+>  	cm32181->client = client;
+
+Also note that the ->client used in suspend/resume now is not set until
+here, so moving the i2c_set_clientdata() up really does not do anything.
+
+I beleive it would be best to just these 2 hunks from the patch and
+only keep the changes to the suspend/resume callbacks.
+
+Regards,
+
+Hans
+
+
+> @@ -490,7 +492,8 @@ static int cm32181_probe(struct i2c_client *client)
+>  
+>  static int cm32181_suspend(struct device *dev)
+>  {
+> -	struct i2c_client *client = to_i2c_client(dev);
+> +	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+> +	struct i2c_client *client = cm32181->client;
+>  
+>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>  					 CM32181_CMD_ALS_DISABLE);
+> @@ -498,8 +501,8 @@ static int cm32181_suspend(struct device *dev)
+>  
+>  static int cm32181_resume(struct device *dev)
+>  {
+> -	struct i2c_client *client = to_i2c_client(dev);
+>  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+> +	struct i2c_client *client = cm32181->client;
+>  
+>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>  					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
+
