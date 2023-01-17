@@ -2,158 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82F670D0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B87D670D0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjAQXQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S229796AbjAQXQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjAQXNr (ORCPT
+        with ESMTP id S229779AbjAQXNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 18:13:47 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504E305E1;
-        Tue, 17 Jan 2023 13:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1673989278; bh=I2/wwz29IHFFWcH9NG7gDXsFobXahOWXy341hdlCpYY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Lo5nnjf4+kdztqPH73lADlseS1W3S7XxGEPFe8HkXuE04yz7wfbFE4DBXR79uOVpl
-         OEImMyhNsH1UAYLGl1ttT54qLyF+5LLqr7S5Gj3+NwnAWmvzcEjrCrL61pAxztgVNW
-         1mpdzyqASn54AlnkEN8MRihhRiXiQO/6A//R4AeXNcmr7dyNvCjuT5SdOJfApw6DA0
-         Oa1JI87VlWpUW1QfyGQf0gTuui7YqipKNUXOzYck4dw+HROYGS+HoSQFwDwTu1F1c3
-         0ocoEW1ouSM6DowZq4UUL9Z3asps5mXDEThQK2l93sqSXGh011lflTcrC1QVVf9roV
-         QfUEP3c5xkxxA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMXQ5-1oyQor0v9r-00JZIG; Tue, 17
- Jan 2023 22:01:18 +0100
-Subject: Re: [PATCH 2/4] ACPI: battery: Fix buffer overread if not
- NUL-terminated
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230114085053.72059-1-W_Armin@gmx.de>
- <20230114085053.72059-3-W_Armin@gmx.de>
- <CAJZ5v0h2vTAUovMoEoWVX2gJQiJS6C9PSYzMqQMtxPusgdHBMQ@mail.gmail.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <90f1270d-3c37-088b-98ac-a08caba685e8@gmx.de>
-Date:   Tue, 17 Jan 2023 22:01:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E8C305DC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:01:23 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p24so34788454plw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oik7f+Obtqb9oYcFCZxNF6kU7CTToRcYlL6LRTQBU44=;
+        b=ZObfXX2Gb1HxVqeXxJx1k/YW5m5gwg1cpLLrVlMJ2+pTnSXrvA7vpoSoraw63QCidF
+         ATflzj3vD699uzgaDMpc+H5Stx+Bk1CmS3m7ZxtMsPPnw4BGlICH2lsHbYAnib5mUN/D
+         s/ib+uqIP792gG7o0TE2rd/ahd1agJ7UZwsJ8xTirF7G7tA6AuYHgellrnCR5ABCgRgQ
+         UVN9t+QVyXJQI13PC63B0MxKm1FvAs1g7ATiJfiOfgo6PhSo3Z86PVs/uxt+7Cdw+pv0
+         4XZk1v9hL8f/zUdMR+0AT4qMWskyZZTC/WTkOEYcwPg68EqucSCcC/TaMIPSUNkoVGDH
+         v/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oik7f+Obtqb9oYcFCZxNF6kU7CTToRcYlL6LRTQBU44=;
+        b=49HsjKy4wgQ+PYMswm63g7TdHll+Xnw5V431d481qo/mNblcATSailbsbNyxeFLfpn
+         F4SdNCJNpLIAwIFhDvPA368lXlM8YMaa/2AsyGmodN5j6yWPl2RzbqG+llk8AMH/9BoD
+         PpUIqV1Va/Iq1Au/R/meVMCSFAufDtnYTHDJf8e441KMbiP5htlsrDJHJW97pW7yvGJD
+         aG/sCyqr+yipGbYW/TdKFPryPrSWjswgslKeOjV7qPAbOlMgEx+xNuwzrl2YhKgindJQ
+         X1dL1jrxECN0H9gR+SrUXeeSwVuZmeHMaMGorOhqS9tA4HCzqBs0pd6CGIxnvXh9nV2v
+         0hWA==
+X-Gm-Message-State: AFqh2krEsaDhjO8/bsLhrhuwVYIrKQ8aJ+6WRGGa5WrVo9nUhS6k2l/8
+        /X3qh+sY2MHzthmELmmB3ZPrTA==
+X-Google-Smtp-Source: AMrXdXuhF09L1YSr6t9q2XBspLKlA69sK9BoqznjJjzvbl1iIrMmIFqZtvr7VXKd6/UbaIerQX9lig==
+X-Received: by 2002:a05:6a21:33a1:b0:ac:af5c:2970 with SMTP id yy33-20020a056a2133a100b000acaf5c2970mr2853170pzb.3.1673989282322;
+        Tue, 17 Jan 2023 13:01:22 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170902ecca00b00189a7fbfd44sm21521000plh.211.2023.01.17.13.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 13:01:21 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:01:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8cMnjHFNIFaoX27@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+ <20230113151258.00006a6d@gmail.com>
+ <Y8F1uPsW56fVdhmC@google.com>
+ <20230114111621.00001840@gmail.com>
+ <Y8bFCb+rs25dKcMY@google.com>
+ <20230117214414.00003229@gmail.com>
+ <Y8cLcY12zDWqO8nd@google.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0h2vTAUovMoEoWVX2gJQiJS6C9PSYzMqQMtxPusgdHBMQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:pAd8VmJjNzHqqsFRHkj5Z0z7Wk0o10r4M/TV2n9E619EIGaL7Ed
- n6AXDzEn57YSyLCB+050zIKViyYr0MHkPTKq2bpBDYF0MB8jRqDTovaQ/rpfWeOBvhVMND4
- gh/mvxtyI5Z74f5XjJ4SqwCARoUBAgnqxM3F7wlT/aS0J39Y368QwsdT+bSpxgsLNcXO3j/
- ce7QZ9zd/R/3IHCRCGtvw==
-UI-OutboundReport: notjunk:1;M01:P0:MSvNwI6J0lQ=;Vs7jRF3ENCqJUnOM82hzUBHNH/S
- XHb5AQg1iDZXS5O9Xi5VurF+5p8MiO5trHIXOJLBdVZ/QAFh1WTug3e07QaKFlVvx6tqXZpiJ
- iVHalJ6E2O8oUFmDa2F2I/Pn9V7bxzA4vEVh9LY9cquF9E/n7DSJS2l8ioeL6VIc17SckISlv
- UgsO5BgADeBuM/JDRPkVb5+ESdPhAjtlbqwWFf4KxlwQrt0yb7iCWyUvpjb6mzTiU9Zcvovim
- 1SPjPVigNVmYn5R+EqNorhw1WgvRROkipHYqd4CrH7cqZ0sqlbS6v4tIQOzlruydBZ7wra7Ee
- RI4Xw5JoIrDCz2Tb9rgezzl5vCAhIzBamY5rwswf25dJF83aywQC6mBBGtF55W4ODVHG2nj5r
- +u5+41UoWvQeyNqS+E5nbRXylQQMopo19CZFN6Dq4c006TIUGYVq+jqamxukc0vgDOG663jfZ
- Wiub8d3/EGHbC2XQ0PkK7mFMhW3cXQ8Blt0lbkFYS8EXK++eQo7m1/wY/ING3LaInpQzg2VbJ
- HNQO7RcIGl2mvKM1kPRhc0vPITSr8ARsvPINBMEPUph0DLz3DbYAMf1XToPf2WxG50+3NY9lp
- dzh/LB+zSr5Zn9TmNmp85y+u6wEgr6qCo08/vZmwk6PRawOjBCoDCmH+X0DLF2rHSNCtK+6dc
- 17qbDxsMuxOyGVNpvjLixLXkkij9yQnAB3Y2gfo9qKKz3nStQOzEhVG698RLF0Ja54eVdfKM9
- 8b6zaowhVnw+/s9CG0tlLfQAktHpJMLdis3u27ji8N6UexTguUEOEuEZi4Bwf8GXZXgdRVd7V
- 2L7sWmIQS/1fKL22K2IISTqL7t03cxVHH+KSKG92r6o4ouqOYAUepUZzFZz9ZUs6YmYnDEaP6
- KGTAjN/qxtE0HPf2nreK0ny7Lov1Q/6dDF7T4xdMNGaZ9dYoBw/t26fK6UwNnhVj0xTQloVbF
- JsgI+Fa4IgFX/bmiqLSPQC1knew=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8cLcY12zDWqO8nd@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 17.01.23 um 15:42 schrieb Rafael J. Wysocki:
+On Tue, Jan 17, 2023, Sean Christopherson wrote:
+> On Tue, Jan 17, 2023, Zhi Wang wrote:
+> > 2) As TDX module doesn't provide contention-and-wait, I guess the following
+> > approach might have been discussed when designing this "retry".
+> > 
+> > KERNEL                          TDX MODULE
+> > 
+> > SEAMCALL A   ->                 PATH A: Taking locks
+> > 
+> > SEAMCALL B   ->                 PATH B: Contention on a lock
+> > 
+> >              <-                 Return "operand busy"
+> > 
+> > SEAMCALL B   -|
+> >               |  <- Wait on a kernel waitqueue
+> > SEAMCALL B  <-|
+> > 
+> > SEAMCALL A   <-                 PATH A: Return
+> > 
+> > SEAMCALL A   -|
+> >               |  <- Wake up the waitqueue
+> > SEMACALL A  <-| 
+> > 
+> > SEAMCALL B  ->                  PATH B: Taking the locks
+> > ...
+> > 
+> > Why not this scheme wasn't chosen?
+> 
+> AFAIK, I don't think a waitqueue approach as ever been discussed publicly.  Intel
+> may have considered the idea internally, but I don't recall anything being proposed
+> publically (though it's entirely possible I just missed the discussion).
+> 
+> Anways, I don't think a waitqueue would be a good fit, at least not for S-EPT
+> management, which AFAICT is the only scenario where KVM does the arbitrary "retry
+> X times and hope things work".  If the contention occurs due to the TDX Module
+> taking an S-EPT lock in VM-Enter, then KVM won't get a chance to do the "Wake up
+> the waitqueue" action until the next VM-Exit, which IIUC is well after the TDX
+> Module drops the S-EPT lock.  In other words, immediately retrying and then punting
+> the problem further up the stack in KVM does seem to be the least awful "solution"
+> if there's contention.
 
-> On Sat, Jan 14, 2023 at 9:51 AM Armin Wolf <W_Armin@gmx.de> wrote:
->> If the buffer containing string data is not NUL-terminated
->> (which is perfectly legal according to the ACPI specification),
->> the acpi battery driver might not honor its length.
-> Note that this is about extracting package entries of type ACPI_TYPE_BUFFER.
->
-> And please spell ACPI in capitals.
->
->> Fix this by limiting the amount of data to be copied to
->> the buffer length while also using strscpy() to make sure
->> that the resulting string is always NUL-terminated.
-> OK
->
->> Also use '\0' instead of a plain 0.
-> Why?  It's a u8, not a char.
->
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   drivers/acpi/battery.c | 23 ++++++++++++++++-------
->>   1 file changed, 16 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
->> index fb64bd217d82..9f6daa9f2010 100644
->> --- a/drivers/acpi/battery.c
->> +++ b/drivers/acpi/battery.c
->> @@ -438,15 +438,24 @@ static int extract_package(struct acpi_battery *battery,
->>                  if (offsets[i].mode) {
->>                          u8 *ptr = (u8 *)battery + offsets[i].offset;
-> I would add
->
-> u32 len = 32;
->
->> -                       if (element->type == ACPI_TYPE_STRING ||
->> -                           element->type == ACPI_TYPE_BUFFER)
->> +                       switch (element->type) {
-> And here I would do
->
-> case ACPI_TYPE_BUFFER:
->          if (len > element->buffer.length + 1)
->                  len = element->buffer.length + 1;
->
->          fallthrough;
-> case ACPI_TYPE_STRING:
->          strscpy(ptr, element->buffer.pointer, len);
->          break;
-> case ACPI_TYPE_INTEGER:
->
-> and so on.
-
-But wouldn't this cause the ACPI string object to be accessed the wrong way
-(buffer.pointer instead of string.pointer)?
-
-Armin Wolf
-
->> +                       case ACPI_TYPE_STRING:
->>                                  strscpy(ptr, element->string.pointer, 32);
->> -                       else if (element->type == ACPI_TYPE_INTEGER) {
->> -                               strncpy(ptr, (u8 *)&element->integer.value,
->> -                                       sizeof(u64));
->> +
->> +                               break;
->> +                       case ACPI_TYPE_BUFFER:
->> +                               strscpy(ptr, element->buffer.pointer,
->> +                                       min_t(u32, element->buffer.length + 1, 32));
->> +
->> +                               break;
->> +                       case ACPI_TYPE_INTEGER:
->> +                               strncpy(ptr, (u8 *)&element->integer.value, sizeof(u64));
->>                                  ptr[sizeof(u64)] = 0;
->> -                       } else
->> -                               *ptr = 0; /* don't have value */
->> +
->> +                               break;
->> +                       default:
->> +                               *ptr = '\0'; /* don't have value */
->> +                       }
->>                  } else {
->>                          int *x = (int *)((u8 *)battery + offsets[i].offset);
->>                          *x = (element->type == ACPI_TYPE_INTEGER) ?
->> --
+Oh, the other important piece I forgot to mention is that dropping mmu_lock deep
+in KVM's MMU in order to wait isn't always an option.  Most flows would play nice
+with dropping mmu_lock and sleeping, but some paths, e.g. from the mmu_notifier,
+(conditionally) disallow sleeping.
