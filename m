@@ -2,136 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B8F670D12
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AB6670D13
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjAQXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S229696AbjAQXRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjAQXPk (ORCPT
+        with ESMTP id S229549AbjAQXPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:15:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5244345B;
-        Tue, 17 Jan 2023 13:03:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95BA06130C;
-        Tue, 17 Jan 2023 21:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECD6C433D2;
-        Tue, 17 Jan 2023 21:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673989414;
-        bh=Z1yj3AKv/D0tTj/52SlF339uoYemMNAwZOwWB+tc454=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qxhz+jC1xMpz2hMxYPK3Fyh4vjWrdfcgaKBkL7uTJJnC0AR3xgxbyOcKTMfIcyRrP
-         AYmt3oofTG03GXnkvUzYXq6B9lzVS1XvEv6TkW/q3LFBjL1IMLQOZmrs5liSdvbQJW
-         SxQO0Q2zNOh6jOFzLoBPJ6hbJKJacULQYJOv86oD3VuUrBAllXWs6icRmaqdrWmHwH
-         DZhLOrZQyflX2bFV1PQqJFwTVERJ22jqnNAnUSIX/CP1ZUSaQbb9HRO+DlctktpwoI
-         lI88hzMjLIdt4jst+ktPd44D6sK2OiSnbqhoouKJmb+gipkGxwsaSGs2ET5ind+cOm
-         V5rxjIHXj5PLA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Tariq Toukan <tariqt@nvidia.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>, Lama Kayal <lkayal@nvidia.com>,
-        Moshe Tal <moshet@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] [v2] mlx5: reduce stack usage in mlx5_setup_tc
-Date:   Tue, 17 Jan 2023 22:01:55 +0100
-Message-Id: <20230117210324.1371169-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 18:15:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B133B0CD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673989353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7w76HtfzwdcmqP5jdkU9ZLwca97vCioI41/SywejLwE=;
+        b=M/fIwXXcTo7ILdgRtL++tSXWvi1IhF0WtUZ5Np8wkGkcAUNiXpS230rdFfjuu1L2ZFbOMn
+        W1uLsJRvBjuQZg835XGK6t/kDoG+8xDOCRio786rrCE6nZlht15YD5pMh57I9ZTYwqNnnh
+        VboeeJ9lTkaf/YP08PxFIzNzJWwrMj8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-554-lVCDMP6vM5CkTz4IUw167g-1; Tue, 17 Jan 2023 16:02:32 -0500
+X-MC-Unique: lVCDMP6vM5CkTz4IUw167g-1
+Received: by mail-ej1-f69.google.com with SMTP id wz4-20020a170906fe4400b0084c7e7eb6d0so22479699ejb.19
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:02:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7w76HtfzwdcmqP5jdkU9ZLwca97vCioI41/SywejLwE=;
+        b=3cFyrSt+1Sb1YgTDcrEZiFMMAZyS2rnsxZEWmbVMM1GQy6R6MQbzIUcE7FqJrlWEOd
+         FmbJTTCo0GQdYMqCFBL2oocVkSOnXYnR5hx/iqx3iw6/IqUzR+lndq5hYgQFQm42JEle
+         pad9/VZtECXYdj0JL1Ucmver3HhyPPSnk0hR7RDwJi/r6oTVfVbCRQv18tESoRBi/SX6
+         YeUmURCJgloIHdfH/ciiOZWKIsncb2BunZS43FvOD0R5JeVO7jp9229Sl6wPiL3OafoS
+         TCEnnHArp3f6lnX1RcZ8lcD1ZwNANxWPQ7ThSAZuukjun6t4XoKUxKSrWs4PYXDPoxCh
+         XNVg==
+X-Gm-Message-State: AFqh2koUXMhBKiphKFb8y5SrDfpvAcFolI1vD6q0ovUvi1u9QdtvZvLb
+        pPgckaXbsjwUfmP4KZ2NpjYKrWlLV+NuYwpOlPW/DEE7joQP8S5MAOu5ShZh/Jw1RnqbZIguKJb
+        8hyHHq/2Ujn1X49P6Z56DUimB
+X-Received: by 2002:a17:906:f49:b0:864:8c78:e7ff with SMTP id h9-20020a1709060f4900b008648c78e7ffmr524130ejj.23.1673989351199;
+        Tue, 17 Jan 2023 13:02:31 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvAJSrzqGgbRw1prAYhG1g+FMQCC1Uscp3OUxHkrUrWI/VWjJQOxnfATQw4f1HIT+XTEqIsJg==
+X-Received: by 2002:a17:906:f49:b0:864:8c78:e7ff with SMTP id h9-20020a1709060f4900b008648c78e7ffmr524102ejj.23.1673989350949;
+        Tue, 17 Jan 2023 13:02:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id q21-20020a17090676d500b0086a2e31d1c1sm5876991ejn.28.2023.01.17.13.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 13:02:30 -0800 (PST)
+Message-ID: <a204fdeb-b2bb-5c61-8a75-de6dd244892a@redhat.com>
+Date:   Tue, 17 Jan 2023 22:02:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] iio: light: cm32181: Fix PM support on system with 2 I2C
+ resources
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
+Cc:     Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230117160951.282581-1-kai.heng.feng@canonical.com>
+ <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
+Content-Language: en-US, nl
+In-Reply-To: <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-Clang warns about excessive stack usage on 32-bit targets:
+On 1/17/23 18:19, Hans de Goede wrote:
+> Hi,
+> 
+> On 1/17/23 17:09, Kai-Heng Feng wrote:
+>> Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
+>> with 2 I2C resources") creates a second client for the actual I2C
+>> address, but the "struct device" passed to PM ops is the first client
+>> that can't talk to the sensor.
+>>
+>> That means the I2C transfers in both suspend and resume routines can
+>> fail and blocking the whole suspend process.
+>>
+>> Instead of using the first client for I2C transfer, store the cm32181
+>> private struct on both cases so the PM ops can get the correct I2C
+>> client to perfrom suspend and resume.
+>>
+>> Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
+>> Tested-by: Wahaj <wahajaved@protonmail.com>
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> 
+> Thank you for this fix. I had looking into this on my todo list,
+> since I have been seeing some bug reports about this too.
+> 
+> One remark inline:
+> 
+>> ---
+>>  drivers/iio/light/cm32181.c | 11 +++++++----
+>>  1 file changed, 7 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+>> index 001055d097509..0f319c891353c 100644
+>> --- a/drivers/iio/light/cm32181.c
+>> +++ b/drivers/iio/light/cm32181.c
+>> @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
+>>  	if (!indio_dev)
+>>  		return -ENOMEM;
+>>  
+>> +	i2c_set_clientdata(client, indio_dev);
+>> +
+> 
+> Why move this up, the suspend/resume callbacks cannot run until
+> probe() completes, so no need for this change.
+> 
+>>  	/*
+>>  	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
+>>  	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
+>> @@ -458,9 +460,9 @@ static int cm32181_probe(struct i2c_client *client)
+>>  		client = i2c_acpi_new_device(dev, 1, &board_info);
+>>  		if (IS_ERR(client))
+>>  			return PTR_ERR(client);
+>> -	}
+>>  
+>> -	i2c_set_clientdata(client, indio_dev);
+>> +		i2c_set_clientdata(client, indio_dev);
+>> +	}
+> 
+> And moving it inside the if block here (instead of just dropping it)
+> is also weird. I guess you meant to just delete it since you moved it up.
+> 
+>>  
+>>  	cm32181 = iio_priv(indio_dev);
+>>  	cm32181->client = client;
+> 
+> Also note that the ->client used in suspend/resume now is not set until
+> here, so moving the i2c_set_clientdata() up really does not do anything.
+> 
+> I beleive it would be best to just these 2 hunks from the patch and
+> only keep the changes to the suspend/resume callbacks.
 
-drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
-static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
+p.s.
 
-It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
-the mlx5e_safe_switch_params() function it calls have a copy of
-'struct mlx5e_params' on the stack, and this structure is fairly
-large.
+I believe that this will likely also fix:
+https://bugzilla.redhat.com/show_bug.cgi?id=2152281
 
-Use dynamic allocation for the inner one.
+Can you please add a:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: simplify the patch
----
- .../net/ethernet/mellanox/mlx5/core/en_main.c   | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 6bb0fdaa5efa..b0b872728653 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -2998,32 +2998,37 @@ int mlx5e_safe_switch_params(struct mlx5e_priv *priv,
- 			     mlx5e_fp_preactivate preactivate,
- 			     void *context, bool reset)
- {
--	struct mlx5e_channels new_chs = {};
-+	struct mlx5e_channels *new_chs;
- 	int err;
- 
- 	reset &= test_bit(MLX5E_STATE_OPENED, &priv->state);
- 	if (!reset)
- 		return mlx5e_switch_priv_params(priv, params, preactivate, context);
- 
--	new_chs.params = *params;
-+	new_chs = kzalloc(sizeof(*new_chs), GFP_KERNEL);
-+	if (!new_chs)
-+		return -ENOMEM;
-+	new_chs->params = *params;
- 
--	mlx5e_selq_prepare_params(&priv->selq, &new_chs.params);
-+	mlx5e_selq_prepare_params(&priv->selq, &new_chs->params);
- 
--	err = mlx5e_open_channels(priv, &new_chs);
-+	err = mlx5e_open_channels(priv, new_chs);
- 	if (err)
- 		goto err_cancel_selq;
- 
--	err = mlx5e_switch_priv_channels(priv, &new_chs, preactivate, context);
-+	err = mlx5e_switch_priv_channels(priv, new_chs, preactivate, context);
- 	if (err)
- 		goto err_close;
- 
-+	kfree(new_chs);
- 	return 0;
- 
- err_close:
--	mlx5e_close_channels(&new_chs);
-+	mlx5e_close_channels(new_chs);
- 
- err_cancel_selq:
- 	mlx5e_selq_cancel(&priv->selq);
-+	kfree(new_chs);
- 	return err;
- }
- 
--- 
-2.39.0
+to the next version.
+
+Regards,
+
+Hans
+
+
+
+> 
+> 
+>> @@ -490,7 +492,8 @@ static int cm32181_probe(struct i2c_client *client)
+>>  
+>>  static int cm32181_suspend(struct device *dev)
+>>  {
+>> -	struct i2c_client *client = to_i2c_client(dev);
+>> +	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+>> +	struct i2c_client *client = cm32181->client;
+>>  
+>>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>>  					 CM32181_CMD_ALS_DISABLE);
+>> @@ -498,8 +501,8 @@ static int cm32181_suspend(struct device *dev)
+>>  
+>>  static int cm32181_resume(struct device *dev)
+>>  {
+>> -	struct i2c_client *client = to_i2c_client(dev);
+>>  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+>> +	struct i2c_client *client = cm32181->client;
+>>  
+>>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>>  					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
+> 
 
