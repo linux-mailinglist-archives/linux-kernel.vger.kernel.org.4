@@ -2,171 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E4B66DF2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E320166DF0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjAQNo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S229775AbjAQNl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjAQNoe (ORCPT
+        with ESMTP id S229541AbjAQNl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:44:34 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4F3B640
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:43:57 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30HDfgP6043900;
-        Tue, 17 Jan 2023 07:41:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673962902;
-        bh=8tzcj7YcBvmsXG1Iqf3XfpgVaGKs2epzXYS+rFPxnuU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nl1+B6EplvVzZA15QZJmQnV0YdsSFFGL1wr8SRISR+q9H9TiP1ZqN85q/gNU2qBdv
-         zNMgyU0UiBgblxBGfzA/wut5xt/feiJ9bD01HeFvMnc3ieIWAVaWt6ztcrzvYEKyWa
-         GyKdUF/kYV5RCxvXO6tawJu2Duq9hvEqPPXSXWzk=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30HDffkI013458
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Jan 2023 07:41:41 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
- Jan 2023 07:41:41 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 17 Jan 2023 07:41:41 -0600
-Received: from [10.250.235.217] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30HDfBu1083638;
-        Tue, 17 Jan 2023 07:41:12 -0600
-Message-ID: <5c888a22-aa56-6d94-2d56-ac5c224f8565@ti.com>
-Date:   Tue, 17 Jan 2023 19:11:10 +0530
+        Tue, 17 Jan 2023 08:41:56 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2056.outbound.protection.outlook.com [40.107.95.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BE5253;
+        Tue, 17 Jan 2023 05:41:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EXtqr/Pb6ZIzFfksjzotnvB3kHaoSaS2aiBGKoPZytc3/J7KIBbKMStqSm+Z3FjgR1J823/rEyEfEvFdzXksWxxMgFKZA5sBAMkkdbqvJdXJz2LEDDR/XmH82YU+SR/V1WJnYojmgARU3qCiKVywKsQ1Ma4Wq1q0MGQUkX4YGwTWpm3tC4mcCU3cpdCwPs/qyivUK8xNFfIOyX3CQXBbjH6aSgLtZ4m6ZaNAkhAkf5deVb5gDJ8r0qaFW4MbImhq77SClz0egyRiawl5S/Lk9K1qXUtlLd59PP0JOe6lzcBLmw/n2diMMDWjxx7XOTjOY6MApmVGaJ0l2ESO+RjqXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CuQq/B7H7nDr+dI5VCnCvJ+f3D9Si0uJXhjxm22hqZA=;
+ b=cgFZSIwr/XcVa+wC6BCrQnpouapgUAoq0tx24Oxuj9BiEJ9B9uvWKQ+YgGBdJf/e3eklqNu4gfaEMF4mAAzv/ZCpfhf6iMoUhlAO5Nkmx8+LdoOWwEbJRb8sU5Un1x+O2vAubSivAW1m+9uaOiiUIMT/f5KZGJgQxtHSh+zQZv11KGIDVkIPZOOarRiqy9WIauCJ/LUO6txTOK2kC/f3R3DElvFf5QEDrjR/tWIvQtb59RghwWVkgV8HEySXtb8G7ZSZIbd3ut2/vAMijhev9WpQUfh4jgcjPCAjFZcCrVibalmHy1B03K195po1T3+hLzCkYA9tgbcZ5lee3o/OEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CuQq/B7H7nDr+dI5VCnCvJ+f3D9Si0uJXhjxm22hqZA=;
+ b=dLoA5ac+bAEUGLm4bmEY8mbzivG6p7b6qHBeKk8YP//GjYgDoryeO4dgQkYwexyD1VXv3uZqB+xdh92XSF/fNsB7aMIjxMe0oGwmGSw00fVRF9trvmQxMRGMbA/rkim0RXWI/rt+dbfP6RNlf/C8/VUQdlQiiTokuWo4OeCbwXw=
+Received: from DS7PR05CA0050.namprd05.prod.outlook.com (2603:10b6:8:2f::9) by
+ DM8PR12MB5477.namprd12.prod.outlook.com (2603:10b6:8:35::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.23; Tue, 17 Jan 2023 13:41:53 +0000
+Received: from DM6NAM11FT097.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2f:cafe::47) by DS7PR05CA0050.outlook.office365.com
+ (2603:10b6:8:2f::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.12 via Frontend
+ Transport; Tue, 17 Jan 2023 13:41:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT097.mail.protection.outlook.com (10.13.172.72) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.13 via Frontend Transport; Tue, 17 Jan 2023 13:41:53 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 17 Jan
+ 2023 07:41:52 -0600
+Received: from xhdipdslab41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 17 Jan 2023 07:41:44 -0600
+From:   Nipun Gupta <nipun.gupta@amd.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <eric.auger@redhat.com>, <alex.williamson@redhat.com>,
+        <cohuck@redhat.com>, <song.bao.hua@hisilicon.com>,
+        <mchehab+huawei@kernel.org>, <maz@kernel.org>,
+        <f.fainelli@gmail.com>, <jeffrey.l.hugo@gmail.com>,
+        <saravanak@google.com>, <Michael.Srba@seznam.cz>,
+        <mani@kernel.org>, <yishaih@nvidia.com>, <jgg@ziepe.ca>,
+        <jgg@nvidia.com>, <robin.murphy@arm.com>, <will@kernel.org>,
+        <joro@8bytes.org>, <masahiroy@kernel.org>,
+        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <okaya@kernel.org>, <harpreet.anand@amd.com>,
+        <nikhil.agarwal@amd.com>, <michal.simek@amd.com>, <git@amd.com>,
+        Nipun Gupta <nipun.gupta@amd.com>
+Subject: [PATCH 0/7] add support for CDX bus
+Date:   Tue, 17 Jan 2023 19:11:32 +0530
+Message-ID: <20230117134139.1298-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: (subset) [PATCH v2 23/23] arm64: dts: Update cache properties for
- ti
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Brijesh Singh <brijeshkumar.singh@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        William Zhang <william.zhang@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Chester Lin <clin@suse.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>,
-        NXP S32 Linux Team <s32@nxp.com>,
-        Wei Xu <xuwei5@hisilicon.com>, Chanho Min <chanho.min@lge.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Adam Ford <aford173@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>, Li Jun <jun.li@nxp.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Martin Kepplinger <martink@posteo.de>,
-        David Heidelberg <david@ixit.cz>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>, Wei Fang <wei.fang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Aswani Reddy <aswani.reddy@samsung.com>,
-        Shashank Prashar <s.prashar@samsung.com>,
-        Arjun K V <arjun.kv@samsung.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <openbmc@lists.ozlabs.org>,
-        <linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-realtek-soc@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>
-References: <20221107155825.1644604-1-pierre.gondois@arm.com>
- <20221107155825.1644604-24-pierre.gondois@arm.com>
-Content-Language: en-US
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <20221107155825.1644604-24-pierre.gondois@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT097:EE_|DM8PR12MB5477:EE_
+X-MS-Office365-Filtering-Correlation-Id: 092fa728-5410-4f0b-f78b-08daf89097e3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: selQpEeDQ7jZ44yLzA2ASXraInhBBE2xHlj+W+sCnlYHwu41cX9TGmCNKJviS1SbY/ZXLa0qMCJhy/iBTaOgwXHQk2auWn563VvAXgChL4ihmJu9rBd4A1v20VTyBnQa9BXkGniRZnwCpirBOLVSHcz/7acoKQpiseoytUuoi2+TVaHpn6mTebNWMJWX6V3l6VwMHMQuvgAHdgnJZe4sfPkxruMzRc067U85fPzwNaR9ShqZxBsO5LE39WjMjChPnxwuTYTWDaTZMxGXfukNk86zT2rHMixEHj5m0oXCd/WErgBjAZVVupxONwWUNybiQAF8GcmZRzYuUcq/3sDYAbLmCir7QSKeLjye1UOD3wyf4D9YGByI0jJb/BYM+EuRv280Kpg3PBdlkWETQVUAdaT3eQEu9lSt0xe4Pka9SJ2PcCKnCdhDiOn2zQS+TYnL8WXuKHA3RYNbRWJ4KYlvT5XvSIL8F5anzQO34tkEshuPuK5qJwPRfogI+rzp9DYdPPGZofIUz9LfABNlTVh+KtrmRpV0joXp8DWeYxfrWbWl6tGy3FaObBclEoGpcR1bzM4G3ZWdLL33TX4WHQK8WenatQw+rZ3VZKkxTzyLJu0QD3l3wOt3Oc5rVMHwQsxG5/bLw++GK0EUqnDC8AavSZ6kQ0lmD2MTyhpMrQ8ep54sjX0fIDHLhQgj4R/dscA4kg2VGkiQFWHYezyMboY9pA6pigrQG7vnaK4yTLFR8vdgywfSjofFKa2GJec7ycyQX+3ddSqvvmcP/e6BNR601OJ7F1wXB4zcobYeQZa+VKnlimsSQuSzRhPSyfRb+EsDZessiN6nIyjsXXQvw4noAm82NIZDnGOAPpVL4mJx7XpdnRRimWGRlSgygganCMQp
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199015)(40470700004)(36840700001)(46966006)(36756003)(7416002)(86362001)(921005)(356005)(8936002)(8676002)(44832011)(70206006)(70586007)(5660300002)(2906002)(4326008)(36860700001)(81166007)(82740400003)(478600001)(40460700003)(6666004)(316002)(54906003)(966005)(110136005)(40480700001)(82310400005)(41300700001)(47076005)(336012)(426003)(1076003)(2616005)(26005)(186003)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 13:41:53.2844
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 092fa728-5410-4f0b-f78b-08daf89097e3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT097.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5477
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -174,42 +108,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre Gondois,
+Introduces AMD CDX bus, which provides a mechanism to
+discover/rescan CDX devices. The CDX devices are 
+memory mapped on system bus for embedded CPUs.
 
-On 11/7/2022 9:27 PM, Pierre Gondois wrote:
-> The DeviceTree Specification v0.3 specifies that the cache node
-> 'compatible' and 'cache-level' properties are 'required'. Cf.
-> s3.8 Multi-level and Shared Cache Nodes
-> The 'cache-unified' property should be present if one of the
-> properties for unified cache is present ('cache-size', ...).
-> 
-> Update the Device Trees accordingly.
+CDX controller interacts with the firmware to query different
+CDX devices present in the Fabric and expose them to the Linux
+host on CDX bus.
 
-[...]
+This patch series:
+- Introduces the CDX bus and CDX devices.
+- Device tree binding for CDX controller
+- Support for CDX bus in arm-smmu-v3 driver
+- Add MCDI (Management CPU Driver Interface) as a protocol
+  for communication with RPU Firmware
+- Support RPMSg channel for Firmware communication
 
-[23/23] arm64: dts: Update cache properties for ti
-        commit: 880932e657ffc677c1b053a947afa87ffed1b29d
+MSI patches for CDX are not added in this series as it's
+support is being revisited as per patch series:
+https://lore.kernel.org/all/20221111133158.196269823@linutronix.de/
+It will be added as separate patches.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain
-during the next merge window (or sooner if it is a relevant bug fix),
-however if problems are discovered then the patch may be dropped or
-reverted.
+RFC changes with stubs were submitted at: 
+https://lore.kernel.org/linux-arm-kernel/20221014044049.2557085-1-nipun.gupta@amd.com/
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Abhijit Gangurde (1):
+  bus/cdx: add rpmsg communication channel for CDX
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Nipun Gupta (6):
+  bus/cdx: add the cdx bus driver
+  iommu/arm-smmu-v3: support ops registration for CDX bus
+  dt-bindings: bus: add CDX bus controller device tree bindings
+  bus/cdx: add MCDI protocol interface for firmware interaction
+  bus/cdx: add cdx controller
+  bus/cdx: add device attributes
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+ Documentation/ABI/testing/sysfs-bus-cdx       |  46 +
+ .../bindings/bus/xlnx,cdxbus-controller.yaml  |  68 ++
+ MAINTAINERS                                   |   8 +
+ drivers/bus/Kconfig                           |   1 +
+ drivers/bus/Makefile                          |   2 +
+ drivers/bus/cdx/Kconfig                       |  16 +
+ drivers/bus/cdx/Makefile                      |   8 +
+ drivers/bus/cdx/cdx.c                         | 577 +++++++++++
+ drivers/bus/cdx/cdx.h                         |  62 ++
+ drivers/bus/cdx/controller/Kconfig            |  30 +
+ drivers/bus/cdx/controller/Makefile           |   9 +
+ drivers/bus/cdx/controller/bitfield.h         |  88 ++
+ drivers/bus/cdx/controller/cdx_controller.c   | 282 ++++++
+ drivers/bus/cdx/controller/cdx_controller.h   |  30 +
+ drivers/bus/cdx/controller/cdx_rpmsg.c        | 222 +++++
+ drivers/bus/cdx/controller/mc_cdx_pcol.h      | 707 ++++++++++++++
+ drivers/bus/cdx/controller/mcdi.c             | 918 ++++++++++++++++++
+ drivers/bus/cdx/controller/mcdi.h             | 259 +++++
+ drivers/bus/cdx/controller/mcdi_functions.c   | 139 +++
+ drivers/bus/cdx/controller/mcdi_functions.h   |  61 ++
+ drivers/iommu/iommu.c                         |   4 +
+ include/linux/cdx/cdx_bus.h                   | 176 ++++
+ include/linux/mod_devicetable.h               |  15 +
+ scripts/mod/devicetable-offsets.c             |   4 +
+ scripts/mod/file2alias.c                      |  12 +
+ 25 files changed, 3744 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-cdx
+ create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdxbus-controller.yaml
+ create mode 100644 drivers/bus/cdx/Kconfig
+ create mode 100644 drivers/bus/cdx/Makefile
+ create mode 100644 drivers/bus/cdx/cdx.c
+ create mode 100644 drivers/bus/cdx/cdx.h
+ create mode 100644 drivers/bus/cdx/controller/Kconfig
+ create mode 100644 drivers/bus/cdx/controller/Makefile
+ create mode 100644 drivers/bus/cdx/controller/bitfield.h
+ create mode 100644 drivers/bus/cdx/controller/cdx_controller.c
+ create mode 100644 drivers/bus/cdx/controller/cdx_controller.h
+ create mode 100644 drivers/bus/cdx/controller/cdx_rpmsg.c
+ create mode 100644 drivers/bus/cdx/controller/mc_cdx_pcol.h
+ create mode 100644 drivers/bus/cdx/controller/mcdi.c
+ create mode 100644 drivers/bus/cdx/controller/mcdi.h
+ create mode 100644 drivers/bus/cdx/controller/mcdi_functions.c
+ create mode 100644 drivers/bus/cdx/controller/mcdi_functions.h
+ create mode 100644 include/linux/cdx/cdx_bus.h
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+-- 
+2.17.1
 
-
-[...]
