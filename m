@@ -2,210 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0D5670DB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B7E670DB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjAQXfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S230125AbjAQXfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjAQXem (ORCPT
+        with ESMTP id S230087AbjAQXew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:34:42 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7F45BDA;
-        Tue, 17 Jan 2023 13:24:34 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HLN2oD022154;
-        Tue, 17 Jan 2023 21:24:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=5xvI3dZKAm3/rBvHa7U0dwZ2zrF9tUivbj0yUdvxiME=;
- b=xI5idqh9TTY+bQ8TQQeYqu6DWXY641uUU39jthrvkz6XAJPl1SJX/CFgEEZz3s8NbSAc
- KTue5H8NDxCSWGZOqvd6S9GvABK7dad6L183073pE9Cee3uHirGze8uFmWmJ6dDGBqoJ
- JSdDODf+7FqLoChWSorsBOUz+GdPkoHkj+L2gkm/MG5ux8VBoT5DN5LzO03YSrKQV1yb
- tBUSeeye+HWZLmHsXCKfyvACdidvD4TVO39j7UU/EMuwANHAVHRXHUzVDht1Nhc6VzJq
- 0vMnWlio7Ncas8awnzgrm/2Po7nEpQaRR6cZVHro5H8y9uVmKELsnuodJmC6rBwtKbgR dw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3mede25k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 21:24:20 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30HLIsY0023561;
-        Tue, 17 Jan 2023 21:24:20 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n63ftr9c7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 21:24:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NXJy3e0Iu45m2eKQmWzYFKbFyVJyHp9BpxTnz7hw2mw0oPoxb1nMaKV+BAq6WCMwE3GPNsDu/otjkFJ0II4vdziB6V3tca/4zdgCrAYiz6Lfhipfvbi8zQLrsfYRmFgBvLlV+/SMs3YKr9GSVgMRfPA4RWKPpoj9ir6+zwaZ0KqatkI1WnVuCzGejGfLsfxIvXIQUtJPgiY2VWLM69aIDwzj4uwyZswk1p3OaJbuguC+JGrpS9hepF73NQ7QA9DIHLCeca757cb/k61bKB1B0/EVwELBOTSgJvMiXKjiYJulLSxVWybGpGTCIuf5YyZcZdapo1n9OmEZOFkhQVDcdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5xvI3dZKAm3/rBvHa7U0dwZ2zrF9tUivbj0yUdvxiME=;
- b=ALDIYwSm3a/Z5/+4/oulT0x1olCAC0fwgWGw2dZsU21lOniikCax+QTo5rsDVeJQZdkliOVo+d3V7VluUZyM2MxZ6Vmb0sPwPxCpTTFFwn6UKRWhekgBH2yRq62YtpqN2v8YDqkG+q/Vqk6M/Pw2OivbN57dVrFLmPctSCbKhPwAh8GKR4dQ7V5HEPbWLUiyTJywkT78wDnYzhxmKnA3BcmqPX2gKFr6evUQNjiEWfSsLH4kfo9rVtW+uV/Sy8wyOxXjWkJioEDVTyRTGbbhxUtENmnF9kElEigty2OTEW/uZGJR2FTJyNaVc9RFf/3f5hfb+CHoLGs9Voq93+9b7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5xvI3dZKAm3/rBvHa7U0dwZ2zrF9tUivbj0yUdvxiME=;
- b=ZdN/KBPuMPvlnMClFo41Ny0IQsEEBYhi9C6adB41lunV3XVGgSRBFfKcSqDRlnZ82AXk5yBT2+NOfHVBfT8JRauMlceTHgwkdlmOnTevTpe+ZJruPNgh6c3DwsN7F/5qMD9fzv/RqDE4D2XgS6I54LgP3u+WL7otJbUPZmulHrE=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by DM4PR10MB6062.namprd10.prod.outlook.com (2603:10b6:8:b7::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.23; Tue, 17 Jan 2023 21:23:45 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::d8a4:336a:21e:40d9]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::d8a4:336a:21e:40d9%5]) with mapi id 15.20.6002.013; Tue, 17 Jan 2023
- 21:23:45 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the nfsd tree
-Thread-Topic: linux-next: duplicate patch in the nfsd tree
-Thread-Index: AQHZJtuHjKaXgt/yjkWRrCUo/8ISo66bbLAAgAW0fICAAK0OAIAA5AyAgABtdoCAAAaBAA==
-Date:   Tue, 17 Jan 2023 21:23:45 +0000
-Message-ID: <E6550C77-4A13-4AD6-8991-D1E369F716E2@oracle.com>
-References: <20230113101326.09b1250e@canb.auug.org.au>
- <53DEC27F-0AAC-4EFA-AB6E-0B5D44AACFB9@oracle.com>
- <F7CFC18D-6AAC-4DAD-AA43-5C718FC1100E@oracle.com>
- <20230117115228.13b55d07@canb.auug.org.au>
- <C72F2CC7-EB89-44D4-AC4A-C33EBED4B120@oracle.com>
- <20230118080027.300ab7b5@canb.auug.org.au>
-In-Reply-To: <20230118080027.300ab7b5@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|DM4PR10MB6062:EE_
-x-ms-office365-filtering-correlation-id: 4a111ec9-f5b9-4e9d-ac62-08daf8d11d80
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9ivuuNuZ30BvENBoaqYelZbp9DgkFDvIFrqmEZAKd6vVzzHqmXsd2jwpOfgrjnOYqlNPKmRXseYZWPLv7gkXTgR8NC4C7y0L8nAVvqXapJVEajtN2hjLbxwU6LnjWGTBJXqyJ2LUKrPSOgh652xxC1bhbvQfyl/c7bSiyMsa+zFF/ubIJ5xut8fl5eIQ++I+NUFJvTtvInXdXDCzMFSumwltOz3HPTdDoKlZmohdBoK+FVOjudg0J0YLf3OdJXIz4FxIrkKkuq6KRKhxk5nZTygSm7BvdITWn9h4myXAygc+oQYi6x5b7zeKHeUdMiJql4D7j+o3vN2BAkt+rjX8qDJuuWwBSGfi7Wr4pOiawrrEQjB/fM+ZOI5TpJM5qzuKTZhYw7bc4PfvZlCSqfWUas2GYHsEHRqADwl1kpCDaW47hcKiYPhPzWJra2YnvfBnN6xCkFbKc3nRqO/7jSASAWsSWErrOKHlAL7kkqjsQpmDU6z15SFY6y1cZDZ9AwY+bPK7j2luaM2kmkCnSDxnv25l/GWAoIc+WYW9cGCkdb1alTTzq7da6zHFc5cmPQNNuOaW119+teMZm1jNa2SIF1C4EZzqULxVBqaKStq5CPOlsZEefZD6zKdPc3BFfNzlbb3TR+H/KJC+/8vvMN34b87wUTKCFwYDRoHJc3zU8ICWxwvwk2T9FHApbfXGksu+hcxa30597wiIeRUeqLf0teSoolp1uU7gCBXJ2jGYpKc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199015)(33656002)(5660300002)(316002)(36756003)(54906003)(2906002)(2616005)(38100700002)(83380400001)(122000001)(6486002)(86362001)(6506007)(53546011)(186003)(26005)(71200400001)(478600001)(6512007)(41300700001)(8936002)(76116006)(91956017)(66946007)(8676002)(4326008)(66556008)(6916009)(66446008)(38070700005)(64756008)(66476007)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IjGn3gxithy2PbLchtoJqH/L9I2mr+Io969v9g99EF1YVFI0Mjsi5SYDa35x?=
- =?us-ascii?Q?z/mmXNe25d4R4tb5NBLNdZU/Ok4F2843nCMRbTkzAkLnNRC4zmf/zyiPpv4s?=
- =?us-ascii?Q?URC95FvuidZ6GJsIgB7WVxv0zq8RkmqpnDfUPCB9IhQeYSTn0q2+mZd0xVv1?=
- =?us-ascii?Q?dILIHuDcRY3yIrw75lYkiFkDEr4vE1RhQbggBMr4/cTdRZTtoUhKRFmaZYpA?=
- =?us-ascii?Q?5mxpSFoFLNTdMq1xZvDHbc8dPMCh6V0GnDlHsIb7KTk6q+ot/Pi9w0+Gy5O5?=
- =?us-ascii?Q?TqC8ENzwac+fo0SNYEsrNnAlih6VKuBs6qVZtEX+/wwW33GHYPzxlAfZS1no?=
- =?us-ascii?Q?mOIzSKQndHA6WFVJZHz22zjBYmVTkd9yy4NDsIYx0IRuBQIBo0UKwL2yTjmP?=
- =?us-ascii?Q?jG6D2geLaOZPCZKNOGZeGcSkCmKBhfrtiSAG4xUS0OlcRYSTFGtCq6xpsBvw?=
- =?us-ascii?Q?g33Fou0OON/rrgZN291ua4qSQphEUnD9kSeorREZ36dQIMIR/3XjFEWy5xp+?=
- =?us-ascii?Q?2IzvceVaAsX6vAOWM10kFP7pYz1OTdhoXOVcXqxP2BUbP3CsdlkxEXUwfF27?=
- =?us-ascii?Q?i72wO03X61R8XzEhPHZDE/i0T71jyK60Fc2Sodkg8ZUkq367a8bd7J/Yw2wW?=
- =?us-ascii?Q?2jHIVVm/BIvKhoSihd7Tm1jaF41jlHjW13oTpZZ3HXvmpPRz8x64+aNUL1Q8?=
- =?us-ascii?Q?bA3dgmD7svlz2fcDZLVoC6v0KxaaPlDCXaE2ji6CFswuPL7C4BVc0Zzkvyeg?=
- =?us-ascii?Q?jXnXzJjrGMcarBGoaoX6sb5Imvfc/MuLi4EOqgGKHs2ffHnU6570rJmsqndn?=
- =?us-ascii?Q?qzdJEoXC99xeUsFuOv6yrLLw0F4Q91BlalKrUZSWa8SKM1qoHK3S3SnjdjfU?=
- =?us-ascii?Q?EheVFRxFDLGCkwxwZzoWO5dWmnB89B7a5ZlkUE5PeUB4xeVDf9GYmLUxVkUD?=
- =?us-ascii?Q?sEO6CDRNXzCx8vPjVlnSCXTBSS/qDzcGWJYRkrGqn6FbdNwMtU+h4nf+Q1zy?=
- =?us-ascii?Q?Pp2NVAhZ5XMEg/m1iA6NWvUfU5MNDKNHp4q6h+iRyWlf1kms9NnBsSVc6FKZ?=
- =?us-ascii?Q?QIvOwFzYWCmJG9AVxW5mWQJRnNvRb6GBtIuGh07M1t1ChwanfeL9ypeDw7fv?=
- =?us-ascii?Q?uaRwLWuo7cJVo+ocEcTqlADmPnjyjCBWlxGKQuYblX6IEdK4BSUkSdqhKS32?=
- =?us-ascii?Q?WrpPSm2zSTnkOQp8nRrdASNI/lgY8IWj2Ybifwq1Drsj8gBV+ZYXBJ6H9wKb?=
- =?us-ascii?Q?klwb1sBmM8C8cW9aXYdXRDzh/iWBQ5SjRWERQ3QLrYBUT8KqqeNmmcaTEFn/?=
- =?us-ascii?Q?GwLgxumReFCfv2nrjmN3kthLgpQa5D/r4kyq0D2DNJGZoLs1uJ4Da+2qKLKR?=
- =?us-ascii?Q?SL2Bf1lx8hkgf0uw0YlcRMyFU+hXaMTEDTFWywckjmgEomu4vyr5JF+q0lpu?=
- =?us-ascii?Q?desEgCeJNBJQGaVPKJRAJ2P2bhUQgtP+V5UXI6tK5WnqBZ/XGfzvGGor1w4W?=
- =?us-ascii?Q?8tnOIuk0L9ZggQdjqrbV8jzaIDxQUtXU/IrC8flgq3WuyXFqI4+aYfgw8KW5?=
- =?us-ascii?Q?tLt+iBrDV8fcENTJCQgR+XN2HT2f1TOHcOXjlO6SDk1okC+sAq/aX3fCYCtX?=
- =?us-ascii?Q?Aw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <ED472CADCF780E4C833C1B2BDB3E6134@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 17 Jan 2023 18:34:52 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2174A1E9;
+        Tue, 17 Jan 2023 13:25:24 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:25:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673990723;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3O5hH0TqSLr9MyAIJBeYLhhGbzzo5X3IAvqGK7xHiiI=;
+        b=RQzqKT+ZuC4czgE7UoZSv6CvM4kEYqVLahcgaOvBMrXVJNKjJg3BsxfYXONbL+CgKXwx2A
+        hyha61iOOBvUPnjCR785xIe6+jdCF+TwEAXBIV3Y8aYeUAyC16k93WhUDF8c0OvOpzJXR4
+        AHhp/bYm93bN0Vi8yX2J98CCLMvs7syEwCY5inNoBWd/zSC5x6NJAHUrbAxs1HyYG1HT+k
+        RyBIWyDqv6bxXH/42UDdLNo9r4XLxxuTHnu7fIS4PLH1Ep1PxfWIH7qKufUn0ERUfE8b+n
+        Ci9fZxNrzeJ0HqlVzRPHyJdevPJmq5OusKr4MjnI1lL3K9EvyXU2qapFrLoJhQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673990723;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3O5hH0TqSLr9MyAIJBeYLhhGbzzo5X3IAvqGK7xHiiI=;
+        b=Cf5SQ2WSd1HJopojk+JYkXj5VFOePO7Yb8LDL7qUx3ilcUMJSfgkuGzM5vq9vk7PW5e0S3
+        mHHivf/H+8c9p9Cg==
+From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Support AMD Automatic IBRS
+Cc:     Kim Phillips <kim.phillips@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230116230159.1511393-7-kim.phillips@amd.com>
+References: <20230116230159.1511393-7-kim.phillips@amd.com>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: FGgoAr/Eafpha8J/apsXuCUfr+rwCvzKYVIXReKTFM+h7Oc1UgKPlSDDcLLDbd5d/8UgH1SQYmBL2PigQOS4F6mIUjDCtN5JWoEIzNX5uHvKO9h97cmmGBBY83ee2yApDGOTnXt7KNG2ZBRJMHgPH9jPicLVNr+CSADHsl9/+KbjgJeLqRDE3cXCvnIXCTdK7eqSM4zoW8ZiLa+zRtT5cyWxFo9yC/gClgG6Et+G/xQuJFXm8i9TsIs0fFDm7lzv0jXLVNv1iGTd/rqnaWgJk8EaJe+rZFbWn/5n1BmT5ih2Bpwph00TD9jBnGSErjBWLfcujI9QL9ALhQmAGaDepmEmP+RvOpbSSPlsmjp+9nv39ywZl+0DNLEEI1EY3rlIeO5x2IqKJKQay/KshMUuxD5FLPSAkGeroCAL0L0ImFv8QjgkUbmGm5YeA4/o2XxnOpcpt47YGkZlbfvHZzTiQNIqBLTl2MpXk5h2OvIyT0JOcUoOWzZ4zBfXBc9Hbsk76oZNYkvx4a8hS4iOtGJlpsxxlpzxJsnHsLBS57VcWdnLTHaKGLP6kYqh5EdzBQ3DwkQ8RDyss71E+8BIxxvDxX6cAbJCQ+QFtudbXGAtibvGVMc6VIh0yu5YCQOtF/W+SvnOih3rPFAl6eO4Unu4vulI9NBdKvLz69hkljEMzwxI/y3VOE3MWP7ZEkaut6GQytNGAIK1ZP+LNiKNosxN+ROZlKMn5Jfqs+rVsbKVRZNXQGYycI1xtpAlhG7a9IwB0q+WuH2nN0viphWCAdlOwznoJZkdbI5h78W9WPY9gZm/QdyNCV69dNTvcM9HAfDX
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a111ec9-f5b9-4e9d-ac62-08daf8d11d80
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 21:23:45.2859
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JfpoWLNI5pPJCIu9jIuuzgCr3ls8HbBmQsgBtiCpqatdVSIPbRj++FI5Ovogq58zvh0kPNtymSt4y6rWtrTpKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6062
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170171
-X-Proofpoint-ORIG-GUID: kvWPoxK77tVIbM2Pdf62_LqLkMyANdq0
-X-Proofpoint-GUID: kvWPoxK77tVIbM2Pdf62_LqLkMyANdq0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167399072298.4906.1782556002008026616.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/cpu branch of tip:
 
+Commit-ID:     116598cbdba664ba995658582034f966805877b5
+Gitweb:        https://git.kernel.org/tip/116598cbdba664ba995658582034f966805877b5
+Author:        Kim Phillips <kim.phillips@amd.com>
+AuthorDate:    Mon, 16 Jan 2023 17:01:58 -06:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 17 Jan 2023 13:00:12 +01:00
 
-> On Jan 17, 2023, at 4:00 PM, Stephen Rothwell <sfr@canb.auug.org.au> wrot=
-e:
->=20
-> Hi Chuck,
->=20
-> On Tue, 17 Jan 2023 14:28:42 +0000 Chuck Lever III <chuck.lever@oracle.co=
-m> wrote:
->>=20
->>> On Jan 16, 2023, at 7:52 PM, Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
->>>=20
->>> Hi Chuck,
->>>=20
->>> On Mon, 16 Jan 2023 14:33:06 +0000 Chuck Lever III <chuck.lever@oracle.=
-com> wrote: =20
->>>>=20
->>>> Sorry, I wasn't clear. I need nfsd's for-rc to be picked
->>>> up and merged into linux-next before I send a PR.
->>>>=20
->>>> I've trimmed for-next to temporarily remove the duplicate
->>>> commit, so you should now be able to continue merging both
->>>> into linux-next without an issue. =20
->>>=20
->>> I am not sure what you mean.  Your for-rc branch has been in linux-next
->>> for a long time and the current version (SHA 7c24fa225081) was merged
->>> last Friday. =20
->>=20
->> My bad. I was looking in the wrong place.
->=20
-> No worries.
->=20
->>> For clarity, the cel-fixes tree and the nfsd tree are both branches of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux - the for-rc
->>> and for-next branches respectively.
->>>=20
->>> Maybe I should rename cel-fixes to be nfsd-fixes? =20
->>=20
->> Renaming my source branch as well would make things a little more clear.
->>=20
->> How about I name the branches in my repo nfsd-next and nfsd-fixes?
->=20
-> Yes, that sounds good.  Let me know when you have done that and I will
-> update my end.  In the mean time, I will rename the cel-fixes tree to
-> nfsd-fixes.
+x86/cpu: Support AMD Automatic IBRS
 
-That's now been done for-rc -> nfsd-fixes and for-next -> nfsd-next.
+The AMD Zen4 core supports a new feature called Automatic IBRS.
 
---
-Chuck Lever
+It is a "set-and-forget" feature that means that, like Intel's Enhanced IBRS,
+h/w manages its IBRS mitigation resources automatically across CPL transitions.
 
+The feature is advertised by CPUID_Fn80000021_EAX bit 8 and is enabled by
+setting MSR C000_0080 (EFER) bit 21.
 
+Enable Automatic IBRS by default if the CPU feature is present.  It typically
+provides greater performance over the incumbent generic retpolines mitigation.
 
+Reuse the SPECTRE_V2_EIBRS spectre_v2_mitigation enum.  AMD Automatic IBRS and
+Intel Enhanced IBRS have similar enablement.  Add NO_EIBRS_PBRSB to
+cpu_vuln_whitelist, since AMD Automatic IBRS isn't affected by PBRSB-eIBRS.
+
+The kernel command line option spectre_v2=eibrs is used to select AMD Automatic
+IBRS, if available.
+
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/r/20230116230159.1511393-7-kim.phillips@amd.com
+---
+ Documentation/admin-guide/hw-vuln/spectre.rst   |  6 ++---
+ Documentation/admin-guide/kernel-parameters.txt |  6 ++---
+ arch/x86/include/asm/cpufeatures.h              |  1 +-
+ arch/x86/include/asm/msr-index.h                |  2 ++-
+ arch/x86/kernel/cpu/bugs.c                      | 20 +++++++++-------
+ arch/x86/kernel/cpu/common.c                    | 19 ++++++++-------
+ 6 files changed, 32 insertions(+), 22 deletions(-)
+
+diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
+index c4dcdb3..3fe6511 100644
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -610,9 +610,9 @@ kernel command line.
+                 retpoline,generic       Retpolines
+                 retpoline,lfence        LFENCE; indirect branch
+                 retpoline,amd           alias for retpoline,lfence
+-                eibrs                   enhanced IBRS
+-                eibrs,retpoline         enhanced IBRS + Retpolines
+-                eibrs,lfence            enhanced IBRS + LFENCE
++                eibrs                   Enhanced/Auto IBRS
++                eibrs,retpoline         Enhanced/Auto IBRS + Retpolines
++                eibrs,lfence            Enhanced/Auto IBRS + LFENCE
+                 ibrs                    use IBRS to protect kernel
+ 
+ 		Not specifying this option is equivalent to
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 6cfa6e3..839fa0f 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5729,9 +5729,9 @@
+ 			retpoline,generic - Retpolines
+ 			retpoline,lfence  - LFENCE; indirect branch
+ 			retpoline,amd     - alias for retpoline,lfence
+-			eibrs		  - enhanced IBRS
+-			eibrs,retpoline   - enhanced IBRS + Retpolines
+-			eibrs,lfence      - enhanced IBRS + LFENCE
++			eibrs		  - Enhanced/Auto IBRS
++			eibrs,retpoline   - Enhanced/Auto IBRS + Retpolines
++			eibrs,lfence      - Enhanced/Auto IBRS + LFENCE
+ 			ibrs		  - use IBRS to protect kernel
+ 
+ 			Not specifying this option is equivalent to
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 86e98bd..06909dc 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -431,6 +431,7 @@
+ #define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" No Nested Data Breakpoints */
+ #define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
+ #define X86_FEATURE_NULL_SEL_CLR_BASE	(20*32+ 6) /* "" Null Selector Clears Base */
++#define X86_FEATURE_AUTOIBRS		(20*32+ 8) /* "" Automatic IBRS */
+ #define X86_FEATURE_NO_SMM_CTL_MSR	(20*32+ 9) /* "" SMM_CTL MSR is not present */
+ 
+ /*
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index cb359d6..617b29a 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -25,6 +25,7 @@
+ #define _EFER_SVME		12 /* Enable virtualization */
+ #define _EFER_LMSLE		13 /* Long Mode Segment Limit Enable */
+ #define _EFER_FFXSR		14 /* Enable Fast FXSAVE/FXRSTOR */
++#define _EFER_AUTOIBRS		21 /* Enable Automatic IBRS */
+ 
+ #define EFER_SCE		(1<<_EFER_SCE)
+ #define EFER_LME		(1<<_EFER_LME)
+@@ -33,6 +34,7 @@
+ #define EFER_SVME		(1<<_EFER_SVME)
+ #define EFER_LMSLE		(1<<_EFER_LMSLE)
+ #define EFER_FFXSR		(1<<_EFER_FFXSR)
++#define EFER_AUTOIBRS		(1<<_EFER_AUTOIBRS)
+ 
+ /* Intel MSRs. Some also available on other CPUs */
+ 
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 5f33704..b41486a 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1238,9 +1238,9 @@ static const char * const spectre_v2_strings[] = {
+ 	[SPECTRE_V2_NONE]			= "Vulnerable",
+ 	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
+ 	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
+-	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
+-	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
+-	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
++	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced / Automatic IBRS",
++	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced / Automatic IBRS + LFENCE",
++	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced / Automatic IBRS + Retpolines",
+ 	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
+ };
+ 
+@@ -1309,7 +1309,7 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
+ 	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
+ 	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
+ 	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
+-		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
++		pr_err("%s selected but CPU doesn't have Enhanced or Automatic IBRS. Switching to AUTO select\n",
+ 		       mitigation_options[i].option);
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+@@ -1495,8 +1495,12 @@ static void __init spectre_v2_select_mitigation(void)
+ 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+ 
+ 	if (spectre_v2_in_ibrs_mode(mode)) {
+-		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
+-		update_spec_ctrl(x86_spec_ctrl_base);
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			msr_set_bit(MSR_EFER, _EFER_AUTOIBRS);
++		} else {
++			x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
++			update_spec_ctrl(x86_spec_ctrl_base);
++		}
+ 	}
+ 
+ 	switch (mode) {
+@@ -1580,8 +1584,8 @@ static void __init spectre_v2_select_mitigation(void)
+ 	/*
+ 	 * Retpoline protects the kernel, but doesn't protect firmware.  IBRS
+ 	 * and Enhanced IBRS protect firmware too, so enable IBRS around
+-	 * firmware calls only when IBRS / Enhanced IBRS aren't otherwise
+-	 * enabled.
++	 * firmware calls only when IBRS / Enhanced / Automatic IBRS aren't
++	 * otherwise enabled.
+ 	 *
+ 	 * Use "mode" to check Enhanced IBRS instead of boot_cpu_has(), because
+ 	 * the user might select retpoline on the kernel command line and if
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index e6bf9b1..62c73c5 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1229,8 +1229,8 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
+ 	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+ 
+ 	/* FAMILY_ANY must be last, otherwise 0x0f - 0x12 matches won't work */
+-	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+-	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO | NO_EIBRS_PBRSB),
++	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO | NO_EIBRS_PBRSB),
+ 
+ 	/* Zhaoxin Family 7 */
+ 	VULNWL(CENTAUR,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS | NO_MMIO),
+@@ -1341,8 +1341,16 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+ 	   !cpu_has(c, X86_FEATURE_AMD_SSB_NO))
+ 		setup_force_cpu_bug(X86_BUG_SPEC_STORE_BYPASS);
+ 
+-	if (ia32_cap & ARCH_CAP_IBRS_ALL)
++	/*
++	 * AMD's AutoIBRS is equivalent to Intel's eIBRS - use the Intel feature
++	 * flag and protect from vendor-specific bugs via the whitelist.
++	 */
++	if ((ia32_cap & ARCH_CAP_IBRS_ALL) || cpu_has(c, X86_FEATURE_AUTOIBRS)) {
+ 		setup_force_cpu_cap(X86_FEATURE_IBRS_ENHANCED);
++		if (!cpu_matches(cpu_vuln_whitelist, NO_EIBRS_PBRSB) &&
++		    !(ia32_cap & ARCH_CAP_PBRSB_NO))
++			setup_force_cpu_bug(X86_BUG_EIBRS_PBRSB);
++	}
+ 
+ 	if (!cpu_matches(cpu_vuln_whitelist, NO_MDS) &&
+ 	    !(ia32_cap & ARCH_CAP_MDS_NO)) {
+@@ -1404,11 +1412,6 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+ 			setup_force_cpu_bug(X86_BUG_RETBLEED);
+ 	}
+ 
+-	if (cpu_has(c, X86_FEATURE_IBRS_ENHANCED) &&
+-	    !cpu_matches(cpu_vuln_whitelist, NO_EIBRS_PBRSB) &&
+-	    !(ia32_cap & ARCH_CAP_PBRSB_NO))
+-		setup_force_cpu_bug(X86_BUG_EIBRS_PBRSB);
+-
+ 	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
+ 		return;
+ 
