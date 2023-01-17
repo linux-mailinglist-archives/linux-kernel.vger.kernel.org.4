@@ -2,55 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A891D670C0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAE8670C18
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjAQWsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S229790AbjAQWtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjAQWqy (ORCPT
+        with ESMTP id S229834AbjAQWrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:46:54 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75387B2D3F;
-        Tue, 17 Jan 2023 13:48:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxMw70dchz4xMx;
-        Wed, 18 Jan 2023 08:48:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673992119;
-        bh=75Yy+WlgV7Ex/vzs3d+z+VuSR6ePdxf+ksxThEs556g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eUrD1izkefCGdU0GkTwpFXkSea45FsmDooNhuxzEozUS2ERpoXmXVmH+UVGIBxi19
-         nEc40XS9polRJgAe1QsBkuDETFTlOl183ayNhp2g5rHrphEm0N54uqny3Lg9QnJGjT
-         jl+WFvCo/dPFjPbvxP9Ub9b3ChBHIkycXjbB7dmsQ9QCrSRTwelPsH9uHjrHFWb7oI
-         Mc5GsMIkjM31FpQfdGTAnb+udsA8cxO16m3/CUbh7gdBmHHAMxLwWIydCMICdGq1pb
-         ZxHWAAmEnaYtCia4oeAjRyQDAUm3I3A+c1OnvKTX2UOy5/yrH+mEEmmXFZkldU+loi
-         CdJOeF0kWgc/Q==
-Date:   Wed, 18 Jan 2023 08:48:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the nfsd tree
-Message-ID: <20230118084837.492b1611@canb.auug.org.au>
-In-Reply-To: <E6550C77-4A13-4AD6-8991-D1E369F716E2@oracle.com>
-References: <20230113101326.09b1250e@canb.auug.org.au>
-        <53DEC27F-0AAC-4EFA-AB6E-0B5D44AACFB9@oracle.com>
-        <F7CFC18D-6AAC-4DAD-AA43-5C718FC1100E@oracle.com>
-        <20230117115228.13b55d07@canb.auug.org.au>
-        <C72F2CC7-EB89-44D4-AC4A-C33EBED4B120@oracle.com>
-        <20230118080027.300ab7b5@canb.auug.org.au>
-        <E6550C77-4A13-4AD6-8991-D1E369F716E2@oracle.com>
+        Tue, 17 Jan 2023 17:47:45 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A0EB4E0D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id g23so19333117plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
+        b=Ytivk0p3o3pKPR4jxRDApSW/X8kWJmOSU/vDUt9s1/F/HroGSdex4UY8cLNEMmie/M
+         SJHUrBNsemSTxj4PVT9ABl9rcmXciGL4VBfmkFcaTCLOmPzzeYKcSeCXZ4cAwgHiJimv
+         P5A/+mzpvc7I5IwbDpnNQroG3uEIK3/5pYOCtujUe/zOU4LXQdqgLIq9FP3Q8YhyADsX
+         +uLJ+IaHx9dxXMM7FC0nBUojSzt7FpQ0Vjr0BfWkXXwaMP20MrlXhoZvPgDK2Rf+cKY0
+         NsT2rt/S1e8PyBz8noED+BbjaMjl8Ndsq0XEF5oRKatjF9vLXme/E0dv/4FPKaUF6x7G
+         mc9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
+        b=gYvIWw8NOvY7kXd+lWJSndZAnl7d6WzmUJMALkGzLgP6x0j5sglSOZXKZyiwi5tZio
+         XONGuP+zlOF+pBZUFTXEm2GWQ27aomLpZRlkJBWzBOK3zHnLQYLFkUd5cnHVIKlULkqt
+         m7XBW+6TOD6ONiimuLr7naEwMAkygQpGeIOVwYdekpmY2d+fZi18hp3JXvawLAwG9E9f
+         delLmCvff4cDt6+0IO19LajZBRomJSWVLIBTjyBknOhs04zVLqOX+JDEaIDUiu0xmcM4
+         uz5MZfoP1A/G9yN8+r07J7aDnw+VvassQ5l3dTKcXpq06R0LgqgGPFuHH81dGQrgDT8P
+         69lg==
+X-Gm-Message-State: AFqh2kqiwVqissCCWhTNJmkIbwp9X9tc3tMPrBDRBJquNycFlJLiN7Ka
+        qb+wzUK8pkLsuSxnXGWy/GN4MQ==
+X-Google-Smtp-Source: AMrXdXvPkZgs3rtHgy0SGs5XB8Ijo6KKK7MXq+jTg0acICkNfD3dp3J3EcjMZ9hdAQ+KOHkyvoqjTw==
+X-Received: by 2002:a17:90b:3941:b0:225:e761:6d2b with SMTP id oe1-20020a17090b394100b00225e7616d2bmr2761268pjb.1.1673992129057;
+        Tue, 17 Jan 2023 13:48:49 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nk16-20020a17090b195000b00212e5068e17sm11884pjb.40.2023.01.17.13.48.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 13:48:48 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:48:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V2 PATCH 3/6] KVM: selftests: x86: Add
+ IS_ALIGNED/IS_PAGE_ALIGNED helpers
+Message-ID: <Y8cXvS2gKcK8tU2D@google.com>
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-4-vannapurve@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AQ8XAsxpQ=/_f5XNHLj7od.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205232341.4131240-4-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +90,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> Add IS_ALIGNED/IS_PAGE_ALIGNED helpers for selftests.
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util_base.h    | 3 +++
+>  tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 4ad99f295f2a..7ba32471df50 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -170,6 +170,9 @@ extern enum vm_guest_mode vm_mode_default;
+>  #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
+>  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+>  
+> +/* @a is a power of 2 value */
+> +#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
 
-Hi Chuck,
+IS_ALIGNED() is provided by tools/include/linux/bitmap.h
 
-On Tue, 17 Jan 2023 21:23:45 +0000 Chuck Lever III <chuck.lever@oracle.com>=
- wrote:
->=20
-> That's now been done for-rc -> nfsd-fixes and for-next -> nfsd-next.
+>  struct vm_guest_mode_params {
+>  	unsigned int pa_bits;
+>  	unsigned int va_bits;
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index 5d310abe6c3f..4d5dd9a467e1 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -279,6 +279,7 @@ static inline unsigned int x86_model(unsigned int eax)
+>  #define PAGE_SHIFT		12
+>  #define PAGE_SIZE		(1ULL << PAGE_SHIFT)
+>  #define PAGE_MASK		(~(PAGE_SIZE-1) & PHYSICAL_PAGE_MASK)
+> +#define IS_PAGE_ALIGNED(x)	IS_ALIGNED(x, PAGE_SIZE)
 
-I have updated here as well, thanks.
+I certainly don't object to adding IS_PAGE_ALIGNED(), but it's not needed for
+this series.  Verifying that KVM doesn't allow an unaligned page conversion during
+KVM_HC_MAP_GPA_RANGE belongs in a separate test+series, as that doesn't have a
+strict dependency on UPM.
 
---=20
-Cheers,
-Stephen Rothwell
+TL;DR: this patch can be dropped, for now at least.
 
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHF7UACgkQAVBC80lX
-0GwBOQf/fF/Y/88sLoaisXK3Tm7cJn4rwR30RQ1ecILgeHy01yChGDAv5CTuJpIm
-Ss6U/LOjSAPQyQX4QxnLvenTDJuWP+/dep5yxkZgmHidFC9xdwp61k3BCg53CXmB
-Hwqxb+uhmQrEw9jRnNqtj+/50/6Vr/0/izHVAKZVuqgTiWcZ63MLaiLU4rx+akay
-xI7QcELOHrgoRC+rFz0trFHhqu0G/M5MMbuvbAtxKxAx8tqt1Md4onMp90NTu5X2
-NCSgZ5bYfxo3laQ6i5tb5AoRCBMzUkxIAOjIoMh14NlEQEsHo6JL1wi1bSp0cJlm
-Df4HCbDcI6//ZnN9t0jbaeLBGC8+VA==
-=BiCg
------END PGP SIGNATURE-----
-
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.--
+>  #define HUGEPAGE_SHIFT(x)	(PAGE_SHIFT + (((x) - 1) * 9))
+>  #define HUGEPAGE_SIZE(x)	(1UL << HUGEPAGE_SHIFT(x))
+> -- 
+> 2.39.0.rc0.267.gcb52ba06e7-goog
+> 
