@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7680466E613
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1E666E626
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbjAQSdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S232758AbjAQSfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbjAQSay (ORCPT
+        with ESMTP id S232585AbjAQSbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:30:54 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A0143917
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:02:38 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15eec491b40so11869612fac.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:02:38 -0800 (PST)
+        Tue, 17 Jan 2023 13:31:50 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEB94391A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:03:42 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id u8so15760022ilq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NukCC4d4QJEDgfsOL/cdaVgghldPnWrPw2w2tKfD+uY=;
-        b=VvnN3QFGrGjHMdoaWWpco2m+snxvy3UVxV1K+wJ6B9ExTsOzvvuLTtkLbMgnyNr4LP
-         pMR0jGgbHwlQLSDz/4rzD90n0aRAxxo570PND+oKrlA4Y3bc0fFrJqsILnm6Qpul5dWe
-         XEHudFeDMQ+XQZJegue7T1zHD0nTQDZHFLhcy+be7NV/O7+C470lRO49e1xMgilFQGED
-         eiALN95KegtB8G8EQvSEYic1OozQeKs8rbEbB16kW5aIRRvopBZOw6AXhYbDsj82WwYu
-         A7zRWsTD0eg5uq2f4Ozcoqg/ZmMajDhvewrD/OfVFpEInN4ggWxOMyUKYa1RmcC7uRXq
-         YKpA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2LfIzIDKNfdwhzRI4wk4tbto15PFLzQqPn6IM74K1Nc=;
+        b=Mooewx5NuvmBi8G3lPeDVvjeMhDwam4J3V5WoYrMGEaACQq8r01FTJwg9r5gNAqKHv
+         BcT+clyjtziDoHfDoZgf8mXwiyxjshQK9AVHMyb/QWVVp32ww9ingtrVqod0LDfOJImz
+         Y0TwcaekYYsJ//YdVBtdZXByqq9WLLeZf19Z8v3wfd8Qhfwfau1IdSR4Tc4e6jr2szha
+         MfdiYZLdlOAFeQe7T4M3d15TPoEEp9r20dwRTcjDofABHxa96XnhDW06/jzXCIqYK82c
+         D9cdjVUUN6zid8FXGy9WF8BxgN6Gta9IfDG+F3FYzRS4GL6vM308WQjFQsyY7d5ObtDP
+         aykg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NukCC4d4QJEDgfsOL/cdaVgghldPnWrPw2w2tKfD+uY=;
-        b=2eAnDnT6S9j2EpUQn2LNQTyElWX4E38j2CZL0b3mJK5Rlsh9zXUQyBFxWS/s4NzESd
-         k7wFtaTRm1M74LEauScW4Jam4h03j81Y5U/fuLQ44oqTGa2jQ3qIBUZywU95sfXxNiKZ
-         /RNLpxDKGxLJpaPSwLI4wybc6RzJoUTqORxb0G96puJ+48YHiAOl4+Hsua119t6FAy0N
-         KIEQw5e2q5naujJw8b5I3+kUf33JPzpeqXWqK05/lgxAPeCyD0mBXnKJ/YAVpox376jo
-         bzsXtF71v+sn+h0DkdmqHZTL0ukczAfHuy2I2O9rVtu7JfEu+K0C5mxjaO1afooZXZ1+
-         E16Q==
-X-Gm-Message-State: AFqh2kqnD9aNBpmzvLRBhIqIg8h93vp/KihBf5abIoyKjv+A1cmj6GBo
-        N70/na6Z8UInYvHKvANGMX7ckhKhuInkP2rMQpOvWg==
-X-Google-Smtp-Source: AMrXdXu+usIT51QrhN3XgtNGs2meY4k3VapR89YptIDkG9ps8gK7cX5MIHSnrazqyTfkC8I4ixxIhSkCKFinuEbLcyo=
-X-Received: by 2002:a05:6870:4b4c:b0:15f:17fd:1531 with SMTP id
- ls12-20020a0568704b4c00b0015f17fd1531mr325174oab.115.1673978557152; Tue, 17
- Jan 2023 10:02:37 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2LfIzIDKNfdwhzRI4wk4tbto15PFLzQqPn6IM74K1Nc=;
+        b=ue3cCaTDhkGE9BGN/rFtkVSQ62GS+rT+D6UwDU4p5asd5zTJQf0nlHEWCjuSA4u+/M
+         db6hBT67I7AoaX6KmZImFG0yTpp/goemW9Prl3TXzZp6jJlmHzRTG3GFad/UQ/46oAg3
+         dwSuf7q008OoNitTf8G/IlplZfR+w7UsUn6w397pY46TnHvm6ptWRvZaISlJtgX2j11p
+         7HYOijLogNJGoqV1pqNzer9GwMrHEL3bmpR5rD7CPWnkrdNBCmbtis46N0sB9A4If+dW
+         QbKchykdZDQEnSMYSGmUWGNT2kGjbZufoD+W6gr0DwJBDLLzcRDzJjalDppuSqpKT0SG
+         muxQ==
+X-Gm-Message-State: AFqh2kra+xKSHwJTERcDQEZ/LpyytNxmQMKc+IDUCtKxOzhfi48VPEEV
+        cCl4YVX558b4YuEYq+Il3OvUGsjZtBluUTnG8yISyA==
+X-Google-Smtp-Source: AMrXdXuYG9pfhe3BEDdAxOrlJ5FMm60eG9MzyrHap4mGomMoh4ycHHb4WuecCt1NKPItKhuNPMbigXyQKtN6iEbWTIk=
+X-Received: by 2002:a92:a043:0:b0:30b:f4af:87bd with SMTP id
+ b3-20020a92a043000000b0030bf4af87bdmr425702ilm.254.1673978611685; Tue, 17 Jan
+ 2023 10:03:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20230116173420.1278704-1-mw@semihalf.com> <20230116173420.1278704-3-mw@semihalf.com>
- <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk> <CAPv3WKcbuY0kmM0trfS++at=r4KhCsp2bZ1kBL2r+-YJe=kE3w@mail.gmail.com>
- <Y8bhzex/k05i9NCQ@shell.armlinux.org.uk>
-In-Reply-To: <Y8bhzex/k05i9NCQ@shell.armlinux.org.uk>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 17 Jan 2023 19:02:29 +0100
-Message-ID: <CAPv3WKec6R_CVv8n5L-bGFg3QHpmUc+emeGV2Sm-DNM6SovGvQ@mail.gmail.com>
-Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API to fwnode_
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Landen.Chao@mediatek.com, Samer.El-Haj-Mahmoud@arm.com,
-        andrew@lunn.ch, andriy.shevchenko@linux.intel.com,
-        davem@davemloft.net, edumazet@google.com, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, jaz@semihalf.com, kuba@kernel.org,
-        linus.walleij@linaro.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        olteanv@gmail.com, pabeni@redhat.com, rafael@kernel.org,
-        sean.wang@mediatek.com, tn@semihalf.com, vivien.didelot@gmail.com
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-13-surenb@google.com>
+In-Reply-To: <20230109205336.3665937-13-surenb@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 19:02:55 +0100
+Message-ID: <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com>
+Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
+ control it
+To:     Suren Baghdasaryan <surenb@google.com>, peterz@infradead.org,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wt., 17 sty 2023 o 18:58 Russell King (Oracle) <linux@armlinux.org.uk>
-napisa=C5=82(a):
->
-> Hi Marcin,
->
-> On Tue, Jan 17, 2023 at 05:20:01PM +0100, Marcin Wojtas wrote:
-> > Hi Russell,
-> >
-> >
-> > pon., 16 sty 2023 o 18:50 Russell King (Oracle) <linux@armlinux.org.uk>
-> > napisa=C5=82(a):
-> > >
-> > > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
-> > > > fixed-link PHYs API is used by DSA and a number of drivers
-> > > > and was depending on of_. Switch to fwnode_ so to make it
-> > > > hardware description agnostic and allow to be used in ACPI
-> > > > world as well.
-> > >
-> > > Would it be better to let the fixed-link PHY die, and have everyone u=
-se
-> > > the more flexible fixed link implementation in phylink?
-> > >
-> > ,
-> > This patchset did not intend to introduce any functional change, simply
-> > switch to a more generic HW description abstraction. Killing
-> > of/fwnode_phy_(de)register_fixed_link entirely seems to be a challenge,=
- as
-> > there are a lot of users beyond the DSA. Otoh I see a value in having
-> > of_/fwnode_phy_is_fixed_link check, afaik there is no equivalent in
-> > phylink...
->
-> Phylink provides a much improved implementation of fixed-link that is
-> way more flexible than the phylib approach - it can implement speeds
-> in excess of 1G. DSA already supports phylink with modern updated
-> drivers that do not use the "adjust_link" implementation.
->
-> What I'm proposing is that we don't bring the baggage of the phylib
-> based fixed link forwards into fwnode, and leave this to be DT-only.
-> I think this is what Andrew and Vladimir have also said.
->
++locking maintainers
 
-Ok, thanks for clarifying.
+On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> Introduce a per-VMA rw_semaphore to be used during page fault handling
+> instead of mmap_lock. Because there are cases when multiple VMAs need
+> to be exclusively locked during VMA tree modifications, instead of the
+> usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
+> exclusively and setting vma->lock_seq to the current mm->lock_seq. When
+> mmap_write_lock holder is done with all modifications and drops mmap_lock,
+> it will increment mm->lock_seq, effectively unlocking all VMAs marked as
+> locked.
+[...]
+> +static inline void vma_read_unlock(struct vm_area_struct *vma)
+> +{
+> +       up_read(&vma->lock);
+> +}
 
-Best regards,
-Marcin
+One thing that might be gnarly here is that I think you might not be
+allowed to use up_read() to fully release ownership of an object -
+from what I remember, I think that up_read() (unlike something like
+spin_unlock()) can access the lock object after it's already been
+acquired by someone else. So if you want to protect against concurrent
+deletion, this might have to be something like:
+
+rcu_read_lock(); /* keeps vma alive */
+up_read(&vma->lock);
+rcu_read_unlock();
+
+But I'm not entirely sure about that, the locking folks might know better.
+
+Also, it might not matter given that the rw_semaphore part is removed
+in the current patch 41/41 anyway...
