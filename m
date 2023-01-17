@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37B766E61E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7680466E613
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjAQSej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S232374AbjAQSdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjAQSbp (ORCPT
+        with ESMTP id S232474AbjAQSay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:31:45 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8A8402D4;
-        Tue, 17 Jan 2023 10:02:06 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so11529042pjg.4;
-        Tue, 17 Jan 2023 10:02:06 -0800 (PST)
+        Tue, 17 Jan 2023 13:30:54 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A0143917
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:02:38 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15eec491b40so11869612fac.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:message-id:date:subject:cc:to:from:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=06SBabuD60dOHeW+Ln05X7+rSaJ0r5j5hL5snKdE54w=;
-        b=CLBaTDHIhQ+3YYF1XoeZKk02D8QYBaZAjlCuBgKLG8hPkQpjROe96ong7hKknhKU0E
-         cwNBmIGl+42af2MolMPj+R+OxoM0UD+TyZrejVjmL2tsAYXI4dTfVomTsPdqUHMY5nXv
-         qtlyx2Vox/OshXN/CGBm/JHhoW0/JIWPMC0YAjMHy4djchg3F1l4zf9TAYhvuuqNdhn9
-         KjRtKE5+7lceiZ/H/mBwCDvVZPSRU1hw4ilcuzfy+b36tAUsaCMVHbpnAtutvnLQqnte
-         JtBxaQZwDEiOjHabPtdls9PGluqyRHGl0jMPIV1lAjlNN3a5FzE+qJ/PKaOT04b8nNut
-         0QeA==
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NukCC4d4QJEDgfsOL/cdaVgghldPnWrPw2w2tKfD+uY=;
+        b=VvnN3QFGrGjHMdoaWWpco2m+snxvy3UVxV1K+wJ6B9ExTsOzvvuLTtkLbMgnyNr4LP
+         pMR0jGgbHwlQLSDz/4rzD90n0aRAxxo570PND+oKrlA4Y3bc0fFrJqsILnm6Qpul5dWe
+         XEHudFeDMQ+XQZJegue7T1zHD0nTQDZHFLhcy+be7NV/O7+C470lRO49e1xMgilFQGED
+         eiALN95KegtB8G8EQvSEYic1OozQeKs8rbEbB16kW5aIRRvopBZOw6AXhYbDsj82WwYu
+         A7zRWsTD0eg5uq2f4Ozcoqg/ZmMajDhvewrD/OfVFpEInN4ggWxOMyUKYa1RmcC7uRXq
+         YKpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:date:subject:cc:to:from:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=06SBabuD60dOHeW+Ln05X7+rSaJ0r5j5hL5snKdE54w=;
-        b=EDNdW3fVgeull+rSQnIfaJNlwx+qtjGxjXi1rhiHCs+C+jYXLC1JmunbGtVHW9nEfP
-         Io4u4mURh8GRjgRUo7hVxbDHxx+Z/IpAZePciksh9/p+gMGChm9RM8ITRAzSp0vlXow9
-         w5KTic7i9NipcML1gVKWOU9Ta6aYhkSXQbq2EtxK7kqCpxWXj90uHa+4/g3o3c0trhSm
-         vfZJiue31cTxW7xgCt+oRZtaZ2PAMqyWU2j5d1OEQVqHJ0Vg/2f+RC9ha09QuhWEQPjB
-         vWwa2oow0VHzrUcRzZhDRFH6c6gDFBa17xxsn4d1PJiq+ATTbwB2FPFn7mEGtsCv3Eqz
-         /CFg==
-X-Gm-Message-State: AFqh2kqYyfkfossR5eQ9q+mvdbgGF1zG05s2YfWjnNV0pgc7DQnlOGxN
-        QbcwfTF0voX1L6C+RhjkhIOCrcuhgxw=
-X-Google-Smtp-Source: AMrXdXtksnEnIAx5Gh1uhNBCUsfvsGfNk0JwKZ+rhyojx19HF4m9w7zolWZJm0XSJfVqDQEjlZJ97Q==
-X-Received: by 2002:a17:902:bb89:b0:194:9b5e:a0a5 with SMTP id m9-20020a170902bb8900b001949b5ea0a5mr6883617pls.43.1673978525740;
-        Tue, 17 Jan 2023 10:02:05 -0800 (PST)
-Received: from localhost (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id w19-20020a170902a71300b0019339f3368asm4995536plq.3.2023.01.17.10.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 10:02:05 -0800 (PST)
-Sender: Junio C Hamano <jch2355@gmail.com>
-From:   Junio C Hamano <gitster@pobox.com>
-To:     git@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, git-packagers@googlegroups.com,
-        lwn@lwn.net
-Subject: [ANNOUNCE] Git 2.39.1 and others
-Date:   Tue, 17 Jan 2023 10:02:05 -0800
-Message-ID: <xmqq7cxl9h0i.fsf@gitster.g>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NukCC4d4QJEDgfsOL/cdaVgghldPnWrPw2w2tKfD+uY=;
+        b=2eAnDnT6S9j2EpUQn2LNQTyElWX4E38j2CZL0b3mJK5Rlsh9zXUQyBFxWS/s4NzESd
+         k7wFtaTRm1M74LEauScW4Jam4h03j81Y5U/fuLQ44oqTGa2jQ3qIBUZywU95sfXxNiKZ
+         /RNLpxDKGxLJpaPSwLI4wybc6RzJoUTqORxb0G96puJ+48YHiAOl4+Hsua119t6FAy0N
+         KIEQw5e2q5naujJw8b5I3+kUf33JPzpeqXWqK05/lgxAPeCyD0mBXnKJ/YAVpox376jo
+         bzsXtF71v+sn+h0DkdmqHZTL0ukczAfHuy2I2O9rVtu7JfEu+K0C5mxjaO1afooZXZ1+
+         E16Q==
+X-Gm-Message-State: AFqh2kqnD9aNBpmzvLRBhIqIg8h93vp/KihBf5abIoyKjv+A1cmj6GBo
+        N70/na6Z8UInYvHKvANGMX7ckhKhuInkP2rMQpOvWg==
+X-Google-Smtp-Source: AMrXdXu+usIT51QrhN3XgtNGs2meY4k3VapR89YptIDkG9ps8gK7cX5MIHSnrazqyTfkC8I4ixxIhSkCKFinuEbLcyo=
+X-Received: by 2002:a05:6870:4b4c:b0:15f:17fd:1531 with SMTP id
+ ls12-20020a0568704b4c00b0015f17fd1531mr325174oab.115.1673978557152; Tue, 17
+ Jan 2023 10:02:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230116173420.1278704-1-mw@semihalf.com> <20230116173420.1278704-3-mw@semihalf.com>
+ <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk> <CAPv3WKcbuY0kmM0trfS++at=r4KhCsp2bZ1kBL2r+-YJe=kE3w@mail.gmail.com>
+ <Y8bhzex/k05i9NCQ@shell.armlinux.org.uk>
+In-Reply-To: <Y8bhzex/k05i9NCQ@shell.armlinux.org.uk>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 17 Jan 2023 19:02:29 +0100
+Message-ID: <CAPv3WKec6R_CVv8n5L-bGFg3QHpmUc+emeGV2Sm-DNM6SovGvQ@mail.gmail.com>
+Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API to fwnode_
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Landen.Chao@mediatek.com, Samer.El-Haj-Mahmoud@arm.com,
+        andrew@lunn.ch, andriy.shevchenko@linux.intel.com,
+        davem@davemloft.net, edumazet@google.com, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, jaz@semihalf.com, kuba@kernel.org,
+        linus.walleij@linaro.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        olteanv@gmail.com, pabeni@redhat.com, rafael@kernel.org,
+        sean.wang@mediatek.com, tn@semihalf.com, vivien.didelot@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A maintenance release v2.39.1, together with releases for older
-maintenance tracks v2.38.3, v2.37.5, v2.36.4, v2.35.6, v2.34.6,
-v2.33.6, v2.32.5, v2.31.6, and v2.30.7, are now available at the
-usual places.
+wt., 17 sty 2023 o 18:58 Russell King (Oracle) <linux@armlinux.org.uk>
+napisa=C5=82(a):
+>
+> Hi Marcin,
+>
+> On Tue, Jan 17, 2023 at 05:20:01PM +0100, Marcin Wojtas wrote:
+> > Hi Russell,
+> >
+> >
+> > pon., 16 sty 2023 o 18:50 Russell King (Oracle) <linux@armlinux.org.uk>
+> > napisa=C5=82(a):
+> > >
+> > > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
+> > > > fixed-link PHYs API is used by DSA and a number of drivers
+> > > > and was depending on of_. Switch to fwnode_ so to make it
+> > > > hardware description agnostic and allow to be used in ACPI
+> > > > world as well.
+> > >
+> > > Would it be better to let the fixed-link PHY die, and have everyone u=
+se
+> > > the more flexible fixed link implementation in phylink?
+> > >
+> > ,
+> > This patchset did not intend to introduce any functional change, simply
+> > switch to a more generic HW description abstraction. Killing
+> > of/fwnode_phy_(de)register_fixed_link entirely seems to be a challenge,=
+ as
+> > there are a lot of users beyond the DSA. Otoh I see a value in having
+> > of_/fwnode_phy_is_fixed_link check, afaik there is no equivalent in
+> > phylink...
+>
+> Phylink provides a much improved implementation of fixed-link that is
+> way more flexible than the phylib approach - it can implement speeds
+> in excess of 1G. DSA already supports phylink with modern updated
+> drivers that do not use the "adjust_link" implementation.
+>
+> What I'm proposing is that we don't bring the baggage of the phylib
+> based fixed link forwards into fwnode, and leave this to be DT-only.
+> I think this is what Andrew and Vladimir have also said.
+>
 
-These maintenance releases are to address the security issues
-identified as CVE-2022-41903 and CVE-2022-23521.
+Ok, thanks for clarifying.
 
-The tarballs are found at:
-
-    https://www.kernel.org/pub/software/scm/git/
-
-The following public repositories all have a copy of the v2.39.1
-tag, as well as the tags for older maintenance tracks for v2.30.7,
-v2.31.6, v2.32.5, v2.33.6, v2.34.6, v2.35.6, v2.36.4, v2.37.5, and
-v2.38.3.
-
-  url = https://git.kernel.org/pub/scm/git/git
-  url = https://kernel.googlesource.com/pub/scm/git/git
-  url = git://repo.or.cz/alt-git.git
-  url = https://github.com/gitster/git
-
- * CVE-2022-41903:
-
-   git log has the ability to display commits using an arbitrary
-   format with its --format specifiers. This functionality is also
-   exposed to git archive via the export-subst gitattribute.
-
-   When processing the padding operators (e.g., %<(, %<|(, %>(,
-   %>>(, or %><( ), an integer overflow can occur in
-   pretty.c::format_and_pad_commit() where a size_t is improperly
-   stored as an int, and then added as an offset to a subsequent
-   memcpy() call.
-
-   This overflow can be triggered directly by a user running a
-   command which invokes the commit formatting machinery (e.g., git
-   log --format=...). It may also be triggered indirectly through
-   git archive via the export-subst mechanism, which expands format
-   specifiers inside of files within the repository during a git
-   archive.
-
-   This integer overflow can result in arbitrary heap writes, which
-   may result in remote code execution.
-
-* CVE-2022-23521:
-
-    gitattributes are a mechanism to allow defining attributes for
-    paths. These attributes can be defined by adding a `.gitattributes`
-    file to the repository, which contains a set of file patterns and
-    the attributes that should be set for paths matching this pattern.
-
-    When parsing gitattributes, multiple integer overflows can occur
-    when there is a huge number of path patterns, a huge number of
-    attributes for a single pattern, or when the declared attribute
-    names are huge.
-
-    These overflows can be triggered via a crafted `.gitattributes` file
-    that may be part of the commit history. Git silently splits lines
-    longer than 2KB when parsing gitattributes from a file, but not when
-    parsing them from the index. Consequentially, the failure mode
-    depends on whether the file exists in the working tree, the index or
-    both.
-
-    This integer overflow can result in arbitrary heap reads and writes,
-    which may result in remote code execution.
-
-Credit for finding CVE-2022-41903 goes to Joern Schneeweisz of GitLab.
-An initial fix was authored by Markus Vervier of X41 D-Sec. Credit for
-finding CVE-2022-23521 goes to Markus Vervier and Eric Sesterhenn of X41
-D-Sec. This work was sponsored by OSTIF.
-
-The proposed fixes have been polished and extended to cover additional
-findings by Patrick Steinhardt of GitLab, with help from others on the
-Git security mailing list.
+Best regards,
+Marcin
