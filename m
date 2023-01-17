@@ -2,108 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A373C670D78
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A652C670D8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjAQXan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S229994AbjAQXcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjAQXaB (ORCPT
+        with ESMTP id S229602AbjAQXbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:30:01 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFCA4942A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:50:54 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id l125so14254156vsc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:50:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JE67O+s9c1DksMih5BPH/dW8Hwc4nNpOK0OPe51sf7k=;
-        b=AJKahwqpQDjAt31oGp82F5r21gwNDZ1moW7XQAwLucBbV8zIeqDE934wC8+d37UQnd
-         EzdDOEjggqvA8ypyOGHC+/0vxXQXI2TKAkz1SlVtmrXm2U7z0zFD+J+8k9DSMfJ64PIk
-         bbWA4Tmb2E1XQnrtOpKiFhDojkFryNY3qQKQY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JE67O+s9c1DksMih5BPH/dW8Hwc4nNpOK0OPe51sf7k=;
-        b=7m2joD4CkUWezhjylBmsCnEbXiy+t71pRuGB18b9FnzgjEwTVWfz2r6dS568x1BQ9Z
-         qRizrxa5UbO1sQvHo3GPhS5WWhc2sMjFG1egUV4C1pfCKxdngenzUpxMqhFmfGkDXGdu
-         nFN7OIEXg/qb/DfOpU3PQZCkKabJyVuXMuq9skUNT+4lz1QgnAB+vFLKX0o6JShy7YOl
-         q59/tO3gAxgMDp63qfpviZqQ0AYf6cc5r1ayhrYXiCPt30AQaGhM58HiKhfnfFJY1/F8
-         zxLWxNWDgYoBu2CV7DiDHLvQ/8LIwY7PPVZM6bHh9rrlxy7FwpuknJS9uVBzbJWhz6mn
-         cJHw==
-X-Gm-Message-State: AFqh2krTxPVS30GYwBJX0HS/9HByjV8x4Me1L+ISGtfBB68btQohucL9
-        KQKcqRiIdpcKhxN5eRQEWQFI5omx/oLyKrR8
-X-Google-Smtp-Source: AMrXdXvCHCQhXj6Segi6tfCDEMaCNhf980UtGarj0MoFtp2Sr3zifJsbgsduY5DH9imK5nWEZKZn8w==
-X-Received: by 2002:a05:6102:d8c:b0:3d0:edbb:4722 with SMTP id d12-20020a0561020d8c00b003d0edbb4722mr2943623vst.1.1673988653024;
-        Tue, 17 Jan 2023 12:50:53 -0800 (PST)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id o43-20020a0561023fab00b003d3fc21b68dsm173695vsv.25.2023.01.17.12.50.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 12:50:52 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id i188so33585702vsi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:50:52 -0800 (PST)
-X-Received: by 2002:a05:6102:21c4:b0:3cb:d175:6642 with SMTP id
- r4-20020a05610221c400b003cbd1756642mr595041vsg.79.1673988652026; Tue, 17 Jan
- 2023 12:50:52 -0800 (PST)
+        Tue, 17 Jan 2023 18:31:52 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A4C460AD;
+        Tue, 17 Jan 2023 12:51:22 -0800 (PST)
+Date:   Tue, 17 Jan 2023 20:51:13 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1673988680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tBfVFTcOroevwU21TT12BjG/YfB4gGjHAdUTut1zEfE=;
+        b=k3SfH990JxjLMD1azdUqAYV3qH2dpILCHNOUpFvPnnEGaH4o8DSODDMapBT1XqN7p/g17I
+        FDQg2C1oQtzrxNeH/+hJZ80tH9djmqM9cQTroEfpGdJahiPMqM3ol6tXjLcSH6C9cycGBq
+        tq4cav0IOHAblnomIdYMP6zRzfCCFw4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in
+ no running vcpu context
+Message-ID: <Y8cKQRIbpLWVcdcw@google.com>
+References: <20230116040405.260935-1-gshan@redhat.com>
+ <20230116040405.260935-2-gshan@redhat.com>
 MIME-Version: 1.0
-References: <20230117024236.1442437-1-judyhsiao@chromium.org>
-In-Reply-To: <20230117024236.1442437-1-judyhsiao@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 17 Jan 2023 12:50:40 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W0ACJ7uMYdtfLpaVh67kdvt+q3ObtmWhhchPMksN_YZQ@mail.gmail.com>
-Message-ID: <CAD=FV=W0ACJ7uMYdtfLpaVh67kdvt+q3ObtmWhhchPMksN_YZQ@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: qcom: sc7280: add display port audio
-To:     Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116040405.260935-2-gshan@redhat.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Gavin,
 
-On Mon, Jan 16, 2023 at 6:42 PM Judy Hsiao <judyhsiao@chromium.org> wrote:
->
-> 1. Add DisplayPort sound node and lpass_cpu node.
->
-> 2. Adjust the dai-link order to make the order to
->    be consistent with sc7280-herobrine-audio-rt5682-3mic.dtsi.
->
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
->
+On Mon, Jan 16, 2023 at 12:04:02PM +0800, Gavin Shan wrote:
+> When dirty ring is enabled, the dirty page information is pushed to
+> the dirty ring if there is a running VCPU context. Otherwise, the
+> dirty page information is still tracked by the backup dirty bitmap.
+> In order to detect if there is a running VCPU context when a guest
+> page becomes dirty, kvm_arch_allow_write_without_running_vcpu() was
+> introduced to warn when no running VCPU context exists on unknown
+> cases.
+> 
+> Other than the site of saving ITS tables, it's possible to save vgic3
+> LPI pending status in no running vcpu context because it can happen when
+> ITS ITE is restored through the command KVM_DEV_ARM_ITS_RESTORE_TABLES
+> on 'kvm-arm-vgic-its' device.
+> 
+> Fix it by allowing to save vgic3 LPI pending status in no running
+> vcpu context.
+> 
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 > ---
->
-> Changes in v3:
-> - Add more detail in the commit message.
->
-> Changes in v2:
-> - Fix the commit message format.
->
->  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+>  Documentation/virt/kvm/api.rst | 5 +++--
+>  arch/arm64/kvm/vgic/vgic-its.c | 3 ++-
+>  arch/arm64/kvm/vgic/vgic-v3.c  | 3 +++
+>  include/kvm/arm_vgic.h         | 1 +
+>  4 files changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 9807b05a1b57..18b245a0ba02 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8071,8 +8071,9 @@ state is final and avoid missing dirty pages from another ioctl ordered
+>  after the bitmap collection.
+>  
+>  NOTE: One example of using the backup bitmap is saving arm64 vgic/its
+> -tables through KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on
+> -KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
+> +tables and vgic3 LPI pending status through KVM_DEV_ARM_{VGIC_GRP_CTRL,
+> +ITS_SAVE_TABLES} and KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES}
+> +command on KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
+>  
+>  8.30 KVM_CAP_XEN_HVM
+>  --------------------
+> diff --git a/arch/arm64/kvm/vgic/vgic-its.c b/arch/arm64/kvm/vgic/vgic-its.c
+> index 94a666dd1443..119a9c7a0a52 100644
+> --- a/arch/arm64/kvm/vgic/vgic-its.c
+> +++ b/arch/arm64/kvm/vgic/vgic-its.c
+> @@ -2792,7 +2792,8 @@ bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
+>  {
+>  	struct vgic_dist *dist = &kvm->arch.vgic;
+>  
+> -	return dist->save_its_tables_in_progress;
+> +	return dist->save_vgic_v3_tables_in_progress ||
+> +	       dist->save_its_tables_in_progress;
 
-nit: Your ${SUBJECT} needs to make it obvious what this is changing. Like maybe:
+I'd much prefer using a single bool to keep track of this, i.e:
 
-arm64: dts: qcom: sc7280: add DP audio to herobrine rt5682 1-mic dtsi
+	return dist->save_tables_in_progress;
 
-Other than that this looks good to me:
+>  }
+>  
+>  static int vgic_its_set_attr(struct kvm_device *dev,
+> diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
+> index 2074521d4a8c..32998c8587a8 100644
+> --- a/arch/arm64/kvm/vgic/vgic-v3.c
+> +++ b/arch/arm64/kvm/vgic/vgic-v3.c
+> @@ -304,6 +304,7 @@ void vgic_v3_enable(struct kvm_vcpu *vcpu)
+>  int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
+>  {
+>  	struct kvm_vcpu *vcpu;
+> +	struct vgic_dist *dist = &kvm->arch.vgic;
+>  	int byte_offset, bit_nr;
+>  	gpa_t pendbase, ptr;
+>  	bool status;
+> @@ -339,7 +340,9 @@ int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
+>  	if (status) {
+>  		/* clear consumed data */
+>  		val &= ~(1 << bit_nr);
+> +		dist->save_vgic_v3_tables_in_progress = true;
+>  		ret = kvm_write_guest_lock(kvm, ptr, &val, 1);
+> +		dist->save_vgic_v3_tables_in_progress = false;
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+With the above suggestion of using a bool, this should become a helper
+used at all the affected callsites:
+
+  static int vgic_write_guest_lock(struct kvm *kvm, gpa_t gpa,
+  				   const void *data, unsigned long len)
+  {
+  	struct vgic_dist *dist = &kvm->arch.vgic;
+	int ret;
+
+	dist->save_tables_in_progress = true;
+	ret = kvm_write_guest_lock(kvm, gpa, data, len);
+	dist->save_tables_in_progress = false;
+
+	return ret;
+  }
+
+--
+Thanks,
+Oliver
