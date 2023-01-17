@@ -2,162 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D35F66E6FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF29D66E704
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjAQTbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S233612AbjAQTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235183AbjAQTU6 (ORCPT
+        with ESMTP id S235283AbjAQTVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:20:58 -0500
-Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107F92312D;
-        Tue, 17 Jan 2023 10:32:30 -0800 (PST)
-Received: from MTA-10-4.privateemail.com (mta-10.privateemail.com [68.65.122.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by h5.fbrelay.privateemail.com (Postfix) with ESMTPS id 4F3726002B;
-        Tue, 17 Jan 2023 18:32:29 +0000 (UTC)
-Received: from mta-10.privateemail.com (localhost [127.0.0.1])
-        by mta-10.privateemail.com (Postfix) with ESMTP id 5022918000A2;
-        Tue, 17 Jan 2023 13:32:15 -0500 (EST)
-Received: from bpappas-XPS-13-9310.net.ucf.edu (unknown [132.170.212.18])
-        by mta-10.privateemail.com (Postfix) with ESMTPA id 156F9180009F;
-        Tue, 17 Jan 2023 13:32:02 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
-        s=default; t=1673980335;
-        bh=9tfJHMfquKiMaSi0dIV592j2HgRcbJho137zYx7AinU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m5m0mC81auHjGwcitxEiIW9qQZnWrm/aLrL5F6Vszpo803bmYPrx6OlmZpkvP3GBA
-         jtr6lpaidV8qjwZnKQsRgK/IN9/VfGRCuFvArbUuEPqoNlp/ilH6fJf8H/t8h+0dB0
-         Q+dZwhXl5MsqWiO5+3K6cfFbVNLRKHgUHQbZTKEGQMM3Q7MdgWNmAPpSGpO25Gnk5h
-         Kzjug6I9Un70kzSl4q0Ntj4zdLUBNj/V7loq0afDt5bgWnaoWyBdEf+qHbwOngD16F
-         9lPOJiVt5Cf9YObHfW/4LEFKvhJkh1dMOnDCZjVEzbLFmkMLUdE4KdELWOwWmhlUD6
-         C8jMuh6ZeypFQ==
-From:   Brent Pappas <bpappas@pappasbrent.com>
-To:     andy.shevchenko@gmail.com
-Cc:     ailus@linux.intel.com, andy@kernel.org, bpappas@pappasbrent.com,
-        error27@gmail.com, gregkh@linuxfoundation.org, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org
-Subject: [PATCH v3] media: atomisp: pci: Replace bytes macros with functions
-Date:   Tue, 17 Jan 2023 13:31:52 -0500
-Message-Id: <20230117183152.6521-1-bpappas@pappasbrent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
-References: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
+        Tue, 17 Jan 2023 14:21:38 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12E5D129
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:32:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673980363; x=1705516363;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=N58e/v7loHKbImA92TI8pyQ0RszEtaQrbld3LocqpQk=;
+  b=PhYEa+2gvy49IX1sQtOoRcZB9IgZM3yv/zk7vGjIwf5eP4x9aB0xn2+X
+   mtQ5NNXbU3UkaeXoziJSXwvfzP6rz1zSdDO2Kfdx/cE9a9UTisjkqLOHY
+   qSrmjtANw3mRe4v2qPn2vz222YrJUunCmu0Q5IKIF+P3ehMJI09/TK2OM
+   WdogtXjOdOUjqaD6ZP85plAAH5j45I24c2z1UbIw2vE83qhiJzc7SlHa/
+   TvYaMPXnIg80rp1Y4E3zJyxlfUrjm5DlnxDSy2MEK+myD2VXtW5PrePdD
+   RTp5GJYETJ985vbuKEQDKDMUxLA3ZA9SdCo0b/RxUGlzZ9B1yL/WTBahQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="389278014"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="389278014"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 10:32:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="636956882"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="636956882"
+Received: from youli-mobl1.amr.corp.intel.com (HELO [10.255.228.205]) ([10.255.228.205])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 10:32:41 -0800
+Message-ID: <832b5c6c-cafa-e9e6-6e52-b741315d0865@intel.com>
+Date:   Tue, 17 Jan 2023 10:32:50 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 6/6] x86/microcode/intel: Print when early microcode
+ loading fails
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Ashok Raj <ashok.raj@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Ingo Molnar <mingo@kernel.org>, alison.schofield@intel.com,
+        reinette.chatre@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
+References: <20230109153555.4986-1-ashok.raj@intel.com>
+ <20230109153555.4986-7-ashok.raj@intel.com> <Y8ROaoJtUtj5bPcx@zn.tnic>
+ <Y8bI4BBst78qrApD@a4bf019067fa.jf.intel.com>
+ <e491fe87-2c2a-e9d2-3cd9-dfc7535f7c27@intel.com> <Y8bnEgP6iXCL+QmX@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y8bnEgP6iXCL+QmX@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the function-like macros FPNTBL_BYTES, SCTBL_BYTES, and
-MORPH_PLANE_BYTES with static inline functions to comply with Linux coding
-style standards.
-Replace multiplication with calls to size_mul to prevent accidental
-arithmetic overflow.
+On 1/17/23 10:21, Borislav Petkov wrote:
+> On Tue, Jan 17, 2023 at 08:29:28AM -0800, Dave Hansen wrote:
+>> This ensures that a message of some kind is printed on all early loads:
+>> successes *and* failures.  This should make it easier for our hapless
+>> users to figure out when a failure occurred.
+> I'm still not convinced. When something doesn't happen in the kernel, we don't
+> always say "It didn't happen". We don't say anything.
 
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
----
-Changelog:
-V1 -> V2: Use size_mul to perform size_t multiplication without risk of
-		  overflow.
-		  Remove the inline keyword from function definitions.
+Well, we have an awful lot of pr_warn()'s in the kernel that talk about
+something that was tried and failed.
 
-V2 -> V3: Add commit message.
+> So I don't like all those talkative drivers for no good reason. If there wasn't
+> an update message, then no update happened. That's it.
 
- .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+I actually kinda like the inverse.
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index f08564f58242..7e111df5c09d 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -98,17 +98,27 @@
- #include "sh_css_frac.h"
- #include "ia_css_bufq.h"
- 
--#define FPNTBL_BYTES(binary) \
--	(sizeof(char) * (binary)->in_frame_info.res.height * \
--	 (binary)->in_frame_info.padded_width)
-+static size_t fpntbl_bytes(const struct ia_css_binary *binary)
-+{
-+	return size_mul(sizeof(char),
-+			size_mul(binary->in_frame_info.res.height,
-+				 binary->in_frame_info.padded_width));
-+}
- 
--#define SCTBL_BYTES(binary) \
--	(sizeof(unsigned short) * (binary)->sctbl_height * \
--	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
-+static size_t sctbl_bytes(const struct ia_css_binary *binary)
-+{
-+	return size_mul(sizeof(unsigned short),
-+				size_mul(binary->sctbl_height,
-+					 size_mul(binary->sctbl_aligned_width_per_color,
-+						  IA_CSS_SC_NUM_COLORS)));
-+}
- 
--#define MORPH_PLANE_BYTES(binary) \
--	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
--	 (binary)->morph_tbl_height)
-+static size_t morph_plane_bytes(const struct ia_css_binary *binary)
-+{
-+	return size_mul(SH_CSS_MORPH_TABLE_ELEM_BYTES,
-+					size_mul(binary->morph_tbl_aligned_width,
-+						 binary->morph_tbl_height));
-+}
- 
- /* We keep a second copy of the ptr struct for the SP to access.
-    Again, this would not be necessary on the chip. */
-@@ -3279,7 +3289,7 @@ sh_css_params_write_to_ddr_internal(
- 	if (binary->info->sp.enable.fpnr) {
- 		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
- 						   &ddr_map_size->fpn_tbl,
--						   (size_t)(FPNTBL_BYTES(binary)),
-+						   fpntbl_bytes(binary),
- 						   params->config_changed[IA_CSS_FPN_ID],
- 						   &err);
- 		if (err) {
-@@ -3304,7 +3314,7 @@ sh_css_params_write_to_ddr_internal(
- 
- 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
- 						   &ddr_map_size->sc_tbl,
--						   SCTBL_BYTES(binary),
-+						   sctbl_bytes(binary),
- 						   params->sc_table_changed,
- 						   &err);
- 		if (err) {
-@@ -3538,8 +3548,7 @@ sh_css_params_write_to_ddr_internal(
- 			buff_realloced |=
- 			    reallocate_buffer(virt_addr_tetra_x[i],
- 					    virt_size_tetra_x[i],
--					    (size_t)
--					    (MORPH_PLANE_BYTES(binary)),
-+					    morph_plane_bytes(binary),
- 					    params->morph_table_changed,
- 					    &err);
- 			if (err) {
-@@ -3549,8 +3558,7 @@ sh_css_params_write_to_ddr_internal(
- 			buff_realloced |=
- 			    reallocate_buffer(virt_addr_tetra_y[i],
- 					    virt_size_tetra_y[i],
--					    (size_t)
--					    (MORPH_PLANE_BYTES(binary)),
-+					    morph_plane_bytes(binary),
- 					    params->morph_table_changed,
- 					    &err);
- 			if (err) {
--- 
-2.34.1
+The common (boring) case where an update was needed and was successful.
+It's the one we don't need to tell users about at all.  It barely
+deserves a message.  Users expect that if there's an early update
+available, it'll get attempted, it will be successful and the kernel
+won't say much.
 
+The time we need to spam dmesg is when something upends user
+expectations and they might need to go do something.  An early loading
+failure is exactly the place where they want to know.  They want to know
+if they're running with known CPU bugs that would have been fixed by the
+early update, or if they somehow have a botched early loading image.
+
+So, if I had to pick either:
+
+ * Print on failure
+or
+ * Print on success
+
+I'd pick failure.  But, considering that we're already printing on
+success, I'm OK doing both.
