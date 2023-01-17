@@ -2,275 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C8A670DD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC69670DD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjAQXni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S229781AbjAQXqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjAQXnC (ORCPT
+        with ESMTP id S229574AbjAQXpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:43:02 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD49656E8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:48:41 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id g10so23435584wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:48:41 -0800 (PST)
+        Tue, 17 Jan 2023 18:45:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1884DE04
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso467046pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LYCcWqCCZCUHqzEyU/xnDg7cnPafRId64wsa4xHKDIA=;
-        b=y6NtW/6VxO1x8kKxzAS+q88Nf99KzaIP+D2IjKsLyOFqIjWSXZBEy7GiUTILBrFWye
-         bPbeaUC+x0Fu2tXv3IifcnPxKHhzNfVWY1GrU1kZdsz8GprC+PVxsF3z0WINvHJMhlcz
-         x9ZwiBtK3rhAOdN4YVIBCAJkUpTcgqmvlXTUugGxjATB6/AGSjuRjLruAtEH3aolU1Jq
-         pMRxrOeo1+/5mRNTN4F2aEhRix6CEgJzz0i73MG/60NZi5I3ytzccm96+eWCU/4YxwAA
-         wKHqZzmvWdTYfO+FJfYCTndwki5xB2wymqjQttORaUdKXJT2mFh6vgQ5erDSFSxecAwr
-         yn6Q==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=sv78Dh2Q372NesG6fn9eLYR446uOhxqMw95J9Xmhrg1XZKK9E0pPqMndt5u6CFNZt+
+         wEx7TGifDWupQ1scvBA7o1nLOawl/DGYwQ/EpX3Vefiab0uJOUJG0SfBWAjtwQfs3Oym
+         9VvMWaizc8KXBH/FiUMj//KhicHS00IpGpo/4RCopkl9BMcYDeUnlsqv3wUtQA4yMTfT
+         wNZSSV1OQs2TLn+dbNinHZ4ZSqgEbAuy5evzUe8XBMKF4hNltMJPeY/gN0UC0FHD254Q
+         kF4s5VHwl6vpnWc2LRSEN9qEOrgZj2zH8YjY9UAxxNUdPIMuzjRJlkcQ1Sm03Mpvlryj
+         fAmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LYCcWqCCZCUHqzEyU/xnDg7cnPafRId64wsa4xHKDIA=;
-        b=OOMeRvcoTLqLxUQ9opD8FokgJZwvcCR/qGGrdC6+U42Y1lGQjZQspkRjrUq9Iw/TZw
-         PMXtQlGhlW4pEcdOxHmfvmrYbjHjd0mGmqKMgJxQrNwm2nFmObQ67KeL/axBMWFwB2Py
-         6uA7Dgx85N9n1FKOO/EWP5jMCaSjZi2H4OrsZrFsCLbPbBQAXraJSjpOHve7YoCCsw0s
-         44412Q/Felzt9C4VztP9bgzXXsBLRkVSQA3ZX2p+96XXpSipKDFP4WyCJyot7efA6oKW
-         9hXhvsk6nLAPqLqSTxFbNnMG4+lV4Unp2+ZEWHgCd0/7WTYwCqFUOLiRiMUcyP6lWMpp
-         dTeQ==
-X-Gm-Message-State: AFqh2kpBs+YQl3OsCezpUwYvqOE9Sq+YgCpGv5GhZ5sO8VxqyYqC7VUS
-        xE9ycaaHsFbQyn0dOaYBMscCcQ==
-X-Google-Smtp-Source: AMrXdXuFvYbZV9S/7lQ8QJ10PZT/eT5LWRdZmBUuVkcgeLYgs3Z2XUHlrgXrVqMt4pxJK4LZ4oNphw==
-X-Received: by 2002:a05:600c:920:b0:3da:22a6:7b6b with SMTP id m32-20020a05600c092000b003da22a67b6bmr4561497wmp.13.1673995719688;
-        Tue, 17 Jan 2023 14:48:39 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c314600b003d99469ece1sm159069wmo.24.2023.01.17.14.48.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 14:48:38 -0800 (PST)
-Message-ID: <28e1df7a-6577-bf39-9739-d0a047b36f12@linaro.org>
-Date:   Tue, 17 Jan 2023 22:48:37 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=LFtCinIslGrmOiyUf69IpP+eU0AuIWjFRKzUntKi/LgUz2BgZaS9Dkc4XiYG0dQgSF
+         IMwSHtsLly56IZ/NWGSIeWJBvcXKBBh11H8696aO+FXca6Rkk9mUCdZ2FU2ucrz/pdv6
+         hUNZ/NQCq8xLgfLwBbE1tIvG2Sk27kwls51zTH+X5Ze9jJ6RA2IObZAuMK1tIp/YDIn9
+         zb8FQbk/7TktymOfA4c9bfaSy2436r1ecDUCpjQ08ndH7URF/OdlRxpiz9J4mSZBOjqD
+         0oTRjKr/jgakOrLI1xlcSumvkS66OevUFV8WVuM5GUZ/7J6imV09fcPsHWall8I/MNX3
+         JBqA==
+X-Gm-Message-State: AFqh2kou6zvQqGQ5BY6NVsY8pXvcH3aUPm8bqt8GEsXGY9tND1u8Lh02
+        V+HoTr0ip0/4YNES9BbRtK59Mg==
+X-Google-Smtp-Source: AMrXdXtw6UInomjD3WXWYJY8U/YyUCazJws5E/fdEK6s0Kvi4UPULlGid2XrdO9gLfFWa2NS3d4S5A==
+X-Received: by 2002:a05:6a20:ce43:b0:b8:c3c0:e7f7 with SMTP id id3-20020a056a20ce4300b000b8c3c0e7f7mr395043pzb.1.1673995906357;
+        Tue, 17 Jan 2023 14:51:46 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b0058bc1a13ffcsm7232252pfq.25.2023.01.17.14.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 14:51:45 -0800 (PST)
+Date:   Tue, 17 Jan 2023 22:51:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V2 PATCH 4/6] KVM: selftests: x86: Add helpers to execute VMs
+ with private memory
+Message-ID: <Y8cmfjRIRp2EphTa@google.com>
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-5-vannapurve@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
- <20230117205800.cqexxwxmtupapy7e@builder.lan>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230117205800.cqexxwxmtupapy7e@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205232341.4131240-5-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 20:58, Bjorn Andersson wrote:
-> On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
->> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
->> differences to msm8916.
->>
->> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
->> - DRAM 1x800 LPDDR3
->> - Camera 4+4 lane CSI
->> - Venus @ 1080p60 HEVC
->> - DSI x 2
->> - Adreno A405
->> - WiFi wcn3660/wcn3680b 802.11ac
->>
->> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
->> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
->> Co-developed-by: Jun Nie <jun.nie@linaro.org>
->> Signed-off-by: Jun Nie <jun.nie@linaro.org>
->> Co-developed-by: Benjamin Li <benl@squareup.com>
->> Signed-off-by: Benjamin Li <benl@squareup.com>
->> Co-developed-by: James Willcox <jwillcox@squareup.com>
->> Signed-off-by: James Willcox <jwillcox@squareup.com>
->> Co-developed-by: Leo Yan <leo.yan@linaro.org>
->> Signed-off-by: Leo Yan <leo.yan@linaro.org>
->> Co-developed-by: Joseph Gates <jgates@squareup.com>
->> Signed-off-by: Joseph Gates <jgates@squareup.com>
->> Co-developed-by: Max Chen <mchen@squareup.com>
->> Signed-off-by: Max Chen <mchen@squareup.com>
->> Co-developed-by: Zac Crosby <zac@squareup.com>
->> Signed-off-by: Zac Crosby <zac@squareup.com>
->> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
->> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
->> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
->> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> 
-> Just to make sure when I get the question, you all co-developed this
-> patch, right?
+On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> +void vcpu_run_and_handle_mapgpa(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * Loop until the guest exits with any reason other than
+> +	 * KVM_HC_MAP_GPA_RANGE hypercall.
+> +	 */
+> +
+> +	while (true) {
+> +		vcpu_run(vcpu);
+> +
+> +		if ((vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) &&
+> +			(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE)) {
 
-A long list but a fair one.
+I get what you're trying to do, and I completely agree that we need better helpers
+and/or macros to reduce this type of boilerplate, but adding a one-off helper like
+this is going to be a net negative overall.  This helper services exactly one use
+case, and also obfuscates what a test does.
 
->> ---
->>   arch/arm64/boot/dts/qcom/msm8939.dtsi | 2393 +++++++++++++++++++++++++
->>   1 file changed, 2393 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
->>
->> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
->> new file mode 100644
->> index 0000000000000..8cd358a9fe623
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
->> @@ -0,0 +1,2393 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2020-2023, Linaro Limited
->> + */
->> +
->> +#include <dt-bindings/clock/qcom,gcc-msm8939.h>
->> +#include <dt-bindings/clock/qcom,rpmcc.h>
->> +#include <dt-bindings/interconnect/qcom,msm8939.h>
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/power/qcom-rpmpd.h>
->> +#include <dt-bindings/reset/qcom,gcc-msm8939.h>
->> +#include <dt-bindings/thermal/thermal.h>
->> +
->> +/ {
->> +	interrupt-parent = <&intc>;
->> +
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
-> 
-> Why do you use a default of 2? In particular since you reduce it to 1 in
-> /soc...
+In other words, this is yet another thing that needs broad, generic support
+(_vcpu_run() is a very special case).  E.g. something like this to make it easy
+for tests to run a guest and handle ucalls plus specific exits (just a strawman,
+I think we can do better for handling ucalls).
 
-You asked that before, and I took a note of the answer but, then because 
-I was away from the main machine when I sent V2, I didn't have the log.
+#define vcpu_run_loop(vcpu, handlers, ucalls)				\
+do {									\
+	uint32_t __exit;						\
+	int __r = 0;							\
+									\
+	while (!r)  {							\
+		vcpu_run(vcpu);						\
+									\
+		__exit = vcpu->run->exit_reason;			\
+									\
+		if (__exit < ARRAY_SIZE(handlers) && handlers[__exit])	\
+			__r = handlers[__exit](vcpu);			\	
+		else if (__exit == KVM_EXIT_IO && ucalls)		\
+			__r = handle_exit_ucall(vcpu, ucalls,		\
+						ARRAY_SIZE(ucalls));	\
+		else							\
+			TEST_FAIL(...)					\
+	}								\
+} while (0)
 
-Here's what I wrote down.
 
-"  - address-cells/size-cells = 1 in /soc - Bjorn
-     I experimentally changed address/cell sizes to 2
-     I'm finding that lk chokes "
-
-So AFAIR LK was unhappy about changing the top level address/size cells 
-to <1> <1> and converting the /soc address/size cells to <2> <2> caused 
-a number of breakages during boot.
-
-To be honest, this pattern is copied from the msm8916.dtsi original. 
-msm8953.dtsi has the same thing. msm8994 too, and 8998.
-
-If you think it needs changing, then I'll have to see what can be done 
-with soc@{} entries.
-
-> 
->> +
->> +	clocks {
->> +		xo_board: xo-board {
->> +			compatible = "fixed-clock";
->> +			#clock-cells = <0>;
->> +			clock-frequency = <19200000>;
->> +		};
->> +
->> +		sleep_clk: sleep-clk {
->> +			compatible = "fixed-clock";
->> +			#clock-cells = <0>;
->> +			clock-frequency = <32768>;
->> +		};
->> +	};
-> [..]
->> +	smp2p-hexagon {
-> 
-> To avoid having people start sending patches that changes the sort order
-> as soon as I merge this, could you please sort your nodes by address
-> (not applicable for this one), then by node name alphabetically, then by
-> label alphabetically.
-
-ah. I sorted the contents of soc. I missed the upper level groupings.
-
-> 
->> +		compatible = "qcom,smp2p";
->> +		qcom,smem = <435>, <428>;
->> +
->> +		interrupts = <GIC_SPI 27 IRQ_TYPE_EDGE_RISING>;
->> +
->> +		mboxes = <&apcs1_mbox 14>;
->> +
->> +		qcom,local-pid = <0>;
->> +		qcom,remote-pid = <1>;
->> +
->> +		hexagon_smp2p_out: master-kernel {
->> +			qcom,entry-name = "master-kernel";
->> +
->> +			#qcom,smem-state-cells = <1>;
->> +		};
->> +
->> +		hexagon_smp2p_in: slave-kernel {
->> +			qcom,entry-name = "slave-kernel";
->> +
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +			#address-cells = <0>;
->> +			#size-cells = <0>;
->> +		};
->> +	};
->> +
->> +	memory@80000000 {
->> +		device_type = "memory";
->> +		/* We expect the bootloader to fill in the reg */
->> +		reg = <0x0 0x80000000 0x0 0x0>;
->> +	};
->> +
-> [..]
->> +	soc: soc@0 {
-> [..]
->> +		pronto: remoteproc@a204000 {
->> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
->> +			reg = <0x0a204000 0x2000>,
->> +			      <0x0a202000 0x1000>,
->> +			      <0x0a21b000 0x3000>;
->> +			reg-names = "ccu", "dxe", "pmu";
->> +
->> +			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
->> +					      <&wcnss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
->> +					      <&wcnss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
->> +					      <&wcnss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
->> +					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
->> +			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
->> +
->> +			memory-region = <&wcnss_mem>;
->> +
->> +			power-domains = <&rpmpd MSM8939_VDDCX>,
->> +					<&rpmpd MSM8939_VDDMX_AO>;
-> 
-> The purpose of the remoteproc driver's vote is to keep the rails powered
-> while we're booting the remote, in the event that Linux decides to
-> suspend and turn of the power rails while we're waiting...
-> 
-> Once the remote pulls the "handover" interrupt, it signals that it has
-> cast the necessary votes and need no more hand-holding.
-> 
-> So it's unlikely that _AO is the right choice here.
-
-Yes, it's probably just VDDMX isn't it.
-
-I'll change that.
-
----
-bod
+For this series, I think it makes sense to just open code yet another test.  It
+really doesn't end up being much code, which is partly why we haven't added
+helpers :-/
