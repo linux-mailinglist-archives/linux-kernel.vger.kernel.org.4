@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BE866D764
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C1966D768
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbjAQIBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S235762AbjAQICM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbjAQIBQ (ORCPT
+        with ESMTP id S235771AbjAQICH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:01:16 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60F61BADF;
-        Tue, 17 Jan 2023 00:01:12 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Nx1YL0N2Bz4xpyC;
-        Tue, 17 Jan 2023 16:01:10 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl1.zte.com.cn with SMTP id 30H815we005478;
-        Tue, 17 Jan 2023 16:01:05 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 17 Jan 2023 16:01:08 +0800 (CST)
-Date:   Tue, 17 Jan 2023 16:01:08 +0800 (CST)
-X-Zmail-TransId: 2af963c655c4ffffffff87b29564
-X-Mailer: Zmail v1.0
-Message-ID: <202301171601080312252@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <herbert@gondor.apana.org.au>
-Cc:     <davem@davemloft.net>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <linux-crypto@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGNyeXB0bzogcDEwLWFlcy1nY20gLSByZW1vdmUgZHVwbGljYXRlIGluY2x1ZGVkIGhlYWRlciBmaWxlcw==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30H815we005478
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C655C6.000/4Nx1YL0N2Bz4xpyC
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 17 Jan 2023 03:02:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16636E95;
+        Tue, 17 Jan 2023 00:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cmVV6xRQmaK0l4HRL/lhH4XySz+BO5RzfEmX6d+cJZM=; b=KLeqLLx0NC+cXLbPhHSUJXvm/7
+        R/nl/8FixpSCZgHfNJHIPElbnFHiIR85J0mANjkPduyvsnh1TOci2q3m71cXS3BTbn0rB7Cz89ZKR
+        QJAkNO6pNAybiWH/mXlGOEdMFq76IoX3V3FwiGVTg4NHWsFd/mnXxJ25MuAMbuJ7LQ+p227fBxOR3
+        Un7EcKwFO+MI7nMp+e4NwGZ0ykdgaaqkKmYEVm7lp8JJsaj7uZsVdxh3ZYbuzZKlGAOlGi3wAv6H9
+        sZsf0ybxabL89GqyzG8JI9EW8On10C7w0tMsJWtBI0gBakel51gCmn+QjxRoDvc2+FTWOhTth9ZBN
+        b7LOBerA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHgut-00DGYh-Be; Tue, 17 Jan 2023 08:01:59 +0000
+Date:   Tue, 17 Jan 2023 00:01:59 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 07/34] iov_iter: Add a function to extract a page list
+ from an iterator
+Message-ID: <Y8ZV9x9gawJPbQho@infradead.org>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391053207.2311931.16398133457201442907.stgit@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167391053207.2311931.16398133457201442907.stgit@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+> Changes:
+> ========
+> ver #6)
+>  - Add back the function to indicate the cleanup mode.
+>  - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+>  - Pass FOLL_SOURCE/DEST_BUF in gup_flags.  Check this against the iter
+>    data_source.
 
-crypto/algapi.h is included more than once.
+FYI, the changelog goes after the --- so that it doesn't get added
+to the git history.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- arch/powerpc/crypto/p10-aes-gcm-glue.c | 1 -
- 1 file changed, 1 deletion(-)
+> Link: https://lore.kernel.org/r/166732025748.3186319.8314014902727092626.stgit@warthog.procyon.org.uk/ # rfc
+> Link: https://lore.kernel.org/r/166869689451.3723671.18242195992447653092.stgit@warthog.procyon.org.uk/ # rfc
+> Link: https://lore.kernel.org/r/166920903885.1461876.692029808682876184.stgit@warthog.procyon.org.uk/ # v2
+> Link: https://lore.kernel.org/r/166997421646.9475.14837976344157464997.stgit@warthog.procyon.org.uk/ # v3
+> Link: https://lore.kernel.org/r/167305163883.1521586.10777155475378874823.stgit@warthog.procyon.org.uk/ # v4
+> Link: https://lore.kernel.org/r/167344728530.2425628.9613910866466387722.stgit@warthog.procyon.org.uk/ # v5
 
-diff --git a/arch/powerpc/crypto/p10-aes-gcm-glue.c b/arch/powerpc/crypto/p10-aes-gcm-glue.c
-index 777e6b5254da..a17d3e8d8f3c 100644
---- a/arch/powerpc/crypto/p10-aes-gcm-glue.c
-+++ b/arch/powerpc/crypto/p10-aes-gcm-glue.c
-@@ -8,7 +8,6 @@
- #include <asm/unaligned.h>
- #include <asm/simd.h>
- #include <asm/switch_to.h>
--#include <crypto/algapi.h>
- #include <crypto/aes.h>
- #include <crypto/algapi.h>
- #include <crypto/b128ops.h>
--- 
-2.25.1
+And all these links aren't exactly useful.  This fairly trivial commit
+is going to look like a hot mess in git.
+
+> +ssize_t iov_iter_extract_pages(struct iov_iter *i, struct page ***pages,
+> +			       size_t maxsize, unsigned int maxpages,
+> +			       unsigned int gup_flags, size_t *offset0);
+
+This function isn't actually added in the current patch.
+
+> +#define iov_iter_extract_mode(iter, gup_flags) \
+> +	(user_backed_iter(iter) ?				\
+> +	 (gup_flags & FOLL_BUF_MASK) == FOLL_SOURCE_BUF ?	\
+> +	 FOLL_GET : FOLL_PIN : 0)
+
+And inline function would be nice here.  I guess that would require
+moving the FULL flags into mm_types.h, though.
