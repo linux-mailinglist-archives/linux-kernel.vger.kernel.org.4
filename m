@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7BB66D491
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56D766D48F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbjAQCuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 21:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S235718AbjAQCuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 21:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235721AbjAQCsc (ORCPT
+        with ESMTP id S235704AbjAQCt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 21:48:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CFC31E27;
-        Mon, 16 Jan 2023 18:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=000a9m2DoIoKjXK7sVIo2/A2GFC81Al6i8o61eGFBME=; b=Ulmd1P+pFnTGzsE0Veaz8CDJrb
-        l2SeOPiAAlZVK73sfMGTnBnttA+ugjnHs9dmERQAnAsqMFnsATPmMtjWyygDbe+kPAG4fL+V15gE8
-        jP3KN9CNjU/Btl32PE9hrj4fzQAHzd8VYMLhhXxRo2QySc9BtIkLKR7PkACGf+MfAJ59IBFzN/gtU
-        /c4DeepTwNHezJqzu0TTjbQ2/OlAsgeKaw0F7gS2OydtWq4eGVxCpOvFxkha8V+nwo/ytwtl/o0iY
-        HeIOcWhrziUWzn8ekaYrGIl+h/CEfImbS8DeNx7R/QSzzoyZ5HvYwIURZpLwcQeM71CvloLBr+GOR
-        pX0BNMQw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHbur-009Ia4-Fu; Tue, 17 Jan 2023 02:41:37 +0000
-Date:   Tue, 17 Jan 2023 02:41:37 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Amy Parker <apark0006@student.cerritos.edu>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dax: use switch statement over chained ifs
-Message-ID: <Y8YK4c6KQg2xjM+E@casper.infradead.org>
-References: <CAPOgqxF_xEgKspetRJ=wq1_qSG3h8mkyXC58TXkUvx0agzEm_A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPOgqxF_xEgKspetRJ=wq1_qSG3h8mkyXC58TXkUvx0agzEm_A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 16 Jan 2023 21:49:56 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC5B33463;
+        Mon, 16 Jan 2023 18:43:03 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NwtTV5mHYz501TL;
+        Tue, 17 Jan 2023 10:42:22 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.99.176])
+        by mse-fl1.zte.com.cn with SMTP id 30H2gFa3047682;
+        Tue, 17 Jan 2023 10:42:15 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 17 Jan 2023 10:42:17 +0800 (CST)
+Date:   Tue, 17 Jan 2023 10:42:17 +0800 (CST)
+X-Zmail-TransId: 2af963c60b09602345dd
+X-Mailer: Zmail v1.0
+Message-ID: <202301171042170334662@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <rafael@kernel.org>
+Cc:     <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
+        <rui.zhang@intel.com>, <srinivas.pandruvada@linux.intel.com>,
+        <dave@stgolabs.net>, <chuansheng.liu@intel.com>,
+        <joeyli.kernel@gmail.com>, <jiasheng@iscas.ac.cn>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2ludDM0MHhfdGhlcm1hbDogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdF9hdCgpIEFQSQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30H2gFa3047682
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C60B0E.000/4NwtTV5mHYz501TL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 06:11:00PM -0800, Amy Parker wrote:
-> This patch uses a switch statement for pe_order, which improves
-> readability and on some platforms may minorly improve performance. It
-> also, to improve readability, recognizes that `PAGE_SHIFT - PAGE_SHIFT' is
-> a constant, and uses 0 in its place instead.
-> 
-> Signed-off-by: Amy Parker <apark0006@student.cerritos.edu>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Hi Amy,
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-Thanks for the patch!  Two problems.  First, your mailer seems to have
-mangled the patch; in my tree these are tab indents, and the patch has
-arrived with four-space indents, so it can't be applied.
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ .../thermal/intel/int340x_thermal/int3400_thermal.c    | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-The second problem is that this function should simply not exist.
-I forget how we ended up with enum page_entry_size, but elsewhere
-we simply pass 'order' around.  So what I'd really like to see is
-a patch series that eliminates page_entry_size everywhere.
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index db8a6f63657d..c1fc4a78607c 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -130,10 +130,7 @@ static ssize_t available_uuids_show(struct device *dev,
 
-I can outline a way to do that in individual patches if that would be
-helpful.
+ 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
+ 		if (priv->uuid_bitmap & (1 << i))
+-			length += scnprintf(&buf[length],
+-					    PAGE_SIZE - length,
+-					    "%s\n",
+-					    int3400_thermal_uuids[i]);
++			length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
+ 	}
 
->  fs/dax.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index c48a3a93ab29..e8beed601384 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -32,13 +32,16 @@
-> 
->  static inline unsigned int pe_order(enum page_entry_size pe_size)
->  {
-> -    if (pe_size == PE_SIZE_PTE)
-> -        return PAGE_SHIFT - PAGE_SHIFT;
-> -    if (pe_size == PE_SIZE_PMD)
-> +    switch (pe_size) {
-> +    case PE_SIZE_PTE:
-> +        return 0;
-> +    case PE_SIZE_PMD:
->          return PMD_SHIFT - PAGE_SHIFT;
-> -    if (pe_size == PE_SIZE_PUD)
-> +    case PE_SIZE_PUD:
->          return PUD_SHIFT - PAGE_SHIFT;
-> -    return ~0;
-> +    default:
-> +        return ~0;
-> +    }
->  }
-> 
->  /* We choose 4096 entries - same as per-zone page wait tables */
-> -- 
-> 2.39.0
+ 	return length;
+@@ -151,10 +148,7 @@ static ssize_t current_uuid_show(struct device *dev,
+
+ 	for (i = 0; i <= INT3400_THERMAL_CRITICAL; i++) {
+ 		if (priv->os_uuid_mask & BIT(i))
+-			length += scnprintf(&buf[length],
+-					    PAGE_SIZE - length,
+-					    "%s\n",
+-					    int3400_thermal_uuids[i]);
++			length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
+ 	}
+
+ 	if (length)
+-- 
+2.25.1
