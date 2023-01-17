@@ -2,225 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0B366D9C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA4F66D9C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbjAQJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S236381AbjAQJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236575AbjAQJXe (ORCPT
+        with ESMTP id S235963AbjAQJX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:23:34 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EFA30B13
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:19:22 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id i185so31562561vsc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LyAjjLF5PSA7nMubEUJgHKfY0OABThszqjzkhk7GoLA=;
-        b=mu8+DFGdWF4ptDfchP/mTU+UdWUHWOXtPcXvUno7sxIGEukorz3/CxldJOzWw/4H1N
-         AB+nA6/QjrVSEuDoAR51/JtAKxriF8nly+RJFy3cuJNJ3AeROLpZyxKt4zbVDjz+yAbs
-         B/CPsFue46wDlcR32iRbY3gIEBBCNDwDGP4K/taUHzrOrDaLRH75OtEecOmLV928I7IK
-         6hqm8f47PPdYKdgdhu/ml7UinFc4NGFz+dg4eouqHUOMEOmXHSY9VjUfStya7QbCw/Ok
-         GWY5aujtu0r516j6VF6yprHPCPaAmBOap7QITgzNMZSP2YvQRXoh3rphfddMuKhzDXxk
-         eNng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LyAjjLF5PSA7nMubEUJgHKfY0OABThszqjzkhk7GoLA=;
-        b=gTMAcwoZSMh5ae5W8LdYXD1stYM0QecX+d4kwHv+AsY1mOgz5TkXBpbS+WqypkCcG9
-         ypuvEJo38nMSow9h+Ykn9/FKEhyt2L1VJ3zJB7bnJCAVsRd5NkrNyQFDSCEvcHRlT6bo
-         lqo+XJJ5jaI9LHyrK2G1b+xsnsZq5IOdcff3Gq0lTtT1ERfTYA60roe1OOsRWQW1ffXN
-         cjGnunhVFLs+U2mj+6W87LStMWPi+Sa1Dig/ksxPa48EeHk5yXDgEZ2PYD29rvNH6F4V
-         bm403r7m3mDOcP0bVZCXuIkcm6+i8ruFLjqe9H7nVysOcQi9E6wCa3f81oxbHMOLFkFQ
-         ZLrA==
-X-Gm-Message-State: AFqh2krgi3N2hkiuFuI0CRlmS24WIhwPlhGUDE77dpKoqiYuQ+eXW0ef
-        sA0Fs5NVYFtUfthKAkoU7FDrTD2vtaXzvEGz3GTTsg==
-X-Google-Smtp-Source: AMrXdXvejjPPvE/eqidQ6SOf7P/i1Am1jVa3gYdJlaSjX8KG9lIcssr0Fp+43T62S6+nPeeQUGTOY0ywdjhB9cb3EP0=
-X-Received: by 2002:a05:6102:358b:b0:3b5:1de3:19fa with SMTP id
- h11-20020a056102358b00b003b51de319famr241511vsu.35.1673947161081; Tue, 17 Jan
- 2023 01:19:21 -0800 (PST)
+        Tue, 17 Jan 2023 04:23:26 -0500
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0663305F9;
+        Tue, 17 Jan 2023 01:19:17 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4C7A2200A9;
+        Tue, 17 Jan 2023 10:19:14 +0100 (CET)
+Date:   Tue, 17 Jan 2023 10:19:12 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "phy: qualcomm: usb28nm: Add MDM9607 init
+ sequence"
+Message-ID: <20230117091912.pzogxqvgf6kivi74@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221214223733.648167-1-marijn.suijten@somainline.org>
+ <Y8GY51Cfkj7o1MJs@matsya>
+ <20230116203549.5jzd2olxua662n6w@SoMainline.org>
+ <Y8YzzCEqGi3m9fWM@matsya>
 MIME-Version: 1.0
-References: <20230115210535.4085-1-apantykhin@gmail.com>
-In-Reply-To: <20230115210535.4085-1-apantykhin@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 17 Jan 2023 17:19:09 +0800
-Message-ID: <CABVgOSkXpbfLy5-40oqhmdLP9c84S=1FN=f_+Fw768QVUBBQPg@mail.gmail.com>
-Subject: Re: [PATCH] tools/testing/kunit/kunit.py: remove redundant double check
-To:     Alexander Pantyukhin <apantykhin@gmail.com>
-Cc:     brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000eeff3405f2723154"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8YzzCEqGi3m9fWM@matsya>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000eeff3405f2723154
-Content-Type: text/plain; charset="UTF-8"
+On 2023-01-17 11:06:12, Vinod Koul wrote:
+<snip>
+> > Thanks, it wasn't clear to me whether to suffix the title when already
+> > included in the Revert: "phy: qualcomm: ..." title :)
+> 
+> A revert patch is a patch as well so the patch rules apply there as well,
+> so should say "subsystem tag: other tags: Revert foo..."
 
-On Mon, 16 Jan 2023 at 05:05, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
->
-> The build_tests function contained the doulbe checking for not success
-Nit: "double" -> "double"
+Ack, but then /keep/ "subsystem tag: other tags:" /within/ the Revert
+string, so "phy: qualcomm: Revert "phy: qualcomm: ...""?
 
-> result. It is fixed in the current patch. Additional small
-> simplifications of code like useing ternary if were applied (avoid use
-Nit: "useing" -> "using"
-> the same operation by calculation times differ in two places).
->
-> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
-> ---
-Thanks for catching these!
-This looks good to me, save for a few typos (which you should fix if
-there's a v2, but it isn't important enough to do another version...)
-
-Unless someone with more Python knowledge than me jumps in and
-complains, this is:
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  tools/testing/kunit/kunit.py | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 43fbe96318fe..481c213818bd 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -77,10 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
->         config_start = time.time()
->         success = linux.build_reconfig(request.build_dir, request.make_options)
->         config_end = time.time()
-> -       if not success:
-> -               return KunitResult(KunitStatus.CONFIG_FAILURE,
-> -                                  config_end - config_start)
-> -       return KunitResult(KunitStatus.SUCCESS,
-> +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
-> +       return KunitResult(status,
->                            config_end - config_start)
->
->  def build_tests(linux: kunit_kernel.LinuxSourceTree,
-> @@ -92,13 +90,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
->                                      request.build_dir,
->                                      request.make_options)
->         build_end = time.time()
-> -       if not success:
-> -               return KunitResult(KunitStatus.BUILD_FAILURE,
-> -                                  build_end - build_start)
-> -       if not success:
-> -               return KunitResult(KunitStatus.BUILD_FAILURE,
-> -                                  build_end - build_start)
-> -       return KunitResult(KunitStatus.SUCCESS,
-> +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
-> +       return KunitResult(status,
->                            build_end - build_start)
->
->  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
-> @@ -145,7 +138,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->                 tests = _list_tests(linux, request)
->                 if request.run_isolated == 'test':
->                         filter_globs = tests
-> -               if request.run_isolated == 'suite':
-> +               elif request.run_isolated == 'suite':
->                         filter_globs = _suites_from_test_list(tests)
->                         # Apply the test-part of the user's glob, if present.
->                         if '.' in request.filter_glob:
-> --
-> 2.25.1
->
-
---000000000000eeff3405f2723154
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDy
-ZcMEl8yMYO6YIzy3RpQs553jqNRFg5YBfpubmCDlMTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMTcwOTE5MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlmFDQehg+SJBKlYQev3z
-YAeIz92FTanLz3eEaWF486PZGQbINnuMkJUVGZIAQmTlpApCW++BQmDAeysoFYuMbo4CkA4BWbMv
-9Z3dIBbcMm2Fb/2N8iUZXk66Om33e9v25DTqqbq5a7M7uoCwkehRY3K6Hj+XYqupntXAw/F6niAh
-q0ZVNzxObSvsabLCgopN6kIFNA4WU4RSEI0DdsGePei+CwthWLIMuGvzvS87Wod2bikqfF9oaX/Z
-wDLS8RK4xmZ6ZrmlyAoAhKIMcno5xndINlhuW5hM+RvdCATVar6voYSmQSDEj+L0Qmm5S6rZpjwA
-yasG8IyXkhkGpfr+ZA==
---000000000000eeff3405f2723154--
+- Marijn
