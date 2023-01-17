@@ -2,164 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CE8670B90
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02C3670BA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjAQWWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S229698AbjAQW3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjAQWWG (ORCPT
+        with ESMTP id S229739AbjAQW3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:22:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF06442C0;
-        Tue, 17 Jan 2023 14:01:21 -0800 (PST)
-Date:   Tue, 17 Jan 2023 22:01:07 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673992868;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cw2ifadid2co5wrZ8WMKcQk2tEe2rtV1EvOYOZJpSz0=;
-        b=mPQOu0upuAow0EFlbXSZtYpOzm/Ma2pG67mk9BwOvD8bYcbqCETte2+u5ZUgLCOkbxqMEF
-        fcZ7+U1al6Enrg7r+uXSAgqCR9A2o3rmSzNWHezzf/pdZG4wyFbmJdYYlVbOn9jrnN+nj2
-        nnPACwuxsuwSz16sQw1KXbamgDJ2aZkabdBzF+1prTuXUNMi9E9fFzvBAJ0iixljY+vWx6
-        eQNoTfNxW+NTLbCGPCzlhTwfDddRHOGFtxbIvZJnsyvGNX282kRmuCsl0vFuPFcRUx4p5b
-        KJVNrKEI3p5sP0+nNHjSk0Myjd5+LKxFu8X5HYLzoaxeLJMnLuTn3v70w8/INw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673992868;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cw2ifadid2co5wrZ8WMKcQk2tEe2rtV1EvOYOZJpSz0=;
-        b=eSxVsx7g9HGDdeQUznb3llfcHAVhiYAP5IuRNZRXQ6UvMtroo2xWeY3sPYlZ0LCnJs8yHy
-        czJU8VT+TvudqlAA==
-From:   "tip-bot2 for Jason Gunthorpe" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] genirq/msi: Free the fwnode created by
- msi_create_device_irq_domain()
-Cc:     Omri Barazi <obarazi@nvidia.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kalle Valo <kvalo@kernel.org>,
-        Leon Romanovsky <leonro@nvidia.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <0-v2-24af6665e2da+c9-msi_leak_jgg@nvidia.com>
-References: <0-v2-24af6665e2da+c9-msi_leak_jgg@nvidia.com>
+        Tue, 17 Jan 2023 17:29:10 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEA7C3801
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:07:00 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id a14-20020a17090a70ce00b00229a2f73c56so299887pjm.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJRxdhIH1ei+8E9XvKSd+3xhLQMFnFsZgxlpSYok93A=;
+        b=AxTejcJhAV5uqM6nwNX4/8W/dC62kMHt47pu6LkWJkYBQ+CazfpjLysRcdPEeD7J7R
+         Ab82K6BZiG9T8tN4ylw6fC6k7Zf7mYuHC6tgFlQxOA90kcFRuTfTJy/3sqkyKnj7xlZV
+         msfEbi10sjs1UrnObHLZ2oICh8nWyZ5vxf3q0N4kngC9RJU7Ez6BeiDuoXWdoYmgTB8z
+         0oGvaHE5JwIw+W8WZssQh5JCuvTlsabDt7q1QFp/2Y8oIYK8QCh3cS9C+AOPDj9GSa6n
+         N3gOrunFRToMDvoJl73VjJKmEx3zcRkIDP+n8mJ+18bJxyHLkOxU2OXA9SaK4zscuktw
+         /JuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VJRxdhIH1ei+8E9XvKSd+3xhLQMFnFsZgxlpSYok93A=;
+        b=uGzb5SoHS1NC9fxIbiq5i3Xbr7F60I6tiN8w/KlX8hVaFWPPJ5oxYN37xHGhfsul+e
+         XOmEufigTkA3l+HYrw4RYCDULC4MTuOBOsQgUnXSqPBbGs8tllMN2K/kMvbjma4cWD6A
+         a9lwk/EHFrdpfzTGcIHN44RjtG7V0lT76seXm/Pb326H4rDYDI7wSHO3NPbTxgDQ6P+b
+         E0yDIBgdTJJq5LyjkREk+5nSmG9eRS3aCgXdwt1FvEyI/cXj2UDOW7pqnApTZx/avD7V
+         PLrRrSdrcd7HSMoHcM+Gh81qLCpkUXsmsP3WdZCDLwPPrm704fo7ZtGmy8qSufJ3I+LP
+         5lTg==
+X-Gm-Message-State: AFqh2kqp2+oQxMmjT7feb4DFAYXhgBotRQjXccuTqhD3mysUfIPSjHuI
+        6Uoq78sgu7Nvca4NKxhoQ3PQPw==
+X-Google-Smtp-Source: AMrXdXu82aDcnqFZtAav3ieEPMc/umOMQz5EXpr+Sf0yV9xRA5h5tXwktjdgLqtV0+s2sklRjexODw==
+X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr2358411plr.0.1673993218276;
+        Tue, 17 Jan 2023 14:06:58 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170902e80600b0019251e959b1sm21609801plg.262.2023.01.17.14.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 14:06:57 -0800 (PST)
+Date:   Tue, 17 Jan 2023 22:06:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V2 PATCH 4/6] KVM: selftests: x86: Add helpers to execute VMs
+ with private memory
+Message-ID: <Y8cb/i/jcUAJvM+M@google.com>
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-5-vannapurve@google.com>
 MIME-Version: 1.0
-Message-ID: <167399286755.4906.18338458048671673819.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205232341.4131240-5-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> Introduce a set of APIs to execute VM with private memslots.
+> 
+> Host userspace APIs for:
+> 1) Executing a vcpu run loop that handles MAPGPA hypercall
+> 2) Backing/unbacking guest private memory
+> 
+> Guest APIs for:
+> 1) Changing memory mapping type
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../kvm/include/x86_64/private_mem.h          |  24 +++
+>  .../selftests/kvm/lib/x86_64/private_mem.c    | 139 ++++++++++++++++++
+>  3 files changed, 164 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
 
-Commit-ID:     ac8f29aef2f1695956ff6773b33f975290437f29
-Gitweb:        https://git.kernel.org/tip/ac8f29aef2f1695956ff6773b33f975290437f29
-Author:        Jason Gunthorpe <jgg@nvidia.com>
-AuthorDate:    Tue, 17 Jan 2023 15:16:17 -04:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 17 Jan 2023 22:57:04 +01:00
+Given that we _know_ private memory isn't always going to x86 specific, I don't
+want to bury any helpers in x86_64 that aren't strictly x86 only.  E.g. helpers
+for doing Intel+AMD hypercalls is ok, but "generic" private memory helpers belong
+elsewhere.
 
-genirq/msi: Free the fwnode created by msi_create_device_irq_domain()
+I experimented with extracting memslots/mmu helpers out of kvm_util.c as prep work,
+e.g. to avoid bloating kvm_util.c, but I couldn't come up with an obviously "good"
+naming scheme and/or split.  At this time, the common bits are fairly small, so
+I think the best approach for now is to simply put vm_mem_map_shared_or_private()
+in kvm_util.c.
 
-msi_create_device_irq_domain() creates a firmware node for the new domain,
-which is never freed. kmemleak reports:
+> +static inline uint64_t __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+> +	uint64_t flags)
+> +{
+> +	return kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
+> +}
 
-unreferenced object 0xffff888120ba9a00 (size 96):
-  comm "systemd-modules", pid 221, jiffies 4294893411 (age 635.732s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 e0 19 8b 83 ff ff ff ff  ................
-    00 00 00 00 00 00 00 00 18 9a ba 20 81 88 ff ff  ........... ....
-  backtrace:
-    [<000000008cdbc98d>] __irq_domain_alloc_fwnode+0x51/0x2b0
-    [<00000000c57acf9d>] msi_create_device_irq_domain+0x283/0x670
-    [<000000009b567982>] __pci_enable_msix_range+0x49e/0xdb0
-    [<0000000077cc1445>] pci_alloc_irq_vectors_affinity+0x11f/0x1c0
-    [<00000000532e9ef5>] mlx5_irq_table_create+0x24c/0x940 [mlx5_core]
-    [<00000000fabd2b80>] mlx5_load+0x1fa/0x680 [mlx5_core]
-    [<000000006bb22ae4>] mlx5_init_one+0x485/0x670 [mlx5_core]
-    [<00000000eaa5e1ad>] probe_one+0x4c2/0x720 [mlx5_core]
-    [<00000000df8efb43>] local_pci_probe+0xd6/0x170
-    [<0000000085cb9924>] pci_device_probe+0x231/0x6e0
+This can go in tools/testing/selftests/kvm/include/x86_64/processor.h.
 
-Use the proper free operation for the firmware wnode so the name is freed
-during error unwind of msi_create_device_irq_domain() and also free the
-node in msi_remove_device_irq_domain() if it was automatically allocated.
+> +static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+> +	uint64_t flags)
+> +{
+> +	uint64_t ret;
+> +
+> +	GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
+> +
+> +	ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
+> +	GUEST_ASSERT_1(!ret, ret);
+> +}
+> +
+> +void kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
+> +{
+> +	kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_DECRYPTED);
+> +}
+> +
+> +void kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
+> +{
+> +	kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_ENCRYPTED);
+> +}
+> +
+> +static void vm_update_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size,
+> +	bool unback_mem)
 
-To avoid extra NULL pointer checks make irq_domain_free_fwnode() tolerant
-of NULL.
+s/unback_mem/map_shared.  "unback memory" is going to be super confusing to someone
+who isn't familiar with UPM.  map_private would be the obvious alternative, but
+I like not having to invert the param in the helper.
 
-Fixes: 27a6dea3ebaa ("genirq/msi: Provide msi_create/free_device_irq_domain()")
-Reported-by: Omri Barazi <obarazi@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Kalle Valo <kvalo@kernel.org>
-Tested-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/0-v2-24af6665e2da+c9-msi_leak_jgg@nvidia.com
+> +{
+> +	int restricted_fd;
+> +	uint64_t restricted_fd_offset, guest_phys_base, fd_offset;
+> +	struct kvm_memory_attributes attr;
+> +	struct kvm_userspace_memory_region_ext *region_ext;
+> +	struct kvm_userspace_memory_region *region;
+> +	int fallocate_mode = 0;
+> +	int ret;
+> +
+> +	region_ext = kvm_userspace_memory_region_ext_find(vm, gpa, gpa + size);
 
----
- kernel/irq/irqdomain.c | 2 +-
- kernel/irq/msi.c       | 6 +++++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+I forget if I've already mentioned this somewhere, but I'd prefer to use the
+"private" userspace_mem_region_find() and delete the existing
+kvm_userspace_memory_region_find().
 
-diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 8fe1da9..5c3fb61 100644
---- a/kernel/irq/irqdomain.c
-+++ b/kernel/irq/irqdomain.c
-@@ -114,7 +114,7 @@ void irq_domain_free_fwnode(struct fwnode_handle *fwnode)
- {
- 	struct irqchip_fwid *fwid;
- 
--	if (WARN_ON(!is_fwnode_irqchip(fwnode)))
-+	if (!fwnode || WARN_ON(!is_fwnode_irqchip(fwnode)))
- 		return;
- 
- 	fwid = container_of(fwnode, struct irqchip_fwid, fwnode);
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 955267b..783a3e6 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -1000,7 +1000,7 @@ bool msi_create_device_irq_domain(struct device *dev, unsigned int domid,
- fail:
- 	msi_unlock_descs(dev);
- free_fwnode:
--	kfree(fwnode);
-+	irq_domain_free_fwnode(fwnode);
- free_bundle:
- 	kfree(bundle);
- 	return false;
-@@ -1013,6 +1013,7 @@ free_bundle:
-  */
- void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
- {
-+	struct fwnode_handle *fwnode = NULL;
- 	struct msi_domain_info *info;
- 	struct irq_domain *domain;
- 
-@@ -1025,7 +1026,10 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
- 
- 	dev->msi.data->__domains[domid].domain = NULL;
- 	info = domain->host_data;
-+	if (irq_domain_is_msi_device(domain))
-+		fwnode = domain->fwnode;
- 	irq_domain_remove(domain);
-+	irq_domain_free_fwnode(fwnode);
- 	kfree(container_of(info, struct msi_domain_template, info));
- 
- unlock:
+> +	TEST_ASSERT(region_ext != NULL, "Region not found");
+> +	region = &region_ext->region;
+> +	TEST_ASSERT(region->flags & KVM_MEM_PRIVATE,
+> +		"Can not update private memfd for non-private memslot\n");
+> +	restricted_fd = region_ext->restricted_fd;
+> +	restricted_fd_offset = region_ext->restricted_offset;
+> +	guest_phys_base = region->guest_phys_addr;
+> +	fd_offset = restricted_fd_offset + (gpa - guest_phys_base);
+> +
+> +	if (unback_mem)
+> +		fallocate_mode = (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE);
+> +
+> +	printf("restricted_fd %d fallocate_mode 0x%x for offset 0x%lx size 0x%lx\n",
+> +		restricted_fd, fallocate_mode, fd_offset, size);
+
+Don't put prints in common helpers, except _maybe_ for error paths.  It's fine
+for development and/or debug, but for the final product it ends up being noise 99%
+of the time.  If you really, really want printing checked in, then pr_debug() is an
+option, but I would generally discourage even that for selftests.  E.g. strace can
+give you all the information printed here without needing to rebuild the binary,
+and without maintenance burden.
+
+> +	ret = fallocate(restricted_fd, fallocate_mode, fd_offset, size);
+> +	TEST_ASSERT(ret == 0, "fallocate failed\n");
+
+Use whitespace to differntiate operations/blocks.
+
+> +	attr.attributes = unback_mem ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> +	attr.address = gpa;
+> +	attr.size = size;
+> +	attr.flags = 0;
+
+Add a helper to do KVM_SET_MEMORY_ATTRIBUTES, e.g. to fill the appropriate struct.
+
+> +	if (unback_mem)
+> +		printf("undoing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
+> +	else
+> +		printf("doing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
+> +
+> +	vm_ioctl(vm, KVM_SET_MEMORY_ATTRIBUTES, &attr);
+> +}
+
+
+void vm_mem_map_shared_or_private(struct kvm_vm *vm, uint64_t gpa,
+				  uint64_t size, bool map_shared)
+{
+	struct userspace_mem_region *region;
+	uint64_t end = gpa + size - 1;
+	off_t fd_offset;
+	int mode, ret;
+
+	region = userspace_mem_region_find(vm, gpa, gpa);
+	TEST_ASSERT(region && region->region.flags & KVM_MEM_PRIVATE,
+		    "Private memory region not found for GPA 0x%lx", gpa);
+
+	TEST_ASSERT(region == userspace_mem_region_find(vm, end, end),
+		    "Private/Shared conversions must act on a single memslot");
+
+	fd_offset = region->region.restricted_offset +
+		    (gpa - region->region.guest_phys_addr);
+
+	/* To map shared, punch a hole.  To map private, allocate (no flags). */
+	mode = map_shared ? (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE) : 0;
+
+	ret = fallocate(region->region.restricted_fd, mode, fd_offset, size);
+	TEST_ASSERT(!ret, "fallocate() failed to map %lx[%lu] %s, fd = %d, mode = %x, offset = %lx\n",
+		     gpa, size, map_shared ? "shared" : "private",
+		     region->region.restricted_fd, mode, fd_offset);
+
+	vm_set_memory_attributes(vm, gpa, size,
+				 map_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE);
+}
