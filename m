@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B201D66DDE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED5F66DDEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbjAQMoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S236485AbjAQMob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbjAQMoJ (ORCPT
+        with ESMTP id S235462AbjAQMo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:44:09 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87645113EA;
-        Tue, 17 Jan 2023 04:44:05 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so24336490wms.2;
-        Tue, 17 Jan 2023 04:44:05 -0800 (PST)
+        Tue, 17 Jan 2023 07:44:27 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7CE3865C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:44:24 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id 187so1344595vsv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:44:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6sBlRrq3xEogAt7tAHbEeXzaCTTRziq/T8p3ux/5hj0=;
-        b=At2l8PbLlvpWYqlVDkmtncf6GV9Uo2jZsIe7XReevvrXLiyGVFVc6+tZH35hQgAEgl
-         3QTDKCiirZoSSep7UGm7QVnMFP+AHD3lSMVlqocCPDYN1nsHxMAQxlQCSlwQ6UVwOadF
-         BiC9vnqSZgatGj9/udLFEDw4AhMcDCIJUykIXrjt6CDLwIU3BuNGgqiatcQKrcEZC1Ni
-         cGIbDXyYS5HSG0y1t6MZJG6Cj+L7s71fJkDDL+djNlQtz/XbaAx4qbi4B++lGgKa0C1v
-         l4UNz0c+b3tg/odmRqs5W21kgiwhKuhqnMKugTNYrd7eWC6HbC4l2KrecpP3AhtMguAM
-         0VHg==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zb5Tffie3pKgu7Pq9EaJZQMrKrZX87HByUGIdfaPiXU=;
+        b=EOqh9vgF7LnKfYFX11HFchok8Ae1u/26sj7dus4KD2RWFXfYayHqXF8VO8jT/RmVRk
+         HYFhGfh+6MdHD/itigrkDCbBknY+fNhnignJoOp6If7O90qOuoVmMmV/bZ5FQ5coS32m
+         yYs9vJmQMWLZM1KqJSSKFIHh6X9qwKy/mxuzBEKdbmv9YXeD9CNN8/Gbgp8pCRdEVTi3
+         VAZ/DSrPCbtPh0MWMQifOhCgBhm1J7mOWH+hg0LDh/pg3kcP3TtsE3XvKJvY9uFCmPix
+         9azcjpSOhRz7ukQtann+ENJf5EQIb8mqf0rMOyR+Cq6dMjTWf5fVnvvgVQHM+b3xdKxp
+         LH4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6sBlRrq3xEogAt7tAHbEeXzaCTTRziq/T8p3ux/5hj0=;
-        b=wo9msTgkFNNhpZUkjb39NQIamA9u8BTpRhhIL8prX0sz0PySju5g2mnMBTb9YriS3E
-         87R3F235p2NzOOdmX+I8qJwpKLEwwAtGizB7XHQQdZ+aGNe4OjvDEwu+pJgg2QEmbCQp
-         zMLK1wGuhVVhKQx4lFEcSTqWGeYR8Uae6RKwgQv0hfHOuKZ1VsNnfG0hc8l58ta1M6IM
-         7wv6PEqp7pj+GeG6ZQXvXy9sY7B+P4hBSpLKyuB9kRkvEmIi89u3EghZdPdUj+bru41z
-         uRYCT4OuJPBLI3CIzJE+yZUqH+PpWY2Qy1wxu+NDQ0nKTJYWMmXm7EkamR6qHv+LEVWu
-         mamw==
-X-Gm-Message-State: AFqh2kopOIuhDq8q5WPRNAoX+PW+W9iwWMKR3Ql0VI49z9l/uqidae7I
-        25eQlzifCUW+R2VGtJelxUY=
-X-Google-Smtp-Source: AMrXdXsG1xem8vC1jgKLFmv0kfx6zvU9tZ2Nf0M5Rxn4Ho9aapYvS4laZCVZrdPBQV+UBolQsDrFRg==
-X-Received: by 2002:a05:600c:3c8a:b0:3da:2a78:d7a4 with SMTP id bg10-20020a05600c3c8a00b003da2a78d7a4mr2927016wmb.21.1673959432094;
-        Tue, 17 Jan 2023 04:43:52 -0800 (PST)
-Received: from debian ([67.208.52.125])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b003dafadd2f77sm7377031wms.1.2023.01.17.04.43.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 04:43:51 -0800 (PST)
-Date:   Tue, 17 Jan 2023 12:43:49 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
-Message-ID: <Y8aYBRwC5Opnxdrp@debian>
-References: <20230116154803.321528435@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zb5Tffie3pKgu7Pq9EaJZQMrKrZX87HByUGIdfaPiXU=;
+        b=50AJLAJqHOoF1yFJehwrjN5LUWgiLttO5tpdhVOREwEk1fH3+GVbodXzmPRJHkdXMc
+         6SiXmB0APR9bq1oWQHnRQbE+JUqq3mYiUJHLO3Hi5IJdEjMHv2GfVJkmXT39fEUqKfvx
+         z7Ne+ciqQznMZAqCODwXuG01hMQMdmXIsOFf9nxvRyZfJhI9OsqddDzRwY9RijYawEk5
+         bd59RT6ZIHtIboknHyZmvLDQeqP0WrZ+EhXykADSbMY7aCsWb0By4Jx0ygJXIiax6EhY
+         zAwoaAh6WVLmhhWbT6aPUNMG1JPMQfE8etl5g/6VeStoHPAPfsnVwbyMP6mmCeKnsIXj
+         eiMg==
+X-Gm-Message-State: AFqh2kqRWgmiqopHynWk0COBnlB/LvvhiDamULtWrhz1037NS/HeqOTi
+        RuLkiPg0iEXd6qG833hxB1aZPtt5iCrCxmjLxPNkYA==
+X-Google-Smtp-Source: AMrXdXuiYMsRUH99cR/6JzARKg2uSTda58F6pQigrwwH/EVEnADISBrDDLRNg95x8ypLViV89a3Pkk8FPSZi57WIjdw=
+X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
+ a26-20020a67f2da000000b003d3d90c5ef2mr450965vsn.17.1673959464106; Tue, 17 Jan
+ 2023 04:44:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230109174511.1740856-1-brgl@bgdev.pl> <20230109174511.1740856-3-brgl@bgdev.pl>
+ <bbd21894-234e-542e-80ec-8f2bb11e268e@linaro.org> <843eed4b-552a-a529-83ed-b813c1346c5f@linaro.org>
+In-Reply-To: <843eed4b-552a-a529-83ed-b813c1346c5f@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 17 Jan 2023 13:44:13 +0100
+Message-ID: <CAMRc=MfTynAACwy+hB+FxOQ=-gA+307viz7LCUk8zmn4H7BaOQ@mail.gmail.com>
+Subject: Re: [PATCH 02/18] clk: qcom: add the GCC driver for sa8775p
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Jan 9, 2023 at 10:06 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 09/01/2023 19:58, Konrad Dybcio wrote:
+> >
+> >
+> > On 9.01.2023 18:44, Bartosz Golaszewski wrote:
+> >> From: Shazad Hussain <quic_shazhuss@quicinc.com>
+> >>
+> >> Add support for the Global Clock Controller found in the QTI SA8775P
+> >> platforms.
+> >>
+> >> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> >> [Bartosz: made the driver ready for upstream]
+> >> Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> ---
+> > [...]
+> >
+>
+> As the driver didn't get to the list, I'll comment OOB.
+>
+> Please use clk_regmap_phy_mux_ops where applicable (PCIe PIPE clocks).
+>
 
-On Mon, Jan 16, 2023 at 04:48:43PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 183 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> Anything received after that time might be too late.
+Looks like it's impossible for this platform as the PCIe PIPE clocks
+have two parents.
 
-Build test (gcc version 12.2.1 20221127):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2663
-[2]. https://openqa.qa.codethink.co.uk/tests/2665
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+Bart
