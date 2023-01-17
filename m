@@ -2,175 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6682766D4D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB7F66D4C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbjAQDBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 22:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S235748AbjAQCzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 21:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbjAQDAn (ORCPT
+        with ESMTP id S235783AbjAQCzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 22:00:43 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1896A2BEF1;
-        Mon, 16 Jan 2023 18:58:24 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H1XF6t015452;
-        Tue, 17 Jan 2023 02:58:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=EEnvsJJM5Osp3CoOWFQQMpnmZGh1V+OjNHzXq5JM+Qc=;
- b=XoLIi6OimKlgfK5FI00qiRPt8WLLxH5eI2Ay6pvsSn4VsTqcNq6/Z0sTPasemPB+pdQU
- YfzXGqz5GMWJTWpjFzpvtK+2Onsn05FndN/QMvWphfI/XsTc7ts890W3XZtx19AwUtTt
- f0jGyBSe98uKeA2Zfw8KdVPWRDi6ZzkUhkcMc/LInEAup9HxOEmbIcqhX3vZ+MPeD3Eh
- RfA5h4Lz5Y07GhAQfj49RquafSiNEbYbbnNwZM1CwJ2MveNz8NCnylsPhjq5dGNj5Wie
- h5MhRx1fxXqpi/ocnVCuMs71kPczhBpbCqW9gQmCWE1+2l9PIyTJ9rmtPa0j+IwybRyC Ug== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3mg3cjma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 02:58:20 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H2wJgp028544
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 02:58:19 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 16 Jan 2023 18:58:19 -0800
-Date:   Mon, 16 Jan 2023 18:58:18 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
-Message-ID: <20230117025818.GC2350793@hu-bjorande-lv.qualcomm.com>
-References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
- <9e831252-7198-7983-8a52-0e745688452d@linaro.org>
- <20230117023238.GB2350793@hu-bjorande-lv.qualcomm.com>
- <c1e3db0d-7593-b0fc-043b-60538faf9ba2@linaro.org>
+        Mon, 16 Jan 2023 21:55:11 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E208E22DF0;
+        Mon, 16 Jan 2023 18:52:57 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NwtKG4p9qz16Mq8;
+        Tue, 17 Jan 2023 10:35:14 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 17 Jan 2023 10:36:55 +0800
+From:   Zhong Jinghua <zhongjinghua@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <bvanassche@acm.org>, <emilne@redhat.com>, <hare@suse.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhongjinghua@huawei.com>, <yi.zhang@huawei.com>,
+        <yukuai3@huawei.com>, <houtao1@huawei.com>
+Subject: [PATCH] scsi: fix iscsi rescan fails to create block
+Date:   Tue, 17 Jan 2023 11:01:14 +0800
+Message-ID: <20230117030114.2131734-1-zhongjinghua@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c1e3db0d-7593-b0fc-043b-60538faf9ba2@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MFhhu_0YLnA72HTVJf2Qgv5Pr_YftpSP
-X-Proofpoint-GUID: MFhhu_0YLnA72HTVJf2Qgv5Pr_YftpSP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-16_18,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 bulkscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301170020
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 02:37:27AM +0000, Bryan O'Donoghue wrote:
-> On 17/01/2023 02:32, Bjorn Andersson wrote:
-> > On Fri, Jan 13, 2023 at 05:10:17PM +0000, Bryan O'Donoghue wrote:
-> > > On 13/01/2023 04:11, Bjorn Andersson wrote:
-> > > > This implements the base PMIC GLINK driver, a power_supply driver and a
-> > > > driver for the USB Type-C altmode protocol. This has been tested and
-> > > > shown to provide battery information, USB Type-C switch and mux requests
-> > > > and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
-> > > > 
-> > > > Bjorn Andersson (4):
-> > > >     dt-bindings: soc: qcom: Introduce PMIC GLINK binding
-> > > >     soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
-> > > >     soc: qcom: pmic_glink: Introduce altmode support
-> > > >     power: supply: Introduce Qualcomm PMIC GLINK power supply
-> > > > 
-> > > >    .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  102 ++
-> > > >    drivers/power/supply/Kconfig                  |    9 +
-> > > >    drivers/power/supply/Makefile                 |    1 +
-> > > >    drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
-> > > >    drivers/soc/qcom/Kconfig                      |   15 +
-> > > >    drivers/soc/qcom/Makefile                     |    2 +
-> > > >    drivers/soc/qcom/pmic_glink.c                 |  336 ++++
-> > > >    drivers/soc/qcom/pmic_glink_altmode.c         |  477 ++++++
-> > > >    include/linux/soc/qcom/pmic_glink.h           |   32 +
-> > > >    9 files changed, 2395 insertions(+)
-> > > >    create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> > > >    create mode 100644 drivers/power/supply/qcom_battmgr.c
-> > > >    create mode 100644 drivers/soc/qcom/pmic_glink.c
-> > > >    create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
-> > > >    create mode 100644 include/linux/soc/qcom/pmic_glink.h
-> > > > 
-> > > 
-> > > How does the USB PHY and a USB redriver fit into this ?
-> > > 
-> > > Is the host supposed to manage both/neither ? Is the DSP responsible for
-> > > configuring the PHY lanes and the turnaround on orientation switch ?
-> > > 
-> > 
-> > As indicated above, the firmware deals with battery management and USB
-> > Type-C handling.
-> > 
-> > The battery/power management is handled by the battmgr implementation,
-> > exposing the various properties through a set of power_supply objects.
-> > 
-> > The USB Type-C handling comes in two forms. The "altmode" protocol
-> > handles DisplayPort notifications - plug detect, orientation and mode
-> > switches. The other part of the USB implementation exposes UCSI.
-> > 
-> > The altmode implementation provides two things:
-> > - A drm_bridge, per connector, which can be tied (of_graph) to a
-> >    DisplayPort instance, and will invoke HPD notifications on the
-> >    drm_bridge, based on notification messages thereof.
-> > 
-> > - Acquire typec_switch and typec_mux handles through the of_graph and
-> >    signal the remotes when notifications of state changes occur. Linking
-> >    this to the FSA4480, is sufficient to get USB/DP combo (2+2 lanes)
-> >    working on e.g. SM8350 HDK.
-> >    Work in progress patches also exists for teaching QMP about
-> >    orientation switching of the SS lines, but it seems this needs to be
-> >    rebased onto the refactored QMP driver.
-> >    I also have patches for QMP to make it switch USB/DP combo -> 4-lane
-> >    DP, which allow 4k support without DSC, unfortunately switch back to
-> >    USB has not been fully reliable, so this requires some more work
-> >    (downstream involves DWC3 here as well, to reprogram the PHY).
-> 
-> Oki doki that makes sense and is pretty much in-line with what I thought.
-> 
-> We still have a bunch of typec-mux and phy work to do even with adsp/glink
-> doing the TCPM.
-> 
+When the three iscsi operations delete, logout, and rescan are concurrent
+at the same time, there is a probability of failure to add disk through
+device_add_disk(). The concurrent process is as follows:
 
-Correct, the registration of QMP as a typec_switch and typec_mux and
-handling of respective notification remains open and should (by design)
-be independent of the TCPM implementation.
+T0: scan host // echo 1 > /sys/devices/platform/host1/scsi_host/host1/scan
+T1: delete target // echo 1 > /sys/devices/platform/host1/session1/target1:0:0/1:0:0:1/delete
+T2: logout // iscsiadm -m node --login
+T3: T2 scsi_queue_work
+T4: T0 bus_probe_device
 
-In particular the orientation switching is an itch worth scratching at
-this time. But when the DPU becomes capable of producing 4k@60 output it
-would obviously be nice to have the whole shebang :)
+T0                          T1                     T2                     T3
+scsi_scan_target
+ mutex_lock(&shost->scan_mutex);
+  __scsi_scan_target
+   scsi_report_lun_scan
+    scsi_add_lun
+     scsi_sysfs_add_sdev
+      device_add
+       kobject_add
+       //create session1/target1:0:0/1:0:0:1/
+       ...
+       bus_probe_device
+       // Create block asynchronously
+ mutex_unlock(&shost->scan_mutex);
+                       sdev_store_delete
+                        scsi_remove_device
+                         device_remove_file
+                          mutex_lock(scan_mutex)
+                           __scsi_remove_device
+                            res = scsi_device_set_state(sdev, SDEV_CANCEL)
+                                             iscsi_if_recv_msg
+                                              scsi_queue_work
+                                                                 __iscsi_unbind_session
+                                                                 session->target_id = ISCSI_MAX_TARGET
+                                                                   __scsi_remove_target
+                                                                   sdev->sdev_state == SDEV_CANCEL
+                                                                   continue;
+                                                                   // end, No delete kobject 1:0:0:1
+                                             iscsi_if_recv_msg
+                                              transport->destroy_session(session)
+                                               __iscsi_destroy_session
+                                               iscsi_session_teardown
+                                                iscsi_remove_session
+                                                 __iscsi_unbind_session
+                                                  iscsi_session_event
+                                                 device_del
+                                                 // delete session
+T4:
+// create the block, its parent is 1:0:0:1
+// If kobject 1:0:0:1 does not exist, it won't go down
+__device_attach_async_helper
+ device_lock
+ ...
+ __device_attach_driver
+  driver_probe_device
+   really_probe
+    sd_probe
+     device_add_disk
+      register_disk
+       device_add
+      // error
 
-Regards,
-Bjorn
+The block is created after the seesion is deleted.
+When T2 deletes the session, it will mark block'parent 1:0:01 as unusable:
+T2
+device_del
+ kobject_del
+  sysfs_remove_dir
+   __kernfs_remove
+   // Mark the children under the session as unusable
+    while ((pos = kernfs_next_descendant_post(pos, kn)))
+		if (kernfs_active(pos))
+			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
 
-> Thanks for the explanation.
-> 
-> ---
-> bod
-> 
+Then, create the block:
+T4
+device_add
+ kobject_add
+  kobject_add_varg
+   kobject_add_internal
+    create_dir
+     sysfs_create_dir_ns
+      kernfs_create_dir_ns
+       kernfs_add_one
+        if ((parent->flags & KERNFS_ACTIVATED) && !kernfs_active(parent))
+		goto out_unlock;
+		// return error
+
+This error will cause a warning:
+kobject_add_internal failed for block (error: -2 parent: 1:0:0:1).
+In the lower version (such as 5.10), there is no corresponding error handling, continuing
+to go down will trigger a kernel panic, so cc stable.
+
+Therefore, creating the block should not be done after deleting the session.
+More practically, we should ensure that the target under the session is deleted first,
+and then the session is deleted. In this way, there are two possibilities:
+
+1) if the process(T1) of deleting the target execute first, it will grab the device_lock(),
+and the process(T4) of creating the block will wait for the deletion to complete.
+Then, block's parent 1:0:0:1 has been deleted, it won't go down.
+
+2) if the process(T4) of creating block execute first, it will grab the device_lock(),
+and the process(T1) of deleting the target will wait for the creation block to complete.
+Then, the process(T2) of deleting the session should need wait for the deletion to complete.
+
+Fix it by removing the judgment of state equal to SDEV_CANCEL in
+__scsi_remove_target() to ensure the order of deletion. Then, it will wait for
+T1's mutex_lock(scan_mutex) and device_del() in __scsi_remove_device() will wait for
+T4's device_lock(dev).
+But we found that such a fix would cause the previous problem:
+commit 81b6c9998979 ("scsi: core: check for device state in __scsi_remove_target()").
+So we use scsi_device_try_get() instead of get_devcie() to fix the previous problem.
+
+Fixes: 81b6c9998979 ("scsi: core: check for device state in __scsi_remove_target()")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+---
+ drivers/scsi/scsi_sysfs.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 42db9c52208e..e7893835b99a 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1503,6 +1503,13 @@ void scsi_remove_device(struct scsi_device *sdev)
+ }
+ EXPORT_SYMBOL(scsi_remove_device);
+ 
++static int scsi_device_try_get(struct scsi_device *sdev)
++{
++	if (!kobject_get_unless_zero(&sdev->sdev_gendev.kobj))
++		return -ENXIO;
++	return 0;
++}
++
+ static void __scsi_remove_target(struct scsi_target *starget)
+ {
+ 	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
+@@ -1521,9 +1528,7 @@ static void __scsi_remove_target(struct scsi_target *starget)
+ 		if (sdev->channel != starget->channel ||
+ 		    sdev->id != starget->id)
+ 			continue;
+-		if (sdev->sdev_state == SDEV_DEL ||
+-		    sdev->sdev_state == SDEV_CANCEL ||
+-		    !get_device(&sdev->sdev_gendev))
++		if (scsi_device_try_get(sdev))
+ 			continue;
+ 		spin_unlock_irqrestore(shost->host_lock, flags);
+ 		scsi_remove_device(sdev);
+-- 
+2.31.1
+
