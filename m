@@ -2,90 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE32866D6A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BE666D6AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjAQHJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S235847AbjAQHJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbjAQHJO (ORCPT
+        with ESMTP id S235825AbjAQHJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:09:14 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318E72B5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:09:12 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id k4so31279552vsc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:09:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pefoley.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iw9KmqXhQAK464aHwakno69xYQNB+Zg+iX2cv1NWImM=;
-        b=hGb6/ZwlYS4Z4sYL4sdBPzJBB1kEeESnRfHAzm9pTHGbUux8nTYlBo+Kqp2G23KdBS
-         /WqjngEvKDZ+CUXpwC5QLqF7ChP2yqAMU/RjcxQCK+nm+/YAhCZYb3nJa+LzMDzF30Ui
-         LLq5LkF50pnavsFQzNqzIv8Jl6SrbRqYhN7gQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iw9KmqXhQAK464aHwakno69xYQNB+Zg+iX2cv1NWImM=;
-        b=rnG5IXH9R0+dkIVpnztevvLCSOqQGAZ8IyB1jd9D8YU2nODejpOCF/GgDwYXOrviJo
-         IxgJynDE6Xic0qkiylYH9q0C1yKLyi+RTcy16kYunKxIfkmhH1pSP+C+odgaNv8J0eU+
-         WMCa1o6pY0uSsM4j/pNxhlhYogEHsptiZp4BJk3mtUZ5sh2ruUh6Z2XZDUngudQC4syK
-         6eNb+TkLhNDKW4U8Vd5AeD5UF1rYFZ3vaRcT236LFBheQo6qonO93fCMW1d888pqpCUP
-         FDT3tm4zM1HJlKLYCXS/OfipirNbn8N1+BBcXaU+jch+WdSQyc2YOqI5tNcdyejRojdJ
-         AGBQ==
-X-Gm-Message-State: AFqh2koE8m/lhPYZhE8bvCtr83s3HP0a9hnaTaAyc3Opk8YD1IBbcHEy
-        yJzIzmcYrw4EKWtZPC4BLIhDsnOAzLmTOoWZTt4/OQ==
-X-Google-Smtp-Source: AMrXdXuznbTWfKXHBoqIxnpdKiYSTwB8VxhxTRxnELjfH+dgvQFQXM/KyS8aB9RwhLIYscJ1Hq3DdNGeM8INU2lrDUE=
-X-Received: by 2002:a67:e9ca:0:b0:3d3:d06a:3229 with SMTP id
- q10-20020a67e9ca000000b003d3d06a3229mr213632vso.28.1673939351950; Mon, 16 Jan
- 2023 23:09:11 -0800 (PST)
+        Tue, 17 Jan 2023 02:09:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4CA9016
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:09:13 -0800 (PST)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nx0ML0N1sznVfn;
+        Tue, 17 Jan 2023 15:07:26 +0800 (CST)
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 17 Jan 2023 15:09:08 +0800
+Message-ID: <5c83fae3-8eae-6303-4656-8da40a2c12b1@huawei.com>
+Date:   Tue, 17 Jan 2023 15:09:08 +0800
 MIME-Version: 1.0
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com> <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
- <194f38f2dc7d521375e5a660baaf1be31536be9a.camel@gmail.com>
- <CAOFdcFOgAH1z7EKyM=Q4EvzLuKETOWWDMwuqp36SxV-X6PGP5Q@mail.gmail.com> <1135125e-6b8a-7b75-5f0b-3208f6b6e8ae@meta.com>
-In-Reply-To: <1135125e-6b8a-7b75-5f0b-3208f6b6e8ae@meta.com>
-From:   Peter Foley <pefoley2@pefoley.com>
-Date:   Mon, 16 Jan 2023 23:09:01 -0800
-Message-ID: <CAOFdcFPnHEc2qd-=C+hdK4nTjJfbHsf4r-G7pdJTRBAT6MuOzg@mail.gmail.com>
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Eduard Zingerman <eddyz87@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Jose E. Marchesi" <jose.marchesi@oracle.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   mawupeng <mawupeng1@huawei.com>
+Subject: Re: [PATCH v2 1/4] mm/mlock: return EINVAL if len overflows for
+ mlock/munlock
+To:     <akpm@linux-foundation.org>
+CC:     <mawupeng1@huawei.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <kuleshovmail@gmail.com>,
+        <aneesh.kumar@linux.ibm.com>
+References: <20230116115813.2956935-1-mawupeng1@huawei.com>
+ <20230116115813.2956935-2-mawupeng1@huawei.com>
+ <20230116125126.ed715ddf00ff4ffa2952ca29@linux-foundation.org>
+Content-Language: en-US
+In-Reply-To: <20230116125126.ed715ddf00ff4ffa2952ca29@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:05 PM Yonghong Song <yhs@meta.com> wrote:
->
-> If I understand correctly (by inspecting clang code), the stack
-> protector is off by default. Do you have link to Gentoo build
-> page to show how they enable stack protector? cmake config or
-> a private patch?
->
-The relevant override appears to be
-https://github.com/gentoo/gentoo/blob/c5247250e9d4a09e67a602965a5f72be3cebbf34/sys-devel/clang-common/clang-common-15.0.7.ebuild#L93
+
+
+On 2023/1/17 4:51, Andrew Morton wrote:
+> On Mon, 16 Jan 2023 19:58:10 +0800 Wupeng Ma <mawupeng1@huawei.com> wrote:
+> 
+>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>
+>> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
+>> The return value of mlock is zero. But nothing will be locked since the
+>> len in do_mlock overflows to zero due to the following code in mlock:
+>>
+>>   len = PAGE_ALIGN(len + (offset_in_page(start)));
+>>
+>> The same problem happens in munlock.
+>>
+>> Add new check and return -EINVAL to fix this overflowing scenarios since
+>> they are absolutely wrong.
+>>
+>> ...
+>>
+>> --- a/mm/mlock.c
+>> +++ b/mm/mlock.c
+>> @@ -569,6 +569,7 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+>>  	unsigned long locked;
+>>  	unsigned long lock_limit;
+>>  	int error = -ENOMEM;
+>> +	size_t old_len = len;
+> 
+> I'm not sure that "old_len" is a good identifier.  It reads to me like
+> "the length of the old mlocked region" or something.
+> 
+> I really don't like it when functions modify the values of the incoming
+> argument like this.  It would be better to leave `len' alone and create
+> a new_len or something.
+
+Thanks for your reviewing.
+
+You do have a point in saying that.
+
+> 
+>>  	start = untagged_addr(start);
+>>  
+>> @@ -578,6 +579,9 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+>>  	len = PAGE_ALIGN(len + (offset_in_page(start)));
+>>  	start &= PAGE_MASK;
+>>  
+>> +	if (old_len != 0 && len == 0)
+>> +		return -EINVAL;
+> 
+> It would be clearer to do this immediately after calculating the new
+> value of `len'.  Before going on to play with `start'.
+> 
+> Can we do something like this?
+> 
+> --- a/mm/mlock.c~a
+> +++ a/mm/mlock.c
+> @@ -575,7 +575,12 @@ static __must_check int do_mlock(unsigne
+>  	if (!can_do_mlock())
+>  		return -EPERM;
+>  
+> -	len = PAGE_ALIGN(len + (offset_in_page(start)));
+> +	if (len) {
+> +		len = PAGE_ALIGN(len + (offset_in_page(start)));
+> +		if (len == 0)	/* overflow */
+> +			return -EINVAL;
+> +	}
+> +
+>  	start &= PAGE_MASK;
+>  
+>  	lock_limit = rlimit(RLIMIT_MEMLOCK);
+> _
+
+It's really more appropriate to check like this, I will use this in the next patchset.
+
+> 
+> That depends on how we handle len==0.  afaict, mlock(len==0) will
+> presently burn a bunch of cpu cycles (not that we want to optimize this
+> case), do nothing then return 0?
+
+We can add and a new check in if len == 0, since the similar check appears in
+mbind, set_mempolicy_home_node, msync.
+
+The origin len == 0 check for mlock/munlock can be found in apply_vma_lock_flags,
+We can move this check to here to avoid burn a bunch of cpu cycles.
+
+do_mlock
+  apply_vma_lock_flags
+	end = start + len;
+	if (end == start)
+	  return 0;
+
+Can we do something like this?
+
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 7032f6dd0ce1..50a33abc1a2e 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -478,8 +478,6 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+        end = start + len;
+        if (end < start)
+                return -EINVAL;
+-       if (end == start)
+-               return 0;
+        vma = mas_walk(&mas);
+        if (!vma)
+                return -ENOMEM;
+@@ -575,7 +573,12 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+        if (!can_do_mlock())
+                return -EPERM;
+ 
++       if (!len)
++               return 0;
+        len = PAGE_ALIGN(len + (offset_in_page(start)));
++       if (len == 0)
++               return -EINVAL;
++
+        start &= PAGE_MASK;
+ 
+        lock_limit = rlimit(RLIMIT_MEMLOCK);
+@@ -632,10 +635,14 @@ SYSCALL_DEFINE3(mlock2, unsigned long, start, size_t, len, int, flags)
+ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ {
+        int ret;
+-
+        start = untagged_addr(start);
+ 
++       if (!len)
++               return 0;
+        len = PAGE_ALIGN(len + (offset_in_page(start)));
++       if (len == 0)
++               return -EINVAL;
++
+        start &= PAGE_MASK;
+ 
+        if (mmap_write_lock_killable(current->mm))
+
+> 
