@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418FF670C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F5A670C06
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjAQWqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S229998AbjAQWrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjAQWow (ORCPT
+        with ESMTP id S229790AbjAQWqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:44:52 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BA45EFB0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:46:03 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id r71so6598273iod.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:46:03 -0800 (PST)
+        Tue, 17 Jan 2023 17:46:42 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C650860
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:46:29 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id dw9so32361016pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+bqBsZZ4RgN9jlgw+b1dC/NMypzjYzjrdfCfcedPWDQ=;
-        b=oKiIXHz6hYZTnFSg8CyeAh1iOmXE+x2JTvTp7n/ELKxH9/S/8QqLxW5rxrlAIA0pY9
-         FGTxfNB6FzBp2L1EQVFE0jq7nSlA/MyzEeFPLmHGwMM5qm7MDAy0PYZpOdEpveGC0Azy
-         m7KF7D5TB3OeS6KxmOWgIJg3mNa70PP07eTN/QyWeX4JmtTKK0EXfC8wPXsA4aeOtGaA
-         51aWJni3yr+WysiWx8JjxtUqnmzU+G4umBm6d27THEG3JhNZWzZ5rZtbU1Ya3nIlZuyR
-         yYhzv1oAYEDalxwkXlfg1KcUXcWMaGXL1NwQ6aG+GfDIfRgoOXnIz83APIiCyu6bR5gq
-         BH8Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rC8/tQUk41CuZwxwlH46s3W2aYILb1S2xKjt3FVwjWk=;
+        b=cgVGR5vSZjy20eYRrtrqp3/gNV7N5qRXpunzl2yBirUn0JTyXcu5pj0b67ubvvuZm3
+         ruZ51Q2QsAxw6Uk65xO3YnKjFDlnhAL+r0wRNQYgPdT3/+v7gX3AF8R4Tjbjwc3/laCp
+         2IY43BlasoahYjElBb5lir0+fGGPpL3VRiUqyk0M+ITHQSMuwaqVkWZGZsLHnuzuI2aY
+         NmissgdaoKJgTLZFraaEkoHeXOMdHQQj45gAnz2/a7B7G/Q9dxDQWSrm0BOwyldEJFul
+         22sQlEUQB1V9QUDV5ZKMg8fg7mie5PCtSLhFixnns23qpRHFuqZGUshwYsVPKiv/Nj47
+         sNTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+bqBsZZ4RgN9jlgw+b1dC/NMypzjYzjrdfCfcedPWDQ=;
-        b=GM7mS+PxZ7gWObSsb4R4sJnBnuOVvbh1pL3lccDTJS49epkNu1hTfh/fExlMq1HKBZ
-         qot63menmbdfLoG3iLZYUxFe15ccyF5QoT58086T0g/nWbTYOPZydNRfsrlZsT7I4dpD
-         NVRwtHYxNwwqsivYw4EZ8B0e389rz4kPmJiT+a3XjeylKg7I3r3UG+teaNGP7kg3dyee
-         XV3uTHgQqUIwNpPpYyGnRjzFZUCjRnahPpVHgB4el4Xs+fGlCEdUko2ECB5QeAWBOUl0
-         EBedoYLQSheV0N0vJpMvBfoF1Qb1Exy7iSLTvko5QwBciF6IoYxFhwNK1oP0UC9Q8Uee
-         +jJA==
-X-Gm-Message-State: AFqh2kp6BT1gSrHRclumNqMzGJCFykS/nX+sTvuHE/jBT5BZeRCN9hjv
-        BaSOsi7xVZnfsbC0uBJDWZKCJOqLhk4pIyRUac6eDQ==
-X-Google-Smtp-Source: AMrXdXvjzRa+kyqV5cDYZnYOJiY7YjAiK71oj/DKwnEZqpEByYHd/G13EWU8vxfkIQDeuwmQ9WfEcwYbls/tg1JyPyE=
-X-Received: by 2002:a02:c884:0:b0:39e:9d33:a47 with SMTP id
- m4-20020a02c884000000b0039e9d330a47mr328254jao.58.1673991962307; Tue, 17 Jan
- 2023 13:46:02 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rC8/tQUk41CuZwxwlH46s3W2aYILb1S2xKjt3FVwjWk=;
+        b=qvyRAiU2RMchuwh/jtvvZIGQUktJMkBdoosyID5ticpgCbuwlf2Vt65BGuD0ksPgJp
+         DbUGoMkwegBF3VwFNMLaDte5RFtULkpPY/9YrjENbcsI6TSApmD/umECZ6HktjR7Y7KS
+         hKnx67EJx4QlQu3wGR8XBfMWdRsPpqHbTSkbKpyywCqdFsma5+pDkrZ3AuxrRs7eoeqk
+         09knTchnR4MuByxnxentsHcTHasD/ugb9dcqXZL+0rUUdVRAxTvkPcuIsjZilHMMCAje
+         mPRoJrNQiVbD3WJt3m7HTlJF0E8y84dTaL5sEvBlWWTIJn6bZ6JGiGkpGrmALchN2m47
+         8aCw==
+X-Gm-Message-State: AFqh2kpGG2UDfcbhOa0OEYK48u8RWEdW9EmrGVuTFPZpjX1j88SmH0Th
+        GwP/XZQMCdXI2Jk0OQIJG7HiHQ==
+X-Google-Smtp-Source: AMrXdXvcjlIzPDJ2H/BqBCU66i//6UERLaf1dN+GVL16Z85jBzFgvROsbL8JNeDZ6Z/+o4RJ4ZSD6A==
+X-Received: by 2002:a05:6a20:c183:b0:b8:ca86:f3ab with SMTP id bg3-20020a056a20c18300b000b8ca86f3abmr359209pzb.2.1673991988781;
+        Tue, 17 Jan 2023 13:46:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u127-20020a626085000000b00580fb018e4bsm16785535pfb.211.2023.01.17.13.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 13:46:28 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:46:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V2 PATCH 2/6] KVM: Selftests: Add support for private memory
+Message-ID: <Y8cXMCBzNcuzniXS@google.com>
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-3-vannapurve@google.com>
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-13-surenb@google.com>
- <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com> <CAJuCfpHawn-hj3yK6MEMHsvnH9xgO87h7Sj3_g0FA7rgut_mVg@mail.gmail.com>
-In-Reply-To: <CAJuCfpHawn-hj3yK6MEMHsvnH9xgO87h7Sj3_g0FA7rgut_mVg@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Jan 2023 22:45:25 +0100
-Message-ID: <CAG48ez3sCwasFzKD5CsqMFA2W57-2fazd75g7r0NaA_BVNTLow@mail.gmail.com>
-Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
- control it
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     peterz@infradead.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205232341.4131240-3-vannapurve@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,71 +89,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:28 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> On Tue, Jan 17, 2023 at 10:03 AM Jann Horn <jannh@google.com> wrote:
-> >
-> > +locking maintainers
->
-> Thanks! I'll CC the locking maintainers in the next posting.
->
-> >
-> > On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > Introduce a per-VMA rw_semaphore to be used during page fault handling
-> > > instead of mmap_lock. Because there are cases when multiple VMAs need
-> > > to be exclusively locked during VMA tree modifications, instead of the
-> > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
-> > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
-> > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
-> > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
-> > > locked.
-> > [...]
-> > > +static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > > +{
-> > > +       up_read(&vma->lock);
-> > > +}
-> >
-> > One thing that might be gnarly here is that I think you might not be
-> > allowed to use up_read() to fully release ownership of an object -
-> > from what I remember, I think that up_read() (unlike something like
-> > spin_unlock()) can access the lock object after it's already been
-> > acquired by someone else. So if you want to protect against concurrent
-> > deletion, this might have to be something like:
-> >
-> > rcu_read_lock(); /* keeps vma alive */
-> > up_read(&vma->lock);
-> > rcu_read_unlock();
->
-> But for deleting VMA one would need to write-lock the vma->lock first,
-> which I assume can't happen until this up_read() is complete. Is that
-> assumption wrong?
+On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> Add support for registering private memory with kvm using
+> KVM_SET_USER_MEMORY_REGION ioctl.
+> 
+> Helper function to query extended userspace mem region is introduced to
+> allow memory conversion.
+> 
+> vm_mem_backing_src types is extended to contain additional guest memory
+> source types to cover the cases where guest memory can be backed by both
+> anonymous memory and restricted memfd.
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     | 12 +++-
+>  .../testing/selftests/kvm/include/test_util.h |  4 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 58 +++++++++++++++++--
+>  tools/testing/selftests/kvm/lib/test_util.c   | 11 ++++
+>  4 files changed, 78 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index c7685c7038ff..4ad99f295f2a 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -31,7 +31,10 @@ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
+>  typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
+>  
+>  struct userspace_mem_region {
+> -	struct kvm_userspace_memory_region region;
+> +	union {
+> +		struct kvm_userspace_memory_region region;
+> +		struct kvm_userspace_memory_region_ext region_ext;
 
-__up_read() does:
+As discussed in the UPM series, we're trending towards adding an entirely new
+struct+ioctl(), kvm_userspace_memory_region2, instead of extending the existing
+struct.  The == -> >= hack you had to add in kvm_do_ioctl() below is one of the
+reason for that change.
 
-rwsem_clear_reader_owned(sem);
-tmp = atomic_long_add_return_release(-RWSEM_READER_BIAS, &sem->count);
-DEBUG_RWSEMS_WARN_ON(tmp < 0, sem);
-if (unlikely((tmp & (RWSEM_LOCK_MASK|RWSEM_FLAG_WAITERS)) ==
-      RWSEM_FLAG_WAITERS)) {
-  clear_nonspinnable(sem);
-  rwsem_wake(sem);
-}
+> +	};
+>  	struct sparsebit *unused_phy_pages;
+>  	int fd;
+>  	off_t offset;
+> @@ -196,7 +199,7 @@ static inline bool kvm_has_cap(long cap)
+>  
+>  #define kvm_do_ioctl(fd, cmd, arg)						\
+>  ({										\
+> -	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");	\
+> +	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) >= _IOC_SIZE(cmd), "");	\
+>  	ioctl(fd, cmd, arg);							\
+>  })
+>  
+> @@ -384,6 +387,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>  void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+>  void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+>  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+> +
+>  struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
+>  vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+>  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+> @@ -715,6 +719,10 @@ struct kvm_userspace_memory_region *
+>  kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
+>  				 uint64_t end);
+>  
+> +struct kvm_userspace_memory_region_ext *
+> +kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
+> +				 uint64_t end);
+> +
+>  #define sync_global_to_guest(vm, g) ({				\
+>  	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
+>  	memcpy(_p, &(g), sizeof(g));				\
+> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+> index 80d6416f3012..aea80071f2b8 100644
+> --- a/tools/testing/selftests/kvm/include/test_util.h
+> +++ b/tools/testing/selftests/kvm/include/test_util.h
+> @@ -103,6 +103,8 @@ enum vm_mem_backing_src_type {
+>  	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
+>  	VM_MEM_SRC_SHMEM,
+>  	VM_MEM_SRC_SHARED_HUGETLB,
+> +	VM_MEM_SRC_ANONYMOUS_AND_RESTRICTED_MEMFD,
+> +	VM_MEM_SRC_ANON_HTLB2M_AND_RESTRICTED_MEMFD,
 
-The atomic_long_add_return_release() is the point where we are doing
-the main lock-releasing.
+There's no need for a dedicated flag in the backing type, vm_userspace_mem_region_add()
+already takes the memslot's flags and can simply key off KVM_MEM_PRIVATE.
 
-So if a reader dropped the read-lock while someone else was waiting on
-the lock (RWSEM_FLAG_WAITERS) and no other readers were holding the
-lock together with it, the reader also does clear_nonspinnable() and
-rwsem_wake() afterwards.
-But in rwsem_down_write_slowpath(), after we've set
-RWSEM_FLAG_WAITERS, we can return successfully immediately once
-rwsem_try_write_lock() sees that there are no active readers or
-writers anymore (if RWSEM_LOCK_MASK is unset and the cmpxchg
-succeeds). We're not necessarily waiting for the "nonspinnable" bit or
-the wake.
+> @@ -881,6 +915,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>  	struct userspace_mem_region *region;
+>  	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
+>  	size_t alignment;
+> +	int restricted_memfd = -1;
 
-So yeah, I think down_write() can return successfully before up_read()
-is done with its memory accesses.
+No need to initialize to -1, KVM is supposed to ignore the restrictedmem fd if
+!KVM_MEM_PRIVATE, and if KVM_MEM_PRIVATE is set, selftests must provide a valid fd.
 
-(Spinlocks are different - the kernel relies on being able to drop
-references via spin_unlock() in some places.)
+>  	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
+>  		"Number of guest pages is not compatible with the host. "
+
+This is what I ended up with after splitting out the conversion to
+KVM_SET_USER_MEMORY_REGION2 to a separate patch.
+
+--
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 7c1f81f93ba3..26c6830c1aa1 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -32,6 +32,11 @@ int open_path_or_exit(const char *path, int flags)
+        return fd;
+ }
+ 
++static int memfd_restricted(unsigned int flags)
++{
++       return syscall(__NR_memfd_restricted, flags);
++}
++
+ /*
+  * Open KVM_DEV_PATH if available, otherwise exit the entire program.
+  *
+@@ -980,6 +985,15 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+        }
+ 
+        region->backing_src_type = src_type;
++
++       if (flags & KVM_MEM_PRIVATE) {
++               region->region.restricted_fd = memfd_restricted(0);
++               region->region.restricted_offset = 0;
++
++               TEST_ASSERT(region->region.restricted_fd >= 0,
++                           "Failed to create restricted memfd");
++       }
++
+        region->unused_phy_pages = sparsebit_alloc();
+        sparsebit_set_num(region->unused_phy_pages,
+                guest_paddr >> vm->page_shift, npages);
+@@ -992,9 +1006,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+        TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION2 IOCTL failed,\n"
+                "  rc: %i errno: %i\n"
+                "  slot: %u flags: 0x%x\n"
+-               "  guest_phys_addr: 0x%lx size: 0x%lx",
++               "  guest_phys_addr: 0x%lx size: 0x%lx restricted fd: %d\n",
+                ret, errno, slot, flags,
+-               guest_paddr, (uint64_t) region->region.memory_size);
++               guest_paddr, (uint64_t) region->region.memory_size,
++               region->region.restricted_fd);
+ 
+        /* Add to quick lookup data structures */
+        vm_userspace_mem_region_gpa_insert(&vm->regions.gpa_tree, region);
