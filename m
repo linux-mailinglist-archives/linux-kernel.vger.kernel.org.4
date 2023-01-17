@@ -2,132 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72D666E4D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4DD66E4CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbjAQRX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S230282AbjAQRWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbjAQRWc (ORCPT
+        with ESMTP id S235184AbjAQRWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:22:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EBD4C0D6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673976034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1PRuX+JN7wqNln+FW4J1BUr8fMYCnc6M3GNZOEvdC2c=;
-        b=aTrATZQK2s5LVyX1N+j5PXDxiDxOW5rejgcugumMSi3q2wjB7JVB9nn0RYL9c59OHst7mS
-        Qi81w5Sya+0tMq3A92VB7esx3tzVs4mwililu0MFAoEXOW4Xb00LqYxNBRvkcehnUuaRLO
-        0v8lt1U+8wTnV+zezzYrtpdkPl1s1Wg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-zoROmHHFNWi7Yx2HUGpmQQ-1; Tue, 17 Jan 2023 12:20:32 -0500
-X-MC-Unique: zoROmHHFNWi7Yx2HUGpmQQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 17 Jan 2023 12:22:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6071E5D6;
+        Tue, 17 Jan 2023 09:21:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A44619705C0;
-        Tue, 17 Jan 2023 17:20:32 +0000 (UTC)
-Received: from rules.brq.redhat.com (ovpn-208-27.brq.redhat.com [10.40.208.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3B5C140EBF5;
-        Tue, 17 Jan 2023 17:20:29 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Stephan Mueller <smueller@chronox.de>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vladis Dronov <vdronov@redhat.com>
-Subject: [PATCH] crypto: testmgr - disallow certain DRBG hash functions in FIPS mode
-Date:   Tue, 17 Jan 2023 18:20:06 +0100
-Message-Id: <20230117172006.8912-1-vdronov@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76B20614E7;
+        Tue, 17 Jan 2023 17:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC2BC433EF;
+        Tue, 17 Jan 2023 17:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673976085;
+        bh=9wwVcHjy8o8R0Tm0Qxk0hELS+dDYumTePIwYrvyTEIY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O5jTplu/i3ONiBA9HU0qKqCmWa0/F0c4cFMbTxaeekS3wvpkEEVXmn6euceZpoLo9
+         CzVuXu47gE4tdP2lTVtCcNzuiEQoPW0sKlGCuMw09RJMvNghyPOcCqxYA+B7V87HLx
+         a30FSP83a8egkNEn0nT5ekf1+IidZyWIoblRaU8J6shDsDXZwCfa+11WekhS0CyGuB
+         u63nHRq38XrEJa3g+sZlLk/G5dpSfe0CrXJR43DfHzjTfdvMNEp2vVQSSuRvenJTWd
+         /Sx7IWWqbi35PXCNV1Cj2sYzch8OML+BKFUZw93KRVDB9gfPxxPWHL/JpP5TXfJhG5
+         XlU06G5WiokQA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hid: stop drivers from selecting CONFIG_HID
+Date:   Tue, 17 Jan 2023 18:20:55 +0100
+Message-Id: <20230117172121.2715953-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to FIPS 140-3 IG, section D.R "Hash Functions Acceptable for
-Use in the SP 800-90A DRBGs", modules certified after May 16th, 2023
-must not support the use of: SHA-224, SHA-384, SHA512-224, SHA512-256,
-SHA3-224, SHA3-384. Disallow HMAC and HASH DRBGs using SHA-384 in FIPS
-mode.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
+There is a mix of drivers using either 'depends on HID' or 'select HID',
+which causes both circular dependencies and missed dependencies for
+a 'select':
+
+WARNING: unment direct dependencies for HID
+  Depends on [m]: HID_SUPPORT [=y] && INPUT [=m]
+  Selected by [y]:
+  - AMD_SFH_HID [=y] && HID_SUPPORT [=y] && (X86_64 || COMPILE_TEST [=y]) && PCI [=y]
+  Selected by [m]:
+  - I2C_HID_CORE [=m] && HID_SUPPORT [=y]
+
+WARNING: unmet direct dependencies detected for INPUT_FF_MEMLESS
+  Depends on [m]: INPUT [=m]
+  Selected by [y]:
+  - DRAGONRISE_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_DRAGONRISE [=y]
+  - HID_MICROSOFT [=y] && HID_SUPPORT [=y] && HID [=y]
+  - GREENASIA_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_GREENASIA [=y]
+  Selected by [m]:
+  - INPUT_ARIZONA_HAPTICS [=m] && INPUT [=m] && INPUT_MISC [=y] && MFD_ARIZONA [=y] && SND_SOC [=m]
+  - INPUT_PM8XXX_VIBRATOR [=m] && INPUT [=m] && INPUT_MISC [=y] && (MFD_PM8XXX [=m] || MFD_SPMI_PMIC [=n])
+  - INPUT_MAX8997_HAPTIC [=m] && INPUT [=m] && INPUT_MISC [=y] && PWM [=y] && MFD_MAX8997 [=y]
+  - INPUT_GPIO_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && (GPIOLIB [=y] || COMPILE_TEST [=y])
+  - INPUT_REGULATOR_HAPTIC [=m] && INPUT [=m] && INPUT_MISC [=y] && REGULATOR [=y]
+  - INPUT_TWL6040_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && TWL6040_CORE [=y]
+  - INPUT_PWM_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && PWM [=y]
+  - INPUT_DRV260X_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y] && (GPIOLIB [=y] || COMPILE_TEST [=y])
+  - INPUT_DRV2665_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y]
+  - INPUT_DRV2667_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y]
+  - INPUT_SC27XX_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && (MFD_SC27XX_PMIC [=y] || COMPILE_TEST [=y])
+  - HID_MAYFLASH [=m] && HID_SUPPORT [=y] && HID [=y]
+
+Avoid this by changing all HID client drivers to use 'depends on HID'.
+For I2C_HID, this requires a larger rework of the Kconfig description,
+but it hopefully becomes easier to understand without the complex
+I2C_HID_CORE definition.
+
+Fixes: 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Some details:
+ drivers/hid/amd-sfh-hid/Kconfig   |  2 +-
+ drivers/hid/i2c-hid/Kconfig       | 31 ++++++++++++++++---------------
+ drivers/hid/intel-ish-hid/Kconfig |  2 +-
+ 3 files changed, 18 insertions(+), 17 deletions(-)
 
-The following DRBG algos are defined in testmgr.c as of now:
-
-drbg_{no,}pr_ctr_aes128
-drbg_{no,}pr_ctr_aes192
-drbg_{no,}pr_ctr_aes256
-
-drbg_{no,}pr_hmac_sha1
-drbg_{no,}pr_hmac_sha256
-drbg_{no,}pr_hmac_sha384 (disallow)
-drbg_{no,}pr_hmac_sha512
-
-drbg_{no,}pr_sha1
-drbg_{no,}pr_sha256
-drbg_{no,}pr_sha384 (disallow)
-drbg_{no,}pr_sha512
-
-Marked DRBGs should be disallowed in FIPS mode according to
-the requirements above.
----
- crypto/testmgr.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 4476ac97baa5..fbb53d961ea9 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -4782,7 +4782,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 	}, {
- 		/* covered by drbg_nopr_hmac_sha256 test */
- 		.alg = "drbg_nopr_hmac_sha384",
--		.fips_allowed = 1,
- 		.test = alg_test_null,
- 	}, {
- 		.alg = "drbg_nopr_hmac_sha512",
-@@ -4805,7 +4804,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 	}, {
- 		/* covered by drbg_nopr_sha256 test */
- 		.alg = "drbg_nopr_sha384",
--		.fips_allowed = 1,
- 		.test = alg_test_null,
- 	}, {
- 		.alg = "drbg_nopr_sha512",
-@@ -4841,7 +4839,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 	}, {
- 		/* covered by drbg_pr_hmac_sha256 test */
- 		.alg = "drbg_pr_hmac_sha384",
--		.fips_allowed = 1,
- 		.test = alg_test_null,
- 	}, {
- 		.alg = "drbg_pr_hmac_sha512",
-@@ -4861,7 +4858,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 	}, {
- 		/* covered by drbg_pr_sha256 test */
- 		.alg = "drbg_pr_sha384",
--		.fips_allowed = 1,
- 		.test = alg_test_null,
- 	}, {
- 		.alg = "drbg_pr_sha512",
+diff --git a/drivers/hid/amd-sfh-hid/Kconfig b/drivers/hid/amd-sfh-hid/Kconfig
+index 56e473fc3c93..af752dd3a340 100644
+--- a/drivers/hid/amd-sfh-hid/Kconfig
++++ b/drivers/hid/amd-sfh-hid/Kconfig
+@@ -5,7 +5,7 @@ menu "AMD SFH HID Support"
+ 
+ config AMD_SFH_HID
+ 	tristate "AMD Sensor Fusion Hub"
+-	select HID
++	depends on HID
+ 	help
+ 	  If you say yes to this option, support will be included for the
+ 	  AMD Sensor Fusion Hub.
+diff --git a/drivers/hid/i2c-hid/Kconfig b/drivers/hid/i2c-hid/Kconfig
+index d65abe65ce73..b72b7f1ceca8 100644
+--- a/drivers/hid/i2c-hid/Kconfig
++++ b/drivers/hid/i2c-hid/Kconfig
+@@ -1,11 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-menu "I2C HID support"
+-	depends on I2C
++menuconfig I2C_HID
++	tristate "I2C HID support"
++	default y
++	depends on I2C && INPUT && HID
++
++if I2C_HID
+ 
+ config I2C_HID_ACPI
+ 	tristate "HID over I2C transport layer ACPI driver"
+-	default n
+-	depends on I2C && INPUT && ACPI
++	depends on ACPI
++	select I2C_HID_CORE
+ 	help
+ 	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
+ 	  other HID based devices which is connected to your computer via I2C.
+@@ -19,8 +23,8 @@ config I2C_HID_ACPI
+ 
+ config I2C_HID_OF
+ 	tristate "HID over I2C transport layer Open Firmware driver"
+-	default n
+-	depends on I2C && INPUT && OF
++	depends on OF
++	select I2C_HID_CORE
+ 	help
+ 	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
+ 	  other HID based devices which is connected to your computer via I2C.
+@@ -34,8 +38,8 @@ config I2C_HID_OF
+ 
+ config I2C_HID_OF_ELAN
+ 	tristate "Driver for Elan hid-i2c based devices on OF systems"
+-	default n
+-	depends on I2C && INPUT && OF
++	depends on OF
++	select I2C_HID_CORE
+ 	help
+ 	  Say Y here if you want support for Elan i2c devices that use
+ 	  the i2c-hid protocol on Open Firmware (Device Tree)-based
+@@ -49,8 +53,8 @@ config I2C_HID_OF_ELAN
+ 
+ config I2C_HID_OF_GOODIX
+ 	tristate "Driver for Goodix hid-i2c based devices on OF systems"
+-	default n
+-	depends on I2C && INPUT && OF
++	depends on OF
++	select I2C_HID_CORE
+ 	help
+ 	  Say Y here if you want support for Goodix i2c devices that use
+ 	  the i2c-hid protocol on Open Firmware (Device Tree)-based
+@@ -62,10 +66,7 @@ config I2C_HID_OF_GOODIX
+ 	  will be called i2c-hid-of-goodix.  It will also build/depend on
+ 	  the module i2c-hid.
+ 
+-endmenu
+-
+ config I2C_HID_CORE
+ 	tristate
+-	default y if I2C_HID_ACPI=y || I2C_HID_OF=y || I2C_HID_OF_ELAN=y || I2C_HID_OF_GOODIX=y
+-	default m if I2C_HID_ACPI=m || I2C_HID_OF=m || I2C_HID_OF_ELAN=m || I2C_HID_OF_GOODIX=m
+-	select HID
++
++endif
+diff --git a/drivers/hid/intel-ish-hid/Kconfig b/drivers/hid/intel-ish-hid/Kconfig
+index 689da84a520d..253dc10d35ef 100644
+--- a/drivers/hid/intel-ish-hid/Kconfig
++++ b/drivers/hid/intel-ish-hid/Kconfig
+@@ -6,7 +6,7 @@ config INTEL_ISH_HID
+ 	tristate "Intel Integrated Sensor Hub"
+ 	default n
+ 	depends on X86
+-	select HID
++	depends on HID
+ 	help
+ 	  The Integrated Sensor Hub (ISH) enables the ability to offload
+ 	  sensor polling and algorithm processing to a dedicated low power
 -- 
 2.39.0
 
