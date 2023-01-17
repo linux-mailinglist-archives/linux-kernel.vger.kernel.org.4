@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12D666D6F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DA966D6FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbjAQHaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S235948AbjAQHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235873AbjAQHaL (ORCPT
+        with ESMTP id S235973AbjAQHd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:30:11 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102C925E02;
-        Mon, 16 Jan 2023 23:30:03 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZm6e64_1673940597;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZm6e64_1673940597)
-          by smtp.aliyun-inc.com;
-          Tue, 17 Jan 2023 15:29:57 +0800
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v8 9/9] perf vendor events arm64: Add instruction mix metrics for neoverse-n2-v2
-Date:   Tue, 17 Jan 2023 15:29:33 +0800
-Message-Id: <1673940573-90503-10-git-send-email-renyu.zj@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
-References: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Tue, 17 Jan 2023 02:33:28 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8A2E0F4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:31:40 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id q23-20020a17090a065700b002290913a521so14004018pje.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wRGuf3zKSLvnU9iingEuUTLd1xRFRQOujh2ZVq1MAGQ=;
+        b=fNdDVZwweEaQxAfz7gQR4YECfnBWQhhDkX9H3rGpV/G+WX7L67iDyLZniEKBGwUNe3
+         HAJjY9oR9Q3M7xN71bG8vEUAIgWYchbYb/5fiQBO5rs4dTlY7YIbKL08Srz8HJH/d9RL
+         JMZI5SYOu7UdZ7gfAuPB07u2+RTnJBVTEYQMVw8awFStSL8vNb2uFcD8+lN0/ECq2jcA
+         ioBQaQwaD+ZMGzAJBOx1mZPl9GiF55stHNKlHkXvnFWDR1/vcz0CY2GpQAg3jVR2XE/Y
+         iuaIhZfhJ+wxZumaRHCRRCVECtTkyYeTR2cM2c9l3u60WsIXCAxZLsZtte2TG9L/OrIo
+         fxGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wRGuf3zKSLvnU9iingEuUTLd1xRFRQOujh2ZVq1MAGQ=;
+        b=vVc/Xzh0INUtFL4y+U+OkUoxWv9l3YLVxwS3lmGvm+97ltssbCpc20xJc0iUzMMhun
+         FrCmR0NDoNLfjATleK8ZRQZ/6gl89Cy8av9jVArhIzsAKYi0jmmcF/AMz4oD60T+5Lbx
+         ju9hp5+pxwLxfiLWXhmWBnF2gvhZebnuwDY5dnJpUwRjzoSh9M9P8DP8dIA5fRbDKpYh
+         FnSuMU5UMp88V/oaWlBIb7oa+ZHjQdpOPwvCEBhAjlEGMZpGX4fbJLI98kFiUMke5xQ9
+         73nQj99HYY/nhsC16w7EwffLpiOfnWufD5UIgc0QoeVyjdoCK2eXGuImC+muPuo0N3+N
+         Ik0g==
+X-Gm-Message-State: AFqh2kptMhG4zZvnKNMfSkO8t13CDy0v+wzNF7SDdiK3y/Fbdl9gAAda
+        tzwNFzXjjO8uVShGT/wLWA9Q6fX1nAIbX3lg
+X-Google-Smtp-Source: AMrXdXt7VLmohgFFsYNbKMdYyjMDqbcHs08zHolF9rmgUXgt8Yb0rU76zjC1cz7WIiSG2rSovNXIlg==
+X-Received: by 2002:a17:902:c3c6:b0:192:c014:f6ba with SMTP id j6-20020a170902c3c600b00192c014f6bamr2319458plj.33.1673940698630;
+        Mon, 16 Jan 2023 23:31:38 -0800 (PST)
+Received: from [10.90.35.114] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b001869b988d93sm13644880pli.187.2023.01.16.23.31.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 23:31:38 -0800 (PST)
+Message-ID: <9f626aa0-cabe-8c7f-5a3c-b30ea52a6adb@bytedance.com>
+Date:   Tue, 17 Jan 2023 15:31:34 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH 3/3] memblock: Avoid useless checks in
+ memblock_merge_regions().
+To:     rppt@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org
+References: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
+ <20230113082659.65276-4-zhangpeng.00@bytedance.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <20230113082659.65276-4-zhangpeng.00@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,88 +75,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add instruction mix related metrics.
+Hi, Mike
 
-Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-Reviewed-by: John Garry <john.g.garry@oracle.com>
-Acked-by: Ian Rogers <irogers@google.com>
----
- .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+What's your opinion of this patch?
 
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-index 3d6ac0c..8ad15b7 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-@@ -206,5 +206,68 @@
-         "MetricGroup": "PEutilization",
-         "MetricName": "cpu_utilization",
-         "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "LD_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of load instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "load_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ST_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of store instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "store_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "DP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of integer data-processing instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "data_process_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ASE_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of advanced SIMD instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "advanced_simd_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "VFP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of floating point instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "float_point_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "CRYPTO_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of crypto instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "crypto_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_IMMED_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of branch immediate instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_immed_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_RETURN_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of procedure return instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_return_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_INDIRECT_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of indirect branch instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_indirect_spec_rate",
-+        "ScaleUnit": "100%"
-     }
- ]
--- 
-1.8.3.1
-
+Sincerely yours,
+Peng.
