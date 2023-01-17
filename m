@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4DD66E4CE
+	by mail.lfdr.de (Postfix) with ESMTP id 8042666E4CD
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAQRWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S235273AbjAQRWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbjAQRWO (ORCPT
+        with ESMTP id S230284AbjAQRWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:22:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6071E5D6;
-        Tue, 17 Jan 2023 09:21:26 -0800 (PST)
+        Tue, 17 Jan 2023 12:22:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB964C6E9;
+        Tue, 17 Jan 2023 09:21:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76B20614E7;
-        Tue, 17 Jan 2023 17:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC2BC433EF;
-        Tue, 17 Jan 2023 17:21:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 114DFB81928;
+        Tue, 17 Jan 2023 17:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E2CC433D2;
+        Tue, 17 Jan 2023 17:21:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673976085;
-        bh=9wwVcHjy8o8R0Tm0Qxk0hELS+dDYumTePIwYrvyTEIY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O5jTplu/i3ONiBA9HU0qKqCmWa0/F0c4cFMbTxaeekS3wvpkEEVXmn6euceZpoLo9
-         CzVuXu47gE4tdP2lTVtCcNzuiEQoPW0sKlGCuMw09RJMvNghyPOcCqxYA+B7V87HLx
-         a30FSP83a8egkNEn0nT5ekf1+IidZyWIoblRaU8J6shDsDXZwCfa+11WekhS0CyGuB
-         u63nHRq38XrEJa3g+sZlLk/G5dpSfe0CrXJR43DfHzjTfdvMNEp2vVQSSuRvenJTWd
-         /Sx7IWWqbi35PXCNV1Cj2sYzch8OML+BKFUZw93KRVDB9gfPxxPWHL/JpP5TXfJhG5
-         XlU06G5WiokQA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hid: stop drivers from selecting CONFIG_HID
-Date:   Tue, 17 Jan 2023 18:20:55 +0100
-Message-Id: <20230117172121.2715953-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        s=k20201202; t=1673976075;
+        bh=skvQqBc/hwy9a+RMCgjlCVkjG/y6LmVz/zErbnp5Lc8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sdJmhwj6QVo0M9LgC8ByvkE7SKmZchZKL/UR8b7SRvTMUsbWup3siR35ELAIvWeLj
+         Q2lauiIXU98vjbpakY7/TzlJcGYPwmN3lOS8bLLK9bdrZoOAxHl4PBHBT/gV0Eonaj
+         HwuEPrz09kSA3gk4PAYMO8MPnaXrU9sU1T7qS1cWVZHb3D7BgVMnGfpOcuOZ97E8uA
+         MwrFy5zysH7MaZIc84G9KSmSnL2O+gjMbiSeyK+fu0nV85rsM4lnyxL0DSdARR5WZF
+         BLCAJMmgob6uAuvsTtH/Awl0R5/AfV6D5Venh81Mmkd844xRH6tDAa3dxZ65ArPT3w
+         0zG/bcLxXYEWQ==
+Date:   Tue, 17 Jan 2023 09:21:14 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: Re: [RFC PATCH v1 00/19] rtw88: Add SDIO support
+Message-ID: <20230117092114.62ba2f66@kernel.org>
+In-Reply-To: <87y1q28o5a.fsf@kernel.org>
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+        <87y1q28o5a.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,148 +61,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 16 Jan 2023 18:01:05 +0200 Kalle Valo wrote:
+> > - My understanding is that there's a discussion about the rtw88 Kconfig
+> >   symbols. We're adding four new ones within this series. It's not
+> >   clear to me what the conclusion is on this topic though.  
+> 
+> Yeah, there were no conclusions about that. Jakub, do you have any
+> opinions? For example, do we keep per device Kconfig options (eg.
+> CONFIG_RTW88_8822BS, RTW88_8822CS and so on) or should we have only one
+> more bus level option (eg. CONFIG_RTW88_SDIO)? rtw88 now uses the former
+> and IIRC so does mt76. ath10k/ath11k/ath12k again use the latter :)
 
-There is a mix of drivers using either 'depends on HID' or 'select HID',
-which causes both circular dependencies and missed dependencies for
-a 'select':
-
-WARNING: unment direct dependencies for HID
-  Depends on [m]: HID_SUPPORT [=y] && INPUT [=m]
-  Selected by [y]:
-  - AMD_SFH_HID [=y] && HID_SUPPORT [=y] && (X86_64 || COMPILE_TEST [=y]) && PCI [=y]
-  Selected by [m]:
-  - I2C_HID_CORE [=m] && HID_SUPPORT [=y]
-
-WARNING: unmet direct dependencies detected for INPUT_FF_MEMLESS
-  Depends on [m]: INPUT [=m]
-  Selected by [y]:
-  - DRAGONRISE_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_DRAGONRISE [=y]
-  - HID_MICROSOFT [=y] && HID_SUPPORT [=y] && HID [=y]
-  - GREENASIA_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_GREENASIA [=y]
-  Selected by [m]:
-  - INPUT_ARIZONA_HAPTICS [=m] && INPUT [=m] && INPUT_MISC [=y] && MFD_ARIZONA [=y] && SND_SOC [=m]
-  - INPUT_PM8XXX_VIBRATOR [=m] && INPUT [=m] && INPUT_MISC [=y] && (MFD_PM8XXX [=m] || MFD_SPMI_PMIC [=n])
-  - INPUT_MAX8997_HAPTIC [=m] && INPUT [=m] && INPUT_MISC [=y] && PWM [=y] && MFD_MAX8997 [=y]
-  - INPUT_GPIO_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && (GPIOLIB [=y] || COMPILE_TEST [=y])
-  - INPUT_REGULATOR_HAPTIC [=m] && INPUT [=m] && INPUT_MISC [=y] && REGULATOR [=y]
-  - INPUT_TWL6040_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && TWL6040_CORE [=y]
-  - INPUT_PWM_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && PWM [=y]
-  - INPUT_DRV260X_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y] && (GPIOLIB [=y] || COMPILE_TEST [=y])
-  - INPUT_DRV2665_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y]
-  - INPUT_DRV2667_HAPTICS [=m] && INPUT_MISC [=y] && INPUT [=m] && I2C [=y]
-  - INPUT_SC27XX_VIBRA [=m] && INPUT [=m] && INPUT_MISC [=y] && (MFD_SC27XX_PMIC [=y] || COMPILE_TEST [=y])
-  - HID_MAYFLASH [=m] && HID_SUPPORT [=y] && HID [=y]
-
-Avoid this by changing all HID client drivers to use 'depends on HID'.
-For I2C_HID, this requires a larger rework of the Kconfig description,
-but it hopefully becomes easier to understand without the complex
-I2C_HID_CORE definition.
-
-Fixes: 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hid/amd-sfh-hid/Kconfig   |  2 +-
- drivers/hid/i2c-hid/Kconfig       | 31 ++++++++++++++++---------------
- drivers/hid/intel-ish-hid/Kconfig |  2 +-
- 3 files changed, 18 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/hid/amd-sfh-hid/Kconfig b/drivers/hid/amd-sfh-hid/Kconfig
-index 56e473fc3c93..af752dd3a340 100644
---- a/drivers/hid/amd-sfh-hid/Kconfig
-+++ b/drivers/hid/amd-sfh-hid/Kconfig
-@@ -5,7 +5,7 @@ menu "AMD SFH HID Support"
- 
- config AMD_SFH_HID
- 	tristate "AMD Sensor Fusion Hub"
--	select HID
-+	depends on HID
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  AMD Sensor Fusion Hub.
-diff --git a/drivers/hid/i2c-hid/Kconfig b/drivers/hid/i2c-hid/Kconfig
-index d65abe65ce73..b72b7f1ceca8 100644
---- a/drivers/hid/i2c-hid/Kconfig
-+++ b/drivers/hid/i2c-hid/Kconfig
-@@ -1,11 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
--menu "I2C HID support"
--	depends on I2C
-+menuconfig I2C_HID
-+	tristate "I2C HID support"
-+	default y
-+	depends on I2C && INPUT && HID
-+
-+if I2C_HID
- 
- config I2C_HID_ACPI
- 	tristate "HID over I2C transport layer ACPI driver"
--	default n
--	depends on I2C && INPUT && ACPI
-+	depends on ACPI
-+	select I2C_HID_CORE
- 	help
- 	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
- 	  other HID based devices which is connected to your computer via I2C.
-@@ -19,8 +23,8 @@ config I2C_HID_ACPI
- 
- config I2C_HID_OF
- 	tristate "HID over I2C transport layer Open Firmware driver"
--	default n
--	depends on I2C && INPUT && OF
-+	depends on OF
-+	select I2C_HID_CORE
- 	help
- 	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
- 	  other HID based devices which is connected to your computer via I2C.
-@@ -34,8 +38,8 @@ config I2C_HID_OF
- 
- config I2C_HID_OF_ELAN
- 	tristate "Driver for Elan hid-i2c based devices on OF systems"
--	default n
--	depends on I2C && INPUT && OF
-+	depends on OF
-+	select I2C_HID_CORE
- 	help
- 	  Say Y here if you want support for Elan i2c devices that use
- 	  the i2c-hid protocol on Open Firmware (Device Tree)-based
-@@ -49,8 +53,8 @@ config I2C_HID_OF_ELAN
- 
- config I2C_HID_OF_GOODIX
- 	tristate "Driver for Goodix hid-i2c based devices on OF systems"
--	default n
--	depends on I2C && INPUT && OF
-+	depends on OF
-+	select I2C_HID_CORE
- 	help
- 	  Say Y here if you want support for Goodix i2c devices that use
- 	  the i2c-hid protocol on Open Firmware (Device Tree)-based
-@@ -62,10 +66,7 @@ config I2C_HID_OF_GOODIX
- 	  will be called i2c-hid-of-goodix.  It will also build/depend on
- 	  the module i2c-hid.
- 
--endmenu
--
- config I2C_HID_CORE
- 	tristate
--	default y if I2C_HID_ACPI=y || I2C_HID_OF=y || I2C_HID_OF_ELAN=y || I2C_HID_OF_GOODIX=y
--	default m if I2C_HID_ACPI=m || I2C_HID_OF=m || I2C_HID_OF_ELAN=m || I2C_HID_OF_GOODIX=m
--	select HID
-+
-+endif
-diff --git a/drivers/hid/intel-ish-hid/Kconfig b/drivers/hid/intel-ish-hid/Kconfig
-index 689da84a520d..253dc10d35ef 100644
---- a/drivers/hid/intel-ish-hid/Kconfig
-+++ b/drivers/hid/intel-ish-hid/Kconfig
-@@ -6,7 +6,7 @@ config INTEL_ISH_HID
- 	tristate "Intel Integrated Sensor Hub"
- 	default n
- 	depends on X86
--	select HID
-+	depends on HID
- 	help
- 	  The Integrated Sensor Hub (ISH) enables the ability to offload
- 	  sensor polling and algorithm processing to a dedicated low power
--- 
-2.39.0
-
+No strong feelings. Larry (IIRC) provided a fair justification for 
+the RTW symbols. If the module binary grows noticeably then having 
+the kconfig does indeed make sense.
