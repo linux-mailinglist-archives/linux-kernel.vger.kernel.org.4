@@ -2,130 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBBB66DAC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0F666DAD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbjAQKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S236067AbjAQKWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235525AbjAQKTn (ORCPT
+        with ESMTP id S236569AbjAQKWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:19:43 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32DB10F3;
-        Tue, 17 Jan 2023 02:19:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 83A8D38319;
-        Tue, 17 Jan 2023 10:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673950781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UTVHq9dqZLKTnxoacLYbqbw1DksZEoMSGKP4V1CCGyE=;
-        b=otgKSDs/4JpBatRD9Uyk6RUBbfoOxcFlHu2acUs6DQetNtZ/n4o7KQBNf97dA84Wqop5Gx
-        FUh7bLqlED5rcOegRYsHenWz15hsjmEovM8WQa5KXoLfCuJmOQd8YQHU0EQs+lo3g39stP
-        Lyo4lXcZa2nOfpMbDBAE/8oIvE6QNZw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673950781;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UTVHq9dqZLKTnxoacLYbqbw1DksZEoMSGKP4V1CCGyE=;
-        b=Sst3FRrTIY5EJQy/YcXbA4kWi2X6HIK1fMH/lBV6B5b/+R6+/8eF4sLu/pvadiVxhC9GNn
-        u4PH6rwKzK+pluCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 530BA13357;
-        Tue, 17 Jan 2023 10:19:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id faB5Ez12xmO+FwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 17 Jan 2023 10:19:41 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        regressions@leemhuis.info, regressions@lists.linux.dev,
-        Vlastimil Babka <vbabka@suse.cz>, Fabian Vogt <fvogt@suse.com>,
-        =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH for 6.1 regression] mm, mremap: fix mremap() expanding for vma's with vm_ops->close()
-Date:   Tue, 17 Jan 2023 11:19:39 +0100
-Message-Id: <20230117101939.9753-1-vbabka@suse.cz>
-X-Mailer: git-send-email 2.38.1
+        Tue, 17 Jan 2023 05:22:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0144326584
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673950905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QEdYja+spAQRgI3ocatVF5aB4j8EGJYrwOlz+aS8qnc=;
+        b=SmVr9iMAUwDVXxgrgv5anTXm0OTJGWq7gT3t+95gEZD7NzTfbCni5EeruPQkc6UtNlUT7U
+        oUeZUMx+lgwnEqPZNwn+lrZB7mAuo4Ud90ylNX5+LU7IfNOOTGS4qFfyaIIuNI1bO4YfRT
+        AReHh+JpKzfq7NYchXoP+JGQzbnLY3k=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-20-edahQMHIOGyxMMegnvgs-Q-1; Tue, 17 Jan 2023 05:21:43 -0500
+X-MC-Unique: edahQMHIOGyxMMegnvgs-Q-1
+Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so22478674qkn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:21:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QEdYja+spAQRgI3ocatVF5aB4j8EGJYrwOlz+aS8qnc=;
+        b=QUKuZXy96/VDyOzuvrKod7MI1FVuxw3PR69aV/zi0y9R8aQ3m6DHkF0l3CXfwNTs0W
+         eMTjJFiIgIO+G44MK6JVdix5KXphGOECgRWQQYS+vP4BZKqYvjRjb6ImcCnWz6mFIFXE
+         ZZcknPIfvnJLsX0qluNBAntVxiCfag6fxbahF5i1XmSueU/kVFkGSs/J9zLC7uCVLizV
+         6mYgmJHPtTjp/EyPgRhwUxr34G7NLk+CYkZB/teXs4kCpTG0dmCFZyN4auYCB0Uy+7c2
+         oePE94ct/T/TjjkMMJ9UAj7cJJzIxOH2ygVeRmm2yFE/JAT3OOdLi1/g4uSKaSO2GEBb
+         PhHw==
+X-Gm-Message-State: AFqh2kqsaMrhReZnRSssYgMp8otGWl7NPX0Jd+RPKeobFhB2LylhfcBT
+        mdT+1xUVR5DsQYl87iKRz1/YSiuY/O41IMCjOfAwtjxYo/GvbHgJjtYECp04bEzMieXDdcMujPE
+        rR+6+rbfrEynPHoivUjQCiKWT
+X-Received: by 2002:a05:6214:5cc6:b0:535:2539:f6f5 with SMTP id lk6-20020a0562145cc600b005352539f6f5mr3569720qvb.19.1673950903264;
+        Tue, 17 Jan 2023 02:21:43 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvPYUizcpEacQSRFhRTtErkHrTAYpfYmoU93jJcJUpktp3acV/jkNc/5kpL9F9xjfj7nlvLjg==
+X-Received: by 2002:a05:6214:5cc6:b0:535:2539:f6f5 with SMTP id lk6-20020a0562145cc600b005352539f6f5mr3569707qvb.19.1673950903011;
+        Tue, 17 Jan 2023 02:21:43 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-115-179.dyn.eolo.it. [146.241.115.179])
+        by smtp.gmail.com with ESMTPSA id t11-20020a05620a034b00b006fa31bf2f3dsm19675388qkm.47.2023.01.17.02.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 02:21:42 -0800 (PST)
+Message-ID: <cf3c7895be29d46e814d356bb5afad1203815253.camel@redhat.com>
+Subject: Re: [PATCH net-next v3] inet: fix fast path in __inet_hash_connect()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 17 Jan 2023 11:21:39 +0100
+In-Reply-To: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
+References: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fabian has reported another regression in 6.1 due to ca3d76b0aa80 ("mm:
-add merging after mremap resize"). The problem is that vma_merge() can
-fail when vma has a vm_ops->close() method, causing is_mergeable_vma()
-test to be negative. This was happening for vma mapping a file from
-fuse-overlayfs, which does have the method. But when we are simply
-expanding the vma, we never remove it due to the "merge" with the added
-area, so the test should not prevent the expansion.
+On Sat, 2023-01-14 at 13:11 +0000, Pietro Borrello wrote:
+> __inet_hash_connect() has a fast path taken if sk_head(&tb->owners) is
+> equal to the sk parameter.
+> sk_head() returns the hlist_entry() with respect to the sk_node field.
+> However entries in the tb->owners list are inserted with respect to the
+> sk_bind_node field with sk_add_bind_node().
+> Thus the check would never pass and the fast path never execute.
+>=20
+> This fast path has never been executed or tested as this bug seems
+> to be present since commit 1da177e4c3f4 ("Linux-2.6.12-rc2"), thus
+> remove it to reduce code complexity.
+>=20
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+> Changes in v3:
+> - remove the fast path to reduce code complexity
+> - Link to v2: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_h=
+ead-v2-1-5ec926ddd985@diag.uniroma1.it
+>=20
+> Changes in v2:
+> - nit: s/list_entry/hlist_entry/
+> - Link to v1: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_h=
+ead-v1-1-7e3c770157c8@diag.uniroma1.it
+> ---
+>  net/ipv4/inet_hashtables.c | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
+>=20
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index d039b4e732a3..b832e7a545d4 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -994,17 +994,7 @@ int __inet_hash_connect(struct inet_timewait_death_r=
+ow *death_row,
+>  	u32 index;
+> =20
+>  	if (port) {
+> -		head =3D &hinfo->bhash[inet_bhashfn(net, port,
+> -						  hinfo->bhash_size)];
+> -		tb =3D inet_csk(sk)->icsk_bind_hash;
+> -		spin_lock_bh(&head->lock);
+> -		if (sk_head(&tb->owners) =3D=3D sk && !sk->sk_bind_node.next) {
+> -			inet_ehash_nolisten(sk, NULL, NULL);
+> -			spin_unlock_bh(&head->lock);
+> -			return 0;
+> -		}
+> -		spin_unlock(&head->lock);
+> -		/* No definite answer... Walk to established hash table */
+> +		local_bh_disable();
+>  		ret =3D check_established(death_row, sk, port, NULL);
+>  		local_bh_enable();
+>  		return ret;
 
-As a quick fix, check for such vmas and expand them using vma_adjust()
-directly as was done before commit ca3d76b0aa80. For a more robust long
-term solution we should try to limit the check for vma_ops->close only
-to cases that actually result in vma removal, so that no merge would be
-prevented unnecessarily.
+LGTM, thanks!
 
-Reported-by: Fabian Vogt <fvogt@suse.com>
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1206359#c35
-Fixes: ca3d76b0aa80 ("mm: add merging after mremap resize")
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Cc: Jakub Matěna <matenajakub@gmail.com>
-Cc: <stable@vger.kernel.org>
-Tested-by: Fabian Vogt <fvogt@suse.com>
----
-Thorsten: this should be added to the previous regression which wasn't
-fully fixed by the previous patch:
-https://linux-regtracking.leemhuis.info/regzbot/regression/20221216163227.24648-1-vbabka@suse.cz/
- mm/mremap.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Eric, do you have any additional comment?
 
-diff --git a/mm/mremap.c b/mm/mremap.c
-index fe587c5d6591..1e234fd95547 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -1032,11 +1032,22 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 			 * the already existing vma (expand operation itself) and possibly also
- 			 * with the next vma if it becomes adjacent to the expanded vma and
- 			 * otherwise compatible.
-+			 *
-+			 * However, vma_merge() can currently fail due to is_mergeable_vma()
-+			 * check for vm_ops->close (see the comment there). Yet this should not
-+			 * prevent vma expanding, so perform a simple expand for such vma.
-+			 * Ideally the check for close op should be only done when a vma would
-+			 * be actually removed due to a merge.
- 			 */
--			vma = vma_merge(mm, vma, extension_start, extension_end,
-+			if (!vma->vm_ops || !vma->vm_ops->close) {
-+				vma = vma_merge(mm, vma, extension_start, extension_end,
- 					vma->vm_flags, vma->anon_vma, vma->vm_file,
- 					extension_pgoff, vma_policy(vma),
- 					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
-+			} else if (vma_adjust(vma, vma->vm_start, addr + new_len,
-+                                   vma->vm_pgoff, NULL)) {
-+				vma = NULL;
-+			}
- 			if (!vma) {
- 				vm_unacct_memory(pages);
- 				ret = -ENOMEM;
--- 
-2.38.1
+Cheers,
+
+Paolo
+
+
 
