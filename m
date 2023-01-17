@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3865C66D79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2C866D7A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236027AbjAQIKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S235920AbjAQILO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbjAQIJm (ORCPT
+        with ESMTP id S235957AbjAQILL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:09:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373512748C;
-        Tue, 17 Jan 2023 00:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pQjSKmSw6p/N0OMSHc7at4GiVU7Rg/XB3qkDkMiu+rs=; b=sFzD+basG4rvAZOsDrubDxcusL
-        KFAWUTWkOY8ubdQ9rE5S0ri3fww/A//S0+L4dcIVxCUc8J4WVyFO+NRipr3GI5MV48YehqqS+7PIP
-        B9uaCAs/Y2fc6HCamTtbb5sRHsKgRex7dDNaEKfnO2WIc4fX2F+My4M+KBm2AsuDiukCA8FWLvNy6
-        RR6mZTk8cYOaAKhP8LHq52JGxWcLoRB7XXKnlxzSEofxxsNnIywjle0Edqar0aRttUtBtp9M+ZdLR
-        r5TF5S6JJ2KD9UgNmaw7nsUn0w+ck/yj60pHY4vaLLkqTKZjT8u5Gf+qR5KAXI+kg0jeX4ZmtNZCS
-        kBvwUJ/A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHh2A-00DHQP-F9; Tue, 17 Jan 2023 08:09:30 +0000
-Date:   Tue, 17 Jan 2023 00:09:30 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 03/34] iov_iter: Pass I/O direction into
- iov_iter_get_pages*()
-Message-ID: <Y8ZXukUbg0/9cYtV@infradead.org>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
- <167391050409.2311931.7103784292954267373.stgit@warthog.procyon.org.uk>
- <Y8ZU1Jjx5VSetvOn@infradead.org>
- <3515368f-d622-f7d2-5854-9503d4a19fb2@redhat.com>
+        Tue, 17 Jan 2023 03:11:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59B935B2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:11:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4071AB811E3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:11:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1070FC433D2;
+        Tue, 17 Jan 2023 08:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673943068;
+        bh=3VeHFq1M6ph27cKYLc0GP6LGGDuQ0Jo6pw/Q7JfWUlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zg+apXeEQJLAaDphQWKt25vRKsSUrgpsCRLBhWX0J0wXZHzWVuSqt5EYGpSeZnVUt
+         KNk+qD2hyPnWoMFID7YxlT020RaqrNhoFjZo2wBbuCXoUCASoSeP9EUPiuxw/3hwY0
+         CGrhTyNQwTeewBJXiDQ0+bpyqPvin94BDg/hhK2PpOx+DvatBntxbPLIYQn1KRi2yD
+         Zecy0SDAE6evuwp+OF44pU6CTuSKjv50uFauNv2K4NK1hA/1Q6X3l7NGapT9dY3VRE
+         1vzAWff2/2ETRmYXG8qdurDJQjVbIAl6kDLG9FNcKoWmGfU4RcJaHDImrYWcVQw0TY
+         Qcx1sSF4YT64Q==
+Date:   Tue, 17 Jan 2023 16:11:04 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
+Subject: Re: drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning:
+ stack frame size (1040) exceeds limit (1024) in
+ 'cros_ec_proto_test_get_sensor_count_legacy'
+Message-ID: <Y8ZYGKpEopzDUbAQ@google.com>
+References: <202301141043.DtsZqxIr-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3515368f-d622-f7d2-5854-9503d4a19fb2@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202301141043.DtsZqxIr-lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:07:48AM +0100, David Hildenbrand wrote:
-> Agreed. What I understand, David considers that confusing when considering
-> the I/O side of things.
+On Sat, Jan 14, 2023 at 10:28:29AM +0800, kernel test robot wrote:
+> Hi Tzung-Bi,
 > 
-> I recall that there is
+> FYI, the error/warning still remains.
 > 
-> DMA_BIDIRECTIONAL -> FOLL_WRITE
-> DMA_TO_DEVICE -> !FOLL_WRITE
-> DMA_FROM_DEVICE -> FOLL_WRITE
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   97ec4d559d939743e8af83628be5af8da610d9dc
+> commit: 33f0fdba6066b504ee0b5f1480b1f93b06050df6 platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+> date:   6 months ago
+> config: powerpc-allmodconfig
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 8d9828ef5aa9688500657d36cd2aefbe12bbd162)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=33f0fdba6066b504ee0b5f1480b1f93b06050df6
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 33f0fdba6066b504ee0b5f1480b1f93b06050df6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/platform/chrome/ drivers/staging/media/
 > 
-> that used different defines for a different API. Such terminology would be
-> easier to get ... but then, again, not sure if we really need acronyms here.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> We're pinning pages and FOLL_WRITE defines how we (pinning the page) are
-> going to access these pages: R/O or R/W. So the read vs. write is never from
-> the POC of the device (DMA read will write to the page).
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack frame size (1040) exceeds limit (1024) in 'cros_ec_proto_test_get_sensor_count_legacy' [-Wframe-larger-than]
+>    static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+>                ^
+>    140/1040 (13.46%) spills, 900/1040 (86.54%) variables
+>    1 warning generated.
 
-Yes.  Maybe the name could be a little more verboe, FOLL_MEM_WRITE or
-FOLL_WRITE_TO_MEM.  But I'd really prefer any renaming to be split from
-logic changes.
+This is the 3rd time to see the warning.  I wasn't able to reproduce the
+warning in my environment until I figured out a way by leveraging docker.
+
+Anyway, the proposed fix is at [1].
+
+[1]: https://patchwork.kernel.org/project/chrome-platform/patch/20230117080254.2725536-1-tzungbi@kernel.org/.
