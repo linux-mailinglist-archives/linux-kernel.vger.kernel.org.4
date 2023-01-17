@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD3F66E49A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D360766E499
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbjAQRPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S232616AbjAQROz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234637AbjAQROu (ORCPT
+        with ESMTP id S235136AbjAQRO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:14:50 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51A4E51C;
-        Tue, 17 Jan 2023 09:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673975616; x=1705511616;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+BBmMXn1zgtdD10z98rWe17Kcp87pYxTLvybL2CPtMM=;
-  b=ZTUfIT2CQOXQ/tLbwv66OmcPT1mJCnYg/hnMR5JEkeo+ErR46BhRsIO9
-   Nh+mvG2B4BsHb8wHmDlmdzoDMEPRJ7N2ttG5I4WdMtVkwhI+gCyR51oyP
-   pDRUTI5P2gS6fBqXYQ2RLqyP7YT4//8ffW8ZsrPHvt3CbvPoXWjArfbgY
-   FiixrsqtpLs4gifDkoYdXV/s4Ba8blVqpbt7tYROHVE1jjWlTf5vbqSoH
-   dsZA9wGMzJ4/q+JzKCMlSz4Av0EKLs0O8IV6tHEg14xt4vxb87AIrO/bL
-   U95EfC9S7I4gQ3ODtplnqNPcLb8kXgosShXJgk6l1LQupzo9E+t4XPI77
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="308319637"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="308319637"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 09:12:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="691662949"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="691662949"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.41.87]) ([10.212.41.87])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 09:12:13 -0800
-Message-ID: <021a7ba0-e15a-52b3-51cf-14a5ef850157@intel.com>
-Date:   Tue, 17 Jan 2023 10:12:12 -0700
+        Tue, 17 Jan 2023 12:14:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C654C0E4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:12:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13A7AB8164B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89186C433D2;
+        Tue, 17 Jan 2023 17:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673975567;
+        bh=WwkZdJTRH/e6oDjQt1JBj5r7Hxk3Sps4Rt8KnDt4/u0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZNGm4dQXyPpdlm7+X9Q4CvkWy0n/zRxxC7Ir3C+TUbW7gC1qxMaaS5DvieEd5lipB
+         enf5LpmFk7sumKBslDpDA4iwMbwtkaco2vtLfWHLz3agHqyEFmDjTuJvj0Hqv+zKSH
+         xKKUwC0JlzGg23g4T8+MHo6zp64b1EiBKmdlrQG0n5hijI21iRv5HUdykcWJz24et2
+         SW/Lk95wWovkMoSGbJ5uySheXx62h3p13bsj02eTXe08CERf4E7LKK8dhRZGcGyr2n
+         3dKH6wXinGH1vHVrOkN39F4fDBMA8ZoaeOBIb5POjI4UKDLtvWiRuAT28+zz6P5aUF
+         xKt199peEHU4A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        George Shen <george.shen@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
+        Lewis Huang <Lewis.Huang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [v2] drm/amd/display: fix dp_retrieve_lttpr_cap return code
+Date:   Tue, 17 Jan 2023 18:12:24 +0100
+Message-Id: <20230117171239.2714855-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] cxl/region: Fix null pointer dereference for resetting
- decoder
-Content-Language: en-US
-To:     Fan Ni <fan.ni@samsung.com>,
-        "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
-Cc:     "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
- <20221215170909.2650271-1-fan.ni@samsung.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221215170909.2650271-1-fan.ni@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
+The dp_retrieve_lttpr_cap() return type changed from 'bool'
+to 'enum dc_status', so now the early 'return' uses the wrong
+type:
 
-On 12/15/22 10:09 AM, Fan Ni wrote:
-> Not all decoders have a reset callback.
-> 
-> The CXL specification allows a host bridge with a single root port to
-> have no explicit HDM decoders. Currently the region driver assumes there
-> are none.  As such the CXL core creates a special pass through decoder
-> instance without a commit/reset callback.
-> 
-> Prior to this patch, the ->reset() callback was called unconditionally when
-> calling cxl_region_decode_reset. Thus a configuration with 1 Host Bridge,
-> 1 Root Port, and one directly attached CXL type 3 device or multiple CXL
-> type 3 devices attached to downstream ports of a switch can cause a null
-> pointer dereference.
-> 
-> Before the fix, a kernel crash was observed when we destroy the region, and
-> a pass through decoder is reset.
-> 
-> The issue can be reproduced as below,
->      1) create a region with a CXL setup which includes a HB with a
->      single root port under which a memdev is attached directly.
->      2) destroy the region with cxl destroy-region regionX -f.
-> 
-> Fixes: 176baefb2eb5 ("cxl/hdm: Commit decoder state to hardware")
-> Signed-off-by: Fan Ni <fan.ni@samsung.com>
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c: In function 'dp_retrieve_lttpr_cap':
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5075:24: error: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Werror=enum-conversion]
+ 5075 |                 return false;
+      |                        ^~~~~
 
-Makes sense, especially with the emulated decoders coming w/o ->reset().
+Convert it to return 'DC_ERROR_UNEXPECTED', which was apparently set
+as a default return code here but never used.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Fixes: b473bd5fc333 ("drm/amd/display: refine wake up aux in retrieve link caps")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2 changes:
+ - use DC_ERROR_UNEXPECTED instead of DC_OK
+ - remove bogus initializers
+---
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->   drivers/cxl/core/region.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index f9ae5ad284ff..3931793a13ac 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -131,7 +131,7 @@ static int cxl_region_decode_reset(struct cxl_region *cxlr, int count)
->   		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
->   		struct cxl_port *iter = cxled_to_port(cxled);
->   		struct cxl_ep *ep;
-> -		int rc;
-> +		int rc = 0;
->   
->   		while (!is_cxl_root(to_cxl_port(iter->dev.parent)))
->   			iter = to_cxl_port(iter->dev.parent);
-> @@ -143,7 +143,8 @@ static int cxl_region_decode_reset(struct cxl_region *cxlr, int count)
->   
->   			cxl_rr = cxl_rr_load(iter, cxlr);
->   			cxld = cxl_rr->decoder;
-> -			rc = cxld->reset(cxld);
-> +			if (cxld->reset)
-> +				rc = cxld->reset(cxld);
->   			if (rc)
->   				return rc;
->   		}
-> @@ -186,7 +187,8 @@ static int cxl_region_decode_commit(struct cxl_region *cxlr)
->   			     iter = ep->next, ep = cxl_ep_load(iter, cxlmd)) {
->   				cxl_rr = cxl_rr_load(iter, cxlr);
->   				cxld = cxl_rr->decoder;
-> -				cxld->reset(cxld);
-> +				if (cxld->reset)
-> +					cxld->reset(cxld);
->   			}
->   
->   			cxled->cxld.reset(&cxled->cxld);
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+index 9edfcdf3db3b..cf512362b4f1 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -5088,14 +5088,14 @@ static bool dpcd_read_sink_ext_caps(struct dc_link *link)
+ enum dc_status dp_retrieve_lttpr_cap(struct dc_link *link)
+ {
+ 	uint8_t lttpr_dpcd_data[8];
+-	enum dc_status status = DC_ERROR_UNEXPECTED;
+-	bool is_lttpr_present = false;
++	enum dc_status status;
++	bool is_lttpr_present;
+ 
+ 	/* Logic to determine LTTPR support*/
+ 	bool vbios_lttpr_interop = link->dc->caps.vbios_lttpr_aware;
+ 
+ 	if (!vbios_lttpr_interop || !link->dc->caps.extended_aux_timeout_support)
+-		return false;
++		return DC_ERROR_UNEXPECTED;
+ 
+ 	/* By reading LTTPR capability, RX assumes that we will enable
+ 	 * LTTPR extended aux timeout if LTTPR is present.
+-- 
+2.39.0
+
