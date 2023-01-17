@@ -2,293 +2,448 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4D066E6E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8DC66E6F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjAQTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S233462AbjAQT2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbjAQTOL (ORCPT
+        with ESMTP id S232484AbjAQTQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:14:11 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D778C45BCB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:29:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673980162; x=1705516162;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Uv9SI4nUVi9GnAZlQJAVruTR0kAH6Tiav9cr74CCGwg=;
-  b=KosLKTos2h3osPU9B9cqP7UrSJaeWH+0ELdoS4jsBp0JTAEe48pvZwtz
-   PGeedlqEQ9Ig2fcDborigUv2kqqWvjiVZLTKAMN9NBqJA+sQttaBBZb95
-   zwQ0saQ8gZwFxjUZ5TmwE4ApAcNmtbz/dKXIJ9E5F83/7t9C/7HYVQxZG
-   JAjPmxQTDje2L/XWQIvu3/nu4QGp/3qVn+kyXFAC+MEl641lIrVq3dJSa
-   cicUGg7oQgJLg/PEr+5pbvInzasm6aSJcHxBnFJC4q7dlDYmrpx0jRtDY
-   TXTJyGkVELSKilIQSyNfs8fyNhKNPvGYmRmM00KjzGBJnmVjy9xrmNPxK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304460716"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="304460716"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 10:29:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="783341844"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="783341844"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2023 10:29:20 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 17 Jan 2023 10:29:20 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 17 Jan 2023 10:29:19 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 10:29:19 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 17 Jan 2023 10:29:19 -0800
+        Tue, 17 Jan 2023 14:16:14 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF74521C0;
+        Tue, 17 Jan 2023 10:29:52 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HG5bpv015831;
+        Tue, 17 Jan 2023 10:29:27 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=C/hT7Tv4fi98Fxv7MB4HU6aQsP03NiHUf0OuTPG5Ytw=;
+ b=aUucQG3CxIGYP+i100tLHYXWwqML5SECy1SZClwwZoOvM8eNZGDkDgMiKvqv9yq8oRBQ
+ khoZqrYJWmgWc1vg9pmBVA/pkzNL9UU5hIQ/AAqMOVCU9hpI0PPPwrhp1KbiSZgnFaDg
+ /NuftH6tixmlYtH+vwuKzlmsZsmC95nAXqC7n6QI+5PGEl/EoYsetF6MUvASnQ1YHur3
+ u0OrtrevwpAAEPiwRv4qOr3TEmnxkY7iM0UlpeddmLL3RILmPdrvTilDRVgI9TyXoUFs
+ WPlC/asFhq+zg0itSCk56qlNWQY6LOYUV/34nuDF0d6t6OgFO08dPTXBPPX0ZStk8cKt Tg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n3u16e3sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 10:29:26 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YosfcQM0u+53wpAHXGH8ds14lHVwIwfx10JCyvhkdf9cq9POyV0Gbu4Y/Pu8cPJSj9nMUWddGnoPeJ7v5wJVhvZvfLSb2TLG3u7E9ED+el3thUdmVxwBojwGuhK6hmPjJ9aoL/stkV0DQ6n6JP7cWUi3IibC6V0MtljEZXkyDwD3kLgvmLQdPCwCBkJN9V4vc4uZW5tMok0TTeC4y+h9Hsx83H0OHLREplwtnpjMCCyg5PSuvEPZ2EshROeKlRbcEQlUax+hhbJGR5rW2upcdHBq5nA3ocSpFl0t7OUFS2tqa5S7jCNbdtTLhL8Q7AhJwYWqcH6jd/63Pyn2n0SPOg==
+ b=aDHi5dTl3h2ZN52JixLsg5GKkki70c0+z/1lYfC40P/E7nrsExFtWbfPiQ0MvLDwnefjl3PYioQMsl5SLkuOa1cpBVUqVDIaJdJ9cbYRZVPnuehgw/UrmtysUQIMgBbs2nokckhIyGOAJA0MQcdjPE8wmotd9/cLSuIJbVvXw2W84WlxlpZlIcrysJFTahKuSPfFW3muUT30ZIMwBD8uwe5Czd+pcsMKsnzwMEzLjhs7wIiSmag5sBUuDwu0RCTDx49JZSMlOnA/uD3ojkXQfb2RbDkcicYchRO/iAzs+hgstU/W0oivLONJ4rFrmSAcrVE0Ms7EN7eHpU0UTbe63Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sLB+08cmR87sRTDQjYXqkruSldvbcUnwxBU8jdCZp58=;
- b=YDm4/WlOWNE3xG6FE6XOWkU6ZL/sIkN46d2VsN3szHa7fRLMsAcbdCbgWCI9GQqDXr5qvnMlb50L7o7rpHn28wHM61Fe8cjcEka0EZ+i0NTDSeUz6/JIhlVgjJJMnzi6o7ZjTk6ksa9fuGrsQQOjTZ6bMGP6LX99+lbWjfK9Y9+dTiJZI20H0gwAf/ePRipYvXwUZIFGTODsY4HhJ4TxNKEHhyU99E3pTCEoVht4YOuB0LTJJy7dauRn9vNdcYvS0maTTz5mxem4cGw69+eXYrbCCndxImYltoohcLVakv/uffvEfu8ZRJQ32n3TNuDU81gOAZfQMGt3JF/jb5q9nw==
+ bh=C/hT7Tv4fi98Fxv7MB4HU6aQsP03NiHUf0OuTPG5Ytw=;
+ b=e83FvJ9XfYh9IqzXqV7Rz8QS37nJQvbI9lJTiy1n5E6KG4/gPdfgDENH0Ez+hHeFP/Fqdqj6Hx2Mo7zYFCWYAyRsAPLT2k6FhRZhaxp7PRcCZfXUaKFfCYADbI/UxY2ev15/zrIWC0WcDCApRst3SV2xGGyXEnqgpaQoqFipxMn0V9Zq++jmFvZ1rREeFFPngSgsJ/kKGpEJF90YJ0xdD2OnRY618zhtDeVAUUtazWTN6dfqx69YChQUn4yQ+aKfbv9pvBn9P3C/GIkZ+J1KNDTqiKYWbSKpCSbUTBHRE95OjDqnmQQ8c4jugMPVKBQSiLG6teaPN5YbAmDfBQOS7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
- by PH0PR11MB7541.namprd11.prod.outlook.com (2603:10b6:510:26d::16) with
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SJ2PR15MB5741.namprd15.prod.outlook.com (2603:10b6:a03:4d2::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Tue, 17 Jan
- 2023 18:29:18 +0000
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::16c0:1ae3:13ee:c40e]) by IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::16c0:1ae3:13ee:c40e%6]) with mapi id 15.20.5986.018; Tue, 17 Jan 2023
- 18:29:18 +0000
-From:   "Yu, Fenghua" <fenghua.yu@intel.com>
-To:     James Morse <james.morse@arm.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
-        "lcherian@marvell.com" <lcherian@marvell.com>,
-        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
-        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        "peternewman@google.com" <peternewman@google.com>
-Subject: RE: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of
- sending an IPI
-Thread-Topic: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of
- sending an IPI
-Thread-Index: AQHZJ3hXXNy7ItZKE0GbLj+Jq0J8EK6hSgIg
-Date:   Tue, 17 Jan 2023 18:29:18 +0000
-Message-ID: <IA1PR11MB6097ED9919B408116EFE161E9BC69@IA1PR11MB6097.namprd11.prod.outlook.com>
-References: <20230113175459.14825-1-james.morse@arm.com>
- <20230113175459.14825-9-james.morse@arm.com>
-In-Reply-To: <20230113175459.14825-9-james.morse@arm.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
+ 2023 18:29:23 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::3cc9:4d23:d516:59f0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::3cc9:4d23:d516:59f0%4]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
+ 18:29:23 +0000
+Message-ID: <f8b5ef05-4dd1-eb3e-c6e0-af47169d7b8e@meta.com>
+Date:   Tue, 17 Jan 2023 10:29:21 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix undeclared identifier build
+ errors of test_bpf_nf.c
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR11MB6097:EE_|PH0PR11MB7541:EE_
-x-ms-office365-filtering-correlation-id: e5d2e54f-44d6-4766-476d-08daf8b8beab
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GdBiX6tA+YWsIXDPhCs5d0emR++pt0upZsUvViulSvw02ijst3hF28Yu3TPyEmhencOLYQb3V3Nnt1fVTPiD7sd1BQS0FUIi0wmSwB9VjWSBtWHcYA5Lr+HlYr97BE5/Zi0Qt/YTI7+qYLIg10EbSEWBzTCV7WeQxwymOeNBUYNGII9pSrzNW8VNgsTS4MTUf/Gi3m1yc0sdvxGNpwdRqAq5ney4w6tlPQYJhQ85jqTCJXFH64bLgZKVDNthiFZBbzA6d2kRoVLIdXu+5d+aNeTkngqudIUyH8we6vGm5FtrOnFkRacs9mBbJ+ONIU/XhlfkIywRoq6gD787xXGaGPm/lB6wwvFIN8o/bBbtK1qsH+kGLTcpQxV9tlq5Qvxd4i+/y11MLDFiAGMQQxigYDInaTLMt4KVv0aXr7zXoRvLxN9Tz+RU2K3rljC5ojyj5i0VtHARdIKQd18Kxky4u1OB4QP5E8qIxwCI5F1jjyGD7WH0n4v59JerhAnjZc9N87z+4Rqkcdv63d4n/xaYCVopggkH8IRm2raALZ/f3KYZW9Vl8ORzIyL9NXVpzFojDjQEOg/zIzkg5osqlpD50gEW/ttpBTNsCc4Ak4nwhSk5w+/PPGTgAn9KlZM0yRzsZPoYJwYKh6k27TeQ6Y7979GFy6EDf8DNncJ4R3jhKLHmvQxDZDz+H94sBKnHQ7iwUfQPAuIyrZlpHQknRKgwYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199015)(83380400001)(55016003)(86362001)(7416002)(38070700005)(52536014)(122000001)(82960400001)(2906002)(5660300002)(8936002)(38100700002)(316002)(8676002)(478600001)(6506007)(66476007)(9686003)(71200400001)(26005)(186003)(64756008)(66556008)(7696005)(76116006)(66446008)(4326008)(66946007)(110136005)(54906003)(41300700001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FmSknXDMsy92MmBkVyAifNmrQ+uVyw1JhFchfctzToLX+Jogvj8sGgRo+Q4I?=
- =?us-ascii?Q?fAzhEnCzOgTJBUe6uKTuaj0ZYrQWyfnmGgrV+RoCsqXqaSFxVD15ml548J12?=
- =?us-ascii?Q?5SVFhBupreDlX+YdU5bbXeTJjmHMzuCyphuJzyvnVZWScJ3aphQzMNUpFWsV?=
- =?us-ascii?Q?oAZLU4ZkEIWOuPZJ9DCAd0717UeRlbHWKol/iAXoEYgxjSIc+arWOCOSWEzY?=
- =?us-ascii?Q?8bQdaY/pSkh19SXrcvfJFKLcyWtNjS3Vdp40KzK8M+8XoyEBUGCmEgEvbkvQ?=
- =?us-ascii?Q?9uY8hEjwiXngrZTAFu47RsKlbIhVjeTnoQRpDqXh8ML8fJr+acMjYbBX9wHq?=
- =?us-ascii?Q?8XyWK0OdmfurxWBiEPQ04NAemC4Oy3HSoF5I+DDc3B9ibwWCYTFgRKNOmNet?=
- =?us-ascii?Q?z+Nodpd4NGdoyOrR+IIKWD2KGxBkrbu3/hRm2bn6067w7DzNUOAWisHU4v0h?=
- =?us-ascii?Q?AFPeiFxRbH410IUKQPRNuDP7YuiHKd/nZZJGzE9wUphAHDcMVZJpE6MgKEoq?=
- =?us-ascii?Q?gYp0nx2xwY/p9nwDDc2YlStd39ElYBGtPaM/QDcOvuSV6hZXbg0GhJ04z8zo?=
- =?us-ascii?Q?n+mI4pqT9Gi9h16EwKW5AWykganFhGcUCKV2dF7c/uw7d9pp1So92EH4mMED?=
- =?us-ascii?Q?vZ2Ftx9YKTZ8vhHzPMcgxmB2bug/HiUsMWfH1SJ7Ow+QMiHMQA2lJmlbSONV?=
- =?us-ascii?Q?mBk27nK6d9RiNYq5q0qT1vBUqbujjzWPYXQ6aeTkPoWkPzGoxljzZdUPJ3xO?=
- =?us-ascii?Q?pqz6W9cqKcLEoTTr9/s5nZ5lvv1Ll2m2WlImdrCVXOTt6iLbOMnQL66buh98?=
- =?us-ascii?Q?wj8jmmKnUDUfAXEVktd0TMN9/gx0Q9XYa5/EXRBWynaY/O1tekoFgOndr/zB?=
- =?us-ascii?Q?HZzM7ZKV4+/EgyLNSDwjDr3pvLnYBA13a21g1edAnWx1SBuORLftm0rHmnEY?=
- =?us-ascii?Q?y51fSaEBp4SemMzEDC5msQFUUxOGvMazV6HmXRpVUlvR6m1Cx90E8B2+asl4?=
- =?us-ascii?Q?f0/ERNNlh6avkMiqH9QJAJgchQyqBQBc4GNDdHyXqnd+t10z/P/rmQeCv7zF?=
- =?us-ascii?Q?D4gKl1surQeh+72T3DwhXhX4BZzXlj5ng9i8Lfb94MnhJiEYKs7mJ/4fDAOg?=
- =?us-ascii?Q?72lf52jgAUWgCet0YSDKQ3HXpA88LNxhCvbVk/B6R30TAVf2g5mb4c8Ta/DX?=
- =?us-ascii?Q?Ce2zIRnqKQg55Z2ODh3pUFKE1hVk1Bif+pPoWBQu4CQK4JOrQ8I5M7Lck5Ea?=
- =?us-ascii?Q?4vSBgzZ8Yai1pdzxcz8COqd17FXgMU1JNhl1yxqC502v4sJwFesPNUT0OU1k?=
- =?us-ascii?Q?TJabQIMidzchGKqf5enKM9Vu9dOnrHMFdRr8zALOuFqqnkVWn/WMhARGsWaF?=
- =?us-ascii?Q?xwa+H4eE9vWfSDh7eJYreqB8Jx5ibT81uOwdb4OL9Zte7Zz8+JOzR9CVqNu7?=
- =?us-ascii?Q?ab4pAAnI5kXU4sPRnRW5QuwAqIbkgE+q0wGPhupGPjrih3u0jpcoyCsI9tIE?=
- =?us-ascii?Q?gd8K19k1NLFqg1CV5rEep+Ynwr96ZTs5nSWlK18AiXQ1yi7gb0t7+QHBH29J?=
- =?us-ascii?Q?ZTLh+d7q0RZ+lyBlU1A=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1673844908-11533-1-git-send-email-yangtiezhu@loongson.cn>
+ <14e0f634f084d0f07e447638c490da60943507d6.camel@gmail.com>
+ <556dc633-e7fb-da8a-1fa9-757684edd3a4@oracle.com>
+ <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
+ <d299be28-42f5-b387-5b54-74694ff5f340@loongson.cn>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <d299be28-42f5-b387-5b54-74694ff5f340@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0335.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::10) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ2PR15MB5741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39fc298b-e8f2-4a45-9a5d-08daf8b8c1cc
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /qEcHxSvrwHBV5qP0mGBmToNXKTdI8ggMC/xU5CFGJ2VsnN/EtZysOwpEWFpBI19JEDrYs9MDfu90c7YdGYF4XiPYPmC3ypiiY+PkfDTYp6LGqkFj8+nq5lzvDmF565ScCNq2nGsDpD2m3g1FW7+ZGolFx/f7OXEiMQ8ZHqOJU6/Z1ATtuismEBMdBN0seq4Lb546bmFfwLugzE0q3Yq+gaUxlzdNzNQDa64+GJV5rJJ9QIFSHZgEgZwMvO55erUNvjEXyaK+7lnwBuAr4nxglWZYaxYTwgX5WlZFQrSPrR0E2HbUT/tOWgmAT5QIySFBbPq9IT1aYJlrquA8Nwl7sJrn7UkFu7aKyjNe66zgyIa3M42RiMgfeOAoKc1A84swv/+SzovqcLIIkMgDkoaYpR63ztozf4a8HZw5F9Frpeffqhv/m6vgdd5M/qpSy8nZ0oWaZKUf43upN2Cf4xf0hHQwTQcOs+LGn8sijx3Ox6Y9tO0gj4xpBWIX2YTTFmsZyPl7OZTag+nBU+1ylFpk0l3R5sgR4PHHYa2HkVgPkExcUMWoUfeGau2rYwQp6RAUskMWDIqhqBzXmjrakjBNNFSAEfWxk8Pdot9Y9jbnpH8DSLf/GyUKLLsWcq4gfh5wJdjpxXMe80XlAJwsTiDBB32EBauQe2CIwwRYqZYGL5VJIsF4DYMigkQErqD6kbYyz7bHZc8xNRuLaBXJub4m5Qx5N/RHgp7XXIPwpT5s1bl0JbnEst1I7QDYvI4tXtf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(31696002)(86362001)(36756003)(6512007)(8676002)(4326008)(186003)(53546011)(66556008)(66946007)(66476007)(41300700001)(2616005)(6506007)(316002)(478600001)(110136005)(38100700002)(921005)(6486002)(30864003)(2906002)(7416002)(5660300002)(83380400001)(8936002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dFRVc0QyN2hKM2I3RUV4bis1WnZ1YysrUkROMFl4bkNaaGpJZitZb1ZXS3Ni?=
+ =?utf-8?B?Wi80aEErVlFMOFM0UDB1U3Z6TnVVTWRQK0h2NU81Y1JlZFNmbit5YlRFekxI?=
+ =?utf-8?B?MVZLUzFRUmFObFdMZ3FXZ0w3a2NqRk1xYmY0WGo0Mmw4UkFFVFVaenZjSDFi?=
+ =?utf-8?B?RkdJaEs3TGFZci9aMytrNzNvUFNaU09rRC90WXdGY2RrcnhlNDlRVmVaWjZK?=
+ =?utf-8?B?YjZJc0tWaUFiaHE3WG1TcmNqWE8vM3ZBdlJ3YXBsQWFoTjJBYWtUT29KOG1o?=
+ =?utf-8?B?YjlBZ0dwczYraDVwVU1nU0phejVoaWlXaFAyckU0UGUrU3RSNTFwR0NjWDZN?=
+ =?utf-8?B?ME5KMUJmVFVQQWp5ZnczV21EM1BnL3MzZThSaURxdVR4Qm1lSEdyMmM3d3d5?=
+ =?utf-8?B?QXYrUWlGQ2duamZzT0h2Wmt4UTFaV0Jkc3pwNVNGSlN4MXdFc0RGNmtwNFRN?=
+ =?utf-8?B?RmVYOHVpWFNPYkI1MWZTQ2VYWWpncHF5bzBmY1VDN3FyYzkxaTY2YW9qaVNZ?=
+ =?utf-8?B?SHRKQ0FNb01aY2d4YUE4L0VpUFNkVG8xZ2h6SktZVnBQemQycWt2enpseWoy?=
+ =?utf-8?B?U2RLdlpUai9mMmEwQUcrSGRvZ0tMNlg1b2ZDcUxhSEY5dDNoUExkbEI3ejRD?=
+ =?utf-8?B?RG56Z2lEOWpDRERUcnBxdUZMZHZ4eE9hOW16Rndtb0xCLzhPbWVOUTZVdzZr?=
+ =?utf-8?B?WFFvRWVwMXhFdFVDQktSVC9SdU05d2g2ektxdWFEbWpYNktjTDVpMVpRTk5t?=
+ =?utf-8?B?SzNtaVZiTTE5SHhXMHVjZzJOOFM0NkdZYitrbTRMNTNuZ1RPOXhsMXNjeHZs?=
+ =?utf-8?B?RHZ6aDIvUTN2bjhFRXBPTDJGMWhtWk9leHRTVGExUVpwU2thdHNUbnNKMFdi?=
+ =?utf-8?B?NXc4MVRYNWlrenNieHlpMnl6SktMSzU1R0UveHgwYUlZYUsxUDFlYVZBZ3NL?=
+ =?utf-8?B?ckdIRzVnR1ZoZjl4OFVQZHJHZVVydXpVOEV4eStJVVlEaWI0aE96TEZMSGZS?=
+ =?utf-8?B?VUpZMFVhY2VhVFJINUErQjA1dEhOOFE4bVpDNUlpRWhWMUgzeWFHQkx4aXBU?=
+ =?utf-8?B?eUFzaWdyVE01czhsSXM1QVN5ei9XbmFLcjJkVjFlWFRBSTNjZnJtSVFXUTNR?=
+ =?utf-8?B?ZkhCekM3N092SmxnSmsyWlRYVVdmaWVwV3VsL3h3ZkJxTWpCRWpVNzVmTnAz?=
+ =?utf-8?B?Um5QdktCMXR2bmg5QnZQb09EQjlMY3dtcDlISyt0ZUtmR2VVcGczYkxpV2dr?=
+ =?utf-8?B?WDBla2ZuclB6Mm9tMnkraTg2MlBQRExlYzR4Mk44M1B5LzlBTUtPZjJFdnRh?=
+ =?utf-8?B?MStUZUZtSTlwZ01XcGpFa1h0Mm5nUXVmR01vMWlHTWlUaW5UeERmK1pFQWEx?=
+ =?utf-8?B?WmRhUGZLZWQycFIxTjVoY09ZR20vOEg4eFFUdjNZZE54WEcvbkd0c295czlw?=
+ =?utf-8?B?M0crT0h2U2lkaUVWKzJXV25MYllKc0JYTlBsbGZ4bjI4UmlDOGxxdjJreGFx?=
+ =?utf-8?B?bkpZdURUTkp4V0xvdmc2UmJodndsSDhqWWR2K2xFNFpKUHgxU1VCcXEvWDdR?=
+ =?utf-8?B?TEZxenNiRHFueUplNllDaUpPK2d1S2VDR0taeUZmMUp1ODl0Y3VzcE9YaTg5?=
+ =?utf-8?B?d1djcXFEWmF4bUxCa1RnQTcwdlk4UTFxYng5RFZmUGJyNUdJL0ZsYlY3RWJ0?=
+ =?utf-8?B?WGZmQm94RVNCVmJUMmVYT1V0eXFta3IxT1htZ0ZvS1hDY0VFU0pHNmwwWTkr?=
+ =?utf-8?B?bnEzcGduYjJ6MFBubWNVeTg0T1pkelQyODh3MDlCbStZOFlFZSt2ajE4N2NV?=
+ =?utf-8?B?VEZxM1gwQ0ZoZENsOW9mL1RXMCt4Q01UVXJPdU5tSEcrKzhnZTJ4VDZGcjU3?=
+ =?utf-8?B?a1pmOU9JYngwWVNiR21DWXFhK05hQVRFRmRnMmp4QmVDN2t2TGF2YzBISUZU?=
+ =?utf-8?B?ekdKZGRzMzNZYUY4Tjd3YXR2dFBRZzJIeXE4NVVjN3IvRG1GWjI1d0hUczhy?=
+ =?utf-8?B?Q09SNFk4TlZzS2U2d296M09VTmQzYy9OblliNHRwcXM4QU1zRlE2VXZFcjhD?=
+ =?utf-8?B?OUhBWHB5dnl4anJ0ZkE1Rnp3VUlYNXIzYU9uZGNNRWx4UmppSm9pSVcxZHdt?=
+ =?utf-8?B?clo4bUM1VE0xeGdNUG9ISDcyT0llNE40MW4raUtxdGZrelJ1WWFJUEEzTWdL?=
+ =?utf-8?B?SkE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39fc298b-e8f2-4a45-9a5d-08daf8b8c1cc
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5d2e54f-44d6-4766-476d-08daf8b8beab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 18:29:18.2444
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 18:29:23.6991
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MPB+eaHr4X0AAtoYLw+NPMwmyXBKhbwGk1RxhpMhKRbN55wfbelSPBaeiusJNv71lZLLpQbMG3OUWzKd4+Q0jA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7541
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L60120/lm6VbCxgDf7zXuCofCTTLXntgExWMkbWCjX8tw7KK8LpQ/9NY/M+y9SUK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR15MB5741
+X-Proofpoint-ORIG-GUID: B4JeUvGQrgZqBV2NwSltd805PU3QK6xJ
+X-Proofpoint-GUID: B4JeUvGQrgZqBV2NwSltd805PU3QK6xJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_09,2023-01-17_01,2022-06-22_01
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, James,
 
-> x86 is blessed with an abundance of monitors, one per RMID, that can be r=
-ead
-> from any CPU in the domain. MPAMs monitors reside in the MMIO MSC, the
-> number implemented is up to the manufacturer. This means when there are
-> fewer monitors than needed, they need to be allocated and freed.
->=20
-> Worse, the domain may be broken up into slices, and the MMIO accesses for
-> each slice may need performing from different CPUs.
->=20
-> These two details mean MPAMs monitor code needs to be able to sleep, and =
-IPI
-> another CPU in the domain to read from a resource that has been sliced.
->=20
-> mon_event_read() already invokes mon_event_count() via IPI, which means t=
-his
-> isn't possible.
->=20
-> Change mon_event_read() to schedule mon_event_count() on a remote CPU
-> and wait, instead of sending an IPI. This function is only used in respon=
-se to a
-> user-space filesystem request (not the timing sensitive overflow code).
 
-But mkdir mon group needs mon_event_count() to reset RMID state.
-If mon_event_count() is called much later, the RMID state may be used
-before it's reset. E.g. prev_msr might be non-0 value. That will cause
-overflow code failure.
+On 1/17/23 1:52 AM, Tiezhu Yang wrote:
+> 
+> 
+> On 01/17/2023 02:48 PM, Yonghong Song wrote:
+>>
+>>
+>> On 1/16/23 5:54 AM, Alan Maguire wrote:
+>>> On 16/01/2023 12:30, Eduard Zingerman wrote:
+>>>> On Mon, 2023-01-16 at 12:55 +0800, Tiezhu Yang wrote:
+>>>>> $ make -C tools/testing/selftests/bpf/
+>>>>>
+>>>>>    CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>>>>> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier
+>>>>> 'NF_NAT_MANIP_SRC'
+>>>>>                  bpf_ct_set_nat_info(ct, &saddr, sport,
+>>>>> NF_NAT_MANIP_SRC);
+>>>>>                                                         ^
+>>>>> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier
+>>>>> 'NF_NAT_MANIP_DST'
+>>>>>                  bpf_ct_set_nat_info(ct, &daddr, dport,
+>>>>> NF_NAT_MANIP_DST);
+>>>>>                                                         ^
+>>>>> 2 errors generated.
+>>>>>
+>>>>> Copy the definitions in include/net/netfilter/nf_nat.h to 
+>>>>> test_bpf_nf.c
+>>>>> to fix the above build errors.
+>>>>>
+>>>>> Fixes: b06b45e82b59 ("selftests/bpf: add tests for
+>>>>> bpf_ct_set_nat_info kfunc")
+>>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>>>> ---
+>>>>>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+>>>>>   1 file changed, 5 insertions(+)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>>> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>>> index 227e85e..114f961 100644
+>>>>> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>>> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>>> @@ -34,6 +34,11 @@ __be16 dport = 0;
+>>>>>   int test_exist_lookup = -ENOENT;
+>>>>>   u32 test_exist_lookup_mark = 0;
+>>>>>   +enum nf_nat_manip_type {
+>>>>> +    NF_NAT_MANIP_SRC,
+>>>>> +    NF_NAT_MANIP_DST
+>>>>> +};
+>>>>> +
+>>>>
+>>>> This is confusing, when I build the kernel/tests I get the declaration
+>>>> the "enum nf_nat_manip_type" from the vmlinux.h (which is included
+>>>> from test_bpf_nf.c).
+>>>> Which means that this patch results in compilation error with my
+>>>> configuration.
+>>>> Is there a chance that your kernel is configured without some
+>>>> necessary netfilter
+>>>> configuration options? Have you tried this patch with BPF CI?
+>>>>
+>>>
+>>> Yep; I suspect if CONFIG_NF_NAT=m , the required definitions won't
+>>> make it
+>>> into vmlinux.h. The reference tools/testing/seftests/bpf/config has
+>>> CONFIG_NF_NAT=y so it is at least documented in the referenced config.
+>>>
+>>> I'd suggest going the route of
+>>>
+>>> commit aa67961f3243dfff26c47769f87b4d94b07ec71f
+>>> Author: Martin KaFai Lau <martin.lau@kernel.org>
+>>> Date:   Tue Dec 6 11:35:54 2022 -0800
+>>>
+>>>      selftests/bpf: Allow building bpf tests with
+>>> CONFIG_XFRM_INTERFACE=[m|n]
+>>>      ...and adding/using local definitons like:
+>>>
+>>> enum nf_nat_manip_type_local {
+>>>     NF_NAT_MANIP_SRC_LOCAL,
+>>>     NF_NAT_MANIP_DST_LOCAL
+>>> };
+>>
+>> The above won't support core, and since preserve_access_index attribute
+>> does not support enum for now. We need to use bpf_core_enum_value to
+>> retrieve the proper value through CORE.
+>>
+>> could you try the following?
+>>
+>> enum nf_nat_manip_type___local {
+>>     NF_NAT_MANIP_SRC___LOCAL,
+>>     NF_NAT_MANIP_DST___LOCAL,
+>> };
+> 
+> This is OK, it is similar with commit 1058b6a78db2 ("selftests/bpf: Do 
+> not fail build if CONFIG_NF_CONNTRACK=m/n").
+> 
+>>
+>> ...
+>> bpf_ct_set_nat_info(ct, &saddr, sport, bpf_core_enum_value(enum
+>> nf_nat_manip_type___local,  NF_NAT_MANIP_SRC___LOCAL));
+>> ...
+>>
+>> bpf_ct_set_nat_info(ct, &daddr, dport, bpf_core_enum_value(enum
+>> nf_nat_manip_type___local,  NF_NAT_MANIP_DST___LOCAL));
+>>
+>> whether it works or not? Could you also try if the
+>> enumerator sequence in enum nf_nat_manip_type___local changed?
+>>
+>>>
+>>> ...to avoid the name clash.
+>>>
+>>>
+>>> Alan
+> 
+> I tested this on x86_64 fedora 36, using config-5.17.5-300.fc36.x86_64
+> to generate .config, CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, there are
+> no definitions of NF_NAT_MANIP_SRC and NF_NAT_MANIP_DST in vmlinux.h,
+> build test_bpf_nf.c failed.
 
-Seems this may happen on both x86 and arm64. At least need to make sure
-RMID state reset happens before it's used.
+Thanks for trying. Yes, I tried in my environment and it failed because
+I didn't change the enum nf_nat_manip_type type for kfunc:
+int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+                         int port, enum nf_nat_manip_type) __ksym;
 
->=20
-> This allows MPAM to hide the slice behaviour from resctrl, and to keep th=
-e
-> monitor-allocation in monitor.c.
->=20
-> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 7 +++++--
->  arch/x86/kernel/cpu/resctrl/internal.h    | 2 +-
->  arch/x86/kernel/cpu/resctrl/monitor.c     | 6 ++++--
->  3 files changed, 10 insertions(+), 5 deletions(-)
->=20
-> diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> index 1df0e3262bca..4ee3da6dced7 100644
-> --- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> +++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-> @@ -532,8 +532,11 @@ void mon_event_read(struct rmid_read *rr, struct
-> rdt_resource *r,
->  		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
->  		    int evtid, int first)
->  {
-> +	/* When picking a cpu from cpu_mask, ensure it can't race with cpuhp
-> */
-> +	lockdep_assert_held(&rdtgroup_mutex);
+But when I changed 'enum nf_nat_manip_type' to
+'enum nf_nat_manip_type___local', kernel complains kfunc argument
+mismatch. The reason most likely is 'enum nf_nat_manip_type___local'
+is not converted to 'enum nf_nat_manip_type' by libbpf.
+
+This might be expected as preserve_access_index attribute only
+supports record (struct/union) type and libbpf might just do that.
+Could you double check whether this is the case or not?
+
+Maybe it is time to implement preserve_access_index support
+for enum type in clang now.
+
+But we need to resolve the issue, even temporarily for now.
+See below.
+
+> 
+> $ grep -w CONFIG_NF_CONNTRACK /boot/config-5.17.5-300.fc36.x86_64
+> CONFIG_NF_CONNTRACK=m
+> $ grep -w CONFIG_NF_NAT /boot/config-5.17.5-300.fc36.x86_64
+> CONFIG_NF_NAT=m
+> 
+> I tested with various configs, the definitions of NF_NAT_MANIP_SRC and
+> NF_NAT_MANIP_DST in vmlinux.h only depend on CONFIG_NF_CONNTRACK=y.
+> 
+> (1) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, no definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> CONFIG_NF_CONNTRACK=m
+> $ grep -w CONFIG_NF_NAT .config
+> CONFIG_NF_NAT=m
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $
+> 
+> (2) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=y, no definitions
+> This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
+> 
+> (3) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=n, no definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> CONFIG_NF_CONNTRACK=m
+> $ grep -w CONFIG_NF_NAT .config
+> # CONFIG_NF_NAT is not set
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $
+> 
+> (4) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=m, have definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> CONFIG_NF_CONNTRACK=y
+> $ grep -w CONFIG_NF_NAT .config
+> CONFIG_NF_NAT=m
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_SRC = 0,
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_DST = 1,
+> 
+> (5) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=y, have definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> CONFIG_NF_CONNTRACK=y
+> $ grep -w CONFIG_NF_NAT .config
+> CONFIG_NF_NAT=y
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_SRC = 0,
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_DST = 1,
+> 
+> (6) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=n, have definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> CONFIG_NF_CONNTRACK=y
+> $ grep -w CONFIG_NF_NAT .config
+> # CONFIG_NF_NAT is not set
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_SRC = 0,
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+>      NF_NAT_MANIP_DST = 1,
+> 
+> (7) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=n, no definitions
+> $ grep -w CONFIG_NF_CONNTRACK .config
+> # CONFIG_NF_CONNTRACK is not set
+> $ grep -w CONFIG_NF_NAT .config
+> $ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+> $
+> 
+> (8) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=y, no definitions
+> This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
+> 
+> Here is an alternative change to check whether CONFIG_NF_CONNTRACK
+> is m, enum nf_nat_manip_type___local is simple, which one is better?
+> 
+> $ git diff tools/testing/selftests/bpf/
+> diff --git a/tools/testing/selftests/bpf/Makefile 
+> b/tools/testing/selftests/bpf/Makefile
+> index 22533a18705e..f3cf02046c20 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -325,7 +325,7 @@ endif
+> 
+>   CLANG_SYS_INCLUDES = $(call 
+> get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
+> -            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
+> +            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) -I$(TOOLSINCDIR)  \
+>               -I$(abspath $(OUTPUT)/../usr/include)
+> 
+>   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c 
+> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e85dda..f2101807072f 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -2,6 +2,7 @@
+>   #include <vmlinux.h>
+>   #include <bpf/bpf_helpers.h>
+>   #include <bpf/bpf_endian.h>
+> +#include <linux/kconfig.h>
+> 
+>   #define EAFNOSUPPORT 97
+>   #define EPROTO 71
+> @@ -34,6 +35,13 @@ __be16 dport = 0;
+>   int test_exist_lookup = -ENOENT;
+>   u32 test_exist_lookup_mark = 0;
+> 
+> +#if IS_MODULE(CONFIG_NF_CONNTRACK)
+> +enum nf_nat_manip_type {
+> +       NF_NAT_MANIP_SRC,
+> +       NF_NAT_MANIP_DST
+> +};
+> +#endif
 > +
->  	/*
-> -	 * setup the parameters to send to the IPI to read the data.
-> +	 * setup the parameters to pass to mon_event_count() to read the data.
->  	 */
->  	rr->rgrp =3D rdtgrp;
->  	rr->evtid =3D evtid;
-> @@ -542,7 +545,7 @@ void mon_event_read(struct rmid_read *rr, struct
-> rdt_resource *r,
->  	rr->val =3D 0;
->  	rr->first =3D first;
->=20
-> -	smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
-> +	smp_call_on_cpu(cpumask_any(&d->cpu_mask), mon_event_count, rr,
-> +false);
->  }
->=20
->  int rdtgroup_mondata_show(struct seq_file *m, void *arg) diff --git
-> a/arch/x86/kernel/cpu/resctrl/internal.h
-> b/arch/x86/kernel/cpu/resctrl/internal.h
-> index adae6231324f..1f90a10b75a1 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -514,7 +514,7 @@ void closid_free(int closid);  int alloc_rmid(u32 clo=
-sid);
-> void free_rmid(u32 closid, u32 rmid);  int rdt_get_mon_l3_config(struct
-> rdt_resource *r); -void mon_event_count(void *info);
-> +int mon_event_count(void *info);
->  int rdtgroup_mondata_show(struct seq_file *m, void *arg);  void
-> mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
->  		    struct rdt_domain *d, struct rdtgroup *rdtgrp, diff --git
-> a/arch/x86/kernel/cpu/resctrl/monitor.c
-> b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index 190ac183139e..d309b830aeb2 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -509,10 +509,10 @@ static void mbm_bw_count(u32 closid, u32 rmid,
-> struct rmid_read *rr)  }
->=20
->  /*
-> - * This is called via IPI to read the CQM/MBM counters
-> + * This is scheduled by mon_event_read() to read the CQM/MBM counters
->   * on a domain.
->   */
-> -void mon_event_count(void *info)
-> +int mon_event_count(void *info)
->  {
->  	struct rdtgroup *rdtgrp, *entry;
->  	struct rmid_read *rr =3D info;
-> @@ -545,6 +545,8 @@ void mon_event_count(void *info)
->  	 */
->  	if (ret =3D=3D 0)
->  		rr->err =3D 0;
-> +
-> +	return 0;
->  }
->=20
->  /*
-> --
-> 2.30.2
 
-Thanks.
+The above change does not work for me. The complication failed with
 
--Fenghua
+   CLNG-BPF [test_maps] 
+btf__core_reloc_nesting___err_missing_container.bpf.o
+   CLNG-BPF [test_maps] test_sysctl_loop2.bpf.o
+progs/test_bpf_nf.c:168:42: error: use of undeclared identifier 
+'NF_NAT_MANIP_SRC'
+                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                        ^
+progs/test_bpf_nf.c:171:42: error: use of undeclared identifier 
+'NF_NAT_MANIP_DST'
+                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                        ^
+2 errors generated.
+
+
+Apparently, IS_MODULE(...) is recognized but it returns 0.
+I do have CONFIG_NF_CONNTRACK=m in my config.
+Note that I build the kernel with KBUILD_OUTPUT=<another dir>
+(make -j LLVM=1) so vmlinux is in a different place.
+While I build selftest
+with 'make -C tools/testing/selftests/bpf -j LLVM=1' which
+is in-tree.
+
+>   struct nf_conn;
+> 
+>   struct bpf_ct_opts___local {
+> 
+> Note that when unset CONFIG_NF_CONNTRACK, there are much more
+> build errors, I do not know whether it is necessary to fix it
+> and how to fix it properly. Here, I only consider the failed
+> case CONFIG_NF_CONNTRACK=m.
+> 
+> Thanks,
+> Tiezhu
+> 
