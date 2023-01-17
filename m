@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AAA66D8AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D5766D8B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbjAQIuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S235842AbjAQIwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236242AbjAQIt7 (ORCPT
+        with ESMTP id S236272AbjAQIw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:49:59 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DFE2365D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:49:57 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1797864wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:49:57 -0800 (PST)
+        Tue, 17 Jan 2023 03:52:29 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2B82CFEA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:51:32 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id g10so21646752wmo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GnntDb2wSxyksznyUK9vORluc24yy6XtA4jjRHLcBuk=;
-        b=LYUV60VqALvvzk6MilzChbMVqyD/B0GIA7z7QQD9RC9k/FTRraa9aq3o9DhdmmF3iq
-         bEZxLJ/EPaEukjPDguwckMzwT4iZWzklaDDCcm8uvmRbfgEzQZ6BypnK+5qR13RDCnuo
-         g/NoNBxqzf6YLnbLdMwkvsPYPgpfMg1IVWEfSQM4dsbIHLnsghP853ZEx8x80OXMesKO
-         Gu6CisBcCKzX5DE471QmgAykmNMIdj+swGJPBP7wSz0pf8//+a8SQFDGZUzGW+MnbWQ+
-         84Q0DSLD8KCf7zQKe08zeZA1GxLvcYKM7P0/3YWWTFKmdYhwcXPB8+J9/t/YfUwb6Dp9
-         NQvA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xUTsuDVDtEpe1GJ8CtfZxPtOBZeRfWuY5JCnMma88g=;
+        b=Q3J63XlGShJ/2WbvRq4hq2JID/RnkKt4xtbAsiugUa9SNycDgYwChezLN95KF6GWZS
+         ZVJkIixYUlATzLJeowVp4c1h7z/f/4DH7nMUk4d4cegvxfChKv/AYjU+hXanodexOasF
+         VAq8RVqnozkvWd1b5Fh1WlO2+qOfWgf+KUsbML1KuGpsVE2k8s88Z7SJqQfDqdIzgmai
+         qbo8EyyaT9JS2OZssTz1Kfflfc2yI4nJHvivkCXHHpXB6yQMbO8dk+957rWZtiA+tEDr
+         mJo3+KPuXQid4Tndd7zCW0puoOEZ60Ol+p6iPz76PYqum6cooiDuY2vr0mGP53YeFcAD
+         MZLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GnntDb2wSxyksznyUK9vORluc24yy6XtA4jjRHLcBuk=;
-        b=joBvJi99KJCa2P4+1/9XJIbVME76q5xaWGCrgiup4myObCf0JyBRcIr/TuZcQ5TFyP
-         y1ZmduXv4aXrwRiDquXqy1r/a1qougFyK8dcuQY9EaUzodBLPqzNL8luj7m8C86kpkbR
-         FLkXxh6S1ZCEYciV3tZTxgUu9jYXcFdnoQaSXhgh4jFXOHB0+vZgPBkLesk514T60hlB
-         A/+OWoF+LqvfXS7Qo6GDgVxaAgk77DivMrqKWblQmt7jqj9hLxLbCbUyFV7A5uGyBbVE
-         iHNopedDXbu+sDZvNkOa43CmyKZ/4vYgDknC4tJkEfCH2xOj9EGCvmEOsxvo+oDk9hdo
-         7Lzw==
-X-Gm-Message-State: AFqh2kot48k/986Oy0t4omCj78qPn7g8rdyyf+7bTYaw99coSkC2eEso
-        Ry9k0RJcjBWP5D6Lo2Enz0/J7w==
-X-Google-Smtp-Source: AMrXdXvVghYU3f6f4pnX+urBDdE5Tc0O9C8WHHbtOL7Y9xI3DWYl8EiIm5gXNSp4H0aKqqrXqdqEMg==
-X-Received: by 2002:a05:600c:920:b0:3da:22a6:7b6b with SMTP id m32-20020a05600c092000b003da22a67b6bmr2225151wmp.13.1673945396215;
-        Tue, 17 Jan 2023 00:49:56 -0800 (PST)
-Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id i14-20020a05600c354e00b003d1d5a83b2esm45040928wmq.35.2023.01.17.00.49.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8xUTsuDVDtEpe1GJ8CtfZxPtOBZeRfWuY5JCnMma88g=;
+        b=EIHad2hzm2iuY/sM4Z6A1dn8O52NBVWjqVP6aaMSrD64koUjbbPJI20ge/NEWIY+Nc
+         32tH3b8QjpCpxf6gXUejcoIXMtJii6RLZ4+Ez08eLIuw4ripxkHfXxDninmuVSbH9ill
+         5epclo3ilPehcEE7wSXZwDNugP2M5CJerky87Wuq8HhyqnbodxVp0iTsFr46B0ncz5vA
+         TVzCiU2nPuxcARnv6MzF9BIAn488EK3SuQ2id3ZjVZMbfCx2u7mgW78AiUdSlmTsj0i2
+         FxqQCXU8ZEg5FM3lZz69qbAImwpmDEdLrs1hjlI/2oH6pRJDizyPUUiTFm4tH1CyQ02p
+         La4A==
+X-Gm-Message-State: AFqh2korACEb77dagzrKgXQ2dTbANEIK/6eDh/f0aQ9vk9kQYXujL9oK
+        Zd9Qfx4I/RR/yu969/rHdjc=
+X-Google-Smtp-Source: AMrXdXuaWZ988H1JpKPLPP+mvkv2SJjjaD8lYx2S17O9IVBsaXXDA9gK/NSe7U0nWs0SYGpizHjdWQ==
+X-Received: by 2002:a05:600c:1d22:b0:3da:f66c:795d with SMTP id l34-20020a05600c1d2200b003daf66c795dmr2466961wms.9.1673945491342;
+        Tue, 17 Jan 2023 00:51:31 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003da2932bde0sm13956874wmq.23.2023.01.17.00.51.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 00:49:55 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 17 Jan 2023 09:49:42 +0100
-Subject: [PATCH 4/4] i2c: i2c-mt65xx: add MT8365 SoC support
+        Tue, 17 Jan 2023 00:51:30 -0800 (PST)
+Date:   Tue, 17 Jan 2023 11:51:27 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     rmfrfs@gmail.com, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: gpio: Replace macro
+ irq_data_to_gpio_chip with function
+Message-ID: <Y8Zhj81ltR7HI7Uh@kadam>
+References: <20230116184707.22302-1-bpappas@pappasbrent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221122-mt8365-i2c-support-v1-4-4aeb7c54c67b@baylibre.com>
-References: <20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com>
-In-Reply-To: <20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>, Qii Wang <qii.wang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1454; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=TWV0BAft8RkOG5xbYhjbDPUS/3D2IDzrN9QH/A7cKxU=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjxmEuVzYMtofJIUJ5oFTa3W0oKUDkqaKLoTvfJXnh
- 0IBK/E2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8ZhLgAKCRArRkmdfjHURcOQEA
- DBqTEdZxCLimcj4ODKJJMfctwwdA7ZiAVFTtdGMWA71M/U79w8cFUVxFHSXnTn47gSHeFVcpiyFjaI
- DM0uhFv5NDrZdV3SvNjHSaHSCDFeQE+N5c9Uzhc431ttuJryYIry72+ioFiUOTnA+U/JDGaD1M7a9m
- 7tL5AJP/pd6FzUpK/mV+KL/oRcSU45dHzjB2WbXsafsVh0yoMAoH2ONYHbYsE9VACpkQs8w11L7I6f
- MgM+zhIRh9TzyVGZ4uL9mRIOgiVqSkRJgNyPnFKCVgpa89Dv+rxu0+Uc7ZJ9OaOXnAAw6+GIvFrF7B
- FMDPiQ89s5gm9KpDwc9Mq/QcKfGm6J9gpPGiMo8mMOx6Jjwl2Pe4PFrbj/CH7lGxINvxSdbUcOkZTL
- 1kUybTF+GoV300oW3Vfqd36rJNPg5T4A2obypuNuBiZ3UTueo+NATNKkWnJc+MxMy92nY4enQJ4TP2
- JKVX1z0A1FPrgtwj1B9IsKKaaK30kPyFuVZSIgLNpXQ5FqeHn9VQAypE9CUnNJdzDZBnOCaLYMeRmu
- XVLDdGgM/IsiHN6asVJvJMCpLe2H9voep8GpiI6rPdNcDDd9IQkkdOMROkZRyRto73sWYT2RlbZTwD
- GFFhgWu5qafDgyJWt1h1f8uSQDUo7fjIA0XyiyGP/zssH+KUXbMKkrEWIf/A==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116184707.22302-1-bpappas@pappasbrent.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+On Mon, Jan 16, 2023 at 01:47:06PM -0500, Brent Pappas wrote:
+> Replace the macro irq_data_to_gpio_chip with a static inline function to comply
+> with Linux coding style standards.
+> 
+> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+> ---
+>  drivers/staging/greybus/gpio.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/greybus/gpio.c b/drivers/staging/greybus/gpio.c
+> index 8a7cf1d0e968..833162ceb385 100644
+> --- a/drivers/staging/greybus/gpio.c
+> +++ b/drivers/staging/greybus/gpio.c
+> @@ -43,7 +43,11 @@ struct gb_gpio_controller {
+>  };
+>  #define gpio_chip_to_gb_gpio_controller(chip) \
+>  	container_of(chip, struct gb_gpio_controller, chip)
+> -#define irq_data_to_gpio_chip(d) (d->domain->host_data)
+> +
+> +static inline void *irq_data_to_gpio_chip(struct irq_data *d)
 
-Add support for I2C on MT8365 SoCs.
+1) Don't make this a void pointer.  ->host_data is void but we want to
+   return a struct gpio_chip * type so declare it as returning a
+   gpio_chip struct pointer.  A big advantage of function over macros is
+   the type checking.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+2) Don't declare it as inline.  Modern compilers are smart and confident.
+   They are smart enough to make it inline automatically.  And confident
+   enough that they just ignore when people mark stuff as inline.  (We
+   have an __always_inline macro for when the compiler is wrong.)
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index d80e59340d97..2c9dbb42861a 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -511,6 +511,19 @@ static const struct mtk_i2c_compatible mt8192_compat = {
- 	.max_dma_support = 36,
- };
- 
-+static const struct mtk_i2c_compatible mt8365_compat = {
-+	.regs = mt_i2c_regs_v1,
-+	.pmic_i2c = 0,
-+	.dcm = 1,
-+	.auto_restart = 1,
-+	.aux_len_reg = 1,
-+	.timing_adjust = 1,
-+	.dma_sync = 1,
-+	.ltiming_adjust = 0,
-+	.apdma_sync = 0,
-+	.max_dma_support = 33,
-+};
-+
- static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt2712-i2c", .data = &mt2712_compat },
- 	{ .compatible = "mediatek,mt6577-i2c", .data = &mt6577_compat },
-@@ -523,6 +536,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt8186-i2c", .data = &mt8186_compat },
- 	{ .compatible = "mediatek,mt8188-i2c", .data = &mt8188_compat },
- 	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat },
-+	{ .compatible = "mediatek,mt8365-i2c", .data = &mt8365_compat },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mtk_i2c_of_match);
+regards,
+dan carpenter
 
--- 
-b4 0.10.1
