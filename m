@@ -2,103 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D901C66E1A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7C566E1AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbjAQPHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
+        id S232700AbjAQPIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjAQPHa (ORCPT
+        with ESMTP id S232334AbjAQPI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:07:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562313D0B1;
-        Tue, 17 Jan 2023 07:07:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1965BB811D5;
-        Tue, 17 Jan 2023 15:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C8AC433F1;
-        Tue, 17 Jan 2023 15:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673968046;
-        bh=X+HCcwyHt3MGqJpCaG1w/tkEuW0Iyo5TQOJGa6JrvVk=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=TJQpMrvJ9qB8909TeONz1R6biPQQygs8ny3R6d/l9ajusEPnL6GgNJVQAX0G9XJmP
-         2CKC4t3Dqv4r6fhZPhIHw1V/1CALEnRqz9RbioWZSQFCpmlEudF7fT3aUnekrwVfOo
-         4JkDdwM+w8MZeIjdCo5zFZQK3A17TGxInbF2kDaxg5iSxAi6QMaZ43tk+JvjfIpoJ8
-         mjmSowZTxOvJLWmo2qEWzrZmy3+dbYYTN4lg/h8swEdS+J3uTIJ1Yiw3cVZHBVGQgB
-         oeO9z1ZNi/KZPDAlUTGyDIe4o4Tv5r+9K0eon6bwwyXDlqPW7SbYUefCy5I6whx9Ix
-         qzE8tXJqEwlbA==
-Received: by mail-ot1-f53.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso17975183oto.11;
-        Tue, 17 Jan 2023 07:07:26 -0800 (PST)
-X-Gm-Message-State: AFqh2krRtkHAqguAW+FOJ7t8t2Q/SdLhZkknPHbcV27XXohxOgBFUuvH
-        MHfg0giya0AHmJutgV8POvDmeuXrxeSxgQjyYp0=
-X-Google-Smtp-Source: AMrXdXvNc2KsleS8qULIJRtcQbD1k0ix52exYOBhVwkrr0Fc4FenlKU+EAe4BgoPnMj/LMgGFAneAyK9pxVmIKkiUSA=
-X-Received: by 2002:a05:6830:3883:b0:684:ed12:d614 with SMTP id
- bq3-20020a056830388300b00684ed12d614mr191726otb.190.1673968045873; Tue, 17
- Jan 2023 07:07:25 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6802:195:b0:49c:ff2e:6ecb with HTTP; Tue, 17 Jan 2023
- 07:07:25 -0800 (PST)
-In-Reply-To: <TYCP286MB23239EE29037F6051CFE5691CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB23239EE29037F6051CFE5691CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 18 Jan 2023 00:07:25 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8AjjzXWEmMDydgRm1p6F7Fo-s836iWryRGeQPYbjcQTQ@mail.gmail.com>
-Message-ID: <CAKYAXd8AjjzXWEmMDydgRm1p6F7Fo-s836iWryRGeQPYbjcQTQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] ksmbd: Minor performance improvement & code cleanup
-To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
-        hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 17 Jan 2023 10:08:27 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10E83D0AF;
+        Tue, 17 Jan 2023 07:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673968106; x=1705504106;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SQsT0mjx5ZWHQPoOgYAo5vZEfEWYhlkbbWw1IeCzlCs=;
+  b=NQvW33I4t9cwLOsYzP1sbxM3OjdtHnm4ecLyHnSwt6PPPeFZ9ovdWMCC
+   V8XW96+ir6uqfWy1dskFQOPx10/XQfdkJDFE9OO8N/dOad2vkIS0y/nSW
+   nZKzJjrg83n3H6ilI6TBB49LeViFyOwiM64EELBVUzo8Qz22QM9Ya+XVN
+   7r20/MIbNEmjVhb+tl/ExJKiCeq4dmFa1a5FqGJypWBHLRvoY+BisRfbI
+   sFyeWl6Mb+Qo35J/xRonOn1Il/q9Xxd4ot/Pz1AJ7825ND8RVbHF7pXKB
+   q98Ica1m5WJupkwK+gq/Z682wYPXjyxTSW88AlJtIscl54SAyg6pfC0Hn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="305093299"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="305093299"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:08:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="689821106"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="689821106"
+Received: from mfmaier-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.214.121])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:08:26 -0800
+Message-ID: <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
+Subject: Re: [PATCH v3 2/4] powercap: idle_inject: Add update callback
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Date:   Tue, 17 Jan 2023 07:08:25 -0800
+In-Reply-To: <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org>
+References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
+         <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
+         <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-01-15 19:32 GMT+09:00, Dawei Li <set_pte_at@outlook.com>:
-> It's a small series mostly aimed at performance improvement and code
-> cleanup.
->
-> Among which, First three ones are performance related commits, and
-> other ones are minor code cleanup.
-except 0005 patch, Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+On Tue, 2023-01-17 at 12:13 +0100, Daniel Lezcano wrote:
+> On 17/01/2023 03:07, Srinivas Pandruvada wrote:
+> 
+> [ ... ]
+> 
+> > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +{
+> > +       return idle_inject_register_full(cpumask, NULL);
+> > +}
+> >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+> 
+> Why not just add the parameter to idle_inject_register() ?
+> 
+> There is only one user ATM
+That was done in v1. But Rafael suggested to avoid changes to existing
+kernel source.
 
-Thanks for your patch!
->
-> 1 & 2: list => xarray, acclerating index based lookup.
-> 3: rwlock => rcu primitive, enabling write & read concurrency.
-> 4: Simple duplicated code removal.
-> 5: Minor code rework and exception handling.
-> 6: Simple typo fix.
->
-> Dawei Li (6):
->   ksmbd: Implements sess->ksmbd_chann_list as xarray
->   ksmbd: Implements sess->rpc_handle_list as xarray
->   ksmbd: replace rwlock with rcu for concurrenct access on conn list
->   ksmbd: Remove duplicated codes
->   ksmbd: improve exception handling and avoid redundant sanity check in
->     loop
->   ksmbd: fix typo, syncronous->synchronous
->
->  fs/ksmbd/asn1.c              | 19 ++++---
->  fs/ksmbd/connection.c        | 54 +++++++++++---------
->  fs/ksmbd/connection.h        |  1 -
->  fs/ksmbd/ksmbd_work.h        |  2 +-
->  fs/ksmbd/mgmt/user_session.c | 98 ++++++++++++++----------------------
->  fs/ksmbd/mgmt/user_session.h |  6 +--
->  fs/ksmbd/smb2pdu.c           | 52 ++++++-------------
->  7 files changed, 93 insertions(+), 139 deletions(-)
->
-> --
-> 2.25.1
->
->
+Thanks,
+Srinivas
+
+> 
+> 
+
