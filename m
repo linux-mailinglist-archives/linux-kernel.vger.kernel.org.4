@@ -2,163 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B1266E900
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50470670B5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjAQV6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S229580AbjAQWLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjAQVve (ORCPT
+        with ESMTP id S229921AbjAQWJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:51:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A3A442EE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:12:28 -0800 (PST)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 054FA6602D2A;
-        Tue, 17 Jan 2023 20:12:24 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673986346;
-        bh=g3+YFgRcvbPTz7/8xFzAI9AbV4cEoOAZFx1BS/KPOhE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HriWKgUC4gK3VT6GxZmqXhMEkKdnvgyPTaYrn3czuuSuc969Q06xGTbLJbTnv8Ldg
-         s5qUcH+57TWwoWcQkpPXqEk2MLDd9P+egXSdEBadZvrMsrjby7GnD0ifiWFsgHLYma
-         3bJm47Z3yjWWiHBdEhKURXUkX1NojJQMth1x1Zf9bVvYy9krbdCegj1fxsAWBctIFq
-         1AGP0c0s4xVLmxF6fFGq7CvIdvUrdnoLUqvDOsvNrGWQYKZyLP7M/PVUaGky7xUD1I
-         M4ENRXghARJYSTWRPgHU3vNACmDSsFg0HfIeLOPlkIlJSEhvcstBF5iHRNis1kXAU8
-         p+wIhYE4qSQMQ==
-Date:   Tue, 17 Jan 2023 15:11:59 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: defconfig: Enable missing configs for
- mt8192-asurada
-Message-ID: <20230117201159.pcxnftapsjr2eotn@notapiano>
-References: <20230112151238.1930126-1-nfraprado@collabora.com>
- <20230117155854.GE2350793@hu-bjorande-lv.qualcomm.com>
+        Tue, 17 Jan 2023 17:09:17 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECC156889;
+        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id v23so29780659plo.1;
+        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eUVREAeuxi0yYQ0P2vbR9fitxXN9smQF7SNOFKwNoSM=;
+        b=cMYFMH8GXe3w9/s8TthwcET4E/yGDk6e9TCH9M/cZzIY0nl0cevHVq9dmclhbdFZJg
+         riP708G5VdFkPgdSJbKeRsEf5kuLphuGICN9KIWUoQ4EyNmF5XVHAp9cjO1XA9gpMyIf
+         2nOjPihV7Sz9S/SoE18NQceO+KCDHHPTxfTzqJsN3gIq3imPOMTvWqKEcoPrAlNRYfQw
+         jWboUf8nRmXwTW+qDClvxJlHUetoalQeCh6FQGpR/SUdOs+aVxHvBx05ygTXxffJb6EB
+         +PyptjY77DHrsTwJOkfceh0AKeHYjzC+PP+LInvJ6jMMwA8/ZBGaqmgFZvGZObYg+G1n
+         0tww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUVREAeuxi0yYQ0P2vbR9fitxXN9smQF7SNOFKwNoSM=;
+        b=tdvCaKpaQDE5bwjSnw4r0lkIeO2xKlqBhxDks71B3QIIQ739Mvic7pxquwn8u8t3XS
+         QtiAlmQsG2PxmaA6SddbpMMw0Ebu4DAmG65AM8DPDUv0FkYa3J1XKh/YO9j7vrFf9fRH
+         6FL8beulLuaV+lHXN4F6Auk66DS7PptzXe7fGGBAMoWY3zCiMzCrcYWFT5mRmB9FeTtx
+         Y1ZRlr8MFKxnYywSrQ6GYuEgn7qGiEDuFrxIfjgCeAnid5ItnqK/bWGb6MIRBWInfzma
+         XC9BLeLSq7uyilDsExZb7eMVuonxoPykWBuMw1HWE2XbJf9+KCUMSF6sZ/s+Pi6/LIqo
+         Eyew==
+X-Gm-Message-State: AFqh2ko5mmFKcUW+/0yZ6x0ycb3up1KQimMYtr1PDilZB0cZ+kQr0PsM
+        0uZIENoewlqXA2HL28jrtAg=
+X-Google-Smtp-Source: AMrXdXuJWsG5EbhUVDSXvJVtmwFi5ddTzDmkbmib3gPrkId1EwHxnBH76KIciaxn81Mil/yTa//s5A==
+X-Received: by 2002:a17:90a:a402:b0:229:5e73:78ec with SMTP id y2-20020a17090aa40200b002295e7378ecmr4830694pjp.34.1673986322059;
+        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id 4-20020a631844000000b00497c1399b38sm17636994pgy.78.2023.01.17.12.12.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 12:12:01 -0800 (PST)
+Message-ID: <3584ba9e-9c15-977f-7e00-ec89ddf2a0f4@gmail.com>
+Date:   Tue, 17 Jan 2023 12:11:59 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230117155854.GE2350793@hu-bjorande-lv.qualcomm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230117124526.766388541@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230117124526.766388541@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 07:58:54AM -0800, Bjorn Andersson wrote:
-> On Thu, Jan 12, 2023 at 10:12:38AM -0500, Nícolas F. R. A. Prado wrote:
-> > Enable missing configs in the arm64 defconfig to get all devices probing
-> > on mt8192-asurada based machines.
-> > 
-> > The devices enabled are: MediaTek Bluetooth USB controller, MediaTek
-> > PCIe Gen3 MAC controller, MT7921E wireless adapter, Elan I2C Trackpad,
-> > MediaTek SPI NOR flash controller, Mediatek SPMI Controller, ChromeOS EC
-> > regulators, MT6315 PMIC, MediaTek Video Codec, MT8192 sound cards,
-> > ChromeOS EC rpmsg communication, all MT8192 clocks.
-> > 
-> > Support for DMA Restricted Pool is also enabled since it is used by the
-> > WiFi card on this platform.
-> > 
-> > REGULATOR_CROS_EC is enabled as builtin since it powers the MMC
-> > controller for the SD card, making it required for booting on some
-> > setups.
+
+
+On 1/17/2023 4:48 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.164 release.
+> There are 64 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I presume this implies that there's no ramdisk to carry these additional
-> modules?
-
-There may or may not be, at the discretion of the user, so enable by default.
-
+> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
+> Anything received after that time might be too late.
 > 
-> > 
-> > By enabling the support for all of this platform's devices on the
-> > defconfig we make it effortless to test the relevant hardware both by
-> > developers as well as CI systems like KernelCI.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > 
-> > ---
-> > 
-> >  arch/arm64/configs/defconfig | 25 +++++++++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> > 
-> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > index f3053e7018fe..4e806d8068f6 100644
-> > --- a/arch/arm64/configs/defconfig
-> > +++ b/arch/arm64/configs/defconfig
-[..]
-> > @@ -1092,6 +1104,18 @@ CONFIG_CLK_IMX8QXP=y
-> >  CONFIG_CLK_IMX8ULP=y
-> >  CONFIG_CLK_IMX93=y
-> >  CONFIG_TI_SCI_CLK=y
-> > +CONFIG_COMMON_CLK_MT8192_AUDSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_CAMSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_IMGSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_IMP_IIC_WRAP=y
-> > +CONFIG_COMMON_CLK_MT8192_IPESYS=y
-> > +CONFIG_COMMON_CLK_MT8192_MDPSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_MFGCFG=y
-> > +CONFIG_COMMON_CLK_MT8192_MMSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_MSDC=y
-> > +CONFIG_COMMON_CLK_MT8192_SCP_ADSP=y
-> > +CONFIG_COMMON_CLK_MT8192_VDECSYS=y
-> > +CONFIG_COMMON_CLK_MT8192_VENCSYS=y
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> Are all these clock drivers needed in order to reach a ramdisk, with
-> working uart, where further kernel modules could be loaded?
-
-No, but currently these configs can't be enabled as modules. So my intention is
-to enable all of them as builtin for now so we get the functionality there, and
-after the drivers and configs are reworked to allow building as modules (which
-should happen shortly after [1] is merged), I'll update the defconfig so that
-the non-essential ones for boot are set to =m.
-
-[1] https://lore.kernel.org/all/20230113110616.111001-1-angelogioacchino.delregno@collabora.com/
-
+> thanks,
 > 
-> >  CONFIG_COMMON_CLK_QCOM=y
-> >  CONFIG_QCOM_A53PLL=y
-> >  CONFIG_QCOM_CLK_APCS_MSM8916=y
-> > @@ -1398,6 +1422,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
-> >  CONFIG_CRYPTO_DEV_HISI_ZIP=m
-> >  CONFIG_CRYPTO_DEV_HISI_HPRE=m
-> >  CONFIG_CRYPTO_DEV_HISI_TRNG=m
-> > +CONFIG_DMA_RESTRICTED_POOL=y
-> 
-> As this would alter the behavior of other platforms and devices, could
-> we please carry this in a patch of its own to aid bisection?
+> greg k-h
 
-Sure.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Thanks,
-Nícolas
-
-> 
-> Thanks,
-> Bjorn
-> 
-> >  CONFIG_CMA_SIZE_MBYTES=32
-> >  CONFIG_PRINTK_TIME=y
-> >  CONFIG_DEBUG_KERNEL=y
-> > -- 
-> > 2.39.0
-> > 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
