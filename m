@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121CB66DE28
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210FC66DE2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236808AbjAQMx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S236887AbjAQMyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237053AbjAQMxJ (ORCPT
+        with ESMTP id S237029AbjAQMxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:53:09 -0500
-Received: from gentwo.de (gentwo.de [161.97.139.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700B7302AF
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1673959938; bh=eyH74BJ/7IIhmnPK8RsGXK4MMB69Q2QKmBRINALqzMY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=UWEiNtKGqkIkX65IVF64nS/tHSIZ8csoAumnpxSMXk+x2SORolGIWPGf4CtdeHGW8
-         HTpgLOvKHTMhdicuvoG4bCT5Y6RRUAp4VkpNYTyeMVJMCXXJHsmDcafWPfqryT5Qip
-         PG+wi1odCf/m17w1HSEHKrYBlvdj/ipk3XggrRAQJThC6c3reiAcTOQv36S7iT0H4O
-         VKR9Lp8jmeOSNi/ZfJvoTkCuHt0puTSfjv/Cj8x13xUiG/UhT+drCzs89lyrb05WkH
-         MhL9tYO3w/OLBADl0pB9G+lGwZ/UBc0rn5EcshX9eOKmamU5inxzERgHWzUj47FSln
-         leGVVBTwIFYqA==
-Received: by gentwo.de (Postfix, from userid 1001)
-        id 2B777B0023C; Tue, 17 Jan 2023 13:52:18 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id 286F0B000FF;
-        Tue, 17 Jan 2023 13:52:18 +0100 (CET)
-Date:   Tue, 17 Jan 2023 13:52:18 +0100 (CET)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-cc:     Frederic Weisbecker <frederic@kernel.org>, atomlin@atomlin.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
- vmstat discrepancies
-In-Reply-To: <Y8V3PEcj2wS/VFD0@tpad>
-Message-ID: <74e4afd4-5695-90fb-e66e-25d2bc2e2f53@gentwo.de>
-References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com> <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de> <Y71XpnJGumySL9ej@lothringen> <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de> <Y73F4tbfxT6Kb9kZ@tpad>
- <60183179-3a28-6bf9-a6ab-8a8976f283d@gentwo.de> <Y77s4x5yC4O1OxTQ@tpad> <24ca2aad-54b2-2c3a-70b5-49a33c9a33@gentwo.de> <Y8V3PEcj2wS/VFD0@tpad>
+        Tue, 17 Jan 2023 07:53:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E9722A2E;
+        Tue, 17 Jan 2023 04:52:23 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 697AA6602D6D;
+        Tue, 17 Jan 2023 12:52:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673959942;
+        bh=Zy6UIHFiddxESUTWxezTFwLYwuiwsUZyyuC6D0UK0o8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=K4PMSwd19uLLwMgu0BrDk7n+pFxWk/AWCpiWDlDle16J/mxjN+qsFZh/Va2PBcs63
+         fot26hvufCnAGIqgmiEAnf+P2v6+TttXrHltMASaSockQlhka7zxqB17lcbw3ZwOTj
+         kx7owuM6mnoto8I02BFS7MQTf4ITtxEH5zeqENDvvXmhz9fDi2x9go6lhtk4dx9Nwp
+         yH6iFzsgX3nfCabV0PMH7Hy5NHx8zcAFTvpr1ISzD8ZehkpRv++XyGFanoaDtQ0ufZ
+         HoELW7xY7Hj9Mf6r0mk0KnQp1Yq3e5kkCRU6We7/65kReOwqGJUVQ/m+xTdLxyQLUd
+         JRJE97qs8niCQ==
+Message-ID: <ddb81fcb-b353-ce7f-8b12-9cdcbfcacb8e@collabora.com>
+Date:   Tue, 17 Jan 2023 13:52:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/4] arm64: dts: mediatek: add i2c support for mt8365 SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com>
+ <20221122-mt8365-i2c-support-v1-2-4aeb7c54c67b@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221122-mt8365-i2c-support-v1-2-4aeb7c54c67b@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023, Marcelo Tosatti wrote:
+Il 17/01/23 09:49, Alexandre Mergnat ha scritto:
+> There are four I2C master channels in MT8365 with a same HW architecture.
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 60 ++++++++++++++++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> index a32f2b7507be..3c2819bd32af 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> @@ -282,6 +282,66 @@ pwm: pwm@11006000 {
+>   			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
+>   		};
+>   
+> +		i2c0: i2c@11007000 {
+> +			compatible = "mediatek,mt8365-i2c",
+> +				     "mediatek,mt8168-i2c";
+> +			reg = <0 0x11007000 0 0xa0>,
+> +			      <0 0x11000080 0 0x80>;
 
-> Honestly, to me, there is no dilemma:
->
-> * There is a requirement from applications to be uninterrupted
-> by operating system activities. Examples include radio access
-> network software, software defined PLCs for industrial automation (1).
->
-> * There exists vm-statistics counters (which count
-> the number of pages on different states, for example, number of
-> free pages, locked pages, pages under writeback, pagetable pages,
-> file pages, etc).
-> To reduce number of accesses to the global counters, each CPU maintains
-> its own delta relative to the global VM counters
-> (which can be cached in the local processor cache, therefore fast).
+Compatibles fit in one line (83 columns is fine);
+regs fit in one line, reaching 76 columns.
 
-The counters only count accurately as a global sum. A counter may be
-specific to a zone and at which time it counts uses of that zone of from
-all processors.
+Same comments for the other nodes that you're adding.
 
-> Now you are objecting to this patchset because:
->
-> It increases the number of cycles to execute the function to modify
-> the counters by 6. Can you mention any benchmark where this
-> increase is significant?
-
-I am objecting because of a fundamental misunderstanding of how these
-counters work and because the patchset is incorrect in the way it handles
-these counters. Come up with a correct approach and then we can consider
-regressions and/or improvements in performance.
-
-> Alternatives:
-> 	1) Disable periodic synchronization for nohz_full CPUs.
-> 	2) Processor instructions which can modify more than
-> 	   one address in memory.
-> 	3) Synchronize the per-CPU stats remotely (which
-> 	   increases per-CPU and per-node accesses).
-
-Or remove the assumptions that may exist in current code that a delta on a
-specific cpu counter means that something occurred on that cpu?
-
-If there is a delta then that *does not* mean that there is something to
-do on that processor. The delta could be folded by another processor into
-the global counter if that processor is idle or not entering the Kernel
-and stays that way throughout the operation.
-
-So I guess that would be #3. The function cpu_vm_stats_fold() already does
-this for offline cpus. Can something similar be made to work for idle cpus
-or those continually running in user space?
+Regards,
+Angelo
 
 
