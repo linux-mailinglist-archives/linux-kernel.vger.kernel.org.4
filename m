@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5D266DDB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A778266DDB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbjAQMes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S236492AbjAQMfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbjAQMep (ORCPT
+        with ESMTP id S236398AbjAQMfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:34:45 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F27A36B15
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:34:42 -0800 (PST)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9480E3F5D0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1673958880;
-        bh=Dr9R5dfY2nTTstdwaC++TmcM/uDTBZdBUz78esGlC00=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=RmLlJ3yB9hECoctWew2F4AlEb0NubEgeud2JD4koWPHTZhs4J8LZuQcahIpKQdEiY
-         WdyOanMF4rb6wrEU3wfk6GshoQ4knC+O2xTQ+N5TuXS1slqwY8X1sT5zhEn5j6pQ5w
-         LuIOWCi3bcG/pTpEcpu834J7I5IZ1+t/hWehlEfqOoK7lrQu+YoHOGw28mDdajGK60
-         fyKSvQLddg4c7xQHmvPUV+yJXQpGTLrnLOfkhwPWp0hB7GP39SeAdhsHNg8yacl1pV
-         IIarvEV9Z+DOIIa7oyrZvZi1k5oOoskWsIMeNgTEQlZZzNSvYZQQttlzHoSI239yL/
-         6fdy7S8imJqZg==
-Received: by mail-pj1-f70.google.com with SMTP id oo13-20020a17090b1c8d00b0022936a63a22so6750902pjb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:34:40 -0800 (PST)
+        Tue, 17 Jan 2023 07:35:25 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16592B61B;
+        Tue, 17 Jan 2023 04:35:23 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so30394461wrb.11;
+        Tue, 17 Jan 2023 04:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H1sazlO13B0CCYmrJZ9N/1/ukVSWqASb/1IbYgu+dLk=;
+        b=WbQtQoGPoellA3xFKFY1+amIvyc+OBh2aSgFVXJ5OqL9NAaFkZTCmPeZvUWlGSU+YG
+         ILi8AKN+dEhtPGhsWV814JG/sk7IhPqZboSKEqc/tiFisOmLGy9jTvI6ZlWxjigRFx2v
+         dL0LPzowlBljUEE+5BEZ2mm7rboqYdvwogJj0uyI1i+Lcn0iDY6agpU3NYebMVKF/xJz
+         JvgkSHQKcQGiD6Ttyq3Eb6MMqAxss6iYQgw+83R+U05P9l+jBqXhG8CVrztLrM9p3gQI
+         AqLi9BNwkjV7JYZX0KnB5jdeFO4umCMER0wQo1d2VVzZSd47gHa8z6l4ddn0DACr49oy
+         UkKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dr9R5dfY2nTTstdwaC++TmcM/uDTBZdBUz78esGlC00=;
-        b=paiQbkZUq57I51g6v11iQf0kuR08n+WBMi0LP6mpnNMG9kP7OTq1lt5zIVfu9z1CyE
-         1gEkoxnoNiklSzGOMfKI1w8FWcYGGNinIQjB28n+q8B4GgPEVKQDKGpXAaZSFLltBIw3
-         9ZxIvAyIMxGmrMJdcJRowYhJiMXWDz1gCFMyRo/1G3nUz9Tz+C5HhO0BhnxUBtFq9VXR
-         ezv8V/FeOXtTFh36MjvjmbFXKX3oovDEd6ScwoolamIzILi97t/0nOCNcibS6pjZJXkb
-         UFW5SQiOvyt8zQvUuaeiDgC2UO79oVxv9oumcIVoEGeS41Dh/84lKm4+XSIbaXHi72l3
-         y3Lw==
-X-Gm-Message-State: AFqh2koER4ijZAAGO8GUT+nixCuEIKvnau2soTJaGal1cDm+bifN4yTq
-        DsdflTUCrA4VvdKOk8EtSv9W8GSKkEa8VujieEaOySjs25KcwdjHBpvgxYgr+e5Adv7JHN+jEmJ
-        tm4Mp6rfnwMNbZCxSa+EaYjmrp7Fse2x1FEB4VNYFXQ==
-X-Received: by 2002:a17:903:41d2:b0:194:8293:7aed with SMTP id u18-20020a17090341d200b0019482937aedmr4803361ple.6.1673958879123;
-        Tue, 17 Jan 2023 04:34:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvx1PIXSEHmS/z7z5lb8KgmnS5yWSwxFE1DXqNZzoijW82rL44xDXdWbSzbhs1ZKeFHCrvm3g==
-X-Received: by 2002:a17:903:41d2:b0:194:8293:7aed with SMTP id u18-20020a17090341d200b0019482937aedmr4803333ple.6.1673958878803;
-        Tue, 17 Jan 2023 04:34:38 -0800 (PST)
-Received: from canonical.com (2001-b011-3007-1498-1355-049d-ac04-c0c3.dynamic-ip6.hinet.net. [2001:b011:3007:1498:1355:49d:ac04:c0c3])
-        by smtp.gmail.com with ESMTPSA id m2-20020a170902bb8200b001949c680b52sm3090850pls.193.2023.01.17.04.34.37
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H1sazlO13B0CCYmrJZ9N/1/ukVSWqASb/1IbYgu+dLk=;
+        b=QQk8ahkkj0deyFRcCkfL7RBzDIgMSCm90ZsfzLhiGvXGeRAlAERdprcZHPaqJxkDEG
+         LGIivFYIkXCjVCYP3OaJgFp0GCEDh3f5AzA3wviEReh6I+sONwwG4V5+qF0gjSMqBDaJ
+         sVZ60pOXgLC1bxCr55QTiCSoKGsiVD7g2wnsElz7sK4OkLXuSgv+7u4hC3evU0NclCIt
+         QPKIyT3ozhO3xQp2gv8srTL5CFWfm/nN3I1TlXPjitYPrruVZnvijYdAlOopqEfwuyCU
+         jdvnfSJNeXYffdAAUs3u7lrHxJncManYjrbvN2mSeVfTEdahgMxHhsDhdIEfNJ5gie08
+         Ua3w==
+X-Gm-Message-State: AFqh2koi6exo5r9YYNY6cDIMHk4+9QAb2NhUJqmTiNypz0e7PXZGMOlt
+        6qUs6rIT9Y/VAc9Z+i7EPpI=
+X-Google-Smtp-Source: AMrXdXso8XJce4JaQ4/3V6qIdrV5+rNmUK9DrELcy6Q5u0Zydz8Lv+npgysFjqsY0epSLG2o3qU7Fw==
+X-Received: by 2002:a05:6000:98d:b0:242:809e:1428 with SMTP id by13-20020a056000098d00b00242809e1428mr3034513wrb.5.1673958922445;
+        Tue, 17 Jan 2023 04:35:22 -0800 (PST)
+Received: from debian ([67.208.52.125])
+        by smtp.gmail.com with ESMTPSA id j17-20020adff011000000b002a64e575b4esm29129839wro.47.2023.01.17.04.35.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 04:34:38 -0800 (PST)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] platform/x86: dell-wmi: Add a keymap for KEY_MUTE in type 0x0010 table
-Date:   Tue, 17 Jan 2023 20:34:36 +0800
-Message-Id: <20230117123436.200440-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 17 Jan 2023 04:35:22 -0800 (PST)
+Date:   Tue, 17 Jan 2023 12:35:20 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc1 review
+Message-ID: <Y8aWCCF8bvmMnj0g@debian>
+References: <20230116154743.577276578@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116154743.577276578@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms send the speaker-mute key from EC. dell-wmi can't
-recognize it.
+Hi Greg,
 
-Add a new keymap for KEY_MUTE in type 0x0010 table.
+On Mon, Jan 16, 2023 at 04:51:07PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.164 release.
+> There are 64 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
----
- drivers/platform/x86/dell/dell-wmi-base.c | 3 +++
- 1 file changed, 3 insertions(+)
+Build test (gcc version 11.3.1 20221127):
+mips: 63 configs -> no failure
+arm: 104 configs -> 1 failure
+arm64: 3 configs -> 1 failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-diff --git a/drivers/platform/x86/dell/dell-wmi-base.c b/drivers/platform/x86/dell/dell-wmi-base.c
-index 0a259a27459f6..502783a7adb11 100644
---- a/drivers/platform/x86/dell/dell-wmi-base.c
-+++ b/drivers/platform/x86/dell/dell-wmi-base.c
-@@ -261,6 +261,9 @@ static const struct key_entry dell_wmi_keymap_type_0010[] = {
- 	{ KE_KEY,    0x57, { KEY_BRIGHTNESSDOWN } },
- 	{ KE_KEY,    0x58, { KEY_BRIGHTNESSUP } },
- 
-+	/*Speaker Mute*/
-+	{ KE_KEY, 0x109, { KEY_MUTE} },
-+
- 	/* Mic mute */
- 	{ KE_KEY, 0x150, { KEY_MICMUTE } },
- 
+Note:
+arm and arm64 builds fail with the error:
+drivers/gpu/drm/msm/dp/dp_aux.c: In function 'dp_aux_isr':
+drivers/gpu/drm/msm/dp/dp_aux.c:427:14: error: 'isr' undeclared (first use in this function); did you mean 'idr'?
+  427 |         if (!isr)
+      |              ^~~
+      |
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2661
+[2]. https://openqa.qa.codethink.co.uk/tests/2667
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.34.1
+Regards
+Sudip
 
