@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF63A66D5CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8B566D5CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235654AbjAQGBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 01:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S235703AbjAQGBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 01:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235620AbjAQF7y (ORCPT
+        with ESMTP id S235591AbjAQGAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:59:54 -0500
-Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D17923304
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 21:59:46 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VZluILG_1673935178;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VZluILG_1673935178)
-          by smtp.aliyun-inc.com;
-          Tue, 17 Jan 2023 13:59:42 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 3/3] drm/amd/display: Clean up some inconsistent indenting
-Date:   Tue, 17 Jan 2023 13:59:22 +0800
-Message-Id: <20230117055922.53911-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20230117055922.53911-1-jiapeng.chong@linux.alibaba.com>
-References: <20230117055922.53911-1-jiapeng.chong@linux.alibaba.com>
+        Tue, 17 Jan 2023 01:00:08 -0500
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9487E2313B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 22:00:04 -0800 (PST)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 30H5xluX010533;
+        Tue, 17 Jan 2023 13:59:47 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Tue, 17 Jan 2023 13:59:44 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCH] mm: use stack_depot_early_init for kmemleak
+Date:   Tue, 17 Jan 2023 13:59:29 +0800
+Message-ID: <1673935169-30019-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 30H5xluX010533
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_hpd.c:140 get_hpd_line() warn: inconsistent indenting.
+Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
+Solve this by having stackdepot use stack_depot_early_init.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3787
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On 1/4/23 17:08, Mirsad Goran Todorovac wrote:
+I hate to bring bad news again, but there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
+
+[root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff951c118568b0 (size 16):
+comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
+    hex dump (first 16 bytes):
+      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
+    backtrace:
+ [root@pc-mtodorov ~]#
+   Apparently, backtrace of called functions on the stack is no longer printed with the list of memory leaks.
+ This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and BIOS version M22KT49A (11/10/2022)
+ and 6.2-rc1 and 6.2-rc2 builds.
+ This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU enabled on a vanilla mainstream kernel
+ from Mr. Torvalds' tree. I don't know if this is deliberate feature for some reason or a bug.
+ Please find attached the config, lshw and kmemleak output.
+
+reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 ---
- drivers/gpu/drm/amd/display/dc/link/link_hpd.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ lib/Kconfig.debug | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_hpd.c b/drivers/gpu/drm/amd/display/dc/link/link_hpd.c
-index 5f39dfe06e9a..4746ea623354 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_hpd.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_hpd.c
-@@ -137,10 +137,9 @@ enum hpd_source_id get_hpd_line(struct dc_link *link)
- 	struct gpio *hpd;
- 	enum hpd_source_id hpd_id;
- 
--		hpd_id = HPD_SOURCEID_UNKNOWN;
--
-+	hpd_id = HPD_SOURCEID_UNKNOWN;
- 	hpd = link_get_hpd_gpio(link->ctx->dc_bios, link->link_id,
--			   link->ctx->gpio_service);
-+				link->ctx->gpio_service);
- 
- 	if (hpd) {
- 		switch (dal_irq_get_source(hpd)) {
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 401ad4b..50cc9f5 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -727,6 +727,7 @@ config DEBUG_KMEMLEAK
+ 	select KALLSYMS
+ 	select CRC32
+ 	select STACKDEPOT
++	select STACKDEPOT_ALWAYS_INIT
+ 	help
+ 	  Say Y here if you want to enable the memory leak
+ 	  detector. The memory allocation/freeing is traced in a way
 -- 
-2.20.1.7.g153144c
+1.9.1
 
