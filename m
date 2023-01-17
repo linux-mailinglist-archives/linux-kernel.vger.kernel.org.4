@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC7366D3D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABC666D3E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbjAQBir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 20:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S233546AbjAQBk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 20:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbjAQBi0 (ORCPT
+        with ESMTP id S234031AbjAQBkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 20:38:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03282887F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:38:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69136B810BD
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04230C43392
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673919503;
-        bh=6I6qWiZy6+VUHL/BjgqW5ooPHVYKqIo8pjsdpLzyhJM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Uxp8WjQMOD1iV74W2WXYsEwNnKRGE0lhIviQY5FqQ7Mdw/vd5KD1zTKaC/MUyBbeD
-         39N9VNrYjQh4awIY7UQpNiFPb03zjd+EQasCWKhTtKI5iMWQnx2ZVOzuccryhPs9tg
-         oBOCUGok/coBej/8h+M8P/L+heGRslB68jIrvQgOdnvCZqOYuMI1AMQXgrgdO05LSQ
-         3DMTvv6As2f1rFB8414m5OkdZ3ApipyrNzZyWrIU/lNgykeAaY97+hm9/0dsCvC9YL
-         STEDKiZzkHOqBmFPtLlE4G4w59DEojLNKVkuqe6ylERUzozi0wFr3emkaNBpEa+GNp
-         nt/ztCsuE5Rog==
-Received: by mail-ej1-f48.google.com with SMTP id vm8so71898016ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:38:22 -0800 (PST)
-X-Gm-Message-State: AFqh2kot3dBH7uz3kDX1wc8z+ZyYp/lYBqiXw5pIQS9m0gf4yphhMFNB
-        uN5GH6RSLVkmLIdG+6Zg4ZzQK4Dkue3m6NMqNQg=
-X-Google-Smtp-Source: AMrXdXsuy/+hu9YZJiwbj1ERS++KdqjNREl+w+fhFyyt/KJk1es4EKClr4/cdxR7/yu/s8nsvUMnoQ/MeClPnRlUkGk=
-X-Received: by 2002:a17:906:a28a:b0:7c0:ff76:7866 with SMTP id
- i10-20020a170906a28a00b007c0ff767866mr58519ejz.272.1673919501199; Mon, 16 Jan
- 2023 17:38:21 -0800 (PST)
+        Mon, 16 Jan 2023 20:40:39 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3276F26584;
+        Mon, 16 Jan 2023 17:40:29 -0800 (PST)
+X-UUID: ea832008960711eda06fc9ecc4dadd91-20230117
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=260WfMFmV7gTCf7bcdowdVdB4l4oCLTurwzBetm6Z5c=;
+        b=XvB2a6HoY/C8stvxCVhWQU0spQxLCzxF88rvHN6cSRSpuRdKPEg8SqqqSMEWRJONs+rz/P5DH7phDtpgZEbpImnZEh6ok2RSToodrdXXLNmL5D17rOeo2NyLc1fUuT3J1I2Ckai1SZN/21Lks9gIc6XZFBtQOQ1C9qGwzaV2F9A=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:2332aea3-cf25-4b84-b007-8f7d0d6da977,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:2f23fef5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: ea832008960711eda06fc9ecc4dadd91-20230117
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 55876540; Tue, 17 Jan 2023 09:40:26 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 17 Jan 2023 09:40:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 17 Jan 2023 09:40:25 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3 0/2] mtk-wdt: Add reset-by-toprgu support
+Date:   Tue, 17 Jan 2023 09:40:21 +0800
+Message-ID: <20230117014023.2993-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <1673255274-18238-1-git-send-email-tangyouling@loongson.cn>
- <1673255274-18238-2-git-send-email-tangyouling@loongson.cn>
- <6f1a1f3c-4569-c427-76ae-2f7093cb5e9f@loongson.cn> <CAAhV-H55Kj4gMnORHfQUYJ3KBueLv7j+ktkNP9cE-=32nEShzg@mail.gmail.com>
- <972e4d0c69dea4e9659eb9459072b2b7b2fd963b.camel@xry111.site>
-In-Reply-To: <972e4d0c69dea4e9659eb9459072b2b7b2fd963b.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 17 Jan 2023 09:38:11 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7KpR3wKUYVR2mSfbCuwbONAmPwSB9oaLAE-4zGhx1r4g@mail.gmail.com>
-Message-ID: <CAAhV-H7KpR3wKUYVR2mSfbCuwbONAmPwSB9oaLAE-4zGhx1r4g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] LoongArch: Use trampoline for exception handlers and
- kill la.abs
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Jinyang He <hejinyang@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 1:41 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Mon, 2023-01-16 at 09:30 +0800, Huacai Chen wrote:
-> > On Sat, Jan 14, 2023 at 2:38 PM Jinyang He <hejinyang@loongson.cn>
-> > wrote:
-> > >
-> > > Hi, Ruoyao and Youling,
-> > >
-> > > I care about the performance when NUMA enabled. We set CSR.EENTRY
-> > > for each possible cpus where is NUMA-relative. So, I guess the more
-> > > codes in NUMA-relative memory makes more performance. If we just set
-> > > handler_trampoline as exception handler, the performance may be
-> > > influenced.
-> > So copying both the handlers and handler_trampoline can solve the
-> > problem? If that is possible, please do that on top of the latest code
-> > in
-> > https://github.com/loongson/linux/commits/loongarch-next
->
-> Hi folks,
->
-> I just wrote the trampoline code as a PoC to show "relocatable kernel
-> can work" and there must be some better way.  But I'm too sad to write
-> any serious code in this month, and I don't have access to a LoongArch
-> NUMA system.  So I think it's better to leave the job for you guys now
-> :).
-Hmm, I hope this series can be merged in 6.3. :)
+This series is based on next-20230116.
 
-Huacai
->
-> Best regards
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+TOPRGU = Top Reset Generation Unit
+
+In some cases, we may need TOPRGU to reset the wdt timer after system
+resets. Provide a reset_by_toprgu parameter for configuration. We can
+disable or enable it by adding reset_by_toprgu in dts.
+
+Changes since v2:
+ - Correct the description
+Changes since v1:
+ - Add more information in bindings
+ - Modify some words in the commit message
+
+Allen-KH Cheng (2):
+  dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu support
+  watchdog: mtk_wdt: Add reset_by_toprgu support
+
+ .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml     | 6 ++++++
+ drivers/watchdog/mtk_wdt.c                                 | 7 +++++++
+ 2 files changed, 13 insertions(+)
+
+-- 
+2.18.0
+
