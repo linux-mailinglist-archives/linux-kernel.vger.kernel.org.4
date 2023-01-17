@@ -2,143 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7CC66E788
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5475A66E7CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjAQUK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        id S233847AbjAQUiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbjAQUHS (ORCPT
+        with ESMTP id S233949AbjAQUaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:07:18 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA53FF29
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1322d768ba7so32973732fac.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
-        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
-         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
-         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
-         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
-         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
-         BObQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
-        b=Q+gc0CqkQXmJAfAeVrw5pGR3eQGVoQVap0sxRoJcD0/vyfyXhZBqQjuSPgqJjA4sjU
-         JiTT0RMn5W+no8axO8lukLfzBGTSP5VVKt3adGjWZXLev2S8yAjp5DH2xZ4Gni9kI91q
-         nF/xcFsPyomjbHFCzoGH4CHviQVFBmaHYfCdAkm+dnBtEqG1/kYcML0lAk1yepVz2RP0
-         gOozG5dvVfe+X7nqpz7/g6j7TBDPSb6wdfPARClfJ5NpSLZUH2pUydomhxsZMAzPGJgJ
-         6LNbKZe9hOS1DQiuiX6lqyKScXLRSb/YlU8/Ag8M8bxBOLQtgALukxSzs6fp0c/gBkGa
-         O36Q==
-X-Gm-Message-State: AFqh2koalovh1kT2erxoQnuOlwPiJna0PoLCcEV89848n0+zRbFPR3FO
-        Yh0ubrkCTSTk2HDCWxLgUBDT4A==
-X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
-X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
-        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
-Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
-Date:   Tue, 17 Jan 2023 13:13:38 -0600
+        Tue, 17 Jan 2023 15:30:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EF93D927
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:16:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA199B81A0F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEF1C433EF;
+        Tue, 17 Jan 2023 19:16:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673982976;
+        bh=aYhIaG8n5o0p/BBkpaMa18FYk6ylAOgNMDr8sc9WmPI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SmT6EUBnqXvnF9/qA9QUrYikLol+V9f38rBhMO8+d3JYmfHgQb/QBhfFgWk30gB5T
+         mIMBlMv9Tk2mGEKXbwFk2Y/tFaSk+CENtRIHyhNrL1AtuaCPkagw6tHWx7jCF39bJv
+         4u2rLBOi73ycfS3m1SZoe0YGQB67+IwT3CgUEQ8wM6MF25C3CigZYFpwKFAqfkd4Rf
+         P+MCQgZUZmmpdo/sonOi+js5YEKH03CgxpValLwJY4s+A6iS8uXkpCo3rHjfJDHD23
+         2VHgugQ5T9bXuDs0ILM+XcFE9jgn0pVcQZXRa0Y4dW+ANgbx/ubxxcvw9Qtb2beM8B
+         0DvGIUS88Miqg==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Liam Howlett <liam.howlett@oracle.com>, brendanhiggins@google.com,
+        kunit-dev@googlegroups.com,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "damon@lists.linux.dev" <damon@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 30/48] mm/damon: Stop using vma_mas_store() for maple tree store
+Date:   Tue, 17 Jan 2023 19:16:14 +0000
+Message-Id: <20230117191614.116521-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230117191109.116438-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <20230116071306.GA15848@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 01:13, Christoph Hellwig wrote:
-> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
->> I'm still maintaining and using this port in Debian.
->>
->> It's a bit disappointing that people keep hammering on it. It works fine for me.
+On Tue, 17 Jan 2023 19:11:09 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> Cc-ing kunit people.
 > 
-> What platforms do you (or your users) use it on?
+> Hi Liam,
+> 
+> 
+> Could we put touching file name on the summary?
+> E.g., mm/damon/vaddr-test: Stop using ...
+> 
+> On Tue, 17 Jan 2023 02:34:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+> 
+> > From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+> > 
+> > Prepare for the removal of the vma_mas_store() function by open coding
+> > the maple tree store in this test code.  Set the range of the maple
+> > state and call the store function directly.
+> > 
+> > Cc: SeongJae Park <sj@kernel.org>
+> > Cc: damon@lists.linux.dev
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > ---
+> >  mm/damon/vaddr-test.h | 19 +++++++++++++------
+> >  1 file changed, 13 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
+> > index bce37c487540..6098933d3272 100644
+> > --- a/mm/damon/vaddr-test.h
+> > +++ b/mm/damon/vaddr-test.h
+> > @@ -14,19 +14,26 @@
+> >  
+> >  #include <kunit/test.h>
+> >  
+> > -static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+> > +static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+> >  			ssize_t nr_vmas)
+> >  {
+> > -	int i;
+> > +	int i, ret = -ENOMEM;
+> >  	MA_STATE(mas, mt, 0, 0);
+> >  
+> >  	if (!nr_vmas)
+> > -		return;
+> > +		return -ENOENT;
 
-3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
-sh4 emulator.
+Also I think it's ok to return zero here, as this function successfully linked
+zero vmas as requested.
 
-I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
-different kinds of boards running it here). There's an existing mmu version of
-j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
-released yet, I have yet to get that to run Linux because the mmu code would
-need adapting, but the most recent customer projects were on the existing nommu
-SOC, as was last year's ASIC work via sky130.
 
-My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
-little blue one is... sh4a I think? (It can run the same userspace, I haven't
-replaced that board's kernel since I got it, I think it's the type Glaubitz is
-using? It's mostly in case he had an issue I couldn't reproduce on different
-hardware, or if I spill something on my N40.)
+Thanks,
+SJ
 
-I also have a physical sh2 board on the shelf which I haven't touched in years
-(used to comparison test during j2 development, and then the j2 boards replaced it).
-
-I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
-really convenient: neither of my physical boards boot from SD card so replacing
-the kernel requires reflashing soldered in flash. (They'll net mount userspace
-but I haven't gotten either bootloader to net-boot a kernel.)
-
-I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
-bash script that builds bootable toybox systems for a dozen-ish architectures,
-including building a kernel configured to run under qemu:
-
-  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
-
-And I ship the resulting bootable system images, most recent release is at:
-
-  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
-
-As described at:
-
-  http://landley.net/toybox/faq.html#mkroot
-
-Various people in Japan have more hardware, but I haven't made it physically
-back there since 2020. (My residency card expired during the pandemic.)
-
-Rob
+> >  
+> >  	mas_lock(&mas);
+> > -	for (i = 0; i < nr_vmas; i++)
+> > -		vma_mas_store(&vmas[i], &mas);
+> > +	for (i = 0; i < nr_vmas; i++) {
+> > +		mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
+> > +		if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
+> > +			goto failed;
+> > +	}
+> > +	ret = 0;
+> > +
+> > +failed:
+> >  	mas_unlock(&mas);
+> > +	return ret;
+> >  }
+> >  
+> >  /*
+> > @@ -71,7 +78,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
+> >  	};
+> >  
+> >  	mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
+> > -	__link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas));
+> > +	KUNIT_EXPECT_EQ(test, __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)), 0);
+> 
+> In case of the __link_vmas() failure, I think we should skip this test using
+> 'kunit_skip()', rather marking this test failed.
+> 
+> 
+> Thanks,
+> SJ
+> 
+> >  
+> >  	__damon_va_three_regions(&mm, regions);
+> >  
+> > -- 
+> > 2.35.1
+> 
