@@ -2,203 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC31266DB34
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51AA66DB32
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbjAQKcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S236484AbjAQKcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236292AbjAQKbD (ORCPT
+        with ESMTP id S236736AbjAQKax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:31:03 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2133.outbound.protection.outlook.com [40.107.117.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C957298
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:30:54 -0800 (PST)
+        Tue, 17 Jan 2023 05:30:53 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2102.outbound.protection.outlook.com [40.107.114.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F41693ED;
+        Tue, 17 Jan 2023 02:30:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GzTDMHtcGqG1eVZBoidOVKHoiNvwSfZnfb2/sQp93Rq+0uQhjKZJ49VdwDxGL4EGrO/VkG7N2kzQca+aNyWAqoWiHGg1fQmKP3izPKyvVNjhjjS2Zt1+SPZgt3W3kOLm3oKpBoDhLvh1Qrca2UctYc9TIzz8FpinqVY6seFAFzwGBZOXd5qp6y8ShytF+0wkxMxezH+8n9X9xtWXUdjHNn3jurfU9vURShKivDMfEZqhboutzsJzUiSwaVE09kQAx4EdHDap0kYBFibK7XwpyhDOT1dAHqJYJqY/fMANta/xL3cOJ4S/UYyS/W+oV+DRgwURG5kAgJpzN5Q2cURTHw==
+ b=V50otIc4eKvsoU6TJRbDoXXfOxH6wVBQdTC/24NvB7E+LESchHsdLTWBAq98NcUBmH8BZ/Sg8YtvlHcrP9AmIaWd154ZdntyB3MnNLeyXqGj/ZyW05/64JoFJ+Ws7IRzl3gr//CQAK8hp662tl0qh7YGycyZT2O1QudqffQrC2XySxbEa9kF9lNKn+ue2zYjVL7aXnOkJOjfKJErbDd7CMU6jKyXGG0VpoYPROgdsUItsUwO2IJIfAKu7GyTxcUF//FQY/EulMR9xMlW+RPEw8PUBZ6ujAyiLqxxkLfmo9ui9ezlA8YCdCt23R9ncHWrHg/+EHRVPVzzxYjCT145Bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Xl2A1hT7mb5Bj9AkO9Ap/vQVKaTsu2J2jzKIX7YnJQ=;
- b=FJ3Hw0/5tZXx3NRLSYiv2THsMnuybJdbD+hmNmVSIGhhNvEFew7GypcM/XncadfTo3cnRvuKZZOnDU4Hq2Y+aD2vQXNeYGxY9waoQxKTkOmmmrLY3+I/6ifmq9fyRAshcZqxVdSzf5PYF+S8IaAo2UxHTh5Du+2FkNWE/6PPGTvXdoVBLAY+19dr/4qCSi8MSidNjvnHKagV8RbWBeEB30bKCjN9edhaKPFp4DdmwKgF27ig2ozD6HLFZFh++x4IBhXLhpVl6xzYP76SJ9Gh5t//KUSjP6hD8F7WzTCT4v6B/ttULh4+f9sLq7GQ88WDpkOvtAPbRpESBkdUoeWtSg==
+ bh=WSzeI/5j1cBLghzz/PGYVtlAeUzT52iZSx4WFUyv5cg=;
+ b=FS53EOIk1JKMajBjNWjcekXBAxVOUQzJzp147hPOvpkolqeUuB95xC4llf/1otNx9FiHATKCKuWyVhUo+nJB1pJV3ArL2KDWJHIZ1bJaNwE6ei54PcwHXWmXwRqJazV+SDZ4rr0NZzxRhi/tGtM4lCIvTi+/PW6QyBdkIk0GKtxkUipqlgDbFG960GHPhUTWyRdWV5/QWVs/p5PlMK5litiWQKVTJ10llk+aj5favnODCyHf2CiPSQa44oTuIb8NP/JbB4pP/DdtYH6zQHkpXYff7RYzqWodm9h9SsahsGaSjAUccdEmbuRR0iZsw0au171PEaH5pPOnPE2bFqDPSA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Xl2A1hT7mb5Bj9AkO9Ap/vQVKaTsu2J2jzKIX7YnJQ=;
- b=mBjw5KEK3qT0M+5H5ymkyiXOdGK81cfavK28QOupicBWU9ZtuKog0jAMhy21dNRSF474QVHmbModBTtCr2N5zeG9l4g6z1ceRKrmOBiFe5eHjMTEla4uuOBnT1PUTItHey5xpgPYNGDdl9TpmN/u6pcsusdDy1i5XnfqUmdzet6iGOu/2J7NEzQLK1pdE3VWJkhyNWRkqLTLE0jVhxkfjZV3gS+3BC0hBQnHIjCldAEQTMGdDvCBoTN6OUd5nXmSljikDl4CByCgTO67UVoIV1wKMXlmjyD3DP/h6USt8TZpzbzCusL1Gl9ExPS5kZdexAYSRvBd3X1GAN8wLHW6Ag==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR06MB6070.apcprd06.prod.outlook.com (2603:1096:820:c9::12) with
+ bh=WSzeI/5j1cBLghzz/PGYVtlAeUzT52iZSx4WFUyv5cg=;
+ b=HbjSdZ0SCPJjnG/Fv0XI191J0cjoHJYwQ/CByAqhg0Nu2t0gn2EeGlYp8sw/NBIEZTyyPIpNIorlCnxw1/v0YGQBau6HCEP7ghcVBoWwH8MeikcNgkBBryHzuoOVDVjGtmnEjkipch2hDvW2VThXVpL/Xo8wgV5aJ56wjMlBbLs=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB8344.jpnprd01.prod.outlook.com (2603:1096:400:151::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.9; Tue, 17 Jan
- 2023 10:30:52 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Tue, 17 Jan 2023
- 10:30:52 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: set *_data_age_threshold according to user_block_count
-Date:   Tue, 17 Jan 2023 18:30:42 +0800
-Message-Id: <20230117103042.2509-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0003.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
+ 2023 10:30:45 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e%6]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
+ 10:30:44 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 2/2] media: dt-bindings: media: renesas,fcp: Document
+ RZ/{G2L,V2L} FCPVD bindings
+Thread-Topic: [PATCH v4 2/2] media: dt-bindings: media: renesas,fcp: Document
+ RZ/{G2L,V2L} FCPVD bindings
+Thread-Index: AQHY/qlxicYftSpeMUKKL0vGYRE9G66iv0cg
+Date:   Tue, 17 Jan 2023 10:30:44 +0000
+Message-ID: <OS0PR01MB5922D9004BC2A00BF1CCA0E186C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20221122193415.1873179-1-biju.das.jz@bp.renesas.com>
+ <20221122193415.1873179-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20221122193415.1873179-2-biju.das.jz@bp.renesas.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB8344:EE_
+x-ms-office365-filtering-correlation-id: 860bd38b-3699-49ab-f810-08daf875e42f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kvumeOFSV7iolQ/U9AN0eguK2CDmIIlnNtHsiG3lQjZ85vQXgrAI9jiUxxvwIxQTyff5uiVNJLZ3kZL6XDSWTjoPfjjrE0oKPwwzXnLntSK7wQcdrAuWCK6zT8zG1mmabFfHo3CqkjUNX41xbIkLjThk2ULuAhCSdor+b0PdDepwYmAeZ8eGuitnk0/je0eTqos5Wgrwh+ToqUr971zYks8uoMW/6TgK01eoME2EJfptJGIbyKdPfJ3Sqdgg1ynrwt5IdRKiEFxYzizt9X4Jmrm6Tc8tmtTsjeWziv3m0yXAxRcXtyg4pA2FSNxyb0RMF5UzQQftKpXANEVW493FSJye2dC4OO/H4E42uDOeUg+/0I/XiH3x7QQFHK2zgk5HAAv/V1V4goBXXnwqUV6M6y+iRf2gcDF126a3YhaKbTO6nZsx/j0H48XJhy7D6b0dTFN1wEC7d5A90UnpgyoMoZvvz0ybz/0OfBEYa3LPsUmGSdLsks5KbnTF4wdNp4kLVAg0Go7nsUY5ovUHlBYisPS5wpbr/ta8w6/4Y9qlEtwpRjbvr5Zdp2SMM4RyM1nRDPMTyDafv41hWZ201/knVlJV1+3+OPnDBKn7uJ7WCUAtEGLV13mYVbsYLL7PDEhihEMIkiV1sERsTsMluQgmjF75jlpHd0ZSZDcVcuQeIHti4Vpbka7TTtVOIt8QaYRuWVNu19v9d+mIlsGpV3it3Fu1WaizHaEtMP/gGV2G6Fs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(376002)(136003)(39860400002)(451199015)(38100700002)(38070700005)(33656002)(55016003)(86362001)(966005)(8676002)(9686003)(64756008)(66476007)(26005)(4326008)(66446008)(186003)(66556008)(110136005)(478600001)(76116006)(7696005)(66946007)(54906003)(71200400001)(316002)(53546011)(122000001)(6506007)(8936002)(41300700001)(52536014)(2906002)(83380400001)(5660300002)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?71JsAcDhx9oa4APE9NdeudvklJAovP1YUs7QSIfxEMZEF1SS9Tsb7CYS+5I6?=
+ =?us-ascii?Q?4Ot40qkxdq1ceGcMwEy2OupACZnanD3LcP1qgiMk8jzsO7cjB58CMCwnIyab?=
+ =?us-ascii?Q?CB/e14aYCC6Ai2nZECjeTfEeuuZowZo+YpBDwIO7wdcEJUaZO34W7MpuZ+ig?=
+ =?us-ascii?Q?cpaoS3rMr3yms/n+kdVq71oUO4TdUIJ73x7pqc6NgOTdOai9IidgmJsxIJqv?=
+ =?us-ascii?Q?HtfEVvs+nzhtd4ZZk1gpnXp7M2Wrsb/fFkirWyi6SzBiwTBmQliEOef3bOQ0?=
+ =?us-ascii?Q?RjTaBd5cjXeM4aOoszDn+iw6u3Sqn/ObZ4rnDxouQdvUZSoZZOOEs64b6DYC?=
+ =?us-ascii?Q?7DyvB0Zk4vsc+iW0pHAw9/yRwFVtBvXOv6L8GbJB1b9iaQsR0H5yYKE9H9tq?=
+ =?us-ascii?Q?nAaAr7IFc2LUiiMALM1KQedFjevS1PlVGxubdfLACRhq6Msht5vq+rhKgYdF?=
+ =?us-ascii?Q?qvWOTQyn9I/VFFuFIwyxjuUtrq5wNN5AzZQi10/O6yC2EJWp8dzqO4urmBh2?=
+ =?us-ascii?Q?MrQjfPlDjVhkYYG6zFXC25m1f5jykb/RYgCLhOGTUwBPlGACi/UOiWLlEaN4?=
+ =?us-ascii?Q?Cd/zFrSKuSNBiaBSOHWOIFijpDesZZRYP+mz2QwxvZBIQeXttSEf5/XJTbWY?=
+ =?us-ascii?Q?JujZwbA4M8KbSJtGEirkibFGcxWvavQNLL1Ej97fctJgpqLyqrH7gisers2K?=
+ =?us-ascii?Q?38B4rqNWgjicp3d7nznF/kOTaDN7Jy/j87hUJEHhxuZwvt6MVaLQLAm87uPr?=
+ =?us-ascii?Q?tQ45kGxSZ1FHOAoHb2tggEmjfHUkwWPux4Bg3PUOo5JfeptTFH1XukwB/ki+?=
+ =?us-ascii?Q?3oDmVL2z21Nh+RUI2e3oT1dJ+32GxsBjghgmRd6KHxwzYjPSpLCIeXr1W18b?=
+ =?us-ascii?Q?vTbLyWOeVKtaPVeNaidN4YDhmHf6OOhR30itphq4sLE0zkTyT6ehHW+vKMDo?=
+ =?us-ascii?Q?MUrAe2dMmziB+OJSc8xgKD3RGE7fGB7qnVabpXKSYTKE7g9ffCeKGWGX7Sqq?=
+ =?us-ascii?Q?xiu/a4khHem518NbiIivoZxO8+KzTGTXOrjD1o9D5r/bm+mpQuuFykCkIe4G?=
+ =?us-ascii?Q?HSLR4JXqT5qGC5CoLa5P0FDTADs9ql+MoVNMh3IcPSYNdGmDnJPmSB6o70Y4?=
+ =?us-ascii?Q?k9I/lWgMQtOD+SBdVLxPDgVB1jwZxOo5kh+BfGmxk2paEYs9fS1+PdBf/MI9?=
+ =?us-ascii?Q?Uq3+BKWQWhYhncvwzhCQmZFvfb0pRh+h7fMkN5YHTViChH/43H/6s8XvRmcL?=
+ =?us-ascii?Q?p0ipAko/4xVy5s1KSHVPS0GZMXy8SCf2zsq1fbXsbp06KCPESWH6xQOSlih+?=
+ =?us-ascii?Q?Lu2FP32mTMjg4c/oOlgRbXwjVuXHUlRCYqnz04UYEqlEpeM0TvR8X48u9kaW?=
+ =?us-ascii?Q?ORRaglXx045mfCaPDzRyA9BjLPCoUM+11cMiWuISFcJSEu5uvy5TRuy8CQm5?=
+ =?us-ascii?Q?Jpke9tVZi2B0hICxyaN8D3sDdwqzlpSx4/FjGDbQzc/P8CpHtpP3QuEISAm8?=
+ =?us-ascii?Q?59FoPsu84qz8kLIg5bikvz3m0brLrWS4M8sWRcyuLvBdvR8n1xi0WANQ3TFz?=
+ =?us-ascii?Q?QT99iOcH/0AjWt0GFv6YPxwRE0SRNIAwccCGjrqeqt1/Pzjj6rhC60sp63IX?=
+ =?us-ascii?Q?Hw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR06MB6070:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a534d76-4c36-4170-f19a-08daf875e853
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GzsGntapHpXAq4FBJn8yEb6/kbJ59E6LYr4QGu5xnGGGi3F6V584WTFJSTlE+EChcMEmGnI6n4lNLbJLqzWALMETw+TSkLB6LW7RpxHby2X6fjUGtGSavJe9Azw7ymcCr32rg36EKu+QAUF2Ms8oK++K0WflQCBDYyAOA+vGUd2J9cigxbqRqVKsnVMMa+ApZDB5Xbbncavj84jw4i3db5xyihZFUI5+gg3RD7fUEhhK3wssLvjVOFwdDM5iOMOuraK5qqOnp6SrMqMQ10Y5Rcuj9RQ5KChnjq76qxqPpO/Dtpc0gckCG+eXNG336g8u9t4TfCMwx/SaHNxu98E+KXg0+2N2EhHtYUTffnrP3/H+Xrnl1MKHQ0U9vlcNW4heNM8+dFte4Bm2d9ImNF1VrXWiIoFWVlHsTgjHRpiiCBsPIBjeJTmUZj8ffmsFOiYC/acXF58ewYT2JcR2iEEinv6fbLyALqRkWmP5Bx/dVre7iaCf6t6eWmS55f1m5UgEArm2DU2Cs6NVokLop87bArQTozXPzRjq1fecQJr19rVBltimwcEI6Ypv7mtQf7pwSmtI6vo3q4o7khJ7ZwsLKZs1JmZkpv6IUkdoRGYiTjuTXn0yY16Z1ZKALuZZILeP9XTtY5LEP3PjVYSUzAuSMl4zXAuudkAoGBWOC703oGBX77/qBdBOm64EN8lYUwN9VNSTi64g9BsbEDnetQkXRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199015)(83380400001)(6486002)(6512007)(52116002)(36756003)(478600001)(186003)(38100700002)(38350700002)(2616005)(1076003)(86362001)(41300700001)(2906002)(107886003)(26005)(6506007)(6666004)(66556008)(8936002)(8676002)(66946007)(66476007)(4326008)(316002)(5660300002)(19627235002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i+Vx+eOjZDA3X7P1mmrb+o9VSpx0plETpPvrDpxThOKVJOhortJiRb/CYyvh?=
- =?us-ascii?Q?CMuJy1HIp2naqMRW//i13WMu3IfNa6BN8nzt4C12dV7WGIvIlrjvp3u3yJ++?=
- =?us-ascii?Q?F11MthBO0oPURJv+mLSeZOyUC6VRydaFfx23cKLlE8rCv5fypk3wNpQHujr+?=
- =?us-ascii?Q?rk3kg/nrwdELo+YvTKRH/1p891OHWa8Ai7ZV5nlpL3X3qu51IXgp+CJdtK+o?=
- =?us-ascii?Q?sJgqVfp2gAkqslV6+QL9nzZUVD5Dl0YUWPCOajWQxdA3Mj5wpTNnDP8/KELY?=
- =?us-ascii?Q?8gJZn+mciVjpfQ1ZDEpW4SEHcEz62WmWPVJ1uqE5fFcvw8bjl2CZOmtGCsB/?=
- =?us-ascii?Q?s5bfOnS4nP16Z41AtirqBq7taIYDgT9I/1No2zYj3KXX+xNvCzwUYQ3wCkU5?=
- =?us-ascii?Q?FLWfW1nff7JIk2cCIpSjVBse3dxUpg/h4iYyVx9NY420A1oX2F+lGSgT/k1D?=
- =?us-ascii?Q?OjG8YpNie+J1/Z/XI+h7fXbDNnFbHID5pZgHDkqSLIo6fbXR6eFE2s6yw1xu?=
- =?us-ascii?Q?5p9uCdVn+rSozTiWbaY6hGU1gdiRioiQkYJJr09c4Di5JlRtA/siKR2SFn4o?=
- =?us-ascii?Q?SCfN4tmZuBZkqBMR3KkMCkgjqrSYvJOQ9s8N/n5m67VT8zjBfkSEKrnc5hzP?=
- =?us-ascii?Q?wqblmyhLAFRxkS9VGnvhoBkS4RVBOceETNnWSr2Raxb6m9QXuCgAs180oRPO?=
- =?us-ascii?Q?NOYwmg1PoOyyiVA113bcg1Nf1O1pBv+SbJIGLeygNvmXnCaOtueijTyjozWj?=
- =?us-ascii?Q?ta6JPKVHKGaHxWnSFtt7ecV3JO1LSS/2nnfcqsK2xtHousy08e9Bwe9fKVZW?=
- =?us-ascii?Q?ZyPR4RFHcz+TtGByZ22YRKGlAORDHrdv4zzqzfe2TegVXXDbiurkT/NJAnve?=
- =?us-ascii?Q?1Sx0YMm2m+ChHsU4F1DFBI+AFBYWgLXrkb/RA5T9/Al2XrgDeDMJMQSWlkE+?=
- =?us-ascii?Q?gvNhigf3HMY9c7qDkr4dYW2bHUgSrRtgRffkRAGtPAFnqIfFBxO0NFnwx121?=
- =?us-ascii?Q?OdtJQY36ROSHohH9EgJeXAsbPeHVu37AHuRIQ/wQlApwK394Ad9qKnrKTbPD?=
- =?us-ascii?Q?j0j1O2OMucLrilGyzcahFENYxlTNrAvlzMg9XKZ45P0W+j2xz8fU/jJZWiLW?=
- =?us-ascii?Q?eD6t8LgQ+IjCn/OVv2Rviy9rFxgBMt7Y3DGiVjeeIjKfRrwg61xHRbj+lP9h?=
- =?us-ascii?Q?QweSbRyfAsoupIQ4nBCnqJqByHMTfMCpQU7ARWDzdNY2tlGplj+jnQeDKMdM?=
- =?us-ascii?Q?Zmhgd+dNt/A+Yso9hjvGrwWhrhS/A5pIL1oEcAYofabGfQOOqL9wMR8FMFLH?=
- =?us-ascii?Q?AjrEGbEStGJJshMTBPbJVHmOHRRoF34T2h4TX6Qmilit+Ph+thdyzj5D352x?=
- =?us-ascii?Q?IVKyuWbghedHIc9y4UFMP9eYPX8D5ACUOFhmKAJIWJNRRfEqNCIPRRzsocT2?=
- =?us-ascii?Q?6uoSpCDQoFs8THymlGz2tggG4EdSUbax286j1X/MGTvoUrYn1ouz2NScTU1G?=
- =?us-ascii?Q?1b1kHZc2HorKlKHV0gjz0gAFObASiz93O2C0ymfPRiRDF3qgv4qvpZm5P4zZ?=
- =?us-ascii?Q?Hcog8qgZxNmG206AxJ5I7qtjqfv1HyGxLg1zQG6j?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a534d76-4c36-4170-f19a-08daf875e853
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 10:30:52.0430
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 860bd38b-3699-49ab-f810-08daf875e42f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 10:30:44.9245
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LZZ/DjQYavl/r3ZlDyG3y0aaM4GqhmNrRUSnd4KzOaqSb3Dt4OksS1Hm/x4C4E/oiFbiY1BC4hCWZrhBRWrmwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6070
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: q1lRHT8YbfHKyRT8NsN9vxhfx29gYfTuJzfys5nz4nXYMx9NDgLmyX+zpLlKfMI8aIo498OZa1OZDeeBtUyeWUhr2kOcgqgh6XVutBV5WHA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8344
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 71644dff4811 ("f2fs: add block_age-based extent cache")
-introduce age extent cache, which experimental data is based on
-a 128G storage device, and hot and warm data age threshold are
-set to 1G and 10G respectively. But it is unreasonable to set
-this value to 1G or 10G by default, which varies depending on
-the environment. For small storage devices, some storage devices
-do not even have 10G.
+Hi all,
 
-Let's change hot and warm data age threshold to 1% and 10% of
-user_block_count respectively.
+Gentle ping.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- Documentation/ABI/testing/sysfs-fs-f2fs | 6 ++----
- fs/f2fs/extent_cache.c                  | 2 --
- fs/f2fs/f2fs.h                          | 9 +++++----
- fs/f2fs/super.c                         | 2 ++
- 4 files changed, 9 insertions(+), 10 deletions(-)
+This patch is reviewed by Rob.
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 75420c242cc4..c7952f1baf59 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -660,15 +660,13 @@ What:		/sys/fs/f2fs/<disk>/hot_data_age_threshold
- Date:		November 2022
- Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
- Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
--		the data blocks as hot. By default it was initialized as 262144 blocks
--		(equals to 1GB).
-+		the data blocks as hot. By default it was initialized as 1% of user_block_count.
- 
- What:		/sys/fs/f2fs/<disk>/warm_data_age_threshold
- Date:		November 2022
- Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
- Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
--		the data blocks as warm. By default it was initialized as 2621440 blocks
--		(equals to 10GB).
-+		the data blocks as warm. By default it was initialized as 10% of user_block_count.
- 
- What:		/sys/fs/f2fs/<disk>/fault_rate
- Date:		May 2016
-diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index 1daf8c88c09b..9c7e304d5660 100644
---- a/fs/f2fs/extent_cache.c
-+++ b/fs/f2fs/extent_cache.c
-@@ -1235,8 +1235,6 @@ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi)
- 
- 	/* initialize for block age extents */
- 	atomic64_set(&sbi->allocated_data_blocks, 0);
--	sbi->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
--	sbi->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
- }
- 
- int __init f2fs_create_extent_cache(void)
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index f3c5f7740c1a..3b853c302a43 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -615,11 +615,12 @@ enum {
- #define SAME_AGE_REGION			1024
- 
- /*
-- * Define data block with age less than 1GB as hot data
-- * define data block with age less than 10GB but more than 1GB as warm data
-+ * Define data block with age less than 1% of user_block_count as hot data
-+ * Define data block with age less than 10% of user_block_count but more
-+ * than 1% of user_block_count as warm data
-  */
--#define DEF_HOT_DATA_AGE_THRESHOLD	262144
--#define DEF_WARM_DATA_AGE_THRESHOLD	2621440
-+#define DEF_HOT_DATA_AGE_THRESHOLD	1
-+#define DEF_WARM_DATA_AGE_THRESHOLD	10
- 
- /* extent cache type */
- enum extent_type {
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 5fc83771042d..8333ea5b8ffd 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -4088,6 +4088,8 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
- 					BIT(F2FS_IPU_HONOR_OPU_WRITE);
- 	}
- 
-+	sbi->hot_data_age_threshold = sbi->user_block_count * DEF_HOT_DATA_AGE_THRESHOLD / 100;
-+	sbi->warm_data_age_threshold = sbi->user_block_count * DEF_WARM_DATA_AGE_THRESHOLD / 100;
- 	sbi->readdir_ra = true;
- }
- 
--- 
-2.25.1
+It is blocking for accepting SoC dtsi patches[1] through renesas-soc tree=20
+
+1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221122193=
+415.1873179-2-biju.das.jz@bp.renesas.com/
+
+Cheers,
+Biju
+
+> -----Original Message-----
+> From: Biju Das <biju.das.jz@bp.renesas.com>
+> Sent: 22 November 2022 19:34
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>; Rob Herring
+> <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Biju Das <biju.das.jz@bp.renesas.com>; Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com>; linux-media@vger.kernel.org; linux-
+> renesas-soc@vger.kernel.org; devicetree@vger.kernel.org; Geert Uytterhoev=
+en
+> <geert+renesas@glider.be>; Fabrizio Castro <fabrizio.castro.jz@renesas.co=
+m>;
+> Rob Herring <robh@kernel.org>
+> Subject: [PATCH v4 2/2] media: dt-bindings: media: renesas,fcp: Document
+> RZ/{G2L,V2L} FCPVD bindings
+>=20
+> Document FCPVD found in RZ/G2L alike SoCs. FCPVD block is similar to FCP =
+for
+> VSP found on R-Car SoC's . It has 3 clocks compared to 1 clock on fcpv.
+> Introduce new compatibles renesas,r9a07g044-fcpvd for RZ/G2{L,LC} and
+> renesas,r9a07g054-fcpvd for RZ/V2L to handle this difference.
+>=20
+> The 3 clocks are shared between du, vspd and fcpvd. No driver changes are
+> required as generic compatible string "renesas,fcpv" will be used as a
+> fallback.
+>=20
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> v3->v4:
+>  * Added Rb tag from Rob.
+> v2->v3:
+>  * Updated the compatibles by replacing items->enum as
+>    it is just one item.
+> v1->v2:
+>  * Documented RZ/{G2,V2}L FCPVD bindings
+>  * Introduces new compatibles renesas,r9a07g0{44,54}-fcpvd
+>  * Added clock-names property
+>  * described clocks.
+> ---
+>  .../bindings/media/renesas,fcp.yaml           | 45 ++++++++++++++++---
+>  1 file changed, 40 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+> b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+> index 43f2fed8cd33..c6abe719881b 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+> @@ -21,15 +21,22 @@ description: |
+>=20
+>  properties:
+>    compatible:
+> -    enum:
+> -      - renesas,fcpv # FCP for VSP
+> -      - renesas,fcpf # FCP for FDP
+> +    oneOf:
+> +      - enum:
+> +          - renesas,fcpv # FCP for VSP
+> +          - renesas,fcpf # FCP for FDP
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a07g044-fcpvd # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-fcpvd # RZ/V2L
+> +          - const: renesas,fcpv         # Generic FCP for VSP fallback
+>=20
+>    reg:
+>      maxItems: 1
+>=20
+> -  clocks:
+> -    maxItems: 1
+> +  clocks: true
+> +
+> +  clock-names: true
+>=20
+>    iommus:
+>      maxItems: 1
+> @@ -49,6 +56,34 @@ required:
+>=20
+>  additionalProperties: false
+>=20
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r9a07g044-fcpvd
+> +              - renesas,r9a07g054-fcpvd
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: Main clock
+> +            - description: Register access clock
+> +            - description: Video clock
+> +        clock-names:
+> +          items:
+> +            - const: aclk
+> +            - const: pclk
+> +            - const: vclk
+> +      required:
+> +        - clock-names
+> +    else:
+> +      properties:
+> +        clocks:
+> +          maxItems: 1
+> +        clock-names: false
+> +
+>  examples:
+>    # R8A7795 (R-Car H3) FCP for VSP-D1
+>    - |
+> --
+> 2.25.1
 
