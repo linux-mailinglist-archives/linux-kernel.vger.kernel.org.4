@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443A066DD20
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDE266DD27
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbjAQMDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S236803AbjAQMED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236798AbjAQMCt (ORCPT
+        with ESMTP id S236976AbjAQMD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:02:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD37D36B0A;
-        Tue, 17 Jan 2023 04:02:40 -0800 (PST)
+        Tue, 17 Jan 2023 07:03:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F66936FCD;
+        Tue, 17 Jan 2023 04:03:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E9A7ACE1689;
-        Tue, 17 Jan 2023 12:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B38C4C43392;
-        Tue, 17 Jan 2023 12:02:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B59E3CE1688;
+        Tue, 17 Jan 2023 12:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E677C433D2;
+        Tue, 17 Jan 2023 12:03:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673956957;
-        bh=b7leQCJ1hzDEzhNOIaU0dSmiOnzI32jbZ622PnNwXdY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bcY3G8vVPQeY2fnf2OCPlwfgh+M8N0byJRF+mzSvpvUtYlMKcCI/El+kpsRQuDvVF
-         GMl5/BgB1e685aQQ2aYz1oGqQLLJ9a+c37UhPX609007dt9wSa44PMFM8yOqgbCWjU
-         lAS3TGRBgHLftnUbgDdNjIAB+mkIKFN8egkxykWwHW7phAY/CsXxeZ6cErATNRjbSk
-         ZBB05wHYkKSKjXqbQFbp+xN6s5KzvJjGXX/LdFi893Pa1pKFMkgHUvUdqtPoV1ni+5
-         S9rb4VVDN98KaYUs6313c3/2I3ukqXhaumclPDn4WjzCp+Thh+UTptD2rja5CAolpg
-         n+V7NvD3wefkQ==
-From:   rfoss@kernel.org
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v1 3/3] arm64: dts: qcom: sm8350-hdk: Enable lt9611uxc dsi-hdmi bridge
-Date:   Tue, 17 Jan 2023 13:02:23 +0100
-Message-Id: <20230117120223.1055225-4-rfoss@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230117120223.1055225-1-rfoss@kernel.org>
-References: <20230117120223.1055225-1-rfoss@kernel.org>
+        s=k20201202; t=1673956993;
+        bh=93tzp+RSOFf3+k4VJuc6vDivUrGEcUxrSIufHOvJ2kk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=of5w9Xji5VNt/i6LxdxPZcYFz/Uw2hYN4b1Dd1rF2g8GNW0eiNQDJ+Y8y1aEEeE/a
+         NYxCsYslSsLRlIH33cntH+tV20HVHqrJQC/0Q1VBorj/mqOH7yHvAPVNLBD4TnP8bX
+         kSdSUi++Jh+XfjjAEcozg0vsEg+6lVk8BcOg+BxODigDLV6JzXKuIWJpSrNS1ZvgsF
+         0kfgA+p4Oo3b3+EprhLqWQjlKdQwvR4bGaaB6nGu9tfws4+mG4rXxdh75g16JMVJtM
+         FEt2NMAXwJ6dD8alBSLP5SfCNjN1jeHTEg7dJD/Bz3ND9ClbQIwMvdb/UolK6yOVRb
+         LFVB1lvT2qqdw==
+Date:   Tue, 17 Jan 2023 14:03:07 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Israel Rukshin <israelr@nvidia.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: Re: [PATCH rdma-next 03/13] RDMA: Split kernel-only create QP flags
+ from uverbs create QP flags
+Message-ID: <Y8aOe68Q49lvsjv8@unreal>
+References: <cover.1673873422.git.leon@kernel.org>
+ <6e46859a58645d9f16a63ff76592487aabc9971d.1673873422.git.leon@kernel.org>
+ <Y8WL2gQqqeZdMvr6@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8WL2gQqqeZdMvr6@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,168 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Foss <robert.foss@linaro.org>
+On Mon, Jan 16, 2023 at 01:39:38PM -0400, Jason Gunthorpe wrote:
+> On Mon, Jan 16, 2023 at 03:05:50PM +0200, Leon Romanovsky wrote:
+> 
+> > diff --git a/drivers/infiniband/hw/mlx4/mlx4_ib.h b/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > index 17fee1e73a45..c553bf0eb257 100644
+> > --- a/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > +++ b/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > @@ -184,7 +184,7 @@ enum mlx4_ib_qp_flags {
+> >  	/* Mellanox specific flags start from IB_QP_CREATE_RESERVED_START */
+> >  	MLX4_IB_ROCE_V2_GSI_QP = MLX4_IB_QP_CREATE_ROCE_V2_GSI,
+> >  	MLX4_IB_SRIOV_TUNNEL_QP = 1 << 30,
+> > -	MLX4_IB_SRIOV_SQP = 1 << 31,
+> > +	MLX4_IB_SRIOV_SQP = 1ULL << 31,
+> >  };
+> 
+> These should be moved to a uapi if we are saying they are userspace
+> available
+> 
+> But I'm not sure they are?
 
-The sm8350-hdk ships with the LT9611 UXC DSI/HDMI bridge chip.
+I don't think so.
 
-In order to toggle the board to enable the HDMI output,
-switch #7 & #8 on the rightmost multi-switch package have
-to be toggled to On.
+> 
+> 
+> > diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+> > index 949cf4ffc536..cc2ddd4e6c12 100644
+> > --- a/include/rdma/ib_verbs.h
+> > +++ b/include/rdma/ib_verbs.h
+> > @@ -1140,16 +1140,15 @@ enum ib_qp_type {
+> >  	IB_QPT_RESERVED10,
+> >  };
+> >  
+> > +/*
+> > + * bits 0, 5, 6 and 7 may be set by old kernels and should not be used.
+> > + */
+> 
+> This is backwards "bits 0 5 6 7 were understood by older kernels and
+> should not be used"
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 105 ++++++++++++++++++++++++
- 1 file changed, 105 insertions(+)
+will change
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-index 7878f42e9378..49ff3033c120 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-@@ -20,6 +20,17 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_con: endpoint {
-+				remote-endpoint = <&lt9611_out>;
-+			};
-+		};
-+	};
-+
- 	vph_pwr: vph-pwr-regulator {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vph_pwr";
-@@ -29,6 +40,31 @@ vph_pwr: vph-pwr-regulator {
- 		regulator-always-on;
- 		regulator-boot-on;
- 	};
-+
-+	lt9611_1v2: lt9611-1v2-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LT9611_1V2";
-+
-+		vin-supply = <&vph_pwr>;
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		gpio = <&tlmm 49 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+
-+	lt9611_3v3: lt9611-3v3-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LT9611_3V3";
-+
-+		vin-supply = <&vreg_bob>;
-+		gpio = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
- };
- 
- &adsp {
-@@ -228,6 +264,15 @@ &dispcc {
- &mdss_dsi0 {
- 	vdda-supply = <&vreg_l6b_1p2>;
- 	status = "okay";
-+
-+	ports {
-+		port@1 {
-+			endpoint {
-+				remote-endpoint = <&lt9611_a>;
-+				data-lanes = <0 1 2 3>;
-+			};
-+		};
-+	};
- };
- 
- &mdss_dsi0_phy  {
-@@ -239,6 +284,46 @@ &gpi_dma1 {
- 	status = "okay";
- };
- 
-+&i2c15 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	lt9611_codec: hdmi-bridge@2b {
-+		compatible = "lontium,lt9611uxc";
-+		reg = <0x2b>;
-+
-+		interrupts-extended = <&tlmm 50 IRQ_TYPE_EDGE_FALLING>;
-+		reset-gpios = <&tlmm 48 GPIO_ACTIVE_HIGH>;
-+
-+		vdd-supply = <&lt9611_1v2>;
-+		vcc-supply = <&lt9611_3v3>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&lt9611_state>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				lt9611_a: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+
-+			port@2 {
-+				reg = <2>;
-+
-+				lt9611_out: endpoint {
-+					remote-endpoint = <&hdmi_con>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdss {
- 	status = "okay";
- };
-@@ -256,6 +341,10 @@ &qupv3_id_0 {
- 	status = "okay";
- };
- 
-+&qupv3_id_2 {
-+	status = "okay";
-+};
-+
- &slpi {
- 	status = "okay";
- 	firmware-name = "qcom/sm8350/slpi.mbn";
-@@ -347,4 +436,20 @@ usb_hub_enabled_state: usb-hub-enabled-state {
- 		drive-strength = <2>;
- 		output-low;
- 	};
-+
-+	lt9611_state: lt9611-state {
-+		rst {
-+			pins = "gpio48";
-+			function = "normal";
-+
-+			output-high;
-+			input-disable;
-+		};
-+
-+		irq {
-+			pins = "gpio50";
-+			function = "gpio";
-+			bias-disable;
-+		};
-+	};
- };
--- 
-2.34.1
+> 
+> >  enum ib_qp_create_flags {
+> > -	IB_QP_CREATE_IPOIB_UD_LSO		= 1 << 0,
+> >  	IB_QP_CREATE_BLOCK_MULTICAST_LOOPBACK	=
+> >  		IB_UVERBS_QP_CREATE_BLOCK_MULTICAST_LOOPBACK,
+> >  	IB_QP_CREATE_CROSS_CHANNEL              = 1 << 2,
+> >  	IB_QP_CREATE_MANAGED_SEND               = 1 << 3,
+> >  	IB_QP_CREATE_MANAGED_RECV               = 1 << 4,
+> > -	IB_QP_CREATE_NETIF_QP			= 1 << 5,
+> > -	IB_QP_CREATE_INTEGRITY_EN		= 1 << 6,
+> > -	IB_QP_CREATE_NETDEV_USE			= 1 << 7,
+> >  	IB_QP_CREATE_SCATTER_FCS		=
+> >  		IB_UVERBS_QP_CREATE_SCATTER_FCS,
+> >  	IB_QP_CREATE_CVLAN_STRIPPING		=
+> > @@ -1159,7 +1158,18 @@ enum ib_qp_create_flags {
+> >  		IB_UVERBS_QP_CREATE_PCI_WRITE_END_PADDING,
+> >  	/* reserve bits 26-31 for low level drivers' internal use */
+> >  	IB_QP_CREATE_RESERVED_START		= 1 << 26,
+> > -	IB_QP_CREATE_RESERVED_END		= 1 << 31,
+> > +	IB_QP_CREATE_RESERVED_END		= 1ULL << 31,
+> 
+> And these should be shifted to the uapi header
 
+No problem.
+
+> 
+> Jason
