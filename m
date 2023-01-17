@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4722366E5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7033C66E5BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjAQSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S229600AbjAQSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjAQSLP (ORCPT
+        with ESMTP id S232653AbjAQSM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:11:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978F33BDAC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:52:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673977947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7bhc0N8lOZgDifhC2frdOWe817b3omvaW/l36eahars=;
-        b=hMhlvu2pHDoglaQTx5U6fE9p+NZornx+4EGBk6/glFqKG78UFWOMF4MVN+HEsFRbmvPaqS
-        CTnhdR8LiBnJ7S0Kei4cG3IdIiEgpDoxzIOTJnyRU36SKVMJWw/Ljgq2s6cCNKOvzOJ8sz
-        Q2NM+j6GAMtvxQjHsvXYytYUYQ0QNSw=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-368-w_9OZDyrMmaygmTkBeR7aA-1; Tue, 17 Jan 2023 12:52:25 -0500
-X-MC-Unique: w_9OZDyrMmaygmTkBeR7aA-1
-Received: by mail-qv1-f69.google.com with SMTP id p12-20020a0cc3cc000000b005350e8146a2so2850460qvi.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:52:25 -0800 (PST)
+        Tue, 17 Jan 2023 13:12:29 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA706A4C;
+        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id 7-20020a17090a098700b002298931e366so4952361pjo.2;
+        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G8hEvDwlMSf2tfj591ozB94dwg3JRKRm8dUmMHqYxK0=;
+        b=Nl/0cscOZqJTcM/thrcHXxKH8AZL5FFhvXmHpuqUMucIk3p3UcIc440BVuwhGgyfOT
+         ilhS7N/N02uTlSfnBbsRr+k+wN/aiVoQyHQPovxUD6VX/69rNTHRnho1ibWP1i5WwklC
+         hg6Bej8hrB0UYF6pfUjTGZo1jEN+Po/EaPnlPppxN7RGysPYhmm11vrT2O3ePryy2pDB
+         Gld8wPFNLAYkoI/rCHLV1apvk4tnCwdTJNJfTpClmA+pUGvAOOiyokBoHPlUFqAfxoML
+         YuFLYooqK0LlQY28YS7/Ggu1wckIzrqp0SxGtcxg8loVo+uzV8N9H1mzjk1mjBpas/7q
+         /spA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7bhc0N8lOZgDifhC2frdOWe817b3omvaW/l36eahars=;
-        b=ZzCYChNVSPGn4NQ3KNANGOiB7F+2uLT2/AXQw3g9S8oFsGYRgcFdKUueXmJjfNLhEb
-         pz/yCtXfUBdD/MmyLbC5Vjdfz81TfmJKpdfgYUWXtNsD6UVqSwmzqQoD9FJ0axquLj0T
-         ZpDBrt0YgMnPmdW/BcHXa7VNvg1V6yApjhv4/doZGMlXX9TMsregwGqSHt4Kt9cglgIi
-         XedshWdqTO7HFkGgQPeZKOQcC970TvXG4UxmvThRIKxkpt1qYqaZPRsRo/knHa+v3zbr
-         wzQ0NUhie30YI9GrFvsIdKRS/cxzz9t4bKjBMs+O88s4cgtS0SnHFrKjtw/Bq0/uD2D2
-         BMuw==
-X-Gm-Message-State: AFqh2krAbc86RufeA0k/ea1KREPI+INqdBH2C2v0UTp0KYcRVST5yeHw
-        curLT6gm+D4bnhUUsJ73KBk1wSKjb0tNNoc9/7BYOLERkiXiYCpA5cUwz0bZm9hfMpL+IpQtnqJ
-        7bdgKHkWYsj3GaiL2OwPnhJE=
-X-Received: by 2002:ac8:480a:0:b0:3ae:55ba:8392 with SMTP id g10-20020ac8480a000000b003ae55ba8392mr4862302qtq.32.1673977944875;
-        Tue, 17 Jan 2023 09:52:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtgV1rHPprpYlV6nz/fDPisM7ofVJJ0FHk5YLTcA4e90viVYHPitevtt/bN1J4+T4+w8pQt7w==
-X-Received: by 2002:ac8:480a:0:b0:3ae:55ba:8392 with SMTP id g10-20020ac8480a000000b003ae55ba8392mr4862262qtq.32.1673977944562;
-        Tue, 17 Jan 2023 09:52:24 -0800 (PST)
-Received: from localhost (pool-68-160-145-102.bstnma.fios.verizon.net. [68.160.145.102])
-        by smtp.gmail.com with ESMTPSA id x21-20020a05620a0b5500b0070688f60025sm2768704qkg.76.2023.01.17.09.52.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G8hEvDwlMSf2tfj591ozB94dwg3JRKRm8dUmMHqYxK0=;
+        b=wXddn6chPezn+z5C0LB5I69HCRo0XEWtyP4tp0Z0yrdZPbiN6alY3GlsZjo4SQGuq1
+         ZDg2n3HuYO8AzuKu4x3t4UwbCwnSwlue/MItU6mIhD5rLpdv/Tn6B2ca2Or+Xlsjh8BI
+         mzYzoJx6qIVQCcgnkAhiXMtY0Z7l5bS+fSUni7tI6X0N8bfjMgeaVpUbM7bJFgiCQkqn
+         F4XeGscFvvP4AaroAkieQLppqYvuHqDa6vFZdP/EwDV/q/oegRHXuldTYO4VfuFstmBd
+         Ggb+SBxuA9tRO37h8eX29iL1bEFCXMv1CJoyNF66mrEV+kmbyhSLJJu8f6LaY4isK0I1
+         kktg==
+X-Gm-Message-State: AFqh2ko5OZFTgyfecttfg7FrzkFa2ymPzwWisvjkouk1OAIbeBJJq1+V
+        0moROS8NNg/UQ/Kur3I6tQE=
+X-Google-Smtp-Source: AMrXdXsonDVhtVowwlGWbPKQPrwd3/OBWE4owFT4EVZnsBd1nRKKYJr++koerleABwUEjBrzPCfFrA==
+X-Received: by 2002:a17:903:2687:b0:192:8ec5:fd58 with SMTP id jf7-20020a170903268700b001928ec5fd58mr2738024plb.6.1673978047288;
+        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
+Received: from KERNELXING-MB0.tencent.com ([114.253.32.172])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0019320b4f832sm10512521plg.178.2023.01.17.09.54.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:52:24 -0800 (PST)
-Date:   Tue, 17 Jan 2023 12:52:22 -0500
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Gulam Mohamed <gulam.mohamed@oracle.com>
-Cc:     linux-block@vger.kernel.org, nvdimm@lists.linux.dev,
-        shminderjit.singh@oracle.com, linux-kernel@vger.kernel.org,
-        song@kernel.org, dm-devel@redhat.com, ira.weiny@intel.com,
-        agk@redhat.com, drbd-dev@lists.linbit.com, dave.jiang@intel.com,
-        christoph.boehmwalder@linbit.com, vishal.l.verma@intel.com,
-        konrad.wilk@oracle.com, joe.jin@oracle.com,
-        kent.overstreet@gmail.com, ngupta@vflare.org, kch@nvidia.com,
-        senozhatsky@chromium.org, snitzer@kernel.org, colyli@suse.de,
-        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
-        dan.j.williams@intel.com, axboe@kernel.dk,
-        martin.petersen@oracle.com, rajesh.sivaramasubramaniom@oracle.com,
-        philipp.reisner@linbit.com, junxiao.bi@oracle.com,
-        minchan@kernel.org, lars.ellenberg@linbit.com
-Subject: Re: [PATCH for-6.2/block V3 2/2] block: Change the granularity of io
- ticks from ms to ns
-Message-ID: <Y8bgVh7HQx9jZWtF@redhat.com>
-References: <20221221040506.1174644-1-gulam.mohamed@oracle.com>
- <20221221040506.1174644-2-gulam.mohamed@oracle.com>
+        Tue, 17 Jan 2023 09:54:06 -0800 (PST)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: [PATCH v6 net] tcp: avoid the lookup process failing to get sk in ehash table
+Date:   Wed, 18 Jan 2023 01:53:40 +0800
+Message-Id: <20230117175340.91712-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221040506.1174644-2-gulam.mohamed@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,247 +71,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[comments/questions inlined below]
+From: Jason Xing <kernelxing@tencent.com>
 
-On Tue, Dec 20 2022 at 11:05P -0500,
-Gulam Mohamed <gulam.mohamed@oracle.com> wrote:
+While one cpu is working on looking up the right socket from ehash
+table, another cpu is done deleting the request socket and is about
+to add (or is adding) the big socket from the table. It means that
+we could miss both of them, even though it has little chance.
 
-> Problem Desc
-> ============
-> The "iostat" user-space utility was showing %util as 100% for the disks
-> which has latencies less than a milli-second i.e for latencies in the
-> range of micro-seconds and below.
-> 
-> Root Cause
-> ==========
-> The IO accounting in block layer is currently done by updating the
-> io_ticks in jiffies which is of milli-seconds granularity. Due to this,
-> for the devices with IO latencies less than a milli-second, the latency
-> will be accounted as 1 milli-second even-though its in the range of
-> micro-seconds. This was causing the iostat command to show %util
-> as 100% which is incorrect.
-> 
-> Recreationg of the issue
-> ========================
-> Setup
-> -----
-> Devices: NVMe 24 devices
-> Model number: 4610 (Intel)
-> 
-> fio
-> ---
-> [global]
-> bs=4K
-> iodepth=1
-> direct=1
-> ioengine=libaio
-> group_reporting
-> time_based
-> runtime=100
-> thinktime=1ms
-> numjobs=1
-> name=raw-write
-> rw=randrw
-> ignore_error=EIO:EIO
-> [job1]
-> filename=/dev/nvme0n1
-> 
-> iostat o/p
-> ----------
-> 
-> Device   %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-> nvme3n1   0.00    0.05    0.00  75.38     0.50     0.00   0.00 100.00
-> 
-> Device   %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-> nvme3n1   0.00    0.05    0.00  74.74     0.50     0.00   0.00 100.00
-> 
-> Solution
-> ========
-> Use ktime_get_ns() to update the disk_stats io_ticks so that the io_ticks
-> are updated for every io start and end times.
-> 
-> Issues using ktime
-> ==================
-> 
-> Using ktime_get_ns() has a performance overhead as ktime will go ahead
-> and reads the clock everytime its called. Following test environment
-> was used by Jens Axboe on which t/io_uring was run which has shown a
-> high performance drop.
-> 
-> Devices
-> -------
-> SSDs: P5800X
-> No of devices: 24
-> 
-> io_uring config
-> ---------------
-> Polled IO
-> iostats: Enabled
-> Reads: Random
-> Block Size: 512
-> QDepth: 128
-> Batch Submit: 32
-> Batch Complete: 32
-> No of Threads: 24
-> 
-> With the above environment and ktime patch, it has shown a performance
-> drop of ~25% from iostats disabled and ~19% performance drop from current
-> iostats enabled. This performance drop is high.
-> 
-> Suggestion from Jens Axboe
-> ==========================
-> Jens Axboe suggested to split the bigger patch into two as follows:
-> 
-> 1. In first patch, change all the types from unsigned long to u64, that
->    can be done while retaining jiffies.
-> 
-> 2. In second patch, add an iostats == 2 setting, which enables the higher
->    resolution mode using ktime. We'd still default to 1, lower granularity
->    iostats enabled.
-> 
-> Fix details
-> ===========
-> 1. Use ktime_get_ns() to get the current nano-seconds to update the
->    io_ticks for start and end time stamps in block layer for io accounting
-> 
-> 2. Create a new setting '2' in sysfs for iostats variable i.e for
->    /sys/block/<device-name>/queue/iostats, to enable the iostat (io
->    accounting) with nano-seconds (using ktime) granularity. This setting
->    should be enabled only if the iostat is needed with high resolution
->    mode as it has a high performance drop
-> 
-> 3. Earlier available settings were 0 and 1 for disable and enable io
->    accounting with milli-seconds granularity (jiffies)
-> 
-> Testing
-> =======
-> Ran the t/io_uring command with following setup:
-> 
-> Devices
-> -------
-> SSDs: P4610
-> No of devices: 8
-> 
-> io_uring config
-> ---------------
-> Polled IO
-> iostats: Enabled
-> Reads: Random
-> Block Size: 512
-> QDepth: 128
-> Batch Submit: 32
-> Batch Complete: 32
-> No of Threads: 24
-> 
-> io_uring o/p
-> ------------
-> iostat=0, with patch: Maximum IOPS=10.09M
-> iostat=1, with patch: Maximum IOPS=9.84M
-> iostat=2, with patch: Maximum IOPS=9.48M
-> 
-> Changes from V2 to V3
-> =====================
-> 1. Changed all the required variables data-type to u64 as a first patch
-> 2. Create a new setting '2' for iostats in sysfs in this patch
-> 3. Change the code to get the ktime values when iostat=2, in this patch
-> 
-> Signed-off-by: Gulam Mohamed <gulam.mohamed@oracle.com>
-> ---
->  block/blk-core.c                  | 26 +++++++++++++++++----
->  block/blk-mq.c                    |  4 ++--
->  block/blk-sysfs.c                 | 39 ++++++++++++++++++++++++++++++-
->  block/genhd.c                     | 18 ++++++++++----
->  drivers/block/drbd/drbd_debugfs.c | 12 ++++++++--
->  drivers/block/zram/zram_drv.c     |  3 ++-
->  drivers/md/dm.c                   | 13 +++++++++--
->  include/linux/blkdev.h            |  4 ++++
->  8 files changed, 103 insertions(+), 16 deletions(-)
-> 
-> diff --git a/block/blk-core.c b/block/blk-core.c
-> index 5670032fe932..0b5e4eb909a5 100644
-> --- a/block/blk-core.c
-> +++ b/block/blk-core.c
-> @@ -927,6 +927,18 @@ int iocb_bio_iopoll(struct kiocb *kiocb, struct io_comp_batch *iob,
->  }
->  EXPORT_SYMBOL_GPL(iocb_bio_iopoll);
->  
-> +/*
-> + * Get the time based upon the available granularity for io accounting
-> + * If the resolution mode is set to precise (2) i.e
-> + * (/sys/block/<device>/queue/iostats = 2), then this will return time
-> + * in nano-seconds else this will return time in jiffies
-> + */
-> +u64  blk_get_iostat_ticks(struct request_queue *q)
-> +{
-> +       return (blk_queue_precise_io_stat(q) ? ktime_get_ns() : jiffies);
-> +}
-> +EXPORT_SYMBOL_GPL(blk_get_iostat_ticks);
-> +
+Let me draw a call trace map of the server side.
+   CPU 0                           CPU 1
+   -----                           -----
+tcp_v4_rcv()                  syn_recv_sock()
+                            inet_ehash_insert()
+                            -> sk_nulls_del_node_init_rcu(osk)
+__inet_lookup_established()
+                            -> __sk_nulls_add_node_rcu(sk, list)
 
-Would prefer to see blk_get_iostat_ticks tagged with 'static inline'
-and moved to blkdev.h (obviously below blk_queue_precise_io_stat).
+Notice that the CPU 0 is receiving the data after the final ack
+during 3-way shakehands and CPU 1 is still handling the final ack.
 
-Also, just a general comment: I've historically been a bigger (ab)user
-of jump_labels to avoid excess branching costs per IO, e.g. see commit
-442761fd2b29 ("dm: conditionally enable branching for less used features").
-It could be there is an opportunity for a follow-on patch that
-leverages them?  Or should that just be left to each driver to decide
-to do with its own resources (rather than have block core provide that)?
+Why could this be a real problem?
+This case is happening only when the final ack and the first data
+receiving by different CPUs. Then the server receiving data with
+ACK flag tries to search one proper established socket from ehash
+table, but apparently it fails as my map shows above. After that,
+the server fetches a listener socket and then sends a RST because
+it finds a ACK flag in the skb (data), which obeys RST definition
+in RFC 793.
 
-(if nothing in the system ever uses QUEUE_FLAG_PRECISE_IO_STAT then
-it'd be nice to avoid needless branching).
+Besides, Eric pointed out there's one more race condition where it
+handles tw socket hashdance. Only by adding to the tail of the list
+before deleting the old one can we avoid the race if the reader has
+already begun the bucket traversal and it would possibly miss the head.
 
-<snip>
+Many thanks to Eric for great help from beginning to end.
 
-> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> index 011a85ea40da..1bb58a0b8cd1 100644
-> --- a/drivers/md/dm.c
-> +++ b/drivers/md/dm.c
-> @@ -482,7 +482,11 @@ static int dm_blk_ioctl(struct block_device *bdev, fmode_t mode,
->  
->  u64 dm_start_time_ns_from_clone(struct bio *bio)
->  {
-> -	return jiffies_to_nsecs(clone_to_tio(bio)->io->start_time);
-> +	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
-> +	u64 start_time_ns = (blk_queue_precise_io_stat(q) ?
-> +				clone_to_tio(bio)->io->start_time :
-> +				jiffies_to_nsecs(clone_to_tio(bio)->io->start_time));
-> +	return start_time_ns;
->  }
->  EXPORT_SYMBOL_GPL(dm_start_time_ns_from_clone);
->  
-> @@ -498,6 +502,11 @@ static void dm_io_acct(struct dm_io *io, bool end)
->  	struct mapped_device *md = io->md;
->  	struct bio *bio = io->orig_bio;
->  	unsigned int sectors;
-> +	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
-> +
-> +	u64 start_time = (blk_queue_precise_io_stat(q) ?
-> +				nsecs_to_jiffies(io->start_time) :
-> +				io->start_time);
->  
->  	/*
->  	 * If REQ_PREFLUSH set, don't account payload, it will be
-> @@ -589,7 +598,7 @@ static struct dm_io *alloc_io(struct mapped_device *md, struct bio *bio)
->  	io->orig_bio = bio;
->  	io->md = md;
->  	spin_lock_init(&io->lock);
-> -	io->start_time = jiffies;
-> +	io->start_time = blk_get_iostat_ticks(bio->bi_bdev->bd_queue);
->  	io->flags = 0;
->  
->  	if (static_branch_unlikely(&stats_enabled))
+Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+---
+v3,4,5,6:
+1) nit: adjust the coding style.
 
-The above seems correct, by checking the top-level DM device's
-disposition on QUEUE_FLAG_PRECISE_IO_STAT, but I'm now wondering
-if there should be code that ensures consistency across stacked
-devices (which DM is the biggest creator/consumer of)?
+v2:
+1) add the sk node into the tail of list to prevent the race.
+2) fix the race condition when handling time-wait socket hashdance.
+---
+ net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
+ net/ipv4/inet_timewait_sock.c | 12 ++++++------
+ 2 files changed, 21 insertions(+), 8 deletions(-)
 
-dm_table_set_restrictions() deals with such inconsistencies at DM
-device creation time (so basically: if any device in the DM table has
-QUEUE_FLAG_PRECISE_IO_STAT set then the top-level DM device should
-inherit that queue flag). A user could still override it but at least
-the default will be sane initially.
-
-Mike
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 24a38b56fab9..f58d73888638 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	spin_lock(lock);
+ 	if (osk) {
+ 		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+-		ret = sk_nulls_del_node_init_rcu(osk);
+-	} else if (found_dup_sk) {
++		ret = sk_hashed(osk);
++		if (ret) {
++			/* Before deleting the node, we insert a new one to make
++			 * sure that the look-up-sk process would not miss either
++			 * of them and that at least one node would exist in ehash
++			 * table all the time. Otherwise there's a tiny chance
++			 * that lookup process could find nothing in ehash table.
++			 */
++			__sk_nulls_add_node_tail_rcu(sk, list);
++			sk_nulls_del_node_init_rcu(osk);
++		}
++		goto unlock;
++	}
++	if (found_dup_sk) {
+ 		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+ 		if (*found_dup_sk)
+ 			ret = false;
+@@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	if (ret)
+ 		__sk_nulls_add_node_rcu(sk, list);
+ 
++unlock:
+ 	spin_unlock(lock);
+ 
+ 	return ret;
+diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+index 1d77d992e6e7..b66f2dea5a78 100644
+--- a/net/ipv4/inet_timewait_sock.c
++++ b/net/ipv4/inet_timewait_sock.c
+@@ -91,20 +91,20 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
+ }
+ EXPORT_SYMBOL_GPL(inet_twsk_put);
+ 
+-static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
+-				   struct hlist_nulls_head *list)
++static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
++					struct hlist_nulls_head *list)
+ {
+-	hlist_nulls_add_head_rcu(&tw->tw_node, list);
++	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
+ }
+ 
+ static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
+-				    struct hlist_head *list)
++					struct hlist_head *list)
+ {
+ 	hlist_add_head(&tw->tw_bind_node, list);
+ }
+ 
+ static void inet_twsk_add_bind2_node(struct inet_timewait_sock *tw,
+-				     struct hlist_head *list)
++					struct hlist_head *list)
+ {
+ 	hlist_add_head(&tw->tw_bind2_node, list);
+ }
+@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+ 
+ 	spin_lock(lock);
+ 
+-	inet_twsk_add_node_rcu(tw, &ehead->chain);
++	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
+ 
+ 	/* Step 3: Remove SK from hash chain */
+ 	if (__sk_nulls_del_node_init_rcu(sk))
+-- 
+2.37.3
 
