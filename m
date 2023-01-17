@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE176670E3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3E9670E3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjAQXys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S229760AbjAQXzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjAQXy2 (ORCPT
+        with ESMTP id S229762AbjAQXyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:54:28 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4DF279B8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:06:59 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id s3so9130398edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:06:59 -0800 (PST)
+        Tue, 17 Jan 2023 18:54:44 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3774ABCB;
+        Tue, 17 Jan 2023 15:08:11 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id az20so60013761ejc.1;
+        Tue, 17 Jan 2023 15:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=34NRbc6Rn5Hl13DlQK5hbHVd7yokEN6LIZjVZYLB8G8=;
-        b=mOosTStJClf1s+/aMHv4S9eSJthVfst5f0cCzLOs1zteP8KNfa71CF91fExyu7VZ97
-         xSm0YCQlKvZnF3zYP8GSxnl8E+kVDjs1ja+TgYK9xk+fStA1q97MHIQf+gw4UW0F0+yZ
-         OVgaZH+yNXuXUWq9swdoOXdxPHPzbDbbLBJlrhycbusqjUHZm2gbbwRmYJVOAasR1i+1
-         9i/8U0igntuW//mMuCx4ExS6UnuJ5+7rX3aqk84HnNSPBVixf4WeqTX8C6mOSUNKO+vS
-         yGMZgpaLF7ewxO5tmaI4I3CalehZhVUPA414tyTk1QYqDZRfZ/834dIrY1A1gR8OkeVn
-         8ZyA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZqG3eRlHUbK1Lyl7ksi3Aw/n8LhVJQ09Kf9OQGt9voM=;
+        b=ZxbOGkUgPd0sW7VsqQdDiiEezFqOj9G5epZuy25qVAeqJo4VqKuLhaIPdKMzhI4z49
+         p7zUZjGRsXHV8muavKDc+qsjH1FkBmWBjW+cqLq/8GvqNU/upQ1x+F5Jp0DS/UQubeEc
+         Ac4pdDjxJ5+Rbs4rzkL6WHY3Tpy6HeGJAgAD5JIRBPG5U2Ky+kVUXKioILZsLd1X8STR
+         5WGXAL/RbSZkGtOsoqpI0S4xqkIrGul9Gr3ihrlJ5WzcxZx44Wqff26av8mbjq5i8SDN
+         WP0YICTHvV0Ho573spiFUOC0blUJaCDC4sjx0e1IQk1UaOFuCmdvVJKufiUSoXFeYeaX
+         FT7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=34NRbc6Rn5Hl13DlQK5hbHVd7yokEN6LIZjVZYLB8G8=;
-        b=iPam0TiHpCY9PQnhWd3ThygoEGIFCj2vt8O3rkuN5QI3b18uvq5WGH/PEDWHXE9OG1
-         8ugoJMqDRzfmqtntn8c8E6KIZycLXSmHnxlEdlOhgINZK2Fd3R4MfodKopw2HxM426tj
-         oxXgWTDPp1as1sZEh/xVE3xwujTbhHjaD2nSedXkjQa6PMBjDUNFdplOOS0MIywoFJnY
-         W+QOqGmVzQ3/M0h+GisKxD4zoveaEdWR5eqOrJCiOshxnJe1J042XltoDHHfd0aHKW5t
-         YnYR/19XxEFCzSRmts9yeTT4I4/3pfPDZ+pab1GhFzCPxuxCjQyFq9AF9DVfWsoET0Pl
-         N6XA==
-X-Gm-Message-State: AFqh2kqlHEQ6JUkk2OVPTY4sfgyXFEutfswHPKb1mD8BmRLFcp2n0xXJ
-        WfTVSqaHHuxQ+qPE25oqQ25IgAf/HUJktAs9+SnT2g==
-X-Google-Smtp-Source: AMrXdXuD8XDTRfhe8VdadVUHbu5H49U/f3QNMGiza2JXIZMnTQHUeeLXRJYvdz8Z6t4UwnRQmicWSGwLne3BbvoTf/E=
-X-Received: by 2002:aa7:da51:0:b0:49e:4936:bbd8 with SMTP id
- w17-20020aa7da51000000b0049e4936bbd8mr34172eds.410.1673996817849; Tue, 17 Jan
- 2023 15:06:57 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZqG3eRlHUbK1Lyl7ksi3Aw/n8LhVJQ09Kf9OQGt9voM=;
+        b=XlRnDcmfCOwxwBDI6uBGYfnFrVFxeSl8BQgFJ4tsl692yp7Du/AGjvxokoaqTfqlKi
+         Og/MQ2VuiubiHqHF7ifll38HN6OzJSegHkSh0vpA2tAVbdbiqcnuSqDNUt+Un/C7wIdU
+         b2tRPsZ56SGCciV8f5EoAUcs440J/gRxcNjyfZZ6rtRyNUPUGsK02mSH5K5IcKggGsIF
+         fGXs6bzVdPrU7w48JFHFJTz0BAP4SscrRIX+kPtgVa4Vmwb1V3cvwz4cH33tqcwgd51X
+         4unKQ6DDfVAoyAc9nu/lsYfO2E81R+Fr7setTLKK/gArq7P9bGjQiudfXY6V742Nj3Fv
+         9rPA==
+X-Gm-Message-State: AFqh2krFErSzLSruLZoczLo1LdsYDwlhvrggn5+hAkzPhXN79JzqI3fv
+        lEBp4oqat2r92awHZ4ExQvU=
+X-Google-Smtp-Source: AMrXdXsNsFKUYz2t3yHJIzHFLh/nyECIcVDxNeg65wxo6D6FxRXy0K+cvrA+72ZPq62T6qBGsedr5g==
+X-Received: by 2002:a17:907:100c:b0:870:e329:5f3d with SMTP id ox12-20020a170907100c00b00870e3295f3dmr4810199ejb.19.1673996890349;
+        Tue, 17 Jan 2023 15:08:10 -0800 (PST)
+Received: from skbuf ([188.27.184.249])
+        by smtp.gmail.com with ESMTPSA id g9-20020a17090604c900b0085ca279966esm8773118eja.119.2023.01.17.15.08.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 15:08:10 -0800 (PST)
+Date:   Wed, 18 Jan 2023 01:08:06 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [RFC PATCH net-next 1/5] net: bridge: add dynamic flag to
+ switchdev notifier
+Message-ID: <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
+References: <20230117185714.3058453-1-netdev@kapio-technology.com>
+ <20230117185714.3058453-2-netdev@kapio-technology.com>
 MIME-Version: 1.0
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-4-vannapurve@google.com> <Y8cXvS2gKcK8tU2D@google.com>
-In-Reply-To: <Y8cXvS2gKcK8tU2D@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 17 Jan 2023 15:06:44 -0800
-Message-ID: <CAGtprH-xN_mSrsJtf4FAKM7xtCoz7XPZvsxdoj_N9XEL__QSkA@mail.gmail.com>
-Subject: Re: [V2 PATCH 3/6] KVM: selftests: x86: Add IS_ALIGNED/IS_PAGE_ALIGNED
- helpers
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117185714.3058453-2-netdev@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,20 +101,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 1:48 PM Sean Christopherson <seanjc@google.com> wrote:
-> ...
-> I certainly don't object to adding IS_PAGE_ALIGNED(), but it's not needed for
-> this series.  Verifying that KVM doesn't allow an unaligned page conversion during
-> KVM_HC_MAP_GPA_RANGE belongs in a separate test+series, as that doesn't have a
-> strict dependency on UPM.
->
-> TL;DR: this patch can be dropped, for now at least.
->
+On Tue, Jan 17, 2023 at 07:57:10PM +0100, Hans J. Schultz wrote:
+> To be able to add dynamic FDB entries to drivers from userspace, the
+> dynamic flag must be added when sending RTM_NEWNEIGH events down.
+> 
+> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+> ---
+>  include/net/switchdev.h   | 1 +
+>  net/bridge/br_switchdev.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+> index ca0312b78294..aaf918d4ba67 100644
+> --- a/include/net/switchdev.h
+> +++ b/include/net/switchdev.h
+> @@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
+>  	u8 added_by_user:1,
+>  	   is_local:1,
+>  	   locked:1,
+> +	   is_dyn:1,
+>  	   offloaded:1;
+>  };
+>  
+> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+> index 7eb6fd5bb917..60c05a00a1df 100644
+> --- a/net/bridge/br_switchdev.c
+> +++ b/net/bridge/br_switchdev.c
+> @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct net_bridge *br,
+>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+> +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
 
-Makes sense.
+Why reverse logic? Why not just name this "is_static" and leave any
+further interpretations up to the consumer?
 
-> >  #define HUGEPAGE_SHIFT(x)    (PAGE_SHIFT + (((x) - 1) * 9))
-> >  #define HUGEPAGE_SIZE(x)     (1UL << HUGEPAGE_SHIFT(x))
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
-> >
+>  	item->locked = false;
+>  	item->info.dev = (!p || item->is_local) ? br->dev : p->dev;
+>  	item->info.ctx = ctx;
+> -- 
+> 2.34.1
+> 
