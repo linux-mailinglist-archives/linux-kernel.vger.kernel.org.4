@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7068566D5B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A29866D5BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjAQFnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 00:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S235337AbjAQFqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 00:46:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235442AbjAQFnI (ORCPT
+        with ESMTP id S230091AbjAQFqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:43:08 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819141EFDA;
-        Mon, 16 Jan 2023 21:43:07 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id i28so1883589qkl.6;
-        Mon, 16 Jan 2023 21:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=10fg20WmnP4mWOYcGw2ELSTfNyC1aYUzasENYBg+S6s=;
-        b=Z48+V+FonNrENMrfv6Uzm6hPkqHaQMp9vyrgkkg7CDgs1rajGNGLf4vD7AgjbKNTUA
-         bPLeJvkPIlBVnjLRPLuNyHnX05pIcqz1AovVSeAGSgZp7iNSeXXToMXkB9EwpvmfIVRM
-         6ghPrXMCLmVlUe0Pt9uZWbkLosudBgaUlSFbYu3bgcjTJKwGX7UTRGQoFnN1LCkwPX5c
-         PQRclFx57uh9rzJD3GxIw+Cj3pzkcnUVkYLsHAUnlkFH/W3qQ8Hf8KYRObSlqGDrhWVq
-         LS7bVwlUK8p7K+OBEIRcHNXrE5/E0ODMoYs75BA6VXMSL7WXDLs1SM7XR5Gc7+j5p9Lo
-         5L4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=10fg20WmnP4mWOYcGw2ELSTfNyC1aYUzasENYBg+S6s=;
-        b=xl3LYQZRxwLrqzxzxSNAZKGbMZ6pAuEUUuJ2U9LNPTh4KivhT8QZnuH841gKQ9LaYB
-         4/P7vLFtsMzkFzJdf09yxngR5f3o2tZTQhV9t/Ap7yMXV8/ksFbfQIKh+6K6tbjzHl4T
-         m38S2P8FoWmcNfleAGJm/XblKoQM/o/mYCo5xRt+OEOnygCZG/ZQURmXMZ4Bzfm1zZTK
-         1HO/Ixa7cpGI5M5D1rkY2ey+z0kW5UxE/C3EFZmh+AY9X6aT7TdQ+l8uNXgqBfvOCIqh
-         1jdmo/ykAz+ZkNuRyblP2YH3CZzCRDWwcvA3dSZWVGhl31qcuiwb8tfWtCvkhR4JmN5z
-         2O2w==
-X-Gm-Message-State: AFqh2kofLTOL5nEsxABVFLY7MheOduYIiWxOdY1m+wQ2wHHZxUuq4aHa
-        oRezYoMJYY0VMwUliGtuKdijiaDLy+LMc9n56g1s01rabL7hG1+iZAA=
-X-Google-Smtp-Source: AMrXdXsiG3nLbyq0OQonXYvwUpYbN97DeSptXwQL30DhfTywlNZ9k4IZrkDk/96iy+UACwwO2fXqdJYPdRHynfjejko=
-X-Received: by 2002:a05:620a:667:b0:702:be9:9915 with SMTP id
- a7-20020a05620a066700b007020be99915mr95345qkh.400.1673934186333; Mon, 16 Jan
- 2023 21:43:06 -0800 (PST)
+        Tue, 17 Jan 2023 00:46:45 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25B82195A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 21:46:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y+G3RMYpPUCpeVuUHshColV5JZSGDtGhPdizzIP2wms=; b=P5cLpNHv6wO/jMH62R5ivyuODF
+        9VsvXC8b/excwArNe/KRkxWV2mLKsX2xgsbEwt66Kpn346Prm3dUGTZPNLMImD+nitRxhxo3xsvrJ
+        mfWg3QFSX5Pnkn3FwXGIL0mp4sWpaCgjBACW/+8RJtWIR3s1pBjFwfBDXT+otbyR6bwQonX/+BNxd
+        m4lbN1/gZznRAQ0EpxpP7GMJZxelmPWujsE6/6vtlABgFHE/nyJ+bG6wPajtevQ+GbMdPYR+7Tt7o
+        zrVDxwqxl2pwLVtaerw4OF9cO5ys5rZNxm/Sm8Y2+JIni90YzxmlfVcFMmeuOLlaAh3xxs8PtamWR
+        Fca2JJYQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHenU-009Pje-4O; Tue, 17 Jan 2023 05:46:12 +0000
+Date:   Tue, 17 Jan 2023 05:46:12 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Message-ID: <Y8Y2JErbNQOhL8ee@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
+ <Y8UxnqPCTLbbD+2F@localhost>
+ <Y8YgomKF189vmgLz@casper.infradead.org>
+ <CAJuCfpECJhUu3fvWbBzmAkEA3+1LTkKqJOVadQB_-_mEHME=xg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAHbf0-EHP0cRDhOD_3Mf4aRzndoVYGbd3j3vxwUOh9_cHp+h1Q@mail.gmail.com>
-In-Reply-To: <CAHbf0-EHP0cRDhOD_3Mf4aRzndoVYGbd3j3vxwUOh9_cHp+h1Q@mail.gmail.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Tue, 17 Jan 2023 10:42:55 +0500
-Message-ID: <CABXGCsMz6qs0qSMoF6F3B_kJt+UwULtfpp2pCNxUuWAqAryniA@mail.gmail.com>
-Subject: Re: [6.2][regression] after commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae
- stopping working wifi mt7921e
-To:     Mike Lothian <mike@fireburn.co.uk>
-Cc:     nbd@nbd.name,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-wireless@vger.kernel.org, lorenzo@kernel.org,
-        sujuan.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpECJhUu3fvWbBzmAkEA3+1LTkKqJOVadQB_-_mEHME=xg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 5:33 AM Mike Lothian <mike@fireburn.co.uk> wrote:
->
-> Hi
->
-> I'm struggling to find these patches on Patchwork, or apply the saved
-> raw patches to rc4
->
-> If I'm missing them, would you mind posting the link
+On Mon, Jan 16, 2023 at 08:34:36PM -0800, Suren Baghdasaryan wrote:
+> On Mon, Jan 16, 2023 at 8:14 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Mon, Jan 16, 2023 at 11:14:38AM +0000, Hyeonggon Yoo wrote:
+> > > > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+> > > >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> > > >  {
+> > > >     /* Check before locking. A race might cause false locked result. */
+> > > > -   if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > > > +   if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > > >             return false;
+> > > >
+> > > > -   if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+> > > > +   if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
+> > > >             return false;
+> > > >
+> > > > +   /* If atomic_t overflows, restore and fail to lock. */
+> > > > +   if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
+> > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
+> > > > +           return false;
+> > > > +   }
+> > > > +
+> > > >     /*
+> > > >      * Overflow might produce false locked result.
+> > > >      * False unlocked result is impossible because we modify and check
+> > > >      * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+> > > >      * modification invalidates all existing locks.
+> > > >      */
+> > > > -   if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > > -           up_read(&vma->vm_lock->lock);
+> > > > +   if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
+> > > >             return false;
+> > > >     }
+> > >
+> > > With this change readers can cause writers to starve.
+> > > What about checking waitqueue_active() before or after increasing
+> > > vma->vm_lock->count?
+> >
+> > I don't understand how readers can starve a writer.  Readers do
+> > atomic_inc_unless_negative() so a writer can always force readers
+> > to fail.
+> 
+> I think the point here was that if page faults keep occuring and they
+> prevent vm_lock->count from reaching 0 then a writer will be blocked
+> and there is no reader throttling mechanism (no max time that writer
+> will be waiting).
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230113105848.34642-3-nbd@nbd.name/
-
--- 
-Best Regards,
-Mike Gavrilov.
+Perhaps I misunderstood your description; I thought that a _waiting_
+writer would make the count negative, not a successfully acquiring
+writer.
