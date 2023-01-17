@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790B566E467
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC5866E46A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjAQRGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S232682AbjAQRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjAQRGL (ORCPT
+        with ESMTP id S232342AbjAQRG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:06:11 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824FB2A98C;
-        Tue, 17 Jan 2023 09:06:10 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pHpPU-001nMn-Ss; Tue, 17 Jan 2023 18:06:08 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pHpPT-002tRa-PS; Tue, 17 Jan 2023 18:06:08 +0100
-Message-ID: <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de>
-Date:   Tue, 17 Jan 2023 18:06:07 +0100
+        Tue, 17 Jan 2023 12:06:57 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2572FCC9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:06:56 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7D3D25C018A;
+        Tue, 17 Jan 2023 12:06:55 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 17 Jan 2023 12:06:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1673975215; x=
+        1674061615; bh=t4iV/vJ99RvkwYm8zUEJNfxo7SCMsAHrMTjivM8RwQk=; b=q
+        EuYDV9zZcsAxpeoT8fxze95sAWXWnozd/pQTRf3k8cwJQb5maNOvbjRn/7KwGNUX
+        JZLZZkMSJKnYJF6+6SwcwUgF+yKdfW+RBIaem8POh9zOakfl7nVvri5O/0hHPViC
+        slFApgtP4jcZ4Ydwi1hjhiQ/tjCgM6NDEl0lRkbOAMuZPcDcni7Aka406m+/ldPz
+        0gvB+NNiVNdIgD6BfdodS2hVCDMbHxv8bmjUBc1uC5cSZKggKBNjyoar7VUpZPDx
+        HsBvoZBtMxWdJzMAtMGiakCuWsbvvOVSec+rjKNo0d28yUpCvU9wyGk1siS+7h0h
+        boxbO4fZeFR+xZn56WTsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673975215; x=
+        1674061615; bh=t4iV/vJ99RvkwYm8zUEJNfxo7SCMsAHrMTjivM8RwQk=; b=R
+        t4GHNrG+J6dfL0FhHLg6kc5B2uRvKNV/ldXlv7ABaAUQz6/HG7HLMEvsdp583qa9
+        SS4VhUrc6yWCcsyO0v6W/54WqZFm4uPia/cNwKFDa2clTCfMIXPwFDTYJLbSZxXU
+        oD6qk40JoLMZOndUkXCmQ5a4HX4+Oy4GR/4UluG2qXGzEAUcpicB/tiWQAIjyQBk
+        vc6mcESG0OhnIRElMf36FUm3axyjv/xkSC3V20c5rIILJoY3Qsh807ekobyB9aIB
+        N0x42gDSTnt1aWRCAHOblssrdQ+L+LbwBwHsTBCT1Ckhw/pEEg78VCSG2IouQV6Q
+        eh7xHNhqwyLvelUnQdwFA==
+X-ME-Sender: <xms:r9XGY1Z9wklfzZyNfuiVlSynE6BVlXXKUnxXb2u4pNHcpAevNHspIw>
+    <xme:r9XGY8a9qIvfAc3XLxO_LRjFYHYSqIYd1BxvqJ4ecHukeGuEfGtdh8_9h1emMAvPQ
+    ugY5fmdPWiOxiB0cgg>
+X-ME-Received: <xmr:r9XGY38JQa9ZMv2qoZIKKYyzKd20LaJN4Cyq7-hpyK3jlq0GKIQ5ftoWcYSKqpZ_fU5-WYz4LlmFu9HCeLzvleWgJYZH_jep05yXMHmla0Qu6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepleeifffgvdetjeejueejieehuedvteeigeehtefhhfeifeegleekudek
+    teegueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:r9XGYzqRMDUHRdTJ2f8hWuhZnXhS_QmljDNww_QMKZxZcpF6MLIdfg>
+    <xmx:r9XGYwq247HZaXidlh_0pDvVEqJa-AdIBq24p5ezR9rjcq2NUdTc6A>
+    <xmx:r9XGY5QaoFFXdI5NdQiIyNY_y73T1J0YleY2vIClMKS9NtD6LrbO4g>
+    <xmx:r9XGY2iReYvux7MR9kRPkHoj-5sS9g75w3i5TL6YRIpJp7jADDbtmg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 17 Jan 2023 12:06:54 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+In-Reply-To: <20230117070216.30318-1-rdunlap@infradead.org>
+References: <20230117070216.30318-1-rdunlap@infradead.org>
+Subject: Re: (subset) [PATCH] drm/atomic-helper: fix kernel-doc problems
+Message-Id: <167397518758.2619750.8146316024242297831.b4-ty@cerno.tech>
+Date:   Tue, 17 Jan 2023 18:06:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Calculating array sizes in C - was: Re: Build
- regressions/improvements in v6.2-rc1
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
-        linux-xtensa@linux-xtensa.org,
-        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
- <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de>
- <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
- <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de>
- <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,SUSPICIOUS_RECIPS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.11.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On 1/17/23 18:01, Geert Uytterhoeven wrote:
-> The issue is that some of the parameters are not arrays, but
-> NULL. E.g.:
+On Mon, 16 Jan 2023 23:02:16 -0800, Randy Dunlap wrote:
+> Fix a kernel-doc warning and other kernel-doc formatting for
+> drm_atomic_helper_connect_tv_check().
 > 
-> arch/sh/kernel/cpu/sh2/setup-sh7619.c:static
-> DECLARE_INTC_DESC(intc_desc, "sh7619", vectors, NULL,
-> arch/sh/kernel/cpu/sh2/setup-sh7619.c-                   NULL,
-> prio_registers, NULL);
+> drivers/gpu/drm/drm_atomic_state_helper.c:560: warning: Cannot understand  * @drm_atomic_helper_connector_tv_check: Validate an analog TV connector state
+>  on line 560 - I thought it was a doc line
+> 
+> 
+> [...]
 
-Isn't this supposed to be caught by this check:
+Applied to drm/drm-misc (drm-misc-next).
 
-	a, __same_type(a, NULL)
-
-?
-
-Adrian
-
--- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+Thanks!
+Maxime
