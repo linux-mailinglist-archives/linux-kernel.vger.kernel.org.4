@@ -2,155 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0FB66E079
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CF366E07E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjAQOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
+        id S232585AbjAQOZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbjAQOXr (ORCPT
+        with ESMTP id S232358AbjAQOYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:23:47 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA63D0BD
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:22:08 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id k8so16248865wrc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:22:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybMp4yf1vi88OQah/2tawVPx6umiUGABzCImHyfek9Y=;
-        b=hAktI9Hg4DyrxZHcvy3fynCOTVjETjt/zk2FifC5B7sAmkDT4FXNVTJXaFvRyg9+PW
-         h2sMPFQ3W1yRaGT+aBC9EA0ARv2xmIhucPJiBWrU2xSjTtShNUjlexnybjRGdA1isVqL
-         i23k3jz9FjVvxSxty27+XaeI7X8woahLuf+6fQbOTZInjmiJ0UjpN090asX9M0ecXQ9i
-         3ffHvbT74wxs69cCzxFWaTu3U/6ey3kBofZUWIWhvtO5Vy+cVusZ+rglU33M+0CI+pus
-         k8P6d0RU0qQMnP19IimHEO0Brxy9Os4KagSi7/61CSOyIpa5focrveqSs7afG0riRx4i
-         afoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybMp4yf1vi88OQah/2tawVPx6umiUGABzCImHyfek9Y=;
-        b=gXvdw39mS+xaEZe2vm0Ym5xv1WgAWBUiknHLiGeqrEtPxTcVEFYANz1oWwoFIQyqNF
-         bVa7ab/a3hOtMOusQ6oJecdTDQw1aHeFFvQ2SyJV4gQ074VUZL2wknG3f/kF4awLRbFR
-         VwdpI4n1HBLsi55qSS0JGuwg3l1xW7Tl9g7AXH3qiH76efepZky7hSTZabTIzK/EFzUM
-         4Wo3oicHH7xCwHpB4iYQMgtOaMED983rlJLfaG8LZskfY2zPzRKoRMd1SqSf2ux0NxfI
-         F348bwPsc4PyJH6V6EJgQ87i7slLi7f9DMpkssFv8CQk5fyJwhq5ZRTkjv71XpGW6ScH
-         2NCw==
-X-Gm-Message-State: AFqh2krpbPM/hQ70FkqFKu3W6HDtPmx1/hMiNf72TPZEn/w9b+osxxU6
-        Ds+Vwzv7/DxCBHn7PctX/pMovVb1boE3jr4MzVE=
-X-Google-Smtp-Source: AMrXdXtMv3z609fCfMMcn1lyVfLqtlv2kX3RFEiFg4rXFi4hUXOF/Cfb7gNI0fQ2luv3PkbTOGN4Vw==
-X-Received: by 2002:adf:cc8c:0:b0:293:1868:3a14 with SMTP id p12-20020adfcc8c000000b0029318683a14mr11101982wrj.0.1673965327363;
-        Tue, 17 Jan 2023 06:22:07 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id g2-20020a5d4882000000b00286ad197346sm28891037wrq.70.2023.01.17.06.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 06:22:06 -0800 (PST)
-Date:   Tue, 17 Jan 2023 14:22:04 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: leds: backlight: Add Kinetic KTZ8866
- backlight
-Message-ID: <Y8avDJj5PCy8OVWV@aspen.lan>
-References: <20230117134742.23238-1-lujianhua000@gmail.com>
- <20230117134742.23238-2-lujianhua000@gmail.com>
+        Tue, 17 Jan 2023 09:24:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0F1C306;
+        Tue, 17 Jan 2023 06:22:41 -0800 (PST)
+Date:   Tue, 17 Jan 2023 15:22:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673965358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8rNbRUq17jXca6tXC9u5GgCkkefHgg4QVQCXss833Bc=;
+        b=cf0DDugTrpbViSovrf0++ZeIl/5rAcjhz4FV299F2W05nHIEhd0ozFEb2cPNs7rjV7qAyU
+        GYJH0ANcfWNUYmYc3DWevC27bHJCbumOjwWlxnJKASH8ML0vSl9AgATb7ICSJkUBTky9OB
+        Qcy0UjmnhbdiF6F/qACROrwGHOyq48GP7Rj3w9B2PoIY+Wr0ke9nhe+1Uhidb1a+XBaP1U
+        99JnBWIn4RaILadXixunQlzQyZ58R5T59e+8zQfyuI5oVd5Tk7uYwmDddVN8WIpmZB2k9Q
+        ZtZsOhKFHxUoP54HqmUkG1hjkEho69Mb+MOIrAx6zAoJ70MPaKl5hJeLlVbsRg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673965358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8rNbRUq17jXca6tXC9u5GgCkkefHgg4QVQCXss833Bc=;
+        b=cI3GLTo9pTXge6PUPWObzW/e4e9TG5xFHfTVLPwgZ8umeT3sevkYJZvGVYBliVpJ+a7msl
+        gPnI5Y+O7mus5wBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <Y8avJm1FQI9vB9cv@linutronix.de>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230117134742.23238-2-lujianhua000@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:47:42PM +0800, Jianhua Lu wrote:
-> Add Kinetic KTZ8866 backlight binding documentation.
->
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+On 2023-01-17 08:38:17 [+0000], Mel Gorman wrote:
+> rw_semaphore and rwlock are explicitly unfair to writers in the presense
+> of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
+> ("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
+> 
+>         The implementation is writer unfair, as it is not feasible to do
+>         priority inheritance on multiple readers, but experience has shown
+>         that real-time workloads are not the typical workloads which are
+>         sensitive to writer starvation.
+> 
+> While atypical, it's also trivial to block writers with PREEMPT_RT
+> indefinitely without ever making forward progress. Since LTP-20220121,
+> the dio_truncate test case went from having 1 reader to having 16 readers
+> and the number of readers is sufficient to prevent the down_write ever
+> succeeding while readers exist. Eventually the test is killed after 30
+> minutes as a failure.
+> 
+> dio_truncate is not a realtime application but indefinite writer starvation
 
-Might be a good idea to take a look at this bit of the docs because
-the patchset is not in the right order (I.5):
-https://docs.kernel.org/devicetree/bindings/submitting-patches.html
+If so then the PI boosting would not work if we would have it ;)
 
+> is undesirable. The test case has one writer appending and truncating files
+> A and B while multiple readers read file A. The readers and writer are
+> contending for one file's inode lock which never succeeds as the readers
+> keep reading until the writer is done which never happens.
 
+This tests the implementation of rwsem/ rwlock functionality to ensure
+that it is not writer unfair.
+
+> This patch records a timestamp when the first writer is blocked if no
+> deadline or realtime task has recently acquired the lock for read. If
+> dt/rt tasks are involved, then reader bias is preserved. For other tasks,
+DL/ RT. Would it work to use the capital letters if it refers to the
+scheduling class?
+
+> reader bias is allowed until the first writer has been blocked for a minimum
+> of 4ms or 1 tick. The cutoff time is arbitrary on the assumption that a
+> normal application contending for 4ms also does not need PREEMPT_RT. On
+> a test machine, the test completed in 88 seconds.
+
+I would go for one second just because it _usually_ does not matter
+since none of the important locks rely on that (as stated in the commit
+message). But then why not use the 4ms/ 1 tick as you suggest. This is
+after all what the NON-PREEMPT_RT implementation is using to ensure that
+the writer is not stalled infinitely. The RWLOCK implementation is
+already writer unfair.
+
+Side note: If the test case gets updated to RT reader which acquire the
+lock (the whole time) then they will block writer again :)
+
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 > ---
-> Changes in v2:
->   - Remove "items" between "compatible" and "const: kinetic,ktz8866"
->   - Change "additionalProperties" to "unevaluatedProperties"
->
-> Changes in v3:
->   - Add Krzysztof's R-b
->
-> Changes in v4:
->   - Drop Krzysztof's R-b
->   - Add some new properties
->
->  .../leds/backlight/kinetic,ktz8866.yaml       | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
->
-> diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-> new file mode 100644
-> index 000000000000..18571d69accb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Kinetic Technologies KTZ8866 backlight
-> +
-> +maintainers:
-> +  - Jianhua Lu <lujianhua000@gmail.com>
-> +
-> +description: |
-> +  The Kinetic Technologies KTZ8866 is a high efficiency 6-sinks led backlight
-> +  with dual lcd bias power.
-> +  https://www.kinet-ic.com/ktz8866/
-> +
-> +allOf:
-> +  - $ref: common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: kinetic,ktz8866
-> +
-> +  current-num-sinks:
-> +    description: Number of LED current sinks.
-> +
-> +  current-ramping-time:
-> +    description: LED current ramping time.
+>  include/linux/rwbase_rt.h  |  3 ++
+>  kernel/locking/rwbase_rt.c | 84 +++++++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 82 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/rwbase_rt.h b/include/linux/rwbase_rt.h
+> index 1d264dd08625..05c4dc74b8bd 100644
+> --- a/include/linux/rwbase_rt.h
+> +++ b/include/linux/rwbase_rt.h
+> @@ -10,12 +10,14 @@
+>  
+>  struct rwbase_rt {
+>  	atomic_t		readers;
+> +	unsigned long		waiter_blocked;
+>  	struct rt_mutex_base	rtmutex;
+>  };
+>  
+>  #define __RWBASE_INITIALIZER(name)				\
+>  {								\
+>  	.readers = ATOMIC_INIT(READER_BIAS),			\
+> +	.waiter_blocked = 0,					\
+>  	.rtmutex = __RT_MUTEX_BASE_INITIALIZER(name.rtmutex),	\
+>  }
+>  
+> @@ -23,6 +25,7 @@ struct rwbase_rt {
+>  	do {							\
+>  		rt_mutex_base_init(&(rwbase)->rtmutex);		\
+>  		atomic_set(&(rwbase)->readers, READER_BIAS);	\
+> +		(rwbase)->waiter_blocked = 0;			\
+>  	} while (0)
+>  
+>  
+> diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+> index c201aadb9301..db2f6accf49f 100644
+> --- a/kernel/locking/rwbase_rt.c
+> +++ b/kernel/locking/rwbase_rt.c
+> @@ -39,7 +39,11 @@
+>   * major surgery for a very dubious value.
+>   *
+>   * The risk of writer starvation is there, but the pathological use cases
+> - * which trigger it are not necessarily the typical RT workloads.
+> + * which trigger it are not necessarily the typical RT workloads. The worst
+> + * case of indefinite starvation of a writer will force readers into the
+> + * slow path if a writer is blocked for more than RW_CONTENTION_THRESHOLD
+> + * jiffies unless dl/rt tasks have taken a read lock since the last write
+DL/RT please.
 
-Needs to document know what units this value is expressed in. IIRC
-this should be expressed in SI units and included the property name.
-Something like:
+> + * unlock.
+>   *
+>   * Fast-path orderings:
+>   * The lock/unlock of readers can run in fast paths: lock and unlock are only
+> @@ -65,6 +69,61 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
 
-  current-ramping-time-us:
-    description: LED current ramping time in microseconds.
+    * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM
+    * implementation.
 
+> + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_blocked
+> + * is used to detect recent rt/dl tasks taking a read lock.
+> + */
+> +#define RW_CONTENTION_THRESHOLD (HZ/250+1)
+				   DIV_ROUND_UP(HZ, 250)
 
+> +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
+> +{
+> +	/* No update required if dl/rt tasks already identified. */
+> +	if (rwb->waiter_blocked & 1)
+> +		return;
 > +
-> +  led-ramping-time:
-> +    description: LED on/off ramping time.
+> +	/*
+> +	 * Record a dl/rt task acquiring the lock for read. This may result
+DL/RT
+> +	 * in indefinite writer starvation but dl/rt tasks should avoid such
+> +	 * behaviour.
+> +	 */
+> +	if (dl_task(current) || rt_task(current)) {
 
-+1
+There is also task_is_realtime(). But using only rt_task() should work
+since it also covers dl_task().
 
+> +		struct rt_mutex_base *rtm = &rwb->rtmutex;
+> +		unsigned long flags;
+> +
+> +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+> +		rwb->waiter_blocked |= 1;
+> +		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+> +	}
+> +}
+> +
+> +/* rtmutex->wait_lock must be held. */
+> +static void __sched set_writer_blocked(struct rwbase_rt *rwb)
+> +{
+> +	/*
+> +	 * Lowest bit preserved to identify recent rt/dl tasks acquiring
+> +	 * the lock for read so guarantee at least one tick delay.
+> +	 */
+> +	rwb->waiter_blocked |= (jiffies + 2) & ~1UL;
 
-Daniel.
+I'm unsure what |= means in terms of multiple writers. It seems to
+extend the wait period and the second writer has none after the first
+one leaves.
+
+> +}
+> +
+> +static bool __sched rwbase_allow_reader_bias(struct rwbase_rt *rwb)
+> +{
+> +	/*
+> +	 * Allow reader bias if a dl or rt task took the lock for read
+> +	 * since the last write unlock. Such tasks should be designed
+> +	 * to avoid heavy writer contention or indefinite starvation.
+> +	 */
+> +	if (rwb->waiter_blocked & 1)
+> +		return true;
+> +
+> +	/*
+> +	 * Allow reader bias unless a writer has been blocked for more
+> +	 * than RW_CONTENTION_THRESHOLD jiffies.
+> +	 */
+> +	return jiffies - rwb->waiter_blocked < RW_CONTENTION_THRESHOLD;
+
+if you set
+	rwb->waiter_blocked = jiffies + RW_CONTENTION_THRESHOLD
+
+then you could use
+	time_after(jiffies, waiter->waiter_blocked)
+
+and we could name it timeout. So the first writer sets it and my guess
+would be that the each RT reader ignores this delay while every non-RT
+tries to acquire the lock unless as long as the timeout did not occur.
+Then they back off and wait for one writer to acquire the lock.
+I don't know what we do with the possible second writer but I guess
+first writer on unlock should reset the timeout for the next writer. So
+we have again reader followed by writer.
+
+> +}
+> +
+>  static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+>  				      unsigned int state)
+>  {
+> @@ -74,9 +133,11 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+>  	raw_spin_lock_irq(&rtm->wait_lock);
+>  	/*
+>  	 * Allow readers, as long as the writer has not completely
+> -	 * acquired the semaphore for write.
+> +	 * acquired the semaphore for write and reader bias is still
+> +	 * allowed.
+>  	 */
+> -	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
+> +	if (atomic_read(&rwb->readers) != WRITER_BIAS &&
+> +	    rwbase_allow_reader_bias(rwb)) {
+>  		atomic_inc(&rwb->readers);
+>  		raw_spin_unlock_irq(&rtm->wait_lock);
+>  		return 0;
+> @@ -140,10 +201,18 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+>  static __always_inline int rwbase_read_lock(struct rwbase_rt *rwb,
+>  					    unsigned int state)
+>  {
+> +	int ret;
+> +
+>  	if (rwbase_read_trylock(rwb))
+> -		return 0;
+> +		ret = 0;
+> +	else
+> +		ret = __rwbase_read_lock(rwb, state);
+> +
+> +	/* Record if the current task acquiring the lock is a dl/rt task. */
+> +	if (!ret)
+> +		update_dlrt_reader(rwb);
+>  
+> -	return __rwbase_read_lock(rwb, state);
+> +	return ret;
+>  }
+>  
+>  static void __sched __rwbase_read_unlock(struct rwbase_rt *rwb,
+> @@ -264,12 +333,17 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+>  		if (__rwbase_write_trylock(rwb))
+>  			break;
+>  
+> +		/* Record first new read/write contention. */
+> +		set_writer_blocked(rwb);
+> +
+>  		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+>  		rwbase_schedule();
+>  		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+>  
+>  		set_current_state(state);
+>  	}
+> +
+> +	rwb->waiter_blocked = 0;
+>  	rwbase_restore_current_state();
+>  	trace_contention_end(rwb, 0);
+>  
+
+Sebastian
