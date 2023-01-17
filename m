@@ -2,107 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50470670B5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D534670B66
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjAQWLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S229598AbjAQWLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjAQWJR (ORCPT
+        with ESMTP id S229931AbjAQWJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 17:09:17 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECC156889;
-        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v23so29780659plo.1;
-        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eUVREAeuxi0yYQ0P2vbR9fitxXN9smQF7SNOFKwNoSM=;
-        b=cMYFMH8GXe3w9/s8TthwcET4E/yGDk6e9TCH9M/cZzIY0nl0cevHVq9dmclhbdFZJg
-         riP708G5VdFkPgdSJbKeRsEf5kuLphuGICN9KIWUoQ4EyNmF5XVHAp9cjO1XA9gpMyIf
-         2nOjPihV7Sz9S/SoE18NQceO+KCDHHPTxfTzqJsN3gIq3imPOMTvWqKEcoPrAlNRYfQw
-         jWboUf8nRmXwTW+qDClvxJlHUetoalQeCh6FQGpR/SUdOs+aVxHvBx05ygTXxffJb6EB
-         +PyptjY77DHrsTwJOkfceh0AKeHYjzC+PP+LInvJ6jMMwA8/ZBGaqmgFZvGZObYg+G1n
-         0tww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eUVREAeuxi0yYQ0P2vbR9fitxXN9smQF7SNOFKwNoSM=;
-        b=tdvCaKpaQDE5bwjSnw4r0lkIeO2xKlqBhxDks71B3QIIQ739Mvic7pxquwn8u8t3XS
-         QtiAlmQsG2PxmaA6SddbpMMw0Ebu4DAmG65AM8DPDUv0FkYa3J1XKh/YO9j7vrFf9fRH
-         6FL8beulLuaV+lHXN4F6Auk66DS7PptzXe7fGGBAMoWY3zCiMzCrcYWFT5mRmB9FeTtx
-         Y1ZRlr8MFKxnYywSrQ6GYuEgn7qGiEDuFrxIfjgCeAnid5ItnqK/bWGb6MIRBWInfzma
-         XC9BLeLSq7uyilDsExZb7eMVuonxoPykWBuMw1HWE2XbJf9+KCUMSF6sZ/s+Pi6/LIqo
-         Eyew==
-X-Gm-Message-State: AFqh2ko5mmFKcUW+/0yZ6x0ycb3up1KQimMYtr1PDilZB0cZ+kQr0PsM
-        0uZIENoewlqXA2HL28jrtAg=
-X-Google-Smtp-Source: AMrXdXuJWsG5EbhUVDSXvJVtmwFi5ddTzDmkbmib3gPrkId1EwHxnBH76KIciaxn81Mil/yTa//s5A==
-X-Received: by 2002:a17:90a:a402:b0:229:5e73:78ec with SMTP id y2-20020a17090aa40200b002295e7378ecmr4830694pjp.34.1673986322059;
-        Tue, 17 Jan 2023 12:12:02 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 4-20020a631844000000b00497c1399b38sm17636994pgy.78.2023.01.17.12.12.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 12:12:01 -0800 (PST)
-Message-ID: <3584ba9e-9c15-977f-7e00-ec89ddf2a0f4@gmail.com>
-Date:   Tue, 17 Jan 2023 12:11:59 -0800
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12313E090;
+        Tue, 17 Jan 2023 12:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1673986459;
+        bh=OYhFAr+sZ9bMx5kLoUnKqAkNLmvDquv/DxwJyciMtw4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BWNfMQ5Wf2HQotqzGQWPRw9BiABduwCxGuKUy1T634WWxY7PLpEexdAPQ9EEZ5hY2
+         Cv0szpxLSASegmjJ/5yZs8bJlzGWY1r/yanmjhWmti0HhPcLIp6hbG8yADugZnhLlR
+         /A+5z3m2LYAhX94NqlNO2GHL6Ynw5HBgxzghuF+Ky8LkGZCfXLhW8VjN9t7g00wQOt
+         pPsyIDO9YV+r2awOowjL5/JObrKh8vEmh7UDSq2H2HMfOekGKZLpfP5RQbCe0/aiQp
+         uUf73AQS6P7lU0XyaedA+qkZil3PvkyHsJ4XZTSHDxnGDxMQ0i3QW0zmaVVWyLOuwN
+         CxhbNIlzdGnJg==
+Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NxKqH2CmGzh8w;
+        Tue, 17 Jan 2023 15:14:19 -0500 (EST)
+Message-ID: <378731e7-eec5-44ca-eded-3277792b061e@efficios.com>
+Date:   Tue, 17 Jan 2023 15:14:52 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc2 review
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [tip:sched/core 7/28] rseq.c:139:37: error: 'AT_RSEQ_ALIGN'
+ undeclared; did you mean 'R_SH_ALIGN'?
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230117124526.766388541@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230117124526.766388541@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, Shuah Khan <shuah@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        linux-kselftest@vger.kernel.org
+References: <202301170348.7WLKH1pl-lkp@intel.com>
+ <bfa719c3-bd1f-5fc4-40ab-6dc6822b7628@efficios.com>
+ <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
+ <Y8ZlKOsN1wGk9tTc@gmail.com>
+ <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
+ <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/17/2023 4:48 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.164 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2023-01-17 14:11, Shuah Khan wrote:
+> On 1/17/23 10:44, Mathieu Desnoyers wrote:
+>> On 2023-01-17 04:06, Ingo Molnar wrote:
+>>>
+>>> * Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>
+>>>> On 1/16/23 13:18, Mathieu Desnoyers wrote:
+>>>>> On 2023-01-16 14:40, kernel test robot wrote:
+>>>>>> tree:   
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 
+>>>>>> sched/core
+>>>>>> head:   79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
+>>>>>> commit: 03f5c0272d1b59343144e199becc911dae52c37e [7/28] 
+>>>>>> selftests/rseq: Use ELF auxiliary vector for extensible rseq
+>>>>>> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+>>>>>> reproduce:
+>>>>>>           # 
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=03f5c0272d1b59343144e199becc911dae52c37e
+>>>>>>           git remote add tip 
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>>>>>>           git fetch --no-tags tip sched/core
+>>>>>>           git checkout 03f5c0272d1b59343144e199becc911dae52c37e
+>>>>>>           make O=/tmp/kselftest headers
+>>>>>>           make O=/tmp/kselftest -C tools/testing/selftests
+>>>>>>
+>>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>>
+>>>>> In order to fix this, I need to change -I../../../../usr/include/ 
+>>>>> for $(KHDR_INCLUDES) in tools/testing/selftests/rseq/Makefile
+>>>>>
+>>>>> I can find 25 odd uses of the same pattern in the kernel selftests. 
+>>>>> Should I fix them all in one go ?
+>>>>
+>>>> kselftest build depends on headers installed in the root directory.
+>>
+>> By "root directory", do you mean kernel sources root directory or 
+>> build output root directory ?
+>>
+>>>> The main makefile enforces this dependency.
+>>
+>> How ? I figure that tools/testing/selftests/lib.mk overrides 
+>> KHDR_INCLUDES if it is not defined yet:
+>>
+>> ifeq ($(KHDR_INCLUDES),)
+>> KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+>> endif
+>>
+>> and selftests makefiles include ../lib.mk.
+>>
+>> This KHDR_INCLUDES can be modified by O=... when built from the kernel 
+>> top level, thus using tools/testing/selftests/Makefile:
+>>
+>> ifneq ($(KBUILD_OUTPUT),)
+>> [...]
+>>    KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+>> else
+>> [...]
+>>    KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+>> endif
+>>
+>> But it's up to the individual selftests to actually use 
+>> $(KHDR_INCLUDES). In many cases, they hardcode 
+>> -I../../../../usr/include/ which is bogus when the build root (O=...) 
+>> differs from the source root.
+>>
+>>   If this test is being
+>>>> built without installing headers by itself, I think the scripts that
+>>>> build individual tests have to makes sure headers are installed first.
+>>
+>> The headers were previously built by "make O=/tmp/kselftest headers", 
+>> as it should, it's just that the selftest makefile uses a hardcoded 
+>> path that is relative to the source directory, and it appears that 
+>> this pattern is repeated all across the selftests.
+>>
 > 
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
+> selftests Makefile used to install headers and there has been a recent
+> change to have mani Makefile (root) to install it. As a result individual
+> test builds (running make in the test directory) requires header install
+> now.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> I think the hard-coded includes are a problem and we have to fix them for
+> all cases i.e make O=, individual test builds.
+> 
+> If you are still up for it, please send patch.
+
+Sure.
+
+Now that I dig a bit more, we could try using "-nostdinc" to tell the 
+compiler not to search the standard system directories, but I've noticed 
+that a few selftests depend on userspace library header files found in 
+the build environment.
+
+I'm not sure how we should approach this.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
 > 
 > thanks,
+> -- Shuah
 > 
-> greg k-h
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
