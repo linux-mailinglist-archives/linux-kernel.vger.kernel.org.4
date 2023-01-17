@@ -2,206 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C6266DFA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ABF66DFB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjAQNz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S231514AbjAQN45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjAQNz2 (ORCPT
+        with ESMTP id S230401AbjAQN4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:55:28 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF6F7ABC;
-        Tue, 17 Jan 2023 05:55:27 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o17-20020a05600c511100b003db021ef437so3123031wms.4;
-        Tue, 17 Jan 2023 05:55:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+8K4EO+Daz1wxfQ80+5vMacSGUxLmGR0DsNNmoO1rU=;
-        b=iyqM/nh3hh0RdHGl3qNhNtb95HDQvufWzwOZ26VK/EFYAUOOqDzhl4tAydr1xF6e+M
-         IDwemHIQ9xRh9Pg97SaISJR90cyn8U68WRoCeB34SOOGU7smX45ErRcnJlSERmgLTHeJ
-         vPe6ODuVM4sOaGcGTJgSLBi1J7Gp+61zMoI2D5dj+/GC/AkPzSg0oNKPq9qIAsp52EnW
-         /1fnpzlKyqnPQdI6ncSjoOAffFOOZFo/STscOKLo5NbW9dDwSciHR5Tx6grPpjEGW2mp
-         sjTbPwoYx3lPSHHZ44ECYo+XXkNO68f1kVkNublAm/tS9OrOt5V/fC4XrI4SNov0c4w5
-         Ft4A==
+        Tue, 17 Jan 2023 08:56:34 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A774695;
+        Tue, 17 Jan 2023 05:56:03 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id p96so9542699qvp.13;
+        Tue, 17 Jan 2023 05:56:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+8K4EO+Daz1wxfQ80+5vMacSGUxLmGR0DsNNmoO1rU=;
-        b=W94jtJRQNoC9AATwS9OoM0n2PtLT11Okhusuyq6Tnlv94irUGvpniH3J6P2Gc+KjiJ
-         ClwheQu3NUsmiUF86jAyJQ/W1DPayv7F3Vd3jJl3rePRasq24lWvatL7reiG4zUkUH9k
-         uvxNWMwYxca0T4cDq+EyDbliMf2u9KPS7yJ4EoaT1BgIDud5vMNyc4emau9yL35zMIes
-         IUI+1nejUer0Wy6gj7OJtRUZlnzDmHLuMIz5hFwgEt1hDyGBEq7jrutNzm+1oXt6/uIW
-         +M0QJFXYjTinQ91hEclNJnpR4vGpoa6fgD8meyp6Bo0Xz47+k1+Nrm8AsscnBsNGjy3y
-         V0Ig==
-X-Gm-Message-State: AFqh2kpY6H0vp0euFVGqTkVzI9mjJfFe0ncBE2cIIHQTOPlO78W4YfSq
-        3ALsNg1lsXNFNB9DbMX2750=
-X-Google-Smtp-Source: AMrXdXskDLI9cbckDCrW8XlHoXPpJqn6mtanOTpdtORDF5CsAe+1kEZjrFYbfq1Yo0FdKxBTnv3ehg==
-X-Received: by 2002:a1c:7919:0:b0:3da:79f:8953 with SMTP id l25-20020a1c7919000000b003da079f8953mr11790148wme.41.1673963725885;
-        Tue, 17 Jan 2023 05:55:25 -0800 (PST)
-Received: from localhost.localdomain (93-34-92-88.ip49.fastwebnet.it. [93.34.92.88])
-        by smtp.googlemail.com with ESMTPSA id s7-20020a1cf207000000b003d98438a43asm35147461wmc.34.2023.01.17.05.55.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 05:55:25 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 6/6] clk: qcom: gcc-ipq8074: rework nss_port5/6 clock to multiple conf
-Date:   Tue, 17 Jan 2023 14:54:59 +0100
-Message-Id: <20230117135459.16868-7-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230117135459.16868-1-ansuelsmth@gmail.com>
-References: <20230117135459.16868-1-ansuelsmth@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oLCNgQgSzIWRwnZwPRVxRdnKYpvVJh9+ULJwZcc5wHA=;
+        b=CvVUvp3BqBjefv1JCZR9bhvIGrKF/aYGdJOXqVEj3fEzqTI22dvPkeXZvQe4DFZQV+
+         E5EOvhwDyR75jq1+WODhwbDzHkmo0F0DeMOwc2vnh25GB43lY1zkbpf9t4vbyYApXuv9
+         LWMqpZc0QRbPRmIhBLBtxhywISXUuwAaOJRl9Xd1L7jq38FDBj2fYzrgGjvB+ljO767A
+         3rQY7gw7YtLAgkTR5M8Dd3PDTpuSKZvjSjtFD1Ll4UqyPbMywcgU/Q2dEcRlM5IEx5WT
+         1m1UWktnibncW2nGc2yBQeJeQPC5Gusk4PiTP0W10qqtglCs8G4AXWxEd+HlGNg2//Xs
+         087w==
+X-Gm-Message-State: AFqh2koTNrW3H4+9yUcI6yTsxSl2Pqf/OMrn8Iq01/tNz3d2T74Jyc1q
+        5MslQfFL0fmIV6LO/S6MsAZ59FJXfFbmFQ==
+X-Google-Smtp-Source: AMrXdXuRcAyU5V+fIJpzGWuC1cyklgMuEAUpshXtpik7ebQFXPEj03lP+p/y5lSlvfgfs5ftWJU3cA==
+X-Received: by 2002:a05:6214:57d1:b0:515:5e33:505b with SMTP id lw17-20020a05621457d100b005155e33505bmr4544782qvb.20.1673963761916;
+        Tue, 17 Jan 2023 05:56:01 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a430c00b006ee949b8051sm20129510qko.51.2023.01.17.05.56.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 05:56:01 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id 20so14993171ybl.0;
+        Tue, 17 Jan 2023 05:56:01 -0800 (PST)
+X-Received: by 2002:a25:2f90:0:b0:7d5:620e:b60f with SMTP id
+ v138-20020a252f90000000b007d5620eb60fmr454677ybv.89.1673963761015; Tue, 17
+ Jan 2023 05:56:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230104103432.1126403-1-s-vadapalli@ti.com> <20230104103432.1126403-4-s-vadapalli@ti.com>
+In-Reply-To: <20230104103432.1126403-4-s-vadapalli@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 Jan 2023 14:55:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com>
+Message-ID: <CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 3/3] net: ethernet: ti: am65-cpsw: Add support
+ for SERDES configuration
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, vladimir.oltean@nxp.com, vigneshr@ti.com,
+        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rework nss_port5/6 to use the new multiple configuration implementation
-and correctly fix the clocks for these port under some corner case.
+Hi Siddharth,
 
-This is particularly relevant for device that have 2.5G or 10G port
-connected to port5 or port 6 on ipq8074. As the parent are shared
-across multiple port it may be required to select the correct
-configuration to accomplish the desired clock. Without this patch such
-port doesn't work in some specific ethernet speed as the clock will be
-set to the wrong frequency as we just select the first configuration for
-the related frequency instead of selecting the best one.
+On Wed, Jan 4, 2023 at 11:37 AM Siddharth Vadapalli <s-vadapalli@ti.com> wrote:
+> Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
+>
+> Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
+> am65_cpsw_disable_serdes_phy() and am65_cpsw_enable_serdes_phy().
+>
+> Add new member "serdes_phy" to struct "am65_cpsw_slave_data" to store the
+> SERDES PHY for each port, if it exists. Use it later while disabling the
+> SERDES PHY for each port.
+>
+> Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
+> by invoking am65_cpsw_enable_serdes_phy().
+>
+> Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
+> am65_cpsw_disable_serdes_phy().
+>
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-Tested-by: Robert Marko <robimarko@gmail.com> # ipq8074 Qnap QHora-301W
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/clk/qcom/gcc-ipq8074.c | 64 +++++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 16 deletions(-)
+Thanks for your patch, which is now commit dab2b265dd23ef8f ("net:
+ethernet: ti: am65-cpsw: Add support for SERDES configuration")
+in net-next.
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 42d185fe19c8..02d04a552b78 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -1787,13 +1787,21 @@ static struct clk_regmap_div nss_port4_tx_div_clk_src = {
- 	},
- };
- 
-+static const struct freq_conf ftbl_nss_port5_rx_clk_src_25[] = {
-+	C(P_UNIPHY1_RX, 12.5, 0, 0),
-+	C(P_UNIPHY0_RX, 5, 0, 0),
-+};
-+
-+static const struct freq_conf ftbl_nss_port5_rx_clk_src_125[] = {
-+	C(P_UNIPHY1_RX, 2.5, 0, 0),
-+	C(P_UNIPHY0_RX, 1, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY1_RX, 12.5, 0, 0),
--	F(25000000, P_UNIPHY0_RX, 5, 0, 0),
-+	FM(25000000, ftbl_nss_port5_rx_clk_src_25),
- 	F(78125000, P_UNIPHY1_RX, 4, 0, 0),
--	F(125000000, P_UNIPHY1_RX, 2.5, 0, 0),
--	F(125000000, P_UNIPHY0_RX, 1, 0, 0),
-+	FM(125000000, ftbl_nss_port5_rx_clk_src_125),
- 	F(156250000, P_UNIPHY1_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_RX, 1, 0, 0),
- 	{ }
-@@ -1829,13 +1837,21 @@ static struct clk_regmap_div nss_port5_rx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port5_tx_clk_src_25[] = {
-+	C(P_UNIPHY1_TX, 12.5, 0, 0),
-+	C(P_UNIPHY0_TX, 5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port5_tx_clk_src_125[] = {
-+	C(P_UNIPHY1_TX, 2.5, 0, 0),
-+	C(P_UNIPHY0_TX, 1, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY1_TX, 12.5, 0, 0),
--	F(25000000, P_UNIPHY0_TX, 5, 0, 0),
-+	FM(25000000, ftbl_nss_port5_tx_clk_src_25),
- 	F(78125000, P_UNIPHY1_TX, 4, 0, 0),
--	F(125000000, P_UNIPHY1_TX, 2.5, 0, 0),
--	F(125000000, P_UNIPHY0_TX, 1, 0, 0),
-+	FM(125000000, ftbl_nss_port5_tx_clk_src_125),
- 	F(156250000, P_UNIPHY1_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_TX, 1, 0, 0),
- 	{ }
-@@ -1871,13 +1887,21 @@ static struct clk_regmap_div nss_port5_tx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port6_rx_clk_src_25[] = {
-+	C(P_UNIPHY2_RX, 5, 0, 0),
-+	C(P_UNIPHY2_RX, 12.5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port6_rx_clk_src_125[] = {
-+	C(P_UNIPHY2_RX, 1, 0, 0),
-+	C(P_UNIPHY2_RX, 2.5, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY2_RX, 5, 0, 0),
--	F(25000000, P_UNIPHY2_RX, 12.5, 0, 0),
-+	FM(25000000, ftbl_nss_port6_rx_clk_src_25),
- 	F(78125000, P_UNIPHY2_RX, 4, 0, 0),
--	F(125000000, P_UNIPHY2_RX, 1, 0, 0),
--	F(125000000, P_UNIPHY2_RX, 2.5, 0, 0),
-+	FM(125000000, ftbl_nss_port6_rx_clk_src_125),
- 	F(156250000, P_UNIPHY2_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_RX, 1, 0, 0),
- 	{ }
-@@ -1913,13 +1937,21 @@ static struct clk_regmap_div nss_port6_rx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port6_tx_clk_src_25[] = {
-+	C(P_UNIPHY2_TX, 5, 0, 0),
-+	C(P_UNIPHY2_TX, 12.5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port6_tx_clk_src_125[] = {
-+	C(P_UNIPHY2_TX, 1, 0, 0),
-+	C(P_UNIPHY2_TX, 2.5, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY2_TX, 5, 0, 0),
--	F(25000000, P_UNIPHY2_TX, 12.5, 0, 0),
-+	FM(25000000, ftbl_nss_port6_tx_clk_src_25),
- 	F(78125000, P_UNIPHY2_TX, 4, 0, 0),
--	F(125000000, P_UNIPHY2_TX, 1, 0, 0),
--	F(125000000, P_UNIPHY2_TX, 2.5, 0, 0),
-+	FM(125000000, ftbl_nss_port6_tx_clk_src_125),
- 	F(156250000, P_UNIPHY2_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_TX, 1, 0, 0),
- 	{ }
--- 
-2.38.1
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -1416,6 +1416,68 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
+>         .ndo_setup_tc           = am65_cpsw_qos_ndo_setup_tc,
+>  };
+>
+> +static void am65_cpsw_disable_phy(struct phy *phy)
+> +{
+> +       phy_power_off(phy);
+> +       phy_exit(phy);
+> +}
+> +
+> +static int am65_cpsw_enable_phy(struct phy *phy)
+> +{
+> +       int ret;
+> +
+> +       ret = phy_init(phy);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret = phy_power_on(phy);
+> +       if (ret < 0) {
+> +               phy_exit(phy);
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
+> +{
+> +       struct am65_cpsw_port *port;
+> +       struct phy *phy;
+> +       int i;
+> +
+> +       for (i = 0; i < common->port_num; i++) {
+> +               port = &common->ports[i];
+> +               phy = port->slave.serdes_phy;
+> +               if (phy)
+> +                       am65_cpsw_disable_phy(phy);
+> +       }
+> +}
+> +
+> +static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np,
+> +                                    struct am65_cpsw_port *port)
+> +{
+> +       const char *name = "serdes-phy";
+> +       struct phy *phy;
+> +       int ret;
+> +
+> +       phy = devm_of_phy_get(dev, port_np, name);
+> +       if (PTR_ERR(phy) == -ENODEV)
+> +               return 0;
+> +
+> +       /* Serdes PHY exists. Store it. */
 
+"phy" may be a different error here (e.g. -EPROBE_DEFER)...
+
+> +       port->slave.serdes_phy = phy;
+> +
+> +       ret =  am65_cpsw_enable_phy(phy);
+
+... so it will crash when dereferencing phy in phy_init().
+
+I think you want to add an extra check above:
+
+    if (IS_ERR(phy))
+            return PTR_ERR(phy);
+
+> +       if (ret < 0)
+> +               goto err_phy;
+> +
+> +       return 0;
+> +
+> +err_phy:
+> +       devm_phy_put(dev, phy);
+> +       return ret;
+> +}
+> +
+>  static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
+>                                       const struct phylink_link_state *state)
+>  {
+> @@ -1959,6 +2021,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
+
+Right out of context we have:
+
+                port->slave.ifphy = devm_of_phy_get(dev, port_np, NULL);
+                if (IS_ERR(port->slave.ifphy)) {
+                        ret = PTR_ERR(port->slave.ifphy);
+                        dev_err(dev, "%pOF error retrieving port phy: %d\n",
+                                port_np, ret);
+
+So if there is only one PHY (named "serdes-phy") in DT, it will be
+used for both ifphy and serdes_phy. Is that intentional?
+
+>                         goto of_node_put;
+>                 }
+>
+> +               /* Initialize the Serdes PHY for the port */
+> +               ret = am65_cpsw_init_serdes_phy(dev, port_np, port);
+> +               if (ret)
+> +                       return ret;
+> +
+>                 port->slave.mac_only =
+>                                 of_property_read_bool(port_np, "ti,mac-only");
+>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
