@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B1566DEA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4DF66DEA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbjAQNT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S236852AbjAQNTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbjAQNTZ (ORCPT
+        with ESMTP id S236789AbjAQNTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:19:25 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98838EAD;
-        Tue, 17 Jan 2023 05:19:24 -0800 (PST)
-Date:   Tue, 17 Jan 2023 13:19:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1673961562; bh=pZa+dtTdSMjanJ9Lbe1aX8Frcq6MgE+SaT/yIDljxS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b6JM5KZKuej1lrKNVnqFhfw7VDRd32K69KLc8fG49arUzQ/O4nPfmcTYqjgs/iYGD
-         RrVnSPlJNlc8axsI1XrDoE0S4/l5AMuD/lyQDDuAhpIVIBl5TomQYmrQs8nBGb/lG5
-         1/Z8EHz5ib5ZzMfyTS4P3RMO3D0YRz7BoNcnoHRw=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Amy Parker <apark0006@student.cerritos.edu>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kheaders: explicitly validate existence of cpio command
-Message-ID: <20230117131919.3ywkaptian2y242d@t-8ch.de>
-References: <20230117-kernel-kheaders-cpio-v1-1-058d3e1c8621@weissschuh.net>
- <Y8ZgTgtA9oH8W17Y@buildd.core.avm.de>
+        Tue, 17 Jan 2023 08:19:51 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E0839B8E;
+        Tue, 17 Jan 2023 05:19:47 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s67so21925571pgs.3;
+        Tue, 17 Jan 2023 05:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+mHMoqOxjmqlEKrrvnWJRDjZ0/NgeDWv0+LnS3FTis=;
+        b=HDNHDgJaLjQvC4ODh63qdBSKzGq8Ri77vm3rywY8ZkY39iyX+tsnS/bQloA5fydjJA
+         Gr8D/UE39tbGqpj4brtX91M2fYNY3NjPiYuwFEMwxSC6trAJmW5H8yfAQo6fWbUbwL+I
+         G4mWWoF3R0XRiSypyGAjJNkNeYwXgYWJ3X23P0l+LRkqKyy0cW68g8kd+t5wDfbnZ9ip
+         +5CPG9NL+dq6Rbgrzhf3dVNZccLmsdmfyfRKmGszQIcb2O3jiWCQWwD/JTjLEefApiBh
+         xKTIOiBKegbSIXkaYeXmc/gZDbdX+UNPNgqkNj/BWf9MfpSvcQVqI7v4CCtgA/pIBNgc
+         Ts3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U+mHMoqOxjmqlEKrrvnWJRDjZ0/NgeDWv0+LnS3FTis=;
+        b=FM729lY0TD/3j5Ok4aP2WhJvn3zabeBsBj42g1Xdc6DxhSHK07JoszVyVBq87zCyh7
+         h3wGh6Fvahm/nDpUH333Ao6Gr5MArt3MZFwXrAOSR95XoYHlTaG6yBRnqFV59iY3CgWt
+         I/c1PUVgOARID5s+vIZG/VAfv36ij/Fcq1SzcR9rHPFz6cgLauxkv7GzgHU/UGajg+Uz
+         4+BfBp1Wmx7vu6Fezz+5ZxfKaJVMWr6630hPars6e343pLaT3iRNV+zT00McT2/4Nx9I
+         Q+U5NloA+zvFSHvKkA20mZ8/+1VH0PWYHFsWN/XtPkYXgLGQrs6lm7EFQ0b0kAZqULg1
+         ha/A==
+X-Gm-Message-State: AFqh2konDmNvE78+I4EFCLbB+yP452n/ABTjSK9aZw3uq+G5v8PmUbhU
+        HHw1MeERKr92OZUcEkMImC525wHsjFhxXPjxt9c=
+X-Google-Smtp-Source: AMrXdXtJ+wI0o3LZ3iVb7QJNPU+v5VCjfsfJIvOOAXonGRm2rTJbG86U9Yk5+BouX0OFe4amGOJTBmIsmbTHH3RBW5o=
+X-Received: by 2002:a62:e40a:0:b0:580:8b92:ecff with SMTP id
+ r10-20020a62e40a000000b005808b92ecffmr302635pfh.4.1673961586875; Tue, 17 Jan
+ 2023 05:19:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y8ZgTgtA9oH8W17Y@buildd.core.avm.de>
+References: <20230116154747.036911298@linuxfoundation.org>
+In-Reply-To: <20230116154747.036911298@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Tue, 17 Jan 2023 05:19:35 -0800
+Message-ID: <CAJq+SaC9Vrp5R0Mt78tBCDiT30tW1o6KyFvYooosq_Wt18-fqQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/86] 5.15.89-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:46:02AM +0100, Nicolas Schier wrote:
-> On Tue, Jan 17, 2023 at 05:30:43AM +0000, Thomas Weißschuh wrote:
-> > If the cpio command is not available the error emitted by
-> > gen_kheaders.so is not clear as all output of the call to cpio is
-> > discarded:
-> > 
-> > GNU make 4.4:
-> > 
-> >   GEN     kernel/kheaders_data.tar.xz
-> > find: 'standard output': Broken pipe
-> > find: write error
-> > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error 127
-> > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
-> > 
-> > GNU make < 4.4:
-> > 
-> >   GEN     kernel/kheaders_data.tar.xz
-> > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error 127
-> > make[2]: *** Waiting for unfinished jobs....
-> > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
-> > 
-> > Add an explicit check that will trigger a clear message about the issue:
-> > 
-> >   CHK     kernel/kheaders_data.tar.xz
-> > ./kernel/gen_kheaders.sh: line 17: type: cpio: not found
-> 
-> Thanks for the patch!  What would you think about an even more verbose
-> message?  Perhaps something like:
-> 
->     echo >&2 ' *** "cpio" is required for "CONFIG_IKHEADERS". >&2
+> This is the start of the stable review cycle for the 5.15.89 release.
+> There are 86 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.89-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Wouldn't hurt obviously.
-The other scripts used by the kernel don't seem to try to provide this
-kind of explicit message either, though.
-Having a line number, some sort of "not found" and the name of the
-command are enough, in my opinion.
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
-> Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
-Thanks!
-
-Thomas
+Thanks.
