@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C4B66E70E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE3566E70B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbjAQTdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S234882AbjAQTeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbjAQT03 (ORCPT
+        with ESMTP id S232700AbjAQT03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 14:26:29 -0500
 Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F082047429
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D74A1D2
         for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:34:18 -0800 (PST)
 Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 7FEC926F670;
+        by soltyk.jannau.net (Postfix) with ESMTPSA id 1422126F66F;
         Tue, 17 Jan 2023 19:25:02 +0100 (CET)
 From:   Janne Grunau <j@jannau.net>
+Subject: [PATCH v2 0/2] nvme-apple: Fix suspend-resume regression
 Date:   Tue, 17 Jan 2023 19:25:00 +0100
-Subject: [PATCH v2 1/2] nvme-apple: Reset controller during shutdown
+Message-Id: <20230114-apple-nvme-suspend-fixes-v6.2-v2-0-9157bf633dba@jannau.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230114-apple-nvme-suspend-fixes-v6.2-v2-1-9157bf633dba@jannau.net>
-References: <20230114-apple-nvme-suspend-fixes-v6.2-v2-0-9157bf633dba@jannau.net>
-In-Reply-To: <20230114-apple-nvme-suspend-fixes-v6.2-v2-0-9157bf633dba@jannau.net>
+X-B4-Tracking: v=1; b=H4sIAPznxmMC/2WLwQ6CQAwFf4X0bA0sxIO/Yjwsy0OaaN20cUNC+
+ HdXrh5nMrORwwRO12YjQxGXt1YIp4bSEvUBlqkyhTb0bdcNHHN+grW8wP7xDJ14lhXO5XIObGmg
+ uo7RwaNFTctvPur/KhsOWZPbfd+/9b8JvYwAAAA=
 To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
@@ -37,11 +38,11 @@ Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
         Janne Grunau <j@jannau.net>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1570; i=j@jannau.net;
- h=from:subject:message-id; bh=qtyorAlxkkMT/6LLYB1Bf2sjPkpsduWNqrw5l5ng7OU=;
- b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuRjz//une7jdPHspxsXz4QpX9JqNW8ofLKt7PmpS3uFL4W2
- pp5J6ChlYRDjYJAVU2RJ0n7ZwbC6RjGm9kEYzBxWJpAhDFycAjCRp1MZ/kd5BHDxrL5lGKkQLbzupt
- leg5POL7XC/xQ81XglfsEjewojw7qzBjVf5V6eXtwT5vDAJuO4wuKne1/GtrmEbnK+e63+PgcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1036; i=j@jannau.net;
+ h=from:subject:message-id; bh=ew343/vV0kObrwRGYdFiYCkdG6wuIuazFB7ONX5IV3A=;
+ b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuRjz//u/zFXvKxAXEqpljGG5+/NNq2bMY+aPIK3L2wqeRij
+ fv1/RykLgxgHg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgIn0uTD8M1+ZeDcmRXXiwtoDq84XHm
+ GsWpcW1qF7bsdzZ/bM7QtmnmBkuP3Ds+Uxw7Rcdt7XT/8Jb4t596dKeoXiLe2M65MdHj5wYAEA
 X-Developer-Key: i=j@jannau.net; a=openpgp;
  fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -52,46 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a functional revert of c76b8308e4c9 ("nvme-apple: fix controller
-shutdown in apple_nvme_disable").
+c76b8308e4c9 removed a NVMe controller reset in the shutdown path. This
+broke suspend since it triggered a reset on resume. This reset hangs
+since the co-processor is not up.
+In addition the reset is needed on suspend to shutdown the co-processor
+cleanly.
 
-The commit broke suspend/resume since apple_nvme_reset_work() tries to
-disable the controller on resume. This does not work for the apple NVMe
-controller since register access only works while the co-processor
-firmware is running.
+This series contains a functional revert of c76b8308e4c9 (a simple revert
+is not possible due to other changes) and issues the NVMe reset only when
+the co-processor is running.
 
-Disabling the NVMe controller in the shutdown path is also required
-for shutting the co-processor down. The original code was appropriate
-for this hardware. Add a comment to prevent a similar breaking changes
-in the future.
+Changes since Hector's v1:
+- keep the fix localy in nvme-apple
+- disable on shutdown for clean co-processor shutdown
+- disable on reset only while the co-processor is running
 
-Fixes: c76b8308e4c9 ("nvme-apple: fix controller shutdown in apple_nvme_disable")
-Reported-by: Janne Grunau <j@jannau.net>
-Link: https://lore.kernel.org/all/20230110174745.GA3576@jannau.net/
-Signed-off-by: Janne Grunau <j@jannau.net>
 ---
- drivers/nvme/host/apple.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Janne Grunau (2):
+      nvme-apple: Reset controller during shutdown
+      nvme-apple: Only reset the controller when RTKit is running
 
-diff --git a/drivers/nvme/host/apple.c b/drivers/nvme/host/apple.c
-index bf1c60edb7f9..2a1f11b30615 100644
---- a/drivers/nvme/host/apple.c
-+++ b/drivers/nvme/host/apple.c
-@@ -829,7 +829,13 @@ static void apple_nvme_disable(struct apple_nvme *anv, bool shutdown)
- 			apple_nvme_remove_cq(anv);
- 		}
- 
--		nvme_disable_ctrl(&anv->ctrl, shutdown);
-+		/*
-+		 * Always reset the NVMe controller on shutdown. The reset is
-+		 * required to shutdown the co-processor cleanly.
-+		 */
-+		if (shutdown)
-+			nvme_disable_ctrl(&anv->ctrl, shutdown);
-+		nvme_disable_ctrl(&anv->ctrl, false);
- 	}
- 
- 	WRITE_ONCE(anv->ioq.enabled, false);
+ drivers/nvme/host/apple.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+---
+base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+change-id: 20230114-apple-nvme-suspend-fixes-v6.2-rc4
 
+Best regards,
 -- 
-2.38.2
+Janne Grunau <j@jannau.net>
