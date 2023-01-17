@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BE3670B21
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B31C670B4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjAQWEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S229873AbjAQWJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjAQWD7 (ORCPT
+        with ESMTP id S229846AbjAQWIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:03:59 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DBF9EFC;
-        Tue, 17 Jan 2023 12:30:48 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so123531wmq.1;
-        Tue, 17 Jan 2023 12:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4AjmrbeLkRHl9VUwyGR8qAetWemt0qiCWTiRfwIoY0g=;
-        b=ZxnZSWWVNS/IJBg+zqox+aaOnKaQzvheMFTpK3NxkVq1D7qs/gid+4UuTjbjJkuISr
-         YadZM7pbfXUf9hO6QpoJLxdffPnAWQvFwtchHyBL8u9WSAYCIrYsMORVgFDhGd1EN+Fu
-         /Dxj+67F6R5QJRmgZGoHIu7zClWs1Po/d+umcyY4D/adaE58onfTcEeTTA9ScHeidcJv
-         U30yanjpmEmREdRtopDWn0gBdaHqXLTzSnZCJagJ8qFrGnxE8MyktQBJe0PWKkVoCp4i
-         1a1oU+/9JRiE8KEtf48u5p0vXzgKRDopBSC8Om/whagLagFM9zeX8t9T1w2aqTkh5kjm
-         W0AA==
+        Tue, 17 Jan 2023 17:08:10 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974C5B448;
+        Tue, 17 Jan 2023 12:30:57 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id q15so4355142qtn.0;
+        Tue, 17 Jan 2023 12:30:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4AjmrbeLkRHl9VUwyGR8qAetWemt0qiCWTiRfwIoY0g=;
-        b=HirObTaOijy0tTEWr6KNZi2CxIRb8HiQXzuf8GiYXiYGs0kZlx3mjNKA/OhHax/Dvn
-         CFMx4eJaPvJT0y81WfKvDd1MBzG9QU3NVa8IMmBOF2RrIWpj+vyvHW29nO8dSGKIYKZH
-         BFANtqmVcD+x68NBNZGbWiBIiOB0BR10kDEsU18PqTeXj7ZCi5SF8fIYXQvlIncSw3v3
-         RZPtk2vX92tzC1re67O68lnsR1PcUHm1I76T86tQ9mUs9H84CuHB1vMDHXjayiugr8sL
-         qWXH9w7SmnE5uEX7GfsFJUi5G8SAuf3MYfeFaS0VnkLpddOv4Uy6UtK2kWlD5bmedM26
-         KTZQ==
-X-Gm-Message-State: AFqh2kqNCo1gyJh7nqC3gLnTBUmgqljRY5jNoOYlh4jq1kGy/IzxEI3+
-        Xd+58WW/UsBSkFOrpAu1l1BtTUYreYQxqQ==
-X-Google-Smtp-Source: AMrXdXsKCMb84vJQUWrxopvyY4qcAg1MqmN6wlig5WbPiP0IRwM6Ca8t6rATsygAPvHe81GmrBcDBQ==
-X-Received: by 2002:a05:600c:6001:b0:3da:f80a:5e85 with SMTP id az1-20020a05600c600100b003daf80a5e85mr4257919wmb.26.1673987446789;
-        Tue, 17 Jan 2023 12:30:46 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c1d0e00b003da105437besm21934507wms.29.2023.01.17.12.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 12:30:46 -0800 (PST)
-Date:   Tue, 17 Jan 2023 23:30:38 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Pierluigi Passaro <pierluigi.passaro@gmail.com>,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, eran.m@variscite.com,
-        nate.d@variscite.com, francesco.f@variscite.com,
-        pierluigi.p@variscite.com
-Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
-Message-ID: <202301180330.5rmOhXOw-lkp@intel.com>
+        bh=EZfuHp/Lb3thRInaaLDpig3glVMpImoS79RTofhvspM=;
+        b=zS/0IXMQhrWGp4Hwy8Fr/lYDMKRffnkvdgaUBYzc8n5aRSy4Uyy6Ox6dsbobE1dYnU
+         JLyl2tWyYNHRL+GQzTbeqFH2S68r89Xrf+vfER/G+mYu1sMNu4SiWg3xeYXBRHhjsEIT
+         WFbs5DCF8vrEuZey1B7XDDwMIlFD4S7yGRAF0JTDi/j5IC+RRIFOJIRONW9buBHh9VZ+
+         gpXimnpHzdnW1O7QJjp27Qcv0sZEYCR2VY94NM3Ct27gwhiUgk14+846hwDv/CycT/AL
+         zrJ1RKOGQZgc9WaGCLd902V5Lniyed4va4R7SSvd0YMIouWQqXJ+wk24kkfu/W14iisO
+         oMiw==
+X-Gm-Message-State: AFqh2krvfpSNLO9qh80w6eycN9K+dy9WW+zAe4H4r88ppdY4nOKMFwgg
+        XDphPXphotcK3d8iZwrFZCbx8GnIZx9xdw==
+X-Google-Smtp-Source: AMrXdXudbXI+KxsWVquYsuYpnexniQjgsLrcQRP5I81E1/UtjpB0RYi1NQUAWW1lXSupBy2Omn6l8w==
+X-Received: by 2002:ac8:4d8d:0:b0:3af:f7f5:2b38 with SMTP id a13-20020ac84d8d000000b003aff7f52b38mr5064876qtw.59.1673987456474;
+        Tue, 17 Jan 2023 12:30:56 -0800 (PST)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id e26-20020ac845da000000b003a527d29a41sm3353344qto.75.2023.01.17.12.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 12:30:55 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-4a263c4ddbaso440053397b3.0;
+        Tue, 17 Jan 2023 12:30:55 -0800 (PST)
+X-Received: by 2002:a81:bd6:0:b0:48d:1334:6e38 with SMTP id
+ 205-20020a810bd6000000b0048d13346e38mr535340ywl.316.1673987455061; Tue, 17
+ Jan 2023 12:30:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230115161006.16431-1-pierluigi.p@variscite.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230117165851.2300111-1-arnd@kernel.org>
+In-Reply-To: <20230117165851.2300111-1-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 Jan 2023 21:30:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU4b4huZR=CMpgW3NzDS2x3O6DJ3mvSqfa68Q3QGmsrfA@mail.gmail.com>
+Message-ID: <CAMuHMdU4b4huZR=CMpgW3NzDS2x3O6DJ3mvSqfa68Q3QGmsrfA@mail.gmail.com>
+Subject: Re: [PATCH] staging: media: stkwebcam: add USB dependency
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Gaosheng Cui <cuigaosheng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierluigi,
+On Tue, Jan 17, 2023 at 5:58 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Before the move, this driver had implicit dependencies on both
+> CONFIG_USB and MEDIA_SUPPORT, which can be =m even in combination
+> with CONFIG_MEDIA_USB_SUPPORT=y, so without the dependency we
+> get a link failure when USB is a loadable module but stkwebcam
+> is built-in:
+>
+> arm-linux-gnueabi-ld: drivers/staging/media/deprecated/stkwebcam/stk-webcam.o: in function `stk_camera_probe':
+> stk-webcam.c:(.text+0xcbc): undefined reference to `usb_get_dev'
+> arm-linux-gnueabi-ld: stk-webcam.c:(.text+0xccc): undefined reference to `usb_get_intf'
+> arm-linux-gnueabi-ld: stk-webcam.c:(.text+0xd68): undefined reference to `usb_put_intf'
+> arm-linux-gnueabi-ld: stk-webcam.c:(.text+0xd70): undefined reference to `usb_put_dev'
+> arm-linux-gnueabi-ld: drivers/staging/media/deprecated/stkwebcam/stk-webcam.o: in function `stk_prepare_iso':
+> stk-webcam.c:(.text+0xfcc): undefined reference to `usb_free_urb'
+> arm-linux-gnueabi-ld: stk-webcam.c:(.text+0x1010): undefined reference to `usb_alloc_urb'
+> arm-linux-gnueabi-ld: stk-webcam.c:(.text+0x10d8): undefined reference to `usb_kill_urb'
+>
+> Add back the original dependency.
+>
+> Fixes: 1943fb1e50d1 ("media: staging/media: add a STAGING_MEDIA_DEPRECATED option")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yeah, those pesky tristate->bool->tristate dependency chains...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pierluigi-Passaro/net-mdio-force-deassert-MDIO-reset-signal/20230116-001044
-patch link:    https://lore.kernel.org/r/20230115161006.16431-1-pierluigi.p%40variscite.com
-patch subject: [PATCH] net: mdio: force deassert MDIO reset signal
-config: xtensa-randconfig-m041-20230116
-compiler: xtensa-linux-gcc (GCC) 12.1.0
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+> --- a/drivers/staging/media/deprecated/stkwebcam/Kconfig
+> +++ b/drivers/staging/media/deprecated/stkwebcam/Kconfig
+> @@ -3,6 +3,7 @@ config VIDEO_STKWEBCAM
+>         tristate "USB Syntek DC1125 Camera support (DEPRECATED)"
+>         depends on VIDEO_DEV
+>         depends on MEDIA_USB_SUPPORT && MEDIA_CAMERA_SUPPORT
+> +       depends on USB && MEDIA_SUPPORT
+>         help
+>           Say Y here if you want to use this type of camera.
+>           Supported devices are typically found in some Asus laptops,
 
-smatch warnings:
-drivers/net/mdio/fwnode_mdio.c:144 fwnode_mdiobus_register_phy() warn: missing unwind goto?
+Gr{oetje,eeting}s,
 
-vim +144 drivers/net/mdio/fwnode_mdio.c
+                        Geert
 
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  114  int fwnode_mdiobus_register_phy(struct mii_bus *bus,
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  115  				struct fwnode_handle *child, u32 addr)
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  116  {
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  117  	struct mii_timestamper *mii_ts = NULL;
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  118  	struct pse_control *psec = NULL;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  119  	struct phy_device *phy;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  120  	bool is_c45 = false;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  121  	u32 phy_id;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  122  	int rc;
-3f08f04af6947d Pierluigi Passaro 2023-01-15  123  	int reset_deassert_delay = 0;
-3f08f04af6947d Pierluigi Passaro 2023-01-15  124  	struct gpio_desc *reset_gpio;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  125  
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  126  	psec = fwnode_find_pse_control(child);
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  127  	if (IS_ERR(psec))
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  128  		return PTR_ERR(psec);
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  129  
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  130  	mii_ts = fwnode_find_mii_timestamper(child);
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  131  	if (IS_ERR(mii_ts)) {
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  132  		rc = PTR_ERR(mii_ts);
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  133  		goto clean_pse;
-                                                                ^^^^^^^^^^^^^^^
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-5e82147de1cbd7 Oleksij Rempel    2022-10-03  134  	}
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  135  
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  136  	rc = fwnode_property_match_string(child, "compatible",
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  137  					  "ethernet-phy-ieee802.3-c45");
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  138  	if (rc >= 0)
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  139  		is_c45 = true;
-bc1bee3b87ee48 Calvin Johnson    2021-06-11  140  
-3f08f04af6947d Pierluigi Passaro 2023-01-15  141  	reset_gpio = fwnode_gpiod_get_index(child, "reset", 0, GPIOD_OUT_LOW, "PHY reset");
-3f08f04af6947d Pierluigi Passaro 2023-01-15  142  	if (reset_gpio == ERR_PTR(-EPROBE_DEFER)) {
-3f08f04af6947d Pierluigi Passaro 2023-01-15  143  		dev_dbg(&bus->dev, "reset signal for PHY@%u not ready\n", addr);
-3f08f04af6947d Pierluigi Passaro 2023-01-15 @144  		return -EPROBE_DEFER;
-                                                                ^^^^^^^^^^^^^^^^^^^^
-Looks like there needs to be some clean up done before the return.
-(Sometimes the kbuild-bot doesn't include the whole function in these
-emails. I'm not sure what the rules are.).
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
