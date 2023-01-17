@@ -2,98 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EC766DA17
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0655D66DA1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236348AbjAQJft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S236673AbjAQJiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236447AbjAQJeX (ORCPT
+        with ESMTP id S236686AbjAQJhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:34:23 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA0A44A1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:34:15 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h16so29905610wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:34:15 -0800 (PST)
+        Tue, 17 Jan 2023 04:37:35 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C37B460;
+        Tue, 17 Jan 2023 01:35:30 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id a1-20020a056830008100b006864df3b1f8so137938oto.3;
+        Tue, 17 Jan 2023 01:35:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rX5JGMpRLSr6DyBFjd77gBFqw7Vo35bbpQ09gyhlp0U=;
-        b=FJ049QbAnCTiGRLIjlmEziGk4eIz6jz3pOGm9YuOvlW2f8KT5rmAVf4vWKwMYGCuLf
-         dVcDc3TQAXqArMifxpgyfhRbEoYc+zzQtQ8envHiJFJv89OJTo+OzDg7fHjmGoDUzLGz
-         aeQXrlB/T9L73p/RRJG7UZURoN0qtXf1uy4aVJrvjcZMQTdFWpVYhQHN4glGaJk6f+WO
-         kQEIWVtpB3y3U9KvKyz3Cf2pwr2e9I7cGoFmOgYIHePHct2vZSFNG1VLfdOgVrkhaH8S
-         a6O4wIDr9x8dNsffrXy5eMxbXijRU4W4cL6QcN7EyQbj/0uX+LEuE5PcxgrDi6qjvsfr
-         nkfA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hMN1V1ykUi0o/01J/siqwvEPlG+4WljMN85XmMhp+C8=;
+        b=bm5AhXZvw6GagCGsfOIKdMDTuj6wYvnwhHWgv0Q8V9/rVLoHpzeoLWLhikzzrqlP9k
+         JOWoUF6bOh/m8JemElbPjefg6dEc2YfOmzpT2TLT4wFu75JM3SHATWPFaGwFWbX2I3Lr
+         xUKRm+61TKEyhCtE+BaAySjcVE5gz4SAuPv7euH9ltmFgx28iMz/zCKFLpraS+H0MhY4
+         nxOWn7Cpwil3vJyYz9JWQ7WUbBK4MI0Xv6SgbxmxdVg3GDcxn5HrM6BVD1CeXc58pjH3
+         6t3vUnkyCYaUGOJGYobQ1GDxXmApZ04e+WMmh0XtUBjyq2O5orj91UoRweQDaedeN1HV
+         HvpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rX5JGMpRLSr6DyBFjd77gBFqw7Vo35bbpQ09gyhlp0U=;
-        b=xDOKzJ21+l1HRveWYCMVV+DyV0kubIBdmgNuGjkoy7ALSvxk9eSjt38mxHdza3XXrc
-         sjB/OtwnGKiGxGTumYokm6uHC3je4PwLIWIBNSObWvxWRwmXZh+6HkpFUTZIBV6bGweg
-         5nEz5rGYEkks6QPGLFJOlHu3LKFSduTb6aYJSIMBgWdu115TKuIk6aDZ2shVxhrivNm2
-         aKPAKw3UrVzDwlzeopTMP5yY0fQtnmPfYLa5NFjq+TLBK7C3cXekEMmBSSmUm0p4ATWs
-         tYmDnQk5p1lpth5EXgcw44rjWj23mg6Dc2rlpybkHkG2vxFpVVdyZwo3I3ouLa+/CK/a
-         PvyA==
-X-Gm-Message-State: AFqh2kqe23ux++JD94iKmzrR2BmUGWQsqq8OesmuV8w+kuw2iSkFnQ10
-        5jMMqWOIZtgIQ9GtPQXXmWY2Kya7bSj63cHh
-X-Google-Smtp-Source: AMrXdXu5vmi3AuRfaLAf41Fb7sh43Xw5WWXe/+T+X8bVCMz4p06E09DnIFM+MyK3syIVIT2qSsG9hg==
-X-Received: by 2002:a05:6000:98d:b0:25f:8ead:96cc with SMTP id by13-20020a056000098d00b0025f8ead96ccmr2053341wrb.70.1673948053511;
-        Tue, 17 Jan 2023 01:34:13 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n16-20020a5d4010000000b002bbed1388a5sm23090463wrp.15.2023.01.17.01.34.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 01:34:13 -0800 (PST)
-Message-ID: <30dc15d9-2377-e51c-f8c6-f63ddfdfdad2@linaro.org>
-Date:   Tue, 17 Jan 2023 10:34:12 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hMN1V1ykUi0o/01J/siqwvEPlG+4WljMN85XmMhp+C8=;
+        b=xEUaj2vHyo0Y7vhYt/cbd9jBMxEJt8O2LOVu/PcIbjtq4Sv713E4r6O1hbtuEpPpW/
+         v4cdYGwmL6X4Uj7kxqo1RUc7yqeiy+qS46N/Tu34qdtx8hYF7SQNp2lBgEOLtcn7s8aO
+         yZFNNa6ZlXARYe2PKGn2Sp86BRmGoicPFtH9xB83kSJA9CLVHmmP2OEBRV/Lqt1082Do
+         RjMUXS0ywI/leg2nWCO7t/Fuj9JrYdFKfxcjpN5alaqdMs1jG4b9IP+Yc1ks/aBsReRA
+         ggXSdbI2L9XR57XGpp3lmdOImbSEEVDzxiZ0gUw9bk1bohADDO+SNOUdE7IId2QlS0Rt
+         gcfQ==
+X-Gm-Message-State: AFqh2kpph2kL33VTLLuuFUaIgp/50JyaC5c3EQ0+wTZR1/ioDegZ/STW
+        8dRLM13O0t5mAOix0Drr4gaoMiVA6owu0NxI4zs=
+X-Google-Smtp-Source: AMrXdXtxONnof1ZhFRt2/e47T77z8K3uO/BGIuol7llPScOfeSC1axJLLaZpJW0jS1XQtCR5528pN8sLA+cMgtl9jDw=
+X-Received: by 2002:a9d:6c4a:0:b0:684:e846:74db with SMTP id
+ g10-20020a9d6c4a000000b00684e84674dbmr132378otq.51.1673948130178; Tue, 17 Jan
+ 2023 01:35:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/4] powercap: idle_inject: Export symbols
-Content-Language: en-US
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
- <20230117020742.2760307-2-srinivas.pandruvada@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230117020742.2760307-2-srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230115210535.4085-1-apantykhin@gmail.com> <CABVgOSkXpbfLy5-40oqhmdLP9c84S=1FN=f_+Fw768QVUBBQPg@mail.gmail.com>
+In-Reply-To: <CABVgOSkXpbfLy5-40oqhmdLP9c84S=1FN=f_+Fw768QVUBBQPg@mail.gmail.com>
+From:   Alexander Pantyukhin <apantykhin@gmail.com>
+Date:   Tue, 17 Jan 2023 13:35:19 +0400
+Message-ID: <CAPi66w-E-WKA3uzE3SGLkp8UYaqz65Py2Yc8UGynhG1s0rtrjQ@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/kunit/kunit.py: remove redundant double check
+To:     David Gow <davidgow@google.com>
+Cc:     brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 03:07, Srinivas Pandruvada wrote:
-> Export symbols for external interfaces, so that they can be used in
-> other loadable modules.
-> 
-> Export is done under name space IDLE_INJECT.
-> 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
+Hello, David.
+Thank you very much for your review!
+There is no v2 yet.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+>
+> On Mon, 16 Jan 2023 at 05:05, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
+> >
+> > The build_tests function contained the doulbe checking for not success
+> Nit: "double" -> "double"
+>
+> > result. It is fixed in the current patch. Additional small
+> > simplifications of code like useing ternary if were applied (avoid use
+> Nit: "useing" -> "using"
+> > the same operation by calculation times differ in two places).
+> >
+> > Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
+> > ---
+> Thanks for catching these!
+> This looks good to me, save for a few typos (which you should fix if
+> there's a v2, but it isn't important enough to do another version...)
+>
+> Unless someone with more Python knowledge than me jumps in and
+> complains, this is:
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
+>
+> >  tools/testing/kunit/kunit.py | 17 +++++------------
+> >  1 file changed, 5 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > index 43fbe96318fe..481c213818bd 100755
+> > --- a/tools/testing/kunit/kunit.py
+> > +++ b/tools/testing/kunit/kunit.py
+> > @@ -77,10 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+> >         config_start = time.time()
+> >         success = linux.build_reconfig(request.build_dir, request.make_options)
+> >         config_end = time.time()
+> > -       if not success:
+> > -               return KunitResult(KunitStatus.CONFIG_FAILURE,
+> > -                                  config_end - config_start)
+> > -       return KunitResult(KunitStatus.SUCCESS,
+> > +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
+> > +       return KunitResult(status,
+> >                            config_end - config_start)
+> >
+> >  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> > @@ -92,13 +90,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> >                                      request.build_dir,
+> >                                      request.make_options)
+> >         build_end = time.time()
+> > -       if not success:
+> > -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> > -                                  build_end - build_start)
+> > -       if not success:
+> > -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> > -                                  build_end - build_start)
+> > -       return KunitResult(KunitStatus.SUCCESS,
+> > +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
+> > +       return KunitResult(status,
+> >                            build_end - build_start)
+> >
+> >  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+> > @@ -145,7 +138,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+> >                 tests = _list_tests(linux, request)
+> >                 if request.run_isolated == 'test':
+> >                         filter_globs = tests
+> > -               if request.run_isolated == 'suite':
+> > +               elif request.run_isolated == 'suite':
+> >                         filter_globs = _suites_from_test_list(tests)
+> >                         # Apply the test-part of the user's glob, if present.
+> >                         if '.' in request.filter_glob:
+> > --
+> > 2.25.1
+> >
