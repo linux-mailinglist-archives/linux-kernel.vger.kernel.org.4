@@ -2,168 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B5A66E311
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4439866E319
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjAQQGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S232017AbjAQQIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjAQQGJ (ORCPT
+        with ESMTP id S232191AbjAQQIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:06:09 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D209386A1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:06:04 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id j130so26273890oif.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:06:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4EfAchFh2XqfMOv5AF2Sfa5iQg29dDmyouMrbdYKJR0=;
-        b=Evh4xGotkD8K7/YI0wKm8LM4Bm1q9bxjAviJg6SXzmcPYwVIFvYspgAf+EiJ8JpdK2
-         +icEBqN5gdrXJSc7kJSmmI+4m7KzoG/vIhs9X+jRo+H+JXFu69KruiGH2gN+FMlWUYl3
-         JDMjpdeWohnVxTRBoeU4W+D/WRlq1k0YlC36ahRxFci3ttgSQPdxw+NpVrXpTTPZ4TJE
-         /ikn2hHuaPWDfvmSM8wN5oT99L8XAl4MK1zQVXJGrvWo5ueIfAaPxP3CFx/WNyT3qV6H
-         TcKp/fGF9wf2djy2JJPsVuVuviPvVNwlEKqyw///y8287ZmtlxJnnAm02L688c2rebm6
-         S+vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4EfAchFh2XqfMOv5AF2Sfa5iQg29dDmyouMrbdYKJR0=;
-        b=wpWdEWkIYgffo5oPgEMaKPOIgh7sfxjKFZoBXyDk8yhOau0st1xpuzSXyRGoOy2WrU
-         QC+cymGqGcXvJoisx6nwlWEXPabHLvYdmX4s7uONAi/XKulhFkBGwbDSLFXnF5egZLw+
-         JoOSGzfnowXB8XaVQ7/yCrV9llqYavmSwOmq30HpCWg88cUxROawtgblw6MH/ADflaIf
-         G2PbEm3ELO7OGWbMKZtHUfDtkqC7We4RQNvUD6qdYH9x2wKWHQnucCiP4p0k6nHUV/tW
-         26Z5dAbrbz4v3FjlTNLvLZgnKPWoIv3mErjY099hD9ktjlW+UzT8fPZbWlwS5wCiocu6
-         29pw==
-X-Gm-Message-State: AFqh2koThoNcIGl46fKoUqGDoz3W9HS1TRYSoS8m/IxkpFE1mq9pVQJu
-        SLjtzUQBvUAOjlIiEHDhEkjAeJnosBFBFGLkIKhdAQ==
-X-Google-Smtp-Source: AMrXdXsrU0YdklNgBFboFkySo1rRevrkr0ofh47b+nLvVnnSnTEMZtKONOxGleKBt40RWI++MDGBklSCZNeSVCNjAjI=
-X-Received: by 2002:a05:6808:124f:b0:35e:18a6:10ea with SMTP id
- o15-20020a056808124f00b0035e18a610eamr239009oiv.239.1673971564010; Tue, 17
- Jan 2023 08:06:04 -0800 (PST)
+        Tue, 17 Jan 2023 11:08:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93761E9D3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:08:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A29ABB817B7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5248EC433D2;
+        Tue, 17 Jan 2023 16:08:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673971713;
+        bh=3lr4oIETAx25wN6aPyOYyQLdHoI4WUF7KcqVquIESvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B7tlc1jYDdhgHLpJjHoxA5CPkHFtHuYgHLgutbgY5G1oDdE10q8pU7sEJJCG0CMQo
+         uPKwDx6LYBOBpm0XOjkmVHaAPQrw/TubEv/Dfmi0vYCEq7R2u7MQVLAR9fNfnYDdSG
+         hI8V6tyJ+lXujwphYFmCIBkp0dt6/V8O2tl7mW0cYGnAOfuLOrwhrZVQYzn9amOpOY
+         9UmcholyBcNOv/WP4pfC2n/xAeldhF2t3IrqFqU0hdV+O9ElgAW7ncz4ZtiIA8Na7N
+         C/MSaAqg1UUbMzYnsc/kLZ+mEKFm4/UUOcb/IVi2d57dB/SXMo5eeWlYaBrCkG240k
+         TpmgKhLHRFocg==
+Date:   Tue, 17 Jan 2023 16:08:26 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, qperret@google.com
+Subject: Re: [PATCH v10 2/5] sched: Use user_cpus_ptr for saving user
+ provided cpumask in sched_setaffinity()
+Message-ID: <20230117160825.GA17756@willie-the-truck>
+References: <20220922180041.1768141-1-longman@redhat.com>
+ <20220922180041.1768141-3-longman@redhat.com>
 MIME-Version: 1.0
-References: <20230116173420.1278704-1-mw@semihalf.com> <20230116173420.1278704-3-mw@semihalf.com>
- <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk> <20230116181618.2iz54jywj7rqzygu@skbuf>
- <Y8XJ3WoP+YKCjTlF@lunn.ch>
-In-Reply-To: <Y8XJ3WoP+YKCjTlF@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 17 Jan 2023 17:05:53 +0100
-Message-ID: <CAPv3WKc8gfBb7BDf5kwyPCNRxmS_H8AgQKRitbsqvL7ihbP1DA@mail.gmail.com>
-Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API to fwnode_
-To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com, sean.wang@mediatek.com,
-        Landen.Chao@mediatek.com, linus.walleij@linaro.org,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hkallweit1@gmail.com, jaz@semihalf.com,
-        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922180041.1768141-3-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew and Vladimir,
+Hi Waiman,
 
-pon., 16 sty 2023 o 23:04 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
->
-> On Mon, Jan 16, 2023 at 08:16:18PM +0200, Vladimir Oltean wrote:
-> > On Mon, Jan 16, 2023 at 05:50:13PM +0000, Russell King (Oracle) wrote:
-> > > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
-> > > > fixed-link PHYs API is used by DSA and a number of drivers
-> > > > and was depending on of_. Switch to fwnode_ so to make it
-> > > > hardware description agnostic and allow to be used in ACPI
-> > > > world as well.
-> > >
-> > > Would it be better to let the fixed-link PHY die, and have everyone u=
-se
-> > > the more flexible fixed link implementation in phylink?
-> >
-> > Would it be even better if DSA had some driver-level prerequisites to
-> > impose for ACPI support - like phylink support rather than adjust_link =
--
-> > and we would simply branch off to a dsa_shared_port_link_register_acpi(=
-)
-> > function, leaving the current dsa_shared_port_link_register_of() alone,
-> > with all its workarounds and hacks? I don't believe that carrying all
-> > that logic over to a common fwnode based API is the proper way forward.
+On Thu, Sep 22, 2022 at 02:00:38PM -0400, Waiman Long wrote:
+> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
+> is currently used only by arm64 arch due to possible asymmetric CPU
+> setup. This patch extends its usage to save user provided cpumask
+> when sched_setaffinity() is called for all arches. With this patch
+> applied, user_cpus_ptr, once allocated after a successful call to
+> sched_setaffinity(), will only be freed when the task exits.
+> 
+> Since user_cpus_ptr is supposed to be used for "requested
+> affinity", there is actually no point to save current cpu affinity in
+> restrict_cpus_allowed_ptr() if sched_setaffinity() has never been called.
+> Modify the logic to set user_cpus_ptr only in sched_setaffinity() and use
+> it in restrict_cpus_allowed_ptr() and relax_compatible_cpus_allowed_ptr()
+> if defined but not changing it.
+> 
+> This will be some changes in behavior for arm64 systems with asymmetric
+> CPUs in some corner cases. For instance, if sched_setaffinity()
+> has never been called and there is a cpuset change before
+> relax_compatible_cpus_allowed_ptr() is called, its subsequent call will
+> follow what the cpuset allows but not what the previous cpu affinity
+> setting allows.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/sched/core.c  | 82 ++++++++++++++++++++------------------------
+>  kernel/sched/sched.h |  7 ++++
+>  2 files changed, 44 insertions(+), 45 deletions(-)
 
-In the past couple of years, a number of subsystems have migrated to a
-more generic HW description abstraction (e.g. a big chunk of network,
-pinctrl, gpio). ACPI aside, with this patchset one can even try to
-describe the switch topology with the swnode (I haven't tried that
-though). I fully agree that there should be no 0-day baggage in the
-DSA ACPI binding (FYI the more fwnode- version of the
-dsa_shared_port_validate_of() cought one issue in the WIP ACPI
-description in my setup). On the other hand, I find fwnode_/device_
-APIs really helpful for most of the cases - ACPI/OF/swnode differences
-can be hidden to a generic layer and the need of maintaining separate
-code paths related to the hardware description on the driver/subsystem
-level is minimized. An example could be found in v1 of this series,
-the last 4 patches in [1] show that it can be done in a simple /
-seamless way, especially given the ACPI (fwnode) PHY description in
-phylink is already settled and widely used. I am aware at the end of
-the day, after final review all this can be more complex.
+We've tracked this down as the cause of an arm64 regression in Android and I've
+reproduced the issue with mainline.
 
-I expect that the actual DSA ACPI support acceptance will require a
-lot of discussions and decisions, on whether certain solutions are
-worth migrating from OF world or require spec modification. For now my
-goal was to migrate to a more generic HW description API, and so to
-allow possible follow-up ACPI-related modifications, and additions to
-be extracted and better tracked.
+Basically, if an arm64 system is booted with "allow_mismatched_32bit_el0" on
+the command-line, then the arch code will (amongst other things) call
+force_compatible_cpus_allowed_ptr() and relax_compatible_cpus_allowed_ptr()
+when exec()'ing a 32-bit or a 64-bit task respectively.
 
->
-> I agree with you there, here is little attempt to make a clean ACPI
-> binding. Most of the attempts to add ACPI support seem to try to take
-> the short cut for just search/replace of_ with fwnode_. And we then
-> have to push back and say no, and generally it then goes quiet.
+If you consider a system where everything is 64-bit but the cmdline option
+above is present, then the call to relax_compatible_cpus_allowed_ptr() isn't
+expected to do anything in this case, and the old code made sure of that:
 
-In most cases, the devices' description is pretty straightforward:
-* a node (single or with some children), resources (mem, irqs), mmio
-address space, optionally address on a bus and a couple of properties
-The DSDT/SSDT tables are very well suited for this. In case of
-separate, contained drivers that is also really easy to maintain.
+> @@ -3055,30 +3032,21 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask);
+>  
+>  /*
+>   * Restore the affinity of a task @p which was previously restricted by a
+> - * call to force_compatible_cpus_allowed_ptr(). This will clear (and free)
+> - * @p->user_cpus_ptr.
+> + * call to force_compatible_cpus_allowed_ptr().
+>   *
+>   * It is the caller's responsibility to serialise this with any calls to
+>   * force_compatible_cpus_allowed_ptr(@p).
+>   */
+>  void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+>  {
+> -	struct cpumask *user_mask = p->user_cpus_ptr;
+> -	unsigned long flags;
+> +	int ret;
+>  
+>  	/*
+> -	 * Try to restore the old affinity mask. If this fails, then
+> -	 * we free the mask explicitly to avoid it being inherited across
+> -	 * a subsequent fork().
+> +	 * Try to restore the old affinity mask with __sched_setaffinity().
+> +	 * Cpuset masking will be done there too.
+>  	 */
+> -	if (!user_mask || !__sched_setaffinity(p, user_mask))
+> -		return;
 
-However, I fully understand your concerns and caution before blessing
-any change related to subsystem/generic code. Therefore ACPI support
-addition was split after v1 (refer to discussion in [1]) and will
-require ACPI maintainers' input and guidelines.
+... since it returned early here if '!user_mask' ...
 
->
-> Marcin, please approach this from the other end. Please document in
-> Documentation/firmware-guide/acpi/dsd what a clean binding should look
-> like, and then try to implement it.
->
+> -
+> -	raw_spin_lock_irqsave(&p->pi_lock, flags);
+> -	user_mask = clear_user_cpus_ptr(p);
+> -	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+> -
+> -	kfree(user_mask);
+> +	ret = __sched_setaffinity(p, task_user_cpus(p));
+> +	WARN_ON_ONCE(ret);
 
-This is how I initially approached this (original submission: [2]; a
-bit updated version, working on top of the current patchset: [3]). We
-then agreed that in order to remove a bit hacky mitigation of the
-double ACPI scan problem, an MDIOSerialBus _CRS method should be
-defined in the ACPI spec, similar to the
-I2CSerialBus/SPISerialBus/UARTSerialBus. I am going to submit the
-first version for review in the coming days. The DSA purely
-ACPI-related changes would be updated and submitted, once the method
-is accepted.
+... however, now we end up going down into __sched_setaffinity() with
+task_user_cpus(p) giving us the 'cpu_possible_mask'! This can lead to a mixture
+of WARN_ON()s and incorrect affinity masks (for example, a newly exec'd task
+ends up with the affinity mask of the online CPUs at the point of exec() and is
+unable to run on anything onlined later).
 
-Best regards,
-Marcin
+I've had a crack at fixing the code above to restore the old behaviour, and it
+seems to work for my basic tests (still pending confirmation from others):
 
-[1] https://www.spinics.net/lists/netdev/msg827337.html
-[2] https://www.spinics.net/lists/netdev/msg827345.html
-[3] https://github.com/semihalf-wojtas-marcin/Linux-Kernel/commit/e017e69c0=
-eda18747029bfe0c335df204670ba59
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index bb1ee6d7bdde..0d4a11384648 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3125,17 +3125,16 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx);
+ void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+ {
+        struct affinity_context ac = {
+-               .new_mask  = task_user_cpus(p),
++               .new_mask  = p->user_cpus_ptr,
+                .flags     = 0,
+        };
+-       int ret;
+ 
+        /*
+         * Try to restore the old affinity mask with __sched_setaffinity().
+         * Cpuset masking will be done there too.
+         */
+-       ret = __sched_setaffinity(p, &ac);
+-       WARN_ON_ONCE(ret);
++       if (ac.new_mask)
++               WARN_ON_ONCE(__sched_setaffinity(p, &ac));
+ }
+ 
+ void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
+
+
+With this change, task_user_cpus() is only used by restrict_cpus_allowed_ptr()
+so I'd be inclined to remove it altogether tbh.
+
+What do you think?
+
+Will
