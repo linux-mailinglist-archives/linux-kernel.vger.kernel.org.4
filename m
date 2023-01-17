@@ -2,69 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CFA670DF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79D8670E0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjAQXr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S229771AbjAQXt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjAQXrU (ORCPT
+        with ESMTP id S229624AbjAQXte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:47:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5133E4A1C6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:55:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E34A661518
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 159F0C433D2;
-        Tue, 17 Jan 2023 22:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1673996133;
-        bh=ruz2A/4YTpx7OPy42aBIYAuAK+3AVNnrNmXTqZhAjSw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=y/ZuQQ+p4hfhGFe69OrMaDXIxXOokePloiIt8MOIBxTvN/X+vyXL5rhQec1Pzm04+
-         gcdtWeEbgYuzL8dWjHGim2Y0ieXi8BTCLiW1odv162eAAjFcLBfLHRL7mXCbQ9w9mF
-         yXOz2S3kJUauib96LWDIOZtj1rULvC2hyVwYNOA4=
-Date:   Tue, 17 Jan 2023 14:55:32 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
-Message-Id: <20230117145532.94132510f8bc538d5465fd43@linux-foundation.org>
-In-Reply-To: <CAG48ez36Nio9GzU_m168AEJMXxtcNtdgq6YpAhLq-aKNQA_9fg@mail.gmail.com>
-References: <20230111133351.807024-1-jannh@google.com>
-        <CAG48ez36Nio9GzU_m168AEJMXxtcNtdgq6YpAhLq-aKNQA_9fg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 18:49:34 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B174F344
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:59:03 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id 18so47259246edw.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bna1Go+FLPWZPO+Q65HkXvlvtGtXMjbIMGmdWudjb8E=;
+        b=SXEXN4zAt0S8uxdQAAbuzPEfDs+2gUgOVxUyZIqwyoFvU5gUH+sBt+cuITwbAuo055
+         QQXw8bCXGg5lptXHjpWKN1NbFkKZxdfHss6hgNw10E9w9ALQHIuqPrnbBPrss6VjtRkb
+         GP9ZiBSPUIBeenGZA5q++JngkMUWHGQyuwshey8h6xai6MQY7GeX84ai4MSaQ9GOHIYZ
+         oP9J3yPcVpozQ9e0Fq6nAp3BrADANgplgrm2onZv9pDxFUPtVbO5xEniRfTdgQbC62dp
+         acw8zhCv4aCs4G1sm0B/kziyBjM2RTVFiwoTONP9pY5D0QLq3sCJrziKfkiaea2ZBgYU
+         Zu1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bna1Go+FLPWZPO+Q65HkXvlvtGtXMjbIMGmdWudjb8E=;
+        b=q63Zp7rFBM81Dy4i5x6/30XXpPsCX9LdiFhgB8NtJ4j5+YQaAP1LVlfkb9TzpJv5Y4
+         qLPM2rYv96ec3uGTR7rQtiwGyLcpmcSVtP/csHbWCM7URm7aTM7NQBf67pnFu54aX+xV
+         naGO9AiVd1rvrpDH4VbNavx4WR5/7+BWkiLYvfuMBBwJ4jYb2/eeyCe5rW4phXM3IpJr
+         tHv6HhgIXsr3dfTICxE5xJtkazsLcxuBbyU80KKJ9f1GYEhZJmC9gAjTCsAeF6xZhCE9
+         q+8vjQIr2xlxQ5XOSLduZVOncICjttrXEP4tN7vIWOuCTtFpgDLPxWMMQpmHHNS5cCRb
+         +cUA==
+X-Gm-Message-State: AFqh2kqB+qoNFbSF+XmAM2DkJpgcmbyh6LS//o2xRkuPhjs5Hnqd/Oh3
+        1GgsWqEBaNqyfObhyRdKjz2z5Sd2T+9GM41naV3qlJ4Tmu04Mw==
+X-Google-Smtp-Source: AMrXdXtj/BOtB5PM/YeFNzbYlnJMctr7Ss11djAm3clEWb1KMmuzi1BrQwFCaY24rxwj7vdIeBQZOopIAXVc0CEtDdo=
+X-Received: by 2002:aa7:da51:0:b0:49e:4936:bbd8 with SMTP id
+ w17-20020aa7da51000000b0049e4936bbd8mr31755eds.410.1673996341742; Tue, 17 Jan
+ 2023 14:59:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-2-vannapurve@google.com> <Y8cVhFIM1EoLHO/V@google.com>
+In-Reply-To: <Y8cVhFIM1EoLHO/V@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 17 Jan 2023 14:58:48 -0800
+Message-ID: <CAGtprH-Z9=pKM1XxYYQTvwA161BCdgeRbRFQjV=HaV+4Qfo3=w@mail.gmail.com>
+Subject: Re: [V2 PATCH 1/6] KVM: x86: Add support for testing private memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 20:12:49 +0100 Jann Horn <jannh@google.com> wrote:
+On Tue, Jan 17, 2023 at 1:39 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> > Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
+> > @@ -272,13 +274,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+> >               .rsvd = err & PFERR_RSVD_MASK,
+> >               .user = err & PFERR_USER_MASK,
+> >               .prefetch = prefetch,
+> > -             .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
+> > +             .is_tdp = is_tdp,
+> >               .nx_huge_page_workaround_enabled =
+> >                       is_nx_huge_page_enabled(vcpu->kvm),
+> >
+> >               .max_level = KVM_MAX_HUGEPAGE_LEVEL,
+> >               .req_level = PG_LEVEL_4K,
+> >               .goal_level = PG_LEVEL_4K,
+> > +             .is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
+> > +                             kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+>
+> After looking at the SNP+UPM series, I think we should forego a dedicated Kconfig
+> for testing and instead add a new VM type for UPM-capable guests.  The new type,
+> e.g. KVM_X86_PROTECTED_VM, can then be used to leverage UPM for "legacy" SEV and
+> SEV-ES guests, as well as for UPM-capable guests that don't utilize per-VM
+> memory encryption, e.g. KVM selftests.
+>
+> Carrying test-only behavior is obviously never ideal, and it would pretty much have
+> to be mutually exclusive with "real" usage of UPM, otherwise the KVM logics gets
+> unnecessarily complex.
 
-> On Wed, Jan 11, 2023 at 2:33 PM Jann Horn <jannh@google.com> wrote:
-> > If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
-> > it to be locked. retract_page_tables() bails out if an ->anon_vma is
-> > attached, but does this check before holding the mmap lock (as the comment
-> > above the check explains).
-> 
-> @akpm please replace the commit message with the following, and maybe
-> also add a "Link:" entry pointing to
-> https://lore.kernel.org/linux-mm/CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com/
-> for the reproducer.
-
-Done, thanks.
+Ack, the newly added VM type fits better here with SEV/SEV-ES and
+non-confidential selftests being able to share this framework.
