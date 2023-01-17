@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A6466E776
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100C266E78B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbjAQUJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S235157AbjAQUL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbjAQUG2 (ORCPT
+        with ESMTP id S234263AbjAQUHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:06:28 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FFC42BE6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:00:07 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y69so818892iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:00:07 -0800 (PST)
+        Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676BF3FF19
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:19 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4c131bede4bso436004177b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Wdw6HE8HTpF7TjWP3fEjV+IfKA8kpoKQVjC2fd8a/M=;
-        b=TI/jZm0TgXF1KqXD5ofQO3vjXscEbgReusDd9NZUiFO+rZ4ufxMxY0Wm4LXbNCDrcg
-         VPncWQa1E7kGB48K1ouW/fIGNKtaTHLaj6Z/N+1njok2FFlr1LQOk6B6mXTmTM4tDkDf
-         IT/vZNPwYX1bRsGgO77+sUA8PUaha5GZWJLZLvBjr/LdPPd7VppF5lAXYrpbp3pdyZxj
-         qnWiHWo+K3KJh9Ng2IQXIddcOyASz5CtMRx5zrwOlml0CTgVQgdC17VWPPFTv7BoO/Vk
-         VQiZrTXpH0fg9i9Oc4wCLj9yLYrY/QAd4sRfKUHBx+5Dam1c45UI9qdnx24fctaC4QRp
-         myrQ==
+        bh=LIZZvFyQtXHixD5sWfvEaQUvi24ljYnGZNh2fBEIyp4=;
+        b=CjLP+GN4eJ8YGFZvjoqXnYn0mL/Nm9o57f+7WOJDJDHEjmOn/4ZZF6+enYJUFh56p6
+         ZjMUPNGSRgQRosE3EMtoX1RXdV9HlQD3govS4EbUA9vX5E0lvyII7jNgKbkxa9q55Ofi
+         5fHxRCrBasHddp+A5FhlnIGxMd1HsMsFjjUSptfu2Xn/GYum5SsgoXsfxk+bQ6S1eMxn
+         TjquS1QRX6eEGqUoWMTLZ0Uen7LLC6vfFjMFZvmVjQlE+SMKypaTTEwOKRHnLLugiZMU
+         Ca7UGjlXIklsuObkggD1KlRzV4LfytQE7UWnMkJIywJkawE+81OksYcPHkL0icjcL46L
+         ZAWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Wdw6HE8HTpF7TjWP3fEjV+IfKA8kpoKQVjC2fd8a/M=;
-        b=g3qKOz7JNgJU61kGyQ6LPSgTPsDv5ic9hUZWfXv2pN7yLvJqH5CUbTQ3S5Gka+cS/e
-         15tjDtdlyYrfU7X4QK8zodpaRPUb86k0Tyc8GDXbKJWAvTE5c+T2UoB8OpqspkdPIUUC
-         4CTOaQ9sMkjPBuDyjozat3ueFnlRJptFciKunuTWHtXElDTrCToVdmmU07ec/yc1GNsl
-         ggYnwnVNggMw9LQAf+gJv7ImukDe/iGcpuWjfV4JLxWZhFXjJ2ECN6BiHnHJ5ZiqSwHP
-         tlROkhW3W1xmoeuE6ojMIfn8pvgxRGuQ8JIIRF1VRAUnBuymvgEIOKwDJW1ShsVLSU+Q
-         +66A==
-X-Gm-Message-State: AFqh2krlb1L+ifOJQpi+rvZoL5LpRrSQLEQ5+Afre1hfJRtdl/UYiGcr
-        lSJTyXLTE/eufp2p8t5IDBcf6tMIH4A6wtrfFXbSnQ==
-X-Google-Smtp-Source: AMrXdXv6MqZXsvF44Gv12CcJfMs1PLhgpGnFRLlBquHPxqID9PTjCHdbpCsREcfjUMjSH1VGmrPetxKzt6MQiokOUYI=
-X-Received: by 2002:a05:6602:2108:b0:704:9cd9:2dc7 with SMTP id
- x8-20020a056602210800b007049cd92dc7mr305485iox.154.1673982006407; Tue, 17 Jan
- 2023 11:00:06 -0800 (PST)
+        bh=LIZZvFyQtXHixD5sWfvEaQUvi24ljYnGZNh2fBEIyp4=;
+        b=k3XtvN9KtVQaimpV4ThfrF4s2x8dQbKe8JWDVNJ2CxQPYqj6m5y75L0oz67n/y6UJR
+         Agz8pB69BjSJZDfMexqd8xyEoRYO0gmmnMpBdQJXAZjTq0MCDObxEcq5os2+vJwLgzri
+         b3CjjIEdtdhRNp+WXCJydVSYEpxDJT0H4p0zBpqtHRvXYzCK+qYG0U7UjKovjlZkdQqX
+         7TQzWyfiKciKte1oufqazF8Cmh9k0XiHRvQ7sRm6V3Pb2AGPLkb0l05oZNVrwZWHHB4c
+         wXEbaaLi5IRFwyezrGq1Lo+E6gcY1OC3D6VPkcLckhbYK6IfOpf/GbaBMNYbsg0Zpsny
+         DcOw==
+X-Gm-Message-State: AFqh2koozn9jdZ1Lrjcfxbw7AiuJJmW/rPwoOLHvFgi7B/Vz1PfmaBf0
+        TQgGKmnKPv078+AM/xLyHlg+BUhrwhzHroKSxMRIEg==
+X-Google-Smtp-Source: AMrXdXuXSHUCPjq8vGtgRecAo+K4qxgIc9+GydwwGOLIiPEqHLP5AyNSTg15twzR8exVpLWal97Wzf6SyesXXn7pY10=
+X-Received: by 2002:a81:9105:0:b0:3dc:fd91:ef89 with SMTP id
+ i5-20020a819105000000b003dcfd91ef89mr459982ywg.347.1673982078402; Tue, 17 Jan
+ 2023 11:01:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-42-surenb@google.com>
- <CAG48ez3ZNt+B3XvAMP1OaeEYuwpXJ1epmT9YtNonFLEJ6yANVQ@mail.gmail.com>
- <CAJuCfpFruHecz9NssGGFrG-RqbJFHCfRuZ7c6GbTBD4x4AU8aA@mail.gmail.com>
- <Y8bpfzYvWq/3ttr+@casper.infradead.org> <CAJuCfpHkgRDpMJXd6vnCmB50PnSOwDY9pjhW5LcdR+fU5JUseA@mail.gmail.com>
- <Y8btYASD3jmdCf5n@casper.infradead.org> <CAJuCfpGcufxmL7A-ea_JDKU2pxrTQJ7Sez7C6zcVyFK9q1CXUg@mail.gmail.com>
-In-Reply-To: <CAJuCfpGcufxmL7A-ea_JDKU2pxrTQJ7Sez7C6zcVyFK9q1CXUg@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Jan 2023 19:59:29 +0100
-Message-ID: <CAG48ez3Je1Jht_vqJf-qQ5R=KDuE1gzmHy5wN8oYZTwr+0PwBA@mail.gmail.com>
-Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-41-surenb@google.com>
+ <CAG48ez1=-tY8nrsX+T=AJBmW05E8sAvZNj80Wev9sGwR9NZysQ@mail.gmail.com>
+In-Reply-To: <CAG48ez1=-tY8nrsX+T=AJBmW05E8sAvZNj80Wev9sGwR9NZysQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 17 Jan 2023 11:01:07 -0800
+Message-ID: <CAJuCfpHSZouW44MqdZxpAB_NAdimdU2kcZ2sDo2mfNCf_nmL3w@mail.gmail.com>
+Subject: Re: [PATCH 40/41] mm: separate vma->lock from vm_area_struct
+To:     Jann Horn <jannh@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
         ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
         paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
         peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
@@ -88,68 +85,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 7:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> On Tue, Jan 17, 2023 at 10:47 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Tue, Jan 17, 2023 at 10:36:42AM -0800, Suren Baghdasaryan wrote:
-> > > On Tue, Jan 17, 2023 at 10:31 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Tue, Jan 17, 2023 at 10:26:32AM -0800, Suren Baghdasaryan wrote:
-> > > > > On Tue, Jan 17, 2023 at 10:12 AM Jann Horn <jannh@google.com> wrote:
-> > > > > >
-> > > > > > On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > > > rw_semaphore is a sizable structure of 40 bytes and consumes
-> > > > > > > considerable space for each vm_area_struct. However vma_lock has
-> > > > > > > two important specifics which can be used to replace rw_semaphore
-> > > > > > > with a simpler structure:
-> > > > > > [...]
-> > > > > > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > > > > > >  {
-> > > > > > > -       up_read(&vma->vm_lock->lock);
-> > > > > > > +       if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > > > > > +               wake_up(&vma->vm_mm->vma_writer_wait);
-> > > > > > >  }
-> > > > > >
-> > > > > > I haven't properly reviewed this, but this bit looks like a
-> > > > > > use-after-free because you're accessing the vma after dropping your
-> > > > > > reference on it. You'd have to first look up the vma->vm_mm, then do
-> > > > > > the atomic_dec_and_test(), and afterwards do the wake_up() without
-> > > > > > touching the vma. Or alternatively wrap the whole thing in an RCU
-> > > > > > read-side critical section if the VMA is freed with RCU delay.
-> > > > >
-> > > > > vm_lock->count does not control the lifetime of the VMA, it's a
-> > > > > counter of how many readers took the lock or it's negative if the lock
-> > > > > is write-locked.
-> > > >
-> > > > Yes, but ...
-> > > >
-> > > >         Task A:
-> > > >         atomic_dec_and_test(&vma->vm_lock->count)
-> > > >                         Task B:
-> > > >                         munmap()
-> > > >                         write lock
-> > > >                         free VMA
-> > > >                         synchronize_rcu()
-> > > >                         VMA is really freed
-> > > >         wake_up(&vma->vm_mm->vma_writer_wait);
-> > > >
-> > > > ... vma is freed.
-> > > >
-> > > > Now, I think this doesn't occur.  I'm pretty sure that every caller of
-> > > > vma_read_unlock() is holding the RCU read lock.  But maybe we should
-> > > > have that assertion?
-> > >
-> > > Yep, that's what this patch is doing
-> > > https://lore.kernel.org/all/20230109205336.3665937-27-surenb@google.com/
-> > > by calling vma_assert_no_reader() from __vm_area_free().
-> >
-> > That's not enough though.  Task A still has a pointer to vma after it
-> > has called atomic_dec_and_test(), even after vma has been freed by
-> > Task B, and before Task A dereferences vma->vm_mm.
+On Tue, Jan 17, 2023 at 10:34 AM Jann Horn <jannh@google.com> wrote:
 >
-> Ah, I see your point now. I guess I'll have to store vma->vm_mm in a
-> local variable and call mmgrab() before atomic_dec_and_test(), then
-> use it in wake_up() and call mmdrop(). Is that what you are thinking?
+> On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > vma->lock being part of the vm_area_struct causes performance regression
+> > during page faults because during contention its count and owner fields
+> > are constantly updated and having other parts of vm_area_struct used
+> > during page fault handling next to them causes constant cache line
+> > bouncing. Fix that by moving the lock outside of the vm_area_struct.
+> > All attempts to keep vma->lock inside vm_area_struct in a separate
+> > cache line still produce performance regression especially on NUMA
+> > machines. Smallest regression was achieved when lock is placed in the
+> > fourth cache line but that bloats vm_area_struct to 256 bytes.
+>
+> Just checking: When you tested putting the lock in different cache
+> lines, did you force the slab allocator to actually store the
+> vm_area_struct with cacheline alignment (by setting SLAB_HWCACHE_ALIGN
+> on the slab or with a ____cacheline_aligned_in_smp on the struct
+> definition)?
 
-You shouldn't need mmgrab()/mmdrop(), because whoever is calling you
-for page fault handling must be keeping the mm_struct alive.
+Yep, I tried all these combinations and still saw noticeable regression.
