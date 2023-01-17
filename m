@@ -2,279 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C3166D6E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AFC66D6E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbjAQH10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        id S232308AbjAQH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbjAQH0o (ORCPT
+        with ESMTP id S235606AbjAQH0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:26:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E2AC140
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673940357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iizuc0HQbsrm6BiEPcueJvdkUUwR6glPVHvzA95lMhU=;
-        b=bH6VDIJa9tmg4/XI/flN+Um9EVTZuSh/x911W7vFo3RbXdXMc0pfryYh/+/U9FJjXVG98m
-        YUa1PTshyS+jdYCPHbFGEc4buXE6+4ZxUSiIbBjL7AxX+PCL99II12BG1+5GnF6Wt5QbPi
-        h704BTL77p8W1nswcuE+56SQzDNjE04=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-8-JHuFw--APPKAtJ0gFrLlcw-1; Tue, 17 Jan 2023 02:25:56 -0500
-X-MC-Unique: JHuFw--APPKAtJ0gFrLlcw-1
-Received: by mail-yb1-f199.google.com with SMTP id k135-20020a25248d000000b007d689f92d6dso7182968ybk.22
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:25:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iizuc0HQbsrm6BiEPcueJvdkUUwR6glPVHvzA95lMhU=;
-        b=hsZCAnrdUfu9gMTUS3tVb1cujwT/MrH67oKOo5nx64FYNL+07fKEiH5ArAWHfaTSJq
-         LrunF+Y/R/QYlc1KadfQXNNp5IZcfFpTZd91fzH52klLaTk+VpAxwDDM1F5h+jAopSj/
-         /fDhOueOGvrr+G9Pt/TdZm/z3+HmU4VDDzWXovaC6NfOmTlEG8zWXV0I+STfdLiE3UCa
-         pLo7wz8jc071p4KW5PjGs0+m1P5JdNnN3Od6LMYfxYr6dRNHCCbZv3Rj8i4yqPVCkrvK
-         lAeF+PRVEoTUb6VBAZWWoZI4GDb1BMxreGtl3omCpDyFqr9hX/EG2Ad2F4FYpQZCP7MX
-         k8Mg==
-X-Gm-Message-State: AFqh2kpPvfagkF5r+5KPKYhJLAWjSdpJGhVvfNzW/l5T46YAub7rrWZr
-        bQU1r8dBHOb/5Qvzu1XTnIii/yyHynek9qi/A0GklpPpfRg7MkDqtcVnQ9Bc4vkknKzaVQax9+k
-        hxcM0dAXsrhri7Vech6HoanvEDjN8iynpO2xYD7Ir
-X-Received: by 2002:a81:1103:0:b0:41e:2266:9718 with SMTP id 3-20020a811103000000b0041e22669718mr323173ywr.294.1673940355521;
-        Mon, 16 Jan 2023 23:25:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXstuo6LF90CJhyvHfiyx4S3DUpMqR5LxKbDWfkNRjMvlhwOuFX+qqyZlYODQ71Z5o/ohL+ywjyKm+hlr/g3C5M=
-X-Received: by 2002:a81:1103:0:b0:41e:2266:9718 with SMTP id
- 3-20020a811103000000b0041e22669718mr323163ywr.294.1673940355271; Mon, 16 Jan
- 2023 23:25:55 -0800 (PST)
+        Tue, 17 Jan 2023 02:26:39 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D206724110;
+        Mon, 16 Jan 2023 23:26:37 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pHgMS-000o0z-Ry; Tue, 17 Jan 2023 15:26:25 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 17 Jan 2023 15:26:24 +0800
+Date:   Tue, 17 Jan 2023 15:26:24 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Danny Tsen <dtsen@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: crypto: p10-aes-gcm - Add asm markings necessary for kernel code
+Message-ID: <Y8ZNoBSX5P0ieJ3t@gondor.apana.org.au>
+References: <20230117144747.37115c52@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230112142218.725622-1-eperezma@redhat.com> <20230112142218.725622-3-eperezma@redhat.com>
- <DM8PR12MB5400B2FF15EA6DB00AB840EBABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
- <CAJaqyWeJOwcAj=mr5R4qHqWSjK1dQ-SxMNVF0HYkPtdoO2BaGQ@mail.gmail.com> <521e9601-b9b1-19f0-24cb-89fb2e7ed164@nvidia.com>
-In-Reply-To: <521e9601-b9b1-19f0-24cb-89fb2e7ed164@nvidia.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 17 Jan 2023 08:25:18 +0100
-Message-ID: <CAJaqyWfor5boWZBxMCSg8tQY==7WRQsHDY2Ce=jTtxEud6rPCA@mail.gmail.com>
-Subject: Re: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destroy_mr
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "mst@redhat.com" <mst@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Parav Pandit <parav@nvidia.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "sgarzare@redhat.com" <sgarzare@redhat.com>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117144747.37115c52@canb.auug.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 8:08 AM Eli Cohen <elic@nvidia.com> wrote:
->
->
-> On 16/01/2023 20:03, Eugenio Perez Martin wrote:
-> > On Mon, Jan 16, 2023 at 8:03 AM Eli Cohen <elic@nvidia.com> wrote:
-> >>> From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >>> Sent: Thursday, 12 January 2023 16:22
-> >>> To: mst@redhat.com; Eli Cohen <elic@nvidia.com>
-> >>> Cc: linux-kernel@vger.kernel.org; Parav Pandit <parav@nvidia.com>;
-> >>> lulu@redhat.com; jasowang@redhat.com; virtualization@lists.linux-
-> >>> foundation.org; sgarzare@redhat.com; si-wei.liu@oracle.com
-> >>> Subject: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destr=
-oy_mr
-> >>>
-> >>> mlx5_vdpa_destroy_mr can be called by setting a map to data ASID afte=
-r
-> >>> populating control virtqueue ASID iotlb.  Control vq iotlb must not b=
-e
-> >>> cleared, since it will not be populated again.
-> >>>
-> >>> Adding a conditional in the function so the caller specifies if it is
-> >>> resetting, cleaning, or just changing data memory.
-> >>>
-> >>> Fixes: 8fcd20c30704 ("vdpa/mlx5: Support different address spaces for
-> >>> control and data")
-> >>> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >>> ---
-> >>>   drivers/vdpa/mlx5/core/mlx5_vdpa.h |  2 +-
-> >>>   drivers/vdpa/mlx5/core/mr.c        |  5 +++--
-> >>>   drivers/vdpa/mlx5/net/mlx5_vnet.c  | 12 ++++++------
-> >>>   3 files changed, 10 insertions(+), 9 deletions(-)
-> >>>
-> >>> diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-> >>> b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-> >>> index 058fbe28107e..000b144019ec 100644
-> >>> --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-> >>> +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-> >>> @@ -119,7 +119,7 @@ int mlx5_vdpa_handle_set_map(struct
-> >>> mlx5_vdpa_dev *mvdev, struct vhost_iotlb *io
-> >>>                             bool *change_map, unsigned int asid);
-> >>>   int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
-otlb
-> >>> *iotlb,
-> >>>                        unsigned int asid);
-> >>> -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
-> >>> +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
-> >>> delete_cvq_iotlb);
-> >>>
-> >>>   #define mlx5_vdpa_warn(__dev, format, ...)
-> >>> \
-> >>>        dev_warn((__dev)->mdev->device, "%s:%d:(pid %d) warning: "
-> >>> format, __func__, __LINE__,     \
-> >>> diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.=
-c
-> >>> index ae34dcac9a3f..878ee94efa78 100644
-> >>> --- a/drivers/vdpa/mlx5/core/mr.c
-> >>> +++ b/drivers/vdpa/mlx5/core/mr.c
-> >>> @@ -491,7 +491,7 @@ static void destroy_user_mr(struct mlx5_vdpa_dev
-> >>> *mvdev, struct mlx5_vdpa_mr *mr
-> >>>        }
-> >>>   }
-> >>>
-> >>> -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev)
-> >>> +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
-> >>> delete_cvq_iotlb)
-> >>>   {
-> >>>        struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
-> >>>
-> >>> @@ -499,7 +499,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev
-> >>> *mvdev)
-> >>>        if (!mr->initialized)
-> >>>                goto out;
-> >>>
-> >>> -     prune_iotlb(mvdev);
-> >>> +     if (delete_cvq_iotlb)
-> >>> +             prune_iotlb(mvdev);
-> >>>        if (mr->user_mr)
-> >>>                destroy_user_mr(mvdev, mr);
-> >>>        else
-> >>> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >>> b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >>> index 6632651b1e54..1f1f341f602b 100644
-> >>> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >>> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >>> @@ -2433,7 +2433,7 @@ static int mlx5_vdpa_change_map(struct
-> >>> mlx5_vdpa_dev *mvdev,
-> >>>                goto err_mr;
-> >>>
-> >>>        teardown_driver(ndev);
-> >>> -     mlx5_vdpa_destroy_mr(mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
-> >>>> group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
-> >> Looks to me we need to handle this in a more generic manner. The asid =
-should be used conditionally for either CVQ or data VQ updates. You are pro=
-tecting CVQ but same thing should hold also for data VQs iotlb.
-> > I agree. Maybe the best option is to replace the boolean indicating
-> > the ASID we want to destroy mr? Then, at cleanup, we can iterate by
-> > all vq groups / ASID.
->
-> I think mlx5_vdpa_destroy_mr() should get the asid as an argument and
-> have a logic such as:
->
-> if (asid =3D=3D data asid)
->
->      destroy_data_mr
->
->
-> if (asid =3D=3D ctrl_vq_asid)
->
->      prune_iotlb()
->
->
-> return
->
+On Tue, Jan 17, 2023 at 02:47:47PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the crypto tree, today's linux-next build (powerpc
+> pseries_le_defconfig) failed like this:
+> 
+> arch/powerpc/crypto/p10_aes_gcm.o: warning: objtool: .text+0x884: unannotated intra-function call
+> arch/powerpc/crypto/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_key+0x44: unannotated intra-function call
+> ld: arch/powerpc/crypto/p10_aes_gcm.o: ABI version 1 is not compatible with ABI version 2 output
+> ld: failed to merge target specific data of file arch/powerpc/crypto/p10_aes_gcm.o
+> 
+> Caused by commit
+> 
+>   ca68a96c37eb ("crypto: p10-aes-gcm - An accelerated AES/GCM stitched implementation")
+> 
+> I have applied the following hack for today.
 
-I agree.
+Thanks Stephen, I'm going to update the previous fix as follows:
 
-> Since we have only two groups, one for data and for control, I don't
-> think we need to iterate.
->
+---8<---
+_GLOBAL is needed instead of .global on Linux in assembly code.
 
-I mean to iterate on mlx5_vdpa_reset and mlx5_vdpa_free. Or, at least,
-to call mlx5_vdpa_destroy_mr(asid=3Ddata) and
-mlx5_vdpa_destroy_mr(asid=3Dcontrol) one after another.
+The explicit abiversion setting is removed as the code should
+with either ABI.
 
-Thanks!
+Mark local functions to avoid objdump warnings.
 
-> >
-> >> Meaning, if qemu wants to update only CVQ than data VQ translation mus=
-t not be affected.
-> > _mlx5_vdpa_create_mr. is the one that checks it If I recall correctly.
-> > It is not obvious in this change though.
-> >
-> > Thanks!
-> >
-> >>>        err =3D mlx5_vdpa_create_mr(mvdev, iotlb, asid);
-> >>>        if (err)
-> >>>                goto err_mr;
-> >>> @@ -2449,7 +2449,7 @@ static int mlx5_vdpa_change_map(struct
-> >>> mlx5_vdpa_dev *mvdev,
-> >>>        return 0;
-> >>>
-> >>>   err_setup:
-> >>> -     mlx5_vdpa_destroy_mr(mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
-> >>>> group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
-> >>>   err_mr:
-> >>>        return err;
-> >>>   }
-> >>> @@ -2578,7 +2578,7 @@ static void mlx5_vdpa_set_status(struct
-> >>> vdpa_device *vdev, u8 status)
-> >>>        return;
-> >>>
-> >>>   err_setup:
-> >>> -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
-> >>>        ndev->mvdev.status |=3D VIRTIO_CONFIG_S_FAILED;
-> >>>   err_clear:
-> >>>        up_write(&ndev->reslock);
-> >>> @@ -2604,7 +2604,7 @@ static int mlx5_vdpa_reset(struct vdpa_device
-> >>> *vdev)
-> >>>        down_write(&ndev->reslock);
-> >>>        teardown_driver(ndev);
-> >>>        clear_vqs_ready(ndev);
-> >>> -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
-> >>>        ndev->mvdev.status =3D 0;
-> >>>        ndev->cur_num_vqs =3D 0;
-> >>>        ndev->mvdev.cvq.received_desc =3D 0;
-> >>> @@ -2691,7 +2691,7 @@ static void mlx5_vdpa_free(struct vdpa_device
-> >>> *vdev)
-> >>>        ndev =3D to_mlx5_vdpa_ndev(mvdev);
-> >>>
-> >>>        free_resources(ndev);
-> >>> -     mlx5_vdpa_destroy_mr(mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(mvdev, true);
-> >>>        if (!is_zero_ether_addr(ndev->config.mac)) {
-> >>>                pfmdev =3D pci_get_drvdata(pci_physfn(mvdev->mdev->pde=
-v));
-> >>>                mlx5_mpfs_del_mac(pfmdev, ndev->config.mac);
-> >>> @@ -3214,7 +3214,7 @@ static int mlx5_vdpa_dev_add(struct
-> >>> vdpa_mgmt_dev *v_mdev, const char *name,
-> >>>   err_res2:
-> >>>        free_resources(ndev);
-> >>>   err_mr:
-> >>> -     mlx5_vdpa_destroy_mr(mvdev);
-> >>> +     mlx5_vdpa_destroy_mr(mvdev, true);
-> >>>   err_res:
-> >>>        mlx5_vdpa_free_resources(&ndev->mvdev);
-> >>>   err_mpfs:
-> >>> --
-> >>> 2.31.1
->
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: cc40379b6e19 ("crypto: p10-aes-gcm - Glue code for AES/GCM stitched implementation")
+Fixes: 3b47eccaaff4 ("crypto: p10-aes-gcm - Supporting functions for AES")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
+diff --git a/arch/powerpc/crypto/aesp8-ppc.pl b/arch/powerpc/crypto/aesp8-ppc.pl
+index 50a0a18f35da..cdbcf6e13efc 100644
+--- a/arch/powerpc/crypto/aesp8-ppc.pl
++++ b/arch/powerpc/crypto/aesp8-ppc.pl
+@@ -121,6 +121,22 @@ my ($inp,$bits,$out,$ptr,$cnt,$rounds)=map("r$_",(3..8));
+ my ($zero,$in0,$in1,$key,$rcon,$mask,$tmp)=map("v$_",(0..6));
+ my ($stage,$outperm,$outmask,$outhead,$outtail)=map("v$_",(7..11));
+ 
++sub declare_function() {
++	my ($name) = @_;
++	if ($kernel) {
++		$code .= "SYM_FUNC_START_LOCAL($name)\n";
++	} else {
++		$code .= "L$name:\n";
++	}
++}
++
++sub end_function() {
++	my ($name) = @_;
++	if ($kernel) {
++		$code .= "SYM_FUNC_END($name)\n";
++	}
++}
++
+ $code.=<<___;
+ .machine	"any"
+ 
+@@ -132,13 +148,18 @@ rcon:
+ .long	0x1b000000, 0x1b000000, 0x1b000000, 0x1b000000	?rev
+ .long	0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c	?rev
+ .long	0,0,0,0						?asis
+-Lconsts:
++___
++&declare_function("consts");
++$code.=<<___;
+ 	mflr	r0
+ 	bcl	20,31,\$+4
+ 	mflr	$ptr	 #vvvvv "distance between . and rcon
+ 	addi	$ptr,$ptr,-0x48
+ 	mtlr	r0
+ 	blr
++___
++&end_function("consts");
++$code.=<<___;
+ 	.long	0
+ 	.byte	0,12,0x14,0,0,0,0,0
+ .asciz	"AES for PowerISA 2.07, CRYPTOGAMS by <appro\@openssl.org>"
+diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
+index 2306ad7c5e36..153388733eae 100644
+--- a/arch/powerpc/crypto/p10_aes_gcm.S
++++ b/arch/powerpc/crypto/p10_aes_gcm.S
+@@ -38,8 +38,10 @@
+  # ===================================================================================
+  #
+ 
++#include <asm/ppc_asm.h>
++#include <linux/linkage.h>
++
+ .machine        "any"
+-.abiversion     1
+ .text
+ 
+  # 4x loops
+@@ -569,9 +571,7 @@ ppc_aes_gcm_ghash:
+  #    rounds is at offset 240 in rk
+  #    Xi is at 0 in gcm_table (Xip).
+  #
+-.global aes_p10_gcm_encrypt
+-.align 5
+-aes_p10_gcm_encrypt:
++_GLOBAL(aes_p10_gcm_encrypt)
+ 
+ 	SAVE_REGS
+ 
+@@ -989,7 +989,7 @@ Normal_block:
+  # Handle multiple partial blocks for encrypt and decrypt
+  #   operations.
+  #
+-Do_partial_block:
++SYM_FUNC_START_LOCAL(Do_partial_block)
+ 	add	17, 15, 5
+ 	cmpdi	17, 16
+ 	bgt	Big_block
+@@ -1075,6 +1075,7 @@ Save_partial:
+ 
+ Partial_done:
+ 	blr
++SYM_FUNC_END(Do_partial_block)
+ 
+  #
+  # Write partial block
+@@ -1082,7 +1083,7 @@ Partial_done:
+  # r12 - remaining bytes
+  # v15 - partial input data
+  #
+-Write_partial_block:
++SYM_FUNC_START_LOCAL(Write_partial_block)
+ 	li		10, 192
+ 	stxvb16x	15+32, 10, 1		# last block
+ 
+@@ -1097,6 +1098,7 @@ Write_last_byte:
+ 	stbu		14, 1(10)
+         bdnz		Write_last_byte
+ 	blr
++SYM_FUNC_END(Write_partial_block)
+ 
+ aes_gcm_out:
+ 	# out = state
+@@ -1109,9 +1111,7 @@ aes_gcm_out:
+  #
+  # 8x Decrypt
+  #
+-.global aes_p10_gcm_decrypt
+-.align 5
+-aes_p10_gcm_decrypt:
++_GLOBAL(aes_p10_gcm_decrypt)
+ 
+ 	SAVE_REGS
+ 
+diff --git a/arch/powerpc/crypto/ppc-xlate.pl b/arch/powerpc/crypto/ppc-xlate.pl
+index 23cca703ce29..d1dcb914858c 100644
+--- a/arch/powerpc/crypto/ppc-xlate.pl
++++ b/arch/powerpc/crypto/ppc-xlate.pl
+@@ -198,6 +198,7 @@ my $mtsle	= sub {
+ };
+ 
+ print "#include <asm/ppc_asm.h>\n" if $flavour =~ /linux/;
++print "#include <linux/linkage.h>\n" if $flavour =~ /linux/;
+ 
+ while($line=<>) {
+ 
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
