@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87EF66E457
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5830B66E45F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjAQRCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S230134AbjAQRFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbjAQRCZ (ORCPT
+        with ESMTP id S230186AbjAQRFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:02:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B054393E;
-        Tue, 17 Jan 2023 09:02:24 -0800 (PST)
+        Tue, 17 Jan 2023 12:05:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D6A3B67C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:05:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 332106149A;
-        Tue, 17 Jan 2023 17:02:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C67C433D2;
-        Tue, 17 Jan 2023 17:02:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD23AB8128D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F85EC433D2;
+        Tue, 17 Jan 2023 17:05:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673974943;
-        bh=J0fMJMgzFoKpVLn+Krs4tXYA63OB6Vo+2PIw/pLLrAw=;
+        s=k20201202; t=1673975112;
+        bh=x0X25cKQNML11LK6Kv5Po/7LOUOfaxLt4ZMA8R6qomk=;
         h=From:To:Cc:Subject:Date:From;
-        b=gOsZkyAXeNghzO5zL4f/bDsyewx6FbmWk5rvXdLOEvJkEUJaBmQMKy1khkUUIVTd4
-         Oc8m/RR2SuwRihhHcJet6Uy8cU68N/+HUee3bnWhhDZ+GjHvetErRgX8k/owV3j5UI
-         T6jdml3rFZOoNe8lxzrVWZB36P4QQhG/IH/tgmTm9Tv0wLcufmxJT0pef5l4Wf0YPu
-         BH5mkjJcg6S+bTjTcVSuGZxUJVeaZYCvLUm0XD6WzavhBHvpQlBcd7k53bTvn942x3
-         xmxN5nA1eQS4jOoFd9iUHAy7oyixABvFmzEt65DPZIjUMJbr30gpEKLEbyhCg6oXoE
-         zbHPWi3bP2I+Q==
+        b=bl8jn1kfSXFv8jjXN7ctyTELVTtO2ztNZWJ+28XCuuwNtD89nYTv/KdHetwAW0ai0
+         kbocvxRUfBaGWJQnoX/UsIKqM9DGKOfDmyvzwroSw5zQn2kQOFhRBmGN3v9LY1TXWn
+         vzl6pcYZZ5jGcc58ippBKZxmR6wajdSv2vMWwkKP0xKHjZT5Vu0M/F6CpOBvz/6Reh
+         fzmVG0MS+eq97LXFZQG6+RrCIA+DNHKsbGwd0Fj4Yp6Gr/RDdECax5ZpGAI6UWVRlD
+         Q8XEgXNdbAHPLJdDpJFSzehGcGB2a1Fpyydcwbpso46012u/aWbrU+1l6xMHjuKRwI
+         U/DyLk5Lq9rpQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Alex Elder <elder@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: rpmh: remove duplicate IPA clock reference
-Date:   Tue, 17 Jan 2023 18:02:09 +0100
-Message-Id: <20230117170217.2462320-1-arnd@kernel.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nhat Pham <nphamcs@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] zsmalloc: avoid unused-function warning
+Date:   Tue, 17 Jan 2023 18:04:59 +0100
+Message-Id: <20230117170507.2651972-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,29 +59,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-One of the ones that were recently added was already there:
+obj_allocated() can be called from two places that are each
+inside of an #ifdef. When both are disabled, the compiler warns:
 
-drivers/clk/qcom/clk-rpmh.c:578:35: error: initialized field overwritten [-Werror=override-init]
-  578 |         [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+mm/zsmalloc.c:900:13: error: 'obj_allocated' defined but not used [-Werror=unused-function]
 
-Fixes: aa055bf158cd ("clk: qcom: rpmh: define IPA clocks where required")
+Rather than trying to figure out the correct #ifdef, mark the
+trivial function as 'inline', which implies __maybe_unused and
+shuts up the warning.
+
+Fixes: 796c71ac728e ("zsmalloc: fix a race with deferred_handles storing")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/clk/qcom/clk-rpmh.c | 1 -
- 1 file changed, 1 deletion(-)
+ mm/zsmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 393b83f6020e..45ee370f3307 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -575,7 +575,6 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
- 	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
- 	[RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
- 	[RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
--	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
- };
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 723ed56d3fbb..9d27d9b00bce 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -937,7 +937,7 @@ static bool obj_tagged(struct page *page, void *obj, unsigned long *phandle,
+ 	return true;
+ }
  
- static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
+-static bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
++static inline bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
+ {
+ 	return obj_tagged(page, obj, phandle, OBJ_ALLOCATED_TAG);
+ }
 -- 
 2.39.0
 
