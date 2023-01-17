@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DCD66DBAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC5566DBB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbjAQK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S236516AbjAQLDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236152AbjAQK7r (ORCPT
+        with ESMTP id S236428AbjAQLDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:59:47 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063585253
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:59:46 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so22841123iln.21
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:59:45 -0800 (PST)
+        Tue, 17 Jan 2023 06:03:01 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D86C29E0C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:02:58 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so7812703wmc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=abFmZAKwNQ0lsGZ+PxxNEj0hBQ4umW7GBDcoKp+rrrw=;
+        b=om96Sz5yNFfHU4TsKyGtSTlZ5sKEDWICtG6E59wRXOVZQn7K6W9qHRz/8HIunnzkLv
+         wc+2mkiiZKEGbTJjG+tAKg8xwvOn3yBHnJTayG9xdaXjPPY+VbNTRgiy/zo76sZWMO2W
+         E8LxB2d/DhESSHMI7Pvrw7b0RFbGSQEfXBh9U4G8y6e1Gkz3amZIAWLxMBlwhw1UTdyU
+         dOzLhU/PZSPd6j6lzIQUfJw8J1Ycss1m+LbpCbOO0LTXpyHmf8kFw+UAZ4/aQGbHOYHi
+         SJ3f9Xk2a1r4EUYkMR1b4iumej8+D2tzc1kcHUtLM8ofRmw9a+niEZ4oYm+/2tw+ERsk
+         Ol+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=me+Je8kmcZhn3uq9cVLdpKdyIZiYx93bWzsZXt1zVVI=;
-        b=ldbWspXA4eY08YXnetiHzvivVZiik12lbkN2aiELmwOLs8SnuSBhas0jao1fgg3qfb
-         DkUwYqXAi14xkQbPC2YY5fW+7GQLFlUidcwQqha4fySrsU7+WU4/O7wo11+6s45jyIpr
-         qC/m0sMCvSUHRsD0U8JZ9j2nO6VZ+/snsEJ1a44OuQlroLyQ+MZrpPsFmMpIoRAAqLTm
-         GDqgiit4NR/1NUmX1gysjgz6ZZCdOCb+XDKWMPEwFC2QkOgLEogbQG2inft3+kMf6RLK
-         8HbYycfAF5UpOFc5U4N70OWep14oPpokxTfY+Rmew9aGz5eyYBOyl9lywpbUG2Yt8H+J
-         A2fA==
-X-Gm-Message-State: AFqh2kq2gz9y22yl9dxKL4splqRQHIHrCOhspbLpQ6l5rn6bqYuUXGVV
-        dF6WLbAEuSPhhoCK3p3gqd+Fna+xIv15O2BxKtaBEX8da8Q+
-X-Google-Smtp-Source: AMrXdXuOw7CiDv56WGbgw0bNr6FmFp+TYXTZKhwJzodm6A4AE+5mkago341OSLGjJY6/Xl5D/QL/8tl5kzTPlYMJCkUxSV9jcDJ0
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=abFmZAKwNQ0lsGZ+PxxNEj0hBQ4umW7GBDcoKp+rrrw=;
+        b=uVK9KfsrhtM8uyolYJBgxNF4Jwss4Zy1kTKIliDwuKYZ38mTvotnHg6yfEBQT1pwHF
+         BtliJ05f+muHIFy6Khzo1Q1QllA6ZPx5Om0ZEw+3tQfcIRJY8gfffs5wNZubghc9ZUlP
+         qnzq6wdZiwo4g7iysj7gDOH2d2cdJounRUygE8cmCpGStJeNWaCuhUZW4mOcOk7SIWjO
+         LzB5vfNFMhoO83dyLXAjYyc19+X8ZfYaRlNmAvyUYsk0dKon6RLnCf+Sd9a14bJByoB0
+         Rqg8JYzoNHWEO79aVA0TU2O+Dhi7/IN1w19FCjPBFxywyb8lb0Eifii7C6Rw5DeLHT+1
+         zOsg==
+X-Gm-Message-State: AFqh2kpPUxAqDgDA5paffZlm1FhjL3cnamIIOnM51T4D4UhcyhZ2HT5W
+        jD2VvMytJoDaKlFLx5XVt7z1Ag==
+X-Google-Smtp-Source: AMrXdXvldDiXjM/r/D7lN/ao41/YqalSL0ysvd2nD8pw30qMQAxQxyb5NuWMVbXG75VI5m5qCIwtwA==
+X-Received: by 2002:a05:600c:c17:b0:3d0:7415:c5a9 with SMTP id fm23-20020a05600c0c1700b003d07415c5a9mr11380374wmb.21.1673953376843;
+        Tue, 17 Jan 2023 03:02:56 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s23-20020a1cf217000000b003d1e3b1624dsm40839658wmc.2.2023.01.17.03.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 03:02:56 -0800 (PST)
+Message-ID: <ca729f62-672e-d3de-4069-e2205c97e7d8@linaro.org>
+Date:   Tue, 17 Jan 2023 12:02:53 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a6b:fc16:0:b0:6e2:f56b:adfe with SMTP id
- r22-20020a6bfc16000000b006e2f56badfemr160615ioh.106.1673953185344; Tue, 17
- Jan 2023 02:59:45 -0800 (PST)
-Date:   Tue, 17 Jan 2023 02:59:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fbb2d505f27398cb@google.com>
-Subject: [syzbot] possible deadlock in release_sock
-From:   syzbot <syzbot+bbd35b345c7cab0d9a08@syzkaller.appspotmail.com>
-To:     cong.wang@bytedance.com, davem@davemloft.net, edumazet@google.com,
-        gnault@redhat.com, jakub@cloudflare.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
+ properties
+Content-Language: en-US
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-2-quic_kriskura@quicinc.com>
+ <20230116163401.GA2371990-robh@kernel.org>
+ <4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,210 +90,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 17/01/2023 10:01, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 1/16/2023 10:04 PM, Rob Herring wrote:
+>> On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
+>>> Add bindings to indicate properties required to support multiport
+>>> on Snps Dwc3 controller.
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
+>>>   1 file changed, 47 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> index 6d78048c4613..3ea051beb2f8 100644
+>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>> @@ -81,15 +81,26 @@ properties:
+>>>   
+>>>     phys:
+>>>       minItems: 1
+>>> -    maxItems: 2
+>>> +    maxItems: 8
+>>>   
+>>>     phy-names:
+>>>       minItems: 1
+>>> -    maxItems: 2
+>>> -    items:
+>>> -      enum:
+>>> -        - usb2-phy
+>>> -        - usb3-phy
+>>> +    maxItems: 8
+>>> +    oneOf:
+>>> +    - items:
+>>> +        enum:
+>>> +          - usb2-phy
+>>> +          - usb3-phy
+>>> +    - items:
+>>> +        enum:
+>>> +          - usb2-phy_port0
+>>> +          - usb2-phy_port1
+>>> +          - usb2-phy_port2
+>>> +          - usb2-phy_port3
+>>> +          - usb3-phy_port0
+>>> +          - usb3-phy_port1
+>>> +          - usb3-phy_port2
+>>> +          - usb3-phy_port3
+>>
+>> usbN-portM
+>>
+>>>   
+>>>     resets:
+>>>       minItems: 1
+>>> @@ -360,6 +371,22 @@ properties:
+>>>       description:
+>>>         Enable USB remote wakeup.
+>>>   
+>>> +  num-ports:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description:
+>>> +      This property indicates the number of ports present on the target that
+>>> +      are to be serviced by the DWC3 controller.
+>>> +    minimum: 1
+>>> +    maximum: 4
+>>> +
+>>> +  num-ss-ports:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description:
+>>> +      This property indicates the number of SS capable ports present on the
+>>> +      target that are to be serviced by the DWC3 controller.
+>>> +    minimum: 1
+>>> +    maximum: 4
+>>
+>> This information is redundant. 'phy-names' tells you how many ports of
+>> each.
+>>
+> Hi Rob,
+> 
+>   Thanks for the review. The reason I wanted to introduce two more 
+> variables is to get info on number of ports  and ss-capable ports 
+> present on hardware whether or not the user provides them in DTSI file.
+> 
+> In the code there are two types of per port / per phy operations:
+> a) Modifying GUSB2PFYCFG and GUSB3PIPECTL registers per phy.
+> b) Generic Phy operations - per phy.
+> 
+> In today's code, if someone doesn't mention the SSPHY in DTSI, 
+> dwc->usb3_generic_phy will be NULL and any call to phy operations will 
+> just bail out. And irrespective of whether we provide SS Phy in DTSI or 
+> not, we still configure GUSB3PIPECTL register.
+> 
+> Consider the following cases:
+> 
+> 1. There are 3 ports and 2 of them are SS capable and all phy's are 
+> mentioned in DTSI.
+> 
+> phy-names= "usb2-port0", "usb3-port0", "usb2-port1", "usb3-port1", 
+> "usb2-port2"
+> 
+> When we count them in the driver, we get num ports as 3 (presuming 
+> num-ports = num of hs ports) and num-ss-ports = 2.
+> 
+> Since there is no ambiguity in which all ports to configure, we can 
+> modify GUSB2PHYCFG registers for all 3 HS Phy's and GUSB3PIPECTL for 
+> both SS Phy's.
+> This is a proper scenario.
+> 
+> 2. If the user skips providing SS Phy on Port-0, then:
+> 
+> phy-names= "usb2-port0", "usb2-port1", "usb3-port1", "usb2-port2"
+> 
+> If we count the phys, we end up getting num-ports=3 and num-ss-ports=1.
+> 
+> Since in the driver code, we are not keeping track of which ports are SS 
+> capable and which ones are not, we end up configuring
+> GUSB2PIPECTL(port-0) instead of port-1  as the num-ss-ports is "1" which 
+> is incorrect.
+> 
+> 3. If the user skips providing one complete port, in this case port-1 is 
+> skipped, then:
+> 
+> phy-names= "usb2-port0", "usb3-port0", "usb2-port2"
+> 
+> If we count the phys, we end up getting num-ports=2 and num-ss-ports=1.
+> 
+> Since in the driver code, we are not keeping track of which ports are SS 
+> capable and which ones are not, we end up configuring 
+> GUSB2PHYCFG(port-0) and GUSB2PHYCFG(port-1) instead of port-2 which is 
+> incorrect.
 
-syzbot found the following issue on:
+Why? You know you have port-2 from the phy name, so why would you ignore
+this information?
 
-HEAD commit:    87b93b678e95 octeontx2-pf: Avoid use of GFP_KERNEL in atom..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=1032dd91480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
-dashboard link: https://syzkaller.appspot.com/bug?extid=bbd35b345c7cab0d9a08
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1716b3a1480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e57a91480000
+> 
+> To avoid these scenarios, if we can get the exact number of SS Ports and 
+> Ports in total present on the HW, we can configure all the registers 
+> whether the phy's are provided in DTSI or not. (This is of no harm I 
+> believe as it still works in today's code)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/191e8cc30fff/disk-87b93b67.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d34dd6d2fffd/vmlinux-87b93b67.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ad9344e76aaf/bzImage-87b93b67.xz
+Doesn't the driver know how many phys it has in such case through
+respective compatible?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bbd35b345c7cab0d9a08@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.2.0-rc3-syzkaller-00197-g87b93b678e95 #0 Not tainted
-------------------------------------------------------
-syz-executor131/5064 is trying to acquire lock:
-ffff888017b6b370 (slock-AF_INET){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff888017b6b370 (slock-AF_INET){+.-.}-{2:2}, at: release_sock+0x1f/0x1b0 net/core/sock.c:3483
-
-but task is already holding lock:
-ffff888017b6b678 (clock-AF_INET){++..}-{2:2}, at: l2tp_tunnel_register+0x2be/0x11e0 net/l2tp/l2tp_core.c:1484
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (clock-AF_INET){++..}-{2:2}:
-       __raw_read_lock_bh include/linux/rwlock_api_smp.h:176 [inline]
-       _raw_read_lock_bh+0x3f/0x70 kernel/locking/spinlock.c:252
-       sock_i_uid+0x1f/0xb0 net/core/sock.c:2564
-       sk_reuseport_match net/ipv4/inet_connection_sock.c:401 [inline]
-       inet_csk_get_port+0x85f/0x2660 net/ipv4/inet_connection_sock.c:532
-       inet_csk_listen_start+0x1ad/0x440 net/ipv4/inet_connection_sock.c:1237
-       inet_listen+0x235/0x640 net/ipv4/af_inet.c:228
-       __sys_listen+0x181/0x250 net/socket.c:1810
-       __do_sys_listen net/socket.c:1819 [inline]
-       __se_sys_listen net/socket.c:1817 [inline]
-       __x64_sys_listen+0x54/0x80 net/socket.c:1817
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&tcp_hashinfo.bhash[i].lock){+.-.}-{2:2}:
-       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-       _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
-       spin_lock include/linux/spinlock.h:350 [inline]
-       __inet_inherit_port+0x2b5/0x1840 net/ipv4/inet_hashtables.c:230
-       tcp_v4_syn_recv_sock+0xb5b/0x1450 net/ipv4/tcp_ipv4.c:1628
-       tcp_check_req+0x632/0x1aa0 net/ipv4/tcp_minisocks.c:803
-       tcp_v4_rcv+0x2120/0x3280 net/ipv4/tcp_ipv4.c:2070
-       ip_protocol_deliver_rcu+0x9f/0x460 net/ipv4/ip_input.c:205
-       ip_local_deliver_finish+0x2ec/0x4c0 net/ipv4/ip_input.c:233
-       NF_HOOK include/linux/netfilter.h:302 [inline]
-       NF_HOOK include/linux/netfilter.h:296 [inline]
-       ip_local_deliver+0x1ae/0x200 net/ipv4/ip_input.c:254
-       dst_input include/net/dst.h:454 [inline]
-       ip_sublist_rcv_finish+0x9a/0x2c0 net/ipv4/ip_input.c:580
-       ip_list_rcv_finish net/ipv4/ip_input.c:630 [inline]
-       ip_sublist_rcv+0x533/0x980 net/ipv4/ip_input.c:638
-       ip_list_rcv+0x31e/0x470 net/ipv4/ip_input.c:673
-       __netif_receive_skb_list_ptype net/core/dev.c:5525 [inline]
-       __netif_receive_skb_list_core+0x548/0x8f0 net/core/dev.c:5573
-       __netif_receive_skb_list net/core/dev.c:5625 [inline]
-       netif_receive_skb_list_internal+0x75f/0xd90 net/core/dev.c:5716
-       gro_normal_list include/net/gro.h:433 [inline]
-       gro_normal_list include/net/gro.h:429 [inline]
-       napi_complete_done+0x243/0x960 net/core/dev.c:6056
-       virtqueue_napi_complete drivers/net/virtio_net.c:405 [inline]
-       virtnet_poll+0xd08/0x1300 drivers/net/virtio_net.c:1682
-       __napi_poll+0xb8/0x770 net/core/dev.c:6485
-       napi_poll net/core/dev.c:6552 [inline]
-       net_rx_action+0xa00/0xde0 net/core/dev.c:6663
-       __do_softirq+0x1fb/0xadc kernel/softirq.c:571
-       invoke_softirq kernel/softirq.c:445 [inline]
-       __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-       irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
-       sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1107
-       asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
-       native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-       arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-       acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
-       acpi_idle_do_entry+0x1fd/0x2a0 drivers/acpi/processor_idle.c:570
-       acpi_idle_enter+0x368/0x510 drivers/acpi/processor_idle.c:707
-       cpuidle_enter_state+0x1af/0xd40 drivers/cpuidle/cpuidle.c:239
-       cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:356
-       call_cpuidle kernel/sched/idle.c:155 [inline]
-       cpuidle_idle_call kernel/sched/idle.c:236 [inline]
-       do_idle+0x3f7/0x590 kernel/sched/idle.c:303
-       cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:400
-       start_secondary+0x256/0x300 arch/x86/kernel/smpboot.c:264
-       secondary_startup_64_no_verify+0xce/0xdb
-
--> #0 (slock-AF_INET){+.-.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
-       lock_acquire kernel/locking/lockdep.c:5668 [inline]
-       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       release_sock+0x1f/0x1b0 net/core/sock.c:3483
-       l2tp_tunnel_register+0x3db/0x11e0 net/l2tp/l2tp_core.c:1487
-       l2tp_nl_cmd_tunnel_create+0x3d6/0x8b0 net/l2tp/l2tp_netlink.c:245
-       genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
-       genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
-       genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
-       netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
-       genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
-       netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
-       netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
-       netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg+0xd3/0x120 net/socket.c:734
-       ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
-       ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
-       __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  slock-AF_INET --> &tcp_hashinfo.bhash[i].lock --> clock-AF_INET
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(clock-AF_INET);
-                               lock(&tcp_hashinfo.bhash[i].lock);
-                               lock(clock-AF_INET);
-  lock(slock-AF_INET);
-
- *** DEADLOCK ***
-
-4 locks held by syz-executor131/5064:
- #0: ffffffff8e159a10 (cb_lock){++++}-{3:3}, at: genl_rcv+0x19/0x40 net/netlink/genetlink.c:1075
- #1: ffffffff8e159ac8 (genl_mutex){+.+.}-{3:3}, at: genl_lock net/netlink/genetlink.c:33 [inline]
- #1: ffffffff8e159ac8 (genl_mutex){+.+.}-{3:3}, at: genl_rcv_msg+0x51a/0x7e0 net/netlink/genetlink.c:1063
- #2: ffff888017b6b3f0 (sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1725 [inline]
- #2: ffff888017b6b3f0 (sk_lock-AF_INET){+.+.}-{0:0}, at: l2tp_tunnel_register+0x2aa/0x11e0 net/l2tp/l2tp_core.c:1483
- #3: ffff888017b6b678 (clock-AF_INET){++..}-{2:2}, at: l2tp_tunnel_register+0x2be/0x11e0 net/l2tp/l2tp_core.c:1484
-
-stack backtrace:
-CPU: 0 PID: 5064 Comm: syz-executor131 Not tainted 6.2.0-rc3-syzkaller-00197-g87b93b678e95 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- release_sock+0x1f/0x1b0 net/core/sock.c:3483
- l2tp_tunnel_register+0x3db/0x11e0 net/l2tp/l2tp_core.c:1487
- l2tp_nl_cmd_tunnel_create+0x3d6/0x8b0 net/l2tp/l2tp_netlink.c:245
- genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
- netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xd3/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f82e5a4fbe9
-Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007
+> 
+> Incase the 2nd and 3rd scenarios are not allowed and user *MUST* declare 
+> all the phy's in the DTSI, then I can go ahead and remove these 
+> properties and count them in the driver code.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Why you cannot then configure all phys in the driver all ports as some
+safe default and then customize it depending on the actual port used?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+
+Best regards,
+Krzysztof
+
