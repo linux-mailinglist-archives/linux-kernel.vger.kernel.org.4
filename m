@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A547A66E0D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702C766E0DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjAQOfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        id S231725AbjAQOfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbjAQOeb (ORCPT
+        with ESMTP id S232501AbjAQOfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:34:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F84A25D;
-        Tue, 17 Jan 2023 06:34:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B723D6147F;
-        Tue, 17 Jan 2023 14:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86555C433EF;
-        Tue, 17 Jan 2023 14:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673966061;
-        bh=Fz/P1XZDGupDtqAJSEnp0rEfUZAKbWxcCPbBc58E86o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zd/8A4ZSHTYkosiDKj1TO0FVHt7VXMMtyD28nA+OIKNWV0uToO4VZUsV04f+85zsK
-         NPAqR1E4a1Q0CqivGIOi81y5puPNQKSjGzt83iuk9+arxT2fS1FYGXhGrqyY0pos+Z
-         OcLCxPp7ys9ubCVCxeMxzYmYNy77ccvTqq24OSgfB3I1ANleDm9EcAC5SJFVPc92BV
-         82ZrOmcDrcd12x/w57ND2bTpnoX2P/SLRY7hVBHhu05Shda5VwcyAjC1oJ0Zq2EiV+
-         jmFS5CVk+gGXWQSHF1NbuqizTD6yrXxEWa4GU13nqxj7Wk2j8qhBhnUxjl4nGJ/QXE
-         mk7N0mBa6Ynxg==
-Date:   Tue, 17 Jan 2023 16:34:17 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Israel Rukshin <israelr@nvidia.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: Re: [PATCH rdma-next 03/13] RDMA: Split kernel-only create QP flags
- from uverbs create QP flags
-Message-ID: <Y8ax6ZD6hhyD41pA@unreal>
-References: <cover.1673873422.git.leon@kernel.org>
- <6e46859a58645d9f16a63ff76592487aabc9971d.1673873422.git.leon@kernel.org>
- <Y8WL2gQqqeZdMvr6@nvidia.com>
- <Y8aOe68Q49lvsjv8@unreal>
- <Y8anaBBZDOGF471q@nvidia.com>
- <Y8atPjQ1x75tBdib@unreal>
- <Y8au3ni8NVBPI5hu@nvidia.com>
+        Tue, 17 Jan 2023 09:35:20 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D4234CB;
+        Tue, 17 Jan 2023 06:35:04 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id o66so26010954oia.6;
+        Tue, 17 Jan 2023 06:35:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nnLVS1vY8ICgnFsF/Vqd+9PjVjBMHSd5IEyHkQc0Jog=;
+        b=0NOQ+J2zCiM3hTQG8e9ZMxqlMqCj5+4A7whyoWdvsW1XzbZW12uRBDRWaPmA9f5FV7
+         zgNuXhlvitue1gBEB+QMvKSq8wV83087zAZGxfPRRJvwn2KCz9OKJaX3XlYnUaH/L61g
+         lx9rUtOp6GLzcVn2PWZLRiCw4AfhHK93A1HB8lPLV46x2XZ+ljaEcueJDWcJaPycZcB9
+         FMbAajA3hMkoR0Ti5lkYPqcxq1kF3chYCH9TQsIjzXXLr342Mwjqx5GIX24Mtji3tQBv
+         zOLpCNOtWcPSq8KsYy7gEJCDwk8MOGDp5U2tPFgTLsJAVNB6hw1tb+fmLs8HzTNX/vvb
+         H1VQ==
+X-Gm-Message-State: AFqh2kpjCyDVmqvzZQz/6dITFKFhLU7+i88cF0jonaYp5lOWjobPskFp
+        GzHf6P/mq/ta6VURYhbVQg==
+X-Google-Smtp-Source: AMrXdXt0cS4sGHhDAwlxdWZSF1eGJyn6cXyyiu6MIr1DnGCZDt2PK4VALAWSzXV8cShK5XR3HhmOKg==
+X-Received: by 2002:aca:ac10:0:b0:36a:dbff:f1e4 with SMTP id v16-20020acaac10000000b0036adbfff1e4mr272941oie.55.1673966103497;
+        Tue, 17 Jan 2023 06:35:03 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z25-20020a056808049900b0035a9003b8edsm14475382oid.40.2023.01.17.06.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 06:35:02 -0800 (PST)
+Received: (nullmailer pid 3027728 invoked by uid 1000);
+        Tue, 17 Jan 2023 14:35:01 -0000
+Date:   Tue, 17 Jan 2023 08:35:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH 0/4] Device tree support for Hyper-V VMBus driver
+Message-ID: <20230117143501.GB2995150-robh@kernel.org>
+References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8au3ni8NVBPI5hu@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:21:18AM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 17, 2023 at 04:14:22PM +0200, Leon Romanovsky wrote:
-> > On Tue, Jan 17, 2023 at 09:49:28AM -0400, Jason Gunthorpe wrote:
-> > > On Tue, Jan 17, 2023 at 02:03:07PM +0200, Leon Romanovsky wrote:
-> > > > On Mon, Jan 16, 2023 at 01:39:38PM -0400, Jason Gunthorpe wrote:
-> > > > > On Mon, Jan 16, 2023 at 03:05:50PM +0200, Leon Romanovsky wrote:
-> > > > > 
-> > > > > > diff --git a/drivers/infiniband/hw/mlx4/mlx4_ib.h b/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> > > > > > index 17fee1e73a45..c553bf0eb257 100644
-> > > > > > --- a/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> > > > > > +++ b/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> > > > > > @@ -184,7 +184,7 @@ enum mlx4_ib_qp_flags {
-> > > > > >  	/* Mellanox specific flags start from IB_QP_CREATE_RESERVED_START */
-> > > > > >  	MLX4_IB_ROCE_V2_GSI_QP = MLX4_IB_QP_CREATE_ROCE_V2_GSI,
-> > > > > >  	MLX4_IB_SRIOV_TUNNEL_QP = 1 << 30,
-> > > > > > -	MLX4_IB_SRIOV_SQP = 1 << 31,
-> > > > > > +	MLX4_IB_SRIOV_SQP = 1ULL << 31,
-> > > > > >  };
-> > > > > 
-> > > > > These should be moved to a uapi if we are saying they are userspace
-> > > > > available
-> > > > > 
-> > > > > But I'm not sure they are?
-> > > > 
-> > > > I don't think so.
-> > > 
-> > > Then they should be > 32 bits right?
-> > 
-> > Right now, they are in reserved range:
-> >         /* reserve bits 26-31 for low level drivers' internal use */
-> >         IB_QP_CREATE_RESERVED_START             = 1 << 26,
-> >         IB_QP_CREATE_RESERVED_END               = 1ULL << 31,
-> > 
-> > If we move them to kernel part, we will need to define reserved range
-> > there too. So we just "burn" extra bits just for mlx4, also I don't see
-> > any reason to promote mlx4 bits to be general ones.
-> 
-> Is the reserved range kernel only? It would be nice to clarify that
-> detail
-> 
-> If yes we should move it so that userspace cannot set it. Do we have a
-> bug here already?
+On Mon, Jan 16, 2023 at 08:48:04AM -0800, Saurabh Sengar wrote:
+> This patch set expands the functionality of the VMBus driver by adding
+> support for device tree on x86/x64 architectures.
 
-No, we always checked that users can't provide these bits and fail create QP.
+Humm, interesting. Currently we support OLPC and CE4100 for x86 DT based 
+systems. Adding a new platform implies numerous new bindings yet there 
+is only 1 here. I'm guessing your DT is generated by the hypervisor, but 
+an example would be nice to see and run thru dtschema validation. We've 
+unfortunately been trying to fix KVM/QEMU DT years after it was created.
 
-It means that we can safely move that range too.
 
-Thanks
+> The first two patches enable Hyper-V builds for non-ACPI systems, while
+> the third patch adds device tree support into the VMBus driver, in
+> addition to its pre-existing support for ACPI. The fourth patch includes
+> the necessary device tree bindings for the VMBus driver.
+
+Bindings come before using them...
 
 > 
-> Jason
+> Saurabh Sengar (4):
+>   drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+>   Drivers: hv: allow non ACPI compilation for
+>     hv_is_hibernation_supported
+>   Drivers: hv: vmbus: Device Tree support
+>   dt-bindings: hv: Add dt-bindings for VMBus
+> 
+>  .../devicetree/bindings/hv/msft,vmbus.yaml         |  34 ++++
+>  drivers/clocksource/hyperv_timer.c                 |  15 +-
+>  drivers/hv/hv_common.c                             |   4 +
+>  drivers/hv/vmbus_drv.c                             | 190 +++++++++++++++++----
+>  4 files changed, 206 insertions(+), 37 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hv/msft,vmbus.yaml
+> 
+> -- 
+> 1.8.3.1
+> 
