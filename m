@@ -2,57 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E211E66E874
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720FC66E875
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjAQVaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S229504AbjAQVa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjAQV3M (ORCPT
+        with ESMTP id S229568AbjAQV3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:29:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC3650852;
-        Tue, 17 Jan 2023 11:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NJtx9k7zK7osmEbmFZPuHNLZSNqdsxL4Z7HMD3kHJnA=; b=uZMimG9QEF0kVnMGdSX6KPtkbg
-        uZiLjTYNTFaR/UnUO4QLzLIX2INtuaM6Pwu5l8wdfWmKNb+IVTN/hI+wWOawFjOckGTojwhso+hJi
-        QPfDlyG/pRBwrGJkTRpH2tjua65eeCJnsJx1KBV655NdMcJzWWwbL4rC0rkak7uLGP8cc696zJ2VX
-        XLUg2r6qZdL58QQflxpUbiReNnt/QvDhcSJr23y50FMa/0YkVTc7Dmi3pZ+FT21ehVhMOUhMF7oCS
-        BtOYxQOtlnIXHZ/YROjZ6S9mR2rbL+tR+D1RLe5kAFFZ47KAJRG62PrQO43EetH10z6FmwLxdafW3
-        orVmlt+g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHrzh-00Fg7t-0H; Tue, 17 Jan 2023 19:51:41 +0000
-Date:   Tue, 17 Jan 2023 11:51:40 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Allen Webb <allenwebb@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jeff Mahoney <jeffm@suse.com>, Omar Sandoval <osandov@fb.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Quentin Perret <qperret@google.com>
-Cc:     masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
- symbol->address lookup with /proc/kallmodsyms
-Message-ID: <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
+        Tue, 17 Jan 2023 16:29:13 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223D85528D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:53:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VOVZ6XhX/SyrKSaZOmvd7nSeMKXsrM8nmhW74XHGl7o/meMQ/WdoawWpsO2SKgyc2c85YuJHrxqWq6LRSuY1FpUVRUnjopCgj7SMzcWySvSAx9oZCLuUHxlYPeenYx5HfeVOznxX4VaYeKZT2bojE5w6i+mkCKR89LW0oZkrCN81ODx43aprx0c7cRKDEE4+U9ndTPwsMZT0Iz0W+hr044nPsDjUlbJ9KgL4dIKSwOPtbWivr0vU7p0jXJftBI3LrGQwGwFnW6VohlhkKFQfh54JIhR5ZbSzJxQ5DIeG/fFaw3q1SMoxGfxNN2xZRcLQgZzNYH+ht2NoojKtUTvNzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ar4tLFzz3TZGgXkxypPzJ3C9RoEcvFgaQc0oopfDjZg=;
+ b=JhC/FhTKRg0sSdl5SAfm3uHGQQXdftvG1pu1DivDqVnuSlUOF8yVkBhbqJlTG5lNuXHbx6I4MGVfqoRS0/fL48/CzEEefjIPPaXqv0rugBebRB+Sawwg4PMHguParNK28YGjEJ+ZVLNMX1x3Oyj2869LL2ghWvCV96lbZ+etkamyWZBcEeYiJfMKmr1C81cKUCG+9b9A3wPIJxmcTj037exNuakRsVkb6qBkYVLZkNhaD3f6qvPXYyq7w+xjs7AKG2XvaRncvbhWUROwMXKRdxZRgPJmda0uoTAipV7cTdvy/jWfQSfQ13Jkvzm0dVjsra9A/I/SxYBud9+XXNaUwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ar4tLFzz3TZGgXkxypPzJ3C9RoEcvFgaQc0oopfDjZg=;
+ b=aemIl5+aUSPq3mUC38C+IPybPFolz4m9HIaPoy5NBZijAgZN7Xpl+S9mD8z9kjPW2xVd2tdl0b0uQvXEqBVa3A4gpVrktfpO49P7GXBnpsWOM5rmGrouK7dCaC0qsb1+/3mOQGXKhgY5ph2JT5O4dk2JziIdanHpF48feXFyZcU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
+ by BL1PR12MB5288.namprd12.prod.outlook.com (2603:10b6:208:314::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
+ 2023 19:53:35 +0000
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a]) by BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a%3]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
+ 19:53:34 +0000
+Message-ID: <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
+Date:   Tue, 17 Jan 2023 11:53:32 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
+ Gecko/20100101 Thunderbird/109.0
+Subject: Re: [PATCH] firmware: zynqmp: fix declarations for gcc-13
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Tanmay Shah <tanmay.shah@xilinx.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ben Levinsky <ben.levinsky@amd.com>,
+        Ronak Jain <ronak.jain@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230117164133.1245749-1-arnd@kernel.org>
+From:   Tanmay Shah <tanmays@amd.com>
+In-Reply-To: <20230117164133.1245749-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR20CA0015.namprd20.prod.outlook.com
+ (2603:10b6:a03:1f4::28) To BY5PR12MB3683.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a5::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|BL1PR12MB5288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 839498e7-8002-4f8f-5f4a-08daf8c48445
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GY6BUVUcEb7g3khfb46UDtfHfebkqH9GIbJ275TFvuLk5jPlhxsxAxQseuuxtcJjQ6srJTqVtlDHszA0DyaSToRbmFmTCRRFtZhpz4nxSal5stgTu6QdBflST9obyoQnHzegGhxrGma4Dcuh0n2MC5NydXB2iTWylNB0w6fh66s6qhy6wY6TX6vKxDGXdD2GvDLMwN6r4jXeiZlPoJRI/Qg3MhKtS730m+sxiCNrtZ0aB4g6/7YWKqhouD+pfKroeqqgW4tl3o4fgvIafhIWqW19E5YYr1lblOLjEMzIHgwmzoFLXld8qRoJ1TTMX+K9iutE51OlZT8MmQ8oEtABOieVRKZ4LFt1H69TgKBx4J656x2KZpie7ChTUNHXxJoihn++nwjtRBiazamypn3NhuHaL76zQhI1e+EhgUmxycS2PxAhIobBK0lQHzy3+u+XDO+DOTkrb7IaCaK2Yf12eThGlmy53/idRY2bY947HFRaKgrv9ezxTtDPmARqlOm/BjyOyAzXFPiIbM/eh6cV1JddlI02giYTz72LqF1N/o/Ux0sH1KOv5gMYMRf8+CA/nzNX9ekNlrkVY1DhQLzCLLfgWPx/wWRLrCROnCxAhZCWjA6laKRmO82UB+O6xYwnvH7X+P9m1F68pFNe5lYZroQ+1j1HMznNQnXmN4KCzlarzRmf6SEebdej5LxzFf7aNXxfjr8fpZeand3vA3kLmGd/hJN0vIhxrooHlVAD9MA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(39860400002)(366004)(376002)(451199015)(2906002)(31686004)(5660300002)(8936002)(66476007)(4326008)(83380400001)(66556008)(36756003)(8676002)(110136005)(316002)(41300700001)(66946007)(31696002)(6486002)(2616005)(53546011)(186003)(6512007)(6506007)(54906003)(478600001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QjYwQTNaTVJsZGViclc2aVRJS2FoblZaZWdkczJNcW0wTS9Td3ZSa3lKcnZT?=
+ =?utf-8?B?TkZmVW92dXM3VmY3NzFSb1JCeVNobzZBRSsxVHorWHc2azAveXVXUkZiUC9z?=
+ =?utf-8?B?enI1ckVtYWFKVkFuaUxGcTVUeTY3LzlaZHZKbXdmc1ZyZXdaUzdEK1BrM0h0?=
+ =?utf-8?B?dzV2bXZyaDBsTHJ3VWQyODdZR09SenJrWldONktXVEd1MFJSQWdWT0NldDVE?=
+ =?utf-8?B?RE1XOXQ1QUd4eGZFOHFtRzRYSXpNMURPMjQrSG1PbVRWY3pkWC8zVk9YMjUx?=
+ =?utf-8?B?Q3dyY0p0T0xEMzlwTDh0YVBKRDJlcEhxV09iSTZkR053anppTU40RXFuaHFX?=
+ =?utf-8?B?akU3SlJUaEVaaFJaeW1NQ1pwVzNNNkp1eVdEMnJHQnhDRUIyaWdiK2tzY1p5?=
+ =?utf-8?B?bFRGYWkrU1RCRFZoMlhFcVNNaU1hU0o4Sjh4bkVEZFdJSjdTbEJSdksxNEUx?=
+ =?utf-8?B?T0xmL2FGcThxaXg2Zll2Vm43WXpHY2tTRHJ5dTFOV09ZZVRveWJmei9na2FI?=
+ =?utf-8?B?eWNsalEzTkJIUExqNVR4UlJydWVtcDdGZkxDM01IVkNnM2thT3lVdmhXa2hF?=
+ =?utf-8?B?VXJqRS9tbyt2Q0xzV3dOb2VwYzFqcHh4MjlBYmpOWFpVaGRBZ2UzYmxXaUww?=
+ =?utf-8?B?UVJTNzJ2bUVwTHJVT1dzQStkZHJwOElTYjlNY2g2YXF1Rk1lQkJGQk1aQkNH?=
+ =?utf-8?B?S0l1Z05lVWRtWjFhaTc5eDdNYkFEODFESmVMc05HZkxoMkJWdTc1UVlaMU14?=
+ =?utf-8?B?L2kwQVZmZ0ZFMmM4dEM3RFdqMnUyVnVKWm55ZUdkUkR5bzN4aTU0Zk9TREJY?=
+ =?utf-8?B?L3pucHFOZUtSLytZeEF1SXl4blg3L1Q5d1IvRUZ0UkltSURGZzBUYzhmZ3U5?=
+ =?utf-8?B?a3M4MU8rMGI1MU55c1RNQ1F5T1F6T1dITVZqOVRESEovVHdPbnVnQ3k1eWlw?=
+ =?utf-8?B?bEpvT2I1aFYzYllGaWFFd0lYRXZNNkYvVEVLd2hiRkdyZkRwZTdRYloxYU1p?=
+ =?utf-8?B?aTBlOXV4Y3A0Z3VzMXVEUVlaRGFoOG1jTnJwdUtOYlJTdTJPNEtSZSsrMTFV?=
+ =?utf-8?B?YVo0SVdTOElXSVg1Kzg3THh0cGFlNTlNenhQSFA5YXllTk44aHdWRmdkU0ta?=
+ =?utf-8?B?T3ZlVkhYT1hOVERxTWRORzZrdXRuMmNzd1lyK1BCVUVVMmRHQlRTeTMxOVh6?=
+ =?utf-8?B?dU1vVGIweWxqeTd1anZHU2YvSjJFSkJVb3QvdkUyQ25Lcmh3bndZUU5aRUp4?=
+ =?utf-8?B?YmxpRUhkOWxIWWlLWFEvUEtzVkllWkM0STVQd2lCbUg1TVNzV0RVWmorb0tL?=
+ =?utf-8?B?RVRJdEk2UzMzY29VbnBRNS90MFZaMU5qT2xtRHNMbXdDZW0zMlRFVDVWaWpN?=
+ =?utf-8?B?VHFMNlc4Tzl2S05pZ0JOTGY4Qk5lWkw1ZU1zS0lQeXZKcCtiV2JPME44dG56?=
+ =?utf-8?B?R3FrWE5oSUNwaEFPMVJiT1pQNlp1cm02dk5heVFMREswblFMMUpwM3F6Ym5X?=
+ =?utf-8?B?NDFXYXRDTDB3QzdEeVBscHZXNFAzNEZOMmlHVlBaWTdaSkZ2c1lSZ240aXFO?=
+ =?utf-8?B?SVp6WXRqNXgzSE5GOVIyNEs1d056STFEejBqdmw5YTE4N1pIWWIwUU1UUVJY?=
+ =?utf-8?B?ZUhTV3FkSHUra2pscmJ6Q0plNjdmK2h1SEpOSUhONnhtRlUrUGxTMmsrT1lD?=
+ =?utf-8?B?NWZwZGJmWGdxYUFIM2xtaXM4TlAxWHBsaXdpS0FRQmh1cVFjTWhnSzR3dlJo?=
+ =?utf-8?B?cEFTLzkwQ3g3RXk5SFNiV3daQUJVMXdtcjliWWkxTWlCZVIzTStoUzJWdFhh?=
+ =?utf-8?B?YUVTM3R5a1R3bzhKMjA1bHNNL3BLc0NiNnIwMEdNbkw0Y0ttZ1hodE1ReXVL?=
+ =?utf-8?B?S3NDU3duMVV4UHdUYVkxekR2Ry9qdndGeUt4SEdBaVU0WWI5a0Z2TmRJaEpW?=
+ =?utf-8?B?eWhBd2NySlNHRmNhWkZhdzgyZUtFS0tOeUtObllLWkZ1UmZrZUJmT2NKcGYr?=
+ =?utf-8?B?VHN2S09PdWZURWRLTXBUODlaa3MrN1pzc25uaXJsNzZqaVBnUjFDc0JIQmFY?=
+ =?utf-8?B?dkQrRTRlRWJGdmc1WG0rektVRE5rckNqZzRIbjhLRGlNc2lYcXJTQzUrVEND?=
+ =?utf-8?B?cGxXTjdZbHZxVnhUY2ZPZExONWpkVkpkeGFidldlZ3RpU2FieXpmdWlrcDJH?=
+ =?utf-8?Q?VjPxU9XiIyymLkD5JkUtrNxqDa4eGAr3I+hJPfSaEaaZ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 839498e7-8002-4f8f-5f4a-08daf8c48445
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 19:53:34.7763
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eqv4tUVVmxaZUogdDRw/RzxbuZGBewPOqNojFcs/L+Rq5Ih8/eFHcrjV5K8kN1bi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5288
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,234 +130,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
-> The kallmodsyms patch series was originally posted in Nov 2019, and the thread
-> (https://lore.kernel.org/linux-kbuild/20191114223036.9359-1-eugene.loh@oracle.com/t/#u)
-> shows review comments, questions, and feedback from interested parties.
-> Most recent posting: <https://lore.kernel.org/linux-modules/20221109134132.9052-1-nick.alcock@oracle.com/T/#t>.
-> 
-> All review comments have been satisfied, as far as I know:
+Hi, Thanks for your patch.
 
-No, not really. I have asked before to trim this cover letter down and
-make each patch make sense atomically. You have not done so. I have also
-asked you to get users of what you are suggesting to add to kernel to
-vouch for this, and for you to make that clear and I feel that falls
-short too. I have even suggested folks who likely could help review your
-patches for other things they may need or are working on.
 
-So no, this is patch review is slow moving but I'd like to clarify as to why.
-It is not that I am ignoring this patch set, it is that each time I come
-back to it I see only a slight step forward with the suggestions made.
+This looks good to me. Thanks for fixing this.
 
-> A kernel tree containing this series alone:
->    https://github.com/oracle/dtrace-linux-kernel kallmodsyms/6.1-rc4-modules-next
-> 
-> 
-> The whole point of symbols is that their names are unique: you can look up a
-> symbol and get back a unique address, and vice versa.  Alas, because
-> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
-> really satisfy this requirement.
+Something must have gone wrong when I ran sparse check on this patch.
 
-You make it sound that's would imply there's bug in kallsyms but its not. We
-would have bug reports and I just don't see them associated to what you say.
+Just one question, does this patch need "fixes:" tag?
 
-kallsyms support was added first by Ingo Molnar on 2.5.38 kernel [0] and the
-goal was to just to be able to print out symbolic crash information and symbolic
-stack backtraces. Rusty Russel later extended support for modules [2] and Kai
-Germaschewski finally decreased the speed to generate the file by writing a C
-program for it [2]. To this day CONFIG_KALLSYMS is described to relfect that
-this is just for oops traces and stack traces.
 
-In that sense getting mapping of addresses to symbols for oops or stack
-traces seems kallsyms is successful.
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=218af2f340009e624603253ca8a35c884f31ab5a
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=a5508ddcd000a435baa37f61ef1bdfb490fcf3c0
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=6802d702761dfdd910e37da40ba95fa71fd06dd7
-
-> Large numbers of symbols are duplicated
-> many times (just search for __list_del_entry!), and while usually these are
-> just out-of-lined things defined in header files and thus all have the same
-> implementation, it does make it needlessly hard to figure out which one is
-> which in stack dumps, when tracing, and such things.
-
-Here is the problem you have in your cover letter: you first try to
-state that kallsyms is falling short for your use case and then skim through
-the actual use case where you need a unique mapping.
-
-> Some configuration
-> options make things much worse: my test make allyesconfig runs introduced
-> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
-> object file, and it was fairly easy to make them appear in ftrace output.
-> 
-> Right now the kernel has no way at all to tell such symbols apart, and nor
-> has the user: their address differs and that's all. 
-
-You need to explain who would care and why this is an issue.
-
-> Which module did they
-> come from?  Which object file?  We don't know.  Figuring out which is which
-> when tracing 
-
-For the very *first* time in the cover letter do I see the first
-description of a use case where someone might care.
-
-> needs a combination of guesswork and luck, and if there are
-> thousands of them that's not a pleasant prospect.  In discussions at LPC it
-> became clear that this is not just annoying me but Steve Rostedt and others,
-> so it's probably desirable to fix this.
-
-You can just summarize this to say tracing folks care and you need to
-explain why. Why this falls short. Why is this limitting tracing folks?
-
-Other than tracing too, wouldn't folks who work on things like crash
-care too (Jeff, Omar)? Wouldn't this help them or their teams which
-rely on tooling around this?
-
-> It turns out that the linker, and the kernel build system, can be made to
-> give us everything we need to resolve this once and for all.  This series
-> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
-> annotates every (textual) symbol which comes from a built-in kernel module
-> with the module's name, in square brackets: if a symbol is used by multiple
-> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
-> a cut-down {object file name}; the combination of symbol, [module] [names]
-> and {object file name} is unique 
-
-If this is about tracing and issues with a symbol name being mapped to
-multiple objects why would this enhancement only involve what are
-possibly modules? If the main motivation for the work you are
-introducing is to help tracers get a better bearing when working with
-a symbols, yes I can see the value in knowing if a symbol was part of
-a module, but I'd likely would want to care about in-kernel symbols
-too. Is the reason a new file is being introduced because you can
-already get 1-1 mapping for symbols only used for built-in stuff?
-Ie, is the semantic requirements for fidelity for pure built-in symbols
-already satisfied by kallsyms? And do modules then introduce a new
-semantic gap, which make it difficult to know what object file thinggs
-map to?
-
-Regardless, if tracing is the main use case and the goal here is to map
-symbols to object files, I can't think of a reason why a symbol map
-filename which also spits out built-in object files needs to be associated with
-modules.
-
-/proc/kallmodsyms seems to imply modules need to be involved somehow,
-but it does not seem that's the reason for the file. Rather, you seem to
-want to just be able to tell users if the symbol came from an object
-file only assocaited to a module.
-
-And if this new feature is being tucked away under a new kconfig symbol,
-why not just extend the existing /proc/kallsyms when folks want the new
-information?
-
-> (with one minor exception: the arm64 nvhe
-> module is pre-linked with ld -r, causing all symbols in it to appear to come
-> from the same object file: if it was reworked to use thin archives this
-> problem would go away).
-
-OK so ARM64 nVHE folks might care, but perhaps other architectures might
-be limitted with this feature. Could you express this via Kconfig so
-that the feature cannot be selected by these architectures if they use
-'ld -r'?
-
-Please work with Guenter Roeck so to have a new branch for your work
-tested on some of the oddball archs he has access to. That should help
-proactively find odd arch issues we'd otherwise find out during testing
-once merged.
-
-> The object file names are cut down to save space: we store only the shortest
-> suffix needed to distinguish symbols from each other.
-
-If the information for tracers was so valuable, why trim this? And how
-much space does that save you? Is the idea that CONFIG_KALLMODSYMS
-would be enabled on production kernels?
-
-> It's fairly rare even
-> to see two/level names, let alone three/level/ones.
-
-What does one level mean? What does two levels mean? What does three
-levels mean here?
-
-> We also save even more
-> space by annotating every symbol in a given object file with the object file
-> name if we annotate any of them.
-> 
-> We also add new fields that let you get at this new info in the kallsyms
-> iterator.
-> 
-> In brief we do this by mapping from address ranges to object files (with
-> assistance from the linker map file), then mapping from those object files
-> to built-in kernel modules and object file names.  Because the number of
-> object files is much smaller than the number of symbols, because we fuse
-> address range and object file entries together if possible, and because we
-> don't even store object file names unless we need to, this is a fairly
-> efficient representation, even with a bit of extra complexity to allow
-> object files to be in more than one module at once.
-> 
-> The size impact of all of this is minimal: in testing, vmlinux grew by 16632
-> bytes, and the compressed vmlinux only grew by 12544 bytes (about .1% of a
-> 10MiB kernel): though this is very configuration-dependent, it seems likely
-> to scale roughly with the kernel as a whole.
-> 
-> This is all controlled by a new config parameter CONFIG_KALLMODSYMS, which when
-> set results in output in /proc/kallmodsyms that looks like this:
-> 
-> ffffffff97606e50 t not_visible
-> ffffffff97606e70 T perf_msr_probe
-> ffffffff97606f80 t test_msr     [rapl]
-> ffffffffa6007350 t rapl_pmu_event_stop  [rapl]
-> ffffffffa6007440 t rapl_pmu_event_del   [rapl]
-> ffffffffa6007460 t rapl_hrtimer_handle  [rapl]
-> ffffffffa6007500 t rapl_pmu_event_read  [rapl]
-> ffffffffa6007520 t rapl_pmu_event_init  [rapl]
-> ffffffffa6007630 t rapl_cpu_offline     [rapl]
-
-My /proc/kallsyms already has something like:
-
-ffffffffc04c7940 t show_shost_eh_deadline       [scsi_mod]
-ffffffffc04c7990 t show_shost_active_mode       [scsi_mod]
-ffffffffc04c79d0 t sdev_show_preferred_path     [scsi_mod]
-
-So why is that falling short vs /proc/kallmodsyms ?
-
-> Differences from v9, early November 2022:
-> 
->  - Rework to use Luis Chamberlain's modules.builtin.objs rather than a
->    tristate-generated "modules_thick.builtin".  Keep the iterator over
->    modules_thick.builtin, but rename it to scripts/modules_builtin.c and
->    make it more robust against strange lines in modules.builtin.objs,
->    such as lines with no colon in.
-
-Please extend the commit log to describe that subsequent patches would
-use that information, as otherwise the commit log seems to just
-introduce something for new user. My patch was simply a proof of concept
-which denied what you claimed was not possible. You can describe also *why*
-this information is useful, ie if your use cas is traces, then mention that
-and why. The point to my patch also was to show you don't have to re-intrdouce
-the tristate stuff, ie your effect revert of commit 8b41fc4454e36fbf ("kbuild:
-create modules.builtin without Makefile.modbuiltin or tristate.conf")
-and so I am extremely surprised you are still keeeping that patch and
-using that suff in this v10 series! The point was to simplify your
-patch series.
-
-The semantics of the module license should suffice.
-
-And please split out the driver conversions to remove module license per
-subsystem, and a new thread. The justification should be simple, commit
-8b41fc4454e36fbf ("kbuild: create modules.builtin without Makefile.modbuiltin or
-tristate.conf") now relies on the module license tag to do simplify the
-build system. And as part of follow up work to that patch we want to
-correct false positives for modules.builtin where userspace may try to
-load a module which is built-in but such module can never be built in.
-You can add Suggested-by me to that set.
-
-The same applies to your other Makefile patch (except to the
-Suggested-by as I don't understand the goal there yet), I don't know what it is
-trying to do, but it should be a separate effort. You can feel free to
-Cc me on that too.
-
-And lastly users. This cover letter should reflect clearly who are the
-new users who are dying for this feature, Cc them and hope to have them be
-actively engaged during review.
-
-  Luis
+On 1/17/23 8:41 AM, Arnd Bergmann wrote:
+> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+>
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> gcc-13.0.1 reports a type mismatch for two functions:
+>
+> drivers/firmware/xilinx/zynqmp.c:1228:5: error: conflicting types for 'zynqmp_pm_set_rpu_mode' due to enum/integer mismatch; have 'int(u32,  enum rpu_oper_mode)' {aka 'int(unsigned int,  enum rpu_oper_mode)'} [-Werror=enum-int-mismatch]
+>   1228 | int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode)
+>        |     ^~~~~~~~~~~~~~~~~~~~~~
+> In file included from drivers/firmware/xilinx/zynqmp.c:25:
+> include/linux/firmware/xlnx-zynqmp.h:552:5: note: previous declaration of 'zynqmp_pm_set_rpu_mode' with type 'int(u32,  u32)' {aka 'int(unsigned int,  unsigned int)'}
+>    552 | int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1);
+>        |     ^~~~~~~~~~~~~~~~~~~~~~
+> drivers/firmware/xilinx/zynqmp.c:1246:5: error: conflicting types for 'zynqmp_pm_set_tcm_config' due to enum/integer mismatch; have 'int(u32,  enum rpu_tcm_comb)' {aka 'int(unsigned int,  enum rpu_tcm_comb)'} [-Werror=enum-int-mismatch]
+>   1246 | int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode)
+>        |     ^~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/firmware/xlnx-zynqmp.h:553:5: note: previous declaration of 'zynqmp_pm_set_tcm_config' with type 'int(u32,  u32)' {aka 'int(unsigned int,  unsigned int)'}
+>    553 | int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1);
+>        |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Change the declaration in the header to match the function definition.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   include/linux/firmware/xlnx-zynqmp.h | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+> index eb88b4ba62f9..0e4c70987e6a 100644
+> --- a/include/linux/firmware/xlnx-zynqmp.h
+> +++ b/include/linux/firmware/xlnx-zynqmp.h
+> @@ -549,8 +549,8 @@ int zynqmp_pm_request_wake(const u32 node,
+>                             const u64 address,
+>                             const enum zynqmp_pm_request_ack ack);
+>   int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode);
+> -int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1);
+> -int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1);
+> +int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode);
+> +int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode);
+>   int zynqmp_pm_set_sd_config(u32 node, enum pm_sd_config_type config, u32 value);
+>   int zynqmp_pm_set_gem_config(u32 node, enum pm_gem_config_type config,
+>                               u32 value);
+> @@ -849,12 +849,12 @@ static inline int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mo
+>          return -ENODEV;
+>   }
+>
+> -static inline int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1)
+> +static inline int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode)
+>   {
+>          return -ENODEV;
+>   }
+>
+> -static inline int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1)
+> +static inline int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode)
+>   {
+>          return -ENODEV;
+>   }
+> --
+> 2.39.0
+>
