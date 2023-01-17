@@ -2,214 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A9F66E604
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D35466E608
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjAQSbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S231183AbjAQSce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjAQS3h (ORCPT
+        with ESMTP id S232112AbjAQSai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:29:37 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6164741E;
-        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so8162321oom.9;
-        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
+        Tue, 17 Jan 2023 13:30:38 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659313A586
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:01:28 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id r205so26575453oib.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1bc4HH8wLLn6R3Oilqb4e8+1SbIPrlAa0QQfg12ZrZs=;
+        b=pbx0Tgwf4mH7q9k59cNhZH4hjrD52u7p7F6cKIcinUWF2lxDNeOdlmMHIlBDGtEaaR
+         GjLj/WaJs3f29Y6ZwQVIqpeEYxgx/dAWsTRBG3h43We4D7nCwLXSEuNYdHWebAjyMJci
+         60Whwq3+BGdC4O3FriBPhisSVQDmK1jwhJS80jut56sKYIhzNmtsRFDCawFmKJf+XgfB
+         +t/FeqFXMG+6c+tzvkVcJbtEIg4U2/eB6dCqQ+NXmB4qYzshsxawPoqWqdCWfKtvZgdC
+         Yy460lMVcnGAw/H56ZXxaVlrO/f11wXoeYPXzj8hLV/+7JR4eYFeZHvDP1fAZEsl3kXV
+         Nmbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/kHOFH1wU0NreMHdddHDbHuXCpkHB1PoZhcRnQt444=;
-        b=foCc1PFG7lYBexT6/8fkfiieupPw+yUWKOVHP2BP/rJxwJ+iP1fXirFkKgDzI/Qa4D
-         EZzGo/EbvWRN627NhAb2M+NsDIoD5dd1uaINbLVstiCqf7m0CSbYU2vWkeBPkZWbVAAq
-         c32/bO38RLbHr3WWC4FZy8T4aU+hWdLJBBw9dvYFh3F7SogOVmBEKmsrzte0n6NDzmbC
-         m+xLZOMqDZbBLKi+DJhW0WAfwbvxh/9RD63V8axdpToc/ESemhiaS/VIC/QQO8niZ9r6
-         sQUU9AAFfuLqi4RYhqGb2R9WVIrMDt/UokL0moYzRzRBLelOCDGb8P5Ch3ytui0fcv7M
-         r/nA==
-X-Gm-Message-State: AFqh2kqun0Ns/yMzVJNHuHbKMQA5pPcH9kqd9WR0VWAqg6rkOk4Y0d0H
-        jfYJSb25/de7O5E7ei6URg==
-X-Google-Smtp-Source: AMrXdXvcuKQfn+7icDnE4nUlh/ljNLsmHBHplIQtCw0qWiIdq35al99wEU9lDuQyulZvwL6n7ShSQA==
-X-Received: by 2002:a05:6820:3c7:b0:4f8:2e60:6afd with SMTP id s7-20020a05682003c700b004f82e606afdmr1593239ooj.8.1673978460048;
-        Tue, 17 Jan 2023 10:01:00 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p2-20020a4ab382000000b004d8c6815287sm15040211ooo.17.2023.01.17.10.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 10:00:59 -0800 (PST)
-Received: (nullmailer pid 3319602 invoked by uid 1000);
-        Tue, 17 Jan 2023 18:00:58 -0000
-Date:   Tue, 17 Jan 2023 12:00:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK
- binding
-Message-ID: <20230117180058.GA3314512-robh@kernel.org>
-References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
- <20230113041132.4189268-2-quic_bjorande@quicinc.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1bc4HH8wLLn6R3Oilqb4e8+1SbIPrlAa0QQfg12ZrZs=;
+        b=CRTxDX8D7xE7+qWTrWPKLJnWwSzidkOhQJNhO00vgIAIEsqoQLK98Bm8GkOngnB4oz
+         +8oOskAVCaHnh4nx02GekWyH6J3yF81m1x1eVmRnUNaGLexPT6Uvybfcx/C02uipljP4
+         /qrq60yE6gyMV8vO9KA/0rqbmjCcvRSyvARl7JZa9Mz23z7vvJVwVvZNNjRaOqxAUIdz
+         ePZ86+wcdbQuldQ8GayzVFK5Xcmi1TTjzJ0uyRwAMJp86mPlGv5lejEoENceSmi5S9ai
+         HsVJVypyKfHdundPyr2dqDrBAE0eVQHXjZMu85+5AgEpTTdSTJSDLV9fcwg39XQmmpMg
+         T0rg==
+X-Gm-Message-State: AFqh2kqMSGBE+hWUHmcGuL1Lb+ZkyvDS9GvNJ8qvXmMRfUb7sef1XNiL
+        8OoeeegMnMZxdYdhYf2v9TwjAvigB7dq07Hda2xi4Q==
+X-Google-Smtp-Source: AMrXdXt/smakKDlhF1dsjQk8jEd8B2AEaeFU0TbuUPk6cOkfp60MGAqgtCGwcN/FUEDa/S61/rN9fNov5CNTV3vGN60=
+X-Received: by 2002:a05:6808:124f:b0:35e:18a6:10ea with SMTP id
+ o15-20020a056808124f00b0035e18a610eamr265907oiv.239.1673978487199; Tue, 17
+ Jan 2023 10:01:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113041132.4189268-2-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230116173420.1278704-1-mw@semihalf.com> <20230116173420.1278704-3-mw@semihalf.com>
+ <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk> <20230116181618.2iz54jywj7rqzygu@skbuf>
+ <Y8XJ3WoP+YKCjTlF@lunn.ch> <CAPv3WKc8gfBb7BDf5kwyPCNRxmS_H8AgQKRitbsqvL7ihbP1DA@mail.gmail.com>
+ <20230117163453.o7pv7cdvgeobne4b@skbuf>
+In-Reply-To: <20230117163453.o7pv7cdvgeobne4b@skbuf>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 17 Jan 2023 19:01:20 +0100
+Message-ID: <CAPv3WKewRYwgTvNWYMdxwZvJfgj3__H3GYiKu__DHQf0fJPLEw@mail.gmail.com>
+Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API to fwnode_
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, sean.wang@mediatek.com,
+        Landen.Chao@mediatek.com, linus.walleij@linaro.org,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, hkallweit1@gmail.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:11:29PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> platforms and implement USB Type-C handling and battery management.
-> This binding describes the component in the OS used to communicate with
-> the firmware and connect it's resources to those described in the
-> Devicetree, particularly the USB Type-C controllers relationship with
-> USB and DisplayPort components.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Added reg under connector, to identify multiple connectors
-> - Updated maintainer email
-> 
->  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 102 ++++++++++++++++++
->  1 file changed, 102 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> new file mode 100644
-> index 000000000000..a79dd0ed9275
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> @@ -0,0 +1,102 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/qcom,pmic-glink.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMIC GLINK firmware interface for battery management, USB
-> +  Type-C and other things.
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description:
-> +  The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> +  platforms and implement USB Type-C handling and battery management. This
-> +  binding describes the component in the OS used to communicate with the
-> +  firmware and connect it's resources to those described in the Devicetree,
-> +  particularly the USB Type-C controllers relationship with USB and DisplayPort
-> +  components.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,sc8180x-pmic-glink
-> +          - qcom,sc8280xp-pmic-glink
-> +          - qcom,sm8350-pmic-glink
-> +      - const: qcom,pmic-glink
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^connector@\d$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +    properties:
-> +      reg: true
+Hi,
 
-       required:
-         - reg
+wt., 17 sty 2023 o 17:34 Vladimir Oltean <olteanv@gmail.com> napisa=C5=82(a=
+):
+>
+> On Tue, Jan 17, 2023 at 05:05:53PM +0100, Marcin Wojtas wrote:
+> > In the past couple of years, a number of subsystems have migrated to a
+> > more generic HW description abstraction (e.g. a big chunk of network,
+> > pinctrl, gpio). ACPI aside, with this patchset one can even try to
+> > describe the switch topology with the swnode (I haven't tried that
+> > though). I fully agree that there should be no 0-day baggage in the
+> > DSA ACPI binding (FYI the more fwnode- version of the
+> > dsa_shared_port_validate_of() cought one issue in the WIP ACPI
+> > description in my setup). On the other hand, I find fwnode_/device_
+> > APIs really helpful for most of the cases - ACPI/OF/swnode differences
+> > can be hidden to a generic layer and the need of maintaining separate
+> > code paths related to the hardware description on the driver/subsystem
+> > level is minimized. An example could be found in v1 of this series,
+> > the last 4 patches in [1] show that it can be done in a simple /
+> > seamless way, especially given the ACPI (fwnode) PHY description in
+> > phylink is already settled and widely used. I am aware at the end of
+> > the day, after final review all this can be more complex.
+> >
+> > I expect that the actual DSA ACPI support acceptance will require a
+> > lot of discussions and decisions, on whether certain solutions are
+> > worth migrating from OF world or require spec modification. For now my
+> > goal was to migrate to a more generic HW description API, and so to
+> > allow possible follow-up ACPI-related modifications, and additions to
+> > be extracted and better tracked.
+>
+> I have a simple question.
+>
+> If you expect that the DSA ACPI bindings will require a lot of
+> discussions, then how do you know that what you convert to fwnode now
+> will be needed later, and why do you insist to mechanically convert
+> everything to fwnode without having that discussion first?
+>
 
-Or '@\d' needs to be optional.
+Ok, let me clarify. From the technical standpoint, I think it is
+fairly easy and to a very big extent, we should be able to reuse, what
+is already existing - I made it work with a really minimal set of
+changes, using a standard nodes' hierarchy and generic methods in the
+ACPI tables. As more difficult, I consider getting this solution
+accepted by the ACPI and the network subsystem maintainers, also given
+the OF quirks/legacy stuff, that apparently needs to be ruled out in
+such circumstances. However, I perceive a preparation step, with
+migrating to the more generic HW description API in the generic
+net/dsa, as a sort of improvement, but I get your point and I will
+wait with resubmitting these changes again.
 
+> You see the lack of a need to maintain separate code paths between OF
+> and ACPI as useful. Yet the DSA maintainers don't, and in some cases
+> this is specifically what they want to avoid. So a mechanical conversion
+> will end up making absolutely no progress.
 
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
-> +    pmic-glink {
-> +        compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        connector@0 {
-> +            compatible = "usb-c-connector";
-> +            reg = <0>;
-> +            power-role = "dual";
-> +            data-role = "dual";
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    endpoint {
-> +                        remote-endpoint = <&usb_role>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    endpoint@0 {
-> +                        reg = <0>;
-> +                        remote-endpoint = <&qmp_out>;
-> +                    };
-> +
-> +                    endpoint@1 {
-> +                        reg = <1>;
-> +                        remote-endpoint = <&displayport_hpd>;
-> +                    };
-> +                };
-> +
-> +                port@2 {
-> +                    reg = <2>;
-> +                    endpoint {
-> +                        remote-endpoint = <&sbu_mux>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> +
-> -- 
-> 2.37.3
-> 
+Fair enough. I'll keep it on hold until MDIOSerialBus gets accepted
+and repost a bigger, combined patchset with all changes like in the
+v1.
+
+Best regards,
+Marcin
