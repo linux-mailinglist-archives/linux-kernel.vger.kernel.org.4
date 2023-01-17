@@ -2,118 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B8566DEE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D01766DEEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjAQNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S229691AbjAQNem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjAQNag (ORCPT
+        with ESMTP id S229583AbjAQNei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:30:36 -0500
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E35134C2C;
-        Tue, 17 Jan 2023 05:30:35 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id x36so10403530ede.13;
-        Tue, 17 Jan 2023 05:30:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MBwIoMBPyxUVrndCKlTiGJI/DLVDR0WmkczeSTQwFd4=;
-        b=beWkEeyZZuJ+yMBXEOznjupxkcQSbVFWkQ6pYjwk8tfO1hSG10YiU0TKZP595fH0fP
-         C8gqgYqdldl+o3S/Ybu/DSwVM+Fh/GDNtZc++Jci2d2+nc4YlggHgnQz2avZ+cMmVwJy
-         merKJ8oYzfpvAxDG7gpXYTyPgLyFr8xVUXFaPPv7nkDe1EpPhV0E9V02JuscCyqCODc+
-         1AN+juj3ymMz0aYN3yNEQpauo8CM1JqKiesVg8LKNBb2nmSBXxrctL0Zt4WcSlJgAf0Y
-         tdDWDHpTKCUflAQWjAsXZI/UJBVhpqMT1A/MPEln1yxhmB2JaWd5ccuTi9EaduFqHDQP
-         YWgQ==
-X-Gm-Message-State: AFqh2kr16LTEIaV+jkOqqbfK4lQPlWRR/UbHUD2YUUksorwObIVowL2h
-        pYr/Yp3OvvAze7n7DjxPhaa+yk/Bh1gCrjLEU/k=
-X-Google-Smtp-Source: AMrXdXu3alUkSln2qykUNLTegOZ+xdifU8V3d9czapg5aFnIMArXmnakmgYKdtZVESamFhXZnir11ffTh5InSFRkNZY=
-X-Received: by 2002:aa7:dd41:0:b0:47e:4f0b:7ad9 with SMTP id
- o1-20020aa7dd41000000b0047e4f0b7ad9mr238376edw.239.1673962233779; Tue, 17 Jan
- 2023 05:30:33 -0800 (PST)
+        Tue, 17 Jan 2023 08:34:38 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7286F65A6;
+        Tue, 17 Jan 2023 05:34:35 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30HDYQUj046175;
+        Tue, 17 Jan 2023 07:34:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673962466;
+        bh=1r0ZTGQvgLPf7ei0hCiziyMQKc87/3gnPfGB80ixdBY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=OJxSzDBEkCsszWSX2ALO9W5Z2xk6z350iLGJuneY8FVhdvP+1k6Vaqw+ASYUeS/va
+         2+bUn/0BgD093nkNelF88kMFzU+Sy9VSsDMd73FXZGsb3yetDlRfLjM5h2iIfRVsnx
+         2XPiQszdgDTD2gawVJxOtrgDjFuHI0JHfJOC//qU=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30HDYQCu003796
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Jan 2023 07:34:26 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
+ Jan 2023 07:34:26 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 17 Jan 2023 07:34:26 -0600
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30HDYNJE017157;
+        Tue, 17 Jan 2023 07:34:23 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Dhruva Gole <d-gole@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, Bryan Brattlof <bb@ti.com>,
+        <devicetree@vger.kernel.org>, Tero Kristo <kristo@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3] arm64: dts: ti: k3-am62-main: Fix clocks for McSPI
+Date:   Tue, 17 Jan 2023 19:04:12 +0530
+Message-ID: <167395338058.410173.2545278634752217876.b4-ty@ti.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230103054840.1133711-1-d-gole@ti.com>
+References: <20230103054840.1133711-1-d-gole@ti.com>
 MIME-Version: 1.0
-References: <20230115235202.24695-1-bhuwz@163.com>
-In-Reply-To: <20230115235202.24695-1-bhuwz@163.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Jan 2023 14:30:17 +0100
-Message-ID: <CAJZ5v0iobEEpOY-ww6GqBbKk-MKmyWFSLi8akVUM9fZT7foSUw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Send CPUFREQ_CREATE_POLICY notification after
- the perf domain creation.
-To:     Vincent Wang <bhuwz@163.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Wang <vincentwang3@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 12:52 AM Vincent Wang <bhuwz@163.com> wrote:
->
-> From: Vincent Wang <vincentwang3@lenovo.com>
->
-> We found the following issue during kernel boot on android phone:
->
-> [    1.325272][    T1] cpu cpu0: EM: created perf domain
-> [    1.329317][    T1] cpu cpu4: EM: created perf domain
-> [    1.337597][   T76] pd_init: no EM found for CPU7
-> [    1.350849][    T1] cpu cpu7: EM: created perf domain
->
-> pd init for cluster2 is executed in a kworker thread and
-> is earlier than the perf domain creation for cluster2.
->
-> pd_init() is called from the cpufreq notification of
-> CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier
-> than that cpufreq_driver->register_em() is called.
->
-> To avoid this issue, cpufreq notification should be sent after
-> the perf domain creation.
->
-> Signed-off-by: Vincent Wang <vincentwang3@lenovo.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 7e56a42750ea..af8836069398 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1430,9 +1430,6 @@ static int cpufreq_online(unsigned int cpu)
->                         policy->max_freq_req = NULL;
->                         goto out_destroy_policy;
->                 }
-> -
-> -               blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-> -                               CPUFREQ_CREATE_POLICY, policy);
->         }
+Hi Dhruva Gole,
 
-AFAICS, in some cases, this may cause cpufreq_online() to send
-CPUFREQ_REMOVE_POLICY without sending CPUFREQ_CREATE_POLICY which is
-generally confusing to its callers.
+On Tue, 3 Jan 2023 11:18:40 +0530, Dhruva Gole wrote:
+> Fixes the clock Device ID's in the DT according to the tisci docs clock
+> identifiers for AM62x
+> 
+> 
 
-I'm wondering if you can reorder the EM registration before the
-initialization of frequency QoS for the policy?
+I have applied the following to branch ti-k3-next on [1].
+Thank you!
 
->
->         if (cpufreq_driver->get && has_target()) {
-> @@ -1506,6 +1503,9 @@ static int cpufreq_online(unsigned int cpu)
->                  */
->                 if (cpufreq_driver->register_em)
->                         cpufreq_driver->register_em(policy);
-> +
-> +               blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-> +                               CPUFREQ_CREATE_POLICY, policy);
->         }
->
->         ret = cpufreq_init_policy(policy);
-> --
+[1/1] arm64: dts: ti: k3-am62-main: Fix clocks for McSPI
+      commit: 6be5d8e5d1804eb4cec29cd8a85dc9cb18683b5d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
+
