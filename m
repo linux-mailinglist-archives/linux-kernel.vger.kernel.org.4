@@ -2,142 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3428D670BCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0469670B5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjAQWnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S229978AbjAQWJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAQWlo (ORCPT
+        with ESMTP id S229806AbjAQWIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:41:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B585AA5B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:54:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673992483;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SgeMP37+5GkMMY5cU2F9SAhbA9yv/IZm6bw7oKKCsAE=;
-        b=XeyC26800ozv9myXbMau+/aj71H/Vbvu2uwac5xv1n2OCnplVqUu6t06DIXm7Ry8OT3WSZ
-        nJZL70EtIsY5ruN7s0wXwjPfBu97LE9wsifw+ugwyhZALNvsuYU3XRChArAotw5WY6Llse
-        qQMIfuncdHM1AIqy4NGe5bahcG72Fis=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-447-rMh5lSdbNp-_GQO5QR-wkQ-1; Tue, 17 Jan 2023 16:54:42 -0500
-X-MC-Unique: rMh5lSdbNp-_GQO5QR-wkQ-1
-Received: by mail-qt1-f198.google.com with SMTP id br26-20020a05622a1e1a00b003b62dc86831so2581497qtb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:54:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SgeMP37+5GkMMY5cU2F9SAhbA9yv/IZm6bw7oKKCsAE=;
-        b=II6B/ARpSXbRQu1sjUHudOBpftIUaVl9OJWboIqsrjHIPAHusMQRTYSFup/CvlWniR
-         AsB/mXhbNXUSF+jgZAXQVoVTDPynRcc6eiZpZ0qK02WfHjKPyMjFLSUrdq9VYYzgEXHi
-         75V+5+P0wxG84m2FyGpPam2C8kR3ar9IwOEHqNdngfpCMKb08priygmfGMzMlMrnIZHM
-         4xQa0KpkQfUSSuEh2WSPId90u/CgS2P1jMrzYI2rSFKmXL2meR5r2I86Qe/IpiwpV+V2
-         SrNyUvsGgh642PDLXN/pnTQ1468aYU6G8zr2YJJhNSaoPxBqDS9o1M0p9Vr5WO0ZzYQF
-         gEdA==
-X-Gm-Message-State: AFqh2kq+2O4Zcof7ZTMmVyrCOcXHkhbzH2+St4VLjjkP+YXe1t4yfyXd
-        /yAtlfs3rYWDcDOuvOhi0mtvi6QR4vtdTmoZfdo9iAddMlbZsGmV8HGu9XW5sP6FgAVtuM8nFgr
-        bI36KNO5blC1iXDvUMS1S0/g5
-X-Received: by 2002:a05:6214:2c0a:b0:532:35ef:203a with SMTP id lc10-20020a0562142c0a00b0053235ef203amr7280043qvb.31.1673992481889;
-        Tue, 17 Jan 2023 13:54:41 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtlT8XS1fomDg2KJtqO7kFqcy20Zed4tyaDLwl2aePI17xv7CDEftZLFqepx1/fEDx1XInq5w==
-X-Received: by 2002:a05:6214:2c0a:b0:532:35ef:203a with SMTP id lc10-20020a0562142c0a00b0053235ef203amr7280029qvb.31.1673992481692;
-        Tue, 17 Jan 2023 13:54:41 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id bj3-20020a05620a190300b00705975d0054sm21166567qkb.19.2023.01.17.13.54.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:54:40 -0800 (PST)
-Date:   Tue, 17 Jan 2023 16:54:38 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 35/46] hugetlb: add MADV_COLLAPSE for hugetlb
-Message-ID: <Y8cZHv6dNHIg99tW@x1n>
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-36-jthoughton@google.com>
- <Y8cN4G0ICoSSggS+@x1n>
- <CADrL8HVDyT6D-O=BoeHkA9oaRPLJR62Sxba8FdTjMaQYW-Ttfw@mail.gmail.com>
+        Tue, 17 Jan 2023 17:08:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65108BBA1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:55:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dYK7QHEqGROj9cTFeHvfSuKosaNcqMrUb865g495bOk=; b=O6tZSHHzGKJZX1iAYHUlbpNdcq
+        ZxrxvmTmmsbqr936EiEWOWMMqob8GgiHmdccZoQjFy2M7JSHlbZzbvs2TchncI+j0k3viYTmseIPC
+        SRjOwRtExn9hUARvpUyEETZYLIXkShGyDfwMwJ/WYav3L6y7Iyc00H+U3nCuYm8W5n4LDo5BjuZ9p
+        +4aRxAyoACCM8sQessBpBPk+zQMyvZ5Hh/ve5p02fFVP7yXt2nK4sqO5wiKupykfS5P04QW3XJyeU
+        2jtbz1crNDA/cVwMfi6Bbdl8kHWAt1s79upbuw/UbeV07ohd0sPjx5OZI3OnS4vNsVmqG228akiwH
+        AVrAhxbQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHtv0-00A4f1-Fg; Tue, 17 Jan 2023 21:54:58 +0000
+Date:   Tue, 17 Jan 2023 21:54:58 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
+ control it
+Message-ID: <Y8cZMt01Z1FvVFXh@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-13-surenb@google.com>
+ <Y8a4+bV1dYNAiUkD@dhcp22.suse.cz>
+ <Y8a66gshQkkhC1cT@dhcp22.suse.cz>
+ <CAJuCfpF2ciMbMFgqa4GqYqg8zjpnmBoNZDG23V0+w017LXeU3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADrL8HVDyT6D-O=BoeHkA9oaRPLJR62Sxba8FdTjMaQYW-Ttfw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpF2ciMbMFgqa4GqYqg8zjpnmBoNZDG23V0+w017LXeU3w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-        On Tue, Jan 17, 2023 at 01:38:24PM -0800, James Houghton wrote:
-> > > +             if (curr < end) {
-> > > +                     /* Don't hold the VMA lock for too long. */
-> > > +                     hugetlb_vma_unlock_write(vma);
-> > > +                     cond_resched();
-> > > +                     hugetlb_vma_lock_write(vma);
+On Tue, Jan 17, 2023 at 01:21:47PM -0800, Suren Baghdasaryan wrote:
+> On Tue, Jan 17, 2023 at 7:12 AM Michal Hocko <mhocko@suse.com> wrote:
 > >
-> > The intention is good here but IIUC this will cause vma lock to be taken
-> > after the i_mmap_rwsem, which can cause circular deadlocks.  If to do this
-> > properly we'll need to also release the i_mmap_rwsem.
-> 
-> Sorry if you spent a long time debugging this! I sent a reply a week
-> ago about this too.
-
-Oops, yes, I somehow missed that one.  No worry - it's reported by
-lockdep. :)
-
-> 
+> > On Tue 17-01-23 16:04:26, Michal Hocko wrote:
+> > > On Mon 09-01-23 12:53:07, Suren Baghdasaryan wrote:
+> > > > Introduce a per-VMA rw_semaphore to be used during page fault handling
+> > > > instead of mmap_lock. Because there are cases when multiple VMAs need
+> > > > to be exclusively locked during VMA tree modifications, instead of the
+> > > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
+> > > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
+> > > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
+> > > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
+> > > > locked.
+> > >
+> > > I have to say I was struggling a bit with the above and only understood
+> > > what you mean by reading the patch several times. I would phrase it like
+> > > this (feel free to use if you consider this to be an improvement).
+> > >
+> > > Introduce a per-VMA rw_semaphore. The lock implementation relies on a
+> > > per-vma and per-mm sequence counters to note exclusive locking:
+> > >         - read lock - (implemented by vma_read_trylock) requires the the
+> > >           vma (vm_lock_seq) and mm (mm_lock_seq) sequence counters to
+> > >           differ. If they match then there must be a vma exclusive lock
+> > >           held somewhere.
+> > >         - read unlock - (implemented by vma_read_unlock) is a trivial
+> > >           vma->lock unlock.
+> > >         - write lock - (vma_write_lock) requires the mmap_lock to be
+> > >           held exclusively and the current mm counter is noted to the vma
+> > >           side. This will allow multiple vmas to be locked under a single
+> > >           mmap_lock write lock (e.g. during vma merging). The vma counter
+> > >           is modified under exclusive vma lock.
 > >
-> > However it may make the resched() logic over complicated, meanwhile for 2M
-> > huge pages I think this will be called for each 2M range which can be too
-> > fine grained, so it looks like the "cur < end" check is a bit too aggresive.
-> >
-> > The other thing is I noticed that the long period of mmu notifier
-> > invalidate between start -> end will (in reallife VM context) causing vcpu
-> > threads spinning.
-> >
-> > I _think_ it's because is_page_fault_stale() (when during a vmexit
-> > following a kvm page fault) always reports true during the long procedure
-> > of MADV_COLLAPSE if to be called upon a large range, so even if we release
-> > both locks here it may not tremedously on the VM migration use case because
-> > of the long-standing mmu notifier invalidation procedure.
+> > Didn't realize one more thing.
+> >             Unlike standard write lock this implementation allows to be
+> >             called multiple times under a single mmap_lock. In a sense
+> >             it is more of mark_vma_potentially_modified than a lock.
 > 
-> Oh... indeed. Thanks for pointing that out.
-> 
+> In the RFC it was called vma_mark_locked() originally and renames were
+> discussed in the email thread ending here:
+> https://lore.kernel.org/all/621612d7-c537-3971-9520-a3dec7b43cb4@suse.cz/.
+> If other names are preferable I'm open to changing them.
+
+I don't want to bikeshed this, but rather than locking it seems to be
+more:
+
+	vma_start_read()
+	vma_end_read()
+	vma_start_write()
+	vma_end_write()
+	vma_downgrade_write()
+
+... and that these are _implemented_ with locks (in part) is an
+implementation detail?
+
+Would that reduce people's confusion?
+
 > >
-> > To summarize.. I think a simpler start version of hugetlb MADV_COLLAPSE can
-> > drop this "if" block, and let the userapp decide the step size of COLLAPSE?
-> 
-> I'll drop this resched logic. Thanks Peter.
-
-Sounds good, thanks.
-
--- 
-Peter Xu
-
+> > >         - write unlock - (vma_write_unlock_mm) is a batch release of all
+> > >           vma locks held. It doesn't pair with a specific
+> > >           vma_write_lock! It is done before exclusive mmap_lock is
+> > >           released by incrementing mm sequence counter (mm_lock_seq).
+> > >       - write downgrade - if the mmap_lock is downgraded to the read
+> > >         lock all vma write locks are released as well (effectivelly
+> > >         same as write unlock).
+> > --
+> > Michal Hocko
+> > SUSE Labs
