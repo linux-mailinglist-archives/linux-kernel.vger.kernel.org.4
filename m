@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2FD66D8B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F092766D8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbjAQIw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S236091AbjAQIyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbjAQIwa (ORCPT
+        with ESMTP id S235927AbjAQIyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:52:30 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB202CFCB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:51:46 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso3960469wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:51:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=expaoc4a1kUuojomtX/CBeI3GGcWe8iG4JOwm7tA2Ms=;
-        b=GCBuP2ME3LEmq3d288LClfQ+DDoceb7qejVUCKci1Io3+3RT81PEq0YzI+C1ZzwsT5
-         6WyQCYKa7CiON2FBCWKBC+ZrjoPsaFO5JDZTtLTblFsb0I90j7ED6EsBVKGyb9eMbfjW
-         zL/aWSzykK4zTaUc4GgVZs/QUjdTlpK4BCVtJBhNAGmInT8k0Gh9CUOdgUMk/69WsWqI
-         T0liqYDKLBb7PqCc5cJAcgK/89PPlPM8ZoGDAHIjm6wK+/lYKZGo9fhmW0b7V9ja1joI
-         iA76KK54eIYL7LNUe07Mnj7MuYHzX2Q2/qBEMEkGW/HVJ9ZGhJpKcr5egZmElAtKO/yS
-         J6aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=expaoc4a1kUuojomtX/CBeI3GGcWe8iG4JOwm7tA2Ms=;
-        b=ssDhp2450Ke/5enpdPf8dMuT2Gge60cwi0ZIevhBmHofMmAxSyokoP1QjtPXB4Lx1f
-         N1arCB4Ov478z4NkqfsMdcDPsK5Zr2PGKfQvoYsmL2p9sQkW/1YhRqhEw8u1EsxJG0R0
-         kcvuqgzqZDNnxeRyrRLJzNFXQt/Rpl78fSO2kttLXv1cn2Y2Ln2+nYYzsr+nont+I1uH
-         jRiYqcD+WSkPkBtPejKxLwpfP+aSz9nb+MP5ffIrZ21TqiuaRsL1Epda2s0jpFEFD39p
-         gV9yzw+o5stkc1lmHNKZteDiHwpSsKWVJBlMX3d2E9mCmivmSF/bUWvgaLnq2UVypYbx
-         Gu2g==
-X-Gm-Message-State: AFqh2koWZ3ObuejRPPdCIl9cKwIRcQEWdoxbuzvLnRDP7B7hWIjy8sN9
-        5NORYwB/3wsDjUhc04wfnDHQhg==
-X-Google-Smtp-Source: AMrXdXueXFpF3XR7NYfg4P+jSjPuEvD2oSEf8abJxzrHhstw07/IPA3YDM4cBB/MjzxBAzfHOuxzSA==
-X-Received: by 2002:a05:600c:5006:b0:3da:f92a:5446 with SMTP id n6-20020a05600c500600b003daf92a5446mr2418854wmr.27.1673945504969;
-        Tue, 17 Jan 2023 00:51:44 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05600c351300b003d9a86a13bfsm39331066wmq.28.2023.01.17.00.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 00:51:44 -0800 (PST)
-Message-ID: <ee9ef65b-38c6-2283-b1e7-abf49abdccd6@linaro.org>
-Date:   Tue, 17 Jan 2023 09:51:42 +0100
+        Tue, 17 Jan 2023 03:54:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4213C07;
+        Tue, 17 Jan 2023 00:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=82O7MPpmKDKH/y6naoktZs3WQBLC/PHyEl3Wjqd7/dM=; b=Ke5GdVNvGDwhG+k46q7dng0FmD
+        4svqJ3BuhIzpCyRd3d34EzrwpAYhtIPNP9U0JudPObAhyc7mKDDB2ufRnVUe8NMuF1emh9A0PNWIH
+        p1R0fL14Y4BiUEbkIt1kuIDfTIDr+dtl1B0SONy0L6U6H9msSNXgpTQM8WUKpqJC+XOMDTKkpqJUy
+        A0FDeq5XRHSYeh/RQjtt4CQSF65Phgmx7FmreCSehAcpaORvkTTe37Nk1Kd9I9heUV3/iILob+ev7
+        j5Jfjn7noy51S9Ufs13OCaNuk4vpeID6Jvr5f0ui2whQba0QF6a+wxAzj0g5CzDexgL5+ikNTlFRJ
+        Sa81nPeg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHhjP-009Wew-5Z; Tue, 17 Jan 2023 08:54:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 99EF1302D60;
+        Tue, 17 Jan 2023 09:53:52 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 46751201ABB3C; Tue, 17 Jan 2023 09:53:52 +0100 (CET)
+Date:   Tue, 17 Jan 2023 09:53:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, frederic@kernel.org, paulmck@kernel.org,
+        pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
+        andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 35/51] trace,hardirq: No moar _rcuidle() tracing
+Message-ID: <Y8ZiIMHyXX/yW1EI@hirez.programming.kicks-ass.net>
+References: <20230112194314.845371875@infradead.org>
+ <20230112195541.477416709@infradead.org>
+ <20230117132446.02ec12e4c10718de27790900@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH] regulator: dt-bindings: qcom-labibb: Allow
- regulator-common properties
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230116092502.71146-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230116092502.71146-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117132446.02ec12e4c10718de27790900@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 10:25, Konrad Dybcio wrote:
-> Allow regulator-common properties on lab/ibb regulators, such as
-> regulator-always-on, etc.
-
-Are these proper regulators? If so this looks sensible. Why calling it
-RFC? What is here questionable?
-
+On Tue, Jan 17, 2023 at 01:24:46PM +0900, Masami Hiramatsu wrote:
+> Hi Peter,
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/regulator/qcom-labibb-regulator.yaml           | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> On Thu, 12 Jan 2023 20:43:49 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> index f97b8083678f..c0be7d5a6d40 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> @@ -20,7 +20,8 @@ properties:
->  
->    lab:
->      type: object
-> -    additionalProperties: false
-> +    $ref: "regulator.yaml#"
+> > Robot reported that trace_hardirqs_{on,off}() tickle the forbidden
+> > _rcuidle() tracepoint through local_irq_{en,dis}able().
+> > 
+> > For 'sane' configs, these calls will only happen with RCU enabled and
+> > as such can use the regular tracepoint. This also means it's possible
+> > to trace them from NMI context again.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> The code looks good to me. I just have a question about comment.
+> 
+> > ---
+> >  kernel/trace/trace_preemptirq.c |   21 +++++++++++++--------
+> >  1 file changed, 13 insertions(+), 8 deletions(-)
+> > 
+> > --- a/kernel/trace/trace_preemptirq.c
+> > +++ b/kernel/trace/trace_preemptirq.c
+> > @@ -20,6 +20,15 @@
+> >  static DEFINE_PER_CPU(int, tracing_irq_cpu);
+> >  
+> >  /*
+> > + * ...
+> 
+> Is this intended? Wouldn't you leave any comment here?
 
-Drop quotes.
-
-> +    unevaluatedProperties: false
->  
->      properties:
->        qcom,soft-start-us:
-> @@ -46,7 +47,8 @@ properties:
->  
->    ibb:
->      type: object
-> -    additionalProperties: false
-> +    $ref: "regulator.yaml#"
-
-Drop quotes.
-
-> +    unevaluatedProperties: false
->  
->      properties:
->        qcom,discharge-resistor-kohms:
-
-Best regards,
-Krzysztof
-
+I indeed forgot to write the comment before posting, my bad :/ Ingo fixed
+it up when he applied.
