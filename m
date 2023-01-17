@@ -2,83 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA950670DAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6E9670D5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjAQXfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S229657AbjAQX1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjAQXeb (ORCPT
+        with ESMTP id S229828AbjAQX0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:34:31 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1A22782
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:00 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4d0f843c417so327708217b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtczcpnEdrb6Lo/I50tBUUcvRCWBMIoMko6b3VfQkh8=;
-        b=AcMcOiO2z6ozFh44VpqFr7ezkcbEZnhi09Dbp343HQiIrdSXkgI50tblBtSXc4Qkbr
-         Dm0aJ5OWtPIPe1vN3owVIfQugxfobInM08+GWcQC0Wl/sGleOffZOyKeiGBU66WnPH9X
-         yGh7HPsaf3D37qff2nHLKSk9GB5gXj4/bJSoqoPygqkBfp0n5aCUJW1R2r1cGv48MYT9
-         AF0QYZ+3MvoaJhRFmZkp/7b87hU6GOckZwAwfWDK+vU6aqzT+gjcR5kQJuyq+Vt1cTTM
-         SPO3L3JDVl95dXMuhHrtNaPJurOeiaEkl6ib7er/Q0Jv+k3LnRbtNLzrD3OvrfjKSDHz
-         HteA==
+        Tue, 17 Jan 2023 18:26:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5935A37540
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673990578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QeSklMeMSoVeudTQC5ciHBckx9nBB5Aw6Kjov/8/jjI=;
+        b=cARcTlgnonmLOIvPea2MhBTm79ITJU43T6PYbpPJ5MffGKCnAzMEXnf6YtfERUueCauVIP
+        plo/oWigOkAyhEIQcWxOHSDyzqfoX0d7xWwMW3lcAFgu+3Jq6PkC3ggBFtClQmnymKi5Ji
+        ZilcUbGVD8YAq3i9H3F3BSAu5yhfuUU=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-204-tr67HynBMGeSIi4uQWu5Jw-1; Tue, 17 Jan 2023 16:22:57 -0500
+X-MC-Unique: tr67HynBMGeSIi4uQWu5Jw-1
+Received: by mail-io1-f71.google.com with SMTP id d24-20020a5d9bd8000000b006ee2ddf6d77so19794538ion.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xtczcpnEdrb6Lo/I50tBUUcvRCWBMIoMko6b3VfQkh8=;
-        b=NYx4CjOABkOChRufeEVNXZEe1cUkPZCrIME8i3aNKSZXM4cNMSrby7HC/DBtkW2YFU
-         g0jDEe8K45RMpqljwmSGfGUV/xgZM2O3kUP4Mr6h+sv889KjQqosS/7suR3/cj+iRVYr
-         8cl17C3aCMJhMCA0N7D46smTV+t9l1YGNEw+TBoow7k1az/ka3Bxk094qig2J9PH/Vfw
-         av901gdBUdKYwpdrSYrzl+BjixdtA1fwozvAsLsWSJAbses4P24MVhQ+gxUSAOB7Z3xA
-         c8InycSHWPQ6vPHLtYVsRigqFSFgPog4SDl7zE+zMKbdTGy4fRYE9kzO86EPHYD2Za8g
-         HSwQ==
-X-Gm-Message-State: AFqh2kp/uPL85s8DcWU05IIRycUBMWh3MiK7H2Q64gupcOBvcmkb7WHp
-        xMBc852ZAV8Oh/mpnTnRyIbX35ZCy9w1GoVOurqU5A==
-X-Google-Smtp-Source: AMrXdXtePqeFLTDxDaGD0SiAwIlsFIJGXklyX1m/MZjPOlYrdLeSS6NZFiXQQ8abRq5qEH0JCgU5ZQh27jLTDLKC0bU=
-X-Received: by 2002:a81:1d2:0:b0:433:f1c0:3f1c with SMTP id
- 201-20020a8101d2000000b00433f1c03f1cmr623569ywb.438.1673990519331; Tue, 17
- Jan 2023 13:21:59 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QeSklMeMSoVeudTQC5ciHBckx9nBB5Aw6Kjov/8/jjI=;
+        b=VnMkgzLcfVhKK7j1pnjR0Hg6PEEDeeiBn2J0BAtO7qZ2sTYACP9CI3d2UXplmPdHSy
+         OwVhYSz7ZHIujVLwfMMEQ8twPnI+0lZH/pQMqqH+XDjL87dV+IvgFvJ4ALYsqKbfIsGX
+         aTnJptyPGRNXq29v7V/b29cewqkmUbnFlsPpu4PyehVzgiLTcHTn1be0M8CCNymwMEgz
+         WpTAfNT1+dQvYLs+KqUSSf7TvEx7ApXQC1Tywmb2RgajqCKep5TdSVqqvpPoJ57GjEzM
+         K+XMX8RDCex8aXEcdbWvH2QVBE5kHNiVuxMtRRyOmj4FWr1AlEq+yiI8mhplfFTDBhL5
+         a2lA==
+X-Gm-Message-State: AFqh2kpv+iRTHwEIaRw5xUMIRxxupIjhQizG1Xh/IStUS/8zwXPa4rMa
+        X3ffT0vhlH3aRuHsdIgGA6WAtPIE0S0a6DiibYVwwULcbFN7Dqh0Rq+ePBVpbm+7BB4K9PzscFE
+        YoMMthX5uxcfpMbwDmpzE57MU
+X-Received: by 2002:a05:6e02:50e:b0:30e:dcfb:6b9d with SMTP id d14-20020a056e02050e00b0030edcfb6b9dmr3964154ils.3.1673990576371;
+        Tue, 17 Jan 2023 13:22:56 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuwYzJIi7PTPrlEprlQbMxxydrTJmjaOJ4Q9jFc1jIJdvjOhgIIkYyHBtR5D65vkYIl3IuCsw==
+X-Received: by 2002:a05:6e02:50e:b0:30e:dcfb:6b9d with SMTP id d14-20020a056e02050e00b0030edcfb6b9dmr3964131ils.3.1673990576020;
+        Tue, 17 Jan 2023 13:22:56 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id f12-20020a056e020c6c00b0030c0217dde6sm9533440ilj.0.2023.01.17.13.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 13:22:55 -0800 (PST)
+Date:   Tue, 17 Jan 2023 14:22:52 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     pbonzini@redhat.com, jgg@nvidia.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] vfio: fix potential deadlock on vfio group lock
+Message-ID: <20230117142252.70cc85c7.alex.williamson@redhat.com>
+In-Reply-To: <20230114000351.115444-1-mjrosato@linux.ibm.com>
+References: <20230114000351.115444-1-mjrosato@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-13-surenb@google.com>
- <Y8a4+bV1dYNAiUkD@dhcp22.suse.cz> <Y8a66gshQkkhC1cT@dhcp22.suse.cz>
-In-Reply-To: <Y8a66gshQkkhC1cT@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 17 Jan 2023 13:21:47 -0800
-Message-ID: <CAJuCfpF2ciMbMFgqa4GqYqg8zjpnmBoNZDG23V0+w017LXeU3w@mail.gmail.com>
-Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
- control it
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,55 +86,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 7:12 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 17-01-23 16:04:26, Michal Hocko wrote:
-> > On Mon 09-01-23 12:53:07, Suren Baghdasaryan wrote:
-> > > Introduce a per-VMA rw_semaphore to be used during page fault handling
-> > > instead of mmap_lock. Because there are cases when multiple VMAs need
-> > > to be exclusively locked during VMA tree modifications, instead of the
-> > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
-> > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
-> > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
-> > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
-> > > locked.
-> >
-> > I have to say I was struggling a bit with the above and only understood
-> > what you mean by reading the patch several times. I would phrase it like
-> > this (feel free to use if you consider this to be an improvement).
-> >
-> > Introduce a per-VMA rw_semaphore. The lock implementation relies on a
-> > per-vma and per-mm sequence counters to note exclusive locking:
-> >         - read lock - (implemented by vma_read_trylock) requires the the
-> >           vma (vm_lock_seq) and mm (mm_lock_seq) sequence counters to
-> >           differ. If they match then there must be a vma exclusive lock
-> >           held somewhere.
-> >         - read unlock - (implemented by vma_read_unlock) is a trivial
-> >           vma->lock unlock.
-> >         - write lock - (vma_write_lock) requires the mmap_lock to be
-> >           held exclusively and the current mm counter is noted to the vma
-> >           side. This will allow multiple vmas to be locked under a single
-> >           mmap_lock write lock (e.g. during vma merging). The vma counter
-> >           is modified under exclusive vma lock.
->
-> Didn't realize one more thing.
->             Unlike standard write lock this implementation allows to be
->             called multiple times under a single mmap_lock. In a sense
->             it is more of mark_vma_potentially_modified than a lock.
+On Fri, 13 Jan 2023 19:03:51 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-In the RFC it was called vma_mark_locked() originally and renames were
-discussed in the email thread ending here:
-https://lore.kernel.org/all/621612d7-c537-3971-9520-a3dec7b43cb4@suse.cz/.
-If other names are preferable I'm open to changing them.
+> Currently it is possible that the final put of a KVM reference comes from
+> vfio during its device close operation.  This occurs while the vfio group
+> lock is held; however, if the vfio device is still in the kvm device list,
+> then the following call chain could result in a deadlock:
+> 
+> kvm_put_kvm
+>  -> kvm_destroy_vm
+>   -> kvm_destroy_devices
+>    -> kvm_vfio_destroy
+>     -> kvm_vfio_file_set_kvm
+>      -> vfio_file_set_kvm
+>       -> group->group_lock/group_rwsem  
+> 
+> Avoid this scenario by having vfio core code acquire a KVM reference
+> the first time a device is opened and hold that reference until right
+> after the group lock is released after the last device is closed.
+> 
+> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
+> Reported-by: Alex Williamson <alex.williamson@redhat.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+> Changes from v3:
+> * Can't check for open_count after the group lock has been dropped because
+>   it would be possible for the count to change again once the group lock
+>   is dropped (Jason)
+>   Solve this by stashing a copy of the kvm and put_kvm while the group
+>   lock is held, nullifying the device copies of these in device_close()
+>   as soon as the open_count reaches 0, and then checking to see if the
+>   device->kvm changed before dropping the group lock.  If it changed
+>   during close, we can drop the reference using the stashed kvm and put
+>   function after dropping the group lock.
+> 
+> Changes from v2:
+> * Re-arrange vfio_kvm_set_kvm_safe error path to still trigger
+>   device_open with device->kvm=NULL (Alex)
+> * get device->dev_set->lock when checking device->open_count (Alex)
+> * but don't hold it over the kvm_put_kvm (Jason)
+> * get kvm_put symbol upfront and stash it in device until close (Jason)
+> * check CONFIG_HAVE_KVM to avoid build errors on architectures without
+>   KVM support
+> 
+> Changes from v1:
+> * Re-write using symbol get logic to get kvm ref during first device
+>   open, release the ref during device fd close after group lock is
+>   released
+> * Drop kvm get/put changes to drivers; now that vfio core holds a
+>   kvm ref until sometime after the device_close op is called, it
+>   should be fine for drivers to get and put their own references to it.
+> ---
+>  drivers/vfio/group.c     | 23 +++++++++++++--
+>  drivers/vfio/vfio.h      |  9 ++++++
+>  drivers/vfio/vfio_main.c | 61 +++++++++++++++++++++++++++++++++++++---
+>  include/linux/vfio.h     |  2 +-
+>  4 files changed, 87 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+> index bb24b2f0271e..b396c17d7390 100644
+> --- a/drivers/vfio/group.c
+> +++ b/drivers/vfio/group.c
+> @@ -165,9 +165,9 @@ static int vfio_device_group_open(struct vfio_device *device)
+>  	}
+>  
+>  	/*
+> -	 * Here we pass the KVM pointer with the group under the lock.  If the
+> -	 * device driver will use it, it must obtain a reference and release it
+> -	 * during close_device.
+> +	 * Here we pass the KVM pointer with the group under the lock.  A
+> +	 * reference will be obtained the first time the device is opened and
+> +	 * will be held until the open_count reaches 0.
+>  	 */
+>  	ret = vfio_device_open(device, device->group->iommufd,
+>  			       device->group->kvm);
+> @@ -179,9 +179,26 @@ static int vfio_device_group_open(struct vfio_device *device)
+>  
+>  void vfio_device_group_close(struct vfio_device *device)
+>  {
+> +	void (*put_kvm)(struct kvm *kvm);
+> +	struct kvm *kvm;
+> +
+>  	mutex_lock(&device->group->group_lock);
+> +	kvm = device->kvm;
+> +	put_kvm = device->put_kvm;
+>  	vfio_device_close(device, device->group->iommufd);
+> +	if (kvm == device->kvm)
+> +		kvm = NULL;
 
->
-> >         - write unlock - (vma_write_unlock_mm) is a batch release of all
-> >           vma locks held. It doesn't pair with a specific
-> >           vma_write_lock! It is done before exclusive mmap_lock is
-> >           released by incrementing mm sequence counter (mm_lock_seq).
-> >       - write downgrade - if the mmap_lock is downgraded to the read
-> >         lock all vma write locks are released as well (effectivelly
-> >         same as write unlock).
-> --
-> Michal Hocko
-> SUSE Labs
+Hmm, so we're using whether the device->kvm pointer gets cleared in
+last_close to detect whether we should put the kvm reference.  That's a
+bit obscure.  Our get and put is also asymmetric.
+
+Did we decide that we couldn't do this via a schedule_work() from the
+last_close function, ie. implementing our own version of an async put?
+It seems like that potentially has a cleaner implementation, symmetric
+call points, handling all the storing and clearing of kvm related
+pointers within the get/put wrappers, passing only a vfio_device to the
+put wrapper, using the "vfio_device_" prefix for both.  Potentially
+we'd just want an unconditional flush outside of lock here for
+deterministic release.
+
+What's the downside?  Thanks,
+
+Alex
+
+>  	mutex_unlock(&device->group->group_lock);
+> +
+> +	/*
+> +	 * The last kvm reference will trigger kvm_destroy_vm, which
+> can in
+> +	 * turn re-enter vfio and attempt to acquire the group lock.
+>  Therefore
+> +	 * we get a copy of the kvm pointer and the put function
+> under the
+> +	 * group lock but wait to put that reference until after
+> releasing the
+> +	 * lock.
+> +	 */
+> +	if (kvm)
+> +		vfio_kvm_put_kvm(put_kvm, kvm);
+>  }
+>  
+>  static struct file *vfio_device_open_file(struct vfio_device *device)
+> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+> index f8219a438bfb..08a5a23d6fef 100644
+> --- a/drivers/vfio/vfio.h
+> +++ b/drivers/vfio/vfio.h
+> @@ -251,4 +251,13 @@ extern bool vfio_noiommu __read_mostly;
+>  enum { vfio_noiommu = false };
+>  #endif
+>  
+> +#ifdef CONFIG_HAVE_KVM
+> +void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm), struct kvm *kvm);
+> +#else
+> +static inline void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm),
+> +				    struct kvm *kvm)
+> +{
+> +}
+> +#endif
+> +
+>  #endif
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 5177bb061b17..c6bb07af46b8 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -16,6 +16,9 @@
+>  #include <linux/fs.h>
+>  #include <linux/idr.h>
+>  #include <linux/iommu.h>
+> +#ifdef CONFIG_HAVE_KVM
+> +#include <linux/kvm_host.h>
+> +#endif
+>  #include <linux/list.h>
+>  #include <linux/miscdevice.h>
+>  #include <linux/module.h>
+> @@ -344,6 +347,49 @@ static bool vfio_assert_device_open(struct
+> vfio_device *device) return
+> !WARN_ON_ONCE(!READ_ONCE(device->open_count)); }
+>  
+> +#ifdef CONFIG_HAVE_KVM
+> +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct
+> kvm *kvm) +{
+> +	void (*pfn)(struct kvm *kvm);
+> +	bool (*fn)(struct kvm *kvm);
+> +	bool ret;
+> +
+> +	pfn = symbol_get(kvm_put_kvm);
+> +	if (WARN_ON(!pfn))
+> +		return false;
+> +
+> +	fn = symbol_get(kvm_get_kvm_safe);
+> +	if (WARN_ON(!fn)) {
+> +		symbol_put(kvm_put_kvm);
+> +		return false;
+> +	}
+> +
+> +	ret = fn(kvm);
+> +	if (ret)
+> +		device->put_kvm = pfn;
+> +	else
+> +		symbol_put(kvm_put_kvm);
+> +
+> +	symbol_put(kvm_get_kvm_safe);
+> +
+> +	return ret;
+> +}
+> +
+> +void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm), struct kvm *kvm)
+> +{
+> +	if (WARN_ON(!put))
+> +		return;
+> +
+> +	put(kvm);
+> +	symbol_put(kvm_put_kvm);
+> +}
+> +#else
+> +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct
+> kvm *kvm) +{
+> +	return false;
+> +}
+> +#endif
+> +
+>  static int vfio_device_first_open(struct vfio_device *device,
+>  				  struct iommufd_ctx *iommufd,
+> struct kvm *kvm) {
+> @@ -361,16 +407,22 @@ static int vfio_device_first_open(struct
+> vfio_device *device, if (ret)
+>  		goto err_module_put;
+>  
+> -	device->kvm = kvm;
+> +	if (kvm && vfio_kvm_get_kvm_safe(device, kvm))
+> +		device->kvm = kvm;
+> +
+>  	if (device->ops->open_device) {
+>  		ret = device->ops->open_device(device);
+>  		if (ret)
+> -			goto err_unuse_iommu;
+> +			goto err_put_kvm;
+>  	}
+>  	return 0;
+>  
+> -err_unuse_iommu:
+> -	device->kvm = NULL;
+> +err_put_kvm:
+> +	if (device->kvm) {
+> +		vfio_kvm_put_kvm(device->put_kvm, device->kvm);
+> +		device->put_kvm = NULL;
+> +		device->kvm = NULL;
+> +	}
+>  	if (iommufd)
+>  		vfio_iommufd_unbind(device);
+>  	else
+> @@ -388,6 +440,7 @@ static void vfio_device_last_close(struct
+> vfio_device *device, if (device->ops->close_device)
+>  		device->ops->close_device(device);
+>  	device->kvm = NULL;
+> +	device->put_kvm = NULL;
+>  	if (iommufd)
+>  		vfio_iommufd_unbind(device);
+>  	else
+> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+> index 35be78e9ae57..87ff862ff555 100644
+> --- a/include/linux/vfio.h
+> +++ b/include/linux/vfio.h
+> @@ -46,7 +46,6 @@ struct vfio_device {
+>  	struct vfio_device_set *dev_set;
+>  	struct list_head dev_set_list;
+>  	unsigned int migration_flags;
+> -	/* Driver must reference the kvm during open_device or never
+> touch it */ struct kvm *kvm;
+>  
+>  	/* Members below here are private, not for driver use */
+> @@ -58,6 +57,7 @@ struct vfio_device {
+>  	struct list_head group_next;
+>  	struct list_head iommu_entry;
+>  	struct iommufd_access *iommufd_access;
+> +	void (*put_kvm)(struct kvm *kvm);
+>  #if IS_ENABLED(CONFIG_IOMMUFD)
+>  	struct iommufd_device *iommufd_device;
+>  	struct iommufd_ctx *iommufd_ictx;
+
