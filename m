@@ -2,145 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83EA66E6A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0462E66E6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjAQTM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S232781AbjAQTNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjAQTKT (ORCPT
+        with ESMTP id S230380AbjAQTK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:10:19 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2A5C0D9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:24:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XSVCY3skPmpUfyMO6XuiNShJAohbJi5MJ+0Tl/OQUuk=; b=mEluEUKEDZTyyDRpL261mqgUP9
-        +oWDZVX/939c909IkEujz+5khCUlk0qOmmCBOOt8jtKddSVusCBFb9ScfvddAieediYlWLsZGvbPU
-        gGGXDadE03QIEDHX5V7yGFQsW7tadIpolftpzK+aHNUrxUhONvsFXMWrupAS+vHfu2z7nIdDpPLnr
-        sUr6vc584V1N2NE72pohE5J1oRqScKE6VlFtORFuIFpAcUiPgUB+duQxe9dZ7JbgOqu24MFvdIZpo
-        06YDcK8usO6+UsjwIgUQzhshHBEVMboByXpfHEdkep+Eov/2x34RXGz4SHfdJiNQc/QTDhwNOULG5
-        FkfgV8aQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHqcQ-009uA2-Oe; Tue, 17 Jan 2023 18:23:34 +0000
-Date:   Tue, 17 Jan 2023 18:23:34 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
-Message-ID: <Y8bnpqw134CHenz/@casper.infradead.org>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-42-surenb@google.com>
- <Y8UxnqPCTLbbD+2F@localhost>
- <Y8YgomKF189vmgLz@casper.infradead.org>
- <CAJuCfpECJhUu3fvWbBzmAkEA3+1LTkKqJOVadQB_-_mEHME=xg@mail.gmail.com>
- <Y8Y2JErbNQOhL8ee@casper.infradead.org>
- <CAJuCfpEx6FJpm0Js=cvcHw6mY3izPfoskxseSMyxFAxLX97X_w@mail.gmail.com>
+        Tue, 17 Jan 2023 14:10:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BA4F867;
+        Tue, 17 Jan 2023 10:24:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93EBDB819A2;
+        Tue, 17 Jan 2023 18:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B07EC433EF;
+        Tue, 17 Jan 2023 18:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673979872;
+        bh=clxRB/jlTPmQ5e3DVafN4xxTKnzEZ2vbVocmLaOKTgo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E4Fy59dJxkITaWtUTYascbFRP5Dr3yMWTEpf3KwBf+tBy9Pm0/LWBnkfSJptaYfxH
+         FAc21jmk3/4z9RZlszT4oIY/NkmxTs3G+9WDn1mdbXDdgtTG3FyfhQNMKgnrXVWMvF
+         f+R+WmeyFbi7v50LErlSqEDksuUgBWmgI3Ko/E+Bmr4effsIxzqUlu52nr7xxquxgM
+         NVjIV5jSyS6W9D5n26AoZJWpBXjDbFZ+C7wvlGtaYaSlkw9Lr3GRR3HISx5fiAqyNn
+         HF44NLVueARpGfZcVcGFoooXC35SXFCT3ZFbqozMREQaxs/OvGgQVfzV6yrE0Z78He
+         8dw2lTGw2SFSA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     abel.vesa@linaro.org, robh+dt@kernel.org, agross@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        johan@kernel.org
+Subject: Re: (subset) [PATCH v3 1/2] arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes
+Date:   Tue, 17 Jan 2023 12:24:17 -0600
+Message-Id: <167397986258.2832389.3518995343678702175.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230116141000.1831351-1-abel.vesa@linaro.org>
+References: <20230116141000.1831351-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpEx6FJpm0Js=cvcHw6mY3izPfoskxseSMyxFAxLX97X_w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 09:58:35PM -0800, Suren Baghdasaryan wrote:
-> On Mon, Jan 16, 2023 at 9:46 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Mon, Jan 16, 2023 at 08:34:36PM -0800, Suren Baghdasaryan wrote:
-> > > On Mon, Jan 16, 2023 at 8:14 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Mon, Jan 16, 2023 at 11:14:38AM +0000, Hyeonggon Yoo wrote:
-> > > > > > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
-> > > > > >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
-> > > > > >  {
-> > > > > >     /* Check before locking. A race might cause false locked result. */
-> > > > > > -   if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
-> > > > > > +   if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
-> > > > > >             return false;
-> > > > > >
-> > > > > > -   if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
-> > > > > > +   if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
-> > > > > >             return false;
-> > > > > >
-> > > > > > +   /* If atomic_t overflows, restore and fail to lock. */
-> > > > > > +   if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
-> > > > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
-> > > > > > +           return false;
-> > > > > > +   }
-> > > > > > +
-> > > > > >     /*
-> > > > > >      * Overflow might produce false locked result.
-> > > > > >      * False unlocked result is impossible because we modify and check
-> > > > > >      * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
-> > > > > >      * modification invalidates all existing locks.
-> > > > > >      */
-> > > > > > -   if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
-> > > > > > -           up_read(&vma->vm_lock->lock);
-> > > > > > +   if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
-> > > > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
-> > > > > >             return false;
-> > > > > >     }
-> > > > >
-> > > > > With this change readers can cause writers to starve.
-> > > > > What about checking waitqueue_active() before or after increasing
-> > > > > vma->vm_lock->count?
-> > > >
-> > > > I don't understand how readers can starve a writer.  Readers do
-> > > > atomic_inc_unless_negative() so a writer can always force readers
-> > > > to fail.
-> > >
-> > > I think the point here was that if page faults keep occuring and they
-> > > prevent vm_lock->count from reaching 0 then a writer will be blocked
-> > > and there is no reader throttling mechanism (no max time that writer
-> > > will be waiting).
-> >
-> > Perhaps I misunderstood your description; I thought that a _waiting_
-> > writer would make the count negative, not a successfully acquiring
-> > writer.
+On Mon, 16 Jan 2023 16:09:59 +0200, Abel Vesa wrote:
+> Add UFS host controller and PHY nodes.
 > 
-> A waiting writer does not modify the counter, instead it's placed on
-> the wait queue and the last reader which sets the count to 0 while
-> releasing its read lock will wake it up. Once the writer is woken it
-> will try to set the count to negative and if successful will own the
-> lock, otherwise it goes back to sleep.
+> 
 
-Then yes, that's a starvable lock.  Preventing starvation on the mmap
-sem was the original motivation for making rwsems non-starvable, so
-changing that behaviour now seems like a bad idea.  For efficiency, I'd
-suggest that a waiting writer set the top bit of the counter.  That way,
-all new readers will back off without needing to check a second variable
-and old readers will know that they *may* need to do the wakeup when
-atomic_sub_return_release() is negative.
+Applied, thanks!
 
-(rwsem.c has a more complex bitfield, but I don't think we need to go
-that far; the important point is that the waiting writer indicates its
-presence in the count field so that readers can modify their behaviour)
+[1/2] arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes
+      commit: 35cf1aaab169e0fd9c0ba5e0c0a5436ecb8081f0
+[2/2] arm64: dts: qcom: sm8550-mtp: Add UFS host controller and PHY node
+      commit: 6fa1a0f8cbfc3f4197434f63425853ac3bc16f68
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
