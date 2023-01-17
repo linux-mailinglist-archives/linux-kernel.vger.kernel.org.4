@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057A866E5CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B058B66E5CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjAQSQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S231246AbjAQSQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbjAQSOE (ORCPT
+        with ESMTP id S233134AbjAQSOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 13:14:04 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3105959E42;
-        Tue, 17 Jan 2023 09:55:00 -0800 (PST)
-Date:   Tue, 17 Jan 2023 17:54:56 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B0D4F84D;
+        Tue, 17 Jan 2023 09:54:59 -0800 (PST)
+Date:   Tue, 17 Jan 2023 17:54:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673978097;
+        s=2020; t=1673978098;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PQcgs/gZzBl+B7TsSGFyPNXbOKfIcXW+ewk0g5LuBAs=;
-        b=FebkwlXyNt/QvcRlqP2e2ODF801LwQvy8pLHm8+5rYd+GUBTR8EpwhgYXkk6i1gkoj20U2
-        JwmSwDQW8hJgeFtgOSmbrcRWmKc4f9Tscn/RQpPjL0YzK0j4aM5LvSwtVGG0Dlweq8Sj3g
-        eCNtLWKzpZJsxichtENTxeJAmEIcayVjnfaBON5o6ysUiVb/x2eUrQayS2YOUHoNxNntPi
-        f3JS7d7/7+TmzujPzCXVvwd/cEWyQmLJiYn6/3tDGF//2bzVrJP6PkDKOLOCD7LuWab3uS
-        0cDjwRmxQqQpd+uPpCHz6IdwdZk2sqbYUTfRtYZnRJaaLuLYqB8vc5+nbKSuYw==
+        bh=QtHAhQr4A/WwrJR2xwohwLM8Ekb9akA5k1WMibZ9mvk=;
+        b=CzgiQAutbbkGi9xTFOZ6FIguYiLiaSdKjcb9hvzJVOgoczp7CYJFPs45miUsHBska9cAvQ
+        S6QlYGktEmZDrEmwtMUUqnckL6f3spj2pinJpAa3RyiHw2fpyRFwWF0IV29wvzrjsA5Ge1
+        cuJ/TEJGc3mhicUDxnfvnq0RQPt0YyaycABZNZqcuZC4tCXySwESgQPTmoo2hNuUvV1JJY
+        xH4oxh6MQ3ug9BJpIMSWCYSq7BvOr8glwI4tKKYGDyzbfW8BCRtIfY2L1ka+bCBURKbX0x
+        hU/bfJCtflxCtL4EvBy5wvQjOd54dt3iOuMwbxwhWg/l3WKdGaE2rSWWHMg8Gg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673978097;
+        s=2020e; t=1673978098;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PQcgs/gZzBl+B7TsSGFyPNXbOKfIcXW+ewk0g5LuBAs=;
-        b=Pe4ejAGe7ctTLneORQMPSIfvAlhqga7TqaZ+dLqhAp/T8W2t3po691JVAXtYHUUrtJsWuy
-        8gO1XNYGsO9YZ9Cw==
+        bh=QtHAhQr4A/WwrJR2xwohwLM8Ekb9akA5k1WMibZ9mvk=;
+        b=h71hnb21TlTIByfU6OkO0RYn2PPy3I/7Z6MJA5jd/ZNmH8/MoTSEQHWJiCWN1Z658FUr1T
+        C1ehvV+zDZ5GtbAg==
 From:   "tip-bot2 for Ming Lei" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] blk-mq: Build default queue map via group_cpus_evenly()
+Subject: [tip: irq/core] genirq/affinity: Don't pass irq_affinity_desc array
+ to irq_build_affinity_masks
 Cc:     Ming Lei <ming.lei@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Christoph Hellwig <hch@lst.de>,
         John Garry <john.g.garry@oracle.com>,
         Jens Axboe <axboe@kernel.dk>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221227022905.352674-7-ming.lei@redhat.com>
-References: <20221227022905.352674-7-ming.lei@redhat.com>
+In-Reply-To: <20221227022905.352674-4-ming.lei@redhat.com>
+References: <20221227022905.352674-4-ming.lei@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167397809674.4906.6016765295947842293.tip-bot2@tip-bot2>
+Message-ID: <167397809771.4906.11909600068519788572.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,132 +70,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     6a6dcae8f486c3f3298d0767d34505121c7b0b81
-Gitweb:        https://git.kernel.org/tip/6a6dcae8f486c3f3298d0767d34505121c7b0b81
+Commit-ID:     e7bdd7f0cbd1c001bb9b4d3313edc5ee094bc3f8
+Gitweb:        https://git.kernel.org/tip/e7bdd7f0cbd1c001bb9b4d3313edc5ee094bc3f8
 Author:        Ming Lei <ming.lei@redhat.com>
-AuthorDate:    Tue, 27 Dec 2022 10:29:05 +08:00
+AuthorDate:    Tue, 27 Dec 2022 10:29:02 +08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 17 Jan 2023 18:50:06 +01:00
 
-blk-mq: Build default queue map via group_cpus_evenly()
+genirq/affinity: Don't pass irq_affinity_desc array to irq_build_affinity_masks
 
-The default queue mapping builder of blk_mq_map_queues doesn't take NUMA
-topo into account, so the built mapping is pretty bad, since CPUs
-belonging to different NUMA node are assigned to same queue. It is
-observed that IOPS drops by ~30% when running two jobs on same hctx
-of null_blk from two CPUs belonging to two NUMA nodes compared with
-from same NUMA node.
+Prepare for abstracting irq_build_affinity_masks() into a public function
+for assigning all CPUs evenly into several groups.
 
-Address the issue by reusing group_cpus_evenly() for building queue mapping
-since group_cpus_evenly() does group cpus according to CPU/NUMA locality.
+Don't pass irq_affinity_desc array to irq_build_affinity_masks, instead
+return a cpumask array by storing each assigned group into one element of
+the array.
 
-Also performance data becomes more stable with this given correct queue
-mapping is applied wrt. numa locality viewpoint, for example, on one two
-nodes arm64 machine with 160 cpus, node 0(cpu 0~79), node 1(cpu 80~159):
-
-1) modprobe null_blk nr_devices=1 submit_queues=2
-
-2) run 'fio(t/io_uring -p 0 -n 4 -r 20 /dev/nullb0)', and observe that
-IOPS becomes much stable on multiple tests:
-
- - unpatched: IOPS is 2.5M ~ 4.5M
- - patched:   IOPS is 4.3M ~ 5.0M
-
-Lots of drivers may benefit from the change, such as nvme pci poll,
-nvme tcp, ...
+This allows to provide a generic interface for grouping all CPUs evenly
+from a NUMA and CPU locality viewpoint, and the cost is one extra allocation
+in irq_build_affinity_masks(), which should be fine since it is done via
+GFP_KERNEL and irq_build_affinity_masks() is a slow path anyway.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: John Garry <john.g.garry@oracle.com>
 Reviewed-by: Jens Axboe <axboe@kernel.dk>                                                                                                                                                                                                    
-Link: https://lore.kernel.org/r/20221227022905.352674-7-ming.lei@redhat.com
+Link: https://lore.kernel.org/r/20221227022905.352674-4-ming.lei@redhat.com
 
 ---
- block/blk-mq-cpumap.c | 63 ++++++++----------------------------------
- 1 file changed, 13 insertions(+), 50 deletions(-)
+ kernel/irq/affinity.c | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/block/blk-mq-cpumap.c b/block/blk-mq-cpumap.c
-index 9c2fce1..0c612c1 100644
---- a/block/blk-mq-cpumap.c
-+++ b/block/blk-mq-cpumap.c
-@@ -10,66 +10,29 @@
- #include <linux/mm.h>
- #include <linux/smp.h>
- #include <linux/cpu.h>
-+#include <linux/group_cpus.h>
- 
- #include <linux/blk-mq.h>
- #include "blk.h"
- #include "blk-mq.h"
- 
--static int queue_index(struct blk_mq_queue_map *qmap,
--		       unsigned int nr_queues, const int q)
--{
--	return qmap->queue_offset + (q % nr_queues);
--}
--
--static int get_first_sibling(unsigned int cpu)
--{
--	unsigned int ret;
--
--	ret = cpumask_first(topology_sibling_cpumask(cpu));
--	if (ret < nr_cpu_ids)
--		return ret;
--
--	return cpu;
--}
--
- void blk_mq_map_queues(struct blk_mq_queue_map *qmap)
+diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
+index da6379c..00bba10 100644
+--- a/kernel/irq/affinity.c
++++ b/kernel/irq/affinity.c
+@@ -249,7 +249,7 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+ 				      cpumask_var_t *node_to_cpumask,
+ 				      const struct cpumask *cpu_mask,
+ 				      struct cpumask *nmsk,
+-				      struct irq_affinity_desc *masks)
++				      struct cpumask *masks)
  {
--	unsigned int *map = qmap->mq_map;
--	unsigned int nr_queues = qmap->nr_queues;
--	unsigned int cpu, first_sibling, q = 0;
--
--	for_each_possible_cpu(cpu)
--		map[cpu] = -1;
--
--	/*
--	 * Spread queues among present CPUs first for minimizing
--	 * count of dead queues which are mapped by all un-present CPUs
--	 */
--	for_each_present_cpu(cpu) {
--		if (q >= nr_queues)
--			break;
--		map[cpu] = queue_index(qmap, nr_queues, q++);
-+	const struct cpumask *masks;
-+	unsigned int queue, cpu;
+ 	unsigned int i, n, nodes, cpus_per_vec, extra_vecs, done = 0;
+ 	unsigned int last_affv = numvecs;
+@@ -270,7 +270,7 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+ 		for_each_node_mask(n, nodemsk) {
+ 			/* Ensure that only CPUs which are in both masks are set */
+ 			cpumask_and(nmsk, cpu_mask, node_to_cpumask[n]);
+-			cpumask_or(&masks[curvec].mask, &masks[curvec].mask, nmsk);
++			cpumask_or(&masks[curvec], &masks[curvec], nmsk);
+ 			if (++curvec == last_affv)
+ 				curvec = 0;
+ 		}
+@@ -321,7 +321,7 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+ 			 */
+ 			if (curvec >= last_affv)
+ 				curvec = 0;
+-			irq_spread_init_one(&masks[curvec].mask, nmsk,
++			irq_spread_init_one(&masks[curvec], nmsk,
+ 						cpus_per_vec);
+ 		}
+ 		done += nv->nvectors;
+@@ -335,16 +335,16 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+  *	1) spread present CPU on these vectors
+  *	2) spread other possible CPUs on these vectors
+  */
+-static int irq_build_affinity_masks(unsigned int numvecs,
+-				    struct irq_affinity_desc *masks)
++static struct cpumask *irq_build_affinity_masks(unsigned int numvecs)
+ {
+ 	unsigned int curvec = 0, nr_present = 0, nr_others = 0;
+ 	cpumask_var_t *node_to_cpumask;
+ 	cpumask_var_t nmsk, npresmsk;
+ 	int ret = -ENOMEM;
++	struct cpumask *masks = NULL;
+ 
+ 	if (!zalloc_cpumask_var(&nmsk, GFP_KERNEL))
+-		return ret;
++		return NULL;
+ 
+ 	if (!zalloc_cpumask_var(&npresmsk, GFP_KERNEL))
+ 		goto fail_nmsk;
+@@ -353,6 +353,10 @@ static int irq_build_affinity_masks(unsigned int numvecs,
+ 	if (!node_to_cpumask)
+ 		goto fail_npresmsk;
+ 
++	masks = kcalloc(numvecs, sizeof(*masks), GFP_KERNEL);
++	if (!masks)
++		goto fail_node_to_cpumask;
 +
-+	masks = group_cpus_evenly(qmap->nr_queues);
-+	if (!masks) {
-+		for_each_possible_cpu(cpu)
-+			qmap->mq_map[cpu] = qmap->queue_offset;
-+		return;
- 	}
+ 	/* Stabilize the cpumasks */
+ 	cpus_read_lock();
+ 	build_node_to_cpumask(node_to_cpumask);
+@@ -386,6 +390,7 @@ static int irq_build_affinity_masks(unsigned int numvecs,
+ 	if (ret >= 0)
+ 		WARN_ON(nr_present + nr_others < numvecs);
  
--	for_each_possible_cpu(cpu) {
--		if (map[cpu] != -1)
--			continue;
--		/*
--		 * First do sequential mapping between CPUs and queues.
--		 * In case we still have CPUs to map, and we have some number of
--		 * threads per cores then map sibling threads to the same queue
--		 * for performance optimizations.
--		 */
--		if (q < nr_queues) {
--			map[cpu] = queue_index(qmap, nr_queues, q++);
--		} else {
--			first_sibling = get_first_sibling(cpu);
--			if (first_sibling == cpu)
--				map[cpu] = queue_index(qmap, nr_queues, q++);
--			else
--				map[cpu] = map[first_sibling];
--		}
-+	for (queue = 0; queue < qmap->nr_queues; queue++) {
-+		for_each_cpu(cpu, &masks[queue])
-+			qmap->mq_map[cpu] = qmap->queue_offset + queue;
- 	}
-+	kfree(masks);
++ fail_node_to_cpumask:
+ 	free_node_to_cpumask(node_to_cpumask);
+ 
+  fail_npresmsk:
+@@ -393,7 +398,11 @@ static int irq_build_affinity_masks(unsigned int numvecs,
+ 
+  fail_nmsk:
+ 	free_cpumask_var(nmsk);
+-	return ret < 0 ? ret : 0;
++	if (ret < 0) {
++		kfree(masks);
++		return NULL;
++	}
++	return masks;
  }
- EXPORT_SYMBOL_GPL(blk_mq_map_queues);
  
+ static void default_calc_sets(struct irq_affinity *affd, unsigned int affvecs)
+@@ -457,13 +466,18 @@ irq_create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
+ 	 */
+ 	for (i = 0, usedvecs = 0; i < affd->nr_sets; i++) {
+ 		unsigned int this_vecs = affd->set_size[i];
+-		int ret;
++		int j;
++		struct cpumask *result = irq_build_affinity_masks(this_vecs);
+ 
+-		ret = irq_build_affinity_masks(this_vecs, &masks[curvec]);
+-		if (ret) {
++		if (!result) {
+ 			kfree(masks);
+ 			return NULL;
+ 		}
++
++		for (j = 0; j < this_vecs; j++)
++			cpumask_copy(&masks[curvec + j].mask, &result[j]);
++		kfree(result);
++
+ 		curvec += this_vecs;
+ 		usedvecs += this_vecs;
+ 	}
