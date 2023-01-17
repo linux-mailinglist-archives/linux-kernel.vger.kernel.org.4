@@ -2,214 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C97966DC88
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957F266DCAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236440AbjAQLei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 06:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S236290AbjAQLkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbjAQLeK (ORCPT
+        with ESMTP id S236374AbjAQLjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:34:10 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2045.outbound.protection.outlook.com [40.107.95.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AAF2DE6C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:34:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T7rl8yJrlUZfqTCLPL7oZ71jq3+qJO2SlcSoZkVp4Rkc6rjHR0/RV0rYJtRmGwhNZCEjud3c5OCPLUyBooWfXB3B8rgq0dnwxTh6aM9Uu3+SJRa8T2ebUTg1NkjcvhPUWPdQvYF3HYsqTvLKb5YDdBm4pTKTNRI7B4sjlGOrXX88mM5+k7xyx2WEmD8M+jCD24I6SBobLb0PKFFQXpAiJx8F5zCwuDtK/e4AlCLJx3xgDyB3XX5NE+tVG/bBJhroD8Gs3guwDBAMQqXOjcUayASJfbdQjCBMISLQO9d6+1B3XxmAQjfrqRBTNb9DMshJlKfQ/GHoMltp2iUrFpBYwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fWvw/aiTzrxFNDhvMOHoAZGdthNleXvtCXLRezkknhQ=;
- b=F4OHiOlmfH/TGxHqN+bQx2WvRvPd15g/QOdKnD8vdi1Z3hntNIK/kkusEBAirU9HtRY48q5kMMnOAkriWJfvwyQfeZokLaLiL8ey4Rt8mO1vHDvqlagO7OyFeLjzVcaPydVrknQT7UJn1ComS1YS7ZzPMoDfzVTJi4xnxUJAqFjsvJ5LZM5tYIYyV2nJQBKs77QAp6jH+EwuQJtU5VHQBHoVuQAPVdd7n5xAoXDBEsE4x0rlo2cQLS9qNd9U2J2ZJTyzsjfGN/pOgeDlLJzzslR5T6SW8WNLvJzrOsPTbDccYhSNJ30PceR+LUB3USuyScmPWAykKRCbYUjVlddbzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fWvw/aiTzrxFNDhvMOHoAZGdthNleXvtCXLRezkknhQ=;
- b=UjE5oOe9AF9984gNwhP9OurK5L54bKkQfSa/XsG9beOyTlO01R7SFVh9XnQlSYYv4EJIjQQaUOaFOL+L2/+mrbx/R+tkZWvkw64Fms//0Y/Nbtc0gt8hD3wsMODyhDrFQfzFdA1vPdLe8F6vQ2/1YlriukFCFJudj50fl6UGooE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by MN0PR12MB6080.namprd12.prod.outlook.com (2603:10b6:208:3c8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 17 Jan
- 2023 11:34:00 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866%7]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 11:34:00 +0000
-Message-ID: <646c7286-79ec-db5e-cceb-4a910292f3e9@amd.com>
-Date:   Tue, 17 Jan 2023 17:07:09 +0530
+        Tue, 17 Jan 2023 06:39:35 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B8930290
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:39:29 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b5so9096623wrn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vF3QjaM7bROJjvJo2a/mn+CmXlw/84X7LZJ02v/ABAU=;
+        b=zLKBoIKI1X1tbKr4R/cZoQ7RMIGw8APCZhFTXrfz4YG7Gl5o99Y2nFQ6WoJk7DMG/3
+         yzzPBZIZ9K9Fuw2Ba+q7I3dUgVF8u14QN683j5+7pd3L1DnI4tNLzyF+Rq/viGT8TwBr
+         w8+2O3c+A9vkyf4Xh3VbrlCLVsDkDky8G6e1EtamptWw/sOAL/7jK3cxF20PpZQOrM+i
+         I0UibyUBGThQVEWaCHoOGrcuKXPzUSCaRTz1lfZdcWdUjCP43hjGHM01og21Q597wW9h
+         CCWv/qzbSM3Y+BflWlJgMyAFDUYzZYscvA9hEDk2hCmVow5TiANBZ28vQn1ozYo+ji8H
+         BMdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vF3QjaM7bROJjvJo2a/mn+CmXlw/84X7LZJ02v/ABAU=;
+        b=8NqHXHHJdyj0KvBHLcKlRHnp/OvT1M3QqwrOixJ1ep3nzlk8d9yG3XcY2clYxjnUYi
+         Hvi0mlqTEKygiyqrPBRup854mo6K8KYbNNYjnCxxQXvJuAp8yJ8VByEYk1uFqpxg+rDt
+         nFvF9EXUIulRIA/ZL0x/Dm7rp654QtWOgsW0dRAVT0WSQrJbuaayw5wVGGgrdtcpdo49
+         zdCrMkSoYSVWtkuQjmsP8Mb8nkamDJJ8DAji42SIJy4rQs6yZUPG45bm3FvJKVAGsSSV
+         7x+3zJr67oD0JiScpZMrRWi92iVFu+HN9RwPMyTwY51198vPMFhQsPkb2BeAItVTVk1a
+         mB+g==
+X-Gm-Message-State: AFqh2krLYKrmuQqK33GdJ8QlIi5SxIKOlM4MlzEZNkbS5P4DTidbWaa1
+        16DQD896HkvRwb5oUxC8Vizitw==
+X-Google-Smtp-Source: AMrXdXuCkpdLgZ/1mIa89YtmyXjuzTAlZJrLeKfPOg30l2hHTbnVlkY+nMfI32aoJYuG8fprjU9EAg==
+X-Received: by 2002:adf:f78d:0:b0:2bd:bed5:9207 with SMTP id q13-20020adff78d000000b002bdbed59207mr2498792wrp.12.1673955567741;
+        Tue, 17 Jan 2023 03:39:27 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u24-20020adfa198000000b002bc84c55758sm24641864wru.63.2023.01.17.03.39.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 03:39:26 -0800 (PST)
+Message-ID: <9c11bf53-6639-2cbe-0d27-ce1ea154f576@linaro.org>
+Date:   Tue, 17 Jan 2023 12:39:24 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 02/19] soundwire: amd: Add support for AMD Master driver
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 01/19] dt-bindings: ARM: MediaTek: Add new MT8188 clock
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org, vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-3-Vijendar.Mukunda@amd.com>
- <991ff630-17a7-eef3-1436-e4a905fe0541@linux.intel.com>
- <78741dee-9257-77c2-8950-0519ccb462e6@amd.com>
- <420258d4-1f66-5288-f421-b26b2a2a35ea@linux.intel.com>
- <dbf20726-3900-9bff-7a72-14608702f636@amd.com>
- <d5638ec8-3fa4-4643-9740-ef87a4ba5833@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <d5638ec8-3fa4-4643-9740-ef87a4ba5833@linux.intel.com>
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+References: <20230109124516.31425-1-Garmin.Chang@mediatek.com>
+ <20230109124516.31425-2-Garmin.Chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230109124516.31425-2-Garmin.Chang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0056.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:22::31) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|MN0PR12MB6080:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5f48c46-321e-418e-308e-08daf87eba5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iMVEOcJayxECfPIPRKNq+qAd+ylSHDIwP9wHQalVQeGNyhcLYYHEOhq5No9OX2oKWIz4X8+ODkSlPHGP1PxgZFaz1/p72YQdhwLZeBSRb2FOdpKFs85SAeV90sWVqIRRBfaG89pxsgjS1i+7el1Z34DnWccIhKOMWKGaURlehXdU6ZkYAv4KICxQYVYcpCH+O7JJg8tbpcYJdSQ+/LYkOKqO64s0tb1FWRd1lBYzU5uShcL60ovbMPcFEzXM5N4e/4BN9WyOqOoap8fnb1RS9FxlK7WhhZii8UuHYxv5EVMWJUVbkBE+/Wr5lG6TfWBFAmpINaU8ceUNStHOqRLznEWv/dhT2Z8sl3cBw9F448oBOAdpelBSLaZq3mUs8qCfRHwLLO9GXJqq452+wtxRHin57UoMyle2V2/amNvioDkhDZqbiidsuht/5ljnh/cIrlHCbsCPyexB5IONyuIGxA3LBL0llEH+1Fu1fmAHnNLS7neBLiSJ5yCyInHkv0Pl5dg5SjBATQzrtBh5kalhXIw3gOtGzcfQNlY+byNYKLrsXQzxowszXl/+8M7AaVY+u1IErOvv1CZQ7DBOmKCdcUZWNa2x/3TwIRGsFDUap7dvvuNJRTWqkIIL0soGOZRHIAdDskj7fj43gTH8T6k9Va4LbwyLPKaelfefbWGSLN0IQ0N9hBnPivtMgQ3Qrn5H+lEgA3a0m+b6gLNlKJB0eG08BgRlCuXK74CIN3o4EKw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(376002)(366004)(396003)(451199015)(6506007)(31686004)(2906002)(66476007)(66946007)(4326008)(8676002)(31696002)(26005)(41300700001)(66556008)(8936002)(38100700002)(36756003)(6512007)(186003)(54906003)(6486002)(478600001)(86362001)(5660300002)(53546011)(316002)(83380400001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bm4vZEtaRWZ6TUQ4SDNDSm5CZnM1bFRLbEt3MHlTeVdBV3JmbjJkTVE4b1du?=
- =?utf-8?B?MEtxek5mcHVacUhiNDQ4MWYwZzl3eXFXbkN4QXNTQjg0eGMyTmVYWEhkbDdo?=
- =?utf-8?B?bmJ3bEpRYjI4N2dxNkRXdEgxWjJCWTR4RnNTcFlIMGNYUzJjb1ROQUsrTHhP?=
- =?utf-8?B?L2hvNy9lR1UzakpqZXFXVC9jVFFQS3pwbGZhMVk5c2xZQnBCWXBCNmxOYm1i?=
- =?utf-8?B?c1Q4YzlGS1VuMVpPaXVISFBPa3pJdzZLQ01DT3RadGpPQzZzTW5pQk9jZm5I?=
- =?utf-8?B?VzRrVlJEdUtRdXJLNWdUUVdjWVBWWUlkVkJ2U1BMWTRPb25mdnhtTXBqVW04?=
- =?utf-8?B?bVY4dlh6c2NEMUpaSDN4TUZUK0hQTHRDclVjQkRUMkFxUFBpWnV6bWZPQ2FC?=
- =?utf-8?B?STE2OWQ4RVNGQlNNditwMVhxZWVsSmZBOXpodnVTTnZuV0VhWmFuSTNiQ2dF?=
- =?utf-8?B?K0VIN25jVEc1RWk1bXlrandBc1lpTUFVRytJZE1rQ1lKdm5nRmRkaXJMcWpt?=
- =?utf-8?B?Um9SdWpjdjRBcWVKRnMxa21XM1dsUWEwNW5jdjc5RVpqU0xRbzdCMnhUR2p3?=
- =?utf-8?B?L2hqajNId3RaOFUxREtBRk12RTllN2w1VHdxajBHbHVYYVlybi9MVFFJa2U5?=
- =?utf-8?B?SndqOVE0SVpQWGZMbENkRyt1c3BkN0VKS0g5SEhEaC9TN2c1WVRjcnQwUVBU?=
- =?utf-8?B?bGFsRy9adkNWZm9kMkJHN3k3WkhxVVh0dHRYWDNpVDNTSnRTMDVyVisrWmdz?=
- =?utf-8?B?Y1hMZkk1NCt4dFFycXh6UXNDZ0d2UmlmTU5OTTVoWUNleEhheGVZc2s1SW1i?=
- =?utf-8?B?R2ZzbWh2RjU0Q3FZSTF5ZkJZK3BSdlNMYUc4ZmI1azd1T05FQnRaTk5JTEZs?=
- =?utf-8?B?UnRLVUlkQldRbkpnUk5JRDJEd1p2ODBwa01Zc2oxNWk3VmNrKzBxc3BJUzE1?=
- =?utf-8?B?YUlpUDlQZ1FOc1V0U1JxenZua2grYWVVQmpJQkY3bkxETnQyOEdQUjRDRC9V?=
- =?utf-8?B?Y3YwNDQ4eEkxOG1hbk5CRmt2bk0rVkpYaDQrbmx6MzdUUU0rbjhvVU5IRSs5?=
- =?utf-8?B?c0VpejMxSDFGZ1dTaDJmOCttQWIwaG1uL051MkRCSWxLWnZCdlN2ZjRKMVZx?=
- =?utf-8?B?RVJYaEFHM2dKWjZ2ZS8zNmFmdUdHUHZRR1IyWFhMeExHT1h4NFBGMU9meHJE?=
- =?utf-8?B?VzRlYllBOWNqdXR4L3J1R2J2blBBRmNYZUtpOERTckQwOTZMalFoc1J1YXBj?=
- =?utf-8?B?MW9udXV5bDVHL1BpTml0OGVJVGQzZ2J0UjNHM3RzQUhrV2c4V3M3Vi9tclR1?=
- =?utf-8?B?ZVFDODZwN3ZVSThjNDhjVWJVazRjM0o5dk9HY1p3dEQxK0gxRWVnQUtreVJO?=
- =?utf-8?B?R0VPZ3U1Sk1kRmJrNERMNlBNYlB3N0JEazRyd1JzVDRqRGE0d1AwTFRLWnVo?=
- =?utf-8?B?dnRtV2pOcmIrU3FWcnRrTE9yUkVUYVpUMy9nWENaNmREWGdJNnUzUHZmc2Q0?=
- =?utf-8?B?WlRXSkVlemhFMnR5TEEyZE9qRDE3dnVaaWJld2tWWWFyWDlDb0UrUGd5Y1BR?=
- =?utf-8?B?bktvOWkwUHhGN0JKU2xXOFQ2bVN0YmxMaXB1ajlaaG5KYmxuRjZFUlROMW9q?=
- =?utf-8?B?MzN4Z1dxUm1aN3lRdWtzQzArSmhOSWZPUjRNa0N5cXRQY0VkWGxkYnhGd3hV?=
- =?utf-8?B?K3BzM21MbWpncVJWR1VZZzAxNUZGSHNDSXBNZzRKbTZXSXhmbmJhcmpTYjF1?=
- =?utf-8?B?eGhDUlNMUEs3VHg0YWRRaUFVKzZwdElXT2JwVUgyb0YwRFFHL0xML3g4R2d6?=
- =?utf-8?B?aFpNWVBKTktadEp2VVQrcEhMZGRMZXFvbmtBcDA5QnVzVjZhajdBNFl3bjM4?=
- =?utf-8?B?cW5zUGlUbkN0T1BCVkxjanhZaDlNQ2FiendBQUxCdndIcnBJVkRGKzBDenhT?=
- =?utf-8?B?bjZjdHo3VmdlSkhMQVBRbXF0eXZ4ejIrWmErUldPQXZScWdTNlZ1NWpnUWdG?=
- =?utf-8?B?emZyWWlmeCsrSHdtcWpSMitaTE1wYW42OXp4ejRVR0dTYW9nM1RBUmFBV01l?=
- =?utf-8?B?RXgrNFJBVmZmeWM4cll1ZVhuNzdIUGVEZk9NK3VzTTZrM1NsQldpc3NNT1pE?=
- =?utf-8?Q?f1oPAKBrGujsYOKW98Qn8q9Ch?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5f48c46-321e-418e-308e-08daf87eba5d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 11:34:00.6503
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: loo+NkNicQXCrArdy5i6RGuFP0eC8kWDfAQJpfxwStsymL56x561AbgL0GAg3dhzO4U0DgfsdgAIu1T1EkRh5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6080
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/23 20:27, Pierre-Louis Bossart wrote:
->
-> On 1/16/23 01:53, Mukunda,Vijendar wrote:
->> On 14/01/23 00:11, Pierre-Louis Bossart wrote:
->>>>>> +	for (index = 0; index < 2; index++) {
->>>>>> +		if (response_buf[index] == -ETIMEDOUT) {
->>>>>> +			dev_err(ctrl->dev, "Program SCP cmd timeout\n");
->>>>>> +			timeout = 1;
->>>>>> +		} else if (!(response_buf[index] & AMD_SDW_MCP_RESP_ACK)) {
->>>>>> +			no_ack = 1;
->>>>>> +			if (response_buf[index] & AMD_SDW_MCP_RESP_NACK) {
->>>>>> +				nack = 1;
->>>>>> +				dev_err(ctrl->dev, "Program SCP NACK received\n");
->>>>>> +			}
->>>>> this is a copy of the cadence_master.c code... With the error added that
->>>>> this is not for a controller but for a master...
->>>> Its manager instance only. Our immediate command and response
->>>> mechanism allows sending commands over the link and get the
->>>> response for every command immediately, unlike as mentioned in
->>>> candence_master.c.
->>> I don't get the reply. The Cadence IP also has the ability to get the
->>> response immediately. There's limited scope for creativity, the commands
->>> are defined in the spec and the responses as well.
->> As per our understanding in Intel code, responses are processed
->> after sending all commands.
->> In our case, we send the command and process the response
->> immediately before invoking the next command.
-> The Cadence IP can queue a number of commands, I think 8 off the top of
-> my head. But the response is provided immediately after each command.
->
-> Maybe the disconnect is that there's an ability to define a watermark on
-> the response buffer, so that the software can decide to process the
-> command responses in one shot.
->
->>>>>> +		}
->>>>>> +	}
->>>>>> +
->>>>>> +	if (timeout) {
->>>>>> +		dev_err_ratelimited(ctrl->dev,
->>>>>> +				    "SCP_addrpage command timeout for Slave %d\n", msg->dev_num);
->>>>>> +		return SDW_CMD_TIMEOUT;
->>>>>> +	}
->>>>>> +
->>>>>> +	if (nack) {
->>>>>> +		dev_err_ratelimited(ctrl->dev,
->>>>>> +				    "SCP_addrpage NACKed for Slave %d\n", msg->dev_num);
->>>>>> +		return SDW_CMD_FAIL;
->>>>>> +	}
->>>>>> +
->>>>>> +	if (no_ack) {
->>>>>> +		dev_dbg_ratelimited(ctrl->dev,
->>>>>> +				    "SCP_addrpage ignored for Slave %d\n", msg->dev_num);
->>>>>> +		return SDW_CMD_IGNORED;
->>>>>> +	}
->>>>>> +	return SDW_CMD_OK;
->>>>> this should probably become a helper since the response is really the
->>>>> same as in cadence_master.c
->>>>>
->>>>> There's really room for optimization and reuse here.
->>>> not really needed. Please refer above comment as command/response
->>>> mechanism differs from Intel's implementation.
->>> how? there's a buffer of responses in both cases. please clarify.
->> Ours implementation is not interrupt driven like Intel.
->> When we send command over the link, we will wait for command's
->> response in polling method and process the response immediately
->> before issuing the new command.
-> On the Intel side we use an interrupt to avoid polling, and in case of N
-> commands the watermark will be set to N to reduce the overhead. That
-> said, most users only use 1 command at a time, it's only recently that
-> Cirrus Logic experimented with multiple commands to speed-up transfers.
->
-> Even if there are differences in the way the responses are processed,
-> whether one-at-a-time or in a batch, the point remains that each command
-> response can be individually analyzed and that could be using a helper -
-> moving code from cadence_master.c into the bus layer.
->
-> will implement a helper function to analyze the response.
+On 09/01/2023 13:44, Garmin.Chang wrote:
+> Add the new binding documentation for system clock
+> and functional clock on MediaTek MT8188.
+
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
+> 
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+> ---
+>  .../bindings/clock/mediatek,mt8188-clock.yaml |  71 ++
+>  .../clock/mediatek,mt8188-sys-clock.yaml      |  55 ++
+>  .../dt-bindings/clock/mediatek,mt8188-clk.h   | 733 ++++++++++++++++++
+>  3 files changed, 859 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt8188-clk.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
+> new file mode 100644
+> index 000000000000..6654cead71f6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Functional Clock Controller for MT8188
+> +
+> +maintainers:
+> +  - Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The devices provide clock gate control in different IP blocks.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8188-adsp-audio26m
+> +      - mediatek,mt8188-imp-iic-wrap-c
+> +      - mediatek,mt8188-imp-iic-wrap-en
+> +      - mediatek,mt8188-imp-iic-wrap-w
+> +      - mediatek,mt8188-mfgcfg
+> +      - mediatek,mt8188-vppsys0
+> +      - mediatek,mt8188-wpesys
+> +      - mediatek,mt8188-wpesys-vpp0
+> +      - mediatek,mt8188-vppsys1
+> +      - mediatek,mt8188-imgsys
+> +      - mediatek,mt8188-imgsys-wpe1
+> +      - mediatek,mt8188-imgsys-wpe2
+> +      - mediatek,mt8188-imgsys-wpe3
+> +      - mediatek,mt8188-imgsys1-dip-top
+> +      - mediatek,mt8188-imgsys1-dip-nr
+> +      - mediatek,mt8188-ipesys
+> +      - mediatek,mt8188-camsys
+> +      - mediatek,mt8188-camsys-rawa
+> +      - mediatek,mt8188-camsys-yuva
+> +      - mediatek,mt8188-camsys-rawb
+> +      - mediatek,mt8188-camsys-yuvb
+> +      - mediatek,mt8188-ccusys
+> +      - mediatek,mt8188-vdecsys-soc
+> +      - mediatek,mt8188-vdecsys
+> +      - mediatek,mt8188-vencsys
+
+The list should be ordered by name.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller@11283000 {
+> +        compatible = "mediatek,mt8188-imp-iic-wrap-c";
+> +        reg = <0x11283000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
+> new file mode 100644
+> index 000000000000..541e0f7df79f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt8188-sys-clock.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-sys-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek System Clock Controller for MT8188
+> +
+> +maintainers:
+> +  - Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
+> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
+> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
+> +  The mcusys provides mux control to select the clock source in AP MCU.
+> +  The device nodes also provide the system control capacity for configuration.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8188-topckgen
+> +          - mediatek,mt8188-infracfg-ao
+> +          - mediatek,mt8188-apmixedsys
+> +          - mediatek,mt8188-pericfg-ao
+
+Ditto
+
+
+Best regards,
+Krzysztof
 
