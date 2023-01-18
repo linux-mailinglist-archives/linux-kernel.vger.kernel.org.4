@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271D0672924
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE35A672929
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjARUPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S229758AbjARURJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjARUPr (ORCPT
+        with ESMTP id S229459AbjARURG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:15:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8295D7E4;
-        Wed, 18 Jan 2023 12:15:46 -0800 (PST)
+        Wed, 18 Jan 2023 15:17:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D28623867
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:17:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20827B81F01;
-        Wed, 18 Jan 2023 20:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508D6C433EF;
-        Wed, 18 Jan 2023 20:15:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 61C02CE1EAE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A519C433EF;
+        Wed, 18 Jan 2023 20:16:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674072943;
-        bh=J4WWSguMR9lTheJDbGf665NqLi4YZhutquYw9Q/2MBE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fKdR5/WNd7sHsQqLKMilgWYTwWn9dblHmb2+Ibnk12p4TVHXb26JhLviMWswH9toD
-         j/Kz4/IkT9CRJ/+UJfp46aznGs2Sj19EOqJEnv8XNWnSev/NZXb8CWFX+40+bmN9oM
-         dFhUbdwgXvwwyzB0wVtKVkbr8zXKclSeihSjD0z4SapQ0JYenshV9If33jZVEDinK6
-         ToNdxR5tsdDqH7oKDP16SlLxetzh8EZ07mBsYhm3qTXVFmdlsIyzIfTLexLSNHGNEb
-         EB/vilqNSVeVNIFb6DjilEJ38D44g+EwrRVXQIF1sdRZ3OWKpyeXbo+tbMv+sWC9RD
-         T0GCy4GzsgLUw==
-Date:   Wed, 18 Jan 2023 14:15:41 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntb@lists.linux.dev, jdmason@kudzu.us, dave.jiang@intel.com,
-        allenbh@gmail.com, lpieralisi@kernel.org, kw@linux.com,
-        mani@kernel.org, kishon@kernel.org, bhelgaas@google.com
-Subject: Re: [PATCH] PCI: endpoint: pci-epf-vntb: add kernel-doc for num_mws
- on epf_ntb_mw_bar_clear()
-Message-ID: <20230118201541.GA254794@bhelgaas>
+        s=k20201202; t=1674073019;
+        bh=msoGIYgablHSNKwDU/Zm9G1C1buCYXqRT7uaWOhwWLo=;
+        h=Date:From:To:cc:Subject:From;
+        b=XKQXp9qK5gIlaaRf44THdHNTXYaLWrWNfCnHoopLtJXyoYjbaVIQ6jcQ8DrbeyjFF
+         KmkioY4z7CDv+fCn2+u9q3Wj3enbAvtT5GxbaFVbKPpX1pZ0nbqgrpjrHYwa5yaJil
+         N59pAOZbRqjo10gWme00m/xUDsjx7GTy1yOFbTm6kCpeMDgq6g4yCBdrZ4noqfFwjQ
+         1z2nK0KhLl6re4QoPuqAcG+p+qvwMdYOyAJBNDxgpEzNVFZ0QfPBaKKezDqtTHBSLO
+         dPu6PeA8mtma860OZkIL5vY2Ba4jSHVFTOB6rPR5Hf4YsQCBkv+o1VfiIn5Lnz/Tnb
+         FEBhSwxVER97w==
+Date:   Wed, 18 Jan 2023 21:17:00 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] HID fixes
+Message-ID: <nycvar.YFH.7.76.2301182112010.1734@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103024907.293853-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,34 +52,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 10:49:07AM +0800, Yang Yingliang wrote:
-> Commit 8e4bfbe644a6 ("PCI: endpoint: pci-epf-vntb: fix error handle
-> in epf_ntb_mw_bar_init()") added a "num_mws" parameter to
-> epf_ntb_mw_bar_clear() but failed to add kernel-doc for num_mws.
-> 
-> This patch adds kernel-doc for num_mws on epf_ntb_mw_bar_clear().
-> 
-> Fixes: 8e4bfbe644a6 ("PCI: endpoint: pci-epf-vntb: fix error handle in epf_ntb_mw_bar_init()")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Linus,
 
-Applied to pci/misc for v6.3, thanks!
+please pull from
 
-> ---
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index 04698e7995a5..b7c7a8af99f4 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -652,6 +652,7 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
->  /**
->   * epf_ntb_mw_bar_clear() - Clear Memory window BARs
->   * @ntb: NTB device that facilitates communication between HOST and VHOST
-> + * @num_mws: the number of Memory window BARs that to be cleared
->   */
->  static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb, int num_mws)
->  {
-> -- 
-> 2.25.1
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2023011801
+
+to receive fixes for HID subsystem.
+
+=====
+- fixes for potential empty list handling in HID core (Pietro Borrello)
+- fix for NULL pointer dereference in betop driver that could be triggered 
+  by malicious device (Pietro Borrello)
+- fixes for handling calibration data preventing division by zero in 
+  Playstation driver (Roderick Colenbrander)
+- fix for memory leak on error path in amd-sfh driver (Basavaraj Natikar)
+- other few assorted small fixes and device ID-specific handling
+=====
+
+Thanks.
+
+----------------------------------------------------------------
+Basavaraj Natikar (1):
+      HID: amd_sfh: Fix warning unwind goto
+
+Jiasheng Jiang (1):
+      HID: intel_ish-hid: Add check for ishtp_dma_tx_map
+
+Jiri Kosina (1):
+      HID: revert CHERRY_MOUSE_000C quirk
+
+José Expósito (1):
+      HID: uclogic: Add support for XP-PEN Deco 01 V2
+
+Pietro Borrello (3):
+      HID: check empty report_list in hid_validate_values()
+      HID: check empty report_list in bigben_probe()
+      HID: betop: check shape of output reports
+
+Roderick Colenbrander (2):
+      HID: playstation: sanity check DualShock4 calibration data.
+      HID: playstation: sanity check DualSense calibration data.
+
+ drivers/hid/amd-sfh-hid/amd_sfh_client.c      |  2 +-
+ drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_init.c |  2 +-
+ drivers/hid/hid-betopff.c                     | 17 ++++----
+ drivers/hid/hid-bigbenff.c                    |  5 +++
+ drivers/hid/hid-core.c                        |  4 +-
+ drivers/hid/hid-ids.h                         |  2 +-
+ drivers/hid/hid-playstation.c                 | 63 +++++++++++++++++++++++++++
+ drivers/hid/hid-quirks.c                      |  1 -
+ drivers/hid/hid-uclogic-core.c                |  2 +
+ drivers/hid/hid-uclogic-params.c              |  2 +
+ drivers/hid/intel-ish-hid/ishtp/dma-if.c      | 10 +++++
+ 11 files changed, 96 insertions(+), 14 deletions(-)
+
+-- 
+Jiri Kosina
+SUSE Labs
+
