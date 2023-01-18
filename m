@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EB567213B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E64067213F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjARP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S229968AbjARP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjARP1N (ORCPT
+        with ESMTP id S230076AbjARP1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:27:13 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6385BA9;
-        Wed, 18 Jan 2023 07:26:15 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id 123-20020a4a0681000000b004faa9c6f6b9so879156ooj.11;
-        Wed, 18 Jan 2023 07:26:15 -0800 (PST)
+        Wed, 18 Jan 2023 10:27:18 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EA01CAE0;
+        Wed, 18 Jan 2023 07:26:55 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id r30so9892548wrr.10;
+        Wed, 18 Jan 2023 07:26:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ypPAzYEJSbtUHwI+8APhdCEH8lcbIVf9Cb/fG9P1p/Q=;
+        b=b1LFdXq6UsyoNYZJSZ7z8zdAZJUQLpfM6RxV1TR5vx6KIgxuoZC3qsNzovOh7JxmRQ
+         6nIahIMfk2OG02NbwbUDdoJvTV4IfPa0t5kepbJN307sQzfI8PlGNtccTZ32nadKN7TV
+         8ZLcuBHPCHaGNkRujMRps8KheTLYciw3l987dtIRqa7jRQZUarzSPGKC3wwSGS/QatUd
+         PxOz4L8+gSqtPXnNdqt/VcSL5sLr9HQDZ+U6z/9zjCT1ai3ly7jyLJhSBurpHwMv2kJ7
+         dLWlkA/GJZJ+xpVocP9jSjzD5PWfSYz+XMuMDLk928f8SRGesjK4lp2NXTdQPKLNoTcU
+         m+Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nT7vo//zIHYtjuHwHvVEOuFwE5YKQ11WWGeqHMGeNf0=;
-        b=uTgpWe9P4CIdT+Q+FzQWm3ly8uH9REXn3e5KdRPdBuZcrRCMd8dPnIerWh5JNi9YzN
-         ABVUnOYZ4sUYXPwYD+AgED9E/7euME/lK9RrXFO6rJDaIKKK0tKnY2/TbGWXsOEajuLq
-         3uvBf9Vt1ZSqR4Q7+hoDX0QEbkpFbnMvu6o0F1vYiFIoB4RUsIIiTGwzQ1UcsSHam7UA
-         qYmt76lqxESlWXrEnKlxraiRir6a70i+DRn1mFy9MRQ+t/j53YWVtlKEyx5Qj0K6sTeB
-         eSIte1Ng6J1x5JbkFZ5DhCi35xCxQni2zYkW6B0Phm9UzwQkEJTIdhfQdX/oGy9qgDjo
-         sjAg==
-X-Gm-Message-State: AFqh2krorMvEFwLt581wDa7w7zgeycLZKSFniUvGkRPrxjoRyfIrBWSM
-        +IjE82fVXYOAbkT5tMKZsw==
-X-Google-Smtp-Source: AMrXdXvrHsL3B9As2RFndVMMqtmIzmNvUPOHglhiIYMLBz7EpgrDtHsKHz/dRPDHU+pft+uq8bi6Dg==
-X-Received: by 2002:a4a:b202:0:b0:4d1:c23:3c51 with SMTP id d2-20020a4ab202000000b004d10c233c51mr2822427ooo.9.1674055574338;
-        Wed, 18 Jan 2023 07:26:14 -0800 (PST)
-Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id o10-20020a4aabca000000b004f22e40ad6fsm10435619oon.2.2023.01.18.07.26.13
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ypPAzYEJSbtUHwI+8APhdCEH8lcbIVf9Cb/fG9P1p/Q=;
+        b=hltsJIWENzUTdUmFnsI8JDiFJvkLfrGX0wUkw1TK1y+Pn2RlUuxp/uwxEgmZnNtrVd
+         CYbpwL+Gnhc4bHLLhNO5rfnEgQQp7thWPb++X7+8hutW3kZZF5yxIqbZKz0/0aWB/70G
+         rOHzjmE18DPsEI7402lT30l4epjibtfWVgztYxFzLksa0wFU3+39C+mTu0MourgKXSgS
+         iSV1YQe4eVGvZd5ulm4eI/fXwapOL0FR+gNwdGKyqaUQkAjvikykmBHHZLpUyCdl+rE4
+         GWa83f7G80tPjgvIhSEkS2xtk13vCOwJUR0MYk+CIcu9x3VcVmuYirtx6XBbb4gHKN6i
+         AWOw==
+X-Gm-Message-State: AFqh2krgn6fZ8WMh0nWyotbMLGDE4h+6V/8h5a+TMqqSgB7uHsR0RREp
+        xRah9Pw2XkyGA4LHAiFI2lU=
+X-Google-Smtp-Source: AMrXdXuCq08opotKRprCnH9Sx/BDKWlGWP9FMJHuvV3tcH8bNrfV2MD+oeI500xtKhdsjeZCYtClJg==
+X-Received: by 2002:a05:6000:5c2:b0:2bb:eb3d:8d20 with SMTP id bh2-20020a05600005c200b002bbeb3d8d20mr3483580wrb.43.1674055614334;
+        Wed, 18 Jan 2023 07:26:54 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bu9-20020a056000078900b002be1dcb6efbsm5451116wrb.9.2023.01.18.07.26.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:26:13 -0800 (PST)
-Received: (nullmailer pid 30555 invoked by uid 1000);
-        Wed, 18 Jan 2023 15:26:13 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 18 Jan 2023 07:26:53 -0800 (PST)
+Date:   Wed, 18 Jan 2023 18:26:50 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     ailus@linux.intel.com, andy.shevchenko@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org
+Subject: Re: [PATCH v5] media: atomisp: pci: Replace bytes macros with
+ functions
+Message-ID: <Y8gPuh+WDO6vJPu+@kadam>
+References: <Y8gImBdR6YpEKZEb@kadam>
+ <20230118151656.20558-1-bpappas@pappasbrent.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof =?utf-8?q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marek Vasut <marex@denx.de>, Shawn Tu <shawnx.tu@intel.com>
-In-Reply-To: <20230118103239.3409674-2-michael.riesch@wolfvision.net>
-References: <20230118103239.3409674-1-michael.riesch@wolfvision.net>
- <20230118103239.3409674-2-michael.riesch@wolfvision.net>
-Message-Id: <167405509286.19309.13229390529677400429.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: media: i2c: add imx415 cmos image sensor
-Date:   Wed, 18 Jan 2023 09:26:13 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118151656.20558-1-bpappas@pappasbrent.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,43 +75,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 18 Jan 2023 11:32:38 +0100, Michael Riesch wrote:
-> Add devicetree binding for the Sony IMX415 CMOS image sensor.
+On Wed, Jan 18, 2023 at 10:16:56AM -0500, Brent Pappas wrote:
+> Replace the function-like macros FPNTBL_BYTES(), SCTBL_BYTES(), and
+> MORPH_PLANE_BYTES() with functions to comply with Linux coding style
+> standards.
+> Replace multiplication with calls to array_size() and array3_size()
+> to prevent accidental arithmetic overflow.
 > 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
 > ---
->  .../bindings/media/i2c/sony,imx415.yaml       | 120 ++++++++++++++++++
->  MAINTAINERS                                   |   7 +
->  2 files changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> Changelog:
+> V1 -> V2: Use size_mul() to perform size_t multiplication without risk of
+> 		  overflow.
+> 		  Remove the inline keyword from function definitions.
 > 
+> V2 -> V3: Add commit message.
+> 
+> V3 -> V4: Use array_size() and array3_size() for multiplication.
+> 
+> V4 -> V5: Fix indentation.
+> 
+>  .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
+>  1 file changed, 23 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+> index f08564f58242..7e111df5c09d 100644
+> --- a/drivers/staging/media/atomisp/pci/sh_css_params.c
+> +++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+> @@ -98,17 +98,27 @@
+>  #include "sh_css_frac.h"
+>  #include "ia_css_bufq.h"
+>  
+> -#define FPNTBL_BYTES(binary) \
+> -	(sizeof(char) * (binary)->in_frame_info.res.height * \
+> -	 (binary)->in_frame_info.padded_width)
+> +static size_t fpntbl_bytes(const struct ia_css_binary *binary)
+> +{
+> +	return array3_size(sizeof(char),
+> +					   binary->in_frame_info.res.height,
+> +					   binary->in_frame_info.padded_width);
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Nope.
 
-yamllint warnings/errors:
+> +}
+>  
+> -#define SCTBL_BYTES(binary) \
+> -	(sizeof(unsigned short) * (binary)->sctbl_height * \
+> -	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
+> +static size_t sctbl_bytes(const struct ia_css_binary *binary)
+> +{
+> +	return array_size(sizeof(unsigned short),
+> +					  array3_size(binary->sctbl_height,
+> +						      binary->sctbl_aligned_width_per_color,
+> +								  IA_CSS_SC_NUM_COLORS));
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.example.dtb: camera-sensor@1a: port:endpoint: Unevaluated properties are not allowed ('clock-lanes', 'data-lanes' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.example.dtb: camera-sensor@1a: port:endpoint: 'link-frequencies' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+Also nope.
 
-doc reference errors (make refcheckdocs):
+> +}
+>  
+> -#define MORPH_PLANE_BYTES(binary) \
+> -	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
+> -	 (binary)->morph_tbl_height)
+> +static size_t morph_plane_bytes(const struct ia_css_binary *binary)
+> +{
+> +	return array3_size(SH_CSS_MORPH_TABLE_ELEM_BYTES,
+> +					   binary->morph_tbl_aligned_width,
+> +					   binary->morph_tbl_height);
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118103239.3409674-2-michael.riesch@wolfvision.net
+Nope.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> +}
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+regards,
+dan carpenter
 
