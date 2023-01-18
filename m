@@ -2,155 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81E3671624
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB58C67161B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjARI0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S229510AbjARIV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjARIZ7 (ORCPT
+        with ESMTP id S230086AbjARIUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:25:59 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8005E47EDC;
-        Tue, 17 Jan 2023 23:51:42 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id CC9433200437;
-        Wed, 18 Jan 2023 02:51:40 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 18 Jan 2023 02:51:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674028300; x=1674114700; bh=RGuR+VxWYL
-        rsT+sIyy6iY6TbdhUSEvwC7Aaq91qar/0=; b=oHFrnBrGVabUGxohEkxAigY0An
-        P4RkYuB2Mua/5CF4hz3xmvxViEvpps7TCExjZX7FPHLLzt5lLrQ9WVgD1gWFcscn
-        yn/aJ0WIxbpJdSF08hDGPkOIDNTurliPtUt6hJY+cWWSCnfMjX17kD1yrL3/tvNN
-        Yc0ZPFWwzeN0LWwpXXXCzTNnmbsP2hvhGtc1Ogkv4PLlBzfUtopGiYddWGg864IT
-        mezS6WBoijD2Pb7xOK39ITYUlCkbrfyqtKEcCSSvyJsc2TqCk9bBKI9vwpqDlovV
-        IpYjUZV+BODtZyc8QsZVgz6lElUO5F0f7YuAw+QfabJM1JLteCqcoHw0yavQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674028300; x=1674114700; bh=RGuR+VxWYLrsT+sIyy6iY6TbdhUS
-        EvwC7Aaq91qar/0=; b=fJ+7TcEq890D95kMoIZ9mpbYhkz5muUCOZfK+RSLCK7P
-        R1kr9Sol39GVm+e7Wki6TGlY+TMsGU7odd80F2GknATy7a2lLYfu2f359h6mksou
-        P5HLvdymfyWalIJOsswTWnj8fhL7kTbXSgiy3ytomNw1gqDk0DPDbBk4Ycr9nVQA
-        v7jMuM+tsYcu8lxVXcr7O4qvC/83sSnfkicG+HtC2m/MGKtoEd6n6/uYJEqYKiC5
-        2bfRGkG0oKn/SJ26C2N/muXTs2OMV0IwM6sPiRCqOERvdQGkGJ7YPY5IGESjpNJH
-        ZUVsbU3TBewM0q5kvmsyD7/KKTT1cn6pqFekRS0rqw==
-X-ME-Sender: <xms:C6XHY4OJXrZzkvGrUmMK0daroG-OpcGvQx9Y-tpoPvvAYgefrCr70A>
-    <xme:C6XHY-9ahjx1K_9-aicGromwcXoRp_lx-YdkHgYRClWrAzRwh8k71TQTfBlCs0mUO
-    _uWjzhD-b6RJw>
-X-ME-Received: <xmr:C6XHY_TJm4hbmafQ-BhYJR85Bb9HSwaUzOLPebrDdenMirqo0p0aSZXT7GIm5IeDnAfRt85QwFTGgJXkrRhg28rksP8X-47V5ssQ-Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtjedgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:C6XHYwuhmSukiA_o6KfdkA3xUHBxdKy-0CJFoAob9LYl0xrlO65v8A>
-    <xmx:C6XHYwc4gdMkHqE7zz2_dL7VYo_qHGIpu8agq_0V6Rcg0d4kQo2pLg>
-    <xmx:C6XHY03BtV-YfnegsZf_cQhujIGascCLHYJSzqWUJBDE9t1PRiVTlg>
-    <xmx:DKXHY23_PQA-7bZ6A6xKx61sPCY9mhjdDULja4r-ncSlaJENZq2vzA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jan 2023 02:51:39 -0500 (EST)
-Date:   Wed, 18 Jan 2023 08:48:20 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jack Pham <quic_jackp@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Rajaram Regupathy <rajaram.regupathy@intel.com>,
-        Saranya Gopal <saranya.gopal@intel.com>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <Y8ekRLJlpyBLEJfN@kroah.com>
-References: <20230118115624.72e7e756@canb.auug.org.au>
+        Wed, 18 Jan 2023 03:20:51 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE6839287;
+        Tue, 17 Jan 2023 23:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674028092; x=1705564092;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V0/TXsQQWmEebWydvXYOMJFyW5Ah/NfVrzP/l74ZXew=;
+  b=TLGw42hmOomx4Kgw8pFfOylDAVbHoWz5bDL5iKv5qoDNSI8ncjiiK1Pc
+   szgNu0PsfXTs2V+FGZ3XD+uKFXyp11NbUcADRJoGUWSrFh3lq6PJHRe5i
+   Va3spuHAGPNNfHo01axByiqgzLn+g7NhX0fDIA9dwALx2P2MNKY3n1ITT
+   tWysx8HzU+rBXDHtiS4JKsUpPVtG0Ps1KfAn2zxNVm0X0R9YysyHsr8SI
+   ZttQwaDU2XkOzbEBZcgfQlRx1RCMmwPFGEVCqb2anXqpa7ssEr/xKZVVc
+   mi0TNi1kjov7FLyfcEK97gLUZ1x1WpXaWbHFXpsj+/84Dqb7NK+5YcfOn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="312800645"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="312800645"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 23:48:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="637171941"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="637171941"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2023 23:48:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id ECF4B256; Wed, 18 Jan 2023 09:48:42 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] iio: core: Replace iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
+Date:   Wed, 18 Jan 2023 09:48:27 +0200
+Message-Id: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118115624.72e7e756@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:56:24AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/typec/ucsi/ucsi.c
-> 
-> between commit:
-> 
->   fac4b8633fd6 ("usb: ucsi: Ensure connector delayed work items are flushed")
-> 
-> from the usb.current tree and commit:
-> 
->   b04e1747fbcc ("usb: typec: ucsi: Register USB Power Delivery Capabilities")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/typec/ucsi/ucsi.c
-> index 1292241d581a,d04809476f71..000000000000
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@@ -1426,20 -1551,14 +1557,26 @@@ void ucsi_unregister(struct ucsi *ucsi
->   		ucsi_unregister_altmodes(&ucsi->connector[i],
->   					 UCSI_RECIPIENT_CON);
->   		ucsi_unregister_port_psy(&ucsi->connector[i]);
->  -		if (ucsi->connector[i].wq)
->  +
->  +		if (ucsi->connector[i].wq) {
->  +			struct ucsi_work *uwork;
->  +
->  +			mutex_lock(&ucsi->connector[i].lock);
->  +			/*
->  +			 * queue delayed items immediately so they can execute
->  +			 * and free themselves before the wq is destroyed
->  +			 */
->  +			list_for_each_entry(uwork, &ucsi->connector[i].partner_tasks, node)
->  +				mod_delayed_work(ucsi->connector[i].wq, &uwork->work, 0);
->  +			mutex_unlock(&ucsi->connector[i].lock);
->   			destroy_workqueue(ucsi->connector[i].wq);
->  +		}
-> + 		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sink_caps);
-> + 		ucsi->connector[i].port_sink_caps = NULL;
-> + 		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_source_caps);
-> + 		ucsi->connector[i].port_source_caps = NULL;
-> + 		usb_power_delivery_unregister(ucsi->connector[i].pd);
-> + 		ucsi->connector[i].pd = NULL;
->   		typec_unregister_port(ucsi->connector[i].port);
->   	}
->   
+None of the current users is using gaps in the list of the items.
+No need to have a specific function for that, just replace it by
+library available __sysfs_match_string().
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/industrialio-core.c | 32 +-------------------------------
+ 1 file changed, 1 insertion(+), 31 deletions(-)
 
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index 52e690f031cb..26e357f14db8 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -205,36 +205,6 @@ bool iio_buffer_enabled(struct iio_dev *indio_dev)
+ }
+ EXPORT_SYMBOL_GPL(iio_buffer_enabled);
+ 
+-/**
+- * iio_sysfs_match_string_with_gaps - matches given string in an array with gaps
+- * @array: array of strings
+- * @n: number of strings in the array
+- * @str: string to match with
+- *
+- * Returns index of @str in the @array or -EINVAL, similar to match_string().
+- * Uses sysfs_streq instead of strcmp for matching.
+- *
+- * This routine will look for a string in an array of strings.
+- * The search will continue until the element is found or the n-th element
+- * is reached, regardless of any NULL elements in the array.
+- */
+-static int iio_sysfs_match_string_with_gaps(const char * const *array, size_t n,
+-					    const char *str)
+-{
+-	const char *item;
+-	int index;
+-
+-	for (index = 0; index < n; index++) {
+-		item = array[index];
+-		if (!item)
+-			continue;
+-		if (sysfs_streq(item, str))
+-			return index;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+ #if defined(CONFIG_DEBUG_FS)
+ /*
+  * There's also a CONFIG_DEBUG_FS guard in include/linux/iio/iio.h for
+@@ -569,7 +539,7 @@ ssize_t iio_enum_write(struct iio_dev *indio_dev,
+ 	if (!e->set)
+ 		return -EINVAL;
+ 
+-	ret = iio_sysfs_match_string_with_gaps(e->items, e->num_items, buf);
++	ret = __sysfs_match_string(e->items, e->num_items, buf);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.39.0
 
-Thanks, this looks correct.  I'll apply it when these get merged locally
-in a week or so.
-
-greg k-h
