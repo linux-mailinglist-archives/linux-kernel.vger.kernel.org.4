@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4976718A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB066718C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjARKMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S230054AbjARKPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjARKL1 (ORCPT
+        with ESMTP id S230218AbjARKNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:11:27 -0500
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485BF9AAA6;
-        Wed, 18 Jan 2023 01:18:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZpkENK_1674033514;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VZpkENK_1674033514)
-          by smtp.aliyun-inc.com;
-          Wed, 18 Jan 2023 17:18:37 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     robdclark@gmail.com
-Cc:     quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] drm/msm/dpu: Remove some unused variables
-Date:   Wed, 18 Jan 2023 17:18:33 +0800
-Message-Id: <20230118091833.87708-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 18 Jan 2023 05:13:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD905955F;
+        Wed, 18 Jan 2023 01:22:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EE18616ED;
+        Wed, 18 Jan 2023 09:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6099C433F2;
+        Wed, 18 Jan 2023 09:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674033723;
+        bh=DZS895Z+3sptXir0tPzxTsJKKkNp6DzwiYVTcI+Nxas=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kQ7ipcJnCrbNJpn/1LWq84GZ6TR5qt3+KUz1dTKkr0XakM13mE2CdJADXrQLKwcR6
+         /Y3Z9lMY/yyTr/h9ZUnaD8+HXWyOE5ECHRk5Ms4N/Ok8HHvwCpTGqhjRA0VIalsHhM
+         Me7LShijNUwJaJ0wWn8jIkIIhcRWdLmHJ1kRfvMXLLv6X71hv3leQfEbYu6u3h9QRe
+         CgT19EWFPvSX+s3slPUT+xSyveq5YOLXegUVs4z8Ti9TPBsI0yH1Rys/JCC1QfWt8t
+         ughKXZz3GlLkly1qj6aT0KSqaw88dFUiVD4evJ91gGUyuExYpTAmMoCAcYMW+RlnUq
+         AdP1+leZLv+ng==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pI4eI-0001cJ-FS; Wed, 18 Jan 2023 10:22:27 +0100
+Date:   Wed, 18 Jan 2023 10:22:26 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
+Message-ID: <Y8e6Us0Qgt0p5S4R@hovoldconsulting.com>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-7-johan+linaro@kernel.org>
+ <871qnslut3.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871qnslut3.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variables 'sc8280xp_regdma' and 'sm8350_regdma' are defined in the
-dpu_hw_catalog.c file, but not used elsewhere, so remove these unused
-variables.
+On Tue, Jan 17, 2023 at 10:23:20PM +0100, Thomas Gleixner wrote:
+> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
+> > The global irq_domain_mutex is now held in all paths that update the
+> > revmap structures so there is no longer any need for the revmap mutex.
+> 
+> This can also go after the 3rd race fix, but ...
+> 
+> >  static void irq_domain_clear_mapping(struct irq_domain *domain,
+> >  				     irq_hw_number_t hwirq)
+> >  {
+> > +	lockdep_assert_held(&irq_domain_mutex);
+> 
+> these lockdep asserts want to be part of the [dis]association race
+> fixes. They are completely unrelated to the removal of the revmap_mutex.
 
-drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:2029:37: warning: unused
-variable 'sc8280xp_regdma'.
-drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:2053:37: warning: unused
-variable 'sm8350_regdma'.
+No, they are very much related to the removal of the revmap_mutex. These
+functions deal with the revmap structures which before this patch were
+clearly only modified with the revmap_mutex held.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3722
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
-  -Adding the regdma entries to .dma_cfg of these chipsets.
+The lockdep assert is here to guarantee that my claim that all current
+(and future) paths that end up modifying these structures do so under
+the irq_domain_mutex instead.
 
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> Your race fixes change the locking and you want to ensure that all
+> callers comply right there, no?
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 0f3da480b066..3318e1d18a0e 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -2677,6 +2677,8 @@ static const struct dpu_mdss_cfg sc8280xp_dpu_cfg = {
- 	.intf = sc8280xp_intf,
- 	.vbif_count = ARRAY_SIZE(sdm845_vbif),
- 	.vbif = sdm845_vbif,
-+	.reg_dma_count = 1,
-+	.dma_cfg = &sc8280xp_regdma,
- 	.perf = &sc8280xp_perf_data,
- 	.mdss_irqs = IRQ_SC8280XP_MASK,
- };
-@@ -2732,7 +2734,7 @@ static const struct dpu_mdss_cfg sm8350_dpu_cfg = {
- 	.vbif_count = ARRAY_SIZE(sdm845_vbif),
- 	.vbif = sdm845_vbif,
- 	.reg_dma_count = 1,
--	.dma_cfg = &sm8250_regdma,
-+	.dma_cfg = &sm8350_regdma,
- 	.perf = &sm8350_perf_data,
- 	.mdss_irqs = IRQ_SM8350_MASK,
- };
--- 
-2.20.1.7.g153144c
+I want to make sure that all callers of these function comply, yes.
+That's why the asserts belong in this patch.
 
+Johan
