@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C80E6721FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559BD672203
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjARPsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S231182AbjARPtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjARPqf (ORCPT
+        with ESMTP id S231527AbjARPqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:46:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C3D303FE;
-        Wed, 18 Jan 2023 07:46:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B71F9B81D92;
-        Wed, 18 Jan 2023 15:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD50C433A7;
-        Wed, 18 Jan 2023 15:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674056782;
-        bh=lJ/kwmiQYsl9y9vng7yDw5HKTngvmR93U8NLEJb0qC8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HGktXM+t0fav2jneq3mlMvIxWBD0QL/poes7B/slAUYayFIgsJRoq7GMyWxQHyQ30
-         DYwofhaZCBfUySVcz1+zOh/BO7XS/9vdrb5FbY0Ztp0gnnubaX/uCDceFDUC2B7naf
-         XJHto2uEPugeT0p7yw/0hrAoP4vu0n3cl/zEIkwoQRFCYkonCQ2wvsSpjOSbQ8B7Ka
-         14JkWnDCqVeZr+L5JTwPVxT1syzgByDDMXLoOiFzlR/yYLvsLkB4MD5ThrGS3AqloN
-         A8KHdzZHCPWrpesaPKVueVOIzTOdw9RqO+tVoWM7ppGc09qDM+DhL8ByhiJ9Mt74TE
-         86p41mhSUyR3A==
-Received: by mail-lf1-f50.google.com with SMTP id bp15so52245474lfb.13;
-        Wed, 18 Jan 2023 07:46:22 -0800 (PST)
-X-Gm-Message-State: AFqh2kolVIv9e1r11FI0GDfBJGE89jrxbZvRVw8HB6I2/CXPYHx3+Uue
-        DzZiuzj3XUBUxZqx5qmGkLEudGY3Awv0u+Ip3uA=
-X-Google-Smtp-Source: AMrXdXvKd2ozhrn+S6d4qTJhm2W4B4noZo8m76bKLACYxbKqjGgo6a44usnJhpG+sf2bB37FJHUokCJHIo3g/InSZOY=
-X-Received: by 2002:a19:c501:0:b0:4b8:9001:a694 with SMTP id
- w1-20020a19c501000000b004b89001a694mr380330lfe.426.1674056780228; Wed, 18 Jan
- 2023 07:46:20 -0800 (PST)
+        Wed, 18 Jan 2023 10:46:36 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631403B3DE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:46:34 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m15so3810396wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+5JIxwYLdszz3QtNNn14zH3G7fOay6yeEWK2c2U4Apw=;
+        b=GvKQjdx9H9NyRni27g+w3f02ZkRz/gMShcGghXCiF8mXUrmhI19CHpdiabajvKBHuI
+         b8muNVsw9ZM/4lp5D2aRM1rLOPa2Ujs95U9Vzhub0VQaxOKKUATCn4wfKPq5SgfuxhIa
+         wX1rHbMp2INsDs56pBjMWQvWPrWMty7+Cvxk5KlBtYwkFQKYwLNzWDwImxk8e5to0OVs
+         YzWLZKxLPE1qREDcuf9Ql/DJ0F3RKa6+vgsTQ30HAB+yZoLAxPfTxOcaaskvTwkHEI0g
+         Qlwb+ghaMZhsI3qQfJWtPVeQVBvH7DSDUzZfBR8k4pzaCkjJs1ypFcQONTK52w+vmse/
+         DNMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5JIxwYLdszz3QtNNn14zH3G7fOay6yeEWK2c2U4Apw=;
+        b=X4MADCr7FrRBwJrm37Rc4cddpEg+mI244dxypWBkLgcDYfEppWeMrLKgTvyvo654P7
+         W+TbHiBMFPTKptY9RlIRdq4NQyQu8tQinWB5xEg2tTwi7KMqyccumFEwzWRYqA51qsQD
+         cQooUD9Ny2fXcnoN9AZGvmGolyzw4GDCBC/+3opSTGeqjaBgarhF0xB+rR653oTha+3W
+         +zjCGMOQc6yn/+JstLb7J5BrjSEm+HezPbqvYJBRT55u8/yaPXiiHonmCgUf8M2OKLLk
+         sQ8vSCT2HQo7CJWm1fke+4VQCu4lKbGx7Xnry97BK0xBNd+EFwZF8uCIZMpMtjlNj3tP
+         CwaA==
+X-Gm-Message-State: AFqh2kqW2bn1QQqaoLmVirRyYodZVtRkfNAbXhM0WcU1iues6JEViZuF
+        vIEQbWHCSoQ/Mr+Nsfsa1bVxsA==
+X-Google-Smtp-Source: AMrXdXsi8lT14Wy6b9Ye83A/k0/x6hjIf5EUq5UIA/MVGjHWG+iux9sBuvphRRMwb25HsHdRFMabpg==
+X-Received: by 2002:a05:600c:198a:b0:3d9:cb4c:af5a with SMTP id t10-20020a05600c198a00b003d9cb4caf5amr7424430wmq.33.1674056792976;
+        Wed, 18 Jan 2023 07:46:32 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z12-20020adfd0cc000000b002bdff778d87sm8738509wrh.34.2023.01.18.07.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 07:46:31 -0800 (PST)
+Message-ID: <d4314561-bdcd-5e93-d329-e755d5316476@linaro.org>
+Date:   Wed, 18 Jan 2023 16:46:30 +0100
 MIME-Version: 1.0
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name> <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
- <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com> <1818a72f-31ef-07b0-d1b4-6a8904636db2@amd.com>
- <CAMj1kXG7s_B1nyEgsxFRRvUzsWNXcFfTszRA2hKY=_a-L24PZg@mail.gmail.com> <e1986845-9eb9-2147-5073-5d7a45633aba@intel.com>
-In-Reply-To: <e1986845-9eb9-2147-5073-5d7a45633aba@intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 18 Jan 2023 16:46:09 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG=rec5HSxfteQnc6ZZ0RnQZq+-wX6HNG5gm4tiSOuH_g@mail.gmail.com>
-Message-ID: <CAMj1kXG=rec5HSxfteQnc6ZZ0RnQZq+-wX6HNG5gm4tiSOuH_g@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v4 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
+Content-Language: en-US
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-3-yanhong.wang@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230118061701.30047-3-yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +87,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 at 16:41, Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 1/18/23 07:09, Ard Biesheuvel wrote:
-> > However, I guess we're at a point where SEV and TDX really want
-> > different solutions, so I think divergence might be the way to
-> > proceed.
->
-> I don't think they want different things really.
->
-> TDX doesn't need this protocol.  It sounds like SEV does need it,
-> though.  That doesn't mean they really diverge.  They're *both* going to
-> have to poke at this protocol knob to get the firmware to not accept the
-> memory.
->
+On 18/01/2023 07:16, Yanhong Wang wrote:
+> Some boards(such as StarFive VisionFive v2) require more than one value
+> which defined by resets property, so the original definition can not
+> meet the requirements. In order to adapt to different requirements,
+> adjust the maxitems number definition.
+> 
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index e26c3e76ebb7..baf2c5b9e92d 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -133,12 +133,9 @@ properties:
+>          - ptp_ref
+>  
+>    resets:
+> -    maxItems: 1
+> -    description:
+> -      MAC Reset signal.
+> -
+> -  reset-names:
+> -    const: stmmaceth
+> +    minItems: 1
+> +    maxItems: 3
+> +    additionalItems: true
 
-No, on TDX, the firmware would never accept all memory. On SEV, it
-would only do so if the protocol has not been called prior to the call
-to ExitBootServices().
+NAK, because I told you twice to drop this one. So this is third time -
+drop this line...
 
-> This does slightly change the motivation for doing explicit unaccepted
-> memory support in the kernel.
->
+Best regards,
+Krzysztof
 
-Not on TDX.
-
-> I also don't know _quite_ how this will look to a guest.  For instance,
-> will they see different memory maps based on which protocol they are
-> using?  I assume so, but didn't see any of that explicitly mentioned in
-> this patch.
-
-The EFI memory map will not contain ranges of type
-EFI_UNACCEPTED_MEMORY if the memory was accepted on behalf of the OS
-by the firmware. That is the point, really, as non-enlightened OSes
-will ignore those.
