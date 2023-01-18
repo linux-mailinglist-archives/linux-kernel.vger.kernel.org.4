@@ -2,242 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B3E671812
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8B3671810
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjARJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S230059AbjARJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjARJnH (ORCPT
+        with ESMTP id S230421AbjARJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:43:07 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A06D676E4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:58:56 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id v127so30617683vsb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tBkTbFF9aWlMGtV+OPGHuf+HNY2wlnat0pDhkhBjc88=;
-        b=q/4nsWsMhxCZhEedY6SE87FQhU76ETSz8iZHj7SSitYii6hz2Q5oV0U/n+FkhmezpQ
-         UhMz09BHcsg4rUQe6eHBeGOuhvxQ3kPBQJMjMxLer1p1+lyZyMuAAjztLMjBUw8BADKJ
-         kEuKMETYF5mZYKN+1xI6UJc4wtURU9jqW7VyE2Iu5gDUbaW2ezKZgkfye00hNgMHGtGT
-         +MJ6wKW+gwiwADZLdLi1QadSvc/8tkjE0cQbBjjs2Zdy8SMSrv2UJHY5YRUI1MyF7Ncm
-         NDdYNpnfwki2xZvSTYOpQC32nmA2q2EKEAritXmodJSIeNfqBicaIzerRsU8MScy55PT
-         STgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tBkTbFF9aWlMGtV+OPGHuf+HNY2wlnat0pDhkhBjc88=;
-        b=bvWiygl5820WYBO2IM8UaR5IubhhOm6UuaMcnBQCPzu5hbVt5Ge7XwiMRNNs9NwLVh
-         D5+akArl4ePenPG8z2FzdYVaMWxDVl5xNwmwpOXqGx66oJt4l5oBD3bCJa9zVwoeq76X
-         a8I9wl4FqD2we0mAU+xjcl3ifJ9nQYW6qzdBn3bf5VLeHnXOl7QAb3HvJjgaKGIN3qGq
-         kOOUZleBULBikuhCIUzOTc3p8A+W7XqucVusQWkCsrfvjafxuuE/xQTJoLStK3MoapZo
-         PMFSy+agVcJ3NsMPgCW6mx8QBphwKwb4RcFE9aced62ZNJZuYVWL6c3ned3uIzQsWYKE
-         vZQA==
-X-Gm-Message-State: AFqh2kqVPbVOFJGW8L5U+T9sJcR3z9djJkwfucfZNFv5re3DV0oNosgA
-        +lrZdi4povslETMI7lBUCumWQ5tCujKj018EJ+AnXw==
-X-Google-Smtp-Source: AMrXdXsyNEMyAZsS8fjeKKM+rIp55VKD4Emx6DelbC6BqI5a72ndd9EcJS9Pbz70s7rrpyTc+lzBteSrt9PtSUeqnvY=
-X-Received: by 2002:a05:6102:4425:b0:3c8:c513:197 with SMTP id
- df37-20020a056102442500b003c8c5130197mr817879vsb.9.1674032335895; Wed, 18 Jan
- 2023 00:58:55 -0800 (PST)
+        Wed, 18 Jan 2023 04:42:08 -0500
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099FF66FAB;
+        Wed, 18 Jan 2023 00:58:52 -0800 (PST)
+X-UUID: 75e262cb2b40474cbae37b4990fb7b92-20230118
+X-CPASD-INFO: e91bbc8fd9d74cad94acf213d1775d91@rolrgo-VZpaQWaaDg6asnlllkZOXXlG
+        CpmtXZ2OUZVGVhH5xTV5nX1V9gnNXZF5dXFV3dnBQY2BhXVJ3i3-XblBgXoZgUZB3tHtrgpKRaA==
+X-CLOUD-ID: e91bbc8fd9d74cad94acf213d1775d91
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:197.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:102.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:9,DUF:13236,ACD:206,DCD:206,SL:0,EISP:0,AG:0,CFC:0.139,CFSR:0.205,UAT:0
+        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
+        0,EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 75e262cb2b40474cbae37b4990fb7b92-20230118
+X-CPASD-BLOCK: 1001
+X-CPASD-STAGE: 1
+X-UUID: 75e262cb2b40474cbae37b4990fb7b92-20230118
+X-User: xurui@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <xurui@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 849748297; Wed, 18 Jan 2023 16:58:52 +0800
+From:   xurui <xurui@kylinos.cn>
+To:     tsbogend@alpha.franken.de, ralf@linux-mips.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, xurui <xurui@kylinos.cn>
+Subject: [RFC] MIPS: Fix a compilation issue
+Date:   Wed, 18 Jan 2023 16:59:12 +0800
+Message-Id: <20230118085912.608758-1-xurui@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230117124624.496082438@linuxfoundation.org>
-In-Reply-To: <20230117124624.496082438@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 18 Jan 2023 14:28:45 +0530
-Message-ID: <CA+G9fYvbxa=vH+Er4m3i=OgiwKtOCRr=uExCjDs3tnpxMmeeXg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/477] 4.19.270-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 at 18:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.270 release.
-> There are 477 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.270-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+arch/mips/include/asm/mach-rc32434/pci.h:377:
+cc1: error: result of ‘-117440512 << 16’ requires 44 bits to represent, but ‘int’ only has 32 bits [-Werror=shift-overflow=]
 
+I guss we don`t need a left shift here?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Signed-off-by: xurui <xurui@kylinos.cn>
+---
+ arch/mips/include/asm/mach-rc32434/pci.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/include/asm/mach-rc32434/pci.h
+index 9a6eefd12757..3eb767c8a4ee 100644
+--- a/arch/mips/include/asm/mach-rc32434/pci.h
++++ b/arch/mips/include/asm/mach-rc32434/pci.h
+@@ -374,7 +374,7 @@ struct pci_msu {
+ 				 PCI_CFG04_STAT_SSE | \
+ 				 PCI_CFG04_STAT_PE)
+ 
+-#define KORINA_CNFG1		((KORINA_STAT<<16)|KORINA_CMD)
++#define KORINA_CNFG1		(KORINA_STAT | KORINA_CMD)
+ 
+ #define KORINA_REVID		0
+ #define KORINA_CLASS_CODE	0
+-- 
+2.25.1
 
-## Build
-* kernel: 4.19.270-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 2738270a87607b0fe9d198d07d8866c75892149a
-* git describe: v4.19.269-478-g2738270a8760
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.269-478-g2738270a8760
-
-## Test Regressions (compared to v4.19.269)
-
-## Metric Regressions (compared to v4.19.269)
-
-## Test Fixes (compared to v4.19.269)
-
-## Metric Fixes (compared to v4.19.269)
-
-## Test result summary
-total: 112688, pass: 84899, fail: 3443, skip: 23978, xfail: 368
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 323 total, 316 passed, 7 failed
-* arm64: 59 total, 58 passed, 1 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 46 total, 46 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 47 passed, 6 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
