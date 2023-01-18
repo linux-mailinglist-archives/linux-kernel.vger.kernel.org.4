@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C52E6712B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF306712BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjAREpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 23:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S229669AbjAREpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 23:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjAREoy (ORCPT
+        with ESMTP id S229667AbjAREpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 23:44:54 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06750577D2;
-        Tue, 17 Jan 2023 20:44:52 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 127so7981932pfe.4;
-        Tue, 17 Jan 2023 20:44:52 -0800 (PST)
+        Tue, 17 Jan 2023 23:45:00 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9878654B3E;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 141so23667206pgc.0;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=itXWojnygtxjpIeaCDfV4R7hBZ6s5zXg2DD6bBlDmBs=;
-        b=eftewbe2CBi/5TV64gKK9OavY/tDi6b+9se+BEA3Z28iy4AcsbG082daQioK7e3Loi
-         804DCiNVLoBU7Mh3a2+1Li+ryCxBdytyRgUd00pGZsFgDegiZiKbMWPY9mZwcMMUPbQY
-         SOi7EZ3xkmngdy0yPw7iMuvyve+0A8DhScdS/+HQwhB2tWzssJE4qPcgy4sEuBGzcaYf
-         Bmb9MsJMk/PGphbVBl7Op+mFA71C5FNYN8qO5cu8jiC1v+eMPCV2hKmSnVSkRYzpeYXc
-         oUpqg6WrvR1pt60FnCNTD0kWYUTVMPE9WZTa1cH84ZuYbQjp5tjOy7x64Lpx3x9f5Rsa
-         8f1g==
+        bh=D62QMVerlbHiyJGnbiMPg5OFumoXXbcE1NYnWS92Nek=;
+        b=YnwAJLYYmNrSJ2611D8WOEipldiLlKr60N05t7pGUjMqmf/PaOVcD+iBQ/bEdKOGuK
+         Aznvm7XYmCkQNTrBzKwF1SqJRuIWi6i3zbCKL3UOOOymZ2ruJYhTeJqwcRECp7kGHL7d
+         DI4VR2JmcSEDpYKFERHE4BJumSUntUJkuA+9tFf34Pj5nS91b7eQv0Dgo/+1suXw/AQd
+         NPyUZByJZq0f2mcsSqBGDwcD0cSBeBJZaGQKTJ83jCyCTU/tMA5RJGXg4lMZa426XsJk
+         wYinfYfa0HKImcaD3Qyqr6aqNS6D4mvxFqWwYSfJFIL2Bv9UhxAHUKi3VRspIi7ll9aR
+         DzUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=itXWojnygtxjpIeaCDfV4R7hBZ6s5zXg2DD6bBlDmBs=;
-        b=i0VUYEIpU708b43lmCEV0/y0uYcaB6XIBJPqdPERp9LUl0swq+yVV8AryScpkVtBm6
-         odhdrJ+rohGIG9yoonIUT4ZFK4V/8kPUfMonckMTLuFel8u5/JfVJMjGLHZosuMI2N12
-         wr4UDVhX5eo/TEaP4/tHhNWkF/Ngv5g3tc+Z3BsvEl2xh1vFnukeg4PD22+skrmt9hpu
-         qqX0FWs/0G1wrqTsPoERaXyrcGaOyBXpKJb6Ghmh8OmObQGz5zaHX7oD01aTxtrInLA1
-         0oMVxIMdAZxYrX7Stv3aV2LrHeY+oM0FylggvOG4NiS88YhzFhuIhgfrOpR4dD86x6Bs
-         CGMA==
-X-Gm-Message-State: AFqh2krrLprpl5CwztZT4FrZr8piha1Y2xfxzH656XUv6KWeu95S4Txa
-        Ft8JTu+T5hYW3FIihI3nTVY=
-X-Google-Smtp-Source: AMrXdXtBJtSFjDvd+tEKeroo4rlbneH5l+K+HTCDwQ7LNibIc+cAzkuTh9IotDPhn2l/gjbk/m3wtA==
-X-Received: by 2002:a05:6a00:2986:b0:58c:8bdd:2e3c with SMTP id cj6-20020a056a00298600b0058c8bdd2e3cmr5927506pfb.20.1674017092407;
-        Tue, 17 Jan 2023 20:44:52 -0800 (PST)
+        bh=D62QMVerlbHiyJGnbiMPg5OFumoXXbcE1NYnWS92Nek=;
+        b=JDPFo4g/Iu1Op4thv7yNVTsmbzouCJn653pAZSz8qPKERyWLl5KHVvFYUQ+vzf6yM6
+         tT0v1qjH5sAnFuj8ovBVmENRmQ76gm9uvYfbyCpkJwqWRC6qc3BzwvI5nCjFWNFiwD3W
+         2eiZCKRVaSBylO5sbcd444YygoK+LLSEpzC6LgDa0tZ64zKFGxEDCaQlvp9Jy8bV3XmM
+         dsOyZob5XZeIeBY4aptPobwiiCGumSLSSU+H25blX2GAEhhzRbrNXOl2569RCGQvOChC
+         sNhdFZdBehOIEbzvbXmRNy03d7siaTvti7Ayi/JiRrBwv/UHAhJqMenNz4vV2q5dTBUE
+         BYOA==
+X-Gm-Message-State: AFqh2koYne3ALRuLUo/D/AVqglGhp7MJtb435285AVkPO1FzrOiT7a66
+        fNZ5ZSNE53MCFnkwXguHsf0=
+X-Google-Smtp-Source: AMrXdXsh+fX6wFVwZRY4xo68oRaBk9FmudTk1cSnjbhf23RkmY4pHCEDgfNQy57E+IP8NNuYjT4XgQ==
+X-Received: by 2002:a62:1507:0:b0:581:6069:5c00 with SMTP id 7-20020a621507000000b0058160695c00mr6413991pfv.28.1674017098355;
+        Tue, 17 Jan 2023 20:44:58 -0800 (PST)
 Received: from localhost.localdomain ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b00581a156b920sm8682770pfk.132.2023.01.17.20.44.48
+        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b00581a156b920sm8682770pfk.132.2023.01.17.20.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 20:44:52 -0800 (PST)
+        Tue, 17 Jan 2023 20:44:57 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/9] arm64: dts: amlogic: Used onboard usb hub reset on odroid c2
-Date:   Wed, 18 Jan 2023 04:44:11 +0000
-Message-Id: <20230118044418.875-4-linux.amoon@gmail.com>
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 4/9] usb: misc: onboard_usb_hub: add Genesys Logic GL852G hub support
+Date:   Wed, 18 Jan 2023 04:44:12 +0000
+Message-Id: <20230118044418.875-5-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230118044418.875-1-linux.amoon@gmail.com>
 References: <20230118044418.875-1-linux.amoon@gmail.com>
@@ -80,63 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Odroid c2 previously use gpio-hog to reset the usb hub,
-switch to used on-board usb hub reset to enable the usb hub
-and enable power to hub.
+Genesys Logic GL852G is a 4-port USB 2.0 STT hub that has a reset pin to
+toggle and a 5.0V core supply exported though an integrated LDO is
+available for powering it.
+
+Add the support for this hub, for controlling the reset pin and the core
+power supply.
 
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v2 - drop the vendor name from compatible string.
-   - move the hub node to USB controller node.
-   - drop the usb_otg_pwr since it only liked to OTG port
-         and link p5v0 to the vdd-supply.
+v2: - fix the compatible string
+    - drop the -OHG suffix from commit message.
+    - Add reset delay.
 ---
- .../boot/dts/amlogic/meson-gxbb-odroidc2.dts  | 26 ++++++++-----------
- 1 file changed, 11 insertions(+), 15 deletions(-)
+ drivers/usb/misc/onboard_usb_hub.c | 1 +
+ drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
-index 201596247fd9..01356437a077 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts
-@@ -250,21 +250,6 @@ eth_phy0: ethernet-phy@0 {
- 	};
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 94e7966e199d..9bf59792fb94 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -409,6 +409,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+ 
+ static const struct usb_device_id onboard_hub_id_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
++	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+index 62129a6a1ba5..163fc07abf25 100644
+--- a/drivers/usb/misc/onboard_usb_hub.h
++++ b/drivers/usb/misc/onboard_usb_hub.h
+@@ -26,11 +26,16 @@ static const struct onboard_hub_pdata genesys_gl850g_data = {
+ 	.reset_us = 3,
  };
  
--&gpio_ao {
--	/*
--	 * WARNING: The USB Hub on the Odroid-C2 needs a reset signal
--	 * to be turned high in order to be detected by the USB Controller
--	 * This signal should be handled by a USB specific power sequence
--	 * in order to reset the Hub when USB bus is powered down.
--	 */
--	hog-0 {
--		gpio-hog;
--		gpios = <GPIOAO_4 GPIO_ACTIVE_HIGH>;
--		output-high;
--		line-name = "usb-hub-reset";
--	};
--};
--
- &hdmi_tx {
- 	status = "okay";
- 	pinctrl-0 = <&hdmi_hpd_pins>, <&hdmi_i2c_pins>;
-@@ -414,5 +399,16 @@ &usb0 {
- };
- 
- &usb1 {
-+	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	status = "okay";
++static const struct onboard_hub_pdata genesys_gl852g_data = {
++	.reset_us = 50,
++};
 +
-+	hub@1 {
-+		/* Genesys Logic GL852G USB 2.0 hub */
-+		compatible = "usb5e3,610";
-+		reg = <1>;
-+		vdd-supply = <&p5v0>;
-+		reset-gpio = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_LOW>;
-+	};
- };
+ static const struct of_device_id onboard_hub_match[] = {
+ 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
++	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
+ 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
 -- 
 2.38.1
 
