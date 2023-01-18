@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5F3671B6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9794671B75
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjARMDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S230152AbjARMGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjARMC0 (ORCPT
+        with ESMTP id S230377AbjARMF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:02:26 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE978458B4;
-        Wed, 18 Jan 2023 03:19:58 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id B36721C09F6; Wed, 18 Jan 2023 12:19:57 +0100 (CET)
-Date:   Wed, 18 Jan 2023 12:19:57 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 000/477] 4.19.270-rc2 review
-Message-ID: <Y8fV3bhpnXzxRyOG@duo.ucw.cz>
-References: <20230117124624.496082438@linuxfoundation.org>
+        Wed, 18 Jan 2023 07:05:58 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24277E4B0;
+        Wed, 18 Jan 2023 03:22:07 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30IBLfFA056612;
+        Wed, 18 Jan 2023 05:21:41 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674040901;
+        bh=OAdIBFrrzccwy+esEDLCSN7tQoc5jz5kJ2Q3YeYHXm8=;
+        h=From:To:CC:Subject:Date;
+        b=Rxd3393nnE72F/PHxYTxWbygdyH8Ly8Up2QckHbJWSahTDO4kAkVowC7NyfMioFbB
+         0OFPUa3bpsg8euDS8Y+jWRQ+EL+f1xL2wGfx0oldUgL9jkJogNQvEdx6pXUUshLE7y
+         o4z2mVDM3S7PE68uacoQH0xi6NCiGTElPAKsZyow=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30IBLf1e032518
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Jan 2023 05:21:41 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
+ Jan 2023 05:21:41 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 18 Jan 2023 05:21:41 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30IBLbt9032879;
+        Wed, 18 Jan 2023 05:21:38 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>,
+        <geert@linux-m68k.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next] net: ethernet: ti: am65-cpsw: Handle -EPROBE_DEFER for Serdes PHY
+Date:   Wed, 18 Jan 2023 16:51:36 +0530
+Message-ID: <20230118112136.213061-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="uFqGZPQabvaoGKdM"
-Content-Disposition: inline
-In-Reply-To: <20230117124624.496082438@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the am65_cpsw_init_serdes_phy() function, the error handling for the
+call to the devm_of_phy_get() function misses the case where the return
+value of devm_of_phy_get() is ERR_PTR(-EPROBE_DEFER). Proceeding without
+handling this case will result in a crash when the "phy" pointer with
+this value is dereferenced by phy_init() in am65_cpsw_enable_phy().
 
---uFqGZPQabvaoGKdM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by adding appropriate error handling code.
 
-Hi!
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Fixes: dab2b265dd23 ("net: ethernet: ti: am65-cpsw: Add support for SERDES configuration")
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+This issue has been reported at:
+Link: https://lore.kernel.org/r/CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com/
 
-> This is the start of the stable review cycle for the 4.19.270 release.
-> There are 477 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-CIP testing did not find any problems here:
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 5cac98284184..c696da89962f 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -1463,6 +1463,8 @@ static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *por
+ 	phy = devm_of_phy_get(dev, port_np, name);
+ 	if (PTR_ERR(phy) == -ENODEV)
+ 		return 0;
++	if (IS_ERR(phy))
++		return PTR_ERR(phy);
+ 
+ 	/* Serdes PHY exists. Store it. */
+ 	port->slave.serdes_phy = phy;
+-- 
+2.25.1
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.19.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---uFqGZPQabvaoGKdM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8fV3QAKCRAw5/Bqldv6
-8v4NAKC2hqg9EgSftKc2xK0ReoH+vTNmaACeMWQAfxRpG4k1j5MjVMxSVtc0BtQ=
-=polm
------END PGP SIGNATURE-----
-
---uFqGZPQabvaoGKdM--
