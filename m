@@ -2,85 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B58F6729A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650486729BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjARUp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S230301AbjARUvZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 Jan 2023 15:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjARUpX (ORCPT
+        with ESMTP id S230178AbjARUvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:45:23 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A055F3AC;
-        Wed, 18 Jan 2023 12:45:22 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bk16so35187427wrb.11;
-        Wed, 18 Jan 2023 12:45:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgIgSN11rEd8/t7p92lzCdZRCM1txWSCMaslInNbKCo=;
-        b=c0vu0i0WjNE2ZEaE4AK/7wjM7vXc9Hah4fdN6SqEkrSy/kAMPhVrwsffQmrdNGQl5l
-         GFbQW7t0/oXXHXUgeSx6yzAGFXwURiTmJKSnQgCFyygDeXoCOr3eySU+kqhfnwqTrZRE
-         7esI7IfQlxzPF36qE9WGQvM023KOLBSiYG/cCpmCBbBx2ckzjHKP+eE3pBCewXSJv7eP
-         enf3YAfWjozH4Zq4+GZD7RwFvuCJv4C/EQBBUMMDKEX+9R1nPcp3wmMY08yYkWA14XGv
-         eGkJvfDlLlSetrbW4C+Y9oUL3yX9HUnz4ySsHhboWxcLZUV+JmT9cBm3+Ro+s/FlDD8x
-         87CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgIgSN11rEd8/t7p92lzCdZRCM1txWSCMaslInNbKCo=;
-        b=iZyjLSZRAYr09/uJ9pdpGrX/mybM7EgW2DxCf+dPrVxO8apcpr3j34w8xshzCqj1UD
-         uWeOyPCLzIOUOkDFEUEYTK0w++cv82HP071g3AFbNBsyQ4j+8AfviRYtlQ4OtSI+pNCK
-         wbxovAlEBHxPcY9pDGTa3A+molZnvGKOfTJsZJZ9ka8wrkuovOavz5sFK7FfQQEAw4e7
-         foVFFZthWVGdfsx/y1lQnjOQdSNkL112f01k7EPKlJb+XMjM6ihS++/PQbO+b7egyQ5b
-         f/kmb3sU9NUYvSMiVig7Tj4/T6opfVDru0KxbNR7NeE8eJbi9wf6t+ao5SwHccS09DWe
-         ml9g==
-X-Gm-Message-State: AFqh2kq8xDwn/IF3PGyTC12M2al6ouPLFwwB2gMdvi+qHwIo51AcOblL
-        3tWtZsRDcaBS9qDZ2ls4pZ4=
-X-Google-Smtp-Source: AMrXdXuhv4CroI7UB3QJWrNv2/LetE7M7cz5upNyBmPvrGLBiJvq45o0CFeb+Rdnys9W28IJQzmXlA==
-X-Received: by 2002:adf:ed0c:0:b0:2be:f21:6b02 with SMTP id a12-20020adfed0c000000b002be0f216b02mr7175864wro.70.1674074720705;
-        Wed, 18 Jan 2023 12:45:20 -0800 (PST)
-Received: from [10.27.0.4] ([217.138.207.228])
-        by smtp.gmail.com with ESMTPSA id by12-20020a056000098c00b002bdd8f12effsm16743332wrb.30.2023.01.18.12.45.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 12:45:20 -0800 (PST)
-Message-ID: <2b0fdc2d-6457-059b-bbdf-27e7de59abeb@gmail.com>
-Date:   Wed, 18 Jan 2023 21:45:18 +0100
+        Wed, 18 Jan 2023 15:51:12 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DDA611F3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:42 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IGUhM8006116
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:42 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n5jdxc45k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:41 -0800
+Received: from twshared24004.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 18 Jan 2023 12:50:40 -0800
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 5D8F913DAA7E5; Wed, 18 Jan 2023 12:47:40 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>, <linux-modules@vger.kernel.org>,
+        <live-patching@vger.kernel.org>
+CC:     <x86@kernel.org>, <jpoimboe@kernel.org>, <jikos@kernel.org>,
+        <pmladek@suse.com>, <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>, Song Liu <song@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH v9] livepatch: Clear relocation targets on a module removal
+Date:   Wed, 18 Jan 2023 12:47:28 -0800
+Message-ID: <20230118204728.1876249-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: q7iQFEhCResTy7zGJIuHgfWCi5Rc64p6
+X-Proofpoint-GUID: q7iQFEhCResTy7zGJIuHgfWCi5Rc64p6
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/4] firmware: Add support for Qualcomm UEFI Secure
- Application
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-4-luzmaximilian@gmail.com>
- <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,130 +59,450 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 09:24, Johan Hovold wrote:
-> On Sun, Jul 24, 2022 at 12:49:48AM +0200, Maximilian Luz wrote:
->> On platforms using the Qualcomm UEFI Secure Application (uefisecapp),
->> EFI variables cannot be accessed via the standard interface in EFI
->> runtime mode. The respective functions return EFI_UNSUPPORTED. On these
->> platforms, we instead need to talk to uefisecapp. This commit provides
->> support for this and registers the respective efivars operations to
->> access EFI variables from the kernel.
->>
->> Communication with uefisecapp follows the standard Qualcomm Trusted
->> Environment (TEE or TrEE) / Secure OS conventions via the respective SCM
->> call interface. This is also the reason why variable access works
->> normally while boot services are active. During this time, said SCM
->> interface is managed by the boot services. When calling
->> ExitBootServices(), the ownership is transferred to the kernel.
->> Therefore, UEFI must not use that interface itself (as multiple parties
->> accessing this interface at the same time may lead to complications) and
->> cannot access variables for us.
->>
->> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
->> ---
-> 
->> +static struct platform_driver qcom_uefisecapp_driver = {
->> +	.probe = qcom_uefisecapp_probe,
->> +	.remove = qcom_uefisecapp_remove,
->> +	.driver = {
->> +		.name = "qcom_tee_uefisecapp",
->> +		.of_match_table = qcom_uefisecapp_dt_match,
->> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->> +	},
->> +};
->> +module_platform_driver(qcom_uefisecapp_driver);
-> 
-> I noticed that for efivarfs to work, you're currently relying on having
-> the firmware still claim that the variable services are supported in the
-> RT_PROP table so that efi core registers the default ops at subsys init
-> time (which are later overridden by this driver).
-> 
-> Otherwise efivarfs may fail to initialise when built in:
-> 
-> 	static __init int efivarfs_init(void)
-> 	{
-> 		if (!efivars_kobject())
-> 			return -ENODEV;
-> 
-> 		return register_filesystem(&efivarfs_type);
-> 	}
-> 
-> 	module_init(efivarfs_init);
-> 
-> With recent X13s firmware the corresponding bit in the RT_PROP table has
-> been cleared so that efivarfs would fail to initialise. Similar problem
-> when booting with 'efi=noruntime'.
-> 
-> One way to handle this is to register also the qcom_uefisecapp_driver at
-> subsys init time and prevent it from being built as a module (e.g. as is
-> done for the SCM driver). I'm using the below patch for this currently.
+From: Miroslav Benes <mbenes@suse.cz>
 
-So I've had another look and I'm not sure this will work reliably:
+Josh reported a bug:
 
-First, you are correct in case the RT_PROP table is cleared. In that
-case, using subsys_initcall() will move the efivar registration before
-the efivarfs_init() call.
+  When the object to be patched is a module, and that module is
+  rmmod'ed and reloaded, it fails to load with:
 
-However, in case EFI indicates support for variables, we will then have
-generic_ops_register() and the uefisecapp's driver call running both in
-subsys_initcall(). So if I'm not mistaken, this could cause the generic
-ops to be registered after the uefisecapp ones, which we want to avoid.
+  module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
 
-One solution is bumping uefisecapp to fs_initcall(). Or do you have any
-other suggestions?
+  The livepatch module has a relocation which references a symbol
+  in the _previous_ loading of nfsd. When apply_relocate_add()
+  tries to replace the old relocation with a new one, it sees that
+  the previous one is nonzero and it errors out.
 
-Regards,
-Max
+  On ppc64le, we have a similar issue:
 
+  module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
 
->  From 8fecce12d215bd8cab1b8c8f9f0d1e1fe20fe6e7 Mon Sep 17 00:00:00 2001
-> From: Johan Hovold <johan+linaro@kernel.org>
-> Date: Sun, 15 Jan 2023 15:32:34 +0100
-> Subject: [PATCH] firmware: qcom_tee_uefisecapp: register at subsys init
-> 
-> Register efivars at subsys init time so that it is available when
-> efivarfs probes. For the same reason, also prevent building the driver
-> as a module.
-> 
-> This is specifically needed on platforms such as the Lenovo Thinkpad
-> X13s where the firmware has cleared the variable services in the RT_PROP
-> table so that efi core does not register any efivar callbacks at subsys
-> init time (which are later overridden).
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/firmware/Kconfig               | 2 +-
->   drivers/firmware/qcom_tee_uefisecapp.c | 7 ++++++-
->   2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index 4e9e2c227899..48e712e363da 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -231,7 +231,7 @@ config QCOM_TEE
->   	select QCOM_SCM
->   
->   config QCOM_TEE_UEFISECAPP
-> -	tristate "Qualcomm TrEE UEFI Secure App client driver"
-> +	bool "Qualcomm TrEE UEFI Secure App client driver"
->   	select QCOM_TEE
->   	depends on EFI
->   	help
-> diff --git a/drivers/firmware/qcom_tee_uefisecapp.c b/drivers/firmware/qcom_tee_uefisecapp.c
-> index 65573e4b815a..e83bce4da70a 100644
-> --- a/drivers/firmware/qcom_tee_uefisecapp.c
-> +++ b/drivers/firmware/qcom_tee_uefisecapp.c
-> @@ -754,7 +754,12 @@ static struct platform_driver qcom_uefisecapp_driver = {
->   		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->   	},
->   };
-> -module_platform_driver(qcom_uefisecapp_driver);
-> +
-> +static int __init qcom_uefisecapp_init(void)
-> +{
-> +	return platform_driver_register(&qcom_uefisecapp_driver);
-> +}
-> +subsys_initcall(qcom_uefisecapp_init);
->   
->   MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
->   MODULE_DESCRIPTION("Client driver for Qualcomm TrEE/TZ UEFI Secure App");
+He also proposed three different solutions. We could remove the error
+check in apply_relocate_add() introduced by commit eda9cec4c9a1
+("x86/module: Detect and skip invalid relocations"). However the check
+is useful for detecting corrupted modules.
+
+We could also deny the patched modules to be removed. If it proved to be
+a major drawback for users, we could still implement a different
+approach. The solution would also complicate the existing code a lot.
+
+We thus decided to reverse the relocation patching (clear all relocation
+targets on x86_64). The solution is not
+universal and is too much arch-specific, but it may prove to be simpler
+in the end.
+
+Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Song Liu <song@kernel.org>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Co-developed-by: Song Liu <song@kernel.org>
+Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+
+---
+
+NOTE: powerpc32 code is only compile tested.
+
+Changes v8 => v9:
+1. Fix overflow check for R_X86_64_PC32 and R_X86_64_PLT32. (Petr Mladek)
+
+Changes v7 = v8:
+1. Remove the logic in powerpc/kernel/module_64.c, as there is ongoing
+   discussions.
+2. For x86_64, add check for expected value during clear_relocate_add().
+   (Petr Mladek)
+3. Optimize the logic in klp_write_section_relocs(). (Petr Mladek)
+4. Optimize __write_relocate_add (x86_64). (Joe Lawrence)
+
+Changes v6 = v7:
+1. Reduce code duplication in livepatch/core.c and x86/kernel/module.c.
+2. Add more comments to powerpc/kernel/module_64.c.
+3. Added Joe's Tested-by (which I should have added in v6).
+
+Changes v5 = v6:
+1. Fix powerpc64.
+2. Fix compile for powerpc32.
+
+Changes v4 = v5:
+1. Fix compile with powerpc.
+
+Changes v3 = v4:
+1. Reuse __apply_relocate_add to make it more reliable in long term.
+   (Josh Poimboeuf)
+2. Add back ppc64 logic from v2, with changes to match current code.
+   (Josh Poimboeuf)
+
+Changes v2 => v3:
+1. Rewrite x86 changes to match current code style.
+2. Remove powerpc changes as there is no test coverage in v3.
+3. Only keep 1/3 of v2.
+
+v2: https://lore.kernel.org/all/20190905124514.8944-1-mbenes@suse.cz/T/#u
+
+fix
+---
+ arch/powerpc/kernel/module_32.c | 10 ++++
+ arch/powerpc/kernel/module_64.c | 10 ++++
+ arch/s390/kernel/module.c       |  8 +++
+ arch/x86/kernel/module.c        | 92 +++++++++++++++++++++------------
+ include/linux/moduleloader.h    |  7 +++
+ kernel/livepatch/core.c         | 54 ++++++++++++++-----
+ 6 files changed, 134 insertions(+), 47 deletions(-)
+
+diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
+index ea6536171778..e3c312770453 100644
+--- a/arch/powerpc/kernel/module_32.c
++++ b/arch/powerpc/kernel/module_32.c
+@@ -285,6 +285,16 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf32_Shdr *sechdrs,
++		   const char *strtab,
++		   unsigned int symindex,
++		   unsigned int relsec,
++		   struct module *me)
++{
++}
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ notrace int module_trampoline_target(struct module *mod, unsigned long addr,
+ 				     unsigned long *target)
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index ff045644f13f..1096d6b3a62c 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -749,6 +749,16 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf64_Shdr *sechdrs,
++		       const char *strtab,
++		       unsigned int symindex,
++		       unsigned int relsec,
++		       struct module *me)
++{
++}
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ int module_trampoline_target(struct module *mod, unsigned long addr,
+ 			     unsigned long *target)
+diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+index 2d159b32885b..cc6784fbc1ac 100644
+--- a/arch/s390/kernel/module.c
++++ b/arch/s390/kernel/module.c
+@@ -500,6 +500,14 @@ static int module_alloc_ftrace_hotpatch_trampolines(struct module *me,
+ }
+ #endif /* CONFIG_FUNCTION_TRACER */
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf64_Shdr *sechdrs, const char *strtab,
++			unsigned int symindex, unsigned int relsec,
++			struct module *me)
++{
++}
++#endif
++
+ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *me)
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 705fb2a41d7d..034969ad7533 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+ 	return 0;
+ }
+ #else /*X86_64*/
+-static int __apply_relocate_add(Elf64_Shdr *sechdrs,
++static int __write_relocate_add(Elf64_Shdr *sechdrs,
+ 		   const char *strtab,
+ 		   unsigned int symindex,
+ 		   unsigned int relsec,
+ 		   struct module *me,
+-		   void *(*write)(void *dest, const void *src, size_t len))
++		   void *(*write)(void *dest, const void *src, size_t len),
++		   bool apply)
+ {
+ 	unsigned int i;
+ 	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+ 	Elf64_Sym *sym;
+ 	void *loc;
+ 	u64 val;
++	u64 zero = 0ULL;
+ 
+-	DEBUGP("Applying relocate section %u to %u\n",
++	DEBUGP("%s relocate section %u to %u\n",
++	       (apply) ? "Applying" : "Clearing",
+ 	       relsec, sechdrs[relsec].sh_info);
+ 	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
++		int write_size = 4;
++
+ 		/* This is where to make the change */
+ 		loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+ 			+ rel[i].r_offset;
+@@ -162,56 +167,53 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+ 
+ 		switch (ELF64_R_TYPE(rel[i].r_info)) {
+ 		case R_X86_64_NONE:
+-			break;
++			continue;  /* nothing to write */
+ 		case R_X86_64_64:
+-			if (*(u64 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 8);
++			write_size = 8;
+ 			break;
+ 		case R_X86_64_32:
+-			if (*(u32 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 4);
+-			if (val != *(u32 *)loc)
++			if (val != *(u32 *)&val)
+ 				goto overflow;
+ 			break;
+ 		case R_X86_64_32S:
+-			if (*(s32 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 4);
+-			if ((s64)val != *(s32 *)loc)
++			if ((s64)val != *(s32 *)&val)
+ 				goto overflow;
+ 			break;
+ 		case R_X86_64_PC32:
+ 		case R_X86_64_PLT32:
+-			if (*(u32 *)loc != 0)
+-				goto invalid_relocation;
+ 			val -= (u64)loc;
+-			write(loc, &val, 4);
+ #if 0
+-			if ((s64)val != *(s32 *)loc)
++			if ((s64)val != *(s32 *)&val)
+ 				goto overflow;
+ #endif
+ 			break;
+ 		case R_X86_64_PC64:
+-			if (*(u64 *)loc != 0)
+-				goto invalid_relocation;
+ 			val -= (u64)loc;
+-			write(loc, &val, 8);
++			write_size = 8;
+ 			break;
+ 		default:
+ 			pr_err("%s: Unknown rela relocation: %llu\n",
+ 			       me->name, ELF64_R_TYPE(rel[i].r_info));
+ 			return -ENOEXEC;
+ 		}
++
++		if (apply) {
++			if (memcmp(loc, &zero, write_size)) {
++				pr_err("x86/modules: Skipping invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
++				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
++				return -ENOEXEC;
++			}
++			write(loc, &val, write_size);
++		} else {
++			if (memcmp(loc, &val, write_size)) {
++				pr_warn("x86/modules: Clearing invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
++					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
++			}
++			write(loc, &zero, write_size);
++		}
+ 	}
+ 	return 0;
+ 
+-invalid_relocation:
+-	pr_err("x86/modules: Skipping invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
+-	       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+-	return -ENOEXEC;
+-
+ overflow:
+ 	pr_err("overflow in relocation type %d val %Lx\n",
+ 	       (int)ELF64_R_TYPE(rel[i].r_info), val);
+@@ -220,11 +222,12 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	return -ENOEXEC;
+ }
+ 
+-int apply_relocate_add(Elf64_Shdr *sechdrs,
+-		   const char *strtab,
+-		   unsigned int symindex,
+-		   unsigned int relsec,
+-		   struct module *me)
++static int write_relocate_add(Elf64_Shdr *sechdrs,
++			      const char *strtab,
++			      unsigned int symindex,
++			      unsigned int relsec,
++			      struct module *me,
++			      bool apply)
+ {
+ 	int ret;
+ 	bool early = me->state == MODULE_STATE_UNFORMED;
+@@ -235,8 +238,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 		mutex_lock(&text_mutex);
+ 	}
+ 
+-	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
+-				   write);
++	ret = __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
++				   write, apply);
+ 
+ 	if (!early) {
+ 		text_poke_sync();
+@@ -246,6 +249,27 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	return ret;
+ }
+ 
++int apply_relocate_add(Elf64_Shdr *sechdrs,
++		   const char *strtab,
++		   unsigned int symindex,
++		   unsigned int relsec,
++		   struct module *me)
++{
++	return write_relocate_add(sechdrs, strtab, symindex, relsec, me, true);
++}
++
++#ifdef CONFIG_LIVEPATCH
++
++void clear_relocate_add(Elf64_Shdr *sechdrs,
++			const char *strtab,
++			unsigned int symindex,
++			unsigned int relsec,
++			struct module *me)
++{
++	write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
++}
++#endif
++
+ #endif
+ 
+ int module_finalize(const Elf_Ehdr *hdr,
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 7b4587a19189..0b54ec9856df 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -75,6 +75,13 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+ 		       unsigned int symindex,
+ 		       unsigned int relsec,
+ 		       struct module *mod);
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf_Shdr *sechdrs,
++		   const char *strtab,
++		   unsigned int symindex,
++		   unsigned int relsec,
++		   struct module *me);
++#endif
+ #else
+ static inline int apply_relocate_add(Elf_Shdr *sechdrs,
+ 				     const char *strtab,
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 201f0c0482fb..c72f378181ce 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -291,10 +291,10 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
+  *    the to-be-patched module to be loaded and patched sometime *after* the
+  *    klp module is loaded.
+  */
+-int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+-			     const char *shstrtab, const char *strtab,
+-			     unsigned int symndx, unsigned int secndx,
+-			     const char *objname)
++static int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
++				    const char *shstrtab, const char *strtab,
++				    unsigned int symndx, unsigned int secndx,
++				    const char *objname, bool apply)
+ {
+ 	int cnt, ret;
+ 	char sec_objname[MODULE_NAME_LEN];
+@@ -316,11 +316,26 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+ 	if (strcmp(objname ? objname : "vmlinux", sec_objname))
+ 		return 0;
+ 
+-	ret = klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
+-	if (ret)
+-		return ret;
++	if (apply) {
++		ret = klp_resolve_symbols(sechdrs, strtab, symndx,
++					  sec, sec_objname);
++		if (ret)
++			return ret;
+ 
+-	return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
++		return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
++	}
++
++	clear_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
++	return 0;
++}
++
++int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
++			     const char *shstrtab, const char *strtab,
++			     unsigned int symndx, unsigned int secndx,
++			     const char *objname)
++{
++	return klp_write_section_relocs(pmod, sechdrs, shstrtab, strtab, symndx,
++					secndx, objname, true);
+ }
+ 
+ /*
+@@ -769,8 +784,9 @@ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
+ 			   func->old_sympos ? func->old_sympos : 1);
+ }
+ 
+-static int klp_apply_object_relocs(struct klp_patch *patch,
+-				   struct klp_object *obj)
++static int klp_write_object_relocs(struct klp_patch *patch,
++				   struct klp_object *obj,
++				   bool apply)
+ {
+ 	int i, ret;
+ 	struct klp_modinfo *info = patch->mod->klp_info;
+@@ -781,10 +797,10 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
+ 		if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
+ 			continue;
+ 
+-		ret = klp_apply_section_relocs(patch->mod, info->sechdrs,
++		ret = klp_write_section_relocs(patch->mod, info->sechdrs,
+ 					       info->secstrings,
+ 					       patch->mod->core_kallsyms.strtab,
+-					       info->symndx, i, obj->name);
++					       info->symndx, i, obj->name, apply);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -792,6 +808,18 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
+ 	return 0;
+ }
+ 
++static int klp_apply_object_relocs(struct klp_patch *patch,
++				   struct klp_object *obj)
++{
++	return klp_write_object_relocs(patch, obj, true);
++}
++
++static void klp_clear_object_relocs(struct klp_patch *patch,
++				    struct klp_object *obj)
++{
++	klp_write_object_relocs(patch, obj, false);
++}
++
+ /* parts of the initialization that is done only when the object is loaded */
+ static int klp_init_object_loaded(struct klp_patch *patch,
+ 				  struct klp_object *obj)
+@@ -1179,7 +1207,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
+ 			klp_unpatch_object(obj);
+ 
+ 			klp_post_unpatch_callback(obj);
+-
++			klp_clear_object_relocs(patch, obj);
+ 			klp_free_object_loaded(obj);
+ 			break;
+ 		}
+-- 
+2.30.2
+
