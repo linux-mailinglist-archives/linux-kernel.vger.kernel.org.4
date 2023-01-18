@@ -2,207 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC9A6717DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A596717DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjARJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S229492AbjARJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjARJ0h (ORCPT
+        with ESMTP id S230371AbjARJcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:26:37 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AB7530FC;
-        Wed, 18 Jan 2023 00:52:30 -0800 (PST)
-X-UUID: 6d3504b6970d11ed945fc101203acc17-20230118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=7oWGcqc6umv1n6EjRJx6TZsOAagTABpA6oCSVX0FXK8=;
-        b=fNwE3XAaKJVJ2mjEunKkbv4O42ok1lhfP8jlYkbMDvZL9fq8hD4iYffmge4xUxidPA47kr6nXOZsi2IfZXeJvU/r6uN5ap6tUnny1evdD33TrymETIFn0BGEn+K7+KgjmppfQ6HDTJfqRFPYt/1Ao6n11zrRXn3Fv5VWHwF9d84=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:69ebcc0a-64e5-4bd9-a10f-47f3ab4e73b3,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:f080ff54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: 6d3504b6970d11ed945fc101203acc17-20230118
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1962576115; Wed, 18 Jan 2023 16:52:24 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 18 Jan 2023 16:52:22 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 18 Jan 2023 16:52:22 +0800
+        Wed, 18 Jan 2023 04:32:06 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313380142;
+        Wed, 18 Jan 2023 00:53:20 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d3xtajWMJpKIRM/1jhdemGPyHC+Bd3xvp1JyAgEvP9gBBKXSr4uvQLmw6MWPX8H0yKro2IjoepNCRiUqXvh808RXIGUWE5IpmdCYPSAzDZwEv6u77oXv1bZJgZ6zqhd2JYfYZqcNDMzWfukUB0XMdLiCgmULYqXoilveuV2kk45SFNh5y53iAaj4ojAeoSfWiRmjPnN3CdDYQAS5C+f6mTBnV6BHoW3xHVPjwnVveXJaEK6I6k27k07ZI/Vc1KAj8Mn7pwKvJmaX52yQun33xsejNGB3BuGkkZaeLu4+pa16NAc83E8YfQWVBMmrAxUMszNM5E78SMZ0XHvXZXHoHA==
+ b=k8zbT1YTA0KyRP89r4auDrtEvPdowsGobwF0S+r8MbEpO6M2tpXk+hGrssm3gBcvXpcbF+3m61pPs+fQ5xzLra30TaAGuA2Fdkac+xPrlIh7fGvVbGasSzJvXBjgNpzGhkSQGezleOsaO2UZH9VGltBZLNlmlg+PE5zKUAehJ3rTI2Pkyhd4VZhoY2XIl4hgGuZdHqPX7l6P88CAjtSFL2t+rqrINkGffo2RqG0C1HKUZtsDaEGBGd8LHT7++brArmTMUpI0ep0VTgV0kbqlaTdZ+plYCbtV93C26mol3aQ4xMFT+YUa9XIPRGP2FtDOUez+eXCIcvZ4mJC5HbpTUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7oWGcqc6umv1n6EjRJx6TZsOAagTABpA6oCSVX0FXK8=;
- b=JGoVxj1RwyRmFKLtxepvNe0CUvmpFJcbOjOehHQFx636NMmvFoTokPuIG7DujDJfOfrNaRM2x7XGvcM0btLr8mWI2rgJLMZwGUFWNPbx4/c1xc98m8u7uBj4lIHCahJx+v7REpAzNmZE47ghViz+V/HWrI3vSZx2XNqvHwJcqncDxexG4EaXBEkV//HVM3oDaiFWr9iBdt9wUT/cL4w81AXtQ90llWgOOOU73EJR/YcnBEC5xlaeAhlzCJ6A/2pcr7rIX9XRjHb+oLvVEpdI4Izf0H/n/zQDejZUh4vRnVhyHK3ZlxFTyCDQ5T+RAsH0Uc7YUUP7SGS2gFTEpzZvaw==
+ bh=XqdvrV0ZXXCodz8TNWpIpXTJahxoGFblslC6DH8DjKE=;
+ b=Nbc5nJx+3d6Vo1SwRc8gJWOKK3zlgEORM/BK1c5mXj6hDcL6YJcDLZlZtVbY6feyLn2Xlv1hnJpcLYT1f5W4cDCY1wulYAH9tBKpq4NWFRfDpzTGZ7R5mRxWTd/FaQZZqBN1xOORxR2LmtZKLtMPb+MqkMlyfXYXfUwsVTHBT6ljuyATdcmpDaxr1agXiUIkDvVjrPmHh2lGIzjl2gQpl2oVQETZVvh0pjk9E5VtkD8Mj14d467EaFPV3FZVMR/Z+dnB3ZLceVYcUJpS5zMsZbjgUDq57y/GLLxAi0rOe5jw6goYXTSr+9R1eufYBiIiHZ8b/pGhx19S1JA26L/2+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7oWGcqc6umv1n6EjRJx6TZsOAagTABpA6oCSVX0FXK8=;
- b=V+jG4FPdpwmmS3xW8DH+orfsibE4ElLG6c9myLrjBZm17f3T0+3z2fYGbcWWLMNze/Sm07sGYFd/vfCqgMuczHND7jQQSqj8w8x6lAmS+NW/BaDVzM5LMw/2GzQTV+8hc9siDo/iBVyKjr87g3xTH36S4A/qn+VpFWEy+2EV9TI=
-Received: from TY0PR03MB6356.apcprd03.prod.outlook.com (2603:1096:400:14c::9)
- by TYZPR03MB5939.apcprd03.prod.outlook.com (2603:1096:400:126::12) with
+ bh=XqdvrV0ZXXCodz8TNWpIpXTJahxoGFblslC6DH8DjKE=;
+ b=QQ6BGrozos43EmiI366/D4vzC1r9I1GjxQdQ1JoQIK4rcVlq9zk46lccTZRE+9Wr0xgayLN2CRPaWXBJ6R9/Li0PHQkd5dxEoaHbAiLZbnPxaml14Si9m8wXe1o/iI91twZxpsjNwkZlRDtnx5Yuz4u33YLiBxN8xHQuBjco7kM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
+ by BY5PR12MB4870.namprd12.prod.outlook.com (2603:10b6:a03:1de::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Wed, 18 Jan
- 2023 08:52:21 +0000
-Received: from TY0PR03MB6356.apcprd03.prod.outlook.com
- ([fe80::eb3c:770d:783d:352d]) by TY0PR03MB6356.apcprd03.prod.outlook.com
- ([fe80::eb3c:770d:783d:352d%4]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 08:52:20 +0000
-From:   =?utf-8?B?TW91ZHkgSG8gKOS9leWul+WOnyk=?= <Moudy.Ho@mediatek.com>
-To:     "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: Re: [RESEND v3 01/13] dt-binding: mediatek: add bindings for MediaTek
- mt8195 MDP3 components
-Thread-Topic: [RESEND v3 01/13] dt-binding: mediatek: add bindings for
- MediaTek mt8195 MDP3 components
-Thread-Index: AQHZKVms05m6LhvokEeyIkOE8xk7Za6gsTCAgAMwdIA=
-Date:   Wed, 18 Jan 2023 08:52:20 +0000
-Message-ID: <bd6bbc3d126a39dd8b8499e891b152c25b6713a7.camel@mediatek.com>
-References: <20230116032147.23607-1-moudy.ho@mediatek.com>
-         <20230116032147.23607-2-moudy.ho@mediatek.com>
-         <f24a54f1-2720-3345-9596-bb8d388ba16f@linaro.org>
-In-Reply-To: <f24a54f1-2720-3345-9596-bb8d388ba16f@linaro.org>
-Accept-Language: zh-TW, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Wed, 18 Jan
+ 2023 08:53:17 +0000
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::500a:d02f:5ceb:4221]) by BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::500a:d02f:5ceb:4221%7]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
+ 08:53:17 +0000
+Message-ID: <db4fa0fc-c9a6-9a48-c45f-1d655b30aff9@amd.com>
+Date:   Wed, 18 Jan 2023 09:53:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH drm-next 00/14] [RFC] DRM GPUVA Manager & Nouveau VM_BIND
+ UAPI
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY0PR03MB6356:EE_|TYZPR03MB5939:EE_
-x-ms-office365-filtering-correlation-id: abca9a7e-977b-42ed-e37a-08daf9314f83
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: alErhBTAq4k++HsxS4qYLK6+8CnPlRgWay7q6kjM2RGedoaddivjI5Hsq5z+4TjDmYva7OCtRaXTbxUmQQZFLUTRQJhiQ8TaxnxpYfF3wNMuYmQ1CLjpHTm5QYJtzgyhLDy1a4ta9mP7n4UJG27WPDS2qcATR47uWBUGUGUu30IC5xbtFtdOFVFB66/TkPRYOtQ8+ELTOomJcbqbsLQb43B2aRZIsNfybkkQcd9E3qwvqzUK/pEpKBgvU450cKMruGjORkFrIxVVlzhctMJV+fYyCfp5/mPn6l5mIukoWIIc1lsuryY8Tri1ycmvFK5e8XdEQOzwx+svHoZlA7peQELf7GlBdElMj8ceVrR/BspoI2jb1q7PYLypB/Won7iiW3Rr2/3opUSDPrTOJ0gODVgcp4oifCHgVckkNw7CX/xHMR9uYyoSvQ4ghdCshf/QrVyy2++fsC27wQHGgHNOAlukNOsC9rgxhZi/m4gbibdxW6B7D8yZLtQGT/yfnCkiw/c0gZMt8/hibNSG2zCAI7hw1c1gB2XoyV9ldCpUnT3YY2vpxCPoXDtZgL/QNiDptQiD25ijkb/UJjZJK1r52woLFftgpML068iVZQohxuvXGljnXk9qaLq67d5Z0qwHfcfLdZ6fdi/m5J0OUILKNfwNjJnLV3InRnFpqPZNGg8dr81jZVXgfLJh7YHU8KtbeMZvUfe/OXWvURu/nofo+XM0RDzLNeyG6+siuHyPoU3T9A+C3hb3ga611TPgiQL5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY0PR03MB6356.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(396003)(366004)(136003)(451199015)(36756003)(83380400001)(41300700001)(8936002)(85182001)(2906002)(66476007)(122000001)(76116006)(2616005)(4326008)(54906003)(8676002)(66446008)(110136005)(64756008)(316002)(53546011)(5660300002)(38100700002)(38070700005)(86362001)(7416002)(66556008)(91956017)(66946007)(26005)(6512007)(478600001)(186003)(966005)(6486002)(6506007)(71200400001)(107886003)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ODRWVmdtTWcwREpDQ3V4YTFvYTlubDdmZFFYWGl1TXM1dlB3dVJSelBwUTl3?=
- =?utf-8?B?Zm9kSjllQW1HNi9VcmZVWElXSGpxaS91d1V6RGt6NFhlYTE1MjBYSXVycG9W?=
- =?utf-8?B?eHNkbHczNXdNYmhGTC9pU0UxVEk4ci9GblVwMVVNNUREMU5NQ1VCMGhOQmha?=
- =?utf-8?B?ejVkRzJnUTF3RDNDQzRRWElQUGhkQTZ3cm5GM01oVnFNamZjeVJwNFNDQjBJ?=
- =?utf-8?B?SWUreDlqU2svMCtWelRWNUh4N3QyOHQrVGRFMVJZdUNISm9La2w4R2tkcmpa?=
- =?utf-8?B?eHI5bWd0WWlhRVc4MTJEMlpTNWRmTlZVR04wam5sMldOVUE1THZ3QWJiRzB6?=
- =?utf-8?B?USs5a0o0NFJiWjBsWisvUzJVQzJEcU9zR1BHdEYxaDRSRFFEak1yaDVuTDFF?=
- =?utf-8?B?b2VmTFREeEt1aUNZQ0t4RkVoWUg2cFlNN2ExbDdWYnFTem1YdWNtOU5nRUFj?=
- =?utf-8?B?N1ZBTjcxVzVUbFBGc1paM0JOV2kzdnE3Rm82bGRmd0FTUjBiSlhnL3NRSnBy?=
- =?utf-8?B?aXBhM2FycnNsNUF3ZjlnTFBpYWpUYkxxZDQrK1c0dEkrUVpTZlRBaGZXMkwv?=
- =?utf-8?B?dWNSeDlvSGs1UUVTckcrMGQ2WFhqS1c3TGpXQlo3RlNoZVBVVjNiK3g4Vmp6?=
- =?utf-8?B?YWI4TS9tVmtUZ0NYSDJ3TkRGYVBhOU01bWdDbnNMaEdjM1I1N1hnWXQ0Szdl?=
- =?utf-8?B?RC9hR1FTZHJ3WGZjenVIbEJGaVJ3cHdNMjJxNExwNnNXb3huUUkreTBwVFds?=
- =?utf-8?B?ZDlhS1draHJVbmlGUzJibEpINUNWOHRTZ1JwRWJUSGhZdnlTRndEVGYxTUwy?=
- =?utf-8?B?bGlmWmFEQU9RNW5XOVMyUXRZeXZ6emt5cnJOb3JETk1BVHFEd2loc3A3S3Fp?=
- =?utf-8?B?c3JScS9UT0E0M2taOG03OHVvUWR2WUlEaWhOWEd5T1J0aWV5eXVPa0RDaVNi?=
- =?utf-8?B?Q1NMSmhxdVZRK3pQNGZqUHhFbmRwc1doeS8zaGc4c3hoMW9xb3VyMFBjOVFh?=
- =?utf-8?B?YW8vcGUxWTRXUmQyTk1zRGhqS0h6L1RGVkNZQlpUS0NJaWd2SUNTNGJleURl?=
- =?utf-8?B?ZXlNRlRHVXN1QUFVd1lFSFJIYnp0cHhIMGtmRVJ3am1vWi83M2MxQnJQVUpz?=
- =?utf-8?B?clRYejc0TC9BVlRVQkUzZkovL0Zic2l5dFJPTDNYQ2tWOS9SOTlMSGtvM1hu?=
- =?utf-8?B?a1FTUW9wTmdHaVRaWjVWdzBiY1NaUG9KVWhqN0ZIOURaenFHOUxVK0Nyc1B2?=
- =?utf-8?B?ZzVYQjdPeDhQTnF1NG9WcGF3VFUxa1k2VzdqLzZrcUdsbGRPRHVKU1FBa0pz?=
- =?utf-8?B?Z3E2aGdzN1FjQWtseERyaUVCV0RuRk83dGFoTlhFV2xmSHdHaWRDTm1IOUhG?=
- =?utf-8?B?anliaUF5OGRWWXc2OTBpL1YraUtTL3B6OGNTUU5rQXc3am94blJvUUF5cFZa?=
- =?utf-8?B?ZEJic0l4bmhxUVh6cGcvVGhmeWwwamo1Q0tCYm1SdUhlVWd5ZUtIOG5tUWlR?=
- =?utf-8?B?SVcvc2RBZEtWazNyL3pMYitmSVZMNFJUQ0tad0g3a0wwZHpNRlJnVm9jcExF?=
- =?utf-8?B?bU5GR21uTDlBT2FJd1FZaHFHWXdKZFJYSlBGWkpCZXA1ZVJ3Y1d5MjU4WlhW?=
- =?utf-8?B?NElqZ2VqMElwS2hFZ3hUeXkycGdHVy9QNGxWUjlKbnJZcndubzkwOERkaEVM?=
- =?utf-8?B?UFFaMzdXT2ZxRjQzOW9LeitIdmZUaUF0RTBpdDhaWENRTFc0MUd6MXNqcllN?=
- =?utf-8?B?VGNtY1htZmlsaDdvYm5lb0daQ1FjNDhGbEdmc0QyVHdXTDFjL2RBOThRaHhh?=
- =?utf-8?B?REpHSjdxZWFUb2pUMGJtTzdLV3IrY3lYWUV6REhqaDNndUh2L1ZXaWx1UjZR?=
- =?utf-8?B?eStVYnpSam9jWjliSkpZTXpyTjhFVjBsNXVDK1hlNHgvajcxSFB0V1ljUk5j?=
- =?utf-8?B?cGo2b0V3TXNqZUoxWUlab2sraWQwWnJHaU9KVm9paGxvZzUrUHFTVU80OWZQ?=
- =?utf-8?B?d2V3WXd4L3NoV3VUYmRiRG9QbUIyZWhXME1YYVJBUlI0cGl6U3NuOXlUTWpt?=
- =?utf-8?B?SVpUZ05JdkV6bDh4TTIxV2dpN0d5dzVMakQ2LzNUNGVvRjlPejBDTkxYT0dB?=
- =?utf-8?B?dkZzVWlYZStKUU1XQlRIYlR6dVJSRERBb0Z1QW1wNnp3Mk0rb0ptQ3FTTnlV?=
- =?utf-8?B?NlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E8091A707113A544A7DC419DBA1AC766@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
+        airlied@redhat.com, bskeggs@redhat.com, jason@jlekstrand.net,
+        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118061256.2689-1-dakr@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230118061256.2689-1-dakr@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0067.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::7) To BYAPR12MB3589.namprd12.prod.outlook.com
+ (2603:10b6:a03:df::29)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|BY5PR12MB4870:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0e63386a-a7ad-4fb7-7bc9-08daf931711f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5+P2WbvDedU6ONkj1L7g++3nvuyCXAD4r1ehW7Hu15DFiHUANaB9vvRUo7LLZZb9aJwkWoa8XGHlE83mV5YOlPsXwXmf11zJR5GzQ7m+0AiWkasY6xKWArL/IGxkV6UVqmNuyA/x1C/tWr+2VfV6sztlxlRZkVMcHuDyy2nKH2ANXgwDiq9UbR80vdy5HV+QGu0qnVZlBTjEg/TAMbgP7uZbD0uGaJmomsQcq6Rk/Qx5LuTnc3VN8s8zawzvVXLXaxGhIR5j5bb5TZHYPtdzkW0tLjmNalNFup++/hD5oC8C6li3jNk6HTl3NGi1vIufnsBQfoV5FxJ0sip/M5e5sUoRsnM1xKZM+oAgmR4nvMEZJgjg3zP0LwyZ9vT8kRWG0vgGCa4iVi9iW3wGn3z0rOvZg0xc7VgOggKkLBkba2XrDP8VsFHroHS6IYFg2ORg2G1RhMWI0MBsMWUzmQj3OGcSwEM3M8gNV9spe9clJCInm/lU+syqdawlpHXIj77EWpuy9kUBvwQ8f67duyWymlNNlUICndEgPQi7GnqDSKdcSAsv3IuqVxIqXdbDzoWA/kBJFVoE6sHNtR5WfQ7ufj4TzXVt+IO74xnCFuwdwSoXoDyryWtVpknhzC2i/3kmfJJ2QahdCkydQlfM3b+V9z48oY7J7Q2QBCt3K3Kc0Cbi0/5GW7+ZHkDjWaIob9l3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(451199015)(31686004)(86362001)(2906002)(7416002)(66556008)(66476007)(66946007)(8936002)(5660300002)(31696002)(38100700002)(316002)(6666004)(66574015)(6486002)(966005)(6506007)(478600001)(36756003)(41300700001)(8676002)(4326008)(186003)(6512007)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2NQb0FzVmgrQ3JvRFVyOVBvWTFMN2hEanNTdVZrTndTK3FabFFnSVppSTFv?=
+ =?utf-8?B?allYZnEvOGVuWHlFZk55M2JrejRQL2IwaEZXYTZSZFVkSDEzWlBBbHVoZjZG?=
+ =?utf-8?B?VlBMQ3g3QjYyVEZoak9KSlN4cGtqUmU1NzFXdzJpWW1Zd1FxTGdHMHozY3RT?=
+ =?utf-8?B?ejl3aFR0d1FaM25zdnlOR3N0c0ZzU0wyUEVaQWdsckVnZUpqQTdFYWVkNHVQ?=
+ =?utf-8?B?S3RJVEZSU2d1djVyeElSOUcvdWU0RFdXcUlmbUo4a1F0YVI1bDAzbmhLdVIw?=
+ =?utf-8?B?dVorYzlNeFhoTk96OVhGMkU4YTZta1FXMFdEZWI5UGpwYTUzRms0MHZxSHly?=
+ =?utf-8?B?NTMxUUhabWdhdUYzbkVaUUt3dWMvd0Y1Vi9SRDNPc0VjamU2RlZqNG93QXJU?=
+ =?utf-8?B?K2l4VkpKZ0JnYWtaUzFCRGhvZ29VQjc3NTY2LzBPcWZtKys4Q3JnLzk1REky?=
+ =?utf-8?B?N3FwMHhCdG5WSWtRK1cxUkdmTEFxaDVpTjJ0ZzU5T0kyWTU2N3poL25icTJI?=
+ =?utf-8?B?ZDJxdzFrbnQzaWs2QisvN0tJWFZMSTU1eitvN2tEZW9QbU92dk91OVNqdW0x?=
+ =?utf-8?B?cVZrNEk3UXVncXlpTTdSaTVmYTlyVFVRNWFiM0VyQnJXZXhZemlwN3ZEZVFM?=
+ =?utf-8?B?RXdVNFIrSVpmRVBVV2FKUElJQmZ5aDhZanFoRkVNUHBlc0VhUGFOU05TOExl?=
+ =?utf-8?B?aTNqYU9Ka25nQU1aNzYzKzJnWFRMenNZQStsb0JVY1FBLzkvMXFwWDRhVzFE?=
+ =?utf-8?B?aFpnbmx5Um9qd1ZZdUhPY3ZtcW5EdFc2TW1IelZtQmxQR1krbXNTSjZsbGlo?=
+ =?utf-8?B?bWZFTWNGVDlWRER3WUtyM3B5TWFKWlk5S3BwM0JlaDlrc3JnZkV2UFF0eitJ?=
+ =?utf-8?B?bUFTMWFtYnNtQXdyNTlDY1k4eERXaFBZQ0RvdCtJaEFSWEE2aGdHNmJHWUdJ?=
+ =?utf-8?B?Q0VRby9ZZk9sQlc2UGNGVERuQTRaT1duekVjWTQxWHB1UWN0RDRhbUgyd1Iv?=
+ =?utf-8?B?VTJoTG55ZGVXWnhOL2xVbkFXUDlGVnhPNWFMQzIzYkRRb1JHTklQaXo1YjJs?=
+ =?utf-8?B?REs1UXdSdEVGTG9HQmpGSXliYW5iYTJkakV1NEdWQ3pMVS9oVjVlUUZzUDUz?=
+ =?utf-8?B?Tk9IRzVxT2RtUXNhQkZCOVREdzg3SEk0KytBZEo3R2g2NjFSUFRDUHU0Z2h1?=
+ =?utf-8?B?bU1XTGJrOWJLbzZRK2tZMXVZb1ZxMWJmVWtJK3BJYmwrM1l3K0JTa0NINDlF?=
+ =?utf-8?B?L3Rka0RPNjI2MG9pdklVOGRZK2pVQVBMenVDWWRYZWtoeDlBUWRlUElmWFoy?=
+ =?utf-8?B?S3lQd05CaytJMU50ZkFYMXBxZVZvMEh5RGU0Q2RuTG8wTVoyVkY0R2tVeVl4?=
+ =?utf-8?B?R25YTm5SNWNlSnR0TW5BRjZPZmNDVkdnR0Rzcm9xcEhNTEFxSXB5ZUNpMVVU?=
+ =?utf-8?B?OXFyVHNqZTR1eTRJem9RTWF4WXdEWHFuOXlXdk5FL1NJWnlYclpQMFFXK1ZS?=
+ =?utf-8?B?aG5kTVhPaVhqTFR0cElNY05KekRERGRCOEd6VHcwVVE3b0lFUTdndFN2ZEJT?=
+ =?utf-8?B?eDdTNTRyWk9LSXNkcmRJVVVzM1J6K3BDd0FUR1dlb3VxT01Jcmk2VHU1eDNB?=
+ =?utf-8?B?V3lGWmdOUDNzODY4V1pzMmgwOEUxemZPeVVyVUlQSHNqbU9hL0tsY2M5NkRI?=
+ =?utf-8?B?UTJIUHlGSnNpekhnbkZlOWdxNVZYZUlXY2JaQ0x0MmpPcjJwZ3lWNHZLcU9u?=
+ =?utf-8?B?M0xub2lIQUVkMFgweGxMbC9aYW83R2YvK21rZFhvR1VvKzhIZTJTL241SDlm?=
+ =?utf-8?B?d2Vmb0VTaElaa1h4RXhuRjZjYVppb2xTaFRQd2pUdUo1dlI4WU5yUEVLSnhH?=
+ =?utf-8?B?dzNPUDFTeEQ1UTczV0sxa1N2VU9semltWGJNUlNycGh2RmowT0FpUXhwWnBx?=
+ =?utf-8?B?M0RLd1dYbVhLeEo4S0o5S3RKbjBmK0hWYVQzM2ZEVXNFeEM2Mkx6Rm9GdG5y?=
+ =?utf-8?B?clplRFArT1lQNDZvVHExQzc3TW9DVjJoaFRFNXZBbXl0M01lcXZqS28rOTgw?=
+ =?utf-8?B?cFl3bzdvRG9hWVErbnFPdkE1ZHdtaUUwZS9uQUxrbXBReHAvRFJXaWlRcW43?=
+ =?utf-8?B?Z3NmVkdQQ1N0bkVNUi9GZnQ0ZzR4R2ZLeTkrL3h5UU94K0I2RWlZcE1KUFYx?=
+ =?utf-8?Q?ly6slsrCTSAvi8aI4G7bZBLOt8dPQOl6xT5qXTt9u9iN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e63386a-a7ad-4fb7-7bc9-08daf931711f
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY0PR03MB6356.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abca9a7e-977b-42ed-e37a-08daf9314f83
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 08:52:20.8635
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 08:53:17.4667
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y6UZ2WuTi/9lBKGEmhK0NKfX/C38kPxZtCakWv4Mc4sjLIxXQICF/Qw5jW0HiG7GWzmr5M70fWt3tTMIYPGapg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5939
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hIB/RDrMxqoxHvcU3gHauuNKhK9L4CQMWFAVg14hugmZBxbF4lT2R1JRLgw7nvwV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4870
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAxLTE2IGF0IDA5OjEwICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
-b3RlOg0KPiBPbiAxNi8wMS8yMDIzIDA0OjIxLCBNb3VkeSBIbyB3cm90ZToNCg0KKHNuaXApDQoN
-Cj4gPiArICBtZWRpYXRlayxnY2UtY2xpZW50LXJlZzoNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0K
-PiA+ICsgICAgICBUaGUgcmVnaXN0ZXIgb2YgY2xpZW50IGRyaXZlciBjYW4gYmUgY29uZmlndXJl
-ZCBieSBnY2Ugd2l0aA0KPiA+IDQgYXJndW1lbnRzDQo+ID4gKyAgICAgIGRlZmluZWQgaW4gdGhp
-cyBwcm9wZXJ0eSwgc3VjaCBhcyBwaGFuZGxlIG9mIGdjZSwgc3Vic3lzIGlkLA0KPiA+ICsgICAg
-ICByZWdpc3RlciBvZmZzZXQgYW5kIHNpemUuDQo+ID4gKyAgICAgIEVhY2ggc3Vic3lzIGlkIGlz
-IG1hcHBpbmcgdG8gYSBiYXNlIGFkZHJlc3Mgb2YgZGlzcGxheQ0KPiA+IGZ1bmN0aW9uIGJsb2Nr
-cw0KPiA+ICsgICAgICByZWdpc3RlciB3aGljaCBpcyBkZWZpbmVkIGluIHRoZSBnY2UgaGVhZGVy
-DQo+ID4gKyAgICAgIGluY2x1ZGUvZHQtYmluZGluZ3MvZ2NlLzxjaGlwPi1nY2UuaC4NCj4gPiAr
-ICAgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3BoYW5kbGUtYXJyYXkN
-Cj4gPiArICAgIG1heEl0ZW1zOiAxDQo+IA0KPiBpdGVtcyB3aXRoIGl0ZW1zIHN5bnRheCBpbnN0
-ZWFkOg0KPiANCj4gDQpodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9lbGl4aXIu
-Ym9vdGxpbi5jb20vbGludXgvdjUuMTgtcmMxL3NvdXJjZS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
-ZWUvYmluZGluZ3Mvc29jL3NhbXN1bmcvZXh5bm9zLXVzaS55YW1sKkw0Ml9fO0l3ISFDVFJOS0E5
-d01nMEFSYnchbGNmZXJyRkZQLW1zaERITkwtcndKTGdOS0RyWEY5ZlhvbGpwcUwzMGs1WUtUTnZD
-d3VDM3dlYnpSMzJWblFRb1BlRnZTdkFld05rZXVwY1Q0bWpkRV9yb3hXVW8kwqANCj4gIA0KPiAN
-Cj4gPiArDQoNCihzbmlwKQ0KDQo+ID4gKw0KPiA+ICsgIG1lZGlhdGVrLGdjZS1jbGllbnQtcmVn
-Og0KPiA+ICsgICAgZGVzY3JpcHRpb246DQo+ID4gKyAgICAgIFRoZSByZWdpc3RlciBvZiBjbGll
-bnQgZHJpdmVyIGNhbiBiZSBjb25maWd1cmVkIGJ5IGdjZSB3aXRoDQo+ID4gNCBhcmd1bWVudHMN
-Cj4gPiArICAgICAgZGVmaW5lZCBpbiB0aGlzIHByb3BlcnR5LCBzdWNoIGFzIHBoYW5kbGUgb2Yg
-Z2NlLCBzdWJzeXMgaWQsDQo+ID4gKyAgICAgIHJlZ2lzdGVyIG9mZnNldCBhbmQgc2l6ZS4NCj4g
-PiArICAgICAgRWFjaCBzdWJzeXMgaWQgaXMgbWFwcGluZyB0byBhIGJhc2UgYWRkcmVzcyBvZiBk
-aXNwbGF5DQo+ID4gZnVuY3Rpb24gYmxvY2tzDQo+ID4gKyAgICAgIHJlZ2lzdGVyIHdoaWNoIGlz
-IGRlZmluZWQgaW4gdGhlIGdjZSBoZWFkZXINCj4gPiArICAgICAgaW5jbHVkZS9kdC1iaW5kaW5n
-cy9nY2UvPGNoaXA+LWdjZS5oLg0KPiANCj4gRnVsbCwgcmVhbCBwYXRoIHBsZWFzZSwgc28gaXQg
-Y291bGQgYmUgdmFsaWRhdGVkIHdpdGggdG9vbHMuDQo+IA0KPiANCj4gQmVzdCByZWdhcmRzLA0K
-PiBLcnp5c3p0b2YNCj4gDQoNCkhpIEtyenlzenRvZiwNCg0KU29ycnkgdG8gYnVnIHlvdSBhZ2Fp
-biBhYm91dCB0aGlzIHByb3BlcnR5LCBjb3VsZCBpdCBiZSBjaGFuZ2VkIHRvDQpmb2xsb3dpbmcg
-Zm9ybS4NCg0KICAgIG1lZGlhdGVrLGdjZS1jbGllbnQtcmVnOg0KICAgICAgJHJlZjogL3NjaGVt
-YXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZS1hcnJheQ0KICAgICAgaXRlbXM6DQog
-ICAgICAgIGl0ZW1zOg0KICAgICAgICAgIC0gZGVzY3JpcHRpb246IHBoYW5kbGUgb2YgR0NFDQog
-ICAgICAgICAgLSBkZXNjcmlwdGlvbjogR0NFIHN1YnN5cyBpZA0KICAgICAgICAgIC0gZGVzY3Jp
-cHRpb246IHJlZ2lzdGVyIG9mZnNldA0KICAgICAgICAgIC0gZGVzY3JpcHRpb246IHJlZ2lzdGVy
-IHNpemUNCiAgICAgIGRlc2NyaXB0aW9uOg0KICAgICAgICAuLi4gZGVmaW5lZCBpbiA8aW5jbHVk
-ZS9kdC1iaW5kaW5ncy9nY2UvbXQ4MTk1LWdjZS5oPi4NCiAgICAgbWF4SXRlbXM6IDEgDQogIA0K
-QWxzbywgaXMgdGhlIGluY2x1ZGUgaGVhZGVyIHBhdGggc3RpbGwgbmVjZXNzYXJ5IGluIHRoaXMg
-Zm9ybT8NCg0KU2luY2VyZWx5LA0KTW91ZHkNCg==
+Am 18.01.23 um 07:12 schrieb Danilo Krummrich:
+> This patch series provides a new UAPI for the Nouveau driver in order to
+> support Vulkan features, such as sparse bindings and sparse residency.
+>
+> Furthermore, with the DRM GPUVA manager it provides a new DRM core feature to
+> keep track of GPU virtual address (VA) mappings in a more generic way.
+>
+> The DRM GPUVA manager is indented to help drivers implement userspace-manageable
+> GPU VA spaces in reference to the Vulkan API. In order to achieve this goal it
+> serves the following purposes in this context.
+>
+>      1) Provide a dedicated range allocator to track GPU VA allocations and
+>         mappings, making use of the drm_mm range allocator.
+
+This means that the ranges are allocated by the kernel? If yes that's a 
+really really bad idea.
+
+Regards,
+Christian.
+
+>
+>      2) Generically connect GPU VA mappings to their backing buffers, in
+>         particular DRM GEM objects.
+>
+>      3) Provide a common implementation to perform more complex mapping
+>         operations on the GPU VA space. In particular splitting and merging
+>         of GPU VA mappings, e.g. for intersecting mapping requests or partial
+>         unmap requests.
+>
+> The new VM_BIND Nouveau UAPI build on top of the DRM GPUVA manager, itself
+> providing the following new interfaces.
+>
+>      1) Initialize a GPU VA space via the new DRM_IOCTL_NOUVEAU_VM_INIT ioctl
+>         for UMDs to specify the portion of VA space managed by the kernel and
+>         userspace, respectively.
+>
+>      2) Allocate and free a VA space region as well as bind and unbind memory
+>         to the GPUs VA space via the new DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
+>
+>      3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
+>
+> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC, make use of the DRM
+> scheduler to queue jobs and support asynchronous processing with DRM syncobjs
+> as synchronization mechanism.
+>
+> By default DRM_IOCTL_NOUVEAU_VM_BIND does synchronous processing,
+> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
+>
+> The new VM_BIND UAPI for Nouveau makes also use of drm_exec (execution context
+> for GEM buffers) by Christian König. Since the patch implementing drm_exec was
+> not yet merged into drm-next it is part of this series, as well as a small fix
+> for this patch, which was found while testing this series.
+>
+> This patch series is also available at [1].
+>
+> There is a Mesa NVK merge request by Dave Airlie [2] implementing the
+> corresponding userspace parts for this series.
+>
+> The Vulkan CTS test suite passes the sparse binding and sparse residency test
+> cases for the new UAPI together with Dave's Mesa work.
+>
+> There are also some test cases in the igt-gpu-tools project [3] for the new UAPI
+> and hence the DRM GPU VA manager. However, most of them are testing the DRM GPU
+> VA manager's logic through Nouveau's new UAPI and should be considered just as
+> helper for implementation.
+>
+> However, I absolutely intend to change those test cases to proper kunit test
+> cases for the DRM GPUVA manager, once and if we agree on it's usefulness and
+> design.
+>
+> [1] https://gitlab.freedesktop.org/nouvelles/kernel/-/tree/new-uapi-drm-next /
+>      https://gitlab.freedesktop.org/nouvelles/kernel/-/merge_requests/1
+> [2] https://gitlab.freedesktop.org/nouveau/mesa/-/merge_requests/150/
+> [3] https://gitlab.freedesktop.org/dakr/igt-gpu-tools/-/tree/wip_nouveau_vm_bind
+>
+> I also want to give credit to Dave Airlie, who contributed a lot of ideas to
+> this patch series.
+>
+> Christian König (1):
+>    drm: execution context for GEM buffers
+>
+> Danilo Krummrich (13):
+>    drm/exec: fix memory leak in drm_exec_prepare_obj()
+>    drm: manager to keep track of GPUs VA mappings
+>    drm: debugfs: provide infrastructure to dump a DRM GPU VA space
+>    drm/nouveau: new VM_BIND uapi interfaces
+>    drm/nouveau: get vmm via nouveau_cli_vmm()
+>    drm/nouveau: bo: initialize GEM GPU VA interface
+>    drm/nouveau: move usercopy helpers to nouveau_drv.h
+>    drm/nouveau: fence: fail to emit when fence context is killed
+>    drm/nouveau: chan: provide nouveau_channel_kill()
+>    drm/nouveau: nvkm/vmm: implement raw ops to manage uvmm
+>    drm/nouveau: implement uvmm for user mode bindings
+>    drm/nouveau: implement new VM_BIND UAPI
+>    drm/nouveau: debugfs: implement DRM GPU VA debugfs
+>
+>   Documentation/gpu/driver-uapi.rst             |   11 +
+>   Documentation/gpu/drm-mm.rst                  |   43 +
+>   drivers/gpu/drm/Kconfig                       |    6 +
+>   drivers/gpu/drm/Makefile                      |    3 +
+>   drivers/gpu/drm/amd/amdgpu/Kconfig            |    1 +
+>   drivers/gpu/drm/drm_debugfs.c                 |   56 +
+>   drivers/gpu/drm/drm_exec.c                    |  294 ++++
+>   drivers/gpu/drm/drm_gem.c                     |    3 +
+>   drivers/gpu/drm/drm_gpuva_mgr.c               | 1323 +++++++++++++++++
+>   drivers/gpu/drm/nouveau/Kbuild                |    3 +
+>   drivers/gpu/drm/nouveau/Kconfig               |    2 +
+>   drivers/gpu/drm/nouveau/include/nvif/if000c.h |   23 +-
+>   drivers/gpu/drm/nouveau/include/nvif/vmm.h    |   17 +-
+>   .../gpu/drm/nouveau/include/nvkm/subdev/mmu.h |   10 +
+>   drivers/gpu/drm/nouveau/nouveau_abi16.c       |   23 +
+>   drivers/gpu/drm/nouveau/nouveau_abi16.h       |    1 +
+>   drivers/gpu/drm/nouveau/nouveau_bo.c          |  152 +-
+>   drivers/gpu/drm/nouveau/nouveau_bo.h          |    2 +-
+>   drivers/gpu/drm/nouveau/nouveau_chan.c        |   16 +-
+>   drivers/gpu/drm/nouveau/nouveau_chan.h        |    1 +
+>   drivers/gpu/drm/nouveau/nouveau_debugfs.c     |   24 +
+>   drivers/gpu/drm/nouveau/nouveau_drm.c         |   25 +-
+>   drivers/gpu/drm/nouveau/nouveau_drv.h         |   92 +-
+>   drivers/gpu/drm/nouveau/nouveau_exec.c        |  310 ++++
+>   drivers/gpu/drm/nouveau/nouveau_exec.h        |   55 +
+>   drivers/gpu/drm/nouveau/nouveau_fence.c       |    7 +
+>   drivers/gpu/drm/nouveau/nouveau_fence.h       |    2 +-
+>   drivers/gpu/drm/nouveau/nouveau_gem.c         |   83 +-
+>   drivers/gpu/drm/nouveau/nouveau_mem.h         |    5 +
+>   drivers/gpu/drm/nouveau/nouveau_prime.c       |    2 +-
+>   drivers/gpu/drm/nouveau/nouveau_sched.c       |  780 ++++++++++
+>   drivers/gpu/drm/nouveau/nouveau_sched.h       |   98 ++
+>   drivers/gpu/drm/nouveau/nouveau_svm.c         |    2 +-
+>   drivers/gpu/drm/nouveau/nouveau_uvmm.c        |  575 +++++++
+>   drivers/gpu/drm/nouveau/nouveau_uvmm.h        |   68 +
+>   drivers/gpu/drm/nouveau/nouveau_vmm.c         |    4 +-
+>   drivers/gpu/drm/nouveau/nvif/vmm.c            |   73 +-
+>   .../gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c    |  168 ++-
+>   .../gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.h    |    1 +
+>   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |   32 +-
+>   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |    3 +
+>   include/drm/drm_debugfs.h                     |   25 +
+>   include/drm/drm_drv.h                         |    6 +
+>   include/drm/drm_exec.h                        |  144 ++
+>   include/drm/drm_gem.h                         |   75 +
+>   include/drm/drm_gpuva_mgr.h                   |  527 +++++++
+>   include/uapi/drm/nouveau_drm.h                |  216 +++
+>   47 files changed, 5266 insertions(+), 126 deletions(-)
+>   create mode 100644 drivers/gpu/drm/drm_exec.c
+>   create mode 100644 drivers/gpu/drm/drm_gpuva_mgr.c
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.c
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.h
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.c
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.h
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.c
+>   create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.h
+>   create mode 100644 include/drm/drm_exec.h
+>   create mode 100644 include/drm/drm_gpuva_mgr.h
+>
+>
+> base-commit: 0b45ac1170ea6416bc1d36798414c04870cd356d
+
