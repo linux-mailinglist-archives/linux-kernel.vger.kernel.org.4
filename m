@@ -2,135 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD8C671CED
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3562671D03
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjARNHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S231297AbjARNIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjARNGh (ORCPT
+        with ESMTP id S230468AbjARNHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:06:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7418F6C4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:28:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 18 Jan 2023 08:07:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6213ED88CF
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:29:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7380C3F238;
-        Wed, 18 Jan 2023 12:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674044915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zKh8lN6MLRAHft2kLm2+oDZIprg2Bfj7D9n39FVQicA=;
-        b=gRIMUF+axiCtmoS2tjXI/ttadrMcp6m21v9MjwMPcYz7Q+zU4k7m19fCpCWPKsJJv58vo6
-        UcmtmWXP4GeTmve7G+ruk/3OWd4qc4MKxiTT2jJoS8dTxjZVaRrD5zBffaXfGr9eZsyIh+
-        CVlOVeZzH5sfKV+ufZIJtF27Lhb0+OI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 483CE138FE;
-        Wed, 18 Jan 2023 12:28:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id skYiEfPlx2NdHQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 12:28:35 +0000
-Date:   Wed, 18 Jan 2023 13:28:34 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, peterz@infradead.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
- control it
-Message-ID: <Y8fl8lqS4QHZO1gV@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-13-surenb@google.com>
- <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF2DC61784
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:29:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32BE5C433D2;
+        Wed, 18 Jan 2023 12:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674044964;
+        bh=6T23F6+Ob0cZya6e1U5EmAV8lJw8OafnZnvNZoe0b/U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IXdsOTUJpV29r8CXDGmORtsMzzrsCkbeuE2++mjr5dtAyl7aUPin79OOG9qZu6vkS
+         PNjNEitiXXOAXUGQ+O3wgfgsfnkEN97QCVHH0WP3kO84hE//6lBSmNsIIqbFWNdYXa
+         4ZdHs/FGJwTZa82eWk+xadRvG7H1fLKjygek8P4cbRnFUveZ3W+OG40KGXuRSKKhMN
+         4EWBoW7DQ4i0TfvWN52Ufs5fuiuP7+hWe5A9rcX7W3FgnwQyfivGPWao+uph44Fbqj
+         /K8nz3asALXMhzL4JQDlDvEVku+cL4KdSS3p9sc7Oa4cNtFv1YIbJ5uPvrqp4UaC3d
+         sHBesJXXxZnQQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6C45C405BE; Wed, 18 Jan 2023 09:29:21 -0300 (-03)
+Date:   Wed, 18 Jan 2023 09:29:21 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Gavin Shan <gshan@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH 1/1 FYI] tools kvm headers arm64: Update KVM header from the
+ kernel sources
+Message-ID: <Y8fmIT5PIfGaZuwa@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 17-01-23 19:02:55, Jann Horn wrote:
-> +locking maintainers
-> 
-> On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > Introduce a per-VMA rw_semaphore to be used during page fault handling
-> > instead of mmap_lock. Because there are cases when multiple VMAs need
-> > to be exclusively locked during VMA tree modifications, instead of the
-> > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
-> > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
-> > mmap_write_lock holder is done with all modifications and drops mmap_lock,
-> > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
-> > locked.
-> [...]
-> > +static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > +{
-> > +       up_read(&vma->lock);
-> > +}
-> 
-> One thing that might be gnarly here is that I think you might not be
-> allowed to use up_read() to fully release ownership of an object -
-> from what I remember, I think that up_read() (unlike something like
-> spin_unlock()) can access the lock object after it's already been
-> acquired by someone else.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Yes, I think you are right. From a look into the code it seems that
-the UAF is quite unlikely as there is a ton of work to be done between
-vma_write_lock used to prepare vma for removal and actual removal.
-That doesn't make it less of a problem though.
+- Arnaldo
 
-> So if you want to protect against concurrent
-> deletion, this might have to be something like:
-> 
-> rcu_read_lock(); /* keeps vma alive */
-> up_read(&vma->lock);
-> rcu_read_unlock();
-> 
-> But I'm not entirely sure about that, the locking folks might know better.
+Full explanation:
 
-I am not a locking expert but to me it looks like this should work
-because the final cleanup would have to happen rcu_read_unlock.
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-Thanks, I have completely missed this aspect of the locking when looking
-into the code.
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-Btw. looking at this again I have fully realized how hard it is actually
-to see that vm_area_free is guaranteed to sync up with ongoing readers.
-vma manipulation functions like __adjust_vma make my head spin. Would it
-make more sense to have a rcu style synchronization point in
-vm_area_free directly before call_rcu? This would add an overhead of
-uncontended down_write of course.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
+
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
+---
+
+To pick the changes from:
+
+  9cb1096f8590bc59 ("KVM: arm64: Enable ring-based dirty memory tracking")
+
+That doesn't result in any changes in tooling (built on a Libre Computer
+Firefly ROC-RK3399-PC-V1.1-A), only addresses this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/kvm.h' differs from latest version at 'arch/arm64/include/uapi/asm/kvm.h'
+  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/asm/kvm.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Gavin Shan <gshan@redhat.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: http://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/arm64/include/uapi/asm/kvm.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
+index 316917b9870704de..a7a857f1784d80d6 100644
+--- a/tools/arch/arm64/include/uapi/asm/kvm.h
++++ b/tools/arch/arm64/include/uapi/asm/kvm.h
+@@ -43,6 +43,7 @@
+ #define __KVM_HAVE_VCPU_EVENTS
+ 
+ #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
++#define KVM_DIRTY_LOG_PAGE_OFFSET 64
+ 
+ #define KVM_REG_SIZE(id)						\
+ 	(1U << (((id) & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT))
 -- 
-Michal Hocko
-SUSE Labs
+2.39.0
+
