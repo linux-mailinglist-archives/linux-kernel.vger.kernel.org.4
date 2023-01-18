@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632B16724DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649AF6724E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjARR2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        id S230144AbjARR36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjARR22 (ORCPT
+        with ESMTP id S229741AbjARR3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:28:28 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB636FDD;
-        Wed, 18 Jan 2023 09:28:28 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A64031056;
-        Wed, 18 Jan 2023 18:28:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674062904;
-        bh=Nf5ZWT8c4jEQ+3HgXGzjRAYkLQMxtH5vS18YV+gTWAw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QJS8g57Pei163/e1x8G8Z2tKqfzCZrarP8akW055bjbRBmPJCBMOk4Lk9gwM07jN4
-         FyGVWn+hWisgPxK2mW1Zo7ijmZSaQ+LSlCm6TthMZOSW68k253baNmKaoPUW6vLjSL
-         4z14eXLtHdpafggHWB2tM6YbYNNTgMyxDIn08rBk=
-Message-ID: <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
-Date:   Wed, 18 Jan 2023 19:28:20 +0200
+        Wed, 18 Jan 2023 12:29:44 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8FB21A0D;
+        Wed, 18 Jan 2023 09:29:41 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MzTCy-1oW1VW1Hhg-00vQLu; Wed, 18 Jan 2023 18:29:26 +0100
+Message-ID: <89377474-bcd4-452a-973f-dd5092dea4d6@i2se.com>
+Date:   Wed, 18 Jan 2023 18:29:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
+Subject: Re: [RFC PATCH 1/4] staging: vc04_services: vchiq_core: Drop custom
+ logging
+To:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
+ <20230118115810.21979-2-umang.jain@ideasonboard.com>
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230118115810.21979-2-umang.jain@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:c9i/D17w64yXKdNX4GYL2ssWp34kom0i30U5afG6wwqxgpXdqhi
+ 1rIOQKRsuPAZltULVkvkcj+vsAfhnmYBXEXOZH1R8xJnLDv1X1Pk1U33zSBx8cqfgu7dth1
+ Pijywyamf+gBZJDuCT0uYu10sfEr20Us0TzrMZwU4xSvw6PDOzjxg1q0eqisTejQAL2yYA5
+ vijcLbazpZcrg6NzG8jMg==
+UI-OutboundReport: notjunk:1;M01:P0:2/yHPKPMUzY=;AX4aNqWm+UcOr38RvvoFo4+LBaH
+ 5i03g5b1GY2b81uiDhYPcXzdSilZwjHjPwz/me18F3l0rzllt9vPIM5p/RoZlzcGGUQ6lRlHJ
+ olfjLnxM0quAeM0w/cVZpQiDSSjQAm91cNhCWXMMIWmtGgwgzAp0VE6tB41Q4wi7nZnY6r3nj
+ cPuGqeb3Voq6FI1kfocQ7D6NajcY5qYIeapk84MItCEKJ9npkPc8WcdTEEt7c1s7z5ULWxBS7
+ i7M6ViDenl3bzSyvOUz8yASQ0Wux4H384miofvAmzuvNNcFD+74haLUNet4D4ee4JllHrEcb+
+ SJ9nZuC8e9jss7N1L5+y7gJTY1nIdgtPgm7cPnfUY3mpebBWUMjtfsMJ6Joio/U+8txyPEFub
+ uAi1OmWb9XoCb+ywifWTfxbtEvTliSK5d4FAima5iy2INq+i/3dPju0KCiUvg9Qc2LpBIIuXe
+ Cjejg1XyZw/IuF39Y4GZwB2GRzlAcvEN1gwm/eUgtBZi9DNavwV74KA3z14OMLJwfClWNmLpZ
+ HAQj8VlnonAiyuJE94UEkxCzSYpp/OGVfN8uQ6WE4hQ9jgXbom8XVOk5cwlykbX3qrI6UUWB5
+ dLoitT5DV1EdGkFS5dCymtzgi75DYHJHBF1mBeAANqDwCovagkyGIe91JqUvNKiDsQX3+nCXC
+ 45WB38MByLX6amyJ8+gMsNc/2MuR+Mp7UefeSgoLSg==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 18:01, Andy Shevchenko wrote:
-> On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:
->> Hi,
->>
->> You can find the v6 from:
->>
->> https://lore.kernel.org/all/20230105140307.272052-1-tomi.valkeinen@ideasonboard.com/
->>
->> Main changes:
->>
->> * i2c-atr: Use bus notifier. This allows us to drop the patch that adds
->>    the attach_client/detach_client callbacks. On the downside, it removes
->>    the option for error handling if the translation setup fails, and also
->>    doesn't provide us the pointer to the i2c_board_info. I belive both
->>    are acceptable downsides.
->>
->> * Use fwnode in the fpdlink drivers instead of OF
->>
->> * Addressed all the review comments (I hope)
->>
->> * Lots of cosmetic or minor fixes which I came up while doing the fwnode
->>    change
-> 
-> I believe my comments to the first driver applies to the next two, so please
-> address them whenever you are agree / it's possible / it makes sense.
-> 
-> About ATR implementation. We have the i2c bus (Linux representation of
-> the driver model) and i2c_adapter and i2c_client objects there. Can't we
-> have an i2c_client_aliased in similar way and be transparent with users?
+Hi Umang,
 
-Can you clarify what you mean here?
+Am 18.01.23 um 12:58 schrieb Umang Jain:
+> Drop custom logging from the vchiq_core.c and use standard kernel
+> logging infrastructure (dev_dbg() and friends for struct Device
+> stuff) and pr_info (and similar) for vchiq_services/instances things.
+i'm sorry but your "staging: vc04_services: vchiq: Register devices with 
+a custom bus_type" is still in my backlog. I was busy with some 
+regressions on bcm2835/bcm2711.
+>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>   .../interface/vchiq_arm/vchiq_core.c          | 450 ++++++++----------
+>   1 file changed, 204 insertions(+), 246 deletions(-)
+>
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+> index 4e705a447a62..7b3c57326d28 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+> @@ -227,10 +227,11 @@ static const char *msg_type_str(unsigned int msg_type)
+>   static inline void
+>   set_service_state(struct vchiq_service *service, int newstate)
+>   {
+> -	vchiq_log_info(vchiq_core_log_level, "%d: srv:%d %s->%s",
+> -		       service->state->id, service->localport,
+> -		       srvstate_names[service->srvstate],
+> -		       srvstate_names[newstate]);
+> +	struct vchiq_state *state = service->state;
+> +
+> +	dev_info(state->dev, "%d: srv:%d %s->%s", state->id,
+> +		 service->localport, srvstate_names[service->srvstate],
+> +		 srvstate_names[newstate]);
+>   	service->srvstate = newstate;
+>   }
+>   
+> @@ -255,8 +256,7 @@ find_service_by_handle(struct vchiq_instance *instance, unsigned int handle)
+>   		return service;
+>   	}
+>   	rcu_read_unlock();
+> -	vchiq_log_info(vchiq_core_log_level,
+> -		       "Invalid service handle 0x%x", handle);
+> +	pr_info("vchiq: Invalid service handle 0x%x", handle);
 
-The i2c_clients are not aware of the i2c-atr. They are normal i2c 
-clients. The FPD-Link drivers are aware of the ATR, as the FPD-Link 
-hardware contains the ATR support.
+Some log levels like this here doesn't make sense. I would expect here a 
+warning or an error. Could you please have look at it in a separate patch?
 
-  Tomi
+Thanks
 
