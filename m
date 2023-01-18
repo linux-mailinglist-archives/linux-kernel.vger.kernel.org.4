@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEF4672159
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255A7672259
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjARPdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S231183AbjARQCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjARPdl (ORCPT
+        with ESMTP id S231206AbjARP7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:33:41 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE1623331
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:33:39 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id t5so29925523wrq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:33:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oUPpYf55nSewKPfRw1r8GTAzRNx6PisN+J3CJfYWWqM=;
-        b=ER+nRfLfGkm6S/o3MmxpSFWWo6T91uTm6DYUbVFOOUC+6DeFJbgFuuyS22UQ55nriy
-         pmWZqfjYVV5qpaqONICqbKhaC3QxF4E2pJOloNLIo5uS7NSvF7zNp56PPGTnHThiuF/p
-         LnEtVfxQlEncXoNaufozHXbHi8uLjaoucMIXqdQ1amadF3yujWJlVRJ+RVXxjD+bzNLM
-         9wpmSjZegYNzNgqR6zt8ODCpgAKpU2IsmMbu+Me5U6eiqvNui0GAjCg3SdGzjp0q5+ui
-         xJ89PpSRdyJmedgCuDXRY0yU2KRNDVosV2inzdam3HY3bz2jgEsYfnnEhAZSRW8gQcBY
-         Vfxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oUPpYf55nSewKPfRw1r8GTAzRNx6PisN+J3CJfYWWqM=;
-        b=R+hrU/RfCoRlInDksihy1lioEby1cKAL5tO8PPlybxUFCot0urhVgfaUONahm6U5bf
-         lq1E9B1o11czb/PQVI9FuxuH5FzrhzIOaUZuF5aUZgC0+MfJU3ya8N84Tbq++2QxFo15
-         RvzYnMRGNQsl/jiKWVghMkGom1QufHJzayEe8rJkYF9vjRM8Zi9vUjtbNUoxiPZa6ZkS
-         kw5SWRSumNblzncF6DETORJTUUz+c1WdUazSFETvHU8OoJEsbxyCUw8dUzOLO4+sGd/L
-         iuUnyDUaJ7lDGFvotKWmOtW1cJVC3uXWIKJ0x9buCarGPJzOXPd2mA+1itvVkdtRptof
-         qaTw==
-X-Gm-Message-State: AFqh2kq+rnrGJ728gnAkrV1BH7+qDnMNzcOCgJKzVlgtJFl/6bfIps7h
-        j22756zQzVLDC8DevYEvVOeT1g==
-X-Google-Smtp-Source: AMrXdXtsBYgy2yvXAk1HX7S7z4hIuZLQip5px4lekLCG5EOdySAkbweDKG6rgI8l5Dgzm8Noat9D+g==
-X-Received: by 2002:adf:df10:0:b0:2bb:e891:1829 with SMTP id y16-20020adfdf10000000b002bbe8911829mr6814451wrl.4.1674056017946;
-        Wed, 18 Jan 2023 07:33:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm31225540wrx.21.2023.01.18.07.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 07:33:37 -0800 (PST)
-Message-ID: <f7d3cd69-3eee-d96e-4c53-958c1e3d1c37@linaro.org>
-Date:   Wed, 18 Jan 2023 16:33:35 +0100
+        Wed, 18 Jan 2023 10:59:46 -0500
+X-Greylist: delayed 1370 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 07:56:37 PST
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FEE3028E;
+        Wed, 18 Jan 2023 07:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=RvRO3J57DG+qNWkdApkxviSN6J7YqPU//nc76wBkQ6c=; b=bM0jdSJ7CSTTIKJr+AoLxDvLVt
+        4Rmmy9tKtLbUvrTpqXdeaIBEnWbnXJAvMgobXiWZ+woDVv9yFnGL5JyJxNczL2toCYqQ/aKwr9cep
+        GAi81EOASbAzuvHFHbXPzbsz0ytRs22nd80Nrqi4x7rGASw81qwCJx9fUjvGz5wCPc9zNxINAcQ2g
+        CD0NoDYzw/KONx9yTYKI/K7pGOzAUCzbJS8O14QwV1453w+WYZuUyw3NYObCqoIsefEEwpc/ewlxX
+        35C6P7i28fg0SkS3LRqub5RgL0LZJHElVO2P8BGzjk5+f44EIr8yqCDH6BPmloWGisf6/aEl7EhEy
+        evjtzBxg==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pIARd-0005Mz-HI; Wed, 18 Jan 2023 16:33:45 +0100
+Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pIARd-000Jx0-3K; Wed, 18 Jan 2023 16:33:45 +0100
+Message-ID: <483c7088-1ac1-6924-9cfb-a131e82276ee@metafoo.de>
+Date:   Wed, 18 Jan 2023 07:33:42 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interconnect: qcom: document the
- interconnects for sa8775p
+ Thunderbird/102.6.0
+Subject: Re: [RESEND PATCH V11 XDMA 2/2] dmaengine: xilinx: xdma: Add user
+ logic interrupt support
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230118140825.242544-1-brgl@bgdev.pl>
- <20230118140825.242544-2-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118140825.242544-2-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Vinod Koul <vkoul@kernel.org>, Lizhi Hou <lizhi.hou@amd.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+References: <1673988842-43631-1-git-send-email-lizhi.hou@amd.com>
+ <1673988842-43631-3-git-send-email-lizhi.hou@amd.com>
+ <Y8eRz2sXrnCtSib+@matsya> <85d1e660-1df4-6e84-a329-751197ef7eec@gpxsee.org>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <85d1e660-1df4-6e84-a329-751197ef7eec@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26785/Wed Jan 18 09:42:40 2023)
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 15:08, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add a DT binding document for the RPMh interconnects on Qualcomm sa8775p
-> platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../interconnect/qcom,sa8775p-rpmh.yaml       |  50 ++++
->  .../interconnect/qcom,sa8775p-rpmh.h          | 231 ++++++++++++++++++
->  2 files changed, 281 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sa8775p-rpmh.h
+On 1/18/23 07:28, Martin Tůma wrote:
+>>> +++ b/include/linux/dma/amd_xdma.h
+>>> @@ -0,0 +1,16 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>>> +/*
+>>> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
+>>> + */
+>>> +
+>>> +#ifndef _DMAENGINE_AMD_XDMA_H
+>>> +#define _DMAENGINE_AMD_XDMA_H
+>>> +
+>>> +#include <linux/interrupt.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +int xdma_enable_user_irq(struct platform_device *pdev, u32 irq_num);
+>>> +void xdma_disable_user_irq(struct platform_device *pdev, u32 irq_num);
+>>> +int xdma_get_user_irq(struct platform_device *pdev, u32 
+>>> user_irq_index);
+>>
+>> who is the user of these APIs? It is not clear to me how this is to be
+>> used...
+>>
+>
+> The APIs are used by the PCIe card devices/drivers that use XDMA. 
+> Without them the "user IRQs" provided by the XDMA HW can not be used 
+> by the PCIe card drivers. If you look at the XDMA HW overview:
+> https://docs.xilinx.com/r/en-US/pg195-pcie-dma/Overview?tocId=O_EMX26J5IsdubL4i3XJ_w 
+>
+> those APIs control the "IRQ module" block.
+>
+> For a linux driver using them see the mgb4 v4l2 driver:
+> https://patchwork.kernel.org/project/linux-media/patch/20230113172636.2590-2-tumic@gpxsee.org/ 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+Rather than custom functions this should probably be integrated with the 
+generic IRQ framework registering a IRQ chip that provides IRQs that can 
+be requested by the consumer.
 
