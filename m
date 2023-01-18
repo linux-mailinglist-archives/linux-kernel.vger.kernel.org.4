@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E9B671DE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAAE671DD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjARNde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
+        id S231210AbjARNdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjARNc7 (ORCPT
+        with ESMTP id S230114AbjARNcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:32:59 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593FD58972;
-        Wed, 18 Jan 2023 04:59:58 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30ICxgYp018304;
-        Wed, 18 Jan 2023 06:59:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674046783;
-        bh=TISRczCqqClgTnuh9Jgbp4YdFIC7Href1UTZ0gVUQ5I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=HtmLhoiO7Kmq5E6oAlRzpG22Wi/dDRUW/IkIM5rR0Tc4g4CzTpq6vSCR69GICWEvh
-         GEDkyMqCY/EpAQ+YFf4O+KIdBeEHvjZ+uTvDjg6v3qat3PnvdPVrfF+0KlMArS+gUv
-         YSXtTqqXJJijq85Avd1RPztwfI/g1OZVxV3XAd/M=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30ICxgBH033224
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Jan 2023 06:59:42 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
- Jan 2023 06:59:42 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 18 Jan 2023 06:59:42 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30ICxfBG003256;
-        Wed, 18 Jan 2023 06:59:42 -0600
-From:   Achal Verma <a-verma1@ti.com>
-To:     <mranostay@ti.com>, <rogerq@kernel.org>, <lpieralisi@kernel.org>,
-        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski@linaro.org>, <vigneshr@ti.com>,
-        <tjoseph@cadence.com>, <sergio.paracuellos@gmail.com>,
-        <pthombar@cadence.com>, <linux-pci@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 3/5] PCI: j721e: Add PCIe 4x lane selection support
-Date:   Wed, 18 Jan 2023 18:29:34 +0530
-Message-ID: <20230118125936.3456716-4-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230118125936.3456716-1-a-verma1@ti.com>
-References: <20230118125936.3456716-1-a-verma1@ti.com>
+        Wed, 18 Jan 2023 08:32:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070E984579;
+        Wed, 18 Jan 2023 04:59:36 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674046774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ia5mcSSMCX645DNR37kXbpCtB0DOcgHMBUz20RFHfC4=;
+        b=PgZLyda/qk+zlwhzR6idZiNhlWjQ9dhxCmeT4rrrl2GneTevgb/CsxE+hZPT77/XxN/D3C
+        OdouussxQq3+fqW0hIcz/Ki25tMkMCvzzYDB8pBZcMQlLCpDT5VZb1pVYMSDA/j2hwWryO
+        XALXhf/W98qKDyrndcj1X2VDtSU3suaEkQMvFPFJNRpd3rP5YqRNavHx/iRYRfI3oGDLj7
+        Fyk2vEI66UfwY0KA5lZAxmspc7UiU9mKVU0asexmqh+7rGYFxRvu36Ar6cF1VNhzA334Kh
+        j+N92wF2QwyoojycoKuUH4XjJ9yjXMXivJ1ePjsam5T0B2hbJpAWejPbykJQrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674046774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ia5mcSSMCX645DNR37kXbpCtB0DOcgHMBUz20RFHfC4=;
+        b=twkPO4xqcEqK9BdeHGZeT7P1XO2VXaNzoSGOiyD8GCiyvcCMbRNK/TsG05ivxP6PlVlbsI
+        bMflMGBUtRJ91XBw==
+To:     Byungchul Park <byungchul.park@lge.com>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+        will@kernel.org, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
+        gwan-gyeong.mun@intel.com
+Subject: Re: [PATCH RFC v7 07/23] dept: Apply sdt_might_sleep_strong() to
+ wait_for_completion()/complete()
+In-Reply-To: <1673235231-30302-8-git-send-email-byungchul.park@lge.com>
+References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
+ <1673235231-30302-8-git-send-email-byungchul.park@lge.com>
+Date:   Wed, 18 Jan 2023 13:59:34 +0100
+Message-ID: <87wn5khubt.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Ranostay <mranostay@ti.com>
+On Mon, Jan 09 2023 at 12:33, Byungchul Park wrote:
+> Makes Dept able to track dependencies by
+> wait_for_completion()/complete().
+>
+> In order to obtain the meaningful caller points, replace all the
+> wait_for_completion*() declarations with macros in the header.
 
-Add support for setting of two-bit field that allows selection of 4x lane
-PCIe which was previously limited to only 2x lanes.
+That's just wrong.
 
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
-Signed-off-by: Achal Verma <a-verma1@ti.com>
----
- drivers/pci/controller/cadence/pci-j721e.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> -extern void wait_for_completion(struct completion *);
+> +extern void raw_wait_for_completion(struct completion *);
 
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index f4dc2c5abedb..58dcac9021e4 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -42,7 +42,6 @@ enum link_status {
- };
- 
- #define J721E_MODE_RC			BIT(7)
--#define LANE_COUNT_MASK			BIT(8)
- #define LANE_COUNT(n)			((n) << 8)
- 
- #define GENERATION_SEL_MASK		GENMASK(1, 0)
-@@ -52,6 +51,7 @@ struct j721e_pcie {
- 	struct clk		*refclk;
- 	u32			mode;
- 	u32			num_lanes;
-+	u32			max_lanes;
- 	void __iomem		*user_cfg_base;
- 	void __iomem		*intd_cfg_base;
- 	u32			linkdown_irq_regfield;
-@@ -205,11 +205,15 @@ static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
- {
- 	struct device *dev = pcie->cdns_pcie->dev;
- 	u32 lanes = pcie->num_lanes;
-+	u32 mask = BIT(8);
- 	u32 val = 0;
- 	int ret;
- 
-+	if (pcie->max_lanes == 4)
-+		mask = GENMASK(9, 8);
-+
- 	val = LANE_COUNT(lanes - 1);
--	ret = regmap_update_bits(syscon, offset, LANE_COUNT_MASK, val);
-+	ret = regmap_update_bits(syscon, offset, mask, val);
- 	if (ret)
- 		dev_err(dev, "failed to set link count\n");
- 
-@@ -441,7 +445,9 @@ static int j721e_pcie_probe(struct platform_device *pdev)
- 		dev_warn(dev, "num-lanes property not provided or invalid, setting num-lanes to 1\n");
- 		num_lanes = 1;
- 	}
-+
- 	pcie->num_lanes = num_lanes;
-+	pcie->max_lanes = data->max_lanes;
- 
- 	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(48)))
- 		return -EINVAL;
--- 
-2.25.1
+> +#define wait_for_completion(x)					\
+> +({								\
+> +	sdt_might_sleep_strong(NULL);				\
+> +	raw_wait_for_completion(x);				\
+> +	sdt_might_sleep_finish();				\
+> +})
 
+The very same can be achieved with a proper annotation which does not
+enforce THIS_IP but allows to use __builtin_return_address($N). That's
+what everything else uses too.
+
+Thanks,
+
+        tglx
