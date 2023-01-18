@@ -2,339 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E04C67249E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EB06724A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjARRQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S229934AbjARRRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjARRQc (ORCPT
+        with ESMTP id S231175AbjARRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:16:32 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694A582B8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:16:31 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j17so6699239wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:16:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q7zV/lGXR4VdaEDQ4Nx12c6m631b/jAQVVbMn5yqLiQ=;
-        b=dLsS8qtz350AVKCTdJBB3SPFogxL/9PcLvhFxBeRIOqWHlZtdQd0eNdkxzTp1n2u3n
-         s2g4VvcaAlbkeqcp04CC2rxtczZCxYNaY0pJq5bssFTHwhZj/JusPAqsA3dz6qmyZkFX
-         KzJjKhSUHA+mFtTSQa4TMhsAAPJ6J8IMr2iIpHsqBcZXevYGfA1z0venCacPb4hWNfzX
-         8z8rSEAmQ+Taig7B57lznwfnjSGNyB3XrV22IM5KPq5TikyMqjB0zpIX5wplEvc7fxjc
-         pP17hncZ/3n7tLZwFmx3TbzEJ1gsIxtNoajRNBWJwLBonp44Of1XOM8pouEJT9HVfI/c
-         /Tcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q7zV/lGXR4VdaEDQ4Nx12c6m631b/jAQVVbMn5yqLiQ=;
-        b=Xrbqo+tQOs3jF8JpGcadMyniV+xXccW6vFsaTFXQzBJzxLPO9c9BHFZ0Usu2mt5eVK
-         ORBE8ccy7CYhUooYNlLyck5+Yapksztt4rdSK7zJeBWeGx1YCxwXwtqa7QMrazD9bN+P
-         vJ2qN9+Z0YbEq1Q6mNmj4M1RjA0GVJfkrAjPUsbmw0p2Gg979EgQuzYPzzRNQedOimi5
-         f/tmQXftvVDs1woWnl8DvvJXs4WHyolSliGOMlKf//P8ZOOU3dAlLkF4kgBjloo6fZ/r
-         Nhfmw6LGqb5Ikx4nTkk2fTvn1U+QZ682JsQ4JWsqRwpHARvamc7KhrjWxPLAmgYt/whU
-         XyxA==
-X-Gm-Message-State: AFqh2krSBX20nu4hKymeH3ZQ5ldeADSHR6fJfnjcveEQnOOAy641j/qy
-        /MdF2jhdVX0vWLrT2cK54uWQPA==
-X-Google-Smtp-Source: AMrXdXuKC5zRFslwGJK52dVjq2ujUBD5QgTWc+OROZLGPXQt+R//dN5r7uBR7HOQr77RLbjFEkO3/g==
-X-Received: by 2002:a05:600c:540f:b0:3da:f6fe:ba6 with SMTP id he15-20020a05600c540f00b003daf6fe0ba6mr7723015wmb.38.1674062190226;
-        Wed, 18 Jan 2023 09:16:30 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t13-20020a05600c198d00b003cfa81e2eb4sm2772780wmq.38.2023.01.18.09.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:16:29 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
-        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
-        swboyd@chromium.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, andersson@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v9 2/2] dt-bindings: msm: dsi-controller-main: Document clocks on a per compatible basis
-Date:   Wed, 18 Jan 2023 17:16:21 +0000
-Message-Id: <20230118171621.102694-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230118171621.102694-1-bryan.odonoghue@linaro.org>
-References: <20230118171621.102694-1-bryan.odonoghue@linaro.org>
+        Wed, 18 Jan 2023 12:16:56 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6324E529;
+        Wed, 18 Jan 2023 09:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UiaXdyQfqOt+6WwaLnuzqkN2uc7Go0jhzWYcMdFqIEU=; b=HqOF5yLycZqDpix07Wa88U3B5z
+        PV+/OuawmGvHXon+V/NTHJO4/hAbMGN4g/ngBlG1PxYXFmW3biP2WJviIM5ke7Ipp6ssbdY7YRUki
+        sTvKtZLK5hHgUk9IahRiPHErAzQhRSnAErMtzdP17+tHybH3AeIdYLBo/DcnAzBSO6pkkfID7e9Ke
+        Is6/xXp8olzFV5cJU7Buzu91LCDft1CQx1FD6SXygcfJqiHQj05Ovli4iFSsDM3j1eqyFix6iFNhr
+        SJt3QCrObUHCcDwUwwJmBO6hLfVVE9OVRCjEk2OlSCXHBb5OANTpBps1L8ypjUEVZZzbCbDnOV7T4
+        IW0JVL2Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIC2Y-0003H1-1h;
+        Wed, 18 Jan 2023 17:15:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 22EE8300094;
+        Wed, 18 Jan 2023 18:16:23 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D7DC920B2B4E5; Wed, 18 Jan 2023 18:16:23 +0100 (CET)
+Date:   Wed, 18 Jan 2023 18:16:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
+        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User
+ Dispatch Suspension
+Message-ID: <Y8gpZ+T/re7mEDjB@hirez.programming.kicks-ass.net>
+References: <20230109153348.5625-1-gregory.price@memverge.com>
+ <20230109153348.5625-2-gregory.price@memverge.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109153348.5625-2-gregory.price@memverge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each compatible has a different set of clocks which are associated with it.
-Add in the list of clocks for each compatible.
+On Mon, Jan 09, 2023 at 10:33:46AM -0500, Gregory Price wrote:
+> @@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
+>  	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
+>  	char state;
+>  
+> +	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
+> +			unlikely(current->ptrace & PT_SUSPEND_SYSCALL_USER_DISPATCH))
+> +		return false;
+> +
+>  	if (likely(instruction_pointer(regs) - sd->offset < sd->len))
+>  		return false;
+>  
 
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../display/msm/dsi-controller-main.yaml      | 218 ++++++++++++++++--
- 1 file changed, 201 insertions(+), 17 deletions(-)
+So by making syscall_user_dispatch() return false, we'll make
+syscall_trace_enter() continue to handle things, and supposedly you want
+to land in ptrace_report_syscall_entry(), right?
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-index 35668caa190c4..ad1ba15b74c19 100644
---- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-@@ -9,9 +9,6 @@ title: Qualcomm Display DSI controller
- maintainers:
-   - Krishna Manikandan <quic_mkrishn@quicinc.com>
- 
--allOf:
--  - $ref: "../dsi-controller.yaml#"
--
- properties:
-   compatible:
-     oneOf:
-@@ -50,22 +47,23 @@ properties:
-     maxItems: 1
- 
-   clocks:
--    items:
--      - description: Display byte clock
--      - description: Display byte interface clock
--      - description: Display pixel clock
--      - description: Display core clock
--      - description: Display AHB clock
--      - description: Display AXI clock
-+    description: |
-+      Several clocks are used, depending on the variant. Typical ones are::
-+       - bus:: Display AHB clock.
-+       - byte:: Display byte clock.
-+       - byte_intf:: Display byte interface clock.
-+       - core:: Display core clock.
-+       - core_mss:: Core MultiMedia SubSystem clock.
-+       - iface:: Display AXI clock.
-+       - mdp_core:: MDP Core clock.
-+       - mnoc:: MNOC clock
-+       - pixel:: Display pixel clock.
-+    minItems: 3
-+    maxItems: 9
- 
-   clock-names:
--    items:
--      - const: byte
--      - const: byte_intf
--      - const: pixel
--      - const: core
--      - const: iface
--      - const: bus
-+    minItems: 3
-+    maxItems: 9
- 
-   phys:
-     maxItems: 1
-@@ -161,6 +159,192 @@ required:
-   - assigned-clock-parents
-   - ports
- 
-+allOf:
-+  - $ref: ../dsi-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,apq8064-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 7
-+        clock-names:
-+          items:
-+            - const: iface
-+            - const: bus
-+            - const: core_mmss
-+            - const: src
-+            - const: byte
-+            - const: pixel
-+            - const: core
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8916-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: mdp_core
-+            - const: iface
-+            - const: bus
-+            - const: byte
-+            - const: pixel
-+            - const: core
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8953-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: mdp_core
-+            - const: iface
-+            - const: bus
-+            - const: byte
-+            - const: pixel
-+            - const: core
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8974-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 7
-+        clock-names:
-+          items:
-+            - const: mdp_core
-+            - const: iface
-+            - const: bus
-+            - const: byte
-+            - const: pixel
-+            - const: core
-+            - const: core_mmss
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8996-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 7
-+        clock-names:
-+          items:
-+            - const: mdp_core
-+            - const: byte
-+            - const: iface
-+            - const: bus
-+            - const: core_mmss
-+            - const: pixel
-+            - const: core
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8998-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: byte
-+            - const: byte_intf
-+            - const: pixel
-+            - const: core
-+            - const: iface
-+            - const: bus
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc7180-dsi-ctrl
-+              - qcom,sc7280-dsi-ctrl
-+              - qcom,sm8250-dsi-ctrl
-+              - qcom,sm8150-dsi-ctrl
-+              - qcom,sm8250-dsi-ctrl
-+              - qcom,sm8350-dsi-ctrl
-+              - qcom,sm8450-dsi-ctrl
-+              - qcom,sm8550-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: byte
-+            - const: byte_intf
-+            - const: pixel
-+            - const: core
-+            - const: iface
-+            - const: bus
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm660-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 9
-+        clock-names:
-+          items:
-+            - const: mdp_core
-+            - const: byte
-+            - const: byte_intf
-+            - const: mnoc
-+            - const: iface
-+            - const: bus
-+            - const: core_mmss
-+            - const: pixel
-+            - const: core
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm845-dsi-ctrl
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: byte
-+            - const: byte_intf
-+            - const: pixel
-+            - const: core
-+            - const: iface
-+            - const: bus
-+
- additionalProperties: false
- 
- examples:
--- 
-2.38.1
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 54482193e1ed..a6ad815bd4be 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -370,6 +370,11 @@ static int check_ptrace_options(unsigned long data)
+>  	if (data & ~(unsigned long)PTRACE_O_MASK)
+>  		return -EINVAL;
+>  
+> +	if (unlikely(data & PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)) {
+> +		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTART))
+> +			return -EINVAL;
+> +	}
 
+Should setting this then not also depend on having
+SYSCALL_WORK_SYSCALL_TRACE set? Because without that, you get 'funny'
+things.
