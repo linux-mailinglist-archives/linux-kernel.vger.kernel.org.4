@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D16671E5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B29671E63
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjARNuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S229614AbjARNwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjARNuZ (ORCPT
+        with ESMTP id S230045AbjARNve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:50:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C835CCE899;
-        Wed, 18 Jan 2023 05:19:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A361B81D0B;
-        Wed, 18 Jan 2023 13:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EE5C433D2;
-        Wed, 18 Jan 2023 13:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674047986;
-        bh=ePgAPHOhTVOksHn0s2syMgYNYHXIHMPRSxnZp4wJ/38=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ia5UQJcongu0X+ElLOSAtjQ1h1Z4S8tC04z/rG10+8rBeyzSAG+V4BT6/5C0IPSe5
-         AaeNqgUaa0LWvfxRH4MDg7CxNPUrjB5RvCqiKJzFlFnqtOwORYtqxveFLmv0JBcIfd
-         /JJ3AgX+e0Rq8Pz2ob9MAnVqKiOg4UDw6YzMVaX0f500Dl+dowhGo+bL1FjyU6k2bH
-         w6mVhx6OWVFU7z++pOiffB/9KSR20DlnpNNgHA3yrmPzA8LkznjS7LEA6ntUDAWHwt
-         aBUg/YgXl7oVEWkCLy1QhaZMm8nANXwJrm0xJB3gvXRFQuU8pyXMS4Q8tyx0Qj5HZU
-         7Wx4HcKaK8Hpg==
-Received: by mail-vs1-f46.google.com with SMTP id 3so35661872vsq.7;
-        Wed, 18 Jan 2023 05:19:46 -0800 (PST)
-X-Gm-Message-State: AFqh2kruyZEcAs4t3TqgJb7oKevd6nx8SEzuA22k0xahyXzBhA71Zo8X
-        zKdhjAkorzbxy+LeukfbiLd12pNf8RLTe7Ipwg==
-X-Google-Smtp-Source: AMrXdXux9aAlM451KGBma1Qs2rJpTOL4EbQDljgAz6sNK/elrsA2uBmlRu/x//wMYoC5wIXCvkWkR51ZCIzD8PoAZoA=
-X-Received: by 2002:a67:f506:0:b0:3d3:c767:4570 with SMTP id
- u6-20020a67f506000000b003d3c7674570mr1026153vsn.85.1674047985721; Wed, 18 Jan
- 2023 05:19:45 -0800 (PST)
+        Wed, 18 Jan 2023 08:51:34 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44225E35
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:22:26 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id kt14so24292189ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:22:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SyETya9J8nxAxFrENMnlTL//0+Ln7pMx/qK2596DM28=;
+        b=XsiJYGgNlxZHyqh9V2BLU6R0hJmWC96Cf0IqgWjC2xCMob6bkx+XT5obQcHg+mVkVn
+         uv+sCDZOJfC9cN1TICvfQ/Zm1TwDNzWtvlf+l3tjSLpkexi6z5M+lB4DdX0Mz7BUsxfN
+         N6JhFfdKy0VY2kkpZ2q0Rtno/1KBk42j6Bp6RXlQEzgZaEZtXrLtomED+SSZCZ2buLKi
+         tbncdt8EIwyMjTYAi9n0YaFRIb5AHXmsrm6Ew0x5egNQrIu5XN3DsOsfpqf9c8gVlNbh
+         ZwsmaYW9ocEATG7lgVzTRrrOijDXgWRqeZfJhuIuq9e3gy401Pc6C+2mPvDwqcrz8v/4
+         rXBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SyETya9J8nxAxFrENMnlTL//0+Ln7pMx/qK2596DM28=;
+        b=BUbyUrtRfd5Uhk07gbMwWq8G9HCXEczNM/G4O19K+Yv8poOWSVk7d09YUIBJlDlcoK
+         XE0LNx9Gzt26PlM3ZTZAosGPapyHdy69DVwa47hQz+ZbgBLAYuH4MRq7N49+9EaliOTQ
+         emOMJTmsSiFBVRt57Bcaop0FzHaaAsRAMq2r4MZ65izRMqO2A6VIzrNe0vBsncpxX6xu
+         TVad4x31Ug5rVIIikXC0UDzL08eu8mHrFEJLgEgwOqK5nIgjApzScYS24flkZr5kRWJx
+         z5TkYQTzcDEyudJgbhWhBeVvoZiaI1Ib3F+UjUjpsFdmuyy3oZcMEBlxXtV8WTttOZJw
+         2OJA==
+X-Gm-Message-State: AFqh2krf50d9gOBnw7J2r3fblFnXKhoS66qc1Z9JwoaVOlyrnTdr/xNn
+        2gmpSuPJVWAMaJy3r5E5UU/63g==
+X-Google-Smtp-Source: AMrXdXumI3LnLjrODIkRwdlfVo7XPFCzuq1zMuzKCmbVt3UZy2jZB9Y230A2uuDcYxpzosH4jmICAw==
+X-Received: by 2002:a17:907:6746:b0:84d:1c67:97d7 with SMTP id qm6-20020a170907674600b0084d1c6797d7mr7664734ejc.30.1674048145282;
+        Wed, 18 Jan 2023 05:22:25 -0800 (PST)
+Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
+        by smtp.gmail.com with ESMTPSA id lj1-20020a170906f9c100b0078d22b0bcf2sm14586201ejb.168.2023.01.18.05.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 05:22:24 -0800 (PST)
+Message-ID: <f4e65645-3951-3a38-63fd-d96f48608737@linaro.org>
+Date:   Wed, 18 Jan 2023 14:22:21 +0100
 MIME-Version: 1.0
-References: <20230113162214.117261-1-krzysztof.kozlowski@linaro.org>
- <20230113162214.117261-2-krzysztof.kozlowski@linaro.org> <20230117192724.GA3489389-robh@kernel.org>
- <331eed95-eaf7-5c5a-86c1-0ee7b5591b9a@linaro.org>
-In-Reply-To: <331eed95-eaf7-5c5a-86c1-0ee7b5591b9a@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 18 Jan 2023 07:19:34 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJUTFa24iZ2fovE_yJdBVcbkcUX8rBoPB12ptdAyxHW6g@mail.gmail.com>
-Message-ID: <CAL_JsqJUTFa24iZ2fovE_yJdBVcbkcUX8rBoPB12ptdAyxHW6g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: qcom,wcd934x: Describe slim-ifc-dev
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] clk: qcom: rpmh: remove duplicate IPA clock reference
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Alex Elder <elder@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230117170217.2462320-1-arnd@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230117170217.2462320-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,24 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 5:25 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/01/2023 20:27, Rob Herring wrote:
-> > On Fri, Jan 13, 2023 at 05:22:13PM +0100, Krzysztof Kozlowski wrote:
-> >> The "slim-ifc-dev" property should not be just "true", because it allows
-> >> any type.
-> >
-> > Yes, but it is common, so it should be in a common schema. Though
-> > there's only one other binding using it (wcd9335.txt).
->
-> This is still wcd9335 and wcd934x specific, not really common. Maybe
-> next Qualcomm codec would also bring it so then we can define common
-> schema for the codecs. But so far I think it is not really a common
-> property.
 
-By common, I only mean used by more than 1 binding. That's already the
-case, there's just not a schema for the 2nd one. In any case, can
-address that later.
 
-Acked-by: Rob Herring <robh@kernel.org>
+On 17.01.2023 18:02, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> One of the ones that were recently added was already there:
+> 
+> drivers/clk/qcom/clk-rpmh.c:578:35: error: initialized field overwritten [-Werror=override-init]
+>   578 |         [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> 
+> Fixes: aa055bf158cd ("clk: qcom: rpmh: define IPA clocks where required")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/clk/qcom/clk-rpmh.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+> index 393b83f6020e..45ee370f3307 100644
+> --- a/drivers/clk/qcom/clk-rpmh.c
+> +++ b/drivers/clk/qcom/clk-rpmh.c
+> @@ -575,7 +575,6 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
+>  	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+>  	[RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
+>  	[RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
+> -	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
