@@ -2,89 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8996715C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C845C6715CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjARIDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S229937AbjARIDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjARH7T (ORCPT
+        with ESMTP id S230193AbjARIBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:59:19 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6B966EFE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:34:44 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so813256wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:34:44 -0800 (PST)
+        Wed, 18 Jan 2023 03:01:16 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5751C7E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:36:23 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id d30so45592282lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:36:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kyUX3mVkFb704ZR5bE8VGDfpv5ttttIo1yF7fkX19nM=;
-        b=Le1BuNwehcAGMI3BMQPsEveagBCM8BlXnWvG1gc3sOmdPSZssAaUmk3KL4sRdULyhM
-         U6LRTgdWEZKKVNxGWQZqzKM7KIhOJUe3V5J+ZwxNn+IXgHxn3Wh9o0hAazJufqetp9dh
-         p/uOj0YyfeAAkOlhK/SXmZ4mLI/DiE64DAReayx3JAN3Fwwz4VPGYr6Zwz3ZSIAMdzzH
-         cDQuqcib51LpCJ6TjvKzPPoevxCoVMMMBPbPqs621pPGTJmI2bz8ZOGQUSL16rKDr9YS
-         hjzNA9OM2X8aZl9NsPvIhdDIxrm4ZDR/xyP0SHARTY14mGNYpgZTso1RQz6bxVV3nuUH
-         wSFQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tXJS6O96pqUrAn6JTjfwzdlxbTr5MxmXpgvppk1+ZUI=;
+        b=Y1PYitAEZNLh0tMF269DyDhvK7SU90x/pZSKSUY1YcSH3Q6dxMtNI8y9Q6AN6MVyxY
+         cn5Ye3GOhKXE+nTWj69viVf+zWfsKnvGe6xqqrgFpGLlGCyy8uyKFasmeGN8dSb1KTLJ
+         uTn3z7L2Fi3f18OTfxJPfiPGQRrL04ekm6xNXWKL9NZsnsFrxC/Z1S5LqSI9bPH2p+W3
+         lmRkmrIyJwD9dBWQgUU1cqe+YQcXSdCW4QFho72DRZ2iucpHpsiXUmFmB+FKdnM/7bZM
+         t9mm3hEVPaskSJ+LwS35XMx0JGimed0EqmiCjGOCFNq6fy6Ea1iT55TyTPNLYakuXk7B
+         B/mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kyUX3mVkFb704ZR5bE8VGDfpv5ttttIo1yF7fkX19nM=;
-        b=SRXRmL3lnZvcVyRJIcIoJEhv5r23dAVZdaKH/qZvrp+pslZsKOXEiQrzBXqpS8Rw6h
-         cvEaosvwNnEN6ORQSzkkj4g+2vUEUEd0Wg2k+y4nwunHyP5QB+jj8QvDexWWzrIgy2vg
-         hiP68IIPTqVa2RK5nsopTGhBMtDiZq4x5o6mjGzxx5PglLHY+EmVG/R0gKYDtiu4Y/q0
-         JVDfEfOtYbdNgcAFzrvMVK9UMyxm62rSDWKfpyOwSU1t1asnkbmEf2L9MnLWcrfQfIPC
-         lw3OJdHsVf5AT763pu0RKNA6wH05KzchcDc2vLERQhsew9lyKt+OoqJslt9CKjT4Ebox
-         TwdQ==
-X-Gm-Message-State: AFqh2koj2zbYQsZIP/nlQkZ0NdEboeByLPcEw/rejiLleMho9kENdoeu
-        bixAW7WINEfqBtZrnfWM9zyQ8g==
-X-Google-Smtp-Source: AMrXdXsJMs5+tNGqm2kcA7wkU1Etj7BlvI1kKIDbMtJUd4uBS9RxjGpJ9jG+k1GSvObVp0/RAung6w==
-X-Received: by 2002:a05:600c:3c94:b0:3da:f2b:d7a0 with SMTP id bg20-20020a05600c3c9400b003da0f2bd7a0mr5493286wmb.31.1674027283155;
-        Tue, 17 Jan 2023 23:34:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l11-20020a1ced0b000000b003dafb0c8dfbsm1385849wmh.14.2023.01.17.23.34.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 23:34:42 -0800 (PST)
-Message-ID: <e871dae2-58ac-7ad9-c198-c4e90d26c69b@linaro.org>
-Date:   Wed, 18 Jan 2023 08:34:40 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tXJS6O96pqUrAn6JTjfwzdlxbTr5MxmXpgvppk1+ZUI=;
+        b=GPqan7BAGejBCriQkuIfmhUaruc9wcqV5vmvssisQsXSX3xbGOo3tn0oKR1fEPnpGI
+         B2ZezjW0o9uxsXHCJe1FvXxaRgRspn9C9/doTcKY83bZ4iQPxYgnP3WlqC/n9gXwxUrd
+         IpXDiNFM7LlX6NgyhedBAIVYeu+UbG72Y/FpQ15bdZbMCj9kIQ0TBeTvwr/Qfb3BrNV1
+         V470kdqmofX56xFbu1LR+l/QPUFd2U0r3OlLATwDmqWEpTQ0JPZuJT/ltj7nMayr1j83
+         glZP3sBP9rUdk6OE8iqUAQi3IaNkwGOz3Q9eauWKFZIkc2lXq4pSuxxp80ExV4jUUbao
+         PsHQ==
+X-Gm-Message-State: AFqh2kqpQc76yGBD1CVN4p0ATN9hV8VM5kqrY9OlkwTkiTiPE+CbHXMM
+        02YswbPWbP7zEBZmnWVU3FdxbNs10tTtGid/xV5zjA==
+X-Google-Smtp-Source: AMrXdXuj5bzcgQGLaz1JgVZv2c7juMWmB7EfCOepc1a7fDbsUWhqpEZ3Uj+TmWN0FE8M1AQbWRFpg+6i/hAV1CzefpU=
+X-Received: by 2002:ac2:4bd0:0:b0:4c5:32a4:6f88 with SMTP id
+ o16-20020ac24bd0000000b004c532a46f88mr410419lfq.6.1674027381894; Tue, 17 Jan
+ 2023 23:36:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] arm64: defconfig: Enable HDA INTEL config for ARM64
-To:     Mohan Kumar <mkumard@nvidia.com>, catalin.marinas@arm.com,
-        will@kernel.org, dmitry.baryshkov@linaro.org, shawnguo@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com
-References: <20230117181658.17010-1-mkumard@nvidia.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230117181658.17010-1-mkumard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117163543.1049025-1-jannh@google.com>
+In-Reply-To: <20230117163543.1049025-1-jannh@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 18 Jan 2023 08:36:09 +0100
+Message-ID: <CACT4Y+aQUeoWnWmbDG3O2_P75f=2u=VDRA1PjuTtbJsp5Xw2VA@mail.gmail.com>
+Subject: Re: [PATCH] fork, vmalloc: KASAN-poison backing pages of vmapped stacks
+To:     Jann Horn <jannh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 19:16, Mohan Kumar wrote:
-> Enable CONFIG_SND_HDA_INTEL for NVIDIA PCI based graphics sound card for
-> ARM64 based platforms as Intel PCI driver was used for registering the
-> sound card.
+On Tue, 17 Jan 2023 at 17:35, Jann Horn <jannh@google.com> wrote:
+>
+> KASAN (except in HW_TAGS mode) tracks memory state based on virtual
+> addresses. The mappings of kernel stack pages in the linear mapping are
+> currently marked as fully accessible.
 
-It's not a part of SoC, not a common device used during debugging or
-development, so I don't think it is reasonable to enable it. We do not
-enable driver just because someone uses them. Otherwise please clarify
-which board has this device embedded (not pluggable by user, but embedded).
+Hi Jann,
 
-Best regards,
-Krzysztof
+To confirm my understanding, this is not just KASAN (except in HW_TAGS
+mode), but also CONFIG_VMAP_STACK is required, right?
 
+> Since stack corruption issues can cause some very gnarly errors, let's be
+> extra careful and tell KASAN to forbid accesses to stack memory through the
+> linear mapping.
+>
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+> I wrote this after seeing
+> https://lore.kernel.org/all/Y8W5rjKdZ9erIF14@casper.infradead.org/
+> and wondering about possible ways that this kind of stack corruption
+> could be sneaking past KASAN.
+> That's proooobably not the explanation, but still...
+
+I think catching any silent corruptions is still very useful. Besides
+confusing reports, sometimes they lead to an explosion of random
+reports all over the kernel.
+
+>  include/linux/vmalloc.h |  6 ++++++
+>  kernel/fork.c           | 10 ++++++++++
+>  mm/vmalloc.c            | 24 ++++++++++++++++++++++++
+>  3 files changed, 40 insertions(+)
+>
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 096d48aa3437..bfb50178e5e3 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -297,4 +297,10 @@ bool vmalloc_dump_obj(void *object);
+>  static inline bool vmalloc_dump_obj(void *object) { return false; }
+>  #endif
+>
+> +#if defined(CONFIG_MMU) && (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS))
+> +void vmalloc_poison_backing_pages(const void *addr);
+> +#else
+> +static inline void vmalloc_poison_backing_pages(const void *addr) {}
+> +#endif
+
+I think this should be in kasan headers and prefixed with kasan_.
+There are also kmsan/kcsan that may poison memory and hw poisoning
+(MADV_HWPOISON), so it's a somewhat overloaded term on its own.
+
+Can/should this be extended to all vmalloc-ed memory? Or some of it
+can be accessed via both addresses?
+
+Also, should we mprotect it instead while it's allocated as the stack?
+If it works, it looks like a reasonable improvement for
+CONFIG_VMAP_STACK in general. Would also catch non-instrumented
+accesses.
+
+>  #endif /* _LINUX_VMALLOC_H */
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 9f7fe3541897..5c8c103a3597 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -321,6 +321,16 @@ static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+>                 vfree(stack);
+>                 return -ENOMEM;
+>         }
+> +
+> +       /*
+> +        * A virtually-allocated stack's memory should only be accessed through
+> +        * the vmalloc area, not through the linear mapping.
+> +        * Inform KASAN that all accesses through the linear mapping should be
+> +        * reported (instead of permitting all accesses through the linear
+> +        * mapping).
+> +        */
+> +       vmalloc_poison_backing_pages(stack);
+> +
+>         /*
+>          * We can't call find_vm_area() in interrupt context, and
+>          * free_thread_stack() can be called in interrupt context,
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ca71de7c9d77..10c79c53cf5c 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -4042,6 +4042,30 @@ void pcpu_free_vm_areas(struct vm_struct **vms, int nr_vms)
+>  }
+>  #endif /* CONFIG_SMP */
+>
+> +#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+> +/*
+> + * Poison the KASAN shadow for the linear mapping of the pages used as stack
+> + * memory.
+> + * NOTE: This makes no sense in HW_TAGS mode because HW_TAGS marks physical
+> + * memory, not virtual memory.
+> + */
+> +void vmalloc_poison_backing_pages(const void *addr)
+> +{
+> +       struct vm_struct *area;
+> +       int i;
+> +
+> +       if (WARN(!PAGE_ALIGNED(addr), "bad address (%p)\n", addr))
+> +               return;
+> +
+> +       area = find_vm_area(addr);
+> +       if (WARN(!area, "nonexistent vm area (%p)\n", addr))
+> +               return;
+> +
+> +       for (i = 0; i < area->nr_pages; i++)
+> +               kasan_poison_pages(area->pages[i], 0, false);
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_PRINTK
+>  bool vmalloc_dump_obj(void *object)
+>  {
+>
+> base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
