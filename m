@@ -2,147 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F1D671B8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CC3671B8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjARMKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S230157AbjARMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjARMHs (ORCPT
+        with ESMTP id S230218AbjARMH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:07:48 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2089.outbound.protection.outlook.com [40.107.243.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B1F4346F;
-        Wed, 18 Jan 2023 03:27:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OLN0LPcPXyokU4AJtNR5xgI7STYItld183mQeOmOU6D/A9hzT82POLZq802wORVmp1EKUIqxl2YHkh0aNreZyo46kh3tGFT4ViCqrvIoJad0/+S3dLWikV+JrnmUBmOG0yi/tDx4ow59XaTaDXgvIg3tMrNsifYoHZsKko7OwJR9NQVmx9LtQT8HKZcCT/bExsBmDX4+cSqHlvsvFRFS7mo2SS+oosJgq898MECGZQUj4HFAdN17yMtVNuuK47LMc0vxMaBRW9xcYMmaGicA2wBE6pYPTCIe2iqU/3I2aBmgfPkACOXF/OocqbaqeEWwG7nII1ojge/HzPBQusEQSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vC0UZnHaP79WhPPdWt13CGQ3PeoIpA2a0PWh57wKMpk=;
- b=TIUipXt1+rv2EEJX+BuIUNeLwGAR3bx8UTJ5taXkZiTqYq70v3N5dhFdW/ooGGqrbAbAOx+9XtR0wg01TkG/qvhevaS6pTPJxzWge5Cv8EgJ9afBRlymBli3emA8nDLm8FiKqOFC43YpEdiqssWfIs5khuhGZ5H/P9xp2OKyzYcL3m6C9Epj0jD2v8KnvEH3789xVlBMm+dmSTySKPtXLfIXyuVZkL8p5/BNfyQBiQzSnGwwlsYRmu7hIagkp0wtSIWMCyYvd2KKQ3VGFGF6cFazmi2yjdwSO6TxnTmipvdKk/0a++fFGnSEGHvlWv5Bo+sBZJx4gzolv6LJcwBPvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vC0UZnHaP79WhPPdWt13CGQ3PeoIpA2a0PWh57wKMpk=;
- b=RSM+jov0vrQAi7Jbd99GzcARfDUK1DVV+y/3rvmdCsKfLfTVDql48bT8kcKzXNXyn4lkNcKXscqQ8mTf2UZWTTr2UMd9NeVNSWdJ/8fdamGu6eCmH/twDwM+xtls2xJ1fa/r0DUOcLpCX/RTEGVdwkcouV1llzPD9lBPMHKzOiCq3hbJtgy5lVuulhI0ZCBAVZPJxWwJrTru/uixlzRaud9TbP0sO1QtIpdEUcsiW7BA2dIvxgEqcfu0tuuvcQAmJ+heI++V/im284L9epWXGmJAjg3m6KanNCSAYsXWJDUtGSDDaXSrWCww1ZnK3+HemhD2IoNA5+lRXdnS7kvZJQ==
-Received: from MW4P223CA0028.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::33)
- by PH7PR12MB6420.namprd12.prod.outlook.com (2603:10b6:510:1fc::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
- 2023 11:27:45 +0000
-Received: from CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::48) by MW4P223CA0028.outlook.office365.com
- (2603:10b6:303:80::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Wed, 18 Jan 2023 11:27:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT114.mail.protection.outlook.com (10.13.174.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Wed, 18 Jan 2023 11:27:45 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
- 2023 03:27:35 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
- 2023 03:27:35 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Wed, 18 Jan 2023 03:27:35 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
-In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
-References: <20230117124546.116438951@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 18 Jan 2023 07:07:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DF946D63;
+        Wed, 18 Jan 2023 03:28:05 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IAC9CG017165;
+        Wed, 18 Jan 2023 11:28:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=tvFrcVsE9AvpsfvfGvwG4Rmqctry5gm2IoLVVjAJM4Y=;
+ b=b1tRJYsybQrpf2Z3BIfdJ/2oAslMeUrii8UjhfbCdEWVhT0/buNKNHEdaPOFAg5c9egt
+ iHpuLSF9HiQZKWVN7tO7pOxWYkQO4riukkH315tM4kCfGvPG8JQoP8Qk/WV8EHpOZZgy
+ 5NY6lAPntn5g8PZKnMkS/vD65M6YkJiaSFRGlxDDzLzD0Dq8cQvapV8CWvfO+kPNGFiR
+ l3CWrkEaBrPXqHA1UZnf1U9+OUNhYZCTPotXafhi4Ou8l8xZCiJG2vrUFByQd0qp6J1T
+ MMyE5lTdXrKwwti/2uqoMoAVjpYm/Le1Dki4V4Mdu5bIF6RJC4cyh5EM8cOfc0hsbkLJ EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6et7snr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 11:28:04 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30IAx0hd001395;
+        Wed, 18 Jan 2023 11:28:04 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6et7snqb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 11:28:04 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30HMJ2WH023694;
+        Wed, 18 Jan 2023 11:28:01 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n3m16n6a1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 11:28:01 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IBRwgt48497012
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Jan 2023 11:27:58 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D3A92004B;
+        Wed, 18 Jan 2023 11:27:58 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7251A20043;
+        Wed, 18 Jan 2023 11:27:57 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.171.34.8])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 18 Jan 2023 11:27:57 +0000 (GMT)
+Date:   Wed, 18 Jan 2023 12:27:55 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] s390/chsc: Switch over to memdup_user()
+Message-ID: <Y8fXu92IySboNxVY@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20230118095823.18785-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118095823.18785-1-jiapeng.chong@linux.alibaba.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sea-_7jQo3b6fLv2sIPoinf0hHZYXHLM
+X-Proofpoint-ORIG-GUID: HPYg575DavTwW7NZzAdIdY-ctcvWiKgV
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Message-ID: <79265b30-278c-40d8-b7d8-b7116279e542@rnnvmail202.nvidia.com>
-Date:   Wed, 18 Jan 2023 03:27:35 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT114:EE_|PH7PR12MB6420:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2085a718-e743-4a89-fb3e-08daf947055d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gfjEc/CX2bqBuNJUIrSvqzbArdoHRr/RcDZQkBsDa53Ue/KshX63eQToXepbr5DbDGJM4TySWR8EjEti37sjyrBoQYeSOtEJL8DBgkWzc9FvYBXALcJ6WdJex2P5YQw2oZXTCQS49xJMlAfssOOLxCiY3MnpYfkp/vimq6fAbqk1U0RxIcqdAf8ObC6o1Y2aE62Psl58ZmP8vIl00MmvBxmL70AQ6ZW2EM6EIZ/00Cli1i1ylCbDdG2X4YAfNtETw6VWXGP7S5TJZCQ7HgeoqKyNAVU0rqkzI7+WOutEnKm2urhpnCrYKrVboeqeLEIZq2uu5X6S1AW0zZ9PB+2S444cl+kYwxbj6lYBuZoB65f8eoSy9wip1P9DqxlouHwfz+fYlfd+ld0kz/U1p9PRz5ChTI/xSUYSnRqf0r5nPA2KTwXZkR9q2YsXyqiCe6RAPgsHxPHQU3gNglc0AhOOsZ5ElMZTIA2yVI/Z9VjXaPGw1K08Y9px0QN8SmE1aDeHkQ8k1eOOl8xY6JeRtR8cabZ65hUdWvKbLQOhOWY6mJmk601HlZc+7jySeIlvejQGkYnJIk1zkOgkhjjF2rMISbId8TfTZddaN3mta6cZU30bftwQ1Jc1HXddSTXwvFX+t/fpbPGgrEoCfEb3T+7rbYp3Y48kznehorDAODUeYONQkaUN3BYJbaIWW4/n3YjW6puUHpnmdLTH+OQwW0ukzrjkolYaXiEF0zeGftuDvCpxeDyfcXK5j0UjVS9qJjqy
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199015)(36840700001)(46966006)(31686004)(2906002)(356005)(86362001)(70586007)(8676002)(31696002)(4326008)(70206006)(8936002)(5660300002)(7416002)(6916009)(7636003)(82740400003)(36860700001)(966005)(316002)(426003)(478600001)(54906003)(40480700001)(82310400005)(41300700001)(336012)(47076005)(26005)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 11:27:45.3448
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2085a718-e743-4a89-fb3e-08daf947055d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6420
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_04,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ phishscore=0 adultscore=0 suspectscore=0 bulkscore=0 clxscore=1015
+ mlxlogscore=999 mlxscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301180096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 13:48:13 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 176 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Jan 18, 2023 at 05:58:23PM +0800, Jiapeng Chong wrote:
+> Use memdup_user rather than duplicating its implementation, this is a
+> little bit restricted to reduce false positives.
 > 
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
+> ./drivers/s390/cio/chsc_sch.c:703:7-14: WARNING opportunity for
+> memdup_user.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.7-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3785
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+> Changes in v2:
+>   -Add free_page((unsigned long)sccl_area); 
 > 
-> thanks,
+>  drivers/s390/cio/chsc_sch.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> greg k-h
+> diff --git a/drivers/s390/cio/chsc_sch.c b/drivers/s390/cio/chsc_sch.c
+> index 180ab899289c..09dcce7ff24b 100644
+> --- a/drivers/s390/cio/chsc_sch.c
+> +++ b/drivers/s390/cio/chsc_sch.c
+> @@ -700,15 +700,13 @@ static int chsc_ioctl_conf_comp_list(void __user *user_ccl)
+>  	sccl_area = (void *)get_zeroed_page(GFP_KERNEL | GFP_DMA);
+>  	if (!sccl_area)
+>  		return -ENOMEM;
+> -	ccl = kzalloc(sizeof(*ccl), GFP_KERNEL);
+> -	if (!ccl) {
+> -		ret = -ENOMEM;
+> -		goto out_free;
+> -	}
+> -	if (copy_from_user(ccl, user_ccl, sizeof(*ccl))) {
+> -		ret = -EFAULT;
+> -		goto out_free;
+> +
+> +	ccl = memdup_user(user_ccl, sizeof(*ccl));
+> +	if (IS_ERR(ccl)) {
+> +		free_page((unsigned long)sccl_area);
+> +		return PTR_ERR(ccl);
+>  	}
+> +
+>  	sccl_area->request.length = 0x0020;
+>  	sccl_area->request.code = 0x0030;
+>  	sccl_area->fmt = ccl->req.fmt;
 
-All tests passing for Tegra ...
-
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
-
-Linux version:	6.1.7-rc2-g507f83506c2b
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+Such a change would have to address other similar patterns in this source.
+Besides, it is not that obvious that swapping GFP_KERNEL for GFP_USER
+(memdup_user() is called with) is issue-free.
