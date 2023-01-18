@@ -2,113 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610E367156B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C14B67156D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjARHtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S229521AbjARHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjARHsI (ORCPT
+        with ESMTP id S229705AbjARHsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:48:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D82F45F46;
-        Tue, 17 Jan 2023 23:17:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDA42B81B3E;
-        Wed, 18 Jan 2023 07:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB21C433EF;
-        Wed, 18 Jan 2023 07:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674026236;
-        bh=TPFbez4kRFQWTS4pIsn2TRE2Yeh3bO7Q6hZYSQ1W6pw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gBE1GvKyWgekNTYsa39JH90glVPf/zresTYnQ0oYxuizvsX6fM5mfbTi+0R6Ij98l
-         YyaDFKnsM6lTyQmL6e2hpKrsC5rvStWq4oOvBnVVT0o/wKzFhIVItTIkr2TYxKT23l
-         7rqy5WkpcyR27VdIF1yTxHowykDskkvhjoUUG53ZfOQR2moXA8Jxhb1pFtb7BfhQWW
-         P0tpyi+0OtQuTEKt00PruI9rK9RKu8zppqgEd/TVL/h3TTTQsh2MB7hpZmsviYbo8P
-         vLSJorCADin7THDqDQl/r4t7iaa9cPH75VNP1IT+BlbB2MeyX2Jv7uPewvM9XoZFkR
-         ObUnV48z0C9Bg==
-Date:   Tue, 17 Jan 2023 23:17:14 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Bryan Tan <bryantan@vmware.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Israel Rukshin <israelr@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Keith Busch <kbusch@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: Re: [PATCH rdma-next 00/13] Add RDMA inline crypto support
-Message-ID: <Y8ec+vUqitvvLKHL@sol.localdomain>
-References: <cover.1673873422.git.leon@kernel.org>
- <Y8eWEPZahIFAfnoI@sol.localdomain>
- <95692a47-09e7-0055-2006-46d085b2eadb@nvidia.com>
+        Wed, 18 Jan 2023 02:48:19 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6D847095
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:37 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so1315354pjl.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlGLOX3kvbi0nv44LsUa95VHx4097O3WTrtdzV1AG3s=;
+        b=JQCxHE4KfFHbikWJo/Oni+upZgpSWezCK0E/6I3LxP/vmkbtuUQxBvaT9Hisrp71LO
+         cmA2rTWhznuUvIwoe/6EBVh05f3RyPQHhXEGxjSLVhx6/sVoNPwI0TS/N8ZaO8uYVxx9
+         2AIsN/U8y3HvMh8e+ehbceSZglVNf6CG+LuIdAVUxUiltZtrebEaPuA6RD57yu+M5CZa
+         liTKUztWBmXdQR+0FR4jKTJAu/H7BlIRxWJZL2IBqsW/YI0Ru7L8HVgO36MOKY7zD+Nu
+         Ve/6lD2P4DgiMWQYGDHGJsyloL2w3byXeMty1H3WqbkHohPsCbPZvVU5AWyjEQAVvLo/
+         9b4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QlGLOX3kvbi0nv44LsUa95VHx4097O3WTrtdzV1AG3s=;
+        b=KcW9yWHmUJleOqFxlAbGRFBtQhPJwyOm6HP+Sdnei8T+X19vhOVaUs78PeUyMWLv7o
+         yCl9/AGGX37tN80mn3CoyPIYOsKAiUGpQG2mamyuMIpQz3tGi2IGU7VNRsFW4afDtP+V
+         omJ7eFZovutuqoXOH61SBCCLujGS8xrhyMBWPXUJK0X/E1mUrdavmn0qfrizk59FKp6N
+         +Hh9tAX+XW3XrQTUILh5VJxQjhzW8GyouxIulkYs8AQKcpT1EJWdWGvjtmrqfniI6rbh
+         yHk+pdy5kAnVMT4Ibc+jIKdi71d4yGRM9+xeDjmZTiuB/rDwR5cekHkygS857ukRyRop
+         x86A==
+X-Gm-Message-State: AFqh2koynJ+tFD8owvBwFxIb9Lo5pefm4iPyLnh2tRhUbNHkhnp66ntK
+        0X20BpBMUWqfAQVXhDcgf6zSrhn20vFmLDfqv5FGXA==
+X-Google-Smtp-Source: AMrXdXsSf635kWaEdT87NA+Fag35LYvXH7hAEMvH8lwHWmn7V/p4Chr+K2kQgI921+06RfAdmgYZGsHd10jKu7NVmXY=
+X-Received: by 2002:a17:90a:17e2:b0:229:6a83:f3f0 with SMTP id
+ q89-20020a17090a17e200b002296a83f3f0mr614370pja.79.1674026257128; Tue, 17 Jan
+ 2023 23:17:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <95692a47-09e7-0055-2006-46d085b2eadb@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230115210535.4085-1-apantykhin@gmail.com> <CAGS_qxpoGCXAK=q+unFoYKN0GtH8V9Ojmntz0YZrae8zBeX-qw@mail.gmail.com>
+ <CAPi66w-D-x_rhv+eQBSPqmqpK3nF2_VuizZPA9dZ0kL1=XAf-w@mail.gmail.com>
+In-Reply-To: <CAPi66w-D-x_rhv+eQBSPqmqpK3nF2_VuizZPA9dZ0kL1=XAf-w@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 17 Jan 2023 23:17:25 -0800
+Message-ID: <CAGS_qxq_ab-O_K=MOMS12PVL-vR-RZJtULicm9KJhDj3ye-dAA@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/kunit/kunit.py: remove redundant double check
+To:     Alexander Pantyukhin <apantykhin@gmail.com>
+Cc:     brendan.higgins@linux.dev, davidgow@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 07:14:30AM +0000, Chaitanya Kulkarni wrote:
-> Eric,
-> 
-> >> Notes:
-> >>   - At plaintext mode only, the user set a master key and the fscrypt
-> >>     driver derived from it the DEK and the key identifier.
-> >>   - 152c41b2ea39fa3d90ea06448456e7fb is the derived key identifier
-> >>   - Only on the first IO, nvme-rdma gets a callback to load the derived DEK.
-> >>
-> >> There is no special configuration to support crypto at nvme modules.
-> >>
-> >> Thanks
-> > 
-> > Very interesting work!  Can you Cc me on future versions?
-> > 
-> > I'm glad to see that this hardware allows all 16 IV bytes to be specified.
-> > 
-> > Does it also handle programming and evicting keys efficiently?
-> > 
-> > Also, just checking: have you tested that the ciphertext that this inline
-> > encryption hardware produces is correct?  That's always super important to test.
-> > There are xfstests that test for it, e.g. generic/582.  Another way to test it
-> > is to just manually test whether encrypted files that were created when the
-> > filesystem was mounted with '-o inlinecrypt' show the same contents when the
-> > filesystem is *not* mounted with '-o inlinecrypt' (or vice versa).
-> > 
-> > - Eric
-> > 
-> 
-> I'm wondering which are the xfstests that needs to run in order
-> to establish the correctness/stability apart from generic/582
-> this work ?
-> 
+On Tue, Jan 17, 2023 at 9:33 PM Alexander Pantyukhin
+<apantykhin@gmail.com> wrote:
+>
+> Hello Daniel.
+> Thank you very much for your review!
+> Could you advise me whom I can address the V2 patch "to"?
 
-See https://docs.kernel.org/filesystems/fscrypt.html#tests.
+davidgow@google.com is the more active maintainer right now.
 
-- Eric
+But since you've got his Reviewed-by already, as long as you CC
+kunit-dev@ and linux-kselftest@, whatever you want to put is fine. We
+can make sure v2 gets picked up.
+
+You'll ultimately see the patch go in through
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+and hopefully merged into 6.3.
+
+Daniel
