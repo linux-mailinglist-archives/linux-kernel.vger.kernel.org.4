@@ -2,159 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1DD67297C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A3767297D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjARUdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S230012AbjARUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjARUcW (ORCPT
+        with ESMTP id S229770AbjARUem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:32:22 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FF75F3A5;
-        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1442977d77dso260743fac.6;
-        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V5afsl4HoXzkYc7n5OJf2Nf55ZwHbUkKJOhGaeA31CE=;
-        b=XuCuphEn7vFAiIWMWcu9wpU1F4dt5pvxpSOX4tyHZkdtFxAj1euR95IHhPJN+QSXuf
-         lHPwKMqBf3jTsDvaIzmUk4qsGojr2ozVW0G9iwM17F/dSx3FmMV5duSS8AZGPlcj8bQG
-         5pE8ds32biAlArhdO853TV+HzP5njFuYWBCUhCksjihkIw4jjNepZEX76YWAv9vMjEFG
-         GoVzpaNYiRCRFwx0JtcqbWGebRuTv6AfGuNlgCANBsxm25svnnW1MF9BckHpWj0tf6Dl
-         1TWptxyAOez8ts/6WH3jkj15HGJLYL+ZofU4XtzrPEaaaLdD5etFjFR3sDYa284nTSom
-         YaaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V5afsl4HoXzkYc7n5OJf2Nf55ZwHbUkKJOhGaeA31CE=;
-        b=nqsyxN6VIINxDLIuHESBcFcCwGFd4BguMqm474zBIPpnvEQU8eSOWUtrYM1toJw2Mu
-         fgl2AV8AdBh+oZevt/aJXjztdoyt5DCN2u4ukdYiRZxPhIm1f13QtCeSwZ5ajQfpz+/C
-         rnqZYeYtVddz5ySNxYf7605JuvRF893p0DNw4uobRAyPGtJ5GzlKV2zrwGSPrs+70mJE
-         eDd372CjkHIbhnfYOrWBTz7e6owP1oo/+/rWfpHFZBoSykdwB1/qSfyy/jqTvc1iPyKl
-         Jlphj5UFc85xcpVDkNy3SAi9qUguxeFH/LUgYVzRWx1RPrF+SR5B/ONaPe0VRYBSDNgw
-         k30A==
-X-Gm-Message-State: AFqh2kqrR0eL9OHFi1g93vF4UnvPRE4ny/Vjqele7jrTgWBSPoqftlop
-        IAFZEYvoDJOted99Kv2CvS4=
-X-Google-Smtp-Source: AMrXdXvt+1GIPyEwKgECbtF7dcEmoIOyuNWdQSfnYEUhAf+veKcW+sCfnGtJYmoWZi9Btv7HXPX6kw==
-X-Received: by 2002:a05:6870:e0ce:b0:15f:3bb9:7b3d with SMTP id a14-20020a056870e0ce00b0015f3bb97b3dmr5169475oab.28.1674073939147;
-        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i8-20020a056870344800b0013b92b3ac64sm18772149oah.3.2023.01.18.12.32.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:32:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 18 Jan 2023 12:32:16 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Gow <davidgow@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] kunit: memcpy: Split slow memcpy tests into
- MEMCPY_SLOW_KUNIT_TEST
-Message-ID: <20230118203216.GA987351@roeck-us.net>
-References: <20230118200653.give.574-kees@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118200653.give.574-kees@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 15:34:42 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79E85EFBF
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:33:22 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D19EA5C00C7;
+        Wed, 18 Jan 2023 15:33:06 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 18 Jan 2023 15:33:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674073986; x=1674160386; bh=iJGSvZEAeF
+        qQdWIKfDucEMI+v1mVjLVCzF+2CZKpJeQ=; b=n1grkTLPGuXJ92lFVLzwtmGUiD
+        AaCT+aLgke39a0nSg6oN+pRuUvZtCv2K7n/AY/ThN+RikRcol73uQck0FG8A1rVc
+        HVewAghVHGuN9XYXNLopg1a6JhodqWn4870pGvBZUAMMPi8TIQ3DD9gI6tyOg2L5
+        b2im4ruMbFHq6XsnWVfxbpg4oqqej4tbF8n87acuuQsXsvqHBqaVb5Bs6GN71/2Q
+        qM+bymsI8dh5dV0236/bLT2dWnWNSzIGNdYpS8zOZQtatz5G5nkjA2KwbdmKZNq+
+        t65qCw/f6MSz3cBjPbTnCsp8VI/JGhNI8NOZVMoFZLXEhhBvCQ5h5ZxiaJQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674073986; x=1674160386; bh=iJGSvZEAeFqQdWIKfDucEMI+v1mV
+        jLVCzF+2CZKpJeQ=; b=llRm8ihNth8j2k6V4srAwXuCkCSdbgrYZzX5/8CnZwKb
+        zCoKqe5Pw8ISnzPkwEuob7YvppusejPLppS4TuzOV4b11nI87QSkO2+7iPFJBguF
+        gIqUlZto9plzXz8eHV99pMFYU4Jyc4dnh96q/dgyj0/w+GtQZJGgDmrvctv0Kd1W
+        DaySHfGXWF+qoz58CLfWrso9Py3NYdGqBfMLzNHkFeCfFD6lKWz9vOfwP99w+Qj+
+        Uhr7J5uMiQjQOeOs824C1uN7BO7rsHffWUGI3o8bxRtrI9huEyL7AkoKqecRH2B3
+        nT5qfQjeJc7ECSzCvRZGa2dOr1Gtr7S2xm6F5FyCAw==
+X-ME-Sender: <xms:glfIY4Qq8Qwabt2MymKo8JlaPNsn8VzTHDfXC8ZC7htCZ7KozUA3fw>
+    <xme:glfIY1zOhyDrk8afaG63g8qIWHO8ks8bTzG9FUPkOgTbyK9rhcl04bVezYMOF903I
+    gP1CQzv5bonqUD6mM0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtkedgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeeigfeiieeiheejjeeiudekleevvddvffetieehteeikeeigeeiffdttdef
+    tdeggfenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:glfIY13dadnqXoYDG2ao5SnYBVVAcs9x8SCNbNA5T4XiEIw9qPFm9A>
+    <xmx:glfIY8A6lKsXwMbXc7cHIXyXemUhRvgDXEZ5h3Wgx57S0jejJYGZOg>
+    <xmx:glfIYxhIKSDKXmYbycGBbQ0saCKAyBP7j6U3B52oEFAbTOcMDqanMA>
+    <xmx:glfIY8U4zpqyskQs9S7WAdQLWf4GryEzXeXPfSwe1p1GzKis7O9k2g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3A84CB60086; Wed, 18 Jan 2023 15:33:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
+Mime-Version: 1.0
+Message-Id: <a1d48420-862e-47e6-9435-462e23bb6be3@app.fastmail.com>
+In-Reply-To: <Y8ggiF+7k0rViXcY@slm.duckdns.org>
+References: <20230117164041.1207412-1-arnd@kernel.org>
+ <99ea6e86d2594b40a6de96cc821c447b@AcuMS.aculab.com>
+ <Y8ggiF+7k0rViXcY@slm.duckdns.org>
+Date:   Wed, 18 Jan 2023 21:32:45 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tejun Heo" <tj@kernel.org>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "Lai Jiangshan" <jiangshanlai@gmail.com>,
+        "Richard Clark" <richard.xnu.clark@gmail.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Andrey Grodzovsky" <andrey.grodzovsky@amd.com>,
+        "Tetsuo Handa" <penguin-kernel@i-love.sakura.ne.jp>,
+        "linux-kernel@vger.kernel.org," <linux-kernel@vger.kernel.org>,
+        "David Laight" <David.Laight@aculab.com>
+Subject: Re: [PATCH] workqueue: fix enum type for gcc-13
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 12:06:54PM -0800, Kees Cook wrote:
-> Since the long memcpy tests may stall a system for tens of seconds
-> in virtualized architecture environments, split those tests off under
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Link: https://lore.kernel.org/lkml/20221226195206.GA2626419@roeck-us.net
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v3: fix defaults, avoid redundant returns.
-> v2: https://lore.kernel.org/all/20230114005408.never.756-kees@kernel.org/
-> v1: https://lore.kernel.org/lkml/20230107040203.never.112-kees@kernel.org
-> ---
->  lib/Kconfig.debug  | 9 +++++++++
->  lib/memcpy_kunit.c | 3 +++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 881c3f84e88a..149d6403b8a9 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2566,6 +2566,15 @@ config MEMCPY_KUNIT_TEST
->  
->  	  If unsure, say N.
->  
-> +config MEMCPY_SLOW_KUNIT_TEST
-> +	bool "Include exhaustive memcpy tests"
-> +	depends on MEMCPY_KUNIT_TEST
-> +	default y
-> +	help
-> +	  Some memcpy tests are quite exhaustive in checking for overlaps
-> +	  and bit ranges. These can be very slow, so they are split out
-> +	  as a separate config, in case they need to be disabled.
-> +
->  config IS_SIGNED_TYPE_KUNIT_TEST
->  	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
-> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-> index 89128551448d..90f3aa9e909f 100644
-> --- a/lib/memcpy_kunit.c
-> +++ b/lib/memcpy_kunit.c
-> @@ -309,6 +309,8 @@ static void set_random_nonzero(struct kunit *test, u8 *byte)
->  
->  static void init_large(struct kunit *test)
->  {
-> +	if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST))
-> +		kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
->  
->  	/* Get many bit patterns. */
->  	get_random_bytes(large_src, ARRAY_SIZE(large_src));
-> @@ -327,6 +329,7 @@ static void init_large(struct kunit *test)
->   */
->  static void copy_large_test(struct kunit *test, bool use_memmove)
->  {
-> +
+On Wed, Jan 18, 2023, at 17:38, Tejun Heo wrote:
+>> From: Arnd Bergmann
+>> > Sent: 17 January 2023 16:41
+>> > 
+>> > In gcc-13, the WORK_STRUCT_WQ_DATA_MASK constant is a signed 64-bit
+>> > type on 32-bit architectures because the enum definition has both
+>> > negative numbers and numbers above LONG_MAX in it:
+>> > 
+>> ...
+>> >  	/* convenience constants */
+>> >  	WORK_STRUCT_FLAG_MASK	= (1UL << WORK_STRUCT_FLAG_BITS) - 1,
+>> > -	WORK_STRUCT_WQ_DATA_MASK = ~WORK_STRUCT_FLAG_MASK,
+>> > +	WORK_STRUCT_WQ_DATA_MASK = (unsigned long)~WORK_STRUCT_FLAG_MASK,
+>> >  	WORK_STRUCT_NO_POOL	= (unsigned long)WORK_OFFQ_POOL_NONE << WORK_OFFQ_POOL_SHIFT,
+>
+> I have a hard time understanding why gcc would change its behavior so that
+> there's no way to compile the same code in a consistent manner across two
+> adjacent compiler versions. The new behavior is fine but it makes no sense
+> to introduce it like this. If at all possible, marking gcc13 broken sounds
+> about right to me.
 
-Some whitespace noise slipped in here.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107405 has some more
+information on the change. In short, the old behavior was a gcc
+extension that was somewhat surprising and not well documented,
+while the new behavior is consistent with C23 and C++ as well
+as easier to understand: Any constant that is defined as part of
+an enum now has the same type as the enum itself, even if it fits
+within a shorter type. In a definition like
 
-Guenter
+enum e {
+   A = -1,
+   B = -1u,
+};
 
->  	init_large(test);
->  
->  	/* Copy a growing number of non-overlapping bytes ... */
-> -- 
-> 2.34.1
-> 
+the enum type has to be compatible with 'long long' because
+anything shorter would not fit both -1 and -1u (UINT_MAX).
+A and B were both signed types to match the signedness of the
+enum type, but A was actually a 32-bit integer since that is
+sufficient, while B was also a 64-bit type since it exceeds
+INT_MAX. Now they are both the same type.
+
+I don't think there is a chance they will revert to the old behavior,
+though we could try asking for an command line flag to warn about
+cases where this changes code generation.
+
+     Arnd
