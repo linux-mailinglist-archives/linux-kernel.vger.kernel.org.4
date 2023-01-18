@@ -2,293 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A203467123F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535B4671244
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjARD4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S229841AbjARD4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjARDzw (ORCPT
+        with ESMTP id S229845AbjARD4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:55:52 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4735B54B0B;
-        Tue, 17 Jan 2023 19:55:50 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pHzYC-00033J-0e;
-        Wed, 18 Jan 2023 04:55:48 +0100
-Date:   Wed, 18 Jan 2023 03:55:41 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <Henry.Yen@mediatek.com>,
-        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v4 2/2] thermal: mediatek: add support for MT7986 and MT7981
-Message-ID: <aa957c759b1182aee00cc35178667f849f941b42.1674012985.git.daniel@makrotopia.org>
-References: <cover.1674012985.git.daniel@makrotopia.org>
+        Tue, 17 Jan 2023 22:56:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9340953F91;
+        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k18so11598989pll.5;
+        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TLRE2TXuEi0Oi6Py0U1FjTjvdMX6n7zTvdehmRccvQA=;
+        b=p+9eUJUJfVS8n33t98G13ynpg+3YLMTqLbo8XZ3+W5aAq0J7WETPVlEbn41TzJcKYn
+         kniSfXDzU8fj1Liw9pei1Ql4kWXqPx3BTNENPHUFKwpQ3jymgSqPRG7DaMVu1Cu80FAI
+         rVi+ICZpl8NBtsUfoJYIgJI+ulrLmSobPBeF9kDLkkukzqhakrRHmCQhJilpvLDSXuTj
+         FAEpKoFREtobxnFQ2uS52hp1HVFlF2CwnggdK3r5ptQNGBz2PiDqeWzbIYE6jh179mlv
+         jD38/RK0naUD6lAvAtFNznD1k3Vk648Wi4Si1yirSmUizPOyEKot+GZ8dM6LjLJ8r4qJ
+         xeDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TLRE2TXuEi0Oi6Py0U1FjTjvdMX6n7zTvdehmRccvQA=;
+        b=ET5tgWVQEv4zrOvxXfTibZKYGui5FbaMvaiOMtWPZxPFVlChVtAJK8Ya2IsflSsmLe
+         sHjYb8jP5uKvWzekpcBLixvoHxGAKnfuXbO2pCE/y6ZgaDfJYIUFfXtXsnfYaL7Ld4/t
+         7xeZMK3aU5RV1+6EwDlZG6LhKHEMrQ1z0ubLQ3kxERXS+5R2tx1H772KI7HboqwgWrMK
+         3k5f7VxnKlLjaSY2fvYt9ypBsuuArArv8TmkY9kHDhtvEiUBOpY++rKDS6F9VC9TvexH
+         ZLOU8BMd7Mr4xaLoxrdGLoEkxZcg/OIVKB/MEGKVqTa6PUqE3Ku7YMWBToJyTx8TbHkQ
+         ntmw==
+X-Gm-Message-State: AFqh2kopVx9IibdxJpO1aJNnAT0FXCmbPk0N/S5NXAXiufFyAxtGKe4Q
+        yghAzw9E/eRSufVOtMLSMm0=
+X-Google-Smtp-Source: AMrXdXvBacoD8XHw7bIj3fRtq94ID9PrZm6RO3ZxWkoHc0UM+D1Lv3h0fEeeOeks7HpvCHDMnbHePQ==
+X-Received: by 2002:a17:903:557:b0:194:55df:4fe with SMTP id jo23-20020a170903055700b0019455df04femr5883472plb.35.1674014174002;
+        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-66.three.co.id. [180.214.232.66])
+        by smtp.gmail.com with ESMTPSA id h5-20020a170902f7c500b0019337bf957dsm17288666plw.296.2023.01.17.19.56.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 19:56:13 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1B48C1016F2; Wed, 18 Jan 2023 10:56:09 +0700 (WIB)
+Date:   Wed, 18 Jan 2023 10:56:09 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
+Message-ID: <Y8dt2efGEPS/JRaP@debian.me>
+References: <20230117124546.116438951@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VVLD0i51IZ9bwB+F"
 Content-Disposition: inline
-In-Reply-To: <cover.1674012985.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
-Brings code to assign values from efuse as well as new function to
-convert raw temperature to millidegree celsius, as found in MediaTek's
-SDK sources (but cleaned up and de-duplicated)
 
-[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/thermal/mtk_thermal.c | 137 ++++++++++++++++++++++++++++++++--
- 1 file changed, 132 insertions(+), 5 deletions(-)
+--VVLD0i51IZ9bwB+F
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 992750ee09e62..171f485a809bb 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -150,6 +150,20 @@
- #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
- #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
- 
-+/*
-+ * Layout of the fuses providing the calibration data
-+ * These macros can be used for MT7981 and MT7986.
-+ */
-+#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
-+#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
-+#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
-+#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
-+#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
-+#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
-+#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
-+#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
-+
- enum {
- 	VTS1,
- 	VTS2,
-@@ -163,6 +177,7 @@ enum {
- enum mtk_thermal_version {
- 	MTK_THERMAL_V1 = 1,
- 	MTK_THERMAL_V2,
-+	MTK_THERMAL_V3,
- };
- 
- /* MT2701 thermal sensors */
-@@ -245,6 +260,27 @@ enum mtk_thermal_version {
- /* The calibration coefficient of sensor  */
- #define MT8183_CALIBRATION	153
- 
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT7986_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT7986 */
-+#define MT7986_NUM_SENSORS		1
-+
-+/* The number of banks in the MT7986 */
-+#define MT7986_NUM_ZONES		1
-+
-+/* The number of sensing points per bank */
-+#define MT7986_NUM_SENSORS_PER_ZONE	1
-+
-+/* MT7986 thermal sensors */
-+#define MT7986_TS1			0
-+
-+/* The number of controller in the MT7986 */
-+#define MT7986_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT7986_CALIBRATION		165
-+
- struct mtk_thermal;
- 
- struct thermal_bank_cfg {
-@@ -388,6 +424,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
- static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
- static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
- 
-+/* MT7986 thermal sensor data */
-+static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
-+static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
-+static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
-+static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
-+static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
-+static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
-+
- /*
-  * The MT8173 thermal controller has four banks. Each bank can read up to
-  * four temperature sensors simultaneously. The MT8173 has a total of 5
-@@ -551,6 +595,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
- 	.version = MTK_THERMAL_V1,
- };
- 
-+/*
-+ * MT7986 uses AUXADC Channel 11 for raw data access.
-+ */
-+static const struct mtk_thermal_data mt7986_thermal_data = {
-+	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT7986_NUM_ZONES,
-+	.num_sensors = MT7986_NUM_SENSORS,
-+	.vts_index = mt7986_vts_index,
-+	.cali_val = MT7986_CALIBRATION,
-+	.num_controller = MT7986_NUM_CONTROLLER,
-+	.controller_offset = mt7986_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt7986_bank_data,
-+		},
-+	},
-+	.msr = mt7986_msr,
-+	.adcpnp = mt7986_adcpnp,
-+	.sensor_mux_values = mt7986_mux_values,
-+	.version = MTK_THERMAL_V3,
-+};
-+
- /**
-  * raw_to_mcelsius_v1 - convert a raw ADC value to mcelsius
-  * @mt:	The thermal controller
-@@ -605,6 +673,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
- 	return (format_2 - tmp) * 100;
- }
- 
-+static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
-+{
-+	s32 tmp;
-+
-+	if (raw == 0)
-+		return 0;
-+
-+	raw &= 0xfff;
-+	tmp = 100000 * 15 / 16 * 10000;
-+	tmp /= 4096 - 512 + mt->adc_ge;
-+	tmp /= 1490;
-+	tmp *= raw - mt->vts[sensno] - 2900;
-+
-+	return mt->degc_cali * 500 - tmp;
-+}
-+
- /**
-  * mtk_thermal_get_bank - get bank
-  * @bank:	The bank
-@@ -885,6 +969,25 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
- 	return 0;
- }
- 
-+static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
-+{
-+	if (!CALIB_BUF1_VALID_V3(buf[1]))
-+		return -EINVAL;
-+
-+	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
-+	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
-+	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
-+	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
-+	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
-+	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
-+	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
-+
-+	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
-+		mt->o_slope = 0;
-+
-+	return 0;
-+}
-+
- static int mtk_thermal_get_calibration_data(struct device *dev,
- 					    struct mtk_thermal *mt)
- {
-@@ -895,6 +998,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 
- 	/* Start with default values */
- 	mt->adc_ge = 512;
-+	mt->adc_oe = 512;
- 	for (i = 0; i < mt->conf->num_sensors; i++)
- 		mt->vts[i] = 260;
- 	mt->degc_cali = 40;
-@@ -920,10 +1024,20 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 		goto out;
- 	}
- 
--	if (mt->conf->version == MTK_THERMAL_V1)
-+	switch (mt->conf->version) {
-+	case MTK_THERMAL_V1:
- 		ret = mtk_thermal_extract_efuse_v1(mt, buf);
--	else
-+		break;
-+	case MTK_THERMAL_V2:
- 		ret = mtk_thermal_extract_efuse_v2(mt, buf);
-+		break;
-+	case MTK_THERMAL_V3:
-+		ret = mtk_thermal_extract_efuse_v3(mt, buf);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
- 
- 	if (ret) {
- 		dev_info(dev, "Device not calibrated, using default calibration values\n");
-@@ -953,6 +1067,10 @@ static const struct of_device_id mtk_thermal_of_match[] = {
- 		.compatible = "mediatek,mt7622-thermal",
- 		.data = (void *)&mt7622_thermal_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt7986-thermal",
-+		.data = (void *)&mt7986_thermal_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8183-thermal",
- 		.data = (void *)&mt8183_thermal_data,
-@@ -1068,15 +1186,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_auxadc;
- 	}
- 
--	if (mt->conf->version == MTK_THERMAL_V2) {
-+	if (mt->conf->version != MTK_THERMAL_V1) {
- 		mtk_thermal_turn_on_buffer(apmixed_base);
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
- 
--	if (mt->conf->version == MTK_THERMAL_V1)
-+	switch (mt->conf->version) {
-+	case MTK_THERMAL_V1:
- 		mt->raw_to_mcelsius = raw_to_mcelsius_v1;
--	else
-+		break;
-+	case MTK_THERMAL_V2:
- 		mt->raw_to_mcelsius = raw_to_mcelsius_v2;
-+		break;
-+	case MTK_THERMAL_V3:
-+		mt->raw_to_mcelsius = raw_to_mcelsius_v3;
-+		break;
-+	default:
-+		break;
-+	}
- 
- 	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
- 		for (i = 0; i < mt->conf->num_banks; i++)
--- 
-2.39.1
+On Tue, Jan 17, 2023 at 01:48:13PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 176 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--VVLD0i51IZ9bwB+F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8dt1QAKCRD2uYlJVVFO
+o/pYAQCe/RTsz0cS/7QTCzrQqZGbAyAyUSM9I6LaRF19nnvA7AEAmN4tnT/8CkEW
+EONq41/MFhUNCcOI3diqIIPDvzHkwwQ=
+=7Yo2
+-----END PGP SIGNATURE-----
+
+--VVLD0i51IZ9bwB+F--
