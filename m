@@ -2,133 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CA66728C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81946728C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjARTy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S229593AbjARTzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjARTy4 (ORCPT
+        with ESMTP id S229482AbjARTzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:54:56 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617FC58983
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id u19so85833796ejm.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
+        Wed, 18 Jan 2023 14:55:21 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AC058983
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:55:19 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id 123so6361681ybv.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:55:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
-        b=S0yIBmB+f/4oFnfqAxjqm9aQJfCPt643cmPeAJKJPeekK2T3v7n5HehsoVvxSE6bU6
-         Y7Bg7s+JENwF9NUn2L7RZFzpVypzZaRMOCFOxolI4MU9wCdSvZYVPSKQnQ3nH05aA/84
-         qlu+z0GkLuieC2sDWH54TBMrxtjFX3knmLW7FotnDQns8sYrlNMGNpJrgH6omg5QQ8S4
-         W8zcVnI5enQv6Oh9l78bEWs5lAVF8Y7bIaQZgg0WvRZwQFUoMY9yWfcuYfKQI31lvRMW
-         t8NxgxIyBXVFwA15TebgbIaBGylGv0Wr/kfDtzyw+peIGIfPEmVeQnc6pnc1LCfqTSS0
-         eIWw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ml4Mq1HxoprduSmaOtE/7qmWaOPc7rT86hVq2mfhQLo=;
+        b=PbeDPrXRrIm7rSfckMx4+MttBahJf6IY5jVAIjntleKZy4etq34NmHOU6XAyeR+Fab
+         ORwDD6aeT/o+Lzatahvs1Df3hC8Zp4wztM3Tsi7zeoFTDN3ZXTRRATMchdXmd1w6iq9r
+         ULB35+cs0evngWClWp+S7DE9yLcIJr+6DdMZNcBfFC64ZUZ8obBNsKaTSHZoXlg8lZnA
+         wrs0Z7xqGozVMTtQXoGy0Ii+xstY22ORN6Rk8NwXfb9Mdy0EMr8jfUqnhJDwLBzm4CO0
+         FxiAdjNv/LNw5Q6CHI1oIM4T8Lczsjebkmmr3AaJHUcG3MLFcXdAW7CuWHhXkm5sY8GX
+         boDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
-        b=L8bJJ9P0nr/mwwGEZmZJbd5A1N+NiMmnFqMhZ4oSST3M1Ww+qFI7GhZkn7cxx60yQH
-         zF4rxLCkt35lJ89ZGMLCWzTJAmSS909zzVdCVFInjv7hfGaU4kQD/W9txJT0nqJ7oRPp
-         OhWcpXtudE2tsThb7saWc1/oQKbgSjqamhLAStphEpukvfTq6C98zKoLxBmR1R7EIVGQ
-         1mlhX9VJfkDfSSmrssJVnWGnrfsu0CKO58Q1OigRb7KHp3qBgMoq5mv4Sr9wGdrtu8KS
-         OZJO50/x/2whE3uzTL+QWmZ4mgxwMzn1GzO23mQrmy1ExFkXp7Sm8HBNJ2VtHzb9ReyR
-         hdvA==
-X-Gm-Message-State: AFqh2krbN+YmBhPWIBxT6uHy0/iT2kmBb/LEXd7mrioEhEuPQzuF+4TF
-        5SDy8+c8TEYp7RfxvZTP6I8ftg==
-X-Google-Smtp-Source: AMrXdXsTXO2h6sqsyvxXkLtL0jBXFCsyXKu+HZK+lAdfdFRJ7Z+o+GbGbEHYDji0L9trJsJrB6sDew==
-X-Received: by 2002:a17:907:1a46:b0:84c:e89e:bb4c with SMTP id mf6-20020a1709071a4600b0084ce89ebb4cmr4063246ejc.49.1674071694016;
-        Wed, 18 Jan 2023 11:54:54 -0800 (PST)
-Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170906495100b0086dd8f20a6asm5923513ejt.77.2023.01.18.11.54.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 11:54:53 -0800 (PST)
-Message-ID: <f07bbbb6-3343-19c7-bd94-c8c239f1cbc8@linaro.org>
-Date:   Wed, 18 Jan 2023 20:54:51 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ml4Mq1HxoprduSmaOtE/7qmWaOPc7rT86hVq2mfhQLo=;
+        b=Msne5DG0fdDxSDGR/OdfWV0J/Y01u5Yl5dts0hWE1vwfRbjKrL9OVcKR4gtdI/Ovgk
+         jcmlp2WITIERW8Iu+L7CfZSAGTWcu9VokCXYQDk1Uq7GzyZY52DwricRvMaaTfhRV38U
+         nvg9/99OvoJIR1bos/ExHJLDRcHgBy7BLFfhzjvT8+PKkqnQ6LhAPPN6V5inutqe8VcS
+         Zvj0JLqBT3ZNe/nEjBpUQXuTk9eGTrln0o9F8gUsSe3wIfStLTtG1HzaA6rZ0PTcIxKS
+         iGuw58zxev0dwxAoX9+OKFSnh1S+uKR/4meWtL93AX9fHk2TqTuGlvEPg3VVDij8csM6
+         o9Ag==
+X-Gm-Message-State: AFqh2kpi3fi2TvLN6PiAgupVbHQq/YgHo3nY0Ki9vqtgy8YWfZxZPRZh
+        jawgds7aBmYgurIK1Z8rOJC51g3eKlZrokAmxsbBpQ==
+X-Google-Smtp-Source: AMrXdXvFdbyYmxgjrhbrPZ+DHMRuLbevMB2fbnG5spWSq+oHRVEA8MSUcimroDBHgsm9LSnvYVm1PM3o2CDb/QRmG9U=
+X-Received: by 2002:a25:bd14:0:b0:73f:fb7d:400 with SMTP id
+ f20-20020a25bd14000000b0073ffb7d0400mr1277748ybk.352.1674071718749; Wed, 18
+ Jan 2023 11:55:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 8/9] interconnect: qcom: rpm: Add a way to always set
- QoS registers
-Content-Language: en-US
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
-        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
- <20230116132152.405535-9-konrad.dybcio@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230116132152.405535-9-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p6>
+ <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
+ <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
+In-Reply-To: <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Wed, 18 Jan 2023 11:55:07 -0800
+Message-ID: <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: system_heap: avoid reclaim for order 4
+To:     John Stultz <jstultz@google.com>
+Cc:     jaewon31.kim@samsung.com,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 17, 2023 at 10:54 PM John Stultz <jstultz@google.com> wrote:
+>
+> On Tue, Jan 17, 2023 at 12:31 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+> > > Using order 4 pages would be helpful for many IOMMUs, but it could spend
+> > > quite much time in page allocation perspective.
+> > >
+> > > The order 4 allocation with __GFP_RECLAIM may spend much time in
+> > > reclaim and compation logic. __GFP_NORETRY also may affect. These cause
+> > > unpredictable delay.
+> > >
+> > > To get reasonable allocation speed from dma-buf system heap, use
+> > > HIGH_ORDER_GFP for order 4 to avoid reclaim.
+>
+> Thanks for sharing this!
+> The case where the allocation gets stuck behind reclaim under pressure
+> does sound undesirable, but I'd be a bit hesitant to tweak numbers
+> that have been used for a long while (going back to ion) without a bit
+> more data.
+>
+> It might be good to also better understand the tradeoff of potential
+> on-going impact to performance from using low order pages when the
+> buffer is used.  Do you have any details like or tests that you could
+> share to help ensure this won't impact other users?
+>
+> TJ: Do you have any additional thoughts on this?
+>
+I don't have any data on how often we hit reclaim for mid order
+allocations. That would be interesting to know. However the 70th
+percentile of system-wide buffer sizes while running the camera on my
+phone is still only 1 page, so it looks like this change would affect
+a subset of use-cases.
 
+Wouldn't this change make it less likely to get an order 4 allocation
+(under memory pressure)? The commit message makes me think the goal of
+the change is to get more of them.
 
-On 16.01.2023 14:21, Konrad Dybcio wrote:
-> On newer SoCs (there's no clear boundary, but probably "new enough"
-> means every interconnect provider is either BIMC or QNoC and there
-> are no old-style NoC hosts) we're expected to set QoS registers
-> regardless of the ap_owned param. Add a bool in the qcom_icc_provider
-> and make the logic assume it's okay to set the registers when it's
-> set.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-Argh, I only noticed now that this patch is incomplete,
-missing setting the value in qnoc_probe() and adding a
-similar struct member to qcom_icc_desc..
+Actually with the low order being 0, I don't think __GFP_COMP makes
+sense in LOW_ORDER_GFP. But I guess that flag isn't harmful there.
 
-Konrad
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  drivers/interconnect/qcom/icc-rpm.h | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 509cadf398e9..343e6021a93a 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -243,7 +243,7 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
->  	bool vote_ap, vote_rpm;
->  	int ret;
->  
-> -	if (qp->type == QCOM_ICC_QNOC) {
-> +	if (qp->type == QCOM_ICC_QNOC || qp->always_set_qos) {
->  		vote_ap = true;
->  		vote_rpm = true;
->  	} else {
-> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-> index 729573f0d9fe..3c8888482a39 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.h
-> +++ b/drivers/interconnect/qcom/icc-rpm.h
-> @@ -28,6 +28,7 @@ enum qcom_icc_type {
->   * @type: the ICC provider type
->   * @regmap: regmap for QoS registers read/write access
->   * @qos_offset: offset to QoS registers
-> + * @always_set_qos: whether to always set QoS registers regardless of bus type
->   * @bus_clk_rate: bus clock rate in Hz
->   * @bus_clks: the clk_bulk_data table of bus clocks
->   * @intf_clks: the clk_bulk_data table of interface clocks
-> @@ -39,6 +40,7 @@ struct qcom_icc_provider {
->  	enum qcom_icc_type type;
->  	struct regmap *regmap;
->  	unsigned int qos_offset;
-> +	bool always_set_qos;
->  	u64 bus_clk_rate[2];
->  	struct clk_bulk_data bus_clks[2];
->  	struct clk_bulk_data intf_clks[];
+> thanks
+> -john
