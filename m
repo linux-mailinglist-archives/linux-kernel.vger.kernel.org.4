@@ -2,206 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17171672718
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B007E672711
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjARSfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:35:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S230121AbjARSfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjARSfm (ORCPT
+        with ESMTP id S229881AbjARSev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:35:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F343759241
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674066892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hMncHHhQckERTZd06SyhZAwfc48IVMAMl6IMnFnoNCs=;
-        b=M+OmZzeHl4ZVFpHbNJehMpOkGUsy458W/pZLsMbSQ5uT3Zb/eQWvpun3bfL70pFzDh1Wan
-        +IskN4vSQpWmVcKhVG9Qo42iGEmcGcRvuke6p6VNoBUAXAq/osKIyut4hWsdIuJ5grqgAb
-        HtjJKCmfV3lSVyI6CUI3j2oYpvqQCyw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-MCKfy-PaOqeUJ5T4t6gXTw-1; Wed, 18 Jan 2023 13:34:48 -0500
-X-MC-Unique: MCKfy-PaOqeUJ5T4t6gXTw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 18 Jan 2023 13:34:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701FD2B0A7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:34:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9DC41C29D40;
-        Wed, 18 Jan 2023 18:34:46 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.33.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA2EA492B00;
-        Wed, 18 Jan 2023 18:34:45 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v6 3/3] fanotify,audit: Allow audit to use the full permission
- event response
-Date:   Wed, 18 Jan 2023 13:34:44 -0500
-Message-ID: <5680172.DvuYhMxLoT@x2>
-Organization: Red Hat
-In-Reply-To: <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
-References: <cover.1673989212.git.rgb@redhat.com>
- <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1075DB81E9A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991C3C433EF;
+        Wed, 18 Jan 2023 18:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674066887;
+        bh=WQ17/uS48eZ8vtlubVHsA2/zGXMyPtsK+cdglVuC3Rk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=l7I9EeWkRjSLj1wGudDzwXdc0sESiedA3fjzJiVx+p/XRVSGBaesgKTbYGvFV/H+8
+         KP8ri+KTfIfSH8KTYyWNP8/ZtnZyQunMJHF7SvF8GN1aAk/DWoxRCFlAcWvfxYu0RC
+         u87DKHHyUfCqMosqAlvct/bnRBhum4/aftEN0bB6UPhSQDj1ya/NAqC3qYBtVkZEkH
+         HxW0N5S1ZUwrHHpY+f1tNg0x59vWWpgMQI49JqhKMmZ4pYL2yadwCBF0jyu3XWinLI
+         4B2q/swf54li/JxKiY7pxyv0AThLCSGhQi0IKcrPIzdXFPB3XcbujUUqAY25jTqCkX
+         /heXQ/ilfGUlw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3CC605C0920; Wed, 18 Jan 2023 10:34:47 -0800 (PST)
+Date:   Wed, 18 Jan 2023 10:34:47 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-40-surenb@google.com>
+ <Y8bFdB47JT/luMld@dhcp22.suse.cz>
+ <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
+ <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
+ <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Richard,
+On Wed, Jan 18, 2023 at 10:04:39AM -0800, Suren Baghdasaryan wrote:
+> On Wed, Jan 18, 2023 at 1:49 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 17-01-23 17:19:46, Suren Baghdasaryan wrote:
+> > > On Tue, Jan 17, 2023 at 7:57 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > > multiple VMAs are being freed.
+> > > >
+> > > > What kind of regressions.
+> > > >
+> > > > > To minimize that impact, place VMAs into
+> > > > > a list and free them in groups using one call_rcu() call per group.
+> > > >
+> > > > Please add some data to justify this additional complexity.
+> > >
+> > > Sorry, should have done that in the first place. A 4.3% regression was
+> > > noticed when running execl test from unixbench suite. spawn test also
+> > > showed 1.6% regression. Profiling revealed that vma freeing was taking
+> > > longer due to call_rcu() which is slow when RCU callback offloading is
+> > > enabled.
+> >
+> > Could you be more specific? vma freeing is async with the RCU so how
+> > come this has resulted in a regression? Is there any heavy
+> > rcu_synchronize in the exec path? That would be an interesting
+> > information.
+> 
+> No, there is no heavy rcu_synchronize() or any other additional
+> synchronous load in the exit path. It's the call_rcu() which can block
+> the caller if CONFIG_RCU_NOCB_CPU is enabled and there are lots of
+> other call_rcu()'s going on in parallel. Note that call_rcu() calls
+> rcu_nocb_try_bypass() if CONFIG_RCU_NOCB_CPU is enabled and profiling
+> revealed that this function was taking multiple ms (don't recall the
+> actual number, sorry). Paul's explanation implied that this happens
+> due to contention on the locks taken in this function. For more
+> in-depth details I'll have to ask Paul for help :) This code is quite
+> complex and I don't know all the details of RCU implementation.
 
-I built a new kernel and tested this with old and new user space. It is 
-working as advertised. The only thing I'm wondering about is why we have 3F 
-as the default value when no additional info was sent? Would it be better to 
-just make it 0?  Btw, the change to %X makes life easier. Thx.
+There are a couple of possibilities here.
 
--Steve
+First, if I am remembering correctly, the time between the call_rcu()
+and invocation of the corresponding callback was taking multiple seconds,
+but that was because the kernel was built with CONFIG_LAZY_RCU=y in
+order to save power by batching RCU work over multiple call_rcu()
+invocations.  If this is causing a problem for a given call site, the
+shiny new call_rcu_hurry() can be used instead.  Doing this gets back
+to the old-school non-laziness, but can of course consume more power.
 
+Second, there is a much shorter one-jiffy delay between the call_rcu()
+and the invocation of the corresponding callback in kernels built with
+either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
+or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
+on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
+of this delay is to avoid lock contention, and so this delay is incurred
+only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
+This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
+invoking call_rcu() at least 16 times within a given jiffy will incur
+the added delay.  The reason for this delay is the use of a separate
+->nocb_bypass list.  As Suren says, this bypass list is used to reduce
+lock contention on the main ->cblist.  This is not needed in old-school
+kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
+(including most datacenter kernels) because in that case the callbacks
+enqueued by call_rcu() are touched only by the corresponding CPU, so
+that there is no need for locks.
 
-On Tuesday, January 17, 2023 4:14:07 PM EST Richard Guy Briggs wrote:
-> This patch passes the full response so that the audit function can use all
-> of it. The audit function was updated to log the additional information in
-> the AUDIT_FANOTIFY record.
-> 
-> Currently the only type of fanotify info that is defined is an audit
-> rule number, but convert it to hex encoding to future-proof the field.
-> Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
-> 
-> The {subj,obj}_trust values are {0,1,2}, corresponding to no, yes, unknown.
-> 
-> Sample records:
->   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
-> fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
-> msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2
-> obj_trust=2
-> 
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> ---
->  fs/notify/fanotify/fanotify.c |  3 ++-
->  include/linux/audit.h         |  9 +++++----
->  kernel/auditsc.c              | 16 +++++++++++++---
->  3 files changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
-> index 24ec1d66d5a8..29bdd99b29fa 100644
-> --- a/fs/notify/fanotify/fanotify.c
-> +++ b/fs/notify/fanotify/fanotify.c
-> @@ -273,7 +273,8 @@ static int fanotify_get_response(struct fsnotify_group
-> *group,
-> 
->  	/* Check if the response should be audited */
->  	if (event->response & FAN_AUDIT)
-> -		audit_fanotify(event->response & ~FAN_AUDIT);
-> +		audit_fanotify(event->response & ~FAN_AUDIT,
-> +			       &event->audit_rule);
-> 
->  	pr_debug("%s: group=%p event=%p about to return ret=%d\n", __func__,
->  		 group, event, ret);
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index d6b7d0c7ce43..31086a72e32a 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -14,6 +14,7 @@
->  #include <linux/audit_arch.h>
->  #include <uapi/linux/audit.h>
->  #include <uapi/linux/netfilter/nf_tables.h>
-> +#include <uapi/linux/fanotify.h>
-> 
->  #define AUDIT_INO_UNSET ((unsigned long)-1)
->  #define AUDIT_DEV_UNSET ((dev_t)-1)
-> @@ -416,7 +417,7 @@ extern void __audit_log_capset(const struct cred *new,
-> const struct cred *old); extern void __audit_mmap_fd(int fd, int flags);
->  extern void __audit_openat2_how(struct open_how *how);
->  extern void __audit_log_kern_module(char *name);
-> -extern void __audit_fanotify(u32 response);
-> +extern void __audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar); extern void
-> __audit_tk_injoffset(struct timespec64 offset);
->  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
->  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int
-> nentries, @@ -523,10 +524,10 @@ static inline void
-> audit_log_kern_module(char *name) __audit_log_kern_module(name);
->  }
-> 
-> -static inline void audit_fanotify(u32 response)
-> +static inline void audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) {
->  	if (!audit_dummy_context())
-> -		__audit_fanotify(response);
-> +		__audit_fanotify(response, friar);
->  }
-> 
->  static inline void audit_tk_injoffset(struct timespec64 offset)
-> @@ -679,7 +680,7 @@ static inline void audit_log_kern_module(char *name)
->  {
->  }
-> 
-> -static inline void audit_fanotify(u32 response)
-> +static inline void audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) { }
-> 
->  static inline void audit_tk_injoffset(struct timespec64 offset)
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index d1fb821de104..3133c4175c15 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -64,6 +64,7 @@
->  #include <uapi/linux/limits.h>
->  #include <uapi/linux/netfilter/nf_tables.h>
->  #include <uapi/linux/openat2.h> // struct open_how
-> +#include <uapi/linux/fanotify.h>
-> 
->  #include "audit.h"
-> 
-> @@ -2877,10 +2878,19 @@ void __audit_log_kern_module(char *name)
->  	context->type = AUDIT_KERN_MODULE;
->  }
-> 
-> -void __audit_fanotify(u32 response)
-> +void __audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) {
-> -	audit_log(audit_context(), GFP_KERNEL,
-> -		AUDIT_FANOTIFY,	"resp=%u", response);
-> +	/* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
-> +	if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> +		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +			  "resp=%u fan_type=%u fan_info=3F subj_trust=2 
-obj_trust=2",
-> +			  response, FAN_RESPONSE_INFO_NONE);
-> +		return;
-> +	}
-> +	audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +		  "resp=%u fan_type=%u fan_info=%X subj_trust=%u 
-obj_trust=%u",
-> +		  response, friar->hdr.type, friar->rule_number,
-> +		  friar->subj_trust, friar->obj_trust);
->  }
-> 
->  void __audit_tk_injoffset(struct timespec64 offset)
+Third, if you are instead seeing multiple milliseconds of CPU consumed by
+call_rcu() in the common case (for example, without the aid of interrupts,
+NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
 
+Or have I lost track of some other slow case?
 
-
-
+							Thanx, Paul
