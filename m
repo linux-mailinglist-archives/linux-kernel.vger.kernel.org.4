@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9C5671E4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 994DE671E52
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjARNnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S230254AbjARNrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjARNnN (ORCPT
+        with ESMTP id S230493AbjARNqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:43:13 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D232E7ED77
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:12:54 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id m6-20020a056e021c2600b0030f19e3764cso3849772ilh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:12:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r4aNU8xVDYxDXUkg59eqAOVcZHqKOxVVQoxHNQ0r1d0=;
-        b=z+vk5GnS/Osq9UjtrdF2n+qvoHd1+yc4JpDv6d/Eo8MQTCfaXMua6L/HHXIkbX8hD8
-         6hYXjMMhe0XSdmcnm+ZfJjxSc6mLuiaCyxPi7VMMgKVLUamse61lFg9319Vyev+SDtvA
-         meZzRFak2qyvSWkPIlnQkSm2VdtLHVlBx7x081U4Zd564xxKbW0HjxWvYAdZXoriG5St
-         WsHtzRKSVboBf+tO0n9yj5zvPqkYEQ3LV9SUpYMf4CElq5b7tb7wUvkAeLcdnruvDP8B
-         kT0zxZZw6IcBK2liTjV4c93V+HDOWQR2plwB99bd7z/t/7kdcDPBtdUBI+WDgv63f66K
-         ZXUw==
-X-Gm-Message-State: AFqh2kpSO7G3N5oPVfY118cUM6F8wy0yiJjMaYIFuG//tdTleM1BJMhX
-        pe7pu6LVIUhOA6uJQouvmYKbWoI6iiVCpibiGFLJ2U4TcgVI
-X-Google-Smtp-Source: AMrXdXvl5KJXpM7tKYwStUJf4hYlckUCvbwhEBVKoxV82ELax5KNfE01G6rJEl8fnjfrxhuh3ktQ7XEjLqmkt0vEK2ZgK7QuucpA
+        Wed, 18 Jan 2023 08:46:37 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD21830B28
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:16:44 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NxmSn0FNRzRrff;
+        Wed, 18 Jan 2023 21:14:49 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 18 Jan 2023 21:16:41 +0800
+Subject: Re: [dm-devel] [PATCH] dm: remove unnecessary check when using
+ dm_get_mdptr()
+To:     Hou Tao <houtao@huaweicloud.com>, <dm-devel@redhat.com>
+CC:     Mike Snitzer <snitzer@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alasdair Kergon <agk@redhat.com>
+References: <20221216042353.3132139-1-houtao@huaweicloud.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <e7fcd9fd-a882-2a97-a072-faf09441efbe@huawei.com>
+Date:   Wed, 18 Jan 2023 21:16:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:c565:0:b0:302:ebf5:a7ae with SMTP id
- b5-20020a92c565000000b00302ebf5a7aemr831622ilj.34.1674047573447; Wed, 18 Jan
- 2023 05:12:53 -0800 (PST)
-Date:   Wed, 18 Jan 2023 05:12:53 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f3da9505f28992f4@google.com>
-Subject: [syzbot] general protection fault in s_show
-From:   syzbot <syzbot+a0258de3c9175e61a024@syzkaller.appspotmail.com>
-To:     adobriyan@gmail.com, akpm@linux-foundation.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev, roman.gushchin@linux.dev,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221216042353.3132139-1-houtao@huaweicloud.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+ping ?
 
-syzbot found the following issue on:
+On 12/16/2022 12:23 PM, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
+>
+> __hash_remove() removes hash_cell with _hash_lock locked, so acquiring
+> _hash_lock can guarantee no-NULL hc returned from dm_get_mdptr() must
+> have not been removed and hc->md must still be md.
+>
+> __hash_remove() also acquires dm_hash_cells_mutex before setting mdptr
+> as NULL, so in dm_copy_name_and_uuid() after acquiring
+> dm_hash_cells_mutex and ensuring returned hc is not NULL, the returned
+> hc must still be alive and hc->md must still be md.
+>
+> So removing these unnecessary hc->md != md checks when using
+> dm_get_mdptr() with _hash_lock or dm_hash_cells_mutex acquired.
+>
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
+>  drivers/md/dm-ioctl.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> index 3bfc1583c20a..2a86524661d1 100644
+> --- a/drivers/md/dm-ioctl.c
+> +++ b/drivers/md/dm-ioctl.c
+> @@ -772,7 +772,7 @@ static struct dm_table *dm_get_inactive_table(struct mapped_device *md, int *src
+>  
+>  	down_read(&_hash_lock);
+>  	hc = dm_get_mdptr(md);
+> -	if (!hc || hc->md != md) {
+> +	if (!hc) {
+>  		DMERR("device has been removed from the dev hash table.");
+>  		goto out;
+>  	}
+> @@ -1476,7 +1476,7 @@ static int table_load(struct file *filp, struct dm_ioctl *param, size_t param_si
+>  	/* stage inactive table */
+>  	down_write(&_hash_lock);
+>  	hc = dm_get_mdptr(md);
+> -	if (!hc || hc->md != md) {
+> +	if (!hc) {
+>  		DMERR("device has been removed from the dev hash table.");
+>  		up_write(&_hash_lock);
+>  		r = -ENXIO;
+> @@ -2128,7 +2128,7 @@ int dm_copy_name_and_uuid(struct mapped_device *md, char *name, char *uuid)
+>  
+>  	mutex_lock(&dm_hash_cells_mutex);
+>  	hc = dm_get_mdptr(md);
+> -	if (!hc || hc->md != md) {
+> +	if (!hc) {
+>  		r = -ENXIO;
+>  		goto out;
+>  	}
 
-HEAD commit:    9ce08dd7ea24 Add linux-next specific files for 20230117
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=118b99ca480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=35b17571659142bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=a0258de3c9175e61a024
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e960de480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13c99296480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5dc082154a67/disk-9ce08dd7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c4232ae45260/vmlinux-9ce08dd7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bb484ac2d045/bzImage-9ce08dd7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a0258de3c9175e61a024@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 1 PID: 5094 Comm: syz-executor205 Not tainted 6.2.0-rc4-next-20230117-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:s_show+0x6d/0xa90 mm/vmalloc.c:4243
-Code: 74 24 08 49 8b 5e 10 48 85 db 0f 84 1b 05 00 00 e8 48 98 bf ff 48 8d 7b 10 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 35 09 00 00 48 8d 7b 08 4c 8b 43 10 48 b8 00 00
-RSP: 0018:ffffc90003d1f9d8 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff81c23c18 RDI: 0000000000000010
-RBP: ffff888021a736f0 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000007c07 R14: ffff888028ca8980 R15: ffffffff8a589ba0
-FS:  0000555555e67300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f609a0d8130 CR3: 000000007779b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
- traverse fs/seq_file.c:101 [inline]
- seq_read_iter+0x913/0x1280 fs/seq_file.c:195
- proc_reg_read_iter+0x1ff/0x2d0 fs/proc/inode.c:305
- call_read_iter include/linux/fs.h:1846 [inline]
- do_iter_readv_writev+0x2e0/0x3b0 fs/read_write.c:733
- do_iter_read+0x2f2/0x750 fs/read_write.c:796
- vfs_readv+0xe5/0x150 fs/read_write.c:916
- do_preadv fs/read_write.c:1008 [inline]
- __do_sys_preadv fs/read_write.c:1058 [inline]
- __se_sys_preadv fs/read_write.c:1053 [inline]
- __x64_sys_preadv+0x22f/0x310 fs/read_write.c:1053
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f609a067e19
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe66bc5d68 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f609a067e19
-RDX: 0000000000000001 RSI: 00000000200020c0 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: 00000000ffff7fff R11: 0000000000000246 R12: 000000000000f33b
-R13: 00007ffe66bc5d7c R14: 00007ffe66bc5d90 R15: 00007ffe66bc5d80
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:s_show+0x6d/0xa90 mm/vmalloc.c:4243
-Code: 74 24 08 49 8b 5e 10 48 85 db 0f 84 1b 05 00 00 e8 48 98 bf ff 48 8d 7b 10 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 35 09 00 00 48 8d 7b 08 4c 8b 43 10 48 b8 00 00
-RSP: 0018:ffffc90003d1f9d8 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff81c23c18 RDI: 0000000000000010
-RBP: ffff888021a736f0 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000007c07 R14: ffff888028ca8980 R15: ffffffff8a589ba0
-FS:  0000555555e67300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f609a0d8130 CR3: 000000007779b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	24 08                	and    $0x8,%al
-   2:	49 8b 5e 10          	mov    0x10(%r14),%rbx
-   6:	48 85 db             	test   %rbx,%rbx
-   9:	0f 84 1b 05 00 00    	je     0x52a
-   f:	e8 48 98 bf ff       	callq  0xffbf985c
-  14:	48 8d 7b 10          	lea    0x10(%rbx),%rdi
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	48 89 fa             	mov    %rdi,%rdx
-  25:	48 c1 ea 03          	shr    $0x3,%rdx
-* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2d:	0f 85 35 09 00 00    	jne    0x968
-  33:	48 8d 7b 08          	lea    0x8(%rbx),%rdi
-  37:	4c 8b 43 10          	mov    0x10(%rbx),%r8
-  3b:	48                   	rex.W
-  3c:	b8                   	.byte 0xb8
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
