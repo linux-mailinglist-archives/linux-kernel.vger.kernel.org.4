@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D6E6715E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B0B6715E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjARIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S230042AbjARILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjARIIA (ORCPT
+        with ESMTP id S230094AbjARIKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:08:00 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC7D18B28
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:39:07 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Nxd1N3nh7z6FK2Q;
-        Wed, 18 Jan 2023 15:39:04 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl1.zte.com.cn with SMTP id 30I7cwNo067361;
-        Wed, 18 Jan 2023 15:38:58 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 18 Jan 2023 15:39:00 +0800 (CST)
-Date:   Wed, 18 Jan 2023 15:39:00 +0800 (CST)
-X-Zmail-TransId: 2af963c7a214131734d8
-X-Mailer: Zmail v1.0
-Message-ID: <202301181539003991927@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <alexander.deucher@amd.com>
-Cc:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
-        <rodrigo.siqueira@amd.com>, <christian.koenig@amd.com>,
-        <xinhui.pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <wenjing.liu@amd.com>, <george.shen@amd.com>, <jun.lei@amd.com>,
-        <jimmy.kizito@amd.com>, <michael.strauss@amd.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBkcm0vYW1kL2Rpc3BsYXk6IHJlbW92ZSBkdXBsaWNhdGUgaW5jbHVkZWQgaGVhZGVyIGZpbGVz?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30I7cwNo067361
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C7A218.000 by FangMail milter!
-X-FangMail-Envelope: 1674027544/4Nxd1N3nh7z6FK2Q/63C7A218.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7A218.000/4Nxd1N3nh7z6FK2Q
+        Wed, 18 Jan 2023 03:10:16 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B07667944;
+        Tue, 17 Jan 2023 23:40:52 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9A32A68D13; Wed, 18 Jan 2023 08:40:47 +0100 (CET)
+Date:   Wed, 18 Jan 2023 08:40:47 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Song Liu <song@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
+        Christoph Hellwig <hch@lst.de>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+Message-ID: <20230118074047.GA27385@lst.de>
+References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com> <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Tue, Jan 17, 2023 at 10:50:55AM -0800, Song Liu wrote:
+> Hi Thomas and Luis,
+> 
+> Could you please share your comments on this? Specifically, is this on
+> the right direction? And, what's your preference with Christophe's
+> suggestions?
+> 
+> "I dislike how it looks with enums, things like
+> mod->mod_mem[MOD_MEM_TYPE_INIT
+> _TEXT] are odd and don't read nicely.
+> Could we have something nicer like mod->mod_mem_init_text ?
+> I know it will complicate your for_each_mod_mem_type() but it would look
+> nicer."
 
-resource.h is included more than once.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-index 1e60827911c6..6747e4b199de 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -47,7 +47,6 @@
- #include "link/link_dp_training_auxless.h"
- #include "link/link_dp_phy.h"
- #include "link/link_dp_capability.h"
--#include "resource.h"
- #define DC_LOGGER \
- 	link->ctx->logger
-
--- 
-2.25.1
+FYI, I don't particularly like the array either.  But if it makes
+the code much simpler I can live with it.
