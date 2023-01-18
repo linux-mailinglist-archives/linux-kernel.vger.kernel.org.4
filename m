@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC80671565
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF106671568
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjARHt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S229603AbjARHtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjARHr2 (ORCPT
+        with ESMTP id S229459AbjARHsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:47:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531AD45236;
-        Tue, 17 Jan 2023 23:16:56 -0800 (PST)
+        Wed, 18 Jan 2023 02:48:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4115145F45
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDD95616C6;
-        Wed, 18 Jan 2023 07:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414EFC433D2;
-        Wed, 18 Jan 2023 07:16:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E786EB81A90
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F55C4339B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674026215;
-        bh=fMdiTni2gMvcsKxUoV8Xq96M3e8d2FKt/Z2+Ho2gGYQ=;
+        s=k20201202; t=1674026232;
+        bh=kmI23F6YpP3wP+g6JxGd9ZmFmajQvU1haCUNlhO3JMw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GHARI1gdwPtbgorOO7XpOh6wzyb0pqbkfxntZx/n8ts+D93dWmq9wAl7q7m1UTimX
-         nbnClMbTijjFUwfoGaZ7x+zin/HON9yHZ2RY7dheYfvb5gEqWTrJp6jltkdaSYI9og
-         e1bKLIZr/R1HcwzBLxSuwUmKMPiKGVDMfAB16J1HhJQWXmyOUXyBD/+I/KQy+J6Ht0
-         ccJwdGaoNMbsupEi89SFHdda/5GIhq0KUiHh+7QEZVIyKV4c6LT8QNn4K71LxgCzcG
-         pRqq/xKxlZjMCWP6WII2akAQewH13/EwZ2bXdqheimpY2Mc6Zi0FVFvH2dU6aYhOns
-         YMcxRmk4HLH2w==
-Received: by mail-ot1-f41.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso19181668oto.11;
-        Tue, 17 Jan 2023 23:16:55 -0800 (PST)
-X-Gm-Message-State: AFqh2krEEkbuQJI7dPo5qhMTtc1nltB2oV4Cs5V84dGumfV2lw28OLW3
-        +u2pzDu79e6ElqBcdEEtFgPuqvMTWMC2pCqseYE=
-X-Google-Smtp-Source: AMrXdXsnxQyWQhxAAGTn9D2e1gF/sug0YZkUn/lyrkp9S3QjlOzNh4GiblyYPA4sCDeSMt4uD5K1LmzCpvf5PNKbbhU=
-X-Received: by 2002:a9d:1984:0:b0:684:c0c2:59c6 with SMTP id
- k4-20020a9d1984000000b00684c0c259c6mr319508otk.343.1674026214533; Tue, 17 Jan
- 2023 23:16:54 -0800 (PST)
+        b=IKAFn5uTcg+8TtVkywsk3Sfdgh218KJjHAOtNH61GBkSXJkYhsFJgkCvmdkkjJaJE
+         jIKlUtyS9GCuUeAYRbkYeV8E9TmSqxkHk+duZKEymJl8Ik01QKAh9yH0m5K63d1lts
+         6QjZnFsRRY+PIN43IuhYpp1VXkw8HlC8CKJOmFmyk74R7poDsvq9XojRQijqNB33RQ
+         7jqI1+0U4HtZp7BGOFjsCCdEigHReSb75PpXi4MbwFEnbFaSBO1BcPBo2Q9YEFrYUz
+         dPbQd99tfvdfN2Cik+QnAFEFN3G/+YuPMKzaxmJDmVD2NXslariAeFFFvNR0Uxxlct
+         dF/7XjyvOC8Ow==
+Received: by mail-ej1-f41.google.com with SMTP id u19so80917501ejm.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:12 -0800 (PST)
+X-Gm-Message-State: AFqh2kqPT8tSNnJm7Iz6VRR35hH+FmEEK977YFv5bdYhorLnDUYCmWx9
+        ggWJkXiYH6DTVwd6tAbkqgcv9FxsimGjMlW6R1w=
+X-Google-Smtp-Source: AMrXdXvw3gfeEzkqEdPNf8APUQ9AeGM5NX4sydYdm5mAAml2mXeWFM9jEmlnJQaCbiXRL/ZwaKYwQWpkjcxm8fUlNXc=
+X-Received: by 2002:a17:906:f86:b0:7b2:7e7a:11c1 with SMTP id
+ q6-20020a1709060f8600b007b27e7a11c1mr511388ejj.684.1674026230719; Tue, 17 Jan
+ 2023 23:17:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117-kernel-kheaders-cpio-v1-1-058d3e1c8621@weissschuh.net>
- <Y8ZgTgtA9oH8W17Y@buildd.core.avm.de> <20230117131919.3ywkaptian2y242d@t-8ch.de>
-In-Reply-To: <20230117131919.3ywkaptian2y242d@t-8ch.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 18 Jan 2023 16:16:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASJU6Ad0HN7SoP-KHCxskYodzHg2AFMkyeTSKnzB=vBzw@mail.gmail.com>
-Message-ID: <CAK7LNASJU6Ad0HN7SoP-KHCxskYodzHg2AFMkyeTSKnzB=vBzw@mail.gmail.com>
-Subject: Re: [PATCH] kheaders: explicitly validate existence of cpio command
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-kbuild@vger.kernel.org,
-        Amy Parker <apark0006@student.cerritos.edu>,
-        linux-kernel@vger.kernel.org
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+ <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn> <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+ <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn> <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
+ <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
+In-Reply-To: <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 18 Jan 2023 15:17:00 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
+Message-ID: <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
+Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as non-kprobe-able
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,59 +66,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:19 PM Thomas Wei=C3=9Fschuh <thomas@t-8ch.de> wr=
-ote:
+On Wed, Jan 18, 2023 at 2:24 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> On Tue, Jan 17, 2023 at 09:46:02AM +0100, Nicolas Schier wrote:
-> > On Tue, Jan 17, 2023 at 05:30:43AM +0000, Thomas Wei=C3=9Fschuh wrote:
-> > > If the cpio command is not available the error emitted by
-> > > gen_kheaders.so is not clear as all output of the call to cpio is
-> > > discarded:
-> > >
-> > > GNU make 4.4:
-> > >
-> > >   GEN     kernel/kheaders_data.tar.xz
-> > > find: 'standard output': Broken pipe
-> > > find: write error
-> > > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error=
- 127
-> > > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
-> > >
-> > > GNU make < 4.4:
-> > >
-> > >   GEN     kernel/kheaders_data.tar.xz
-> > > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error=
- 127
-> > > make[2]: *** Waiting for unfinished jobs....
-> > > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
-> > >
-> > > Add an explicit check that will trigger a clear message about the iss=
-ue:
-> > >
-> > >   CHK     kernel/kheaders_data.tar.xz
-> > > ./kernel/gen_kheaders.sh: line 17: type: cpio: not found
+>
+>
+> On 01/18/2023 02:05 PM, Jinyang He wrote:
 > >
-> > Thanks for the patch!  What would you think about an even more verbose
-> > message?  Perhaps something like:
+> > On 2023-01-18 12:23, Tiezhu Yang wrote:
+> >>
+> >>
+> >> On 01/18/2023 12:14 PM, Huacai Chen wrote:
+> >>> If memcpy should be blacklisted, then what about memset and memmove?
+> >>
+> >> According to the test results, there are no problems to probe
+> >> memset and memmove, so no need to blacklist them for now,
+> >> blacklist memcpy is because it may cause recursive exceptions,
+> >> there is a detailed discussion in the following link:
+> >>
+> >> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> >>
 > >
-> >     echo >&2 ' *** "cpio" is required for "CONFIG_IKHEADERS". >&2
+> > Hi, Tiezhu,
+> >
+> > I cannot reproduce the results when kprobe memcpy. Could you please give
+> > some details. Emm, I just replace "kernel_clone" with "memcpy" in
+> > kprobe_example.c.
 >
-> Wouldn't hurt obviously.
-> The other scripts used by the kernel don't seem to try to provide this
-> kind of explicit message either, though.
-> Having a line number, some sort of "not found" and the name of the
-> command are enough, in my opinion.
+> Please remove the related "_ASM_NOKPROBE(memcpy)" code in
+> arch/loongarch/lib/memcpy.S, and then compile and update kernel,
+> execute the following cmd after reboot, I can reproduce the hang
+> problem easily (it will take a few minutes).
 >
-> > Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> modprobe kprobe_example symbol="memcpy"
+Then, why is handle_syscall different from other exception handlers?
+
+Huacai
 >
-> Thanks!
+> >
+> > And for your call trace,
+> >
+> >  handler_pre()
+> >    pr_info()
+> >      printk()
+> >       _printk()
+> >         vprintk()
+> >           vprintk_store()
+> >             memcpy()
+> >
+> > I think when we should skip this time kprobe which triggered in
+> > handler_{pre, post}. That means this time kprobe will not call
+> > handler_{pre, post} agian, and not cause recursion. I remember
+> > your codes had done this skip action. So, that's so strange if
+> > recursion in handler_{pre, post}.
+> >
+> >
+> > Thanks,
+> >
+> > Jinyang
+> >
+> >
+> >>
+> >> Thanks,
+> >> Tiezhu
+> >>
+> >>>
+> >>> Huacai
+> >>>
+> >>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn>
+> >>> wrote:
+> >>>>
+> >>>> Some assembler symbols are not kprobe safe, such as handle_syscall
+> >>>> (used as syscall exception handler), *memcpy* (may cause recursive
+> >>>> exceptions), they can not be instrumented, just blacklist them for
+> >>>> kprobing.
+> >>>>
+> >>>> Here is a related problem and discussion:
+> >>>> Link:
+> >>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> >>>>
+> >>>>
+> >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >>>> ---
+> >>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
+> >>>>  arch/loongarch/kernel/entry.S    |  1 +
+> >>>>  arch/loongarch/lib/memcpy.S      |  3 +++
+> >>>>  3 files changed, 14 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/loongarch/include/asm/asm.h
+> >>>> b/arch/loongarch/include/asm/asm.h
+> >>>> index 40eea6a..f591b32 100644
+> >>>> --- a/arch/loongarch/include/asm/asm.h
+> >>>> +++ b/arch/loongarch/include/asm/asm.h
+> >>>> @@ -188,4 +188,14 @@
+> >>>>  #define PTRLOG         3
+> >>>>  #endif
+> >>>>
+> >>>> +/* Annotate a function as being unsuitable for kprobes. */
+> >>>> +#ifdef CONFIG_KPROBES
+> >>>> +#define _ASM_NOKPROBE(name)                            \
+> >>>> +       .pushsection "_kprobe_blacklist", "aw";         \
+> >>>> +       .quad   name;                                   \
+> >>>> +       .popsection
+> >>>> +#else
+> >>>> +#define _ASM_NOKPROBE(name)
+> >>>> +#endif
+> >>>> +
+> >>>>  #endif /* __ASM_ASM_H */
+> >>>> diff --git a/arch/loongarch/kernel/entry.S
+> >>>> b/arch/loongarch/kernel/entry.S
+> >>>> index d53b631..55e23b1 100644
+> >>>> --- a/arch/loongarch/kernel/entry.S
+> >>>> +++ b/arch/loongarch/kernel/entry.S
+> >>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
+> >>>>
+> >>>>         RESTORE_ALL_AND_RET
+> >>>>  SYM_FUNC_END(handle_syscall)
+> >>>> +_ASM_NOKPROBE(handle_syscall)
+> >>>>
+> >>>>  SYM_CODE_START(ret_from_fork)
+> >>>>         bl      schedule_tail           # a0 = struct task_struct *prev
+> >>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+> >>>> index 7c07d59..3b7e1de 100644
+> >>>> --- a/arch/loongarch/lib/memcpy.S
+> >>>> +++ b/arch/loongarch/lib/memcpy.S
+> >>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
+> >>>>         ALTERNATIVE     "b __memcpy_generic", \
+> >>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
+> >>>>  SYM_FUNC_END(memcpy)
+> >>>> +_ASM_NOKPROBE(memcpy)
+> >>>>
+> >>>>  EXPORT_SYMBOL(memcpy)
+> >>>>
+> >>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
+> >>>>  2:     move    a0, a3
+> >>>>         jr      ra
+> >>>>  SYM_FUNC_END(__memcpy_generic)
+> >>>> +_ASM_NOKPROBE(__memcpy_generic)
+> >>>>
+> >>>>  /*
+> >>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
+> >>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
+> >>>>  3:     move    a0, a3
+> >>>>         jr      ra
+> >>>>  SYM_FUNC_END(__memcpy_fast)
+> >>>> +_ASM_NOKPROBE(__memcpy_fast)
+> >>>> --
+> >>>> 2.1.0
+> >>>>
+> >>
 >
-> Thomas
-
-
-Applied to linux-kbuild. Thanks.
-
-
---=20
-Best Regards
-Masahiro Yamada
+>
