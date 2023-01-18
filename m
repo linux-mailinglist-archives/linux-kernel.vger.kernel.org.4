@@ -2,192 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7B467227B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EFB672275
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjARQGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S230271AbjARQGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjARQGE (ORCPT
+        with ESMTP id S230223AbjARQFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:06:04 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8A459756;
-        Wed, 18 Jan 2023 08:02:48 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30I8f4IA009052;
-        Wed, 18 Jan 2023 08:02:30 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=4T0eCnCSn3ot26og/9AC5vrcmhPU97+jbxQrKlHXesQ=;
- b=lFiIIsOcz3AmX6SmtsE4lW6G3FHbl/wEatx5x/Jb15AQrdPUfU1889ukRsoNi0Z196Rs
- AmyCQ92nBG3LUhAuAu3kpVMkboPToEVd3tFjjQpdQMs86rVvf236BJIKQT/2rir6civQ
- ylRFkWEa+g2uqZrjybMuxRjC4u9ygNuN6j8L3Rr4jdJwKrZSSMwhXfPg6+6Pw6Fc0SCx
- kECaBgl+UY3NlwGDcZcGL+BTUwy3tV86inq7uBsOladCoASvdEie8ElQk2eRC33CULL4
- ui4POl2tOQAwHZgZ/so2W71twsC3hO/4cVM9ydbEg8tWnp3vteAe7lFSTDmqYfVyOrIh Lg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3n3vstj4xv-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 08:02:27 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 18 Jan
- 2023 08:02:18 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 18 Jan 2023 08:02:18 -0800
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id AEE4A5B695F;
-        Wed, 18 Jan 2023 08:02:16 -0800 (PST)
-Date:   Wed, 18 Jan 2023 08:02:16 -0800
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
-        <jannadurai@marvell.com>, <cchavva@marvell.com>
-Subject: Re: [PATCH 3/5] dt-bindings: mmc: sdhci-cadence: SD6 support
-Message-ID: <20230118160216.GA19078@Dell2s-9>
-References: <20221219142418.27949-1-pmalgujar@marvell.com>
- <20221219142418.27949-4-pmalgujar@marvell.com>
- <5fc29d3c-e3da-3dc4-bce5-2158b81daa43@linaro.org>
- <20230106164812.GA14720@Dell2s-9>
- <f9d4c883-4b76-c95e-c6dc-a659b4410bf2@linaro.org>
+        Wed, 18 Jan 2023 11:05:46 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3003059245;
+        Wed, 18 Jan 2023 08:02:34 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id 20so10011157plo.3;
+        Wed, 18 Jan 2023 08:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OR1pa/GbW4DJUJPKFZgeVx5ahTeFijGOvToDk9lr28w=;
+        b=q1epYfurhNhtEgAMdJf55yrQkz0Nl15t6IJLWLIBlqJTCrB1GTOk4FtmttyLYtNt0t
+         621pbRTmTqMqsHd12ggnaCqBuylb1gRAU+0IpmInFoT8Z7FGmP4xcbptMlB2becpVeec
+         gpURz+9wG+b7wFCXZe2SuNHWVbVyg99PDjJ1Qwbiw7LgU+Lw2zTBk9IaHaY65o4xv+HL
+         emnXqVg92EayZ/sYTLW1lPu+V+eKerxgCta8TVkREJxqqNOAJMPgiRB0/eNRwnFRxcIx
+         fC3/tsdFOVV0Ox4v6ZwMdJZGrc+CA19bUeBXVlgmgt0uuV9J6tLhnIjiYRpgWOSCoOmI
+         OehA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OR1pa/GbW4DJUJPKFZgeVx5ahTeFijGOvToDk9lr28w=;
+        b=4x8m4doH57+mJVJfAqzbgRBzDF27wXAv26ZfLgkIl7Dt7fa/Nd3T195Rn2i+dX4Irn
+         t9XyI5aCglE+8lAKyfC9rD2+9ahIz7keO4hNbQrUaYLkg2TqBu1QaiA/ie2IN5RakvuN
+         Q732uxW+13W1nkMiffCpDpYZreptDSRnLqwZzktBcOsLcSz7qcqF+rhXw6DB+5QTynpf
+         w6Z+rC6O2F442qnZL42QunM4lpEoUf2PSjb9YwqPq/HXNrqefQWI68UgtlnIUZ15IDqi
+         sU2HKTM92JwVOcT3dIQIfgAD2B2pCIcjQT1NlJR7sIEvLrzWHCuHOOqx4/OgAjAzajQ+
+         BDtg==
+X-Gm-Message-State: AFqh2krY8cQGfrc2Ry5PVmICaYNHAxSZCDmx+a5261Wpu5ZLU0BmqSNf
+        5KW1SzttIZoTIHq0yVgPdbg=
+X-Google-Smtp-Source: AMrXdXvVwV+ETpe8nxu6ihGd2qLsTWHaPQ9M8HtL5NtCtLaePq8ARzYyy0dTFLUOS0Ku/PQfh2G1NQ==
+X-Received: by 2002:a17:902:da90:b0:189:469c:dc0 with SMTP id j16-20020a170902da9000b00189469c0dc0mr10872841plx.7.1674057750698;
+        Wed, 18 Jan 2023 08:02:30 -0800 (PST)
+Received: from localhost.localdomain ([218.186.180.226])
+        by smtp.gmail.com with ESMTPSA id m7-20020a170902db0700b00192b0a07891sm23364327plx.101.2023.01.18.08.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 08:02:30 -0800 (PST)
+From:   Vinay Varma <varmavinaym@gmail.com>
+Cc:     Vinay Varma <varmavinaym@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org
+Subject: [PATCH] scripts: `make rust-analyzer` for out-of-tree modules
+Date:   Thu, 19 Jan 2023 00:02:20 +0800
+Message-Id: <20230118160220.776302-1-varmavinaym@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f9d4c883-4b76-c95e-c6dc-a659b4410bf2@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-ORIG-GUID: 6kslb20W85i3_AAAvtNMJwdG5rQ94t3s
-X-Proofpoint-GUID: 6kslb20W85i3_AAAvtNMJwdG5rQ94t3s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Adds support for out-of-tree rust modules to use the `rust-analyzer`
+make target to generate the rust-project.json file.
 
-On Sat, Jan 07, 2023 at 02:25:02PM +0100, Krzysztof Kozlowski wrote:
-> On 06/01/2023 17:48, Piyush Malgujar wrote:
-> > Hi Krzysztof,
-> > 
-> > Thank you the review comments.
-> > 
-> > On Mon, Dec 19, 2022 at 04:40:35PM +0100, Krzysztof Kozlowski wrote:
-> >> On 19/12/2022 15:24, Piyush Malgujar wrote:
-> >>> From: Jayanthi Annadurai <jannadurai@marvell.com>
-> >>>
-> >>
-> >> Subject: use final prefix matching the file, so "cdns,sdhci:"
-> >>
-> >>> Add support for SD6 controller support
-> >>
-> >> Full stop.
-> >>
-> >>>
-> >>> Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> >>> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> >>> ---
-> >>>  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 33 +++++++++++++++++--
-> >>>  1 file changed, 31 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> >>> index 8b1a0fdcb5e3e2e8b87d8d7678e37f3dad447fc1..2043e78ccd5f708a01e87fd96ec410418fcd539f 100644
-> >>> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> >>> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> >>> @@ -4,7 +4,7 @@
-> >>>  $id: http://devicetree.org/schemas/mmc/cdns,sdhci.yaml#
-> >>>  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>  
-> >>> -title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
-> >>> +title: Cadence SD/SDIO/eMMC Host Controller (SD4HC, SD6HC)
-> >>>  
-> >>>  maintainers:
-> >>>    - Masahiro Yamada <yamada.masahiro@socionext.com>
-> >>> @@ -19,6 +19,7 @@ properties:
-> >>>            - microchip,mpfs-sd4hc
-> >>>            - socionext,uniphier-sd4hc
-> >>>        - const: cdns,sd4hc
-> >>> +      - const: cdns,sd6hc
-> >>
-> >> Does not look like you tested the DTS against bindings. Please run `make
-> >> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> >> for instructions).
-> >>
-> >> ... because it does not really make sense. Why do you require SD6HC as
-> >> fallback? I think you meant enum.
-> >>
-> > 
-> > Yes, that's correct. I will change it to enum.
-> > 
-> >>>  
-> >>>    reg:
-> >>>      maxItems: 1
-> >>> @@ -111,6 +112,34 @@ properties:
-> >>>      minimum: 0
-> >>>      maximum: 0x7f
-> >>>  
-> >>> +  cdns,iocell_input_delay:
-> >>
-> >> No underscores. Use proper units in name suffix:
-> >> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-> >>
-> >>
-> >>> +    description: Delay in ps across the input IO cells
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>
-> >> Ditto... and so on - all of the fields.
-> >>
-> >>> +
-> >>> +  cdns,iocell_output_delay:
-> >>> +    description: Delay in ps across the output IO cells
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +
-> >>> +  cdns,delay_element:
-> >>> +    description: Delay element in ps used for calculating phy timings
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +
-> >>> +  cdns,read_dqs_cmd_delay:
-> >>> +    description: Command delay used in HS200 tuning
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +
-> >>> +  cdns,tune_val_start:
-> >>> +    description: Staring value of data delay used in HS200 tuning
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +
-> >>> +  cdns,tune_val_step:
-> >>> +    description: Incremental value of data delay used in HS200 tuning
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +
-> >>> +  cdns,max_tune_iter:
-> >>> +    description: Maximum number of iterations to complete the HS200 tuning process
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>
-> >> Why these three are properties of DT?
-> >>
-> > 
-> > These tuning parameters are added here so to make them custom configurable for different
-> > boards.
-> 
-> I understand why do you wanted to add them, but I am asking why these
-> are suitable for DT? DT  describes hardware, so what is here specific to
-> hardware which requires DT property?
-> 
-> 
+The change involves adding an optional parameter `external_src` to the
+`generate_rust_analyzer.py` which expects the path to the out-of-tree
+module's source directory. When this parameter is passed, I have chosen
+not to add the non-core modules (samples and drivers) into the result
+since these are not expected to be used in third party modules. Related
+changes are also made to the Makefile and rust/Makefile allowing the
+`rust-analyzer` target to be used for out-of-tree modules as well.
 
-We have different values based on emmc devices populated on different boards and these
-tuning parameters are used to program phy registers accordingly.
+Signed-off-by: Vinay Varma <varmavinaym@gmail.com>
+---
+ Makefile                          | 12 +++++++-----
+ rust/Makefile                     |  6 ++++--
+ scripts/generate_rust_analyzer.py | 14 +++++++++-----
+ 3 files changed, 20 insertions(+), 12 deletions(-)
 
-> Best regards,
-> Krzysztof
+diff --git a/Makefile b/Makefile
+index f41ec8c8426b..a055a316d2a4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1831,11 +1831,6 @@ rustfmt:
+ rustfmtcheck: rustfmt_flags = --check
+ rustfmtcheck: rustfmt
+ 
+-# IDE support targets
+-PHONY += rust-analyzer
+-rust-analyzer:
+-	$(Q)$(MAKE) $(build)=rust $@
+-
+ # Misc
+ # ---------------------------------------------------------------------------
+ 
+@@ -1888,6 +1883,7 @@ help:
+ 	@echo  '  modules         - default target, build the module(s)'
+ 	@echo  '  modules_install - install the module'
+ 	@echo  '  clean           - remove generated files in module directory only'
++	@echo  '  rust-analyzer	  - generate rust-project.json rust-analyzer support file'
+ 	@echo  ''
+ 
+ endif # KBUILD_EXTMOD
+@@ -2022,6 +2018,12 @@ quiet_cmd_tags = GEN     $@
+ tags TAGS cscope gtags: FORCE
+ 	$(call cmd,tags)
+ 
++# IDE support targets
++PHONY += rust-analyzer
++rust-analyzer:
++	$(Q)$(MAKE) $(build)=rust $@
++
++
+ # Script to generate missing namespace dependencies
+ # ---------------------------------------------------------------------------
+ 
+diff --git a/rust/Makefile b/rust/Makefile
+index 8f598a904f38..41c1435cd8d4 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -389,8 +389,10 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
+ 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
+ 
+ rust-analyzer:
+-	$(Q)$(srctree)/scripts/generate_rust_analyzer.py $(srctree) $(objtree) \
+-		$(RUST_LIB_SRC) > $(objtree)/rust-project.json
++	$(Q)$(srctree)/scripts/generate_rust_analyzer.py \
++		$(abs_srctree) $(abs_objtree) \
++		$(RUST_LIB_SRC) $(KBUILD_EXTMOD) > \
++		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
+ 
+ $(obj)/core.o: private skip_clippy = 1
+ $(obj)/core.o: private skip_flags = -Dunreachable_pub
+diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
+index ecc7ea9a4dcf..1546b80db554 100755
+--- a/scripts/generate_rust_analyzer.py
++++ b/scripts/generate_rust_analyzer.py
+@@ -8,8 +8,9 @@ import json
+ import logging
+ import pathlib
+ import sys
++import os
+ 
+-def generate_crates(srctree, objtree, sysroot_src):
++def generate_crates(srctree, objtree, sysroot_src, external_src):
+     # Generate the configuration list.
+     cfg = []
+     with open(objtree / "include" / "generated" / "rustc_cfg") as fd:
+@@ -65,7 +66,7 @@ def generate_crates(srctree, objtree, sysroot_src):
+         [],
+         is_proc_macro=True,
+     )
+-    crates[-1]["proc_macro_dylib_path"] = "rust/libmacros.so"
++    crates[-1]["proc_macro_dylib_path"] = f"{objtree}/rust/libmacros.so"
+ 
+     append_crate(
+         "build_error",
+@@ -98,13 +99,15 @@ def generate_crates(srctree, objtree, sysroot_src):
+     # Then, the rest outside of `rust/`.
+     #
+     # We explicitly mention the top-level folders we want to cover.
+-    for folder in ("samples", "drivers"):
++    extra_src_dirs = ["samples", "drivers"] if external_src is None else [external_src]
++
++    for folder in extra_src_dirs:
+         for path in (srctree / folder).rglob("*.rs"):
+             logging.info("Checking %s", path)
+             name = path.name.replace(".rs", "")
+ 
+             # Skip those that are not crate roots.
+-            if f"{name}.o" not in open(path.parent / "Makefile").read():
++            if os.path.exists(path.parent / "Makefile") and f"{name}.o" not in open(path.parent / "Makefile").read():
+                 continue
+ 
+             logging.info("Adding %s", name)
+@@ -123,6 +126,7 @@ def main():
+     parser.add_argument("srctree", type=pathlib.Path)
+     parser.add_argument("objtree", type=pathlib.Path)
+     parser.add_argument("sysroot_src", type=pathlib.Path)
++    parser.add_argument("exttree", type=pathlib.Path, nargs='?')
+     args = parser.parse_args()
+ 
+     logging.basicConfig(
+@@ -131,7 +135,7 @@ def main():
+     )
+ 
+     rust_project = {
+-        "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src),
++        "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src, args.exttree),
+         "sysroot_src": str(args.sysroot_src),
+     }
+ 
+-- 
+2.39.0
 
-Thanks,
-Piyush> 
