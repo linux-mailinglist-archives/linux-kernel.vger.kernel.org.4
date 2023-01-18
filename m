@@ -2,114 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE3B671071
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5445671073
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjARB41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S229563AbjARB76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjARB4V (ORCPT
+        with ESMTP id S229449AbjARB74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:56:21 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5564614E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:56:17 -0800 (PST)
-Date:   Wed, 18 Jan 2023 10:56:07 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674006975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CyWTxF4FfJMeDbUGZTVRzt6Lmnq30K9ei9PlhTnyc/s=;
-        b=uluUZb7gb/031l90RszkUgv+R23MlNN1gM9xJ6uuErvXIsK5hBi8tJ8c/6Jd91pZehWp4l
-        C2PI8CodSCp5WYWcHLFwy828AfcxpeiDMFJ7rHTR+OLNC0YGQmh1JkHJO3vgYIkBw0uPu7
-        b0r6MWymx1k0Xf18uoBYfFgH+5bhJA4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        jhubbard@nvidia.com
-Subject: Re: [PATCH mm-unstable v2 8/8] mm/hugetlb: convert
- demote_free_huge_page to folios
-Message-ID: <20230118015607.GA1620837@u2004>
-References: <20230110212821.984047-1-sidhartha.kumar@oracle.com>
- <20230110212821.984047-9-sidhartha.kumar@oracle.com>
- <Y73bP5CFT/8T/DvO@casper.infradead.org>
- <Y738EQkRcgv1eO66@monkey>
- <2f9ef115-a508-090b-d804-23235a447063@oracle.com>
+        Tue, 17 Jan 2023 20:59:56 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2A232520;
+        Tue, 17 Jan 2023 17:59:55 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so794303pjg.4;
+        Tue, 17 Jan 2023 17:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dOQsc3ED40InAGrmwJD0MA/AC6XNhADd5xAaCdBAITM=;
+        b=KxJJNA+tkQb4hVNsAjPgRgngCk2WF6G5BmHFchHXEE4S4LQ4Tklni31MPHUmzWB740
+         QDL+ym2CjAAUmLW8jF00KFyYfV9+1A2o0Sz1WctHxvYoFutKpIMYC8A9wscg1kMLN+Rz
+         VHXxge1qnCiCArHpJeZ7PxmeNQ2gU/idnyP3Pt9HJVdt58RorKdFfivW965D75hK4WHq
+         1OKaJnFv8OA/YDhyI/SKBkMxfDUgIL4Dbd3abT9k63GEsIn7Jv3YSuVA4Mecxc77qscy
+         5Jv9d2ClyESipYhw+296/RrPnkZzLd6EhVpEQJ51TQGdXalTD/66tveuewwGLWKn1ytb
+         0jHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dOQsc3ED40InAGrmwJD0MA/AC6XNhADd5xAaCdBAITM=;
+        b=yDPzKrVx8cQyf7V4h5dh2UKq06TmkC7FhMR6Oa3CvPHGYaiCcZVyMbmfvj9cCQBCjJ
+         FpUdyVt9e3vDkGpN7gQsILoe8btgwMIOKELiT5TVZ/6s15SxarMmEoDGp/pKESjBsvO7
+         ZiLXyUNx9mto9oIZPOrUF8KP0gIQke+sBNbf266plsS5I5RJ7mMyhNk7HKYeTrQmhq57
+         M8vw+rHEiwsoOPK+dRxwsR3lgUVNy+POHiLur1wRXlPoZshcHkyl6u/M8hoKBmS3kJDM
+         kQMni2UQeDuZHx7QHH2DdLVS8lsiWaJ46KBflRoD04EnG68pWWEHLsXtPqKySpIcpRnW
+         TbXw==
+X-Gm-Message-State: AFqh2kpE2VRWKBJ+hyGzDZURjamMi/8DTeJutffwu8M4LUa97AUh7Icc
+        jfaXsEPfviYaIMnFqLp5FdQ=
+X-Google-Smtp-Source: AMrXdXvMvLzOV7yoDbIUnjtJNlU9cHI0UfDBGSWEjFS1oHL34U2K86wm8hF+ZZ+Q+4uNHVY24AvtWg==
+X-Received: by 2002:a17:902:9a82:b0:18d:d954:5f24 with SMTP id w2-20020a1709029a8200b0018dd9545f24mr5700101plp.6.1674007195222;
+        Tue, 17 Jan 2023 17:59:55 -0800 (PST)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170903110900b00178b6ccc8a0sm21976053plh.51.2023.01.17.17.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 17:59:54 -0800 (PST)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: [PATCH v7 net] tcp: avoid the lookup process failing to get sk in ehash table
+Date:   Wed, 18 Jan 2023 09:59:41 +0800
+Message-Id: <20230118015941.1313-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2f9ef115-a508-090b-d804-23235a447063@oracle.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 09:16:23AM -0600, Sidhartha Kumar wrote:
-> On 1/10/23 6:00 PM, Mike Kravetz wrote:
-> > On 01/10/23 21:40, Matthew Wilcox wrote:
-> > > On Tue, Jan 10, 2023 at 03:28:21PM -0600, Sidhartha Kumar wrote:
-> > > > @@ -3505,6 +3505,7 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
-> > > >   {
-> > > >   	int nr_nodes, node;
-> > > >   	struct page *page;
-> > > > +	struct folio *folio;
-> > > >   	lockdep_assert_held(&hugetlb_lock);
-> > > > @@ -3518,8 +3519,8 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
-> > > >   		list_for_each_entry(page, &h->hugepage_freelists[node], lru) {
-> > > >   			if (PageHWPoison(page))
-> > > >   				continue;
-> > > > -
-> > > > -			return demote_free_huge_page(h, page);
-> > > > +			folio = page_folio(page);
-> > > > +			return demote_free_hugetlb_folio(h, folio);
-> > > >   		}
-> > > >   	}
-> > > 
-> > > Can't this be
-> > > 		list_for_each_entry(folio, &h->hugepage_freelists[node], lru)
-> > > 
-> > > which avoids the call to page_folio() here.
-> > > 
-> > > I think the call to PageHWPoison is actually wrong here.  That would
-> > > only check the hwpoison bit on the first page, whereas we want to know
-> > > about the hwpoison bit on any page (don't we?)  So this should be
-> > > folio_test_has_hwpoisoned()?
-> > > 
-> > > Or is that a THP-thing that is different for hugetlb pages?
-> > 
-> > I believe it is different for hugetlb pages.  See hugetlb_set_page_hwpoison()
-> > where it sets PageHWPoison on head page as well as allocating a raw_hwp_page
-> 
-> I agree, this line in hugetlb_set_page_hwpoison (which is now
-> folio_set_hugetlb_hwpoison) sets the HWPoison flag on the head page
-> 
-> int ret = folio_test_set_hwpoison(folio) ? -EHWPOISON : 0;
-> 
-> so the correct code in demote_pool_huge_page() would be:
-> 
-> 	list_for_each_entry(folio, &h->hugepage_freelists[node], lru) {
-> 			if (folio_test_hwpoison(folio))
-> 				continue;
-> 			return demote_free_hugetlb_folio(h, folio);
-> 		}
-> 
-> 
-> > to track the actual page with poison.  Note that we can not directly flag
-> > hugetlb 'subpages' because we may not have the struct pages due to vmemmap
-> > optimization.  Adding Naoya just to be sure.
+From: Jason Xing <kernelxing@tencent.com>
 
-Yes, the above code and the reason totally make sense to me.
-Thanks for the patch and the update.
+While one cpu is working on looking up the right socket from ehash
+table, another cpu is done deleting the request socket and is about
+to add (or is adding) the big socket from the table. It means that
+we could miss both of them, even though it has little chance.
 
-- Naoya Horiguchif
+Let me draw a call trace map of the server side.
+   CPU 0                           CPU 1
+   -----                           -----
+tcp_v4_rcv()                  syn_recv_sock()
+                            inet_ehash_insert()
+                            -> sk_nulls_del_node_init_rcu(osk)
+__inet_lookup_established()
+                            -> __sk_nulls_add_node_rcu(sk, list)
+
+Notice that the CPU 0 is receiving the data after the final ack
+during 3-way shakehands and CPU 1 is still handling the final ack.
+
+Why could this be a real problem?
+This case is happening only when the final ack and the first data
+receiving by different CPUs. Then the server receiving data with
+ACK flag tries to search one proper established socket from ehash
+table, but apparently it fails as my map shows above. After that,
+the server fetches a listener socket and then sends a RST because
+it finds a ACK flag in the skb (data), which obeys RST definition
+in RFC 793.
+
+Besides, Eric pointed out there's one more race condition where it
+handles tw socket hashdance. Only by adding to the tail of the list
+before deleting the old one can we avoid the race if the reader has
+already begun the bucket traversal and it would possibly miss the head.
+
+Many thanks to Eric for great help from beginning to end.
+
+Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+---
+v3,4,5,6,7:
+1) nit: adjust the coding style.
+
+v2:
+1) add the sk node into the tail of list to prevent the race.
+2) fix the race condition when handling time-wait socket hashdance.
+---
+ net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
+ net/ipv4/inet_timewait_sock.c |  8 ++++----
+ 2 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 24a38b56fab9..f58d73888638 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	spin_lock(lock);
+ 	if (osk) {
+ 		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+-		ret = sk_nulls_del_node_init_rcu(osk);
+-	} else if (found_dup_sk) {
++		ret = sk_hashed(osk);
++		if (ret) {
++			/* Before deleting the node, we insert a new one to make
++			 * sure that the look-up-sk process would not miss either
++			 * of them and that at least one node would exist in ehash
++			 * table all the time. Otherwise there's a tiny chance
++			 * that lookup process could find nothing in ehash table.
++			 */
++			__sk_nulls_add_node_tail_rcu(sk, list);
++			sk_nulls_del_node_init_rcu(osk);
++		}
++		goto unlock;
++	}
++	if (found_dup_sk) {
+ 		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+ 		if (*found_dup_sk)
+ 			ret = false;
+@@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	if (ret)
+ 		__sk_nulls_add_node_rcu(sk, list);
+ 
++unlock:
+ 	spin_unlock(lock);
+ 
+ 	return ret;
+diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+index 1d77d992e6e7..beed32fff484 100644
+--- a/net/ipv4/inet_timewait_sock.c
++++ b/net/ipv4/inet_timewait_sock.c
+@@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
+ }
+ EXPORT_SYMBOL_GPL(inet_twsk_put);
+ 
+-static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
+-				   struct hlist_nulls_head *list)
++static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
++					struct hlist_nulls_head *list)
+ {
+-	hlist_nulls_add_head_rcu(&tw->tw_node, list);
++	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
+ }
+ 
+ static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
+@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+ 
+ 	spin_lock(lock);
+ 
+-	inet_twsk_add_node_rcu(tw, &ehead->chain);
++	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
+ 
+ 	/* Step 3: Remove SK from hash chain */
+ 	if (__sk_nulls_del_node_init_rcu(sk))
+-- 
+2.37.3
+
