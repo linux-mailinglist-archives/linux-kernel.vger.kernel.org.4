@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2001E6710F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF056710FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjARCPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S229763AbjARCQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjARCPR (ORCPT
+        with ESMTP id S229525AbjARCQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:15:17 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 88A0D51C66
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:15:16 -0800 (PST)
-Received: (qmail 190654 invoked by uid 1000); 17 Jan 2023 21:15:15 -0500
-Date:   Tue, 17 Jan 2023 21:15:15 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y8dWMyBfz1iiaF8M@rowland.harvard.edu>
-References: <Y8RmEtBnwqOzNhsK@rowland.harvard.edu>
- <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
- <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
- <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8aKlNY4Z0z2Yqs0@andrea>
- <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 17 Jan 2023 21:16:19 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B3351C6D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:16:17 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c24993965eso442982417b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=plQIjN2wQ9XQXBQ5PSme4vUCmLrYkEIK9If4doKFLBI=;
+        b=LEYLSbN+VJha9Y8r6nX3W37X12OGy8n862kizG4i1KEMLBQvAcrAa7awSx1mGj6i1M
+         UZO5TbjxfJVrwATY1r5dwUg8ulM2yFaaEytzlAWSqp+tigueh/wVI7At443/LMXGGcdV
+         02aU2qgTw4KyyW2cVar/Q+JPbd/GajrGO3fhydG8cNxnsGEj2DNXX1lHjQcNta+ndKLq
+         VlrCSw29Fmnei5ErjNjvLZbBUUKgepCwNTFqoqk9hXLiOqQJA6NxpzwZj5tNijHCrCY0
+         zNFBA/nJjj38TAHajL1bHQYqy86Qx8fnD261/akARVMdMAHEV4rhTf3wbpcFOTD1vzhT
+         StSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=plQIjN2wQ9XQXBQ5PSme4vUCmLrYkEIK9If4doKFLBI=;
+        b=NwkzPXdpLlh0xh/U+IP+fNmyZoXyAbXxBmIuJwdXnQVvY56CR3EwLAG1L7Cv+MRX+E
+         v71le6DNc120vqn6T8+YQwX+C7n3oLQaPA6Xf50rXhjIuD4SqhkILZZKYLMi+zXlC83p
+         ZFhrrzwuBE7QQY8nVAfa2s0kfSlQipIP1AJruW6HfgQ4fb2Rfiu1UFfBct90jc81QiZZ
+         G7HHTvsFI88QyQL9fnFTMY2yo4I1ji6zttAL9XK0iHbv+LTmw/cMoETXDMGY5Cp9CVC3
+         +ZCevcrqbCkbn1xozFrLAZiR0G479eQq+Df72SIIZgTD261oRaRpdzeRm/5OJBoSYjqS
+         2wVg==
+X-Gm-Message-State: AFqh2kqGKCrYxbwj3BZkdDmEUdV614tcKGbnp2kvi030Xg0HCZRSGEXV
+        pTBB4jz7u9fCrs0c/HP24EzfqdYbq/mwNeF6BVYmqw==
+X-Google-Smtp-Source: AMrXdXu0PzeQzUrtMPh6Q6gmLxuEYbH19qaRWq6JHAbxojJ61ekKXs60PExdWQAgVi5xOUd0vb27BXUobHRewBc0eVw=
+X-Received: by 2002:a81:9105:0:b0:3dc:fd91:ef89 with SMTP id
+ i5-20020a819105000000b003dcfd91ef89mr584557ywg.347.1674008176468; Tue, 17 Jan
+ 2023 18:16:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-10-surenb@google.com>
+ <Y8av6HjRUvaujeEO@dhcp22.suse.cz>
+In-Reply-To: <Y8av6HjRUvaujeEO@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 17 Jan 2023 18:16:05 -0800
+Message-ID: <CAJuCfpFNp5dZvhx168k0MC+oBTRLY2ZVWgMQL_8VTZDTY3URDg@mail.gmail.com>
+Subject: Re: [PATCH 09/41] mm: rcu safe VMA freeing
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,90 +85,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:43:08AM -0800, Paul E. McKenney wrote:
-> On Tue, Jan 17, 2023 at 10:56:34AM -0500, Alan Stern wrote:
+On Tue, Jan 17, 2023 at 6:25 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 09-01-23 12:53:04, Suren Baghdasaryan wrote:
+> [...]
+> >  void vm_area_free(struct vm_area_struct *vma)
+> >  {
+> >       free_anon_vma_name(vma);
+> > +#ifdef CONFIG_PER_VMA_LOCK
+> > +     call_rcu(&vma->vm_rcu, __vm_area_free);
+> > +#else
+> >       kmem_cache_free(vm_area_cachep, vma);
+> > +#endif
+>
+> Is it safe to have vma with already freed vma_name? I suspect this is
+> safe because of mmap_lock but is there any reason to split the freeing
+> process and have this potential UAF lurking?
 
-> > Isn't it true that the current code will flag srcu-bad-nesting if a 
-> > litmus test has non-nested overlapping SRCU read-side critical sections?
-> 
-> Now that you mention it, it does indeed, flagging srcu-bad-nesting.
-> 
-> Just to see if I understand, different-values yields true if the set
-> contains multiple elements with the same value mapping to different
-> values.  Or, to put it another way, if the relation does not correspond
-> to a function.
-> 
-> Or am I still missing something?
-> 
-> > And if it is true, is there any need to change the memory model at this 
-> > point?
-> > 
-> > (And if it's not true, that's most likely due to a bug in herd7.)
-> 
-> Agreed, changes must wait for SRCU support in herd7.
+It should be safe because VMA is either locked or has been isolated
+while locked, so no page fault handlers should have access to it. But
+you are right, moving free_anon_vma_name() into __vm_area_free() does
+seem safer. Will make the change in the next rev.
 
-Maybe we don't.  Please test the patch below; I think it will do what 
-you want -- and it doesn't rule out nesting.
-
-Alan
-
-
-
-Index: usb-devel/tools/memory-model/linux-kernel.bell
-===================================================================
---- usb-devel.orig/tools/memory-model/linux-kernel.bell
-+++ usb-devel/tools/memory-model/linux-kernel.bell
-@@ -57,20 +57,12 @@ flag ~empty Rcu-lock \ domain(rcu-rscs)
- flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
- 
- (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
--let srcu-rscs = let rec
--	    unmatched-locks = Srcu-lock \ domain(matched)
--	and unmatched-unlocks = Srcu-unlock \ range(matched)
--	and unmatched = unmatched-locks | unmatched-unlocks
--	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
--	and unmatched-locks-to-unlocks =
--		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
--	and matched = matched | (unmatched-locks-to-unlocks \
--		(unmatched-po ; unmatched-po))
--	in matched
-+let srcu-rscs = ([Srcu-lock] ; data ; [Srcu-unlock]) & loc
- 
- (* Validate nesting *)
- flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
--flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
-+flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-unlocking
-+flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-unlocks
- 
- (* Check for use of synchronize_srcu() inside an RCU critical section *)
- flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
-@@ -80,11 +72,11 @@ flag ~empty different-values(srcu-rscs)
- 
- (* Compute marked and plain memory accesses *)
- let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
--		LKR | LKW | UL | LF | RL | RU
-+ 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
- let Plain = M \ Marked
- 
- (* Redefine dependencies to include those carried through plain accesses *)
--let carry-dep = (data ; rfi)*
-+let carry-dep = (data ; rfi ; [~Srcu-lock])*
- let addr = carry-dep ; addr
- let ctrl = carry-dep ; ctrl
- let data = carry-dep ; data
-Index: usb-devel/tools/memory-model/linux-kernel.def
-===================================================================
---- usb-devel.orig/tools/memory-model/linux-kernel.def
-+++ usb-devel/tools/memory-model/linux-kernel.def
-@@ -49,8 +49,8 @@ synchronize_rcu() { __fence{sync-rcu}; }
- synchronize_rcu_expedited() { __fence{sync-rcu}; }
- 
- // SRCU
--srcu_read_lock(X)  __srcu{srcu-lock}(X)
--srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-+srcu_read_lock(X)  __load{srcu-lock}(*X)
-+srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
- synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
- synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
- 
-
+>
+> >  }
+> >
+> >  static void account_kernel_stack(struct task_struct *tsk, int account)
+> > --
+> > 2.39.0
+>
+> --
+> Michal Hocko
+> SUSE Labs
