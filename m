@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5212E67157C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 715AA67158B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjARHyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S229884AbjARHyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjARHxY (ORCPT
+        with ESMTP id S229752AbjARHx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:53:24 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E932F4FCE5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:24:26 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id k135-20020a25248d000000b007d689f92d6dso10809342ybk.22
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=g5ejasQrFsU/5gVpFRFubfv/+PZvkyzMvOtZ1k9Ls2g=;
-        b=sg3ax46z3ITf8FSZP4v7C7ytnbVk7hIKtf93DfqvhuueGbIMI3vje4kCIkHKREXLTn
-         s4sxOff7VissWFrsaAzuyDwqtHQJOt8dvzLjdWbCfWhoaCqkjwUW9mpZG+BXbM0Z53fc
-         4TgqJGE3LUjS37rdL2Rb9gXQ336AMMMimusx1NBHUHXE4fE3Z+LbZzanir3vUTT36WBV
-         dwOUKsJYKA5L1nJvNB7uuW8DhzjzzzQwGq2ntcyzqWVRZ8nZ6L0G1uIAqbks4iDCeahX
-         snD5rDXsoyg3i8w94uHsaFMg9kPaoMxPx/QxSRl/nZMNnPhNNOY0PRkfgFFQH6+4PMjd
-         +kPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g5ejasQrFsU/5gVpFRFubfv/+PZvkyzMvOtZ1k9Ls2g=;
-        b=1vMfrbaiWsikOgbyl8MpAwv9ZYiDI2GOOIIr6HrBzLi1l1REK07V2br4Tq5gyuSrJe
-         5WqZkRZmeVtXHXNysftmELh6yGfKkkDFfksU8kNPeLBmH+ReSk8xxOWJAuBqsfsrKUVW
-         xDDFEqPiqlzu842JCGZPFw56Q968Y5nY4tjEYrg/ipvYGV0XUld4j5x6kju3OBZjMoqi
-         DnpAqlkdkB2JDyTeAhP56BQXqnEtGb1bKim4VWnUQFjHMqiMzTXm9WONp3QPhH8i9qPc
-         YwOUHjAHgcHEo8NYXabf5K/XwQrq8q8GcifGkFHP/UhZNFTQQ5HOf5+d5linLqwod9L7
-         JmHQ==
-X-Gm-Message-State: AFqh2kpUrUVz42UYBamuzkJAUwjfdDQkR12lX2Y2Fx6blsrD9nB0G52v
-        mJtWk68VneGnvwq6M9e0Yr2DaxJDDTyc
-X-Google-Smtp-Source: AMrXdXudsO9xpF3o4NoK3cPpdWKIYrYY2Om/KWhPomCdbcIY4lxaTSpifcV4AXwwjc93A1quEvO7d7CGh7z+
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6cc7:ef8b:a10c:4c81])
- (user=irogers job=sendgmr) by 2002:a81:cc2:0:b0:4db:3866:6fa6 with SMTP id
- 185-20020a810cc2000000b004db38666fa6mr716845ywm.44.1674026666209; Tue, 17 Jan
- 2023 23:24:26 -0800 (PST)
-Date:   Tue, 17 Jan 2023 23:24:09 -0800
-Message-Id: <20230118072409.147786-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v3] perf script flamegraph: Avoid d3-flame-graph package dependency
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        996839@bugs.debian.org, Andreas Gerstmayr <agerstmayr@redhat.com>,
-        Martin Spier <spiermar@gmail.com>,
-        Brendan Gregg <brendan@intel.com>
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Wed, 18 Jan 2023 02:53:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067535B5AC;
+        Tue, 17 Jan 2023 23:25:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EEBEB81A90;
+        Wed, 18 Jan 2023 07:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872D3C433D2;
+        Wed, 18 Jan 2023 07:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674026745;
+        bh=ofOSANDmuIMxfltFXcmeW2ct09Fn7hC4wyKiPDC0fn4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H6F8olG8fj/O/EGK71hEDqWd8fORumPM9P4Peuyo0WtdGf89dWRcU0fmSS1iHYmYr
+         8EuTACIAySa4WfJSNec5ZlEEkhXSsTE89BZCrXlsUtL2l8OE6H/cxndwuNOJt8Ue/F
+         ye6a94yr40fAWVxz8ycpeMaFlxBIYHcZnNCF56uTSZZw+5NZZZrUI/yaDjyfs24G8Q
+         LpKUp/De7A5ejts8YsIgbs/HCzZE7kijeUuuqqzQYwMK3FMx39cqeDUaCMq4w6BjFk
+         IQ28HBZlGlHqJjbp/g+uXYgD/zyw90oR70vvCm6/WoUR62VVl5Za6X1RVXlfIp9vUK
+         pwtuZQdItV7+w==
+Message-ID: <36906043-4c18-bfff-c4e4-5d16b3445906@kernel.org>
+Date:   Wed, 18 Jan 2023 09:25:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
+ release action
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vigneshr@ti.com, srk@ti.com
+References: <20230116044517.310461-1-s-vadapalli@ti.com>
+ <Y8T8+rWrvv6gfNxa@unreal> <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
+ <b33c25c5-c93f-6860-b0a5-58279022a91c@kernel.org>
+ <aebaa171-bf4e-c143-a186-a37cd34b724e@ti.com> <Y8aHwSnVK9+sAb24@unreal>
+ <7323af1e-1f33-adcf-885e-db604f7a3788@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <7323af1e-1f33-adcf-885e-db604f7a3788@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,168 +65,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently flame graph generation requires a d3-flame-graph template to
-be installed. Unfortunately this is hard to come by for things like
-Debian [1]. If the template isn't installed then ask if it should be
-downloaded from jsdelivr CDN. The downloaded HTML file is validated
-against an md5sum. If the download fails, generate a minimal flame
-graph with the javascript coming from links to jsdelivr CDN.
+Hi,
 
-v3. Adds a warning message and quits before download in live mode.
-v2. Change the warning to a prompt about downloading and add the
-    --allow-download command line flag. Add an md5sum check for the
-    downloaded HTML.
+On 18/01/2023 06:58, Siddharth Vadapalli wrote:
+> On 17/01/23 17:04, Leon Romanovsky wrote:
+>> On Tue, Jan 17, 2023 at 10:30:26AM +0530, Siddharth Vadapalli wrote:
+>>> Roger, Leon,
+>>>
+>>> On 16/01/23 21:31, Roger Quadros wrote:
+>>>> Hi Siddharth,
+>>>>
+>>>> On 16/01/2023 09:43, Siddharth Vadapalli wrote:
+>>>>>
+>>>>>
+>>>>> On 16/01/23 13:00, Leon Romanovsky wrote:
+>>>>>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
+>>>>>>> The am65_cpts_release() function is registered as a devm_action in the
+>>>>>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
+>>>>>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
+>>>>>>> actions associated with the am65-cpsw driver's device.
+>>>>>>>
+>>>>>>> In the event of probe failure or probe deferral, the platform_drv_probe()
+>>>>>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
+>>>>>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
+>>>>>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
+>>>>>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
+>>>>>>> hardware is assumed to be powered on at this point. However, the hardware
+>>>>>>> is powered off before the devm actions are executed.
+>>>>>>>
+>>>>>>> Fix this by getting rid of the devm action for am65_cpts_release() and
+>>>>>>> invoking it directly on the cleanup and exit paths.
+>>>>>>>
+>>>>>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
+>>>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>>>>>> ---
+>>>>>>> Changes from v1:
+>>>>>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
+>>>>>>>    error was reported by kernel test robot <lkp@intel.com> at:
+>>>>>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
+>>>>>>> 2. Collect Reviewed-by tag from Roger Quadros.
+>>>>>>>
+>>>>>>> v1:
+>>>>>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
+>>>>>>>
+>>>>>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
+>>>>>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
+>>>>>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
+>>>>>>>  3 files changed, 18 insertions(+), 10 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>> index 5cac98284184..00f25d8a026b 100644
+>>>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>>>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
+>>>>>>>  	return 0;
+>>>>>>>  }
+>>>>>>>  
+>>>>>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
+>>>>>>> +{
+>>>>>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
+>>>>>>
+>>>>>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
+>>>>>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
+>>>>>>
+>>>>>> How is it possible to have common->cpts == NULL?
+>>>>>
+>>>>> Thank you for reviewing the patch. I realize now that checking
+>>>>> CONFIG_TI_K3_AM65_CPTS is unnecessary.
+>>>>>
+>>>>> common->cpts remains NULL in the following cases:
+>>>
+>>> I realized that the cases I mentioned are not explained clearly. Therefore, I
+>>> will mention the cases again, along with the section of code they correspond to,
+>>> in order to make it clear.
+>>>
+>>> Case-1: am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not
+>>> enabled. This corresponds to the following section within am65_cpsw_init_cpts():
+>>>
+>>> if (!IS_ENABLED(CONFIG_TI_K3_AM65_CPTS))
+>>> 	return 0;
+>>>
+>>> In this case, common->cpts remains NULL, but it is not a problem even if the
+>>> am65_cpsw_nuss_probe() fails later, since the am65_cpts_release() function is
+>>> NOP. Thus, this case is not an issue.
+>>>
+>>> Case-2: am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not present
+>>> in the device tree. This corresponds to the following section within
+>>> am65_cpsw_init_cpts():
+>>>
+>>> node = of_get_child_by_name(dev->of_node, "cpts");
+>>> if (!node) {
+>>> 	dev_err(dev, "%s cpts not found\n", __func__);
+>>> 	return -ENOENT;
+>>> }
+>>>
+>>> In this case as well, common->cpts remains NULL, but it is not a problem because
+>>> the probe fails and the execution jumps to "err_of_clear", which doesn't invoke
+>>> am65_cpsw_cpts_cleanup(). Therefore, common->cpts being NULL is not a problem.
+>>>
+>>> Case-3 and Case-4 are described later in this mail.
+>>>
+>>>>> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
+>>>>> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
+>>>>> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
+>>>>> function with a return value of 0 when cpts is disabled.
+>>>>
+>>>> In this case common->cpts is not NULL and is set to error pointer.
+>>>> Probe will continue normally.
+>>>> Is it OK to call any of the cpts APIs with invalid handle?
+>>>> Also am65_cpts_release() will be called with invalid handle.
+>>>
+>>> Yes Roger, thank you for pointing it out. When I wrote "cpts is disabled", I had
+>>> meant that the following section is executed within the am65_cpsw_init_cpts()
+>>> function:
+>>>
+>>> Case-3:
+>>>
+>>> cpts = am65_cpts_create(dev, reg_base, node);
+>>> if (IS_ERR(cpts)) {
+>>> 	int ret = PTR_ERR(cpts);
+>>>
+>>> 	of_node_put(node);
+>>> 	if (ret == -EOPNOTSUPP) {
+>>> 		dev_info(dev, "cpts disabled\n");
+>>> 		return 0;
+>>> 	}
+>>
+>> This code block is unreachable, because of config earlier.
+>>   1916 static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
+>>   1917 {
+>> ...
+>>   1923         if (!IS_ENABLED(CONFIG_TI_K3_AM65_CPTS))
+>>   1924                 return 0;
+>> ...
+>>   1933         cpts = am65_cpts_create(dev, reg_base, node);
+>>   1934         if (IS_ERR(cpts)) {
+>>   1935                 int ret = PTR_ERR(cpts);
+>>   1936
+>>   1937                 of_node_put(node);
+>>   1938                 if (ret == -EOPNOTSUPP) {
+>>   1939                         dev_info(dev, "cpts disabled\n");
+>>   1940                         return 0;
+>>   1941                 }
+>>
+>> You should delete all the logic above.
+> 
+> Leon,
+> 
+> I did not realize that the code block is unreachable. I had assumed it was valid
+> and handled the case where the CONFIG_TI_K3_AM65_CPTS config is enabled and one
+> of the functions within am65_cpts_create() return -EOPNOTSUPP, since this
+> section of code was already present. I analyzed the possible return values of
+> all the functions within am65_cpts_create() and like you pointed out, none of
+> them seem to return -EOPNOTSUPP.
+> 
+> 
+> Roger,
+> 
+> Please let me know if you can identify a case where CONFIG_TI_K3_AM65_CPTS is
+> enabled and one of the functions within the am65_cpts_create() function return
+> -EOPNOTSUPP. I was unable to find one after analyzing the return values.
 
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+I couldn't find either.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/scripts/python/flamegraph.py | 107 +++++++++++++++++++-----
- 1 file changed, 85 insertions(+), 22 deletions(-)
+> Therefore, I shall proceed with adding a cleanup patch which deletes the
+> unreachable code block, followed by updating this patch with Leon's first
+> suggestion of dropping am65_cpsw_cpts_cleanup() entirely, since common->cpts
+> being NULL won't have any problem and am65_cpts_release() can be invoked
+> directly. I will post these two patches as the v3 series if there are no issues.
 
-diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
-index b6af1dd5f816..cf7ce8229a6c 100755
---- a/tools/perf/scripts/python/flamegraph.py
-+++ b/tools/perf/scripts/python/flamegraph.py
-@@ -19,12 +19,34 @@
- # pylint: disable=missing-function-docstring
- 
- from __future__ import print_function
--import sys
--import os
--import io
- import argparse
-+import hashlib
-+import io
- import json
-+import os
- import subprocess
-+import sys
-+import urllib.request
-+
-+minimal_html = """<head>
-+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
-+</head>
-+<body>
-+  <div id="chart"></div>
-+  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
-+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
-+  <script type="text/javascript">
-+  const stacks = [/** @flamegraph_json **/];
-+  // Note, options is unused.
-+  const options = [/** @options_json **/];
-+
-+  var chart = flamegraph();
-+  d3.select("#chart")
-+        .datum(stacks[0])
-+        .call(chart);
-+  </script>
-+</body>
-+"""
- 
- # pylint: disable=too-few-public-methods
- class Node:
-@@ -50,16 +72,6 @@ class FlameGraphCLI:
-         self.args = args
-         self.stack = Node("all", "root")
- 
--        if self.args.format == "html" and \
--                not os.path.isfile(self.args.template):
--            print("Flame Graph template {} does not exist. Please install "
--                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
--                  "package, specify an existing flame graph template "
--                  "(--template PATH) or another output format "
--                  "(--format FORMAT).".format(self.args.template),
--                  file=sys.stderr)
--            sys.exit(1)
--
-     @staticmethod
-     def get_libtype_from_dso(dso):
-         """
-@@ -128,16 +140,63 @@ class FlameGraphCLI:
-             }
-             options_json = json.dumps(options)
- 
-+            template_md5sum = None
-+            if self.args.format == "html":
-+                if os.path.isfile(self.args.template):
-+                    template = f"file://{self.args.template}"
-+                else:
-+                    if not self.args.allow_download:
-+                        print(f"""Warning: Flame Graph template '{self.args.template}'
-+does not exist. To avoid this please install a package such as the
-+js-d3-flame-graph or libjs-d3-flame-graph, specify an existing flame
-+graph template (--template PATH) or use another output format (--format
-+FORMAT).""",
-+                              file=sys.stderr)
-+                        if self.args.input == "-":
-+                            print("""Not attempting to download Flame Graph template as script command line
-+input is disabled due to using live mode. If you want to download the
-+template retry without live mode. For example, use 'perf record -a -g
-+-F 99 sleep 60' and 'perf script report flamegraph'. Alternatively,
-+download the template from:
-+https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html
-+and place it at:
-+/usr/share/d3-flame-graph/d3-flamegraph-base.html""",
-+                                  file=sys.stderr)
-+                            quit()
-+                        s = None
-+                        while s != "y" and s != "n":
-+                            s = input("Do you wish to download a template from cdn.jsdelivr.net? (this warning can be suppressed with --allow-download) [yn] ").lower()
-+                        if s == "n":
-+                            quit()
-+                    template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
-+                    template_md5sum = "143e0d06ba69b8370b9848dcd6ae3f36"
-+
-             try:
--                with io.open(self.args.template, encoding="utf-8") as template:
--                    output_str = (
--                        template.read()
--                        .replace("/** @options_json **/", options_json)
--                        .replace("/** @flamegraph_json **/", stacks_json)
--                    )
--            except IOError as err:
--                print("Error reading template file: {}".format(err), file=sys.stderr)
--                sys.exit(1)
-+                with urllib.request.urlopen(template) as template:
-+                    output_str = "".join([
-+                        l.decode("utf-8") for l in template.readlines()
-+                    ])
-+            except Exception as err:
-+                print(f"Error reading template {template}: {err}\n"
-+                      "a minimal flame graph will be generated", file=sys.stderr)
-+                output_str = minimal_html
-+                template_md5sum = None
-+
-+            if template_md5sum:
-+                download_md5sum = hashlib.md5(output_str.encode("utf-8")).hexdigest()
-+                if download_md5sum != template_md5sum:
-+                    s = None
-+                    while s != "y" and s != "n":
-+                        s = input(f"""Unexpected template md5sum.
-+{download_md5sum} != {template_md5sum}, for:
-+{output_str}
-+continue?[yn] """).lower()
-+                    if s == "n":
-+                        quit()
-+
-+            output_str = output_str.replace("/** @options_json **/", options_json)
-+            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
-+
-             output_fn = self.args.output or "flamegraph.html"
-         else:
-             output_str = stacks_json
-@@ -172,6 +231,10 @@ if __name__ == "__main__":
-                         choices=["blue-green", "orange"])
-     parser.add_argument("-i", "--input",
-                         help=argparse.SUPPRESS)
-+    parser.add_argument("--allow-download",
-+                        default=False,
-+                        action="store_true",
-+                        help="allow unprompted downloading of HTML template")
- 
-     cli_args = parser.parse_args()
-     cli = FlameGraphCLI(cli_args)
--- 
-2.39.0.314.g84b9a713c41-goog
 
+cheers,
+-roger
