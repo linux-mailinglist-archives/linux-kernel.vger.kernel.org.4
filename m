@@ -2,128 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A08F67297B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1DD67297C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjARUdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S230268AbjARUdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjARUbm (ORCPT
+        with ESMTP id S230206AbjARUcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:31:42 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FCC5F395;
-        Wed, 18 Jan 2023 12:31:20 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IJcXFn020232;
-        Wed, 18 Jan 2023 20:31:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qsmgMKIfCvzFFP+MW1CT1qJ5I9c85Ggjf4gT7J2pj34=;
- b=ZnIhzh7fmOaXDn9gXPjpDlfcBk8gbgwnTKldks3GWAfl5Fo2g5JJGs2h6IwxTfyuLmiT
- Ya895bjFgp1Qtf4qhunOzQ+1Y+MFeSYls0UWUZAv3IKjiBusKzIOyEpJSvNq8DQAjFce
- Xj7y2DLmCjfpR8qJ1WQHRcmcaEjtOMoeSUl5L4qZSVGnQvIzGzVOOnagpKL89BeJ3FNV
- szfMGJQHMwAVnNPOaBGugLHAycq49x10nhj97rrgHylx4NCIf6RbajJ72sla5fEfBG+w
- uNMEnr3vr6N6D5PItld/1QtbUk7z9mAQPv+AWu6cGBMC76DMGWDYkneOGiC9VNLst1ol 3A== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6bu0ty8t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 20:31:19 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IK2MJZ025991;
-        Wed, 18 Jan 2023 20:31:18 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3n3m17ytp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 20:31:18 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IKVGc88782376
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 20:31:17 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90C0358043;
-        Wed, 18 Jan 2023 20:31:16 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14CDC58055;
-        Wed, 18 Jan 2023 20:31:16 +0000 (GMT)
-Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.endicott.ibm.com (unknown [9.60.85.43])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Jan 2023 20:31:15 +0000 (GMT)
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, pasic@linux.ibm.com
-Subject: [PATCH v2 6/6] s390/vfio_ap: increase max wait time for reset verification
-Date:   Wed, 18 Jan 2023 15:31:11 -0500
-Message-Id: <20230118203111.529766-7-akrowiak@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230118203111.529766-1-akrowiak@linux.ibm.com>
-References: <20230118203111.529766-1-akrowiak@linux.ibm.com>
+        Wed, 18 Jan 2023 15:32:22 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FF75F3A5;
+        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1442977d77dso260743fac.6;
+        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V5afsl4HoXzkYc7n5OJf2Nf55ZwHbUkKJOhGaeA31CE=;
+        b=XuCuphEn7vFAiIWMWcu9wpU1F4dt5pvxpSOX4tyHZkdtFxAj1euR95IHhPJN+QSXuf
+         lHPwKMqBf3jTsDvaIzmUk4qsGojr2ozVW0G9iwM17F/dSx3FmMV5duSS8AZGPlcj8bQG
+         5pE8ds32biAlArhdO853TV+HzP5njFuYWBCUhCksjihkIw4jjNepZEX76YWAv9vMjEFG
+         GoVzpaNYiRCRFwx0JtcqbWGebRuTv6AfGuNlgCANBsxm25svnnW1MF9BckHpWj0tf6Dl
+         1TWptxyAOez8ts/6WH3jkj15HGJLYL+ZofU4XtzrPEaaaLdD5etFjFR3sDYa284nTSom
+         YaaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V5afsl4HoXzkYc7n5OJf2Nf55ZwHbUkKJOhGaeA31CE=;
+        b=nqsyxN6VIINxDLIuHESBcFcCwGFd4BguMqm474zBIPpnvEQU8eSOWUtrYM1toJw2Mu
+         fgl2AV8AdBh+oZevt/aJXjztdoyt5DCN2u4ukdYiRZxPhIm1f13QtCeSwZ5ajQfpz+/C
+         rnqZYeYtVddz5ySNxYf7605JuvRF893p0DNw4uobRAyPGtJ5GzlKV2zrwGSPrs+70mJE
+         eDd372CjkHIbhnfYOrWBTz7e6owP1oo/+/rWfpHFZBoSykdwB1/qSfyy/jqTvc1iPyKl
+         Jlphj5UFc85xcpVDkNy3SAi9qUguxeFH/LUgYVzRWx1RPrF+SR5B/ONaPe0VRYBSDNgw
+         k30A==
+X-Gm-Message-State: AFqh2kqrR0eL9OHFi1g93vF4UnvPRE4ny/Vjqele7jrTgWBSPoqftlop
+        IAFZEYvoDJOted99Kv2CvS4=
+X-Google-Smtp-Source: AMrXdXvt+1GIPyEwKgECbtF7dcEmoIOyuNWdQSfnYEUhAf+veKcW+sCfnGtJYmoWZi9Btv7HXPX6kw==
+X-Received: by 2002:a05:6870:e0ce:b0:15f:3bb9:7b3d with SMTP id a14-20020a056870e0ce00b0015f3bb97b3dmr5169475oab.28.1674073939147;
+        Wed, 18 Jan 2023 12:32:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i8-20020a056870344800b0013b92b3ac64sm18772149oah.3.2023.01.18.12.32.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 12:32:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 18 Jan 2023 12:32:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] kunit: memcpy: Split slow memcpy tests into
+ MEMCPY_SLOW_KUNIT_TEST
+Message-ID: <20230118203216.GA987351@roeck-us.net>
+References: <20230118200653.give.574-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6CsUgAbO6BkWfh49ecze4VLWjeB-MeTe
-X-Proofpoint-ORIG-GUID: 6CsUgAbO6BkWfh49ecze4VLWjeB-MeTe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 malwarescore=0 spamscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301180169
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118200653.give.574-kees@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Increase the maximum time to wait for verification of a queue reset
-operation to 200ms.
+On Wed, Jan 18, 2023 at 12:06:54PM -0800, Kees Cook wrote:
+> Since the long memcpy tests may stall a system for tens of seconds
+> in virtualized architecture environments, split those tests off under
+> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/lkml/20221226195206.GA2626419@roeck-us.net
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v3: fix defaults, avoid redundant returns.
+> v2: https://lore.kernel.org/all/20230114005408.never.756-kees@kernel.org/
+> v1: https://lore.kernel.org/lkml/20230107040203.never.112-kees@kernel.org
+> ---
+>  lib/Kconfig.debug  | 9 +++++++++
+>  lib/memcpy_kunit.c | 3 +++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 881c3f84e88a..149d6403b8a9 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2566,6 +2566,15 @@ config MEMCPY_KUNIT_TEST
+>  
+>  	  If unsure, say N.
+>  
+> +config MEMCPY_SLOW_KUNIT_TEST
+> +	bool "Include exhaustive memcpy tests"
+> +	depends on MEMCPY_KUNIT_TEST
+> +	default y
+> +	help
+> +	  Some memcpy tests are quite exhaustive in checking for overlaps
+> +	  and bit ranges. These can be very slow, so they are split out
+> +	  as a separate config, in case they need to be disabled.
+> +
+>  config IS_SIGNED_TYPE_KUNIT_TEST
+>  	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 89128551448d..90f3aa9e909f 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -309,6 +309,8 @@ static void set_random_nonzero(struct kunit *test, u8 *byte)
+>  
+>  static void init_large(struct kunit *test)
+>  {
+> +	if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST))
+> +		kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
+>  
+>  	/* Get many bit patterns. */
+>  	get_random_bytes(large_src, ARRAY_SIZE(large_src));
+> @@ -327,6 +329,7 @@ static void init_large(struct kunit *test)
+>   */
+>  static void copy_large_test(struct kunit *test, bool use_memmove)
+>  {
+> +
 
-Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
----
- drivers/s390/crypto/vfio_ap_ops.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Some whitespace noise slipped in here.
 
-diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-index 68be34362680..d665e1bc494a 100644
---- a/drivers/s390/crypto/vfio_ap_ops.c
-+++ b/drivers/s390/crypto/vfio_ap_ops.c
-@@ -30,6 +30,9 @@
- #define AP_QUEUE_UNASSIGNED "unassigned"
- #define AP_QUEUE_IN_USE "in use"
- 
-+#define MAX_RESET_CHECK_WAIT	200	/* Sleep max 200ms for reset check	*/
-+#define AP_RESET_INTERVAL		20	/* Reset sleep interval (20ms)		*/
-+
- static int vfio_ap_mdev_reset_queues(struct ap_queue_table *qtable);
- static struct vfio_ap_queue *vfio_ap_find_queue(int apqn);
- static const struct vfio_device_ops vfio_ap_matrix_dev_ops;
-@@ -1626,11 +1629,12 @@ static int apq_status_check(int apqn, struct ap_queue_status *status)
- 
- static int apq_reset_check(struct vfio_ap_queue *q)
- {
--	int iters = 2, ret;
-+	int ret;
-+	int iters = MAX_RESET_CHECK_WAIT / AP_RESET_INTERVAL;
- 	struct ap_queue_status status;
- 
--	while (iters--) {
--		msleep(20);
-+	for (; iters > 0; iters--) {
-+		msleep(AP_RESET_INTERVAL);
- 		status = ap_tapq(q->apqn, NULL);
- 		ret = apq_status_check(q->apqn, &status);
- 		if (ret != -EBUSY)
--- 
-2.31.1
+Guenter
 
+>  	init_large(test);
+>  
+>  	/* Copy a growing number of non-overlapping bytes ... */
+> -- 
+> 2.34.1
+> 
