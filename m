@@ -2,190 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE886672666
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7203672667
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjARSLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S230465AbjARSL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjARSLi (ORCPT
+        with ESMTP id S230460AbjARSLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 13:11:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D9F55290
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:11:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37ECBB81E13
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C680DC433D2;
-        Wed, 18 Jan 2023 18:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674065492;
-        bh=gr6AG1xtmIKls/C6W3LPutwiHESNaUcxHVkX4DZbsZc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XreLFk/FgMeXNYJSoGZ/LIwfMUrSzm6RhNMqDrADHCeE+HlpL0uu8rfCbJE1TDdFo
-         vEI18sb59X8CCiXSwar2vTJIAYJbXSULjK/y5Qv9Wo/tKxae8mJCg2FBD90JugLenn
-         V5LOqJ3vEjm7p78Qhd2VppGs27NGyHrBDw7kkg6tIsxcvAXfv72gCNLA4B0L7BUxt8
-         sCMZV65CP8rZO+tBnjswRvthHZiDQ1QdYxengtPICMOpxhFA+gO0xz0+CuQLCLYsXP
-         UHrkyvPTvrjfc2P63ACpdnXSZjuclYzVanNYr1M5tRhzf5JcxAWZXLc0aEaMVG83pA
-         J+/tLoBu9blqQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6D8435C0920; Wed, 18 Jan 2023 10:11:32 -0800 (PST)
-Date:   Wed, 18 Jan 2023 10:11:32 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] sched/deadline: fix inactive_task_timer splat with
- CONFIG_PREEMPT_RT
-Message-ID: <20230118181132.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230104181701.43224-1-wander@redhat.com>
- <20230110013333.GH4028633@paulmck-ThinkPad-P17-Gen-1>
- <CAAq0SUm+VkoM38ULJE6zuajA3Tc7KYbiH51uc9oKjGE+RhDmXg@mail.gmail.com>
- <20230110222725.GT4028633@paulmck-ThinkPad-P17-Gen-1>
- <xhsmha62fj0nh.mognet@vschneid.remote.csb>
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811C256EEC;
+        Wed, 18 Jan 2023 10:11:36 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so1604053wmq.1;
+        Wed, 18 Jan 2023 10:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-id:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=thZKzDaf41DOaDvzUVPdA+iiPMIsDq7PLQWiM3Lp49Q=;
+        b=Vq1msGhnpVMBs0zCpH22rqL+V1G+NR5pHVjXueq2cjEuSWKRT5Tf4G5i/gWOJPb286
+         UrKqQz+uKIRbbYxRKSmT6JE2O382ES5NqftxXoJmA8FsNg4NwKOW81DDKyXAt4f/obtA
+         mctWLMjRW7npj4ete1xJ10W2deeD3Cmu1pVMmoSeoXvWzjFJPeKAV3Zrnw/8ef/mMZw8
+         h73RmkTVUBvFPKJC1v31anMHtftuvhjOZqOhlTfmdcTN1dNW/G7JQCzUTHpLAQIUTt1C
+         Haj23BWbKf0MMySxEDWFpLCXsOK5R3mZ7oANDD26sLCRNUJTKg2rHbav7mETH8u7Y20V
+         cWJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-id:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=thZKzDaf41DOaDvzUVPdA+iiPMIsDq7PLQWiM3Lp49Q=;
+        b=AfNQ5Kf2zSsHR5nOrrhhGFUrIr33W0RhgeSJ+1uzDmSQY4vOWo1pZ/mjNIrZr6EZuq
+         NtumSi50gfMRCW9C92bVMqyufFmBDBM1RiP9A9ZnmIC77HEF6GDa4bufd5IYO+ISA+vb
+         sPulxO1RGVN/a3ogVRioB0qkdwc/vhoP+2d8v6wsHRBYtdEYPe5za0mR90DDzuMkVKj1
+         mE9Fvz+bQ30YQmxqoCFY41k63haoNkdcGCpUGteum27tjujt2PGfi2kPbaeeBzEoW2Vu
+         3VSN5hsGogN14qxxLc0WzHGF7lC73+5rtnKSC3IcPP9spI5HvOSnZ/OTYC7BTNtZMevm
+         2QoQ==
+X-Gm-Message-State: AFqh2krii+HsbizZxJlGp08lMEKJAnWW+Qu21Kkv/EM9EJ2Kj2E02tZP
+        n4ApImat2gjCszmxR9yP2Cw=
+X-Google-Smtp-Source: AMrXdXvC3macKDxyUb+BGmYm7BcOTuI3IMOhA5CwUNKGqTvZkc3N9iWtCJJjx6b7+Ycm553BQ/XoJw==
+X-Received: by 2002:a05:600c:3422:b0:3da:f651:782c with SMTP id y34-20020a05600c342200b003daf651782cmr3620699wmp.25.1674065495006;
+        Wed, 18 Jan 2023 10:11:35 -0800 (PST)
+Received: from fedora.36 ([78.10.207.59])
+        by smtp.gmail.com with ESMTPSA id l36-20020a05600c1d2400b003d1e1f421bfsm3107205wms.10.2023.01.18.10.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 10:11:34 -0800 (PST)
+Date:   Wed, 18 Jan 2023 19:11:33 +0100 (CET)
+From:   =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+cc:     =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>,
+        linux-kernel@vger.kernel.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, cosmin.tanislav@analog.com,
+        jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio: addac: adi,74115: Add missing
+ maxItems
+In-Reply-To: <20230117195723.GA3527095-robh@kernel.org>
+Message-ID: <16a6e9ae-291f-d0b9-9529-4c72588d9668@student.agh.edu.pl>
+References: <20230115022558.145076-1-mchl.grzlk@gmail.com> <20230117195723.GA3527095-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmha62fj0nh.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463809024-2123484451-1674063327=:48246"
+Content-ID: <bf5b20f9-7b9d-cbf5-db48-9adad995e2@student.agh.edu.pl>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:57:38PM +0000, Valentin Schneider wrote:
-> On 10/01/23 14:27, Paul E. McKenney wrote:
-> > On Tue, Jan 10, 2023 at 05:52:03PM -0300, Wander Lairson Costa wrote:
-> >> On Mon, Jan 9, 2023 at 10:40 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >> >
-> >> > On Wed, Jan 04, 2023 at 03:17:01PM -0300, Wander Lairson Costa wrote:
-> >> > > inactive_task_timer() executes in interrupt (atomic) context. It calls
-> >> > > put_task_struct(), which indirectly acquires sleeping locks under
-> >> > > PREEMPT_RT.
-> >> > >
-> >> > > Below is an example of a splat that happened in a test environment:
-> >> > >
-> >> > >  CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
-> >> > >  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
-> >> > >  Call Trace:
-> >> > >  dump_stack_lvl+0x57/0x7d
-> >> > >  mark_lock_irq.cold+0x33/0xba
-> >> > >  ? stack_trace_save+0x4b/0x70
-> >> > >  ? save_trace+0x55/0x150
-> >> > >  mark_lock+0x1e7/0x400
-> >> > >  mark_usage+0x11d/0x140
-> >> > >  __lock_acquire+0x30d/0x930
-> >> > >  lock_acquire.part.0+0x9c/0x210
-> >> > >  ? refill_obj_stock+0x3d/0x3a0
-> >> > >  ? rcu_read_lock_sched_held+0x3f/0x70
-> >> > >  ? trace_lock_acquire+0x38/0x140
-> >> > >  ? lock_acquire+0x30/0x80
-> >> > >  ? refill_obj_stock+0x3d/0x3a0
-> >> > >  rt_spin_lock+0x27/0xe0
-> >> > >  ? refill_obj_stock+0x3d/0x3a0
-> >> > >  refill_obj_stock+0x3d/0x3a0
-> >> > >  ? inactive_task_timer+0x1ad/0x340
-> >> > >  kmem_cache_free+0x357/0x560
-> >> > >  inactive_task_timer+0x1ad/0x340
-> >> > >  ? switched_from_dl+0x2d0/0x2d0
-> >> > >  __run_hrtimer+0x8a/0x1a0
-> >> > >  __hrtimer_run_queues+0x91/0x130
-> >> > >  hrtimer_interrupt+0x10f/0x220
-> >> > >  __sysvec_apic_timer_interrupt+0x7b/0xd0
-> >> > >  sysvec_apic_timer_interrupt+0x4f/0xd0
-> >> > >  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
-> >> > >  asm_sysvec_apic_timer_interrupt+0x12/0x20
-> >> > >  RIP: 0033:0x7fff196bf6f5
-> >> > >
-> >> > > Instead of calling put_task_struct() directly, we defer it using
-> >> > > call_rcu(). A more natural approach would use a workqueue, but since
-> >> > > in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-> >> > > the code would become more complex because we would need to put the
-> >> > > work_struct instance in the task_struct and initialize it when we
-> >> > > allocate a new task_struct.
-> >> > >
-> >> > > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> >> > > Cc: Paul McKenney <paulmck@kernel.org>
-> >> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> >> > > ---
-> >> > >  kernel/sched/build_policy.c |  1 +
-> >> > >  kernel/sched/deadline.c     | 24 +++++++++++++++++++++++-
-> >> > >  2 files changed, 24 insertions(+), 1 deletion(-)
-> >> > >
-> >> > > diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-> >> > > index d9dc9ab3773f..f159304ee792 100644
-> >> > > --- a/kernel/sched/build_policy.c
-> >> > > +++ b/kernel/sched/build_policy.c
-> >> > > @@ -28,6 +28,7 @@
-> >> > >  #include <linux/suspend.h>
-> >> > >  #include <linux/tsacct_kern.h>
-> >> > >  #include <linux/vtime.h>
-> >> > > +#include <linux/rcupdate.h>
-> >> > >
-> >> > >  #include <uapi/linux/sched/types.h>
-> >> > >
-> >> > > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> >> > > index 9ae8f41e3372..ab9301d4cc24 100644
-> >> > > --- a/kernel/sched/deadline.c
-> >> > > +++ b/kernel/sched/deadline.c
-> >> > > @@ -1405,6 +1405,13 @@ static void update_curr_dl(struct rq *rq)
-> >> > >       }
-> >> > >  }
-> >> > >
-> >> > > +static void delayed_put_task_struct(struct rcu_head *rhp)
-> >> > > +{
-> >> > > +     struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-> >> > > +
-> >> > > +     __put_task_struct(task);
-> >> >
-> >> > Please note that BH is disabled here.  Don't you therefore
-> >> > need to schedule a workqueue handler?  Perhaps directly from
-> >> > inactive_task_timer(), or maybe from this point.  If the latter, one
-> >> > way to skip the extra step is to use queue_rcu_work().
-> >> >
-> >>
-> >> My initial work was using a workqueue [1,2]. However, I realized I
-> >> could reach a much simpler code with call_rcu().
-> >> I am afraid my ignorance doesn't allow me to get your point. Does
-> >> disabling softirq imply atomic context?
-> >
-> > Given that this problem occurred in PREEMPT_RT, I am assuming that the
-> > appropriate definition of "atomic context" is "cannot call schedule()".
-> > And you are in fact not permitted to call schedule() from a bh-disabled
-> > region.
-> >
-> > This also means that you cannot acquire a non-raw spinlock in a
-> > bh-disabled region of code in a PREEMPT_RT kernel, because doing
-> > so can invoke schedule.
-> 
-> But per the PREEMPT_RT lock "replacement", non-raw spinlocks end up
-> invoking schedule_rtlock(), which should be safe vs BH disabled
-> (local_lock() + rcu_read_lock()):
-> 
->   6991436c2b5d ("sched/core: Provide a scheduling point for RT locks")
-> 
-> Unless I'm missing something else?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-No, you miss nothing.  Apologies for my confusion!
+---1463809024-2123484451-1674063327=:48246
+Content-Type: text/plain; charset=ISO-8859-2; format=flowed
+Content-Transfer-Encoding: 8BIT
+Content-ID: <35a7aac2-3d12-ac32-14cf-0679fc484c6@student.agh.edu.pl>
 
-(I could have sworn that someone else corrected me on this earlier,
-but I don't see it right off hand.)
+On Tue, 17 Jan 2023, Rob Herring wrote:
 
-							Thanx, Paul
+> On Sun, Jan 15, 2023 at 03:25:58AM +0100, Micha³ Grzelak wrote:
+>> Running 'make dt_binding_check' gives following warnings:
+>> iio/addac/adi,ad74115.example.dtb:
+>> addac@0: adi,conv2-range-microvolt: 'oneOf' conditional failed, one must
+>> be fixed:
+>>         4282967296 is not one of [-2500000, 0]
+>>         4282967296 is not one of [-12000000, 0]
+>>         -2500000 was expected
+>>         -104000 was expected
+>>         625000 was expected
+>>
+>> addac@0: Unevaluated properties are not allowed
+>> ('adi,conv2-range-microvolt' was unexpected)
+>>         From schema: iio/addac/adi,ad74115.yaml
+>
+> I think your dtschema version is out of date. I don't see this issue.
+> The issue has to do with signed types and there have been some fixes
+> related to them.
+>
+
+Right. Issue vanished after upgrade, sorry for unnecessary noise.
+
+Best regards,
+Micha³
+---1463809024-2123484451-1674063327=:48246--
