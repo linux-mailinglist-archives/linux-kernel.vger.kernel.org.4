@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458C1671E8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FBD671E8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjARNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S229685AbjARNyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjARNwW (ORCPT
+        with ESMTP id S230482AbjARNxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:52:22 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA29302AA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:07 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id r9so11131325wrw.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:07 -0800 (PST)
+        Wed, 18 Jan 2023 08:53:31 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ABB792AC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:22 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x10so46733540edd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGtX6Xomvv0Zvw2ChFFYcesiMxlqQe3xiNuEHsKpSTI=;
-        b=aYMOE6r2RwGDo2+O3pCFAAAp4eGo7OmMUWFbRB3a77/fVjwokTqPn9kXh30jyVeMox
-         Hzmcc4N81HICUURefsIZFdfr6BFiYFGIxA3ij0PboFjTieLvkrWfzSb0h0ArvWRlvTk6
-         K0AagclJyek/0P62wwX5dxm1g8SDWefXV85XdUTC4ZDFBQ/ZkLdALrSJJHQEPqNGAwst
-         6BQwR4Y235nywAmhdYqBK51yE3NQzkHe2Eudk3ODs2xXc6N7znk2rHPD/zTBsJN7YBVJ
-         axnmE9tuSNVrjXUn0Q0euvj3Hr01NfVrIPvF/uyCo474SVyfPqZPNEzt8XLuhS0dKJP7
-         p2jw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FgU9OV81VKNoacRkVG36DRzxhv8CRha3b241eiVTJOU=;
+        b=y943B9lru//EWuO6UMJJ3vYBFc9kuFRe8EjbWug/kitczTxrPpjydtYgnSU571IYWv
+         +10nJmvwC2S1qdxe0a7VIXrt7bzL9NvjoXV3JZYw+VkaPwnRR1TUxM3E6e+NsfiW1b7H
+         aSPjBKope0li8mNKoIOPXNqgXp1EkC6e6zkTjFI8vGKtu3kjWGTgXPlmjIoeGg+w9kOj
+         /rpQ6HH9TgFbHoKWCZn7HixvsioMN/DPvLsVrdK7Em/ga84IAYxB0pY2SovhaM0RId41
+         w7ZXC1UNMetFeJ8uLvCAahBmOMWXZGN0r5d1Gq0wo466bNPl+MfUBjrXacklZzeRvb5i
+         PMiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aGtX6Xomvv0Zvw2ChFFYcesiMxlqQe3xiNuEHsKpSTI=;
-        b=y0a9d54Yg7Z+yL8mQ+tbNiRfz/ianJYCXZD7/wPQ2H0/UiiT0pJ5QHx4qsg4/BXwUt
-         IPVTzRw2otbpNLDpxre8bDIHrsfoEZ0mnnKs3/hqXrwGcNkINqMH0/el2LOB49A/OzB6
-         Y1ZfSRsDEU6+v5bKmRroTv9wzhzggFsFQH7D0yXEmrRt9u3X2o7c31IulSY8iYu15Q/x
-         O4xl89O101TJudjoBG2Hkcrs1Ic7RsNkRGNKYY31YzSvXPVO8dKUtSRoucmCJLavjtZy
-         O3AGAhFI6AzJ1wdebARvp3pdzYP3NFt8kcJL+jwYC1MX9ihsEM+5A8xf/LtXwHjbfp4C
-         A3Vw==
-X-Gm-Message-State: AFqh2ko4wR34qKZ9UIfyB+HTwmWyfNF7RTsklDruduSX7qpAaKqHPsEt
-        6AiuNC76334EYRn7U6XtLeLEaQ==
-X-Google-Smtp-Source: AMrXdXsdPNHbsnLa957TyAPdquE49R/mFl4FzMmguPl+EyrKQ+vdLmzBBsVjlm87ZzA5gtRrAd6iEA==
-X-Received: by 2002:a5d:6952:0:b0:242:1415:ab02 with SMTP id r18-20020a5d6952000000b002421415ab02mr5805169wrw.9.1674048245943;
-        Wed, 18 Jan 2023 05:24:05 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:37dc:5071:959c:93e4? ([2a01:e0a:982:cbb0:37dc:5071:959c:93e4])
-        by smtp.gmail.com with ESMTPSA id b16-20020adff910000000b002bdf8dd6a8bsm9289920wrr.80.2023.01.18.05.24.05
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FgU9OV81VKNoacRkVG36DRzxhv8CRha3b241eiVTJOU=;
+        b=ol7wMHl5enHDkkcxAD1SQzpf1thXMlwS2E+1h3Xthfn0spEfejqcpTki6KvuYyRUFM
+         Cm6j1ZdmnvRHlaFiyxusOhGzyzOcfYzy97nE9pkC8PPFL3BOFtleCC/EOM9v+PezXkmc
+         VQyqaS7w0UTkVTN5+jpbHoWY2wNkMS8IesdurpC9+7IubhfHBtVtggz/pTAdd2uYn9Bs
+         ykLDOjkc5RRP1zYrNrRen9O7dFjwV6nAf3QXyMlNT1H5hivfKNQFDfpPE+I8LNe8/SW5
+         FaMiioivKSXhA7V+tBX6/s88Ay+cSgYUlLG91yKBaCqRW8j94tUimCX0chHt4mNgl8+S
+         Ow/g==
+X-Gm-Message-State: AFqh2koBlO6gTzy7QSN8jY8fQOFiooY3KQs1QwZz9BoaX4U8ij93uZ8t
+        F7Xbnf2PBwJqhNgFZbW5FMewIQ==
+X-Google-Smtp-Source: AMrXdXsp1+bb0awcdMhn3BnuUs3hIK4/cegYEOwsfNWiIBA5PynRHZ2PN+kb9S7rYz2DsxQSTLEm2g==
+X-Received: by 2002:aa7:c1ce:0:b0:49e:89e:3b36 with SMTP id d14-20020aa7c1ce000000b0049e089e3b36mr7350531edp.30.1674048261163;
+        Wed, 18 Jan 2023 05:24:21 -0800 (PST)
+Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
+        by smtp.gmail.com with ESMTPSA id q24-20020a056402249800b0046ac460da13sm14286777eda.53.2023.01.18.05.24.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 05:24:05 -0800 (PST)
-Message-ID: <0dbefaec-e1de-fc3f-54f2-c5fe75a28c7c@linaro.org>
-Date:   Wed, 18 Jan 2023 14:24:04 +0100
+        Wed, 18 Jan 2023 05:24:20 -0800 (PST)
+Message-ID: <3b3709ce-c1ea-155f-f175-c07a3765836d@linaro.org>
+Date:   Wed, 18 Jan 2023 14:24:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 7/9] arm64: dts: amlogic: Used onboard usb hub reset on
- odroid c4
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc8280xp: Define CMA region for CRD
+ and X13s
 Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230118044418.875-1-linux.amoon@gmail.com>
- <20230118044418.875-8-linux.amoon@gmail.com>
- <b112ee8e-93ab-2c30-ced3-82ff858884b4@linaro.org>
- <CANAwSgQ1b8vj+HCBS0ARnNqOwKHU8VzzsB7htL3L4Sr_v6Y=VQ@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CANAwSgQ1b8vj+HCBS0ARnNqOwKHU8VzzsB7htL3L4Sr_v6Y=VQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20230117184630.2775905-1-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230117184630.2775905-1-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -90,100 +81,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 12:55, Anand Moon wrote:
-> Hi Neil,
-> 
-> Thanks for your review comments.
-> 
-> On Wed, 18 Jan 2023 at 13:59, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>
->> On 18/01/2023 05:44, Anand Moon wrote:
->>> On Odroid c4 previously use gpio-hog to reset the usb hub,
->>> switch to used on-board usb hub reset to enable the usb hub
->>> and enable power to hub.
->>>
->>> USB hub is combination of USB 2.0 and USB 3.0 root hub so
->>> use peer-hub node to link then.
->>>
->>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>> ---
->>> v2: - fix the compatible string.
->>>       - Fix the hub node to use peer-hub to link the usb 2.0 and usb 3.0.
->>> ---
->>>    .../boot/dts/amlogic/meson-sm1-odroid-c4.dts  | 36 ++++++++++++-------
->>>    1 file changed, 23 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
->>> index 8c30ce63686e..d04768a66bfe 100644
->>> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
->>> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
->>> @@ -26,20 +26,30 @@ led-blue {
->>>        sound {
->>>                model = "ODROID-C4";
->>>        };
->>> -};
->>>
->>> -&gpio {
->>> -     /*
->>> -      * WARNING: The USB Hub on the Odroid-C4 needs a reset signal
->>> -      * to be turned high in order to be detected by the USB Controller
->>> -      * This signal should be handled by a USB specific power sequence
->>> -      * in order to reset the Hub when USB bus is powered down.
->>> -      */
->>> -     hog-0 {
->>> -             gpio-hog;
->>> -             gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
->>> -             output-high;
->>> -             line-name = "usb-hub-reset";
->>> +     /* USB hub supports both USB 2.0 and USB 3.0 root hub */
->>> +     usb-hub {
->>> +             dr_mode = "host";
->>
->> Is this really needed ?
->>
-> I got carried forward from the other device tree binding,
-> If not needed I will drop this.
-> 
->>> +             #address-cells = <1>;
->>> +             #size-cells = <0>;
->>> +
->>> +             /* 2.0 hub on port 1 */
->>> +             hub_2_0: hub@1 {
->>> +                     compatible = "usb2109,2817";
->>> +                     reg = <1>;
->>> +                     peer-hub = <&hub_3_0>;
->>> +                     reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
->>> +                     vdd-supply = <&vcc_5v>;
->>> +             };
->>> +
->>> +             /* 3.1 hub on port 4 */
->>> +             hub_3_0: hub@2 {
->>> +                     compatible = "usb2109,817";
->>> +                     reg = <2>;
->>> +                     peer-hub = <&hub_2_0>;
->>> +                     reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
->>> +                     vdd-supply = <&vcc_5v>;
->>> +             };
->>
->> The final discussion in v1 was to drop this /usb-hub node and move the
->> hub_2_0 & hub_3_0 node under the dwc3 node.
->>
-> 
-> Yes, but It did not work back then, since these are two different events
-> USB node will try to bring the PHY and dwc2 and dwc2 nodes up.
-> USB hub supports the reset of the USB hub and links the power supply
-> to the ports.
-> This works on this board.
 
-Forget the dwc2 node, the dwc2 since GXL is device mode only, so you need to put both
-nodes in the dwc3 node which is host-only.
 
-Neil
-
+On 17.01.2023 19:46, Bjorn Andersson wrote:
+> While booting the CRD, a series of CMA allocation errors can be seen in
+> the kernel log:
 > 
->> Neil
->>
-> Thanks
+>   cma: cma_alloc: reserved: alloc failed, req-size: 128 pages, ret: -12
 > 
-> -Anand
+> Growing the CMA region and querying /proc/meminfo indicates that a newly
+> booted system (currently) uses 64MB CMA.
+> 
+> Define a memory region sufficiently large for the current use cases, to
+> avoid forcing users to add this themselves, through command line
+> parameters etc.
+> 
+> While fixing the CRD define the same region for the X13s.
+> 
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sc8280xp-lenovo-thinkpad-x13s
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+> 
+> Changes since v1:
+> - Updated commit message
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                | 9 +++++++++
+>  .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts      | 9 +++++++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index 4e92dc28e2ce..6f686377dc3e 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -128,6 +128,15 @@ vreg_wwan: regulator-wwan {
+>  
+>  		regulator-boot-on;
+>  	};
+> +
+> +	reserved-memory {
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			size = <0x0 0x8000000>;
+> +			reusable;
+> +			linux,cma-default;
+> +		};
+> +	};
+>  };
+>  
+>  &apps_rsc {
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 55ecbee19a58..8d485e0000cf 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -153,6 +153,15 @@ vreg_wwan: regulator-wwan {
+>  		regulator-boot-on;
+>  	};
+>  
+> +	reserved-memory {
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			size = <0x0 0x8000000>;
+> +			reusable;
+> +			linux,cma-default;
+> +		};
+> +	};
+> +
+>  	thermal-zones {
+>  		skin-temp-thermal {
+>  			polling-delay-passive = <250>;
