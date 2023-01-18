@@ -2,160 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0132367189B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5C66718AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjARKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S229777AbjARKN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjARKKx (ORCPT
+        with ESMTP id S229787AbjARKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:10:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5449576F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:18:18 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E7FF321018;
-        Wed, 18 Jan 2023 09:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674033496; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=438nt7jo257JN0NDxWdsUaukIUI34KHbTWX932uaDtE=;
-        b=g0sbYN+brR7TQ3n0vUl1nEJKdgAcwgOWuLvnlLuh4Ljm8yKKlyqyRzYGHHlJ5G4hSinscU
-        ZwP8lIlnwOEaHQfwZADHptX9kCosF1BY1oVLj3MPqBe8P2Z04nTaF1g+yfLgx9dN97jLsY
-        EwMwLYb1PZKQWvPDR+TlDdUSo2KdsOI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C1E3139D2;
-        Wed, 18 Jan 2023 09:18:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ThJ9Ble5x2OpMgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 09:18:15 +0000
-Date:   Wed, 18 Jan 2023 10:18:08 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
- control it
-Message-ID: <Y8e5UNrjMWPuragY@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-13-surenb@google.com>
- <Y8a4+bV1dYNAiUkD@dhcp22.suse.cz>
- <Y8a66gshQkkhC1cT@dhcp22.suse.cz>
- <CAJuCfpF2ciMbMFgqa4GqYqg8zjpnmBoNZDG23V0+w017LXeU3w@mail.gmail.com>
- <Y8cZMt01Z1FvVFXh@casper.infradead.org>
+        Wed, 18 Jan 2023 05:11:25 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F19AAA4;
+        Wed, 18 Jan 2023 01:18:37 -0800 (PST)
+X-UUID: 139659e2971111ed945fc101203acc17-20230118
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=uWVRgR/ln+/38QVR0gXqYzqLESpxkY2yEXnYWdBeJ4A=;
+        b=sOnXAnoVHKQl6QPF4kN20ZgBH5YEhb3sJ4G3bY7qkP9dg/X3DsRcbts+qKZ2rOLse1OEGuHqyivZo8JMmw1jkelmD1qb5EvTvxEqbU21VdDuX+U4/zO43ga833w7ZwsXmb5ledYDLAhf7MyH1d5swmvV28lopyJIEXyJPXxhC80=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:92713461-2396-4aca-ae49-57b9335c8682,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:ac1a2af6-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: 139659e2971111ed945fc101203acc17-20230118
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1935262506; Wed, 18 Jan 2023 17:18:31 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 18 Jan 2023 17:18:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 18 Jan 2023 17:18:30 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 0/9] Add and update some driver nodes for MT8186 SoC
+Date:   Wed, 18 Jan 2023 17:18:20 +0800
+Message-ID: <20230118091829.755-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8cZMt01Z1FvVFXh@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 17-01-23 21:54:58, Matthew Wilcox wrote:
-> On Tue, Jan 17, 2023 at 01:21:47PM -0800, Suren Baghdasaryan wrote:
-> > On Tue, Jan 17, 2023 at 7:12 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Tue 17-01-23 16:04:26, Michal Hocko wrote:
-> > > > On Mon 09-01-23 12:53:07, Suren Baghdasaryan wrote:
-> > > > > Introduce a per-VMA rw_semaphore to be used during page fault handling
-> > > > > instead of mmap_lock. Because there are cases when multiple VMAs need
-> > > > > to be exclusively locked during VMA tree modifications, instead of the
-> > > > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
-> > > > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
-> > > > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
-> > > > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
-> > > > > locked.
-> > > >
-> > > > I have to say I was struggling a bit with the above and only understood
-> > > > what you mean by reading the patch several times. I would phrase it like
-> > > > this (feel free to use if you consider this to be an improvement).
-> > > >
-> > > > Introduce a per-VMA rw_semaphore. The lock implementation relies on a
-> > > > per-vma and per-mm sequence counters to note exclusive locking:
-> > > >         - read lock - (implemented by vma_read_trylock) requires the the
-> > > >           vma (vm_lock_seq) and mm (mm_lock_seq) sequence counters to
-> > > >           differ. If they match then there must be a vma exclusive lock
-> > > >           held somewhere.
-> > > >         - read unlock - (implemented by vma_read_unlock) is a trivial
-> > > >           vma->lock unlock.
-> > > >         - write lock - (vma_write_lock) requires the mmap_lock to be
-> > > >           held exclusively and the current mm counter is noted to the vma
-> > > >           side. This will allow multiple vmas to be locked under a single
-> > > >           mmap_lock write lock (e.g. during vma merging). The vma counter
-> > > >           is modified under exclusive vma lock.
-> > >
-> > > Didn't realize one more thing.
-> > >             Unlike standard write lock this implementation allows to be
-> > >             called multiple times under a single mmap_lock. In a sense
-> > >             it is more of mark_vma_potentially_modified than a lock.
-> > 
-> > In the RFC it was called vma_mark_locked() originally and renames were
-> > discussed in the email thread ending here:
-> > https://lore.kernel.org/all/621612d7-c537-3971-9520-a3dec7b43cb4@suse.cz/.
-> > If other names are preferable I'm open to changing them.
-> 
-> I don't want to bikeshed this, but rather than locking it seems to be
-> more:
-> 
-> 	vma_start_read()
-> 	vma_end_read()
-> 	vma_start_write()
-> 	vma_end_write()
-> 	vma_downgrade_write()
-> 
-> ... and that these are _implemented_ with locks (in part) is an
-> implementation detail?
+This series is based on matthias github, for-next.
 
-Agreed!
+Changes since v1:
+ - Remove the unnecessary trailing number
+ - Add aliases for ovl* and rdma*
 
-> Would that reduce people's confusion?
+Allen-KH Cheng (9):
+  arm64: dts: mediatek: mt8186: Add MTU3 nodes
+  dt-bindings: spmi: spmi-mtk-pmif: Document mediatek,mt8195-spmi as
+    fallback of mediatek,mt8186-spmi
+  arm64: dts: mediatek: mt8186: Add SPMI node
+  arm64: dts: mediatek: mt8186: Add ADSP mailbox nodes
+  arm64: dts: mediatek: mt8186: Add ADSP node
+  arm64: dts: mediatek: mt8186: Add audio controller node
+  arm64: dts: mediatek: mt8186: Add DPI node
+  dt-bindings: display: mediatek: Fix the fallback for
+    mediatek,mt8186-disp-ccorr
+  arm64: dts: mediatek: mt8186: Add display nodes
 
-Yes I believe that naming it less like a locking primitive will clarify
-it. vma_{start,end}_[try]read is better indeed. I am wondering about the
-write side of things because that is where things get confusing. There
-is no explicit write lock nor unlock. vma_start_write sounds better than
-the vma_write_lock but it still lacks that pairing with vma_end_write
-which is never the right thing to call. Wouldn't vma_mark_modified and
-vma_publish_changes describe the scheme better?
+ .../display/mediatek/mediatek,ccorr.yaml      |   2 +-
+ .../bindings/spmi/mtk,spmi-mtk-pmif.yaml      |  11 +-
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 342 ++++++++++++++++++
+ 3 files changed, 351 insertions(+), 4 deletions(-)
 
-Downgrade case is probably the least interesting one because that is
-just one off thing that can be completely hidden from any code besides
-mmap_write_downgrade so I wouldn't be too concern about that one.
-
-But as you say, no need to bikeshed this too much. Great naming is hard
-and if the scheme is documented properly we can live with a suboptimal
-naming as well.
 -- 
-Michal Hocko
-SUSE Labs
+2.18.0
+
