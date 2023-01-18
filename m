@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8DD671870
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4511A67185C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjARKCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S229791AbjARJ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjARJxN (ORCPT
+        with ESMTP id S230299AbjARJyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:53:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A338B15567;
-        Wed, 18 Jan 2023 01:04:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CF8861734;
-        Wed, 18 Jan 2023 09:04:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91599C433D2;
-        Wed, 18 Jan 2023 09:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674032698;
-        bh=Og++GJb7hTbwoPbP/PbiJ4khLA5V7ZfC8ZOMe7Q2oZE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=onJ2d5SBJ3KicWcxuISKEZT7OC+yjoOjMYNpXkzOF27Sw+/vekm9D5AVL04vwguKX
-         kiwMGVYZ6Snu7m60/z9LjxONpccDUYHmJdKb25OWSMswXpZm2mfnWjLi7fE5XVor6L
-         Yv6vF8K8XQ8o/l3tSpkfur4wgRK5MXXKNQKnN1D53/pr4m+SwZ3a44ojPoeTAG4M26
-         KVk4aOp6YJE8xmNi6vwBlVUgVp9+c83JN/3xt0s0aYKXoHsPMc1PGC9Z2+8ESRGbPj
-         IE4YnyeW6hJ8XQV02EqOuEY740XzYR0IzoAecPbs7FcIhWAIKtpSWLtiazZuqk3MKC
-         M1dOIEK7kX6YQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pI4Nm-0001Is-Mt; Wed, 18 Jan 2023 10:05:22 +0100
-Date:   Wed, 18 Jan 2023 10:05:22 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 03/19] irqdomain: Drop leftover brackets
-Message-ID: <Y8e2Ut3xayFUcw+f@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-4-johan+linaro@kernel.org>
- <877cxklv09.ffs@tglx>
+        Wed, 18 Jan 2023 04:54:37 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0728F7D2;
+        Wed, 18 Jan 2023 01:06:21 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30I969TF104115;
+        Wed, 18 Jan 2023 03:06:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674032769;
+        bh=/da+ssa5GDD6vweT7++x50Ek4g6HrX+yJTbxHpmjcwM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=VyNGN4/1efZ4VWOZP9XZ1ZoGXQAyENpXrPzInwoHAhnEOEfgizsU16ssgE562PMRp
+         DRdaKZV1+uC3V60HC9/3mwet8bCBCpAsqqzpLNdjz041VRpbvZ+0nJ8aaXFTTPaMMW
+         AkWwnDK2F2Zs2UjXTcVAAcBLeltrPztSxf8LEASw=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30I969HG007343
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Jan 2023 03:06:09 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
+ Jan 2023 03:06:08 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 18 Jan 2023 03:06:08 -0600
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30I963Jf062854;
+        Wed, 18 Jan 2023 03:06:04 -0600
+Message-ID: <998410e8-7856-2b15-4312-e8f6fe868587@ti.com>
+Date:   Wed, 18 Jan 2023 14:36:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877cxklv09.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Milind Parab <mparab@cadence.com>,
+        Jian Wang <jian-wang@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH] PCI: cadence: Fix next function value in case of ARI
+Content-Language: en-US
+To:     Achal Verma <a-verma1@ti.com>
+References: <20230118072035.3381993-1-a-verma1@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230118072035.3381993-1-a-verma1@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:19:02PM +0100, Thomas Gleixner wrote:
-> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> > Drop some unnecessary brackets that were left in place when the
-> > corresponding code was updated.
+Hello Achal,
+
+On 18/01/23 12:50, Achal Verma wrote:
+> From: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
 > 
-> This is really the wrong patch order. Real fixes first, then the
-> cleanups and cosmetics.
+> Next function field in ARI_CAP_AND_CTR field register for last
+> function should be zero but thats not the case, so this patch
+> programs the next function field for last function as zero.
+> 
+> Signed-off-by: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
+> ---
+>  drivers/pci/controller/cadence/pcie-cadence-ep.c | 15 ++++++++++++++-
+>  drivers/pci/controller/cadence/pcie-cadence.h    |  6 ++++++
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> index b8b655d4047e..6b6904cf0123 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> @@ -565,7 +565,8 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+>  	struct cdns_pcie *pcie = &ep->pcie;
+>  	struct device *dev = pcie->dev;
+>  	int max_epfs = sizeof(epc->function_num_map) * 8;
+> -	int ret, value, epf;
+> +	int ret, epf, last_fn;
+> +	u32 reg, value;
+>  
+>  	/*
+>  	 * BIT(0) is hardwired to 1, hence function 0 is always enabled
+> @@ -573,6 +574,18 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+>  	 */
+>  	cdns_pcie_writel(pcie, CDNS_PCIE_LM_EP_FUNC_CFG, epc->function_num_map);
+>  
+> +	/* Setup ARI Next Function Number.
 
-Yeah, that's what I'd normally do. Perhaps I took Marc's:
+Please follow the standard multi-line commenting style with the first line being
+"/*" followed by the comment on the next line.
 
-	No, let's put the code in shape *first*, then add work on the
-	locking, as it should make the patch simpler. Backports aren't
-	my concern, really.
+> +	 * This field should point to the next physical Function and 0 for
+> +	 * last Function.
+> +	 */
+> +	last_fn = find_last_bit(&epc->function_num_map, BITS_PER_LONG);
+> +	reg     = CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(last_fn);
+> +
+> +	// Clear Next Function Number for the last function used.
 
-	https://lore.kernel.org/lkml/87v8rhwf9r.wl-maz@kernel.org/
+Please enclose the comment within /* and */.
 
-too literally.
-
-Johan
+Regards,
+Siddharth.
