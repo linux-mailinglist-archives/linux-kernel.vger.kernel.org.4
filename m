@@ -2,123 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6AA67245C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A4467272F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjARRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
+        id S230163AbjARSiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjARRBX (ORCPT
+        with ESMTP id S229518AbjARSiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:01:23 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AD45BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:22 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15f64f2791dso5829088fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DJBZdN4kSLIlLl8kPVsTumsNteLxan9/Bu7rB/h9NIk=;
-        b=ecAOyczQCTbiITKL2h/jHtACGOR0iJ2EQF7lthUuPAgymOdRLiYelJAF++vP6TGAOc
-         MXa0wIhKP64NJxuPY6hUpfJY50pLqfUviyFQgxwmkZDdvvVY7y4piI+iuclZDGar5zvO
-         hxbZlC4EfpSx2dm9/weoMEVNjOuSothO2LjCo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DJBZdN4kSLIlLl8kPVsTumsNteLxan9/Bu7rB/h9NIk=;
-        b=aQc9l873VsdIzVrpqk1L1DizIDOrxJ1SDYICWxd4OgbwJ9XbBjfwK7Vfro66B54MMz
-         okzs13VHMdeDzAdf0vfrEUjlvCCcaEfJGYMES0py2NloA933OUdyp2K/e2EvAujoSVNM
-         crocyhEmNr5eI4qcDJoTkjOO2j9h+eMHvWrBGHjhplgy7KqORbZ4g/wHYQLwfXQh8H8x
-         Eteq9i/l69FvcH9akmVReLPa7nuGMaO6g8sdsGFpgPqRrFQ3CJFjQztsqPo1WmWcikL0
-         RmqrzeSsQUcvhzsdW51xaPXDsbb7ymCX3tn8JY92ZI6srJRvu8XRVnsoZ1iWQvJAKG7c
-         tpEQ==
-X-Gm-Message-State: AFqh2krchPZ0p0AJ8tV9QPW+0wzC7CnbwOU2qzr2pkqnFgjEt7WgL/yh
-        Wxd4ZAj2T9zO7ZNchIKynhxkRPhxfFpjNbzy
-X-Google-Smtp-Source: AMrXdXums2QA/bUwPK7TpSTwP9ELAXyhEFonaJZ14pVVsbRfYrjPfCGe6TopbYTi0oBuuxxM27/CdA==
-X-Received: by 2002:a05:6870:3b0f:b0:15f:9ab4:a308 with SMTP id gh15-20020a0568703b0f00b0015f9ab4a308mr162452oab.7.1674061281153;
-        Wed, 18 Jan 2023 09:01:21 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b007054feab4aesm22506939qki.27.2023.01.18.09.01.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:01:20 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id d13so24157279qvj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:20 -0800 (PST)
-X-Received: by 2002:a05:6214:5f82:b0:534:252f:b091 with SMTP id
- ls2-20020a0562145f8200b00534252fb091mr343909qvb.130.1674061280149; Wed, 18
- Jan 2023 09:01:20 -0800 (PST)
+        Wed, 18 Jan 2023 13:38:16 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC9A65BC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674067094; x=1705603094;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OlBzbupfhV2bmyY8s2x6GJLsiZW8YnpaxbAPUhUsLXU=;
+  b=c1EGxFdVOgGSMK3didkAMgvz72SuQbg2mkj2KVo+43SrQECj6imRd+tZ
+   goD4LOwqWOo7eRIsJfdJ3c/Y/gXQC7vhlJ7uHOq2EQnqL6wXK/qGOA6A+
+   IfH8e3kKv3i6v1hOms5443wqGfbmRLKZP87YC2QTCvZmAHkN+9xuGURLP
+   aVC5lV3e7Skrn1+s2D6qPXzZEWNihnowtPmgqS5zE3t2Dxz5RqhkWaEgi
+   pBowXh5MjWiEwnh9JcvRJvSnTHbP5CsWKTZrvP30R22qu2GYAoOf6OGoA
+   xtj935gR67VVRvLq2fREETe9poj1OyPMazyrFpp9s6+WCZ4Rx+g80NY8L
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327138509"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="327138509"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 10:37:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="783777243"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="783777243"
+Received: from jaibarra-mobl.amr.corp.intel.com (HELO [10.209.131.1]) ([10.209.131.1])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 10:37:54 -0800
+Message-ID: <72ba99a9-3d21-b3be-4a23-6570078aaae9@linux.intel.com>
+Date:   Wed, 18 Jan 2023 10:37:34 -0600
 MIME-Version: 1.0
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-2-kirill.shutemov@linux.intel.com> <Y8gVJUDEFE5U7xAq@hirez.programming.kicks-ass.net>
- <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com> <Y8gi+/Y0qcjtRf6m@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y8gi+/Y0qcjtRf6m@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 18 Jan 2023 09:01:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjtUnjYSttxsYtXu2VtsTeBjoaL8Je8cjWqFMJzw1-MhQ@mail.gmail.com>
-Message-ID: <CAHk-=wjtUnjYSttxsYtXu2VtsTeBjoaL8Je8cjWqFMJzw1-MhQ@mail.gmail.com>
-Subject: Re: [PATCHv14 01/17] x86/mm: Rework address range check in get_user()
- and put_user()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/8] soundwire: stream: Add specific prep/deprep
+ commands to port_prep callback
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
+ <20230118160452.2385494-2-sbinding@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230118160452.2385494-2-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 8:49 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > We'll still return -EFAULT, of course, we're just getting rid of the
-> >
-> >         WARN_ONCE(trapnr == X86_TRAP_GP,
-> >                 "General protection fault in user access.
-> > Non-canonical address?");
-> >
-> > issue that comes from not being so exact about the address limit any more.
->
-> Ah indeed, so for !LAM we'd now print the message were we would not
-> before (the whole TASK_SIZE_MAX+ range).
 
-Yeah.
 
-We could just remove that warning entirely, but it has been useful for
-syzbot catching random user addresses that weren't caught by
-"access_ok()" when people did bad bad things (ie using the
-non-checking "__copy_from_user()" and friends).
+On 1/18/23 10:04, Stefan Binding wrote:
+> Currently, port_prep callback only has commands for PRE_PREP, PREP,
+> and POST_PREP, which doesn't directly say whether this is for a
+> prepare or deprepare call. Extend the command list enum to say
+> whether the call is for prepare or deprepare aswell.
+> 
+> Also remove SDW_OPS_PORT_PREP from sdw_port_prep_ops as this is unused,
+> and update this enum to be simpler and more consistent with enum
+> sdw_clk_stop_type.
 
-I'm not sure how much that warning is worth any more - and for
-get_user() and put_user() itself it buys us nothing, since by
-definition _those_ do the range checking. Christoph getting rid of the
-set_fs() model simplified a lot of our user address checking.
+yes, I don't know why this PORT_PREP was added, clearly the prepare part
+is something that would be done with standard registers without the need
+to inform the codec driver. The codec driver only need the pre- and
+post- notifications.
 
-But I think it's easier to just keep that existing warning about "how
-did you get a non-canonical address here" for other user accesses, and
-just make get/put_user() use that _ASM_EXTABLE() version that doesn't
-do it.
+Good cleanup!
 
-               Linus
+
+> Note: Currently, the only users of SDW_OPS_PORT_POST_PREP are codec
+> drivers sound/soc/codecs/wsa881x.c and sound/soc/codecs/wsa883x.c, both
+> of which seem to assume that POST_PREP only occurs after a prepare,
+> even though it would also have occurred after a deprepare. Since it
+> doesn't make sense to mark the port prepared after a deprepare, changing
+> the enum to separate PORT_DEPREP from PORT_PREP should make the check
+> for PORT_PREP in those drivers be more logical.
+> 
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+>  drivers/soundwire/stream.c    | 4 ++--
+>  include/linux/soundwire/sdw.h | 8 +++++---
+>  2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+> index df3b36670df4c..1652fb5737d9d 100644
+> --- a/drivers/soundwire/stream.c
+> +++ b/drivers/soundwire/stream.c
+> @@ -469,7 +469,7 @@ static int sdw_prep_deprep_slave_ports(struct sdw_bus *bus,
+>  	}
+>  
+>  	/* Inform slave about the impending port prepare */
+> -	sdw_do_port_prep(s_rt, prep_ch, SDW_OPS_PORT_PRE_PREP);
+> +	sdw_do_port_prep(s_rt, prep_ch, prep ? SDW_OPS_PORT_PRE_PREP : SDW_OPS_PORT_PRE_DEPREP);
+>  
+>  	/* Prepare Slave port implementing CP_SM */
+>  	if (!dpn_prop->simple_ch_prep_sm) {
+> @@ -501,7 +501,7 @@ static int sdw_prep_deprep_slave_ports(struct sdw_bus *bus,
+>  	}
+>  
+>  	/* Inform slaves about ports prepared */
+> -	sdw_do_port_prep(s_rt, prep_ch, SDW_OPS_PORT_POST_PREP);
+> +	sdw_do_port_prep(s_rt, prep_ch, prep ? SDW_OPS_PORT_POST_PREP : SDW_OPS_PORT_POST_DEPREP);
+>  
+>  	/* Disable interrupt after Port de-prepare */
+>  	if (!prep && intr)
+> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+> index 3cd2a761911ff..547fc1b30a51a 100644
+> --- a/include/linux/soundwire/sdw.h
+> +++ b/include/linux/soundwire/sdw.h
+> @@ -569,13 +569,15 @@ struct sdw_prepare_ch {
+>   * enum sdw_port_prep_ops: Prepare operations for Data Port
+>   *
+>   * @SDW_OPS_PORT_PRE_PREP: Pre prepare operation for the Port
+> - * @SDW_OPS_PORT_PREP: Prepare operation for the Port
+> + * @SDW_OPS_PORT_PRE_DEPREP: Pre deprepare operation for the Port
+>   * @SDW_OPS_PORT_POST_PREP: Post prepare operation for the Port
+> + * @SDW_OPS_PORT_POST_DEPREP: Post deprepare operation for the Port
+>   */
+>  enum sdw_port_prep_ops {
+>  	SDW_OPS_PORT_PRE_PREP = 0,
+> -	SDW_OPS_PORT_PREP = 1,
+> -	SDW_OPS_PORT_POST_PREP = 2,
+> +	SDW_OPS_PORT_PRE_DEPREP,
+> +	SDW_OPS_PORT_POST_PREP,
+> +	SDW_OPS_PORT_POST_DEPREP,
+>  };
+>  
+>  /**
