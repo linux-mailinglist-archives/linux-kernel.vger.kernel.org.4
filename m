@@ -2,121 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDE267258D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DD4672597
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjARRwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S229904AbjARRyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjARRwu (ORCPT
+        with ESMTP id S229564AbjARRyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:52:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658D54B49C;
-        Wed, 18 Jan 2023 09:52:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16813B81E69;
-        Wed, 18 Jan 2023 17:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D82C43396;
-        Wed, 18 Jan 2023 17:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674064364;
-        bh=/Gzr/WR95XMtTWMDsej0/0zxfcG/BPllZVyCwX0lM6g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fp574ofBRl53RryS+r3YEUQmBy2MWwMXjhG7vQtUhrJf6LKDt67DX8BUISkoG2Uti
-         WoBCyuJEOz3podTg4r4Kphc8ssJgU4ND0pwm6Dzch+HfBVkTsZHOW9RwBAHGi/3Ytp
-         IoCOOuUslmdW+dRxJs1BoTn4PjIFpIzkaDEdJz1pxXzfK0DbIUI48OlS7YMuW9gTiQ
-         YZIyQ0ejF8YuQCvPXsabh99XYmQu0V8i8neWI47Q6qAcj+s7fA+gfBD8jygCBTtqlo
-         blXPaDNdc4lnWgwR+NeRB+MGgfP0SyHUKJoakjeh16zyGTFfjmb8QRMmUkoaGKIZRE
-         HG37jgpgijwCw==
-Received: by mail-lf1-f53.google.com with SMTP id bp15so52786765lfb.13;
-        Wed, 18 Jan 2023 09:52:44 -0800 (PST)
-X-Gm-Message-State: AFqh2kpx5yuivhUR3FZK7l0fxyFJHQ7hUH5nnHXAqXufhK/YwGrOOLeX
-        E26YGx7LB+YjAF4Y21y2dKT0KqTzaDyTqC5voDU=
-X-Google-Smtp-Source: AMrXdXsz3DFc0OfRs+agT2c4zNuyTjg7T6vN1ft7TBpReHglOHBeqGsmrSwT3VPQxp0zw2d14zoZpRBoF2VVObWLE1I=
-X-Received: by 2002:ac2:48b7:0:b0:4b6:e71d:94a6 with SMTP id
- u23-20020ac248b7000000b004b6e71d94a6mr586014lfg.476.1674064362704; Wed, 18
- Jan 2023 09:52:42 -0800 (PST)
+        Wed, 18 Jan 2023 12:54:20 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D94DE0A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:54:18 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so1969578wmb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:54:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TWpO1YbgA04yjZBzLFJGZr2Ux7J9tn5oLTa4Qr7uJbk=;
+        b=yPqo3wCU1xKWJPTbuSCKCbqYu6Q+pewK3OQ1KwO4DvrbPw4kUHaYyutclqFtr8rniv
+         rFB6x+jo6VQZ3dIlql4OO3K15gyVQVAKU3AYVC2LM+MZh6yPUdKhf9nv6PA2T845Jgx0
+         7yms/WQF5TaY3zASjHlGhI5n4Bamh23pq1kXrtkbHWpAmcRoSyGmggfj3vgMv2XT0hVc
+         ny3oYDCyascDlK2oamvzZXNSAKXv97QzBO8GY3CF9s0p+ggSH3VBEFKJ7FowVdowCM0s
+         lOyVHWx9INpOjZ9m5zUjoUnY8HVAxBrvv6R0qQ9om98BW0nVvP1h4U8BW7Fog/yjGxf+
+         Wzzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TWpO1YbgA04yjZBzLFJGZr2Ux7J9tn5oLTa4Qr7uJbk=;
+        b=euuxl28ArOk9u0tfF93bWuHrj129BE/QtNA0CaRDpCiq4yioPlSjRCao4Qqxjim/GQ
+         CNquwWT2YUDKtoAnfe32JvxQRIFAcH1bh2VElyimzlFApHdawpEMlQtoigCqGqCrhrsR
+         8EONdw4EldkN9YDG7JhMjPdJLluQDXBqm0+f8ZaEVr3vibfjOqKmfWncBFJqjTK/3zly
+         g/Cra8eG/t3F9p1qccEN9j7RbyWm4ft7dR3U8BFrQalmBWY3UllUZ7EUrvj6nBPOBtZG
+         8wpdFUOCkxEXpJsMg9nLxD8z6x92feWWtrA+3e0VOsQBYfRw9oxL+3Xy4RI9kREeHmrR
+         OXqQ==
+X-Gm-Message-State: AFqh2kq6NQAE98wZ9v2Al7CNqOBuEEic1KyKaYnM/MQljfYdyhgtaPZ9
+        Sh91ov3ZViBjw7owsyc2Gm5y0w==
+X-Google-Smtp-Source: AMrXdXuVbyarxnAiepfXzbwTR1RHkFZszrKxbE5DGbOdnNgX139UqeLC5+bUZ7kndu3Jzieu7igTOQ==
+X-Received: by 2002:a05:600c:4d93:b0:3d9:efd1:214d with SMTP id v19-20020a05600c4d9300b003d9efd1214dmr7568201wmp.25.1674064457145;
+        Wed, 18 Jan 2023 09:54:17 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003cf894dbc4fsm2730015wmq.25.2023.01.18.09.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 09:54:16 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>, de Goede <hdegoede@redhat.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, ath11k@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: net: wireless: minor whitespace and name cleanups
+Date:   Wed, 18 Jan 2023 18:54:13 +0100
+Message-Id: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
- <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
- <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
- <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu> <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 18 Jan 2023 09:52:29 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
-Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:07 AM Peter Zijlstra <peterz@infradead.org> wrote=
-:
->
-> On Tue, Jan 10, 2023 at 06:31:41AM +0000, Christophe Leroy wrote:
-> > Le 09/01/2023 =C4=85 21:51, Song Liu a =C3=A9crit :
->
-> > > Do you mean one tree will cause addr_[min|max] to be inaccurate?
-> > >
-> >
-> > Yes at least. On powerpc you will have module text below kernel,
-> > somewhere between 0xb0000000 and 0xcfffffff, and you will have module
-> > data in vmalloc area, somewhere between 0xf0000000 and 0xffffffff.
-> >
-> > If you have only one tree, any address between 0xc0000000 and 0xeffffff=
-f
-> > will trigger a tree search.
->
-> The current min/max thing is tied to the tree because of easy update on
-> remove, but module-insert/remove is not a performance critical path.
->
-> So I think it should be possible to have {min,max}[TYPES] pairs.  Either
-> brute force the removal -- using a linear scan of the mod->list to find
-> the new bounds on removal.
+Minor cleanups:
+ - Drop redundant blank lines,
+ - Correct indentaion in examples,
+ - Correct node names in examples to drop underscore and use generic
+   name.
 
-I think keeping an array of min/max pairs is an overkill.
-w/o CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, all the
-types will be allocated in the same range (MODULES_VADDR, MODULES_END),
-so one min/max pair should be enough.
-w/ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, there
-is a big gap between text allocation and data allocation. I think a second
-min/max pair will be useful here.
+No functional impact except adjusting to preferred coding style.
 
->
-> Or overengineer the whole thing and use an augmented tree to keep that
-> many heaps in sync during the update -- but this seems total overkill.
->
-> The only consideration is testing that many ranges in
-> __module_address(), this is already 2 cachelines worth of range-checks
-> -- which seems a little excessive.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/net/wireless/esp,esp8089.yaml    | 20 +++---
+ .../bindings/net/wireless/ieee80211.yaml      |  1 -
+ .../bindings/net/wireless/mediatek,mt76.yaml  |  1 -
+ .../bindings/net/wireless/qcom,ath11k.yaml    | 11 ++-
+ .../bindings/net/wireless/silabs,wfx.yaml     |  1 -
+ .../bindings/net/wireless/ti,wlcore.yaml      | 70 +++++++++----------
+ 6 files changed, 50 insertions(+), 54 deletions(-)
 
-Currently, min/max are updated on module load, but not on module unload.
-I guess we won't really need __module_address() to be that fast.
+diff --git a/Documentation/devicetree/bindings/net/wireless/esp,esp8089.yaml b/Documentation/devicetree/bindings/net/wireless/esp,esp8089.yaml
+index 5557676e9d4b..0ea84d6fe73e 100644
+--- a/Documentation/devicetree/bindings/net/wireless/esp,esp8089.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/esp,esp8089.yaml
+@@ -29,15 +29,15 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-      mmc {
+-          #address-cells = <1>;
+-          #size-cells = <0>;
+-
+-          wifi@1 {
+-              compatible = "esp,esp8089";
+-              reg = <1>;
+-              esp,crystal-26M-en = <2>;
+-          };
+-      };
++    mmc {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        wifi@1 {
++            compatible = "esp,esp8089";
++            reg = <1>;
++            esp,crystal-26M-en = <2>;
++        };
++    };
+ 
+ ...
+diff --git a/Documentation/devicetree/bindings/net/wireless/ieee80211.yaml b/Documentation/devicetree/bindings/net/wireless/ieee80211.yaml
+index e68ed9423150..d89f7a3f88a7 100644
+--- a/Documentation/devicetree/bindings/net/wireless/ieee80211.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/ieee80211.yaml
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ # Copyright (c) 2018-2019 The Linux Foundation. All rights reserved.
+-
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/net/wireless/ieee80211.yaml#
+diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+index f0c78f994491..7d526ff53fb7 100644
+--- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ # Copyright (c) 2018-2019 The Linux Foundation. All rights reserved.
+-
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/net/wireless/mediatek,mt76.yaml#
+diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+index 556eb523606a..5f4b141ba813 100644
+--- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ # Copyright (c) 2018-2019 The Linux Foundation. All rights reserved.
+-
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/net/wireless/qcom,ath11k.yaml#
+@@ -262,10 +261,10 @@ allOf:
+ examples:
+   - |
+ 
+-    q6v5_wcss: q6v5_wcss@CD00000 {
++    q6v5_wcss: remoteproc@cd00000 {
+         compatible = "qcom,ipq8074-wcss-pil";
+-        reg = <0xCD00000 0x4040>,
+-              <0x4AB000 0x20>;
++        reg = <0xcd00000 0x4040>,
++              <0x4ab000 0x20>;
+         reg-names = "qdsp6",
+                     "rmb";
+     };
+@@ -386,7 +385,7 @@ examples:
+         #address-cells = <2>;
+         #size-cells = <2>;
+ 
+-        qcn9074_0: qcn9074_0@51100000 {
++        qcn9074_0: wifi@51100000 {
+             no-map;
+             reg = <0x0 0x51100000 0x0 0x03500000>;
+         };
+@@ -463,6 +462,6 @@ examples:
+         qcom,smem-states = <&wlan_smp2p_out 0>;
+         qcom,smem-state-names = "wlan-smp2p-out";
+         wifi-firmware {
+-                iommus = <&apps_smmu 0x1c02 0x1>;
++            iommus = <&apps_smmu 0x1c02 0x1>;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml b/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
+index 583db5d42226..84e5659e50ef 100644
+--- a/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
+@@ -2,7 +2,6 @@
+ # Copyright (c) 2020, Silicon Laboratories, Inc.
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/net/wireless/silabs,wfx.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml b/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
+index e31456730e9f..f799a1e52173 100644
+--- a/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
+@@ -90,47 +90,47 @@ examples:
+ 
+     // For wl12xx family:
+     spi1 {
+-            #address-cells = <1>;
+-            #size-cells = <0>;
+-
+-            wlcore1: wlcore@1 {
+-                    compatible = "ti,wl1271";
+-                    reg = <1>;
+-                    spi-max-frequency = <48000000>;
+-                    interrupts = <8 IRQ_TYPE_LEVEL_HIGH>;
+-                    vwlan-supply = <&vwlan_fixed>;
+-                    clock-xtal;
+-                    ref-clock-frequency = <38400000>;
+-            };
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        wlcore1: wlcore@1 {
++            compatible = "ti,wl1271";
++            reg = <1>;
++            spi-max-frequency = <48000000>;
++            interrupts = <8 IRQ_TYPE_LEVEL_HIGH>;
++            vwlan-supply = <&vwlan_fixed>;
++            clock-xtal;
++            ref-clock-frequency = <38400000>;
++        };
+     };
+ 
+     // For wl18xx family:
+     spi2 {
+-            #address-cells = <1>;
+-            #size-cells = <0>;
+-
+-            wlcore2: wlcore@0 {
+-                    compatible = "ti,wl1835";
+-                    reg = <0>;
+-                    spi-max-frequency = <48000000>;
+-                    interrupts = <27 IRQ_TYPE_EDGE_RISING>;
+-                    vwlan-supply = <&vwlan_fixed>;
+-            };
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        wlcore2: wlcore@0 {
++            compatible = "ti,wl1835";
++            reg = <0>;
++            spi-max-frequency = <48000000>;
++            interrupts = <27 IRQ_TYPE_EDGE_RISING>;
++            vwlan-supply = <&vwlan_fixed>;
++        };
+     };
+ 
+     // SDIO example:
+     mmc3 {
+-            vmmc-supply = <&wlan_en_reg>;
+-            bus-width = <4>;
+-            cap-power-off-card;
+-            keep-power-in-suspend;
+-
+-            #address-cells = <1>;
+-            #size-cells = <0>;
+-
+-            wlcore3: wlcore@2 {
+-                    compatible = "ti,wl1835";
+-                    reg = <2>;
+-                    interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
+-            };
++        vmmc-supply = <&wlan_en_reg>;
++        bus-width = <4>;
++        cap-power-off-card;
++        keep-power-in-suspend;
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        wlcore3: wlcore@2 {
++            compatible = "ti,wl1835";
++            reg = <2>;
++            interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
++        };
+     };
+-- 
+2.34.1
 
-If there are no objections or suggestions. I will update the patches with a
-second min/max pair with CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
-
-Thanks,
-Song
-
->
-> (also, I note that module_addr_{min,max} are unused these days)
