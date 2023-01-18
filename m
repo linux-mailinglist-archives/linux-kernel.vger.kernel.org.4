@@ -2,60 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F186710EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461256710F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjARCOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S229742AbjARCOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjARCOA (ORCPT
+        with ESMTP id S229525AbjARCOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:14:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D536E2C646
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674007991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s6J/WHZNn/3SX2lLfl7aH2I2U9AvTu3J+4+/5IXf5mA=;
-        b=Dz+6BHDhe47PkPXH1k0S8L6pxa8IrVxQ5pVW4b6OrMR5zofnUbgxgHztUCgicma47SKUjH
-        ZFUmo1eIXqxuDHzl3wpv81iT8AOByHAdecOLvztdmf4IzF2VCXt/UAPHF4R0IdwaS+twUG
-        qV8lM9xsx92RBIgS4gxIycSkPB9wWMs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-hsWh1o42M4-y1LeMONrO4g-1; Tue, 17 Jan 2023 21:13:06 -0500
-X-MC-Unique: hsWh1o42M4-y1LeMONrO4g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8DD22805582;
-        Wed, 18 Jan 2023 02:13:05 +0000 (UTC)
-Received: from localhost (ovpn-13-29.pek2.redhat.com [10.72.13.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E67491121315;
-        Wed, 18 Jan 2023 02:13:04 +0000 (UTC)
-Date:   Wed, 18 Jan 2023 10:13:01 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
-        stephen.s.brennan@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
-Message-ID: <Y8dVrYl3evmhUi21@fedora>
-References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-3-bhe@redhat.com>
- <Y8VBqEzlvyDgxj83@lucifer>
+        Tue, 17 Jan 2023 21:14:41 -0500
+Received: from out20-87.mail.aliyun.com (out20-87.mail.aliyun.com [115.124.20.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA072C646;
+        Tue, 17 Jan 2023 18:14:39 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1684025|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.0108859-0.000814038-0.9883;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=17;RT=17;SR=0;TI=SMTPD_---.Qvn4t1z_1674008073;
+Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.Qvn4t1z_1674008073)
+          by smtp.aliyun-inc.com;
+          Wed, 18 Jan 2023 10:14:34 +0800
+Date:   Wed, 18 Jan 2023 10:14:35 +0800
+From:   Wang Yugui <wangyugui@e16-tech.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hch@lst.de
+Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+In-Reply-To: <Y8Znr6CAFi8ikhdH@kroah.com>
+References: <20230117151136.CB79.409509F4@e16-tech.com> <Y8Znr6CAFi8ikhdH@kroah.com>
+Message-Id: <20230118101433.734D.409509F4@e16-tech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8VBqEzlvyDgxj83@lucifer>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Becky! ver. 2.81.04 [en]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,125 +45,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/16/23 at 12:23pm, Lorenzo Stoakes wrote:
-> On Fri, Jan 13, 2023 at 11:19:16AM +0800, Baoquan He wrote:
-> > Through vmalloc API, a virtual kernel area is reserved for physical
-> > address mapping. And vmap_area is used to track them, while vm_struct
-> > is allocated to associate with the vmap_area to store more information
-> > and passed out.
-> >
-> > However, area reserved via vm_map_ram() is an exception. It doesn't have
-> > vm_struct to associate with vmap_area. And we can't recognize the
-> > vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
-> > freeing path will set va->vm = NULL before unmapping, please see
-> > function remove_vm_area().
-> >
-> > Meanwhile, there are two kinds of handling for vm_map_ram area. One is
-> > the whole vmap_area being reserved and mapped at one time through
-> > vm_map_area() interface; the other is the whole vmap_area with
-> > VMAP_BLOCK_SIZE size being reserved, while mapped into split regions
-> > with smaller size via vb_alloc().
-> >
-> > To mark the area reserved through vm_map_ram(), add flags field into
-> > struct vmap_area. Bit 0 indicates this is vm_map_ram area created
-> > through vm_map_ram() interface, while bit 1 marks out the type of
-> > vm_map_ram area which makes use of vmap_block to manage split regions
-> > via vb_alloc/free().
-> >
-> > This is a preparatoin for later use.
-> >
-> 
-> Small typo here :)
+Hi,
 
-Good catch, will fix it.
+> On Tue, Jan 17, 2023 at 03:11:37PM +0800, Wang Yugui wrote:
+> > Hi,
+> > 
+> > fstests(generic/034, xfs) panic when 6.1.7-rc1, but not panic when 6.1.6.
+> > 
+> > It seems patch *1 related.
+> > *1 Subject: blk-mq: move the srcu_struct used for quiescing to the tagset
+> > From: Christoph Hellwig <hch@lst.de>
+> > 
+> > This patch has been drop from 6.1.2-rc1. and it now added in 6.1.7-rc1 again.
+> > 
+> > the panic in 6.1.7-rc1 is almost same as that in 6.1.2-rc1.
+> 
+> Argh, yes, let me go drop these again.
+> 
+> Sasha, can you blacklist these from your tools so they don't get picked
+> up again?
 
-> 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > ---
-> >  include/linux/vmalloc.h |  1 +
-> >  mm/vmalloc.c            | 16 ++++++++++++----
-> >  2 files changed, 13 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> > index 096d48aa3437..69250efa03d1 100644
-> > --- a/include/linux/vmalloc.h
-> > +++ b/include/linux/vmalloc.h
-> > @@ -76,6 +76,7 @@ struct vmap_area {
-> >  		unsigned long subtree_max_size; /* in "free" tree */
-> >  		struct vm_struct *vm;           /* in "busy" tree */
-> >  	};
-> > +	unsigned long flags; /* mark type of vm_map_ram area */
-> >  };
-> >
-> >  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index d6ff058ef4d0..ab4825050b5c 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -1589,7 +1589,8 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
-> >  static struct vmap_area *alloc_vmap_area(unsigned long size,
-> >  				unsigned long align,
-> >  				unsigned long vstart, unsigned long vend,
-> > -				int node, gfp_t gfp_mask)
-> > +				int node, gfp_t gfp_mask,
-> > +				unsigned long va_flags)
-> >  {
-> >  	struct vmap_area *va;
-> >  	unsigned long freed;
-> > @@ -1635,6 +1636,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
-> >  	va->va_start = addr;
-> >  	va->va_end = addr + size;
-> >  	va->vm = NULL;
-> > +	va->flags = va_flags;
-> >
-> >  	spin_lock(&vmap_area_lock);
-> >  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
-> > @@ -1913,6 +1915,10 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
-> >
-> >  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
-> >
-> > +#define VMAP_RAM		0x1 /* indicates vm_map_ram area*/
-> > +#define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
-> > +#define VMAP_FLAGS_MASK		0x3
-> > +
-> >  struct vmap_block_queue {
-> >  	spinlock_t lock;
-> >  	struct list_head free;
-> > @@ -1988,7 +1994,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
-> >
-> >  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
-> >  					VMALLOC_START, VMALLOC_END,
-> > -					node, gfp_mask);
-> > +					node, gfp_mask,
-> > +					VMAP_RAM|VMAP_BLOCK);
-> >  	if (IS_ERR(va)) {
-> >  		kfree(vb);
-> >  		return ERR_CAST(va);
-> > @@ -2297,7 +2304,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
-> >  	} else {
-> >  		struct vmap_area *va;
-> >  		va = alloc_vmap_area(size, PAGE_SIZE,
-> > -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
-> > +				VMALLOC_START, VMALLOC_END,
-> > +				node, GFP_KERNEL, VMAP_RAM);
-> >  		if (IS_ERR(va))
-> >  			return NULL;
-> >
-> > @@ -2537,7 +2545,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
-> >  	if (!(flags & VM_NO_GUARD))
-> >  		size += PAGE_SIZE;
-> >
-> > -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
-> > +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
-> >  	if (IS_ERR(va)) {
-> >  		kfree(area);
-> >  		return NULL;
-> > --
-> > 2.34.1
-> >
-> 
-> Other than that typo,
-> 
-> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> 
+this panic does not happen on  upstream 6.2.0-rc4.
+or maybe we need a bigger patch set?
+
+Best Regards
+Wang Yugui (wangyugui@e16-tech.com)
+2023/01/18
 
