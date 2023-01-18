@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D91672182
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D41672184
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjARPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S230224AbjARPku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjARPki (ORCPT
+        with ESMTP id S230183AbjARPks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:40:38 -0500
+        Wed, 18 Jan 2023 10:40:48 -0500
 Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE6310DE;
-        Wed, 18 Jan 2023 07:40:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0BE6A6F;
+        Wed, 18 Jan 2023 07:40:46 -0800 (PST)
 Received: from local
         by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.96)
         (envelope-from <daniel@makrotopia.org>)
-        id 1pIAY6-0007gG-1J;
-        Wed, 18 Jan 2023 16:40:26 +0100
-Date:   Wed, 18 Jan 2023 15:40:19 +0000
+        id 1pIAYP-0007gi-0q;
+        Wed, 18 Jan 2023 16:40:45 +0100
+Date:   Wed, 18 Jan 2023 15:40:39 +0000
 From:   Daniel Golle <daniel@makrotopia.org>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
@@ -36,11 +36,14 @@ To:     AngeloGioacchino Del Regno
 Cc:     Steven Liu <steven.liu@mediatek.com>,
         Henry Yen <Henry.Yen@mediatek.com>,
         Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
-Subject: [PATCH v5 0/2] thermal: mediatek: add support for MT7986 and MT7981
-Message-ID: <cover.1674055882.git.daniel@makrotopia.org>
+Subject: [PATCH v5 1/2] thermal/drivers/mtk: use function pointer for
+ raw_to_mcelsius
+Message-ID: <69c17529e8418da3eec703dde31e1b01e5b0f7e8.1674055882.git.daniel@makrotopia.org>
+References: <cover.1674055882.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1674055882.git.daniel@makrotopia.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,47 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As requested in a previous review, first convert the if-else selection
-of the raw_to_mcelsius_* function to instead use a function pointer
-added to struct mtk_thermal. Then add thermal support for the MT7986
-SoC which can also be used on MT7981.
+Instead of having if-else logic selecting either raw_to_mcelsius_v1 or
+raw_to_mcelsius_v2 in mtk_thermal_bank_temperature introduce a function
+pointer raw_to_mcelsius to struct mtk_thermal which is initialized in the
+probe function.
 
-Device Tree bindings have already been merged[1].
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/thermal/mtk_thermal.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-Changes since v4: Only use switch statement where requested[2] and keep
-if-else logic in other places.
-
-When submitting v3, it looked like the patch series submitted by Amjad
-Ouled-Ameur ("thermal: mediatek: Add support for MT8365 SoC"[3]) which
-also adds this function pointer would be merged first. However, a
-re-spin of this series addressing the comments it has received has not
-yet been submitted. The change introducing the raw_to_mcelsius function
-pointer is hence being applied independently.
-
-Changes since v2: Rebase on top of pending patch introducing
-raw_to_mcelsius function pointer.
-Drop left-over macro extracting the unused adc_oe field.
-Use switch (...) instead of if-else-if-else-... statements.
-For now, return -EINVAL as default in case of unknown version. Imho
-this should be BUG(), as this version is only defined within this
-driver.
-
-Changes since v1: Drop use of adc_oe field in efuse, Henry Yen
-confirmed its use has been dropped intentionally in MTK SDK as well.
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/bleeding-edge&id=071e99848ccc1fbe238c4c9c7cfffd83f1dfe156
-[2]: https://lore.kernel.org/lkml/0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com/
-[3]: https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
-
-Daniel Golle (2):
-  thermal/drivers/mtk: use function pointer for raw_to_mcelsius
-  thermal: mediatek: add support for MT7986 and MT7981
-
- drivers/thermal/mtk_thermal.c | 143 +++++++++++++++++++++++++++++++---
- 1 file changed, 133 insertions(+), 10 deletions(-)
-
-
-base-commit: 9ce08dd7ea24253aac5fd2519f9aea27dfb390c9
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 0084b76493d9a..992750ee09e62 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -292,6 +292,8 @@ struct mtk_thermal {
+ 
+ 	const struct mtk_thermal_data *conf;
+ 	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
++
++	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
+ };
+ 
+ /* MT8183 thermal sensor data */
+@@ -656,13 +658,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+ 		raw = readl(mt->thermal_base + conf->msr[i]);
+ 
+-		if (mt->conf->version == MTK_THERMAL_V1) {
+-			temp = raw_to_mcelsius_v1(
+-				mt, conf->bank_data[bank->id].sensors[i], raw);
+-		} else {
+-			temp = raw_to_mcelsius_v2(
+-				mt, conf->bank_data[bank->id].sensors[i], raw);
+-		}
++		temp = mt->raw_to_mcelsius(
++			mt, conf->bank_data[bank->id].sensors[i], raw);
++
+ 
+ 		/*
+ 		 * The first read of a sensor often contains very high bogus
+@@ -1075,6 +1073,11 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 	}
+ 
++	if (mt->conf->version == MTK_THERMAL_V1)
++		mt->raw_to_mcelsius = raw_to_mcelsius_v1;
++	else
++		mt->raw_to_mcelsius = raw_to_mcelsius_v2;
++
+ 	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
+ 		for (i = 0; i < mt->conf->num_banks; i++)
+ 			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
 -- 
 2.39.1
 
