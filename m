@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB30671041
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221C4671049
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjARBlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S229940AbjARBm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjARBli (ORCPT
+        with ESMTP id S229942AbjARBmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:41:38 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD755421B;
-        Tue, 17 Jan 2023 17:40:08 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id r132so16945176oif.10;
-        Tue, 17 Jan 2023 17:40:08 -0800 (PST)
+        Tue, 17 Jan 2023 20:42:06 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AB3521EE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:40:35 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id e16so8199192ljn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:40:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kxxd3xqe9c7nfQjsQfb2u+lISPgW9CFdGJBHNXsa12I=;
-        b=lhrPFZ+V7iW7YE5t9PVcYLfGAYbd4HlJC6RK4v5DwsEVjKldo2M6wZF1Kj07hRl/Il
-         dzQDvfIcBpCihnxGnrSYVDeigAKFHM4jA3NYx7ZKMbA2+QV45aEUVFCOyPaY0ast/J3y
-         zKKL5ZQsZ1qrl2pabTYSxRR/u2KB3biuoKxwRa8r5U72bubq0ddmCyvuG6sKwrlRkY6Y
-         cmPfmaL8qkTYnbqPhNG8ZHkM3Feug6IM/SV/4KqucOMxYBq1jSUtImQcnxN9O4oapKTD
-         U/AdBVYgr7qjsQ5gLn5dSCb8tstqjY/UQ6Px2YUha/i/W3eDTtvy3WtmHSnTm1rtuQ1M
-         xP4A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=shjxwHFTr8u+xtmkHSiNEPjbEsIzgwDSfE4nzs+fRNw=;
+        b=KrhzIKzM90qTaCHwmda4g4cFsl9KD/JjaVWAW9LFfm+LeBPGK+w21ZswOITVgiHylo
+         ptD30erVVRaaMvBV70Q5d90mX31U4KJx2G0Mj2aSs2d/MOEZui38RCFdN0BHcDD1HBwG
+         wOL571cyO7AqTCv9OCQL9NPt5xEcQDLVTPG5h9Bj3jN65oluDS5vesZ2+aL4F6GYE8H9
+         r7KvAN9SLmZ8FrgjYXvZEuvmREvJfuTAIqA/yaZGvOMNMJh2lxa5/7wAlpKqMGrF+rjU
+         a0c+qckd2+VRljzCqy8o+TqH/c6wWDDFCPySuOufEFTCc3aHD9dkx9ZHr6YaBoeAJ53s
+         bPWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kxxd3xqe9c7nfQjsQfb2u+lISPgW9CFdGJBHNXsa12I=;
-        b=a6QUQTNombSXABjQiiIVoYhKVShOIAUQynnhMaBEwrmK0GPS2/FqLHDQBCLXjN8L8S
-         1/pNp8h0CMNQVBqhFBz/CruILK4LxRBVV7m+YWamUe5zBk+5OJ3A/lKHb7F8ObwIAwWy
-         w//JGGV/lcTq8XwSWDg0qVRqpQloUJAqPsn1yC6EPEP3PY7Sx5BbNV8jDp26dhvTg4ui
-         FRsGN/sZjccWwcCYboSFIKCRL39P0dlCYP1T03buQFsTPbD2qLding9e4oHsDbxXR384
-         QYWWfsZnmfE2ToAm9JY8tLhehHIHUvC2OrDl6ZUVl+eIIV6knfiacPdqzjtCS9pfocMp
-         VbYA==
-X-Gm-Message-State: AFqh2kpZ7yK68v3Shk6mqXgZ8+yBXZ3ccmMBx6LDSloqvcuxMS9032EP
-        m4y9f8vgmeD5aE2RvBwYEHg=
-X-Google-Smtp-Source: AMrXdXv4dCHXlEiFmxGcr2aZsuMqf9K2MlzBM9YjNQEgyRzmhETdhQGuVjBWFv/jm+ZJiFRl74sFwQ==
-X-Received: by 2002:a05:6808:8db:b0:364:e248:1d70 with SMTP id k27-20020a05680808db00b00364e2481d70mr5564435oij.1.1674006003968;
-        Tue, 17 Jan 2023 17:40:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bk33-20020a0568081a2100b0035a2f3e423esm15351850oib.32.2023.01.17.17.40.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 17:40:03 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 17 Jan 2023 17:40:02 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
-Message-ID: <20230118014002.GF1727121@roeck-us.net>
-References: <20230117124546.116438951@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=shjxwHFTr8u+xtmkHSiNEPjbEsIzgwDSfE4nzs+fRNw=;
+        b=Z+lmKhty/Z0P3ZM72PqvD6JYW6tzqa7vjKDAKrAC7dNPhL1fCvgDzzon+q2reU2XXr
+         U/tH36rDGW3KpnUTB0bg22TwAZd7NauA4PqoVcyzRJaBK4CGGm4Qg/lIZNtHx9aSRCT8
+         O/BlE/Kj1S0qaKaY3F5oI5ALZW6VmjvjvP54+jcKixSGqKGOXZHjHxLL5tq/aI6El7SZ
+         kVoYY7KgVCt2mmQLBbv5I+hsSP2uF85AeAmEq9yLptLZ9T23I2mlLPgWz/b3wbGJqOOf
+         +Lse3TrhSu8yK0hYOTpEtzUjxhh7hRNXu56PPp10n34ef7DmezTXQ/DHiRKzj2ZF83f6
+         vI4A==
+X-Gm-Message-State: AFqh2kq6yZHVzbvBZ13eZh+0X6u92StJbYZS12vjO7mBr9xUQ4wLq0RH
+        eCwHfXF5o06vuETHSpqrzkJ2JN2bAU/SqP6Tm3o=
+X-Google-Smtp-Source: AMrXdXvAwUPKSzfj4epK+2tmhQyLB90xdP0y1j/zdjuaZQlH0y9EFMPG4XSSGEHCVXPsQ+wyBLtGhrlRml629G+FY/Y=
+X-Received: by 2002:a2e:a4a4:0:b0:27f:7ee5:8424 with SMTP id
+ g4-20020a2ea4a4000000b0027f7ee58424mr278315ljm.114.1674006027132; Tue, 17 Jan
+ 2023 17:40:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <1673943112-8620-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <20230117161731.ab69c2352a62a0693570cf70@linux-foundation.org>
+ <CAGWkznHKJF1hiVTS2gAxgywnGz4T9u8UQtDV_Oj7r3cWqM5=nA@mail.gmail.com> <20230117173145.867a06c1585728da1e9b6a54@linux-foundation.org>
+In-Reply-To: <20230117173145.867a06c1585728da1e9b6a54@linux-foundation.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Wed, 18 Jan 2023 09:40:03 +0800
+Message-ID: <CAGWkznEusXRmi=ZEOvfK8qRfe+aKWa3X-bLG28=XoeGZ5umeuQ@mail.gmail.com>
+Subject: Re: [PATCHv2] mm: use stack_depot_early_init for kmemleak
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 01:48:13PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 176 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
-> 
-
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 502 pass: 502 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+On Wed, Jan 18, 2023 at 9:31 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 18 Jan 2023 09:25:48 +0800 Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+>
+> > On Wed, Jan 18, 2023 at 8:17 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Tue, 17 Jan 2023 16:11:52 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
+> > >
+> > > > Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
+> > > > Solve this by having stackdepot use stack_depot_early_init. Extra Kconfig also
+> > > > done by moving kmemleak stuff to mm/Kconfig.debug.
+> > >
+> > > I don't understand - what was the reason for the Kconfig change?
+> > The items related to kmemleak are moved from lib/Kconfig.debug to
+> > mm/Kconfig.debug
+>
+> Well yes, but why?
+It was suggested by Vlastimil in a previous comment. It makes more
+sense to have kmemleak's source code and Kconfig items under the same
+directory.
+>
+> Is that related to this bug fix?  If not then please let's have that
+> change in a separate patch.
+The moved items are updated for this bug fix.
+>
