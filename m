@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733E0672265
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1592967226C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjARQEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S231282AbjARQEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjARQDj (ORCPT
+        with ESMTP id S230161AbjARQDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:03:39 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB8568B1;
-        Wed, 18 Jan 2023 07:59:38 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-15eec491b40so14982080fac.12;
-        Wed, 18 Jan 2023 07:59:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uYLwATUgXkSjEpYITC3xrrUBVVSKhXYf3klEB5MK1WI=;
-        b=wJarYY+HrgKVucUCJ5rTw5IKetYZsM7YtISq7AyN6sEfYSd3slyw9MGTIAANYoix2Z
-         5zrryNcVrwujEyqtvhMlnhamMnNwEph8UuvxsFfJ5nfgvGTCVHn1SedrgIu3cVQURFvr
-         f1uDya2bHSv/TXqg72mDWRGysBdTOsCIiY0D3wl9FsgZnPNpv/Fz7vO4J2M5U9nR0RaL
-         tUy3LEmmG0MvzAkqrA0hmDd/13r70/F/j5PKQG1rTwLWidoXhIQCsexBEAf32mt+/Yop
-         Ad+txOkYJ4HOdIH3PksrCgaSQugMAA+j0yCq1i1XbJHdHXkbfwwL+VeIqe2YAxIrPEdJ
-         Jqtg==
-X-Gm-Message-State: AFqh2kpXi0k4z5jNHAYNh+NQO38MZvnvHVFy+ekUBrMVUlpIaYHhMLx8
-        qpw5qXf7DdNW2Vb37VS1cA==
-X-Google-Smtp-Source: AMrXdXtNXcgtaf4kqxp3LkeZgl009U5TgsdRR7APA5uSgwVb7Iat9myzCJOSH4NszFG9TWuteb8Vig==
-X-Received: by 2002:a05:6870:4b9b:b0:15f:29ff:b84b with SMTP id lx27-20020a0568704b9b00b0015f29ffb84bmr4426352oab.53.1674057577328;
-        Wed, 18 Jan 2023 07:59:37 -0800 (PST)
-Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id e23-20020aca1317000000b0035028730c90sm1293795oii.1.2023.01.18.07.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:59:37 -0800 (PST)
-Received: (nullmailer pid 80474 invoked by uid 1000);
-        Wed, 18 Jan 2023 15:59:36 -0000
-Date:   Wed, 18 Jan 2023 09:59:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] dt-bindings: arm: mediatek: mmsys: Add support
- for MT8195 VPPSYS
-Message-ID: <167405753490.79458.14830841571648305293.robh@kernel.org>
-References: <20230118031509.29834-1-moudy.ho@mediatek.com>
- <20230118031509.29834-3-moudy.ho@mediatek.com>
+        Wed, 18 Jan 2023 11:03:45 -0500
+Received: from outbound-smtp05.blacknight.com (outbound-smtp05.blacknight.com [81.17.249.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771A03EC58
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:00:23 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp05.blacknight.com (Postfix) with ESMTPS id 210EFCCB81
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:00:22 +0000 (GMT)
+Received: (qmail 11314 invoked from network); 18 Jan 2023 16:00:21 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 Jan 2023 16:00:21 -0000
+Date:   Wed, 18 Jan 2023 16:00:20 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <20230118160020.jcubwokkipnm7fls@techsingularity.net>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8fN2VQQTGUZ3ykw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230118031509.29834-3-moudy.ho@mediatek.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8fN2VQQTGUZ3ykw@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 18 Jan 2023 11:15:07 +0800, Moudy Ho wrote:
-> For MT8195, VPPSYS0 and VPPSYS1 are 2 display pipes with
-> hardware differences in power domains, clocks and subsystem counts,
-> which should be determined by compatible names.
+On Wed, Jan 18, 2023 at 11:45:45AM +0100, Ingo Molnar wrote:
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 ++
->  1 file changed, 2 insertions(+)
+> > +/*
+> > + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
+> > + * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM implementation.
+> > + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_timeout
+> > + * is used to detect recent DL / RT tasks taking a read lock.
+> > + */
+> > +#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
+> > +
+> > +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
+> > +{
+> > +	/* No update required if DL / RT tasks already identified. */
+> > +	if (rwb->waiter_timeout & 1)
+> > +		return;
+> > +
+> > +	/*
+> > +	 * Record a DL / RT task acquiring the lock for read. This may result
+> > +	 * in indefinite writer starvation but DL / RT tasks should avoid such
+> > +	 * behaviour.
+> > +	 */
+> > +	if (rt_task(current)) {
+> > +		struct rt_mutex_base *rtm = &rwb->rtmutex;
+> > +		unsigned long flags;
+> > +
+> > +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+> > +		rwb->waiter_timeout |= 1;
+> > +		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+> > +	}
+> > +}
+> 
+> So I'm not sure this should be dependent on the task being an RT task.
+> 
+> Starvation scenarios are bad no matter what scheduling policy is used.
+> 
+> Should be unconditional - and all workloads should live with the new 
+> behavior.
 > 
 
+The DL / RT task special casing was based on feedback given here
+https://lore.kernel.org/r/Y7wxjBN9bDaZ0BKo@hirez.programming.kicks-ass.net.
+Based on that, I assumed that allowing write to blocks readers that
+may be depending on priority inheritance is potentially problematic for
+applications that likely have been designed with writer-starvation in mind.
+The first version of the patch did not care about the scheduling classes
+were but I admit there is a non-zero possibility that breaking reader bias
+for a writer may break some unknown RT-specific application that relied
+on writer starvation for DL / RT tasks.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
-Missing tags:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
+-- 
+Mel Gorman
+SUSE Labs
