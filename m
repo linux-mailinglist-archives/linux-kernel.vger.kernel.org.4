@@ -2,201 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFC56713D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2AB6713CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjARGWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 01:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S229694AbjARGVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 01:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjARGTT (ORCPT
+        with ESMTP id S229531AbjARGSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:19:19 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AF7B46158
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:07:07 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8BxZ+lBjMdj_UQCAA--.1648S3;
-        Wed, 18 Jan 2023 14:05:53 +0800 (CST)
-Received: from [10.136.12.26] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+Q+jMdjdisbAA--.16958S3;
-        Wed, 18 Jan 2023 14:05:52 +0800 (CST)
-Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as
- non-kprobe-able
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
- <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
-Date:   Wed, 18 Jan 2023 14:05:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 18 Jan 2023 01:18:17 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DA9193DE;
+        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id d10so23711138pgm.13;
+        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=AJM2l+mABefkfyEbBF+RzKX6IR1PByT45QHpW0h3qe4=;
+        b=Uk9EEPHa9abUvjhRIQIWoxZOrA4S++vJR7Iml2l67ItI4NgzfFUOz1vV9Q63tFOjUm
+         +QDRMwrVP7wbKL/UfKcz0XLrcmk5e32iTNT/I5grbXwJRvkLJnjCkYa+PrzAHHaIocjd
+         uUtNOfaBvIUfMoTHFl8A7zTRslSf2vZPGjD9ijvZhaiqU66TeOxuFwSDxa+rlMS1wewi
+         V4d0JUaeSZU9li9O4KdejcCLA88DVAhh4Vrp06iPXC/A3UOgbKQXznTgqh+4Cnz3z4Am
+         iFtYE6EqMhZVXjwXvbIkYL/14mJS/XVDjY1S4HOxTFH+WMiR6KemWXi6zvzOhN53dQSV
+         59+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJM2l+mABefkfyEbBF+RzKX6IR1PByT45QHpW0h3qe4=;
+        b=2BMNowzCbHzbQC4fZS2fhgVVmQnGKRy0lHmlcs1NGnksJMMIiXcCHU9F1iFwQg3M2Y
+         6ITpS0HDIx9s+q0r1J1v/hYr16zvr+QaCLnlUSPFxe0fgxhz92ixBI4tI1za5FtqrXzs
+         Pm0lCphsi2+DOY/snZ4mhBbPwVEnH6Nx79BnBWOwIZHlCtidAUM3jqtu03dnR8YybIZF
+         /B7vw9/eyYF1iGmyFIHK+vZJKcfNx8K9Qe1H6MzFhBr/UbWBI4dXbJo3rsXpWmNLKkGL
+         YRjTEJMsXO0rkE42FSZj12aLPG57/RriHjctZz5qXSQm0rSASKXvp6tMNuEH07peOzRY
+         6aag==
+X-Gm-Message-State: AFqh2kpN9ez7JgRRVNLFLeGC2+V9HKB51HLfmd/Ymmx/ovPgJpBuyTKt
+        mus8L1BOICciQJhrobWJJwU=
+X-Google-Smtp-Source: AMrXdXvJj/WuxPD1+Xma7Enk9QJHUshgvQ19l5+RsLJDTd/eY1Ms6gJENO1+HU9ZaSxZaP5H9LwKlg==
+X-Received: by 2002:a05:6a00:180d:b0:58d:c694:9a9e with SMTP id y13-20020a056a00180d00b0058dc6949a9emr7449718pfa.18.1674021960598;
+        Tue, 17 Jan 2023 22:06:00 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:3749:9eb3:dfb5:f449])
+        by smtp.gmail.com with ESMTPSA id b126-20020a62cf84000000b00574e84ed847sm10990180pfg.24.2023.01.17.22.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 22:06:00 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Subject: [PATCHSET 0/8] perf/core: Prepare sample data for BPF (v3)
+Date:   Tue, 17 Jan 2023 22:05:51 -0800
+Message-Id: <20230118060559.615653-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-In-Reply-To: <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8Bxb+Q+jMdjdisbAA--.16958S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFW7Gr4UZr15Jr1xGr1kuFg_yoWrZFW5pr
-        1kAFs8trZ5Gr18Jry7tw18X34Utrn7G3Wjqw1jyFy8Jr47Xr1jgry0gr4q9FyxJw4xGr10
-        qF1rXrnrZF45Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzZ2-UUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 2023-01-18 12:23, Tiezhu Yang wrote:
->
->
-> On 01/18/2023 12:14 PM, Huacai Chen wrote:
->> If memcpy should be blacklisted, then what about memset and memmove?
->
-> According to the test results, there are no problems to probe
-> memset and memmove, so no need to blacklist them for now,
-> blacklist memcpy is because it may cause recursive exceptions,
-> there is a detailed discussion in the following link:
->
-> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/ 
->
+The perf_prepare_sample() is to fill the perf sample data and update the
+header info before sending it to the ring buffer.  But we want to use it
+for BPF overflow handler so that it can access the sample data to filter
+relevant ones.
 
-Hi, Tiezhu,
+Changes in v3)
+ * update data->sample_flags in __perf_event_header__init_id()  (PeterZ)
+ * add Acked-by's from Jiri and Song
 
-I cannot reproduce the results when kprobe memcpy. Could you please give
-some details. Emm, I just replace "kernel_clone" with "memcpy" in
-kprobe_example.c.
+Changes in v2)
+ * the layout change is merged
+ * reduce branches using __cond_set  (PeterZ)
+ * add helpers to set dynamic sample data  (PeterZ)
+ * introduce perf_prepare_header()  (PeterZ)
+ * call perf_prepare_sample() before bpf_overflow_handler unconditionally
 
-And for your call trace,
+This means the perf_prepare_handler() can be called more than once.  To
+avoid duplicate work, use the data->sample_flags and save the data size.
 
-  handler_pre()
-    pr_info()
-      printk()
-       _printk()
-         vprintk()
-           vprintk_store()
-             memcpy()
+I also added a few of helpers to set those information accordingly.
+But it looks some fields like REGS_USER, STACK_USER and AUX are saved in
+the perf_prepare_sample() so I didn't add the helpers for them.
 
-I think when we should skip this time kprobe which triggered in
-handler_{pre, post}. That means this time kprobe will not call
-handler_{pre, post} agian, and not cause recursion. I remember
-your codes had done this skip action. So, that's so strange if
-recursion in handler_{pre, post}.
+After than we can just check the filtered_sample_type flags begin zero
+to determine if it has more work.  In that case, it needs to update the
+data->type since it's possible to miss when PMU driver sets all required
+sample flags before calling perf_prepare_sample().
 
+The code is also available at 'perf/prepare-sample-v3' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
 Thanks,
+Namhyung
 
-Jinyang
+Cc: Song Liu <song@kernel.org>
+Cc: bpf@vger.kernel.org
+
+Namhyung Kim (8):
+  perf/core: Save the dynamic parts of sample data size
+  perf/core: Add perf_sample_save_callchain() helper
+  perf/core: Add perf_sample_save_raw_data() helper
+  perf/core: Add perf_sample_save_brstack() helper
+  perf/core: Set data->sample_flags in perf_prepare_sample()
+  perf/core: Do not pass header for sample id init
+  perf/core: Introduce perf_prepare_header()
+  perf/core: Call perf_prepare_sample() before running BPF
+
+ arch/powerpc/perf/core-book3s.c    |   3 +-
+ arch/s390/kernel/perf_cpum_cf.c    |   4 +-
+ arch/s390/kernel/perf_cpum_sf.c    |   3 +-
+ arch/s390/kernel/perf_pai_crypto.c |   4 +-
+ arch/s390/kernel/perf_pai_ext.c    |   4 +-
+ arch/x86/events/amd/core.c         |   6 +-
+ arch/x86/events/amd/ibs.c          |   9 +-
+ arch/x86/events/intel/core.c       |   6 +-
+ arch/x86/events/intel/ds.c         |  24 ++--
+ include/linux/perf_event.h         | 133 +++++++++++++-----
+ kernel/events/core.c               | 207 ++++++++++++++++-------------
+ kernel/trace/bpf_trace.c           |   6 +-
+ 12 files changed, 236 insertions(+), 173 deletions(-)
 
 
->
-> Thanks,
-> Tiezhu
->
->>
->> Huacai
->>
->> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn> 
->> wrote:
->>>
->>> Some assembler symbols are not kprobe safe, such as handle_syscall
->>> (used as syscall exception handler), *memcpy* (may cause recursive
->>> exceptions), they can not be instrumented, just blacklist them for
->>> kprobing.
->>>
->>> Here is a related problem and discussion:
->>> Link: 
->>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
->>>
->>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>> ---
->>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
->>>  arch/loongarch/kernel/entry.S    |  1 +
->>>  arch/loongarch/lib/memcpy.S      |  3 +++
->>>  3 files changed, 14 insertions(+)
->>>
->>> diff --git a/arch/loongarch/include/asm/asm.h 
->>> b/arch/loongarch/include/asm/asm.h
->>> index 40eea6a..f591b32 100644
->>> --- a/arch/loongarch/include/asm/asm.h
->>> +++ b/arch/loongarch/include/asm/asm.h
->>> @@ -188,4 +188,14 @@
->>>  #define PTRLOG         3
->>>  #endif
->>>
->>> +/* Annotate a function as being unsuitable for kprobes. */
->>> +#ifdef CONFIG_KPROBES
->>> +#define _ASM_NOKPROBE(name)                            \
->>> +       .pushsection "_kprobe_blacklist", "aw";         \
->>> +       .quad   name;                                   \
->>> +       .popsection
->>> +#else
->>> +#define _ASM_NOKPROBE(name)
->>> +#endif
->>> +
->>>  #endif /* __ASM_ASM_H */
->>> diff --git a/arch/loongarch/kernel/entry.S 
->>> b/arch/loongarch/kernel/entry.S
->>> index d53b631..55e23b1 100644
->>> --- a/arch/loongarch/kernel/entry.S
->>> +++ b/arch/loongarch/kernel/entry.S
->>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
->>>
->>>         RESTORE_ALL_AND_RET
->>>  SYM_FUNC_END(handle_syscall)
->>> +_ASM_NOKPROBE(handle_syscall)
->>>
->>>  SYM_CODE_START(ret_from_fork)
->>>         bl      schedule_tail           # a0 = struct task_struct *prev
->>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
->>> index 7c07d59..3b7e1de 100644
->>> --- a/arch/loongarch/lib/memcpy.S
->>> +++ b/arch/loongarch/lib/memcpy.S
->>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
->>>         ALTERNATIVE     "b __memcpy_generic", \
->>>                         "b __memcpy_fast", CPU_FEATURE_UAL
->>>  SYM_FUNC_END(memcpy)
->>> +_ASM_NOKPROBE(memcpy)
->>>
->>>  EXPORT_SYMBOL(memcpy)
->>>
->>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
->>>  2:     move    a0, a3
->>>         jr      ra
->>>  SYM_FUNC_END(__memcpy_generic)
->>> +_ASM_NOKPROBE(__memcpy_generic)
->>>
->>>  /*
->>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
->>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
->>>  3:     move    a0, a3
->>>         jr      ra
->>>  SYM_FUNC_END(__memcpy_fast)
->>> +_ASM_NOKPROBE(__memcpy_fast)
->>> -- 
->>> 2.1.0
->>>
->
+base-commit: 9fcad995c6c52cc9791f7ee9f1386a5684055f9c
+-- 
+2.39.0.314.g84b9a713c41-goog
 
