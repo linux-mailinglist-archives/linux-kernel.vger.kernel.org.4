@@ -2,82 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F93672B21
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C24B672B1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjARWM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S230007AbjARWLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjARWMv (ORCPT
+        with ESMTP id S229669AbjARWLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:12:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02D45F3A0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:12:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674079925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZMEMrcYWxCYgncCZ7gZI9FW1ZAN3xqpELmriu9FkXc0=;
-        b=hN693yiUQ3mojFVHxtn+E9c9bpluwR19mpwqoxfOfVWj5sFTvzqtGXms4RsLEzIagd+kUq
-        2WQFs0rozpQMrcTOpUf9B+BU/F+08Q/JyMxWKUb6pvrBdvoonXWmBaZI5Ni/t9vCh6IGsN
-        zOhitOOVOPFcaEldVkCpysn/SPehWMI=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-138-_yXyL21lNBGQ0daMcwgaUA-1; Wed, 18 Jan 2023 17:12:01 -0500
-X-MC-Unique: _yXyL21lNBGQ0daMcwgaUA-1
-Received: by mail-pg1-f200.google.com with SMTP id g32-20020a635660000000b00478c21b8095so17026pgm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:12:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZMEMrcYWxCYgncCZ7gZI9FW1ZAN3xqpELmriu9FkXc0=;
-        b=sopffRszesw1fPGR/FZlXRBBxUt7o7njXW5ebd8ZqWCLp+oLU7j5D0ILqyc+uzROmy
-         jWG9POhVWrbsgr07Ut/aWdxB7h1Wte3W+ZXfKF0D6NRaJ0wBP/9QYXmNUIiMfb5xFHW/
-         DW+AOFuCntfQY13tEeafDqeIOKYvaBq77jv+AXWie4gZBBHPQTJGcGtWPzY7fcIOweKV
-         +8HrCbb05fPZPHdXfn/3bj2PvgdNk/lUmBkPn0VrTQ/xuX+DcxN0ztfqZ4QBfPICw1lN
-         YI6DXgY6tFVh8M1OyOJs2Asvr+1+wDuRtsyngghLFsrlfGsq6rnGUiAJNTePg/W8x60M
-         ejSw==
-X-Gm-Message-State: AFqh2kqgbIk96DXcscdp+sjYyBQtUW7U5+NXsVLKTwDMCLJTYTlksZol
-        Lz3lU/j17RnyiRJ0TelbQYWu87jQv8jYkHiwPER8thasFy7etNMEXkn2GwW0XqdbwRNwtdJu4LA
-        WEY2+4mzg0eanAP2yOvxkQlwRNTeePC8rnbbL8eZT
-X-Received: by 2002:a17:90a:bd8b:b0:229:3b43:a31f with SMTP id z11-20020a17090abd8b00b002293b43a31fmr1010106pjr.81.1674079920359;
-        Wed, 18 Jan 2023 14:12:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsEVBmBylWpQyn2dcYBw+l/HGBhJWmGomA3c22HZNKZfJ0OUa8lD0ANX47rTRzPNb7JB63lpkyMuZfIjLQXNyI=
-X-Received: by 2002:a17:90a:bd8b:b0:229:3b43:a31f with SMTP id
- z11-20020a17090abd8b00b002293b43a31fmr1010097pjr.81.1674079920131; Wed, 18
- Jan 2023 14:12:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20230117181533.2350335-1-neelx@redhat.com> <2bdeb975-6d45-67bb-3017-f19df62fe7af@intel.com>
- <CACjP9X-hKf8g2UqitV8_G7WQW7u6Js5EsCNutsAMA4WD7YYSwA@mail.gmail.com> <42e74619-f2d0-1079-28b1-61e9e17ae953@intel.com>
-In-Reply-To: <42e74619-f2d0-1079-28b1-61e9e17ae953@intel.com>
-From:   Daniel Vacek <neelx@redhat.com>
-Date:   Wed, 18 Jan 2023 23:11:23 +0100
-Message-ID: <CACjP9X8SHZAd_+HSLJCxYxSRQuRmq3r48id13r17n2ehrec2YQ@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH] ice/ptp: fix the PTP worker retrying
- indefinitely if the link went down
-To:     Jacob Keller <jacob.e.keller@intel.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "Kolacinski, Karol" <karol.kolacinski@intel.com>,
-        Siddaraju <siddaraju.dh@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Wed, 18 Jan 2023 17:11:51 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8815F3A0;
+        Wed, 18 Jan 2023 14:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UoquC9whzc3rr7eP+HxcCPXYruQxRORFQZRxln0GZAk=; b=tdyxMPfbMamU2hv4bCllGQkZMy
+        MaoY47at6HR2JrbmHOz0Lk08xi5kgun5ZqIGY5MF++llzkFAtPrJgMzPfx229u9HcE59rRqif8rv/
+        t1r8gnNCgiqE7iwTNohtlGsy3aBfkO3b8W1I4kJEdKo4IPX9fjCPHm5GhM49MybwVCPXJj25wP0Bm
+        sRgfA0M+yA+4scwxjk1nu0h4ZaEZtj9BNbuMSAuPtyDPdQlH9ACUIbZW/vPcfbqn8u8IF9V9ja4T8
+        n/DnR7SFX1gRfVShJvTBEHgOKVrmY3peq8dze12Zp2UdTLfCV15uRnPERuoeQIvGnp67UtS3qD39l
+        VEJXeVqw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIGen-002d0k-2W;
+        Wed, 18 Jan 2023 22:11:45 +0000
+Date:   Wed, 18 Jan 2023 22:11:45 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: Re: [PATCH v6 01/34] vfs: Unconditionally set IOCB_WRITE in
+ call_write_iter()
+Message-ID: <Y8huoSe4j6ysLUTT@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391048988.2311931.1567396746365286847.stgit@warthog.procyon.org.uk>
+ <Y8ZTyx7vM8NpnUAj@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8ZTyx7vM8NpnUAj@infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,53 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:59 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
-> On 1/18/2023 7:14 AM, Daniel Vacek wrote:
-> > On Tue, Jan 17, 2023 at 7:47 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
-> >>
-> >> At a minimum I think I would only set drop_ts but not not goto skip_ts_read.
-> >
-> > IIUC, that would still fail to clear the tx->in_use bit in case ice_read_phy_tstamp()
-> > returns with error. It would only work for the other case where no error is
-> > returned but rather the returned &raw_tstamp is invalid. I'll send a v2 of
-> > this fix trying to address the goto concern.
-> >
->
-> Please re-send the patch with the goto concern addressed. (only set
-> drop_ts, and still read the timestamp just in case and make sure that if
-> the read function fails while drop_ts is set we still drop the ts).
+On Mon, Jan 16, 2023 at 11:52:43PM -0800, Christoph Hellwig wrote:
 
-Just in case it got lost I did send the patch here:
+> This doesn't remove the existing setting of IOCB_WRITE, and also
+> feelds like the wrong place.
+> 
+> I suspect the best is to:
+> 
+>  - rename init_sync_kiocb to init_kiocb
+>  - pass a new argument for the destination to it.  I'm not entirely
+>    sure if flags is a good thing, or an explicit READ/WRITE might be
+>    better because it's harder to get wrong, even if a the compiler
+>    might generate worth code for it.
+>  - also use it in the async callers (io_uring, aio, overlayfs, loop,
+>    nvmet, target, cachefs, file backed swap)
 
-https://lore.kernel.org/intel-wired-lan/20230118161727.2485457-1-neelx@redhat.com/
-
-But unfortunately I misplaced the --in-reply-to header with --reply-to one :-(
-Hopefully it arrived to you safely.
-
-> I believe that alleviates my concerns regarding the potential link down
-> race with a completed timestamp above.
->
-> We also should already be preventing requesting new timestamps while
-> link is down so that should be sufficient to combine with this and cover
-> the three flows:
->
-> 1) request tx timestamp
-> 2) link down
-> 3) timestamp never occurs
->
-> 1) request tx timestamp
-> 2) timestamp occurs
-> 3) link goes down while processing
-
-I was thinking this is the case we got reported. But then again, I'm
-not really experienced in this field.
-
---nX
-
-> 1) link down
-> 2) request tx timestamp rejected
->
-> Thanks!
->
-> -Jake
-
+Do you want it to mess with get_current_ioprio() for those?  Looks
+wrong...
