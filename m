@@ -2,83 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21339671E53
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9201A671E54
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjARNrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S229663AbjARNth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjARNqy (ORCPT
+        with ESMTP id S229737AbjARNtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:46:54 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C8F65F37
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:17:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wd8rPoxSEOy2m/HQXKKEeOnbpnN+wzZH84RSXywB5Ok=; b=kE12tB6grAfclGwnHOd+B8gs3P
-        ee+o8Uvt7azWscY1yd/rzi99XHXgRxhfEZHn3R39jBOfiABbzgWc4sjLQpcO6vTXBE9qItBwbepl4
-        UQxUcDsLwQLTLYQSYGcgCym4IBystWypGQa/JE3RPThemi/PaDlifX2DjigSh2g97v88=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pI8JI-002RSP-El; Wed, 18 Jan 2023 14:17:00 +0100
-Date:   Wed, 18 Jan 2023 14:17:00 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     ye.xingchen@zte.com.cn
-Cc:     gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn
-Subject: Re: [PATCH] ARM: mvebu: potential dereference of null pointer
-Message-ID: <Y8fxTCLpQ8mBAHzL@lunn.ch>
-References: <202301171822040406304@zte.com.cn>
+        Wed, 18 Jan 2023 08:49:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFAEC925B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:19:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C84A617E1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB0E0C433EF;
+        Wed, 18 Jan 2023 13:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674047908;
+        bh=etRSyexaS7lKbqSE4du4p/95DwyYLBtFmlpNtRNPPuU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ovM5RSgXPoDJsfcJTyCDMZdrECwUmy0zlmZLgKpWF13ffxheqn2JunkHddIdVyVaI
+         eoFZq0RahuoDiIhU2rI1wZo65E9JSrbZIbZdYuT0HE3W1r6FfZlZHTWM9NounHg947
+         9WqlNi2DkPcstcA5Or2Lzjq+X1Z5GWsO5MJCjONrt2F7I8XUb0wPawxKgv3rwDH+e0
+         T0tgahFM94fssrjQ6OyadtsV7UM84BU3to+JaZai+Clxy3sue+Urywchea72B7JYeZ
+         ROPJhYKK6mRutC1H5Nvvi0f554Oe2lhgE6Rn4Esi7Nj1Pb90TxcyVTVVuj61Zy1CWv
+         HI27XMef2yimA==
+Date:   Wed, 18 Jan 2023 21:18:21 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
+        Siddh Raman Pant <code@siddh.me>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Jia Zhu <zhujia.zj@bytedance.com>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>
+Subject: [GIT PULL] erofs fixes for 6.2-rc5
+Message-ID: <Y8fxnV7ol9OP6JSz@debian>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
+        Siddh Raman Pant <code@siddh.me>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Jia Zhu <zhujia.zj@bytedance.com>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202301171822040406304@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 06:22:04PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> The return value of kzalloc() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  arch/arm/mach-mvebu/board-v7.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-mvebu/board-v7.c b/arch/arm/mach-mvebu/board-v7.c
-> index fd5d0c8ff695..b93b4a8a8357 100644
-> --- a/arch/arm/mach-mvebu/board-v7.c
-> +++ b/arch/arm/mach-mvebu/board-v7.c
-> @@ -125,7 +125,8 @@ static void __init i2c_quirk(void)
->  		struct property *new_compat;
-> 
->  		new_compat = kzalloc(sizeof(*new_compat), GFP_KERNEL);
-> -
-> +		if (!new_compat)
-> +			return;
->  		new_compat->name = kstrdup("compatible", GFP_KERNEL);
->  		new_compat->length = sizeof("marvell,mv78230-a0-i2c");
->  		new_compat->value = kstrdup("marvell,mv78230-a0-i2c",
+Hi Linus,
 
-Please add a blank line after the return statement.
+Could you consider this pull request for 6.2-rc5?
 
-Also, i find it interested your bot is telling you about kzalloc, but
-totally ignoring kstrdup().
+Two patches fixes issues reported by syzbot, one fixes
+missing `domain_id` mount option started from v6.1 in
+documentation and a minor cleanup.  Details are shown
+below as well.
 
-	Andrew
+All commits have been in -next for a while.
+
+Thanks,
+Gao Xiang
+
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.2-rc5
+
+for you to fetch changes up to e02ac3e7329f76c5de40cba2746cbe165f571dff:
+
+  erofs: clean up parsing of fscache related options (2023-01-16 22:39:47 +0800)
+
+----------------------------------------------------------------
+Changes since last update:
+
+ - Fix wrong iomap->length calculation post EOF, which could
+   cause a WARN_ON in iomap_iter_done() (Siddh);
+
+ - Fix improper kvcalloc() use with __GFP_NOFAIL (me);
+
+ - Add missing `domain_id` mount option in documentation (Jingbo);
+
+ - Clean up fscache option parsing (Jingbo).
+
+----------------------------------------------------------------
+Gao Xiang (1):
+      erofs: fix kvcalloc() misuse with __GFP_NOFAIL
+
+Jingbo Xu (2):
+      erofs: add documentation for 'domain_id' mount option
+      erofs: clean up parsing of fscache related options
+
+Siddh Raman Pant (1):
+      erofs/zmap.c: Fix incorrect offset calculation
+
+ Documentation/filesystems/erofs.rst |  2 ++
+ fs/erofs/super.c                    | 13 ++++++-------
+ fs/erofs/zdata.c                    | 12 ++++++------
+ fs/erofs/zmap.c                     | 10 +++++++---
+ 4 files changed, 21 insertions(+), 16 deletions(-)
