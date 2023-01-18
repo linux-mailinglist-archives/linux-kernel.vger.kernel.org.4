@@ -2,146 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E82F671711
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF046716EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjARJGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S230079AbjARJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjARJEg (ORCPT
+        with ESMTP id S229879AbjARI7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:04:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755523E0AD;
-        Wed, 18 Jan 2023 00:24:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674030281; x=1705566281;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=mSO4PAMhEZisTll2SVfi2Yx3pBS6smLK7Q3mTuJU1oA=;
-  b=Xw5pozIH/dQFwvoJIvMdSKyZ69PKHC2soxXvHTqfxtxwVSDqkyWEtCfA
-   ipGSRm2hIIZxS3oQ0xiNx/l29EfDF1SJH2L97GChoGaKd4BctU+oeVRUY
-   mUCOuNP14slRIsR4Hj//w1ykPHkYYqcp/OSYQjkn88KBcUKnzF2WmwSg9
-   UvuvxkDlrQ3StY+f+L2CBO3aOOGhsSscfNh87yrxPEghYjw2hsYy0c8il
-   EVbziUgGqb67ahXJKBgpRh0kvRORM8lu95w5HrCHcjq78znw31sEQ/LbM
-   vNJTrUZ0qH8DrEEqOaAjHLKFW284bfJstu4HG1wGECFDEyjd43slXQpe5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="323620012"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="323620012"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 00:24:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="722997271"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="722997271"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 00:24:28 -0800
-Date:   Wed, 18 Jan 2023 16:16:41 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20230118081641.GA303785@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
- <Y8HTITl1+Oe0H7Gd@google.com>
- <20230117124107.GA273037@chaop.bj.intel.com>
- <Y8bOB7VuVIsxoMcn@google.com>
+        Wed, 18 Jan 2023 03:59:16 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930FC5D137
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:18:50 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h16so33062075wrz.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W0hEkd0ysfwynvDAeHLSyvcKkJlGfnDtvDBH2lgZqaw=;
+        b=Cur0e32YY5qCzlLEctN2Zb27XLMLenD+PXApcuhhXMBNQ9PIX5L6ScqlqwdNHGhNsT
+         PcenlLH8b698Xq1c/EGrWPzU79lxakgqOA0WkW/0cyho/gxytfJViDUUzZYH3F5mOWWP
+         ZXSdvahBjh5DToovwXVepk9VMKz5lIlA+G0VTddjGi44jTCDe0WKOaL2lpapvBilb0WX
+         IfkQz6WzLUg2eQSi9k/fRuAfy29xUnJ1+pQqoghCgmQ59q0Ov6fyru0rmo9b2krwUXnt
+         UOSiUPK40u+kly90yjudihJojN/zaq7Fjn/bDh0f2bQwdECaLfoeDwLM7KaRpcSgxLbP
+         TkXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W0hEkd0ysfwynvDAeHLSyvcKkJlGfnDtvDBH2lgZqaw=;
+        b=aZK4m3aCGjdvvjJtP5nOd9pkUAnm+gwB77nliO6kQxl0aQhczJwyg5Gsg52H5IEJtE
+         asksQX6/O8bQYL3cIFIX9xkHYH3fVg3K849xXB/x+Ty3Vf3T/0G4tRPv9oWptMEUFbCz
+         bh6dvffR2pYd9VUOpqt2ONb7L6r4zmhq4zJBK/KrFTdY2L7UYzAghpTQLwVnjmiJbQpc
+         S2PCYHogxy5h/kW3M974PW4/Z1B4LGYMoIbiEO7pZAJVXcDrS7VJWl9vabDr8xRwgOKO
+         5+eo1sv2HrfbCrsTfSomDKBWq5Gsjs+N7ZBJ91YkQsY7efTGsvRyFQZktCYUdCVeDQC1
+         PasA==
+X-Gm-Message-State: AFqh2kojMJTwjxLQccQElhgKRu83bW80hAAUBXoo/8NX5zL9gF9abncZ
+        7Vx8fWjsYe3dF4S6l+BbUOQW3w==
+X-Google-Smtp-Source: AMrXdXsBQGUlE7qI6KECAJ7MOJ6Z+LkSVfm4jetRokZ6qobuXFx5t7ftxvGzwd2hxlLMLBPSGDt58g==
+X-Received: by 2002:adf:dece:0:b0:2bd:f671:22b with SMTP id i14-20020adfdece000000b002bdf671022bmr4774137wrn.55.1674029929105;
+        Wed, 18 Jan 2023 00:18:49 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w5-20020adfcd05000000b002bdc914a139sm20958509wrm.108.2023.01.18.00.18.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 00:18:48 -0800 (PST)
+Message-ID: <2608bee3-7571-dc82-caa9-0aab2735512e@linaro.org>
+Date:   Wed, 18 Jan 2023 09:18:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8bOB7VuVIsxoMcn@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] thermal/idle_inject: Support 100% idle injection
+Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com
+References: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 04:34:15PM +0000, Sean Christopherson wrote:
-> On Tue, Jan 17, 2023, Chao Peng wrote:
-> > On Fri, Jan 13, 2023 at 09:54:41PM +0000, Sean Christopherson wrote:
-> > > > +	list_for_each_entry(notifier, &data->notifiers, list) {
-> > > > +		notifier->ops->invalidate_start(notifier, start, end);
-> > > 
-> > > Two major design issues that we overlooked long ago:
-> > > 
-> > >   1. Blindly invoking notifiers will not scale.  E.g. if userspace configures a
-> > >      VM with a large number of convertible memslots that are all backed by a
-> > >      single large restrictedmem instance, then converting a single page will
-> > >      result in a linear walk through all memslots.  I don't expect anyone to
-> > >      actually do something silly like that, but I also never expected there to be
-> > >      a legitimate usecase for thousands of memslots.
-> > > 
-> > >   2. This approach fails to provide the ability for KVM to ensure a guest has
-> > >      exclusive access to a page.  As discussed in the past, the kernel can rely
-> > >      on hardware (and maybe ARM's pKVM implementation?) for those guarantees, but
-> > >      only for SNP and TDX VMs.  For VMs where userspace is trusted to some extent,
-> > >      e.g. SEV, there is value in ensuring a 1:1 association.
-> > > 
-> > >      And probably more importantly, relying on hardware for SNP and TDX yields a
-> > >      poor ABI and complicates KVM's internals.  If the kernel doesn't guarantee a
-> > >      page is exclusive to a guest, i.e. if userspace can hand out the same page
-> > >      from a restrictedmem instance to multiple VMs, then failure will occur only
-> > >      when KVM tries to assign the page to the second VM.  That will happen deep
-> > >      in KVM, which means KVM needs to gracefully handle such errors, and it means
-> > >      that KVM's ABI effectively allows plumbing garbage into its memslots.
-> > 
-> > It may not be a valid usage, but in my TDX environment I do meet below
-> > issue.
-> > 
-> > kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0x80000000 ua=0x7fe1ebfff000 ret=0
-> > kvm_set_user_memory AddrSpace#0 Slot#1 flags=0x4 gpa=0xffc00000 size=0x400000 ua=0x7fe271579000 ret=0
-> > kvm_set_user_memory AddrSpace#0 Slot#2 flags=0x4 gpa=0xfeda0000 size=0x20000 ua=0x7fe1ec09f000 ret=-22
-> > 
-> > Slot#2('SMRAM') is actually an alias into system memory(Slot#0) in QEMU
-> > and slot#2 fails due to below exclusive check.
-> > 
-> > Currently I changed QEMU code to mark these alias slots as shared
-> > instead of private but I'm not 100% confident this is correct fix.
+On 17/01/2023 19:22, Srinivas Pandruvada wrote:
+> The users of idle injection framework allow 100% idle injection. For
+> example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
+> the runtime_duration becomes zero.
 > 
-> That's a QEMU bug of sorts.  SMM is mutually exclusive with TDX, QEMU shouldn't
-> be configuring SMRAM (or any SMM memslots for that matter) for TDX guests.
+> In the function idle_inject_set_duration() in idle injection framework
+> run_duration_us == 0 is silently ignored, without any error (it is a
+> void function). So, the caller will assume that everything is fine and
+> 100% idle is effective. But in reality the idle inject will be whatever
+> set before.
+> 
+> There are two options:
+> - The caller change their max state to 99% instead of 100% and
+> document that 100% is not supported by idle inject framework
+> - Support 100% idle support in idle inject framework
+> 
+> Since there are other protections via RT throttling, this framework can
+> allow 100% idle. The RT throttling will be activated at 95% idle by
+> default. The caller disabling RT throttling and injecting 100% idle,
+> should be aware that CPU can't be used at all.
+> 
+> The idle inject timer is started for (run_duration_us + idle_duration_us)
+> duration. Hence replace (run_duration_us && idle_duration_us) with
+> (run_duration_us + idle_duration_us) in the function
+> idle_inject_set_duration(). Also check for !(run_duration_us +
+> idle_duration_us) to return -EINVAL in the function idle_inject_start().
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
 
-Thanks for the confirmation. As long as we only bind one notifier for
-each address, using xarray does make things simple.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Chao
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
