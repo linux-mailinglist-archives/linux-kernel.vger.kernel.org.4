@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535B4671244
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CC671246
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjARD4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S229823AbjARD4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjARD4P (ORCPT
+        with ESMTP id S229840AbjARD4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:56:15 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9340953F91;
-        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id k18so11598989pll.5;
-        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TLRE2TXuEi0Oi6Py0U1FjTjvdMX6n7zTvdehmRccvQA=;
-        b=p+9eUJUJfVS8n33t98G13ynpg+3YLMTqLbo8XZ3+W5aAq0J7WETPVlEbn41TzJcKYn
-         kniSfXDzU8fj1Liw9pei1Ql4kWXqPx3BTNENPHUFKwpQ3jymgSqPRG7DaMVu1Cu80FAI
-         rVi+ICZpl8NBtsUfoJYIgJI+ulrLmSobPBeF9kDLkkukzqhakrRHmCQhJilpvLDSXuTj
-         FAEpKoFREtobxnFQ2uS52hp1HVFlF2CwnggdK3r5ptQNGBz2PiDqeWzbIYE6jh179mlv
-         jD38/RK0naUD6lAvAtFNznD1k3Vk648Wi4Si1yirSmUizPOyEKot+GZ8dM6LjLJ8r4qJ
-         xeDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TLRE2TXuEi0Oi6Py0U1FjTjvdMX6n7zTvdehmRccvQA=;
-        b=ET5tgWVQEv4zrOvxXfTibZKYGui5FbaMvaiOMtWPZxPFVlChVtAJK8Ya2IsflSsmLe
-         sHjYb8jP5uKvWzekpcBLixvoHxGAKnfuXbO2pCE/y6ZgaDfJYIUFfXtXsnfYaL7Ld4/t
-         7xeZMK3aU5RV1+6EwDlZG6LhKHEMrQ1z0ubLQ3kxERXS+5R2tx1H772KI7HboqwgWrMK
-         3k5f7VxnKlLjaSY2fvYt9ypBsuuArArv8TmkY9kHDhtvEiUBOpY++rKDS6F9VC9TvexH
-         ZLOU8BMd7Mr4xaLoxrdGLoEkxZcg/OIVKB/MEGKVqTa6PUqE3Ku7YMWBToJyTx8TbHkQ
-         ntmw==
-X-Gm-Message-State: AFqh2kopVx9IibdxJpO1aJNnAT0FXCmbPk0N/S5NXAXiufFyAxtGKe4Q
-        yghAzw9E/eRSufVOtMLSMm0=
-X-Google-Smtp-Source: AMrXdXvBacoD8XHw7bIj3fRtq94ID9PrZm6RO3ZxWkoHc0UM+D1Lv3h0fEeeOeks7HpvCHDMnbHePQ==
-X-Received: by 2002:a17:903:557:b0:194:55df:4fe with SMTP id jo23-20020a170903055700b0019455df04femr5883472plb.35.1674014174002;
-        Tue, 17 Jan 2023 19:56:14 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-66.three.co.id. [180.214.232.66])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902f7c500b0019337bf957dsm17288666plw.296.2023.01.17.19.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 19:56:13 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 1B48C1016F2; Wed, 18 Jan 2023 10:56:09 +0700 (WIB)
-Date:   Wed, 18 Jan 2023 10:56:09 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
-Message-ID: <Y8dt2efGEPS/JRaP@debian.me>
-References: <20230117124546.116438951@linuxfoundation.org>
+        Tue, 17 Jan 2023 22:56:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864E954227;
+        Tue, 17 Jan 2023 19:56:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FA776160E;
+        Wed, 18 Jan 2023 03:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78111C433D2;
+        Wed, 18 Jan 2023 03:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674014189;
+        bh=GqWHxua0L6lPQIAKNKiopte/74IpSnqlqs2H7TJq2CY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IsHlAjKa0F21eCJONlHnQ09ZgmN3Ee1N/60k4+a1P9S1q8BgaBbWNPXkmkx7jsT4L
+         GqL7yV9k5hPlNt0zIFq0VDALvsKynyX9yvNru//R2857HCbm/CIKUSlCSzwH7tzfhg
+         uS5CEVlF2W+p8rSoPdkaB2x/GeAtrNbImkFwFPPyzC+kbqrU14yahamYETyTnxNAcZ
+         UDjCKvXutsebE6Vdn/J21JpxtGjyTF7Wn4xovwCGuGqbJOuhYOOt9vVN7OnAPWv5hy
+         fsBcalCiLh2ODwqVdwI52Gv7BGT8FMiviv6R85bU4DoMcmw3U0aoM1aQAD7SMP2i+6
+         V+zXgzmkVileA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2A9985C1052; Tue, 17 Jan 2023 19:56:29 -0800 (PST)
+Date:   Tue, 17 Jan 2023 19:56:29 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH rcu v2 17/20] kvm: Remove "select SRCU"
+Message-ID: <20230118035629.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
+ <20230113001132.3375334-17-paulmck@kernel.org>
+ <Y8dLCJKXn5fL/2Iq@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VVLD0i51IZ9bwB+F"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y8dLCJKXn5fL/2Iq@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 18, 2023 at 01:27:36AM +0000, Sean Christopherson wrote:
+> On Thu, Jan 12, 2023, Paul E. McKenney wrote:
+> > Now that the SRCU Kconfig option is unconditionally selected, there is
+> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> > Kconfig statements from the various KVM Kconfig files.
+> > 
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: <kvm@vger.kernel.org>
+> > Acked-by: Marc Zyngier <maz@kernel.org> (arm64)
+> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> > Acked-by: Anup Patel <anup@brainfault.org> (riscv)
+> > Acked-by: Heiko Carstens <hca@linux.ibm.com> (s390)
+> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
+> > ---
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> 
+> 
+> Ugh, my apologies Paul.  I didn't realize 0cd7e350abc4 ("rcu: Make SRCU mandatory")
+> is already in Linus' tree, i.e. bundling this in a single patch was unnecessary work
+> for you.
+> 
+> Anyways, since there isn't an external dependency, this can go through the KVM
+> tree.  Unless you prefer to take it directly, I'll make sure Paolo sends it along
+> at some point before v6.2 final.
 
---VVLD0i51IZ9bwB+F
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am very happy to have you guys take it.  Just let me know when you
+have it in place, and I will drop my copy on my next rebase after that.
 
-On Tue, Jan 17, 2023 at 01:48:13PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 176 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-=20
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---VVLD0i51IZ9bwB+F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8dt1QAKCRD2uYlJVVFO
-o/pYAQCe/RTsz0cS/7QTCzrQqZGbAyAyUSM9I6LaRF19nnvA7AEAmN4tnT/8CkEW
-EONq41/MFhUNCcOI3diqIIPDvzHkwwQ=
-=7Yo2
------END PGP SIGNATURE-----
-
---VVLD0i51IZ9bwB+F--
+							Thanx, Paul
