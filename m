@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35592672406
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30621672404
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjARQtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S229787AbjARQtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjARQt0 (ORCPT
+        with ESMTP id S229941AbjARQtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:49:26 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6099E37F0D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:49:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NoQkT4bAeFUtKhReQlXOayJmOIx8fi/SsB/fWlbrzXQ=; b=BZ1vl+eV0aBW85PIlSsd4uGqBn
-        zc9sXI+JywLhi61h/6zxZmH5YXB+YjyJLjy3kJTCpZNv532AZv6O2seW9haxn5H3yUNdUB2sIi6xG
-        wq8Eagx4eb7hsFFspIYUDGUr4WFEKICOhoh0mT2z053/9tXaMK+loxX5CKFrp/yu4PUP0OIAWccdZ
-        RMYK9XXU7qBH4U17RS7XBBcFTPHqwkXxyAyTZeU6qOELe6Kc+dMD4k8qpgKqfVDgyHwQfXdIUmHcu
-        rwhKR24bbsLqb2sUksVytStpMylNzI82SIls6q2BU/8Fk6Z3v0VwMDvEj+ncmvC8Oaal+hHaPbUAb
-        1MMovObA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pIBc3-0002uG-0r;
-        Wed, 18 Jan 2023 16:48:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AE30230030F;
-        Wed, 18 Jan 2023 17:48:59 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8E7B720A68C2A; Wed, 18 Jan 2023 17:48:59 +0100 (CET)
-Date:   Wed, 18 Jan 2023 17:48:59 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv14 01/17] x86/mm: Rework address range check in
- get_user() and put_user()
-Message-ID: <Y8gi+/Y0qcjtRf6m@hirez.programming.kicks-ass.net>
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-2-kirill.shutemov@linux.intel.com>
- <Y8gVJUDEFE5U7xAq@hirez.programming.kicks-ass.net>
- <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com>
+        Wed, 18 Jan 2023 11:49:07 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEA236FE7;
+        Wed, 18 Jan 2023 08:49:06 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-15eec491b40so15145849fac.12;
+        Wed, 18 Jan 2023 08:49:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9W9y7b/ziaOFjGUNm7d4cmFDdM4EDargAbRPiR5bNLQ=;
+        b=4hJywG/AKM9TeRQsQ1JvW4TgL+sbpr+Sl707UiCXzYMrBVwgnbADr+RPSX/FG3YQ0A
+         pkF1QZnOKYXM0DiggI10ZgyFmb0l9fOmxsVqQcamcWakQLBou5kVCVhwXAkXyEC5VBY6
+         cebO2azcAprqFZ5vJFM2gy0zgBrU5JsFi1pbdVc2JcduaqFhL9Pn3+w4cWzLA6pBGnX9
+         OyN0p8fh2HSi9qJ013Kh7QImxGms585wwCwMG4KmPQoZNcKGHZ8a/WapyaWlhbaB1ku8
+         klhCU/t1F12f6GLQZTYg7TDqp4LaxJDJvyrQFlh+sXlu1FyxHM6MEbhDdZvZVBFpwD36
+         rPmg==
+X-Gm-Message-State: AFqh2kpD5KiQuHSrJunYlzmGTj+Cfm/ahLv50+865QxVzlxybHy5fgwg
+        fhM8jW/NCulkwvhZ42EKnA==
+X-Google-Smtp-Source: AMrXdXtIWuC3J1y+UwrLmINbTm9kPgk76QzDW6udmvO3aPTiNNlYIcEhJTMYOiY45UdU64RY+g328A==
+X-Received: by 2002:a05:6870:c906:b0:15e:f1d6:3d8 with SMTP id hj6-20020a056870c90600b0015ef1d603d8mr4189671oab.14.1674060545753;
+        Wed, 18 Jan 2023 08:49:05 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id s18-20020a056870611200b0014c7958c55bsm18632011oae.42.2023.01.18.08.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 08:49:05 -0800 (PST)
+Received: (nullmailer pid 148495 invoked by uid 1000);
+        Wed, 18 Jan 2023 16:49:04 -0000
+Date:   Wed, 18 Jan 2023 10:49:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: qcom,sm8250: use fallback for
+ SDM845 sound cards
+Message-ID: <167406054417.148440.18145295940494067473.robh@kernel.org>
+References: <20230118101542.96705-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118101542.96705-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 07:59:21AM -0800, Linus Torvalds wrote:
 
-> We don't silence it - for a kernel address that turns into an all-ones
-> address, the the _ASM_EXTABLE() will still cause the -EFAULT due to
-> the page fault.
-
-> But it's not the high bit set case that is the problem here.
-
-Yes, and the explicit bad_get_user jump would not print the message and
-now with _UA removed it won't either (I seem to have my wires crossed
-just now).
-
-> The problem is a "positive" address that is non-canonical.
+On Wed, 18 Jan 2023 11:15:41 +0100, Krzysztof Kozlowski wrote:
+> All SDM845 sound cards are compatible with each other, so use one
+> generic fallback compatible for them.
 > 
-> Testing against TASK_SIZE_MAX would catch non-canonical addresses
-> before the access, and we'd return -EFAULT.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/sound/qcom,sm8250.yaml           | 24 +++++++++++--------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
 > 
-> But now that we don't test against TASK_SIZE_MAX any more,
-> non-canonical accesses will cause a GP fault, and *that* message is
-> what we want to silence.
 
-Right, but I was thinking that we'd explicitly allowed those because
-with LAM enabled we'd actually accept those addresses.
-
-> We'll still return -EFAULT, of course, we're just getting rid of the
-> 
->         WARN_ONCE(trapnr == X86_TRAP_GP,
->                 "General protection fault in user access.
-> Non-canonical address?");
-> 
-> issue that comes from not being so exact about the address limit any more.
-
-Ah indeed, so for !LAM we'd now print the message were we would not
-before (the whole TASK_SIZE_MAX+ range).
-
-OK, agreed.
+Acked-by: Rob Herring <robh@kernel.org>
