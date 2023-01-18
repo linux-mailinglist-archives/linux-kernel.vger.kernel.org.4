@@ -2,427 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ED6672811
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2F7672818
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjARTTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S229663AbjARTX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjARTTZ (ORCPT
+        with ESMTP id S229489AbjARTX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:19:25 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF0A53571;
-        Wed, 18 Jan 2023 11:19:14 -0800 (PST)
-Received: from umang.jainideasonboard.com (unknown [IPv6:2405:204:820c:4b28:9aaf:3c:ef34:ecdd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44A0A1056;
-        Wed, 18 Jan 2023 20:19:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674069553;
-        bh=v7f2EepVufrbXEZ17JZNbOqBSaSez3VNJ0FenZNNITU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fgxgii/T8W/KCP1MmqKx/qWjYOiaFcmxtzdXmmuDidXNmNN+J+nGKyXbN+dunckMy
-         GbOMV+ay1Nxz07kDBi+A/YS9XDT6DnmivgL5NrhpuoqTbhfRUjmxReg80AbgtPqauZ
-         fhjudRJ2PyzxaMJ90EtLFQsKwCXDlAAMKVzMRoPc=
-From:   Umang Jain <umang.jain@ideasonboard.com>
-To:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v4 6/6] staging: vc04_services: vchiq: Register devices with a custom bus_type
-Date:   Thu, 19 Jan 2023 00:48:11 +0530
-Message-Id: <20230118191811.208552-7-umang.jain@ideasonboard.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230118191811.208552-1-umang.jain@ideasonboard.com>
-References: <20230118191811.208552-1-umang.jain@ideasonboard.com>
+        Wed, 18 Jan 2023 14:23:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B847953B2C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:23:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69FC8B81C66
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCB3C433D2;
+        Wed, 18 Jan 2023 19:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674069802;
+        bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=EwpuW/gobuiyeXJs2dQ4kbN14sQEOWf/f8Lxa8Kkrf9gX2uBQW8IikL84yL5nqOUU
+         jLtjRLiYds2rRqxwDqod9XyJS36xOD68fxAIl4pWMI8O7FxAlQYfIxSyVA/H4Z5uBl
+         nHQCRDmzy/GghPNk+Vc1RIg3PfgqLu7Vj0vX0DbcLc8WTDOdCTo6i3w7G/FSqQm1Zn
+         vxJXpPlstBhJBnp5VnqmL+IyeFDBkcxfm7c9vKNt9zV5X3N0bLLmodEbSCUUS1uL4I
+         +ItgfsgroRhpr3DYHGcEX4MP01SoVAX5FK19SaXLMPyH20SsfPhMviowjvA9ioT+eE
+         39vvDeYR6IwqA==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Wed, 18 Jan 2023 12:22:59 -0700
+Subject: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABRHyGMC/x2N0QqDMAxFf0XyvICts0x/ZfhQ02wGXJVEZCD++
+ +rgvhwuh3OAsQob9NUByruYLLmAu1VAU8xvRkmFwde+qZ174H4v23CeE7qAXUhtaomaQB6KM0Zj
+ HDVmmi7rE21jvY5V+SXff+g5nOcPBT2DQXgAAAA=
+To:     linux@armlinux.org.uk, arnd@arndb.de
+Cc:     ndesaulniers@google.com, trix@redhat.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2188; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDMkn3DX7ptX3yk/buub+p7cHnHw+Ho74v3H/xcuZm7Zo5B3c
+ pBZY1VHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmsqSBkaGFr9akoUciZIb4grYGp3
+ WX7luftRZ7qJvY+N5CZFb0lFBGhht8B/S9lZgZ9KXKRMTr/WMOCO06m3vGdnf+icBtr+1VmAE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devices that the vchiq interface registers(bcm2835-audio,
-bcm2835-camera) are implemented and exposed by the VC04 firmware.
-The device tree describes the VC04 itself with the resources
-required to communicate with it through a mailbox interface. However,
-the vchiq interface registers these devices as platform devices. This
-also means the specific drivers for these devices are also getting
-registered as platform drivers. This is not correct and a blatant
-abuse of platform device/driver.
+Commit 6a7ee50f8f56 ("ARM: disallow pre-ARMv5 builds with ld.lld")
+prevented v4 or v4t kernels when ld.lld will link the kernel due to
+inserting unsupported blx instructions.
 
-Replace the platform device/driver model with a standard device driver
-model. A custom bus_type, vchiq_bus_type, is created in the vchiq
-interface which matches the devices to their specific device drivers
-thereby, establishing driver binding. A struct vchiq_device wraps the
-struct device for each device being registered on the bus by the vchiq
-interface.
+ld.lld has been fixed in current main (16.0.0) to avoid inserting these
+instructions by inserting position independent thunks instead. Allow
+these configurations to be enabled when ld.lld 16.0.0 is used to link
+the kernel.
 
-Each device registered will expose a 'name' read-only device attribute
-in sysfs (/sys/bus/vchiq-bus/devices). New devices and drivers can be
-added by registering on vchiq_bus_type and adding a corresponding
-device name entry in the static list of devices, vchiq_devices. There
-is currently no way to enumerate the VCHIQ devices that are available
-from the firmware.
+Additionally, add a link to the upstream LLVM issue so that the reason
+for this dependency is clearly documented.
 
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/964
+Link: https://github.com/llvm/llvm-project/commit/6f9ff1beee9d12aca0c9caa9ae0051dc6d0a718c
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- .../vc04_services/bcm2835-audio/bcm2835.c     |  19 ++-
- .../bcm2835-camera/bcm2835-camera.c           |  17 ++-
- .../interface/vchiq_arm/vchiq_arm.c           | 121 +++++++++++++++---
- .../interface/vchiq_arm/vchiq_arm.h           |   1 +
- 4 files changed, 117 insertions(+), 41 deletions(-)
+I just build tested:
 
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-index 00bc898b0189..9f3af84f5d5d 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-+++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-@@ -1,12 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright 2011 Broadcom Corporation.  All rights reserved. */
+- multi_v4t_defconfig without 6a7ee50f8f56 with LLVM 15: warning
+- multi_v4t_defconfig with this patch with LLVM 16: no warning
+
+and the configuration cannot be selected under the old and new conditions
+still.
+---
+ arch/arm/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 43c7773b89ae..874c5b56cf9a 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -345,14 +345,16 @@ comment "CPU Core family selection"
+ config ARCH_MULTI_V4
+ 	bool "ARMv4 based platforms (FA526, StrongARM)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	depends on !LD_IS_LLD
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
  
--#include <linux/platform_device.h>
--
- #include <linux/init.h>
- #include <linux/slab.h>
- #include <linux/module.h>
- 
-+#include "../interface/vchiq_arm/vchiq_arm.h"
- #include "bcm2835.h"
- 
- static bool enable_hdmi;
-@@ -268,9 +267,8 @@ static int snd_add_child_devices(struct device *device, u32 numchans)
- 	return 0;
- }
- 
--static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
-+static int snd_bcm2835_alsa_probe(struct device *dev)
- {
--	struct device *dev = &pdev->dev;
- 	int err;
- 
- 	if (num_channels <= 0 || num_channels > MAX_SUBSTREAMS) {
-@@ -292,30 +290,29 @@ static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
- 
- #ifdef CONFIG_PM
- 
--static int snd_bcm2835_alsa_suspend(struct platform_device *pdev,
-+static int snd_bcm2835_alsa_suspend(struct device *pdev,
- 				    pm_message_t state)
- {
- 	return 0;
- }
- 
--static int snd_bcm2835_alsa_resume(struct platform_device *pdev)
-+static int snd_bcm2835_alsa_resume(struct device *pdev)
- {
- 	return 0;
- }
- 
- #endif
- 
--static struct platform_driver bcm2835_alsa_driver = {
-+static struct device_driver bcm2835_alsa_driver = {
- 	.probe = snd_bcm2835_alsa_probe,
- #ifdef CONFIG_PM
- 	.suspend = snd_bcm2835_alsa_suspend,
- 	.resume = snd_bcm2835_alsa_resume,
- #endif
--	.driver = {
--		.name = "bcm2835_audio",
--	},
-+	.name = "bcm2835_audio",
-+	.bus = &vchiq_bus_type,
- };
--module_platform_driver(bcm2835_alsa_driver);
-+module_driver(bcm2835_alsa_driver, driver_register, driver_unregister);
- 
- MODULE_AUTHOR("Dom Cobley");
- MODULE_DESCRIPTION("Alsa driver for BCM2835 chip");
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 4f81765912ea..199a49f9ec1e 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -24,8 +24,8 @@
- #include <media/v4l2-event.h>
- #include <media/v4l2-common.h>
- #include <linux/delay.h>
--#include <linux/platform_device.h>
- 
-+#include "../interface/vchiq_arm/vchiq_arm.h"
- #include "../vchiq-mmal/mmal-common.h"
- #include "../vchiq-mmal/mmal-encodings.h"
- #include "../vchiq-mmal/mmal-vchiq.h"
-@@ -1841,7 +1841,7 @@ static struct v4l2_format default_v4l2_format = {
- 	.fmt.pix.sizeimage = 1024 * 768,
- };
- 
--static int bcm2835_mmal_probe(struct platform_device *pdev)
-+static int bcm2835_mmal_probe(struct device *device)
- {
- 	int ret;
- 	struct bcm2835_mmal_dev *dev;
-@@ -1896,7 +1896,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 						       &camera_instance);
- 		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
- 		if (ret) {
--			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-+			dev_err(device, "%s: could not register V4L2 device: %d\n",
- 				__func__, ret);
- 			goto free_dev;
- 		}
-@@ -1976,7 +1976,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int bcm2835_mmal_remove(struct platform_device *pdev)
-+static int bcm2835_mmal_remove(struct device *device)
- {
- 	int camera;
- 	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-@@ -1990,15 +1990,14 @@ static int bcm2835_mmal_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static struct platform_driver bcm2835_camera_driver = {
-+static struct device_driver bcm2835_camera_driver = {
-+	.name		= "bcm2835-camera",
- 	.probe		= bcm2835_mmal_probe,
- 	.remove		= bcm2835_mmal_remove,
--	.driver		= {
--		.name	= "bcm2835-camera",
--	},
-+	.bus		= &vchiq_bus_type,
- };
- 
--module_platform_driver(bcm2835_camera_driver)
-+module_driver(bcm2835_camera_driver, driver_register, driver_unregister)
- 
- MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
- MODULE_AUTHOR("Vincent Sanders");
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index 22de23f3af02..86c8e5df7cf6 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -12,6 +12,8 @@
- #include <linux/cdev.h>
- #include <linux/fs.h>
- #include <linux/device.h>
-+#include <linux/device/bus.h>
-+#include <linux/string.h>
- #include <linux/mm.h>
- #include <linux/highmem.h>
- #include <linux/pagemap.h>
-@@ -65,9 +67,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
- DEFINE_SPINLOCK(msg_queue_spinlock);
- struct vchiq_state g_state;
- 
--static struct platform_device *bcm2835_camera;
--static struct platform_device *bcm2835_audio;
--
- struct vchiq_drvdata {
- 	const unsigned int cache_line_size;
- 	struct rpi_firmware *fw;
-@@ -132,6 +131,51 @@ struct vchiq_pagelist_info {
- 	unsigned int scatterlist_mapped;
- };
- 
-+struct vchiq_device {
-+	const char *name;
-+	struct device dev;
-+};
-+
-+static ssize_t vchiq_dev_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct vchiq_device *device = container_of(dev, struct vchiq_device, dev);
-+
-+	return sprintf(buf, "%s", device->name);
-+}
-+
-+static DEVICE_ATTR_RO(vchiq_dev);
-+
-+static struct attribute *vchiq_dev_attrs[] = {
-+	&dev_attr_vchiq_dev.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(vchiq_dev);
-+
-+static const struct device_type vchiq_device_type = {
-+	.groups         = vchiq_dev_groups
-+};
-+
-+static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv)
-+{
-+	if (dev->bus == &vchiq_bus_type &&
-+	    strcmp(dev_name(dev), drv->name) == 0)
-+		return 1;
-+	return 0;
-+}
-+
-+struct bus_type vchiq_bus_type = {
-+	.name   = "vchiq-bus",
-+	.match  = vchiq_bus_type_match,
-+};
-+EXPORT_SYMBOL(vchiq_bus_type);
-+
-+static const char *const vchiq_devices[] = {
-+	"bcm2835_audio",
-+	"bcm2835-camera",
-+};
-+
- static void __iomem *g_regs;
- /* This value is the size of the L2 cache lines as understood by the
-  * VPU firmware, which determines the required alignment of the
-@@ -1763,26 +1807,52 @@ static const struct of_device_id vchiq_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, vchiq_of_match);
- 
--static struct platform_device *
-+static void
-+vchiq_release_device(struct device *dev)
-+{
-+	struct vchiq_device *device;
-+
-+	device = container_of(dev, struct vchiq_device, dev);
-+	kfree(device);
-+}
-+
-+static int
- vchiq_register_child(struct platform_device *pdev, const char *name)
- {
--	struct platform_device_info pdevinfo;
--	struct platform_device *child;
-+	struct vchiq_device *device = NULL;
-+	int ret;
- 
--	memset(&pdevinfo, 0, sizeof(pdevinfo));
-+	device = kzalloc(sizeof(*device), GFP_KERNEL);
-+	if (!device)
-+		return -ENOMEM;
- 
--	pdevinfo.parent = &pdev->dev;
--	pdevinfo.name = name;
--	pdevinfo.id = PLATFORM_DEVID_NONE;
--	pdevinfo.dma_mask = DMA_BIT_MASK(32);
-+	device->name = name;
-+	device->dev.init_name = name;
-+	device->dev.parent = &pdev->dev;
-+	device->dev.bus = &vchiq_bus_type;
-+	device->dev.type = &vchiq_device_type;
-+	device->dev.release = vchiq_release_device;
-+
-+	ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
-+	if (ret < 0) {
-+		vchiq_release_device(&device->dev);
-+		return ret;
-+	}
- 
--	child = platform_device_register_full(&pdevinfo);
--	if (IS_ERR(child)) {
--		dev_warn(&pdev->dev, "%s not registered\n", name);
--		child = NULL;
-+	ret = device_register(&device->dev);
-+	if (ret) {
-+		put_device(&device->dev);
-+		return -EINVAL;
- 	}
- 
--	return child;
-+	return 0;
-+}
-+
-+static int
-+vchiq_unregister_child(struct device *dev, void *data)
-+{
-+	device_unregister(dev);
-+	return 0;
- }
- 
- static int vchiq_probe(struct platform_device *pdev)
-@@ -1790,7 +1860,7 @@ static int vchiq_probe(struct platform_device *pdev)
- 	struct device_node *fw_node;
- 	const struct of_device_id *of_id;
- 	struct vchiq_drvdata *drvdata;
--	int err;
-+	int i, err;
- 
- 	of_id = of_match_node(vchiq_of_match, pdev->dev.of_node);
- 	drvdata = (struct vchiq_drvdata *)of_id->data;
-@@ -1832,8 +1902,12 @@ static int vchiq_probe(struct platform_device *pdev)
- 		goto error_exit;
- 	}
- 
--	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
--	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
-+	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-+		err = vchiq_register_child(pdev, vchiq_devices[i]);
-+		if (!err)
-+			dev_err(&pdev->dev, "Failed to register %s vchiq device\n",
-+				vchiq_devices[i]);
-+	}
- 
- 	return 0;
- 
-@@ -1845,8 +1919,8 @@ static int vchiq_probe(struct platform_device *pdev)
- 
- static int vchiq_remove(struct platform_device *pdev)
- {
--	platform_device_unregister(bcm2835_audio);
--	platform_device_unregister(bcm2835_camera);
-+	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_unregister_child);
-+
- 	vchiq_debugfs_deinit();
- 	vchiq_deregister_chrdev();
- 
-@@ -1866,6 +1940,10 @@ static int __init vchiq_driver_init(void)
- {
- 	int ret;
- 
-+	ret = bus_register(&vchiq_bus_type);
-+	if (ret)
-+		pr_err("Failed to register %s\n", vchiq_bus_type.name);
-+
- 	ret = platform_driver_register(&vchiq_driver);
- 	if (ret)
- 		pr_err("Failed to register vchiq driver\n");
-@@ -1876,6 +1954,7 @@ module_init(vchiq_driver_init);
- 
- static void __exit vchiq_driver_exit(void)
- {
-+	bus_unregister(&vchiq_bus_type);
- 	platform_driver_unregister(&vchiq_driver);
- }
- module_exit(vchiq_driver_exit);
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-index 2fb31f9b527f..98c3af32774a 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-@@ -81,6 +81,7 @@ extern int vchiq_susp_log_level;
- 
- extern spinlock_t msg_queue_spinlock;
- extern struct vchiq_state g_state;
-+extern struct bus_type vchiq_bus_type;
- 
- extern struct vchiq_state *
- vchiq_get_state(void);
+ config ARCH_MULTI_V4T
+ 	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	depends on !LD_IS_LLD
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+ 		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+
+---
+base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+change-id: 20230118-v4-v4t-lld-16-96d5d5cc36c2
+
+Best regards,
 -- 
-2.39.0
-
+Nathan Chancellor <nathan@kernel.org>
