@@ -2,150 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E64067213F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9433672141
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjARP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S231130AbjARP2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjARP1S (ORCPT
+        with ESMTP id S230515AbjARP1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:27:18 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EA01CAE0;
-        Wed, 18 Jan 2023 07:26:55 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r30so9892548wrr.10;
-        Wed, 18 Jan 2023 07:26:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ypPAzYEJSbtUHwI+8APhdCEH8lcbIVf9Cb/fG9P1p/Q=;
-        b=b1LFdXq6UsyoNYZJSZ7z8zdAZJUQLpfM6RxV1TR5vx6KIgxuoZC3qsNzovOh7JxmRQ
-         6nIahIMfk2OG02NbwbUDdoJvTV4IfPa0t5kepbJN307sQzfI8PlGNtccTZ32nadKN7TV
-         8ZLcuBHPCHaGNkRujMRps8KheTLYciw3l987dtIRqa7jRQZUarzSPGKC3wwSGS/QatUd
-         PxOz4L8+gSqtPXnNdqt/VcSL5sLr9HQDZ+U6z/9zjCT1ai3ly7jyLJhSBurpHwMv2kJ7
-         dLWlkA/GJZJ+xpVocP9jSjzD5PWfSYz+XMuMDLk928f8SRGesjK4lp2NXTdQPKLNoTcU
-         m+Wg==
+        Wed, 18 Jan 2023 10:27:21 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C9040BF3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:27:19 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id w24-20020a5d8458000000b00704bf40efecso4598477ior.21
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:27:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ypPAzYEJSbtUHwI+8APhdCEH8lcbIVf9Cb/fG9P1p/Q=;
-        b=hltsJIWENzUTdUmFnsI8JDiFJvkLfrGX0wUkw1TK1y+Pn2RlUuxp/uwxEgmZnNtrVd
-         CYbpwL+Gnhc4bHLLhNO5rfnEgQQp7thWPb++X7+8hutW3kZZF5yxIqbZKz0/0aWB/70G
-         rOHzjmE18DPsEI7402lT30l4epjibtfWVgztYxFzLksa0wFU3+39C+mTu0MourgKXSgS
-         iSV1YQe4eVGvZd5ulm4eI/fXwapOL0FR+gNwdGKyqaUQkAjvikykmBHHZLpUyCdl+rE4
-         GWa83f7G80tPjgvIhSEkS2xtk13vCOwJUR0MYk+CIcu9x3VcVmuYirtx6XBbb4gHKN6i
-         AWOw==
-X-Gm-Message-State: AFqh2krgn6fZ8WMh0nWyotbMLGDE4h+6V/8h5a+TMqqSgB7uHsR0RREp
-        xRah9Pw2XkyGA4LHAiFI2lU=
-X-Google-Smtp-Source: AMrXdXuCq08opotKRprCnH9Sx/BDKWlGWP9FMJHuvV3tcH8bNrfV2MD+oeI500xtKhdsjeZCYtClJg==
-X-Received: by 2002:a05:6000:5c2:b0:2bb:eb3d:8d20 with SMTP id bh2-20020a05600005c200b002bbeb3d8d20mr3483580wrb.43.1674055614334;
-        Wed, 18 Jan 2023 07:26:54 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id bu9-20020a056000078900b002be1dcb6efbsm5451116wrb.9.2023.01.18.07.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:26:53 -0800 (PST)
-Date:   Wed, 18 Jan 2023 18:26:50 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Brent Pappas <bpappas@pappasbrent.com>
-Cc:     ailus@linux.intel.com, andy.shevchenko@gmail.com,
-        gregkh@linuxfoundation.org, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org
-Subject: Re: [PATCH v5] media: atomisp: pci: Replace bytes macros with
- functions
-Message-ID: <Y8gPuh+WDO6vJPu+@kadam>
-References: <Y8gImBdR6YpEKZEb@kadam>
- <20230118151656.20558-1-bpappas@pappasbrent.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RSHU3L3O8m2f5qhh1xzMaWO9cyJv2viK8s/JnzrdiaM=;
+        b=UXmQCP4aSihwyP+aStukoDGLeAIE2XvQKcydw8VM2m22dF1oj02Ih2me2EaPmJpOPy
+         F0EKY+Bob9Z6+1zm9Ot5mE+KhyKbsNIRh2LGeePBdU6SJX1Swv24nX9JL+39HM5puuTN
+         hG2qmU4rTeIl7duBSJktVZzYm7qnbK3a6c5vb+yCgmxhP3yNoyNuMjPDSI1fIepsTAte
+         CY/q8NLa/N7Z7i5G5lI0BAti7ZuLbjAfI/IznYbfZDdX4Hy/M7mxY2zqMb5j32z5EqYT
+         C3uzPAqHmx8ahlVVk+bRPMNa++0w3M3tS4i3AD4HtTQNK9f5HF0vWcZA4+PEaCfPyELE
+         m7fw==
+X-Gm-Message-State: AFqh2kpLpk0TYZ0wq6Jvth5euQ0CgcsxPwtZl6JV0xfuHQ+p++GT5zg5
+        8BxLFb5vg8YdeWRRvRQVydQBwFYSy57BL3qcl1x+xcvdZhnf
+X-Google-Smtp-Source: AMrXdXvOVrXYt8iuPJjiRCmJe/PTCHPgF3F0lFyh1ydL+i4txdOI7v+eCHxocamLsHxgLPnRmpTNWMGXVTCamp+oQRBIoQqiucvg
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118151656.20558-1-bpappas@pappasbrent.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:d41:b0:30d:87b7:cfd3 with SMTP id
+ h1-20020a056e020d4100b0030d87b7cfd3mr913719ilj.196.1674055638407; Wed, 18 Jan
+ 2023 07:27:18 -0800 (PST)
+Date:   Wed, 18 Jan 2023 07:27:18 -0800
+In-Reply-To: <20230118150448.3071-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a9632e05f28b7373@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
+From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:16:56AM -0500, Brent Pappas wrote:
-> Replace the function-like macros FPNTBL_BYTES(), SCTBL_BYTES(), and
-> MORPH_PLANE_BYTES() with functions to comply with Linux coding style
-> standards.
-> Replace multiplication with calls to array_size() and array3_size()
-> to prevent accidental arithmetic overflow.
-> 
-> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
-> ---
-> Changelog:
-> V1 -> V2: Use size_mul() to perform size_t multiplication without risk of
-> 		  overflow.
-> 		  Remove the inline keyword from function definitions.
-> 
-> V2 -> V3: Add commit message.
-> 
-> V3 -> V4: Use array_size() and array3_size() for multiplication.
-> 
-> V4 -> V5: Fix indentation.
-> 
->  .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
->  1 file changed, 23 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-> index f08564f58242..7e111df5c09d 100644
-> --- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-> +++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-> @@ -98,17 +98,27 @@
->  #include "sh_css_frac.h"
->  #include "ia_css_bufq.h"
->  
-> -#define FPNTBL_BYTES(binary) \
-> -	(sizeof(char) * (binary)->in_frame_info.res.height * \
-> -	 (binary)->in_frame_info.padded_width)
-> +static size_t fpntbl_bytes(const struct ia_css_binary *binary)
-> +{
-> +	return array3_size(sizeof(char),
-> +					   binary->in_frame_info.res.height,
-> +					   binary->in_frame_info.padded_width);
+Hello,
 
-Nope.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in io_req_caches_free
 
-> +}
->  
-> -#define SCTBL_BYTES(binary) \
-> -	(sizeof(unsigned short) * (binary)->sctbl_height * \
-> -	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
-> +static size_t sctbl_bytes(const struct ia_css_binary *binary)
-> +{
-> +	return array_size(sizeof(unsigned short),
-> +					  array3_size(binary->sctbl_height,
-> +						      binary->sctbl_aligned_width_per_color,
-> +								  IA_CSS_SC_NUM_COLORS));
+==================================================================
+BUG: KASAN: use-after-free in wq_stack_extract io_uring/slist.h:126 [inline]
+BUG: KASAN: use-after-free in io_alloc_req io_uring/io_uring.h:356 [inline]
+BUG: KASAN: use-after-free in io_req_caches_free+0x1a8/0x201 io_uring/io_uring.c:2745
+Read of size 8 at addr ffff8880711c7938 by task kworker/u4:5/1184
 
-Also nope.
+CPU: 1 PID: 1184 Comm: kworker/u4:5 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Workqueue: events_unbound io_ring_exit_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ wq_stack_extract io_uring/slist.h:126 [inline]
+ io_alloc_req io_uring/io_uring.h:356 [inline]
+ io_req_caches_free+0x1a8/0x201 io_uring/io_uring.c:2745
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2977
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-> +}
->  
-> -#define MORPH_PLANE_BYTES(binary) \
-> -	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
-> -	 (binary)->morph_tbl_height)
-> +static size_t morph_plane_bytes(const struct ia_css_binary *binary)
-> +{
-> +	return array3_size(SH_CSS_MORPH_TABLE_ELEM_BYTES,
-> +					   binary->morph_tbl_aligned_width,
-> +					   binary->morph_tbl_height);
+Allocated by task 5597:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Nope.
+Freed by task 1184:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+ io_req_caches_free+0x1c4/0x201 io_uring/io_uring.c:2747
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2977
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-> +}
+The buggy address belongs to the object at ffff8880711c78c0
+ which belongs to the cache io_kiocb of size 224
+The buggy address is located 120 bytes inside of
+ 224-byte region [ffff8880711c78c0, ffff8880711c79a0)
 
-regards,
-dan carpenter
+The buggy address belongs to the physical page:
+page:ffffea0001c471c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x711c7
+memcg:ffff88802b0a9f01
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88801c3f03c0 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88802b0a9f01
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5597, tgid 5596 (syz-executor.0), ts 92319099413, free_ts 80415300921
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1451 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
+ __folio_put_small mm/swap.c:106 [inline]
+ __folio_put+0xc5/0x140 mm/swap.c:129
+ folio_put include/linux/mm.h:1203 [inline]
+ put_page include/linux/mm.h:1272 [inline]
+ anon_pipe_buf_release+0x3fb/0x4c0 fs/pipe.c:138
+ pipe_buf_release include/linux/pipe_fs_i.h:183 [inline]
+ pipe_read+0x614/0x1110 fs/pipe.c:324
+ call_read_iter include/linux/fs.h:1846 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x7fa/0x930 fs/read_write.c:470
+ ksys_read+0x1ec/0x250 fs/read_write.c:613
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880711c7800: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+ ffff8880711c7880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>ffff8880711c7900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                        ^
+ ffff8880711c7980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880711c7a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+Tested on:
+
+commit:         0a093b28 Add linux-next specific files for 20230112
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b06c96480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1056f519480000
 
