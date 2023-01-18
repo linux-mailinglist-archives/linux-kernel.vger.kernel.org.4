@@ -2,66 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB10670EDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C645670EE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjARAmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S229828AbjARAmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjARAl1 (ORCPT
+        with ESMTP id S229504AbjARAl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:41:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100E5528C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D765CB81A63
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABA1C433D2;
-        Wed, 18 Jan 2023 00:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674001099;
-        bh=chNFHUlN28DER9rui9ejEk9u0ZDm3x0bDdM5RgT8GgM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R8Y/mkGw+XISglIct6nR4jEjT0GyILnCo/QaoFbW++Ecd4obwKydAU2sHG+3XCSTJ
-         D5ft3EWUp2P6ARRQqaGY7yp/Lx11VknmvMNB52lGaQe+B3ATAWNaQkivJcXeG6qpKS
-         YOTXG+ydFBGkwM7qNcAgpFdIX460LTZU8kjJPmlg=
-Date:   Tue, 17 Jan 2023 16:18:18 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [PATCHv2] mm: use stack_depot_early_init for kmemleak
-Message-Id: <20230117161818.2dba77f3ee9b8709947b58f2@linux-foundation.org>
-In-Reply-To: <1673943112-8620-1-git-send-email-zhaoyang.huang@unisoc.com>
-References: <1673943112-8620-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 17 Jan 2023 19:41:28 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ED23C2B1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:33 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id z11-20020a6b5c0b000000b0070492cb751aso7580234ioh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5YP4NYX9S7zVrVLE6QdkyuYEvdTIcKXOFJ/pF/J7aoo=;
+        b=DiMuuKDUaQOWmEy1UBMBwe/WEcDFFi7wMWK0S7xtZv31BW4UQFj11yCkucyrd4fBuV
+         TByB3DM7eQS7zzwog8470VEv2k1JUWnPhS56LhMF5GWuymbNZCPe2SxySZhLq23W4S3I
+         v33snliHSMPz0cEd/7Jgl2rSY5NjnvM1c/cppzfTixKO3oVbMXq1WfGZnnoaBBU1SVDn
+         l3xP8irHPvWGr13JZm+erNTVTC2D78Wy4b6fGa4/pquQy60cOonorJytYVT0D/GCajk6
+         xfjCKXpnj9Nqht/S9SYSjo9Eh1g18ghyPi5nb4MG7PMFMXSia27z71p8CBOgBe+R7aIX
+         F5zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5YP4NYX9S7zVrVLE6QdkyuYEvdTIcKXOFJ/pF/J7aoo=;
+        b=2/4kPm3gQIhiTkijGDlVMlJLqCQE7AUveF8DmeTIZcQ584faQFyV59tCPjbtwZEwZk
+         A7n8twg7ntfYjsDKBclxnph4bEeYjwqUhU+hygiqARq/ZdyCHMHgsk2G6w34XpPBQca7
+         E2LS+I2GyWdpa402YoGGrPOuU1MttDK7+raEB7GVeg8gyZKlNXLlNxadfmQgN8KVinaC
+         AKUxP+5MLNN+QlGbE20aNxWenXAaVwfTAuIzb+45rTJebvXE6AhRLjnAus2j652qKAqg
+         4hK9M3fCg84/0muMRjaTjadJxHkgzcXMn8rSj8g1nRZLIFuWpAYfUmIamIRaOjqwbQbC
+         7znw==
+X-Gm-Message-State: AFqh2kqf6VVQrqOWbWbClHlvvA/W59Ok1rnNTrbvyQda/W2f4GzMylcN
+        vTZNUel9wYKYnfSkERu5NAlRg6omQVpwyg==
+X-Google-Smtp-Source: AMrXdXsFqr8HDqlUNMxYGuAtJ7EfwL5fmDPmzLylZfggQzUqT0acRAJN8EnLNioKK3h4K7SNaTq4Z2soq78ZFw==
+X-Received: from talumbau.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:90d])
+ (user=talumbau job=sendgmr) by 2002:a05:6638:279b:b0:3a5:93e:989a with SMTP
+ id dl27-20020a056638279b00b003a5093e989amr439248jab.319.1674001112913; Tue,
+ 17 Jan 2023 16:18:32 -0800 (PST)
+Date:   Wed, 18 Jan 2023 00:18:20 +0000
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230118001827.1040870-1-talumbau@google.com>
+Subject: [PATCH mm-unstable v1 0/7] mm: multi-gen LRU: improve
+From:   "T.J. Alumbaugh" <talumbau@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-mm@google.com, "T.J. Alumbaugh" <talumbau@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 16:11:52 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
+This patch series improves a few MGLRU functions, collects related
+functions, and adds additional documentation.
 
-> Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
-> Solve this by having stackdepot use stack_depot_early_init. Extra Kconfig also
-> done by moving kmemleak stuff to mm/Kconfig.debug.
+T.J. Alumbaugh (7):
+  mm: multi-gen LRU: section for working set protection
+  mm: multi-gen LRU: section for rmap/PT walk feedback
+  mm: multi-gen LRU: section for Bloom filters
+  mm: multi-gen LRU: section for memcg LRU
+  mm: multi-gen LRU: improve lru_gen_exit_memcg()
+  mm: multi-gen LRU: improve walk_pmd_range()
+  mm: multi-gen LRU: simplify lru_gen_look_around()
 
-Are we able to identify which commit caused this regression?
+ Documentation/mm/multigen_lru.rst |  78 ++++-
+ include/linux/mm_inline.h         |  17 -
+ include/linux/mmzone.h            |  13 +-
+ mm/memcontrol.c                   |   8 +-
+ mm/vmscan.c                       | 534 ++++++++++++++++--------------
+ 5 files changed, 360 insertions(+), 290 deletions(-)
 
-Thanks.
+-- 
+2.39.0.314.g84b9a713c41-goog
+
