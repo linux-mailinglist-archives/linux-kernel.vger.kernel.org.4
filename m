@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475A3672312
+	by mail.lfdr.de (Postfix) with ESMTP id 9D86D672313
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjARQZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S230132AbjARQZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjARQYX (ORCPT
+        with ESMTP id S230357AbjARQY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:24:23 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA97589A1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:22:47 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1935851wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:22:47 -0800 (PST)
+        Wed, 18 Jan 2023 11:24:26 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454A05895B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:22:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1970428wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:22:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TGzHrMG3hr3Zooc6YVSDSOl6T9u3WLIHlDj6p+zw1Ms=;
-        b=DFgjwP8Maa/fVHV9FbuWiKu4x2xgl0uzbDWsvLFSvNMmMhb2RGVJec6bEldAGMJfQq
-         umfaaUbLB677DZwYQH4ln7K+C6cdw2RlYXCGVlRAqyLGtMPq8T7cEdhAO0BZiHIrlqyk
-         h7hghN1USHxMUqpzY7N446Qd8cLwieI9MimHa8kXHnXbli1KTpFH4PUdpyXp9oWjlW+5
-         rIYPL3Xf5Gzhf1n6IdqQOaYYuGkItgyfWURCIQEu9tO2lhBD/5mKvtqUIfvfqrqUDZdU
-         XEVfC1sGhBA1zgKqOVYcmeJ295hVG8Rx3HqJYEP0+RYKW/dQKrh4eGNZ3BjkqktkCfro
-         40YQ==
+        bh=lqnfHCYygowMSX7A3WvGQbm7TCkDCHNHV0hd4pSc8Q0=;
+        b=XAQcuisoFpq12ir2wdVDYU4xF9CUwVRzGGAPMmaSSxXUvKXblbAK4uQxvYytWhVLjA
+         Z1yeK3yCw/DZqHfoBH6Aswd6N44ziqoirVkhV6pTw0IElPRbbpmsPoCEjK2ls1PF6vKy
+         ZBun27S1fpW3iiRFSLAGbNZQou9OBjOeZOy1Jw4vJfhWWbbrAVrXawXkWwGMVA70qJZO
+         ETt0oJqplC3GFw7P061xDioU0w0RPdBiqajKSp1rYyGtS8IP8XMbumQJZtFazucDhuLr
+         uNzDPdglxLv1/3kt2KK47rggn7kr6c7xopGhHyzsmqMXLQH71Crx+ZNFuBdXnM6wDdFi
+         FCCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TGzHrMG3hr3Zooc6YVSDSOl6T9u3WLIHlDj6p+zw1Ms=;
-        b=765w6heFNWtWzPiJFlI6MIfFCUqo+5jF2FkQv6Mnp/1QfezpR9WBoRtbbWExQPw0wb
-         rUjsQEEbnzgaSprGRcBe3ID/h5uxFMP+x6Fh2KDxz5sayTo5P49vwd6ubPMsuPucyBre
-         /IuZ2llaSn/x6dKzvs2DVGDqdnU8MvVQNxZQHg6fpNShUpaQJmvqmygwHe/BX/p6Gljg
-         B1oCv4DTdTymgHcOJTz50oZqAD+4YRaxh8H+Q0jm34HohZVwxs/+E8oPnDexLv9lJ1kw
-         g8Nq4GBY5F7R2+gKsz8ADN502P1+leCn9b3vBrNQLTyRB+hdXfbV9RwAyJcE7U0DRDqy
-         82bg==
-X-Gm-Message-State: AFqh2koTYh1wdAq8q+L7HAkHISE+WDDhQoDwCSk46DezLdFiuwnFdVLk
-        ZkWJyL74h3dUMjJoWU+9W23f6Q==
-X-Google-Smtp-Source: AMrXdXuwudbAkNcO2ugsDvhbHLTFpG9VcZS9oag+CekWkhv9Wf/eyrCVuOLDGR71ziG0v6pBEN2bIg==
-X-Received: by 2002:a05:600c:198a:b0:3d9:cb4c:af5a with SMTP id t10-20020a05600c198a00b003d9cb4caf5amr7555794wmq.33.1674058966810;
-        Wed, 18 Jan 2023 08:22:46 -0800 (PST)
+        bh=lqnfHCYygowMSX7A3WvGQbm7TCkDCHNHV0hd4pSc8Q0=;
+        b=D1OA4BKbakoJdvcHXEc7AJsbMMwASXz/FlPC1sIPHBtMYijDohDPB2lyiJb3eMvpns
+         yr7FEgfDSMW4zX+KqK/5yZ4hM+IDPn+6drtrZg0ov2Q5wEGM1V3kjjijiMgVi8t1jLVL
+         LCKHlD3aSIvr4813KWa1uWi/2Yb5Q+qFIM7RKd0eIVVzfyqFCdCJiShS4Q3zWhK+96WU
+         sm2ktZMjKosN3gZ2GjxL5vB2wxepZ4KzFDwXTIWNY2cm7NFhqH3tZG6KJPswvJ3FoStn
+         FzynoXT1V4q/tbBavaprxag6f6A9f815M9hDeuiRXET+JUe/Cg2fnJLcxusydtrDxcU8
+         Y/Mw==
+X-Gm-Message-State: AFqh2koWMeBM4tOqsARw+bzeFllLdXECsGlGw+/Vn2mh+e1SguRk6IMH
+        JAR328FjyU9cttWC1hezf8Omqg==
+X-Google-Smtp-Source: AMrXdXtZ60ZrBWVgTHaydBUATR/KmNUnsFzakckw9pVYb2uQuF6IxZxMdwebnVPH11oDwfF6XV603Q==
+X-Received: by 2002:a05:600c:4f12:b0:3d0:7415:c5a9 with SMTP id l18-20020a05600c4f1200b003d07415c5a9mr3277473wmq.21.1674058967803;
+        Wed, 18 Jan 2023 08:22:47 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b003db0dbbea53sm2744393wms.30.2023.01.18.08.22.45
+        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b003db0dbbea53sm2744393wms.30.2023.01.18.08.22.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:22:46 -0800 (PST)
+        Wed, 18 Jan 2023 08:22:47 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 18 Jan 2023 17:22:42 +0100
-Subject: [PATCH v4 4/5] remoteproc: qcom_q6v5_pas: add support for assigning
- memory to firmware
+Date:   Wed, 18 Jan 2023 17:22:43 +0100
+Subject: [PATCH v4 5/5] remoteproc: qcom_q6v5_pas: add sm8550 adsp, cdsp &
+ mpss compatible & data
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-4-54154c08c0b7@linaro.org>
+Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-5-54154c08c0b7@linaro.org>
 References: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
 In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -77,147 +77,109 @@ Cc:     Alex Elder <elder@linaro.org>, linux-arm-msm@vger.kernel.org,
 X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting with SM8550, the DSM memory must now be shared to the
-firmware by the APPS process instead of beeing defined in the
-carveout memory reserved for MPSS.
+This adds the compatible & data for the aDSP, cDSP and MPSS found in
+the SM8550 SoC.
 
-In order to handle that, add a region_assign_idx in adsp_data
-to specify with index of memory-region must be assigned to
-the MPSS via the qcom_scm_assign_mem() call at probe time.
+This platform requires the "Devicetree" firmware to be loaded along the
+main firmware.
+
+The MPSS DSM memory to be assigned to the MPSS subsystem is the
+third memory-region entry as defined in the bindings.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/remoteproc/qcom_q6v5_pas.c | 71 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ drivers/remoteproc/qcom_q6v5_pas.c | 63 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
 diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 3837a21820d6..445020f8baf8 100644
+index 445020f8baf8..abe47c990082 100644
 --- a/drivers/remoteproc/qcom_q6v5_pas.c
 +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -48,6 +48,8 @@ struct adsp_data {
- 	const char *ssr_name;
- 	const char *sysmon_name;
- 	int ssctl_id;
-+
-+	int region_assign_idx;
+@@ -1101,6 +1101,66 @@ static const struct adsp_data sm8450_mpss_resource = {
+ 	.ssctl_id = 0x12,
  };
  
- struct qcom_adsp {
-@@ -84,10 +86,15 @@ struct qcom_adsp {
- 	phys_addr_t dtb_mem_phys;
- 	phys_addr_t mem_reloc;
- 	phys_addr_t dtb_mem_reloc;
-+	phys_addr_t region_assign_phys;
- 	void *mem_region;
- 	void *dtb_mem_region;
- 	size_t mem_size;
- 	size_t dtb_mem_size;
-+	size_t region_assign_size;
++static const struct adsp_data sm8550_adsp_resource = {
++	.crash_reason_smem = 423,
++	.firmware_name = "adsp.mdt",
++	.dtb_firmware_name = "adsp_dtb.mdt",
++	.pas_id = 1,
++	.dtb_pas_id = 0x24,
++	.minidump_id = 5,
++	.auto_boot = false,
++	.proxy_pd_names = (char*[]){
++		"lcx",
++		"lmx",
++		NULL
++	},
++	.load_state = "adsp",
++	.ssr_name = "lpass",
++	.sysmon_name = "adsp",
++	.ssctl_id = 0x14,
++};
 +
-+	int region_assign_idx;
-+	int region_assign_perms;
- 
- 	struct qcom_rproc_glink glink_subdev;
- 	struct qcom_rproc_subdev smd_subdev;
-@@ -557,6 +564,64 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- 	return 0;
- }
- 
-+static int adsp_assign_memory_region(struct qcom_adsp *adsp)
-+{
-+	struct qcom_scm_vmperm perm;
-+	struct device_node *node;
-+	struct resource r;
-+	int ret;
++static const struct adsp_data sm8550_cdsp_resource = {
++	.crash_reason_smem = 601,
++	.firmware_name = "cdsp.mdt",
++	.dtb_firmware_name = "cdsp_dtb.mdt",
++	.pas_id = 18,
++	.dtb_pas_id = 0x25,
++	.minidump_id = 7,
++	.auto_boot = false,
++	.proxy_pd_names = (char*[]){
++		"cx",
++		"mxc",
++		"nsp",
++		NULL
++	},
++	.load_state = "cdsp",
++	.ssr_name = "cdsp",
++	.sysmon_name = "cdsp",
++	.ssctl_id = 0x17,
++};
 +
-+	if (!adsp->region_assign_idx)
-+		return 0;
++static const struct adsp_data sm8550_mpss_resource = {
++	.crash_reason_smem = 421,
++	.firmware_name = "modem.mdt",
++	.dtb_firmware_name = "modem_dtb.mdt",
++	.pas_id = 4,
++	.dtb_pas_id = 0x26,
++	.minidump_id = 3,
++	.auto_boot = false,
++	.decrypt_shutdown = true,
++	.proxy_pd_names = (char*[]){
++		"cx",
++		"mss",
++		NULL
++	},
++	.load_state = "modem",
++	.ssr_name = "mpss",
++	.sysmon_name = "modem",
++	.ssctl_id = 0x12,
++	.region_assign_idx = 2,
++};
 +
-+	node = of_parse_phandle(adsp->dev->of_node, "memory-region", adsp->region_assign_idx);
-+	if (!node) {
-+		dev_err(adsp->dev, "missing shareable memory-region\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = of_address_to_resource(node, 0, &r);
-+	if (ret)
-+		return ret;
-+
-+	perm.vmid = QCOM_SCM_VMID_MSS_MSA;
-+	perm.perm = QCOM_SCM_PERM_RW;
-+
-+	adsp->region_assign_phys = r.start;
-+	adsp->region_assign_size = resource_size(&r);
-+	adsp->region_assign_perms = BIT(QCOM_SCM_VMID_HLOS);
-+
-+	ret = qcom_scm_assign_mem(adsp->region_assign_phys,
-+				  adsp->region_assign_size,
-+				  &adsp->region_assign_perms,
-+				  &perm, 1);
-+	if (ret < 0) {
-+		dev_err(adsp->dev, "assign memory failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void adsp_unassign_memory_region(struct qcom_adsp *adsp)
-+{
-+	struct qcom_scm_vmperm perm;
-+	int ret;
-+
-+	if (!adsp->region_assign_idx)
-+		return;
-+
-+	perm.vmid = QCOM_SCM_VMID_HLOS;
-+	perm.perm = QCOM_SCM_PERM_RW;
-+
-+	ret = qcom_scm_assign_mem(adsp->region_assign_phys,
-+				  adsp->region_assign_size,
-+				  &adsp->region_assign_perms,
-+				  &perm, 1);
-+	if (ret < 0)
-+		dev_err(adsp->dev, "unassign memory failed\n");
-+}
-+
- static int adsp_probe(struct platform_device *pdev)
- {
- 	const struct adsp_data *desc;
-@@ -607,6 +672,7 @@ static int adsp_probe(struct platform_device *pdev)
- 	adsp->pas_id = desc->pas_id;
- 	adsp->info_name = desc->sysmon_name;
- 	adsp->decrypt_shutdown = desc->decrypt_shutdown;
-+	adsp->region_assign_idx = desc->region_assign_idx;
- 	if (dtb_fw_name) {
- 		adsp->dtb_firmware_name = dtb_fw_name;
- 		adsp->dtb_pas_id = desc->dtb_pas_id;
-@@ -621,6 +687,10 @@ static int adsp_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto free_rproc;
- 
-+	ret = adsp_assign_memory_region(adsp);
-+	if (ret)
-+		goto free_rproc;
-+
- 	ret = adsp_init_clock(adsp);
- 	if (ret)
- 		goto free_rproc;
-@@ -673,6 +743,7 @@ static int adsp_remove(struct platform_device *pdev)
- 	rproc_del(adsp->rproc);
- 
- 	qcom_q6v5_deinit(&adsp->q6v5);
-+	adsp_unassign_memory_region(adsp);
- 	qcom_remove_glink_subdev(adsp->rproc, &adsp->glink_subdev);
- 	qcom_remove_sysmon_subdev(adsp->sysmon);
- 	qcom_remove_smd_subdev(adsp->rproc, &adsp->smd_subdev);
+ static const struct of_device_id adsp_of_match[] = {
+ 	{ .compatible = "qcom,msm8226-adsp-pil", .data = &adsp_resource_init},
+ 	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
+@@ -1142,6 +1202,9 @@ static const struct of_device_id adsp_of_match[] = {
+ 	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
+ 	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
+ 	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
++	{ .compatible = "qcom,sm8550-adsp-pas", .data = &sm8550_adsp_resource},
++	{ .compatible = "qcom,sm8550-cdsp-pas", .data = &sm8550_cdsp_resource},
++	{ .compatible = "qcom,sm8550-mpss-pas", .data = &sm8550_mpss_resource},
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, adsp_of_match);
 
 -- 
 2.34.1
