@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813EF672B17
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB5A672B18
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjARWI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S229974AbjARWIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjARWI0 (ORCPT
+        with ESMTP id S230021AbjARWIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:08:26 -0500
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D447D5EF9A;
-        Wed, 18 Jan 2023 14:08:24 -0800 (PST)
-Received: by mail-io1-f50.google.com with SMTP id j1so154354iob.6;
-        Wed, 18 Jan 2023 14:08:24 -0800 (PST)
+        Wed, 18 Jan 2023 17:08:37 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE24465EEE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:08:34 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qx13so810736ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
+        b=RPs3G3yaRI38mu07PInL0zlQ4NpGuyeOd3fENbN9pdSeXncTIqPXNQHPKRy43JB/3F
+         zfzkVqE0QVBsy8LjVOHmjjAqLmgoK+MDJli+sLeVBMD5q+noCwt/eJobexdY3Uv/VhIa
+         cQHD0JA1Ge+yBrnhJsQla+FqEyUj7QEivoRy7eO6OKDvBpO5Xvve6Tu0V8Zts+Um0wFa
+         gzFr5iM6+8IIWtDwn05AH5E1gKesFcaoud5gaefMVL1OXGhuoTFSEmaTlSFIxmjp6BKj
+         YMuQWoJcYYD8/ju8uYn2z9j3P/6U2/M4GTXrLFowclwee6G+z4kf4mNp/pdAXKJFcvRl
+         eG5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w3zZvGJ2IF8IzLXLWgrdTpLSWoXEmzbMQIT+v+9QWxc=;
-        b=adOXBSqY4JYIaYoUao9LIIVR5mStl24+fzWbE2g3FmAZ9JJOQP1voac77PdU6gQH+N
-         u+vMbBskzR1roKnMEBdq3IJvCRO2t6GqgLOSyUDOIfnOxx4fsRUT+JCyHRfr5/XsBSQt
-         h4Aqr6l8S8ItPeDyht5gt4RmwXYWNXstPyKFogw46v1MIn/GF6kGgY+qzJGk5gutkomQ
-         hJ9mwVWO7fbNiBlTXDKkHN0+oYkyiep4uF5CLbJFipb1d+jHYY9eYUwbpZAcgJL7byk8
-         4PyTCLXgBMMX6IDp1CTdNJAh/nVTwzyOAr0J125EvQeK9c3V4Fz6GpfQN0CsEgqkUzCR
-         hkNA==
-X-Gm-Message-State: AFqh2kp79dOLRWrCrf0NQA04/w7G2YDJmEq0Wz3peyJCzczousugADso
-        GbyR9vgIDJtbzP2hRq/6fP6yScLzqibB/SXY0fs=
-X-Google-Smtp-Source: AMrXdXtpXUd1nJvo/57YPaXtKZtc4K0swsmzTqx8T6h+Yw+cTrHaEA6O8ldY2zfKpvMhyayrFUPGmsx+4kGwIA3DuF0=
-X-Received: by 2002:a6b:8d0c:0:b0:6e0:28f8:83a4 with SMTP id
- p12-20020a6b8d0c000000b006e028f883a4mr692956iod.28.1674079703966; Wed, 18 Jan
- 2023 14:08:23 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
+        b=YaA921VTIMwUPLKGkMcelDsEVPevRsHLND89sEbBwVJ5lei6D2EANmnYsmjE2inm6j
+         XrL1g3hug1kZhppnqggLGTERqyAv+0zwflhBTDemyEEwoHr/Co4+NZoJJzZAQtXc7Tu1
+         HvFOU2zzBwCchQsQB8fDFmyMHqimRhymxKYxEDzB3gcltzIGkqMX5rSf3zxgkwMW6y/7
+         N/FOg/N3ZW8OkUap+mTFWwVx1Muv+cPedcxYoUWBaGsFEWyen4XMO5XnzGyHyy1d/sP8
+         O9uIq+Y18CLBeVK4l/P7rKGck6+zKbZJcDcnXlrqe1xgZQgP9qa857OKpGDJPVtfaXR+
+         Loyw==
+X-Gm-Message-State: AFqh2kpQe9HqDAx89VAeN8DAfo1xjnETCsVC301WIOc4I89nMVNygd7o
+        IA7xU+c6bnMFmRacKSNMRrJJkdyDtbg=
+X-Google-Smtp-Source: AMrXdXuoP9buq/9xeOZMQrDs8wmC3sV3DPSD3AnBMCB6t4asRU/ZI9mXB+wJrwJWBOLVCWsYuz3trg==
+X-Received: by 2002:a17:906:95d2:b0:7c1:37:6d5e with SMTP id n18-20020a17090695d200b007c100376d5emr8257533ejy.2.1674079713014;
+        Wed, 18 Jan 2023 14:08:33 -0800 (PST)
+Received: from Semens-MBP.fritz.box (84-87-100-184.fixed.kpn.net. [84.87.100.184])
+        by smtp.gmail.com with ESMTPSA id 14-20020a170906308e00b0084d3acda5fasm13718704ejv.189.2023.01.18.14.08.32
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 18 Jan 2023 14:08:32 -0800 (PST)
+From:   Semen Zhydenko <semen.zhydenko@gmail.com>
+To:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com
+Cc:     Semen Zhydenko <semen.zhydenko@gmail.com>
+Subject: [PATCH] Fixed typo in comments
+Date:   Wed, 18 Jan 2023 23:08:28 +0100
+Message-Id: <20230118220828.85115-1-semen.zhydenko@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+In-Reply-To: <20230116222254.74479-1-semen.zhydenko@gmail.com>
+References: <20230116222254.74479-1-semen.zhydenko@gmail.com>
 MIME-Version: 1.0
-References: <20230118060559.615653-1-namhyung@kernel.org> <Y8fO/Tro6wstoAeo@hirez.programming.kicks-ass.net>
- <20230118194230.mqitrgfb3j73hzw4@MacBook-Pro-6.local>
-In-Reply-To: <20230118194230.mqitrgfb3j73hzw4@MacBook-Pro-6.local>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 18 Jan 2023 14:08:12 -0800
-Message-ID: <CAM9d7ciwC8h3pKFezQ3tLV3cDKPG4Ef6Ug4Xzjya3HVAR-_uhQ@mail.gmail.com>
-Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF (v3)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexei,
+To change one typo in kernel/time/timer.c
+Typo is "aquisition" proper spelling should be "acquisition".
 
-On Wed, Jan 18, 2023 at 11:43 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Jan 18, 2023 at 11:50:37AM +0100, Peter Zijlstra wrote:
-> > On Tue, Jan 17, 2023 at 10:05:51PM -0800, Namhyung Kim wrote:
-> > > Namhyung Kim (8):
-> > >   perf/core: Save the dynamic parts of sample data size
-> > >   perf/core: Add perf_sample_save_callchain() helper
-> > >   perf/core: Add perf_sample_save_raw_data() helper
-> > >   perf/core: Add perf_sample_save_brstack() helper
-> > >   perf/core: Set data->sample_flags in perf_prepare_sample()
-> > >   perf/core: Do not pass header for sample id init
-> > >   perf/core: Introduce perf_prepare_header()
-> > >   perf/core: Call perf_prepare_sample() before running BPF
-> >
-> > Thanks!,
-> >
-> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->
-> Thanks Peter.
-> The patches look good to me as well.
-> How do you want to route them bpf-next or tip ?
->
-> Namhyung,
-> I'd also like to see a follow up patch with a selftest/bpf for this.
->
-> BPF CI didn't have a chance to really test the set, since
-> there is a build issue on s390 due to llvm upstream repo.
-> We're aware and working on that.
+Signed-off-by: Semen Zhydenko <semen.zhydenko@gmail.com>
+---
+ kernel/time/timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yep, I'll add a test case as soon as it gets the change.
-
-Thanks,
-Namhyung
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 63a8ce7177dd..6430c00b05a9 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1324,7 +1324,7 @@ static int __timer_delete(struct timer_list *timer, bool shutdown)
+ 	 * If @shutdown is set then the lock has to be taken whether the
+ 	 * timer is pending or not to protect against a concurrent rearm
+ 	 * which might hit between the lockless pending check and the lock
+-	 * aquisition. By taking the lock it is ensured that such a newly
++	 * acquisition. By taking the lock it is ensured that such a newly
+ 	 * enqueued timer is dequeued and cannot end up with
+ 	 * timer->function == NULL in the expiry code.
+ 	 *
+--
+2.37.1 (Apple Git-137.1)
