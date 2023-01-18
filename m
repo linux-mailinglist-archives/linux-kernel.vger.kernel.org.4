@@ -2,81 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8B3671810
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D881067182E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjARJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S229568AbjARJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjARJmI (ORCPT
+        with ESMTP id S230336AbjARJt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:42:08 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099FF66FAB;
-        Wed, 18 Jan 2023 00:58:52 -0800 (PST)
-X-UUID: 75e262cb2b40474cbae37b4990fb7b92-20230118
-X-CPASD-INFO: e91bbc8fd9d74cad94acf213d1775d91@rolrgo-VZpaQWaaDg6asnlllkZOXXlG
-        CpmtXZ2OUZVGVhH5xTV5nX1V9gnNXZF5dXFV3dnBQY2BhXVJ3i3-XblBgXoZgUZB3tHtrgpKRaA==
-X-CLOUD-ID: e91bbc8fd9d74cad94acf213d1775d91
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:197.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:102.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:9,DUF:13236,ACD:206,DCD:206,SL:0,EISP:0,AG:0,CFC:0.139,CFSR:0.205,UAT:0
-        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 75e262cb2b40474cbae37b4990fb7b92-20230118
-X-CPASD-BLOCK: 1001
-X-CPASD-STAGE: 1
-X-UUID: 75e262cb2b40474cbae37b4990fb7b92-20230118
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 849748297; Wed, 18 Jan 2023 16:58:52 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     tsbogend@alpha.franken.de, ralf@linux-mips.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rdunlap@infradead.org, xurui <xurui@kylinos.cn>
-Subject: [RFC] MIPS: Fix a compilation issue
-Date:   Wed, 18 Jan 2023 16:59:12 +0800
-Message-Id: <20230118085912.608758-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 Jan 2023 04:49:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A5B611CF;
+        Wed, 18 Jan 2023 01:01:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C6B61734;
+        Wed, 18 Jan 2023 09:01:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FBEC433D2;
+        Wed, 18 Jan 2023 09:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674032485;
+        bh=NLYd7TN6vH/s+v7UK420x0jDdP0vK/RzDH5BQQI3Y18=;
+        h=From:To:Cc:Subject:Date:From;
+        b=f2ti79ww970dIOt3KZ0XH9Tuw2nWIvtSyhV5GxRydxxL2HkeIJGviT3aWAp8dCcec
+         fFBdV1Z/Vcm4InuSIId2ZPOSVpU1k0e5lvf72w/CVbBYd0oTDqiWjQnKzxge+e2vgh
+         dy78n3FwHREzxmd/NQtu8fg2/qW9RPEAIx2fqevG1XQzK/YDF+g/jXQqNnzeoeOIjo
+         NCcjymomjT7hFr520Ls2+UnkqDqLroQeaoJu/PrxCDou0oRlB3PXgOK1J3ijyeo4V1
+         aiELqaE3n8eiW7TtHPG6NWzSzz/YOeog64RLE18uhNUMnFTT7/doyCH9dRVRZG/Dit
+         32w9+xG+ZlgCA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shannon Nelson <shannon.nelson@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i40e: fix dma alloc/free prototypes
+Date:   Wed, 18 Jan 2023 10:01:05 +0100
+Message-Id: <20230118090120.2081560-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/mips/include/asm/mach-rc32434/pci.h:377:
-cc1: error: result of ‘-117440512 << 16’ requires 44 bits to represent, but ‘int’ only has 32 bits [-Werror=shift-overflow=]
+From: Arnd Bergmann <arnd@arndb.de>
 
-I guss we don`t need a left shift here?
+gcc-13 notices a mismatch between the declaration and the definition
+for a few functions that apparently used to return a i40e_status_code
+instead of an int:
 
-Signed-off-by: xurui <xurui@kylinos.cn>
+drivers/net/ethernet/intel/i40e/i40e_main.c:129:5: error: conflicting types for 'i40e_allocate_dma_mem_d' due to enum/integer mismatch; have 'int(struct i40e_hw *, struct i40e_dma_mem *, u64,  u32)' {aka 'int(struct i40e_hw *, struct i40e_dma_mem *, long long unsigned int,  unsigned int)'} [-Werror=enum-int-mismatch]
+  129 | int i40e_allocate_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/net/ethernet/intel/i40e/i40e_type.h:8,
+                 from drivers/net/ethernet/intel/i40e/i40e.h:41,
+                 from drivers/net/ethernet/intel/i40e/i40e_main.c:12:
+drivers/net/ethernet/intel/i40e/i40e_osdep.h:40:25: note: previous declaration of 'i40e_allocate_dma_mem_d' with type 'i40e_status(struct i40e_hw *, struct i40e_dma_mem *, u64,  u32)' {aka 'enum i40e_status_code(struct i40e_hw *, struct i40e_dma_mem *, long long unsigned int,  unsigned int)'}
+   40 |                         i40e_allocate_dma_mem_d(h, m, s, a)
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/i40e/i40e_alloc.h:23:13: note: in expansion of macro 'i40e_allocate_dma_mem'
+   23 | i40e_status i40e_allocate_dma_mem(struct i40e_hw *hw,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+
+Change the prototypes to match the definition.
+
+Fixes: 56a62fc86895 ("i40e: init code and hardware support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/include/asm/mach-rc32434/pci.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_alloc.h | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/include/asm/mach-rc32434/pci.h
-index 9a6eefd12757..3eb767c8a4ee 100644
---- a/arch/mips/include/asm/mach-rc32434/pci.h
-+++ b/arch/mips/include/asm/mach-rc32434/pci.h
-@@ -374,7 +374,7 @@ struct pci_msu {
- 				 PCI_CFG04_STAT_SSE | \
- 				 PCI_CFG04_STAT_PE)
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_alloc.h b/drivers/net/ethernet/intel/i40e/i40e_alloc.h
+index cb8689222c8b..e9c4a8fda9de 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_alloc.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_alloc.h
+@@ -20,16 +20,14 @@ enum i40e_memory_type {
+ };
  
--#define KORINA_CNFG1		((KORINA_STAT<<16)|KORINA_CMD)
-+#define KORINA_CNFG1		(KORINA_STAT | KORINA_CMD)
+ /* prototype for functions used for dynamic memory allocation */
+-i40e_status i40e_allocate_dma_mem(struct i40e_hw *hw,
+-					    struct i40e_dma_mem *mem,
+-					    enum i40e_memory_type type,
+-					    u64 size, u32 alignment);
+-i40e_status i40e_free_dma_mem(struct i40e_hw *hw,
+-					struct i40e_dma_mem *mem);
+-i40e_status i40e_allocate_virt_mem(struct i40e_hw *hw,
+-					     struct i40e_virt_mem *mem,
+-					     u32 size);
+-i40e_status i40e_free_virt_mem(struct i40e_hw *hw,
+-					 struct i40e_virt_mem *mem);
++int i40e_allocate_dma_mem(struct i40e_hw *hw,
++			  struct i40e_dma_mem *mem,
++			  enum i40e_memory_type type,
++			  u64 size, u32 alignment);
++int i40e_free_dma_mem(struct i40e_hw *hw, struct i40e_dma_mem *mem);
++int i40e_allocate_virt_mem(struct i40e_hw *hw,
++			   struct i40e_virt_mem *mem,
++			   u32 size);
++int i40e_free_virt_mem(struct i40e_hw *hw, struct i40e_virt_mem *mem);
  
- #define KORINA_REVID		0
- #define KORINA_CLASS_CODE	0
+ #endif /* _I40E_ALLOC_H_ */
 -- 
-2.25.1
+2.39.0
 
