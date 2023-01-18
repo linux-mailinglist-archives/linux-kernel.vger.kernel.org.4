@@ -2,167 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E36D67247E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002C5672479
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjARRIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S230416AbjARRH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjARRIg (ORCPT
+        with ESMTP id S230305AbjARRHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:08:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0781F54208
+        Wed, 18 Jan 2023 12:07:52 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0646089
         for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:07:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674061671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fBANv9H3NJKZ6sjNqm34M+TVsHXbeGsvXhw690AG2bM=;
-        b=DLiaB+U+atgut1xhP5ZUlXwXDOLyl69+GcQWmcEhZfYU9/98iohoOf1nKQgpLTJX1ZHLQ+
-        yEO3BMDbPt7MPV+LPW2kdgGJCI8EGtvX7RjLtygoLjUMREzc9RPbc6Drj4w/pVG9uA8qHv
-        T8VIMTds5f6kN8jKzUov8uPbyb5Ft4c=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-96-feDjGFwpNGCA-GBCj4V04g-1; Wed, 18 Jan 2023 12:07:49 -0500
-X-MC-Unique: feDjGFwpNGCA-GBCj4V04g-1
-Received: by mail-ed1-f70.google.com with SMTP id z2-20020a056402274200b0049e48d86760so1983063edd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:07:48 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m15so4013908wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/yFy8KCBDkivXTsc037TVfu+xpAhAeGSdUN2o0NSQbQ=;
+        b=kEKoTicM2490dvrih0L67d9qgTL6WjFGof1+p/XpMA1Brx09Ml+8+pdigM3QG768vn
+         fLsywnFO1nhIaZ8lUnhEluMJIoY69jeFxxmV//OpfEIpn5aiL9FcyQhjXYQRR9RDx2Et
+         y5SYsON8Drw9dEaQckmluMfZf3tPtoMBJqqbV1q2mfRJyFfIJxDcfV7OH/DCL/PzQ0Ea
+         dgSnwv4lAM973PsRxVl356KQHiwpvuNbXBB/RHus6VfpGgniSmlQYCKTKJEU0MWzuPjM
+         SnWNYDui9C6pzg37zkBhI2JrphKUVMO7deHmDtzcSvphnINQwUXJCX0f68QIkQpZjF2z
+         obQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fBANv9H3NJKZ6sjNqm34M+TVsHXbeGsvXhw690AG2bM=;
-        b=ugOGH9jmtj0+ziu4RJ+AM3KMy92b53TQ4iA6jZYdEq9oK+0eHPb1WHn88ZBGiqP1gy
-         R+8o0ITnTrSILorC5FP/3ir9CI6v8gNAUvSOOtMaqdNuCL9QtZYLCK56+zmdePTBmQBz
-         XhjqlnNmgPJfSQHVZ5BRo0DTY+PJXkVpNwV4WM9NDvr0BM0ejWmwMtp+LRm0AvlMWxxY
-         nOvkqxZM/P8LPUgozueqfmcq8Taa9EzKdRnT2tSxdRiJOgBnPmI6QYX9srabr0S4upaq
-         Da03dNucNLe7828zzMq69Er08F09tr28l/UZbziSYrYdqzk42X338FGAX/uTh68SO2tl
-         XWUA==
-X-Gm-Message-State: AFqh2ko4EEL2DEgMvCTc8FAGxw48fzjzVPUpjxHyjtSrY/1niUYmpkSF
-        mpy6KAZ9+in50oI2Ecs8ZzZz6uVjTgtDSrgIQB8O4XM0pc3ChfsFas0+LXD23PqYOn3QNGS410W
-        JfMe22ZDYnZ/2oNMXDqJmZ5t7
-X-Received: by 2002:a05:6402:3496:b0:48e:9c36:6c39 with SMTP id v22-20020a056402349600b0048e9c366c39mr10655816edc.0.1674061667348;
-        Wed, 18 Jan 2023 09:07:47 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuM6N50uo34MhuDQ2myK4tmuRftD6RxUPFaD0W5wWJaH1S/YZtVCY64QmVFCMkp4Ewl6ol/wg==
-X-Received: by 2002:a05:6402:3496:b0:48e:9c36:6c39 with SMTP id v22-20020a056402349600b0048e9c366c39mr10655801edc.0.1674061667188;
-        Wed, 18 Jan 2023 09:07:47 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id g13-20020a170906538d00b0085a958808c6sm10297082ejo.7.2023.01.18.09.07.46
+        bh=/yFy8KCBDkivXTsc037TVfu+xpAhAeGSdUN2o0NSQbQ=;
+        b=AFzuLkgL48RIErxSieDL6zG/Up0Ua7nfQKfz1H44svNieSxLF3AtuGhCV995L4rn2w
+         fAcTNUpPLo9aKQMUfUwguyYuopzUrcps6pbpSLw/imJslNcUf+Io49jZVNNnGs/jOGTv
+         bkUns+7MjNoysZFxe3OE9XcO1gTuao/+VaOxWiuX9U/WQgAA2A5Yx3jLuMhpcBa8Mhfz
+         7Vl5rWAn4t+dpT2/G4ulANCkrOnvSx9Vq0FiwafIgpZ4GIG5NfJBo/5CwI+3ysOwu5/F
+         S9hhNCAQLECZK2N7lGJ+9v8rsSMfCzXgdeB54M9oQ1ILfTrdZDdf+EiWhPJe2Mt51JZE
+         BsxA==
+X-Gm-Message-State: AFqh2kreOcVGd5VVOgH+BQZrfyia1jYo4F+atARpKC/j+KJ1ID7TKI9B
+        kX/wNlUmbbZRbMnEnoNFJkvu8A==
+X-Google-Smtp-Source: AMrXdXuJxET6y4/IjToh8EiBp+HlqhHTYbthvsdR+drFWhaPazgTyEQXysWCb3omvuNjlh1aEkHPtQ==
+X-Received: by 2002:a05:600c:2116:b0:3d6:10e:68a8 with SMTP id u22-20020a05600c211600b003d6010e68a8mr3463680wml.0.1674061670163;
+        Wed, 18 Jan 2023 09:07:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b19-20020a05600c4e1300b003db0647645fsm2502769wmq.48.2023.01.18.09.07.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:07:46 -0800 (PST)
-Message-ID: <3d51f766-bd80-870d-c939-99660526c654@redhat.com>
-Date:   Wed, 18 Jan 2023 18:07:45 +0100
+        Wed, 18 Jan 2023 09:07:49 -0800 (PST)
+Message-ID: <cc820b4b-d3b7-9972-a07f-0c9f94f8d175@linaro.org>
+Date:   Wed, 18 Jan 2023 18:07:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] iio: light: cm32181: Fix PM support on system with 2
- I2C resources
-Content-Language: en-US, nl
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230118170422.339619-1-kai.heng.feng@canonical.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230118170422.339619-1-kai.heng.feng@canonical.com>
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 3/3] arm64: dts: ti: iot2050: Add support for M.2 variant
+Content-Language: en-US
+To:     Jan Kiszka <jan.kiszka@siemens.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Bao Cheng Su <baocheng.su@siemens.com>,
+        Chao Zeng <chao.zeng@siemens.com>
+References: <cover.1674059300.git.jan.kiszka@siemens.com>
+ <fe57b923d3f290dceea4f54724459015a7bad899.1674059300.git.jan.kiszka@siemens.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fe57b923d3f290dceea4f54724459015a7bad899.1674059300.git.jan.kiszka@siemens.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 1/18/23 18:04, Kai-Heng Feng wrote:
-> Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
-> with 2 I2C resources") creates a second client for the actual I2C
-> address, but the "struct device" passed to PM ops is the first I2C
-> client that can't talk to the sensor.
+On 18/01/2023 17:28, Jan Kiszka wrote:
+> From: chao zeng <chao.zeng@siemens.com>
 > 
-> That means the I2C transfers in both suspend and resume routines can
-> fail and blocking the whole suspend process.
+> The M.2 variant comes with 2 slots, one B-keyed and another one E-keyed.
+> They are configured by the firmware during startup. Also the device tree
+> will be adjusted according to the detect or manually configured
+> interface mode by the firmware. The kernel only carries a single
+> configuration as base device tree. It has to be built with a symbols
+> node so that the firmware can apply overlays for the connector modes.
 > 
-> Instead of using the first client for I2C transfer, use the I2C client
-> stored in the cm32181 private struct so the PM ops can get the correct
-> I2C client to really talk to the sensor device.
-> 
-> Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
-> BugLink: https://bugs.launchpad.net/bugs/1988346
-> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-> Tested-by: Wahaj <wahajaved@protonmail.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
+> Signed-off-by: chao zeng <chao.zeng@siemens.com>
+> [Jan: refactored to a single DT]
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 > ---
-> v2:
->  - Removed setting drvdata to the dummy client.
->  - Added bug links.
->  - Wording.
+>  arch/arm64/boot/dts/ti/Makefile               |   3 +
+>  .../dts/ti/k3-am6548-iot2050-advanced-m2.dts  | 122 ++++++++++++++++++
+>  2 files changed, 125 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced-m2.dts
 > 
->  drivers/iio/light/cm32181.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-> index 001055d097509..b1674a5bfa368 100644
-> --- a/drivers/iio/light/cm32181.c
-> +++ b/drivers/iio/light/cm32181.c
-> @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
->  	if (!indio_dev)
->  		return -ENOMEM;
->  
-> +	i2c_set_clientdata(client, indio_dev);
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index cf7c509538a4..13e79bf7e804 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -11,6 +11,9 @@ dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic-pg2.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-pg2.dtb
+> +dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-m2.dtb
+
+This does not look like proper order.
+
 > +
->  	/*
->  	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
->  	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
-> @@ -460,8 +462,6 @@ static int cm32181_probe(struct i2c_client *client)
->  			return PTR_ERR(client);
->  	}
+> +DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
 >  
-> -	i2c_set_clientdata(client, indio_dev);
-> -
->  	cm32181 = iio_priv(indio_dev);
->  	cm32181->client = client;
->  	cm32181->dev = dev;
-> @@ -490,7 +490,8 @@ static int cm32181_probe(struct i2c_client *client)
->  
->  static int cm32181_suspend(struct device *dev)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> +	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> +	struct i2c_client *client = cm32181->client;
->  
->  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
->  					 CM32181_CMD_ALS_DISABLE);
-> @@ -498,8 +499,8 @@ static int cm32181_suspend(struct device *dev)
->  
->  static int cm32181_resume(struct device *dev)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
->  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> +	struct i2c_client *client = cm32181->client;
->  
->  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
->  					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
+
+Best regards,
+Krzysztof
 
