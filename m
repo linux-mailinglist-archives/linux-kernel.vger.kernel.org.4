@@ -2,93 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3826D67176B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E656717CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjARJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S230350AbjARJbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjARJU3 (ORCPT
+        with ESMTP id S230244AbjARJUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:20:29 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A2038B60;
-        Wed, 18 Jan 2023 00:37:56 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NxfKG2Wkwz508D2;
-        Wed, 18 Jan 2023 16:37:54 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl1.zte.com.cn with SMTP id 30I8bi8n021856;
-        Wed, 18 Jan 2023 16:37:44 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 18 Jan 2023 16:37:47 +0800 (CST)
-Date:   Wed, 18 Jan 2023 16:37:47 +0800 (CST)
-X-Zmail-TransId: 2af963c7afdbffffffffa170dd25
-X-Mailer: Zmail v1.0
-Message-ID: <202301181637472073620@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <daniel.lezcano@linaro.org>
-Cc:     <rafael@kernel.org>, <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <matthias.bgg@gmail.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2RyaXZlcnMvbXRrX3RoZXJtYWw6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30I8bi8n021856
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C7AFE2.000 by FangMail milter!
-X-FangMail-Envelope: 1674031074/4NxfKG2Wkwz508D2/63C7AFE2.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7AFE2.000/4NxfKG2Wkwz508D2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 18 Jan 2023 04:20:37 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752CF589BB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:38:09 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id i188so34943603vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:38:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4xSpb9k1VQIhesAkOYuaD05lW2+xLG8Wkaag5mS/rNM=;
+        b=bBoTlcpchQEAT8sYNjdVDmytBYHJotBKNLXZfjDqsEqKC/jTQNsOuGsBJNUg2cE+/M
+         xK061uO/lGuoHIP5AOS0FzmmOFoSoi03wnzYL4RxWZ6At8vHJrVU6vb4AmZgO+IEICEJ
+         f5ibDbvPnN5XVdiNxsaf++zPx5NdT0CLRGs+1tCW56D00nvt23R2sBwUuwdJ0B7S6IBC
+         654w9R7KxamaOIMRE7FWa6lu3GSCL6XHJm7bTIeK1hc2UCBJaC7omCeM9yA3QNvrV7Gk
+         T9OJ7yyfxmQtjJCNflsSjjfqJxLlDJNQkNhU1iVr1FX1wRmwUkk8D8zRZY5mAJYbublm
+         eQUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4xSpb9k1VQIhesAkOYuaD05lW2+xLG8Wkaag5mS/rNM=;
+        b=5nxocfVASRmHif6vG/OstkAEfmCTD7si/wscR77mV92rQtxx8MyTgNd9undEfTuVfn
+         IpQIfDxOYJyqrX/dKvXZ15cGPQxnVp40Fa30HFv5Wq0XJxaAWOH49GrApC2+So29pbLq
+         baWfACf7qio9HrWSWfmravTsDRkGGcLYtXzk5LhCDwe2fhpI/D3IUqOYF3nSoBEZCJLB
+         x/qiLvvgtpATWt7mpeln23w5gWaksQwgoV4G0bzq004IjKuPsH6jlxCMIWrAYJikWDqN
+         Cqs6G0AY67b2xTZ6kkSz8GoXfS4FE9o8DVPNNYj1Sy8wZEWk98w3UFBwprw/mfuQgIzy
+         Fg0A==
+X-Gm-Message-State: AFqh2krpSZdhGXVXjdW/2n7gly3D1C39h5ZuRem/6ilbLzgHfOSzkwDl
+        6uq/SM0KQw0B8aQHq9Os5IRp4Ct82QwsVFOv28b8qw==
+X-Google-Smtp-Source: AMrXdXv3lM7bBzKfS09f3aOeVbB2umM972cC+13zP+aiQAy3z7Ci20mCWR4+fGIJRkSe2Mgv2EqRZt7FhE4IiH07Z78=
+X-Received: by 2002:a67:f9d8:0:b0:3d0:8947:f6f6 with SMTP id
+ c24-20020a67f9d8000000b003d08947f6f6mr845609vsq.3.1674031088396; Wed, 18 Jan
+ 2023 00:38:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20230117124648.308618956@linuxfoundation.org>
+In-Reply-To: <20230117124648.308618956@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 Jan 2023 14:07:57 +0530
+Message-ID: <CA+G9fYus9p1Qu7HHxdphBcttDtGC8_J1w1Rn+vEPY4Be3epp=g@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/622] 5.4.229-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Tue, 17 Jan 2023 at 18:18, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.229 release.
+> There are 622 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.229-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/thermal/mtk_thermal.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 0084b76493d9..9a8b107900e9 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -990,7 +990,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	int ret, i, ctrl_id;
- 	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
- 	struct mtk_thermal *mt;
--	struct resource *res;
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-@@ -1009,8 +1008,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	if (IS_ERR(mt->clk_auxadc))
- 		return PTR_ERR(mt->clk_auxadc);
+## Build
+* kernel: 5.4.229-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 11f7238df0b49d924647889fa54e04c023811200
+* git describe: v5.4.228-623-g11f7238df0b4
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+28-623-g11f7238df0b4
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	mt->thermal_base = devm_ioremap_resource(&pdev->dev, res);
-+	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(mt->thermal_base))
- 		return PTR_ERR(mt->thermal_base);
+## Test Regressions (compared to v5.4.228)
 
--- 
-2.25.1
+## Metric Regressions (compared to v5.4.228)
+
+## Test Fixes (compared to v5.4.228)
+
+## Metric Fixes (compared to v5.4.228)
+
+## Test result summary
+total: 127769, pass: 103864, fail: 3495, skip: 20045, xfail: 365
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 146 total, 145 passed, 1 failed
+* arm64: 44 total, 40 passed, 4 failed
+* i386: 26 total, 20 passed, 6 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 12 total, 11 passed, 1 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 37 total, 30 passed, 7 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
