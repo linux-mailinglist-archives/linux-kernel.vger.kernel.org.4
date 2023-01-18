@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651D16723EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BE36723EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjARQqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S230258AbjARQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjARQpg (ORCPT
+        with ESMTP id S229986AbjARQpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:45:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFC358661
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:44:15 -0800 (PST)
+        Wed, 18 Jan 2023 11:45:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6685D582AA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:44:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674060254;
+        s=mimecast20190719; t=1674060253;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fY7ZFKCSeA1/hO616eCT/ffy6ZcVRsbG6pt4HMxlg40=;
-        b=L8o2q5PtRBhRqyTubSx1OHweuwc5hXIBUqsGUHU2TnVHC8+aNeNkqAS4ICU7WDD/ZwTx1U
-        YIzukUvWq2HGsqREWSv7Mb7Du1k4GL4RuaWVReVA7k5rImSuQy/lB456rurd11fBE/gD+q
-        +/87dZp3FoCRW5IuRvL/XYeoLHQznmw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=wHqIpzQSkuEl19TQY/3XES0k5HPtR7PzJw91HkmdGrE=;
+        b=UK3L84TPIeY/Ia5ttYrHvRvXpk44Ep/TNNwL1+4BqEOdGMXerU3ce6WjGRI0lTHbgmZAxb
+        KxKAYBprKc8q6tTnxd76l26gQdoxF5xRGH2t2CvJSXCwhLDRdSG7VRldN63zAV39JwYpF0
+        b6DlrpbkZevbOF+rscsaKqzlovpnrmM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-CsVoZYk3O1W7FhPQcrc4nQ-1; Wed, 18 Jan 2023 11:44:08 -0500
-X-MC-Unique: CsVoZYk3O1W7FhPQcrc4nQ-1
+ us-mta-264-qnHa-CyiOPyF5XEt1aLMuQ-1; Wed, 18 Jan 2023 11:44:12 -0500
+X-MC-Unique: qnHa-CyiOPyF5XEt1aLMuQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2287B1871DA4;
-        Wed, 18 Jan 2023 16:44:06 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 979113804527;
+        Wed, 18 Jan 2023 16:44:08 +0000 (UTC)
 Received: from eperezma.remote.csb (unknown [10.39.192.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E7DC2140EBF6;
-        Wed, 18 Jan 2023 16:44:03 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EE30140EBF6;
+        Wed, 18 Jan 2023 16:44:06 +0000 (UTC)
 From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
 To:     mst@redhat.com
 Cc:     leiyang@redhat.com, Laurent Vivier <lvivier@redhat.com>,
@@ -46,9 +46,9 @@ Cc:     leiyang@redhat.com, Laurent Vivier <lvivier@redhat.com>,
         virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
         linux-kernel@vger.kernel.org, lulu@redhat.com,
         Gautam Dawar <gdawar@xilinx.com>, alvaro.karsz@solid-run.com
-Subject: [PATCH 1/2] vdpa_sim: not reset state in vdpasim_queue_ready
-Date:   Wed, 18 Jan 2023 17:43:58 +0100
-Message-Id: <20230118164359.1523760-2-eperezma@redhat.com>
+Subject: [PATCH 2/2] vringh: fetch used_idx from vring at vringh_init_iotlb
+Date:   Wed, 18 Jan 2023 17:43:59 +0100
+Message-Id: <20230118164359.1523760-3-eperezma@redhat.com>
 In-Reply-To: <20230118164359.1523760-1-eperezma@redhat.com>
 References: <20230118164359.1523760-1-eperezma@redhat.com>
 MIME-Version: 1.0
@@ -65,39 +65,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vdpasim_queue_ready calls vringh_init_iotlb, which resets split indexes.
-But it can be called after setting a ring base with
-vdpasim_set_vq_state.
+Starting from an used_idx different than 0 is needed in use cases like
+virtual machine migration.  Not doing so and letting the caller set an
+avail idx different than 0 causes destination device to try to use old
+buffers that source driver already recover and are not available
+anymore.
 
-Fix it by stashing them. They're still resetted in vdpasim_vq_reset.
+While callers like vdpa_sim set avail_idx directly it does not set
+used_idx.  Instead of let the caller do the assignment, fetch it from
+the guest at initialization like vhost-kernel do.
 
-This was discovered and tested live migrating the vdpa_sim_net device.
+To perform the same at vring_kernel_init and vring_user_init is left for
+the future.
 
-Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
 Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/vhost/vringh.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index cb88891b44a8..8839232a3fcb 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -66,6 +66,7 @@ static void vdpasim_vq_notify(struct vringh *vring)
- static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
- {
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
-+	uint16_t last_avail_idx = vq->vring.last_avail_idx;
- 
- 	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false,
- 			  (struct vring_desc *)(uintptr_t)vq->desc_addr,
-@@ -74,6 +75,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
- 			  (struct vring_used *)
- 			  (uintptr_t)vq->device_addr);
- 
-+	vq->vring.last_avail_idx = last_avail_idx;
- 	vq->vring.notify = vdpasim_vq_notify;
+diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+index 33eb941fcf15..0eed825197f2 100644
+--- a/drivers/vhost/vringh.c
++++ b/drivers/vhost/vringh.c
+@@ -1301,6 +1301,17 @@ static inline int putused_iotlb(const struct vringh *vrh,
+ 	return 0;
  }
+ 
++/**
++ * vringh_update_used_idx - fetch used idx from driver's used split vring
++ * @vrh: The vring.
++ *
++ * Returns -errno or 0.
++ */
++static inline int vringh_update_used_idx(struct vringh *vrh)
++{
++	return getu16_iotlb(vrh, &vrh->last_used_idx, &vrh->vring.used->idx);
++}
++
+ /**
+  * vringh_init_iotlb - initialize a vringh for a ring with IOTLB.
+  * @vrh: the vringh to initialize.
+@@ -1319,8 +1330,18 @@ int vringh_init_iotlb(struct vringh *vrh, u64 features,
+ 		      struct vring_avail *avail,
+ 		      struct vring_used *used)
+ {
+-	return vringh_init_kern(vrh, features, num, weak_barriers,
+-				desc, avail, used);
++	int r = vringh_init_kern(vrh, features, num, weak_barriers, desc,
++				 avail, used);
++
++	if (r != 0)
++		return r;
++
++	/* Consider the ring not initialized */
++	if ((void *)desc == used)
++		return 0;
++
++	return vringh_update_used_idx(vrh);
++
+ }
+ EXPORT_SYMBOL(vringh_init_iotlb);
  
 -- 
 2.31.1
