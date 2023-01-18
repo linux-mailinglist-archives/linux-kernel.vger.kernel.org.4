@@ -2,269 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C14671168
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EAF67116A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjARC6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S229704AbjARC7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjARC6b (ORCPT
+        with ESMTP id S229453AbjARC7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:58:31 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298CE4FC34
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:58:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id tz11so15610943ejc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/jxMstUvueEQASfZNGKQtozJSkPqyF+FQ0f5CH6JWto=;
-        b=Ewt84ua+9q2pPgw239vJZTEcpW5L79v2xH2x/6HFk8bN5JP8eYr9cEKvJEWJhoGWYE
-         DIyriS8A5mmAUfdMwjXXiiKI376zR2cqXGWbOWmgAviSzQTdKxTT/bdCfD5I2IaoEC9w
-         jwbQJab/9765992rtPSxzGY8PEA4DVY/XGQ8kLH4NhAT2lD/V7i8huNlHj6WRWOYH5pL
-         OlmlcKQcSRDjkohjLwMQnNzF5z/WL+dfgpz1OwWdpVBzyIksOz1Tpe06CnqVcCAR6QMC
-         65W9m8cOxFC+1RxPzn8I4yG37K+5nHIvsyjE1VKTUQLiocp2JVQSvZTFXxe1tzwBrrkz
-         HcUQ==
+        Tue, 17 Jan 2023 21:59:17 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ED94FC30
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:59:16 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id w24-20020a5d8458000000b00704bf40efecso3705668ior.21
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:59:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/jxMstUvueEQASfZNGKQtozJSkPqyF+FQ0f5CH6JWto=;
-        b=J+MWEMpUEHomSvIQjpb/IprPY52PNlKyFYq4y6y0nmeZURVrKkvhwgP/BQzXlMwciI
-         RA4yA5HFvv+PjsX+t+9ITOh8cRKGWPn6IPXWAnhlIdhD+mNXrjF4f3cc1VhJClj2I+Lt
-         QgXy5Uwo1dJLcIQlGKn35OslUIJgOJScTVhLYwMYq7k2QRLI2KFnvcn4obyxpEyFzpjd
-         JxxmG/cQNlRKcA7zFM9ceEVeC18V2pmdE766xdeg2/ieu10yzhjT7V/ftyBVF6UW8dIr
-         gcLwJ+4uCD0Bb2uvnHA4CXbSl6YWw7tbTn2JUObrWfoAPFn6xy6yLgc3Er1/ECguX1tH
-         eXaA==
-X-Gm-Message-State: AFqh2kpH+g2IHcELl7p0tZHflmJb+gju7IzaxQOCsOOeTvYjnT8SSy0R
-        /5+RW2C45EcK5xUdYkKNiWN5bg==
-X-Google-Smtp-Source: AMrXdXtanBFiuO6F4QWUHNIZE17iB+p93sQtCEfM2tNe9hI+JXrj35iHPaKIWAXkSIORjuT0gYFAPw==
-X-Received: by 2002:a17:906:6846:b0:84d:2fdf:a41b with SMTP id a6-20020a170906684600b0084d2fdfa41bmr4755294ejs.50.1674010708743;
-        Tue, 17 Jan 2023 18:58:28 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm12875378ejb.68.2023.01.17.18.58.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 18:58:28 -0800 (PST)
-Message-ID: <6e7b1518-0dd5-59a6-128a-e3c3c194bf52@linaro.org>
-Date:   Wed, 18 Jan 2023 04:58:26 +0200
+        bh=F2C5KVQj3v7in+ZETo5Nvo/3HeVwiJYVA0UpOu/fZ5U=;
+        b=n5N7LoOC+Q34GK2Qg7TByfOnPA0P6HNC0/Qf3zit2oaWMUBxRYybPp+LOIx6INb7QZ
+         7trDsQa47TmV3EDDLyRVGNq0XMY+Fpe6PmnKmAqdFEX0wUmoWzkFBSdY5n6yaHlbcJ3I
+         zVuv3oWVixjrC9cMBkAnfj0hfxXnmuwnsXIBR77bNeJI58BNMdSM5T1ajCwSw8ZGjUos
+         3goWm2XFX6LzqyTH4JQZTeuBnESGYYK42oNv0YauPdBDGM31ZoWnOv+kmkzkONBqqehd
+         qlOs0ylnLzZpF3X4ZdvObggup/wixpad4Df9pwbvLN50uT8cv0CObwqwu2WWp5G/Ez10
+         u/2A==
+X-Gm-Message-State: AFqh2kowGnNmSYrw1DfBi8MJfa5e19zQJlIASlk8Y5bX95WTqw13jAm9
+        6zDdTWNlRto44rHqJX14/UujWl32B3TW259jtIvkkPdOI9Ru
+X-Google-Smtp-Source: AMrXdXsRPAJhz/zJN0sssZd1/IsMe7h4OLxVgXJsMpFy8KETzUOnuA42c3CWePd963EO1HaInRvZNSiksyo+Eo7vfU4ZjauXWQKm
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 10/12] arm64: dts: qcom: sc8280xp: Define some of the
- display blocks
-Content-Language: en-GB
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221207220012.16529-1-quic_bjorande@quicinc.com>
- <20221207220012.16529-11-quic_bjorande@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221207220012.16529-11-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c013:0:b0:3a4:366b:33a6 with SMTP id
+ y19-20020a02c013000000b003a4366b33a6mr530654jai.0.1674010755399; Tue, 17 Jan
+ 2023 18:59:15 -0800 (PST)
+Date:   Tue, 17 Jan 2023 18:59:15 -0800
+In-Reply-To: <20230118023942.2716-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006d079c05f2810010@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
+From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 00:00, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Define the display clock controllers, the MDSS instances, the DP phys
-> and connect these together.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v4:
-> - None
-> 
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 838 +++++++++++++++++++++++++
->   1 file changed, 838 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 9f3132ac2857..c2f186495506 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -4,6 +4,7 @@
->    * Copyright (c) 2022, Linaro Limited
->    */
->   
-> +#include <dt-bindings/clock/qcom,dispcc-sc8280xp.h>
->   #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
->   #include <dt-bindings/clock/qcom,rpmh.h>
->   #include <dt-bindings/interconnect/qcom,sc8280xp.h>
-> @@ -1698,6 +1699,44 @@ usb_1_qmpphy: phy@8903000 {
->   			status = "disabled";
->   		};
->   
-> +		mdss1_dp0_phy: phy@8909a00 {
-> +			compatible = "qcom,sc8280xp-dp-phy";
-> +			reg = <0 0x08909a00 0 0x19c>,
-> +			      <0 0x08909200 0 0xec>,
-> +			      <0 0x08909600 0 0xec>,
-> +			      <0 0x08909000 0 0x1c8>;
-> +
-> +			clocks = <&dispcc1 DISP_CC_MDSS_DPTX0_AUX_CLK>,
-> +				 <&dispcc1 DISP_CC_MDSS_AHB_CLK>;
-> +			clock-names = "aux", "cfg_ahb";
-> +
-> +			power-domains = <&rpmhpd SC8280XP_MX>;
-> +
-> +			#clock-cells = <1>;
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		mdss1_dp1_phy: phy@890ca00 {
-> +			compatible = "qcom,sc8280xp-dp-phy";
-> +			reg = <0 0x0890ca00 0 0x19c>,
-> +			      <0 0x0890c200 0 0xec>,
-> +			      <0 0x0890c600 0 0xec>,
-> +			      <0 0x0890c000 0 0x1c8>;
-> +
-> +			clocks = <&dispcc1 DISP_CC_MDSS_DPTX1_AUX_CLK>,
-> +				 <&dispcc1 DISP_CC_MDSS_AHB_CLK>;
-> +			clock-names = "aux", "cfg_ahb";
-> +
-> +			power-domains = <&rpmhpd SC8280XP_MX>;
-> +
-> +			#clock-cells = <1>;
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
-> +		};
-> +
->   		system-cache-controller@9200000 {
->   			compatible = "qcom,sc8280xp-llcc";
->   			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
-> @@ -1813,6 +1852,326 @@ usb_1_dwc3: usb@a800000 {
->   			};
->   		};
->   
-> +		mdss0: display-subsystem@ae00000 {
-> +			compatible = "qcom,sc8280xp-mdss";
-> +			reg = <0 0x0ae00000 0 0x1000>;
-> +			reg-names = "mdss";
-> +
-> +			power-domains = <&dispcc0 MDSS_GDSC>;
-> +
-> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +				 <&dispcc0 DISP_CC_MDSS_AHB_CLK>,
-> +				 <&dispcc0 DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface",
-> +				      "ahb",
-> +				      "core";
-> +
-> +			resets = <&dispcc0 DISP_CC_MDSS_CORE_BCR>;
-> +
-> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "mdp0-mem", "mdp1-mem";
-> +
-> +			iommus = <&apps_smmu 0x1000 0x402>;
-> +
-> +			status = "disabled";
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			mdss0_mdp: display-controller@ae01000 {
-> +				compatible = "qcom,sc8280xp-dpu";
-> +				reg = <0 0x0ae01000 0 0x8f000>,
-> +				      <0 0x0aeb0000 0 0x2008>;
-> +				reg-names = "mdp", "vbif";
-> +
-> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +					 <&gcc GCC_DISP_SF_AXI_CLK>,
-> +					 <&dispcc0 DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc0 DISP_CC_MDSS_MDP_LUT_CLK>,
-> +					 <&dispcc0 DISP_CC_MDSS_MDP_CLK>,
-> +					 <&dispcc0 DISP_CC_MDSS_VSYNC_CLK>;
-> +				clock-names = "bus",
-> +					      "nrt_bus",
-> +					      "iface",
-> +					      "lut",
-> +					      "core",
-> +					      "vsync";
-> +
-> +				assigned-clocks = <&dispcc0 DISP_CC_MDSS_MDP_CLK>,
-> +						  <&dispcc0 DISP_CC_MDSS_VSYNC_CLK>;
-> +				assigned-clock-rates = <460000000>,
-> +						       <19200000>;
-> +
-> +				operating-points-v2 = <&mdss0_mdp_opp_table>;
-> +				power-domains = <&rpmhpd SC8280XP_MMCX>;
-> +
-> +				interrupt-parent = <&mdss0>;
-> +				interrupts = <0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@5 {
-> +						reg = <5>;
-> +						mdss0_intf5_out: endpoint {
-> +							remote-endpoint = <&mdss0_dp3_in>;
-> +						};
-> +					};
-> +
-> +					port@6 {
-> +						reg = <6>;
-> +						mdss0_intf6_out: endpoint {
-> +							remote-endpoint = <&mdss0_dp2_in>;
-> +						};
-> +					};
-> +				};
+Hello,
 
-This now fails with:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in tctx_task_work
 
-arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb: display-controller@ae01000: 
-ports: 'port@0' is a required property
-	From schema: 
-Documentation/devicetree/bindings/display/msm/qcom,sc8280xp-dpu.yaml
-arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb: display-controller@ae01000: 
-Unevaluated properties are not allowed ('ports' was unexpected)
-	From schema: 
-Documentation/devicetree/bindings/display/msm/qcom,sc8280xp-dpu.yaml
+==================================================================
+BUG: KASAN: use-after-free in io_fallback_tw io_uring/io_uring.c:1252 [inline]
+BUG: KASAN: use-after-free in tctx_task_work.cold+0x10a/0x11d io_uring/io_uring.c:1222
+Read of size 8 at addr ffff888024f00948 by task syz-executor.0/5598
 
-We do not map reg ids to INTF indices. So, unless you plan to change 
-that, could you please change these to port@0 / port@1 ?
+CPU: 1 PID: 5598 Comm: syz-executor.0 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ io_fallback_tw io_uring/io_uring.c:1252 [inline]
+ tctx_task_work.cold+0x10a/0x11d io_uring/io_uring.c:1222
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb17/0x2a90 kernel/exit.c:867
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ get_signal+0x225f/0x24f0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff84e88c0c9
+Code: Unable to access opcode bytes at 0x7ff84e88c09f.
+RSP: 002b:00007ff84f57d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: fffffffffffffe00 RBX: 00007ff84e9abf80 RCX: 00007ff84e88c0c9
+RDX: 0000000000002020 RSI: 00000000200021c0 RDI: 0000000000000006
+RBP: 00007ff84e8e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd739e0c8f R14: 00007ff84f57d300 R15: 0000000000022000
+ </TASK>
 
-[skipped the rest]
+Allocated by task 5598:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2409
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3433
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
--- 
-With best wishes
-Dmitry
+Freed by task 9:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+ io_req_caches_free+0x1c4/0x201 io_uring/io_uring.c:2741
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2971
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff888024f008c0
+ which belongs to the cache io_kiocb of size 224
+The buggy address is located 136 bytes inside of
+ 224-byte region [ffff888024f008c0, ffff888024f009a0)
+
+The buggy address belongs to the physical page:
+page:ffffea000093c000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x24f00
+memcg:ffff88801264c781
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88814614c640 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88801264c781
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5598, tgid 5597 (syz-executor.0), ts 86881423641, free_ts 86232019510
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2409
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3433
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1451 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page_list+0x176/0xcd0 mm/page_alloc.c:3528
+ release_pages+0xcb1/0x1330 mm/swap.c:1072
+ tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
+ tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:299 [inline]
+ tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
+ exit_mmap+0x202/0x7c0 mm/mmap.c:3100
+ __mmput+0x128/0x4c0 kernel/fork.c:1212
+ mmput+0x60/0x70 kernel/fork.c:1234
+ exit_mm kernel/exit.c:563 [inline]
+ do_exit+0x9ac/0x2a90 kernel/exit.c:854
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __se_sys_exit_group kernel/exit.c:1021 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff888024f00800: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+ ffff888024f00880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>ffff888024f00900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                              ^
+ ffff888024f00980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888024f00a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+Tested on:
+
+commit:         0a093b28 Add linux-next specific files for 20230112
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d23496480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11b23c41480000
 
