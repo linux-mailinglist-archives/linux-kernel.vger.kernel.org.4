@@ -2,135 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3CC67208A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E5367208C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjARPGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S230286AbjARPHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjARPGP (ORCPT
+        with ESMTP id S229910AbjARPHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:06:15 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91DA8A72;
-        Wed, 18 Jan 2023 07:06:12 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30IF5m4n046516;
-        Wed, 18 Jan 2023 09:05:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674054348;
-        bh=yeMuyvf0CNYri6p9yVKI+iipvOaqkrcmBQdptZ908h4=;
-        h=From:To:CC:Subject:Date;
-        b=AYS1mSU4HYBKioA7ETXVx5f1W6RrC1qL7cvnV3Bnhy9/Lny6YP3YFSY2kygkk2i5J
-         ZYS4Wu5V5iRZqPTrNrRyC+Yvy+huzucz8InyGUcdbINsfDQUayRMSyjtsylp0GmXRP
-         uvM555Y+PGW5fqdxIMFpgJ6figt21TDUgzmX0Rb8=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30IF5mPR090521
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Jan 2023 09:05:48 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
- Jan 2023 09:05:47 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 18 Jan 2023 09:05:47 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30IF5kUp114843;
-        Wed, 18 Jan 2023 09:05:47 -0600
-From:   Achal Verma <a-verma1@ti.com>
-To:     Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Achal Verma <a-verma1@ti.com>,
-        Milind Parab <mparab@cadence.com>
-Subject: [PATCH v2] PCI: cadence: Fix next function value in case of ARI
-Date:   Wed, 18 Jan 2023 20:35:46 +0530
-Message-ID: <20230118150546.3477995-1-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 Jan 2023 10:07:19 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97BB196B2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:07:13 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v30so50008877edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:07:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=de5VSyCSp4LwIkgkLbu8PgcqKtOJrMJR3VqjQzZBt04=;
+        b=Tn84+dn0XpHVthmT5dogJZCrr7OsRwjBMD8hbBUwdImvjTCgvCNeA+K4edPl83CnGu
+         2ZTUVsS9miwka1IP8rdQnBaK2FLqudjX2Ht/h205Xg2sLCWXlkRTJZ2Fz05i7SPOc7zu
+         UiT2s99aNP7pm72NtR9ZlPS0oOCzBaEnu+5a27TOOi3H+1rCaY1+3G80NGB2+hMyH0jf
+         KobfxgPJvrH2cvKvJOEqRFAWGtwJOo8YhRqmY76mYm1Er2eRVYPebDkhQZqAu7h3ElgP
+         JROiD+bp4Y9u66ioDV4aKzfLZdKVgWRJhWSLxvC7+Bf5qYhSc7LS1Uak1H9soeJrygE6
+         R8NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=de5VSyCSp4LwIkgkLbu8PgcqKtOJrMJR3VqjQzZBt04=;
+        b=TLy5a7/QcpiZ4gM0ypFwT4e7pI0UPd11/r3acriVzx6DF9tFN/oznuhRIJFLpL7Tsy
+         baIFDI6k6cViHTa3VW5SZ7kVXCPl2iRO8Bw+cpw2UGc53MY9DYVWyYNA2kWt3EPbqcYK
+         5dF8c/VXTvDu1GTOSFTFn+aK6mRF9GaPoniYSsmPMMWMkqwMmvdouDpL2pPVPYc8aJ+2
+         FcfR4JyL4tn67SP9UWbGnhUdI/2VWbkmAbDsavPmBMnkQueEz6NhzbQI8oO2qyY8YcrI
+         lwVttQKpaxves9ALvfFAmxzAE8VgU76rlENdUHRT0VaFPtNa4NYbSUhg1/eiTSWnXhW0
+         eZdw==
+X-Gm-Message-State: AFqh2kouywBluueXVmQVFeHkpZBbt4039EQu4Rj3R3ljW7F3i1R4ko9w
+        gO97qAucqOPt9c0L9H2JREjKlutl8RR6RA==
+X-Google-Smtp-Source: AMrXdXudLdRDYqhpQHhGrnJqyeIGhfS9uYGo6ulHMXCeOy/wijIYzBUb61Mk8xeqHj4fNFA03Qvwbw==
+X-Received: by 2002:aa7:c3cf:0:b0:499:5405:9319 with SMTP id l15-20020aa7c3cf000000b0049954059319mr6980786edr.32.1674054432104;
+        Wed, 18 Jan 2023 07:07:12 -0800 (PST)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id m20-20020aa7c2d4000000b00495f4535a33sm14425184edp.74.2023.01.18.07.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:07:11 -0800 (PST)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
+Date:   Wed, 18 Jan 2023 16:07:03 +0100
+Message-Id: <20230118150703.4024-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+{set,clear}_bits_ll.  x86 CMPXCHG instruction returns success in ZF
+flag, so this change saves a compare after cmpxchg (and related move
+instruction in front of cmpxchg).
 
-Next function field in ARI_CAP_AND_CTR register for last function should
-be zero by default as per the PCIe spec but thats not the case, so this patch
-clears the next function field for last function used.
+Also, try_cmpxchg implicitly assigns old *ptr value to "old"
+when cmpxchg fails.
 
-Signed-off-by: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
-Signed-off-by: Achal Verma <a-verma1@ti.com>
+Note that the value from *ptr should be read using READ_ONCE to prevent
+the compiler from merging, refetching or reordering the read.
+
+The patch also declares these two functions inline, to ensure inlining.
+
+No functional change intended.
+
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- drivers/pci/controller/cadence/pcie-cadence-ep.c | 14 +++++++++++++-
- drivers/pci/controller/cadence/pcie-cadence.h    |  6 ++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ lib/genalloc.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
-index b8b655d4047e..8742b2f594fd 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
-@@ -565,7 +565,8 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
- 	struct cdns_pcie *pcie = &ep->pcie;
- 	struct device *dev = pcie->dev;
- 	int max_epfs = sizeof(epc->function_num_map) * 8;
--	int ret, value, epf;
-+	int ret, epf, last_fn;
-+	u32 reg, value;
+diff --git a/lib/genalloc.c b/lib/genalloc.c
+index 00fc50d0a640..0c883d6fbd44 100644
+--- a/lib/genalloc.c
++++ b/lib/genalloc.c
+@@ -40,32 +40,30 @@ static inline size_t chunk_size(const struct gen_pool_chunk *chunk)
+ 	return chunk->end_addr - chunk->start_addr + 1;
+ }
  
- 	/*
- 	 * BIT(0) is hardwired to 1, hence function 0 is always enabled
-@@ -573,6 +574,17 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
- 	 */
- 	cdns_pcie_writel(pcie, CDNS_PCIE_LM_EP_FUNC_CFG, epc->function_num_map);
+-static int set_bits_ll(unsigned long *addr, unsigned long mask_to_set)
++static inline int
++set_bits_ll(unsigned long *addr, unsigned long mask_to_set)
+ {
+-	unsigned long val, nval;
++	unsigned long val = READ_ONCE(*addr);
  
-+	/*
-+	 * Next function field in ARI_CAP_AND_CTR register for last function
-+	 * should be 0.
-+	 * Clearing Next Function Number field for the last function used.
-+	 */
-+	last_fn = find_last_bit(&epc->function_num_map, BITS_PER_LONG);
-+	reg     = CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(last_fn);
-+	value  = cdns_pcie_readl(pcie, reg);
-+	value &= ~CDNS_PCIE_ARI_CAP_NFN_MASK;
-+	cdns_pcie_writel(pcie, reg, value);
-+
- 	if (ep->quirk_disable_flr) {
- 		for (epf = 0; epf < max_epfs; epf++) {
- 			if (!(epc->function_num_map & BIT(epf)))
-diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index 190786e47df9..68c4c7878111 100644
---- a/drivers/pci/controller/cadence/pcie-cadence.h
-+++ b/drivers/pci/controller/cadence/pcie-cadence.h
-@@ -130,6 +130,12 @@
- #define CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET	0xc0
- #define CDNS_PCIE_EP_FUNC_SRIOV_CAP_OFFSET	0x200
+-	nval = *addr;
+ 	do {
+-		val = nval;
+ 		if (val & mask_to_set)
+ 			return -EBUSY;
+ 		cpu_relax();
+-	} while ((nval = cmpxchg(addr, val, val | mask_to_set)) != val);
++	} while (!try_cmpxchg(addr, &val, val | mask_to_set));
  
-+/*
-+ * Endpoint PF Registers
-+ */
-+#define CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(fn)	(0x144 + (fn) * 0x1000)
-+#define CDNS_PCIE_ARI_CAP_NFN_MASK	GENMASK(15, 8)
-+
- /*
-  * Root Port Registers (PCI configuration space for the root port function)
-  */
+ 	return 0;
+ }
+ 
+-static int clear_bits_ll(unsigned long *addr, unsigned long mask_to_clear)
++static inline int
++clear_bits_ll(unsigned long *addr, unsigned long mask_to_clear)
+ {
+-	unsigned long val, nval;
++	unsigned long val = READ_ONCE(*addr);
+ 
+-	nval = *addr;
+ 	do {
+-		val = nval;
+ 		if ((val & mask_to_clear) != mask_to_clear)
+ 			return -EBUSY;
+ 		cpu_relax();
+-	} while ((nval = cmpxchg(addr, val, val & ~mask_to_clear)) != val);
++	} while (!try_cmpxchg(addr, &val, val & ~mask_to_clear));
+ 
+ 	return 0;
+ }
 -- 
-2.25.1
+2.39.0
 
