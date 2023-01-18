@@ -2,233 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB78671357
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 06:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A667136F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 06:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjARFvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 00:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S229590AbjARF5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 00:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjARFtD (ORCPT
+        with ESMTP id S229589AbjARFyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 00:49:03 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7EE552AF;
-        Tue, 17 Jan 2023 21:48:09 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30I5leEq121959;
-        Tue, 17 Jan 2023 23:47:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674020860;
-        bh=BrJrsYVahMtFpU7O/aRpM2BujKcpQcSo61rQrOwBF2c=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=xNDM/P2bqUZW035+W21sWSPw45hmBZPWV9ZKdcHsRW/PY3DrnckP/wYMu7VGsgwEI
-         lBV7j/+8UNJM03v6O2UgxKseFzmm95R+WIfxTwnyNVmFqgUFc28fAMpFz6Sk/zxofW
-         JBJaGC2X8yy+v3yvCF70Ezxwp5tZp3cRp0Zn0OO4=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30I5leAC052855
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Jan 2023 23:47:40 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
- Jan 2023 23:47:39 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 17 Jan 2023 23:47:39 -0600
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30I5lYrO023611;
-        Tue, 17 Jan 2023 23:47:35 -0600
-Message-ID: <69d39885-68df-7c94-5a98-5f1e174c7316@ti.com>
-Date:   Wed, 18 Jan 2023 11:17:33 +0530
+        Wed, 18 Jan 2023 00:54:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB35421B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 21:53:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A9C61633
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B85C433EF;
+        Wed, 18 Jan 2023 05:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674021225;
+        bh=Li0EPMHtSKQ7wkJMyWtwCEqB+BQ3FhQiHQm1YGZAm0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LP7iYAc68vJ7CcKxOti6Tiv/s+840HikPidjdAwxKpYBkpZd0BWIBTNb4B+odqgGN
+         TQZHAxW0MeTrpejtn6CqQeZXjy+y6HOHxNU8W4e2Id1lbaD0mxP/J8uCegqpPH6wWp
+         etuqQXalH+jjMqf7MdzprNI+F6FVZLCf2UM5J02lkFmf2BXlkzGP1cuvmJknMLsv30
+         gl2EQmp0Xnww9iEjSh7ACJZaWpJBcUV9VrfANpbwFdm6KSeYUPcbOLs5njPA5RBSnC
+         TkIudFQwRjBZVqpaCkpgShlj8wf2Mg0Nf1YU/frrvGe6+XNdbbnIIEKtLFGWTLCx6t
+         QprStRxqEI6lA==
+Date:   Wed, 18 Jan 2023 07:53:32 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        david@redhat.com, quic_charante@quicinc.com,
+        lizhe.67@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4] mm/page_ext: Do not allocate space for
+ page_ext->flags if not needed
+Message-ID: <Y8eJXOgKQfrmzeDi@kernel.org>
+References: <20230117202103.1412449-1-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next v6 3/3] net: ethernet: ti: am65-cpsw: Add support
- for SERDES configuration
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20230104103432.1126403-1-s-vadapalli@ti.com>
- <20230104103432.1126403-4-s-vadapalli@ti.com>
- <CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117202103.1412449-1-pasha.tatashin@soleen.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
+On Tue, Jan 17, 2023 at 08:21:03PM +0000, Pasha Tatashin wrote:
+> There is 8 byte page_ext->flags field allocated per page whenever
+> CONFIG_PAGE_EXTENSION is enabled. However, not every user of page_ext
+> uses flags. Therefore, check whether flags is needed at least by one
+> user and if so allocate space for it.
+> 
+> For example when page_table_check is enabled, on a machine with 128G
+> of memory before the fix:
+> 
+> [    2.244288] allocated 536870912 bytes of page_ext
+> after the fix:
+> [    2.160154] allocated 268435456 bytes of page_ext
+> 
+> Also, add a kernel-doc comment before page_ext_operations that describes
+> the fields, and remove check if need() is set, as that is now a required
+> field.
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-Thank you for reviewing the patch.
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-On 17/01/23 19:25, Geert Uytterhoeven wrote:
-> Hi Siddharth,
+> ---
+>  include/linux/page_ext.h | 18 ++++++++++++++++++
+>  mm/page_ext.c            | 14 ++++++++++++--
+>  mm/page_owner.c          |  1 +
+>  mm/page_table_check.c    |  1 +
+>  4 files changed, 32 insertions(+), 2 deletions(-)
 > 
-> On Wed, Jan 4, 2023 at 11:37 AM Siddharth Vadapalli <s-vadapalli@ti.com> wrote:
->> Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
->>
->> Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
->> am65_cpsw_disable_serdes_phy() and am65_cpsw_enable_serdes_phy().
->>
->> Add new member "serdes_phy" to struct "am65_cpsw_slave_data" to store the
->> SERDES PHY for each port, if it exists. Use it later while disabling the
->> SERDES PHY for each port.
->>
->> Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
->> by invoking am65_cpsw_enable_serdes_phy().
->>
->> Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
->> am65_cpsw_disable_serdes_phy().
->>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Changelog:
+> v4: Addressed comments from Mike Rapoport, added Acked-by's.
+> v3: Added comment before page_ext_operations, removed check if
+>     need is null.
+> v2: Fixed field name in page_owner.c that caused build error.
 > 
-> Thanks for your patch, which is now commit dab2b265dd23ef8f ("net:
-> ethernet: ti: am65-cpsw: Add support for SERDES configuration")
-> in net-next.
+> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+> index 22be4582faae..67314f648aeb 100644
+> --- a/include/linux/page_ext.h
+> +++ b/include/linux/page_ext.h
+> @@ -7,15 +7,33 @@
+>  #include <linux/stackdepot.h>
+>  
+>  struct pglist_data;
+> +
+> +/**
+> + * struct page_ext_operations - per page_ext client operations
+> + * @offset: Offset to the client's data within page_ext. Offset is returned to
+> + *          the client by page_ext_init.
+> + * @size: The size of the client data within page_ext.
+> + * @need: Function that returns true if client requires page_ext.
+> + * @init: (optional) Called to initialize client once page_exts are allocated.
+> + * @need_shared_flags: True when client is using shared page_ext->flags
+> + *                     field.
+> + *
+> + * Each Page Extension client must define page_ext_operations in
+> + * page_ext_ops array.
+> + */
+>  struct page_ext_operations {
+>  	size_t offset;
+>  	size_t size;
+>  	bool (*need)(void);
+>  	void (*init)(void);
+> +	bool need_shared_flags;
+>  };
+>  
+>  #ifdef CONFIG_PAGE_EXTENSION
+>  
+> +/*
+> + * The page_ext_flags users must set need_shared_flags to true.
+> + */
+>  enum page_ext_flags {
+>  	PAGE_EXT_OWNER,
+>  	PAGE_EXT_OWNER_ALLOCATED,
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index 4ee522fd381c..e2c22ffdbb81 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -71,6 +71,7 @@ static bool need_page_idle(void)
+>  }
+>  static struct page_ext_operations page_idle_ops __initdata = {
+>  	.need = need_page_idle,
+> +	.need_shared_flags = true,
+>  };
+>  #endif
+>  
+> @@ -86,7 +87,7 @@ static struct page_ext_operations *page_ext_ops[] __initdata = {
+>  #endif
+>  };
+>  
+> -unsigned long page_ext_size = sizeof(struct page_ext);
+> +unsigned long page_ext_size;
+>  
+>  static unsigned long total_usage;
+>  static struct page_ext *lookup_page_ext(const struct page *page);
+> @@ -106,7 +107,16 @@ static bool __init invoke_need_callbacks(void)
+>  	bool need = false;
+>  
+>  	for (i = 0; i < entries; i++) {
+> -		if (page_ext_ops[i]->need && page_ext_ops[i]->need()) {
+> +		if (page_ext_ops[i]->need()) {
+> +			if (page_ext_ops[i]->need_shared_flags) {
+> +				page_ext_size = sizeof(struct page_ext);
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	for (i = 0; i < entries; i++) {
+> +		if (page_ext_ops[i]->need()) {
+>  			page_ext_ops[i]->offset = page_ext_size;
+>  			page_ext_size += page_ext_ops[i]->size;
+>  			need = true;
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 2d27f532df4c..f0553bedb39d 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -99,6 +99,7 @@ struct page_ext_operations page_owner_ops = {
+>  	.size = sizeof(struct page_owner),
+>  	.need = need_page_owner,
+>  	.init = init_page_owner,
+> +	.need_shared_flags = true,
+>  };
+>  
+>  static inline struct page_owner *get_page_owner(struct page_ext *page_ext)
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index 93e633c1d587..25d8610c0042 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -45,6 +45,7 @@ struct page_ext_operations page_table_check_ops = {
+>  	.size = sizeof(struct page_table_check),
+>  	.need = need_page_table_check,
+>  	.init = init_page_table_check,
+> +	.need_shared_flags = false,
+>  };
+>  
+>  static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 > 
->> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->> @@ -1416,6 +1416,68 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
->>         .ndo_setup_tc           = am65_cpsw_qos_ndo_setup_tc,
->>  };
->>
->> +static void am65_cpsw_disable_phy(struct phy *phy)
->> +{
->> +       phy_power_off(phy);
->> +       phy_exit(phy);
->> +}
->> +
->> +static int am65_cpsw_enable_phy(struct phy *phy)
->> +{
->> +       int ret;
->> +
->> +       ret = phy_init(phy);
->> +       if (ret < 0)
->> +               return ret;
->> +
->> +       ret = phy_power_on(phy);
->> +       if (ret < 0) {
->> +               phy_exit(phy);
->> +               return ret;
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
->> +{
->> +       struct am65_cpsw_port *port;
->> +       struct phy *phy;
->> +       int i;
->> +
->> +       for (i = 0; i < common->port_num; i++) {
->> +               port = &common->ports[i];
->> +               phy = port->slave.serdes_phy;
->> +               if (phy)
->> +                       am65_cpsw_disable_phy(phy);
->> +       }
->> +}
->> +
->> +static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np,
->> +                                    struct am65_cpsw_port *port)
->> +{
->> +       const char *name = "serdes-phy";
->> +       struct phy *phy;
->> +       int ret;
->> +
->> +       phy = devm_of_phy_get(dev, port_np, name);
->> +       if (PTR_ERR(phy) == -ENODEV)
->> +               return 0;
->> +
->> +       /* Serdes PHY exists. Store it. */
-> 
-> "phy" may be a different error here (e.g. -EPROBE_DEFER)...
 
-The Serdes is automatically configured for multi-link protocol (Example: PCIe +
-QSGMII) by the Serdes driver, due to which it is not necessary to invoke the
-Serdes configuration via phy_init(). However, for single-link protocol (Example:
-Serdes has to be configured only for SGMII), the Serdes driver doesn't configure
-the Serdes unless requested. For this case, the am65-cpsw driver explicitly
-invokes phy_init() for the Serdes to be configured, by looking up the optional
-device-tree phy named "serdes-phy". For this reason, the above section of code
-is actually emulating a non-existent "devm_of_phy_optional_get()". The
-"devm_of_phy_optional_get()" function is similar to the
-"devm_phy_optional_get()" function in the sense that the "serdes-phy" phy in the
-device-tree is optional and it is not truly an error if the property isn't present.
-
-Thank you for pointing out that if the Serdes driver is built as a module and
-the am65-cpsw driver runs first, then the "phy" returned for "serdes-phy" will
-be "-EPROBE_DEFER".
-
-> 
->> +       port->slave.serdes_phy = phy;
->> +
->> +       ret =  am65_cpsw_enable_phy(phy);
-> 
-> ... so it will crash when dereferencing phy in phy_init().
-> 
-> I think you want to add an extra check above:
-> 
->     if (IS_ERR(phy))
->             return PTR_ERR(phy);
-
-Please let me know if posting a "Fixes" patch for fixing this net-next commit is
-the right process to address this.
-
-> 
->> +       if (ret < 0)
->> +               goto err_phy;
->> +
->> +       return 0;
->> +
->> +err_phy:
->> +       devm_phy_put(dev, phy);
->> +       return ret;
->> +}
->> +
->>  static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
->>                                       const struct phylink_link_state *state)
->>  {
->> @@ -1959,6 +2021,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
-> 
-> Right out of context we have:
-> 
->                 port->slave.ifphy = devm_of_phy_get(dev, port_np, NULL);
->                 if (IS_ERR(port->slave.ifphy)) {
->                         ret = PTR_ERR(port->slave.ifphy);
->                         dev_err(dev, "%pOF error retrieving port phy: %d\n",
->                                 port_np, ret);
-> 
-> So if there is only one PHY (named "serdes-phy") in DT, it will be
-> used for both ifphy and serdes_phy. Is that intentional?
-
-The PHY corresponding to "ifphy" is meant to be the CPSW MAC's PHY and not the
-Serdes PHY. The CPSW MAC's PHY is configured by the
-drivers/phy/ti/phy-gmii-sel.c driver and this is NOT an optional PHY, unlike the
-Serdes PHY. Therefore, it is assumed that the CPSW MAC's PHY is always provided
-in the device-tree, while the Serdes PHY is optional, depending on whether the
-Serdes is being configured for single-link protocol or multi-link protocol.
-Please let me know if this appears to be an issue and I will fix it based on
-your suggestion.
-
-Regards,
-Siddharth.
+-- 
+Sincerely yours,
+Mike.
