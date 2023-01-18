@@ -2,142 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AB26722AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430316722AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjARQLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S229864AbjARQL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjARQJ3 (ORCPT
+        with ESMTP id S229916AbjARQJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:09:29 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBF45AA6F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:05:32 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l8so7924347wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:05:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TlpQr2e80moEUIK/fMAJf4D8UDlmnyfV6FvXUUoII8s=;
-        b=mAn2qWHxBDlWnGsHCmRMSyJ9Cgjy9na703v331EgvwSvckiTgKNXhK2mX4qGvSWTVz
-         gATsRKUL7LVhq+cXTmWVBfk12Acu4cFcSBiT8UeZT/RxmT11SXZR3oVqpZT5DKM2MmbE
-         Qy7SysHmo/OSIlAlNERV5D7Vyx03l1TlfC+3ECIDmkS6CW4CRddQ1LhNX1In38bJCTkh
-         SqEsju9kFCKQDq8rKxhzVpJX/MokdM1Ul7dfDyvb2mS1fs3R3eJKqQNzVCgcf4cW0a1l
-         orFrXiqmwDUcyaJZlzyXd/ywlj4lbwOZFNuAoA9yJEHyf+xn2YMMSmS+eQo+oIZZ5qNS
-         OquA==
+        Wed, 18 Jan 2023 11:09:35 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8003B3E1;
+        Wed, 18 Jan 2023 08:05:43 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id v17so7664086oie.5;
+        Wed, 18 Jan 2023 08:05:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TlpQr2e80moEUIK/fMAJf4D8UDlmnyfV6FvXUUoII8s=;
-        b=Ctx19GHBLmo5GAh91VcBxC+lwsJAZO1rqlljN7370ao7/Fd8ZMCB+nWoprBACBcvtt
-         s84eY+f41FOgFkEL8JK290T+eTS76JoPo4sy808n3ii5/PKcTVXRJgt7rtvUf17Fa0tg
-         ET5vUm11Cq4q6K2GAiuZ15W4QjZ1orucC+YPY7E4UK1Le2ihFvmpDw9KcaYBQobwIzsO
-         Le8sOTfnYDVjmbnYIBXK+bjyE+KoMSk4VEo5IU4pTW6UrVpBZlblDiZCrt3nl9kTIJQH
-         Mft4aW+9WEnPTzKjIP5jb2oNR8cMq0/RaoSE0hkudjhA6m9UtbPpER9u9z+szBuavZ53
-         Jf/g==
-X-Gm-Message-State: AFqh2koxK36vH35iuBAfn0pBD/eJJGZppw0BaA11GYloK22fZhIrDw6z
-        8K5A8VOj5rEnTUDiYTjRFqHZsg==
-X-Google-Smtp-Source: AMrXdXtMo9VtxxVGHKA5Vmrw+4k/bxklMtWbXdVXPAQVenIjLidMhYpXoOxBSsvoBf5gIN6j4+Cpbg==
-X-Received: by 2002:a05:600c:2056:b0:3db:ce8:6662 with SMTP id p22-20020a05600c205600b003db0ce86662mr5147700wmg.31.1674057931048;
-        Wed, 18 Jan 2023 08:05:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f20-20020a7bcd14000000b003da28dfdedcsm2899480wmj.5.2023.01.18.08.05.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 08:05:30 -0800 (PST)
-Message-ID: <3ca41414-df2e-4ba0-9dc7-cacea2413fe6@linaro.org>
-Date:   Wed, 18 Jan 2023 17:05:28 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7tuGFAfqRCVW7qUbmXv4aoqXHqjRDkD2HH7zwkEHfLk=;
+        b=1RtIivoZyqzEmlHIQssJxZ2X08m5H4NEnVx9YVnGTU/Z7UVOOvZlIaoSdqkA93ibYB
+         tgvnWGWGa2YziYgWyBe4Whmw6Dfchx8q5Iyxd5Kpe+VhYMYnOAX6Db6afRnWitOpdWTk
+         rTp5i+mWfb4G9CB3L6hqfhEXMrIFpYWbZbSQ7W+JEOnzTv1dImBWuTa49Z+57gp4dmjT
+         cZt0UJ9Ig0zrmT5Ywbg5EwB9LtjxKlfY8mEpfCBn3iW0ThR40FoFp01deKUN02xOTj1K
+         teV3CTbfpdLP9wFztL4M00L6ODRMEzLGxzQKep+/hgENF7WQWhdCus6J+biJQWtoeNl7
+         FQ5Q==
+X-Gm-Message-State: AFqh2kpvFMAUycRLNLhiVwURHS3QOSNp6hxUxBRVmCKbODvJIAru+T38
+        TQAh/svE3WVNdaBVBT1qfKxa7k0tMA==
+X-Google-Smtp-Source: AMrXdXu75jJ57NWli2T25cgyRN8wEQAFExKDfERE3ly1W13hMhKaZ/tacFIMiyHP6aLAYiEKhNhoHQ==
+X-Received: by 2002:a05:6808:120d:b0:364:9e70:2d77 with SMTP id a13-20020a056808120d00b003649e702d77mr12791684oil.20.1674057942566;
+        Wed, 18 Jan 2023 08:05:42 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id bs1-20020a056830398100b00660e833baddsm18527592otb.29.2023.01.18.08.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 08:05:42 -0800 (PST)
+Received: (nullmailer pid 90065 invoked by uid 1000);
+        Wed, 18 Jan 2023 16:05:41 -0000
+Date:   Wed, 18 Jan 2023 10:05:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v7 2/7] dt-bindings: arm: msm: Convert and split kpss-acc
+ driver Documentation to yaml
+Message-ID: <167405794085.89999.14844192427406164237.robh@kernel.org>
+References: <20230116204751.23045-1-ansuelsmth@gmail.com>
+ <20230116204751.23045-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
- device on SDM845
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
- <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
- <20230118155919.GD4690@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118155919.GD4690@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116204751.23045-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 16:59, Manivannan Sadhasivam wrote:
-> On Wed, Jan 18, 2023 at 04:37:29PM +0100, Krzysztof Kozlowski wrote:
->> On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
->>> The platforms based on SDM845 SoC locks the access to EDAC registers in the
->>> bootloader. So probing the EDAC driver will result in a crash. Hence,
->>> disable the creation of EDAC platform device on all SDM845 devices.
->>>
->>> The issue has been observed on Lenovo Yoga C630 and DB845c.
->>>
->>> Cc: <stable@vger.kernel.org> # 5.10
->>> Reported-by: Steev Klimaszewski <steev@kali.org>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
->>>  1 file changed, 12 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->>> index 7b7c5a38bac6..8d840702df50 100644
->>> --- a/drivers/soc/qcom/llcc-qcom.c
->>> +++ b/drivers/soc/qcom/llcc-qcom.c
->>> @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>>  
->>>  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
->>>  
->>> -	llcc_edac = platform_device_register_data(&pdev->dev,
->>> -					"qcom_llcc_edac", -1, drv_data,
->>> -					sizeof(*drv_data));
->>> -	if (IS_ERR(llcc_edac))
->>> -		dev_err(dev, "Failed to register llcc edac driver\n");
->>> +	/*
->>> +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
->>> +	 * in bootloader. So probing the EDAC driver will result in a crash.
->>> +	 * Hence, disable the creation of EDAC platform device on SDM845.
->>> +	 */
->>> +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
->>
->> Don't spread of_device_is_compatible() in driver code. You have driver
->> data for this.
->>
+
+On Mon, 16 Jan 2023 21:47:46 +0100, Christian Marangi wrote:
+> Convert kpss-acc driver Documentation to yaml.
+> The original Documentation was wrong all along. Fix it while we are
+> converting it.
+> The example was wrong as kpss-acc-v2 should only expose the regs but we
+> don't have any driver that expose additional clocks. The kpss-acc driver
+> is only specific to v1. For this exact reason, split the Documentation
+> to 2 different schema, v1 as clock-controller and v2 for
+> power-manager as per msm-3.10 specification, the exposed regs handle
+> power manager.
 > 
-> Yeah, but there is no ID to in the driver data to identify an SoC. 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 -------------
+>  .../bindings/clock/qcom,kpss-acc-v1.yaml      | 72 +++++++++++++++++++
+>  .../bindings/power/qcom,kpss-acc-v2.yaml      | 42 +++++++++++
+>  3 files changed, 114 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
+>  create mode 100644 Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
+> 
 
-What do you mean there is no? You use exactly the same compatible as the
-one in driver data.
-
-
-> I could add
-> one but is that really worth doing so? Is using of_device_is_compatible() in
-> drivers discouraged nowadays?
-
-Because it spreads variant matching all over. It does not scale. drv
-data fields are the way or better quirks/flags.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Rob Herring <robh@kernel.org>
