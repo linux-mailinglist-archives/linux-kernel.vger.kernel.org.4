@@ -2,467 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51037671EB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC8C671EB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjAROAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S230517AbjARN6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjARN7r (ORCPT
+        with ESMTP id S230200AbjARN6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:59:47 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F8960482
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674048839; x=1705584839;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=9QDiD69fMotePiu/1ZsGZ53CWaxmf+kdbHJSM/6JoOA=;
-  b=lj0hHe1UAu0JqDEUZ3ATtUjVMco0yb2kMHHI2avGOJQ47xuRUmTxZyHW
-   O7+9jCdxYd6B62/xd/mcJbDLZtcEIdvVz2Fl3ELlDxfNKfZI6aTgER/J+
-   afyLkdKouBN+An1Hu8px3dpA0CLvud6UH5cQKN+Iujzf9fYOqr7ENhBq+
-   er+GGk4KQ7ERH06jFvwP7YOzAsvoiaC6CdduevVTrfrXEsrU4yWXmH6Ya
-   uahm5vZAoElr9ksMJ1r8cazN66gXsGQp/Thp0VN4+8F4xF/aHaxz2kDGv
-   /OggN4TK5yAptpMLiVUm4yr8IvbZEGsV5Anu0JfpVSkUTQdlWVQao+FrS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304662426"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="log'?scan'208";a="304662426"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 05:33:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="783677755"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="log'?scan'208";a="783677755"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2023 05:33:56 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 05:33:55 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 05:33:55 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 05:33:55 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 18 Jan 2023 05:33:55 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dmd0K0Ts+NQ8vD3mcR9sMo4paNPlxksqvLp6Qonpd3S7/damqMof1Iq5g5zqd4isjMF/LleLt8UsIHtT20KtqRoTvdamVII3Or77K65JdRL9UNVCuZxgM8DbCCon3/+eex5jjCGRCn6J5yYlftz9BORxUiE0BpTwNpAtKKELFI3wlVxlVit3DKSIBfh/FcligoRbCOAVMlbtV1PU6a9z3MVqzCzO+TROBqRiVi0rL3Zpn3dQfBGirkZs6FgDgJf72VUMuOJCfrX5BMm6za3WSIiLuV/YmsoyhNYsjsIcJWdoP7WWmg6O7tdSxt+obJ5sBrLnZiqGLGzy5mNcjCm+ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L7RI0zoujOHCSGWShIJhefLDrF/y2/3IcjBFJLyDzQU=;
- b=cOdytZq/7mx1F9Q8oXV03MuF4QDZExpph1ABH09KHtL1HfL0pYuUsJPnvwQZza/zlFa3fhVFVCUq7Xe6q5n+DZwEWbG8/eBwFdN/mTK9Xisv6+d84AC986T2gTNMzyGHOmOQoX8CzWKjIYNExdD+XcvnPKS3nFS5dKn+SvZIE1ZGH1eRGlmd1pDPpZxQEg7tAi0FvJ7sTzliZqyIQ3aG3IcgerfVMTBEBV/IrBhZo+ROoHZ1iR5Gz19GRA2r4IC1J5IR7C+ZZeKuT67SewZPK7uSCVt+rj9nPb6+v0jbvUT0H7VuYbCm5VpoBx3pYwjpOQawg2mKUpA8lDSFqXjjGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by PH8PR11MB8106.namprd11.prod.outlook.com (2603:10b6:510:255::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
- 2023 13:33:51 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::868b:ff1f:d827:188d]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::868b:ff1f:d827:188d%3]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 13:33:50 +0000
-Date:   Wed, 18 Jan 2023 21:31:06 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Vlastimil Babka <vbabka@suse.cz>,
-        "Sang, Oliver" <oliver.sang@intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        lkp <lkp@intel.com>,
+        Wed, 18 Jan 2023 08:58:02 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 05:32:49 PST
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D771ABFE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:32:49 -0800 (PST)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2049.outbound.protection.outlook.com [104.47.22.49]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-46-s1ymGKkXOVWoYraluedUCw-1; Wed, 18 Jan 2023 14:31:42 +0100
+X-MC-Unique: s1ymGKkXOVWoYraluedUCw-1
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ ZR0P278MB0121.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1a::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.24; Wed, 18 Jan 2023 13:31:40 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ace5:84e5:2754:a1fa]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ace5:84e5:2754:a1fa%2]) with mapi id 15.20.6002.012; Wed, 18 Jan 2023
+ 13:31:40 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "victor.liu@nxp.com" <victor.liu@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "pierre.gondois@arm.com" <pierre.gondois@arm.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "oliver.graute@kococonnector.com" <oliver.graute@kococonnector.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jann Horn <jannh@google.com>,
-        "Song, Youquan" <youquan.song@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>, <hongjiu.lu@intel.com>
-Subject: Re: [linus:master] [hugetlb] 7118fc2906:
- kernel_BUG_at_lib/list_debug.c
-Message-ID: <Y8f0miUc//BQXN3A@feng-clx>
-References: <202301170941.49728982-oliver.sang@intel.com>
- <2f483247-da76-9ec9-3e51-f690939f4585@suse.cz>
- <Y8ZVxJSZdtEk8Nco@feng-clx>
- <Y8aSc5xGO+rW2pyo@feng-clx>
- <CAHk-=wiS84nS9apjs_Vt=jjZ_+j+F8HQ3B+ABSvbzcqtW9x5Kg@mail.gmail.com>
-Content-Type: multipart/mixed; boundary="dD8aPH+a8OyjebKK"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiS84nS9apjs_Vt=jjZ_+j+F8HQ3B+ABSvbzcqtW9x5Kg@mail.gmail.com>
-X-ClientProxiedBy: SG2PR04CA0155.apcprd04.prod.outlook.com (2603:1096:4::17)
- To MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+        "abelvesa@kernel.org" <abelvesa@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "viorel.suman@nxp.com" <viorel.suman@nxp.com>
+Subject: Re: [PATCH v4 05/17] arm64: dts: imx8qm: add pwm_lvds0/1 support
+Thread-Topic: [PATCH v4 05/17] arm64: dts: imx8qm: add pwm_lvds0/1 support
+Thread-Index: AQHZKw5a0PYjH3Mpn066jFnlaBrRFK6j3NQAgABPcoA=
+Date:   Wed, 18 Jan 2023 13:31:40 +0000
+Message-ID: <d959972f5897f68a468c61bb74cbf89e93efdc5d.camel@toradex.com>
+References: <20230118072656.18845-1-marcel@ziswiler.com>
+         <20230118072656.18845-6-marcel@ziswiler.com>
+         <60f8f656cf466b8fbd8dfe93177119cfa4839b72.camel@nxp.com>
+In-Reply-To: <60f8f656cf466b8fbd8dfe93177119cfa4839b72.camel@nxp.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|ZR0P278MB0121:EE_
+x-ms-office365-filtering-correlation-id: 627a16bb-7096-4885-6e29-08daf95854de
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: 1ibDLpcKcCVXliBo3LwwBKumdcjlHEBOxjVioXCPhH3qCAhmYY5tW0LwMjG/gdUKUyCWCSGV6IfRtM/Z/uoeXxU0bXcxGDtSTOrD0kK7ncKUQMKCtBVsrH4t2Tbhqyh2GFxhhV2xgrQLHTepqlRgvKN51aAtEDJFzS3fCjUM7i01H0aOoyIfjNjdloNaANEdYMIu9RvFtxIu3r0wfaGBfKKfIRuTL+9kS4Lbi4ezj8hwxyQpfj+ZfgH8PL36FJEl4QzJiAQJzh7OYs9UWiSR2T3BQbQX9/AFjh9tkcgZv9YtgGL9PTejq/dIMmJ/Kc0I4ekvVh9WaCK9M4bH6I+9ZkAzcsDsMf8N6lVuwW+h5C4+4FiSk0f7l2wyUdU5pXsoHFzqF01SA9yjjFL4dZgF4XCLajmqGGeZdoXuAJeELowL+uvzmJT3XeL/7shmblyqkJTV36zScme5KFHaw6QNPi8CWGDM1k56DfYL0z0mNh9BE3vE/5Gtc5C1T4lf1Nsohc8sQo6byjjjWNss7yKyilvn1itsnGLiSxVdj5EmG8knuetL+dACFRqsayuUDQwcLo7Qgzb3gE5a1dVVpsFZUzEz3Zl1H37OryNhwgfpiQkFhS4MoUrw1+k00ewKi39zEG1QyXMil5G6xlG9Dw4hky3Fw2ylq6WCbxsFEIs3hGLs6BdkroVnqfNPzqg6UJE3M7UXNoKYyGdQ5a2CDkaxuqEaNI++GEiWb4fpAcEkbl3ONXfr9zDtmPkYMVKt73kD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(136003)(376002)(396003)(366004)(346002)(451199015)(2906002)(966005)(6486002)(86362001)(71200400001)(478600001)(41300700001)(5660300002)(8936002)(36756003)(8676002)(66446008)(66476007)(66946007)(64756008)(4326008)(66556008)(76116006)(44832011)(83380400001)(122000001)(38100700002)(7416002)(6512007)(6506007)(26005)(186003)(2616005)(38070700005)(110136005)(54906003)(316002)(32563001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWxOb1ZsdWhUMkpwL0VYMjhKNTdNb2dCOUxLeStGaENsR1kxWGtRVzJiTzl0?=
+ =?utf-8?B?OC96dU1GdVdyTHJFMkgzTVF5NmFSSzJUNlJHRWlIdk82MWlNYmdVVE1JQklW?=
+ =?utf-8?B?cDVzTXJJMExaUkV5WTQ0WmtyclVEb01LZlIrZjZ1am9YWFVQQzZBd3pwQ2Ju?=
+ =?utf-8?B?R2llQmpMa2FEMzlpQ1diajB1bmJ0amdiMCtodlNnd1VDSlAyNGdFdDZHQndG?=
+ =?utf-8?B?SHExM1BWN2M0L0V1QVl1M1d1MWhWRDJ0NkhHZ1BGQ3laN3Jhb2hMRWdodXVZ?=
+ =?utf-8?B?OUQvbUUyaGtEWTN6UnFieHZPTjlKY0RFQjdDYWZ0WlRFejY1aGRrSDRPWTZ6?=
+ =?utf-8?B?YUJyWUVjRVBwY0pnQUNXQ2t4SnRNMHYzY2ZyRXdBS0QyTlRoUTlsR2E1NWtF?=
+ =?utf-8?B?M01Nc05EaFowaGpXY3hIQlExRlZCaVRnejRZb0dWQVUvVERuZ1N3MVlZV1B5?=
+ =?utf-8?B?djN3M3lCT0VBVTdJVGhwQkhHWXliRkFWNDMxVW5namp5SXlJVnFJSjRpdzN6?=
+ =?utf-8?B?UDJEVDRkbjdJMzBEbmYyTzNaNTJHREkwSjRPeVlmU1RlY3ZPMFhhcHA2TVpT?=
+ =?utf-8?B?Mk5rYW1jcitvbEZ6QjRybjFaZGU3ZE1nZHMxVUJ5UGtqSjc5dHhyRlJyVjZD?=
+ =?utf-8?B?RmJISGx2TGNoeFZrcXRub2ErQzZSUDRzRW9kYTBTNHJ1QnU0RFJRLy9sTnZL?=
+ =?utf-8?B?ZDIyeC9GY3VDRGIxTlhLRXp0VWxOaFdqUGdyUlJWUFB4SXoyd3JRc3d5Y0ZP?=
+ =?utf-8?B?ZDA1Wkhub2c3cFZqSzhxcXQ2VGFFNDZvY3VRSFFKb3dCdlJMVDFCN3dtZmNk?=
+ =?utf-8?B?MHkzQmNRQWJXZmp6QTZNN3kxK1BlU0hvbkp6M2FwbGJCSjRXQnRwbU5vd1NV?=
+ =?utf-8?B?TVNXZU1YRldRcDZXZDduMG5kdHU4OS9sc3BSUUhPUU9za2VScjZ6Y1hxcEZZ?=
+ =?utf-8?B?RW5aV0FVa3hTVmU0ZDB2SGFXOFFFNUliMHhUN1gzK0pMS2NmenYzektrK2Ev?=
+ =?utf-8?B?M3RCMEprWGZZQmF2MWEzamRGQVYzVTJud1dMTGRyem5XaG1COW5HWk41SVdE?=
+ =?utf-8?B?RDF3U2wzd3lBWXVHajlhbk8wVndRcE5nRnd0WFB4S0VMNTdoNlZIamFFZUd5?=
+ =?utf-8?B?eTRqNXJqd3ZBdVhuZWZRZUNkMnd1Vm5XMndUQ2RNSlRQZ05zRS9td202SmRO?=
+ =?utf-8?B?dEtleW5FUHJ4b1ZVOWNzOGRHN2wyY0s4OUxTQWRVZEV4cElWeGJ2OFUrNGY5?=
+ =?utf-8?B?UFlvWWtxVENxRDhwdXh0MXhrUTQzZ1VaN0JGUE5xSWx3VU80cThsL0dWbUtW?=
+ =?utf-8?B?bnlsTlpXMnBUVlZNcFRZc25LaFg5S08xcnpxWUU3Mi9KTXRMUkQ2T2laTFZQ?=
+ =?utf-8?B?MkJSRzdoRHU3M25mOXZ1Z2Z3aFpJVGVheUIyZWNPVFdzd3YvL3JWN3pOcFEx?=
+ =?utf-8?B?d2ZMcnFyZTd5bjVBeVlkRmVSdHQvY2ZDMlZYYzIrQ0tvOC9EdWUrMWNJQVgy?=
+ =?utf-8?B?dzNUenJuM1ByUzFyUGI2WjFaNXdQR1BhUWtuNFlLTWFRVlQxWnBDUEZ6dW1T?=
+ =?utf-8?B?ODJYTi9jV0JEQVppMTZkcVM1ajhqY0Y0YzgvaG10SE9COTFnSnN0NTRucDd2?=
+ =?utf-8?B?TW04dEFROTQ3S2haQjFJdmVSaXg5VGtoYUNsR3lvRU1Jb2dwaGdjVzd4ejVr?=
+ =?utf-8?B?S0JBcFIrTHN5UFE0VWgrU3EyUEY0NjNJWjZRekJNK3ZFT0dEQjNYQzlIaVV2?=
+ =?utf-8?B?ODFha2t5UFRJeW1OV01HTkRkTEl2bDYxV1g0T1B3Q3l6VU4xcDRLOUE0Mktx?=
+ =?utf-8?B?eTBORkpJa204R0hHQUNXTlpkRlJ6MVNSMWl5Wkp4YWFvSGJnMHZ6ellpeWcr?=
+ =?utf-8?B?dm9HRUhRKzR1TVJRS0tWL2VoM0NJRmgrRFZXVXpLR1lhR1A3Ny83aWwxQWp2?=
+ =?utf-8?B?T1JJb0VjUnNDYzMvaGwwMkc3NVhqNUF1ZjdxNmhUZ0RIbWhLSFlTK01zL0ZO?=
+ =?utf-8?B?dVM1d3kvUksydnQzUEk0ejBCRlpHZzFnSnJXb1JmREpCaS80dmt4Wlo4a1FX?=
+ =?utf-8?B?QXR5VWJVcDJhZXU2bSsxWDVldVNHRS9WbTB0NCswV3NwaG1CaVFyRldiL0Q0?=
+ =?utf-8?B?RUVwczQ3R00xb1hDWDZTazhCbHVJTS83QURwSDJVNDFWRWhFOU9GODEraGhP?=
+ =?utf-8?Q?r+AFYk1VR+HmG7WEKhMCir0=3D?=
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|PH8PR11MB8106:EE_
-X-MS-Office365-Filtering-Correlation-Id: ead841ba-74aa-4e9c-991f-08daf958a27c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D7P1X1e2lL8qWX6UvGLEHNxFtKX/N61791qFyNuNOcvE/a2felrfNatNG/mYGdSd2YnGCvXZXeZdgYY9Q1fZRm+1yJf8U2LW6SyUjvlebuWLmjFGrXms5RD8b/3p81PKV3z3eOfJ1f3pFu1hIy7d0OeG8rju3QeLbv8P6XU1dmjEDstBZ5LKYrQobipatqNjdnVLM1snwuCc/1lHm621e4mZFvsqAuQq7GGxXLQeGii9tbIaeDCt5nZr0ztuArCJd2gmRp7aXZ8ZS1t1YyhXIWRa1/A2B2xc+53BSrK16rpY8X36W7VP5KaJAxHwU4SwQeRYqgh1ywWLbFb8tk0zV/GPhByM6HRGTOwTq7GOOJHBcSpbSxd7h3/hquPsY0BF+ppeZDCBT9U61hhLgzc7jA1nIH9qQB6Fa/MUZyV3YZWl2NMJoTyH3hCGslhBJrugBGfDsoL9ztx8DJLG4MGmp8EVbt4mq5vA8whkj3VmDt4Q6WnDwJbarK3NjAMHQSplJmmwg25u3pspdyoHsSVQjiJ7gvmPtDMHe2hWFsccClXnK74pAlzTkjH1EGlEdCj622RHm6UbNcxfOkEISiQEnoqQ0vWzGQQvJ/iFjFFl156ksKZ0/tOkJDrknXY3SDUl7wFzrjvRoqS4AX2bQjmOmcPz1cPP2E0xwSNbrFqGfqghHot+M3ZcYwbQJgIA3S/MJUdN3ONMMFlFjRXBDkARwQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(366004)(39860400002)(136003)(396003)(376002)(451199015)(83380400001)(33716001)(54906003)(6486002)(6512007)(9686003)(478600001)(186003)(26005)(86362001)(38100700002)(82960400001)(2906002)(6666004)(107886003)(66556008)(6506007)(21480400003)(53546011)(44144004)(44832011)(6916009)(66476007)(4326008)(66946007)(316002)(41300700001)(5660300002)(8676002)(235185007)(8936002)(7416002)(2700100001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mFSAk27HUHPGYb8/+abiJAlJaqHCxIOOluyZO+U+NakhsZCmqT0ysX3HZofu?=
- =?us-ascii?Q?G2i/JIhPY6T4NTw70Bli0f+DqeDZ4L1C4r2WVCYOrgLTFSldyAeS1R1u55b+?=
- =?us-ascii?Q?ewbi+pFYCjmSlnSz06kjdJXq/Y+nP3bIgnrItUCe7YFlYts0PASJCaExtrL8?=
- =?us-ascii?Q?CnPEcmbMDvUqpZuEQn3Xch3OhU6w5QTV0WN0FrOiIK403Qeys208sRfrbjFW?=
- =?us-ascii?Q?UfYCfJn4rDfDgXQ9dirKe8SJGZ2Ht0eCS5IgckVi+Bj4cyTEPod9sb6CARmE?=
- =?us-ascii?Q?4zuGMMymrraXcCZ7G1LHoum1GIUc3xtveQknTpjvDWriOYMIeZuFkLv4mVqp?=
- =?us-ascii?Q?QqKMvAMcbH6EfSDeBEKfWSDm2NoIOqfOn6++m0fdVe2Ioa1ra93qyoneb6Xq?=
- =?us-ascii?Q?hyMJB5R91Wfg7H5oSr2t75pKqxcqHMrExZAJ4SqVKef7ipSB4ZNjE2VvvXI2?=
- =?us-ascii?Q?dRI/QXC7bjkwcR+ydSjjYH4zh2uEYDWlfwc94Vg1bXT0MwX5Or8CRFtIdTEU?=
- =?us-ascii?Q?1a8GYjDMxAZBJ9bGQ8t5XvZtvTs56CTd6O+wIA3yZHUuMKLvJLuxw7Df9n3t?=
- =?us-ascii?Q?lhp4BimLkoSzN9MmPOTcgCx/WYUG0U34ppAlGS0qn73vgBCYq46KoYdQaoAo?=
- =?us-ascii?Q?nhykjydniNeOvKB5HN1G+01X2lLINpCn3prRwxWuo2XXhP46K+Da0GEZ1Cfs?=
- =?us-ascii?Q?uUUT89oA6RySLw5gRJpGCMRJczgl4RPX4O7Mp1QCpWEgTaaQBqEX4y8IYggB?=
- =?us-ascii?Q?oTUyjweHEg7D7fABgxhZ7obT6ZHTKJHfW7s7mznjgPV4tD+Gx6VlrkLbbcVz?=
- =?us-ascii?Q?TNa3tK/ihjb2lrr2OlD04V6w4H4Lyizp6xJ8rGWXO24ba+fGPxofhlAKcXu+?=
- =?us-ascii?Q?3xR8p25Nwl+FI4c0p3cbFIrhqEsPDed4p0OaMBbqDd1BW5f8fChfGOytlnF9?=
- =?us-ascii?Q?Fsvud578dmPs+Q4TDhYvx/2I1VoNDdyrGuzFroN6jla0XMPuXwh7ABa5hT4L?=
- =?us-ascii?Q?ZvuX5boP6VCRZhBT/fOru1Chsu1EKY0iKMh1Kp5oD2cQBQPJfjKI1361O1Es?=
- =?us-ascii?Q?p6SvX5xHDYAf9Dt48aKoIdY5BEq/Gje5RhHFhL62aSATNkCAarUhNdysXga/?=
- =?us-ascii?Q?e5tjH/qeY4GOT+1O8fRkj4LIvJt8JP3LM8fH7b8YdJ1acEFHPxy7oo+iJq6g?=
- =?us-ascii?Q?CSCS542fmyGivEhCEer/0rom6Mq2kzc5jOumXhCcK4dqaXFavhk0fLp8TO+H?=
- =?us-ascii?Q?P5OjnQUMpq5oMekgMOpulhiH0m/bGqjE1RP2H+1LJNdzIl4tWCR3D6KR1d4y?=
- =?us-ascii?Q?YIp1nsZiaWWjAMLSUtUrcSsxHHU908sVcmgcwftlE7YO/WlpSqVr7t2+eafk?=
- =?us-ascii?Q?XOC0SxR1v350rIy1skD3P5nX1g3dZkTYCz8rNeWlYP95IhzWlMxXJoUGkUyF?=
- =?us-ascii?Q?KM8Rzjyad3fAtJzB7sjnI/qhbJsZzxQ2W0Q8Rux02wbl3OnNxip9nYOW2vYD?=
- =?us-ascii?Q?oGPzrCZ4kEZljIuHMMljckPoLWsmbO5Ylkmsjy3CIer0tW7KQdVe8fJaQvQi?=
- =?us-ascii?Q?6jPeK7PAFaU9XjWEEyysEAsdlfOn0UVn32HlVBNA?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ead841ba-74aa-4e9c-991f-08daf958a27c
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-OriginatorOrg: toradex.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 13:33:50.7983
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 627a16bb-7096-4885-6e29-08daf95854de
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 13:31:40.2179
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dakDPiLfuJlnzr4urIrqxziKpCob95JUlWN5Hnesc9huWny4b5xHB/nxjBzrjfLJsqft7rw0TcZ7eSthjKLrqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8106
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: F0qZqyAfeNkrphaqc4Qho9Jg5w+zm7s5oJlb+h8niFqUT+U/JRh+aA2PFV8ZJovfbdd0YjXing+U8RxN4aZLvhpnjYE14n+tK00ejbIOk8U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0121
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <0B267A29230EB64581AE99EB6C6A94D7@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---dD8aPH+a8OyjebKK
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+SGkgTGl1CgpUaGFuayB5b3UgdmVyeSBtdWNoIGZvciB5b3VyIHZhbHVhYmxlIGZlZWRiYWNrLgoK
+T24gV2VkLCAyMDIzLTAxLTE4IGF0IDE2OjQ3ICswODAwLCBMaXUgWWluZyB3cm90ZToKPiBIaSBN
+YXJjZWwsCj4gCj4gT24gV2VkLCAyMDIzLTAxLTE4IGF0IDA4OjI2ICswMTAwLCBNYXJjZWwgWmlz
+d2lsZXIgd3JvdGU6Cj4gPiBGcm9tOiBMaXUgWWluZyA8dmljdG9yLmxpdUBueHAuY29tPgo+ID4g
+Cj4gPiBUaGlzIHBhdGNoIGFkZHMgcHdtX2x2ZHMwLzEgc3VwcG9ydCB0b2dldGhlciB3aXRoIGEK
+PiA+IGkuTVggOFFNIExWRFMgc3Vic3lzdGVtIGRldmljZSB0cmVlLgo+ID4gCj4gPiBTaWduZWQt
+b2ZmLWJ5OiBMaXUgWWluZyA8dmljdG9yLmxpdUBueHAuY29tPgo+ID4gU2lnbmVkLW9mZi1ieTog
+TWFyY2VsIFppc3dpbGVyIDxtYXJjZWwuemlzd2lsZXJAdG9yYWRleC5jb20+Cj4gPiAKPiA+IC0t
+LQo+ID4gCj4gPiBDaGFuZ2VzIGluIHY0Ogo+ID4gLSBOZXcgcGF0Y2ggY29tYmluaW5nIHRoZSBm
+b2xsb3dpbmcgZG93bnN0cmVhbSBwYXRjaGVzIGxpbWl0dGVkIHRvCj4gPiBMVkRTCj4gPiDCoCBQ
+V00gZnVuY3Rpb25hbGl0eSBmb3Igbm93Ogo+ID4gwqAgY29tbWl0IDAzNmM2YjI4YTE4NiAoImFy
+bTY0OiBpbXg4cW0uZHRzaTogQWRkIExWRFMwLzEgc3Vic3lzdGVtcwo+ID4gc3VwcG9ydCIpCj4g
+PiDCoCBjb21taXQgYzNkMjk2MTFkOWQ0ICgiYXJtNjQ6IGlteDhxbS1zcy1sdmRzLmR0c2k6IEFk
+ZCBwd21fbHZkczAvMQo+ID4gc3VwcG9ydCIpCj4gPiDCoCBjb21taXQgYmFmMWIwZjIyZjhhICgi
+TEYtODgyLTEgYXJtNjQ6IGlteDhxbS1zcy1sdmRzLmR0c2k6IFNlcGFyYXRlCj4gPiBpcGcgY2xv
+Y2sgZm9yIGx2ZHMwLzEgc3Vic3lzdGVtcyIpCj4gCj4gU29ycnksIEkgZG9uJ3QgdGhpbmsgdGhl
+IGRvd25zdHJlYW0gcGF0Y2hlcyBhcmUgZG9pbmcgdGhpbmdzIGNvcnJlY3QuCj4gVGhlIGJpZ2dl
+c3QgcHJvYmxlbSBpcyB0aGF0IHRoZSBsdmRzIHJlbGF0ZWQgZGV2aWNlcyBzaG91bGQgYmUgY2hp
+bGQKPiBkZXZpY2VzIG9mIGRpc3BsYXkgc3Vic3lzdGVtIHBpeGVsIGxpbmsgTVNJIGJ1cyBkZXZp
+Y2UoU2VlIGJlbG93Cj4gY29tbWVudHMpLgoKUmVtZW1iZXIsIEkgZXZlbiBpbnF1aXJlZCBhYm91
+dCB0aGlzIFsxXSBidXQgZGlkIG5vdCBnZXQgYW55IGZlZWRiYWNrICh5ZXQpLgoKPiBJIGhhdmUg
+bG9jYWwgcGF0Y2hlcyB0byBhZGQgc29tZSBsdmRzIHJlbGF0ZWQgZGV2aWNlcyB3aGljaCBoYXZl
+bid0Cj4gYmVlbiBzdWJtaXR0ZWQuCgpBcyBtZW50aW9uZWQgYmVmb3JlLCBJIHdvdWxkIGJlIHZl
+cnkgaW50ZXJlc3RlZCBpbiBhY3R1YWxseSB0ZXN0aW5nIHN1Y2ggYW5kIGdpdmluZyBob3BlZnVs
+bHkgdmFsdWFibGUKZmVlZGJhY2suCgo+ID4gwqAuLi4vYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhx
+bS1zcy1sdmRzLmR0c2nCoMKgwqAgfCA4Mwo+ID4gKysrKysrKysrKysrKysrKysrKwo+ID4gwqBh
+cmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cW0uZHRzacKgwqDCoMKgIHzCoCAxICsK
+PiA+IMKgMiBmaWxlcyBjaGFuZ2VkLCA4NCBpbnNlcnRpb25zKCspCj4gPiDCoGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cW0tc3MtbHZkcy5kdHNp
+Cj4gPiAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4
+cW0tc3MtbHZkcy5kdHNpCj4gPiBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhx
+bS1zcy1sdmRzLmR0c2kKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAw
+MDAwMDAuLjRiOTQwZmMzYzg5MAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvYXJjaC9hcm02
+NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHFtLXNzLWx2ZHMuZHRzaQo+ID4gQEAgLTAsMCArMSw4
+MyBAQAo+ID4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wKwo+ID4gKy8qCj4g
+PiArICogQ29weXJpZ2h0IDIwMjMgTlhQCj4gPiArICovCj4gPiArCj4gPiArLyB7Cj4gPiArwqDC
+oMKgwqDCoMKgwqBsdmRzMV9zdWJzeXM6IGJ1c0A1NjI0MDAwMCB7Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJzaW1wbGUtYnVzIjsKPiAKPiBJbiBteSBs
+b2NhbCBwYXRjaGVzLCB0aGVyZSBpcyBubyAnbHZkc3swLDF9X3N1YnN5cycuIEluc3RlYWQsIGx2
+ZHMKPiByZWxhdGVkIGRldmljZXMgYXJlIGNoaWxkIGRldmljZXMgb2YgJ2RjezAsMX1fcGxfbXNp
+X2J1cycgYnVzZXMsCj4gc29tZXRoaW5nIGxpa2UgdGhpczoKPiAKPiBJbiBpbXg4cW0tc3MtZGMu
+ZHRzaToKPiAmZGMwX3N1YnN5cyB7Cj4gwqDCoMKgwqDCoMKgwqAgZGMwX3BsX21zaV9idXM6IGJ1
+c0A1NjIwMDAwMCB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbXBhdGlibGUg
+PSAiZnNsLGlteDhxbS1kaXNwbGF5LXBpeGVsLWxpbmstbXNpLWJ1cyIsCj4gInNpbXBsZS1wbS1i
+dXMiOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAjYWRkcmVzcy1jZWxscyA9IDwx
+PjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgI3NpemUtY2VsbHMgPSA8MT47Cj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwweDU2MjAwMDAwIDB4MjAwMDA+
+Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnRlcnJ1cHQtcGFyZW50ID0gPCZk
+YzBfaXJxc3RlZXI+OwoKQ29uY2VybmluZyBpcnFzdGVlciBJIHdhcyB1bnN1cmUgYWJvdXQgd2hl
+dGhlciBvciBub3QgYWxsIHRoaXMgaXMgYWxyZWFkeSB1cHN0cmVhbS4gQXQgbGVhc3QgdGhlIGRl
+dmljZSB0cmVlCnBhcnRzIHNlZW0gbWlzc2luZy4KCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGludGVycnVwdHMgPSA8MzIwPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgcmFuZ2VzOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjbG9ja3MgPSA8JmRj
+MF9kaXNwX2N0cmxfbGlua19tc3QwX2xwY2cKPiBJTVhfTFBDR19DTEtfND4sCgpJIGJlbGlldmUg
+dGhvc2UgSU1YX0xQQ0dfQ0xLXyBhcmUgaW5kaWNlcyBvbmx5LiBCdXQgbW9yZSBvbiB0aGF0IGZ1
+cnRoZXIgYmVsb3cuCgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCA8JmRjMF9kaXNwX2N0cmxfbGlua19tc3QwX2xwY2cKPiBJTVhfTFBDR19DTEtfND47
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNsb2NrLW5hbWVzID0gIm1zaSIsICJh
+aGIiOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwb3dlci1kb21haW5zID0gPCZw
+ZCBJTVhfU0NfUl9EQ18wPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RhdHVz
+ID0gImRpc2FibGVkIjsKPiDCoMKgwqDCoMKgwqDCoCB9Owo+IH07Cj4gCj4gSW4gaW14OHFtLXNz
+LWx2ZHMuZHRzaToKPiAmZGMwX3BsX21zaV9idXMgewo+IMKgwqDCoMKgwqDCoMKgIGx2ZHMwX2ly
+cXN0ZWVyOiBpbnRlcnJ1cHQtY29udHJvbGxlckA1NjI0MDAwMCB7Cj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGNvbXBhdGlibGUgPSAiZnNsLGlteC1pcnFzdGVlciI7Cj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC4uLgo+IMKgwqDCoMKgwqDCoMKgIH07Cj4gCj4gwqDC
+oMKgwqDCoMKgwqAgbHZkczBfY3NyOiBidXNANTYyNDEwMDAgewo+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gImZzbCxpbXg4cW0tbHZkcy1jc3IiLCAic3lzY29u
+IiwgInNpbXBsZS0KPiBwbS1idXMiOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+Li4uCj4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gCj4gwqDCoMKgwqDCoMKgwqDCoGx2ZHMwX3B3bV9s
+cGNnOiBjbG9jay1jb250cm9sbGVyQDU2MjQzMDBjIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgY29tcGF0aWJsZSA9ICJmc2wsaW14OHFtLWxwY2ciLCAiZnNsLGlteDhxeHAtbHBj
+ZyI7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuLi4KPiDCoMKgwqDCoMKgwqDC
+oMKgfTsKPiAKPiDCoMKgwqDCoMKgwqDCoMKgbHZkczBfcHdtOiBwd21ANTYyNDQwMDAgewo+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gImZzbCxpbXg4cW0tcHdt
+IiwgImZzbCxpbXgyNy1wd20iOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLi4u
+Cj4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gfTsKPiAKPiBUaGUgYmVsb3cgcGF0Y2ggaXMgbmVlZGVk
+IHRvIHVzZSBjbG9ja3MgZm9yIHBpeGVsIGxpbmsgTVNJIGJ1cyBhcyBhCj4gc2ltcGxlLXBtLWJ1
+cy4KPiAKPiAKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzIwMjIxMjI2MDMxNDE3LjEw
+NTY3NDUtMS12aWN0b3IubGl1QG54cC5jb20vdC8KPiAKPiAiZnNsLGlteDhxbS1sdmRzLWNzciIg
+bmVlZHMgdG8gYmUgYWRkZWQgaW50byBzaW1wbGVfcG1fYnVzX29mX21hdGNoW10KPiBpbiBzaW1w
+bGUtcG0tYnVzLmMuCgpPa2F5LCBJIHdhcyBub3QgYXdhcmUgb2YgdGhhdC4KCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2FkZHJlc3MtY2VsbHMgPSA8MT47Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI3NpemUtY2VsbHMgPSA8MT47Cj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmFuZ2VzID0gPDB4NTYyNDAwMDAgMHgwIDB4NTYyNDAwMDAg
+MHgxMDAwMD47Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbHZkczBf
+aXBnX2NsazogY2xvY2stbHZkcy1pcGcgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gImZpeGVkLWNsb2NrIjsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2Nsb2NrLWNlbGxzID0g
+PDA+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBj
+bG9jay1mcmVxdWVuY3kgPSA8MjQwMDAwMDA+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9jay1vdXRwdXQtbmFtZXMgPSAibHZkczBfaXBnX2Ns
+ayI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBsdmRzMF9wd21fbHBjZzogY2xvY2stY29udHJvbGxl
+ckA1NjI0MzAwYyB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGNvbXBhdGlibGUgPSAiZnNsLGlteDhxbS1scGNnIjsKPiAKPiBTaG91bGQgbGlzdCAi
+ZnNsLGlteDhxeHAtbHBjZyIgYXMgb25lIGl0ZW0gYXMgd2VsbCwgc2luY2UgaW14OHF4cC0KPiBs
+cGNnLnlhbWwgbWVudGlvbnMgaXQuCgpBZ3JlZWQuCgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZWcgPSA8MHg1NjI0MzAwYyAweDQ+Owo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjY2xvY2stY2VsbHMg
+PSA8MT47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNsb2NrcyA9IDwmY2xrIElNWF9TQ19SX0xWRFNfMF9QV01fMAo+ID4gSU1YX1NDX1BNX0NMS19Q
+RVI+LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIDwmbHZkczBfaXBnX2Nsaz47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrLWluZGljZXMgPSA8SU1YX0xQQ0dfQ0xL
+XzA+LAo+ID4gPElNWF9MUENHX0NMS180PjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stb3V0cHV0LW5hbWVzID0gImx2ZHMwX3B3bV9scGNn
+X2NsayIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgImx2ZHMwX3B3bV9scGNn
+X2lwZ19jbGsiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBwb3dlci1kb21haW5zID0gPCZwZCBJTVhfU0NfUl9MVkRTXzBfUFdNXzA+Owo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcHdtX2x2ZHMwOiBwd21ANTYyNDQwMDAgewo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gImZzbCxpbXgy
+Ny1wd20iOwo+IAo+IE5lZWQgdG8gZG9jdW1lbnQgImZzbCxpbXg4cW0tcHdtIiBpbiBpbXgtcHdt
+LnlhbWwgYW5kIGxpc3QgaXQgaW4gdGhlCj4gY29tcGF0aWJsZSBzdGluZyBoZXJlLgoKQnV0IHNv
+IGZhciBubyBzdWNoICJmc2wsaW14OHFtLXB3bSIgZXhpc3RzIGFueXdoZXJlLiBJcyBpdCByZWFs
+bHkgcmVxdWlyZWQ/Cgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZWcgPSA8MHg1NjI0NDAwMCAweDEwMDA+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8Jmx2ZHMwX3B3bV9scGNnIDA+
+LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIDwmbHZkczBfcHdtX2xwY2cgMT47Cj4gCj4gSW4gbXkgbG9jYWwgcGF0Y2hl
+cywgSSBzZXQgdGhlIGNsb2NrcyBwcm9wZXJ0eSBhczoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgY2xvY2tzID0gPCZsdmRzMF9wd21fbHBjZyBJTVhfTFBDR19DTEtfMD4sCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmbHZkczBfcHdt
+X2xwY2cgSU1YX0xQQ0dfQ0xLXzQ+Owo+IAo+IEknbSBub3Qgc3VyZSBpZiBpdCBpcyBjb3JyZWN0
+IG5vdy4KCkkgZG91YnQgYXMgdGhvc2UgSU1YX0xQQ0dfQ0xLXyBhcmUgZGVmaW5lcyBmb3IgdGhl
+IGluZGljZXMgZS5nLiBJTVhfTFBDR19DTEtfNCBhY3R1YWxseSBpcyAxNiBhbmQgbm90IDEgKG9y
+IDQpCig7LXApLgoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY2xvY2stbmFtZXMgPSAicGVyIiwgImlwZyI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFzc2lnbmVkLWNsb2NrcyA9IDwmY2xrIElNWF9T
+Q19SX0xWRFNfMF9QV01fMAo+ID4gSU1YX1NDX1BNX0NMS19QRVI+Owo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhc3NpZ25lZC1jbG9jay1yYXRlcyA9
+IDwyNDAwMDAwMD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCNwd20tY2VsbHMgPSA8Mj47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoHBvd2VyLWRvbWFpbnMgPSA8JnBkIElNWF9TQ19SX0xWRFNfMF9Q
+V01fMD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHN0YXR1cyA9ICJkaXNhYmxlZCI7Cj4gCj4gSW4gbXkgbG9jYWwgcGF0Y2hlcywgdGhpcyBub2Rl
+IGhhcyB0aGUgYmVsb3cgaW50ZXJydXB0IHJlbGF0ZWQKPiBwcm9wZXJ0aWVzOgo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnRlcnJ1cHQtcGFyZW50ID0gPCZsdmRzMF9pcnFzdGVl
+cj47Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludGVycnVwdHMgPSA8MTI+OwoK
+QXMgbWVudGlvbmVkIGFib3ZlIG15IGZhbWlsaWFyaXR5IHdpdGggaXJxc3RlZXIgaXMgZmFyIGZy
+b20gY29tcGxldGUuIFBsdXMgaW50ZXJlc3RpbmdseSBmb3IgbWUgdGhpcyBMVkRTIFBXTQphY3R1
+YWxseSByZWFsbHkgd29ya3Mgd2l0aG91dCBpbnRlcnJ1cHRzLiBOb3Qgc3VyZSB3aGV0aGVyIG9y
+IG5vdCBvciB3aGF0IGV4YWN0bHkgbWlnaHQgbm90ICJmdWxseSIgd29yawp3aXRob3V0LgoKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Owo+ID4gK8KgwqDCoMKgwqDCoMKgfTsK
+PiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGx2ZHMyX3N1YnN5czogYnVzQDU3MjQwMDAwIHsKPiAK
+PiBBYm92ZSBjb21tZW50cyBhcHBseSBmb3IgJ2x2ZHMyX3N1YnN5cycgc2ltaWxhcmx5Lgo+IAo+
+IFsuLi5dCj4gCj4gUmVnYXJkcywKPiBMaXUgWWluZwoKWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2FsbC81NDliZjFmMjZiODIxMmRlMmQ0ODkwYTI3ZTM5NjI1MDI1N2FhMDI3LmNhbWVsQHRv
+cmFkZXguY29tLwoKQ2hlZXJzCgpNYXJjZWwK
 
-On Tue, Jan 17, 2023 at 10:25:17AM -0800, Linus Torvalds wrote:
-> On Tue, Jan 17, 2023 at 4:22 AM Feng Tang <feng.tang@intel.com> wrote:
-> >
-> > With the following patch to use 'O1' instead 'O2' gcc optoin for
-> > page_alloc.c, the list corruption issue can't be reproduced for
-> > commit 7118fc2906 in 1000 runs.
-> 
-> Ugh.
-> 
-> It would be lovely if you could just narrow it down with
-> 
->   #pragma GCC optimize ("O1")
->  ...
->   #pragma GCC optimize ("O2")
-> 
-> around just that prep_compound_page(), but when I tried it myself I
-> get some function attribute mismatch errors.
-
-Yes, this works with both my local build and 0Day's build system,
-and it also makes the issue gone.
- 
-> > As is can't be reproduced with X86_64 build, it could be i386
-> > compiling related.
-> 
-> Your particular config causes a huge amount of nasty 64-bit arithmetic
-> according to the objdump code, with sequences like
-> 
->   c13b3cbb:       83 05 d0 28 6c c5 01    addl   $0x1,0xc56c28d0
->   c13b3cc2:       83 15 d4 28 6c c5 00    adcl   $0x0,0xc56c28d4
-> 
-> which seems to be just from some coverage profiling being on
-> (CONFIG_GCOV?), or something. It makes it very hard to read the code.
-> 
-> You also have UBSAN enabled, which - again - makes for some really
-> grotty asm that hides any actual logic.
-> 
-> Finally, your objdump version also does some horrendous decoding, like
-> 
->   c13b3e29:       8d b4 26 00 00 00 00    lea    0x0(%esi,%eiz,1),%esi
-
-I know little about these tools, and I tried objdump tool from
-Cent OS 9 (objdump version 2.35.2) and Ubuntu 22.04 (objdump version
-2.38), they both dumped similar assembly. Please let me know if you
-want us to try other version of objdump.
-
-> which is just a 7-byte 'nop' instruction, but again, it makes it
-> rather hard to actually read the code.
-> 
-> With the i386 defconfig, gcc generates a function that is just ~30
-> instructions for me, so this makes a huge difference in the legibility
-> of the code.
-> 
-> I wonder if you can recreate the issue with a much more
-> straightforward config. By all means, leave DEBUG_PAGEALLOC and SLUB
-> debugging on, but without the things like UBSAN and GCOV.
-
-We modify the kconfig to disable GCOV and UBSAN, and the issue can't
-be reproudced in 1000 runs.
-
-The objdump of prep_compound_page() for the 2 commits are also
-attached for check.
-
-Anothe info is, as you pointed out GCOV and UBSAN, we tried to
-disable GCOV/UBSAN for page_alloc.c in mm/Makefile separtely
-(thanks to Fengwei Yin's tip), by adding lines:
-
-a) UBSAN_SANITIZE_page_alloc.o := n
-b) GCOV_PROFILE_page_alloc.o := n 
-
-The issue also cannot be reproduced with either one (with
-original kconfig)  
-
-> > I also objdumped 'prep_compound_page' for vmlinux of 7118fc2906 and
-> > its parent commit 48b8d744ea84, which have big difference than the
-> > simple 'set_page_count()' change, but I can't tell which part is
-> > abnormal, so attach them for further check.
-> 
-> Yeah, I can't make heads or tails of them either, see above on how
-> illegible the objdump files are. And that's despite not even having
-> all of prep_compound_page() in them (it's missing
-> prep_compound_page.cold, which is probably just UBSAN fixup code, but
-> who knows..)
-
-Yes, from what I can tell that old 'prep_compound_page.cold' is mostly
-calling UBSAN functions. And after disbling GCOV+UBSAN, there is no
-more prep_compound_page.cold. 
-
-Thanks,
-Feng
-
-> 
-> That said, with the i386 defconfig, the only change from adding
-> set_page_count() to the loop seems to be exactly that:
-> 
->  .L589:
-> -       movl    $1024, 12(%eax)
-> +       movl    $0, 28(%eax)
->         addl    $32, %eax
-> +       movl    $1024, -20(%eax)
->         movl    %esi, -28(%eax)
->         movl    $0, -12(%eax)
->         cmpl    %edx, %eax
-> 
-> (don't ask me why gcc does *one* access using the pre-incremented
-> pointer, and then the rest to the post-incremented ones, but whatever
-> - it means that it's not just "add a mov $0", it's also changing how
-> the
-> 
->         p->mapping = TAIL_MAPPING;
-> 
-> instruction is done, which is that
-> 
-> -       movl    $1024, 12(%eax)
-> +       movl    $1024, -20(%eax)
-> 
-> part of the change)
-> 
->              Linus
-
---dD8aPH+a8OyjebKK
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="7118fc29.log"
-
-
-c11e56e0 <prep_compound_page>:
-c11e56e0:	55                   	push   %ebp
-c11e56e1:	89 d1                	mov    %edx,%ecx
-c11e56e3:	89 e5                	mov    %esp,%ebp
-c11e56e5:	56                   	push   %esi
-c11e56e6:	53                   	push   %ebx
-c11e56e7:	89 c3                	mov    %eax,%ebx
-c11e56e9:	b8 01 00 00 00       	mov    $0x1,%eax
-c11e56ee:	d3 e0                	shl    %cl,%eax
-c11e56f0:	83 3b ff             	cmpl   $0xffffffff,(%ebx)
-c11e56f3:	0f 84 87 00 00 00    	je     c11e5780 <prep_compound_page+0xa0>
-c11e56f9:	0f ba 2b 10          	btsl   $0x10,(%ebx)
-c11e56fd:	48                   	dec    %eax
-c11e56fe:	7e 21                	jle    c11e5721 <prep_compound_page+0x41>
-c11e5700:	8d 73 01             	lea    0x1(%ebx),%esi
-c11e5703:	ba 28 00 00 00       	mov    $0x28,%edx
-c11e5708:	d3 e2                	shl    %cl,%edx
-c11e570a:	8d 43 28             	lea    0x28(%ebx),%eax
-c11e570d:	01 da                	add    %ebx,%edx
-c11e570f:	90                   	nop
-c11e5710:	c7 40 0c 00 04 00 00 	movl   $0x400,0xc(%eax)
-c11e5717:	83 c0 28             	add    $0x28,%eax
-c11e571a:	89 70 dc             	mov    %esi,-0x24(%eax)
-c11e571d:	39 d0                	cmp    %edx,%eax
-c11e571f:	75 ef                	jne    c11e5710 <prep_compound_page+0x30>
-c11e5721:	c7 43 34 ff ff ff ff 	movl   $0xffffffff,0x34(%ebx)
-c11e5728:	b8 01 00 00 00       	mov    $0x1,%eax
-c11e572d:	c6 43 30 01          	movb   $0x1,0x30(%ebx)
-c11e5731:	d3 e0                	shl    %cl,%eax
-c11e5733:	89 43 38             	mov    %eax,0x38(%ebx)
-c11e5736:	8b 43 04             	mov    0x4(%ebx),%eax
-c11e5739:	88 4b 31             	mov    %cl,0x31(%ebx)
-c11e573c:	a8 01                	test   $0x1,%al
-c11e573e:	75 50                	jne    c11e5790 <prep_compound_page+0xb0>
-c11e5740:	89 d8                	mov    %ebx,%eax
-c11e5742:	8b 10                	mov    (%eax),%edx
-c11e5744:	81 e2 00 00 01 00    	and    $0x10000,%edx
-c11e574a:	74 24                	je     c11e5770 <prep_compound_page+0x90>
-c11e574c:	83 38 ff             	cmpl   $0xffffffff,(%eax)
-c11e574f:	74 42                	je     c11e5793 <prep_compound_page+0xb3>
-c11e5751:	8b 10                	mov    (%eax),%edx
-c11e5753:	81 e2 00 00 01 00    	and    $0x10000,%edx
-c11e5759:	74 0d                	je     c11e5768 <prep_compound_page+0x88>
-c11e575b:	80 78 31 01          	cmpb   $0x1,0x31(%eax)
-c11e575f:	76 07                	jbe    c11e5768 <prep_compound_page+0x88>
-c11e5761:	c7 43 58 00 00 00 00 	movl   $0x0,0x58(%ebx)
-c11e5768:	5b                   	pop    %ebx
-c11e5769:	5e                   	pop    %esi
-c11e576a:	5d                   	pop    %ebp
-c11e576b:	c3                   	ret    
-c11e576c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-c11e5770:	8b 50 04             	mov    0x4(%eax),%edx
-c11e5773:	f6 c2 01             	test   $0x1,%dl
-c11e5776:	75 d4                	jne    c11e574c <prep_compound_page+0x6c>
-c11e5778:	5b                   	pop    %ebx
-c11e5779:	5e                   	pop    %esi
-c11e577a:	5d                   	pop    %ebp
-c11e577b:	c3                   	ret    
-c11e577c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-c11e5780:	ba 10 5c 97 c2       	mov    $0xc2975c10,%edx
-c11e5785:	89 d8                	mov    %ebx,%eax
-c11e5787:	e8 e4 ae fd ff       	call   c11c0670 <dump_page>
-c11e578c:	0f 0b                	ud2    
-c11e578e:	66 90                	xchg   %ax,%ax
-c11e5790:	48                   	dec    %eax
-c11e5791:	eb af                	jmp    c11e5742 <prep_compound_page+0x62>
-c11e5793:	ba 10 5c 97 c2       	mov    $0xc2975c10,%edx
-c11e5798:	e8 d3 ae fd ff       	call   c11c0670 <dump_page>
-c11e579d:	0f 0b                	ud2    
-c11e579f:	90                   	nop
-
-
-
---dD8aPH+a8OyjebKK
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="48b8d744.log"
-
-
-c11e56c0 <prep_compound_page>:
-c11e56c0:	55                   	push   %ebp
-c11e56c1:	88 d1                	mov    %dl,%cl
-c11e56c3:	89 e5                	mov    %esp,%ebp
-c11e56c5:	57                   	push   %edi
-c11e56c6:	bf 01 00 00 00       	mov    $0x1,%edi
-c11e56cb:	56                   	push   %esi
-c11e56cc:	89 c6                	mov    %eax,%esi
-c11e56ce:	53                   	push   %ebx
-c11e56cf:	d3 e7                	shl    %cl,%edi
-c11e56d1:	83 ec 0c             	sub    $0xc,%esp
-c11e56d4:	83 38 ff             	cmpl   $0xffffffff,(%eax)
-c11e56d7:	89 55 ec             	mov    %edx,-0x14(%ebp)
-c11e56da:	0f 84 c0 00 00 00    	je     c11e57a0 <prep_compound_page+0xe0>
-c11e56e0:	0f ba 28 10          	btsl   $0x10,(%eax)
-c11e56e4:	83 ff 01             	cmp    $0x1,%edi
-c11e56e7:	7e 38                	jle    c11e5721 <prep_compound_page+0x61>
-c11e56e9:	89 75 e8             	mov    %esi,-0x18(%ebp)
-c11e56ec:	8d 48 01             	lea    0x1(%eax),%ecx
-c11e56ef:	bb 01 00 00 00       	mov    $0x1,%ebx
-c11e56f4:	8d 40 28             	lea    0x28(%eax),%eax
-c11e56f7:	89 ce                	mov    %ecx,%esi
-c11e56f9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
-c11e5700:	c7 40 1c 00 00 00 00 	movl   $0x0,0x1c(%eax)
-c11e5707:	3e 8d 74 26 00       	lea    %ds:0x0(%esi,%eiz,1),%esi
-c11e570c:	c7 40 0c 00 04 00 00 	movl   $0x400,0xc(%eax)
-c11e5713:	43                   	inc    %ebx
-c11e5714:	83 c0 28             	add    $0x28,%eax
-c11e5717:	89 70 dc             	mov    %esi,-0x24(%eax)
-c11e571a:	39 df                	cmp    %ebx,%edi
-c11e571c:	75 e2                	jne    c11e5700 <prep_compound_page+0x40>
-c11e571e:	8b 75 e8             	mov    -0x18(%ebp),%esi
-c11e5721:	c7 46 34 ff ff ff ff 	movl   $0xffffffff,0x34(%esi)
-c11e5728:	8b 4d ec             	mov    -0x14(%ebp),%ecx
-c11e572b:	b8 01 00 00 00       	mov    $0x1,%eax
-c11e5730:	c6 46 30 01          	movb   $0x1,0x30(%esi)
-c11e5734:	88 4e 31             	mov    %cl,0x31(%esi)
-c11e5737:	d3 e0                	shl    %cl,%eax
-c11e5739:	89 46 38             	mov    %eax,0x38(%esi)
-c11e573c:	8b 46 04             	mov    0x4(%esi),%eax
-c11e573f:	a8 01                	test   $0x1,%al
-c11e5741:	75 6d                	jne    c11e57b0 <prep_compound_page+0xf0>
-c11e5743:	89 f0                	mov    %esi,%eax
-c11e5745:	8b 10                	mov    (%eax),%edx
-c11e5747:	81 e2 00 00 01 00    	and    $0x10000,%edx
-c11e574d:	74 41                	je     c11e5790 <prep_compound_page+0xd0>
-c11e574f:	83 38 ff             	cmpl   $0xffffffff,(%eax)
-c11e5752:	74 5f                	je     c11e57b3 <prep_compound_page+0xf3>
-c11e5754:	8b 10                	mov    (%eax),%edx
-c11e5756:	81 e2 00 00 01 00    	and    $0x10000,%edx
-c11e575c:	74 0d                	je     c11e576b <prep_compound_page+0xab>
-c11e575e:	80 78 31 01          	cmpb   $0x1,0x31(%eax)
-c11e5762:	76 07                	jbe    c11e576b <prep_compound_page+0xab>
-c11e5764:	c7 46 58 00 00 00 00 	movl   $0x0,0x58(%esi)
-c11e576b:	83 c4 0c             	add    $0xc,%esp
-c11e576e:	5b                   	pop    %ebx
-c11e576f:	5e                   	pop    %esi
-c11e5770:	5f                   	pop    %edi
-c11e5771:	5d                   	pop    %ebp
-c11e5772:	c3                   	ret    
-c11e5773:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-c11e5777:	90                   	nop
-c11e5778:	89 45 f0             	mov    %eax,-0x10(%ebp)
-c11e577b:	31 d2                	xor    %edx,%edx
-c11e577d:	e8 5e 06 04 00       	call   c1225de0 <__page_ref_set>
-c11e5782:	8b 45 f0             	mov    -0x10(%ebp),%eax
-c11e5785:	eb 85                	jmp    c11e570c <prep_compound_page+0x4c>
-c11e5787:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
-c11e578e:	66 90                	xchg   %ax,%ax
-c11e5790:	8b 50 04             	mov    0x4(%eax),%edx
-c11e5793:	f6 c2 01             	test   $0x1,%dl
-c11e5796:	75 b7                	jne    c11e574f <prep_compound_page+0x8f>
-c11e5798:	83 c4 0c             	add    $0xc,%esp
-c11e579b:	5b                   	pop    %ebx
-c11e579c:	5e                   	pop    %esi
-c11e579d:	5f                   	pop    %edi
-c11e579e:	5d                   	pop    %ebp
-c11e579f:	c3                   	ret    
-c11e57a0:	ba a8 5b 97 c2       	mov    $0xc2975ba8,%edx
-c11e57a5:	e8 f6 ae fd ff       	call   c11c06a0 <dump_page>
-c11e57aa:	0f 0b                	ud2    
-c11e57ac:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-c11e57b0:	48                   	dec    %eax
-c11e57b1:	eb 92                	jmp    c11e5745 <prep_compound_page+0x85>
-c11e57b3:	ba a8 5b 97 c2       	mov    $0xc2975ba8,%edx
-c11e57b8:	e8 e3 ae fd ff       	call   c11c06a0 <dump_page>
-c11e57bd:	0f 0b                	ud2    
-c11e57bf:	90                   	nop
-
-
---dD8aPH+a8OyjebKK--
