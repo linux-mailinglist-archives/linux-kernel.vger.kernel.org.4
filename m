@@ -2,188 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C253B6724BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1626D6724C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjARRV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S229459AbjARRWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjARRV0 (ORCPT
+        with ESMTP id S230266AbjARRWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:21:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4638125AB;
-        Wed, 18 Jan 2023 09:21:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 917705BEE9;
-        Wed, 18 Jan 2023 17:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674062483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1SCxeVbTpnVsT03pooH2y84Lv1BB7k5KwUYDP0XFyWA=;
-        b=qEwVvVWxhxhY1cLo7t+SlFvjG6RhTz/cvVyqd8YUGGhSp6XL9LFdC+ZOgbWgyDTtmahcIT
-        PriICH13TJhLwOXC5lOpM2F2BnJ+ohb6blVOOdSIa6wmQbgw3j0OO9trtN7JH/cm3sZZ0d
-        zsQ3Pc5PBLVe9jF2xxuP8FlySmS00aQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31513139D2;
-        Wed, 18 Jan 2023 17:21:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MAcLCZMqyGPARQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 17:21:23 +0000
-Date:   Wed, 18 Jan 2023 18:21:22 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, fvdl@google.com,
-        bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: Proactive reclaim/demote discussion (was Re: [PATCH] Revert "mm:
- add nodes= arg to memory.reclaim")
-Message-ID: <Y8gqkub3AM6c+Z5y@dhcp22.suse.cz>
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
- <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
- <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
- <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
- <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
- <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz>
- <87lemiitdd.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
+        Wed, 18 Jan 2023 12:22:20 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683AA58670
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:22:12 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id d10so17341225ilc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YHkgikre77EHT3/g6r0NFQCicXfNDncfTKLPLwU0O5Q=;
+        b=mQVPzVOy2HAK3snoqJ5SuOs+TGigKX0JzcM1I1ffephUlCut6a4watbrK58DAtqW+O
+         P2HRiFijPyWn9GdB6MvCLt9VxuyXmA/G1XQkqssjC+2RJwT2f8A6EGONwN81bkZx5bmp
+         +zQylD+L4yXp6WDODprc2dRr9Q2DFYgySgNMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YHkgikre77EHT3/g6r0NFQCicXfNDncfTKLPLwU0O5Q=;
+        b=axRhi78b7C4T29J7hVF2Ann0Hbepr6rc8k6741Jh5xP82HXIWKIS9XNIkLq3s3MMRI
+         TTMp3gdUsQ+VXzRtCqy4fnBsN5pTMKhoUMoMN5lEHP76KxcCfoLYdXPhB9IRKOuIbanB
+         wLsXEYXJ3hhvfAM14DZcLMgskAsNhP0Y7VJpJ5ruHO9DtMvG4VCtpJVVAQwav3aBgdXX
+         sv28tCWXZbmu61vUEi7TmdPA+weTJOtaJy/BT5jzYgUfHquFppSVWIvU+STn/0Kvo5/U
+         KfEFUQ2mtysGikdW7cCIA+fLBO/+imwNtobXRl6cEdt8hj4EzQAKpZENgPitUHbjyZIQ
+         nY6A==
+X-Gm-Message-State: AFqh2krpX1N2jX0G1/aerKjpV8IsPbJ9HEj5CxXtq8YXwQR1WiMUmTtU
+        IYe5HYjWaMCbdWjxxRLQDdetsQ==
+X-Google-Smtp-Source: AMrXdXtMjhW5fHNPeVRbpUj2TtE21JZN3FT5gzC4TId5LfCuRZEk9efrLRfrVPrpMeR7hh+KOEpAZQ==
+X-Received: by 2002:a05:6e02:1d86:b0:30d:c671:48c5 with SMTP id h6-20020a056e021d8600b0030dc67148c5mr8273983ila.16.1674062531845;
+        Wed, 18 Jan 2023 09:22:11 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id z1-20020a027a41000000b003760a908bfasm10644139jad.169.2023.01.18.09.22.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 09:22:11 -0800 (PST)
+Date:   Wed, 18 Jan 2023 17:22:11 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/9] usb: misc: onboard_usb_hub: add VIA LAB VL817 hub
+ support
+Message-ID: <Y8gqw3G0z25zG69K@google.com>
+References: <20230118044418.875-1-linux.amoon@gmail.com>
+ <20230118044418.875-9-linux.amoon@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87lemiitdd.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118044418.875-9-linux.amoon@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 04-01-23 16:41:50, Huang, Ying wrote:
-> Michal Hocko <mhocko@suse.com> writes:
+On Wed, Jan 18, 2023 at 04:44:16AM +0000, Anand Moon wrote:
+> VIA LAB VL817 is a 4-port USB 3.1 hub and USB 2.0 root hub
+> that has a reset pin to toggle and a 5.0V core supply exported
+> though an integrated LDO is available for powering it.
 > 
-> [snip]
+> Add the support for this hub, for controlling the reset pin and
+> the core power supply.
 > 
-> > This really requires more discussion.
+> Add USB device id's for USB 2.0 and USB 3.0 root hub.
 > 
-> Let's start the discussion with some summary.
-> 
-> Requirements:
-> 
-> - Proactive reclaim.  The counting of current per-memcg proactive
->   reclaim (memory.reclaim) isn't correct.  The demoted, but not
->   reclaimed pages will be counted as reclaimed.  So "echo XXM >
->   memory.reclaim" may exit prematurely before the specified number of
->   memory is reclaimed.
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 
-This is reportedly a problem because memory.reclaim interface cannot be
-used for proper memcg sizing IIRC.
-
-> - Proactive demote.  We need an interface to do per-memcg proactive
->   demote.
-
-For the further discussion it would be useful to reference the usecase
-that is requiring this functionality. I believe this has been mentioned
-somewhere but having it in this thread would help.
-
-> We may reuse memory.reclaim via extending the concept of
->   reclaiming to include demoting.  Or, we can add a new interface for
->   that (for example, memory.demote).  In addition to demote from fast
->   tier to slow tier, in theory, we may need to demote from a set of
->   nodes to another set of nodes for something like general node
->   balancing.
-> 
-> - Proactive promote.  In theory, this is possible, but there's no real
->   life requirements yet.  And it should use a separate interface, so I
->   don't think we need to discuss that here.
-
-Yes, proactive promotion is not backed by any real usecase at the
-moment. We do not really have to focus on it but we should be aware of
-the posibility and alow future extentions towards that functionality.
- 
-There is one requirement missing here.
- - Per NUMA node control - this is what makes the distinction between
-   demotion and charge reclaim really semantically challenging - e.g.
-   should demotions constrained by the provided nodemask or they should
-   be implicit?
-
-> Open questions:
-> 
-> - Use memory.reclaim or memory.demote for proactive demote.  In current
->   memcg context, reclaiming and demoting is quite different, because
->   reclaiming will uncharge, while demoting will not.  But if we will add
->   per-memory-tier charging finally, the difference disappears.  So the
->   question becomes whether will we add per-memory-tier charging.
-
-The question is not whether but when IMHO. We've had a similar situation
-with the swap accounting. Originally we have considered swap as a shared
-resource but cgroupv2 goes with per swap limits because contention for
-the swap space is really something people do care about.
-
-> - Whether should we demote from faster tier nodes to lower tier nodes
->   during the proactive reclaiming.
-
-I thought we are aligned on that. Demotion is a part of aging and that
-is an integral part of the reclaim.
-
->   Choice A is to keep as much fast
->   memory as possible.  That is, reclaim from the lowest tier nodes
->   firstly, then the secondary lowest tier nodes, and so on.  Choice B is
->   to demote at the same time of reclaiming.  In this way, if we
->   proactively reclaim XX MB memory, we may free XX MB memory on the
->   fastest memory nodes.
-> 
-> - When we proactively demote some memory from a fast memory tier, should
->   we trigger memory competition in the slower memory tiers?  That is,
->   whether to wake up kswapd of the slower memory tiers nodes?
-
-Johannes made some very strong arguments that there is no other choice
-than involve kswapd (https://lore.kernel.org/all/Y5nEQeXj6HQBEHEY@cmpxchg.org/).
-
->   If we
->   want to make per-memcg proactive demoting to be per-memcg strictly, we
->   should avoid to trigger the global behavior such as triggering memory
->   competition in the slower memory tiers.  Instead, we can add a global
->   proactive demote interface for that (such as per-memory-tier or
->   per-node).
-
-I suspect we are left with a real usecase and then follow the path we
-took for the swap accounting.
-
-Other open questions I do see are
-- what to do when the memory.reclaim is constrained by a nodemask as
-  mentioned above. Is the whole reclaim process (including aging) bound to
-  the given nodemask or does demotion escape from it.
-- should the demotion be specific to multi-tier systems or the interface
-  should be just NUMA based and users could use the scheme to shuffle
-  memory around and allow numa balancing from userspace that way. That
-  would imply that demotion is a dedicated interface of course.
-- there are other usecases that would like to trigger aging from
-  userspace (http://lkml.kernel.org/r/20221214225123.2770216-1-yuanchu@google.com).
-  Isn't demotion just a special case of aging in general or should we
-  end up with 3 different interfaces?
-
--- 
-Michal Hocko
-SUSE Labs
+Acked-by: Matthias Kaehlcke <mka@chromium.org>
