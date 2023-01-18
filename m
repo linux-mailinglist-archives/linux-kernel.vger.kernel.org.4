@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCE66729C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB266729C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjARUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S230033AbjARUym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:54:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjARUxe (ORCPT
+        with ESMTP id S229947AbjARUyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:53:34 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8DEA5D4;
-        Wed, 18 Jan 2023 12:53:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674075212; x=1705611212;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l4SONC/Qdtv6CckCiaxSv423aZE7tdp+t6/ZdNoJapo=;
-  b=GdcZDIyrHIzwKmZzHuGzNLSz5h/MzRFceBhRsTs2D0uB9cigKeqrBMKq
-   ng1jlo/Pp7VKnwaCAxefgPGUpkgk94xAQv8V3B26uVAeMTYmcLy5bn2mj
-   jGYlJc5nSBPu9RLt2e7Z6E73mMgU2UDw4Hu9TraUWL7wAbOCRQAYJaj5q
-   Zlp3j0AoBkFeRmPnVv/pgw8KJyDVYcms3yVDB4PpLb5c/AYQQUZn3zmP9
-   2kbixE/x2ng0CThwdZNDd5k9G9GzEGFmMu2Yx08N0JTjkqzRKZCOvbe9C
-   FfKXA/XhmmLdFCEmS9VejKW0ajBSMzt3Zlp2gLCNIVNT7yNvus/++P0Fy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="325149644"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="325149644"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637432730"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="637432730"
-Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:30 -0800
-Message-ID: <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Date:   Wed, 18 Jan 2023 12:53:31 -0800
-In-Reply-To: <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
-         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
-         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-         <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
-         <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 18 Jan 2023 15:54:38 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46A5A5D4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:54:36 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id e10so25460231pgc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=38Ab1ydOxWFoCnQ1hn18tsTd/nLpjWDkMcuz9LcJhgc=;
+        b=QcyKTP98pIj4xoEtMVaGgqSYkQu19v4GHm3EeHftxsvlz9FraAkTB6wZdkfNGVLtGd
+         ugvtfy72K2zx1HqIbEIzd0CmgQjHeKQaFTLcEiTde2MxVGAPLpBkuXs9i+TD+Oery4rr
+         M5Ee7c3RrmztbjIZM61dd1PYrXAP3IddNfsT4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=38Ab1ydOxWFoCnQ1hn18tsTd/nLpjWDkMcuz9LcJhgc=;
+        b=yWhIiOeO7mtDFFBu4TqFUgSrqRXFmzJ6sGI6Ytu6GWqsqd7Gn3EAhWFViwebnxYmsI
+         FWWr8GDE/mjlv7nG/qg0t8RPFhfhdon8A7+FwQliAuDhREX4sSLRWTeMaC7qh9LBnA+i
+         pZxaCmIZUft858O0WxaQtxvv1wN+Mom72BS8r52Doh7OMjNoFInX64YIUhUIBd+QNrU0
+         9Iq6D/S5L7zOa5t6GdnniuZEXs9twmkPSYqeGyE9EugCkEloqs5BqNoKwclj7wrr/wDX
+         K+8JRkIjSUV4YWvJ9v+AFz1k1JdqU9XCYGkFmBwqPKdswIwo/eUZdBQNWgy21OPXYTim
+         XfUA==
+X-Gm-Message-State: AFqh2krORppQzBLbTr0G931gUOBzQgplwzSUD4yf81MEi/m4j0qtl1XZ
+        OsNXS57X7jV1nrt/t/dudJFnBP7Rc/B1wNWy
+X-Google-Smtp-Source: AMrXdXuiNSgEY7oHvEwxaIEKfBUrMnTDuVqSiNAxvJGyyZSQNRNFIyO+qQS75b9JhsA6buYwmwliog==
+X-Received: by 2002:a05:6a00:4289:b0:583:319a:4425 with SMTP id bx9-20020a056a00428900b00583319a4425mr8760833pfb.29.1674075276168;
+        Wed, 18 Jan 2023 12:54:36 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 66-20020a620645000000b00581172f7456sm5101790pfg.56.2023.01.18.12.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 12:54:35 -0800 (PST)
+Date:   Wed, 18 Jan 2023 12:54:34 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     caizp2008 <caizp2008@163.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Yupeng Li <liyupeng@zbhlos.com>,
+        tariqt@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH 1/1] net/mlx4: Fix build error use array_size()
+ helper in copy_to_user()
+Message-ID: <202301181253.B19EE86@keescook>
+References: <20230107072725.673064-1-liyupeng@zbhlos.com>
+ <Y7wb1hCpJiGEdbav@ziepe.ca>
+ <202301131039.7354AD35CF@keescook>
+ <202301131453.D93C967D4@keescook>
+ <11689498.158e.185b5471bad.Coremail.caizp2008@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11689498.158e.185b5471bad.Coremail.caizp2008@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
-> On 18/01/2023 20:16, srinivas pandruvada wrote:
-> 
-> [ ... ]
-> 
-> > > > But we'd better wait for the thermald test result from
-> > > > Srinvias.
-> > > 
-> > > A quick test show that things still work with thermald and these
-> > > changes.
-> > 
-> > But I have a question. In some devices trip point temperature is
-> > not
-> > static. When hardware changes, we get notification. For example
-> > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
-> > Currently get_trip can get the latest changed value. But if we
-> > preregister, we need some mechanism to update them.
-> 
-> When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
-> call 
-> int340x_thermal_read_trips() which in turn updates the trip points.
-> 
+On Sun, Jan 15, 2023 at 07:53:34PM +0800, caizp2008 wrote:
+> my kernel config is config-mlx4-error.
 
-Not sure how we handle concurrency here when driver can freely update
-trips while thermal core is using trips.
+Where can I find this config?
 
-
-Thanks,
-Srinivas
-
-
-
-> 
-> 
-
+-- 
+Kees Cook
