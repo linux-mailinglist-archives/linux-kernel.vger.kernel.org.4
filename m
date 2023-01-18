@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C8A671AA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63110671AB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjARLbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S229845AbjARLdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 06:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjARLbW (ORCPT
+        with ESMTP id S230127AbjARLcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:31:22 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF905DC27;
-        Wed, 18 Jan 2023 02:51:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 18 Jan 2023 06:32:47 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9595166FF
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:52:22 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 02F8B205DA;
+        Wed, 18 Jan 2023 10:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674039136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
+        bh=4CzLTnXF1RGnXjzn638iSw21L+MKQzT38mnf8LP2ER8=;
+        b=CZHCZkfNSnc0v2Aywk4cPfl87iNvRA3TuOYbUT3sABI3Wu2+YcH5BDlLRIb5eHqyjoyh+8
+        dllgMdk+CQSn+j+joQgqxx4RfNquDjp3J+ig6ZH1aeex6uwrpJGeSjeJ7GbMljgEfQ36n0
+        quSY7cvlKx/CVXmdsRsXH85Hc71mY0U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674039136;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
+        bh=4CzLTnXF1RGnXjzn638iSw21L+MKQzT38mnf8LP2ER8=;
+        b=YCuzL6Z+vqRqKHgPHFQdPWq1N3RhW3H+gcV3Hw1Z8FKMwkvRl5R0Sl95aMGjK1BlGesaJF
+        maWg25+vcEu+uiBg==
+Received: from lion.mk-sys.cz (unknown [10.100.200.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E49AD204B1;
-        Wed, 18 Jan 2023 10:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674039083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/9erNZdmzZn06cCNOJDly4yn3eTixjSiK6j9e1hIz0=;
-        b=ZZ64m24AmxiunAMNKMk1YSLi61k72uBpxt6gftuoB5sdtukVtpzIqukV0XZxBrgxeKTNvS
-        lB4zfOvU0DjBhcR7HKtIwT/T8E/Oyw0zhYgInbqGnuldi6aQz/k1bObogoBRz4M3i66nu3
-        er5WssaIJAuOa3N9RKkhl3lhez4wEy0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674039083;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/9erNZdmzZn06cCNOJDly4yn3eTixjSiK6j9e1hIz0=;
-        b=euhQysow3RJUvUioeSoWe8nop2Xt3mGFRF00fzmNQSKGQwfW2NjvSrMRBh7v7BgzODktN2
-        xcXeD7DNWd86G5Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D4244138FE;
-        Wed, 18 Jan 2023 10:51:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1SRxMyvPx2ObZAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 18 Jan 2023 10:51:23 +0000
-Message-ID: <ce97ebc9-f8c1-cd1e-f364-60866cfb092a@suse.de>
-Date:   Wed, 18 Jan 2023 11:51:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 00/21] blksnap - block devices snapshots module
-To:     Mike Snitzer <snitzer@redhat.com>,
-        Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <Y8cNVv4O+vjL+aAy@redhat.com>
-Content-Language: en-US
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <Y8cNVv4O+vjL+aAy@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by relay2.suse.de (Postfix) with ESMTPS id E6B5C2C141;
+        Wed, 18 Jan 2023 10:52:15 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id B9DA960514; Wed, 18 Jan 2023 11:52:15 +0100 (CET)
+From:   Michal Kubecek <mkubecek@suse.cz>
+Subject: [PATCH] objtool: check that module init/exit function is an indirect
+ call target
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
+Message-Id: <20230118105215.B9DA960514@lion.mk-sys.cz>
+Date:   Wed, 18 Jan 2023 11:52:15 +0100 (CET)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 22:04, Mike Snitzer wrote:
-> On Fri, Dec 09 2022 at  9:23P -0500,
-> Sergei Shtepa <sergei.shtepa@veeam.com> wrote:
-> 
->> Hi Jens. Hi Jonathan. Hi all.
->>
->> I am happy to offer a modified version of the Block Devices Snapshots
->> Module. It allows to create non-persistent snapshots of any block devices.
->> The main purpose of such snapshots is to provide backups of block devices.
->> See more in Documentation/block/blksnap.rst.
->>
->> The Block Device Filtering Mechanism is added to the block layer. This
->> allows to attach and detach block device filters to the block layer.
->> Filters allow to extend the functionality of the block layer.
->> See more in Documentation/block/blkfilter.rst.
->>
->> A tool, a library for working with blksnap and tests can be found at
->> www.github.com/veeam/blksnap.
->>
->> The first version was suggested at 13 June 2022. Many thanks to
->> Christoph Hellwig and Randy Dunlap for the review of that version.
->>
->> Changes:
->> - Forgotten "static" declarations have been added.
->> - The text of the comments has been corrected.
->> - It is possible to connect only one filter, since there are no others in
->>    upstream.
->> - Do not have additional locks for attach/detach filter.
->> - blksnap.h moved to include/uapi/.
->> - #pragma once and commented code removed.
->> - uuid_t removed from user API.
->> - Removed default values for module parameters from the configuration file.
->> - The debugging code for tracking memory leaks has been removed.
->> - Simplified Makefile.
->> - Optimized work with large memory buffers, CBT tables are now in virtual
->>    memory.
->> - The allocation code of minor numbers has been optimized.
->> - The implementation of the snapshot image block device has been
->>    simplified, now it is a bio-based block device.
->> - Removed initialization of global variables with null values.
->> - Only one bio is used to copy one chunk.
->> - Checked on ppc64le.
->>
->> The v1 version was suggested at 2 November 2022. Many thanks to Fabio
->> Fantoni for his for his participation in the "blksnap" project on github
->> and Jonathan Corbet for his article https://lwn.net/Articles/914031/.
->> Thanks to the impartial kernel test robot.
->>
->> Changes:
->> - Added documentation for Block Device Filtering Mechanism.
->> - Added documentation for Block Devices Snapshots Module (blksnap).
->> - The MAINTAINERS file has been updated.
->> - Optimized queue code for snapshot images.
->> - Fixed comments, log messages and code for better readability.
-> 
-> [this reply got long...]
-> 
-[ .. ]
-> 
-> But you've already bypassed me, my hope is that Jens and Christoph
-> agree that we need this line of development to be in service to other
-> areas of the Linux block subsystem and its drivers that were
-> established for the purposes of remapping IO.  It cannot just be
-> the subset needed to cement veeam's ability to use Linux for its
-> purposes (but I completely understand that is the point of veeam's
-> exercise).
-> 
-That's why I proposed my topic at LSF/MM, precisely to figure out how to 
-handle these issues.
+Some out-of-tree modules still do not use module_init() / module_exit()
+macros and simply create functions with magic names init_module() and
+cleanup_module() instead. As a result, these functions are not recognized
+as indirect call targets by objtool and such module fails to load into an
+IBT enabled kernel.
 
-Cheers,
+This old way is not even documented any more but it is cleaner to issue
+a warning than to let the module fail on load without obvious reason.
 
-Hannes
+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+---
+ tools/objtool/Documentation/objtool.txt | 8 ++++++++
+ tools/objtool/check.c                   | 7 +++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
+index 8a671902a187..8e53fc6735ef 100644
+--- a/tools/objtool/Documentation/objtool.txt
++++ b/tools/objtool/Documentation/objtool.txt
+@@ -410,6 +410,14 @@ the objtool maintainers.
+    can remove this warning by putting the ANNOTATE_INTRA_FUNCTION_CALL
+    directive right before the call.
+ 
++12. file.o: warning: func(): not an indirect call target
++
++   This means that objtool is running with --ibt and a function expected
++   to be an indirect call target is not. In particular, this happens for
++   init_module() or cleanup_module() if a module relies on these special
++   names and does not use module_init() / module_exit() macros to create
++   them.
++
+ 
+ If the error doesn't seem to make sense, it could be a bug in objtool.
+ Feel free to ask the objtool maintainer for help.
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 4b7c8b33069e..0afa4f0ffa67 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -854,8 +854,15 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
+ 	list_for_each_entry(insn, &file->endbr_list, call_node) {
+ 
+ 		int *site = (int *)sec->data->d_buf + idx;
++		struct symbol *sym = insn->sym;
+ 		*site = 0;
+ 
++		if (opts.module && sym && sym->type == STT_FUNC &&
++		    insn->offset == sym->offset &&
++		    (!strcmp(sym->name, "init_module") ||
++		     !strcmp(sym->name, "cleanup_module")))
++			WARN("%s(): not an indirect call target", sym->name);
++
+ 		if (elf_add_reloc_to_insn(file->elf, sec,
+ 					  idx * sizeof(int),
+ 					  R_X86_64_PC32,
+-- 
+2.38.1
+
