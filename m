@@ -2,150 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACC4672C38
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79F6672C3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjARXEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S229784AbjARXFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjARXEr (ORCPT
+        with ESMTP id S229627AbjARXFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:04:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596183C2B;
-        Wed, 18 Jan 2023 15:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674083086; x=1705619086;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LsOWRuvImwjjaHZSnCrTEoQrEF97YyyaWIH9zI+x4Rs=;
-  b=YCwQ3v2azCe9y2EKbiTn2fVM5BKzvcMzAgtri9bMK7SDE38iQMVx2mlJ
-   oKvzmESRw5KkvlB7FJ8aBq+6XK1t/k/Q4rYEJVlz5gqmjwG9tuEQ5bZgj
-   h4SuEuDtqc8aqqDYxL6GO+SNzUsGTbi/5Hc3UsmJFKe+weIA2vZdZ2TcP
-   pTs0xpiG6D+Q2Apt3CCOkM7O7fefF0aUeAwymSxue5cYSECMZS3ZcifSX
-   KoH/l4lpYZQUt4ZpaGcv2uc7NlswRbKHeMuxsRO3Qxje26ysXe0cNwIAf
-   f97XTxPUHA0hvd25sED7A3CgInU4nM1cGGBDJAHlHg1UanNW1BMI6EQPb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="308688174"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="308688174"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:04:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="748669327"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="748669327"
-Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:04:45 -0800
-Message-ID: <b51ecbb8ac774efc4fb4ac1349585b486303f86f.camel@linux.intel.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Date:   Wed, 18 Jan 2023 15:04:44 -0800
-In-Reply-To: <d6f71181-1de4-7937-eda0-8805d9dfc3b4@linaro.org>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
-         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
-         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-         <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
-         <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
-         <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
-         <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org>
-         <340f3ecdaddb2c422dcbe3df712a082f333eab0d.camel@linux.intel.com>
-         <d6f71181-1de4-7937-eda0-8805d9dfc3b4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 18 Jan 2023 18:05:33 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E163A863
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 15:05:32 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id m15so258531wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 15:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m4PepIMgjunHPFAdcwLkHufzAvLogufkwZaXQ5q9ioM=;
+        b=rsFwZUUs/BZI/dJUyY8MiEWoUhj+bNz3VjHaDJHeXz7XYylPZPTiUMqb4hLC41yD/O
+         fngXVIRA9ow2YYhGSEMnEKN5gPBKcacPzaW7NKdm14UGyzJQwlbomr7JyO2iUN2wE7xO
+         efOQdqKkUbDm8IrPSR/0xD5qXneiEAGIA00X2/hdCJpjacFv4rYt4Wz1KSMmB8dY4xnM
+         vo5oM9FnZy2riRhECyQ1LSNb5zE7g1ISwQ7v3x18ZmDXQ5AzxgdjxD72OT89UCcfP5F5
+         4ufr5Y0xUVu8btnPZscb1IhsG0f/mB+HCfl/fU1csc9y+tFIvtn8SC6SThc4t592zqag
+         j0hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m4PepIMgjunHPFAdcwLkHufzAvLogufkwZaXQ5q9ioM=;
+        b=2IDt5ErotqDtEDGgmze9QFAzBFNl14kcfALXN9qBopSLATGBbI35Mev4iD5EkJWbyb
+         RQK5GBBlqAtdWQlee3o2bmODvWUuCrUSfz+DQ0aDXadqMv/g6vf1KAuTVkhitHLI4eQx
+         gJErnbnlLBrhb/tcZl6NZXdFXio75H3Ny70ExpgQI9iyyLpFKQsUbd6Myv0SasxG/iZa
+         +tR/7Tkm4dLdcVvR+f38BZ9V/GfhHSSiymoFrXnsiBQZNWxqxhjhugwJHtU+N+2THo2A
+         CE83qrdmYgzhcSPDFr5huAeGn5vv2lGVRUPTTcAzHpOLM8RW13OO6djOicfaIIgnzi1I
+         D7Ig==
+X-Gm-Message-State: AFqh2kqMb+WH6fn27fhL5BlsTYXYMHKtagDhsBRm6QyxldDQy9gpf7fP
+        LaRU+j8GccvsqA9wWUcAsTVl2A==
+X-Google-Smtp-Source: AMrXdXvOn5g/rZ2qMOY5PWhwdG/0hZbasik5oaViA2GbP6IJAUe8eaPlnoW/Oct32slxARGRFO9gPg==
+X-Received: by 2002:a05:600c:510b:b0:3db:d3f:a919 with SMTP id o11-20020a05600c510b00b003db0d3fa919mr4297232wms.1.1674083131063;
+        Wed, 18 Jan 2023 15:05:31 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c510200b003c6f8d30e40sm3523314wms.31.2023.01.18.15.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 15:05:30 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] arm64: dts: qcom: sm8550: Add PCIe HC and PHY support
+Date:   Thu, 19 Jan 2023 01:05:24 +0200
+Message-Id: <20230118230526.1499328-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-18 at 23:14 +0100, Daniel Lezcano wrote:
-> On 18/01/2023 22:16, srinivas pandruvada wrote:
-> > On Wed, 2023-01-18 at 22:01 +0100, Daniel Lezcano wrote:
-> > > On 18/01/2023 21:53, srinivas pandruvada wrote:
-> > > > On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
-> > > > > On 18/01/2023 20:16, srinivas pandruvada wrote:
-> > > > > 
-> > > > > [ ... ]
-> > > > > 
-> > > > > > > > But we'd better wait for the thermald test result from
-> > > > > > > > Srinvias.
-> > > > > > > 
-> > > > > > > A quick test show that things still work with thermald
-> > > > > > > and
-> > > > > > > these
-> > > > > > > changes.
-> > > > > > 
-> > > > > > But I have a question. In some devices trip point
-> > > > > > temperature
-> > > > > > is
-> > > > > > not
-> > > > > > static. When hardware changes, we get notification. For
-> > > > > > example
-> > > > > > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
-> > > > > > Currently get_trip can get the latest changed value. But if
-> > > > > > we
-> > > > > > preregister, we need some mechanism to update them.
-> > > > > 
-> > > > > When the notification INT3403_PERF_TRIP_POINT_CHANGED
-> > > > > happens, we
-> > > > > call
-> > > > > int340x_thermal_read_trips() which in turn updates the trip
-> > > > > points.
-> > > > > 
-> > > > 
-> > > > Not sure how we handle concurrency here when driver can freely
-> > > > update
-> > > > trips while thermal core is using trips.
-> > > 
-> > > Don't we have the same race without this patch ? The thermal core
-> > > can
-> > > call get_trip_temp() while there is an update, no ?
-> > Yes it is. But I can add a mutex locally here to solve.
-> > But not any longer.
-> > 
-> > I think you need some thermal_zone_read_lock/unlock() in core,
-> > which
-> > can use rcu. Even mutex is fine as there will be no contention as
-> > updates to trips will be rare.
-> 
-> I was planning to provide a thermal_trips_update(tz, trips) and from 
-> there handle the locking.
-> 
-> As the race was already existing, can we postpone this change after
-> the 
-> generic trip points changes?
-I think so.
+This patchset adds PCIe controllers and PHYs support to SM8550 platform
+and enables them on the MTP board.
 
-> 
-> There is still a lot of work to do to consolidate the code. One of
-> them 
-> is to provide a generic function to browse the trip points and ensure
-> the code is using it instead of directly inspect the thermal zone 
-> internals structure.
-> 
-> I'm almost there but I need the remaining Intel drivers changes to be
-> merged (as well as ACPI which is finished but depending on this
-> series).
-> 
-Sounds good.
+The v1 was here:
+https://lore.kernel.org/all/20221116130430.2812173-1-abel.vesa@linaro.org/
 
-You can add my tested by for this.
+Changes since v1:
+ * ordered pcie related nodes alphabetically in MTP dts
+ * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
+ * dropped the child node from the phy nodes, like Johan suggested,
+   and updated to use the sc8280xp binding scheme
+ * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
+   to "nocsr"
+ * reordered all pcie nodes properties to look similar to the ones
+   from sc8280xp
 
-Thanks,
-Srinivas
+Abel Vesa (2):
+  arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
+  arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
+
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts |  29 ++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi    | 213 +++++++++++++++++++++++-
+ 2 files changed, 239 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
 
