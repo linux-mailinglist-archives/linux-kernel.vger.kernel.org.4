@@ -2,101 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB6567190E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E571671907
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjARKga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S229724AbjARKgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjARKdO (ORCPT
+        with ESMTP id S229865AbjARKfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:33:14 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8128385A;
-        Wed, 18 Jan 2023 01:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674034801; x=1705570801;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dim/XHdZNOWgoQEmO/2DDcF5rOun4Mijg9kltai7M+A=;
-  b=CLZgMcab6anhctRCx8aH3DanqI9LA5BgnpmJMtcwrViPtefrAS3iQ3ot
-   WZgBR3JtYjwnwLMmOvmvrHziMhvxFrJ8FryGnDo2kTmwxYVCzBzx27FTm
-   lUGXwrcqExwnS06XEs0SeG9YpwdPLUCv939CmpPS6kD33M+kYMJc92CW+
-   CW4s+3Xl5LsOowulxPn2HfdQ4vPNrtGGj7cEpKZaRlgpNbZ5DpwxIs6o4
-   B1XOLt4d194kx0dgI/wcBmV0lEl96wozMZpkpkpZK6czS0Hu73A6Exgwy
-   9vtRq3u5/VHJZBt8SSlaelyFvozTeq53vHu53cWU4QQ2b8dBWsH24HLmX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="305317435"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="305317435"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:39:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="802120538"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="802120538"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2023 01:39:47 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Jan 2023 11:39:46 +0200
-Date:   Wed, 18 Jan 2023 11:39:46 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-Message-ID: <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
-References: <20230118031514.1278139-1-pmalani@chromium.org>
+        Wed, 18 Jan 2023 05:35:00 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300D28385F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:40:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D418521066;
+        Wed, 18 Jan 2023 09:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674034811; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qkSsxdGDhi7OFnoEmmEI+/6UTMsWfEo5f5xKht27nUU=;
+        b=XXI0e3SJYUfmbTv7Egu/VOj5qe2veVpfQOCo54bZ/6FeH0dQKnz5D55LikQtuGQQuUNqfI
+        Gn7IKTKaqjbGrtd1XZzr4g/KpxDTk79Mv+uc0zAiZxKfI8Y788ts0MzsC3fxrwN4O4u8pN
+        Wa2w/A2JXRQ13PjgVrmAhrdegohLoFI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9B3F139D2;
+        Wed, 18 Jan 2023 09:40:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GwnzKHu+x2MPPgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 09:40:11 +0000
+Date:   Wed, 18 Jan 2023 10:40:09 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 18/41] mm/khugepaged: write-lock VMA while collapsing a
+ huge page
+Message-ID: <Y8e+efbJ4rw9goF0@dhcp22.suse.cz>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-19-surenb@google.com>
+ <Y8a9+ywh65fmuKvv@dhcp22.suse.cz>
+ <CAG48ez2Adwqs8Vvm3YUKwpx8qzV1wWtnUdWVo1UphjzADjMZQQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118031514.1278139-1-pmalani@chromium.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAG48ez2Adwqs8Vvm3YUKwpx8qzV1wWtnUdWVo1UphjzADjMZQQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
-> Update the altmode "active" state when we receive Acks for Enter and
-> Exit Mode commands. Having the right state is necessary to change Pin
-> Assignments using the 'pin_assignment" sysfs file.
-
-The idea was that the port drivers take care of this, not the altmode
-drivers.
-
-thanks,
-
-> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-> Cc: stable@vger.kernel.org
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 ++
->  1 file changed, 2 insertions(+)
+On Tue 17-01-23 21:28:06, Jann Horn wrote:
+> On Tue, Jan 17, 2023 at 4:25 PM Michal Hocko <mhocko@suse.com> wrote:
+> > On Mon 09-01-23 12:53:13, Suren Baghdasaryan wrote:
+> > > Protect VMA from concurrent page fault handler while collapsing a huge
+> > > page. Page fault handler needs a stable PMD to use PTL and relies on
+> > > per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
+> > > set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
+> > > not be detected by a page fault handler without proper locking.
+> >
+> > I am struggling with this changelog. Maybe because my recollection of
+> > the THP collapsing subtleties is weak. But aren't you just trying to say
+> > that the current #PF handling and THP collapsing need to be mutually
+> > exclusive currently so in order to keep that assumption you have mark
+> > the vma write locked?
+> >
+> > Also it is not really clear to me how that handles other vmas which can
+> > share the same thp?
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 06fb4732f8cd..bc1c556944d6 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -277,9 +277,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
->  	case CMDT_RSP_ACK:
->  		switch (cmd) {
->  		case CMD_ENTER_MODE:
-> +			typec_altmode_update_active(alt, true);
->  			dp->state = DP_STATE_UPDATE;
->  			break;
->  		case CMD_EXIT_MODE:
-> +			typec_altmode_update_active(alt, false);
->  			dp->data.status = 0;
->  			dp->data.conf = 0;
->  			break;
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
+> It's not about the hugepage itself, it's about how the THP collapse
+> operation frees page tables.
+> 
+> Before this series, page tables can be walked under any one of the
+> mmap lock, the mapping lock, and the anon_vma lock; so when khugepaged
+> unlinks and frees page tables, it must ensure that all of those either
+> are locked or don't exist. This series adds a fourth lock under which
+> page tables can be traversed, and so khugepaged must also lock out that one.
+> 
+> There is a codepath in khugepaged that iterates through all mappings
+> of a file to zap page tables (retract_page_tables()), which locks each
+> visited mm with mmap_write_trylock() and now also does
+> vma_write_lock().
 
+OK, I see. This would be a great addendum to the changelog.
+ 
+> I think one aspect of this patch that might cause trouble later on, if
+> support for non-anonymous VMAs is added, is that retract_page_tables()
+> now does vma_write_lock() while holding the mapping lock; the page
+> fault handling path would probably take the locks the other way
+> around, leading to a deadlock? So the vma_write_lock() in
+> retract_page_tables() might have to become a trylock later on.
+
+This, right?
+#PF			retract_page_tables
+vma_read_lock
+			i_mmap_lock_write
+i_mmap_lock_read
+			vma_write_lock
+
+
+I might be missing something but I have only found huge_pmd_share to be
+called from the #PF path. That one should be safe as it cannot be a
+target for THP. Not that it would matter much because such a dependency
+chain would be really subtle.
 -- 
-heikki
+Michal Hocko
+SUSE Labs
