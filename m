@@ -2,85 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8184F672B15
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813EF672B17
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjARWIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S230003AbjARWI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjARWIS (ORCPT
+        with ESMTP id S229977AbjARWI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:08:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A886309E;
-        Wed, 18 Jan 2023 14:08:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4E28B81D7E;
-        Wed, 18 Jan 2023 22:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF35C433EF;
-        Wed, 18 Jan 2023 22:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674079694;
-        bh=2xtau7plmXqGiqi6aOh4Poqgd4EbYmZSUXvErstuhvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=osttHVIh4eACk+rKzgqwdDdIDgMpHUk4eMeG3yG3kp27De8BgcMptoqCFBh11IiHZ
-         GtWqhyEb8NrSLVLEdIWMqPjsGUJrmKFYPFDr67SG/Ful+OyygYUQMUzmko36DXzwew
-         /I0FppBqACcJfJqrZ6eS0KQkM5GhRxlVA6sGDZtLd/QpxH1Xs+hM0vjk7fGS3gfGdb
-         JsZvBMijBcrwLbP1UhyOE40HzQSCcopdTI0M1iRaUIS9nScXXI12OMPIgCHsvWhO1v
-         i7LsPgkErbGKD6vpp0f1xG9K6eof5BTqofgn7hm486UHjlDU6jtK6tRGQQoEHbnLpO
-         /gfqj2i2TwywQ==
-Date:   Wed, 18 Jan 2023 14:08:12 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, joe.lawrence@redhat.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20230118220812.dvztwhlmliypefha@treble>
-References: <20230118204728.1876249-1-song@kernel.org>
+        Wed, 18 Jan 2023 17:08:26 -0500
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D447D5EF9A;
+        Wed, 18 Jan 2023 14:08:24 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id j1so154354iob.6;
+        Wed, 18 Jan 2023 14:08:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w3zZvGJ2IF8IzLXLWgrdTpLSWoXEmzbMQIT+v+9QWxc=;
+        b=adOXBSqY4JYIaYoUao9LIIVR5mStl24+fzWbE2g3FmAZ9JJOQP1voac77PdU6gQH+N
+         u+vMbBskzR1roKnMEBdq3IJvCRO2t6GqgLOSyUDOIfnOxx4fsRUT+JCyHRfr5/XsBSQt
+         h4Aqr6l8S8ItPeDyht5gt4RmwXYWNXstPyKFogw46v1MIn/GF6kGgY+qzJGk5gutkomQ
+         hJ9mwVWO7fbNiBlTXDKkHN0+oYkyiep4uF5CLbJFipb1d+jHYY9eYUwbpZAcgJL7byk8
+         4PyTCLXgBMMX6IDp1CTdNJAh/nVTwzyOAr0J125EvQeK9c3V4Fz6GpfQN0CsEgqkUzCR
+         hkNA==
+X-Gm-Message-State: AFqh2kp79dOLRWrCrf0NQA04/w7G2YDJmEq0Wz3peyJCzczousugADso
+        GbyR9vgIDJtbzP2hRq/6fP6yScLzqibB/SXY0fs=
+X-Google-Smtp-Source: AMrXdXtpXUd1nJvo/57YPaXtKZtc4K0swsmzTqx8T6h+Yw+cTrHaEA6O8ldY2zfKpvMhyayrFUPGmsx+4kGwIA3DuF0=
+X-Received: by 2002:a6b:8d0c:0:b0:6e0:28f8:83a4 with SMTP id
+ p12-20020a6b8d0c000000b006e028f883a4mr692956iod.28.1674079703966; Wed, 18 Jan
+ 2023 14:08:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230118204728.1876249-1-song@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118060559.615653-1-namhyung@kernel.org> <Y8fO/Tro6wstoAeo@hirez.programming.kicks-ass.net>
+ <20230118194230.mqitrgfb3j73hzw4@MacBook-Pro-6.local>
+In-Reply-To: <20230118194230.mqitrgfb3j73hzw4@MacBook-Pro-6.local>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 18 Jan 2023 14:08:12 -0800
+Message-ID: <CAM9d7ciwC8h3pKFezQ3tLV3cDKPG4Ef6Ug4Xzjya3HVAR-_uhQ@mail.gmail.com>
+Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF (v3)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
-> From: Miroslav Benes <mbenes@suse.cz>
-> 
-> Josh reported a bug:
-> 
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
-> 
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> 
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
-> 
->   On ppc64le, we have a similar issue:
-> 
->   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+Hi Alexei,
 
-Shouldn't there also be a fix for this powerpc issue?
+On Wed, Jan 18, 2023 at 11:43 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Jan 18, 2023 at 11:50:37AM +0100, Peter Zijlstra wrote:
+> > On Tue, Jan 17, 2023 at 10:05:51PM -0800, Namhyung Kim wrote:
+> > > Namhyung Kim (8):
+> > >   perf/core: Save the dynamic parts of sample data size
+> > >   perf/core: Add perf_sample_save_callchain() helper
+> > >   perf/core: Add perf_sample_save_raw_data() helper
+> > >   perf/core: Add perf_sample_save_brstack() helper
+> > >   perf/core: Set data->sample_flags in perf_prepare_sample()
+> > >   perf/core: Do not pass header for sample id init
+> > >   perf/core: Introduce perf_prepare_header()
+> > >   perf/core: Call perf_prepare_sample() before running BPF
+> >
+> > Thanks!,
+> >
+> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>
+> Thanks Peter.
+> The patches look good to me as well.
+> How do you want to route them bpf-next or tip ?
+>
+> Namhyung,
+> I'd also like to see a follow up patch with a selftest/bpf for this.
+>
+> BPF CI didn't have a chance to really test the set, since
+> there is a build issue on s390 due to llvm upstream repo.
+> We're aware and working on that.
 
--- 
-Josh
+Yep, I'll add a test case as soon as it gets the change.
+
+Thanks,
+Namhyung
