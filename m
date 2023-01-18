@@ -2,83 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B60672383
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC603672386
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjARQhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S229787AbjARQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjARQh0 (ORCPT
+        with ESMTP id S229829AbjARQhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:37:26 -0500
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556EB41B7E;
-        Wed, 18 Jan 2023 08:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=pHXxnxZLzOGoKxbma4bKofhzaLgd2KSaWI6G8LAFKCg=; b=D4G5mLw+vwzwIOtrf1Ik8JoPVb
-        2jbbsXY3/bX+/4wa7wCfjjYhxdEVTfZRFk2yZk8asjo6lqYlmEQcU3Il3N/bHStI1WGv79kb0wMQr
-        QeSq/VNcd92/MszNpWMr/oi3Sz20vUleuLuVSQNRwU4kJqkalHBd0wwd8YkKSzGJlxfbfm94P2gSE
-        3b5WfF4vRJsYjg2q2CU0iPgKnlPGUeUEMaDpwS0zoXeuJ9bUN56IcZh+G2O089NfH1jz6gyA/xfnF
-        8sMTklEtAtLuUpujibgv6m7jDbuJAeRBLcDXiIHxWGKjpWfVHnhFu8ckkvUi5vIq/We0qiSV21jDE
-        fO2VrIgQ==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pIBQu-000EdM-4s; Wed, 18 Jan 2023 17:37:04 +0100
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pIBQt-00077t-QB; Wed, 18 Jan 2023 17:37:03 +0100
-Message-ID: <64406c4f-c9da-b434-360b-1050ff685d2d@metafoo.de>
-Date:   Wed, 18 Jan 2023 08:37:01 -0800
+        Wed, 18 Jan 2023 11:37:35 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E0748617
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:37:25 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id r30so10112583wrr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:37:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SvcyApmvYKbhMxRU1lBU5lO8l2c63hcs0Nh63H9OSkU=;
+        b=WAKsBPCUGvdQDm9d8EgdgiebxIqoGD/TnPD/w4Unj0sr4AsjT6TM6CMiY0uD0gqeci
+         YqLZyBc8iv2IIeV8t7rn//eAy22qGuN4EfUgvj9kFemITC2BOP10ahxMM/JfT+IHzWDO
+         DPjp55JFoK6pAnVpZEIYb0QAeNmLUuNeENob4gq8iW4c4gGuEXfdFUvFVlwIUkvGkgoY
+         9EVBLd2CQobELCrqjpEZzh096zCLFmgOGyTE3Q2/upXDJonXm8XT/s5rS2RlprQmsFqB
+         aYILB9VKNw8ggi/NSKU8tdvoxHpYBCsYzojY6wc+HkAyaySgJMRheYluMfdletPR5oK+
+         TReA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SvcyApmvYKbhMxRU1lBU5lO8l2c63hcs0Nh63H9OSkU=;
+        b=svbLYyx8tiv9wHiuWfZHhR03v3m/Hyjw8Vl8LNoqad1znnSXnYXwqCcLlGuGkol80s
+         xfD9Iyk2rLzfPi47nfecNpRpgDlXHGvh0OXTCPix3mrhSmFC0nuY6cWEiiso4JbEdZ5O
+         oILsj7/crFxFkBvnugilqD4+MKFSRcH+NmXC3aVU9Dte7SLkTmBq/eQ7Gp5VgQSpIqxt
+         H5l44iFH4vyAy83o+3TqIP4+F4XVswN4aTQJYiQtfERol0aCF7dUQnDzoctN4Dvk6DbB
+         fKQCW4E0PY6qCqptW2thjd6JZlqlxYNyjaWMz1Xw+jXcRu/NBCZkfakPzc+GwX8xY9Jm
+         gk6Q==
+X-Gm-Message-State: AFqh2kp3S3uBWbWanlcKXPOwU3UjGlXoMB1tWqbx2Aunjfo8DfuulK1c
+        s+mg8yZBbQ24I9B0GxE1LFsftQ==
+X-Google-Smtp-Source: AMrXdXsCy/j9nV45B+2uqVon/wd9l2XwrMH20gcWUjVTm/cksrL2RHvILrsrS9SZCKz5q0c3ug/XBQ==
+X-Received: by 2002:a5d:4fce:0:b0:242:1bdf:a02 with SMTP id h14-20020a5d4fce000000b002421bdf0a02mr6504812wrw.37.1674059843738;
+        Wed, 18 Jan 2023 08:37:23 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id m16-20020adfe0d0000000b002be36beb2d9sm666486wri.113.2023.01.18.08.37.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 08:37:23 -0800 (PST)
+Message-ID: <2c0de89e-0842-21af-cedf-2aa9184c6d1a@arista.com>
+Date:   Wed, 18 Jan 2023 16:37:16 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/2] iio: core: Replace
- iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 3/4] crypto/net/ipv6: sr: Switch to using crypto_pool
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230116201458.104260-1-dima@arista.com>
+ <20230116201458.104260-4-dima@arista.com>
+ <20230117194856.55ec5458@kernel.org>
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>
-References: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
- <5f9b713b-9c71-7da6-e674-b6ebd28dc5d5@metafoo.de>
- <Y8gVDs0UoiHqCRsM@smile.fi.intel.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <Y8gVDs0UoiHqCRsM@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20230117194856.55ec5458@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26785/Wed Jan 18 09:42:40 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/23 07:49, Andy Shevchenko wrote:
-> On Wed, Jan 18, 2023 at 07:22:30AM -0800, Lars-Peter Clausen wrote:
->> On 1/17/23 23:48, Andy Shevchenko wrote:
->>> None of the current users is using gaps in the list of the items.
->>> No need to have a specific function for that, just replace it by
->>> library available __sysfs_match_string().
->> Hm, I specifically remember adding this for a driver where there were gaps.
->> One of the DACs. But it might be that the driver itself never made it
->> upstream.
-> I have checked all modules that have struct iio_enum and/or ("or" probably may
-> not happen) IIO_ENUM() in them.
->
-> It might be that I missed something.
-I checked too, I can't find it either. The driver probably never made it 
-upstream.
+On 1/18/23 03:48, Jakub Kicinski wrote:
+> On Mon, 16 Jan 2023 20:14:57 +0000 Dmitry Safonov wrote:
+>> The conversion to use crypto_pool has the following upsides:
+>> - now SR uses asynchronous API which may potentially free CPU cycles and
+>>   improve performance for of CPU crypto algorithm providers;
+>> - hash descriptors now don't have to be allocated on boot, but only at
+>>   the moment SR starts using HMAC and until the last HMAC secret is
+>>   deleted;
+>> - potentially reuse ahash_request(s) for different users
+>> - allocate only one per-CPU scratch buffer rather than a new one for
+>>   each user
+>> - have a common API for net/ users that need ahash on RX/TX fast path
+> 
+> breaks allmodconfig build:
+> 
+> ERROR: modpost: "seg6_hmac_init" [net/ipv6/ipv6.ko] undefined!
+> make[2]: *** [../scripts/Makefile.modpost:138: Module.symvers] Error 1
+> make[1]: *** [/home/nipa/net-next/Makefile:1960: modpost] Error 2
+> make: *** [Makefile:242: __sub-make] Error 2
+
+Thanks!
+Yeah, I thought I barely touched seg6 in v3 and it seems I didn't even
+build it in current .config assuming not much changed. Oops!
+
+Will send a better version 4 today,
+          Dmitry
+
