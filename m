@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD61671C38
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199B3671C37
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjARMfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S230305AbjARMfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjARMfA (ORCPT
+        with ESMTP id S230503AbjARMfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 07:35:00 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F23947088;
-        Wed, 18 Jan 2023 03:58:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD6836FC1;
+        Wed, 18 Jan 2023 03:58:36 -0800 (PST)
 Received: from umang.jainideasonboard.com (unknown [103.86.18.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 976DB1B5C;
-        Wed, 18 Jan 2023 12:58:28 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 51AF21643;
+        Wed, 18 Jan 2023 12:58:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674043111;
-        bh=TBsbR7oiP57NsJJYhX/WoXpbozaJauNQ1lOkJtxXczg=;
+        s=mail; t=1674043115;
+        bh=54fyp56C8zG+m4xs/lXWL4IFVTrJQGYK0w0NLdazNA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jlpDKSHZ/eVAP11xXrI/+IZKQNfuvwTct71rNjYikPGqEzDvKUBTcxZzFLTVCpGIN
-         ydgCuyZ3lPJt5TwpinFrtAkoOgm+qBvLep2yT0ZrBEf9G/vG63GjCxYGIfpzpUQCh1
-         9HaWozT982WbtpfM8BERDQeDrX18E1iG7dicduVA=
+        b=DIKCMGmT0gK+neJMDeYe3e+bJPBEPsNophIC7vZTWTBTDC9aXoIE9o9WIj4yq3vjM
+         KYI9EyYV1uSmnfDoqyMdTAjD/Th/1NCuxKbdh8hPKniBiLIVR53q4Nuf+Qeyi/Hd8L
+         P94O+pBocuMLGzdriH8BfUyQWJXQWhaw+XvU0ueE=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-staging@lists.linux.dev,
         linux-rpi-kernel@lists.infradead.org,
@@ -39,9 +39,9 @@ Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [RFC PATCH 3/4] staging: vc04_services: Drop custom logging
-Date:   Wed, 18 Jan 2023 17:28:09 +0530
-Message-Id: <20230118115810.21979-4-umang.jain@ideasonboard.com>
+Subject: [RFC PATCH 4/4] staging: vc04_services: Drop remnants of custom logging
+Date:   Wed, 18 Jan 2023 17:28:10 +0530
+Message-Id: <20230118115810.21979-5-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230118115810.21979-1-umang.jain@ideasonboard.com>
 References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
@@ -56,219 +56,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop custom logging from the vchiq_connected and vchiq_dev.
-Use standard kernel logging infrastructure (dev_dbg and friends
-for struct Device stuff) and pr_info (and similar) for vchiq_instance
-related things.
+Drop remnants of custom logging such as header definitions and such.
+Also migrate the vchiq_debugfs to use the log levels coming from
+include/linux/kern_levels.h instead.
 
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- .../interface/vchiq_arm/vchiq_connected.c     |  5 +-
- .../interface/vchiq_arm/vchiq_dev.c           | 78 ++++++++-----------
- 2 files changed, 33 insertions(+), 50 deletions(-)
+ .../interface/vchiq_arm/vchiq_arm.c           |  4 --
+ .../interface/vchiq_arm/vchiq_core.c          | 39 +++++++------------
+ .../interface/vchiq_arm/vchiq_core.h          | 39 -------------------
+ .../interface/vchiq_arm/vchiq_debugfs.c       | 26 ++++++++-----
+ 4 files changed, 31 insertions(+), 77 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
-index bdb0ab617d8b..c769014ae2ac 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_connected.c
-@@ -39,9 +39,8 @@ void vchiq_add_connected_callback(void (*callback)(void))
- 		callback();
- 	} else {
- 		if (g_num_deferred_callbacks >= MAX_CALLBACKS) {
--			vchiq_log_error(vchiq_core_log_level,
--					"There already %d callback registered - please increase MAX_CALLBACKS",
--					g_num_deferred_callbacks);
-+			pr_err("vchiq: There is already %d callback registered - please increase MAX_CALLBACKS",
-+				g_num_deferred_callbacks);
- 		} else {
- 			g_deferred_callback[g_num_deferred_callbacks] =
- 				callback;
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev.c
-index 841e1a535642..2524a435e5ce 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_dev.c
-@@ -47,9 +47,8 @@ user_service_free(void *userdata)
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index ed3773b996a3..45e28ca368ee 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -60,10 +60,6 @@
+ #define KEEPALIVE_VER 1
+ #define KEEPALIVE_VER_MIN KEEPALIVE_VER
  
- static void close_delivered(struct user_service *user_service)
- {
--	vchiq_log_info(vchiq_arm_log_level,
--		       "%s(handle=%x)",
--		       __func__, user_service->service->handle);
-+	pr_info("vchiq: %s(handle=%x)", __func__,
-+		user_service->service->handle);
+-/* Run time control of log level, based on KERN_XXX level. */
+-int vchiq_arm_log_level = VCHIQ_LOG_DEFAULT;
+-int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
+-
+ DEFINE_SPINLOCK(msg_queue_spinlock);
+ struct vchiq_state g_state;
  
- 	if (user_service->close_pending) {
- 		/* Allow the underlying service to be culled */
-@@ -235,8 +234,7 @@ static int vchiq_ioc_dequeue_message(struct vchiq_instance *instance,
- 			spin_unlock(&msg_queue_spinlock);
- 			DEBUG_TRACE(DEQUEUE_MESSAGE_LINE);
- 			if (wait_for_completion_interruptible(&user_service->insert_event)) {
--				vchiq_log_info(vchiq_arm_log_level,
--					       "DEQUEUE_MESSAGE interrupted");
-+				pr_info("vchiq: DEQUEUE_MESSAGE interrupted\n");
- 				ret = -EINTR;
- 				break;
- 			}
-@@ -271,9 +269,8 @@ static int vchiq_ioc_dequeue_message(struct vchiq_instance *instance,
- 			ret = -EFAULT;
- 		}
- 	} else {
--		vchiq_log_error(vchiq_arm_log_level,
--				"header %pK: bufsize %x < size %x",
--				header, args->bufsize, header->size);
-+		pr_err("vchiq: header %pK: bufsize %x < size %x",
-+			header, args->bufsize, header->size);
- 		WARN(1, "invalid size\n");
- 		ret = -EMSGSIZE;
- 	}
-@@ -318,13 +315,11 @@ static int vchiq_irq_queue_bulk_tx_rx(struct vchiq_instance *instance,
- 		}
- 		mutex_unlock(&instance->bulk_waiter_list_mutex);
- 		if (!waiter) {
--			vchiq_log_error(vchiq_arm_log_level,
--					"no bulk_waiter found for pid %d", current->pid);
-+			pr_err("vchiq: no bulk_waiter found for pid %d", current->pid);
- 			ret = -ESRCH;
- 			goto out;
- 		}
--		vchiq_log_info(vchiq_arm_log_level,
--			       "found bulk_waiter %pK for pid %d", waiter, current->pid);
-+		pr_info("vchiq: found bulk_waiter %pK for pid %d", waiter, current->pid);
- 		userdata = &waiter->bulk_waiter;
- 	} else {
- 		userdata = args->userdata;
-@@ -355,8 +350,7 @@ static int vchiq_irq_queue_bulk_tx_rx(struct vchiq_instance *instance,
- 		mutex_lock(&instance->bulk_waiter_list_mutex);
- 		list_add(&waiter->list, &instance->bulk_waiter_list);
- 		mutex_unlock(&instance->bulk_waiter_list_mutex);
--		vchiq_log_info(vchiq_arm_log_level,
--			       "saved bulk_waiter %pK for pid %d", waiter, current->pid);
-+		pr_info("vchiq: saved bulk_waiter %pK for pid %d", waiter, current->pid);
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+index 7b3c57326d28..4cf710a3ca28 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+@@ -9,6 +9,7 @@
+ #include <linux/wait.h>
+ #include <linux/delay.h>
+ #include <linux/slab.h>
++#include <linux/kern_levels.h>
+ #include <linux/kref.h>
+ #include <linux/rcupdate.h>
+ #include <linux/sched/signal.h>
+@@ -103,10 +104,8 @@ static_assert((unsigned int)VCHIQ_PORT_MAX <
  
- 		ret = put_user(mode_waiting, mode);
- 	}
-@@ -455,8 +449,7 @@ static int vchiq_ioc_await_completion(struct vchiq_instance *instance,
- 		mutex_lock(&instance->completion_mutex);
- 		if (rc) {
- 			DEBUG_TRACE(AWAIT_COMPLETION_LINE);
--			vchiq_log_info(vchiq_arm_log_level,
--				       "AWAIT_COMPLETION interrupted");
-+			pr_info("vchiq: AWAIT_COMPLETION interrupted");
- 			ret = -EINTR;
- 			goto out;
- 		}
-@@ -501,10 +494,9 @@ static int vchiq_ioc_await_completion(struct vchiq_instance *instance,
- 			msglen = header->size + sizeof(struct vchiq_header);
- 			/* This must be a VCHIQ-style service */
- 			if (args->msgbufsize < msglen) {
--				vchiq_log_error(vchiq_arm_log_level,
--						"header %pK: msgbufsize %x < msglen %x",
--						header, args->msgbufsize, msglen);
--						WARN(1, "invalid message size\n");
-+				pr_err("vchiq: header %pK: msgbufsize %x < msglen %x",
-+				       header, args->msgbufsize, msglen);
-+				       WARN(1, "invalid message size\n");
- 				if (ret == 0)
- 					ret = -EMSGSIZE;
- 				break;
-@@ -582,10 +574,9 @@ vchiq_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	long ret = 0;
- 	int i, rc;
+ #define BULK_INDEX(x) ((x) & (VCHIQ_NUM_SERVICE_BULKS - 1))
  
--	vchiq_log_trace(vchiq_arm_log_level,
--			"%s - instance %pK, cmd %s, arg %lx", __func__, instance,
--			((_IOC_TYPE(cmd) == VCHIQ_IOC_MAGIC) && (_IOC_NR(cmd) <= VCHIQ_IOC_MAX)) ?
--			ioctl_names[_IOC_NR(cmd)] : "<invalid>", arg);
-+	pr_debug("vchiq: %s - instance %pK, cmd %s, arg %lx", __func__, instance,
-+		 ((_IOC_TYPE(cmd) == VCHIQ_IOC_MAGIC) && (_IOC_NR(cmd) <= VCHIQ_IOC_MAX)) ?
-+		 ioctl_names[_IOC_NR(cmd)] : "<invalid>", arg);
+-#define SRVTRACE_LEVEL(srv) \
+-	(((srv) && (srv)->trace) ? VCHIQ_LOG_TRACE : vchiq_core_msg_log_level)
+ #define SRVTRACE_ENABLED(srv, lev) \
+-	(((srv) && (srv)->trace) || (vchiq_core_msg_log_level >= (lev)))
++	(((srv) && (srv)->trace) || (LOGLEVEL_DEFAULT >= (lev)))
  
- 	switch (cmd) {
- 	case VCHIQ_IOC_SHUTDOWN:
-@@ -618,9 +609,8 @@ vchiq_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 		}
- 		rc = mutex_lock_killable(&instance->state->mutex);
- 		if (rc) {
--			vchiq_log_error(vchiq_arm_log_level,
--					"vchiq: connect: could not lock mutex for state %d: %d",
--					instance->state->id, rc);
-+			pr_err("vchiq: connect: could not lock mutex for state %d: %d",
-+			       instance->state->id, rc);
- 			ret = -EINTR;
- 			break;
- 		}
-@@ -630,8 +620,7 @@ vchiq_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 		if (!status)
- 			instance->connected = 1;
- 		else
--			vchiq_log_error(vchiq_arm_log_level,
--					"vchiq: could not connect: %d", status);
-+			pr_err("vchiq: could not connect: %d", status);
- 		break;
- 
- 	case VCHIQ_IOC_CREATE_SERVICE: {
-@@ -700,11 +689,10 @@ vchiq_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 				vchiq_use_service_internal(service) :
- 				vchiq_release_service_internal(service);
- 			if (ret) {
--				vchiq_log_error(vchiq_susp_log_level,
--						"%s: cmd %s returned error %ld for service %c%c%c%c:%03d",
--						__func__, (cmd == VCHIQ_IOC_USE_SERVICE) ?
--						"VCHIQ_IOC_USE_SERVICE" :
--						"VCHIQ_IOC_RELEASE_SERVICE",
-+				pr_err("vchiq:%s: cmd %s returned error %ld for service %c%c%c%c:%03d",
-+					__func__, (cmd == VCHIQ_IOC_USE_SERVICE) ?
-+					"VCHIQ_IOC_USE_SERVICE" :
-+					"VCHIQ_IOC_RELEASE_SERVICE",
- 					ret,
- 					VCHIQ_FOURCC_AS_4CHARS(service->base.fourcc),
- 					service->client_id);
-@@ -869,15 +857,13 @@ vchiq_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	}
- 
- 	if (!status && (ret < 0) && (ret != -EINTR) && (ret != -EWOULDBLOCK))
--		vchiq_log_info(vchiq_arm_log_level,
--			       "  ioctl instance %pK, cmd %s -> status %d, %ld",
--			       instance, (_IOC_NR(cmd) <= VCHIQ_IOC_MAX) ?
--			       ioctl_names[_IOC_NR(cmd)] : "<invalid>", status, ret);
-+		pr_info("vchiq: ioctl instance %pK, cmd %s -> status %d, %ld",
-+			instance, (_IOC_NR(cmd) <= VCHIQ_IOC_MAX) ?
-+			ioctl_names[_IOC_NR(cmd)] : "<invalid>", status, ret);
- 	else
--		vchiq_log_trace(vchiq_arm_log_level,
--				"  ioctl instance %pK, cmd %s -> status %d, %ld",
--				instance, (_IOC_NR(cmd) <= VCHIQ_IOC_MAX) ?
--				ioctl_names[_IOC_NR(cmd)] : "<invalid>", status, ret);
-+		pr_debug("vchiq: ioctl instance %pK, cmd %s -> status %d, %ld",
-+			instance, (_IOC_NR(cmd) <= VCHIQ_IOC_MAX) ?
-+			ioctl_names[_IOC_NR(cmd)] : "<invalid>", status, ret);
- 
- 	return ret;
+ #define NO_CLOSE_RECVD	0
+ #define CLOSE_RECVD	1
+@@ -154,11 +153,6 @@ static inline void check_sizes(void)
+ 	BUILD_BUG_ON_NOT_POWER_OF_2(VCHIQ_MAX_SERVICES);
  }
-@@ -1170,11 +1156,10 @@ static int vchiq_open(struct inode *inode, struct file *file)
- 	struct vchiq_state *state = vchiq_get_state();
- 	struct vchiq_instance *instance;
  
--	vchiq_log_info(vchiq_arm_log_level, "vchiq_open");
-+	pr_info("vchiq: %s\n", __func__);
+-/* Run time control of log level, based on KERN_XXX level. */
+-int vchiq_core_log_level = VCHIQ_LOG_DEFAULT;
+-int vchiq_core_msg_log_level = VCHIQ_LOG_DEFAULT;
+-int vchiq_sync_log_level = VCHIQ_LOG_DEFAULT;
+-
+ DEFINE_SPINLOCK(bulk_waiter_spinlock);
+ static DEFINE_SPINLOCK(quota_spinlock);
  
- 	if (!state) {
--		vchiq_log_error(vchiq_arm_log_level,
--				"vchiq has no connection to VideoCore");
-+		pr_err("vchiq: vchiq has no connection to VideoCore\n");
- 		return -ENOTCONN;
+@@ -1035,8 +1029,7 @@ queue_message(struct vchiq_state *state, struct vchiq_service *service,
+ 			return -EINVAL;
+ 		}
+ 
+-		if (SRVTRACE_ENABLED(service,
+-				     VCHIQ_LOG_INFO))
++		if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO))
+ 			vchiq_log_dump_mem("Sent", 0,
+ 					   header->data,
+ 					   min_t(size_t, 16, callback_result));
+@@ -1144,6 +1137,7 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
+ 	struct vchiq_shared_state *local;
+ 	struct vchiq_header *header;
+ 	ssize_t callback_result;
++	int svc_fourcc;
+ 
+ 	local = state->local;
+ 
+@@ -1184,8 +1178,7 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
  	}
  
-@@ -1206,8 +1191,7 @@ static int vchiq_release(struct inode *inode, struct file *file)
- 	int ret = 0;
- 	int i;
+ 	if (service) {
+-		if (SRVTRACE_ENABLED(service,
+-				     VCHIQ_LOG_INFO))
++		if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO))
+ 			vchiq_log_dump_mem("Sent", 0,
+ 					   header->data,
+ 					   min_t(size_t, 16, callback_result));
+@@ -1199,19 +1192,15 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
+ 	header->size = size;
+ 	header->msgid = msgid;
  
--	vchiq_log_info(vchiq_arm_log_level, "%s: instance=%lx", __func__,
--		       (unsigned long)instance);
-+	pr_info("%s: instance=%lx", __func__, (unsigned long)instance);
+-	if (vchiq_sync_log_level >= VCHIQ_LOG_TRACE) {
+-		int svc_fourcc;
  
- 	if (!state) {
- 		ret = -EPERM;
+-		svc_fourcc = service
+-			? service->base.fourcc
+-			: VCHIQ_MAKE_FOURCC('?', '?', '?', '?');
++	svc_fourcc = service ? service->base.fourcc
++			     : VCHIQ_MAKE_FOURCC('?', '?', '?', '?');
+ 
+-		dev_dbg(state->dev,
+-			"Sent Sync Msg %s(%u) to %c%c%c%c s:%u d:%d len:%d",
+-			msg_type_str(VCHIQ_MSG_TYPE(msgid)), VCHIQ_MSG_TYPE(msgid),
+-			VCHIQ_FOURCC_AS_4CHARS(svc_fourcc), VCHIQ_MSG_SRCPORT(msgid),
+-			VCHIQ_MSG_DSTPORT(msgid), size);
+-	}
++	dev_dbg(state->dev,
++		"Sent Sync Msg %s(%u) to %c%c%c%c s:%u d:%d len:%d",
++		msg_type_str(VCHIQ_MSG_TYPE(msgid)), VCHIQ_MSG_TYPE(msgid),
++		VCHIQ_FOURCC_AS_4CHARS(svc_fourcc), VCHIQ_MSG_SRCPORT(msgid),
++		VCHIQ_MSG_DSTPORT(msgid), size);
+ 
+ 	remote_event_signal(&state->remote->sync_trigger);
+ 
+@@ -1624,7 +1613,7 @@ parse_message(struct vchiq_state *state, struct vchiq_header *header)
+ 		break;
+ 	}
+ 
+-	if (SRVTRACE_ENABLED(service, VCHIQ_LOG_INFO)) {
++	if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO)) {
+ 		int svc_fourcc;
+ 
+ 		svc_fourcc = service
+@@ -2031,7 +2020,7 @@ sync_func(void *v)
+ 			continue;
+ 		}
+ 
+-		if (vchiq_sync_log_level >= VCHIQ_LOG_TRACE) {
++		if (vchiq_sync_log_level >= LOGLEVEL_DEBUG) {
+ 			int svc_fourcc;
+ 
+ 			svc_fourcc = service
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
+index ec3505424718..960bf4efeab5 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
+@@ -30,39 +30,6 @@
+ #define VCHIQ_SLOT_SIZE     4096
+ #define VCHIQ_MAX_MSG_SIZE  (VCHIQ_SLOT_SIZE - sizeof(struct vchiq_header))
+ 
+-/* Run time control of log level, based on KERN_XXX level. */
+-#define VCHIQ_LOG_DEFAULT  4
+-#define VCHIQ_LOG_ERROR    3
+-#define VCHIQ_LOG_WARNING  4
+-#define VCHIQ_LOG_INFO     6
+-#define VCHIQ_LOG_TRACE    7
+-
+-#define VCHIQ_LOG_PREFIX   KERN_INFO "vchiq: "
+-
+-#ifndef vchiq_log_error
+-#define vchiq_log_error(cat, fmt, ...) \
+-	do { if (cat >= VCHIQ_LOG_ERROR) \
+-		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
+-#endif
+-#ifndef vchiq_log_warning
+-#define vchiq_log_warning(cat, fmt, ...) \
+-	do { if (cat >= VCHIQ_LOG_WARNING) \
+-		 printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
+-#endif
+-#ifndef vchiq_log_info
+-#define vchiq_log_info(cat, fmt, ...) \
+-	do { if (cat >= VCHIQ_LOG_INFO) \
+-		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
+-#endif
+-#ifndef vchiq_log_trace
+-#define vchiq_log_trace(cat, fmt, ...) \
+-	do { if (cat >= VCHIQ_LOG_TRACE) \
+-		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
+-#endif
+-
+-#define vchiq_loud_error(...) \
+-	vchiq_log_error(vchiq_core_log_level, "===== " __VA_ARGS__)
+-
+ #define VCHIQ_SLOT_MASK        (VCHIQ_SLOT_SIZE - 1)
+ #define VCHIQ_SLOT_QUEUE_MASK  (VCHIQ_MAX_SLOTS_PER_SIDE - 1)
+ #define VCHIQ_SLOT_ZERO_SLOTS  DIV_ROUND_UP(sizeof(struct vchiq_slot_zero), \
+@@ -496,12 +463,6 @@ vchiq_dump_state(void *dump_context, struct vchiq_state *state);
+ extern int
+ vchiq_dump_service_state(void *dump_context, struct vchiq_service *service);
+ 
+-extern void
+-vchiq_loud_error_header(void);
+-
+-extern void
+-vchiq_loud_error_footer(void);
+-
+ extern void
+ request_poll(struct vchiq_state *state, struct vchiq_service *service,
+ 	     int poll_type);
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
+index dc667afd1f8c..1d142752351d 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
+@@ -5,6 +5,8 @@
+  */
+ 
+ #include <linux/debugfs.h>
++#include <linux/kern_levels.h>
++
+ #include "vchiq_core.h"
+ #include "vchiq_arm.h"
+ #include "vchiq_debugfs.h"
+@@ -22,6 +24,12 @@
+ static struct dentry *vchiq_dbg_dir;
+ static struct dentry *vchiq_dbg_clients;
+ 
++int vchiq_arm_log_level = LOGLEVEL_DEFAULT;
++int vchiq_susp_log_level = LOGLEVEL_ERR;
++int vchiq_core_log_level = LOGLEVEL_DEFAULT;
++int vchiq_core_msg_log_level = LOGLEVEL_DEFAULT;
++int vchiq_sync_log_level = LOGLEVEL_DEFAULT;
++
+ /* Log category debugfs entries */
+ struct vchiq_debugfs_log_entry {
+ 	const char *name;
+@@ -42,16 +50,16 @@ static int debugfs_log_show(struct seq_file *f, void *offset)
+ 	char *log_value = NULL;
+ 
+ 	switch (*levp) {
+-	case VCHIQ_LOG_ERROR:
++	case LOGLEVEL_ERR:
+ 		log_value = VCHIQ_LOG_ERROR_STR;
+ 		break;
+-	case VCHIQ_LOG_WARNING:
++	case LOGLEVEL_WARNING:
+ 		log_value = VCHIQ_LOG_WARNING_STR;
+ 		break;
+-	case VCHIQ_LOG_INFO:
++	case LOGLEVEL_INFO:
+ 		log_value = VCHIQ_LOG_INFO_STR;
+ 		break;
+-	case VCHIQ_LOG_TRACE:
++	case LOGLEVEL_DEBUG:
+ 		log_value = VCHIQ_LOG_TRACE_STR;
+ 		break;
+ 	default:
+@@ -85,15 +93,15 @@ static ssize_t debugfs_log_write(struct file *file,
+ 	kbuf[count - 1] = 0;
+ 
+ 	if (strncmp("error", kbuf, strlen("error")) == 0)
+-		*levp = VCHIQ_LOG_ERROR;
++		*levp = LOGLEVEL_ERR;
+ 	else if (strncmp("warning", kbuf, strlen("warning")) == 0)
+-		*levp = VCHIQ_LOG_WARNING;
++		*levp = LOGLEVEL_WARNING;
+ 	else if (strncmp("info", kbuf, strlen("info")) == 0)
+-		*levp = VCHIQ_LOG_INFO;
++		*levp = LOGLEVEL_INFO;
+ 	else if (strncmp("trace", kbuf, strlen("trace")) == 0)
+-		*levp = VCHIQ_LOG_TRACE;
++		*levp = LOGLEVEL_DEBUG;
+ 	else
+-		*levp = VCHIQ_LOG_DEFAULT;
++		*levp = LOGLEVEL_DEFAULT;
+ 
+ 	*ppos += count;
+ 
 -- 
 2.39.0
 
