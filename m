@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D2A671516
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC1667151B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjARHef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S229913AbjARHgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjARHd6 (ORCPT
+        with ESMTP id S229866AbjARHfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:33:58 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4FA8EFEC;
-        Tue, 17 Jan 2023 22:49:25 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so781794wmq.0;
-        Tue, 17 Jan 2023 22:49:25 -0800 (PST)
+        Wed, 18 Jan 2023 02:35:23 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222E093724
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id j185so3627925vsc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X3j7TK4o15smaY9j7yBCCWkNi0k481whvm/a6xLSW68=;
-        b=qEgfCW2osBy04NQeCBEIzIVQ3BSrHa19rj4E/ZwZb6l+m5MuPKXkWFRMxxgTrwNlKF
-         S+agjzMsDo44oOWxavGbaBVcclkBQrIsfWcGyseeMgDIYMHHVGCIN+q/Zxis9KpdXobk
-         TgHGo7d39AHHzsyNFI2dBUlqXpNRiLjTw+Pb/h+aVhFo1fBW2C/kyhtQjELfcrpHqj3q
-         L72Mzo6enk84zTLrMNkYFKkQq+Rgjzr2W5c0KBz4mV2akothtYIt2d/Qwof2KsxlbT4u
-         F3safktAdjdtFHT5z3rGV5OrGy9N6pkvsLd8iNVfoyUL1FCe9pvor4BjK37Y5kChox1Z
-         hH2g==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
+        b=B3s3j3N0gG+bNvJM1kixcYCNP/GKIWVHPyV4lr3MVXl/p0N7BMpYjYlyLkA+JDNEwK
+         YPBayZkNvzY9TJMNbLdgwh74aQGMywjDnB+HgnS0sAYfB7rOXeKINkcC80Dq9Chxv1DM
+         1Tew2QJlCzFdNmJd4aYvCOrI3jZfPsBDrEg+t6exzkc3wFZhl1TDhr3dj3POyWbweOYR
+         +7Npg6iCsUQcJq8UB4rK0rr2tOPePqrnq2X7W6XikqLyrIoHUkuWy0cFKeDRI/7G0kUt
+         bC9HiI6ACpwicvuUfC9hiCdSxpSHxHZNDelqvQnkWIAm1HWc1SKEmSTBl5163j53Jqb9
+         dDlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3j7TK4o15smaY9j7yBCCWkNi0k481whvm/a6xLSW68=;
-        b=E+CurFIXMWQW4uIahOhr2bTn2GKpC6gPsGL+b2em6w8Ek6E/t1POiNnf+wIZdU9j01
-         9Lm24U+pIhSB9Svn2PiTwMy2C2qzHwx6WqIJlDLvgUtBlgdMQiLjPJXNj3wYHSL7eKuC
-         GevzgKdeBNdyk16ecJx9AUhvtDFbvm3uKuVo6ATVhhNWT/5fKqVczswTC9gpvLT4YWK1
-         vjt2umwtGzh/treXdWF8KclUMQ8m8p1CXDem/ZgQSL1q1ZZx0XeAXZ1jZ+qh+gAoImiT
-         kUvrGRU+2xFgDsk1cDTsoSHmHZbIyO3mhuftoTWEH6Hm/VbkdvZm1GNxjklB0Hjk2tBU
-         RYcQ==
-X-Gm-Message-State: AFqh2koPaijXMnMoY38C8QaJjxSQL62d1PtEriqjIk1kHpOvYDecWFkb
-        +Y9BTFHFboQsKOM5jRz7lJg=
-X-Google-Smtp-Source: AMrXdXsIkAT4mygynpSuSNgl7Bn0qYNULYecV3TnXtqIIyJ/+LBrwp9/iDLLEBDAyljXZZCAC7j8Kw==
-X-Received: by 2002:a05:600c:3acc:b0:3d9:efe8:a424 with SMTP id d12-20020a05600c3acc00b003d9efe8a424mr5780077wms.34.1674024563807;
-        Tue, 17 Jan 2023 22:49:23 -0800 (PST)
-Received: from [192.168.0.103] ([77.126.105.148])
-        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm24594261wrv.11.2023.01.17.22.49.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 22:49:23 -0800 (PST)
-Message-ID: <c3fac862-2f5a-6be8-5be2-19bf5866c067@gmail.com>
-Date:   Wed, 18 Jan 2023 08:49:20 +0200
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
+        b=6Jn1jww5je59JuaSW9/K1NP9NDFXGCcA1kjZTE8tsvLZuLYWCUXIZ8X4xmtAdcY5an
+         litSlfRRlJ1THRy6eC6qGBvZ9P2gh/VTygnGvQ15akgfl3yHZodIU0ZjfS2omi0uQF0I
+         cDojC3qVI5W+WUapNFGeY66NnCJ7UE/ILBPDsUl+L5yZS9fg6ONuJTT33fMPLsPmxGbu
+         HBWQbJ9GCRxNntOELDFq8p5VKTvJsPd17NuIv16t9zeCTkMbQGSitmwdZjhKlyrwrZTj
+         yrsTydh36pEH1hvu84q+dvdA/eZ4Z6eMcuGsk6s2Tdw607+aZHVI7GGD/I2I67RRF6dF
+         vovA==
+X-Gm-Message-State: AFqh2kpznz1JRPLvrl1TBBl750HKF6QILpIKDDZENPmwuXnJEgypOtcp
+        yFzzVWgxUoG8IHDfAx6NqIegNoLcpvC6RkCzO1s6Ag==
+X-Google-Smtp-Source: AMrXdXsAPqq2grhhH7dWv3ibNzidh83nP0UMQkpPzASvjBVgkLMqi0nHLe5BmrNOLAwh7gP3eyGxpJ7a7jWlLotqW3o=
+X-Received: by 2002:a05:6102:5587:b0:3b5:32d0:edcc with SMTP id
+ dc7-20020a056102558700b003b532d0edccmr779063vsb.24.1674024677099; Tue, 17 Jan
+ 2023 22:51:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] [v2] mlx5: reduce stack usage in mlx5_setup_tc
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Tariq Toukan <tariqt@nvidia.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>, Lama Kayal <lkayal@nvidia.com>,
-        Moshe Tal <moshet@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230117210324.1371169-1-arnd@kernel.org>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230117210324.1371169-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 Jan 2023 12:21:06 +0530
+Message-ID: <CA+G9fYs+ZDoW8Xm8M5quk7J3aE942D4c34oDWM2Xjg-DQFm+Bw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] drm/msm/gpu: Add devfreq tuning debugfs
+To:     dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Following build regression noticed on Linux next-20230118.
+
+Regressions found on arm:
+    - build/gcc-8-imx_v6_v7_defconfig
+    - build/gcc-12-imx_v6_v7_defconfig
+    - build/clang-15-imx_v6_v7_defconfig
+    - build/clang-nightly-imx_v6_v7_defconfig
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
+  Depends on [n]: PM_DEVFREQ [=n]
+  Selected by [y]:
+  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
+SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
+IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
+(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
+QCOM_COMMAND_DB [=n]=n)
+
+WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
+  Depends on [n]: PM_DEVFREQ [=n]
+  Selected by [y]:
+  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
+SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
+IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
+(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
+QCOM_COMMAND_DB [=n]=n)
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm
+CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+In file included from drivers/gpu/drm/msm/msm_gpu.h:18,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
+                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
+drivers/gpu/drm/msm/msm_drv.h:237:45: error: field
+'gpu_devfreq_config' has incomplete type
+  237 |         struct devfreq_simple_ondemand_data gpu_devfreq_config;
+      |                                             ^~~~~~~~~~~~~~~~~~
+
+Build log:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230118/testrun/14250189/suite/build/test/gcc-12-imx_v6_v7_defconfig/log
+
+This was already reported a while back on lore,
+https://lore.kernel.org/all/202301130108.fslQjvJ8-lkp@intel.com/
 
 
-On 17/01/2023 23:01, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Clang warns about excessive stack usage on 32-bit targets:
-> 
-> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
-> static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
-> 
-> It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
-> the mlx5e_safe_switch_params() function it calls have a copy of
-> 'struct mlx5e_params' on the stack, and this structure is fairly
-> large.
-> 
-> Use dynamic allocation for the inner one.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: simplify the patch
-> ---
->   .../net/ethernet/mellanox/mlx5/core/en_main.c   | 17 +++++++++++------
->   1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-
-Thanks for your patch.
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+--
+Linaro LKFT
+https://lkft.linaro.org
