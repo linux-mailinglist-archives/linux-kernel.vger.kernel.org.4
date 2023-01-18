@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF3C671916
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4085867194D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjARKhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
+        id S229928AbjARKls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjARKfu (ORCPT
+        with ESMTP id S229873AbjARKjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:35:50 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAC949431
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:42:50 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so1041598wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:42:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jaewd2L8TgxgXbB/K1HfRKTMQWLJEFmYWcmTBCa0RC8=;
-        b=GU1REnZEAYxr5gnK/c11uqhYCCvVTzCtMtRsedU7qTu3etvRaFM1ZpHmrFwef2sDKL
-         ap5NSkPQoah09uVlxszezdLRT8XvN4PxInmt3rotCChRa+pYfQGhkD8zEIvA9b4kqLg5
-         QcN1ZUwhPHvgXsvfgR8agOl8RabEUfqje9SqpU6eU6FZTq4dWTue76QAGOS5La0N4wjV
-         +6c8vbKv9qX1cFyMaZDjR9YdkH1hxclBB6JO+HzQL4CNEz5sGk4gD5JHAvX/MpIt/m5A
-         c+nsL+z0hsLecaXXE3jbxUqXeVw8Rta5e2n7qsm9YZQs+LrTD+I50DWe6Yk8yi7uzXsG
-         Oqng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jaewd2L8TgxgXbB/K1HfRKTMQWLJEFmYWcmTBCa0RC8=;
-        b=N3nJDTgRvAPzinrcZUav0B2nSx8h/TLhwPvYWKhmZ4dEsrfpza8i3jqI6ldleXW7td
-         JqVbqq4J8fJ/oxZT2hgvn7GmSBtJd2Dqkcz0hMTtH65uqhPJWRnrUeETD9uMm2ibctMC
-         ARDjUqW2m0Q1aKoYtIs3AyOvUtbKJJ10u37GCGOZMDLJ296ZGrh4Yl7rpP5TXA9qa8Rq
-         hgZHQARw6wuXGnvx1DxhnRm34fqbMGQOiOHlj8y20xG4VKgApIfW/Sa6sCZoKxHSvh1b
-         AlyzmfZqVnUbPYcgpvdl8RrhSvwegUnQAg4w8qfFp9U58s0y2eiA+8y+XmQF/NqIbJvD
-         i+Hg==
-X-Gm-Message-State: AFqh2kqgYdDseDTtpNdoblfA1hNiKGyiU0SDWyuvGPK5MGJYL9DIlOIn
-        LJiaJ+7VCrHmjFieRgL7vSyUDg==
-X-Google-Smtp-Source: AMrXdXsBHwdvsYNou+cx4ItMPakpwEYAvNSUrq6Eo3TSnH7kFKV3tUETdCHSxQQuIiBLaZLQbHBpYw==
-X-Received: by 2002:a05:600c:2284:b0:3d3:5c21:dd9d with SMTP id 4-20020a05600c228400b003d35c21dd9dmr6009243wmf.19.1674034955224;
-        Wed, 18 Jan 2023 01:42:35 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m13-20020adfe94d000000b002714b3d2348sm30972662wrn.25.2023.01.18.01.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 01:42:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: drop unused properties from tx-macro
-Date:   Wed, 18 Jan 2023 10:42:24 +0100
-Message-Id: <20230118094224.51704-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118094224.51704-1-krzysztof.kozlowski@linaro.org>
-References: <20230118094224.51704-1-krzysztof.kozlowski@linaro.org>
+        Wed, 18 Jan 2023 05:39:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC53666FBA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:43:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 858B02107A;
+        Wed, 18 Jan 2023 09:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674035001; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xwj2L+9GHMXRMvC0PXKAy4Vi7OOq14XSvOdqanVYA8Y=;
+        b=oQppwSHRZn9nA7psyaLGFQs/n7yu4DC1JHVfljgHkXtLq+DOkvXYVpC0pxpoUjYBm0HTcS
+        BkONlwtTDH8AHIFUQOLXiSJJ2S7HX+NBVrdprdVQ79j6ABRRpBWxtQ58jldQ8maq5weOoW
+        FQcHNE9i90gdNQSHN34UWvlnl2fB3Is=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5923C139D2;
+        Wed, 18 Jan 2023 09:43:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eEGoFDm/x2OYPwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 09:43:21 +0000
+Date:   Wed, 18 Jan 2023 10:43:19 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 26/41] kernel/fork: assert no VMA readers during its
+ destruction
+Message-ID: <Y8e/N1m+YGFmxy+L@dhcp22.suse.cz>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-27-surenb@google.com>
+ <Y8bB3TFLQV2HJZQ+@dhcp22.suse.cz>
+ <CAJuCfpH8-wNiPXQcS=0j-Ex7iMqoBkUhjSN8QiAvq6FdXudRGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpH8-wNiPXQcS=0j-Ex7iMqoBkUhjSN8QiAvq6FdXudRGQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tx-macro does not have children and does not allow address/size cells:
+On Tue 17-01-23 17:53:00, Suren Baghdasaryan wrote:
+> On Tue, Jan 17, 2023 at 7:42 AM 'Michal Hocko' via kernel-team
+> <kernel-team@android.com> wrote:
+> >
+> > On Mon 09-01-23 12:53:21, Suren Baghdasaryan wrote:
+> > > Assert there are no holders of VMA lock for reading when it is about to be
+> > > destroyed.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  include/linux/mm.h | 8 ++++++++
+> > >  kernel/fork.c      | 2 ++
+> > >  2 files changed, 10 insertions(+)
+> > >
+> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > > index 594e835bad9c..c464fc8a514c 100644
+> > > --- a/include/linux/mm.h
+> > > +++ b/include/linux/mm.h
+> > > @@ -680,6 +680,13 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
+> > >       VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
+> > >  }
+> > >
+> > > +static inline void vma_assert_no_reader(struct vm_area_struct *vma)
+> > > +{
+> > > +     VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock) &&
+> > > +                   vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
+> > > +                   vma);
+> >
+> > Do we really need to check for vm_lock_seq? rwsem_is_locked should tell
+> > us something is wrong on its own, no? This could be somebody racing with
+> > the vma destruction and using the write lock. Unlikely but I do not see
+> > why to narrow debugging scope.
+> 
+> I wanted to ensure there are no page fault handlers (read-lockers)
+> when we are destroying the VMA and rwsem_is_locked(&vma->lock) alone
+> could trigger if someone is concurrently calling vma_write_lock(). But
+> I don't think we expect someone to be write-locking the VMA while we
 
-  sc8280xp-crd.dtb: txmacro@3220000: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
+That would be UAF, no?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> are destroying it, so you are right, I'm overcomplicating things here.
+> I think I can get rid of vma_assert_no_reader() and add
+> VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock)) directly in
+> __vm_area_free(). WDYT?
 
----
-
-Changes since v1:
-1. Add Rb tag.
-2. Split from SDM845 audio patchset, so this can easily be picked up.
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index fb1aa08c2524..bc698e417fae 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1789,8 +1789,6 @@ txmacro: txmacro@3220000 {
- 			clock-output-names = "mclk";
- 
- 			#clock-cells = <0>;
--			#address-cells = <2>;
--			#size-cells = <2>;
- 			#sound-dai-cells = <1>;
- 		};
- 
+Yes, that adds some debugging. Not sure it is really necessary buyt it
+is VM_BUG_ON so why not.
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
