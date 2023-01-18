@@ -2,156 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E41C671FE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17700671FE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjAROl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S231305AbjAROmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjAROlB (ORCPT
+        with ESMTP id S231499AbjAROlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:41:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75AF2C642
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:31:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674052281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MZJOxLnmkEvZGZ/FgYrJ/gq7makso9s4WdJRv05FlCs=;
-        b=FaynD6Ww7PggX5rzV3xoomz11PSvon45nphbQu0hRH3xwPDVIB+H5FbDt9X4kCfkdp6bSJ
-        73u/JWtC1TWjMwLuYi9WqqtypmYFpxMSqcouGKyeDbjiKMY4NuT1SoEMap5itR4AdLTF74
-        CB6PU4vO/RReejxTewfk5hVyA3eU1Ck=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-10-TYBasntbNIiO1hVEDrlU4A-1; Wed, 18 Jan 2023 09:31:19 -0500
-X-MC-Unique: TYBasntbNIiO1hVEDrlU4A-1
-Received: by mail-wr1-f69.google.com with SMTP id v5-20020adf8b45000000b002bde0366b11so368749wra.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:31:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZJOxLnmkEvZGZ/FgYrJ/gq7makso9s4WdJRv05FlCs=;
-        b=7ypsPAvuNia2LAanKssK4wuklqvAstJt+YmB0mcAtqkzzsf7iEVcWGnhAuoxryoh6t
-         DUOVWtB/5ZLXRRpR3fbtdYconPJwuJc3YRsVCvyIOSnHPqeWBPiNTsODF3tePSVjrQqk
-         cNwwn8QvWQZEC847uK244A27uH01fRcdEdMbIDezqBR6EA1GWykMsZGmCkQFxJHgiraw
-         ApaG81ycpeG8KUt0FLcVe5i10f/vshXgAtpdApGIAOa8oCJnc3jGIpz78263RstpU+2n
-         oDdrcNPWtH1Lqd8mJ2er2Z0trsg2q+5aHBldaTVHyksqsxiib2v7Ft4UzroBBjejYblr
-         W8OQ==
-X-Gm-Message-State: AFqh2krA2PmMlR2ZCFrUryOuvvFE8M9eZcnOgoJPEAibjJSVVxD1o9fu
-        MbqQRT5/RPhZjjyy3sonzwOtwBcj2UNXj1tJN6H/ruX2EGLxWHvJyMiMFarckx+iMFq06SPTdQa
-        OkwRsK52KeWkx/Uq/rQqcbmpr
-X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr7009879wmg.8.1674052278233;
-        Wed, 18 Jan 2023 06:31:18 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsth3/hCFmCk0CHrLL4sAw6wLN3YDRV43ECbmf5dcJXsZ/th3eShzA76PWIJL/IQZihhGpC9Q==
-X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr7009855wmg.8.1674052277937;
-        Wed, 18 Jan 2023 06:31:17 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:800:1a88:f98a:d223:c454? (p200300cbc70508001a88f98ad223c454.dip0.t-ipconnect.de. [2003:cb:c705:800:1a88:f98a:d223:c454])
-        by smtp.gmail.com with ESMTPSA id f2-20020adff982000000b002bde537721dsm13524925wrr.20.2023.01.18.06.31.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 06:31:17 -0800 (PST)
-Message-ID: <688bd1cb-0b4c-3b4f-6af9-7a07da3d16fa@redhat.com>
-Date:   Wed, 18 Jan 2023 15:31:16 +0100
+        Wed, 18 Jan 2023 09:41:16 -0500
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0FF2D173
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:32:45 -0800 (PST)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2041.outbound.protection.outlook.com [104.47.22.41]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-36-jt6lR6EvPcuKKoHrnjbdUg-1; Wed, 18 Jan 2023 15:32:41 +0100
+X-MC-Unique: jt6lR6EvPcuKKoHrnjbdUg-1
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ GV0P278MB0113.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.24; Wed, 18 Jan 2023 14:32:40 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ace5:84e5:2754:a1fa]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ace5:84e5:2754:a1fa%2]) with mapi id 15.20.6002.012; Wed, 18 Jan 2023
+ 14:32:40 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "qiangqing.zhang@nxp.com" <qiangqing.zhang@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v4 07/17] arch: arm64: imx8qm: add can node in devicetree
+Thread-Topic: [PATCH v4 07/17] arch: arm64: imx8qm: add can node in devicetree
+Thread-Index: AQHZKw5d/jC7Xax5/0aCdAUVMVdJO66kM6MAgAAJroA=
+Date:   Wed, 18 Jan 2023 14:32:39 +0000
+Message-ID: <3645c9a42797e821ced4cd9ba2985acc136376b8.camel@toradex.com>
+References: <20230118072656.18845-1-marcel@ziswiler.com>
+         <20230118072656.18845-8-marcel@ziswiler.com>
+         <5b1f757c-92af-f91f-3fd4-ad23622add7b@linaro.org>
+In-Reply-To: <5b1f757c-92af-f91f-3fd4-ad23622add7b@linaro.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|GV0P278MB0113:EE_
+x-ms-office365-filtering-correlation-id: 2140b03c-7baf-43c1-34b1-08daf960da3c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: /bVYMqRnR/0jzNxgnnXti/oBOoOcw1sHD5/dAEuxNVABmpb1AUzG604SK5fc8BcjldOYts17mGgfqp6ukLF3k9Qp8hs0GSrmsq+nAqFETrwlGY7WezMk/xFtNM/fXuYNLEbqMlp0O3wuFDowUgQHCV1kNX0eijzOPMpUNlhvxBS+PiOn+zyqh4l4IsOcxkMXyz6EeCk2Vk2z5DCwSR34y0kJCgd8JrUilcd6vlJlm8RlLkwY1KCE4FhY08r0PeSkfefVxFet8y1qO/fwsx9UoiV/kT3RntBg838BMcQSZHEHMxReFuTM3oS7olHh2UvzUQphSyvC1wxW+FomQlRmbQrnP6Gc0tWpyj4BaJRQAgzADPnJoahRGv4th5P/R0ikzWIGfRUYDazKXtbKpX6tneBXAdK4tM/rPly1JQMQZ5q3bSsbbcbHH2UKipqjIV7ahmhSpZFYQetDcs0mi7MA8cqKZgybBq1der5D9aMhm8DqvymJlrqtEyFDrrOvI919F1ekQ5w72zvrNj3C+SjojPym0CbPgoXFDOV2XKL8oRc5L/LwejqBj/oChafb/472c2D6EVBTCvyjXvW0RZ9mrAEEOoamO08SZLrSf/jhCiYjaeChnCQD8Dj/wsbqgHM7nND+VcYU0LDAP/crnS0QUXX8MixZ7uUO7Mh1NIyY/knaFaVZbzWoH2mGyY5RoZwMDYycrUxusZV5kT+oDuyyIUCfJ4lu1ZWqmIh7lOUhauw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39850400004)(366004)(136003)(376002)(451199015)(6512007)(86362001)(5660300002)(41300700001)(7416002)(44832011)(8936002)(6486002)(38100700002)(122000001)(36756003)(558084003)(54906003)(478600001)(186003)(71200400001)(110136005)(53546011)(38070700005)(26005)(6506007)(8676002)(66946007)(64756008)(316002)(66556008)(4326008)(66476007)(66446008)(76116006)(2616005)(2906002)(32563001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzlHRlJIS2M2NE8zdU1abklJalFxR1U1N3RNdDlBVE84VUZDZVVLdDJ5bjNT?=
+ =?utf-8?B?UlpuM2c4U2tLa1dHRUZ6cktDc2RuQnhqQTNTQ0E0bCtlczdrU00wVXZwRGta?=
+ =?utf-8?B?d2IvS0FIMkx2Z0hsM1lSRlMrQzQ3cjNkN0JoTVNpVktTdFpiM0VNTVJHVlM0?=
+ =?utf-8?B?RGxBalMxeGJsRDVCV1VRam9TRGJuZkZjd2w0K0VFZW83U21QRWFwUndaS29T?=
+ =?utf-8?B?ZnVFa1RQVXRaWFRMaitvd05VbUtJaW1mcTUrQi9kdnBhSE5qMWZ2dXk1c2pi?=
+ =?utf-8?B?SHprV1duRkZDVmlvT3B3U1ptcCtoVWErV1BxSkcyV0I1U2VuSHNyV040djdT?=
+ =?utf-8?B?M2tXSVBTZnVkd01lNmJWWjl1NmpiQjFuMTlDWmFUbUNrdlVCQ1lNRnpYR3VW?=
+ =?utf-8?B?RUJQYmNIdkQ4cE1MNTlOY25uQTNIN0E5SDFUcUJZZDBFN1pydm5JM0svWVlF?=
+ =?utf-8?B?YzdJRFVxSldRRlduZ2tGV1g5MGdjY1V3YVIwRFZVcEJ1ejEwemVJcTRtQlJI?=
+ =?utf-8?B?Nkh6SmlLYnRTK3pYR212eTk5Y3EzSU01a08yNGoyeFk5K3FsaXpWa0xNbCtw?=
+ =?utf-8?B?UTd0cjJyL2xQZUE2Y2pPYnkwU0J0UWEzR1JVNTc1S3lKN3hBTjlMTHJqZitF?=
+ =?utf-8?B?a0J1ajl6OThEZG9jMzlHN1pKUmk5aUU4UHBUYlNXakhQUVJJY1ZYOFpidzcw?=
+ =?utf-8?B?c0tTTzNKMEZUcStCS2s0M3dtVXRLZlA3cllPeDhVZWg1SWxXSE5wNGYzZGtF?=
+ =?utf-8?B?THdsZXJZWjdDUHc1ZG5WZFFzbk5kWFFWbTBOaDRzS29FcXNVTUxVUDRiZmxS?=
+ =?utf-8?B?WUpQMmVJN1FQbzRNbEVxaXJFbHFUWEwvTXo2R0ZpcEhETk5EaTU1QUdFSm9S?=
+ =?utf-8?B?S2hORWF4KzNRdnhEcElXREl3S081dWU0N1liZGJNaFFid3ozQ2FWNWgrMElx?=
+ =?utf-8?B?NnFBQXdQb01RWEpab0M0cGNuRkp1QWxvbm9CVG83OEZ3RjRkMk92cVhoSmdQ?=
+ =?utf-8?B?WmpWNGErWHI3QlF2dDFMN0xWbktCLzlpS3hQSzhuL0YrMmU5Vk1ZRkRNd1Na?=
+ =?utf-8?B?aUVmMUdkNkxRY3Zwb2J1czI0dFFjWXZFb3FqTGZSTG54RXBGb1VPUjI3bTdw?=
+ =?utf-8?B?TXZGNVhia043WDE1blkzdm9UK3hiSlpORlpMZHlibmlZR1g3S3pkMTFCN3hK?=
+ =?utf-8?B?bHNld0JVTjExNkdNMGhDRzRMZWFIRFB0Q3pZLzFIRlowL2FXQ1ZLdDZTUVhp?=
+ =?utf-8?B?UDVJRTV2eklETzRVU2F0STVTME5ZajJJTXZMUHRlSHNUVnU0bFVPUXV3QllR?=
+ =?utf-8?B?amtjTCtIVHRPQllEaU8wbmM2ZTU5Q08zSUdLcVE3SGEyU1o5QVBGQ2wrK3Y5?=
+ =?utf-8?B?OS93Tis0RVlRNEZYMW5uWXhSdVVEOU0yaXN6VE1Sang1NDJTY2l1ZXJYeUdt?=
+ =?utf-8?B?NjhiamRwNHhObWwyaWMwR2RaSU81RzR5d3BHWHNPU0dWU2YvZFk3ZWRjUHJq?=
+ =?utf-8?B?c3E1VmhLVUxTdnJHWDhoT0VRVkVIQlZuN2ZwOVVEZTFnajFhd3RITUNsZi9h?=
+ =?utf-8?B?SHRWdnA0bDB6RFg2UmpkWjNhWlJ3OFY0VEt6SHQ0bmJsVkRrSndzN1NESW10?=
+ =?utf-8?B?T3FZMkV2dlk3WjRNUEYrOHo2eXRxalYzeTM2SnNxdThrcGs5N0lRZ3hjRmZS?=
+ =?utf-8?B?dzVnMzZBTW4rWkswN2JpYkdGRkprdjJSd2R1d1paNTAxa2FYR1RSOFV2dytx?=
+ =?utf-8?B?aGNzbUs2LzNZcHRXK09DMXZJTFR3RURVUHFDRHYySHIvV2JnNHJDaWJGSFdo?=
+ =?utf-8?B?MXFHNVV5cnlYaUo5TnkreDk5T3QvZzNaanBnYkQ5bUk3a2luS1pqMG1XNkdC?=
+ =?utf-8?B?bjFoTHdHNjJpbzdTNnpWQ2ZsY2FOZHR0cDJRNENjeVZkWjhLbW5Pb3Y5ZXZX?=
+ =?utf-8?B?cjJYZmxzTnVWSWtMUDcrMDg0Y0gwZUhjeEowbTdsRU5CeUw0ejM3NFl5eko4?=
+ =?utf-8?B?MmpRM01qRHZKQUdxY3ZJWjh5MGlZZUtEaUFrd01QdmQzNUk1QXNRL044M2ZF?=
+ =?utf-8?B?bk5SNHNOUUVzSzBiNjlwMTdtb2RVVVdVNFp1R3J1VzQ1TkV2RExYNWRnSmNr?=
+ =?utf-8?B?VmIwTXRUNzVoRVhFYmJQNU8vTHJSM3pwTi9nU3dNdzN2ODltWXRlbWlGOWVs?=
+ =?utf-8?Q?BLqAlkxibqe0KPwoG4S8UQg=3D?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 4/6] ksm: count zero pages for each process
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2140b03c-7baf-43c1-34b1-08daf960da3c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 14:32:39.9433
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: si/xk1/Yg0nopRKZOj9qmlzzkmQqBD1/pSna4Q9SkmxqaghIO4fwvxHxfrLZhfapWLtttGYoLEI9rgQh4TPCOPsKJANkYQnGw6bslxsP01w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0113
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
 Content-Language: en-US
-To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
-Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
-References: <202212300916292181912@zte.com.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <202212300916292181912@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <986BFAA30829114F8D1B01A26C352611@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.12.22 02:16, yang.yang29@zte.com.cn wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> As the number of ksm zero pages is not included in ksm_merging_pages per
-> process when enabling use_zero_pages, it's unclear of how many actual
-> pages are merged by KSM. To let users accurately estimate their memory
-> demands when unsharing KSM zero-pages, it's necessary to show KSM zero-
-> pages per process.
-> 
-> since unsharing zero pages placed by KSM accurately is achieved, then
-> tracking empty pages merging and unmerging is not a difficult thing any
-> longer.
-> 
-> Since we already have /proc/<pid>/ksm_stat, just add the information of
-> zero_pages_sharing in it.
-> 
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-> Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-> Cc: Yang Yang <yang.yang29@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->   fs/proc/base.c           | 1 +
->   include/linux/mm_types.h | 7 ++++++-
->   mm/ksm.c                 | 2 ++
->   3 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 9e479d7d202b..ac9ebe972be0 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -3207,6 +3207,7 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
->   	mm = get_task_mm(task);
->   	if (mm) {
->   		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
-> +		seq_printf(m, "zero_pages_sharing %lu\n", mm->ksm_zero_pages_sharing);
->   		mmput(mm);
->   	}
-> 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 4e1031626403..5c734ebc1890 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -776,7 +776,7 @@ struct mm_struct {
->   #ifdef CONFIG_KSM
->   		/*
->   		 * Represent how many pages of this process are involved in KSM
-> -		 * merging.
-> +		 * merging (not including ksm_zero_pages_sharing).
->   		 */
->   		unsigned long ksm_merging_pages;
->   		/*
-> @@ -784,6 +784,11 @@ struct mm_struct {
->   		 * including merged and not merged.
->   		 */
->   		unsigned long ksm_rmap_items;
-> +		/*
-> +		 * Represent how many empty pages are merged with kernel zero
-> +		 * pages when enabling KSM use_zero_pages.
-> +		 */
-> +		unsigned long ksm_zero_pages_sharing;
-
-Same comment as for previous patch: this counts rmap itmaps, no? 
-ksm_zero_rmap_items might be more appropriate.
-
--- 
-Thanks,
-
-David / dhildenb
+T24gV2VkLCAyMDIzLTAxLTE4IGF0IDE0OjU4ICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
+b3RlOg0KPiBPbiAxOC8wMS8yMDIzIDA4OjI2LCBNYXJjZWwgWmlzd2lsZXIgd3JvdGU6DQo+ID4g
+RnJvbTogSm9ha2ltIFpoYW5nIDxxaWFuZ3FpbmcuemhhbmdAbnhwLmNvbT4NCj4gPiANCj4gPiBB
+ZGQgQ0FOIG5vZGUgZm9yIGlteDhxbSBpbiBkZXZpY2V0cmVlLg0KPiANCj4gSW5jb3JyZWN0IHN1
+YmplY3QgcHJlZml4Lg0KDQpTdXJlLCB3b3VsZCB5b3UgbWluZCBlbGFib3JhdGluZyB3aGF0IHRo
+ZSBjb3JyZWN0IG9uZSB3b3VsZCBiZT8NCg0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0K
 
