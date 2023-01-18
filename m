@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6C167200D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895AC672014
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjAROrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S230504AbjAROro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjAROq4 (ORCPT
+        with ESMTP id S231223AbjAROrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:46:56 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575AC11E80
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:39:38 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id u8so17117735ilg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9RbrfYpTsB5Gdv1tFjCVf0tX4IIPKE7pjcU8y4J3trI=;
-        b=cNEjzeCiE1lLElvTzWfgP/zBRRGU/b+PP2WFw5jto+lw/ZZQxn4ZYaDE8AAIK/0QhO
-         8MhGqSxlddXbOpmt1GCbssCDRalZrI8/4JxNN8OLgaUlKwYWkE5IyaMynVYR/WKsQQfV
-         jOIIEcSM468A8Yo/p3UhZdpsaIAdAdN+5laIQHCO2l5c56rSEJ9cfTbX7QCD+8RxIVi1
-         iGpVaPm+FSzxjhvlwoYKYPIqt9zMuADr3+PbEMVt6kbfi/kHnwUKlLTLgZ3pUNbzZPLz
-         kecdmPuPLJJXQqm/O06rXUNxmSuBdvLw+51OLeZZk/o//igAKHvUb6e74yYkpqilOvdh
-         u40w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9RbrfYpTsB5Gdv1tFjCVf0tX4IIPKE7pjcU8y4J3trI=;
-        b=dDapJOF8o20UKj4KiIJXM2S+AoWgJXFEOoPyKCTfea170MzyJ+r1y8qzDh4bHXgiSW
-         1r241OeIbv5Y4ytWSoEUTwP1gA202ij/ZETRiZpj92Jouv05qNMLXEV3/K8Bt0Y2FvSa
-         uBtxKY0NoZ179KamVajQAkiTRS6CCURXGdvGYIeRMaDREpQiZm+RmoHHjmokX0+L4qfo
-         vEs7JSNbZqgd68RTNuTt5M2PCkSQUQjIhVKsITG+dB3lw6DLMr2YdQj30Xw7OGbe+GSn
-         38+DhHALTWv5O8P+6Ompk1KnTppqc1FWDPs3A1xTT1RYBqIGqs+RVRv8mbVbFwUjgmmR
-         19Fg==
-X-Gm-Message-State: AFqh2krjf06Nn4C8qRUk0mPDqhSuV7quwsTG//bSdfWx/b9E/RViXUfO
-        uvorIsZynmuWLgJA2wM6LPKyvg==
-X-Google-Smtp-Source: AMrXdXsEDNwTglSypvAYmMnk0+QJxEhtr9E07S6m3PYDu0to0zeckpI+rKolYcTZulbtx+JjfmpFhg==
-X-Received: by 2002:a05:6e02:be7:b0:30e:f0e7:dddb with SMTP id d7-20020a056e020be700b0030ef0e7dddbmr1165192ilu.1.1674052777721;
-        Wed, 18 Jan 2023 06:39:37 -0800 (PST)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id k8-20020a056e02134800b0030dc530050dsm5936282ilr.85.2023.01.18.06.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 06:39:37 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     asml.silence@gmail.com, dylany@meta.com, io-uring@vger.kernel.org,
-        Breno Leitao <leitao@debian.org>
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20230112144411.2624698-1-leitao@debian.org>
-References: <20230112144411.2624698-1-leitao@debian.org>
-Subject: Re: [PATCH 1/2] io_uring: Rename struct io_op_def
-Message-Id: <167405277695.132004.11895027913107306037.b4-ty@kernel.dk>
-Date:   Wed, 18 Jan 2023 07:39:36 -0700
-MIME-Version: 1.0
+        Wed, 18 Jan 2023 09:47:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD44474D3;
+        Wed, 18 Jan 2023 06:40:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 729C5B81D6D;
+        Wed, 18 Jan 2023 14:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08E04C433F1;
+        Wed, 18 Jan 2023 14:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674052818;
+        bh=Tsm1APk/mXfgMvBuRY8ii5mqCI8QhhSSIAOswYeQn38=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BBBym8a4SW7BF4Nklul6hEwwo7OcPVfJKtt0lYp8g8UgMe6+NW8VL++DGVyRiLYel
+         VdWGIlgS6wwXJDZHoLtSqsOQYKp46+s3D4tYQCchR8nAU5s6sTiFUejGTsOmyxL4yP
+         BZLnf1QuJ1skOCUs+OfqHbYMNbwcoOsyGpektv8YVujt4nSZMD4EwFXiLKe/3A3E9M
+         vlpVmq3gguYE5gstMTH+vGeAQV+ZSUQBKfVlY7y2pVKW0PcOq0hcstnwwJTMwK4JQb
+         2IUX8WFqWo6/0BccWutNEhwpSakgF+cb0cD756On6pPTo0QAX6M4YXJO4DVgqSGvys
+         oVC/Gvv5VSIxg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC890C3959E;
+        Wed, 18 Jan 2023 14:40:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-78c63
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/5] Improve locking in the VCAP API
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167405281789.22945.18204552117628849446.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 Jan 2023 14:40:17 +0000
+References: <20230117085544.591523-1-steen.hegelund@microchip.com>
+In-Reply-To: <20230117085544.591523-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        rdunlap@infradead.org, casper.casan@gmail.com,
+        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
+        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
-On Thu, 12 Jan 2023 06:44:10 -0800, Breno Leitao wrote:
-> The current io_op_def struct is becoming huge and the name is a bit
-> generic.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue, 17 Jan 2023 09:55:39 +0100 you wrote:
+> This improves the VCAP cache and the VCAP rule list protection against
+> access from different sources.
 > 
-> The goal of this patch is to rename this struct to `io_issue_def`. This
-> struct will contain the hot functions associated with the issue code
-> path.
+> The VCAP Admin lock protects the list of rules for the VCAP instance as
+> well as the cache used for encoding and decoding rules.
+> 
+> This series provides dedicated functions for accessing rule statistics,
+> decoding rule content, verifying if a rule exists and getting a rule with
+> the lock held, as well as ensuring the use of the lock when the list of
+> rules or the cache is accessed.
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [net-next,1/5] net: microchip: sparx5: Add support for rule count by cookie
+    https://git.kernel.org/netdev/net-next/c/27d293cceee5
+  - [net-next,2/5] net: microchip: sparx5: Add support to check for existing VCAP rule id
+    https://git.kernel.org/netdev/net-next/c/975d86acaec7
+  - [net-next,3/5] net: microchip: sparx5: Add VCAP admin locking in debugFS
+    https://git.kernel.org/netdev/net-next/c/9579e2c271b4
+  - [net-next,4/5] net: microchip: sparx5: Improve VCAP admin locking in the VCAP API
+    https://git.kernel.org/netdev/net-next/c/1972b6d927ac
+  - [net-next,5/5] net: microchip: sparx5: Add lock initialization to the KUNIT tests
+    https://git.kernel.org/netdev/net-next/c/595655e08174
 
-[1/2] io_uring: Rename struct io_op_def
-      commit: 4e61c603ba6abca16888f1a319845048f8e17317
-[2/2] io_uring: Split io_issue_def struct
-      commit: b64775c649e984f8faf8a3956937d1a5e99b45f6
-
-Best regards,
+You are awesome, thank you!
 -- 
-Jens Axboe
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
