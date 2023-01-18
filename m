@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE5B671E40
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40AA671E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjARNmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S230384AbjARNnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjARNlz (ORCPT
+        with ESMTP id S230145AbjARNmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:41:55 -0500
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C86E4FC23;
-        Wed, 18 Jan 2023 05:10:55 -0800 (PST)
-Received: by mail-oo1-f50.google.com with SMTP id c145-20020a4a4f97000000b004f505540a20so2038170oob.1;
-        Wed, 18 Jan 2023 05:10:55 -0800 (PST)
+        Wed, 18 Jan 2023 08:42:07 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B75611FE;
+        Wed, 18 Jan 2023 05:10:58 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id g2-20020a9d6b02000000b006864bf5e658so2416838otp.1;
+        Wed, 18 Jan 2023 05:10:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=LPXKE4fWh08xIviaGRGhwlFYvgu/9wGipKwIrtn3ERY=;
-        b=uNf3VSqr6i/H/SFMqfg1Ekznu9B/ttX4LFx53AFBpqLvuRaridi0WoisuONJP0DI4E
-         CIUhqtFUp6R+RNR6VJCP8NDjg58H+rdOZfJQPC9vlvebCB5sesyodyWm5o7J4kRB5bK8
-         FlsSCHDREO7eqRMtYablV+9VSpswViPdcjzTMAgR4V1HQqx6niJC4wDya5utoSGmmvo4
-         ILwmFU9G0Nd6K4msTzxf4NuVrhbFU1q7FMNfjrtzhhBLOZ6rYjhIjMt9gIBAoNRA1vgA
-         4Oj30UkrEwUsrvnmgJ/JG07esO4aKfD5QG96d5/qSqV9XAma9ViK0ss8eCBFM5Y6EsBW
-         idIA==
-X-Gm-Message-State: AFqh2kroRSLQMRqx6qoc8sJdRuewxx8spJfWYtUx8DLS0N1iPOaTQE2y
-        CYNd4YbzeWbrER5Xu3vlKQ==
-X-Google-Smtp-Source: AMrXdXuaVkiDYUFtNuNfPCSPfjF3RtDj8mtkMncMjSfU5aOhhpiJCxGNF68RjD5jl+wYaaUCe+TGSw==
-X-Received: by 2002:a4a:1ac4:0:b0:4f2:21f7:cd93 with SMTP id 187-20020a4a1ac4000000b004f221f7cd93mr3356508oof.0.1674047449990;
-        Wed, 18 Jan 2023 05:10:49 -0800 (PST)
+        bh=C73j249s5bhwEuVvXBUJxqTogNEcEvZ4jDs6uGdeSpI=;
+        b=uEfDNwoXY2fZYfyoWhqGLHUxwCstFqXTj+cYLlPz7Bmskv/G2X61WZYzH6X2HIDLqY
+         /N9mhYvpBxvwEJ5SVyGTQFaXnZPFs0zLKXR+y/sUB3F6WtVdbKRyG5CA2KW4Ov8p71P5
+         N8IpCklABWYnrDb0VchxN76lMxRI+hylx1I7aWBYOckeqbEjZCH9PBLWcboQN62aQS9M
+         oOHzr9aIE6LO0JIIdWNJk3ZIzu2kLbWxV5kWROD/Ll6f39VMd9QJqhhwFKC5ecDVH5Ki
+         WSlidBJNt9Xl1ODhEylkCdR9sILEO2NOZPmbNhGgTTuBlOeQyOxjNee+RfLvZc6qMDnc
+         Gv1Q==
+X-Gm-Message-State: AFqh2kq4PtooecDE510QGQruhzMqak/Amnc75t5CvzOoSRNTJ8/iEP+a
+        rqNUP+G/CNnRV3VqMT64Kg==
+X-Google-Smtp-Source: AMrXdXuZ/Q1R/e+2+1EZkZ2Wjv+Jm8OHazomq5xSIF2UKkdyDtTVd2zV+xaJkBBDz4yHktrjx9hC4A==
+X-Received: by 2002:a9d:4c13:0:b0:684:c595:70a6 with SMTP id l19-20020a9d4c13000000b00684c59570a6mr3544907otf.24.1674047451997;
+        Wed, 18 Jan 2023 05:10:51 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s23-20020a4ae557000000b0049f5ce88583sm16470775oot.7.2023.01.18.05.10.47
+        by smtp.gmail.com with ESMTPSA id h8-20020a056830164800b006864a6f2bfdsm2513474otr.31.2023.01.18.05.10.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 05:10:48 -0800 (PST)
-Received: (nullmailer pid 1459876 invoked by uid 1000);
+        Wed, 18 Jan 2023 05:10:51 -0800 (PST)
+Received: (nullmailer pid 1459892 invoked by uid 1000);
         Wed, 18 Jan 2023 13:10:47 -0000
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        Peter Geis <pgwipeout@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230118061701.30047-3-yanhong.wang@starfivetech.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-3-yanhong.wang@starfivetech.com>
-Message-Id: <167404705359.1390391.205840489556921087.robh@kernel.org>
-Subject: Re: [PATCH v4 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
- number of resets and reset-names
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        devicetree@vger.kernel.org,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, linux-iio@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230118063822.14521-3-okan.sahin@analog.com>
+References: <20230118063822.14521-1-okan.sahin@analog.com>
+ <20230118063822.14521-3-okan.sahin@analog.com>
+Message-Id: <167404705445.1390430.14924342340029865521.robh@kernel.org>
+Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: Add ADI MAX77541/MAX77540
 Date:   Wed, 18 Jan 2023 07:10:47 -0600
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -76,16 +78,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 18 Jan 2023 14:16:56 +0800, Yanhong Wang wrote:
-> Some boards(such as StarFive VisionFive v2) require more than one value
-> which defined by resets property, so the original definition can not
-> meet the requirements. In order to adapt to different requirements,
-> adjust the maxitems number definition.
+On Wed, 18 Jan 2023 09:38:09 +0300, Okan Sahin wrote:
+> Add ADI MAX77541/MAX77540 devicetree document.
 > 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 > ---
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  .../devicetree/bindings/mfd/adi,max77541.yaml | 87 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -94,16 +95,13 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+./Documentation/devicetree/bindings/mfd/adi,max77541.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/regulator/adi,max77541-regulator.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77541.example.dtb: pmic@69: regulators: False schema does not allow {'buck1': {'regulator-min-microvolt': [[500000]], 'regulator-max-microvolt': [[5200000]], 'regulator-boot-on': True, 'regulator-always-on': True}, 'buck2': {'regulator-min-microvolt': [[500000]], 'regulator-max-microvolt': [[5200000]], 'regulator-boot-on': True, 'regulator-always-on': True}}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77541.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118061701.30047-3-yanhong.wang@starfivetech.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118063822.14521-3-okan.sahin@analog.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
