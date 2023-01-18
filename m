@@ -2,137 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199196723A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAD36723AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjARQkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S229650AbjARQlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjARQjq (ORCPT
+        with ESMTP id S229590AbjARQkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:39:46 -0500
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA25C4393C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:39:35 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CAFA92012A;
-        Wed, 18 Jan 2023 17:39:33 +0100 (CET)
-Date:   Wed, 18 Jan 2023 17:39:32 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/5] iio: core: Point users of extend_name field
- to read_label callback
-Message-ID: <20230118163932.srskwgx6rhzozai6@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230116220909.196926-1-marijn.suijten@somainline.org>
- <20230116220909.196926-2-marijn.suijten@somainline.org>
- <20230118161920.0000207c@Huawei.com>
- <20230118163525.hh6woxq5q74pmcmq@SoMainline.org>
+        Wed, 18 Jan 2023 11:40:10 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00C018B29
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:40:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674060009; x=1705596009;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7w2kiowsP1kbV+aVfDwigVDi0hRPGhPi46/JT9skzEI=;
+  b=D+KNejRJh52gE4oqYjcGRx+3Dxi46I8R8IThcnGsmtmDhD3ElfABssxp
+   83KQJwjdduHOjVrHi6Om2ji+puFgG7CuXLSYVxKcUfVwn/aCDP9Xbp4nT
+   7ET7gqg5zDFRhHqRFCRgf4f2gXBW2YVoJSVfRcb8LmY+i1uakaGr58BEz
+   /lmGj3XbiXFqwFc+rdBgiEAvrIhbLxDu273TpDegKW81LhZxg5Wo+raJJ
+   PBzQrdhH3A0RBIjtq7JTB5jeQR3ukAYVIIIHX/xP46pnm2+uQ/jbRY/Qf
+   KGdHWu7PyHAYsJFMh65ztvLNhJTzbDU2Mkgeg+QR9nr2X+BnI0R5olYSy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="308589363"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="308589363"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 08:39:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="783741416"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="783741416"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2023 08:39:56 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIBTg-0000WM-0d;
+        Wed, 18 Jan 2023 16:39:56 +0000
+Date:   Thu, 19 Jan 2023 00:39:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
+Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:10:1: sparse: sparse: symbol
+ '__pcpu_scope_overflow_stack' was not declared. Should it be static?
+Message-ID: <202301190044.0RtHssbW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118163525.hh6woxq5q74pmcmq@SoMainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-18 17:35:27, Marijn Suijten wrote:
-> On 2023-01-18 16:19:20, Jonathan Cameron wrote:
-> > On Mon, 16 Jan 2023 23:09:05 +0100
-> > Marijn Suijten <marijn.suijten@somainline.org> wrote:
-> > 
-> > > As mentioned and discussed in [1] extend_name should not be used for
-> > > full channel labels (and most drivers seem to only use it to express a
-> > > short type of a channel) as this affects sysfs filenames, while the
-> > > label name is supposed to be extracted from the *_label sysfs file
-> > > instead.  This appears to have been unclear to some drivers as
-> > > extend_name is also used when read_label is unset, achieving an initial
-> > > goal of providing sensible names in *_label sysfs files without noticing
-> > > that sysfs filenames are (negatively and likely unintentionally)
-> > > affected as well.
-> > > 
-> > > Point readers of iio_chan_spec::extend_name to iio_info::read_label by
-> > > mentioning deprecation and side-effects of this field.
-> > > 
-> > > [1]: https://lore.kernel.org/linux-arm-msm/20221221223432.si2aasbleiicayfl@SoMainline.org/
-> > > 
-> > > Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > > ---
-> > >  include/linux/iio/iio.h | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
-> > > index 81413cd3a3e7..36c89f238fb9 100644
-> > > --- a/include/linux/iio/iio.h
-> > > +++ b/include/linux/iio/iio.h
-> > > @@ -221,6 +221,9 @@ struct iio_event_spec {
-> > >   * @extend_name:	Allows labeling of channel attributes with an
-> > >   *			informative name. Note this has no effect codes etc,
-> > >   *			unlike modifiers.
-> > > + *			This field is deprecated in favour of overriding read_label
-> > > + *			in iio_info, which unlike @extend_name does not affect sysfs
-> > > + *			filenames.
-> > Perhaps reword as
-> > 
-> > This field is deprecated in favour of overriding the default label
-> > by providing a read_label() callback in iio_info, which unlike
-> > @extend_name does not affect sysfs filenames.
-> > ?
-> 
-> Agreed, explicitly stating "the default label by" makes this much more
-> clear.  Though, maybe swap that around into "in favour of providing
-> read_label() in iio_info to override the label"?  Otherwise this could
-> be interpreted as "overriding the default label" is preferred to setting
-> extend_name... which one would do to override the default label.
-> 
-> I can queue this up for v3 unless you'll fix it up while applying,
-> presuming no other changes have to be made (aside from dropping patch
-> 3/5).
-> 
-> Will read_label() turn into a link?  And is the @extend_name reference
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c1649ec55708ae42091a2f1bca1ab49ecd722d55
+commit: 548ec3336f323db56260b312c232ab37285f0284 KVM: arm64: On stack overflow switch to hyp overflow_stack
+date:   6 months ago
+config: arm64-randconfig-s053-20230118 (https://download.01.org/0day-ci/archive/20230119/202301190044.0RtHssbW-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=548ec3336f323db56260b312c232ab37285f0284
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 548ec3336f323db56260b312c232ab37285f0284
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Yes, if read_label is a function that exists (but it's a member)... and
-@extend_name will indeed reference the member anywhere.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> proper?  Is there something to link to iio_info, perhaps a hashtag - or
-> maybe fully qualify `#iio_info::read_label()` for linking purposes?
-> /me jumps over to kerneldoc documentation :)
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/kvm/hyp/nvhe/stacktrace.c:10:1: sparse: sparse: symbol '__pcpu_scope_overflow_stack' was not declared. Should it be static?
 
-Looks like that would be &iio_info->read_label() (not sure about the
-trailing () though):
-https://docs.kernel.org/doc-guide/kernel-doc.html#highlights-and-cross-references
+vim +/__pcpu_scope_overflow_stack +10 arch/arm64/kvm/hyp/nvhe/stacktrace.c
 
-- Marijn
+  > 10	#include <asm/percpu.h>
+    11	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
