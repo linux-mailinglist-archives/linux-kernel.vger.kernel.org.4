@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E26672D26
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92508672D28
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjARX4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
+        id S230241AbjARX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjARXz4 (ORCPT
+        with ESMTP id S230170AbjARX4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:55:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A4545BFD;
-        Wed, 18 Jan 2023 15:55:55 -0800 (PST)
+        Wed, 18 Jan 2023 18:56:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619384A1EC;
+        Wed, 18 Jan 2023 15:55:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E62D761ADE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE08261AE4;
+        Wed, 18 Jan 2023 23:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B41C433EF;
         Wed, 18 Jan 2023 23:55:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BA9C433F0;
-        Wed, 18 Jan 2023 23:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674086154;
-        bh=FzOrmZ4zaqjbt/e9+QApYGb6CGTUnh4yd7AqFSLVJso=;
+        s=k20201202; t=1674086155;
+        bh=bGktQr6CID0RA42Vw90gEQWeUTjQ8XSiZzgElS0VMqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DkzDXvzwO+THphU0ils6FfiOcn1lFGPMUsNg8avnr2fx5dCLryYh9N8ymo1v1wvgF
-         6icOENh/ztyXC5mUmGzA3d3Evx9hePMRU/Jd+3FMsuW995W0rxrM7uwNLSWef0UrCF
-         vRdhstGnqYJd3lOZFib+Ut5jHYmCgbs47oUT5usyDvKJoSywTJxIlVdnRYfZsCAfv4
-         1D1HhoDI9xF4q0QTERNvU+rAXGQamBydQP2QDQaDeh4dCGwrCD9MOZV+c162K8Rk+a
-         neEtUyhVlAtLN54OCdnAnrVUymoW1yP6YYNFaj4QTcxxrFAlB8PXdeNZ4ZFfw5gaQ6
-         r/zxW8qjWPihw==
+        b=RAqAvxyaUFv3d6ZWNMGdFa8MIPXXjjN13c/4BBlXqwfeYnsIuErb+QuiHhENeLaYm
+         qdmib7BKCf3/v3j0SVk3w2+efRczLd0zjwfUoAdiqQSo71mEfx/loyp08C81va5KyG
+         AY4hk3+sj37IzRRyFLnCbeZKr0lDkM38kMmCsOXznrH0lKLYh40Bq9L9ms1Va2lwLS
+         L0eAL9qrCUCRVL3b1ntfmfpOCNG2Gzai3TEcvwMkz9BcUNV0nV3vEn0K0AZVLE50JT
+         Rzve5qjUvoQoGIayD+AvTjNUtnvPC/mshYAF8M3/wltgwPTMrOYZg+ph2P6FtGjdeI
+         icp4tALx1TwQw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linmengbo0689@protonmail.com, devicetree@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh+dt@kernel.org>, konrad.dybcio@somainline.org,
-        markuss.broks@gmail.com, JosefWMenad@protonmail.ch,
-        julian.ribbeck@gmx.de, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        stephan@gerhold.net, nikita@trvn.ru,
+To:     neil.armstrong@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        konrad.dybcio@somainline.org, Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: (subset) [PATCH v6 0/5] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
-Date:   Wed, 18 Jan 2023 17:55:37 -0600
-Message-Id: <167408614064.2989059.9530033047968534075.b4-ty@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        abel.vesa@linaro.org
+Subject: Re: [PATCH v3 0/3] arm64: dts: qcom: Add ADSP, CDSP & MDSS support to SM8550 and MTP board
+Date:   Wed, 18 Jan 2023 17:55:38 -0600
+Message-Id: <167408614065.2989059.7261682427241729811.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230106142748.546975-1-linmengbo0689@protonmail.com>
-References: <20230106142748.546975-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20221115-topic-sm8550-upstream-dts-remoteproc-v3-0-815a1753de34@linaro.org>
+References: <20221115-topic-sm8550-upstream-dts-remoteproc-v3-0-815a1753de34@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,27 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 06 Jan 2023 14:28:38 +0000, Lin, Meng-Bo wrote:
-> v6: Rebase on linux-next and reword. Add MUIC. Drop WIP J3 device tree
-> v5: Fix address typo tz-apps@85a00000 in msm8916-samsung-j3.dts
-> v4: Try "git format-patch -B -C -M -D" to fix errors.
-> v3: Drop msm8916-samsung-j5.dts temporarily before moving it.
-> Minor rewords.
-> v2: Reword and resend. Split common dtsi patch.
-> Add missing suffix state in pinctrl.
+On Wed, 18 Jan 2023 17:25:11 +0100, neil.armstrong@linaro.org wrote:
+> This adds support for the aDSP, cDSP and MPSS Subsystems found in
+> the SM8550 SoC.
+> 
+> The aDSP, cDSP and MPSS needs:
+> - smp2p support nodes to get event back from the subsystems
+> - remoteproc nodes with glink-edge subnodes providing all needed
+> resources to start and run the subsystems
 > 
 > [...]
 
 Applied, thanks!
 
-[2/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add initial common device tree
-      commit: 66e9ba516be3c165b1adf86ed2bd7e2ec4a3b578
-[3/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add new device trees
-      commit: 4414bdf9c56513f6f706bc936cb9e35126ac8773
-[4/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add Hall sensor
-      commit: 027523b77c0cecf4e4afbb7c587aaa10fd33b510
-[5/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add MUIC support
-      commit: 83a54e61b2bdfd81865bee12033b1d9d5af0016f
+[1/3] arm64: dts: qcom: sm8550: Add interconnect path to SCM node
+      commit: 2e3790de9b18f1e4761e44332ee50f4147282152
+[2/3] arm64: dts: qcom: sm8550: add adsp, cdsp & mdss nodes
+      commit: d0c061e366ed55ba81ee11a7b648d4c87ebc8517
+[3/3] arm64: dts: qcom: sm8550-mtp: enable adsp, cdsp & mdss
+      commit: 6c409f633f2373adf6815365876a206d7919fca2
 
 Best regards,
 -- 
