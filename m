@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6728670EE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87287670EE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjARAmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S229893AbjARAmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjARAla (ORCPT
+        with ESMTP id S229784AbjARAlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:41:30 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFA33B67A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:44 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4d4b54d0731so215769497b3.18
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:44 -0800 (PST)
+        Tue, 17 Jan 2023 19:41:31 -0500
+Received: from mail-ot1-x34a.google.com (mail-ot1-x34a.google.com [IPv6:2607:f8b0:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD71E3BDB3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:45 -0800 (PST)
+Received: by mail-ot1-x34a.google.com with SMTP id 46-20020a9d0331000000b00684ce0aa309so7650904otv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTRJVqBDkGUHWO7WMmajNVElkfX34x7nOoLfAt9+bEQ=;
-        b=EX4UN/0eFUWIexqbQBRbpsGvA8KNCkS9OA2NXANeTD6ptgjqai35FyeOaIlNA+FBeT
-         Cnm1APiNeCIgthHh2iELTziFYadXwmKI+My466IFRjTf/8YHjX/qU076qk38a1evmlWx
-         9cOBrA43RLYgGR0khB9BTTTnuGuKySesuafSPYRMecz6/nmWTUyMMYSArHGqmlT0Lqvp
-         18oLpRY+JKlwBTFpzRAjjAaW5oIyD/R7ryPOJioSA9lpHAZcpz2CvjjALChgEZLHXOM7
-         SoqMJT034sFZS2SsfMRRiWjeQ3w338ooV2rbafg3XxSq36dYpf7Y7Qlv8xp/0Z4MLaY/
-         8dKw==
+        bh=fBsOlKlcuwYg1TO5fnMZqwWlWQzMMR0DkSccvt40dYk=;
+        b=XayJErSb1aUIDJQCWLMV0aDRWh/VtUQOtmRqg/ZJxZnU40ttu0e9zM+Xhxtdl++5pZ
+         lPE3P44X2Ej530Kl88sXanY2BnvXQKxEhrYGsF3QszLz1C4W4SMucbXVkGn/GRTAgsn2
+         fFc12zaIEm71Lua2HdCr1jxbKNOSRWe49p+eLsRiILK9qxazoqtwDNvvc2+AMNizUPm2
+         e+/XjaknM6u/pigZ5eKwgASGZNUD+/mH4qvaYvqulYP8AIKpFrvSNg+xpxnOuBFuUz7C
+         HVMdu1disoW9P4vfqufI7AfwND1y3wI1M6ClDfOdPy2+sDpqlvuwiGDN617BzYG4SlL3
+         kYvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTRJVqBDkGUHWO7WMmajNVElkfX34x7nOoLfAt9+bEQ=;
-        b=ECmhb/TiKXSZPq9FmAoV7nNggFFrlItUwRSplg1rLZ0cbX+QHY6nIYbRU0QK85i5va
-         X3Z8gYpS+1x9pxJKZX73Q54JRY62lQyd3095vKPkLitxQPVhL27N+J3XQDYUUG3EXJfd
-         s+3MSFWLb48iXVAnWEctGlNJqHKr4YSko5AOAlpx6iwbYqDarzj0K1NOtTLdeplpoZrX
-         fv8TiXjS5X/ALnn3EvzigPcKUdP55YOR2wh2a/a4JzuWEXQHRGPx14OoXl7+YV2Fm5TG
-         3oUJvG1sJDmkrX2zcAT2yZWSllG1X/c7f5F6TOerRhAiURL+XoI76bS+0OfGJI60LVf9
-         bfpQ==
-X-Gm-Message-State: AFqh2koqTorviGJj1HiU5vqZ/ewqOdab86Q8VF/iKqvOcQx5UceCQ4dS
-        pggOi7ex4befzLERHWOZfLm4HK9xR4dV/w==
-X-Google-Smtp-Source: AMrXdXtD7bqi98Yh7h2wUwVBLNMYi2DQaFvYeFfYECMq032GE0MLbvHBZdI0aQprknrCs8TdSBeXA1M9DG39IQ==
+        bh=fBsOlKlcuwYg1TO5fnMZqwWlWQzMMR0DkSccvt40dYk=;
+        b=nttOwYamA1P+NOvfhiHpRdqrvAZoU3q+nmFpOHcGGok8uVfQNWNN+DodfioCf4GUj8
+         4fi7zuFRYMqpDWXqwMdHHf11c9dul2ecL7v8SFXd260M7krf7jgIhTrsH0jcYxejZv4P
+         ipBWBctfFZUutNSuJ1mjYWMdHXvnM5AOOOxLL7cjj3iEuN+AkWIL0R1FX5Yk+lFdLN19
+         GToQibJLh3yBhsYQiphuzJGfS4PSSb6ABhXBFBsnq2n2oYq75OHZNgjGZCBzYB80fqbF
+         wXlNbaEDgNwOfyRVoseC9+iPfnLMaZaOlBOCEi75YiGaeZcSfaCo4+icBxSjkAZe9rZa
+         /8AA==
+X-Gm-Message-State: AFqh2kqEVUbeTUf7F4AK1yZ46n0NjCTlGhdsjv5Zi5bD4C5URb/kYnMj
+        mzQfVSkms3Dn4LflsoeczsRY4BVt9fDcfw==
+X-Google-Smtp-Source: AMrXdXvyo6DW2fTIellOLWSjvwbbsAvYsTAnHGBC++acHS1loujh0p6QFwQu+rlsujM/lM0FuAgtv4WyxwJreA==
 X-Received: from talumbau.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:90d])
- (user=talumbau job=sendgmr) by 2002:a25:6089:0:b0:7b4:6882:d442 with SMTP id
- u131-20020a256089000000b007b46882d442mr579253ybb.429.1674001123956; Tue, 17
- Jan 2023 16:18:43 -0800 (PST)
-Date:   Wed, 18 Jan 2023 00:18:22 +0000
+ (user=talumbau job=sendgmr) by 2002:a05:6808:6d8:b0:35b:58e9:8890 with SMTP
+ id m24-20020a05680806d800b0035b58e98890mr272274oih.243.1674001125047; Tue, 17
+ Jan 2023 16:18:45 -0800 (PST)
+Date:   Wed, 18 Jan 2023 00:18:23 +0000
 In-Reply-To: <20230118001827.1040870-1-talumbau@google.com>
 Mime-Version: 1.0
 References: <20230118001827.1040870-1-talumbau@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230118001827.1040870-3-talumbau@google.com>
-Subject: [PATCH mm-unstable v1 2/7] mm: multi-gen LRU: section for rmap/PT
- walk feedback
+Message-ID: <20230118001827.1040870-4-talumbau@google.com>
+Subject: [PATCH mm-unstable v1 3/7] mm: multi-gen LRU: section for Bloom filters
 From:   "T.J. Alumbaugh" <talumbau@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -69,55 +68,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a section for lru_gen_look_around() in the code and the design
-doc.
+Move Bloom filters code into a dedicated section. Improve the design
+doc to explain Bloom filter usage and connection between aging and
+eviction in their use.
 
 Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 ---
- Documentation/mm/multigen_lru.rst | 14 ++++++++++++++
- mm/vmscan.c                       |  4 ++++
- 2 files changed, 18 insertions(+)
+ Documentation/mm/multigen_lru.rst |  16 +++
+ mm/vmscan.c                       | 180 +++++++++++++++---------------
+ 2 files changed, 108 insertions(+), 88 deletions(-)
 
 diff --git a/Documentation/mm/multigen_lru.rst b/Documentation/mm/multigen_lru.rst
-index 6e1483e70fdc..bd988a142bc2 100644
+index bd988a142bc2..770b5d539856 100644
 --- a/Documentation/mm/multigen_lru.rst
 +++ b/Documentation/mm/multigen_lru.rst
-@@ -156,6 +156,20 @@ This time-based approach has the following advantages:
-    and memory sizes.
- 2. It is more reliable because it is directly wired to the OOM killer.
+@@ -170,6 +170,22 @@ promotes hot pages. If the scan was done cacheline efficiently, it
+ adds the PMD entry pointing to the PTE table to the Bloom filter. This
+ forms a feedback loop between the eviction and the aging.
  
-+Rmap/PT walk feedback
-+---------------------
-+Searching the rmap for PTEs mapping each page on an LRU list (to test
-+and clear the accessed bit) can be expensive because pages from
-+different VMAs (PA space) are not cache friendly to the rmap (VA
-+space). For workloads mostly using mapped pages, searching the rmap
-+can incur the highest CPU cost in the reclaim path.
++Bloom Filters
++-------------
++Bloom filters are a space and memory efficient data structure for set
++membership test, i.e., test if an element is not in the set or may be
++in the set.
 +
-+``lru_gen_look_around()`` exploits spatial locality to reduce the
-+trips into the rmap. It scans the adjacent PTEs of a young PTE and
-+promotes hot pages. If the scan was done cacheline efficiently, it
-+adds the PMD entry pointing to the PTE table to the Bloom filter. This
-+forms a feedback loop between the eviction and the aging.
++In the eviction path, specifically, in ``lru_gen_look_around()``, if a
++PMD has a sufficient number of hot pages, its address is placed in the
++filter. In the aging path, set membership means that the PTE range
++will be scanned for young pages.
++
++Note that Bloom filters are probabilistic on set membership. If a test
++is false positive, the cost is an additional scan of a range of PTEs,
++which may yield hot pages anyway. Parameters of the filter itself can
++control the false positive rate in the limit.
 +
  Summary
  -------
  The multi-gen LRU can be disassembled into the following parts:
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index a741765896b6..eb9263bf6806 100644
+index eb9263bf6806..1be9120349f8 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -4569,6 +4569,10 @@ static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
- 	}
+@@ -3233,6 +3233,98 @@ static bool __maybe_unused seq_is_valid(struct lruvec *lruvec)
+ 	       get_nr_gens(lruvec, LRU_GEN_ANON) <= MAX_NR_GENS;
  }
  
 +/******************************************************************************
-+ *                          rmap/PT walk feedback
++ *                          Bloom filters
 + ******************************************************************************/
 +
- /*
-  * This function exploits spatial locality when shrink_folio_list() walks the
-  * rmap. It scans the adjacent PTEs of a young PTE and promotes hot pages. If
++/*
++ * Bloom filters with m=1<<15, k=2 and the false positive rates of ~1/5 when
++ * n=10,000 and ~1/2 when n=20,000, where, conventionally, m is the number of
++ * bits in a bitmap, k is the number of hash functions and n is the number of
++ * inserted items.
++ *
++ * Page table walkers use one of the two filters to reduce their search space.
++ * To get rid of non-leaf entries that no longer have enough leaf entries, the
++ * aging uses the double-buffering technique to flip to the other filter each
++ * time it produces a new generation. For non-leaf entries that have enough
++ * leaf entries, the aging carries them over to the next generation in
++ * walk_pmd_range(); the eviction also report them when walking the rmap
++ * in lru_gen_look_around().
++ *
++ * For future optimizations:
++ * 1. It's not necessary to keep both filters all the time. The spare one can be
++ *    freed after the RCU grace period and reallocated if needed again.
++ * 2. And when reallocating, it's worth scaling its size according to the number
++ *    of inserted entries in the other filter, to reduce the memory overhead on
++ *    small systems and false positives on large systems.
++ * 3. Jenkins' hash function is an alternative to Knuth's.
++ */
++#define BLOOM_FILTER_SHIFT	15
++
++static inline int filter_gen_from_seq(unsigned long seq)
++{
++	return seq % NR_BLOOM_FILTERS;
++}
++
++static void get_item_key(void *item, int *key)
++{
++	u32 hash = hash_ptr(item, BLOOM_FILTER_SHIFT * 2);
++
++	BUILD_BUG_ON(BLOOM_FILTER_SHIFT * 2 > BITS_PER_TYPE(u32));
++
++	key[0] = hash & (BIT(BLOOM_FILTER_SHIFT) - 1);
++	key[1] = hash >> BLOOM_FILTER_SHIFT;
++}
++
++static bool test_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
++{
++	int key[2];
++	unsigned long *filter;
++	int gen = filter_gen_from_seq(seq);
++
++	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
++	if (!filter)
++		return true;
++
++	get_item_key(item, key);
++
++	return test_bit(key[0], filter) && test_bit(key[1], filter);
++}
++
++static void update_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
++{
++	int key[2];
++	unsigned long *filter;
++	int gen = filter_gen_from_seq(seq);
++
++	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
++	if (!filter)
++		return;
++
++	get_item_key(item, key);
++
++	if (!test_bit(key[0], filter))
++		set_bit(key[0], filter);
++	if (!test_bit(key[1], filter))
++		set_bit(key[1], filter);
++}
++
++static void reset_bloom_filter(struct lruvec *lruvec, unsigned long seq)
++{
++	unsigned long *filter;
++	int gen = filter_gen_from_seq(seq);
++
++	filter = lruvec->mm_state.filters[gen];
++	if (filter) {
++		bitmap_clear(filter, 0, BIT(BLOOM_FILTER_SHIFT));
++		return;
++	}
++
++	filter = bitmap_zalloc(BIT(BLOOM_FILTER_SHIFT),
++			       __GFP_HIGH | __GFP_NOMEMALLOC | __GFP_NOWARN);
++	WRITE_ONCE(lruvec->mm_state.filters[gen], filter);
++}
++
+ /******************************************************************************
+  *                          mm_struct list
+  ******************************************************************************/
+@@ -3352,94 +3444,6 @@ void lru_gen_migrate_mm(struct mm_struct *mm)
+ }
+ #endif
+ 
+-/*
+- * Bloom filters with m=1<<15, k=2 and the false positive rates of ~1/5 when
+- * n=10,000 and ~1/2 when n=20,000, where, conventionally, m is the number of
+- * bits in a bitmap, k is the number of hash functions and n is the number of
+- * inserted items.
+- *
+- * Page table walkers use one of the two filters to reduce their search space.
+- * To get rid of non-leaf entries that no longer have enough leaf entries, the
+- * aging uses the double-buffering technique to flip to the other filter each
+- * time it produces a new generation. For non-leaf entries that have enough
+- * leaf entries, the aging carries them over to the next generation in
+- * walk_pmd_range(); the eviction also report them when walking the rmap
+- * in lru_gen_look_around().
+- *
+- * For future optimizations:
+- * 1. It's not necessary to keep both filters all the time. The spare one can be
+- *    freed after the RCU grace period and reallocated if needed again.
+- * 2. And when reallocating, it's worth scaling its size according to the number
+- *    of inserted entries in the other filter, to reduce the memory overhead on
+- *    small systems and false positives on large systems.
+- * 3. Jenkins' hash function is an alternative to Knuth's.
+- */
+-#define BLOOM_FILTER_SHIFT	15
+-
+-static inline int filter_gen_from_seq(unsigned long seq)
+-{
+-	return seq % NR_BLOOM_FILTERS;
+-}
+-
+-static void get_item_key(void *item, int *key)
+-{
+-	u32 hash = hash_ptr(item, BLOOM_FILTER_SHIFT * 2);
+-
+-	BUILD_BUG_ON(BLOOM_FILTER_SHIFT * 2 > BITS_PER_TYPE(u32));
+-
+-	key[0] = hash & (BIT(BLOOM_FILTER_SHIFT) - 1);
+-	key[1] = hash >> BLOOM_FILTER_SHIFT;
+-}
+-
+-static void reset_bloom_filter(struct lruvec *lruvec, unsigned long seq)
+-{
+-	unsigned long *filter;
+-	int gen = filter_gen_from_seq(seq);
+-
+-	filter = lruvec->mm_state.filters[gen];
+-	if (filter) {
+-		bitmap_clear(filter, 0, BIT(BLOOM_FILTER_SHIFT));
+-		return;
+-	}
+-
+-	filter = bitmap_zalloc(BIT(BLOOM_FILTER_SHIFT),
+-			       __GFP_HIGH | __GFP_NOMEMALLOC | __GFP_NOWARN);
+-	WRITE_ONCE(lruvec->mm_state.filters[gen], filter);
+-}
+-
+-static void update_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
+-{
+-	int key[2];
+-	unsigned long *filter;
+-	int gen = filter_gen_from_seq(seq);
+-
+-	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
+-	if (!filter)
+-		return;
+-
+-	get_item_key(item, key);
+-
+-	if (!test_bit(key[0], filter))
+-		set_bit(key[0], filter);
+-	if (!test_bit(key[1], filter))
+-		set_bit(key[1], filter);
+-}
+-
+-static bool test_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
+-{
+-	int key[2];
+-	unsigned long *filter;
+-	int gen = filter_gen_from_seq(seq);
+-
+-	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
+-	if (!filter)
+-		return true;
+-
+-	get_item_key(item, key);
+-
+-	return test_bit(key[0], filter) && test_bit(key[1], filter);
+-}
+-
+ static void reset_mm_stats(struct lruvec *lruvec, struct lru_gen_mm_walk *walk, bool last)
+ {
+ 	int i;
 -- 
 2.39.0.314.g84b9a713c41-goog
 
