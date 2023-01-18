@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81946728C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609A46728C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjARTzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S229584AbjARTzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjARTzV (ORCPT
+        with ESMTP id S229634AbjARTzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:55:21 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AC058983
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:55:19 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 123so6361681ybv.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:55:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ml4Mq1HxoprduSmaOtE/7qmWaOPc7rT86hVq2mfhQLo=;
-        b=PbeDPrXRrIm7rSfckMx4+MttBahJf6IY5jVAIjntleKZy4etq34NmHOU6XAyeR+Fab
-         ORwDD6aeT/o+Lzatahvs1Df3hC8Zp4wztM3Tsi7zeoFTDN3ZXTRRATMchdXmd1w6iq9r
-         ULB35+cs0evngWClWp+S7DE9yLcIJr+6DdMZNcBfFC64ZUZ8obBNsKaTSHZoXlg8lZnA
-         wrs0Z7xqGozVMTtQXoGy0Ii+xstY22ORN6Rk8NwXfb9Mdy0EMr8jfUqnhJDwLBzm4CO0
-         FxiAdjNv/LNw5Q6CHI1oIM4T8Lczsjebkmmr3AaJHUcG3MLFcXdAW7CuWHhXkm5sY8GX
-         boDQ==
+        Wed, 18 Jan 2023 14:55:37 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2693F5954B;
+        Wed, 18 Jan 2023 11:55:31 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id x10so146031edd.10;
+        Wed, 18 Jan 2023 11:55:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ml4Mq1HxoprduSmaOtE/7qmWaOPc7rT86hVq2mfhQLo=;
-        b=Msne5DG0fdDxSDGR/OdfWV0J/Y01u5Yl5dts0hWE1vwfRbjKrL9OVcKR4gtdI/Ovgk
-         jcmlp2WITIERW8Iu+L7CfZSAGTWcu9VokCXYQDk1Uq7GzyZY52DwricRvMaaTfhRV38U
-         nvg9/99OvoJIR1bos/ExHJLDRcHgBy7BLFfhzjvT8+PKkqnQ6LhAPPN6V5inutqe8VcS
-         Zvj0JLqBT3ZNe/nEjBpUQXuTk9eGTrln0o9F8gUsSe3wIfStLTtG1HzaA6rZ0PTcIxKS
-         iGuw58zxev0dwxAoX9+OKFSnh1S+uKR/4meWtL93AX9fHk2TqTuGlvEPg3VVDij8csM6
-         o9Ag==
-X-Gm-Message-State: AFqh2kpi3fi2TvLN6PiAgupVbHQq/YgHo3nY0Ki9vqtgy8YWfZxZPRZh
-        jawgds7aBmYgurIK1Z8rOJC51g3eKlZrokAmxsbBpQ==
-X-Google-Smtp-Source: AMrXdXvFdbyYmxgjrhbrPZ+DHMRuLbevMB2fbnG5spWSq+oHRVEA8MSUcimroDBHgsm9LSnvYVm1PM3o2CDb/QRmG9U=
-X-Received: by 2002:a25:bd14:0:b0:73f:fb7d:400 with SMTP id
- f20-20020a25bd14000000b0073ffb7d0400mr1277748ybk.352.1674071718749; Wed, 18
- Jan 2023 11:55:18 -0800 (PST)
+        bh=yQTDNe7yFHyxNpHt+5GYWQ4fTkN36Wo6nFC2zV7ddRA=;
+        b=UdRUtm22/nVwd2/yhLyFOkTfSiQXuXeMFQ3Kp6hVPDDBU4Z/NMpGYTxQL2IX4MA87a
+         52su/8R5xmPukNXLrUu/X39YO1pBFOSNi/hRGpzJawBunHm6YSvV7a4rnOem/sGoa2QH
+         DCjMhA8cXwbD1UB6OLGLG3R+Wfs4tp9rOnYKtdFFyl9Zb+LgIanoIwQYAyIn+LzU832H
+         GRvjRAaqT/YcnPSZXBG6mQwRkKmmQ6FGn0Pb4hW5a5w9SmA7U0zJ2FUZYdvZ/dWZpbyH
+         Sve/8mlqFgY2QG7nK1IrIO2XtaYAg0izF7rPFxnVi+CVHnDG2Ge3mHmXsCm5UxDn7jCN
+         qKLA==
+X-Gm-Message-State: AFqh2kqprf4nISB5XnyWJuqbbUqQZqMW4omqpZocJZmQXdIBePTReBzH
+        SzjuLD8e3tAlNtW0tfKIavWqe4IbD5Ej1do6fsY=
+X-Google-Smtp-Source: AMrXdXufxEuzBCgs6edR0DKECeIru46xUZ4hMNXNamwvHSWkmE+7Nka2sXtX+eHIroy5RNXVkD9xY9GYYRBKHTFJazI=
+X-Received: by 2002:a05:6402:40d6:b0:46d:53d7:d1f6 with SMTP id
+ z22-20020a05640240d600b0046d53d7d1f6mr918494edb.211.1674071730393; Wed, 18
+ Jan 2023 11:55:30 -0800 (PST)
 MIME-Version: 1.0
-References: <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p6>
- <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
- <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
-In-Reply-To: <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 18 Jan 2023 11:55:07 -0800
-Message-ID: <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: system_heap: avoid reclaim for order 4
-To:     John Stultz <jstultz@google.com>
-Cc:     jaewon31.kim@samsung.com,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+References: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 Jan 2023 20:55:19 +0100
+Message-ID: <CAJZ5v0gdWWmAj9JMe--wUM+Z=MZLof65hbwHCGGgWknAnw61UQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] device property: Make fwnode_graph_for_each_endpoint()
+ consistent
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:54 PM John Stultz <jstultz@google.com> wrote:
+On Tue, Jan 17, 2023 at 4:21 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Tue, Jan 17, 2023 at 12:31 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
-> > > Using order 4 pages would be helpful for many IOMMUs, but it could spend
-> > > quite much time in page allocation perspective.
-> > >
-> > > The order 4 allocation with __GFP_RECLAIM may spend much time in
-> > > reclaim and compation logic. __GFP_NORETRY also may affect. These cause
-> > > unpredictable delay.
-> > >
-> > > To get reasonable allocation speed from dma-buf system heap, use
-> > > HIGH_ORDER_GFP for order 4 to avoid reclaim.
+> Make fwnode_graph_for_each_endpoint() consistent with the rest of
+> for_each_*() definitions in the file, i.e. use the form of
 >
-> Thanks for sharing this!
-> The case where the allocation gets stuck behind reclaim under pressure
-> does sound undesirable, but I'd be a bit hesitant to tweak numbers
-> that have been used for a long while (going back to ion) without a bit
-> more data.
+>         for (iter = func(NULL); iter; \
+>              iter = func(iter))
 >
-> It might be good to also better understand the tradeoff of potential
-> on-going impact to performance from using low order pages when the
-> buffer is used.  Do you have any details like or tests that you could
-> share to help ensure this won't impact other users?
+> as it's done in all the rest of the similar macro definitions.
 >
-> TJ: Do you have any additional thoughts on this?
->
-I don't have any data on how often we hit reclaim for mid order
-allocations. That would be interesting to know. However the 70th
-percentile of system-wide buffer sizes while running the camera on my
-phone is still only 1 page, so it looks like this change would affect
-a subset of use-cases.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Wouldn't this change make it less likely to get an order 4 allocation
-(under memory pressure)? The commit message makes me think the goal of
-the change is to get more of them.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Actually with the low order being 0, I don't think __GFP_COMP makes
-sense in LOW_ORDER_GFP. But I guess that flag isn't harmful there.
+and I think that you need to resend it and CC Greg (who picks up
+device property patches nowadays).
 
-> thanks
-> -john
+> ---
+>  include/linux/property.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 37179e3abad5..f090419818a2 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -436,9 +436,9 @@ fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+>  unsigned int fwnode_graph_get_endpoint_count(struct fwnode_handle *fwnode,
+>                                              unsigned long flags);
+>
+> -#define fwnode_graph_for_each_endpoint(fwnode, child)                  \
+> -       for (child = NULL;                                              \
+> -            (child = fwnode_graph_get_next_endpoint(fwnode, child)); )
+> +#define fwnode_graph_for_each_endpoint(fwnode, child)                          \
+> +       for (child = fwnode_graph_get_next_endpoint(fwnode, NULL); child;       \
+> +            child = fwnode_graph_get_next_endpoint(fwnode, child))
+>
+>  int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
+>                                 struct fwnode_endpoint *endpoint);
+> --
