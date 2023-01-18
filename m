@@ -2,168 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C716D67255C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB39867256F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjARRpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S229904AbjARRsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjARRpP (ORCPT
+        with ESMTP id S229831AbjARRrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:45:15 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330F95AB4D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:43:56 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d3so37613305plr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdipg/e4fRuWWYxK3H9aGCTA3DbUCt12SK72zt21rzM=;
-        b=d5LcAH7zwL18g39tFFPyrtTmow8BpqTSbmmMqSzPjDBQNYo7J/+zfBhvwKIuGqXPsL
-         ydGdNA2GFez4En5eQvt++QxQxbWyXrZpb/E9jxO7CSDBswbF18VDdaUMCUdgqvOZmEBc
-         LgydGdUoMlBIpTCaUbvxnAyfcc4HBUguYA9xlgzaOW6kueOYmdCKoOK2LmFoklDEpTPI
-         XHVSOUriWggkjJElRv/P0qUWS+TcRFFsdEVvClaV3nasnzpdvwND5BGFGLr1kf2rwBCs
-         VBwe7mq91A6yW2sF35PGnhyMMEoJX2TFchBRCOCLUEYOasQ5klyCTJlq+ZTVtNp+Y1Da
-         DmNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fdipg/e4fRuWWYxK3H9aGCTA3DbUCt12SK72zt21rzM=;
-        b=cbBA3kSJJjv9LIMsIM/fQM35w1hRuZo+50oobEI7fTIfysAX9IPHEmiojLBpUPbNwg
-         4uWp3HNhIjfqSS/JkVSlnDEP5vFUxL18StYev/PXFJ1LuI2FNVfDjL/neTPvcVDGFCEh
-         iqvMu266VrP9KU2yG1u+TLUtrtIx3306ms/ZS3Jq43IK6YQbw1dX+R4agXg29iBmWNER
-         l6lZ4Mic6cy51iCpq3t+hhNiS3XGB/FRA4QIi/S4Goq6ZQfvMv55oHXQPTLAffTEwJtQ
-         Kr7g441JU93R7LLK1FMyTuiAcjuNWNw/AmhtAS3Xc5d6bAUHShM66wf21Ce012cSSgac
-         WS5A==
-X-Gm-Message-State: AFqh2kqnfE7D6A0n/FKssCIDGNjEbl7qNjL94umAytVc3LvGsIKt4jH+
-        AxG0AAfpflwGvSzV8ZsfoDxrKA==
-X-Google-Smtp-Source: AMrXdXvvH4o58eJCx/PxcUDcLBwIRxh1v90Qqn4G2ig6i8PErgkz4Xjra3LwAs4nnnx3luW3K15kcg==
-X-Received: by 2002:a17:902:82c2:b0:192:6bff:734 with SMTP id u2-20020a17090282c200b001926bff0734mr3481093plz.2.1674063830825;
-        Wed, 18 Jan 2023 09:43:50 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170903244100b0019498477f31sm3912441pls.123.2023.01.18.09.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:43:50 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:43:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     David Matlack <dmatlack@google.com>, pbonzini@redhat.com,
-        bgardon@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v3 1/9] KVM: x86/mmu: Repurpose KVM MMU shrinker to purge
- shadow page caches
-Message-ID: <Y8gv0srYi+6PvJml@google.com>
-References: <20221222023457.1764-1-vipinsh@google.com>
- <20221222023457.1764-2-vipinsh@google.com>
- <Y64MsBubSyPNmMyk@google.com>
- <CAHVum0efBBe+OEiJw1-L+F1R8d-xPanAKjktgkg7Q2SXDot+KQ@mail.gmail.com>
- <CAHVum0cZtDYZN2bD3TZgUNpcWiy2-Qkw1mb40syut_2kkR=Agg@mail.gmail.com>
+        Wed, 18 Jan 2023 12:47:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E05CFD7;
+        Wed, 18 Jan 2023 09:46:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BB46ACE1B53;
+        Wed, 18 Jan 2023 17:46:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A58C4C433F0;
+        Wed, 18 Jan 2023 17:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674063988;
+        bh=MWdNzb1aQw4NJSMQBvu2jSlHNAYyl/IhJuxAJiXZHWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ol5PtcjeQNn+GhJ8Y0tkDbOmz6I1a6MuIpO0o+ECwx+qtLepmgkkSFN+XzFPUwF9Y
+         OE5kcKAHreizCqXe5hiHEYN9PeZ4EY2nc4KOlhgGVBOQGRldjGyqH9GoCZhOwCx4I7
+         MgBU2EoMBvhaT8NiDcHbQthWohhLpmWAiQQHwTh+zprkwvS/UkZP29uOKyVUEUSll2
+         QcFFgOmjmi6qKEup3A3yCn19kDiLCgwqUxa2qb9y36Yq8P9d1IWTb8G0rlQQoUcuoH
+         YFhNldU8FD01eYT0tq+Tn2YrCluJAZQFgz3B1DhQ2DuiqiW8U+6eWTMDFbsDvr6lIF
+         U6qc/sXrcfLJw==
+Date:   Wed, 18 Jan 2023 11:46:25 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 01/17] EDAC/device: Respect any driver-supplied
+ workqueue polling value
+Message-ID: <20230118174625.oo5gi36q45kfbgoq@builder.lan>
+References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+ <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHVum0cZtDYZN2bD3TZgUNpcWiy2-Qkw1mb40syut_2kkR=Agg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@all, trim your replies!
-
-On Tue, Jan 03, 2023, Vipin Sharma wrote:
-> On Tue, Jan 3, 2023 at 10:01 AM Vipin Sharma <vipinsh@google.com> wrote:
-> >
-> > On Thu, Dec 29, 2022 at 1:55 PM David Matlack <dmatlack@google.com> wrote:
-> > > > @@ -6646,66 +6690,49 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
-> > > >  static unsigned long
-> > > >  mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-> > > >  {
-> > > > -     struct kvm *kvm;
-> > > > -     int nr_to_scan = sc->nr_to_scan;
-> > > > +     struct kvm_mmu_memory_cache *cache;
-> > > > +     struct kvm *kvm, *first_kvm = NULL;
-> > > >       unsigned long freed = 0;
-> > > > +     /* spinlock for memory cache */
-> > > > +     spinlock_t *cache_lock;
-> > > > +     struct kvm_vcpu *vcpu;
-> > > > +     unsigned long i;
-> > > >
-> > > >       mutex_lock(&kvm_lock);
-> > > >
-> > > >       list_for_each_entry(kvm, &vm_list, vm_list) {
-> > > > -             int idx;
-> > > > -             LIST_HEAD(invalid_list);
-> > > > -
-> > > > -             /*
-> > > > -              * Never scan more than sc->nr_to_scan VM instances.
-> > > > -              * Will not hit this condition practically since we do not try
-> > > > -              * to shrink more than one VM and it is very unlikely to see
-> > > > -              * !n_used_mmu_pages so many times.
-> > > > -              */
-> > > > -             if (!nr_to_scan--)
-> > > > +             if (first_kvm == kvm)
-> > > >                       break;
-> > > > -             /*
-> > > > -              * n_used_mmu_pages is accessed without holding kvm->mmu_lock
-> > > > -              * here. We may skip a VM instance errorneosly, but we do not
-> > > > -              * want to shrink a VM that only started to populate its MMU
-> > > > -              * anyway.
-> > > > -              */
-> > > > -             if (!kvm->arch.n_used_mmu_pages &&
-> > > > -                 !kvm_has_zapped_obsolete_pages(kvm))
-> > > > -                     continue;
-> > > > +             if (!first_kvm)
-> > > > +                     first_kvm = kvm;
-> > > > +             list_move_tail(&kvm->vm_list, &vm_list);
-> > > >
-> > > > -             idx = srcu_read_lock(&kvm->srcu);
-> > > > -             write_lock(&kvm->mmu_lock);
-> > > > +             kvm_for_each_vcpu(i, vcpu, kvm) {
-> > >
-> > > What protects this from racing with vCPU creation/deletion?
-> > >
+On Wed, Jan 18, 2023 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
+> The EDAC drivers may optionally pass the poll_msec value. Use that value
+> if available, else fall back to 1000ms.
 > 
-> vCPU deletion:
-> We take kvm_lock in mmu_shrink_scan(), the same lock is taken in
-> kvm_destroy_vm() to remove a vm from vm_list. So, once we are
-> iterating vm_list we will not see any VM removal which will means no
-> vcpu removal.
+>   [ bp: Touchups. ]
 > 
-> I didn't find any other code for vCPU deletion except failures during
-> VM and VCPU set up. A VM is only added to vm_list after successful
-> creation.
+> Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Yep, KVM doesn't support destroying/freeing a vCPU after it's been added.
+Your S-o-b should be the last one to indicate that you are the  one
+certifying the origin of this patch.
 
-> vCPU creation:
-> I think it will work.
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+
+If the two of you wrote the patch, please add a Co-developed-by.
+
+Thanks,
+Bjorn
+
+> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> Cc: <stable@vger.kernel.org> # 4.9
+> Link: https://lore.kernel.org/r/COZYL8MWN97H.MROQ391BGA09@otso
+> ---
+>  drivers/edac/edac_device.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 > 
-> kvm_vm_ioctl_create_vcpus() initializes the vcpu, adds it to
-> kvm->vcpu_array which is of the type xarray and is managed by RCU.
-> After this online_vcpus is incremented. So, kvm_for_each_vcpu() which
-> uses RCU to read entries, if it sees incremented online_vcpus value
-> then it will also sees all of the vcpu initialization.
-
-Yep.  The shrinker may race with a vCPU creation, e.g. not process a just-created
-vCPU, but that's totally ok in this case since the shrinker path is best effort
-(and purging the caches of a newly created vCPU is likely pointless).
-
-> @Sean, Paolo
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 19522c568aa5..a50b7bcfb731 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -34,6 +34,9 @@
+>  static DEFINE_MUTEX(device_ctls_mutex);
+>  static LIST_HEAD(edac_device_list);
+>  
+> +/* Default workqueue processing interval on this instance, in msecs */
+> +#define DEFAULT_POLL_INTERVAL 1000
+> +
+>  #ifdef CONFIG_EDAC_DEBUG
+>  static void edac_device_dump_device(struct edac_device_ctl_info *edac_dev)
+>  {
+> @@ -336,7 +339,7 @@ static void edac_device_workq_function(struct work_struct *work_req)
+>  	 * whole one second to save timers firing all over the period
+>  	 * between integral seconds
+>  	 */
+> -	if (edac_dev->poll_msec == 1000)
+> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+>  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+>  	else
+>  		edac_queue_work(&edac_dev->work, edac_dev->delay);
+> @@ -366,7 +369,7 @@ static void edac_device_workq_setup(struct edac_device_ctl_info *edac_dev,
+>  	 * timers firing on sub-second basis, while they are happy
+>  	 * to fire together on the 1 second exactly
+>  	 */
+> -	if (edac_dev->poll_msec == 1000)
+> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+>  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+>  	else
+>  		edac_queue_work(&edac_dev->work, edac_dev->delay);
+> @@ -398,7 +401,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+>  {
+>  	unsigned long jiffs = msecs_to_jiffies(value);
+>  
+> -	if (value == 1000)
+> +	if (value == DEFAULT_POLL_INTERVAL)
+>  		jiffs = round_jiffies_relative(value);
+>  
+>  	edac_dev->poll_msec = value;
+> @@ -443,11 +446,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
+>  		/* This instance is NOW RUNNING */
+>  		edac_dev->op_state = OP_RUNNING_POLL;
+>  
+> -		/*
+> -		 * enable workq processing on this instance,
+> -		 * default = 1000 msec
+> -		 */
+> -		edac_device_workq_setup(edac_dev, 1000);
+> +		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ?: DEFAULT_POLL_INTERVAL);
+>  	} else {
+>  		edac_dev->op_state = OP_RUNNING_INTERRUPT;
+>  	}
+> -- 
+> 2.25.1
 > 
-> Is the above explanation correct, kvm_for_each_vcpu() is safe without any lock?
-
-Well, in this case, you do need to hold kvm_lock ;-)
-
-But yes, iterating over vCPUs without holding the per-VM kvm->lock is safe, the
-caller just needs to ensure the VM can't be destroyed, i.e. either needs to hold
-a reference to the VM or needs to hold kvm_lock.
