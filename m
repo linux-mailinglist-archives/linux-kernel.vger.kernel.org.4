@@ -2,136 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D593670FE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2323A670FE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjARBVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S229550AbjARBVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjARBVO (ORCPT
+        with ESMTP id S230037AbjARBVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:21:14 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9841135BC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:19:02 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso741788pjg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:19:02 -0800 (PST)
+        Tue, 17 Jan 2023 20:21:18 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F413A93
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:19:58 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4bf16baa865so447239607b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:19:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yM0/ZgSXnPriP0s8Td7ncf1X5xesw5ro9ypu77r/PK0=;
-        b=BV117Kzh2UJo/RZBiMP4OXZU4kXp8mdi48JKZJMLPFMihgNhZzPzqYbkUzLWDXY6Lb
-         vAf8PqLlTxrCEba2lMkeotanIM/+dubx70HNK40Jd1vYL16+29poPIqIo6w0Ih6RcmFC
-         UzNMr/URPmE2+wiXJ+R2ECli2yQmt5dzyAjUk=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JXWFfS4aiyJcUPRd+ryee/bpyv1wIIuVm8HjnFM4YwU=;
+        b=Px76etJtqo+vzkJY5k26UOhb6WDYZwrowUwMIothVbfItA611chAfKe1cZZbCYe18v
+         pWUOMkcFzisLL0UjLaeC38Vc9PdYHX+FX9AkzPAIJIhgrpwsvPVhbVFn0veZqmzECQNx
+         X2BdlNyIyKIuzT2YeQCjVFDL8FE/Px/uceIbST/a1pV7aGbsLQCPDpebAGoJMjSuOLWv
+         SKIu71ReD/rafQACFoXcYwdxqjH3PldndZq0ZsWTh9tgYpIH5Ip+0a0UN0bLIZhXeYPf
+         HFNTn/s/dz5HXxIDO+CufvyshmF9uyF9zYjoFxKQAKHhdN7hU0pJIUOPsqK1VZhIER13
+         SQtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yM0/ZgSXnPriP0s8Td7ncf1X5xesw5ro9ypu77r/PK0=;
-        b=U5PMGFVFJAVTPuUI6IJkALdlvOt9PZn5E0/mk9IL9hVM99pFHFD81JWbNOAgvcMF3m
-         YuSAf3rQ6yga7Gj60AXz766BBNK9+cEHfFDvNp5fXJOzxhpd6ylRUePgPXo7udXdNAJR
-         9qrnrf6DOymzOUPn4vBP5SZI2xIFObIrNvUt4GW17B1SM6XMaxRVr+ySsXRu4H/su00w
-         nAdTloSXRFLElvrrT3JEbhx3XnJX79ZDdUz9364ghb8GxcoHXPksfwHL9slfTce4JCA0
-         pSgWhDejAFSe2z/ZZto00OtYGd5P39y7iZyGII0YNGTONB8K/9hhQtroqZsFcP94px9E
-         RSOQ==
-X-Gm-Message-State: AFqh2ko16pLh0GEQb9WfM6HHU0aw3NLTt7slieBnoUF8V5NX3yVB3gH0
-        yU3byscPFATisCJq5EVsDieM7w==
-X-Google-Smtp-Source: AMrXdXvp8hy99LqbYoteOM90Am/eEo/HgHBQWWXXYRic5vTpFMq2hhBNwBimm+r/63GraZGxPXd1DA==
-X-Received: by 2002:a05:6a20:b925:b0:9d:efbf:8156 with SMTP id fe37-20020a056a20b92500b0009defbf8156mr28765714pzb.31.1674004742127;
-        Tue, 17 Jan 2023 17:19:02 -0800 (PST)
-Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with ESMTPSA id b3-20020a63d803000000b00477bfac06b7sm18014600pgh.34.2023.01.17.17.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 17:19:01 -0800 (PST)
-From:   Judy Hsiao <judyhsiao@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH v4] arm64: dts: qcom: sc7280: add DP audio to herobrine rt5682 1-mic dtsi
-Date:   Wed, 18 Jan 2023 01:18:53 +0000
-Message-Id: <20230118011853.1614566-1-judyhsiao@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        bh=JXWFfS4aiyJcUPRd+ryee/bpyv1wIIuVm8HjnFM4YwU=;
+        b=jkwt652IRd4F13LKSKzVBlZu+bHEsB6aBwP9T8DgoOIBWiTr9w55TM8hyO4wkFIKve
+         KJZLIrztbQJ0RYuWOGPWqysmZllHzTNt/6VDvrYO3ap4RuBjJpqT0ot2uJohN8NyxHXo
+         tkzNSmP580jfPJk85RzI/bdUWfHsGMGwPDXGmDbNXZFaQBtectolXx54Iklt/Q8/Ogi/
+         8Gq8HDd958RF8HYPc4DcvRtx/UgHefPtHQoGbAXDpg8BilRe/6DfEnXXN5jUi6gr9KQv
+         lGw+gTO8wKExhu3SB7/XuWp57GJ8eY8mv0RmwCwScx2XiwUI1u+pjb7dh1P5lRaYWspI
+         HQ3Q==
+X-Gm-Message-State: AFqh2kpAGM0dpRtiG0WBOzI+sJMxGHjswhkXPx21yAf6xDLwfZ7LqAhc
+        KdD9Pv0Qmk6kRwOLLISVsn12IOdtg0GRdzRoe4YLvg==
+X-Google-Smtp-Source: AMrXdXuusAXlckmOHYo/FB3BTugnLiciDCWeH/OH9DYwge23YcEvOJoTVCiUAgQM3zYMQEArpfk5YvktjC1zXfSXUx0=
+X-Received: by 2002:a0d:fc05:0:b0:3ea:454d:d1ef with SMTP id
+ m5-20020a0dfc05000000b003ea454dd1efmr676859ywf.409.1674004797702; Tue, 17 Jan
+ 2023 17:19:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8bFdB47JT/luMld@dhcp22.suse.cz>
+In-Reply-To: <Y8bFdB47JT/luMld@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 17 Jan 2023 17:19:46 -0800
+Message-ID: <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Add DisplayPort sound node and lpass_cpu node.
+On Tue, Jan 17, 2023 at 7:57 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > call_rcu() can take a long time when callback offloading is enabled.
+> > Its use in the vm_area_free can cause regressions in the exit path when
+> > multiple VMAs are being freed.
+>
+> What kind of regressions.
+>
+> > To minimize that impact, place VMAs into
+> > a list and free them in groups using one call_rcu() call per group.
+>
+> Please add some data to justify this additional complexity.
 
-2. Adjust the dai-link order to make the order to
-   be consistent with sc7280-herobrine-audio-rt5682-3mic.dtsi.
+Sorry, should have done that in the first place. A 4.3% regression was
+noticed when running execl test from unixbench suite. spawn test also
+showed 1.6% regression. Profiling revealed that vma freeing was taking
+longer due to call_rcu() which is slow when RCU callback offloading is
+enabled. I asked Paul McKenney and he explained to me that because the
+callbacks are offloaded to some other kthread, possibly running on
+some other CPU, it is necessary to use explicit locking.  Locking on a
+per-call_rcu() basis would result in excessive contention during
+callback flooding. So, by batching call_rcu() work we cut that
+overhead and reduce this lock contention.
 
-Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
----
-
-Changes in v4:
-- Fix the subject.
-
-Changes in v3:
-- Add more detail in the commit message.
-
-Changes in v2:
-- Fix the commit message format.
-
- .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-index af685bc35e10..69e7aa7b2f6c 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-@@ -33,9 +33,22 @@ codec {
- 		};
- 
- 		dai-link@1 {
--			link-name = "ALC5682";
-+			link-name = "DisplayPort";
- 			reg = <1>;
- 
-+			cpu {
-+				sound-dai = <&lpass_cpu LPASS_DP_RX>;
-+			};
-+
-+			codec {
-+				sound-dai = <&mdss_dp>;
-+			};
-+		};
-+
-+		dai-link@2 {
-+			link-name = "ALC5682";
-+			reg = <2>;
-+
- 			cpu {
- 				sound-dai = <&lpass_cpu MI2S_PRIMARY>;
- 			};
-@@ -92,6 +105,10 @@ dai-link@1 {
- 		reg = <MI2S_SECONDARY>;
- 		qcom,playback-sd-lines = <0>;
- 	};
-+
-+	dai-link@5 {
-+		reg = <LPASS_DP_RX>;
-+	};
- };
- 
- /* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
--- 
-2.39.0.314.g84b9a713c41-goog
-
+> --
+> Michal Hocko
+> SUSE Labs
