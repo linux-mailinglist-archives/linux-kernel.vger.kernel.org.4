@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6A667225C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5FA672264
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjARQCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S230256AbjARQD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjARQAv (ORCPT
+        with ESMTP id S230022AbjARQDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:00:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA63A4DE1A;
-        Wed, 18 Jan 2023 07:58:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C8A617BC;
-        Wed, 18 Jan 2023 15:58:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB98CC433EF;
-        Wed, 18 Jan 2023 15:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674057510;
-        bh=pEEVf/Jora3k9fJs7MkNDz8h6qM3plpE8adDbzqBFOc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oarDxp9l6MGmeqdtPPlPcdcbct7dpxUxhM4ZbO0nB/h5L1I/bWMWT+F4COW6gdFuG
-         ka9uVRj0MBzO/PovATGhagFvnLVoGhVt9G3I1LO1xyY9kfG5IqOrjAJZP7Zl/qgYlv
-         6L0hvziRSN4jmqOJDOFRRFpiKNndCh0ggr0dntwoM1JG7GRQUGNE5FJo0JLoRvjF0y
-         NKPqAvqHFVaXZHU1ccf/FYF52DgvTbWPikkg3D8T0KkzILemeh+co8C+tjw+5RkntU
-         0Qz8dKIMvdmpTHejRPydgnFn/g8+EZJ+cBDARMBwAPLowgmKyFS4N4ocHLdjGyh8sz
-         qMSJkca+YFgqg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/msm/gpu: Add proper DEVFREQ_GOV_SIMPLE_ONDEMAND dependency
-Date:   Wed, 18 Jan 2023 16:58:05 +0100
-Message-Id: <20230118155825.4071424-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Wed, 18 Jan 2023 11:03:36 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981BB577EE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:29 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 141so24853777pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TkK91UFziEYA9a0PZy5wDygMUGAdbCISJG9fWIp70W4=;
+        b=B3LhbX+uC9VzWniTeiFC79j4cyksKvOBeF4ERJMLzjJAJ0kBEKMPqSqRjrT/PPOBoE
+         ki9tKLE3N6oMuvkXouwydXttMR+4yu7mmc6xcUF7WUSNjprswDMU8YQMaTaV4C7gfcYg
+         NW8z8gOLN9N748d7ZTV73rnDaILNR13zUo13778t0tYnUz/dsVTjywUqPRcCI6BiW+mP
+         kvmxVQXOdOFUATNJTmHZjTdUK59QSwidGlSvz29HDI02oR2C9i9v7v9vBYMvFke9dgis
+         NPPEe/vGhaXRoxy2WsWSCENrwZIj3rZU8NlD2AJ41cgl1FjCoqLGBN1ESYJNX4whhMY+
+         V8LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TkK91UFziEYA9a0PZy5wDygMUGAdbCISJG9fWIp70W4=;
+        b=oHdRqMYfnFbH7JPb41l/zP8s7vmIkiF7FdGOOvcLo0MDt8MP0qmnaHJ7JOZ2LB/iD2
+         AT31u+uMwVp72qPfLEPJ32Sg+E8fD6wBoReuVZi92sRsHh+qiU+4mhDaITfsenNbXZNo
+         0gwE4SNR+FroykwhBpgzRo8cnoTMC7aqGQa3v5GdkqX0CcnvvDzuodqEzRN5cExvgyc6
+         HuiCFROs8n0yqK1Z+KX6O3V5lE591NxiYzWZ/ETOyaPfLgXspI1Tnf+MqJtfif3kTdYq
+         zM79anQBvX/h1vsoJpEHpE8WOFWZl2TQVlT1txT7PI/qGAHOi3KKaKrL+Ie11oQWvUXm
+         FpOg==
+X-Gm-Message-State: AFqh2kogGXL6FvCWHMQO6mDnpfxlKQrFcoUixJtGLe4oZMMHV3m3db/P
+        1fOsySjegJVpGkO584Vjkfam
+X-Google-Smtp-Source: AMrXdXs1YhdyWPpUeoWW8QBJn7XDi2Fy1FHiKv4FDAWn2Ny4J26ydTlpU1GMFDCzrstItkpN1RREqQ==
+X-Received: by 2002:aa7:9614:0:b0:58b:b9cc:5724 with SMTP id q20-20020aa79614000000b0058bb9cc5724mr21956409pfg.15.1674057568997;
+        Wed, 18 Jan 2023 07:59:28 -0800 (PST)
+Received: from thinkpad ([27.111.75.61])
+        by smtp.gmail.com with ESMTPSA id s2-20020a625e02000000b0057ef155103asm20699260pfb.155.2023.01.18.07.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:59:28 -0800 (PST)
+Date:   Wed, 18 Jan 2023 21:29:19 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
+ device on SDM845
+Message-ID: <20230118155919.GD4690@thinkpad>
+References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+ <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
+ <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jan 18, 2023 at 04:37:29PM +0100, Krzysztof Kozlowski wrote:
+> On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
+> > The platforms based on SDM845 SoC locks the access to EDAC registers in the
+> > bootloader. So probing the EDAC driver will result in a crash. Hence,
+> > disable the creation of EDAC platform device on all SDM845 devices.
+> > 
+> > The issue has been observed on Lenovo Yoga C630 and DB845c.
+> > 
+> > Cc: <stable@vger.kernel.org> # 5.10
+> > Reported-by: Steev Klimaszewski <steev@kali.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
+> >  1 file changed, 12 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> > index 7b7c5a38bac6..8d840702df50 100644
+> > --- a/drivers/soc/qcom/llcc-qcom.c
+> > +++ b/drivers/soc/qcom/llcc-qcom.c
+> > @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+> >  
+> >  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
+> >  
+> > -	llcc_edac = platform_device_register_data(&pdev->dev,
+> > -					"qcom_llcc_edac", -1, drv_data,
+> > -					sizeof(*drv_data));
+> > -	if (IS_ERR(llcc_edac))
+> > -		dev_err(dev, "Failed to register llcc edac driver\n");
+> > +	/*
+> > +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
+> > +	 * in bootloader. So probing the EDAC driver will result in a crash.
+> > +	 * Hence, disable the creation of EDAC platform device on SDM845.
+> > +	 */
+> > +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
+> 
+> Don't spread of_device_is_compatible() in driver code. You have driver
+> data for this.
+> 
 
-DRM_MSM can no longer be built when devfreq is disabled:
+Yeah, but there is no ID to in the driver data to identify an SoC. I could add
+one but is that really worth doing so? Is using of_device_is_compatible() in
+drivers discouraged nowadays?
 
-WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-  Depends on [n]: PM_DEVFREQ [=n]
-  Selected by [y]:
-  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] || SOC_IMX5 [=n] || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=y] || QCOM_COMMAND_DB [=y]=n)
+Thanks,
+Mani
 
-In file included from drivers/gpu/drm/msm/msm_gpu.h:18,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
-drivers/gpu/drm/msm/msm_drv.h:238:45: error: field 'gpu_devfreq_config' has incomplete type
-  238 |         struct devfreq_simple_ondemand_data gpu_devfreq_config;
-      |                                             ^~~~~~~~~~~~~~~~~~
+> Best regards,
+> Krzysztof
+> 
 
-Device drivers should never select user-visible options, especially
-in other subsystems. This one can simply be expressed as a Kconfig
-'depends on' statement, though a better approach would be to
-let the driver keep working even without devfreq.
-
-Note that the same symbol selects a bunch of other drivers that
-should probably be turned into 'depends on' as well, but doing so
-has the potential to introduce regressions, so I'm not touching
-that here.
-
-Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/gpu/drm/msm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-index 871870ddf7ec..7f6f5202648a 100644
---- a/drivers/gpu/drm/msm/Kconfig
-+++ b/drivers/gpu/drm/msm/Kconfig
-@@ -9,6 +9,7 @@ config DRM_MSM
- 	depends on QCOM_OCMEM || QCOM_OCMEM=n
- 	depends on QCOM_LLCC || QCOM_LLCC=n
- 	depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
-+	depends on DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select IOMMU_IO_PGTABLE
- 	select QCOM_MDT_LOADER if ARCH_QCOM
- 	select REGULATOR
-@@ -23,7 +24,6 @@ config DRM_MSM
- 	select SHMEM
- 	select TMPFS
- 	select QCOM_SCM
--	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select WANT_DEV_COREDUMP
- 	select SND_SOC_HDMI_CODEC if SND_SOC
- 	select SYNC_FILE
 -- 
-2.39.0
-
+மணிவண்ணன் சதாசிவம்
