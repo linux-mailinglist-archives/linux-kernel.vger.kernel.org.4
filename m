@@ -2,83 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB266729C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556716729C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjARUym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
+        id S230198AbjARUy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjARUyi (ORCPT
+        with ESMTP id S230215AbjARUyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:54:38 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46A5A5D4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:54:36 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id e10so25460231pgc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=38Ab1ydOxWFoCnQ1hn18tsTd/nLpjWDkMcuz9LcJhgc=;
-        b=QcyKTP98pIj4xoEtMVaGgqSYkQu19v4GHm3EeHftxsvlz9FraAkTB6wZdkfNGVLtGd
-         ugvtfy72K2zx1HqIbEIzd0CmgQjHeKQaFTLcEiTde2MxVGAPLpBkuXs9i+TD+Oery4rr
-         M5Ee7c3RrmztbjIZM61dd1PYrXAP3IddNfsT4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=38Ab1ydOxWFoCnQ1hn18tsTd/nLpjWDkMcuz9LcJhgc=;
-        b=yWhIiOeO7mtDFFBu4TqFUgSrqRXFmzJ6sGI6Ytu6GWqsqd7Gn3EAhWFViwebnxYmsI
-         FWWr8GDE/mjlv7nG/qg0t8RPFhfhdon8A7+FwQliAuDhREX4sSLRWTeMaC7qh9LBnA+i
-         pZxaCmIZUft858O0WxaQtxvv1wN+Mom72BS8r52Doh7OMjNoFInX64YIUhUIBd+QNrU0
-         9Iq6D/S5L7zOa5t6GdnniuZEXs9twmkPSYqeGyE9EugCkEloqs5BqNoKwclj7wrr/wDX
-         K+8JRkIjSUV4YWvJ9v+AFz1k1JdqU9XCYGkFmBwqPKdswIwo/eUZdBQNWgy21OPXYTim
-         XfUA==
-X-Gm-Message-State: AFqh2krORppQzBLbTr0G931gUOBzQgplwzSUD4yf81MEi/m4j0qtl1XZ
-        OsNXS57X7jV1nrt/t/dudJFnBP7Rc/B1wNWy
-X-Google-Smtp-Source: AMrXdXuiNSgEY7oHvEwxaIEKfBUrMnTDuVqSiNAxvJGyyZSQNRNFIyO+qQS75b9JhsA6buYwmwliog==
-X-Received: by 2002:a05:6a00:4289:b0:583:319a:4425 with SMTP id bx9-20020a056a00428900b00583319a4425mr8760833pfb.29.1674075276168;
-        Wed, 18 Jan 2023 12:54:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620645000000b00581172f7456sm5101790pfg.56.2023.01.18.12.54.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:54:35 -0800 (PST)
-Date:   Wed, 18 Jan 2023 12:54:34 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     caizp2008 <caizp2008@163.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Yupeng Li <liyupeng@zbhlos.com>,
-        tariqt@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH 1/1] net/mlx4: Fix build error use array_size()
- helper in copy_to_user()
-Message-ID: <202301181253.B19EE86@keescook>
-References: <20230107072725.673064-1-liyupeng@zbhlos.com>
- <Y7wb1hCpJiGEdbav@ziepe.ca>
- <202301131039.7354AD35CF@keescook>
- <202301131453.D93C967D4@keescook>
- <11689498.158e.185b5471bad.Coremail.caizp2008@163.com>
+        Wed, 18 Jan 2023 15:54:50 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 845F57ED0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:54:48 -0800 (PST)
+Received: (qmail 224150 invoked by uid 1000); 18 Jan 2023 15:54:47 -0500
+Date:   Wed, 18 Jan 2023 15:54:47 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y8hclxuhpGm+krkz@rowland.harvard.edu>
+References: <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
+ <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8aKlNY4Z0z2Yqs0@andrea>
+ <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
+ <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
+ <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11689498.158e.185b5471bad.Coremail.caizp2008@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 07:53:34PM +0800, caizp2008 wrote:
-> my kernel config is config-mlx4-error.
+On Wed, Jan 18, 2023 at 12:06:01PM -0800, Paul E. McKenney wrote:
+> On Wed, Jan 18, 2023 at 11:50:24AM -0500, Alan Stern wrote:
+> Boqun mentioned off-list this morning that this is still the case,
+> and that each execution of srcu_read_lock() will return a unique value.
+> Assuming that I understood him correctly, anyway.
 
-Where can I find this config?
+That will no longer be true with the patch I posted yesterday.  Every 
+execution of srcu_read_lock() will return 0 (or whatever the initial 
+value of the lock variable is).
 
--- 
-Kees Cook
+But with a small change to the .def file, each execution of 
+srcu_read_unlock() can be made to increment the lock's value, and then 
+the next srcu_read_lock() would naturally return the new value.
+
+> > > given that I have no idea how one would go about modeling down_read()
+> > > and up_read() in LKMM.
+> > 
+> > It might make sense to work on that first, before trying to do 
+> > srcu_down_read() and srcu_up_read().
+> 
+> The thing is that it is easy to associate an srcu_down_read() with the
+> corresponding srcu_up_read().  With down() and up(), although in the
+> Linux kernel this might be represented by a data structure tracking
+> (say) an I/O request, LKMM is going to be hard pressed to figure that out.
+
+It would help (or at least, it would help _me_) if you gave a short 
+explanation of how srcu_down_read() and srcu_up_read() are meant to 
+work.  With regular r/w semaphores, the initial lock value is 0, each 
+down() operation decrements the value, each up() operation increments 
+the value -- or vice versa if you don't like negative values -- and a 
+write_lock() will wait until the value is >= 0.  In that setting, it 
+makes sense to say that a down() which changes the value from n to n-1 
+matches the next up() which changes the value from n-1 to n.
+
+I presume that srcu semaphores do not work this way.  Particularly since 
+the down() operation returns a value which must be passed to the 
+corresponding up() operation.  So how _do_ they work?
+
+> > Hmmm.  What happens if you write:
+> > 
+> > 	r1 = srcu_down_read(x);
+> > 	r2 = srcu_down_read(x);
+> > 	srcu_up_read(x, r1);
+> > 	srcu_up_read(x, r2);
+> > 
+> > ?  I can't even tell what that would be _intended_ to do.
+> 
+> Let's take it one line at a time:
+> 
+> 	r1 = srcu_down_read(x);
+> 	// A
+> 	r2 = srcu_down_read(x);
+> 	// B
+> 	srcu_up_read(x, r1);
+> 	// C
+> 	srcu_up_read(x, r2);
+> 	// D
+> 
+> An SRCU grace period that starts at A is permitted to complete at
+> C, difficult though it might be to actually make this happen in the
+> Linux kernel.  It need wait only for pre-existing critical sections.
+
+So the down() returning r1 matches the up() receiving r1?
+
+> But an SRCU grace period that starts at either B or C must wait for both
+> critical sections, that is until D.
+
+Implying that the down() returning r2 matches up() receiving r2?
+
+And in general, an up() matches a down() iff they have the same values?  
+And we can imagine that every down() returns a different value?  
+
+How does this differ from srcu_read_lock() and srcu_read_unlock()?  And 
+how do the "up" and "down" parts figure into it? -- what is going up or 
+down?
+
+Alan
