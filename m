@@ -2,365 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F2C671185
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A4667118D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjARDI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S229493AbjARDKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjARDIo (ORCPT
+        with ESMTP id S229548AbjARDKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:08:44 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE2450851
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:08:42 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id g68so22429691pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bUKXZKTsbYRCrRiyD4l6vOhZZfGrn2LcV5GgwuQd5oM=;
-        b=ws4AS0/475a+w48Ib6Rjf9rozR62HpyHQErj7HgS5N0CgmbYSU+PZx2lElJWJxowEM
-         ssYE3qHzMgANfNvqdQNmB4xRyhkP2tvLDCtxtY40UHUJ5alYuhCXmHCM3YE66judtB+o
-         J2h8r1aYHDw0XtO16N+KRmi9v4g5RdV/R9TUxsvOROenzqRbK0HWL9S+n3yDqoNNH5U4
-         GwZ71iEo3ZRlqbn3ee8hFRaNswWvelyyGt+YsC0TjzHzw3xD9HOaEb3gbbhaYsz5aIK+
-         z8SR9nHhudauw2Zu45tPcVS4SiYvGvrB6Fd7b6Gurw91d3uqVIDD+TYvJKB5ozoesVK7
-         SFVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bUKXZKTsbYRCrRiyD4l6vOhZZfGrn2LcV5GgwuQd5oM=;
-        b=X4UUckXo5+wHVcKnSXoq/WfgmTKopxO2YAntGcdQiQ2Cto0Wwa3e9FTkb2K29Ost+g
-         bjTcpleHQafLkRluTfXrqFna1iRm4B5H+hSzYv1pkCG53TJsMk/kR+spLuxjEBrsM1bg
-         be13l72f9NjVEsDvc1wNyXR6x8SE2vJJIaCyByfb9Cxog306NHr+VDPVbsmc0hbZwBWy
-         M3K3Kh1A9KQa9iiqopQYdpqONeq3eZznOtHG7WnigvirszlbA02olKGOmXm/af0bIuS1
-         EGXF4nlG+l28afkyrlh5q26iMSiiPXUDSVkE52J9nS4ljvaAgFN51IQBFs9LVXQJFH57
-         mC8Q==
-X-Gm-Message-State: AFqh2krWol+KW5wYOY+FCDBi0gONjTanC+Yr0aGp7GWLzngjbxxG0crL
-        GZb4PLkiZRT/qS09CZVzfN2M/A==
-X-Google-Smtp-Source: AMrXdXt/KzrjhRmABn7lDjx3EJ4ebYagvAILhg+/QLmG+T7BF/shtTNtJhQlzpkeAoHzcCilo18OSg==
-X-Received: by 2002:a05:6a00:1ca3:b0:58d:bce6:3d52 with SMTP id y35-20020a056a001ca300b0058dbce63d52mr5875479pfw.29.1674011321490;
-        Tue, 17 Jan 2023 19:08:41 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-146-207.pa.vic.optusnet.com.au. [49.186.146.207])
-        by smtp.gmail.com with ESMTPSA id 3-20020a621503000000b00581c741f95csm19041666pfv.46.2023.01.17.19.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 19:08:40 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pHyoW-004OV9-8m; Wed, 18 Jan 2023 14:08:36 +1100
-Date:   Wed, 18 Jan 2023 14:08:36 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Alexander Larsson <alexl@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com
-Subject: Re: [PATCH v2 2/6] composefs: Add on-disk layout
-Message-ID: <20230118030836.GC937597@dread.disaster.area>
-References: <cover.1673623253.git.alexl@redhat.com>
- <819f49676080b05c1e87bff785849f0cc375d245.1673623253.git.alexl@redhat.com>
- <20230116012904.GJ2703033@dread.disaster.area>
- <fe2e39b16d42ca871428e508935f1aa21608b4ee.camel@redhat.com>
- <20230116230647.GK2703033@dread.disaster.area>
- <c0c928880f35b40f8231036d21251ae3efa340db.camel@redhat.com>
+        Tue, 17 Jan 2023 22:10:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B484FCFB
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:09:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674011396;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TTozoTYivpj8I4L2tIqMRp9GkC9vbzgfcsOJBU+tFh0=;
+        b=HNfaprpkYkMyJamTNt0GAUJF6GM9yZFhre0ScVTvtqijSwJfBYVhNsw1H59bELCSblYVmo
+        Le4po+c95UrM+eFFYgiJIcw+0GGgFhaMc1vk+4/FF95tWQ7LW2q9wS96WKsxxKRII+/gHd
+        V8B8xatJWCg9wnS85hKf88gixmzhmgU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-7TMUMTMDNjyacfJSUnjcCQ-1; Tue, 17 Jan 2023 22:09:51 -0500
+X-MC-Unique: 7TMUMTMDNjyacfJSUnjcCQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B39AB18811CE;
+        Wed, 18 Jan 2023 03:09:50 +0000 (UTC)
+Received: from localhost (ovpn-13-29.pek2.redhat.com [10.72.13.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 725C71121319;
+        Wed, 18 Jan 2023 03:09:48 +0000 (UTC)
+Date:   Wed, 18 Jan 2023 11:09:44 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stephen.s.brennan@oracle.com, willy@infradead.org,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v2 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y8di+GSIr4HLxYyy@fedora>
+References: <20221217015435.73889-1-bhe@redhat.com>
+ <20221217015435.73889-3-bhe@redhat.com>
+ <Y6HpGayyQZH7U7Fd@pc636>
+ <Y6UrPGMVYUMttKD3@MiWiFi-R3L-srv>
+ <Y8DWG+OHV6E4cR8p@fedora>
+ <Y8WPWngsci0QPY0Y@pc636>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c0c928880f35b40f8231036d21251ae3efa340db.camel@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Y8WPWngsci0QPY0Y@pc636>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 01:11:33PM +0100, Alexander Larsson wrote:
-> On Tue, 2023-01-17 at 10:06 +1100, Dave Chinner wrote:
-> > On Mon, Jan 16, 2023 at 12:00:03PM +0100, Alexander Larsson wrote:
-> > > On Mon, 2023-01-16 at 12:29 +1100, Dave Chinner wrote:
-> > > > On Fri, Jan 13, 2023 at 04:33:55PM +0100, Alexander Larsson
-> > > > wrote:
-> > > > > +} __packed;
-> > > > > +
-> > > > > +struct cfs_header_s {
-> > > > > +       u8 version;
-> > > > > +       u8 unused1;
-> > > > > +       u16 unused2;
-> > > > 
-> > > > Why are you hyper-optimising these structures for minimal space
-> > > > usage? This is 2023 - we can use a __le32 for the version number,
-> > > > the magic number and then leave....
-> > > > 
-> > > > > +
-> > > > > +       u32 magic;
-> > > > > +       u64 data_offset;
-> > > > > +       u64 root_inode;
-> > > > > +
-> > > > > +       u64 unused3[2];
-> > > > 
-> > > > a whole heap of space to round it up to at least a CPU cacheline
-> > > > size using something like "__le64 unused[15]".
-> > > > 
-> > > > That way we don't need packed structures nor do we care about
-> > > > having
-> > > > weird little holes in the structures to fill....
+On 01/16/23 at 06:54pm, Uladzislau Rezki wrote:
+> On Fri, Jan 13, 2023 at 11:55:07AM +0800, Baoquan He wrote:
+> > Hi Uladzislau Rezkiï¼Œ
+> > 
+> > On 12/23/22 at 12:14pm, Baoquan He wrote:
+> > > On 12/20/22 at 05:55pm, Uladzislau Rezki wrote:
+> > ......
+> >  > >  	spin_lock(&vmap_area_lock);
+> > > > >  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
+> > > > > @@ -1887,6 +1889,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+> > > > >  
+> > > > >  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
+> > > > >  
+> > > > > +#define VMAP_RAM		0x1
+> > > > > +#define VMAP_BLOCK		0x2
+> > > > > +#define VMAP_FLAGS_MASK		0x3
+> > > > > 
+> > > > Maybe to rename a VMAP_BLOCK to something like VMAP_BLOCK_RESERVED or
+> > > > VMAP_PER_CPU_BLOCK?
 > > > 
-> > > Sure.
-> > 
-> > FWIW, now I see how this is used, this header kinda defines what
-> > we'd call the superblock in the on-disk format of a filesystem. It's
-> > at a fixed location in the image file, so there should be a #define
-> > somewhere in this file to document it's fixed location.
-> 
-> It is at offset zero. I don't really think that needs a define, does
-> it? Maybe a comment though.
-
-Having the code use magic numbers for accessing fixed structures
-(e.g. the hard coded 0 in the superblock read function)
-is generally considered bad form.
-
-If someone needs to understand how an image file is laid out, where
-do they look to find where structures are physically located? Should
-it be defined in a header file that is easy to find, or should they
-have to read all the code to find where the magic number is embedded
-in the code that defines the location of critical structures?
-
-
-> > Also, if this is the in-memory representation of the structure and
-> > not the actual on-disk format, why does it even need padding,
-> > packing or even store the magic number?
-> 
-> In this case it is the on-disk format though.
-
-Yeah, that wasn't obvious at first glance.
-
-> > > > > +} __packed;
-> > > > > +
-> > > > > +enum cfs_inode_flags {
-> > > > > +       CFS_INODE_FLAGS_NONE = 0,
-> > > > > +       CFS_INODE_FLAGS_PAYLOAD = 1 << 0,
-> > > > > +       CFS_INODE_FLAGS_MODE = 1 << 1,
-> > > > > +       CFS_INODE_FLAGS_NLINK = 1 << 2,
-> > > > > +       CFS_INODE_FLAGS_UIDGID = 1 << 3,
-> > > > > +       CFS_INODE_FLAGS_RDEV = 1 << 4,
-> > > > > +       CFS_INODE_FLAGS_TIMES = 1 << 5,
-> > > > > +       CFS_INODE_FLAGS_TIMES_NSEC = 1 << 6,
-> > > > > +       CFS_INODE_FLAGS_LOW_SIZE = 1 << 7, /* Low 32bit of
-> > > > > st_size
-> > > > > */
-> > > > > +       CFS_INODE_FLAGS_HIGH_SIZE = 1 << 8, /* High 32bit of
-> > > > > st_size */
-> > > > 
-> > > > Why do we need to complicate things by splitting the inode size
-> > > > like this?
-> > > > 
+> > > Both VMAP_BLOCK or VMAP_PER_CPU_BLOCK look good to me, please see my
+> > > explanation at below.
 > > > 
-> > > The goal is to minimize the image size for a typical rootfs or
-> > > container image. Almost zero files in any such images are > 4GB. 
-> > 
-> > Sure, but how much space does this typically save, versus how much
-> > complexity it adds to runtime decoding of inodes?
-> > 
-> > I mean, in a dense container system the critical resources that need
-> > to be saved is runtime memory and CPU overhead of operations, not
-> > the storage space. Saving a 30-40 bytes of storage space per inode
-> > means a typical image might ber a few MB smaller, but given the
-> > image file is not storing data we're only talking about images the
-> > use maybe 500 bytes of data per inode. Storage space for images
-> > is not a limiting factor, nor is network transmission (because
-> > compression), so it comes back to runtime CPU and memory usage.
-> 
-> Here are some example sizes of composefs images with the current packed
-> inodes: 
-> 
-> 6.2M cs9-developer-rootfs.composefs
-> 2.1M cs9-minimal-rootfs.composefs
-> 1.2M fedora-37-container.composefs
-> 433K ubuntu-22.04-container.composefs
-> 
-> If we set all the flags for the inodes (i.e. fixed size inodes) we get:
-> 
-> 8.8M cs9-developer-rootfs.composefs
-> 3.0M cs9-minimal-rootfs.composefs
-> 1.6M fedora-37-container.composefs
-> 625K ubuntu-22.04-container.composefs
-> 
-> So, images are about 40% larger with fixed size inodes.
-
-40% sounds like a lot, but in considering the size magnitude of the
-image files I'd say we just don't care about a few hundred KB to a
-couple of MB extra space usage. Indeed, we'll use much more than 40%
-extra space on XFS internally via speculative EOF preallocation when
-writing those files to disk....
-
-Also, I don't think that this is an issue for shipping them across
-the network or archiving the images for the long term: compression
-should remove most of the extra zeros.
-
-Hence I'm still not convinced that the complexity of conditional
-field storage is worth the decrease in image file size...
-
-> > The inodes are decoded out of the page cache, so the memory for the
-> > raw inode information is volatile and reclaimed when needed.
-> > Similarly, the VFS inode built from this information is reclaimable
-> > when not in use, too. So the only real overhead for runtime is the
-> > decoding time to find the inode in the image file and then decode
-> > it.
-> 
-> I disagree with this characterization. It is true that page cache is
-> volatile, but if you can fit 40% less inode data in the page cache then
-> there is additional overhead where you need to read this from disk. So,
-> decoding time is not the only thing that affects overhead.
-
-True, but the page cache is a secondary cache for inodes - if you
-are relying on secondary caches for performance then you've already
-lost because it means the primary cache is not functioning
-effectively for your production workload.
-
-> Additionally, just by being larger and less dense, more data has to be
-> read from disk, which itself is slower.
-
-That's a surprisingly common fallacy.
-
-e.g. we can do a 64kB read IO for only 5% more time and CPU cost
-than a 4kB read IO. This means we can pull 16x as much information
-into the cache for almost no extra cost. This has been true since
-spinning disks were invented more than 4 decades ago, but it's still
-true with modern SSDs (for different reasons).
-
-A 64kb IO is going to allow more inodes to be bought into the cache
-for effectively the same IO cost, yet it provides a 16x improvement
-in subsequent cache hit probability compared to doing 4kB IO. In
-comparison, saving 40% in object size only improves the cache hit
-probability for the same IO by ~1.5x....
-
-Hence I don't consider object density isn't a primary issue for a
-secondary IO caches; what matters is how many objects you can bring
-into cache per IO, and how likely a primary level cache miss for
-those objects will be in the near future before memory reclaim
-removes them from the cache again.
-
-As an example of this, the XFS inode allocation layout and caching
-architecture is from the early 1990s, and it is a direct embodiment
-of the the above principle. We move inodes in and out of the
-secondary cache in clusters of 32 inodes (16KB IOs) because it is
-much more CPU and IO efficient than doing it in 4kB IOs... 
-
-> > Given the decoding of the inode -all branches- and is not
-> > straight-line code, it cannot be well optimised and the CPU branch
-> > predictor is not going to get it right every time. Straight line
-> > code that decodes every field whether it is zero or not is going to
-> > be faster.
-> >
-> > Further, with a fixed size inode in the image file, the inode table
-> > can be entirely fixed size, getting rid of the whole unaligned data
-> > retreival problem that code currently has (yes, all that
-> > "le32_to_cpu(__get_unaligned(__le32, data)" code) because we can
-> > ensure that all the inode fields are aligned in the data pages. This
-> > will significantly speed up decoding into the in-memory inode
-> > structures.
-> 
-> I agree it could be faster. But is inode decode actually the limiting
-> factor, compared to things like disk i/o or better use of page cache?
-
-The limiting factor in filesystem lookup paths tends to CPU usage.
-It's spread across many parts of the kernel, but every bit we can
-save makes a difference. Especially on a large server running
-thousands of containers - the less CPU we use doing inode lookup and
-instantiation, the more CPU there is for the user workloads. We are
-rarely IO limited on machines like this, and as SSDs get even faster
-in the near future, that's going to be even less of a problem than
-it now.
-
-> > > > > +struct cfs_dir_s {
-> > > > > +       u32 n_chunks;
-> > > > > +       struct cfs_dir_chunk_s chunks[];
-> > > > > +} __packed;
 > > > > 
-> > > > So directory data is packed in discrete chunks? Given that this
-> > > > is a
-> > > > static directory format, and the size of the directory is known
-> > > > at
-> > > > image creation time, why does the storage need to be chunked?
+> > > > >  struct vmap_block_queue {
+> > > > >  	spinlock_t lock;
+> > > > >  	struct list_head free;
+> > > > > @@ -1962,7 +1968,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> > > > >  
+> > > > >  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
+> > > > >  					VMALLOC_START, VMALLOC_END,
+> > > > > -					node, gfp_mask);
+> > > > > +					node, gfp_mask,
+> > > > > +					VMAP_RAM|VMAP_BLOCK);
+> > > > >
+> > > > A new_vmap_block() is for a per-cpu path. As far as i see the VMAP_BLOCK
+> > > > flag is used to mark a VA that corresponds to a reserved per-cpu free area.
+> > > > 
+> > > > Whereas a VMAP_RAM is for VA that was obtained over per-cpu path but
+> > > > over alloc_vmap_area() thus a VA should be read out over "busy" tree
+> > > > directly.
+> > 
+> > Rethinking about the vmap->flags and the bit0->VMAP_RAM,
+> > bit1->VMAP_BLOCK correspondence, it looks better to use bit0->VMAP_RAM
+> > to indicate the vm_map_ram area, no matter how it's handled inside
+> > vm_map_ram() interface; and use bit1->VMAP_BLOCK to mark out the special
+> > vm_map_ram area which is further subdivided and managed by struct
+> > vmap_block. With these, you can see that we can identify vm_map_ram area
+> > and treat it as one type of vmalloc area, e.g in vread(), s_show().
+> > 
+> > Means when we are talking about vm_map_ram areas, we use
+> > (vmap->flags & VMAP_RAM) to recognize them; when we need to
+> > differentiate and handle vm_map_ram areas respectively, we use
+> > (vmap->flags & VMAP_BLOCK) to pick out the area which is further managed
+> > by vmap_block. Please help check if this is OK to you.
+> > 
+> > > > 
+> > > > Why do you need to set here both VMAP_RAM and VMAP_BLOCK?
 > > > 
-> > > We chunk the data such that each chunk fits inside a single page in
-> > > the
-> > > image file. I did this to make accessing image data directly from
-> > > the
-> > > page cache easier.
+> > > My understanding is that the vm_map_ram area has two types, one is
+> > > the vb percpu area via vb_alloc(), the other is allocated via
+> > > alloc_vmap_area(). While both of them is got from vm_map_ram()
+> > > interface, this is the main point that distinguishes the vm_map_ram area
+> > > than the normal vmalloc area, and this makes vm_map_ram area not owning
+> > > va->vm pointer. So here, I use flag VMAP_RAM to mark the vm_map_ram
+> > > area, including the two types; meanwhile, I add VMAP_BLOCK to mark out
+> > > the vb percpu area. 
+> > > 
+> > > I understand people could have different view about them, e.g as you
+> > > said, use VMAP_RAM to mark the type of vm_map_ram area allocated through
+> > > alloc_vmap_area(), while use VMAP_PER_CPU_BLOCK to mark vb percpu area
+> > > from vb_alloc. In this way, we may need to rename VMAP_RAM to reflect
+> > > the area allocated from alloc_vmap_area() only. Both is fine to me.
+> > > 
+> > > > 
+> > > > >  	if (IS_ERR(va)) {
+> > > > >  		kfree(vb);
+> > > > >  		return ERR_CAST(va);
+> > > > > @@ -2229,8 +2236,12 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+> > > > >  		return;
+> > > > >  	}
+> > > > >  
+> > > > > -	va = find_vmap_area(addr);
+> > > > > +	spin_lock(&vmap_area_lock);
+> > > > > +	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+> > > > >  	BUG_ON(!va);
+> > > > > +	if (va)
+> > > > > +		va->flags &= ~VMAP_RAM;
+> > > > > +	spin_unlock(&vmap_area_lock);
+> > > > >  	debug_check_no_locks_freed((void *)va->va_start,
+> > > > >
+> > > > Agree with Lorenzo. BUG_ON() should be out of spinlock(). Furthermore
+> > > > i think it makes sense to go with WARN_ON_ONCE() and do not kill a system.
+> > > > Instead emit a warning and bailout.
+> > > > 
+> > > > What do you think? Maybe separate patch for it?
+> > > 
+> > > Agree, your patch looks great to me. Thanks.
+> > > 
+> > > > 
+> > > > >  				    (va->va_end - va->va_start));
+> > > > >  	free_unmap_vmap_area(va);
+> > > > > @@ -2265,7 +2276,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+> > > > >  	} else {
+> > > > >  		struct vmap_area *va;
+> > > > >  		va = alloc_vmap_area(size, PAGE_SIZE,
+> > > > > -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
+> > > > > +				VMALLOC_START, VMALLOC_END,
+> > > > > +				node, GFP_KERNEL, VMAP_RAM);
+> > > > >  		if (IS_ERR(va))
+> > > > >  			return NULL;
+> > > > >  
+> > > > > @@ -2505,7 +2517,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
+> > > > >  	if (!(flags & VM_NO_GUARD))
+> > > > >  		size += PAGE_SIZE;
+> > > > >  
+> > > > > -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
+> > > > > +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
+> > > > >  	if (IS_ERR(va)) {
+> > > > >  		kfree(area);
+> > > > >  		return NULL;
+> > > > >
+> > > > I know we have already discussed the new parameter. But what if we just
+> > > > use atomic_set operation to mark VA as either vmap-ram or vmap-block?
 > > 
-> > Hmmmm. So you defined a -block size- that matched the x86-64 -page
-> > size- to avoid page cache issues.  Now, what about ARM or POWER
-> > which has 64kB page sizes?
+> > As I replied at above, I take the vm_map_ram as one kind of vmalloc
+> > area, and mark out the percpu vmap block handling of vm_map_ram area.
+> > Seems the passing in the flags through function parameter is better. Not
+> > sure if I got your suggestion correctly, and my code change is
+> > appropriate. I have sent v3 according to your and Lorenzo's comments and
+> > suggestion, and my rethinking after reading your words. I make some
+> > adjustment to try to remove misundersanding or confusion when reading
+> > patch and code. Please help check if it's OK.
 > > 
-> > IOWs, "page size" is not the same on all machines, whilst the
-> > on-disk format for a filesystem image needs to be the same on all
-> > machines. Hence it appears that this:
-> > 
-> > > > > +#define CFS_MAX_DIR_CHUNK_SIZE 4096
-> > 
-> > should actually be defined in terms of the block size for the
-> > filesystem image, and this size of these dir chunks should be
-> > recorded in the superblock of the filesystem image. That way it
-> > is clear that the image has a specific chunk size, and it also paves
-> > the way for supporting more efficient directory structures using
-> > larger-than-page size chunks in future.
-> 
-> Yes, its true that assuming a (min) 4k page size is wasteful on some
-> arches, but it would be hard to read a filesystem created for 64k pages
-> on a 4k page machine, which is not ideal. However, wrt your commend on
-> multi-page mappings, maybe we can just totally drop these limits. I'll
-> have a look at that.
+> OK, if we decided to go with a parameter it is OK, it is not a big deal
+> and complexity. If needed it can be adjusted later on if there is a
+> need.
 
-It's not actually that hard - just read in all the pages into the
-page cache, look them up, map them, do the operation, unmap them.
+My preference for function parameter passing is we don't need do the
+atomic reading when we want to check va->flags. However, in va->flags
+setting side, atomic_set() code is simpler than function parameter.
 
-After all, you already ahve a cfs_buf that you could store a page
-array in, and then you have an object that you can use for single
-pages (on a 64kB machine) or 16 pages (4kB page machine) without the
-code that is walking the buffers caring about the underlying page
-size. This is exactly what we do with the struct xfs_buf. :)
+	flags = atomic_read(&va->flags);
+        if (flags & VMAP_RAM) {
+		
+	}
 
-> 
-> > > If we had dirent data spanning multiple pages
-> > > then we would either need to map the pages consecutively (which
-> > > seems
-> > > hard/costly) or have complex in-kernel code to handle the case
-> > > where a
-> > > dirent straddles two pages.
-> > 
-> > Actually pretty easy - we do this with XFS for multi-page directory
-> > buffers. We just use vm_map_ram() on a page array at the moment,
-> > but in the near future there will be other options based on
-> > multipage folios.
-> > 
-> > That is, the page cache now stores folios rather than pages, and is
-> > capable of using contiguous multi-page folios in the cache. As a
-> > result, multipage folios could be used to cache multi-page
-> > structures in the page cache and efficiently map them as a whole.
-> > 
-> > That mapping code isn't there yet - kmap_local_folio() only maps the
-> > page within the folio at the offset given - but the foundation is
-> > there for supporting this functionality natively....
-> > 
-> > I certainly wouldn't be designing a new filesystem these days that
-> > has it's on-disk format constrained by the x86-64 4kB page size...
-> 
-> Yes, I agree. I'm gonna look at using multi-page mapping for both
-> dirents and xattr data, which should completely drop these limits, as
-> well as get rid of the dirent chunking.
+I checked code, and feel it doesn't have much difference, so keep the
+current code. If there's other thing I didn't think of, we can still
+change. Thanks.
 
-That will be interesting to see :)
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
