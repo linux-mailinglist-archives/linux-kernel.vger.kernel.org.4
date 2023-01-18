@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FE2670F84
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32E6670F87
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjARBHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S229793AbjARBH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjARBGv (ORCPT
+        with ESMTP id S229850AbjARBGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 20:06:51 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B33C288;
-        Tue, 17 Jan 2023 16:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=i4RkttW8fJDbyZOT5cX4fAabf2Wi+aZdAXMv1JEZ7Hc=; b=NXLSsL9V7Bo6BKRF5Y9jfRUgrQ
-        pdCFL6s8KfhkjazcKLSqN3u1CkBz9NhcL5GM5NW0EQ+djyO/iwuePSLZQild575wArFqbPjMZompR
-        WH33mY7hWiO52lvdZ/OAf2WWLZKJpxh4UP/c289so17o7EycuDkdKK0wOKDZeTxhVOkm4oh9ExlNY
-        bxg+1afaacpFIk8tP/AuMF5nYbEehFugAtZcopEm/zNFVZvNtPadNisTjH6jLW7UxLqaV0lEP5ysC
-        wVpaagAKfTwOYFD5+lVEHhx0mu6LzWHbBrhVczSydBh9yBJMUIKAzxymYxNH5IurEOnjNZgyOD4oS
-        mGUH9rFQ==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHwkp-00GNFP-E9; Wed, 18 Jan 2023 00:56:39 +0000
-Message-ID: <19d40c05-4e97-a739-47b4-689b047841fc@infradead.org>
-Date:   Tue, 17 Jan 2023 16:56:36 -0800
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9102510D5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:57:11 -0800 (PST)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id NRX00008
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:57:08 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201619.home.langchao.com (10.100.2.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 18 Jan 2023 08:57:08 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] firmware: memmap: fix typos in comments
+Date:   Tue, 17 Jan 2023 19:57:02 -0500
+Message-ID: <20230118005702.4291-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] rtc: sunplus: fix format string for printing resource
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230117172450.2938962-1-arnd@kernel.org>
- <Y8bhApoC4Bmgtjoq@mail.local>
- <54f13745-bec5-8777-4212-6f093947f146@infradead.org>
- <589415b2-ddf2-44e5-bca5-5971f8ab9576@app.fastmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <589415b2-ddf2-44e5-bca5-5971f8ab9576@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
+ jtjnmail201619.home.langchao.com (10.100.2.19)
+tUid:   202311808570837e3f817f95849883bc248b505887c70
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+change `syfs` to `sysfs`.
 
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ drivers/firmware/memmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 1/17/23 11:36, Arnd Bergmann wrote:
-> On Tue, Jan 17, 2023, at 19:24, Randy Dunlap wrote:
->> On 1/17/23 09:55, Alexandre Belloni wrote:
->>> On 17/01/2023 18:24:44+0100, Arnd Bergmann wrote:
->>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>
->>>> On 32-bit architectures with 64-bit resource_size_t, sp_rtc_probe()
->>>> causes a compiler warning:
->>>>
->>>> drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
->>>> drivers/rtc/rtc-sunplus.c:243:33: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
->>>>   243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
->>>>       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>
->>>> The best way to print a resource is the special %pR format string,
->>>> and similarly to print a pointer we can use %p and avoid the cast.
->>>>
->>>
->>> I got this one this morning, which one is more correct? :)
->>> https://lore.kernel.org/all/20230117054232.24023-1-rdunlap@infradead.org/
-> 
-> Both are equally correct, it's just a preference.
-> 
->> I prefer my handling of res->start and Arnd's no-cast handling of reg_base.
->> IMO using "%pR" prints too much info, but that's more up to the file's author
->> or maintainer...
-> 
-> Right, I could have equally well picked the %pap version, and just
-> went for brevity in the source. It's only pr_debug(), so very few
-> users are going to actually see the output.
-
-Alexandre, sounds like you should just go with Arnd's patch.
-
+diff --git a/drivers/firmware/memmap.c b/drivers/firmware/memmap.c
+index 8e59be3782cb..8e72bd678b4e 100644
+--- a/drivers/firmware/memmap.c
++++ b/drivers/firmware/memmap.c
+@@ -275,7 +275,7 @@ firmware_map_find_entry_bootmem(u64 start, u64 end, const char *type)
+  *
+  * Adds a firmware mapping entry. This function is for memory hotplug, it is
+  * similar to function firmware_map_add_early(). The only difference is that
+- * it will create the syfs entry dynamically.
++ * it will create the sysfs entry dynamically.
+  *
+  * Return: 0 on success, or -ENOMEM if no memory could be allocated.
+  */
 -- 
-~Randy
+2.27.0
+
