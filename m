@@ -2,102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BEE671288
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC8E67128F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjAREVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 23:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S229541AbjAREXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 23:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjAREVC (ORCPT
+        with ESMTP id S229448AbjAREXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 23:21:02 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2855474F5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:21:01 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id mp20so33692323ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jwhBr3J/U9ThzXjXZ9tSi8GQCFjSMQIBnPwd5x/QKIY=;
-        b=dRGTr0Fn6VsIQtfq3Zm7M/UGuulnXyZrc2SIJAE6aB88i70h1ipbkdrnC809e+oIyr
-         Etqy6XSHwucZqNNpMGxrLJwJ8NcLHopf7Qd8DEFTLfkRt7eiEhulr59JF9pQs03xnB4m
-         OqNZP1OlfH8WfKnJ+NwuBHIkkEV5Yt5XVr/lGLAKlE9HTjX61uV8pmTZbL2oWRkhegpd
-         UKbM29Yv3pbTdlS7UiGagMvoSYgb7eHyUhL19hjA0RbHGw1m0U9fBPsHfsKZefw5N6ch
-         R6y3ZRob5tjH46fyNNGLdGYgPXVOnLT9iE+m0MgqZTsR3/7Md2Vi6OAtW35EDkdkuGPh
-         VRIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwhBr3J/U9ThzXjXZ9tSi8GQCFjSMQIBnPwd5x/QKIY=;
-        b=yiUNd5AniEmAK0tm1Qg+oFPKSG3vHMOZrcksFbu0sIVF6AUF0NDEIDpGIh3S1/NkCh
-         4ax8KKgW9d/vlnOn3bc9UKYq9CT4WSj1WqeqMSwqhj/Jiv0/0dHfD0/FljxYc3ku9uPB
-         miO7gpZRN4m7RZ41OFcAjYLh7tHS+4Vp2YztRK+Gc4BZBw+VfYrAolTZV0e8tXudk1tA
-         d2WFPvS+8Hq+dopJTM0ivxCbA4BPdeGHXMNSES5J2YSC8KbGE8jiU/5bvSpNif1UyAVP
-         ScTJchQbn6NKLynItyPb26Mkzltf14249N3q215IRu6CwkJx1OsbTZlCdztNhqQhfyFM
-         HJtQ==
-X-Gm-Message-State: AFqh2krrLhR1SaRKS1nqWAX2zcCNzN6lmj2HptvlETrGryf/az8pPvv9
-        wr1cVwgHe+UgWijGsSKcQwhrmg==
-X-Google-Smtp-Source: AMrXdXtItNegkORRqJZIHkpkuzpZh0JDRl4O6E0z8ldy71irGFZ4ANfUbJ69u9wyPRmrIQ3E9Ch/hA==
-X-Received: by 2002:a17:906:4a85:b0:84d:2f09:661 with SMTP id x5-20020a1709064a8500b0084d2f090661mr5340273eju.1.1674015660594;
-        Tue, 17 Jan 2023 20:21:00 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b0079e11b8e891sm13870975ejh.125.2023.01.17.20.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 20:21:00 -0800 (PST)
-Message-ID: <f9930af9-93d7-c7e6-c0d2-543b81f77cad@linaro.org>
-Date:   Wed, 18 Jan 2023 06:20:58 +0200
+        Tue, 17 Jan 2023 23:23:37 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11E9654121
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:23:35 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxCepAdMdjb0ICAA--.6729S3;
+        Wed, 18 Jan 2023 12:23:28 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxjb47dMdj0SMbAA--.56222S3;
+        Wed, 18 Jan 2023 12:23:25 +0800 (CST)
+Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as
+ non-kprobe-able
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+ <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
+Date:   Wed, 18 Jan 2023 12:23:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 2/8] phy: qcom-qmp: pcs: Add v6 register offsets
-Content-Language: en-GB
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-References: <20230118005328.2378792-1-abel.vesa@linaro.org>
- <20230118005328.2378792-3-abel.vesa@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230118005328.2378792-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8Bxjb47dMdj0SMbAA--.56222S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxCF1rCr4DCw4ktFWDKr4kZwb_yoW5Cr47pF
+        1DAFs5KFs5Gr1fZry7tw1Yv3yqqws7KF1293W29FW8Cr47WF1Uury09398WFyftw47KrWF
+        vFn5JasI9FWUJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bIxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcV
+        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8PCzJUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 02:53, Abel Vesa wrote:
-> The new SM8550 SoC bumps up the HW version of QMP phy to v6 for USB,
-> UFS and PCIE g3x2. Add the new PCS offsets in a dedicated header file.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6.h | 16 ++++++++++++++++
->   drivers/phy/qualcomm/phy-qcom-qmp.h        |  2 ++
->   2 files changed, 18 insertions(+)
->   create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6.h
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
--- 
-With best wishes
-Dmitry
+On 01/18/2023 12:14 PM, Huacai Chen wrote:
+> If memcpy should be blacklisted, then what about memset and memmove?
+
+According to the test results, there are no problems to probe
+memset and memmove, so no need to blacklist them for now,
+blacklist memcpy is because it may cause recursive exceptions,
+there is a detailed discussion in the following link:
+
+https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+
+Thanks,
+Tiezhu
+
+>
+> Huacai
+>
+> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> Some assembler symbols are not kprobe safe, such as handle_syscall
+>> (used as syscall exception handler), *memcpy* (may cause recursive
+>> exceptions), they can not be instrumented, just blacklist them for
+>> kprobing.
+>>
+>> Here is a related problem and discussion:
+>> Link: https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
+>>  arch/loongarch/kernel/entry.S    |  1 +
+>>  arch/loongarch/lib/memcpy.S      |  3 +++
+>>  3 files changed, 14 insertions(+)
+>>
+>> diff --git a/arch/loongarch/include/asm/asm.h b/arch/loongarch/include/asm/asm.h
+>> index 40eea6a..f591b32 100644
+>> --- a/arch/loongarch/include/asm/asm.h
+>> +++ b/arch/loongarch/include/asm/asm.h
+>> @@ -188,4 +188,14 @@
+>>  #define PTRLOG         3
+>>  #endif
+>>
+>> +/* Annotate a function as being unsuitable for kprobes. */
+>> +#ifdef CONFIG_KPROBES
+>> +#define _ASM_NOKPROBE(name)                            \
+>> +       .pushsection "_kprobe_blacklist", "aw";         \
+>> +       .quad   name;                                   \
+>> +       .popsection
+>> +#else
+>> +#define _ASM_NOKPROBE(name)
+>> +#endif
+>> +
+>>  #endif /* __ASM_ASM_H */
+>> diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
+>> index d53b631..55e23b1 100644
+>> --- a/arch/loongarch/kernel/entry.S
+>> +++ b/arch/loongarch/kernel/entry.S
+>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
+>>
+>>         RESTORE_ALL_AND_RET
+>>  SYM_FUNC_END(handle_syscall)
+>> +_ASM_NOKPROBE(handle_syscall)
+>>
+>>  SYM_CODE_START(ret_from_fork)
+>>         bl      schedule_tail           # a0 = struct task_struct *prev
+>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+>> index 7c07d59..3b7e1de 100644
+>> --- a/arch/loongarch/lib/memcpy.S
+>> +++ b/arch/loongarch/lib/memcpy.S
+>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
+>>         ALTERNATIVE     "b __memcpy_generic", \
+>>                         "b __memcpy_fast", CPU_FEATURE_UAL
+>>  SYM_FUNC_END(memcpy)
+>> +_ASM_NOKPROBE(memcpy)
+>>
+>>  EXPORT_SYMBOL(memcpy)
+>>
+>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
+>>  2:     move    a0, a3
+>>         jr      ra
+>>  SYM_FUNC_END(__memcpy_generic)
+>> +_ASM_NOKPROBE(__memcpy_generic)
+>>
+>>  /*
+>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
+>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
+>>  3:     move    a0, a3
+>>         jr      ra
+>>  SYM_FUNC_END(__memcpy_fast)
+>> +_ASM_NOKPROBE(__memcpy_fast)
+>> --
+>> 2.1.0
+>>
 
