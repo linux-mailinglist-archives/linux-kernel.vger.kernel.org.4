@@ -2,83 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E2967205F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198FD672069
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjARPAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S229737AbjARPBF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 Jan 2023 10:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjARPAK (ORCPT
+        with ESMTP id S229686AbjARPAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:00:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5A5AB48;
-        Wed, 18 Jan 2023 06:55:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E4B6185C;
-        Wed, 18 Jan 2023 14:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71347C433D2;
-        Wed, 18 Jan 2023 14:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674053725;
-        bh=wjglZMLOEjQw+vq02RhUK9jEtIO+B6Bqz4mUgDY3ieY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=O30xWI6z44KBeWjES0Q+xaK/kQvDQoRnFLDXLidPgskZam0Us1qX5SErhY2uqB7f0
-         1Hq/zby63ptVXMEGOd/bslV1Me7c4YcdfPiUYexlgnd93zUXkeNnc4MBbeff8TiiSg
-         Odl0oCDgki+7RHty31CatojngdO+l8wC3yMAiG7Gbj3Czvl6obwg3L1UNyOY438koG
-         xLZk0hyqISVQ5rQ9lIrmjmLX35omEqK4lB1EGOecnD+2WOBXfvn3Jy5wpx4WxkSt4K
-         j5n8xGkMw/Gx4bOdw9TyLYD5cKN3clag3O1I6b8a+wIoGHTDRgBG7q/No5ClfoYrO9
-         +MvZWaDpllSiQ==
-Date:   Wed, 18 Jan 2023 15:55:26 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Lee Jones <lee@kernel.org>
-cc:     benjamin.tissoires@redhat.com, avid.rheinsberg@gmail.com,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH 1/2] HID: core: Provide new max_buffer_size attribute to
- over-ride the default
-In-Reply-To: <Y8fTd0VJXqKkPIuo@google.com>
-Message-ID: <nycvar.YFH.7.76.2301181554370.1734@cbobk.fhfr.pm>
-References: <20230113150557.1308176-1-lee@kernel.org> <nycvar.YFH.7.76.2301181002550.1734@cbobk.fhfr.pm> <Y8fTd0VJXqKkPIuo@google.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 18 Jan 2023 10:00:32 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3216049B;
+        Wed, 18 Jan 2023 06:55:53 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id v6so40854960ejg.6;
+        Wed, 18 Jan 2023 06:55:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b48v8QljjeQEvg4WS7Gp0aF7ulXCUr3rAEntulrG8ig=;
+        b=aoRLmaHoo6taw0BIhgPX2qkGb9FANR4kEm2BjiX8UgiVQPxmUX34pp9NhwMe9NT1qq
+         MqgXT0WVDikGvkpP6S1Y+//7FyFGnrYQ+umaX42C7VC84vfHSQ+POQv28mSp0/gQHPTo
+         dli3loN5caI4UTjVOJRtYHdsiX7XDYcHS7N2jcJ4rECRTKAvnLGbYw8SbYFVi1J89BoR
+         SW0sH1hfnrvpdzXKwY2cYbaS6GOZvMlKtVlorQ9PTlT8q0FDS+4uslKCZZdDDDKw8Lbn
+         B42TasX/hOZhXZsnm6DQKLyzmEsCqqwNPD1f318SS8oZ888JZxrR5t2jCE3dDJNXvs5L
+         4XWQ==
+X-Gm-Message-State: AFqh2kqT1WO07Sxr5Xrg0jm/dabRKllbVkscqjJNB+TZqbZzWMIldn83
+        QlBoT3ylhtOvYl410SmuhfoyMHyTi6+saIugAZ0=
+X-Google-Smtp-Source: AMrXdXtOAWIZIC5HT7/4nUTX9+gkurr4UMHBJyjTiC9rCjfjB+4K7GJaxInxHkN7JLsJn9RV0QkqAMishSZNR3BLDx4=
+X-Received: by 2002:a17:906:eb1b:b0:86e:abe4:5acf with SMTP id
+ mb27-20020a170906eb1b00b0086eabe45acfmr727417ejb.615.1674053751661; Wed, 18
+ Jan 2023 06:55:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117155724.22940-1-jgross@suse.com> <CAJZ5v0iCAT2W-m1T-v1wSBw+GQerhMAp1hT6SioJ53RQY=oA3g@mail.gmail.com>
+ <7f969b09-438b-cee3-be4c-e08b97457b12@intel.com> <CAJZ5v0iOmZouhSb_ap0MA3-sk6RWJ7MRpTuGekrJrvOn-Y4JYQ@mail.gmail.com>
+ <43d0f8b1-0d2e-0e0f-d794-0048641d84f1@intel.com>
+In-Reply-To: <43d0f8b1-0d2e-0e0f-d794-0048641d84f1@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 Jan 2023 15:55:39 +0100
+Message-ID: <CAJZ5v0iNS2fV=xKJCVCK1wRjUxkNVUORLxhqFwCBr8Psgyx17w@mail.gmail.com>
+Subject: Re: [PATCH v2] acpi: fix suspend with Xen PV
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <lenb@kernel.org>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023, Lee Jones wrote:
+On Wed, Jan 18, 2023 at 1:15 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 1/17/23 09:08, Rafael J. Wysocki wrote:
+> > On Tue, Jan 17, 2023 at 5:51 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> >> On 1/17/23 08:47, Rafael J. Wysocki wrote:
+> >>>> Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as Xen PV guest")
+> >>>> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> >>>> Signed-off-by: Juergen Gross <jgross@suse.com>
+> >>>> ---
+> >>>> V2:
+> >>>> - new approach, avoid calling acpi_get_wakeup_address()
+> >>> I'll queue this up for 6.3 if the x86 people don't object.
+> >> That 'Fixes:' patch looked to me like it was applied during the 6.2
+> >> merge window.  I would have expected a fix to go up for 6.2 final.
+> > Right, sorry.  Definitely, 6.2-rc material.
+>
+> I think the original issue went up in x86/boot, so how about I queue
+> this in x86/urgent?  Rafael, should I add an ack from you on it?
 
-> > > Presently, when a report is processed, its size is compared solely 
-> > > against the value specified by user-space.  
-> > 
-> > While I am generally fine with the idea, I don't understand this sentence. 
-> > What exactly do you mean by 'specified by user-space'? It's defined as a 
-> > compile-time constant.
-> > 
-> > > If the received report ends up being smaller than this, the
-> > > remainder of the buffer is zeroed. 
-> 
-> Apologies for any ambiguity.
-> 
-> "its size" == "compile-time constant"
-> 
-> Would "its maximum size" read better?
+Yes, please.
 
-I think that the confusion comes from the fact that the changelog is 
-written solely with the UHID usercase on mind ... ? (which is dealt with 
-in the independent followup patch).
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
