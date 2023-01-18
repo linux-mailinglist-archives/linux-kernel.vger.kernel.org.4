@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A90671EA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A88671EA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjARN5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S230472AbjARN5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjARN4r (ORCPT
+        with ESMTP id S230310AbjARN5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:56:47 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6545585;
-        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s67so24500374pgs.3;
-        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTmYGFbnmeCPW2MRLupoC59xlxn4uUeHuUvCevs7WXQ=;
-        b=LoPo/7lV3PVsff57JQEJpECKO7OHtYeEpqPoSSe0eveZcG6SSHpoEXki47FiO72ODQ
-         9ZZt/5F6kQsCqLihVB+FdfLny6Vj5ptg3ZpxgUR8EwENrhiC1eTjcwBz8z5LTOcFp8kJ
-         9tAfNLTkYscnBat92aE52ShAuXt80UvvJl49DUIzSHqLlCooNR5qX4IJ7s+z7xeuXSlj
-         q7Y5aIPXx//xsMJYyxMxF7Rod6afbzuR/ZQm5Wz3L8KqKer1eSGs9QRIlwQ1CQu0+clH
-         KmpZqVFOAQLu0L7khPNpypmIf8IedrxMlY6ps66Mw/aoY2KMmslkXOAbkEgqbwQjIfdf
-         AAsQ==
+        Wed, 18 Jan 2023 08:57:18 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AF34DCE6;
+        Wed, 18 Jan 2023 05:31:05 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id x5so6196328qti.3;
+        Wed, 18 Jan 2023 05:31:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gTmYGFbnmeCPW2MRLupoC59xlxn4uUeHuUvCevs7WXQ=;
-        b=6zJIjqhpa200WqkfkzPMmkHx51QmTxetEidV/h80s7fkx/dlaxTT+V1g/FemWkcC3A
-         6LaVMj4bCcIa7qXITRgU4oiQG5VXROPLDVztfjo4eIujXoLBiaFn2NKv51GEUbzXJeDz
-         y/U8Ye8NaVyqNYxMTH0CJgeBFAnisDoEdh438LDqLVaYV6/nG+NyfwJGjluRbgN2h55Y
-         YlCObTML3I1eRYaWv/2CvEoLBVcgD0ZOZo08az9oYQ55fCP/b5cF1vRYxIK3C3jj+Spj
-         NKVIu5ZzB5yPv1kqfhLwEbBw3zMv4o7rCT2AadyaEDReYceSGhWmPZjXcgi5zphHKnUi
-         YE3g==
-X-Gm-Message-State: AFqh2kqg48YHPMJOqakLGZdwvEwBpJr5g33r7u50ZRw/Oewvr7cwi/QG
-        4RQnExdJtIc+3TBWcM0iQH4=
-X-Google-Smtp-Source: AMrXdXuJ4kYwmUS7FBqtPHfOWARPBImPQnR96jC4mCyWO6yH20jWVO7kWwYw8p3vX2v6A+wHIcqxFA==
-X-Received: by 2002:a62:52c5:0:b0:585:fc75:c544 with SMTP id g188-20020a6252c5000000b00585fc75c544mr7440591pfb.15.1674048576348;
-        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
-        by smtp.gmail.com with ESMTPSA id w125-20020a626283000000b005815a371177sm21362735pfb.52.2023.01.18.05.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 05:29:35 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 3C538104E09; Wed, 18 Jan 2023 20:29:32 +0700 (WIB)
-Date:   Wed, 18 Jan 2023 20:29:31 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Usama Arif <usama.arif@bytedance.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
-        pbonzini@redhat.com
-Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com
-Subject: Re: [v3 1/6] KVM: arm64: Document PV-lock interface
-Message-ID: <Y8f0Oz2W9QevuZJM@debian.me>
-References: <20230117102930.1053337-1-usama.arif@bytedance.com>
- <20230117102930.1053337-2-usama.arif@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QuUEJG05N3nYMvxWxSZgupX5x29WRenTbmClFTcwzSc=;
+        b=7yFsvlPr+5qjmUoQKBxOpCu8FMkONZgJesViE2u6+NrJA5jDr7CnMx0u8tQ+GVXQky
+         ZjOPbzhbWR5X3x4lHWKDK16FmN16NvZ7zjH2NGVdAnLMcM4E5GQ/Mibqjbt1qgUHimgw
+         8VlLVAY7o4S6QyBm2Zr0jn5Qtm0F+uNb8dfCDdiaCWWxsWBR7ldJpKvusbfCtNlAl9Ad
+         w7ZqV4HrpCDsTI69xCsFV2HdaXbCql2pvJ2TALtrT6sD9a3d3h4lRrAfuZxaQ74QMlfh
+         nb/UM1jiYQoajzKDcnK72bEpZGKN9KOwQnmaBgFzFdier00xO9yYTK7sTRFR03cgKXuK
+         sDSA==
+X-Gm-Message-State: AFqh2kr5k6b7yByzui+98d/YEX3KM4kbBng7jplA/Nb46OdJSyhkQt1a
+        KDKVN/qvQ8nOoW9NmuZw+viUmpOH0mqmyJKe
+X-Google-Smtp-Source: AMrXdXvczlAoS+gN4wt826CtzFghAo2rMhUaswqxC+YxMoaAooIrWNHcdRk42cBBmYVV65liEGsxyg==
+X-Received: by 2002:a05:622a:1827:b0:3b6:3c95:735a with SMTP id t39-20020a05622a182700b003b63c95735amr9947007qtc.52.1674048664308;
+        Wed, 18 Jan 2023 05:31:04 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id y5-20020ac85245000000b003b5bc7a4512sm5126690qtn.26.2023.01.18.05.31.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 05:31:03 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id c124so37982111ybb.13;
+        Wed, 18 Jan 2023 05:31:03 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr731869ybg.202.1674048663439; Wed, 18
+ Jan 2023 05:31:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LKnbaJbZgtLjGMWc"
-Content-Disposition: inline
-In-Reply-To: <20230117102930.1053337-2-usama.arif@bytedance.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230118122003.132905-1-wsa+renesas@sang-engineering.com> <Y8fpg/WkR4OMrpOu@pendragon.ideasonboard.com>
+In-Reply-To: <Y8fpg/WkR4OMrpOu@pendragon.ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 Jan 2023 14:30:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUegruzCdP_+_qNuhVvFWp-_8zvdYw=v3kmt6zDU8=w5Q@mail.gmail.com>
+Message-ID: <CAMuHMdUegruzCdP_+_qNuhVvFWp-_8zvdYw=v3kmt6zDU8=w5Q@mail.gmail.com>
+Subject: Re: [PATCH] media: renesas: vsp1: blacklist r8a7795 ES1.*
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Laurent,
 
---LKnbaJbZgtLjGMWc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 18, 2023 at 2:21 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Wed, Jan 18, 2023 at 01:20:02PM +0100, Wolfram Sang wrote:
+> > The earliest revision of these SoC may hang when underrunning. Later
+> > revisions have that fixed. Bail out when we detect a problematic
+> > version.
+> >
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > ---
+> >
+> > The BSP tries to work around the issue, yet this is neither upstreamable
+> > nor are we sure the solution is complete. Because the early SoC revision
+> > is hardly in use, we simply "document" the problem upstream.
+>
+> The workaround isn't upstreamable as-is, but I think it could be
+> upstreamed after being cleaned up.
+>
+> Overall, how much support do we still have upstream for H3 ES1.x, and do
+> we need to keep it ? H3 ES.1x is relatively old, does someone still rely
+> on it ?
 
-On Tue, Jan 17, 2023 at 10:29:25AM +0000, Usama Arif wrote:
-> Introduce a paravirtualization interface for KVM/arm64 to obtain whether
-> the VCPU is currently running or not.
->=20
-> The PV lock structure of the guest is allocated by user space.
->=20
-> A hypercall interface is provided for the guest to interrogate the
-> location of the shared memory structures.
->=20
+I think the upstream support level for R-Car H3 ES1.x is about the same
+as for H3 ES2.0.
 
-The doc LGTM, thanks.
+Gr{oetje,eeting}s,
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+                        Geert
 
---=20
-An old man doll... just what I always wanted! - Clara
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---LKnbaJbZgtLjGMWc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8f0NQAKCRD2uYlJVVFO
-o4qgAQDcP0rNaydRQo4231hMi0Vw3TckZruhUL6c4YQM/lptNAD/dTmwvHDvLrPL
-bQ8mmtSifTbeLABeqIK776M+1x9SLgo=
-=hq72
------END PGP SIGNATURE-----
-
---LKnbaJbZgtLjGMWc--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
