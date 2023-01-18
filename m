@@ -2,162 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34196672A56
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4A6672A5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjARVXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S230508AbjARVYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 16:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjARVXG (ORCPT
+        with ESMTP id S230492AbjARVYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:23:06 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E224940B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:23:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F20E73F3B5;
-        Wed, 18 Jan 2023 21:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674076984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1TWe4//UXtWoSbfkzYR+yLI6KZbz74mo1UXbqphj11c=;
-        b=CStZUXfRae9aJsMQsiWggighXwjHfvOgkCBON+YFqM0TUXRFqiijoLauDIjoVjoKKujIhx
-        azaFM13uO4vlItJERp6/k7jUK01N6dVRIKzTAb1qB2J+OmG46s/xvd4uHiDZI6zIcnWBvt
-        vT6yrvEUKWLg8pX9KZ7YPZOCJkCEnec=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C2D7E139D2;
-        Wed, 18 Jan 2023 21:23:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GBpHLTdjyGPBNQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 18 Jan 2023 21:23:03 +0000
-Date:   Wed, 18 Jan 2023 22:23:02 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH 1/3] mm: return the number of pages successfully paged out
-Message-ID: <Y8hjNm+kB8WquUH6@dhcp22.suse.cz>
-References: <20230117231632.2734737-1-minchan@kernel.org>
- <Y8e3lHsYoWjFWbRU@dhcp22.suse.cz>
- <Y8gn0KQDWC/5CZ/w@google.com>
- <Y8gt5Gb7DPaEI2uN@dhcp22.suse.cz>
- <Y8g1VWkdSwt5SUVo@google.com>
+        Wed, 18 Jan 2023 16:24:42 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6180460499
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:24:41 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso824511wmn.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:24:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IFxZKl7hCmO0fLuY8+p3+x6sh8BJNlqy9dGBP7VEmYM=;
+        b=K0DcXw86hQI0oQltDntbuTDBbjkVifmR5KNpltq/kd60KP3U7DDavClaPBtHg3zXHF
+         3A2Jsgf6/5qg8tlO1jnZaHvpswBM5uhyuSRjuFUQ99cjr+/uA4roD8sWC0Z0wWkAsPz6
+         YBsxXdcESvVO6NMJvvFXt+FlEeKHte25K7/7g7m26Lq9zF0zm7w4qnmOtU0AYfhRY134
+         FPItd2dLcD3E2VBBO0/bOoIXmOj5U/Gid3IBBoC5lB9izmV0drZQJD84b7EgowtGsCR7
+         FB6LQFHrgDJ0OTIh8Psj4JHHoNhdQsbJjkgdDgA8cQp2mpcUthTX5vWkEjckj4/2J1e6
+         bhRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IFxZKl7hCmO0fLuY8+p3+x6sh8BJNlqy9dGBP7VEmYM=;
+        b=KIyxfrCQjUMWxz1iHsRD2Cp3bXf4dy4LHoKmTXFrl4BIfnS/RRrxUi8eaYc/BC2844
+         7zU0FyceHTMISS7fErWAiiz21OW5rl1Tx+pPQKdZ2pP0FMdZ2QVXX7IL9e6R5SalBiYF
+         QBnyKuygaxFE6WE8Qxmsxq/wkbrxPeiO9np+5TVytM/7SH8FwEjM6/UwPG/ZLBmuBULs
+         /T+JEvAfY4tEBgbaK8lN2Qe9JY6OEOSEuVEpndeflwZUSmDnC8FdFGhxMwPNn+Zenfwu
+         SnFPSsh/zc2melmRvFl5D2F51fmIbdNxvT8yyFEceuhEsyRaYdANVH6TF0LIsFCWA9In
+         YXdw==
+X-Gm-Message-State: AFqh2kpNayiGCajee7jfgsZEGvq6mI9FLGCdyrgfr+n8XJiy5lxCVLth
+        YF9izlMh+D76sUnFRrotqtSnjA==
+X-Google-Smtp-Source: AMrXdXuGoYQ2ipyxKj9qImNlNeIu7/IywGxVLvg5V5HN3V4OIeWY5uR558/S2som56xTlfJPCXek7Q==
+X-Received: by 2002:a05:600c:3d19:b0:3db:1810:8c9e with SMTP id bh25-20020a05600c3d1900b003db18108c9emr2851203wmb.38.1674077079858;
+        Wed, 18 Jan 2023 13:24:39 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e36-20020a5d5964000000b002be0b1e556esm7594189wri.59.2023.01.18.13.24.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 13:24:39 -0800 (PST)
+Message-ID: <a88d0ee2-5616-0362-0b8d-a9005176890b@linaro.org>
+Date:   Wed, 18 Jan 2023 22:24:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8g1VWkdSwt5SUVo@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_thermal/drivers/mtk=5fthermal=3a_Use?=
+ =?UTF-8?B?wqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn
+Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <202301181637472073620@zte.com.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <202301181637472073620@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 18-01-23 10:07:17, Minchan Kim wrote:
-> On Wed, Jan 18, 2023 at 06:35:32PM +0100, Michal Hocko wrote:
-> > On Wed 18-01-23 09:09:36, Minchan Kim wrote:
-> > > On Wed, Jan 18, 2023 at 10:10:44AM +0100, Michal Hocko wrote:
-> > > > On Tue 17-01-23 15:16:30, Minchan Kim wrote:
-> > > > > The reclaim_pages MADV_PAGEOUT uses needs to return the number of
-> > > > > pages paged-out successfully, not only the number of reclaimed pages
-> > > > > in the operation because those pages paged-out successfully will be
-> > > > > reclaimed easily at the memory pressure due to asynchronous writeback
-> > > > > rotation(i.e., PG_reclaim with folio_rotate_reclaimable).
-> > > > > 
-> > > > > This patch renames the reclaim_pages with paging_out(with hope that
-> > > > > it's clear from operation point of view) and then adds a additional
-> > > > > stat in reclaim_stat to represent the number of paged-out but kept
-> > > > > in the memory for rotation on writeback completion.
-> > > > > 
-> > > > > With that stat, madvise_pageout can know how many pages were paged-out
-> > > > > successfully as well as reclaimed. The return value will be used for
-> > > > > statistics in next patch.
-> > > > 
-> > > > I really fail to see the reson for the rename and paging_out doesn't
-> > > > even make much sense as a name TBH.
-> > > 
-> > > Currently, what we are doing to reclaim memory is
-> > > 
-> > > reclaim_folio_list
-> > >     shrink_folio_list
-> > >         if (folio_mapped(folio))
-> > >             try_to_unmap(folio)
-> > > 
-> > >         if (folio_test_dirty(folio))
-> > >             pageout
-> > > 
-> > > Based on the structure, pageout is just one of way to reclaim memory.
-> > > 
-> > > With MADV_PAGEOUT, what user want to know how many pages
-> > > were paged out as they requested(from userspace PoV, how many times
-> > > pages fault happens in future accesses), not the number of reclaimed
-> > > pages shrink_folio_list returns currently.
-> > > 
-> > > In the sense, I wanted to distinguish between reclaim and pageout.
-> > 
-> > But MADV_PAGEOUT is documented to trigger memory reclaim in general
-> > not a pageout. Let me quote from the man page
-> > : Reclaim a given range of pages.  This is done to free up memory occupied
-> > : by these pages.
+On 18/01/2023 09:37, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> IMO, we need to change the documentation something like this.
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
->  : Try to reclaim a given range of pages. The reclaim carries on the
->    unmap pages from address space and then write them out to backing
->    storage. It could help to free up memory occupied by these pages
->    or improve memory reclaim efficiency.
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
 
-But this is not what the implementation does nor should it be specific
-about what reclaim actual can do. The specific implementation of the
-reclaim is an implementation detail.
- 
-> > Sure anonymous pages can be paged out to the swap storage but with the
-> > upcomming multi-tiering it can be also "paged out" to a lower tier. All
-> > that leads to freeing up memory that is currently mapped by that address
-> > range.
-> 
-> I am not familiar with multi-tiering. However, thing is the operation
-> of pageout is synchronous or not. If it's synchronous(IOW, when the
-> pageout returns, the page was really written to the storage), yes,
-> it can reclaim memory. If the backing storage is asynchrnous device
-> (which is *major* these days), we cannot reclaim the memory but just
-> wrote the page to the storage with hope it could help reclaim speed
-> at next iteration of reclaim.
-
-I am sorry but I do not follow. Synchronicity of the reclaim should be
-completely irrelevant. Even swapout (pageout from your POV AFAIU) can be
-async or sync.
- 
-> > Anyway, what do you actually meen by distinguishing between reclaim and
-> > pageout. Aren't those just two names for the same thing?
-> 
-> reclaim is realy memory freeing but pageout is just one of the way
-> to achieve the memory freeing, which is not guaranteed depending on
-> backing storage's speed.
-
-Try to think about it some more. Do you really want the MADV_PAGEOUT to
-be so specific about how the memory reclaim is achieved? How do you
-reflect new ways of reclaiming memory - e.g. memory demotion when the
-primary memory gets freed by migrating the content to a slower type of
-memory yet not write it out to ultra slow swap storage (which is just
-yet another tier that cannot be accessed directly without an explicit
-IO)?
+Applied, thanks
 
 -- 
-Michal Hocko
-SUSE Labs
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
