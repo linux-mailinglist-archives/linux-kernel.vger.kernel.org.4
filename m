@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA13671E33
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE5B671E40
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjARNlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S230458AbjARNmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjARNlL (ORCPT
+        with ESMTP id S230344AbjARNlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:41:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F9AA6C48;
-        Wed, 18 Jan 2023 05:10:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84A5FB81CE9;
-        Wed, 18 Jan 2023 13:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 096A8C43398;
-        Wed, 18 Jan 2023 13:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674047418;
-        bh=ZjUASydz7Gcshr3yBAP5rGbkt3uJUSn+CqNygpWGjlg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LRipYjMCwNL09w96bX73Zb4Hg6mpPHfTCjTw3KJ9aR+TvAyMpAoto634j/C2MOi1P
-         od9+JT7xtxHPHeHLdAji50vbQxWjROIIUdLvIyMG9shWKLlIU/AYH+iy4OIIuNT6Fy
-         5/wU+7U0M3gkT/Wr6P3rf7P/A3giOI3z2i2G6ZIXZljbb2qvIJ6/lDCiXwa/CcRJro
-         sEwqDEyKPMGP1kP29owKQb8k9LXe/K4o/sUr6pJwHEFKNbr4tv3YnB7oKTK4TvlQTP
-         4E0PBCQgqk14Fv39KiUqZ7zHa0zQoI/SxVI6fVLoddfIQqtzF8KJ7X3jTjUHDnYL4K
-         xtVSem2mP+39A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4A74C5C7C4;
-        Wed, 18 Jan 2023 13:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 18 Jan 2023 08:41:55 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C86E4FC23;
+        Wed, 18 Jan 2023 05:10:55 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id c145-20020a4a4f97000000b004f505540a20so2038170oob.1;
+        Wed, 18 Jan 2023 05:10:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LPXKE4fWh08xIviaGRGhwlFYvgu/9wGipKwIrtn3ERY=;
+        b=uNf3VSqr6i/H/SFMqfg1Ekznu9B/ttX4LFx53AFBpqLvuRaridi0WoisuONJP0DI4E
+         CIUhqtFUp6R+RNR6VJCP8NDjg58H+rdOZfJQPC9vlvebCB5sesyodyWm5o7J4kRB5bK8
+         FlsSCHDREO7eqRMtYablV+9VSpswViPdcjzTMAgR4V1HQqx6niJC4wDya5utoSGmmvo4
+         ILwmFU9G0Nd6K4msTzxf4NuVrhbFU1q7FMNfjrtzhhBLOZ6rYjhIjMt9gIBAoNRA1vgA
+         4Oj30UkrEwUsrvnmgJ/JG07esO4aKfD5QG96d5/qSqV9XAma9ViK0ss8eCBFM5Y6EsBW
+         idIA==
+X-Gm-Message-State: AFqh2kroRSLQMRqx6qoc8sJdRuewxx8spJfWYtUx8DLS0N1iPOaTQE2y
+        CYNd4YbzeWbrER5Xu3vlKQ==
+X-Google-Smtp-Source: AMrXdXuaVkiDYUFtNuNfPCSPfjF3RtDj8mtkMncMjSfU5aOhhpiJCxGNF68RjD5jl+wYaaUCe+TGSw==
+X-Received: by 2002:a4a:1ac4:0:b0:4f2:21f7:cd93 with SMTP id 187-20020a4a1ac4000000b004f221f7cd93mr3356508oof.0.1674047449990;
+        Wed, 18 Jan 2023 05:10:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s23-20020a4ae557000000b0049f5ce88583sm16470775oot.7.2023.01.18.05.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 05:10:48 -0800 (PST)
+Received: (nullmailer pid 1459876 invoked by uid 1000);
+        Wed, 18 Jan 2023 13:10:47 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] Add PPS support to am65-cpts driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167404741786.5923.11609204629264354932.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 Jan 2023 13:10:17 +0000
-References: <20230116085534.440820-1-s-vadapalli@ti.com>
-In-Reply-To: <20230116085534.440820-1-s-vadapalli@ti.com>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        vigneshr@ti.com, rogerq@kernel.org, nsekhar@ti.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        Peter Geis <pgwipeout@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230118061701.30047-3-yanhong.wang@starfivetech.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-3-yanhong.wang@starfivetech.com>
+Message-Id: <167404705359.1390391.205840489556921087.robh@kernel.org>
+Subject: Re: [PATCH v4 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
+Date:   Wed, 18 Jan 2023 07:10:47 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 16 Jan 2023 14:25:31 +0530 you wrote:
-> The CPTS hardware doesn't support PPS signal generation. Using the GenFx
-> (periodic signal generator) function, it is possible to model a PPS signal
-> followed by routing it via the time sync router to the CPTS_HWy_TS_PUSH
-> (hardware time stamp) input, in order to generate timestamps at 1 second
-> intervals.
+On Wed, 18 Jan 2023 14:16:56 +0800, Yanhong Wang wrote:
+> Some boards(such as StarFive VisionFive v2) require more than one value
+> which defined by resets property, so the original definition can not
+> meet the requirements. In order to adapt to different requirements,
+> adjust the maxitems number definition.
 > 
-> This series adds driver support for enabling PPS signal generation.
-> Additionally, the documentation for the am65-cpts driver is updated with
-> the bindings for the "ti,pps" property, which is used to inform the
-> pair [CPTS_HWy_TS_PUSH, GenFx] to the cpts driver.
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v2,1/3] dt-binding: net: ti: am65x-cpts: add 'ti,pps' property
-    https://git.kernel.org/netdev/net-next/c/2b76af68d8e5
-  - [net-next,v2,2/3] net: ethernet: ti: am65-cpts: add pps support
-    https://git.kernel.org/netdev/net-next/c/b6d787123427
-  - [net-next,v2,3/3] net: ethernet: ti: am65-cpts: adjust pps following ptp changes
-    https://git.kernel.org/netdev/net-next/c/eb9233ce6751
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.example.dtb: ethernet@1c0b000: Unevaluated properties are not allowed ('reset-names' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118061701.30047-3-yanhong.wang@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
