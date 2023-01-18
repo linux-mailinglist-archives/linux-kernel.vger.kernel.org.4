@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF5F67106C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B422267106B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjARBtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S229530AbjARBtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjARBt2 (ORCPT
+        with ESMTP id S229493AbjARBtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:49:28 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E151C66
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:49:26 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id g14so35042077ljh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:49:26 -0800 (PST)
+        Tue, 17 Jan 2023 20:49:14 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DCD4708C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:49:13 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso719676pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:49:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EofrsKclU1Bd3gKxPPxphmvSRJzHoKFWbRAdp5SlbJI=;
-        b=boIYGE+m3kCDRxqRd/7+64o/AV97y54ui0V/gJ+LcZtZQFDolp9kiY0orqv9r6OoWz
-         6WvVy7YJDD4saHCXC0p38hRhEYs3CITcGcu4PaFl/KhTs5bo3Xc5xn4pZ1o7Cx4KSBPL
-         e3OROPvSLfcbPA64tDnupmGitqE0lDZs2hwSQ76OLgO6ioV0sll70E6e7nX1QIFQ74TS
-         H5pOEeCnxYiVT3694FMkgGVSCdfx0ogjR2AUWGwyZDtqfqu3i0gNAYgVp2vUQ9s0arls
-         w1sf23ADKa46AMgylZG/XezZgu6Ah6yauYwEieEp7nj8hu418zEn8eLHvmadNFgrqiF0
-         qaTQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m3t+VlNzoCY4kIKf+CqXn8JwnB74qYXseQle+f7bT5o=;
+        b=E+wLgGKwKDGJzA3B5wG0TtlB64oNme0I2VNg82u7pDo3qzK3A0fakGfktoZgqg77SQ
+         onJij8y5Jp4/D2iU4WxkZEgcFWDUhRwAdcu5B8X6/ev/V8Tup2mNMPhmHK+Pgk84l7/e
+         f7CdlrX6vGvqUYLJzbxaZif78kkdSJZ+X/xsSk/LvaRdUvxNUYWk3cCh0tzKCLSx9zJb
+         YIqqD1maDIu/tnahHy/TMP9VeR0zVS8EJX4Vhvc057LyXndLyXe5wmB0jLjhdMe4/+dx
+         a5s1pQczkbo+7S07FHoZIHOh+LmDGeI+WwIT7WeK2dLGZ6RIBSSxava/hdjaP3ORmGEa
+         SGaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EofrsKclU1Bd3gKxPPxphmvSRJzHoKFWbRAdp5SlbJI=;
-        b=z2Yz+ZK+0rXXGwHfJo2MjVfxWrx/WTfZzrpCzH4SzPn0gcZuwDe76NNciAxnakXxMK
-         YRwtiSCx/GRrhb/xqJqTvkQ5vhPBFDM3Pl3r0EEsdnCZUtsC+okmqnYqGgohKBZ/L9C8
-         /RVONo/7kg91rxn2i2g6uvfIv4CamhzoFhm/8ARo1WaMkdcEBoeirTAMAGg/HXqCaUDX
-         VbMbdLLBVBe64e6LQBKTSCW7ySMGx/oEeS5tnF1waBT4d1jdO1F80kKLCmYigCPhb+6X
-         sSZuPMT8mwvWuGsx15NaugqtEihbKFR1a6yl3myTmlUU/ouPcwGFXG+HPHvpDYzgygUO
-         fd1w==
-X-Gm-Message-State: AFqh2kq1KLBa7vS0DsyPWgZrSNHrnHMuC0Ozt0vn5NmsxnsWqZmv76y6
-        X36tmVnpP4DyzyHVfNvOqZw49QfRXSBPo+zFOh4=
-X-Google-Smtp-Source: AMrXdXtOClVIp1XhZ2IuXdLjsnrX8fXXvUg+8qrxI/0LmwZXgA8uFMETv75h/57JZoWdiu1DERbX/HGKuAOKcji4vc8=
-X-Received: by 2002:a2e:a49a:0:b0:28b:6abf:29ea with SMTP id
- h26-20020a2ea49a000000b0028b6abf29eamr464639lji.359.1674006565275; Tue, 17
- Jan 2023 17:49:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m3t+VlNzoCY4kIKf+CqXn8JwnB74qYXseQle+f7bT5o=;
+        b=sxrB/1r0x7Ddojqbhw5EgBP8aJ+zXuclnuyyX7xwz0q9rQ05V28x8YRBeiuzJdPhY3
+         3hClTCExCOYWt9Ujw0JNK7GTyRR2Xvjh3Lum+jpJ1M9INy+VqYnO1n7h+CGwn6acux2c
+         Dz2SCsYBZ5D52OENKWdC+v6dOgbgfSzwmjT3PvvRc/9YLEY6sxdTv9uHr/vvGBLsK5Wx
+         YfMla+UZXi+AaGB+UshT9Tg/tGkG1886AIirkPXhZxhy7FWTD2P2wZDqEW0d/byTVc3J
+         n3qn3GVyj9rme+pCE2pGfzSMU7h4eBdIi3VSCOKEnlhi6FbrJb15Ag2NDRLVQpRjO7X3
+         OSwA==
+X-Gm-Message-State: AFqh2kqWfgxqyev9bP+TDMYnCveEWSBYqmvsje1YZCIzVFWsIv0W355G
+        Albj0eaNfdAOpEeM9y3FA4wkTGLi+Wc=
+X-Google-Smtp-Source: AMrXdXsPixU25b0oYj2LqGEHBtO20HAZKav9KPAsB2nHmKEsoduTF56l2K2ARLcJoaVF1GvAKmSVKw==
+X-Received: by 2002:a17:903:252:b0:194:a852:57b2 with SMTP id j18-20020a170903025200b00194a85257b2mr5398261plh.64.1674006552672;
+        Tue, 17 Jan 2023 17:49:12 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:27ce:97b5:ee13:dbfe])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b0018685257c0dsm21853275plg.58.2023.01.17.17.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 17:49:12 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 17 Jan 2023 17:49:10 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>, SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH 1/3] mm: return the number of pages successfully paged out
+Message-ID: <Y8dQFvvU99brPFi9@google.com>
+References: <20230117231632.2734737-1-minchan@kernel.org>
+ <20230117155312.5464d01c2d639b1ac44f9330@linux-foundation.org>
+ <Y8c+tFfwSTwlRFOk@google.com>
+ <Y8dEITaIfETA/Z/+@casper.infradead.org>
 MIME-Version: 1.0
-References: <1673943112-8620-1-git-send-email-zhaoyang.huang@unisoc.com>
- <20230117161731.ab69c2352a62a0693570cf70@linux-foundation.org>
- <CAGWkznHKJF1hiVTS2gAxgywnGz4T9u8UQtDV_Oj7r3cWqM5=nA@mail.gmail.com>
- <20230117173145.867a06c1585728da1e9b6a54@linux-foundation.org> <CAGWkznEusXRmi=ZEOvfK8qRfe+aKWa3X-bLG28=XoeGZ5umeuQ@mail.gmail.com>
-In-Reply-To: <CAGWkznEusXRmi=ZEOvfK8qRfe+aKWa3X-bLG28=XoeGZ5umeuQ@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 18 Jan 2023 09:49:01 +0800
-Message-ID: <CAGWkznFDCTXM3-6YEGyFtDOvqPZhK9+XoTvem26fz996fFnLJg@mail.gmail.com>
-Subject: Re: [PATCHv2] mm: use stack_depot_early_init for kmemleak
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8dEITaIfETA/Z/+@casper.infradead.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:40 AM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
->
-> On Wed, Jan 18, 2023 at 9:31 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Wed, 18 Jan 2023 09:25:48 +0800 Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
-> >
-> > > On Wed, Jan 18, 2023 at 8:17 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > >
-> > > > On Tue, 17 Jan 2023 16:11:52 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
-> > > >
-> > > > > Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
-> > > > > Solve this by having stackdepot use stack_depot_early_init. Extra Kconfig also
-> > > > > done by moving kmemleak stuff to mm/Kconfig.debug.
-> > > >
-> > > > I don't understand - what was the reason for the Kconfig change?
-> > > The items related to kmemleak are moved from lib/Kconfig.debug to
-> > > mm/Kconfig.debug
-> >
-> > Well yes, but why?
-> It was suggested by Vlastimil in a previous comment. It makes more
-> sense to have kmemleak's source code and Kconfig items under the same
-> directory.
-> >
-> > Is that related to this bug fix?  If not then please let's have that
-> > change in a separate patch.
-> The moved items are updated for this bug fix.
-sorry for my faint. I will make another patch for Kconfig changes.
-> >
+On Wed, Jan 18, 2023 at 12:58:09AM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 17, 2023 at 04:35:00PM -0800, Minchan Kim wrote:
+> > Yes, both are correct in my view since pageout is initiated after
+> > unmapping the page from page table and think that's better wording
+> > to be in description. Let me use the explanation in the description
+> > at next spin. Thanks.
+> 
+> For the next spin, you'll want to do it against mm-unstable as
+> deactivate_page() is now folio_deactivate().
+
+I was curious what branch I need to use baseline for creating a patch
+since I saw multiple branches recent mm/
+
+Thanks for the hint. Sure, will do.
