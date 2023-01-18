@@ -2,287 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A596717DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978B26717E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjARJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S229606AbjARJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjARJcG (ORCPT
+        with ESMTP id S229987AbjARJfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:32:06 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313380142;
-        Wed, 18 Jan 2023 00:53:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k8zbT1YTA0KyRP89r4auDrtEvPdowsGobwF0S+r8MbEpO6M2tpXk+hGrssm3gBcvXpcbF+3m61pPs+fQ5xzLra30TaAGuA2Fdkac+xPrlIh7fGvVbGasSzJvXBjgNpzGhkSQGezleOsaO2UZH9VGltBZLNlmlg+PE5zKUAehJ3rTI2Pkyhd4VZhoY2XIl4hgGuZdHqPX7l6P88CAjtSFL2t+rqrINkGffo2RqG0C1HKUZtsDaEGBGd8LHT7++brArmTMUpI0ep0VTgV0kbqlaTdZ+plYCbtV93C26mol3aQ4xMFT+YUa9XIPRGP2FtDOUez+eXCIcvZ4mJC5HbpTUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XqdvrV0ZXXCodz8TNWpIpXTJahxoGFblslC6DH8DjKE=;
- b=Nbc5nJx+3d6Vo1SwRc8gJWOKK3zlgEORM/BK1c5mXj6hDcL6YJcDLZlZtVbY6feyLn2Xlv1hnJpcLYT1f5W4cDCY1wulYAH9tBKpq4NWFRfDpzTGZ7R5mRxWTd/FaQZZqBN1xOORxR2LmtZKLtMPb+MqkMlyfXYXfUwsVTHBT6ljuyATdcmpDaxr1agXiUIkDvVjrPmHh2lGIzjl2gQpl2oVQETZVvh0pjk9E5VtkD8Mj14d467EaFPV3FZVMR/Z+dnB3ZLceVYcUJpS5zMsZbjgUDq57y/GLLxAi0rOe5jw6goYXTSr+9R1eufYBiIiHZ8b/pGhx19S1JA26L/2+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XqdvrV0ZXXCodz8TNWpIpXTJahxoGFblslC6DH8DjKE=;
- b=QQ6BGrozos43EmiI366/D4vzC1r9I1GjxQdQ1JoQIK4rcVlq9zk46lccTZRE+9Wr0xgayLN2CRPaWXBJ6R9/Li0PHQkd5dxEoaHbAiLZbnPxaml14Si9m8wXe1o/iI91twZxpsjNwkZlRDtnx5Yuz4u33YLiBxN8xHQuBjco7kM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
- by BY5PR12MB4870.namprd12.prod.outlook.com (2603:10b6:a03:1de::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Wed, 18 Jan
- 2023 08:53:17 +0000
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::500a:d02f:5ceb:4221]) by BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::500a:d02f:5ceb:4221%7]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 08:53:17 +0000
-Message-ID: <db4fa0fc-c9a6-9a48-c45f-1d655b30aff9@amd.com>
-Date:   Wed, 18 Jan 2023 09:53:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH drm-next 00/14] [RFC] DRM GPUVA Manager & Nouveau VM_BIND
- UAPI
-Content-Language: en-US
-To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        airlied@redhat.com, bskeggs@redhat.com, jason@jlekstrand.net,
-        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118061256.2689-1-dakr@redhat.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230118061256.2689-1-dakr@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0067.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::7) To BYAPR12MB3589.namprd12.prod.outlook.com
- (2603:10b6:a03:df::29)
+        Wed, 18 Jan 2023 04:35:00 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665D0A25B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:54:42 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id o8so1353882uaw.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=49hVYpdfpGudyxPMxCrvPN1QUwNU0gvklZbqsfCUCE0=;
+        b=MZvIz4ucU3ckbBoYyb8BHSztHdYfF/T1xOUu1DUJwso2pkiuOZ9WKT3l57A3A+BLVS
+         np+t3nXZ8jvTIt3eDrkpglsgxVgpdwfyIS4zTEMzpEytvCCVF8Wv5NYLIXaze6GMPCS9
+         MYcDnL0ttRjUdcBD+Px/1KIY6a7pveaN5qeSKBGSUuZ5tViGxlsOzRANMMeXisd+Ch+U
+         MdyGvlHGraIECEzxgcIHSrW9Evfq3lcTOxSn5kF33OLUweKXvjFbv2SSP3k3cHxg11rZ
+         mbEt+edQSeZukvlMHL77SnJBtxEb3mjK4LyDJhiCqWWf72zEo4OsRKZPRF/56ZYYcLFh
+         x1gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=49hVYpdfpGudyxPMxCrvPN1QUwNU0gvklZbqsfCUCE0=;
+        b=Ry0D9sQLU93BKESwW4wBGd/uQqAgyIYTo98SGE2vbhf3a4rJX5VdiXj0nogqGOSNkV
+         sWNWA5NGj5X8QE8mV9jfZy++tgc0TCXhvlLGd0jzYNrPagkESD97Xkj2jTzfuRIJWLq/
+         sqFGBr/P1A0KmXQuGpoSoZEfXnHdEajRPDnc5cp/rB1YGuz5ZvXf42Ej2IDz2WUQqFrI
+         Utgew389koLIL/CKmOC8u076dfXTYkrJG0JhmWxEYSqf628Z3fjMafITyQHXTDIpN2TX
+         Hc4FlJFB0LzA5xgMZSJu9wYmesx8VnBeNXBrYRFh/QVU2G7fIAI1wz4NPpg8EdxrgBfq
+         dBVQ==
+X-Gm-Message-State: AFqh2krqbDf8BI+S323EyJKWMfNEihaP8j21x3WVbqU7qVh1haLeveIk
+        Mb0hT3uPKiGZgQoxCN7l2Ck9ckAPOtP0QVEoqKql6w==
+X-Google-Smtp-Source: AMrXdXugKCqXvSeRnMwos6ZAe03rDqs6gyi4RAQrNJ/ogr4rbIIcW04mOaSGMLnhgth9bR1KUu84pU6rVNG0Hgd9XxY=
+X-Received: by 2002:ab0:784f:0:b0:5a4:c264:fb05 with SMTP id
+ y15-20020ab0784f000000b005a4c264fb05mr759518uaq.22.1674032081336; Wed, 18 Jan
+ 2023 00:54:41 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|BY5PR12MB4870:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e63386a-a7ad-4fb7-7bc9-08daf931711f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5+P2WbvDedU6ONkj1L7g++3nvuyCXAD4r1ehW7Hu15DFiHUANaB9vvRUo7LLZZb9aJwkWoa8XGHlE83mV5YOlPsXwXmf11zJR5GzQ7m+0AiWkasY6xKWArL/IGxkV6UVqmNuyA/x1C/tWr+2VfV6sztlxlRZkVMcHuDyy2nKH2ANXgwDiq9UbR80vdy5HV+QGu0qnVZlBTjEg/TAMbgP7uZbD0uGaJmomsQcq6Rk/Qx5LuTnc3VN8s8zawzvVXLXaxGhIR5j5bb5TZHYPtdzkW0tLjmNalNFup++/hD5oC8C6li3jNk6HTl3NGi1vIufnsBQfoV5FxJ0sip/M5e5sUoRsnM1xKZM+oAgmR4nvMEZJgjg3zP0LwyZ9vT8kRWG0vgGCa4iVi9iW3wGn3z0rOvZg0xc7VgOggKkLBkba2XrDP8VsFHroHS6IYFg2ORg2G1RhMWI0MBsMWUzmQj3OGcSwEM3M8gNV9spe9clJCInm/lU+syqdawlpHXIj77EWpuy9kUBvwQ8f67duyWymlNNlUICndEgPQi7GnqDSKdcSAsv3IuqVxIqXdbDzoWA/kBJFVoE6sHNtR5WfQ7ufj4TzXVt+IO74xnCFuwdwSoXoDyryWtVpknhzC2i/3kmfJJ2QahdCkydQlfM3b+V9z48oY7J7Q2QBCt3K3Kc0Cbi0/5GW7+ZHkDjWaIob9l3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(451199015)(31686004)(86362001)(2906002)(7416002)(66556008)(66476007)(66946007)(8936002)(5660300002)(31696002)(38100700002)(316002)(6666004)(66574015)(6486002)(966005)(6506007)(478600001)(36756003)(41300700001)(8676002)(4326008)(186003)(6512007)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2NQb0FzVmgrQ3JvRFVyOVBvWTFMN2hEanNTdVZrTndTK3FabFFnSVppSTFv?=
- =?utf-8?B?allYZnEvOGVuWHlFZk55M2JrejRQL2IwaEZXYTZSZFVkSDEzWlBBbHVoZjZG?=
- =?utf-8?B?VlBMQ3g3QjYyVEZoak9KSlN4cGtqUmU1NzFXdzJpWW1Zd1FxTGdHMHozY3RT?=
- =?utf-8?B?ejl3aFR0d1FaM25zdnlOR3N0c0ZzU0wyUEVaQWdsckVnZUpqQTdFYWVkNHVQ?=
- =?utf-8?B?S3RJVEZSU2d1djVyeElSOUcvdWU0RFdXcUlmbUo4a1F0YVI1bDAzbmhLdVIw?=
- =?utf-8?B?dVorYzlNeFhoTk96OVhGMkU4YTZta1FXMFdEZWI5UGpwYTUzRms0MHZxSHly?=
- =?utf-8?B?NTMxUUhabWdhdUYzbkVaUUt3dWMvd0Y1Vi9SRDNPc0VjamU2RlZqNG93QXJU?=
- =?utf-8?B?K2l4VkpKZ0JnYWtaUzFCRGhvZ29VQjc3NTY2LzBPcWZtKys4Q3JnLzk1REky?=
- =?utf-8?B?N3FwMHhCdG5WSWtRK1cxUkdmTEFxaDVpTjJ0ZzU5T0kyWTU2N3poL25icTJI?=
- =?utf-8?B?ZDJxdzFrbnQzaWs2QisvN0tJWFZMSTU1eitvN2tEZW9QbU92dk91OVNqdW0x?=
- =?utf-8?B?cVZrNEk3UXVncXlpTTdSaTVmYTlyVFVRNWFiM0VyQnJXZXhZemlwN3ZEZVFM?=
- =?utf-8?B?RXdVNFIrSVpmRVBVV2FKUElJQmZ5aDhZanFoRkVNUHBlc0VhUGFOU05TOExl?=
- =?utf-8?B?aTNqYU9Ka25nQU1aNzYzKzJnWFRMenNZQStsb0JVY1FBLzkvMXFwWDRhVzFE?=
- =?utf-8?B?aFpnbmx5Um9qd1ZZdUhPY3ZtcW5EdFc2TW1IelZtQmxQR1krbXNTSjZsbGlo?=
- =?utf-8?B?bWZFTWNGVDlWRER3WUtyM3B5TWFKWlk5S3BwM0JlaDlrc3JnZkV2UFF0eitJ?=
- =?utf-8?B?bUFTMWFtYnNtQXdyNTlDY1k4eERXaFBZQ0RvdCtJaEFSWEE2aGdHNmJHWUdJ?=
- =?utf-8?B?Q0VRby9ZZk9sQlc2UGNGVERuQTRaT1duekVjWTQxWHB1UWN0RDRhbUgyd1Iv?=
- =?utf-8?B?VTJoTG55ZGVXWnhOL2xVbkFXUDlGVnhPNWFMQzIzYkRRb1JHTklQaXo1YjJs?=
- =?utf-8?B?REs1UXdSdEVGTG9HQmpGSXliYW5iYTJkakV1NEdWQ3pMVS9oVjVlUUZzUDUz?=
- =?utf-8?B?Tk9IRzVxT2RtUXNhQkZCOVREdzg3SEk0KytBZEo3R2g2NjFSUFRDUHU0Z2h1?=
- =?utf-8?B?bU1XTGJrOWJLbzZRK2tZMXVZb1ZxMWJmVWtJK3BJYmwrM1l3K0JTa0NINDlF?=
- =?utf-8?B?L3Rka0RPNjI2MG9pdklVOGRZK2pVQVBMenVDWWRYZWtoeDlBUWRlUElmWFoy?=
- =?utf-8?B?S3lQd05CaytJMU50ZkFYMXBxZVZvMEh5RGU0Q2RuTG8wTVoyVkY0R2tVeVl4?=
- =?utf-8?B?R25YTm5SNWNlSnR0TW5BRjZPZmNDVkdnR0Rzcm9xcEhNTEFxSXB5ZUNpMVVU?=
- =?utf-8?B?OXFyVHNqZTR1eTRJem9RTWF4WXdEWHFuOXlXdk5FL1NJWnlYclpQMFFXK1ZS?=
- =?utf-8?B?aG5kTVhPaVhqTFR0cElNY05KekRERGRCOEd6VHcwVVE3b0lFUTdndFN2ZEJT?=
- =?utf-8?B?eDdTNTRyWk9LSXNkcmRJVVVzM1J6K3BDd0FUR1dlb3VxT01Jcmk2VHU1eDNB?=
- =?utf-8?B?V3lGWmdOUDNzODY4V1pzMmgwOEUxemZPeVVyVUlQSHNqbU9hL0tsY2M5NkRI?=
- =?utf-8?B?UTJIUHlGSnNpekhnbkZlOWdxNVZYZUlXY2JaQ0x0MmpPcjJwZ3lWNHZLcU9u?=
- =?utf-8?B?M0xub2lIQUVkMFgweGxMbC9aYW83R2YvK21rZFhvR1VvKzhIZTJTL241SDlm?=
- =?utf-8?B?d2Vmb0VTaElaa1h4RXhuRjZjYVppb2xTaFRQd2pUdUo1dlI4WU5yUEVLSnhH?=
- =?utf-8?B?dzNPUDFTeEQ1UTczV0sxa1N2VU9semltWGJNUlNycGh2RmowT0FpUXhwWnBx?=
- =?utf-8?B?M0RLd1dYbVhLeEo4S0o5S3RKbjBmK0hWYVQzM2ZEVXNFeEM2Mkx6Rm9GdG5y?=
- =?utf-8?B?clplRFArT1lQNDZvVHExQzc3TW9DVjJoaFRFNXZBbXl0M01lcXZqS28rOTgw?=
- =?utf-8?B?cFl3bzdvRG9hWVErbnFPdkE1ZHdtaUUwZS9uQUxrbXBReHAvRFJXaWlRcW43?=
- =?utf-8?B?Z3NmVkdQQ1N0bkVNUi9GZnQ0ZzR4R2ZLeTkrL3h5UU94K0I2RWlZcE1KUFYx?=
- =?utf-8?Q?ly6slsrCTSAvi8aI4G7bZBLOt8dPQOl6xT5qXTt9u9iN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e63386a-a7ad-4fb7-7bc9-08daf931711f
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 08:53:17.4667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hIB/RDrMxqoxHvcU3gHauuNKhK9L4CQMWFAVg14hugmZBxbF4lT2R1JRLgw7nvwV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4870
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230117124546.116438951@linuxfoundation.org>
+In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 Jan 2023 14:24:30 +0530
+Message-ID: <CA+G9fYsbfzY1=5dZvdHfBqv5nX8wovpXVH2vb_Q1mo+jcTv0eA@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.01.23 um 07:12 schrieb Danilo Krummrich:
-> This patch series provides a new UAPI for the Nouveau driver in order to
-> support Vulkan features, such as sparse bindings and sparse residency.
+On Tue, 17 Jan 2023 at 18:18, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Furthermore, with the DRM GPUVA manager it provides a new DRM core feature to
-> keep track of GPU virtual address (VA) mappings in a more generic way.
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 176 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> The DRM GPUVA manager is indented to help drivers implement userspace-manageable
-> GPU VA spaces in reference to the Vulkan API. In order to achieve this goal it
-> serves the following purposes in this context.
+> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
+> Anything received after that time might be too late.
 >
->      1) Provide a dedicated range allocator to track GPU VA allocations and
->         mappings, making use of the drm_mm range allocator.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.7-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This means that the ranges are allocated by the kernel? If yes that's a 
-really really bad idea.
 
-Regards,
-Christian.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
->
->      2) Generically connect GPU VA mappings to their backing buffers, in
->         particular DRM GEM objects.
->
->      3) Provide a common implementation to perform more complex mapping
->         operations on the GPU VA space. In particular splitting and merging
->         of GPU VA mappings, e.g. for intersecting mapping requests or partial
->         unmap requests.
->
-> The new VM_BIND Nouveau UAPI build on top of the DRM GPUVA manager, itself
-> providing the following new interfaces.
->
->      1) Initialize a GPU VA space via the new DRM_IOCTL_NOUVEAU_VM_INIT ioctl
->         for UMDs to specify the portion of VA space managed by the kernel and
->         userspace, respectively.
->
->      2) Allocate and free a VA space region as well as bind and unbind memory
->         to the GPUs VA space via the new DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
->
->      3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
->
-> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC, make use of the DRM
-> scheduler to queue jobs and support asynchronous processing with DRM syncobjs
-> as synchronization mechanism.
->
-> By default DRM_IOCTL_NOUVEAU_VM_BIND does synchronous processing,
-> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
->
-> The new VM_BIND UAPI for Nouveau makes also use of drm_exec (execution context
-> for GEM buffers) by Christian König. Since the patch implementing drm_exec was
-> not yet merged into drm-next it is part of this series, as well as a small fix
-> for this patch, which was found while testing this series.
->
-> This patch series is also available at [1].
->
-> There is a Mesa NVK merge request by Dave Airlie [2] implementing the
-> corresponding userspace parts for this series.
->
-> The Vulkan CTS test suite passes the sparse binding and sparse residency test
-> cases for the new UAPI together with Dave's Mesa work.
->
-> There are also some test cases in the igt-gpu-tools project [3] for the new UAPI
-> and hence the DRM GPU VA manager. However, most of them are testing the DRM GPU
-> VA manager's logic through Nouveau's new UAPI and should be considered just as
-> helper for implementation.
->
-> However, I absolutely intend to change those test cases to proper kunit test
-> cases for the DRM GPUVA manager, once and if we agree on it's usefulness and
-> design.
->
-> [1] https://gitlab.freedesktop.org/nouvelles/kernel/-/tree/new-uapi-drm-next /
->      https://gitlab.freedesktop.org/nouvelles/kernel/-/merge_requests/1
-> [2] https://gitlab.freedesktop.org/nouveau/mesa/-/merge_requests/150/
-> [3] https://gitlab.freedesktop.org/dakr/igt-gpu-tools/-/tree/wip_nouveau_vm_bind
->
-> I also want to give credit to Dave Airlie, who contributed a lot of ideas to
-> this patch series.
->
-> Christian König (1):
->    drm: execution context for GEM buffers
->
-> Danilo Krummrich (13):
->    drm/exec: fix memory leak in drm_exec_prepare_obj()
->    drm: manager to keep track of GPUs VA mappings
->    drm: debugfs: provide infrastructure to dump a DRM GPU VA space
->    drm/nouveau: new VM_BIND uapi interfaces
->    drm/nouveau: get vmm via nouveau_cli_vmm()
->    drm/nouveau: bo: initialize GEM GPU VA interface
->    drm/nouveau: move usercopy helpers to nouveau_drv.h
->    drm/nouveau: fence: fail to emit when fence context is killed
->    drm/nouveau: chan: provide nouveau_channel_kill()
->    drm/nouveau: nvkm/vmm: implement raw ops to manage uvmm
->    drm/nouveau: implement uvmm for user mode bindings
->    drm/nouveau: implement new VM_BIND UAPI
->    drm/nouveau: debugfs: implement DRM GPU VA debugfs
->
->   Documentation/gpu/driver-uapi.rst             |   11 +
->   Documentation/gpu/drm-mm.rst                  |   43 +
->   drivers/gpu/drm/Kconfig                       |    6 +
->   drivers/gpu/drm/Makefile                      |    3 +
->   drivers/gpu/drm/amd/amdgpu/Kconfig            |    1 +
->   drivers/gpu/drm/drm_debugfs.c                 |   56 +
->   drivers/gpu/drm/drm_exec.c                    |  294 ++++
->   drivers/gpu/drm/drm_gem.c                     |    3 +
->   drivers/gpu/drm/drm_gpuva_mgr.c               | 1323 +++++++++++++++++
->   drivers/gpu/drm/nouveau/Kbuild                |    3 +
->   drivers/gpu/drm/nouveau/Kconfig               |    2 +
->   drivers/gpu/drm/nouveau/include/nvif/if000c.h |   23 +-
->   drivers/gpu/drm/nouveau/include/nvif/vmm.h    |   17 +-
->   .../gpu/drm/nouveau/include/nvkm/subdev/mmu.h |   10 +
->   drivers/gpu/drm/nouveau/nouveau_abi16.c       |   23 +
->   drivers/gpu/drm/nouveau/nouveau_abi16.h       |    1 +
->   drivers/gpu/drm/nouveau/nouveau_bo.c          |  152 +-
->   drivers/gpu/drm/nouveau/nouveau_bo.h          |    2 +-
->   drivers/gpu/drm/nouveau/nouveau_chan.c        |   16 +-
->   drivers/gpu/drm/nouveau/nouveau_chan.h        |    1 +
->   drivers/gpu/drm/nouveau/nouveau_debugfs.c     |   24 +
->   drivers/gpu/drm/nouveau/nouveau_drm.c         |   25 +-
->   drivers/gpu/drm/nouveau/nouveau_drv.h         |   92 +-
->   drivers/gpu/drm/nouveau/nouveau_exec.c        |  310 ++++
->   drivers/gpu/drm/nouveau/nouveau_exec.h        |   55 +
->   drivers/gpu/drm/nouveau/nouveau_fence.c       |    7 +
->   drivers/gpu/drm/nouveau/nouveau_fence.h       |    2 +-
->   drivers/gpu/drm/nouveau/nouveau_gem.c         |   83 +-
->   drivers/gpu/drm/nouveau/nouveau_mem.h         |    5 +
->   drivers/gpu/drm/nouveau/nouveau_prime.c       |    2 +-
->   drivers/gpu/drm/nouveau/nouveau_sched.c       |  780 ++++++++++
->   drivers/gpu/drm/nouveau/nouveau_sched.h       |   98 ++
->   drivers/gpu/drm/nouveau/nouveau_svm.c         |    2 +-
->   drivers/gpu/drm/nouveau/nouveau_uvmm.c        |  575 +++++++
->   drivers/gpu/drm/nouveau/nouveau_uvmm.h        |   68 +
->   drivers/gpu/drm/nouveau/nouveau_vmm.c         |    4 +-
->   drivers/gpu/drm/nouveau/nvif/vmm.c            |   73 +-
->   .../gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c    |  168 ++-
->   .../gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.h    |    1 +
->   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |   32 +-
->   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |    3 +
->   include/drm/drm_debugfs.h                     |   25 +
->   include/drm/drm_drv.h                         |    6 +
->   include/drm/drm_exec.h                        |  144 ++
->   include/drm/drm_gem.h                         |   75 +
->   include/drm/drm_gpuva_mgr.h                   |  527 +++++++
->   include/uapi/drm/nouveau_drm.h                |  216 +++
->   47 files changed, 5266 insertions(+), 126 deletions(-)
->   create mode 100644 drivers/gpu/drm/drm_exec.c
->   create mode 100644 drivers/gpu/drm/drm_gpuva_mgr.c
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.c
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.h
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.c
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.h
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.c
->   create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.h
->   create mode 100644 include/drm/drm_exec.h
->   create mode 100644 include/drm/drm_gpuva_mgr.h
->
->
-> base-commit: 0b45ac1170ea6416bc1d36798414c04870cd356d
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 6.1.7-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 507f83506c2bc81502508bb12fc4970dec7b1746
+* git describe: v6.1.5-194-g507f83506c2b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.5=
+-194-g507f83506c2b
+
+## Test Regressions (compared to v6.1.5-11-g5eedeabf82ee)
+
+## Metric Regressions (compared to v6.1.5-11-g5eedeabf82ee)
+
+## Test Fixes (compared to v6.1.5-11-g5eedeabf82ee)
+
+## Metric Fixes (compared to v6.1.5-11-g5eedeabf82ee)
+
+## Test result summary
+total: 177864, pass: 147712, fail: 4982, skip: 25143, xfail: 27
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 147 total, 144 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* i386: 35 total, 29 passed, 6 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 34 total, 30 passed, 4 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 40 total, 35 passed, 5 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
