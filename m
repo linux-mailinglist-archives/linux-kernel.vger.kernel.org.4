@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EBE672AFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F19672B05
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjARWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S229950AbjARWD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjARWBn (ORCPT
+        with ESMTP id S230095AbjARWDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:01:43 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA835EFAC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:01:41 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id l139so184652ybl.12
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qtq4bTyQy0W4Bsf1mh5rx8LNnKznTvqqjHsmXtsh7DY=;
-        b=IAT5APY9WkjsiY4I6E0A+2MrwUYt2keZusJ6Z/9Twqhz6K1BzWrNvV/ddK0s3xkoca
-         YntymHOvR/VNglekh3ZntKkkb1G9NVurcdaOmb+Md0YgJIYb2ldm6rVJW20LZiLC/uVZ
-         gUA1FZQawq07+xrTuUkJ5JGs5Z+4iq4NmHh/lj5ReqVsVMOZn5no+MQjDEiuEHsprp5g
-         tQdy7XV79TEyJHWBa3PUGdCwt6AkTZi+FGWzdcA4NiOYfWprnaf0bFWIplwonrwHNbIw
-         r+VMmO10hBMU/tVLwNy5/W8bQmNPcpL+DiqwS1NOlGhOhS+INBm0Bb6H3wYD2RMCxz6E
-         fVMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qtq4bTyQy0W4Bsf1mh5rx8LNnKznTvqqjHsmXtsh7DY=;
-        b=JC5SDEJ9u42RwsY0DVMVHWxhPVPw0+NRzX9B4aIWoiXneNQ6Ddo90yQAnjf8ITfXhC
-         s4a4NIX41H4FzJ59wDS/Aw2pLnQrfTG2bRR0hBv0l4rDjMfnDji4tS3DCUPCzx/PGk9h
-         F0xjXXAYcX81Ixyz+W1iRbFXAr/REpdswAd/ZFOWSVJUoAhLKhcD8VIKT530k331yBL/
-         AWHxdk3UJz3FWsYZOpWlPMtiBzP60Id6deZ00bCR13c/DGAGLefDEeU5wCO6ew2AFBvp
-         UOKU1xH79agELhG87RRv5qh6JSfceWYSRtWrcRiwaB8oCxreFbTW9g+PoLrDw0LHJlWO
-         Ioog==
-X-Gm-Message-State: AFqh2kqVhiGrU4XIxK9liBgLp4S1TZyFkPB1fM/dOIJj8LwWf2hYQLxZ
-        tz7b5RmDU+1eA6FhweAT/nHkvxg6nsK8sJWMkSO1GyYN5q8=
-X-Google-Smtp-Source: AMrXdXsbqHTIUxZ0kmW8VtpW1geWYPLEm+bgiYi5tHPR+hPgMkdnS2ZRkYrvkpfAjEw5z3YO4E5NLyx/YNRvkQpyCTI=
-X-Received: by 2002:a25:740b:0:b0:7b6:9dcb:6588 with SMTP id
- p11-20020a25740b000000b007b69dcb6588mr977882ybc.251.1674079301023; Wed, 18
- Jan 2023 14:01:41 -0800 (PST)
+        Wed, 18 Jan 2023 17:03:24 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55086646B7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:03:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ny01R0gmBz9v7P2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:55:23 +0800 (CST)
+Received: from [10.48.135.81] (unknown [10.48.135.81])
+        by APP2 (Coremail) with SMTP id GxC2BwC3hl2EbMhjj6qoAA--.1278S2;
+        Wed, 18 Jan 2023 23:02:55 +0100 (CET)
+Message-ID: <4a917e54-d029-9341-aef4-a447746b7743@huaweicloud.com>
+Date:   Wed, 18 Jan 2023 23:02:40 +0100
 MIME-Version: 1.0
-References: <20230118150703.4024-1-ubizjak@gmail.com> <20230118131825.c6daea81ea1e2dc6aa014f38@linux-foundation.org>
- <CAFULd4ZQGG+N3f7xDuoiNG1jY128pqaH0F4eLKO+fhvSNAbKfA@mail.gmail.com> <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com>
-In-Reply-To: <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Wed, 18 Jan 2023 23:01:29 +0100
-Message-ID: <CAFULd4Y8huj1iZo0yE9A7Ww5Z7WWoBK2KvG90s75OU-s7pL90Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mateusz Guzik <mjguzik@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     paulmck@kernel.org, stern@rowland.harvard.edu, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+ <Y8hk6JrUXei6ZInI@andrea>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y8hk6JrUXei6ZInI@andrea>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwC3hl2EbMhjj6qoAA--.1278S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4UurWDKFW3Jry5tF1xAFb_yoWrZr1fpF
+        W8taySgw4kJFn5Wwn7AayDZryFkws3Ja1UJFyDWwn5Cwn8Jr1I9Fnrta15ZFW8Grs5C3Wj
+        vr4av3WkX34DCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:55 PM Uros Bizjak <ubizjak@gmail.com> wrote:
->
-> On Wed, Jan 18, 2023 at 10:47 PM Uros Bizjak <ubizjak@gmail.com> wrote:
-> >
-> > On Wed, Jan 18, 2023 at 10:18 PM Andrew Morton
-> > <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Wed, 18 Jan 2023 16:07:03 +0100 Uros Bizjak <ubizjak@gmail.com> wrote:
-> > >
-> > > > Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-> > > > {set,clear}_bits_ll.  x86 CMPXCHG instruction returns success in ZF
-> > > > flag, so this change saves a compare after cmpxchg (and related move
-> > > > instruction in front of cmpxchg).
-> > > >
-> > > > Also, try_cmpxchg implicitly assigns old *ptr value to "old"
-> > > > when cmpxchg fails.
-> > > >
-> > > > Note that the value from *ptr should be read using READ_ONCE to prevent
-> > > > the compiler from merging, refetching or reordering the read.
-> > > >
-> > > > The patch also declares these two functions inline, to ensure inlining.
-> > >
-> > > But why is that better?  This adds a few hundred bytes more text, which
-> > > has a cost.
-> >
-> > Originally, both functions are inlined and the size of an object file
-> > is (gcc version 12.2.1, x86_64):
-> >
-> >   text    data     bss     dec     hex filename
-> >   4661     480       0    5141    1415 genalloc-orig.o
-> >
-> > When try_cmpxchg is used, gcc chooses to not inline set_bits_ll (its
-> > estimate of code size is not very precise when multi-line assembly is
-> > involved), resulting in:
-> >
-> >   text    data     bss     dec     hex filename
-> >   4705     488       0    5193    1449 genalloc-noinline.o
-> >
-> > And with an inline added to avoid gcc's quirks:
-> >
-> >   text    data     bss     dec     hex filename
-> >   4629     480       0    5109    13f5 genalloc.o
-> >
-> > Considering that these two changed functions are used only in
-> > genalloc.o, adding inline qualifier is a win, also when comparing to
-> > the original size.
->
-> BTW: Recently, it was determined [1] that the usage of cpu_relax()
-> inside the cmpxchg loop can be harmful for performance. We actually
-> have the same situation here, so perhaps cpu_relax() should be removed
-> in the same way it was removed from the lockref.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5fe24ef17b5fbe6db49534163e77499fb10ae8c
+Thanks for reviewing the documentation.
+You made me realize that the patch is already doing two things -- trying 
+to fix the incorrectness of the documentation where it claims that 
+fences like strong-fence only relate po-earlier to po-later events, and 
+trying to make ppo a subrelation of po.
 
-I forgot to add some CCs that may be interested in the above.
+Perhaps it would be better to do this in two steps. First like you 
+suggest only do the ppo fix, and then in a second step (after agreeing 
+with Alan on terminology) fix the documentation in a unified way 
+(instead of only for strong-fence like in this patch).
+Of course you're free to re-state your disagreement about such a change 
+then :D
 
-Uros.
+Either way, the specific comments are helpful.
+
+On 1/18/2023 10:30 PM, Andrea Parri wrote:
+
+>> +	Whenever any CPU C' executes an unlock operation U such that
+>> +	CPU C executes a lock operation L followed by a po-later
+>> +	smp_mb__after_unlock_lock() fence, and L is either a later lock
+>> +	operation on the lock released by U or is po-after U, then any
+>> +	store that propagates to C' before U must propagate to all other
+>> +	CPUs before any instructions po-after the fence are executed on C.
+> The barrier is never mentioned in this document.  This is a relatively
+> oddball/rare barrier.  Also, IMO, this description doesn't add much to
+> the notions of execution and propagation being introduced.  I'd rather
+> move it (or parts of it) to ODDS AND ENDS where smp_mb__after_spinlock()
+> and other smp_mb__*() are currently briefly described.
+
+I understand your concern.
+However, I think the extended strong-order relation needs to be 
+mentioned for defining pb. Having a strong ordering operation at this 
+point of the manual also helps introducing rcu-fence later which works 
+similarly.
+I'm hoping if we can make a single renaming patch, we can essentially 
+kill most of the explanation of how rcu-fence links events by different 
+threads by just pointing to how strong-order is doing the same thing.
+
+
+>> +While smp_wmb() and release fences only force certain earlier stores
+>> +to propagate to another CPU C' before certain later stores propagate
+>> +to the same CPU C',
+> If "earlier" means po-earlier, this statement is wrong, cf. the comment
+> about A-cumulativity.  IAC, it should be clarified.
+Indeed I don't mean po-earlier, and agree it should be clarified.
+But I'm not sure yet how to clarify "earlier" and "later" considering 
+that the precise definition of earlier and later depends on the barrier.
+
+>
+>
+>> strong fences and smp_mb__after_unlock_lock()
+>> +force those stores to propagate to all other CPUs before any later
+>> +instruction is executed.  We collectively refer to the latter
+>> +operations as strong ordering operations, as they provide much
+>> +stronger ordering in two ways:
+>> +
+>> +	Firstly, strong ordering operations also create order between
+>> +	earlier stores and later reads.
+> Switching back to "execution order" I guess; need clarification.
+>
+(Same as above)
+>> +
+>> +	Secondly, strong ordering operations create a form of global
+>> +	ordering: When an earlier store W propagates to CPU C and is
+>> +	ordered by a strong ordering operation with a store W' of C,
+>> +	and another CPU C' observes W' and in response issues yet
+>> +	another store W'', then W'' also can not propagate to any CPU
+>> +	before W.  By contrast, a release fence or smp_wmb() would only
+>> +	order W and W', but not force any ordering between W and W''.
+>> +	To summarize, the ordering forced by strong ordering operations
+>> +	extends to later stores of all CPUs, while other fences only
+>> +	force ordering with relation to stores on the CPU that executes
+>> +	the fence.
+>> +
+>> +The propagation ordering enforced by release fences and strong ordering
+>> +operations affects stores from other CPUs that propagate to CPU C before
+>> +the fence is executed, as well as stores that are executed on C before
+>> +the fence.  We describe this property by saying that release fences and
+>> +strong ordering operations are A-cumulative.  By contrast, smp_wmb()
+>> +fences are not A-cumulative; they only affect the propagation of stores
+>> +that are executed on C before the fence (i.e., those which precede the
+>> +fence in program order).
+> [lots of renaming unless I missed something]
+
+The second paragraph is just renaming, but the first part is new.
+
+Best wishes and let me know if you agree on rearranging the submission 
+like that,
+jonas
+
