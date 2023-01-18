@@ -2,164 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032BA671909
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EE7671917
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjARKgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S229986AbjARKhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjARKfR (ORCPT
+        with ESMTP id S230225AbjARKfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:35:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2BAC3824;
-        Wed, 18 Jan 2023 01:40:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33457B81BA0;
-        Wed, 18 Jan 2023 09:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95B9C433EF;
-        Wed, 18 Jan 2023 09:40:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674034833;
-        bh=tTHcg/z9T99BPI6eUaM75jLrRAUzs67xHkkXXR/GIsk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=en2ki9TitjA9re2RPj4k2fvbiPi/ck3YT8R35kX3l0lXrNQQivGwFzrZXToiPbV3F
-         8gxILssBC53HB4YA61N56jY8/OyLzuoZZfq5ZCZjXggI9uy8VZRJ3dZEB5SiyzTbnL
-         g/afZldFS7UsN4MpeL63ER52kRKrRtv9UBXdqhoI9wxNu/GfSYJcpBbNpH96YGMBkU
-         k090SA3FiMS6x7qkW0/EbdynvWVsBvVZgCZq3fnxB5gC7U4XTx/RRYfklgz3t0XKar
-         MF4GzVa0pIqKRBvbNS5zCchyhCavvHK5JoGTdSXanfeeXjmynBREUHsq5LCR0Rmj4A
-         6lO0XNVq92U0g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pI4wD-0001se-DC; Wed, 18 Jan 2023 10:40:58 +0100
-Date:   Wed, 18 Jan 2023 10:40:57 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dmitry Torokhov <dtor@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 09/19] irqdomain: Fix mapping-creation race
-Message-ID: <Y8e+qfaC+ytx2LDv@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-10-johan+linaro@kernel.org>
- <87sfg8kfh4.ffs@tglx>
+        Wed, 18 Jan 2023 05:35:47 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D72149400
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:42:45 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id b5so12131510wrn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c11ZbMdZ6CbR/mvUDBlMS1lilf+DHkhh5Ihu84dTUVE=;
+        b=hZKZz+lnxUovUiiGxVM3l+A/RSBOtJaBnGY3UkTiMlcVqLx1VEBqtrh9rk0Xopo+HA
+         HWkLfIQ7e87UA5S03VQelaYMkftUxBrh1sUUa8isG4h2sw02xRQjj7F1Xs+J1c/DE/2d
+         coKhqajODBmQsSdCdYQFgkas5mOV5Fbomhb3aqS4mxFBmni4LKH9y1QCqwSdsq3t2N4P
+         OMeNnFo5eurFs5vaQ8eSIx87qg7qXnFPnV7JMRgy4Hcq2vcWYJvlUF5Vb9HH5Pw2PYCY
+         f2TiKGNCCgKvdWExVP1oaWHSBrO3bNR87HOkPFnTXE2Fg1qVEj9W9YSDG5hGbuBYSsCC
+         yilQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c11ZbMdZ6CbR/mvUDBlMS1lilf+DHkhh5Ihu84dTUVE=;
+        b=ebYjohqQ4qNzkfwJVwSDbZKxTcJjNtS/ZASYFwmuBixceGkn4VSHGJrz77zDyZiN1U
+         Ajq4u3MtqmMmEP4m6txpI6clThNlT4npyno2YkmkCUFzM6va4ssgSWLwL695aX5Eyc17
+         Qzd3KqV0LE3K5a3G+I+ZW56Epq8k+wwdqZ6iEAMck/Xt0Spu4zmKhio0DeAIgek+XAmp
+         bmXdF01HZ9Tz7nXrVWT2pg0dQkgvh1LenZ/rn1bn1bJVEoGzEsuJRZoN6NUN6GQOL8WM
+         91dokyjkgSxYUIABtD+nfzcZCqqtADDJhfZWGNIKB26G7VjF7Sc9fP62F870kSUOK/VF
+         QAtA==
+X-Gm-Message-State: AFqh2kpU3VTSXHYqgPZWyb6/PY1oE0r1UgzhgOQWQ4IbH8rpSDBq0nl1
+        nuBTQXnz6vVFG9MKf6njfPB9lQ==
+X-Google-Smtp-Source: AMrXdXuN6LTcHYyVsgIQEDbl/n4CyNNDt40KrlPNntvuUqzdcGb+sAFsWbqCydmGsTKrPJ1lIy87vQ==
+X-Received: by 2002:a5d:4606:0:b0:2bd:e960:9855 with SMTP id t6-20020a5d4606000000b002bde9609855mr5663227wrq.18.1674034949954;
+        Wed, 18 Jan 2023 01:42:29 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m13-20020adfe94d000000b002714b3d2348sm30972662wrn.25.2023.01.18.01.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 01:42:29 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] arm64: dts: qcom: sm8250: drop unused clock-frequency from rx-macro
+Date:   Wed, 18 Jan 2023 10:42:22 +0100
+Message-Id: <20230118094224.51704-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfg8kfh4.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:39:51PM +0100, Thomas Gleixner wrote:
-> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> 
-> > Parallel probing (e.g. due to asynchronous probing) of devices that share
-> > interrupts can currently result in two mappings for the same hardware
-> > interrupt to be created.
-> 
-> This lacks an explanation why this can happen.
+Neither qcom,sm8250-lpass-rx-macro bindings nor the driver use
+"clock-frequency" property.
 
-The explanation is there (parallel probing), but I can amend it with the
-concrete example from the input subsystem if that's what you're after?
+  sm8250-mtp.dtb: rxmacro@3200000: Unevaluated properties are not allowed ('clock-frequency' was unexpected)
 
-Or do you mean that the above doesn't say that the current locking is
-incomplete? I believe that's covered by the next paragraph:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-    Make sure to hold the irq_domain_mutex when creating mappings so that
-    looking for an existing mapping before creating a new one is done
-    atomically.
+---
+
+Changes since v1:
+1. Add Rb tag.
+2. Split from SDM845 audio patchset, so this can easily be picked up.
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index f614992709d2..b22569101314 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2301,7 +2301,6 @@ rxmacro: rxmacro@3200000 {
+ 			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
  
-> > @@ -802,6 +811,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
-> >  		type &= IRQ_TYPE_SENSE_MASK;
-> >  
-> > +	mutex_lock(&irq_domain_mutex);
-> > +
-> >  	/*
-> >  	 * If we've already configured this interrupt,
-> >  	 * don't do it again, or hell will break loose.
-> > @@ -814,7 +825,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  		 * interrupt number.
-> >  		 */
-> >  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
-> > -			return virq;
-> > +			goto out;
-> >  
-> >  		/*
-> >  		 * If the trigger type has not been set yet, then set
-> > @@ -823,36 +834,43 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
-> >  			irq_data = irq_get_irq_data(virq);
-> >  			if (!irq_data)
-> > -				return 0;
-> > +				goto err;
-> >  
-> >  			irqd_set_trigger_type(irq_data, type);
-> > -			return virq;
-> > +			goto out;
-> >  		}
-> >  
-> >  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
-> >  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
-> > -		return 0;
-> > +		goto err;
-> >  	}
-> >  
-> >  	if (irq_domain_is_hierarchy(domain)) {
-> > -		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
-> > +		virq = ___irq_domain_alloc_irqs(domain, -1, 1, NUMA_NO_NODE,
-> > +						fwspec, false, NULL);
-> >  		if (virq <= 0)
-> > -			return 0;
-> > +			goto err;
-> >  	} else {
-> >  		/* Create mapping */
-> >  		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
-> >  		if (!virq)
-> > -			return virq;
-> > +			goto err;
-> >  	}
-> >  
-> >  	irq_data = irq_get_irq_data(virq);
-> >  	if (WARN_ON(!irq_data))
-> > -		return 0;
-> > +		goto err;
-> >  
-> >  	/* Store trigger type */
-> >  	irqd_set_trigger_type(irq_data, type);
-> > +out:
-> > +	mutex_unlock(&irq_domain_mutex);
-> >  
-> >  	return virq;
-> > +err:
-> > +	mutex_unlock(&irq_domain_mutex);
-> > +
-> > +	return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(irq_create_fwspec_mapping);
-> 
-> You can spare that goto churn by renaming the existing function to
-> irq_create_fwspec_mapping_locked() and invoked that guarded by the
-> mutex, no?
+ 			#clock-cells = <0>;
+-			clock-frequency = <9600000>;
+ 			clock-output-names = "mclk";
+ 			#sound-dai-cells = <1>;
+ 		};
+-- 
+2.34.1
 
-That may be possible, but I'm not sure it's better. It wasn't really
-obvious which of the above returns where error paths and which were
-success paths before this change.
-
-I'll try and see what it would look like.
-
-Johan
