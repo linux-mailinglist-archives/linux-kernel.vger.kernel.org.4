@@ -2,168 +2,610 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A16C672025
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A93672026
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjAROuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S231527AbjAROum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjAROuD (ORCPT
+        with ESMTP id S231701AbjAROuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:50:03 -0500
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B523A9F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:42:40 -0800 (PST)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2108.outbound.protection.outlook.com [104.47.22.108]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-46-qVRdP_D8M6ek7Tx06ctdTg-1; Wed, 18 Jan 2023 15:42:38 +0100
-X-MC-Unique: qVRdP_D8M6ek7Tx06ctdTg-1
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
- GVAP278MB0102.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:23::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.12; Wed, 18 Jan 2023 14:42:36 +0000
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::ace5:84e5:2754:a1fa]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::ace5:84e5:2754:a1fa%2]) with mapi id 15.20.6002.012; Wed, 18 Jan 2023
- 14:42:36 +0000
-From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
-CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 16/17] arm64: dts: freescale: apalis-imx8: fix
- reserved-memory node names
-Thread-Topic: [PATCH v4 16/17] arm64: dts: freescale: apalis-imx8: fix
- reserved-memory node names
-Thread-Index: AQHZKw5yH9xn+DGG2UG2ziZCJz4LSq6kNM6AgAAJiYCAAABUgIAAAWyA
-Date:   Wed, 18 Jan 2023 14:42:36 +0000
-Message-ID: <66cb1441d016551255e0ee2447c1886cb3bf76c9.camel@toradex.com>
-References: <20230118072656.18845-1-marcel@ziswiler.com>
-         <20230118072656.18845-17-marcel@ziswiler.com>
-         <b5a60852-f8f5-f3c4-fb75-bb5f00823c82@linaro.org>
-         <1d4dc13ce1ffae4885bceb439d5d259f3567e6c4.camel@toradex.com>
-         <83939b6b-0188-9cb7-c4fc-624f13437a48@linaro.org>
-In-Reply-To: <83939b6b-0188-9cb7-c4fc-624f13437a48@linaro.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|GVAP278MB0102:EE_
-x-ms-office365-filtering-correlation-id: 5a4c391c-8bff-4665-9f1a-08daf9623dd4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: adM/cn0Ek45y6owOzYa9UlEzwCQT8E6OccNsprAeMAg6Fog6LCY5vxplYienKthGaWi6wxjLocPOmr+bFngdphPYVNkfbaMBWDGqcE2Ny/zGft4gIMLIoPcLe1tI+hlh18DSubtTDPHjGBM0wBukA6HqQjNJM8TtSRGEwXvJto92br1pOplP5Xb8DaC5W1LQEMXGUHyXvnmYvW0qRwYbDFGPonY8+N8c2SFjfLfeYhWnzGTjKPz7YnVX6iJVAjB/w6+dhblnetH5tnwZOhDT1cm+Jm0MoBcUX0MjvmQXhQechM1l/sT/m2K2VWnCjOJlsZxFlDHT43Y+gYOqtyZ4oW9738aP1K62rw6UsEwiY1BDpySewfyJp4DsvlCAMAUXmNYjKEHbCvDT8lVrnXfvImzLKFUIQ6LO4hsxfPQhSIv/q2T5RAPh3TWqySvkC9ktK2nP1srMqsCikcXXkRHnE2o9kDzKNpbIWn2mSa7aEOg942aHjH9dKxOEokAd6oMM3hYbxFUqs8wv7Joaqw+4T18tyf66G7Pdg2GV/J8T352j7T+kl+YjIv9TfWDx1+o5mCTVMcC7O9Rfu8lngH1qY85Mv6Fvj1YwNuAyK8i6i8u8y58d5E5C4IVzxWxsw5+eG1JOhQFnw6+TcwD8HiCfvqrJM8obGp+4vKCZ1CyAlOxGtlOf7ILh86pCd/W6j49CaonfjkwIgvvT2KIXG4KINQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(136003)(39850400004)(396003)(346002)(451199015)(26005)(6486002)(38100700002)(76116006)(478600001)(71200400001)(316002)(110136005)(6512007)(41300700001)(4326008)(8676002)(83380400001)(66476007)(66556008)(66946007)(66446008)(64756008)(6506007)(186003)(2906002)(44832011)(54906003)(2616005)(5660300002)(8936002)(7416002)(53546011)(38070700005)(122000001)(36756003)(86362001);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QnhGbVJYVm9jZDRyVkZWN0NrWE1EKzJicDVySC9yYVhQZEVhclFXdktPcnN1?=
- =?utf-8?B?aXhYbERmUXpld04vSU5iTXlRT3JJb0J4QjVmcE9TV1JzNDhqVVdpL0R0QkFu?=
- =?utf-8?B?OGpneUN4bUJaV2VLV3FHTE4zUUNvOU5wS1hnam9tRlN2ZDNaUW9kTzAweUVm?=
- =?utf-8?B?enIwbmdYc2JvTHMzZExHV0liS0hEOEtNYXNOTDdFZkp5UDByL2xtYWg1Z3Rw?=
- =?utf-8?B?cDA0QzIvelVWaWk0Z2FTL3RzM05BYU9DSFk5WTA0dGRpWEZlMW4xQlBHbFJD?=
- =?utf-8?B?M1JnZ21DekZyRFJncEFMVWVIMkZVMUFqVWUvYzVmNHZjSkRVSlFvcVVNTGV3?=
- =?utf-8?B?TjlsV0p4T0RPYWp6TnVMWTRZa2VSNHpvMmVSdFNnaDNORDNlS3hYcEVqQmh0?=
- =?utf-8?B?b0VGbUExLzNNY2ZySk5PeCs4MC9vODlMTURQcEtwa3hkN2NlVEJ1Yk9TRklR?=
- =?utf-8?B?dms1Z0d6T0QxS0svOGVSOEJQakg4aWxzUVdMaU9aYVhXTmVrSnU1VFhRNmFE?=
- =?utf-8?B?eDFkckx6dEJQaE9wUUNqMFQ1eTI3Nzh4RllvNHR6YUFMaHdQOHk3eThKTElH?=
- =?utf-8?B?NVJxZ0V3RkMwd2djTWJqME1CZ1FlaFJ2am4vWERXREZtOWExcFRiODJocWlK?=
- =?utf-8?B?dXJPSjFEUE9OQXZaUDJMZkNEcjRWS2JURUtlNEx4SDEzbStlSG5CWGZHNVR0?=
- =?utf-8?B?ODA0R2xiUDJMMjRqS1JGT1BTOVJEZG1USGd4WXcza1ZZN09zcmNwNkg4MDc2?=
- =?utf-8?B?QW5TNWRwYWdNTU5vMVVRRjQvWWVjb2VGM2d5eUZXN1JzUWNyS29IOGZHWVBs?=
- =?utf-8?B?d0dWaHpHNTZLT2lmSjBIZ2VwbSs0OUdQamh5NEZsazEwRnpuQzlMVlRBMU9E?=
- =?utf-8?B?cjRQM0JaUlhobk1kQmRLYWp0NXltelhJSTlNUC8wZGVoL3NqZU5YcW5RaFdQ?=
- =?utf-8?B?NkpCTWFoV3pEbjNKUXFvaFpqSitsc3ZPaW45dmNJTUtPcllOUlAzM1ZHTE1l?=
- =?utf-8?B?ZFJlUFJtN0pncUd5amQwVlMzcnl2L3hIU3B2a3NQcDlzQ0g3U3ZXOUFjTG5t?=
- =?utf-8?B?aGUvQUgyZVNtOXRNc1FoYmRhZExhL1dGRGxaOHA5SGJqYVNzUmwwdGhQMjYx?=
- =?utf-8?B?UUFRV0hxb2RtSFlWTVg3YzFnMXhteHFTZ3U2RVluZGVSVG9QTC9KdnNWbWNL?=
- =?utf-8?B?SldEZ3YxckFzR3lqanExdm4vVmdpRzkrQ1BQLzd3ZnAwODFJZnhBMkVJTEtD?=
- =?utf-8?B?Uk5zaWRNNUQ0UzJWRi9YczBhUThOWG1aUmRqUjM2UDVHTXM4UDNTZzZSLy9w?=
- =?utf-8?B?NDY5QkpOOWhDdnRrZ0pLSXhjeU5HMk8zYjJhdWJ1NlJrZHBxZUw1OXgyOE12?=
- =?utf-8?B?cVlCbE41NmVreEFMK011aFdFRVdrK1Q2andhaGhoYkExdzhwa1F2YldPSlNl?=
- =?utf-8?B?b2FuMk1PZU1Idk03djhlcTVGdzZNSjZXTW0rOUZ3YXpRclZJVElTSlNSUnlu?=
- =?utf-8?B?NUpaeVZsV05ZWjJBVDdMMjJsQnFBU2RtNGF6ZkdSdXU2Yk5tQS9KaFZaTW5m?=
- =?utf-8?B?QnNYc3B5NlEyUnZIZEVld014QzV6R1JSZnFNVlpOS1NhYjkrVEJVb2RqSnhv?=
- =?utf-8?B?bkVQWUhPSnF1ZTMvcGNzVXBIODJpYWVWVzBoajNINGdZQlAxWlJ2c1g5aHhE?=
- =?utf-8?B?ZTVwSHhmTDJjcjdWRzdKTUZSbEd4NHhQZ29BbWlRMkw2SzRZaFNVZnhGMEd4?=
- =?utf-8?B?RGw4WjE4a2Yxb3JId0NLTEk5bU5aSFhOaW1XKzFpa1Nob0h0TDQrKzFXckpo?=
- =?utf-8?B?RmdpdW1PQmhvN2ZUTnBGcXdmTGh3b01zL2RyandHZkpnWHJjRHcwVHNwcjZD?=
- =?utf-8?B?aGsyOHUyeHErNjE4ZDJkVDVVS2RSbGxqRUNUaktFRy9TelRoUG9xd0h1R0Rm?=
- =?utf-8?B?bHJTMWFoaDB6cFRVeEUwcUs3RFNWeHhPM1FKa1ZLME5OMlUzUlVxRC9NcW9I?=
- =?utf-8?B?ditKWVZQV24vUHMrSzFRaTRac2E3dUdmYmdiS0lzY05FbFpNQ2dxeW0rSXg2?=
- =?utf-8?B?RWFJS2JIT21pZnhmeithTFdGWlJrYWNlbUtlaXlGMHByblBxNkNWTm5pTXF6?=
- =?utf-8?B?VEllMFNKTFFnZFQ1aUNiN2QyQXdsbUdPY25CSFU4endBL0VvMHk4VjlKeFFB?=
- =?utf-8?Q?YgsQJHE4hP0VO3cnLilXnjI=3D?=
+        Wed, 18 Jan 2023 09:50:07 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D697238009
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:43:00 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id hw16so71913236ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3DIEaQSu9A6rK44S+Lin2wD16o6zDolOKPsI+dW81jE=;
+        b=e66ofynaqkI0D/+p0GJ4kEJpcuVhylsCLVYGDUv+EievkI5Kc8qavkF84WuqjYbZNm
+         raeLrA217XRYd3axjj1vWJYdGAHV64ufrbXSICCebZmsqIPKlRUvUiQdOxnO9Pl/XTXZ
+         IXuG0ZVDRnSKpuLPuCALT2BQz6IbQpA6FAilWsARqC/wwx3T3DHafI0pKuue3h94avO7
+         V0riwdVZMk5GbkzFgrA0mpLaKLVXzNFZVS07myt1mpNS+JgAhFn63kMZ97bvmGp25z4Z
+         W7cpbsqDkMNVFGiLchnrD4F7Gk6Jk8Z+GMaNf05LEDQm7oJg9wysaP/nYSGNUc7FRTvx
+         5MxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3DIEaQSu9A6rK44S+Lin2wD16o6zDolOKPsI+dW81jE=;
+        b=QXtpG5x11foA6uF4GTwwk4z8im6lzIAmAL9Gzai1Y0O+pMsLoN3TOyuGBFMRiI7V6l
+         1kCrT0Zl8g7MADTmqPcA2gZGRo4fNPTCk1+1+ChpO1mNmtu3WI8LvrackfItGXBn3Cyx
+         2K40bzLr3890o6d9/XeI9uzgJn/Tya0utHiA2GmLY37r2ye6KRDRmutiJmICLJ45HiPW
+         /TBKA/tWm3UX+3jfMgZ9eQi3c1mZqM7hywtgc9Bnk/VOPlmgJbM/mwFW4aexCyq0JGBE
+         s/z07eL+dD6tyEGzi91XO7sW9qvS7RO8xcWrt3sI+rEvyfB2jwXMOLHZzBYQjgqXzk+j
+         YJNQ==
+X-Gm-Message-State: AFqh2kopep5gsWs7IbVxWOw4g6jNB1QKDKUAhP9CJeGx53vyseq8BEuQ
+        DypHyJxX+ho+7hn4ifx0vweS8A==
+X-Google-Smtp-Source: AMrXdXvONGRWOn34H4mjWjCHyPIlRClBkiwMq858nofmz+6WOM0tfy86+i70VNKNjz9miGxiYZHMcA==
+X-Received: by 2002:a17:907:1110:b0:872:bb39:a6e1 with SMTP id qu16-20020a170907111000b00872bb39a6e1mr6641388ejb.52.1674052978833;
+        Wed, 18 Jan 2023 06:42:58 -0800 (PST)
+Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm15095577ejg.174.2023.01.18.06.42.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 06:42:58 -0800 (PST)
+Message-ID: <cff5ed4b-ef6b-b573-2370-1fb55ae746fd@linaro.org>
+Date:   Wed, 18 Jan 2023 15:42:56 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a4c391c-8bff-4665-9f1a-08daf9623dd4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 14:42:36.5489
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LCPtnJXd9FqJl6IN49wo54uBfooppTOMqgxFpKTc7IT8gfMfTLTvv/mjUhXc0PgbStsyC6v5lNdbC6UW60vUrENFtrHq3DE3vMu4TSegfeQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0102
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 8/8] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
 Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-9-bryan.odonoghue@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230117024846.1367794-9-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-ID: <EAC4D8FC58107B4493B2EB2F29BC5F9B@CHEP278.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAxLTE4IGF0IDE1OjM3ICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
-b3RlOg0KPiBPbiAxOC8wMS8yMDIzIDE1OjM2LCBNYXJjZWwgWmlzd2lsZXIgd3JvdGU6DQo+ID4g
-T24gV2VkLCAyMDIzLTAxLTE4IGF0IDE1OjAyICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
-b3RlOg0KPiA+ID4gT24gMTgvMDEvMjAyMyAwODoyNiwgTWFyY2VsIFppc3dpbGVyIHdyb3RlOg0K
-PiA+ID4gPiBGcm9tOiBNYXJjZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNv
-bT4NCj4gPiA+ID4gDQo+ID4gPiA+IEZpeCByZXNlcnZlZC1tZW1vcnkgbm9kZSBuYW1lcyB1c2lu
-ZyBkYXNoZXMgcmF0aGVyIHRoYW4gdW5kZXJzY29yZXMuDQo+ID4gPiA+IA0KPiA+ID4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBNYXJjZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4N
-Cj4gPiA+ID4gDQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiANCj4gPiA+ID4gQ2hhbmdlcyBpbiB2NDoN
-Cj4gPiA+ID4gLSBOZXcgcGF0Y2ggZml4aW5nIHJlc2VydmVkLW1lbW9yeSBub2RlIG5hbWVzLg0K
-PiA+ID4gPiANCj4gPiA+ID4gwqBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4LWFw
-YWxpcy12MS4xLmR0c2kgfCAxMiArKysrKystLS0tLS0NCj4gPiA+ID4gwqAxIGZpbGUgY2hhbmdl
-ZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0KPiA+ID4gPiANCj4gPiA+ID4gZGlm
-ZiAtLWdpdCBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDgtYXBhbGlzLXYxLjEu
-ZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDgtDQo+ID4gPiA+IGFwYWxp
-cy12MS4xLmR0c2kNCj4gPiA+ID4gaW5kZXggNzBjMDBiOTJjYjA1Li42MjE3ZTBhNDhmOTYgMTAw
-NjQ0DQo+ID4gPiA+IC0tLSBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDgtYXBh
-bGlzLXYxLjEuZHRzaQ0KPiA+ID4gPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2Fs
-ZS9pbXg4LWFwYWxpcy12MS4xLmR0c2kNCj4gPiA+ID4gQEAgLTEzMywxNyArMTMzLDE3IEBAIHJl
-c2VydmVkLW1lbW9yeSB7DQo+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-I3NpemUtY2VsbHMgPSA8Mj47DQo+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgcmFuZ2VzOw0KPiA+ID4gPiDCoA0KPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgZGVjb2Rlcl9ib290OiBkZWNvZGVyX2Jvb3RAODQwMDAwMDAgew0KPiA+ID4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVjb2Rlcl9ib290OiBkZWNvZGVyLWJvb3RAODQw
-MDAwMDAgew0KPiA+ID4gDQo+ID4gPiBUaGlzIGlzIHJpZGljdWxvdXMuIFlvdSBqdXN0IGFkZGVk
-IGl0ISBJZiB3ZSBjb25zaWRlciBvcmlnaW5hbCBjb2RlIGFzDQo+ID4gPiB3cm9uZywgdGhlbiB5
-b3UgaW50ZW50aW9uYWxseSBhZGRlZCB3cm9uZyBjb2RlIGp1c3QgdG8gZml4IGl0Lg0KPiA+ID4g
-DQo+ID4gPiBObywgdGhhdCdzIG5vdCB0aGUgd2F5IGhvdyBpdCBzaG91bGQgYmUgZGV2ZWxvcGVk
-Lg0KPiA+IA0KPiA+IFNoYXduIGFza2VkIG1lIHRvIGVhc2UgdGhlIHJldmlldyBwcm9jZXNzIHdo
-aWNoIGlzIGV4YWN0bHkgd2hhdCBJIGRpZC4NCj4gDQo+IEFueSByZWFzb24gd2h5IGI0IGRpZmYg
-Y2Fubm90IGJlIHVzZWQ/IElmIHlvdXIgcGF0Y2hzZXQgZmFpbHMgYjQNCj4gYXV0by1kZXRlY3Rp
-b24gb2YgdmVyc2lvbiwgdGhpcyBzaG91bGQgYmUgZml4ZWQgaW5zdGVhZCBvZiBmYWtlIHNwbGl0
-Lg0KDQpTb3JyeSwgSSBkaWQgbm90IGtub3cgYW55dGhpbmcgYWJvdXQgdGhpcyBiNCBkaWZmIHN0
-dWZmIGFuZCB3aWxsIGF2b2lkIHN1Y2ggc3BsaXR0aW5nIGluIHRoZSBmdXR1cmUuIFRoYW5rcyEN
-Cg0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0K
 
+
+On 17.01.2023 03:48, Bryan O'Donoghue wrote:
+> Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
+> 
+> Tulip is paired with:
+> 
+> - wcn3660
+> - smb1360 battery charger
+> - 720p Truly NT35521 Panel
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  arch/arm64/boot/dts/qcom/apq8039-t2.dts       |   2 -
+>  .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 466 ++++++++++++++++++
+>  3 files changed, 467 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 5c47d1fb50b01..8b9fa1deadbe0 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -24,6 +24,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> index 21f5a21f76135..ee04cf294179f 100644
+> --- a/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> @@ -491,8 +491,6 @@ pm8916_l18: l18 {
+>  };
+>  
+>  &sdhc_1 {
+> -	vmmc-supply = <&pm8916_l8>;
+> -	vqmmc-supply = <&pm8916_l5>;
+>  	pinctrl-names = "default", "sleep";
+>  	pinctrl-0 = <&sdc1_default_state>;
+>  	pinctrl-1 = <&sdc1_sleep_state>;
+This hunk doesn't belong in this patch..
+
+
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> new file mode 100644
+> index 0000000000000..ffe3ea17dcae2
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> @@ -0,0 +1,466 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022-2023, Bryan O'Donoghue.
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8939.dtsi"
+> +#include "msm8939-pm8916.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +
+> +/ {
+> +	model = "Sony Xperia M4 Aqua";
+> +	compatible = "sony,kanuti-tulip", "qcom,msm8939";
+> +
+> +	qcom,board-id = <8 0>;
+> +	qcom,msm-id = <239 0>, <239 0x30000>, <241 0x30000>, <263 0x30000>;
+> +
+> +	aliases {
+> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
+> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+> +		serial0 = &blsp1_uart2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	negative5_reg: negative5-regulator {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&negative5_reg_default>;
+> +		regulator-name = "negative5_reg";
+> +		gpio = <&tlmm 17 GPIO_ACTIVE_LOW>;
+> +		startup-delay-us = <0>;
+> +	};
+> +
+> +	positive5_reg: positive5-regulator {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&positive5_reg_default>;
+> +		regulator-name = "positive5_reg";
+> +		gpio = <&tlmm 114 GPIO_ACTIVE_LOW>;
+> +		startup-delay-us = <0>;
+> +	};
+> +
+> +	usb_id: usb-id {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&usb_id_default>;
+> +	};
+> +};
+> +
+> +&blsp_dma {
+> +	status = "okay";
+> +};
+> +
+> +&dsi0 {
+> +	vdda-supply = <&pm8916_l2>;
+> +	vddio-supply = <&pm8916_l16>;
+#include "msm8939-pm8916.dtsi"
+
+> +	status = "okay";
+> +
+> +	panel@0 {
+> +		compatible = "sony,tulip-truly-nt35521";
+> +		reg = <0>;
+> +		positive5-supply = <&positive5_reg>;
+> +		negative5-supply = <&negative5_reg>;
+> +		reset-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
+> +		enable-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
+> +
+> +		ports {
+> +			port {
+> +				panel_in: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
+> +				};
+> +			};
+> +		};
+> +
+> +	};
+> +};
+> +
+> +&dsi0_out {
+> +	remote-endpoint = <&panel_in>;
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&dsi_phy0 {
+> +	vddio-supply = <&pm8916_l16>;
+That sounds strange.. you sure it's this one?
+
+> +	qcom,dsi-phy-regulator-ldo-mode;
+> +	status = "okay";
+> +};
+> +
+> +&tlmm {
+> +	ak8963_default: ak8963-default-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ak8963_sleep: ak8963-sleep-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	/* Ambient light and proximity sensor apds9930 and apds9900 */
+> +	apds99xx_default: apds99xx-default-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	apds99xx_sleep: apds99xx-sleep-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	cam_sensor_flash_default: cam-sensor-flash-default-state {
+> +		pins = "gpio98", "gpio97";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cci1_default: cci1-default-state {
+> +		pins = "gpio31", "gpio32";
+> +		function = "cci_i2c";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cdc_ext_spk_pa_active: cdc-ext-spk-pa-on-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cdc_ext_spk_pa_sus: cdc-ext-spk-pa-off-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cdc_slim_lines_act: lines-on-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <8>;
+> +		output-high;
+> +	};
+> +
+> +	cdc_slim_lines_sus: lines-off-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cross_conn_det_act: lines-on-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-pull-down;
+> +		output-low;
+> +	};
+> +
+> +	cross_conn_det_sus: lines-off-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ext_buck_vsel: vsel0-state {
+> +		pins = "gpio111";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_act: tlmm-lines-on-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-disable;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_sus: tlmm-lines-off-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	gpio_key_suspend: gpio-key-suspend-state {
+> +		pins = "gpio107", "gpio108", "gpio109";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	negative5_reg_default: negative5-reg-default-state {
+> +		pins = "gpio17";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	positive5_reg_default: positive5-reg-default-state {
+> +		pins = "gpio114";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	/* Gyroscope and accelerometer sensor combo */
+> +	mpu6050_default: mpu6050-default-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	mpu6050_sleep: mpu6050-sleep-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	nfc_disable_active: nfc-disable-active-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nfc_disable_suspend: nfc-disable-suspend-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-disable;
+> +	};
+> +
+> +	nfc_int_active: nfc-int-active-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nfc_int_suspend: nfc-int-suspend-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nt35521_te_default: nt35521-te-default-state {
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	nt35521_backlight: nt35521-backlight-default-state {
+> +		pins = "gpio10";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	smb_int: smb-int-default-state {
+> +		pins = "gpio62";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_int_active: ts-int-active-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_int_suspend: ts-int-suspend-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_reset_active: ts-reset-active-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_reset_suspend: ts-reset-suspend-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_release: ts-release-default-state {
+> +		pins = "gpio13", "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	usb_id_default: usb-id-default-state {
+> +		pins = "gpio110";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&pronto {
+> +	status = "okay";
+> +
+> +	iris {
+> +		compatible = "qcom,wcn3660";
+> +	};
+> +};
+> +
+> +&smd_rpm_regulators {
+> +	vdd_l1_l2_l3-supply = <&pm8916_s3>;
+> +	vdd_l4_l5_l6-supply = <&pm8916_s4>;
+> +	vdd_l7-supply = <&pm8916_s4>;
+> +
+> +	pm8916_s3: s3 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1300000>;
+> +	};
+> +
+> +	pm8916_s4: s4 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2100000>;
+> +	};
+> +
+> +	pm8916_l2: l2 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +	};
+> +
+> +	pm8916_l4: l4 {
+> +		regulator-min-microvolt = <2050000>;
+> +		regulator-max-microvolt = <2050000>;
+> +	};
+> +
+> +	pm8916_l5: l5 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	pm8916_l6: l6 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	pm8916_l7: l7 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	pm8916_l8: l8 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2900000>;
+> +	};
+> +
+> +	pm8916_l9: l9 {
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l10: l10 {
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l11: l11 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-allow-set-load;
+Please put this below regulator-system-load for consistency with
+other DTs.
+
+> +		regulator-system-load = <200000>;
+> +	};
+> +
+> +	pm8916_l12: l12 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l13: l13 {
+> +		regulator-min-microvolt = <3075000>;
+> +		regulator-max-microvolt = <3075000>;
+> +	};
+> +
+> +	pm8916_l14: l14 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l15: l15 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l16: l16 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	pm8916_l17: l17 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2850000>;
+> +	};
+> +
+> +	pm8916_l18: l18 {
+> +		regulator-min-microvolt = <2700000>;
+> +		regulator-max-microvolt = <2700000>;
+> +	};
+> +};
+> +
+> +&sdhc_1 {
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc1_default_state>;
+> +	pinctrl-1 = <&sdc1_sleep_state>;
+> +	status = "okay";
+> +};
+> +
+> +&sdhc_2 {
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc2_default_state>;
+> +	pinctrl-1 = <&sdc2_sleep_state>;
+> +	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
+> +	status = "okay";
+> +};
+> +
+> +&usb {
+> +	extcon = <&usb_id>, <&usb_id>;
+> +	status = "okay";
+> +
+> +	ulpi {
+> +		usb_hs_phy: phy {
+> +			v1p8-supply = <&pm8916_l7>;
+> +			v3p3-supply = <&pm8916_l13>;
+#include "msm8939-pm8916.dtsi"
+
+Konrad
+> +		};
+> +	};
+> +};
+> +
+> +&usb_hs_phy {
+> +	extcon = <&usb_id>;
+> +};
