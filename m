@@ -2,474 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE8967211D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C842672195
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjARPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S230336AbjARPmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjARPWd (ORCPT
+        with ESMTP id S230177AbjARPmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:22:33 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA29402F6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:19:24 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id AED0B341B61;
-        Wed, 18 Jan 2023 18:19:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=eHluV91WrSVHSKJ6sc
-        S7krCLC3zPBscZhDyMj0nLg/U=; b=Rr0trLoUZJWgrFgZJWEl8n9YeaWmAz6Ptb
-        LspUO+WJwYFawfr7f14ReuV9K0F24kNXPRmdx6Xgk7plrJ50dUFW6W8hAOintUGb
-        to5CNMd91ze8/F1VPWtpXKe6ZTqcxOwsTDUx/hetREbIhm49iQNbaybPkQBvr0/x
-        yKO7TPoCc=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id A4066341B5D;
-        Wed, 18 Jan 2023 18:19:22 +0300 (MSK)
-Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 18 Jan
- 2023 18:19:22 +0300
-Message-ID: <926b0971-5c0c-2d12-5366-8a0e2aa7ae0f@yadro.com>
-Date:   Wed, 18 Jan 2023 18:19:21 +0300
+        Wed, 18 Jan 2023 10:42:24 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598BD1EFC4;
+        Wed, 18 Jan 2023 07:42:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8ARTirEDTDggH2Fib6o18VcnUqM8aW10aJnYxQEeGpexad0n5KGGqyh6rgbFN/vPoGCrB5ZFaZQbjO5jJQ3aUbwYU6w2HeGyHlewRx4uvgIeOkUYE9Dzpz+0R0knigBbNHfgLIXHsfnGYnqE8wqFazUsV974PnyDMkyUUoxKgIgjtuBJmfNTxu07T6H3vPyBQlEBgWmfFkbh/J3UA2TLnsvA0NtGXbOiHXr7DcZIayKI9VnB6HR2Ie/5i0ZMGa6umNSIdlrdEHKGPxyXwovyXQyyrFKe4NXb4gqN27tD2rsA87jffgEsrrLHqwfPXimGaSWX5XF8SJ0OPn8mclfeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xbZfDUOyO4Gt1CHvqreHMDYxWc2uL9jRbQ50MSdZjpo=;
+ b=n9js2EvK3JLyfRuaMmZTdUd7ueKY/hEwgUvKb9RXpgQvSkPDuDBozuwZribuQkvNwC+9sxGRKhv+CQ23fWMuHowl+078R56YatQvfF3ln+3TqrSdIjegmivG2KGO7te0grgeBizEqs9JvRdovs7h+6nHgNLSjDGFAdM7qGyktN7PFAy15yeNp0+GUzBiTbI2nUcfPtyIQpVP6ecbtXY5iS3+VukzRdkqw7e1Z1YvF1yyQgmuF+T0Ld2SzsGr5Vn8YS3rzrq92ACVbJY3hx/to7M0/ApZqL7quG9PeBx5K+lvbWMOgMKJZwLiYWT5HOdbASdk3wNk1EOm233MMxaKbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xbZfDUOyO4Gt1CHvqreHMDYxWc2uL9jRbQ50MSdZjpo=;
+ b=n3QuHTwCM4AvCg5hfU4e4kZr8V2LHtBZPTtt/9Bs4U/lhGMtbAsQ8gdAf59aeQbPDHQ+kjX0OTq0CGhvLbEobl9TgaFlDIuOlxmTP7QjmDtced1dE6g+yYZkZ8iBmZNpEyRCNoQPniJ4xq5AnTiLM23+YBn38/WJb/RJOUxybnFHDtdmplZujRPTK+nBJyXIYhz587FNXU6hG8RRpytfzMbZHIVfFK+0yLw3kiIZIuhiKMvFmj1Wu2UfzqbA0uNkQgctDITKuamM+9SkCgJEfmDqjPgZ/y6X5f5cwIN+N7/yHnne+0tUms3QnK2MXHUkxtuOAEZXi2zdjJJSG55ZEQ==
+Received: from MW4PR03CA0061.namprd03.prod.outlook.com (2603:10b6:303:b6::6)
+ by SN7PR12MB7909.namprd12.prod.outlook.com (2603:10b6:806:340::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Wed, 18 Jan
+ 2023 15:42:20 +0000
+Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b6:cafe::21) by MW4PR03CA0061.outlook.office365.com
+ (2603:10b6:303:b6::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
+ Transport; Wed, 18 Jan 2023 15:42:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13 via Frontend Transport; Wed, 18 Jan 2023 15:42:20 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
+ 2023 07:42:08 -0800
+Received: from yaviefel (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
+ 2023 07:42:02 -0800
+References: <20230116144853.2446315-1-daniel.machon@microchip.com>
+ <20230116144853.2446315-4-daniel.machon@microchip.com>
+ <87lem0w1k3.fsf@nvidia.com> <Y8f4i2ablWnNO9Op@DEN-LT-70577>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     <Daniel.Machon@microchip.com>
+CC:     <petrm@nvidia.com>, <netdev@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <Lars.Povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <joe@perches.com>, <error27@gmail.com>,
+        <Horatiu.Vultur@microchip.com>, <Julia.Lawall@inria.fr>,
+        <vladimir.oltean@nxp.com>, <maxime.chevallier@bootlin.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 3/6] net: dcb: add new rewrite table
+Date:   Wed, 18 Jan 2023 16:20:31 +0100
+In-Reply-To: <Y8f4i2ablWnNO9Op@DEN-LT-70577>
+Message-ID: <874jsnalyv.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH -next V7 6/7] samples: ftrace: Add riscv support for
- SAMPLE_FTRACE_DIRECT[_MULTI]
-Content-Language: en-US
-To:     Song Shuai <suagrfillet@gmail.com>, <guoren@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <anup@brainfault.org>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <conor.dooley@microchip.com>,
-        <heiko@sntech.de>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <jolsa@redhat.com>, <bp@suse.de>, <jpoimboe@kernel.org>,
-        <andy.chiu@sifive.com>, <linux@yadro.com>
-References: <20230112090603.1295340-1-guoren@kernel.org>
- <20230112090603.1295340-7-guoren@kernel.org>
- <a83dc6de-8fda-439d-b2dd-d05786e642eb@yadro.com>
- <CAAYs2=jj2uiF3P_B1tXQTHdYOmcN7dRcMyPx2tW2kg4QWvq3Lg@mail.gmail.com>
- <1514c929-5a98-0e58-e038-9bb4537d5189@yadro.com>
- <7c85f9d8-458d-6881-ffbe-4f5c6384e35e@yadro.com>
- <CAAYs2=j=Ei-BSHeLyyBhwG0HUTr1vaQrzP0oYy45gn5JfVQTOg@mail.gmail.com>
-From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <CAAYs2=j=Ei-BSHeLyyBhwG0HUTr1vaQrzP0oYy45gn5JfVQTOg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.199.21.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT012:EE_|SN7PR12MB7909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6cbf5749-2b00-40de-a80e-08daf96a9606
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /Se9eIK1DOoS4EJ5Ja8ef+Xs4AqwuHsLgbM8EjexvRKuO8v41WPIXuaEblxbiMbw23fmLW5hSyiOy0Jl81DTE3CDPi0U/pkSbjSov/C4jnPOaRUm95Z24lyfrWcdAjV2U8FNulBBAbitU+vL9eMw5Ap7KYWw7xNUN08c24kMK3oq9m+j9mGNcQfhszHoJ1rFGOoBBGODCy9vpv/V6TjeyYLNBjM/JZRKRGpqHSjQDU3XYcV5hVKwerrdeOn11HoSIu8fkL5H6hjNfLM1DCya4qDHZ6ZAR+Jm4OkQ97QMR3WtiSbZ48eW8RxYDWuT+1K/RtwRZkapgtzaCUJF1hWFqOGX1LD8jUTpddVNpFElf19azKORp24OZyDNKgGwN4BKGYIPSQrQ1Q+sH48SAT9AQP497e9EcOZq+vDLAO+CHknBsBESMYvgBRNh07eJjDxU956nRkaJHhiaTLPYswMX7GLY8Qxq+QHLT6pIxfC++2yXYtYieFnWqzV2MGtr9gpGHwR0QML7S3GyJxODq/d0lmQbtSFBkgYTb9dZBAG+ccKA4YPZ+vcXQLqnd7sE91F2MnK5cYoSago/2vpzSy9jXNHT9Pg3XWD7RbzH04W0UIgeapxa0SESJwXchv1/3GTeW/nf1n+C0DwYpCnkqS24VA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(451199015)(36840700001)(46966006)(83380400001)(7636003)(36860700001)(6916009)(70586007)(4326008)(8676002)(82310400005)(54906003)(2906002)(7416002)(426003)(8936002)(26005)(498600001)(2616005)(47076005)(336012)(5660300002)(16526019)(6666004)(356005)(70206006)(86362001)(66899015)(186003)(36756003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 15:42:20.3652
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6cbf5749-2b00-40de-a80e-08daf96a9606
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7909
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.01.2023 05:37, Song Shuai wrote:
-> Evgenii Shatokhin <e.shatokhin@yadro.com> 于2023年1月17日周二 16:22写道：
->>
->> On 17.01.2023 16:16, Evgenii Shatokhin wrote:
->>> Hi, Song,
->>>
->>> On 17.01.2023 12:32, Song Shuai wrote:
->>>>
->>>> Hi, Evgenii:
->>>>
->>>> Evgenii Shatokhin <e.shatokhin@yadro.com> 于2023年1月16日周一 14:30写道：
->>>>
->>>>>
->>>>> Hi,
->>>>>
->>>>> On 12.01.2023 12:06, guoren@kernel.org wrote:
->>>>>> From: Song Shuai <suagrfillet@gmail.com>
->>>>>>
->>>>>> select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->>>>>> for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
->>>>>> the ftrace-direct*.c files in samples/ftrace/.
->>>>>>
->>>>>> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
->>>>>> Tested-by: Guo Ren <guoren@kernel.org>
->>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>>>>> ---
->>>>>>     arch/riscv/Kconfig                          |  2 ++
->>>>>>     samples/ftrace/ftrace-direct-modify.c       | 33 ++++++++++++++++++
->>>>>>     samples/ftrace/ftrace-direct-multi-modify.c | 37
->>>>>> +++++++++++++++++++++
->>>>>>     samples/ftrace/ftrace-direct-multi.c        | 22 ++++++++++++
->>>>>>     samples/ftrace/ftrace-direct-too.c          | 26 +++++++++++++++
->>>>>>     samples/ftrace/ftrace-direct.c              | 22 ++++++++++++
->>>>>>     6 files changed, 142 insertions(+)
->>>>>
->>>>> The samples were built OK now, but ftrace-direct-multi and
->>>>> ftrace-direct-multi-modify report incorrect values of ip/pc it seems.
->>>>>
->>>>> I ran 'insmod ftrace-direct-multi.ko', waited a little and then checked
->>>>> the messages in the trace:
->>>>>
->>>>> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
->>>>> #              | |         |   |||||     |         |
->>>>>         migration/1-19      [001] .....  3858.532131: my_direct_func1: my
->>>>> direct func1 ip 0
->>>>>         migration/0-15      [000] d.s2.  3858.532136: my_direct_func1: my
->>>>> direct func1 ip ff60000001ba9600
->>>>>         migration/0-15      [000] d..2.  3858.532204: my_direct_func1: my
->>>>> direct func1 ip ff60000003334d00
->>>>>         migration/0-15      [000] .....  3858.532232: my_direct_func1: my
->>>>> direct func1 ip 0
->>>>>           rcu_sched-14      [001] .....  3858.532257: my_direct_func1: my
->>>>> direct func1 ip 0
->>>>>              insmod-415     [000] .....  3858.532270: my_direct_func1: my
->>>>> direct func1 ip 7fffffffffffffff
->>>>>              <idle>-0       [001] ..s1.  3858.539051: my_direct_func1: my
->>>>> direct func1 ip ff60000001ba9600
->>>>>              <idle>-0       [001] dns2.  3858.539124: my_direct_func1: my
->>>>> direct func1 ip ff60000001ba9600
->>>>>           rcu_sched-14      [001] .....  3858.539208: my_direct_func1: my
->>>>> direct func1 ip 0
->>>>> [...]
->>>>>
->>>>> If I understand it right, my_direct_func1() should print the address of
->>>>> some location in the code, probably - at the beginning of the traced
->>>>> functions.
->>>>>
->>>>> The printed values (0x0, 0x7fffffffffffffff, ...) are not valid code
->>>>> addresses.
->>>>>
->>>> The invalid code address is only printed by accessing the schedule()
->>>> function's first argument whose address stores in a0 register.
->>>> While schedule() actually has no parameter declared, so my_direct_func
->>>> just prints the a0 in the context of the schedule()'s caller and
->>>> the address maybe varies depending on the caller.
->>>>
->>>> I can't really understand why tracing the first argument of the
->>>> schedule() function, but it seems nonsense at this point.
->>>
->>> The question is, what should be passed as the argument(s) of
->>> my_direct_func() in this particular sample module. The kernel docs and
->>> commit logs seem to contain no info on that.
->>>
->>> With direct functions, I suppose, the trampoline can pass anything it
->>> wants to my_direct_func(), not just the arguments of the traced function.
->>>
->>> I'd check what these sample modules do on x86 and would try to match
->>> that behaviour on RISC-V.
->>
->> I have checked ftrace-direct-multi.ko and ftrace-direct-multi-modify.ko
->> on 6.2-rc4 built for x86-64 - yes, ip/pc in the traced function should
->> be passed to my_direct_func().
->>
->> ftrace-direct-multi.ko:
->> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
->> #              | |         |   |||||     |         |
->>             insmod-10829   [000] d.h1.  1719.518535: my_direct_func: ip
->> ffffffff87332f45 // wake_up_process+0x5
->>    rcu_tasks_kthre-11      [000] .....  1719.518696: my_direct_func: ip
->> ffffffff8828d935 // schedule+0x5
->>             insmod-10829   [000] .....  1719.518708: my_direct_func: ip
->> ffffffff8828d935
->>    systemd-journal-293     [001] .....  1719.518823: my_direct_func: ip
->> ffffffff8828d935
->>            systemd-1       [000] .....  1719.519141: my_direct_func: ip
->> ffffffff8828d935
->>             <idle>-0       [001] ..s1.  1719.521889: my_direct_func: ip
->> ffffffff87332f45
->>             <idle>-0       [000] d.s2.  1719.521901: my_direct_func: ip
->> ffffffff87332f45
->>        rcu_preempt-15      [001] .....  1719.521917: my_direct_func: ip
->> ffffffff8828d935
->> [...]
->>
->> The ip values are wake_up_process+0x5 and schedule+0x5, the locations
->> where the execution of the traced functions resumes after the Ftrace
->> trampoline has finished.
->>
->> The results with ftrace-direct-multi-modify.ko are similar to that.
->>
->> The samples look like a demonstration, that one can pass anything
->> necessary to the handler in case of "direct" functions.
->>
->> I suppose, the RISC-V-specific asm code in these two sample modules
->> could be updated to pass the saved pc value to my_direct_func() in a0.
-> 
-> Yes, you're right.
-> 
-> I added 'mv a0,t0' in front of `call my_direct_func` to pass the address of
-> traced function with mcount offset.
-> 
-> Here is the updated patch for your reference.
-> https://github.com/sugarfillet/linux/commit/95b174fb104dd970b982ee6fa19879393e229318
 
-Thank you for the quick fix. This one looks good to me.
+<Daniel.Machon@microchip.com> writes:
 
-ftrace-direct-multi*.ko now report the ip values corresponding to 
-schedule+0x8 and wake_up_process+0x8, which is what was expected here.
+>> > +     rewr = nla_nest_start_noflag(skb, DCB_ATTR_DCB_REWR_TABLE);
+>> > +     if (!rewr)
+>> > +             return -EMSGSIZE;
+>> 
+>> This being new code, don't use _noflag please.
+>
+> Ack.
+>
+>> 
+>> > +
+>> > +     spin_lock_bh(&dcb_lock);
+>> > +     list_for_each_entry(itr, &dcb_rewr_list, list) {
+>> > +             if (itr->ifindex == netdev->ifindex) {
+>> > +                     enum ieee_attrs_app type =
+>> > +                             dcbnl_app_attr_type_get(itr->app.selector);
+>> > +                     err = nla_put(skb, type, sizeof(itr->app), &itr->app);
+>> > +                     if (err) {
+>> > +                             spin_unlock_bh(&dcb_lock);
+>> 
+>> This should cancel the nest started above.
+>
+> Yes, it should.
+>
+>> 
+>> I wonder if it would be cleaner in a separate function, so that there
+>> can be a dedicated clean-up block to goto.
+>
+> Well yes. That would make sense if the function were reused for both APP
+> and rewr.
 
-One more thing: please change my "Co-developed-by:" into "Tested-by:" in 
-your patch, becase this is what I actually did: tested it and reported 
-the results. I cannot take your credit for development of this patch ;-)
+I meant purely for to make the cleanup clear. The function would be
+approximately:
 
-Looking forward for v8 of the series.
-> 
-> 
->>
->>>
->>>>
->>>> As for this patch, it just impls a simple mcount (direct_caller) to
->>>> trace kernel functions, and basically saves the necessary ABI,
->>>> call the tracing function, and restores the ABI, just like other
->>>> arches do.
->>>> so It shouldn't be blamed.
->>>>
->>>> I started an independent patch to replace schedule with kick_process
->>>> to make these samples more reasonable. And It has no conflict with the
->>>> current patch, so we can go on.
->>>>
->>>> Link:
->>>> https://lore.kernel.org/linux-kernel/20230117091101.3669996-1-suagrfillet@gmail.com/T/#u
->>>>
->>>>> The same issue is with ftrace-direct-multi-modify.ko.
->>>>>
->>>>> Is anything missing here?
->>>>>
->>>>>>
->>>>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->>>>>> index 307a9f413edd..e944af44f681 100644
->>>>>> --- a/arch/riscv/Kconfig
->>>>>> +++ b/arch/riscv/Kconfig
->>>>>> @@ -112,6 +112,8 @@ config RISCV
->>>>>>            select HAVE_POSIX_CPU_TIMERS_TASK_WORK
->>>>>>            select HAVE_REGS_AND_STACK_ACCESS_API
->>>>>>            select HAVE_FUNCTION_ARG_ACCESS_API
->>>>>> +       select HAVE_SAMPLE_FTRACE_DIRECT
->>>>>> +       select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->>>>>>            select HAVE_STACKPROTECTOR
->>>>>>            select HAVE_SYSCALL_TRACEPOINTS
->>>>>>            select HAVE_RSEQ
->>>>>> diff --git a/samples/ftrace/ftrace-direct-modify.c
->>>>>> b/samples/ftrace/ftrace-direct-modify.c
->>>>>> index de5a0f67f320..be7bf472c3c7 100644
->>>>>> --- a/samples/ftrace/ftrace-direct-modify.c
->>>>>> +++ b/samples/ftrace/ftrace-direct-modify.c
->>>>>> @@ -23,6 +23,39 @@ extern void my_tramp2(void *);
->>>>>>
->>>>>>     static unsigned long my_ip = (unsigned long)schedule;
->>>>>>
->>>>>> +#ifdef CONFIG_RISCV
->>>>>> +
->>>>>> +asm (" .pushsection    .text, \"ax\", @progbits\n"
->>>>>> +"      .type           my_tramp1, @function\n"
->>>>>> +"      .globl          my_tramp1\n"
->>>>>> +"   my_tramp1:\n"
->>>>>> +"      addi sp,sp,-16\n"
->>>>>> +"      sd   t0,0(sp)\n"
->>>>>> +"      sd   ra,8(sp)\n"
->>>>>> +"      call my_direct_func1\n"
->>>>>> +"      ld   t0,0(sp)\n"
->>>>>> +"      ld   ra,8(sp)\n"
->>>>>> +"      addi sp,sp,16\n"
->>>>>> +"      jr t0\n"
->>>>>> +"      .size           my_tramp1, .-my_tramp1\n"
->>>>>> +
->>>>>> +"      .type           my_tramp2, @function\n"
->>>>>> +"      .globl          my_tramp2\n"
->>>>>> +"   my_tramp2:\n"
->>>>>> +"      addi sp,sp,-16\n"
->>>>>> +"      sd   t0,0(sp)\n"
->>>>>> +"      sd   ra,8(sp)\n"
->>>>>> +"      call my_direct_func2\n"
->>>>>> +"      ld   t0,0(sp)\n"
->>>>>> +"      ld   ra,8(sp)\n"
->>>>>> +"      addi sp,sp,16\n"
->>>>>> +"      jr t0\n"
->>>>>> +"      .size           my_tramp2, .-my_tramp2\n"
->>>>>> +"      .popsection\n"
->>>>>> +);
->>>>>> +
->>>>>> +#endif /* CONFIG_RISCV */
->>>>>> +
->>>>>>     #ifdef CONFIG_X86_64
->>>>>>
->>>>>>     #include <asm/ibt.h>
->>>>>> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c
->>>>>> b/samples/ftrace/ftrace-direct-multi-modify.c
->>>>>> index d52370cad0b6..10884bf418f7 100644
->>>>>> --- a/samples/ftrace/ftrace-direct-multi-modify.c
->>>>>> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
->>>>>> @@ -21,6 +21,43 @@ void my_direct_func2(unsigned long ip)
->>>>>>     extern void my_tramp1(void *);
->>>>>>     extern void my_tramp2(void *);
->>>>>>
->>>>>> +#ifdef CONFIG_RISCV
->>>>>> +
->>>>>> +asm (" .pushsection    .text, \"ax\", @progbits\n"
->>>>>> +"      .type           my_tramp1, @function\n"
->>>>>> +"      .globl          my_tramp1\n"
->>>>>> +"   my_tramp1:\n"
->>>>>> +"       addi sp,sp,-24\n"
->>>>>> +"       sd   a0,0(sp)\n"
->>>>>> +"       sd   t0,8(sp)\n"
->>>>>> +"       sd   ra,16(sp)\n"
->>>>>> +"       call my_direct_func1\n"
->>>>>> +"       ld   a0,0(sp)\n"
->>>>>> +"       ld   t0,8(sp)\n"
->>>>>> +"       ld   ra,16(sp)\n"
->>>>>> +"       addi sp,sp,24\n"
->>>>>> +"      jr t0\n"
->>>>>> +"      .size           my_tramp1, .-my_tramp1\n"
->>>>>> +
->>>>>> +"      .type           my_tramp2, @function\n"
->>>>>> +"      .globl          my_tramp2\n"
->>>>>> +"   my_tramp2:\n"
->>>>>> +"       addi sp,sp,-24\n"
->>>>>> +"       sd   a0,0(sp)\n"
->>>>>> +"       sd   t0,8(sp)\n"
->>>>>> +"       sd   ra,16(sp)\n"
->>>>>> +"       call my_direct_func2\n"
->>>>>> +"       ld   a0,0(sp)\n"
->>>>>> +"       ld   t0,8(sp)\n"
->>>>>> +"       ld   ra,16(sp)\n"
->>>>>> +"       addi sp,sp,24\n"
->>>>>> +"      jr t0\n"
->>>>>> +"      .size           my_tramp2, .-my_tramp2\n"
->>>>>> +"      .popsection\n"
->>>>>> +);
->>>>>> +
->>>>>> +#endif /* CONFIG_RISCV */
->>>>>> +
->>>>>>     #ifdef CONFIG_X86_64
->>>>>>
->>>>>>     #include <asm/ibt.h>
->>>>>> diff --git a/samples/ftrace/ftrace-direct-multi.c
->>>>>> b/samples/ftrace/ftrace-direct-multi.c
->>>>>> index ec1088922517..a35bf43bf6d7 100644
->>>>>> --- a/samples/ftrace/ftrace-direct-multi.c
->>>>>> +++ b/samples/ftrace/ftrace-direct-multi.c
->>>>>> @@ -16,6 +16,28 @@ void my_direct_func(unsigned long ip)
->>>>>>
->>>>>>     extern void my_tramp(void *);
->>>>>>
->>>>>> +#ifdef CONFIG_RISCV
->>>>>> +
->>>>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
->>>>>> +"       .type           my_tramp, @function\n"
->>>>>> +"       .globl          my_tramp\n"
->>>>>> +"   my_tramp:\n"
->>>>>> +"       addi sp,sp,-24\n"
->>>>>> +"       sd   a0,0(sp)\n"
->>>>>> +"       sd   t0,8(sp)\n"
->>>>>> +"       sd   ra,16(sp)\n"
->>>>>> +"       call my_direct_func\n"
->>>>>> +"       ld   a0,0(sp)\n"
->>>>>> +"       ld   t0,8(sp)\n"
->>>>>> +"       ld   ra,16(sp)\n"
->>>>>> +"       addi sp,sp,24\n"
->>>>>> +"       jr t0\n"
->>>>>> +"       .size           my_tramp, .-my_tramp\n"
->>>>>> +"       .popsection\n"
->>>>>> +);
->>>>>> +
->>>>>> +#endif /* CONFIG_RISCV */
->>>>>> +
->>>>>>     #ifdef CONFIG_X86_64
->>>>>>
->>>>>>     #include <asm/ibt.h>
->>>>>> diff --git a/samples/ftrace/ftrace-direct-too.c
->>>>>> b/samples/ftrace/ftrace-direct-too.c
->>>>>> index e13fb59a2b47..3b62e33c2e6d 100644
->>>>>> --- a/samples/ftrace/ftrace-direct-too.c
->>>>>> +++ b/samples/ftrace/ftrace-direct-too.c
->>>>>> @@ -18,6 +18,32 @@ void my_direct_func(struct vm_area_struct *vma,
->>>>>>
->>>>>>     extern void my_tramp(void *);
->>>>>>
->>>>>> +#ifdef CONFIG_RISCV
->>>>>> +
->>>>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
->>>>>> +"       .type           my_tramp, @function\n"
->>>>>> +"       .globl          my_tramp\n"
->>>>>> +"   my_tramp:\n"
->>>>>> +"       addi sp,sp,-40\n"
->>>>>> +"       sd   a0,0(sp)\n"
->>>>>> +"       sd   a1,8(sp)\n"
->>>>>> +"       sd   a2,16(sp)\n"
->>>>>> +"       sd   t0,24(sp)\n"
->>>>>> +"       sd   ra,32(sp)\n"
->>>>>> +"       call my_direct_func\n"
->>>>>> +"       ld   a0,0(sp)\n"
->>>>>> +"       ld   a1,8(sp)\n"
->>>>>> +"       ld   a2,16(sp)\n"
->>>>>> +"       ld   t0,24(sp)\n"
->>>>>> +"       ld   ra,32(sp)\n"
->>>>>> +"       addi sp,sp,40\n"
->>>>>> +"       jr t0\n"
->>>>>> +"       .size           my_tramp, .-my_tramp\n"
->>>>>> +"       .popsection\n"
->>>>>> +);
->>>>>> +
->>>>>> +#endif /* CONFIG_RISCV */
->>>>>> +
->>>>>>     #ifdef CONFIG_X86_64
->>>>>>
->>>>>>     #include <asm/ibt.h>
->>>>>> diff --git a/samples/ftrace/ftrace-direct.c
->>>>>> b/samples/ftrace/ftrace-direct.c
->>>>>> index 1f769d0db20f..2cfe5a7d2d70 100644
->>>>>> --- a/samples/ftrace/ftrace-direct.c
->>>>>> +++ b/samples/ftrace/ftrace-direct.c
->>>>>> @@ -15,6 +15,28 @@ void my_direct_func(struct task_struct *p)
->>>>>>
->>>>>>     extern void my_tramp(void *);
->>>>>>
->>>>>> +#ifdef CONFIG_RISCV
->>>>>> +
->>>>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
->>>>>> +"       .type           my_tramp, @function\n"
->>>>>> +"       .globl          my_tramp\n"
->>>>>> +"   my_tramp:\n"
->>>>>> +"       addi sp,sp,-24\n"
->>>>>> +"       sd   a0,0(sp)\n"
->>>>>> +"       sd   t0,8(sp)\n"
->>>>>> +"       sd   ra,16(sp)\n"
->>>>>> +"       call my_direct_func\n"
->>>>>> +"       ld   a0,0(sp)\n"
->>>>>> +"       ld   t0,8(sp)\n"
->>>>>> +"       ld   ra,16(sp)\n"
->>>>>> +"       addi sp,sp,24\n"
->>>>>> +"       jr t0\n"
->>>>>> +"       .size           my_tramp, .-my_tramp\n"
->>>>>> +"       .popsection\n"
->>>>>> +);
->>>>>> +
->>>>>> +#endif /* CONFIG_RISCV */
->>>>>> +
->>>>>>     #ifdef CONFIG_X86_64
->>>>>>
->>>>>>     #include <asm/ibt.h>
->>>>>> --
->>>>>> 2.36.1
->>>>
->>>> --
->>>> Thanks,
->>>> Song
->>>>
->>>
->>> Regards,
->>> Evgenii
->>
->>
-> 
-> 
-> --
-> Thanks,
-> Song
-> 
+static int dcbnl_ieee_fill_rewr(struct sk_buff *skb, struct net_device *netdev)
+{
+	struct dcb_app_type *itr;
+	struct nlattr *rewr;
+	int err;
 
+	rewr = nla_nest_start_noflag(skb, DCB_ATTR_DCB_REWR_TABLE);
+	if (!rewr)
+		return -EMSGSIZE;
 
+	spin_lock_bh(&dcb_lock);
+	list_for_each_entry(itr, &dcb_rewr_list, list) {
+		if (itr->ifindex == netdev->ifindex) {
+			enum ieee_attrs_app type =
+				dcbnl_app_attr_type_get(itr->app.selector);
+			err = nla_put(skb, type, sizeof(itr->app), &itr->app);
+			if (err)
+				goto err_out;
+		}
+	}
+
+	spin_unlock_bh(&dcb_lock);
+	nla_nest_end(skb, rewr);
+        return 0;
+
+err_out:
+	spin_unlock_bh(&dcb_lock);
+	nla_nest_cancel(skb, rewr);
+	return err;
+}
+
+Which uses an idiomatic style with the cleanup block at the end, instead
+of stashing the individual cleanups before the return statement. I find
+it easier to reason about.
+
+But it's not a big deal. Your thing is readable just fine.
+
+> Though in the APP equivalent code, nla_nest_start_noflag is used, and
+> dcbnl_ops->getdcbx() is called. Is there any userspace side-effect of
+> using nla_nest_start for APP too?
+
+Yeah, the clients would be looking for code DCB_ATTR_IEEE_APP_TABLE, but
+would get DCB_ATTR_IEEE_APP_TABLE | NLA_F_NESTED, and get confused.
+
+For reuse between APP_TABLE and REWR_TABLE, you could just always call
+_noflag in the helper, and pass the actual attribute in an argument.
+Then the argument would be either DCB_ATTR_DCB_REWR_TABLE | NLA_F_NESTED,
+or just plain DCB_ATTR_IEEE_APP_TABLE.
+
+But that makes the code less clear, and I don't feel it brings much.
+
+> dcbnl_ops->getdcbx() would then be left outside of the shared function.
+> Does that call even have to hold the dcb_lock? Not as far as I can tell.
+>
+> something like:
+>
+> err = dcbnl_app_table_get(ndev, skb, &dcb_app_list,
+> 			  DCB_ATTR_IEEE_APP_TABLE);
+> if (err)
+> 	return -EMSGSIZE;
+>
+> err = dcbnl_app_table_get(ndev, skb, &dcb_rewr_list,
+> 			  DCB_ATTR_DCB_REWR_TABLE);
+> if (err)
+>         return -EMSGSIZE;
+>
+> if (netdev->dcbnl_ops->getdcbx)
+> 	dcbx = netdev->dcbnl_ops->getdcbx(netdev); <-- without lock held
+> else
+> 	dcbx = -EOPNOTSUPP;
+>
+> Let me hear your thoughts.
+
+Yeah, and the dcbx stuff is the added wrinkle.
+
+Dunno, I'd not force it. This redundancy is not great, but the code is
+small and easy to understand, so I find it's not an issue.
