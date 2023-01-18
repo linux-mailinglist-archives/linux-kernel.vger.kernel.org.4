@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378B86715EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1F4671611
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjARINu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S229884AbjARITD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjARIMk (ORCPT
+        with ESMTP id S229862AbjARIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:12:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE394C6D8;
-        Tue, 17 Jan 2023 23:42:25 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g13so50519858lfv.7;
-        Tue, 17 Jan 2023 23:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WogcXw5V1dMUk2yAmcSaqUx3fjFKGGjC2OchSCFaRqI=;
-        b=W1vKNzXcW4o7IgdoAL+E9UDjAPHxmJQ9sTOucXTBt9P7tTTRkfvNaK2uKALGjWEqkV
-         P30POXU33GsV+zVFKLvSVc08Nn1ozsS7uyQdCzunMCqjJCwWdi5jo13qsVQjqSKsemZv
-         +DEDaxw1/38djQa9aKIe/l041tjx7fxCH45m6Yo1ymPeToGZ0Eg/xggLs1mnCc8qtXp5
-         fQRViXuU5XPr8dXypHCsYw4swi76ByhxTI0GXW+jV7iMrPQXUfUxjkRL4DHj4XkTQGQT
-         UCTd8iQL47QPXGe7pyYvh+6hboJ9JFlKGOKJwaZk/GPcUV+OdueEahid+LHRjg0s+/GF
-         8wjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WogcXw5V1dMUk2yAmcSaqUx3fjFKGGjC2OchSCFaRqI=;
-        b=Kyqq9keluFRVMfhk9uCOCJESDf7Gi0lInOGBieBVYeiwEFZhVevjFffOmZ8nHZ5RAN
-         eAyhkWr36g8X5oa2aLXP8SYpMvYa7htEOF92D0KA1dANKwevJ5PLzkhJW0eiALRh6xoU
-         buKb8XydFF87dDDh6KRRFfvu4WHix5T8KaHOtxPy+JkG5Ymtb0S3EjoCKbv9NvRyxZ29
-         dOSsW4QRVAwTGk/aITIHy8nhwie/8mRYC/C7sx/fmFxDXgy4naptNF7xHea5uH8k0IuI
-         MJ+oXtGl2VXYEA5vD90aHufiBtxg4h4S0vflG/SRGTb3XZVD8kDwx5KgA/dbtekq81rQ
-         wgxw==
-X-Gm-Message-State: AFqh2kojd0Es33cY5eFqAw5MCgtPn7T5DodB/EXkPn8Cys4TDzkc28E/
-        IgwCxY3WKC0VhqpElt097No=
-X-Google-Smtp-Source: AMrXdXue+OGDgorAqaEOtatXxZXkTPdQ1/cJFe/pnQXlzV0Bu/t8n4gQWL68XKAFQx06ucpwca+Cmg==
-X-Received: by 2002:a19:ac0c:0:b0:4c8:ae6b:ea8d with SMTP id g12-20020a19ac0c000000b004c8ae6bea8dmr1321742lfc.8.1674027744171;
-        Tue, 17 Jan 2023 23:42:24 -0800 (PST)
-Received: from localhost.localdomain ([46.147.136.0])
-        by smtp.gmail.com with ESMTPSA id z17-20020a056512371100b004cc898ce1c5sm3831792lfr.163.2023.01.17.23.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 23:42:23 -0800 (PST)
-From:   Alexander Pantyukhin <apantykhin@gmail.com>
-To:     davidgow@google.com
-Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        Alexander Pantyukhin <apantykhin@gmail.com>
-Subject: [PATCH V2] tools/testing/kunit/kunit.py: remove redundant double check
-Date:   Wed, 18 Jan 2023 12:42:19 +0500
-Message-Id: <20230118074219.3921-1-apantykhin@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 Jan 2023 03:17:42 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5776D6BE;
+        Tue, 17 Jan 2023 23:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674028022; x=1705564022;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+QFXAEE/I1e+ZlCichsm9XHIaVDx4dSZnoWCivSwEaY=;
+  b=PtHr7507Cc91CPZHgkRPNwLBmP/s/8zGjZyu3XiMRtg+ZPwEa46OR8tv
+   QYyKnAnZwtc8EfLh/gop36PJERFsIx+VhTt0ouBZPiZTpNC9UzH52KAgE
+   W4eYDTNReQfmzHYhd6pBDZQUANIJtYwBfOoIk42Jy9JAro9aDlFACP2Qs
+   WNbfxN0romXGMPRP08pnS2fTKS8fJl2yGh3hi59cCeuwnNhKpjqRyAAoe
+   qhTX2V3p4FY7nMrnM+O3AO55hfEQSmce7QaBeFuf/tLGqzWwx+zI2y/4j
+   /JJPQr2EinN2B1Ps6Ttsd/Ph72CD5/QsiYzQ40Np/sfL1DhEoIWgMw0tP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="322611688"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="322611688"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 23:46:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="728085837"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="728085837"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jan 2023 23:46:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pI39C-00Azu7-2C;
+        Wed, 18 Jan 2023 09:46:14 +0200
+Date:   Wed, 18 Jan 2023 09:46:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
+Message-ID: <Y8ejxsqeHL/pBTAY@smile.fi.intel.com>
+References: <20230117093944.72271-1-andriy.shevchenko@linux.intel.com>
+ <20230117231204.fpvxryjscosg57a6@SoMainline.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117231204.fpvxryjscosg57a6@SoMainline.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The build_tests function contained double checking for not success
-result. It is fixed in the current patch. Additional small
-simplifications of code like using ternary if were applied (avoid using
-the same operation by calculation times differ in two places).
+On Wed, Jan 18, 2023 at 12:12:04AM +0100, Marijn Suijten wrote:
+> On 2023-01-17 11:39:44, Andy Shevchenko wrote:
+> > The node name can contain an address part which is not used by
+> > the driver. Cut it out before assigning the channel name.
+> 
+> This explanation doesn't cut it.  It's not that the driver "doesn't use"
 
-Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
----
- tools/testing/kunit/kunit.py | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+Driver doesn't use it still. There is no contradiction, but I agree that
+below part is good to have in the commit message.
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 43fbe96318fe..0e3e08cc0204 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -77,11 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
- 	config_start = time.time()
- 	success = linux.build_reconfig(request.build_dir, request.make_options)
- 	config_end = time.time()
--	if not success:
--		return KunitResult(KunitStatus.CONFIG_FAILURE,
--				   config_end - config_start)
--	return KunitResult(KunitStatus.SUCCESS,
--			   config_end - config_start)
-+	status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
-+	return KunitResult(status, config_end - config_start)
- 
- def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 		request: KunitBuildRequest) -> KunitResult:
-@@ -92,14 +89,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 				     request.build_dir,
- 				     request.make_options)
- 	build_end = time.time()
--	if not success:
--		return KunitResult(KunitStatus.BUILD_FAILURE,
--				   build_end - build_start)
--	if not success:
--		return KunitResult(KunitStatus.BUILD_FAILURE,
--				   build_end - build_start)
--	return KunitResult(KunitStatus.SUCCESS,
--			   build_end - build_start)
-+	status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
-+	return KunitResult(status, build_end - build_start)
- 
- def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
- 			   request: KunitBuildRequest) -> KunitResult:
-@@ -145,7 +136,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
- 		tests = _list_tests(linux, request)
- 		if request.run_isolated == 'test':
- 			filter_globs = tests
--		if request.run_isolated == 'suite':
-+		elif request.run_isolated == 'suite':
- 			filter_globs = _suites_from_test_list(tests)
- 			# Apply the test-part of the user's glob, if present.
- 			if '.' in request.filter_glob:
+> the address part, it is that this string is propagated into the
+> userspace label, sysfs /filenames/ *and breaking ABI*.
+
+So I will add it into v2 in case the fix works (see below).
+
+...
+
+> > -	const char *name = fwnode_get_name(fwnode), *channel_name;
+> > +	const char *name, *channel_name;
+> 
+> I don't think this'll compile as name is still a pointer to const data,
+> while you're assigning (a '\0' char) to it below.
+
+Right, it's always hard for me to compile things for ARM on x86 :-)
+Thanks for catching this up!
+
+But does this fix the issue after compilation fix?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
