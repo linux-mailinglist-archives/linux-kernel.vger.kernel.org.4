@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5FA672264
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C96672266
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjARQD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S231267AbjARQER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjARQDg (ORCPT
+        with ESMTP id S230430AbjARQDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:03:36 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981BB577EE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:29 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 141so24853777pgc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:29 -0800 (PST)
+        Wed, 18 Jan 2023 11:03:41 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE11F56EE4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:40 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id q10so24032271qvt.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TkK91UFziEYA9a0PZy5wDygMUGAdbCISJG9fWIp70W4=;
-        b=B3LhbX+uC9VzWniTeiFC79j4cyksKvOBeF4ERJMLzjJAJ0kBEKMPqSqRjrT/PPOBoE
-         ki9tKLE3N6oMuvkXouwydXttMR+4yu7mmc6xcUF7WUSNjprswDMU8YQMaTaV4C7gfcYg
-         NW8z8gOLN9N748d7ZTV73rnDaILNR13zUo13778t0tYnUz/dsVTjywUqPRcCI6BiW+mP
-         kvmxVQXOdOFUATNJTmHZjTdUK59QSwidGlSvz29HDI02oR2C9i9v7v9vBYMvFke9dgis
-         NPPEe/vGhaXRoxy2WsWSCENrwZIj3rZU8NlD2AJ41cgl1FjCoqLGBN1ESYJNX4whhMY+
-         V8LQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMnfiDl90nDMp75zhCoCphPVt5I3scvrOc1ITYVkfYQ=;
+        b=PdMtFWv6YOkJKhAG4gLjZhgFPo65DsYbGhXsa3xdtPIKBIPTic0rHcEQ3CdiRbooys
+         MtFyqsMqZIIgHuIoVgVIVuT6YoFxNTQ2CcVt6GhEwOcXD09vu8nJ2n4BB6fo3/kBhPt2
+         JxhySlSm6v/yV+rqY6m/f6nNkvkEhQaiHRo6M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TkK91UFziEYA9a0PZy5wDygMUGAdbCISJG9fWIp70W4=;
-        b=oHdRqMYfnFbH7JPb41l/zP8s7vmIkiF7FdGOOvcLo0MDt8MP0qmnaHJ7JOZ2LB/iD2
-         AT31u+uMwVp72qPfLEPJ32Sg+E8fD6wBoReuVZi92sRsHh+qiU+4mhDaITfsenNbXZNo
-         0gwE4SNR+FroykwhBpgzRo8cnoTMC7aqGQa3v5GdkqX0CcnvvDzuodqEzRN5cExvgyc6
-         HuiCFROs8n0yqK1Z+KX6O3V5lE591NxiYzWZ/ETOyaPfLgXspI1Tnf+MqJtfif3kTdYq
-         zM79anQBvX/h1vsoJpEHpE8WOFWZl2TQVlT1txT7PI/qGAHOi3KKaKrL+Ie11oQWvUXm
-         FpOg==
-X-Gm-Message-State: AFqh2kogGXL6FvCWHMQO6mDnpfxlKQrFcoUixJtGLe4oZMMHV3m3db/P
-        1fOsySjegJVpGkO584Vjkfam
-X-Google-Smtp-Source: AMrXdXs1YhdyWPpUeoWW8QBJn7XDi2Fy1FHiKv4FDAWn2Ny4J26ydTlpU1GMFDCzrstItkpN1RREqQ==
-X-Received: by 2002:aa7:9614:0:b0:58b:b9cc:5724 with SMTP id q20-20020aa79614000000b0058bb9cc5724mr21956409pfg.15.1674057568997;
-        Wed, 18 Jan 2023 07:59:28 -0800 (PST)
-Received: from thinkpad ([27.111.75.61])
-        by smtp.gmail.com with ESMTPSA id s2-20020a625e02000000b0057ef155103asm20699260pfb.155.2023.01.18.07.59.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:59:28 -0800 (PST)
-Date:   Wed, 18 Jan 2023 21:29:19 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
-Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
- device on SDM845
-Message-ID: <20230118155919.GD4690@thinkpad>
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
- <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yMnfiDl90nDMp75zhCoCphPVt5I3scvrOc1ITYVkfYQ=;
+        b=uTeypvjs0CEL8OIAquveHulL5TZBL8Uzqji+HTfQAD0RjmVM7MWQXrsL7/eb8vaYhJ
+         tM0EvsA36bQ3ha1TdvV+nDn2G05LVGm5ZkKoyDWbUcHuLtHc5XunkrBX7PAqOUAnI+0A
+         gSFwu/2VqKjBrhjZ/Ln4IVakVu0Im5nHgcuxBrCpSdyS7XkN9dh0ZaGNd9H3lZWzcxU3
+         +0khY+1j6U06zt3YK6qZtpQ9rwvrFYqezp3VspOeGcH76bpPHLio7ZdX5GkdXOBRM1xl
+         DYwkLJej5Np/FN8ORTzFg8yYCGlUgwaPE/Psjd1nAoGZwdjy+lPWZNIQdL+esjszc+GI
+         Kefw==
+X-Gm-Message-State: AFqh2krxiRrGEmv94SaRpKzuU8XVn5heB16340qjCpA9A8FbKHVITK+l
+        x07shYXn8qndYV7dDOWp6VcCDshwBcNpcxX/
+X-Google-Smtp-Source: AMrXdXvv7Qn9dVgYc73P0kNntiKIlzrMoh90GDKYfjCV0SIVg4z1zFPdxW5dKJblwiNMSHkdkeFa3Q==
+X-Received: by 2002:a0c:ef4f:0:b0:531:c196:3dfb with SMTP id t15-20020a0cef4f000000b00531c1963dfbmr36338668qvs.25.1674057579632;
+        Wed, 18 Jan 2023 07:59:39 -0800 (PST)
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05620a430800b006b615cd8c13sm22698539qko.106.2023.01.18.07.59.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 07:59:38 -0800 (PST)
+Received: by mail-qk1-f177.google.com with SMTP id d13so9514795qkk.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:59:38 -0800 (PST)
+X-Received: by 2002:a37:6387:0:b0:706:92f4:125 with SMTP id
+ x129-20020a376387000000b0070692f40125mr423230qkb.72.1674057577814; Wed, 18
+ Jan 2023 07:59:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
+ <20230111123736.20025-2-kirill.shutemov@linux.intel.com> <Y8gVJUDEFE5U7xAq@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y8gVJUDEFE5U7xAq@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 18 Jan 2023 07:59:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com>
+Message-ID: <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com>
+Subject: Re: [PATCHv14 01/17] x86/mm: Rework address range check in get_user()
+ and put_user()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 04:37:29PM +0100, Krzysztof Kozlowski wrote:
-> On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
-> > The platforms based on SDM845 SoC locks the access to EDAC registers in the
-> > bootloader. So probing the EDAC driver will result in a crash. Hence,
-> > disable the creation of EDAC platform device on all SDM845 devices.
-> > 
-> > The issue has been observed on Lenovo Yoga C630 and DB845c.
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.10
-> > Reported-by: Steev Klimaszewski <steev@kali.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
-> >  1 file changed, 12 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index 7b7c5a38bac6..8d840702df50 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  
-> >  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
-> >  
-> > -	llcc_edac = platform_device_register_data(&pdev->dev,
-> > -					"qcom_llcc_edac", -1, drv_data,
-> > -					sizeof(*drv_data));
-> > -	if (IS_ERR(llcc_edac))
-> > -		dev_err(dev, "Failed to register llcc edac driver\n");
-> > +	/*
-> > +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
-> > +	 * in bootloader. So probing the EDAC driver will result in a crash.
-> > +	 * Hence, disable the creation of EDAC platform device on SDM845.
-> > +	 */
-> > +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
-> 
-> Don't spread of_device_is_compatible() in driver code. You have driver
-> data for this.
-> 
+On Wed, Jan 18, 2023 at 7:50 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Jan 11, 2023 at 03:37:20PM +0300, Kirill A. Shutemov wrote:
+>
+> > If an address with bit 63 set is passed down, it will trigger a #GP
+> > exception. _ASM_EXTABLE_UA() complains about this. Replace it with
+> > plain _ASM_EXTABLE() as it is expected behaviour now.
+>
+> here I don't. The new logic basically squishes every kernel address to
+> -1L -- a known unmapped address, but getting that address in
+> {get,put}_user() is still a fail, right?
+>
+> We used to manually branch to bad_get_user when outside TASK_SIZE_MAX,
+> now we rely on #GP.
+>
+> So why silence it?
 
-Yeah, but there is no ID to in the driver data to identify an SoC. I could add
-one but is that really worth doing so? Is using of_device_is_compatible() in
-drivers discouraged nowadays?
+We don't silence it - for a kernel address that turns into an all-ones
+address, the the _ASM_EXTABLE() will still cause the -EFAULT due to
+the page fault.
 
-Thanks,
-Mani
+But it's not the high bit set case that is the problem here.
 
-> Best regards,
-> Krzysztof
-> 
+The problem is a "positive" address that is non-canonical.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Testing against TASK_SIZE_MAX would catch non-canonical addresses
+before the access, and we'd return -EFAULT.
+
+But now that we don't test against TASK_SIZE_MAX any more,
+non-canonical accesses will cause a GP fault, and *that* message is
+what we want to silence.
+
+We'll still return -EFAULT, of course, we're just getting rid of the
+
+        WARN_ONCE(trapnr == X86_TRAP_GP,
+                "General protection fault in user access.
+Non-canonical address?");
+
+issue that comes from not being so exact about the address limit any more.
+
+                 Linus
