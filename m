@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6843967165F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48B2671663
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjARIgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S229852AbjARIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjARIfQ (ORCPT
+        with ESMTP id S229583AbjARIhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:35:16 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AA25C0F8;
-        Tue, 17 Jan 2023 23:55:41 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.49.8]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MZCOl-1pDQZ60UCH-00V6J2; Wed, 18 Jan 2023 08:55:13 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:219:b8ff:fe08:dd7c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 04C833C087;
-        Wed, 18 Jan 2023 08:55:12 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 5B3371C7C; Wed, 18 Jan 2023 08:55:11 +0100 (CET)
-Date:   Wed, 18 Jan 2023 08:55:11 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] kheaders: use standard naming for the temporary
- directory
-Message-ID: <Y8el34qPsCq49bKd@bergen.fjasle.eu>
-References: <20230117-kernel-kheaders-gitignore-v3-0-e686b93b0732@weissschuh.net>
- <20230117-kernel-kheaders-gitignore-v3-2-e686b93b0732@weissschuh.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="67NBECsffgd7Rpuu"
-Content-Disposition: inline
-In-Reply-To: <20230117-kernel-kheaders-gitignore-v3-2-e686b93b0732@weissschuh.net>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:aMxYp1DxzfTUZdEWrLrhpKKxEN5TlPiy2IK7TGfoY3rG6U+/aru
- sHurwZ7TnTdVViiHxd0SdfkO431HgyCRxd6kbBuApnIAeVOsHFr3+QRf7i0tDktx29vyBMa
- 7rGAj+rRTLLp28v05PFBgwIZ4Yxw3J+MtW0minHR7KJv3c7/M/rzkZ7AY8U+QO6LOdxfEUq
- TdvgsB4zYHHKLj9bciZiw==
-UI-OutboundReport: notjunk:1;M01:P0:HfV3AwTnIt8=;DfPvW6GbR+flBSgt7JwNH+a0Fmo
- etZMKQAKKD02ePfDB4ZcS+o4hr7ojoPsRB+zospZuX5eiMM3zBnqM5uo+CJVQ4UGkG3eq2ugP
- fHmqK93EgtWoMUyNFr9DmWFtjTD/uR0vMDA4FgwdPDr5Xmmg1kzfc8S6HL7FJS6LhekRhy10f
- YYhjkr2LcSW3C3g3+hSocHPjiimGysLf4FwQbV2I3CCXdOi+nXnUqFj/y1uBz+qrrQTk2ae8O
- jA+UYeKq4qxYQOAIHm9crWEMefjpxFC6A71ZC8cJInmtCCuohHt4d1R0N6t+hU/e3Z+vTw24D
- wQ+ewTzhPCtif95VbP5/nnu6LvbpoBHjWrCOYkLCf240sCNRwDA4ikc19QXTxuSgpOdMTLrZB
- JwVTYzFx+EiAvbwvA0DPWVEd5L7p2w74t2Y/y79Xul0IhAkqK/nH6Qm7yv8f3sgK1h6EwzOiA
- eJbPB36n2GIIFcNgfaZm53FDS1aqHRtHJCTCldO4Hd9IPp/C8BrkrYK5ToSRLsJ/Vl8GQPAIu
- W6//afLMiI9JlEHrJ8sXJRunaG5UZZuwOBsqW9NjJPCzUDSve9GlEIJtb0iGZVDvE/bB2vN8F
- 8+FRcKfYW5kZ3t7DG7xmFNt9wfh32Asyky02ti4hLCIjHL6VSUTK0fkJCHjWTvXdo8sg6Ama2
- SjhPOdwEM4Q+BvchRIYRX5IX0CbKwREpUlHWUJkEjw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 03:37:10 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 123247EE5B;
+        Tue, 17 Jan 2023 23:56:58 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxrvBJpsdjy0kCAA--.7296S3;
+        Wed, 18 Jan 2023 15:56:57 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+RHpsdjVzUbAA--.17363S2;
+        Wed, 18 Jan 2023 15:56:55 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix build errors if CONFIG_NF_CONNTRACK=m
+Date:   Wed, 18 Jan 2023 15:56:44 +0800
+Message-Id: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cxf+RHpsdjVzUbAA--.17363S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAFykGr17ZryxCFyDXr4fZrb_yoW5XrW8pa
+        48Z3s0yr4kGw4UuF1xAFZ7Zr4rKFs29a4UJw1kJrWSkrZ5Xr1Utr1xKr43Ar9xurW09ay3
+        Za42gry7AFyrAaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jwnYwUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If CONFIG_NF_CONNTRACK=m, there are no definitions of NF_NAT_MANIP_SRC
+and NF_NAT_MANIP_DST in vmlinux.h, build test_bpf_nf.c failed.
 
---67NBECsffgd7Rpuu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ make -C tools/testing/selftests/bpf/
 
-On Wed 18 Jan 2023 05:05:35 GMT, Thomas Wei=DFschuh wrote:
-> If the kheaders archive generation is interrupted then this directory
-> may be left on disk and not ignored by git.
-> By using the standard naming schema for temporary files and directories
-> the default .gitignore and "make clean" rules will apply.
->=20
-> Suggested-by: Nicolas Schier <nicolas@fjasle.eu>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Thomas Wei=DFschuh <linux@weissschuh.net>
-> ---
->  kernel/gen_kheaders.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-> index 473036b43c83..b477b763f262 100755
-> --- a/kernel/gen_kheaders.sh
-> +++ b/kernel/gen_kheaders.sh
-> @@ -7,7 +7,7 @@ set -e
->  sfile=3D"$(readlink -f "$0")"
->  outdir=3D"$(pwd)"
->  tarfile=3D$1
-> -cpio_dir=3D$outdir/$tarfile.tmp
-> +cpio_dir=3D$outdir/${tarfile%/*}/.tmp_cpio_dir
-> =20
->  dir_list=3D"
->  include/
->=20
-> --=20
-> 2.39.1
+  CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+                bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                       ^
+progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+                bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                       ^
+2 errors generated.
 
-Thanks!
+Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c,
+in order to avoid redefinitions if CONFIG_NF_CONNTRACK=y, rename them with
+___local suffix. This is similar with commit 1058b6a78db2 ("selftests/bpf:
+Do not fail build if CONFIG_NF_CONNTRACK=m/n").
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nicolas Schier <nicolas@fjasle.eu>
+Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/testing/selftests/bpf/progs/test_bpf_nf.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
---67NBECsffgd7Rpuu
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 227e85e..9fc603c 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -34,6 +34,11 @@ __be16 dport = 0;
+ int test_exist_lookup = -ENOENT;
+ u32 test_exist_lookup_mark = 0;
+ 
++enum nf_nat_manip_type___local {
++	NF_NAT_MANIP_SRC___local,
++	NF_NAT_MANIP_DST___local
++};
++
+ struct nf_conn;
+ 
+ struct bpf_ct_opts___local {
+@@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
+ int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
+ int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
+ int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+-			int port, enum nf_nat_manip_type) __ksym;
++			int port, enum nf_nat_manip_type___local) __ksym;
+ 
+ static __always_inline void
+ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+@@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+ 
+ 		/* snat */
+ 		saddr.ip = bpf_get_prandom_u32();
+-		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
++		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
+ 		/* dnat */
+ 		daddr.ip = bpf_get_prandom_u32();
+-		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
++		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
+ 
+ 		ct_ins = bpf_ct_insert_entry(ct);
+ 		if (ct_ins) {
+-- 
+2.1.0
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPHpd4ACgkQB1IKcBYm
-Emma3xAAjFSXPAeJG5tdbFmUVd1WnUhzMDacYopa9a8QSKDiVw4FFG0dYegX6YEl
-PBotDzyEBwapXpkJ6kyI68bMrZoG8fB3xRjnyXQZ/jLq45/Wsz0I8YKVKKJlD+LI
-EJxeCVCfAp4m97SsRz+zwfJWFucEuNTz3hz86Sj/CHRQpAByeH1o+pRcQ/Yv3bzd
-7rnx+Rb61P7B06oP67OWocPYc92iehHtNNWiPagsP4yzzw+03r7Jue4RCicRSK6p
-rknBWotBsCruFiHiO3kDhLOPZhHSZM/5uWiMDRMM+VK+x+lXzA8Y+0apGsRSJ+8t
-enR0PpixzTy4hE4/zSDwz99k6ticXfsLIy6kw4dcA4xZ46i7FZfKMVeiIICDc1li
-pYxhmYrXot+X3Ja4yqrA+YkexWTgQHQtHTt4i6xASscCUJB7pb0TF7M/XsJRtpje
-usKgEqnIpf/5+Cwm5d9sgheWbgA8Mco30sC4sPQGGvpTMheegnTaX5im/77VphXO
-gtQr1FYYhC1q67VIkvzj+/86J9jnn4An/MXmnOZ6YVuKieaVkaDC9aubVBYDgz80
-M5h9nR4xQ83BU/ii8hj981BxQSEYnrpo4aqB99q69yIG2Kfzo2sebf6FkqwT2gFo
-OMNW1pSZX0qmqEgDVwfzYxn3husB5trAvv4QFE2Qam4FFjOK7K0=
-=uoCd
------END PGP SIGNATURE-----
-
---67NBECsffgd7Rpuu--
