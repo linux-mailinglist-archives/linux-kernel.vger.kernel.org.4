@@ -2,149 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA129671C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0A2671C47
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjARMk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S230318AbjARMki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjARMiQ (ORCPT
+        with ESMTP id S230426AbjARMiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:38:16 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2812995150
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:03:27 -0800 (PST)
-Received: from [192.168.1.103] (unknown [103.86.18.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C1041643;
-        Wed, 18 Jan 2023 13:03:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674043405;
-        bh=xqoJmXp5A5UYs1VELsFCrw1lWZU25O95+ePMttd4PgE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PFu4ZXH4gPCDe/Sv+3RSItX65lYMxGDtBablkp23ea7UehaPwm/5ctdxaeK+vGFhF
-         gcioVolgttKuKxk0Rt5nRHcDW/Wl3g9OhO0f7p+hOfXXl1PzHufsC4o+cou+VUXU1R
-         w099fwomZcrel2aYlVhPf+Bwx604rJMermkshLNk=
-Message-ID: <d4e9fd51-6d22-d304-3eb0-e76c15dcb1da@ideasonboard.com>
-Date:   Wed, 18 Jan 2023 17:33:15 +0530
+        Wed, 18 Jan 2023 07:38:14 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9D95147;
+        Wed, 18 Jan 2023 04:03:27 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id k8so19202313wrc.9;
+        Wed, 18 Jan 2023 04:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8nhezqflOATFFNnPhTotRfG2qXe/R2C82GK9147Uq6k=;
+        b=ZPXzjtrQKfSffr6NP3Ie4Q9762h40A4UqbVI+8raOIk6IgOVQ6vukTzwDDe4zsMWRD
+         6IdD2apgtz7nW7I6KFbt6OHNfU/l2lEkkF4Gx58xuTedkizhD7D+F3czue3cpbUKnUX5
+         p+DRU9uhTjjJ8UtJVzmwMpjFJ4izt21ieLZS7PWR+uA2x5E7jF8XDKggj08T0I3Ju2Js
+         VK+9xJlqPw4pihZw5xoitjYRERpT8PeZreewTVHPv4WTj+O8esxrteopYIB5uQ2rusro
+         x4EzWG1ZhSVXu0xrWsDYZGtxpykyERBBKgOsTpSw/qrWW2JbGJBmtVSKqwlBvoAKITyk
+         1v7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8nhezqflOATFFNnPhTotRfG2qXe/R2C82GK9147Uq6k=;
+        b=rrN8da5IV8qDbsFLDiz/ad+Duve4ufLbiAR0C7ontHtfG5B3zZKLtZpHqwdtm9rMWf
+         w1TfkmDG5+tsAyKaEbK5gxUJDRKOWk7gxgKit3X5hjMntmmG4MDcw/FOcBRPL59O9eSH
+         oyKwdbEulg1D6R1nGrROHMtf3ZQ0ANoXtz4XpgCPDnDLoIu2QIDN3vipQqJIHTRgdww4
+         s0F56FhzyRTcFj7tYF5w50bju/NsGSxGOeku+5wYTIk9AGOxzlkzc9wl8JO9+3Dc3igN
+         GeYi67nnTVTR6lcKfrSS6l9qYqaVoyd/VWmNFEf5p100P6tF4SfD2c/hSFn4/vsgXKQb
+         nYkg==
+X-Gm-Message-State: AFqh2krPOnfgA5jKTksKlie6OuX0T9DyuAX4L2jrnQTGe1D+TR1Gadp/
+        UouyPKmrho0BByXpOCYYN2A=
+X-Google-Smtp-Source: AMrXdXvNmRU+xYMjcdBGpUG52jhIDjjbp9w8DVYtmASVRK7Yt61KX8EkAymfdItkn4V2AoAXEr1Bug==
+X-Received: by 2002:adf:f0c1:0:b0:2bd:e7a0:6b5e with SMTP id x1-20020adff0c1000000b002bde7a06b5emr6223464wro.40.1674043406275;
+        Wed, 18 Jan 2023 04:03:26 -0800 (PST)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d6152000000b002425be3c9e2sm30535321wrt.60.2023.01.18.04.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 04:03:25 -0800 (PST)
+Date:   Wed, 18 Jan 2023 12:03:24 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
+Message-ID: <Y8fgDBLOMgZGerSZ@debian>
+References: <20230117124546.116438951@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] staging: vchiq_arm: fix enum vchiq_status return types
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230117163957.1109872-1-arnd@kernel.org>
- <3a69e1fc-c266-d75c-32e3-9b5f655a8258@i2se.com>
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <3a69e1fc-c266-d75c-32e3-9b5f655a8258@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Greg,
 
-On 1/18/23 5:08 PM, Stefan Wahren wrote:
-> Hi Arnd,
->
-> Am 17.01.23 um 17:39 schrieb Arnd Bergmann:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> gcc-13 notices a type mismatch between function declaration
->> and definition for a few functions that have been converted
->> from returning vchiq specific status values to regular error
->> codes:
->>
->> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:662:5: 
->> error: conflicting types for 'vchiq_initialise' due to enum/integer 
->> mismatch; have 'int(struct vchiq_instance **)' 
->> [-Werror=enum-int-mismatch]
->> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:1411:1: 
->> error: conflicting types for 'vchiq_use_internal' due to enum/integer 
->> mismatch; have 'int(struct vchiq_state *, struct vchiq_service *, 
->> enum USE_TYPE_E)' [-Werror=enum-int-mismatch]
->> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:1468:1: 
->> error: conflicting types for 'vchiq_release_internal' due to 
->> enum/integer mismatch; have 'int(struct vchiq_state *, struct 
->> vchiq_service *)' [-Werror=enum-int-mismatch]
->>
->> Change the declarations to match the actual function definition.
->>
->> Fixes: a9fbd828be7f ("staging: vchiq_arm: drop enum vchiq_status from 
->> vchiq_*_internal")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> thanks for fixing this.
->
-> Greg applied a series [1] from Umang which completely removes this 
-> enum completely. This series has been applied to today and will likely 
-> cause a conflict tomorrow in linux-next.
+On Tue, Jan 17, 2023 at 01:48:13PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 176 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
+> Anything received after that time might be too late.
 
-Yes, the series was applied today.
+Build test (gcc version 12.2.1 20230113):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Has this patch (By Arnd) already applied to linux-next? I am not sure if 
-I understand where the conflict will get originated ..
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
->
-> [1] - 
-> https://lore.kernel.org/linux-arm-kernel/ba52e6b4-33ec-622e-00b6-1b098f529a90@ideasonboard.com/T/
->
->> ---
->>   .../staging/vc04_services/include/linux/raspberrypi/vchiq.h | 2 +-
->>   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h | 4 ++--
->>   2 files changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git 
->> a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h 
->> b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
->> index db1441c0cc66..690ab7165b2c 100644
->> --- a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
->> +++ b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
->> @@ -86,7 +86,7 @@ struct vchiq_service_params_kernel {
->>     struct vchiq_instance;
->>   -extern enum vchiq_status vchiq_initialise(struct vchiq_instance 
->> **pinstance);
->> +extern int vchiq_initialise(struct vchiq_instance **pinstance);
->>   extern enum vchiq_status vchiq_shutdown(struct vchiq_instance 
->> *instance);
->>   extern enum vchiq_status vchiq_connect(struct vchiq_instance 
->> *instance);
->>   extern enum vchiq_status vchiq_open_service(struct vchiq_instance 
->> *instance,
->> diff --git 
->> a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h 
->> b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
->> index 2851ef6b9cd0..cd20eb18f275 100644
->> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
->> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
->> @@ -100,10 +100,10 @@ vchiq_dump_platform_use_state(struct 
->> vchiq_state *state);
->>   extern void
->>   vchiq_dump_service_use_state(struct vchiq_state *state);
->>   -extern enum vchiq_status
->> +extern int
->>   vchiq_use_internal(struct vchiq_state *state, struct vchiq_service 
->> *service,
->>              enum USE_TYPE_E use_type);
->> -extern enum vchiq_status
->> +extern int
->>   vchiq_release_internal(struct vchiq_state *state,
->>                  struct vchiq_service *service);
+[1]. https://openqa.qa.codethink.co.uk/tests/2679
+[2]. https://openqa.qa.codethink.co.uk/tests/2680
+[3]. https://openqa.qa.codethink.co.uk/tests/2681
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
 
