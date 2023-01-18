@@ -2,144 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B19667220C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0506A67221C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjARPuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S230501AbjARPvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjARPtj (ORCPT
+        with ESMTP id S231287AbjARPul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:49:39 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0EB53E71;
-        Wed, 18 Jan 2023 07:47:31 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id z11so50199082ede.1;
-        Wed, 18 Jan 2023 07:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NwgV158VzLBEwnGM/l7d36JtM7My51+lT57j1JGtHIs=;
-        b=Pnsqx/b/Md5J6PPDJLVlGUEm4SDbiGA/5a+wIZ0BzNL9kaE71HxuKTBGLEhw2jqzBB
-         +FdflJ/gXAOD+DM6pctjHZAjGPJ47Ez/GFUzuQeN5oKlp61oPm5joWM+OmnXssPl7gzb
-         31VI8A3Vj1zws4kF05jGunyjE/GKn2Z5hinkrtIm5zijnr3p3aKukkDIRoHGtVJS4luL
-         79FPNmvVXFSX1k2/Yyc/z1ubdb2yzY+InxjRRfaFIPN9x6K3jSgR0+BQwt60WN5KTjlq
-         K+/0KxPIrzbr7YXVwXGlVylAkPREspEIxHShRN08w0s5B4en6iyrVNVds6guuzq9CJuu
-         TQ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwgV158VzLBEwnGM/l7d36JtM7My51+lT57j1JGtHIs=;
-        b=iwZMQ8bxUZzcGQdXW62Y2DqPiTG+88skgqNdngpwAGdJEiPnfzB0vYRAYxseSsDJ2q
-         nYTTlF/GdFxQ34rsWEHc8Owo4KpJi71bAlhjjxDrOkmrrmethOVvagBzGBwhHjcyP137
-         F6zzRVAi6VtwLGlvVkQoEnBr0avkIxV7tXybMyJ0ecjiJ0ZZvttu1y95RmocAR/ZAl+f
-         yLuZrb1poLNJHmS/68j79BprkK8R3IpLwMBSKQQm0qBvvO9KbpqcE7znPLpvqBFXmUxf
-         E+9O+4TI+ed+tknL/XyyE6u59tD2KXgkK/YL5xiY/LuPxYkMaH4aP2ul306i5TV/vJHD
-         swgw==
-X-Gm-Message-State: AFqh2kpG/NSaO5x/0yVzUsSu64RNZsYtQBdMqheIFKw3QuTKuUEZ2xJD
-        GWWgLCYeoAMxLMRD7NmrXcg=
-X-Google-Smtp-Source: AMrXdXuydvQh3hAPzT1cMH4Ifuyjvtw1eBOZaBIdfL5iY7MyZIdfL69czWjCed/hDPV46V9cOshRKg==
-X-Received: by 2002:a05:6402:28ca:b0:49c:96f9:417e with SMTP id ef10-20020a05640228ca00b0049c96f9417emr7534101edb.2.1674056849884;
-        Wed, 18 Jan 2023 07:47:29 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id v18-20020aa7cd52000000b0047eeaae9558sm6358824edw.60.2023.01.18.07.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:47:29 -0800 (PST)
-Date:   Wed, 18 Jan 2023 16:47:31 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-Subject: [PATCH v2 net-next 1/1] net: phy: fix use of uninit variable when
- setting PLCA config
-Message-ID: <f22f1864165a8dbac8b7a2277f341bc8e7a7b70d.1674056765.git.piergiorgio.beruto@gmail.com>
+        Wed, 18 Jan 2023 10:50:41 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0EB5423A;
+        Wed, 18 Jan 2023 07:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674056941; x=1705592941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/S4y7oDBR7UHj4PnIE+PQukj/5U/90zDnFO+1s+hhgs=;
+  b=XYiGLLwAwxgNnp5rmxYKhh+mT7NJ0dcRRB6z/IWuh5Y0CKuS8Ka3NXgp
+   l+HkWwDsl918LAR5vrBDAi4vWJlKVFZ/XQFk7YC2IVzGVx89nMZdlBDGo
+   I/90TBZQiYNLGIAIV1IGDl6ngdA31YM//HJVwejXTVM52tzdEDiebJiTf
+   VI67Eq7zRE2i4xqDa3Hya+Jmp9lM072mjdt9L6MR0jurasZ4IB/LMAOqj
+   +o1B0Ulw8w2eynrOUWK9VB7MVYNBCtNovGKhe3hhJ7ExIZrSigo12/GmU
+   jQSW7eqzVdoIVVWgbNhPOmN+3m3WgMeGBxUw12FYCekZN7Oz2ULyKXNSE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304694800"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="304694800"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:48:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="723131293"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="723131293"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 07:48:54 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIAgH-0000TO-1A;
+        Wed, 18 Jan 2023 15:48:53 +0000
+Date:   Wed, 18 Jan 2023 23:47:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, Deepak.Sharma@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        wyes.karny@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 04/11] cpufreq: amd-pstate: implement Pstate EPP
+ support for the AMD processors
+Message-ID: <202301182325.NoodiJ0K-lkp@intel.com>
+References: <20230118075210.447418-5-perry.yuan@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230118075210.447418-5-perry.yuan@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coverity reported the following:
+Hi Perry,
 
-*** CID 1530573:    (UNINIT)
-drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
-1030     				return ret;
-1031
-1032     			val = ret;
-1033     		}
-1034
-1035     		if (plca_cfg->node_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
-1037     			      (plca_cfg->node_cnt << 8);
-1038
-1039     		if (plca_cfg->node_id >= 0)
-1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
-1041     			      (plca_cfg->node_id);
-drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
-1070     				return ret;
-1071
-1072     			val = ret;
-1073     		}
-1074
-1075     		if (plca_cfg->burst_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
-1077     			      (plca_cfg->burst_cnt << 8);
-1078
-1079     		if (plca_cfg->burst_tmr >= 0)
-1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
-1081     			      (plca_cfg->burst_tmr);
+I love your patch! Perhaps something to improve:
 
-This is not actually creating a real problem because the path leading to
-'val' being used uninitialized will eventually override the full content
-of that variable before actually using it for writing the register.
-However, the fix is simple and comes at basically no cost.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.2-rc4 next-20230118]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Fixes: 493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
----
- drivers/net/phy/phy-c45.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/ACPI-CPPC-Add-AMD-pstate-energy-performance-preference-cppc-control/20230118-163633
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230118075210.447418-5-perry.yuan%40amd.com
+patch subject: [PATCH v11 04/11] cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors
+config: x86_64-randconfig-a013-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182325.NoodiJ0K-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/d596b3586a809f4f6b65ec216c168b6f01c82f67
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Perry-Yuan/ACPI-CPPC-Add-AMD-pstate-energy-performance-preference-cppc-control/20230118-163633
+        git checkout d596b3586a809f4f6b65ec216c168b6f01c82f67
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
-diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-index cff83220595c..9f9565a4819d 100644
---- a/drivers/net/phy/phy-c45.c
-+++ b/drivers/net/phy/phy-c45.c
-@@ -999,8 +999,8 @@ EXPORT_SYMBOL_GPL(genphy_c45_plca_get_cfg);
- int genphy_c45_plca_set_cfg(struct phy_device *phydev,
- 			    const struct phy_plca_cfg *plca_cfg)
- {
-+	u16 val = 0;
- 	int ret;
--	u16 val;
- 
- 	// PLCA IDVER is read-only
- 	if (plca_cfg->version >= 0)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/cpufreq/amd-pstate-ut.c:29:
+>> include/linux/amd-pstate.h:142:21: warning: 'epp_values' defined but not used [-Wunused-variable]
+     142 | static unsigned int epp_values[] = {
+         |                     ^~~~~~~~~~
+>> include/linux/amd-pstate.h:133:27: warning: 'energy_perf_strings' defined but not used [-Wunused-const-variable=]
+     133 | static const char * const energy_perf_strings[] = {
+         |                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/amd-pstate.h:97:27: warning: 'amd_pstate_mode_string' defined but not used [-Wunused-const-variable=]
+      97 | static const char * const amd_pstate_mode_string[] = {
+         |                           ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/epp_values +142 include/linux/amd-pstate.h
+
+   132	
+ > 133	static const char * const energy_perf_strings[] = {
+   134		[EPP_INDEX_DEFAULT] = "default",
+   135		[EPP_INDEX_PERFORMANCE] = "performance",
+   136		[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
+   137		[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
+   138		[EPP_INDEX_POWERSAVE] = "power",
+   139		NULL
+   140	};
+   141	
+ > 142	static unsigned int epp_values[] = {
+
 -- 
-2.37.4
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
