@@ -2,79 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54480670FD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B67670FD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjARBSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S229889AbjARBUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjARBRT (ORCPT
+        with ESMTP id S229898AbjARBUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:17:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E603CE2C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:13:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7268F615BE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C26C433EF;
-        Wed, 18 Jan 2023 01:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674004393;
-        bh=fk4xm4Y+i17NbExuukutS9RENCIwEMlB9MvB7cPidDg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=udnOuwa2DgChr43Fas+3JsfXU8FXPXmZZItIeMR1KQsKzFO3WKQnmx+Tn9YvGSK4M
-         TC5XO+gDXnyi7PMjefEbaicTZy3MkIJuOS83b1yuQ734sk/0rwKYw6/PA3CPsGyS6u
-         NZNH9QA02Rav+slBL3DsMdXkNS40OfeRqe5FPZXQ=
-Date:   Tue, 17 Jan 2023 17:13:12 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     rppt@kernel.org, mhocko@suse.com, vbabka@suse.cz, david@redhat.com,
-        quic_charante@quicinc.com, lizhe.67@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm/page_ext: init page_ext early if there are no
- deferred struct pages
-Message-Id: <20230117171312.13bdb3b2673bdac3c93c2ab7@linux-foundation.org>
-In-Reply-To: <20230117204617.1553748-1-pasha.tatashin@soleen.com>
-References: <20230117204617.1553748-1-pasha.tatashin@soleen.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 20:20:02 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D47915557
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:16:53 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id z13so7544650plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nR851gTQUNhuZ9nIqOBqdizsZwq4fVLd+DeaO/RL3js=;
+        b=Hd6WMpGYSNQdq6x5bZEpXv1KX4X9pv/ZsFdwt6iPmRB17S3WL8F4pe+UYA/RvwFBR3
+         2andNh8JioNmt1w7ODtXwzK2SSABlFcpVJjGhA3lXo57Qdz4CO/NjcHzNEBUi/OnTKxW
+         ox1NhKj4dnSoXAC58rF53eQK0b+9PC/0eSIQyJEZCsjeZGR2T/cvR7n12txhLtwqtQwU
+         ywpJ44DNPB9j7b4VkcHo7QNEXTEVyn342SF26e8/RVcMW+tpnEjG/Dg4Z3EMbYlLQ84R
+         g73nmIgc0JdPGhARJM+p1pjjuvK0ZNYZNQcI3JKkcHE5UAbz/ASX5xecyba7HkLKLbwt
+         4H0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nR851gTQUNhuZ9nIqOBqdizsZwq4fVLd+DeaO/RL3js=;
+        b=EPiqaxdBUhVl9ORr7TxyEu0xop9KEVicvWLuBzToBCWZMzIwyzBVDRdWAcludMtL3W
+         yehH7S+GI5dExJAgd1rKdDx2JM5wGHv2drKdjeTPH5KLCXsGVUa0Vaa7HGBgfYLQzbj2
+         69Jp/c3UvCwDvqQngv2lXBRaTU4ify9qYO/yktXej4OfXBx9VVzdnJLVCdwo/BMTnxWa
+         DGrI93JNH/iFJrwEn6zhLgCgAEwniY4X4xHuu2pygFx24dGSbfmqsaUtT7IPvYP9tcEK
+         LgraFgqMFwxZzPrlG05hjEMPaIhX97/1haTT+uWmyPKAQw+4a5yqyU1stfbwkJOsUFil
+         RBhA==
+X-Gm-Message-State: AFqh2ko2NnJXE91cX1nAxQpz6FS0fJlPUKnWXLnxFsqmdS8i2BqzXYnq
+        rXTlbl6UzD1p193m36cPJuMVXg==
+X-Google-Smtp-Source: AMrXdXsY6+D7UtkQ8QiX1vkkhfrbiAxGDNZS2xOOMXN6r3s6A82c2NGSaWy3Rx6VWNBn2JQ5Ph2PHA==
+X-Received: by 2002:a05:6a21:33a1:b0:ac:af5c:2970 with SMTP id yy33-20020a056a2133a100b000acaf5c2970mr2962127pzb.3.1674004612406;
+        Tue, 17 Jan 2023 17:16:52 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t13-20020a170902b20d00b001926a76e8absm21827824plr.114.2023.01.17.17.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 17:16:51 -0800 (PST)
+Date:   Wed, 18 Jan 2023 01:16:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "dmatlack@google.com" <dmatlack@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v11 025/113] KVM: TDX: Use private memory for TDX
+Message-ID: <Y8dIgEhj1Zb1688t@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <4c3f5462852af9fd0957bb7db0b04a6f2d5639ee.1673539699.git.isaku.yamahata@intel.com>
+ <b8f88a7b9b2ab00379e6b1afd6a7fdb409d35492.camel@intel.com>
+ <Y8bPljsAF+lSnWtC@google.com>
+ <9fa4473f76f20b94a8ba516defb3b33ac3e86e96.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fa4473f76f20b94a8ba516defb3b33ac3e86e96.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 20:46:17 +0000 Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-
-> page_ext must be initialized after all struct pages are initialized.
-> Therefore, page_ext is initialized after page_alloc_init_late(), and
-> can optionally be initialized earlier via early_page_ext kernel
-> parameter which as a side effect also disables deferred struct pages.
+On Tue, Jan 17, 2023, Huang, Kai wrote:
+> On Tue, 2023-01-17 at 16:40 +0000, Sean Christopherson wrote:
+> > On Mon, Jan 16, 2023, Huang, Kai wrote:
+> > > AMD's series has a different solution:
+> > > 
+> > > https://lore.kernel.org/lkml/20221214194056.161492-3-michael.roth@amd.com/
+> > > 
+> > > I think somehow this needs to get aligned.
+> > 
+> > Ya.  My thought is
+> > 
+> >  bool kvm_arch_has_private_mem(struct kvm *kvm)
+> >  {
+> > 	return kvm->arch.vm_type != KVM_X86_DEFAULT_VM;
+> >  }
+> > 
+> > where the VM types end up being:
+> > 
+> >  #define KVM_X86_DEFAULT_VM	0
+> >  #define KVM_X86_PROTECTED_VM	1
+> >  #define KVM_X86_TDX_VM		2
+> >  #define KVM_X86_SNP_VM		3
 > 
-> Allow to automatically init page_ext early when there are no deferred
-> struct pages in order to be able to use page_ext during kernel boot
-> and track for example page allocations early.
+> What's the  difference between  PROTECTED_VM vs TDX_VM/SNP_VM, may I ask?
 
-Compilation blows up with CONFIG_PAGE_EXTENSION=n.  I did
+Not sure :-)  
 
---- a/include/linux/page_ext.h~mm-page_ext-init-page_ext-early-if-there-are-no-deferred-struct-pages-fix
-+++ a/include/linux/page_ext.h
-@@ -92,6 +92,7 @@ static inline struct page_ext *page_ext_
- 
- #else /* !CONFIG_PAGE_EXTENSION */
- struct page_ext;
-+#define deferred_struct_pages (0)
- 
- static inline bool early_page_ext_enabled(void)
- {
+At this point, PROTECTED_VM is a handwavy "guest that can access restricted memory".
+I think/hope it can be used in combination with existing SEV/SEV-ES APIs to allow
+backing such guests with restrictedmem.
 
-but it then blew up differently.
+As for TDX_VM and SNP_VM, I'm speculating that KVM will need to differentiate between
+SNP, TDX, and everything else.  E.g. if KVM needs to uniquely identify TDX VMs at
+creation time, then adding dedicated VM types seems like the obvious choice.  Ditto
+for SNP VMs.
+
+That's partly why I want to smush everything together, to see if we actually need
+multiple VM types.
