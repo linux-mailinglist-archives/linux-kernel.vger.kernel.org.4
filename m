@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781AE671B64
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3E9671B69
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjARMBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:01:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S229651AbjARMCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjARMBJ (ORCPT
+        with ESMTP id S229880AbjARMBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:01:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70DED9D288
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:19:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E85DE1477;
-        Wed, 18 Jan 2023 03:19:50 -0800 (PST)
-Received: from [10.57.77.192] (unknown [10.57.77.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E7A43F445;
-        Wed, 18 Jan 2023 03:19:06 -0800 (PST)
-Message-ID: <55689951-d9df-3f5e-4edc-23c86259ef2f@arm.com>
-Date:   Wed, 18 Jan 2023 11:19:02 +0000
+        Wed, 18 Jan 2023 07:01:14 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8A245226;
+        Wed, 18 Jan 2023 03:19:11 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 687BA1C09F6; Wed, 18 Jan 2023 12:19:09 +0100 (CET)
+Date:   Wed, 18 Jan 2023 12:19:08 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc2 review
+Message-ID: <Y8fVrIyavmA1mU6J@duo.ucw.cz>
+References: <20230117124526.766388541@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/panfrost: fix GENERIC_ATOMIC64 dependency
-Content-Language: en-GB
-To:     Steven Price <steven.price@arm.com>,
-        Arnd Bergmann <arnd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Adri=c3=a1n_Larumbe?= <adrian.larumbe@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230117164456.1591901-1-arnd@kernel.org>
- <18260f9c-2e2e-1210-7203-ac3b79f7da2a@arm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <18260f9c-2e2e-1210-7203-ac3b79f7da2a@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="SGHGfHY/4OqrwRAd"
+Content-Disposition: inline
+In-Reply-To: <20230117124526.766388541@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-18 11:09, Steven Price wrote:
-> On 17/01/2023 16:44, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> On ARMv5 and earlier, a randconfig build can still run into
->>
->> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>    Depends on [n]: IOMMU_SUPPORT [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=y]
->>    Selected by [y]:
->>    - DRM_PANFROST [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y]) && MMU [=y]
->>
->> Rework the dependencies to always require a working cmpxchg64.
->>
->> Fixes: db594ba3fcf9 ("drm/panfrost: depend on !GENERIC_ATOMIC64 when using COMPILE_TEST")
-> 
-> Looking at db594ba3fcf9 - it states:
-> 
->>      Since panfrost has a 'select' on IOMMU_IO_PGTABLE_LPAE we must depend on
->>      the same set of flags. Otherwise IOMMU_IO_PGTABLE_LPAE will be forced on
->>      even though it cannot build (no support for cmpxchg64).
-> 
-> And at the time the dependencies on IOMMU_IO_PGTABLE_LPAE were exactly
-> these.
-> 
-> However d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
-> (currently in the iommu tree) changed the depends to split the
-> !GENERIC_ATOMIC64 out. So we could argue that really that's the commit
-> that should be blamed in the fixes line.
 
-Oh bum... indeed this is entirely my fault for forgetting about our one 
-"foreign" io-pgtable user in that commit, sorry about that.
+--SGHGfHY/4OqrwRAd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> However there's no harm in this being backported further than it
-> strictly needs to be, and it's clearly better having the
-> !GENERIC_ATOMIC64 split out. So I'll merge this to drm-misc-fixes.
+Hi!
 
-Thanks both!
+> This is the start of the stable review cycle for the 5.10.164 release.
+> There are 64 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Robin.
+CIP testing did not find any problems here:
 
-> 
-> Reviewed-by: Steven Price <steven.price@arm.com>
-> 
-> Thanks!
-> 
-> Steve
-> 
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>   drivers/gpu/drm/panfrost/Kconfig | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/panfrost/Kconfig b/drivers/gpu/drm/panfrost/Kconfig
->> index 079600328be1..e6403a9d66ad 100644
->> --- a/drivers/gpu/drm/panfrost/Kconfig
->> +++ b/drivers/gpu/drm/panfrost/Kconfig
->> @@ -3,7 +3,8 @@
->>   config DRM_PANFROST
->>   	tristate "Panfrost (DRM support for ARM Mali Midgard/Bifrost GPUs)"
->>   	depends on DRM
->> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
->> +	depends on ARM || ARM64 || COMPILE_TEST
->> +	depends on !GENERIC_ATOMIC64    # for IOMMU_IO_PGTABLE_LPAE
->>   	depends on MMU
->>   	select DRM_SCHED
->>   	select IOMMU_SUPPORT
-> 
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--SGHGfHY/4OqrwRAd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8fVrAAKCRAw5/Bqldv6
+8odDAJ49ZLLnHQ5ttlaTPJSeq5m3SN8kRwCdHyCOvHo7ClFHI0dF1sYZYXgC9P4=
+=ZFlA
+-----END PGP SIGNATURE-----
+
+--SGHGfHY/4OqrwRAd--
