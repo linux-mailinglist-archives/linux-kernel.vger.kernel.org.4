@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FC8672B0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF149672B0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjARWFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S229797AbjARWGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjARWEs (ORCPT
+        with ESMTP id S230005AbjARWFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:04:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3BC63E02
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:04:47 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so2358601wml.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YwIPzOL5zDtnm8fGUbKYZT0rLB8g0X1JeGG+nlkwy2g=;
-        b=RbNnMw6tL2FY/7TumtFfRH/RzPMkiMlwqLjvQlOMqFpqcFg7xFzkZlKm7HshvD1uhc
-         GYf4nvjvZ9Gaig4ljDuhSRZhNRf2TmFX1ShcfKldoTziIlHLhMWiWHnLb2O5akyusUy+
-         uKI5CLnEXeGpmOZKzLfvHoPYqKSeKSoAZofTtN8t8sRNHNmgO77M7CNcVJ6dYGYMNt5C
-         AI3sWSnG4ExajqbWdAapWiz+b6jIKMCv7gK7OhMmQF+BdfZOuoGjDKCCo1yhy2fVxuZS
-         4VkTy0/WPobGmzU/LTAq7bSlN8q7d9wNfnNzIakOE8YFAo5RW5VBThYNBRo7MVdRtKR2
-         viFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YwIPzOL5zDtnm8fGUbKYZT0rLB8g0X1JeGG+nlkwy2g=;
-        b=0rDdEBYvXwLy87w/a38PCQjKk/jpBexR9jrEKZVZX+3MHt0vLdwgou9A3Lm5amEU4w
-         IOZUO8lXwvsRwVZ82tR6OHoNQz+SoiTbf3ntGOwrgvDB0MA4ESF7V6GjL0noUfP26s6o
-         mhY5N1kCGMFRonHiGedik0IIUwdRx2+r5YKoeV5161KYYxWyKptAfrorUyBmi67Vz/QM
-         WCZ35ymJKADOGBMY+rdFHHce2CUGgvWMAexwMknAG9n7mmL5673AvTSwdX1sq3gf5CaV
-         YaiN5XCUl4xqq+GeXlf6vv1Pgxmnci6rLuCDeyY/lqSq4groXkUpgNwdpUFpn7Yfe8rk
-         cm7Q==
-X-Gm-Message-State: AFqh2kp7d8kFIREl48FDdWlbeJNYI0mcpadvk0b+76/daTTos6kzz+Ox
-        lBX7SDKuGeURXxrObFVt953PyWlnrD9LmLqKvKBSXQ==
-X-Google-Smtp-Source: AMrXdXs3YifbiXqcN/UM9iuN5qbxprLoFpLthaoKnHv5Q0dpt/Ixi+xaFLmP1X8b0KoaiNfnrWS05HuuetM0wGCrfJk=
-X-Received: by 2002:a05:600c:a686:b0:3db:104:7821 with SMTP id
- ip6-20020a05600ca68600b003db01047821mr459041wmb.77.1674079485953; Wed, 18 Jan
- 2023 14:04:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20230113210703.62107-1-nhuck@google.com> <Y8HI+42TxxlJxT6D@slm.duckdns.org>
- <CAJkfWY7vmvrU8sW3OWpSa9zygY=6e8BTTkktPe-VScdOcLL-sw@mail.gmail.com>
- <Y8gxu7l8BUWewuMg@slm.duckdns.org> <CAB=BE-Q9jtJnqPwGzSTQ6-soZ9STvqAebeONy=Eyo08H+eg-rQ@mail.gmail.com>
-In-Reply-To: <CAB=BE-Q9jtJnqPwGzSTQ6-soZ9STvqAebeONy=Eyo08H+eg-rQ@mail.gmail.com>
-From:   Nathan Huckleberry <nhuck@google.com>
-Date:   Wed, 18 Jan 2023 14:04:34 -0800
-Message-ID: <CAJkfWY5c=kT1CpQ+R34MpX6_Dyq_32zgkYDgrWU7Kuoz7d9TYg@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Add WQ_SCHED_FIFO
-To:     Sandeep Dhavale <dhavale@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Daeho Jeong <daehojeong@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Wed, 18 Jan 2023 17:05:45 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83635630BD;
+        Wed, 18 Jan 2023 14:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ph23ln2G3weWAIQMclCijpBxjfjqbvcIl1UPbyjflns=; b=m/Oc3dNKwITBehTqZzLwzPDz5K
+        igmF/szwBv4jT+BwWx4trHSh9wDmQ9fPO5Rp/PtMfG/HFdtpb3K8OqZivOX8o9VYS3o1j2N0k0NzY
+        etrpkOb0RbM4TRsLL9FuA0QJ2kPOz3hf88kQ8eM1DoKNJbgTVuk9EYO4NzWjkb4Sy/6dYcKevBr/Z
+        LQlEVF+tf67BuZcQO3sMorpBlwIHxhvu95LITp2+MoX9vK/CpNYfPBCbwKeT6jlPoDaWjlZu/gtAX
+        pR4pDHU4ebG1e9/zDM573RDjNMLdOZn2oqBhdqpA6QA6IT1lC9kOmzcH2u4Xb5oAnXuJ1xORdJwqx
+        AqsMKpBw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIGYs-002cyB-2r;
+        Wed, 18 Jan 2023 22:05:38 +0000
+Date:   Wed, 18 Jan 2023 22:05:38 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Subject: Re: [PATCH v6 01/34] vfs: Unconditionally set IOCB_WRITE in
+ call_write_iter()
+Message-ID: <Y8htMvG33I73oG9z@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391048988.2311931.1567396746365286847.stgit@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167391048988.2311931.1567396746365286847.stgit@warthog.procyon.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:22 AM Sandeep Dhavale <dhavale@google.com> wrote:
->
-> On Wed, Jan 18, 2023 at 9:52 AM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > On Sat, Jan 14, 2023 at 01:00:00PM -0800, Nathan Huckleberry wrote:
-> > > This sounds fine to me. How do you feel about a config flag to change
-> > > the default WQ_HIGHPRI scheduler policy and a sysfs node to update the
-> > > policy per workqueue?
-> >
-> > Yeah, sounds fine to me.
-> >
-> > Thanks.
-> >
-> Hi Tejun,
-> If with the kernel config option, every WQ_HIGHPRI is elevated to
-> sched_fifo_low, wouldn't that be kind of defeating the purpose? Having
-> another class for even more urgent work is better in my opinion.
+On Mon, Jan 16, 2023 at 11:08:09PM +0000, David Howells wrote:
+> IOCB_WRITE is set by aio, io_uring and cachefiles before submitting a write
+> operation to the VFS, but it isn't set by, say, the write() system call.
+> 
+> Fix this by setting IOCB_WRITE unconditionally in call_write_iter().
 
-I agree, however most of the users of WQ_HIGHPRI that are relevant to
-Android would probably have SCHED_FIFO enabled anyway.
+	Which does nothing for places that do not use call_write_iter()...
+__kernel_write_iter() is one such; for less obvious specimen see
+drivers/nvme/target/io-cmd-file.c:nvmet_file_submit_bvec() - there
+we have iocb coming from the caller and *not* fed to init_sync_kiocb(),
+so Christoph's suggestion doesn't work either.  Sure, we could take
+care of that by adding ki_flags |= IOCB_WRITE in there, but...
 
-I can write the patches such that WQ_HIGHPRI selects one of two
-internal WQ flags. If using SCHED_FIFO for all workqueues is
-problematic, Android can consider using the internal WQ flags directly
-and carry those one-line patches in the Android tree.
+FWIW, call chains for ->write_iter() (as an explicit method call) are:
 
-Thanks,
-Huck
+->write_iter() <- __kernel_write_iter() [init_sync_kiocb()]
+->write_iter() <- call_write_iter() <- new_sync_write() [init_sync_kiocb()]
+->write_iter() <- call_write_iter() <- do_iter_read_write() [init_sync_kiocb()]
+->write_iter() <- call_write_iter() <- aio_write() [sets KIOCB_WRITE]
+->write_iter() <- call_write_iter() <- io_write() [sets KIOCB_WRITE]
 
->
-> Thanks,
-> Sandeep.
-> > --
-> > tejun
+->write_iter() <- nvmet_file_submit_bvec()
+->write_iter() <- call_write_iter() <- lo_rw_aio()
+->write_iter() <- call_write_iter() <- fd_execute_rw_aio()
+->write_iter() <- call_write_iter() <- vfs_iocb_iter_write()
+
+The last 4 neither set KIOCB_WRITE nor call init_sync_kiocb().  What's
+more, there are places that call instances (or their guts - look at
+btrfs_do_write_iter() callers) directly...
