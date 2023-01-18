@@ -2,238 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03F56713E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607CE671411
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjARGYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 01:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S229788AbjARG2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 01:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjARGVu (ORCPT
+        with ESMTP id S229650AbjARGWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:21:50 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F8A31E30
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:10:49 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id w72so15926527vkw.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:10:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=11vO0Lv9o8nLVnGmajYi3cQZqeTyG0dHG5Fh0cL5wtM=;
-        b=TFvt7vGR4A1CdmelwWbaxKi+ULuEwSWP6ozlAcVoVJYu+k6qo/qf5ZH7Nmx4HW05w1
-         CwSbqzCmndI4eH0i30fCN2BtDF4vDVCQv7nEdPyb4ONfecXMXeEf9bwmfFAmw6UPYgFJ
-         RpTs2xL6fpPhf48Uy8hZ/aMTuEw5RurftkQfoBaHOGIfQmPBFaJE9UOUKdMPjybpTxaV
-         riNFfmChAAFd8Ig/A/yepxecxRINdNuA81su04EbDixys44VL6jDQ1RH/UYAVhDKSVNH
-         HVekTsIfRg+JWjSkconBXlnErJAW8bCsoWqjnlkGPO8Vl6JF11oj0nQ+pxB78Ivk+WTD
-         l6xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=11vO0Lv9o8nLVnGmajYi3cQZqeTyG0dHG5Fh0cL5wtM=;
-        b=tmj1IvNNXwstQ/63kNrDVQcnu2dBWVqlOanxzj87jJD+aT2f8GtveJgn1cKVbKshwN
-         2HaFCAgo4J/0AB4yeYx7H3oWi9whAjS6M2sOvQtdF7flEHN9bdvFFb/V2vzQgZFQBzrD
-         JQzOLoZT5VTURstD3mFwtC/T/0eG+/sTGb68Mo9rIofgWaqcGVBtor1KN+wAmAxj3V3f
-         ugPe0+9KfJ6zXkdLatRtVx3+y9qCPNUjdC3awYRMLk9lnUhbmqzi82hWpbHJaKOa/WtK
-         9E+zS2mA6ocC2HJtf711cTCtiYmATQnkb09T6pykCHAvOgCk0a+dKuSGPhLyfIt+ghig
-         zzpA==
-X-Gm-Message-State: AFqh2krzd4oAimcS59gKTLRHxe1q7uSYJfPm/1ecXp7kXs3PIDw+6AT5
-        X53e6tmRb/xxnGorzjqBAYS3jBmh/rh9v0rEx5ebm6dZm4s=
-X-Google-Smtp-Source: AMrXdXu3yItewvN21DncdY9WCmLw6qmY1lHBOLt+RD0wh8FpCzxyXdzVJOySUmvTxeDrnNwSsIiyWUDzAUesMSNAgGY=
-X-Received: by 2002:a05:6122:c61:b0:3da:6118:f9cd with SMTP id
- i33-20020a0561220c6100b003da6118f9cdmr820018vkr.32.1674022248203; Tue, 17 Jan
- 2023 22:10:48 -0800 (PST)
+        Wed, 18 Jan 2023 01:22:11 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B204DE30;
+        Tue, 17 Jan 2023 22:11:27 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30I3X8PM013916;
+        Wed, 18 Jan 2023 06:11:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=YOKVyZlHt9gKVreG+L7L/eHzAmNuRlWREtNcu1SGhnc=;
+ b=RZLKTcMItTe6NPOL7ASuN3hVnjT9jEhS/5an9Ef4a506Zxqi8naR1g5kTpR3+JpKwoxd
+ kGnCAzwCxHGTuxlMLTNs39XBFnIHtRGYdI0idq/Fu5Jx2RCk6fMY6DFNgSRXFF6qWsnT
+ VskAgnzn+7dSz6MvEpuGrMeYluqFJbrQbatliP8X6YhXqfgM9Gajw3Gol09oNIZqdk2d
+ 0/BY3kf7cA312JqrPOrg98sOSiueIJ8WMM4NCc3Hx1qeCtPQFAX7B858BTONNx4c01pl
+ lch8CJjstzPOxeC/sVA7IzFWcgIKSy3wEExaO0II2vo2vK+CrTBexXXIP3tGe2aaEfdn bw== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n68ycaq5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 06:11:18 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEZ69c007302;
+        Wed, 18 Jan 2023 06:11:16 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n3m16kgru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 06:11:16 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30I6BDGv52429126
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Jan 2023 06:11:13 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C57BF20040;
+        Wed, 18 Jan 2023 06:11:13 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFBB820043;
+        Wed, 18 Jan 2023 06:11:12 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Jan 2023 06:11:12 +0000 (GMT)
+Received: from jarvis-ozlabs-ibm-com.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 5BC8160954;
+        Wed, 18 Jan 2023 17:11:08 +1100 (AEDT)
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ruscur@russell.cc, zohar@linux.ibm.com, mpe@ellerman.id.au,
+        gjoyce@linux.ibm.com, sudhakar@linux.ibm.com, bgray@linux.ibm.com,
+        erichte@linux.ibm.com
+Subject: [PATCH v3 12/24] powerpc/pseries: Move PLPKS constants to header file
+Date:   Wed, 18 Jan 2023 17:10:37 +1100
+Message-Id: <20230118061049.1006141-13-ajd@linux.ibm.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230118061049.1006141-1-ajd@linux.ibm.com>
+References: <20230118061049.1006141-1-ajd@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230110213010.2683185-1-avagin@google.com> <20230110213010.2683185-3-avagin@google.com>
- <Y7+4S9umCo5I+Ty7@chenyu5-mobl1> <CANaxB-wcpKS64q6_0+r+OwoZupRN-A-PQvPRiVsMmEgB1TRSrw@mail.gmail.com>
- <Y8LRa/HJtZ/L2Shy@chenyu5-mobl1>
-In-Reply-To: <Y8LRa/HJtZ/L2Shy@chenyu5-mobl1>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Tue, 17 Jan 2023 22:10:36 -0800
-Message-ID: <CANaxB-yWkKzhhPMGXCQbtjntJbqZ40FL2qtM2hk7LLWE-ZpbAg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] sched: add WF_CURRENT_CPU and externise ttwu
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Andrei Vagin <avagin@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: p9p-OMbiirYkwoAKFCJTpoD6eCpnISex
+X-Proofpoint-ORIG-GUID: p9p-OMbiirYkwoAKFCJTpoD6eCpnISex
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_01,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301180051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 8:00 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> On 2023-01-13 at 13:39:46 -0800, Andrei Vagin wrote:
-> > On Wed, Jan 11, 2023 at 11:36 PM Chen Yu <yu.c.chen@intel.com> wrote:
-> > >
-> > > On 2023-01-10 at 13:30:07 -0800, Andrei Vagin wrote:
-> > > > From: Peter Oskolkov <posk@google.com>
-> > > >
-> > > > Add WF_CURRENT_CPU wake flag that advices the scheduler to
-> > > > move the wakee to the current CPU. This is useful for fast on-CPU
-> > > > context switching use cases.
-> > > >
-> > > > In addition, make ttwu external rather than static so that
-> > > > the flag could be passed to it from outside of sched/core.c.
-> > > >
-> > > > Signed-off-by: Peter Oskolkov <posk@google.com>
-> > > > Signed-off-by: Andrei Vagin <avagin@gmail.com>
-> > > > @@ -7380,6 +7380,10 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
-> > > >       if (wake_flags & WF_TTWU) {
-> > > >               record_wakee(p);
-> > > >
-> > > > +             if ((wake_flags & WF_CURRENT_CPU) &&
-> > > > +                 cpumask_test_cpu(cpu, p->cpus_ptr))
-> > > > +                     return cpu;
-> > > I agree that cross-CPU wake up brings pain to fast context switching
-> > > use cases,  especially on high core count system. We suffered from this
-> > > issue as well, so previously we presented this issue as well. The difference
-> > > is that we used some dynamic "WF_CURRENT_CPU" mechanism[1] to deal with it.
-> > > That is, if the waker/wakee are both short duration tasks, let the waker wakes up
-> > > the wakee on current CPU. So not only seccomp but also other components/workloads
-> > > could benefit from this without having to set the WF_CURRENT_CPU flag.
-> > >
-> > > Link [1]:
-> > > https://lore.kernel.org/lkml/cover.1671158588.git.yu.c.chen@intel.com/
-> >
-> > Thanks for the link. I like the idea, but this change has no impact on the
-> > seccom notify case.  I used the benchmark from the fifth patch. It is
-> > a ping-pong
-> > benchmark in which one process triggers system calls, and another process
-> > handles them. It measures the number of system calls that can be processed
-> > within a specified time slice.
-> >
-> Thanks for this information.
-> > $ cd tools/testing/selftests/seccomp/
-> > $ make
-> > $ ./seccomp_bpf  2>&1| grep user_notification_sync
-> > #  RUN           global.user_notification_sync ...
-> > # seccomp_bpf.c:4281:user_notification_sync:basic: 8489 nsec/syscall
-> > # seccomp_bpf.c:4281:user_notification_sync:sync: 3078 nsec/syscall
-> > #            OK  global.user_notification_sync
-> > ok 51 global.user_notification_sync
-> >
-> > The results are the same with and without your change. I expected that
-> > your change improves
-> > the basic case so that it reaches the sync one.
-> >
-> The reason why the patch did not bring benefit might be that, that patch
-> aims to wake task on current CPU only there is no idle cores. The seccomp
-> notify would launch 2 processes which makes it hard to saturate the system
-> if I understand correctly?
+From: Russell Currey <ruscur@russell.cc>
 
-Yes, you understand it right. Our workloads do not always scale on all CPU-s,
-and it is critical to work with maximum performance even when there are some
-idle cores. I feel I need to say a few words about our use-case. I am working on
-gVisor, it is a sandbox solution. In a few words, we intercept guest system
-calls and handle them in our user-mode kernel. All these mean that we are
-limited by a user application that is running inside a sandbox and how well it
-scales on multiple cpu-s. The current benchmark emulates a uni-thread
-process running in a sandbox.
+Move the constants defined in plpks.c to plpks.h, and standardise their
+naming, so that PLPKS consumers can make use of them later on.
 
-> I built a kernel based on your repo, and launched
-> above test, it seems that the average load is quit low on my system. Is this
-> expected? Besides, is 100 ms long enough to test(USER_NOTIF_BENCH_TIMEOUT)?
+Signed-off-by: Russell Currey <ruscur@russell.cc>
+Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-The accuracy within the 20% range is good enough for this test. But if
-we want to
-have a real benchmark, we need to implement it in a separate binary or we can
-add it to the perf benchmark suite.
+---
 
-> > I did some experiments and found that we can achieve the desirable
-> > outcome if we move the "short-task" checks prior to considering waking
-> > up on prev_cpu.
-> >
-> > For example, with this patch:
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 2f89e44e237d..af20b58e3972 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6384,6 +6384,11 @@ static int wake_wide(struct task_struct *p)
-> >  static int
-> >  wake_affine_idle(int this_cpu, int prev_cpu, int sync)
-> >  {
-> > +       /* The only running task is a short duration one. */
-> > +       if (cpu_rq(this_cpu)->nr_running == 1 &&
-> > +           is_short_task(cpu_curr(this_cpu)))
-> > +               return this_cpu;
-> > +
-> In v1 we put above code before checking the prev_cpu, but is was reported
-> to bring regression on some systems[2]. The result suggested that, we should
-> try to pick idle CPU first, no matter it is current CPU, or previous CPU,
-> if it failed, we can lower the bar and pick the current CPU.
+v3: New patch
+---
+ arch/powerpc/include/asm/plpks.h       | 36 +++++++++++++---
+ arch/powerpc/platforms/pseries/plpks.c | 57 ++++++++++----------------
+ 2 files changed, 53 insertions(+), 40 deletions(-)
 
-Maybe the criteria of a short task should be lower for idle cpu-s. It should be
-close to the cost of waking up an idle cpu.
+diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
+index 8295502ee93b..6466aadd7145 100644
+--- a/arch/powerpc/include/asm/plpks.h
++++ b/arch/powerpc/include/asm/plpks.h
+@@ -14,14 +14,40 @@
+ #include <linux/types.h>
+ #include <linux/list.h>
+ 
+-#define OSSECBOOTAUDIT 0x40000000
+-#define OSSECBOOTENFORCE 0x20000000
+-#define WORLDREADABLE 0x08000000
+-#define SIGNEDUPDATE 0x01000000
++// Object policy flags from supported_policies
++#define PLPKS_OSSECBOOTAUDIT	PPC_BIT32(1) // OS secure boot must be audit/enforce
++#define PLPKS_OSSECBOOTENFORCE	PPC_BIT32(2) // OS secure boot must be enforce
++#define PLPKS_PWSET		PPC_BIT32(3) // No access without password set
++#define PLPKS_WORLDREADABLE	PPC_BIT32(4) // Readable without authentication
++#define PLPKS_IMMUTABLE		PPC_BIT32(5) // Once written, object cannot be removed
++#define PLPKS_TRANSIENT		PPC_BIT32(6) // Object does not persist through reboot
++#define PLPKS_SIGNEDUPDATE	PPC_BIT32(7) // Object can only be modified by signed updates
++#define PLPKS_HVPROVISIONED	PPC_BIT32(28) // Hypervisor has provisioned this object
+ 
+-#define PLPKS_VAR_LINUX	0x02
++// Signature algorithm flags from signed_update_algorithms
++#define PLPKS_ALG_RSA2048	PPC_BIT(0)
++#define PLPKS_ALG_RSA4096	PPC_BIT(1)
++
++// Object label OS metadata flags
++#define PLPKS_VAR_LINUX		0x02
+ #define PLPKS_VAR_COMMON	0x04
+ 
++// Flags for which consumer owns an object is owned by
++#define PLPKS_FW_OWNER			0x1
++#define PLPKS_BOOTLOADER_OWNER		0x2
++#define PLPKS_OS_OWNER			0x3
++
++// Flags for label metadata fields
++#define PLPKS_LABEL_VERSION		0
++#define PLPKS_MAX_LABEL_ATTR_SIZE	16
++#define PLPKS_MAX_NAME_SIZE		239
++#define PLPKS_MAX_DATA_SIZE		4000
++
++// Timeouts for PLPKS operations
++#define PLPKS_MAX_TIMEOUT		5000 // msec
++#define PLPKS_FLUSH_SLEEP		10 // msec
++#define PLPKS_FLUSH_SLEEP_RANGE		400
++
+ struct plpks_var {
+ 	char *component;
+ 	u8 *name;
+diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+index 955117f81e50..5bdc093de6fb 100644
+--- a/arch/powerpc/platforms/pseries/plpks.c
++++ b/arch/powerpc/platforms/pseries/plpks.c
+@@ -20,19 +20,6 @@
+ #include <asm/machdep.h>
+ #include <asm/plpks.h>
+ 
+-#define PKS_FW_OWNER	     0x1
+-#define PKS_BOOTLOADER_OWNER 0x2
+-#define PKS_OS_OWNER	     0x3
+-
+-#define LABEL_VERSION	    0
+-#define MAX_LABEL_ATTR_SIZE 16
+-#define MAX_NAME_SIZE	    239
+-#define MAX_DATA_SIZE	    4000
+-
+-#define PKS_FLUSH_MAX_TIMEOUT 5000 //msec
+-#define PKS_FLUSH_SLEEP	      10 //msec
+-#define PKS_FLUSH_SLEEP_RANGE 400
+-
+ static u8 *ospassword;
+ static u16 ospasswordlength;
+ 
+@@ -59,7 +46,7 @@ struct label_attr {
+ 
+ struct label {
+ 	struct label_attr attr;
+-	u8 name[MAX_NAME_SIZE];
++	u8 name[PLPKS_MAX_NAME_SIZE];
+ 	size_t size;
+ };
+ 
+@@ -122,7 +109,7 @@ static int pseries_status_to_err(int rc)
+ static int plpks_gen_password(void)
+ {
+ 	unsigned long retbuf[PLPAR_HCALL_BUFSIZE] = { 0 };
+-	u8 *password, consumer = PKS_OS_OWNER;
++	u8 *password, consumer = PLPKS_OS_OWNER;
+ 	int rc;
+ 
+ 	password = kzalloc(maxpwsize, GFP_KERNEL);
+@@ -158,7 +145,7 @@ static struct plpks_auth *construct_auth(u8 consumer)
+ {
+ 	struct plpks_auth *auth;
+ 
+-	if (consumer > PKS_OS_OWNER)
++	if (consumer > PLPKS_OS_OWNER)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	auth = kzalloc(struct_size(auth, password, maxpwsize), GFP_KERNEL);
+@@ -168,7 +155,7 @@ static struct plpks_auth *construct_auth(u8 consumer)
+ 	auth->version = 1;
+ 	auth->consumer = consumer;
+ 
+-	if (consumer == PKS_FW_OWNER || consumer == PKS_BOOTLOADER_OWNER)
++	if (consumer == PLPKS_FW_OWNER || consumer == PLPKS_BOOTLOADER_OWNER)
+ 		return auth;
+ 
+ 	memcpy(auth->password, ospassword, ospasswordlength);
+@@ -188,7 +175,7 @@ static struct label *construct_label(char *component, u8 varos, u8 *name,
+ 	struct label *label;
+ 	size_t slen;
+ 
+-	if (!name || namelen > MAX_NAME_SIZE)
++	if (!name || namelen > PLPKS_MAX_NAME_SIZE)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	slen = strlen(component);
+@@ -202,9 +189,9 @@ static struct label *construct_label(char *component, u8 varos, u8 *name,
+ 	if (component)
+ 		memcpy(&label->attr.prefix, component, slen);
+ 
+-	label->attr.version = LABEL_VERSION;
++	label->attr.version = PLPKS_LABEL_VERSION;
+ 	label->attr.os = varos;
+-	label->attr.length = MAX_LABEL_ATTR_SIZE;
++	label->attr.length = PLPKS_MAX_LABEL_ATTR_SIZE;
+ 	memcpy(&label->name, name, namelen);
+ 
+ 	label->size = sizeof(struct label_attr) + namelen;
+@@ -266,10 +253,10 @@ static int plpks_confirm_object_flushed(struct label *label,
+ 		if (!rc && status == 1)
+ 			break;
+ 
+-		usleep_range(PKS_FLUSH_SLEEP,
+-			     PKS_FLUSH_SLEEP + PKS_FLUSH_SLEEP_RANGE);
+-		timeout = timeout + PKS_FLUSH_SLEEP;
+-	} while (timeout < PKS_FLUSH_MAX_TIMEOUT);
++		usleep_range(PLPKS_FLUSH_SLEEP,
++			     PLPKS_FLUSH_SLEEP + PLPKS_FLUSH_SLEEP_RANGE);
++		timeout = timeout + PLPKS_FLUSH_SLEEP;
++	} while (timeout < PLPKS_MAX_TIMEOUT);
+ 
+ 	rc = pseries_status_to_err(rc);
+ 
+@@ -284,13 +271,13 @@ int plpks_write_var(struct plpks_var var)
+ 	int rc;
+ 
+ 	if (!var.component || !var.data || var.datalen <= 0 ||
+-	    var.namelen > MAX_NAME_SIZE || var.datalen > MAX_DATA_SIZE)
++	    var.namelen > PLPKS_MAX_NAME_SIZE || var.datalen > PLPKS_MAX_DATA_SIZE)
+ 		return -EINVAL;
+ 
+-	if (var.policy & SIGNEDUPDATE)
++	if (var.policy & PLPKS_SIGNEDUPDATE)
+ 		return -EINVAL;
+ 
+-	auth = construct_auth(PKS_OS_OWNER);
++	auth = construct_auth(PLPKS_OS_OWNER);
+ 	if (IS_ERR(auth))
+ 		return PTR_ERR(auth);
+ 
+@@ -322,10 +309,10 @@ int plpks_remove_var(char *component, u8 varos, struct plpks_var_name vname)
+ 	struct label *label;
+ 	int rc;
+ 
+-	if (!component || vname.namelen > MAX_NAME_SIZE)
++	if (!component || vname.namelen > PLPKS_MAX_NAME_SIZE)
+ 		return -EINVAL;
+ 
+-	auth = construct_auth(PKS_OS_OWNER);
++	auth = construct_auth(PLPKS_OS_OWNER);
+ 	if (IS_ERR(auth))
+ 		return PTR_ERR(auth);
+ 
+@@ -357,14 +344,14 @@ static int plpks_read_var(u8 consumer, struct plpks_var *var)
+ 	u8 *output;
+ 	int rc;
+ 
+-	if (var->namelen > MAX_NAME_SIZE)
++	if (var->namelen > PLPKS_MAX_NAME_SIZE)
+ 		return -EINVAL;
+ 
+ 	auth = construct_auth(consumer);
+ 	if (IS_ERR(auth))
+ 		return PTR_ERR(auth);
+ 
+-	if (consumer == PKS_OS_OWNER) {
++	if (consumer == PLPKS_OS_OWNER) {
+ 		label = construct_label(var->component, var->os, var->name,
+ 					var->namelen);
+ 		if (IS_ERR(label)) {
+@@ -379,7 +366,7 @@ static int plpks_read_var(u8 consumer, struct plpks_var *var)
+ 		goto out_free_label;
+ 	}
+ 
+-	if (consumer == PKS_OS_OWNER)
++	if (consumer == PLPKS_OS_OWNER)
+ 		rc = plpar_hcall(H_PKS_READ_OBJECT, retbuf, virt_to_phys(auth),
+ 				 virt_to_phys(label), label->size, virt_to_phys(output),
+ 				 maxobjsize);
+@@ -419,17 +406,17 @@ static int plpks_read_var(u8 consumer, struct plpks_var *var)
+ 
+ int plpks_read_os_var(struct plpks_var *var)
+ {
+-	return plpks_read_var(PKS_OS_OWNER, var);
++	return plpks_read_var(PLPKS_OS_OWNER, var);
+ }
+ 
+ int plpks_read_fw_var(struct plpks_var *var)
+ {
+-	return plpks_read_var(PKS_FW_OWNER, var);
++	return plpks_read_var(PLPKS_FW_OWNER, var);
+ }
+ 
+ int plpks_read_bootloader_var(struct plpks_var *var)
+ {
+-	return plpks_read_var(PKS_BOOTLOADER_OWNER, var);
++	return plpks_read_var(PLPKS_BOOTLOADER_OWNER, var);
+ }
+ 
+ static __init int pseries_plpks_init(void)
+-- 
+2.39.0
 
->
-> [2] https://lore.kernel.org/lkml/6c626e8d-4133-00ba-a765-bafe08034517@amd.com/
-> >         /*
-> >          * If this_cpu is idle, it implies the wakeup is from interrupt
-> >          * context. Only allow the move if cache is shared. Otherwise an
-> > @@ -6405,11 +6410,6 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
-> >         if (available_idle_cpu(prev_cpu))
-> >                 return prev_cpu;
-> >
-> > -       /* The only running task is a short duration one. */
-> > -       if (cpu_rq(this_cpu)->nr_running == 1 &&
-> > -           is_short_task(cpu_curr(this_cpu)))
-> > -               return this_cpu;
-> > -
-> >         return nr_cpumask_bits;
-> >  }
-> >
-> > @@ -6897,6 +6897,10 @@ static int select_idle_sibling(struct
-> > task_struct *p, int prev, int target)
-> >             asym_fits_cpu(task_util, util_min, util_max, target))
-> >                 return target;
-> >
-> > +       if (!has_idle_core && cpu_rq(target)->nr_running == 1 &&
-> > +           is_short_task(cpu_curr(target)) && is_short_task(p))
-> > +               return target;
-> > +
-> >         /*
-> >          * If the previous CPU is cache affine and idle, don't be stupid:
-> >          */
-> >
-> >
-> > the basic test case shows almost the same results as the sync one:
-> >
-> > $ ./seccomp_bpf  2>&1| grep user_notification_sync
-> > #  RUN           global.user_notification_sync ...
-> > # seccomp_bpf.c:4281:user_notification_sync:basic: 3082 nsec/syscall
-> > # seccomp_bpf.c:4281:user_notification_sync:sync: 2690 nsec/syscall
-> > #            OK  global.user_notification_sync
-> > ok 51 global.user_notification_sync
-> >
-> > If you want to do any experiments, you can find my tree here:
-> > [1] https://github.com/avagin/linux-task-diag/tree/wip/seccom-notify-sync-and-shed-short-task
-> >
-> I'm happy to further test on this. One thing I'm curious about is, where does the
-> benefit of waking up seccom task on current CPU come from? Is it due to hot L1 cache?
-
-I don't think that it is due to cpu caches. It should be due to the
-overhead of queuing a task to
-a non-current queue, sending ipt, waking from the idle loop.
-
-Thanks,
-Andrei
