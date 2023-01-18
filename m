@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A6C6727A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF536727B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjARTAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S229721AbjARTCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjARS7i (ORCPT
+        with ESMTP id S229699AbjARTBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:59:38 -0500
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212E853E5C;
-        Wed, 18 Jan 2023 10:59:33 -0800 (PST)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-15ebfdf69adso44974fac.0;
-        Wed, 18 Jan 2023 10:59:33 -0800 (PST)
+        Wed, 18 Jan 2023 14:01:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902285B5A3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:00:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674068405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6VHgRLoz21ZdB+avm4AD7iQRbs1S2YR2I/6RIM3KpT8=;
+        b=QBUewSnRyabEFpWw3W1eIVgfkrkm6SsBLx0adEBJT68pgJbNAAKRwPf+1fD8HlXG3NANYu
+        xj2BwKG1y52zuDLxl3tUrQfHnbekwwSIaMClyRaWPgi6TlbvDGtu18HUYcIhMmOk5DaPEu
+        Op76t1e1d05vxw86roXD3Qe5wTzJoKE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-569-yiH84_ZaN3eJ-FzcOXMuqA-1; Wed, 18 Jan 2023 14:00:04 -0500
+X-MC-Unique: yiH84_ZaN3eJ-FzcOXMuqA-1
+Received: by mail-ej1-f69.google.com with SMTP id sb39-20020a1709076da700b0086b1cfb06f0so10364087ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:00:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t21dCSgXMADUq1pWfl156WNqD9atSWj6SahX+ddDCFs=;
-        b=PWJv9FVBhirkqEqeeFHznZmcwj8JOIo7Lo9cdFmgHARnJ+JcLqLl79u3TwVpTVn5Xe
-         YFEFHYF4NlsCGpuAgoWDy+MPWvIcefPXyBVmsbyTc9D6FDTG5YJ/RYGSFzeKfEv6t2hi
-         sef7Tk+/djUBZvEXs4ST9Ueq/OMR9MqITm+LVw+KvSfJerrYBRgqDmjlYIq0AJHkF6QI
-         PxAX/lqxq+PVTCCMRqiuWpmKXA4CsojNdU4VtE/DI8/X0tI+DMwyLJ3zU967OWcJtDJm
-         AKtS4hgB00T9w/ujoDC6yBG9v9ibJIcz7H8Butb5//VP5TfvRxlWqhDo0R/7KqTRXQ7a
-         svDQ==
-X-Gm-Message-State: AFqh2kpbQivmi2mIVZWbCsyLfQXzhy+FJI2i8d2hf2eDN6zESa7VlqjD
-        b1fnUlb3r+moQPS3IlFpeQ==
-X-Google-Smtp-Source: AMrXdXu1m2DIrv1ryGF/RTJllp6w43tl35oqGQcA5exBroeqivdYJaPoylgEUL5k6Lc/e6NTdaZI0g==
-X-Received: by 2002:a05:6871:4207:b0:144:a774:15bf with SMTP id li7-20020a056871420700b00144a77415bfmr4223145oab.48.1674068372392;
-        Wed, 18 Jan 2023 10:59:32 -0800 (PST)
-Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id eq2-20020a056870a90200b0014fb4bdc746sm18661681oab.8.2023.01.18.10.59.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 10:59:31 -0800 (PST)
-Received: (nullmailer pid 629754 invoked by uid 1000);
-        Wed, 18 Jan 2023 18:59:29 -0000
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 18 Jan 2023 12:59:27 -0600
-Subject: [PATCH v2 5/5] dt-bindings: usb: Convert Nuvoton EHCI to DT schema
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6VHgRLoz21ZdB+avm4AD7iQRbs1S2YR2I/6RIM3KpT8=;
+        b=zEGn9HKsPaCoHJ8SwGaobhq41YiR9ap0tMtyyg5QRIXR0trHXtkzyl6d9LCzdvEh2x
+         Q4Zef9TO1a8Cewb/cQYM4vyuHEW+vMeW4SQj8MzVQ+jRHa9D+apvKbbGBuaTveFeCqr7
+         YXmT5/kAZEMWNevlk6vWE2UigzOxA/P7rUD0DyOAAkZuWWTZ1ry2N5veCwRlFHihuzAz
+         w1a3aHgyqCKaTQ4sTBCGhvLkRz1lVtM5lMVAkY/S+MG1kw8krd0hjFuOpgPTo97ByBlI
+         mQiilO92aA5N9fDopPr9j8gCZBdE6fbXofCGtprF5V5J/28FNDbxc990kRKEbtwpsKRh
+         wcLw==
+X-Gm-Message-State: AFqh2kr+lGG1yJn+xkgTjjrYWlUT3Aiv3arj+R0p3ZaBXeV+bvDcuArw
+        CF+s1NxGsoAdI1gfDeJuLtcHQOxyFtPfp+sD/4A++T/zcpsb/Md2tVUUIFedYEIBM8RIBFC2vs/
+        3JModKUTdgjFcGzb5BDOribXd
+X-Received: by 2002:a17:907:8dca:b0:85f:5d72:1841 with SMTP id tg10-20020a1709078dca00b0085f5d721841mr8927960ejc.39.1674068402937;
+        Wed, 18 Jan 2023 11:00:02 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtsdunAhuQoXTg/VSvgVA6q/ZXPxkW/qMVvnmose4gPIQY/RC2Jhhnm+VqSnkVslMwPuQBExQ==
+X-Received: by 2002:a17:907:8dca:b0:85f:5d72:1841 with SMTP id tg10-20020a1709078dca00b0085f5d721841mr8927939ejc.39.1674068402689;
+        Wed, 18 Jan 2023 11:00:02 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1709061be100b0086f40238403sm5244115ejg.223.2023.01.18.11.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 11:00:02 -0800 (PST)
+Message-ID: <9830b666-b78c-9794-0d4a-7de31b9fd9b5@redhat.com>
+Date:   Wed, 18 Jan 2023 20:00:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230110-dt-usb-v2-5-926bc1260e51@kernel.org>
-References: <20230110-dt-usb-v2-0-926bc1260e51@kernel.org>
-In-Reply-To: <20230110-dt-usb-v2-0-926bc1260e51@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Lee Jones <lee@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-X-Mailer: b4 0.12-dev
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH drm-next 02/14] drm/exec: fix memory leak in
+ drm_exec_prepare_obj()
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        daniel@ffwll.ch, airlied@redhat.com, bskeggs@redhat.com,
+        jason@jlekstrand.net, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-3-dakr@redhat.com>
+ <3c3bd64a-164b-7ff2-ebf0-c8f9c2f94b72@amd.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <3c3bd64a-164b-7ff2-ebf0-c8f9c2f94b72@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Nuvoton EHCI binding is just some compatible strings, so add it to the
-generic-ehci.yaml schema.
+On 1/18/23 09:51, Christian König wrote:
+> That one should probably be squashed into the original patch.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/usb/generic-ehci.yaml        |  2 ++
- .../devicetree/bindings/usb/npcm7xx-usb.txt          | 20 --------------------
- 2 files changed, 2 insertions(+), 20 deletions(-)
+Yes, just wanted to make it obvious for you to pick it up in case you 
+did not fix it already yourself.
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index ebbb01b39a92..050cfd5acdaa 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -76,6 +76,8 @@ properties:
-           - generic-ehci
-           - marvell,armada-3700-ehci
-           - marvell,orion-ehci
-+          - nuvoton,npcm750-ehci
-+          - nuvoton,npcm845-ehci
-           - ti,ehci-omap
-           - usb-ehci
- 
-diff --git a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt b/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
-deleted file mode 100644
-index 352a0a1e2f76..000000000000
---- a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Nuvoton NPCM7XX SoC USB controllers:
-------------------------------
--
--EHCI:
-------
--
--Required properties:
--- compatible: should be one of
--    "nuvoton,npcm750-ehci"
--    "nuvoton,npcm845-ehci"
--- interrupts: Should contain the EHCI interrupt
--- reg:        Physical address and length of the register set for the device
--
--Example:
--
--	ehci1: usb@f0806000 {
--		compatible = "nuvoton,npcm750-ehci";
--		reg = <0xf0806000 0x1000>;
--		interrupts = <0 61 4>;
--	};
-
--- 
-2.39.0
+> 
+> Christian.
+> 
+> Am 18.01.23 um 07:12 schrieb Danilo Krummrich:
+>> Don't call drm_gem_object_get() unconditionally.
+>>
+>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>> ---
+>>   drivers/gpu/drm/drm_exec.c | 1 -
+>>   1 file changed, 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_exec.c b/drivers/gpu/drm/drm_exec.c
+>> index ed2106c22786..5713a589a6a3 100644
+>> --- a/drivers/gpu/drm/drm_exec.c
+>> +++ b/drivers/gpu/drm/drm_exec.c
+>> @@ -282,7 +282,6 @@ int drm_exec_prepare_obj(struct drm_exec *exec, 
+>> struct drm_gem_object *obj,
+>>               goto error_unlock;
+>>       }
+>> -    drm_gem_object_get(obj);
+>>       return 0;
+>>   error_unlock:
+> 
 
