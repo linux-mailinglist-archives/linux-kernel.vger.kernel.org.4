@@ -2,93 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A17D671E9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A90671EA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjARN4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S230410AbjARN5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjARN4Z (ORCPT
+        with ESMTP id S229973AbjARN4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:56:25 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6094E50C;
-        Wed, 18 Jan 2023 05:27:54 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IC9YAU023085;
-        Wed, 18 Jan 2023 13:27:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=h8QKC9HBsZ2WVliqH8imjRco0PuJfspcpxoo1zsNtVE=;
- b=mx/d8yWMiE6S50H3T36223LS1iesd+OPxFaAE98FOgwrqDDKqJFbOvWHp1xS9RmhcC1m
- bz0aHVXPJ3fON7IByG2KQDA6vQ3xo4YoYtsih3tA0X9+ubhII6t+9HDwtOCgtoNRDTNA
- vUb8OP20e6ZROWM0VjNRjbexErnRe/8d5ANW2+guWRvYuqK4UPJ8ZeAFLuljdi2SOPIg
- qLDn1fcr1eMcFjk77r8WlDfdWDJq3Fff3DFGyZ3Yx6r/W61qqkd/92WwWlddvlcPYca4
- ThJFsWzcZoTLSCCip0r7TWL3OjpPyghDu5MN6kr4xf1QZo6Iu+M88L6qJbQjYP1cgRD2 5A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6gh79v8s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 13:27:51 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ICt57m014116;
-        Wed, 18 Jan 2023 13:27:51 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6gh79v8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 13:27:51 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30ICTpsF009766;
-        Wed, 18 Jan 2023 13:27:50 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n3m17w9fc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 13:27:49 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IDRmb97799342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 13:27:48 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 68D5358053;
-        Wed, 18 Jan 2023 13:27:48 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA1D858043;
-        Wed, 18 Jan 2023 13:27:47 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Jan 2023 13:27:47 +0000 (GMT)
-Message-ID: <d30d23f2-46d0-acfc-4356-49e82b027a9b@linux.ibm.com>
-Date:   Wed, 18 Jan 2023 08:27:47 -0500
+        Wed, 18 Jan 2023 08:56:47 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6545585;
+        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s67so24500374pgs.3;
+        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTmYGFbnmeCPW2MRLupoC59xlxn4uUeHuUvCevs7WXQ=;
+        b=LoPo/7lV3PVsff57JQEJpECKO7OHtYeEpqPoSSe0eveZcG6SSHpoEXki47FiO72ODQ
+         9ZZt/5F6kQsCqLihVB+FdfLny6Vj5ptg3ZpxgUR8EwENrhiC1eTjcwBz8z5LTOcFp8kJ
+         9tAfNLTkYscnBat92aE52ShAuXt80UvvJl49DUIzSHqLlCooNR5qX4IJ7s+z7xeuXSlj
+         q7Y5aIPXx//xsMJYyxMxF7Rod6afbzuR/ZQm5Wz3L8KqKer1eSGs9QRIlwQ1CQu0+clH
+         KmpZqVFOAQLu0L7khPNpypmIf8IedrxMlY6ps66Mw/aoY2KMmslkXOAbkEgqbwQjIfdf
+         AAsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gTmYGFbnmeCPW2MRLupoC59xlxn4uUeHuUvCevs7WXQ=;
+        b=6zJIjqhpa200WqkfkzPMmkHx51QmTxetEidV/h80s7fkx/dlaxTT+V1g/FemWkcC3A
+         6LaVMj4bCcIa7qXITRgU4oiQG5VXROPLDVztfjo4eIujXoLBiaFn2NKv51GEUbzXJeDz
+         y/U8Ye8NaVyqNYxMTH0CJgeBFAnisDoEdh438LDqLVaYV6/nG+NyfwJGjluRbgN2h55Y
+         YlCObTML3I1eRYaWv/2CvEoLBVcgD0ZOZo08az9oYQ55fCP/b5cF1vRYxIK3C3jj+Spj
+         NKVIu5ZzB5yPv1kqfhLwEbBw3zMv4o7rCT2AadyaEDReYceSGhWmPZjXcgi5zphHKnUi
+         YE3g==
+X-Gm-Message-State: AFqh2kqg48YHPMJOqakLGZdwvEwBpJr5g33r7u50ZRw/Oewvr7cwi/QG
+        4RQnExdJtIc+3TBWcM0iQH4=
+X-Google-Smtp-Source: AMrXdXuJ4kYwmUS7FBqtPHfOWARPBImPQnR96jC4mCyWO6yH20jWVO7kWwYw8p3vX2v6A+wHIcqxFA==
+X-Received: by 2002:a62:52c5:0:b0:585:fc75:c544 with SMTP id g188-20020a6252c5000000b00585fc75c544mr7440591pfb.15.1674048576348;
+        Wed, 18 Jan 2023 05:29:36 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
+        by smtp.gmail.com with ESMTPSA id w125-20020a626283000000b005815a371177sm21362735pfb.52.2023.01.18.05.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 05:29:35 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3C538104E09; Wed, 18 Jan 2023 20:29:32 +0700 (WIB)
+Date:   Wed, 18 Jan 2023 20:29:31 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Usama Arif <usama.arif@bytedance.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
+        pbonzini@redhat.com
+Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+Subject: Re: [v3 1/6] KVM: arm64: Document PV-lock interface
+Message-ID: <Y8f0Oz2W9QevuZJM@debian.me>
+References: <20230117102930.1053337-1-usama.arif@bytedance.com>
+ <20230117102930.1053337-2-usama.arif@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/2] tpm: Add reserved memory event log
-Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@ziepe.ca, jarkko@kernel.org,
-        peterhuewe@gmx.de
-References: <20230113161017.1079299-1-eajames@linux.ibm.com>
- <20230113161017.1079299-3-eajames@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230113161017.1079299-3-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ooca7sjD3K_a790sg7sDX5mPBW6zs6zE
-X-Proofpoint-GUID: xxnsxAvXmht50VRNwlVhMPSMYt4BwMJy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 clxscore=1011 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301180113
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LKnbaJbZgtLjGMWc"
+Content-Disposition: inline
+In-Reply-To: <20230117102930.1053337-2-usama.arif@bytedance.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,81 +83,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--LKnbaJbZgtLjGMWc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1/13/23 11:10, Eddie James wrote:
-> Some platforms may desire to pass the event log up to linux in the
+On Tue, Jan 17, 2023 at 10:29:25AM +0000, Usama Arif wrote:
+> Introduce a paravirtualization interface for KVM/arm64 to obtain whether
+> the VCPU is currently running or not.
+>=20
+> The PV lock structure of the guest is allocated by user space.
+>=20
+> A hypercall interface is provided for the guest to interrogate the
+> location of the shared memory structures.
+>=20
 
-Which platforms are these that work like this?
+The doc LGTM, thanks.
 
-    Stefan
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-> form of a reserved memory region. Add support for this in the TPM
-> core to find the reserved memory region and map it.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->   drivers/char/tpm/eventlog/of.c | 38 +++++++++++++++++++++++++++++++++-
->   1 file changed, 37 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> index 741ab2204b11..c815cadf00a4 100644
-> --- a/drivers/char/tpm/eventlog/of.c
-> +++ b/drivers/char/tpm/eventlog/of.c
-> @@ -12,12 +12,48 @@
->   
->   #include <linux/device.h>
->   #include <linux/slab.h>
-> +#include <linux/io.h>
-> +#include <linux/ioport.h>
->   #include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_reserved_mem.h>
->   #include <linux/tpm_eventlog.h>
->   
->   #include "../tpm.h"
->   #include "common.h"
->   
-> +static int tpm_read_log_memory_region(struct tpm_chip *chip)
-> +{
-> +	struct device_node *node;
-> +	struct resource res;
-> +	int rc;
-> +
-> +	node = of_parse_phandle(chip->dev.parent->of_node, "memory-region", 0);
-> +	if (!node) {
-> +		dev_info(&chip->dev, "no phandle\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	rc = of_address_to_resource(node, 0, &res);
-> +	of_node_put(node);
-> +	if (rc) {
-> +		dev_info(&chip->dev, "no mem\n");
-> +		return rc;
-> +	}
-> +
-> +	chip->log.bios_event_log = devm_memremap(&chip->dev, res.start, resource_size(&res),
-> +						 MEMREMAP_WB);
-> +	if (!chip->log.bios_event_log) {
-> +		dev_info(&chip->dev, "err memremap\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	chip->log.bios_event_log_end = chip->log.bios_event_log + resource_size(&res);
-> +
-> +	return chip->flags & TPM_CHIP_FLAG_TPM2 ? EFI_TCG2_EVENT_LOG_FORMAT_TCG_2 :
-> +		EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-> +}
-> +
->   int tpm_read_log_of(struct tpm_chip *chip)
->   {
->   	struct device_node *np;
-> @@ -39,7 +75,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
->   	sizep = of_get_property(np, "linux,sml-size", NULL);
->   	basep = of_get_property(np, "linux,sml-base", NULL);
->   	if (sizep == NULL && basep == NULL)
-> -		return -ENODEV;
-> +		return tpm_read_log_memory_region(chip);
->   	if (sizep == NULL || basep == NULL)
->   		return -EIO;
->   
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--LKnbaJbZgtLjGMWc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8f0NQAKCRD2uYlJVVFO
+o4qgAQDcP0rNaydRQo4231hMi0Vw3TckZruhUL6c4YQM/lptNAD/dTmwvHDvLrPL
+bQ8mmtSifTbeLABeqIK776M+1x9SLgo=
+=hq72
+-----END PGP SIGNATURE-----
+
+--LKnbaJbZgtLjGMWc--
