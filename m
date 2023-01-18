@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288AD6724A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB326724AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjARRRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S230475AbjARRSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjARRRS (ORCPT
+        with ESMTP id S230495AbjARRSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:17:18 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD6759577
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:17:16 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id y3-20020a17090a390300b00229add7bb36so2838725pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6FL8JJKN1LVzWkPF+aKtJUdwHaz9en8xDzUW2zFOrSY=;
-        b=bl5IHfblF7oi96NNkA5U8SF7wUtop9rpLyHBYs/4MD+DADCJ6isUH3ZccvjespkLZD
-         gXwGmB8IdvutFO2kyTnloszSczWHCoKGfI0xG1j2Ve7NarDvGd+URgpodYb19MJaH0zX
-         RPikpRZqC7VGmj+XI1sO0dpytVz5VH0NFQdvEeeYc2H4LDBAQ8i2KWpNvjQ/zdZ64Aif
-         Ta6Gn9SHn1KpN21U6TsCYRCkzVuVZVycpaUyRvdubCEtUP/O+Sejy1reztba8QfEwtde
-         Ky7f0b80BDeXQbMn20TkFDFRyyL5nozpU7s/VU/Vzb6+D3GxrVXlO1/pwwFhTV96xl/G
-         WGXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6FL8JJKN1LVzWkPF+aKtJUdwHaz9en8xDzUW2zFOrSY=;
-        b=xXw/0NmWq0bHcKMRBPooN1T4fPBFq7UUh1Xjm9KiuOdCWaVzOYPLdQHtkxJhJf9qca
-         8UwZoRMFB56qyvYulQJDj+ldx1eoYGJSmcI+7hLyEgOYS2SChyeGPLLm8gJWtfuYJ1Cq
-         E2ro+wGpv1gp3oS5CrmAmHdcT47X08pwihUv+LF7XxEfL+a/YFInv5wxykvuIEemni63
-         a92Ecz0xu+C39UIogAHv+T/5yf1hH6qlyEaFgNUAEwaQ0IsBzewvPOXTJSgRru9rlTrK
-         R/M0HlUG2PzfCqiTT8VCA30gYOjkv1C9FJj1wy6FLH1b6ODuZVjfU1F0DK+36vaa+ZWr
-         Ki7Q==
-X-Gm-Message-State: AFqh2kr6dGih1JGm6qJi1nuL1sUTjFGBRx6y7hWEpP5AmJapbg3Gihj4
-        Vy5IqvQi5/+rHJoY/pXu0dg20A==
-X-Google-Smtp-Source: AMrXdXtOORgNGTIyd11R2eMP7ByXXE52rPFRkTZwXhynNFuQSIdozZ7e3gP+UEGWXjWMQ6ldDAX2Ig==
-X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr3394337plg.1.1674062235976;
-        Wed, 18 Jan 2023 09:17:15 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b001895f7c8a71sm6609409plg.97.2023.01.18.09.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:17:15 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:17:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private
- memory
-Message-ID: <Y8gpl+LwSuSgBFks@google.com>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <Y8dG3WDxY2OCGPby@google.com>
- <20230118112511.wrljyng2xiz3yktv@box.shutemov.name>
+        Wed, 18 Jan 2023 12:18:04 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D80D51C41;
+        Wed, 18 Jan 2023 09:18:01 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 867E7FF803;
+        Wed, 18 Jan 2023 17:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674062279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HHiWQiQKmF9Aq364tQ1OQoYyXwqW/hpH1Vz8i01CmX4=;
+        b=W2GeEJNXWZ+yf3j1rPF8scQWxjgLiyhA2BCQpdJJj7AFFTLb/MgCZIUAiUqETbp8WtS0CS
+        0rPiblgQSwSGIwccSso7YA1KfnnxvlsOY413u0TdNHcb09xaZyKPpciZDkD2Am5/CskueT
+        GSTiH080p3ycDeogzaEXQ1oTxt+QLSIQQ61z1SJSIhQRzX0YPe8ucIMNzCut/UZQObmOzm
+        Rkk+cBP9wKmvoHpi1PyiQOgo0U0CDCY9vavR3Iszjfjl1flEHy/L79ojuljCxDcF3/UJCn
+        3QOfS56cFNigVaELWtoRE9ubBIj4bmwcG9AclRZGVqgd01zcvEJiNdpbnSkwsQ==
+Date:   Wed, 18 Jan 2023 18:17:53 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
+Message-ID: <20230118181753.7a325953@booty>
+In-Reply-To: <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+        <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
+        <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118112511.wrljyng2xiz3yktv@box.shutemov.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,68 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023, Kirill A. Shutemov wrote:
-> On Wed, Jan 18, 2023 at 01:09:49AM +0000, Sean Christopherson wrote:
-> > On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > > This series implements selftests targeting the feature floated by Chao via:
-> > > https://lore.kernel.org/lkml/20221202061347.1070246-10-chao.p.peng@linux.intel.com/T/
-> > > 
-> > > Below changes aim to test the fd based approach for guest private memory
-> > > in context of normal (non-confidential) VMs executing on non-confidential
-> > > platforms.
-> > > 
-> > > private_mem_test.c file adds selftest to access private memory from the
-> > > guest via private/shared accesses and checking if the contents can be
-> > > leaked to/accessed by vmm via shared memory view before/after conversions.
-> > > 
-> > > Updates in V2:
-> > > 1) Simplified vcpu run loop implementation API
-> > > 2) Removed VM creation logic from private mem library
+Hello Andy,
+
+On Wed, 18 Jan 2023 16:23:53 +0200
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+
+> On Wed, Jan 18, 2023 at 02:40:25PM +0200, Tomi Valkeinen wrote:
+> > From: Luca Ceresoli <luca@lucaceresoli.net>
 > > 
-> > I pushed a rework version of this series to:
+> > An ATR is a device that looks similar to an i2c-mux: it has an I2C
+> > slave "upstream" port and N master "downstream" ports, and forwards
+> > transactions from upstream to the appropriate downstream port. But is
+> > is different in that the forwarded transaction has a different slave  
+> 
+> is is ?
+> 
+> > address. The address used on the upstream bus is called the "alias"
+> > and is (potentially) different from the physical slave address of the
+> > downstream chip.
 > > 
-> >   git@github.com:sean-jc/linux.git x86/upm_base_support
+> > Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+> > implementing ATR features in a device driver. The helper takes care or
+> > adapter creation/destruction and translates addresses at each transaction.  
 > 
-> It still has build issue with lockdep enabled that I mentioned before:
-
-Yeah, I haven't updated the branch since last Friday, i.e. I haven't fixed the
-known bugs yet.  I pushed the selftests changes at the same as everything else,
-just didn't get to typing up the emails until yesterday.
-
-> https://lore.kernel.org/all/20230116134845.vboraky2nd56szos@box.shutemov.name/
+> ...
 > 
-> And when compiled with lockdep, it triggers a lot of warnings about missed
-> locks, like this:
+> > +A typical example follows.
+> > +
+> > +Topology::
+> > +
+> > +                      Slave X @ 0x10
+> > +              .-----.   |
+> > +  .-----.     |     |---+---- B
+> > +  | CPU |--A--| ATR |
+> > +  `-----'     |     |---+---- C
+> > +              `-----'   |
+> > +                      Slave Y @ 0x10
+> > +
+> > +Alias table:
+> > +
+> > +.. table::
+> > +
+> > +   ======   =====
+> > +   Client   Alias
+> > +   ======   =====
+> > +   X        0x20
+> > +   Y        0x30
+> > +   ======   =====
+> > +
+> > +Transaction:
+> > +
+> > + - Slave X driver sends a transaction (on adapter B), slave address 0x10
+> > + - ATR driver rewrites messages with address 0x20, forwards to adapter A
+> > + - Physical I2C transaction on bus A, slave address 0x20
+> > + - ATR chip propagates transaction on bus B with address translated to 0x10
+> > + - Slave X chip replies on bus B
+> > + - ATR chip forwards reply on bus A
+> > + - ATR driver rewrites messages with address 0x10
+> > + - Slave X driver gets back the msgs[], with reply and address 0x10  
+> 
+> I'm not sure I got the real / virtual status of the adapters. Are the B and C
+> virtual ones, while A is the real?
 
-Ah crud, I knew I was forgetting something.  The lockdep assertion can simply be
-removed, mmu_lock doesn't need to be held to read attributes.  I knew the assertion
-was wrong when I added it, but I wanted to remind myself to take a closer look at
-the usage of kvm_mem_is_private() and forgot to go back and delete the assertion.
+Let me reply, as I wrote these docs back at the times and thus I feel
+guilty in case that's unclear. :)
 
-The use of kvm_mem_is_private() in kvm_mmu_do_page_fault() is technically unsafe.
-Similar to getting the pfn, if mmu_lock isn't held, consuming the attributes
-(private vs. shared) needs MMU notifier protection, i.e. the attributes are safe
-to read only after mmu_invalidate_seq is snapshot.
+I don't like the word "virtual" in this situation. A, B and C are all
+physical busses, made of copper and run by electrons on PCBs. B and C
+are the "remote" or "downstream" busses (w.r.t. the CPU), where the i2c
+devices are and where transactions happen using the address that the
+chip responds to. A is the "local" or "upstream" bus that is driven
+directly by the CPU (*) and where address aliases are used. Using
+aliases there is necessary because using address 0x10 would be
+ambiguous as there are two 0x10 chips out there.
 
-However, is_private gets rechecked by __kvm_faultin_pfn(), which is protected by
-the sequence counter, and so the technically unsafe read is verified in the end.
-The obvious alternative is to make is_private an output of kvm_faultin_pfn(), but
-that's incorrect for SNP and TDX guests, in which case "is_private" is a property
-of the fault itself.
+(*) There could be more layers of course, but still A is "closer to the
+CPU than B and C", for the sake of completeness.
 
-TL;DR: I'm going to delete the assertion and add a comment in kvm_mmu_do_page_fault()
-explaining why it's safe to consume kvm_mem_is_private() for "legacy" guests.
+...
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 35a339891aed..da0afe81cf10 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2310,8 +2310,6 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
- #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
- static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
- {
--       lockdep_assert_held(kvm->mmu_lock);
--
-        return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
- }
+> > +void i2c_atr_set_driver_data(struct i2c_atr *atr, void *data)
+> > +{
+> > +	atr->priv = data;
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(i2c_atr_set_driver_data, I2C_ATR);
+> > +
+> > +void *i2c_atr_get_driver_data(struct i2c_atr *atr)
+> > +{
+> > +	return atr->priv;
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(i2c_atr_get_driver_data, I2C_ATR);  
+> 
+> Just to be sure: Is it really _driver_ data and not _device instance_ data?
 
+It is device instance data indeed. I don't remember why this got
+changed, but in v3 it was i2c_atr_set_clientdata().
+
+[v3]
+https://lore.kernel.org/all/20220206115939.3091265-3-luca@lucaceresoli.net/
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
