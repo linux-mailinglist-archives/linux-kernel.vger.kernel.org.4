@@ -2,386 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9674672245
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9CA672254
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjARP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S230497AbjARQBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjARP6V (ORCPT
+        with ESMTP id S231256AbjARP7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:58:21 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAAFD568B8;
-        Wed, 18 Jan 2023 07:55:02 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 8613820E09F3; Wed, 18 Jan 2023 07:55:02 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8613820E09F3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1674057302;
-        bh=xuNrvowv2hcTLI73DVnfkxQ84AfOWijeQN8uwU3Si1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ObVnY1z16hV8Et/ISM7DC3DNl7fd26Br85inzvm5NFmAc8yKfZWjJ7ISaNaA4lyG5
-         A1aGLyzLLfrYr92nIAwp/Kzo+b4sjvBilvYYPR7ERfuX8VZMjJv2gCVVKawfzDq91B
-         bibjjoDuStwIzDNCzKXh8ibeu4pHTnqm/UfbXViQ=
-Date:   Wed, 18 Jan 2023 07:55:02 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v7 14/64] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <20230118155502.GB24742@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-15-michael.roth@amd.com>
+        Wed, 18 Jan 2023 10:59:54 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C9054B07;
+        Wed, 18 Jan 2023 07:56:42 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id ud5so84375683ejc.4;
+        Wed, 18 Jan 2023 07:56:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kpirYHngnT4pnfeId8PwGYCJd6AYwIUHThaVH7Hubp4=;
+        b=7T8YUUT4iRiPOjpbmsSSqfUMovJ41quEMrCAEwyFYNoZWH9nF4Ql3dD3b4vFhpB6Yw
+         vrnct3W+QU9Cucdx34rP8VdsfiWwjJs0+oVNIDSPVVhXBPDjpB+HxEkPDx1FPOqL6iSG
+         mulwwYFhXDYqZauKSb5UpvGCvL9bqqwmrd9b0pebgEJtPlE5W0FnFFQR9zPqFOgmq0Mi
+         1DgxRGWiFuktg3X6sD0HAWELM9hCIvP3mWI49PsjE6QrePLYweIHBERIyef/VCjJtXLV
+         z77ZXZtHSgySwCaOVnrqoMe6HXVNDzVruAumUxCCuZKHO/yPwe7yHiBTwfsonhf4NweK
+         d2ZA==
+X-Gm-Message-State: AFqh2kqChRMN0ZK8rcJ45UUJwaAAW7vSQMb410493XEYxXYHYqgn4qWA
+        yOIS0dk73Zqz4T/8wmTagio=
+X-Google-Smtp-Source: AMrXdXtr40LzqXP8+RQaUuAxxO44Xk05rql9rcrJEQ3/EUo+edYvelcfQ5ygO11ZQgMVz99c2FljdA==
+X-Received: by 2002:a17:907:c388:b0:86e:65c8:6fe3 with SMTP id tm8-20020a170907c38800b0086e65c86fe3mr8253919ejc.7.1674057401112;
+        Wed, 18 Jan 2023 07:56:41 -0800 (PST)
+Received: from localhost (fwdproxy-cln-120.fbsv.net. [2a03:2880:31ff:78::face:b00c])
+        by smtp.gmail.com with ESMTPSA id gw21-20020a170906f15500b0086dc9e05685sm5621406ejb.222.2023.01.18.07.56.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:56:40 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org
+Cc:     kasan-dev@googlegroups.com, leitao@debian.org, leit@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring: Enable KASAN for request cache
+Date:   Wed, 18 Jan 2023 07:56:30 -0800
+Message-Id: <20230118155630.2762921-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214194056.161492-15-michael.roth@amd.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:40:06PM -0600, Michael Roth wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> The memory integrity guarantees of SEV-SNP are enforced through a new
-> structure called the Reverse Map Table (RMP). The RMP is a single data
-> structure shared across the system that contains one entry for every 4K
-> page of DRAM that may be used by SEV-SNP VMs. The goal of RMP is to
-> track the owner of each page of memory. Pages of memory can be owned by
-> the hypervisor, owned by a specific VM or owned by the AMD-SP. See APM2
-> section 15.36.3 for more detail on RMP.
-> 
-> The RMP table is used to enforce access control to memory. The table itself
-> is not directly writable by the software. New CPU instructions (RMPUPDATE,
-> PVALIDATE, RMPADJUST) are used to manipulate the RMP entries.
-> 
-> Based on the platform configuration, the BIOS reserves the memory used
-> for the RMP table. The start and end address of the RMP table must be
-> queried by reading the RMP_BASE and RMP_END MSRs. If the RMP_BASE and
-> RMP_END are not set then disable the SEV-SNP feature.
-> 
-> The SEV-SNP feature is enabled only after the RMP table is successfully
-> initialized.
-> 
-> Also set SYSCFG.MFMD when enabling SNP as SEV-SNP FW >= 1.51 requires
-> that SYSCFG.MFMD must be se
-> 
-> RMP table entry format is non-architectural and it can vary by processor
-> and is defined by the PPR. Restrict SNP support on the known CPU model
-> and family for which the RMP table entry format is currently defined for.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-b: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/include/asm/disabled-features.h |   8 +-
->  arch/x86/include/asm/msr-index.h         |  11 +-
->  arch/x86/kernel/sev.c                    | 180 +++++++++++++++++++++++
->  3 files changed, 197 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-> index 33d2cd04d254..9b5a2cc8064a 100644
-> --- a/arch/x86/include/asm/disabled-features.h
-> +++ b/arch/x86/include/asm/disabled-features.h
-> @@ -87,6 +87,12 @@
->  # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
->  #endif
->  
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +# define DISABLE_SEV_SNP	0
-> +#else
-> +# define DISABLE_SEV_SNP	(1 << (X86_FEATURE_SEV_SNP & 31))
-> +#endif
-> +
->  /*
->   * Make sure to add features to the correct mask
->   */
-> @@ -110,7 +116,7 @@
->  			 DISABLE_ENQCMD)
->  #define DISABLED_MASK17	0
->  #define DISABLED_MASK18	0
-> -#define DISABLED_MASK19	0
-> +#define DISABLED_MASK19	(DISABLE_SEV_SNP)
->  #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
->  
->  #endif /* _ASM_X86_DISABLED_FEATURES_H */
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 10ac52705892..35100c630617 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -565,6 +565,8 @@
->  #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
->  #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
->  #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-> +#define MSR_AMD64_RMP_BASE		0xc0010132
-> +#define MSR_AMD64_RMP_END		0xc0010133
->  
->  #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
->  
-> @@ -649,7 +651,14 @@
->  #define MSR_K8_TOP_MEM2			0xc001001d
->  #define MSR_AMD64_SYSCFG		0xc0010010
->  #define MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT	23
-> -#define MSR_AMD64_SYSCFG_MEM_ENCRYPT	BIT_ULL(MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT)
-> +#define MSR_AMD64_SYSCFG_MEM_ENCRYPT		BIT_ULL(MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT)
-> +#define MSR_AMD64_SYSCFG_SNP_EN_BIT		24
-> +#define MSR_AMD64_SYSCFG_SNP_EN		BIT_ULL(MSR_AMD64_SYSCFG_SNP_EN_BIT)
-> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT	25
-> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN		BIT_ULL(MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT)
-> +#define MSR_AMD64_SYSCFG_MFDM_BIT		19
-> +#define MSR_AMD64_SYSCFG_MFDM			BIT_ULL(MSR_AMD64_SYSCFG_MFDM_BIT)
-> +
->  #define MSR_K8_INT_PENDING_MSG		0xc0010055
->  /* C1E active bits in int pending message */
->  #define K8_INTP_C1E_ACTIVE_MASK		0x18000000
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index a428c62330d3..687a91284506 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -22,6 +22,9 @@
->  #include <linux/efi.h>
->  #include <linux/platform_device.h>
->  #include <linux/io.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/iommu.h>
-> +#include <linux/amd-iommu.h>
->  
->  #include <asm/cpu_entry_area.h>
->  #include <asm/stacktrace.h>
-> @@ -38,6 +41,7 @@
->  #include <asm/apic.h>
->  #include <asm/cpuid.h>
->  #include <asm/cmdline.h>
-> +#include <asm/iommu.h>
->  
->  #define DR7_RESET_VALUE        0x400
->  
-> @@ -57,6 +61,12 @@
->  #define AP_INIT_CR0_DEFAULT		0x60000010
->  #define AP_INIT_MXCSR_DEFAULT		0x1f80
->  
-> +/*
-> + * The first 16KB from the RMP_BASE is used by the processor for the
-> + * bookkeeping, the range needs to be added during the RMP entry lookup.
-> + */
-> +#define RMPTABLE_CPU_BOOKKEEPING_SZ	0x4000
-> +
->  /* For early boot hypervisor communication in SEV-ES enabled guests */
->  static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
->  
-> @@ -69,6 +79,9 @@ static struct ghcb *boot_ghcb __section(".data");
->  /* Bitmap of SEV features supported by the hypervisor */
->  static u64 sev_hv_features __ro_after_init;
->  
-> +static unsigned long rmptable_start __ro_after_init;
-> +static unsigned long rmptable_end __ro_after_init;
-> +
->  /* #VC handler runtime per-CPU data */
->  struct sev_es_runtime_data {
->  	struct ghcb ghcb_page;
-> @@ -2260,3 +2273,170 @@ static int __init snp_init_platform_device(void)
->  	return 0;
->  }
->  device_initcall(snp_init_platform_device);
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt)	"SEV-SNP: " fmt
-> +
-> +static int __mfd_enable(unsigned int cpu)
-> +{
-> +	u64 val;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +		return 0;
-> +
-> +	rdmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	val |= MSR_AMD64_SYSCFG_MFDM;
-> +
-> +	wrmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	return 0;
-> +}
-> +
-> +static __init void mfd_enable(void *arg)
-> +{
-> +	__mfd_enable(smp_processor_id());
-> +}
-> +
-> +static int __snp_enable(unsigned int cpu)
-> +{
-> +	u64 val;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +		return 0;
-> +
-> +	rdmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	val |= MSR_AMD64_SYSCFG_SNP_EN;
-> +	val |= MSR_AMD64_SYSCFG_SNP_VMPL_EN;
-> +
-> +	wrmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	return 0;
-> +}
-> +
-> +static __init void snp_enable(void *arg)
-> +{
-> +	__snp_enable(smp_processor_id());
-> +}
-> +
-> +static bool get_rmptable_info(u64 *start, u64 *len)
-> +{
-> +	u64 calc_rmp_sz, rmp_sz, rmp_base, rmp_end;
-> +
-> +	rdmsrl(MSR_AMD64_RMP_BASE, rmp_base);
-> +	rdmsrl(MSR_AMD64_RMP_END, rmp_end);
-> +
-> +	if (!rmp_base || !rmp_end) {
-> +		pr_err("Memory for the RMP table has not been reserved by BIOS\n");
-> +		return false;
-> +	}
-> +
-> +	rmp_sz = rmp_end - rmp_base + 1;
-> +
-> +	/*
-> +	 * Calculate the amount the memory that must be reserved by the BIOS to
-> +	 * address the whole RAM. The reserved memory should also cover the
-> +	 * RMP table itself.
-> +	 */
-> +	calc_rmp_sz = (((rmp_sz >> PAGE_SHIFT) + totalram_pages()) << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
+Every io_uring request is represented by struct io_kiocb, which is
+cached locally by io_uring (not SLAB/SLUB) in the list called
+submit_state.freelist. This patch simply enabled KASAN for this free
+list.
 
-Since the rmptable is indexed by page number, I believe this check should be
-using max_pfn:
+This list is initially created by KMEM_CACHE, but later, managed by
+io_uring. This patch basically poisons the objects that are not used
+(i.e., they are the free list), and unpoisons it when the object is
+allocated/removed from the list.
 
-    calc_rmp_sz = (max_pfn << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
+Touching these poisoned objects while in the freelist will cause a KASAN
+warning.
 
-This accounts for holes/offsets in the memory map which lead to the top of
-memory having pfn > totalram_pages().
+Suggested-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ io_uring/io_uring.c |  3 ++-
+ io_uring/io_uring.h | 11 ++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-> +
-> +	if (calc_rmp_sz > rmp_sz) {
-> +		pr_err("Memory reserved for the RMP table does not cover full system RAM (expected 0x%llx got 0x%llx)\n",
-> +		       calc_rmp_sz, rmp_sz);
-> +		return false;
-> +	}
-> +
-> +	*start = rmp_base;
-> +	*len = rmp_sz;
-> +
-> +	pr_info("RMP table physical address [0x%016llx - 0x%016llx]\n", rmp_base, rmp_end);
-> +
-> +	return true;
-> +}
-> +
-> +static __init int __snp_rmptable_init(void)
-> +{
-> +	u64 rmp_base, sz;
-> +	void *start;
-> +	u64 val;
-> +
-> +	if (!get_rmptable_info(&rmp_base, &sz))
-> +		return 1;
-> +
-> +	start = memremap(rmp_base, sz, MEMREMAP_WB);
-> +	if (!start) {
-> +		pr_err("Failed to map RMP table addr 0x%llx size 0x%llx\n", rmp_base, sz);
-> +		return 1;
-> +	}
-> +
-> +	/*
-> +	 * Check if SEV-SNP is already enabled, this can happen in case of
-> +	 * kexec boot.
-> +	 */
-> +	rdmsrl(MSR_AMD64_SYSCFG, val);
-> +	if (val & MSR_AMD64_SYSCFG_SNP_EN)
-> +		goto skip_enable;
-> +
-> +	/* Initialize the RMP table to zero */
-> +	memset(start, 0, sz);
-> +
-> +	/* Flush the caches to ensure that data is written before SNP is enabled. */
-> +	wbinvd_on_all_cpus();
-> +
-> +	/* MFDM must be enabled on all the CPUs prior to enabling SNP. */
-> +	on_each_cpu(mfd_enable, NULL, 1);
-> +
-> +	/* Enable SNP on all CPUs. */
-> +	on_each_cpu(snp_enable, NULL, 1);
-> +
-> +skip_enable:
-> +	rmptable_start = (unsigned long)start;
-> +	rmptable_end = rmptable_start + sz - 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init snp_rmptable_init(void)
-> +{
-> +	int family, model;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +		return 0;
-> +
-> +	family = boot_cpu_data.x86;
-> +	model  = boot_cpu_data.x86_model;
-> +
-> +	/*
-> +	 * RMP table entry format is not architectural and it can vary by processor and
-> +	 * is defined by the per-processor PPR. Restrict SNP support on the known CPU
-> +	 * model and family for which the RMP table entry format is currently defined for.
-> +	 */
-> +	if (family != 0x19 || model > 0xaf)
-> +		goto nosnp;
-> +
-> +	if (amd_iommu_snp_enable())
-> +		goto nosnp;
-> +
-> +	if (__snp_rmptable_init())
-> +		goto nosnp;
-> +
-> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/rmptable_init:online", __snp_enable, NULL);
-> +
-> +	return 0;
-> +
-> +nosnp:
-> +	setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
-> +	return -ENOSYS;
-> +}
-> +
-> +/*
-> + * This must be called after the PCI subsystem. This is because amd_iommu_snp_enable()
-> + * is called to ensure the IOMMU supports the SEV-SNP feature, which can only be
-> + * called after subsys_initcall().
-> + *
-> + * NOTE: IOMMU is enforced by SNP to ensure that hypervisor cannot program DMA
-> + * directly into guest private memory. In case of SNP, the IOMMU ensures that
-> + * the page(s) used for DMA are hypervisor owned.
-> + */
-> +fs_initcall(snp_rmptable_init);
-> -- 
-> 2.25.1
-> 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2ac1cd8d23ea..8cc0f12034d1 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -151,7 +151,7 @@ static void io_move_task_work_from_local(struct io_ring_ctx *ctx);
+ static void __io_submit_flush_completions(struct io_ring_ctx *ctx);
+ static __cold void io_fallback_tw(struct io_uring_task *tctx);
+ 
+-static struct kmem_cache *req_cachep;
++struct kmem_cache *req_cachep;
+ 
+ struct sock *io_uring_get_socket(struct file *file)
+ {
+@@ -230,6 +230,7 @@ static inline void req_fail_link_node(struct io_kiocb *req, int res)
+ static inline void io_req_add_to_cache(struct io_kiocb *req, struct io_ring_ctx *ctx)
+ {
+ 	wq_stack_add_head(&req->comp_list, &ctx->submit_state.free_list);
++	kasan_poison_object_data(req_cachep, req);
+ }
+ 
+ static __cold void io_ring_ctx_ref_free(struct percpu_ref *ref)
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index ab4b2a1c3b7e..0ccf62a19b65 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -3,6 +3,7 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/lockdep.h>
++#include <linux/kasan.h>
+ #include <linux/io_uring_types.h>
+ #include <uapi/linux/eventpoll.h>
+ #include "io-wq.h"
+@@ -379,12 +380,16 @@ static inline bool io_alloc_req_refill(struct io_ring_ctx *ctx)
+ 	return true;
+ }
+ 
++extern struct kmem_cache *req_cachep;
++
+ static inline struct io_kiocb *io_alloc_req(struct io_ring_ctx *ctx)
+ {
+-	struct io_wq_work_node *node;
++	struct io_kiocb *req;
+ 
+-	node = wq_stack_extract(&ctx->submit_state.free_list);
+-	return container_of(node, struct io_kiocb, comp_list);
++	req = container_of(ctx->submit_state.free_list.next, struct io_kiocb, comp_list);
++	kasan_unpoison_object_data(req_cachep, req);
++	wq_stack_extract(&ctx->submit_state.free_list);
++	return req;
+ }
+ 
+ static inline bool io_allowed_run_tw(struct io_ring_ctx *ctx)
+-- 
+2.30.2
+
