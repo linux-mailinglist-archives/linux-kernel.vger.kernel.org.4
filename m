@@ -2,112 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE0F671A10
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3229F671A13
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjARLJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S230186AbjARLKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 06:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjARLIy (ORCPT
+        with ESMTP id S229468AbjARLJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:08:54 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2A495769
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:15:50 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1107000wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:15:50 -0800 (PST)
+        Wed, 18 Jan 2023 06:09:58 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9793059B63
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:22 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id s3so10779277edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djuiJl7bx5DRHNGTITj28NZCN8UBHbOpoHymK5Xy668=;
-        b=mZq+wCBjWMn4ys2DKQ0xXZVF8e3MLqZsuhe6LIZqmNvtZVqNdlnFOXwye+qFyKabNR
-         0eNJ3k+q/L1cobWT0KiCY692QLHmm6GDt9Z0VLiBMFrljI1gGieMZjlQ2Q/HVagCCMlt
-         lsa4GP/fwmnoRl14bppiNU4yXZpm7G+ohNT/iQfrW54D0N/zAiYv1lE7GtwM80lK93+u
-         WuXszjFi6zHUt+QsLbBmef9gdJJthddTMAwawOeawoHBpXl4J/YfTuJWaHIFKNxFNSuG
-         iZue6hpChPgsvVbaRxTB+uS/8JSOK+T4LJH3g3TgU2jb1KvdUHOhA5KDdYOTmheGfMLw
-         QQhg==
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H6ol8sai5DSETE3D+zujMvxltBJArSra6pkGjRfRXcQ=;
+        b=OKuh87dDHhB4r7B/XfGPzn8hfY+yL11ZKBITLUzzh0qgBkiusgIeE1QTBPQBq+7LX/
+         FhoX/TBO0j3DrTmeRrjfOy75s5FP8iLPtpgWjG+OE8REU0nBtin/5/G1s3Ed6+b8HKtD
+         rDuu4lliSBOfsjFhexY9S8wHKAf290rP5+fTGS5fySCIWm0U1d6GWPfh0/eQw3S1+Lgv
+         lKWqAYPlrSEnqvkW7lOcOxEAiJadaetD07TXPTIM5UnHQKf+fctNnoQWGDMYDKfMQhk+
+         PwK+s8jrP6W5m7nYgwO9ccqUkjwi7Pw9S6h311EwltRvVGYiUyEGw3JqiD2LCgfkRNoB
+         GYUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=djuiJl7bx5DRHNGTITj28NZCN8UBHbOpoHymK5Xy668=;
-        b=NKMXirdv/x5BigX54MYN2vyX3Y/uhj4msUgqjraAWe5o3v3MsdyEqht5gSHJzIf3Ay
-         l8eL1V1MAJg7ri7eEQgU6bvZpTOQ4uHpnuyR7zvxe0jRRlTdScNAISqKchExtnbnqk7w
-         awmbo34LuwSKwz6Npytw3ebF0jXQYcvI02fAJljkCy5kBnBOfSfGIvYMbM6a8mO+lx51
-         JSPu5PwqJh4pdWwbnlzr5FoZF3CZ7tdKyh5rgerVbwlPFJYDviIYh6iLtTVB4poNGNeU
-         EhXCjfyEpgzlfm4FUamsOvrUJBPb9TtVXL19XmuX6J2UzLq3UL30JsX44XivD17P6Eru
-         G7Jw==
-X-Gm-Message-State: AFqh2kp9JIDUssxDfV97OQwQCgwHbXCBWMs434HcAJNdcGIXKgzYB5nJ
-        TyzDo7pzuCUd5XKeDAp796ttLw==
-X-Google-Smtp-Source: AMrXdXuSuwUkqc5Qgfm+fecSkhvRSa+4v0bwmM8Aw/gpqS1HjI0hteb1WBpPIkYpvlfGlqcbh3aNVg==
-X-Received: by 2002:a05:600c:1713:b0:3da:fd90:19dd with SMTP id c19-20020a05600c171300b003dafd9019ddmr6139660wmn.26.1674036948962;
-        Wed, 18 Jan 2023 02:15:48 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05600c474a00b003db00747fdesm1529838wmo.15.2023.01.18.02.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 02:15:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ASoC: qcom: sdm845: add remark about unneeded compatibles
-Date:   Wed, 18 Jan 2023 11:15:42 +0100
-Message-Id: <20230118101542.96705-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118101542.96705-1-krzysztof.kozlowski@linaro.org>
-References: <20230118101542.96705-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H6ol8sai5DSETE3D+zujMvxltBJArSra6pkGjRfRXcQ=;
+        b=5l26kmEzzkK930rDvaDYytnE1fHrdIEWhsb1ma7V77Xb3E1QslZLD2+xFKVX0JbiaC
+         W4cEpyxiwHkagnTwf2F2sdTbmS39nMHPEHS9hKIIxmTFq76YKmWxjbpQrysBLVyQPuqZ
+         87euBjBGhKnsfKJi1TkHaCEYKfxMPe0YA4FCKpAgQ9HCpJoeGx47pYuPKPXhge7758H8
+         ETb0wNt7rGqUlQw1iz4sNZdZEWT44ZCsa4gTfOhL1Jay9/AyOWpo9J2cM5Ql0tirq1Z0
+         V5d3azUvCpywkuEW6FHO7wsd7qbb6aPgVSz85H5bFMmJcpTld/Rve1wKH6cptZYkMUV2
+         Pg5g==
+X-Gm-Message-State: AFqh2kr6F9oECemJfk7uEz3EHc1WVFe0V6dRDx3ad1cR0gGOdsuut2Gm
+        RWlk6ZIAYIyFemT0W6BgjKFYKDnZ/tYsm2PI
+X-Google-Smtp-Source: AMrXdXtnqYQxYTHzWZ2KiGPhZG9eVT4RMx08GspQk3hYnE29LeJ7Ai1qxXVecF9Bx9ZV7W9flh8JQw==
+X-Received: by 2002:a05:6402:1012:b0:46b:34a:3945 with SMTP id c18-20020a056402101200b0046b034a3945mr6264556edu.31.1674037041150;
+        Wed, 18 Jan 2023 02:17:21 -0800 (PST)
+Received: from ?IPV6:2003:f6:af03:d200:ef9b:6781:7d3:df26? (p200300f6af03d200ef9b678107d3df26.dip0.t-ipconnect.de. [2003:f6:af03:d200:ef9b:6781:7d3:df26])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa7c6d4000000b004610899742asm13950048eds.13.2023.01.18.02.17.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 02:17:20 -0800 (PST)
+Message-ID: <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
+Date:   Wed, 18 Jan 2023 11:17:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 3/3] KVM: x86: do not unload MMU roots when only toggling
+ CR0.WP
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230117204556.16217-1-minipli@grsecurity.net>
+ <20230117204556.16217-4-minipli@grsecurity.net> <Y8cTMnyBzNdO5dY3@google.com>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <Y8cTMnyBzNdO5dY3@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If all devices are the same or compatible, there is no single need to
-keep growing of_device_id list with new entries.
+On 17.01.23 22:29, Sean Christopherson wrote:
+> On Tue, Jan 17, 2023, Mathias Krause wrote:
+>> There is no need to unload the MMU roots when only CR0.WP has changed --
+>> the paging structures are still valid, only the permission bitmap needs
+>> to be updated.
+> 
+> This doesn't hold true when KVM is using shadow paging, in which case CR0.WP
+> affects the shadow page tables.  I believe that also holds true for nNPT :-(
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Oh, I knew there would be a case I missed. Thank you for pointing it out!
 
----
+> nEPT doesn't consume CR0.WP so we could expedite that case as well, though
+> identifying that case might be annoying.
 
-Patches are independent and backwards compatible. DTS fixup will be sent
-separately.
----
- sound/soc/qcom/sdm845.c | 1 +
- 1 file changed, 1 insertion(+)
+I'm fine with starting with optimizing L1 only as the performance gain
+for this usual case is huge already. But sure, if more is possible, I'm
+all for it. It's just that I lack the knowledge about KVM internals to
+figure it out all by myself.
 
-diff --git a/sound/soc/qcom/sdm845.c b/sound/soc/qcom/sdm845.c
-index d8d35563af00..02612af714a8 100644
---- a/sound/soc/qcom/sdm845.c
-+++ b/sound/soc/qcom/sdm845.c
-@@ -588,6 +588,7 @@ static int sdm845_snd_platform_probe(struct platform_device *pdev)
- 
- static const struct of_device_id sdm845_snd_device_id[]  = {
- 	{ .compatible = "qcom,sdm845-sndcard" },
-+	/* Do not grow the list for compatible devices */
- 	{ .compatible = "qcom,db845c-sndcard" },
- 	{ .compatible = "lenovo,yoga-c630-sndcard" },
- 	{},
--- 
-2.34.1
+>> Change kvm_mmu_reset_context() to get passed the need for unloading MMU
+>> roots and explicitly avoid it if only CR0.WP was toggled on a CR0 write
+>> caused VMEXIT.
+> 
+> One thing we should explore on top of this is not intercepting CR0.WP (on Intel)
+> when TDP is enabled.  It could even trigger after toggling CR0.WP N times, e.g.
+> to optimize the grsecurity use case without negatively impacting workloads with
+> a static CR0.WP, as walking guest memory would require an "extra" VMREAD to get
+> CR0.WP in that case.
 
+That would be even better, agreed. I'll look into it and will try to
+come up with something.
+
+> Unfortunately, AMD doesn't provide per-bit controls.
+> 
+>> This change brings a huge performance gain as the following micro-
+>> benchmark running 'ssdd 10 50000' from rt-tests[1] on a grsecurity L1 VM
+>> shows (runtime in seconds, lower is better):
+>>
+>>                       legacy MMU   TDP MMU
+>> kvm.git/queue             11.55s    13.91s
+>> kvm.git/queue+patch        7.44s     7.94s
+>>
+>> For legacy MMU this is ~35% faster, for TTP MMU ~43% faster.
+>>
+>> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+>>
+>> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+>> ---
+> 
+> ...
+> 
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 508074e47bc0..d7c326ab94de 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -902,7 +902,9 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+>>  
+>>  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
+>>  {
+>> -	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+>> +	unsigned long cr0_change = cr0 ^ old_cr0;
+>> +
+>> +	if (cr0_change & X86_CR0_PG) {
+>>  		kvm_clear_async_pf_completion_queue(vcpu);
+>>  		kvm_async_pf_hash_reset(vcpu);
+>>  
+>> @@ -914,10 +916,18 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
+>>  			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+>>  	}
+>>  
+>> -	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
+>> -		kvm_mmu_reset_context(vcpu);
+>> +	if (cr0_change & KVM_MMU_CR0_ROLE_BITS) {
+>> +		bool unload_mmu =
+>> +			cr0_change & (KVM_MMU_CR0_ROLE_BITS & ~X86_CR0_WP);
+> 
+> As above, this needs to guarded with a check that the MMU is direct.  And rather
+> than add a flag to kvm_mmu_reset_context(), just call kvm_init_mmu() directly.
+> E.g. I think this would work?
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index d07563d0e204..8f9fac6d81d2 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -927,6 +927,11 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+>  
+>  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
+>  {
+> +       if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
+> +               kvm_init_mmu(vcpu);
+> +               return;
+> +       }
+> +
+>         if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+>                 kvm_clear_async_pf_completion_queue(vcpu);
+>                 kvm_async_pf_hash_reset(vcpu);
+
+Looks much simpler and more direct. Nice. :)
+
+I'll re-test and send a v2 later today.
+
+Thanks,
+Mathias
