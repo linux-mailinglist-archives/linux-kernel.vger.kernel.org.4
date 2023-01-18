@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A57672B8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863AB672B96
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjARWrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S230002AbjARWrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjARWrH (ORCPT
+        with ESMTP id S229928AbjARWrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:47:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0720392B2;
-        Wed, 18 Jan 2023 14:47:06 -0800 (PST)
+        Wed, 18 Jan 2023 17:47:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D17A63E3D;
+        Wed, 18 Jan 2023 14:47:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B3D561A8E;
-        Wed, 18 Jan 2023 22:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AFE46C433F0;
-        Wed, 18 Jan 2023 22:47:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9F6EB81F83;
+        Wed, 18 Jan 2023 22:47:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A5DE3C433F1;
+        Wed, 18 Jan 2023 22:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674082025;
-        bh=IXzqkYp637f9FFHz3IM9yM1xNvc8W5Lh4WiOPUudzTU=;
+        s=k20201202; t=1674082027;
+        bh=JWCl1ZWZAs1W8KPwAon/CLRVAoq0WcPAhupCon+bLEI=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lxxT/2KPyHjJMFnhlLqT6k3rVwnJ4Hwit1s9PFPCmso0qjY70DFXJCargEkC5G/CO
-         w14CUcbY8PkOwVzyMm/RGckaJO1ZksSA/8sM4Bn7/9m9/tH6j+SlwGeV3CXquqHhou
-         KeMkndPzvOM3WE02NFY+EXH+IDMGxd8ZOLWoyC0QXp7Mf7TcMrMoDQhyIOaFgMr7NH
-         Vuyg7EVybhDNGVp/+vGZl9QTgA5J0MhZrIn9PMLvOpzGCK5JEOjFPpCEKHI9KYK9US
-         DJ7cmy9KaZ3N1Yt6F4Ifl1vO6rHjyjBswpgmq+OEO4zCnTl+34+Pkn3zwPIZNO8ALu
-         5gsJGLDsMPtJQ==
+        b=t13V5DI1c0IWTKKVgo600A5yDEIdnPSIR/UTzvthUCEfIn3jMsCEvpO3DNFMLWYQh
+         Zs9r6/gNUwBBlfMt84YyQc/9+JS8mIfGmdp2d0iXfkffsofls5i+MGtMm0DCT6IOGG
+         ADAJrG4uGy6yIVXH8RLQbGPJfw5xRrySJV8klxVu8L7oC5KRuGbQAmtqqCgpSiULv+
+         efEeV6xqHeIAxUXKjvBKr1Y6nJd7NXj1SkrnzSJ8V1XyZIhPl43aswdNz/SkaGlurG
+         N95lObFL+SQ7A6KdjclQMyR1vxx50hDg1wJzaYotZzNrD2jHIoy/vuWLB6XYrwwRTq
+         Ixm2eV27qr2VQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98249E54D2B;
-        Wed, 18 Jan 2023 22:47:05 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.2-rc5
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8DC9BC3959E;
+        Wed, 18 Jan 2023 22:47:07 +0000 (UTC)
+Subject: Re: [GIT PULL] AFFS fix for 6.2
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230118092651.2452402-1-chenhuacai@loongson.cn>
-References: <20230118092651.2452402-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
-X-PR-Tracked-Message-Id: <20230118092651.2452402-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.2-1
-X-PR-Tracked-Commit-Id: dc74a9e8a8c57966a563ab078ba91c8b2c0d0a72
+In-Reply-To: <cover.1674051240.git.dsterba@suse.com>
+References: <cover.1674051240.git.dsterba@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cover.1674051240.git.dsterba@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-for-6.2-tag
+X-PR-Tracked-Commit-Id: eef034ac6690118c88f357b00e2b3239c9d8575d
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 84bd7e08a79a5d3153c3a5805a1347a8dc979f35
-Message-Id: <167408202561.14684.15699936419070494644.pr-tracker-bot@kernel.org>
-Date:   Wed, 18 Jan 2023 22:47:05 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+X-PR-Merge-Commit-Id: 7026172bc334300652cb36d59b392c1a6b20926a
+Message-Id: <167408202757.14684.3726739122872210919.pr-tracker-bot@kernel.org>
+Date:   Wed, 18 Jan 2023 22:47:07 +0000
+To:     David Sterba <dsterba@suse.com>
+Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 18 Jan 2023 17:26:51 +0800:
+The pull request you sent on Wed, 18 Jan 2023 15:16:49 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.2-1
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-for-6.2-tag
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/84bd7e08a79a5d3153c3a5805a1347a8dc979f35
+https://git.kernel.org/torvalds/c/7026172bc334300652cb36d59b392c1a6b20926a
 
 Thank you!
 
