@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45877671CC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689DC671CCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjARM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S231144AbjARM6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjARM5d (ORCPT
+        with ESMTP id S231169AbjARM5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:57:33 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091C64ED19;
+        Wed, 18 Jan 2023 07:57:34 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D1982D44;
+        Wed, 18 Jan 2023 04:18:52 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id e3so24510246wru.13;
+        Wed, 18 Jan 2023 04:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IzXuhTjwqwTTvvex3uE3V9EMJrJPQwqSYU5zyi+X+lY=;
+        b=FXEPCsycYMMAkAKXfIAUXduQz87Ymlp+ZlN4h+kxS7ETHKGdAfbEI3dTSr58ux9cjh
+         RuNujA2Vbi3wbeaabw6Ghyl2L5BWCu5agsYLl/+VTsnzr5sgzL/ZwJl//DdtDGQUmpd+
+         hBMHydNtbgVkUDCvWmN6vJDW+FgBt/QeD5uq5+pS4K+OE5QIolpzPVbQy8TVpvEg2OzB
+         f0vkYT+ana/viHts6dJsqGSb5kpQUrebotf4asW0se6LbPDhBMT853pz/vjaFhVRuu6R
+         1A6HU/R3cCJJraauZ3faxlBtKlI/+ABFZ25vwI2/X0dkxn63eoBz8Sj5ahqIcyWGjd7a
+         aBRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IzXuhTjwqwTTvvex3uE3V9EMJrJPQwqSYU5zyi+X+lY=;
+        b=M0TLlljszfacAMDTw3eweTvqQs+Z7u3kr9cHGeNthr1llxMlBbbm2E6RwLdfn64LPu
+         dgVWUtZb375REojEMpcXONBMMYuEcCyaX+nmasPRt2dplb2RzY7Rp7aEI8cgzGpoTAsp
+         NGKGlNm0Sg8X8UQlNMmmUIzQWxIjExwKPlc6/Qi+bJY/mhHrUG2mTW4bBl9XL5brd0oB
+         Cm4W19NLsJD1vFdL/la4CMLinPDPRpY37+T5n1RtgRkxuMh391aWhf7qDptMZMqY2z33
+         3HyScfzCcV/BCxzNsX3qv2NWz5uwX60NCdBxTBzmbD/XteVO3XgAp4T9TNl2T4VauxP3
+         jnuw==
+X-Gm-Message-State: AFqh2kq1Z/gWyF7eQghkSvN0bSsh/sNe/0zGkrDklxcUxmRoIxBXjpdP
+        vRss/CU3h2uXGPssFqemZIOA3g80P6Y=
+X-Google-Smtp-Source: AMrXdXu6KyXChBO2hAgogSw1N/qRKhCpFiz5gsLp4sYI8qHA3eLkjrD+DPciPH4/UlkIvhbxBSOR9w==
+X-Received: by 2002:a5d:4e01:0:b0:2bd:e531:8e58 with SMTP id p1-20020a5d4e01000000b002bde5318e58mr6039404wrt.24.1674044330613;
         Wed, 18 Jan 2023 04:18:50 -0800 (PST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NxlCl4zd6z8RV7D;
-        Wed, 18 Jan 2023 20:18:27 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NxlC943kjz501Rr;
-        Wed, 18 Jan 2023 20:17:57 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl1.zte.com.cn with SMTP id 30ICHpaE003447;
-        Wed, 18 Jan 2023 20:17:51 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp04[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Wed, 18 Jan 2023 20:17:54 +0800 (CST)
-Date:   Wed, 18 Jan 2023 20:17:54 +0800 (CST)
-X-Zmail-TransId: 2b0663c7e372ffffffff8bf081dc
-X-Mailer: Zmail v1.0
-Message-ID: <202301182017545851044@zte.com.cn>
-In-Reply-To: <Y8Wq3apsJh7keUVA@casper.infradead.org>
-References: 202301131736452546903@zte.com.cn,Y8Wq3apsJh7keUVA@casper.infradead.org
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <willy@infradead.org>
-Cc:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <bagasdotme@gmail.com>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <iamjoonsoo.kim@lge.com>, <ran.xiaokai@zte.com.cn>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCBsaW51eC1uZXh0IHYzXSBzd2FwX3N0YXRlOiB1cGRhdGUgc2hhZG93X25vZGVzIGZvciBhbm9ueW1vdXMgcGFnZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30ICHpaE003447
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63C7E393.000 by FangMail milter!
-X-FangMail-Envelope: 1674044307/4NxlCl4zd6z8RV7D/63C7E393.000/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7E393.000/4NxlCl4zd6z8RV7D
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b002be099f78c0sm6935204wri.69.2023.01.18.04.18.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 04:18:50 -0800 (PST)
+Date:   Wed, 18 Jan 2023 12:18:48 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 000/477] 4.19.270-rc2 review
+Message-ID: <Y8fjqFh/pRBpNOz7@debian>
+References: <20230117124624.496082438@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117124624.496082438@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> i_lock is at offset 128 of struct inode, so that matches the dump.
-> I believe that swapper_spaces never have ->host set, so I don't
-> believe you've tested this patch since 51b8c1fe250d went in
-> back in 2021.
+Hi Greg,
 
-You are totally right. I reproduce the panic in linux-next, and fix
-it by patch v4. I should be more careful, since I used Linux 5.14
-to test the patch which is a mistake.
+On Tue, Jan 17, 2023 at 01:47:51PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.270 release.
+> There are 477 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
+> Anything received after that time might be too late.
 
-Much apologies for the time wasted.
+Build test (gcc version 11.3.1 20230113):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Thanks.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2673
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
