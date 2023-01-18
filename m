@@ -2,259 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5604E672142
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9CF672148
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjARP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S230148AbjARP3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjARP1Z (ORCPT
+        with ESMTP id S231411AbjARP2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:27:25 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C37C212F;
-        Wed, 18 Jan 2023 07:27:22 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id B06F020E09F3; Wed, 18 Jan 2023 07:27:21 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B06F020E09F3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1674055641;
-        bh=nyM2Q/9B+FBlb3H/YYpaI5gb/MfRcINPjbbYDRtXRvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B4qKpnRqJ7WP304w/B16ae2Q649R06mFxTS7U97Kex+JcUGcCcovw8E04oBMJ3hyA
-         wYOYr4TT92Y/UV6eOljcJ1Gg2ah8qaVp3BvZRT+4wLybZD4TxUG8uTXl8mO846sa8H
-         NdAMJP3V0PzHbjg/PQZCf9vZONzArtpPyWj2EmZQ=
-Date:   Wed, 18 Jan 2023 07:27:21 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v7 44/64] KVM: SVM: Remove the long-lived GHCB host
- map
-Message-ID: <20230118152721.GA24742@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-45-michael.roth@amd.com>
+        Wed, 18 Jan 2023 10:28:50 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5D54AA68
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:28:19 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id p24so37206439plw.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1OpOAaZLDBZwIcKhB8f5D7QZijHxGB6vA+uOjDRAnP4=;
+        b=xsf6XlV16XgE3UECaYTxXM9NSNBUUd1c26+00o83eltx/b3NLDtDuWSkWKEdNjC8LO
+         9Vz102fr3QWaUf0xwi+L+lmP/cFV+v5lF5WV3enOjTulMMsAPvUNOFnyrBp/BQ0xFI04
+         RkLxiVh+WV81KjO55Fhc1o3e7U0XKK7z18Fvdm2iIQ1HziR4kumcZcpczsU2CeicBiRj
+         VwnCGVvjDhcpW+DGxzh5izoKH0J69gAc7gOZIKK8MtVMq0Tj9cKcBUQrQNZ3XtZ0xE48
+         jkqKdLQB2r2D/LbWa11zjPojTjeRH3hE9/tyIjLdihAFyNdtFHnT0yjc3XS5AIvs+G6y
+         Oxkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OpOAaZLDBZwIcKhB8f5D7QZijHxGB6vA+uOjDRAnP4=;
+        b=wIIOknfiMQnly0rHfsNU6vQ0hTYtASP+lukolltgBgcLZ2mdCVA4wXcisMrQdhTlFW
+         gXdCdEWlXCV5d38WL6cxo1b856c4cg8EhupDA28Nvuu0xqy1rguOKRwJXokXThqfBSv9
+         HDLE+nzLPl7M6LeuH3WssgBscXweXJfH/BFjp3K5HwlIyGxpvGUCKZAx5bbMemxDbiJo
+         AoVvrLX7/5NKaH6aANI/86lN7k1Z46BnBcs6r5/1z2F9OYjdZmrBFnpY/U1yPBpp3ZXR
+         bU7G4WuDpwIa+gh3qhduLusg35sI/GeNM+D09NXqG1htBbz6Zfycsrw5fatk0SVT+tEK
+         BUbw==
+X-Gm-Message-State: AFqh2kpo8ZsMAGzGZcwltNS7ueM2c/tluCVr/KdlMW1ADOhg8RzuT6es
+        ozOrBO8xL/UMs74o3JoswHH1
+X-Google-Smtp-Source: AMrXdXue7Xsdr13GXyu90w85O2Fntx4faZksW69pVo7NLm0JWQLw2IALCxyJheaOCLZAMVv+OntIxA==
+X-Received: by 2002:a05:6a20:c189:b0:b8:6168:bc2e with SMTP id bg9-20020a056a20c18900b000b86168bc2emr8459540pzb.52.1674055698482;
+        Wed, 18 Jan 2023 07:28:18 -0800 (PST)
+Received: from thinkpad ([27.111.75.61])
+        by smtp.gmail.com with ESMTPSA id 35-20020a631563000000b0044ed37dbca8sm19032149pgv.2.2023.01.18.07.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:28:17 -0800 (PST)
+Date:   Wed, 18 Jan 2023 20:58:09 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@somainline.org,
+        amit.pundir@linaro.org, regressions@leemhuis.info,
+        sumit.semwal@linaro.org, will@kernel.org, catalin.marinas@arm.com,
+        robin.murphy@arm.com
+Subject: Re: [PATCH V4 06/11] remoteproc: qcom_q6v5_mss: Use a carveout to
+ authenticate modem headers
+Message-ID: <20230118152809.GC4690@thinkpad>
+References: <20230117085840.32356-1-quic_sibis@quicinc.com>
+ <20230117085840.32356-7-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221214194056.161492-45-michael.roth@amd.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117085840.32356-7-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:40:36PM -0600, Michael Roth wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
+On Tue, Jan 17, 2023 at 02:28:35PM +0530, Sibi Sankar wrote:
+> Any access to the dynamically allocated metadata region by the application
+> processor after assigning it to the remote Q6 will result in a XPU
+> violation. Fix this by replacing the dynamically allocated memory region
+> with a no-map carveout and unmap the modem metadata memory region before
+> passing control to the remote Q6.
 > 
-> On VMGEXIT, sev_handle_vmgexit() creates a host mapping for the GHCB GPA,
-> and unmaps it just before VM-entry. This long-lived GHCB map is used by
-> the VMGEXIT handler through accessors such as ghcb_{set_get}_xxx().
-> 
-> A long-lived GHCB map can cause issue when SEV-SNP is enabled. When
-> SEV-SNP is enabled the mapped GPA needs to be protected against a page
-> state change.
-> 
-> To eliminate the long-lived GHCB mapping, update the GHCB sync operations
-> to explicitly map the GHCB before access and unmap it after access is
-> complete. This requires that the setting of the GHCBs sw_exit_info_{1,2}
-> fields be done during sev_es_sync_to_ghcb(), so create two new fields in
-> the vcpu_svm struct to hold these values when required to be set outside
-> of the GHCB mapping.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> [mdr: defer per_cpu() assignment and order it with barrier() to fix case
->       where kvm_vcpu_map() causes reschedule on different CPU]
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Reported-and-tested-by: Amit Pundir <amit.pundir@linaro.org>
+> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
 > ---
->  arch/x86/kvm/svm/sev.c | 131 ++++++++++++++++++++++++++---------------
->  arch/x86/kvm/svm/svm.c |  18 +++---
->  arch/x86/kvm/svm/svm.h |  24 +++++++-
->  3 files changed, 116 insertions(+), 57 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index d5c6e48055fb..6ac0cb6e3484 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2921,15 +2921,40 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
->  	kvfree(svm->sev_es.ghcb_sa);
->  }
+> v4:
+>  * Use size/alloc-ranges instead of a specific address [Bjorn]
+>  * Include size checks
+> 
+> v3:
+>  * Drop revert no_kernel_mapping since it's already on the list [Mani]
+>  * kfree metadata from the branch for parity
+> 
+>  drivers/remoteproc/qcom_q6v5_mss.c | 59 +++++++++++++++++++++++++++---
+>  1 file changed, 53 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index e2f765f87ec9..292e22f58df3 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+> @@ -215,6 +216,9 @@ struct q6v5 {
+>  	size_t mba_size;
+>  	size_t dp_size;
 >  
-> +static inline int svm_map_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
-> +{
-> +	struct vmcb_control_area *control = &svm->vmcb->control;
-> +	u64 gfn = gpa_to_gfn(control->ghcb_gpa);
+> +	phys_addr_t mdata_phys;
+> +	size_t mdata_size;
 > +
-> +	if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
-> +		/* Unable to map GHCB from guest */
-> +		pr_err("error mapping GHCB GFN [%#llx] from guest\n", gfn);
-> +		return -EFAULT;
+>  	phys_addr_t mpss_phys;
+>  	phys_addr_t mpss_reloc;
+>  	size_t mpss_size;
+> @@ -973,15 +977,35 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  	if (IS_ERR(metadata))
+>  		return PTR_ERR(metadata);
+>  
+> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> -	if (!ptr) {
+> -		kfree(metadata);
+> -		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> -		return -ENOMEM;
+> +	if (qproc->mdata_phys) {
+> +		if (size > qproc->mdata_size) {
+> +			ret = -EINVAL;
+> +			dev_err(qproc->dev, "metadata size outside memory range\n");
+> +			goto free_metadata;
+> +		}
+> +
+> +		phys = qproc->mdata_phys;
+> +		ptr = memremap(qproc->mdata_phys, size, MEMREMAP_WC);
+> +		if (!ptr) {
+> +			ret = -EBUSY;
+> +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
+> +				&qproc->mdata_phys, size);
+> +			goto free_metadata;
+> +		}
+> +	} else {
+> +		ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> +		if (!ptr) {
+> +			ret = -ENOMEM;
+> +			dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> +			goto free_metadata;
+> +		}
+>  	}
+>  
+>  	memcpy(ptr, metadata, size);
+>  
+> +	if (qproc->mdata_phys)
+> +		memunmap(ptr);
+> +
+>  	/* Hypervisor mapping to access metadata by modem */
+>  	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+>  	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, true,
+> @@ -1010,7 +1034,9 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  			 "mdt buffer not reclaimed system may become unstable\n");
+>  
+>  free_dma_attrs:
+> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+> +	if (!qproc->mdata_phys)
+> +		dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+> +free_metadata:
+>  	kfree(metadata);
+>  
+>  	return ret < 0 ? ret : 0;
+> @@ -1847,6 +1873,7 @@ static int q6v5_init_reset(struct q6v5 *qproc)
+>  static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+>  {
+>  	struct device_node *child;
+> +	struct reserved_mem *rmem;
+>  	struct device_node *node;
+>  	struct resource r;
+>  	int ret;
+> @@ -1893,6 +1920,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+>  	qproc->mpss_phys = qproc->mpss_reloc = r.start;
+>  	qproc->mpss_size = resource_size(&r);
+>  
+> +	if (!child) {
+> +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
+> +	} else {
+> +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
+> +		node = of_parse_phandle(child, "memory-region", 0);
+> +		of_node_put(child);
 > +	}
 > +
-> +	return 0;
-> +}
+> +	if (!node)
+> +		return 0;
 > +
-> +static inline void svm_unmap_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
-> +{
-> +	kvm_vcpu_unmap(&svm->vcpu, map, true);
-> +}
+> +	rmem = of_reserved_mem_lookup(node);
+> +	if (!rmem) {
+> +		dev_err(qproc->dev, "unable to resolve metadata region\n");
+> +		return -EINVAL;
+> +	}
 > +
->  static void dump_ghcb(struct vcpu_svm *svm)
->  {
-> -	struct ghcb *ghcb = svm->sev_es.ghcb;
-> +	struct kvm_host_map map;
->  	unsigned int nbits;
-> +	struct ghcb *ghcb;
+> +	qproc->mdata_phys = rmem->base;
+> +	qproc->mdata_size = rmem->size;
 > +
-> +	if (svm_map_ghcb(svm, &map))
-> +		return;
-> +
-> +	ghcb = map.hva;
-
-dump_ghcb() is called from sev_es_validate_vmgexit() with the ghcb already
-mapped. How about passing 'struct kvm_host_map *' (or struct ghcb *) as a
-param to avoid double mapping?
-
->  
->  	/* Re-use the dump_invalid_vmcb module parameter */
->  	if (!dump_invalid_vmcb) {
->  		pr_warn_ratelimited("set kvm_amd.dump_invalid_vmcb=1 to dump internal KVM state.\n");
-> -		return;
-> +		goto e_unmap;
->  	}
->  
->  	nbits = sizeof(ghcb->save.valid_bitmap) * 8;
-> @@ -2944,12 +2969,21 @@ static void dump_ghcb(struct vcpu_svm *svm)
->  	pr_err("%-20s%016llx is_valid: %u\n", "sw_scratch",
->  	       ghcb->save.sw_scratch, ghcb_sw_scratch_is_valid(ghcb));
->  	pr_err("%-20s%*pb\n", "valid_bitmap", nbits, ghcb->save.valid_bitmap);
-> +
-> +e_unmap:
-> +	svm_unmap_ghcb(svm, &map);
->  }
->  
-> -static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
-> +static bool sev_es_sync_to_ghcb(struct vcpu_svm *svm)
->  {
->  	struct kvm_vcpu *vcpu = &svm->vcpu;
-> -	struct ghcb *ghcb = svm->sev_es.ghcb;
-> +	struct kvm_host_map map;
-> +	struct ghcb *ghcb;
-> +
-> +	if (svm_map_ghcb(svm, &map))
-> +		return false;
-> +
-> +	ghcb = map.hva;
->  
->  	/*
->  	 * The GHCB protocol so far allows for the following data
-> @@ -2963,13 +2997,24 @@ static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
->  	ghcb_set_rbx(ghcb, vcpu->arch.regs[VCPU_REGS_RBX]);
->  	ghcb_set_rcx(ghcb, vcpu->arch.regs[VCPU_REGS_RCX]);
->  	ghcb_set_rdx(ghcb, vcpu->arch.regs[VCPU_REGS_RDX]);
-> +
-> +	/*
-> +	 * Copy the return values from the exit_info_{1,2}.
-> +	 */
-> +	ghcb_set_sw_exit_info_1(ghcb, svm->sev_es.ghcb_sw_exit_info_1);
-> +	ghcb_set_sw_exit_info_2(ghcb, svm->sev_es.ghcb_sw_exit_info_2);
-> +
-> +	trace_kvm_vmgexit_exit(svm->vcpu.vcpu_id, ghcb);
-> +
-> +	svm_unmap_ghcb(svm, &map);
-> +
-> +	return true;
->  }
->  
-> -static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
-> +static void sev_es_sync_from_ghcb(struct vcpu_svm *svm, struct ghcb *ghcb)
->  {
->  	struct vmcb_control_area *control = &svm->vmcb->control;
->  	struct kvm_vcpu *vcpu = &svm->vcpu;
-> -	struct ghcb *ghcb = svm->sev_es.ghcb;
->  	u64 exit_code;
->  
->  	/*
-> @@ -3013,20 +3058,25 @@ static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
->  	memset(ghcb->save.valid_bitmap, 0, sizeof(ghcb->save.valid_bitmap));
->  }
->  
-> -static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
-> +static int sev_es_validate_vmgexit(struct vcpu_svm *svm, u64 *exit_code)
->  {
-> -	struct kvm_vcpu *vcpu;
-> +	struct kvm_vcpu *vcpu = &svm->vcpu;
-> +	struct kvm_host_map map;
->  	struct ghcb *ghcb;
-> -	u64 exit_code;
->  	u64 reason;
->  
-> -	ghcb = svm->sev_es.ghcb;
-> +	if (svm_map_ghcb(svm, &map))
-> +		return -EFAULT;
-> +
-> +	ghcb = map.hva;
-> +
-> +	trace_kvm_vmgexit_enter(vcpu->vcpu_id, ghcb);
->  
->  	/*
->  	 * Retrieve the exit code now even though it may not be marked valid
->  	 * as it could help with debugging.
->  	 */
-> -	exit_code = ghcb_get_sw_exit_code(ghcb);
-> +	*exit_code = ghcb_get_sw_exit_code(ghcb);
->  
->  	/* Only GHCB Usage code 0 is supported */
->  	if (ghcb->ghcb_usage) {
-> @@ -3119,6 +3169,9 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
->  		goto vmgexit_err;
->  	}
->  
-> +	sev_es_sync_from_ghcb(svm, ghcb);
-> +
-> +	svm_unmap_ghcb(svm, &map);
 >  	return 0;
->  
->  vmgexit_err:
-> @@ -3129,10 +3182,10 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
->  			    ghcb->ghcb_usage);
->  	} else if (reason == GHCB_ERR_INVALID_EVENT) {
->  		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx is not valid\n",
-> -			    exit_code);
-> +			    *exit_code);
->  	} else {
->  		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx input is not valid\n",
-> -			    exit_code);
-> +			    *exit_code);
->  		dump_ghcb(svm);
->  	}
->  
-> @@ -3142,6 +3195,8 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
->  	ghcb_set_sw_exit_info_1(ghcb, 2);
->  	ghcb_set_sw_exit_info_2(ghcb, reason);
->  
-> +	svm_unmap_ghcb(svm, &map);
-> +
->  	/* Resume the guest to "return" the error code. */
->  	return 1;
 >  }
+>  
+> -- 
+> 2.17.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
