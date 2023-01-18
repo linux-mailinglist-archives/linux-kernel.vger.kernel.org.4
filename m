@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60854672798
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9E26727A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjARS7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S229796AbjARTAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjARS7b (ORCPT
+        with ESMTP id S229591AbjARS7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:59:31 -0500
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513F95957F;
-        Wed, 18 Jan 2023 10:59:31 -0800 (PST)
-Received: by mail-ot1-f53.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so10494270otf.8;
-        Wed, 18 Jan 2023 10:59:31 -0800 (PST)
+        Wed, 18 Jan 2023 13:59:38 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E695957F;
+        Wed, 18 Jan 2023 10:59:35 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1433ef3b61fso36502820fac.10;
+        Wed, 18 Jan 2023 10:59:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nHSFrwryn6fPv+cT/r2Gmm/cJBn2LuFhBNelG0ms7lQ=;
-        b=NNt2gJH3Zkq/yG9POMCrTPI4cWsMN5QYPkRGATB+vpA58avl4mKA/kYp4QnKvCqN4S
-         WWIInwJN1Q7njYiU+DxRWdHH2tyF6YTXYwm1QXocCh0M3myRSi95/prViMvVTnIdl+nF
-         MA01DXZX8vTdEivQbHSz0+TXHj+UEi/vnDyNTigSUF1CJtQAAbPlT7ZcFD4x52Dk1MS1
-         F3SWBOtKGjmW8fCOqsrfXyvkzNLl2QNED4Ze/L6gte6LaXGIJ0LrlqhM9Rfq5pRu4SXx
-         rFHT78vkMEsQG2m9gBsvzikZTztzNgTqeDb3PJwumxDJtm3wOK43OLdcjbn94qXX1Uy7
-         iaig==
-X-Gm-Message-State: AFqh2kpEpB+COxVgPqPtRxJ/W59YNMfPEHgBAtzs60OuMBltllh/AA4m
-        oE2pbOupMvPoZ9FBzCH14GCRvczxFQ==
-X-Google-Smtp-Source: AMrXdXsXsibVi/mXBx5wpLNup3wGFrSwbUKQ5EbaZJM3qDLNOiUndqkGVOrWW3O789IRP6ncH5I1sA==
-X-Received: by 2002:a05:6830:26c5:b0:686:41a1:4c16 with SMTP id m5-20020a05683026c500b0068641a14c16mr5435393otu.24.1674068370410;
-        Wed, 18 Jan 2023 10:59:30 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2FJcOTfsjwpdIljEO429tvKoOeEBhTBITWRzGMiqJAg=;
+        b=wKaEcRs98rs+WQXuCK99GUfiMsLuVyKh0EEDMxIujNqyL4iI+i4GukXjtuT2oIt9w2
+         o67P1uPjuetKONTvGvGclgiBxi0G6bRryA83n05sUnWHHbWdLc6TC6Ab4H7Tu0STT4/3
+         rUY49cDvNoiENlfUUFuwBsyEzcRBY8wmy4XG/HF6MTnhUex5ZY+P1mtOyPTStkK12BuD
+         SDokdJ2mDi3Fn8kP3DOK3b4lc9q+utUJEkcep1Hyhoh/fKyuTWr7U6S1o7R7Mc3s4Eys
+         nSutX7T3g41mDWP5E09n9LQluEugq9jnLEE/UhHIN6cJUIjIG32lA2mUM6KmW6grYdv3
+         wB+Q==
+X-Gm-Message-State: AFqh2ko02dH7qatKdaLk7yE9aJ0en1qVBosR5jy8msBUTMcNOsK5Th9D
+        GN+hqs4SX8ULtF2oNY3XRA==
+X-Google-Smtp-Source: AMrXdXscaED9/2tSNc/EWmCUoL6KUA5ro4vcmZupKkFZp8aHQrNSo7DtQPDnUsLGeCcrB99X4bhVlw==
+X-Received: by 2002:a05:6870:b6a5:b0:14c:68df:833e with SMTP id cy37-20020a056870b6a500b0014c68df833emr5764905oab.15.1674068374366;
+        Wed, 18 Jan 2023 10:59:34 -0800 (PST)
 Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id o15-20020a9d764f000000b0066b9a6bf3bcsm18688925otl.12.2023.01.18.10.59.29
+        by smtp.gmail.com with ESMTPSA id y34-20020a05687045a200b00143ae7d4ccesm5057713oao.45.2023.01.18.10.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 10:59:29 -0800 (PST)
-Received: (nullmailer pid 629743 invoked by uid 1000);
+        Wed, 18 Jan 2023 10:59:33 -0800 (PST)
+Received: (nullmailer pid 629746 invoked by uid 1000);
         Wed, 18 Jan 2023 18:59:29 -0000
 From:   Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 0/5] dt-bindings: usb: Convert some more simple
- OHCI/EHCI bindings
 Date:   Wed, 18 Jan 2023 12:59:23 -0600
-Message-Id: <20230110-dt-usb-v2-0-926bc1260e51@kernel.org>
+Subject: [PATCH v2 1/5] dt-bindings: usb: Remove obsolete
+ brcm,bcm3384-usb.txt
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAItByGMC/2WNywqDMBBFf0Vm3Sl5YJSu+h/iItGpCZVYJiotk
- n9v6rbLc7ice0AiDpTgVh3AtIcUllhAXSoYvI0TYRgLgxJKCykFjituyaEcjG6aWtlWOyhjZxO
- hYxsHX+Zxm+ciX0yP8D7rXV/Yh7Qu/DnPdvmzf91dosCWtDGklamlvj+JI83XhSfoc85f7/lOX
- bIAAAA=
+Message-Id: <20230110-dt-usb-v2-1-926bc1260e51@kernel.org>
+References: <20230110-dt-usb-v2-0-926bc1260e51@kernel.org>
+In-Reply-To: <20230110-dt-usb-v2-0-926bc1260e51@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -79,44 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'ohci-usb' compatible is another 'generic' compatible for OHCI, but 
-isn't documented with a schema. Let's add it to generic-ohci.yaml 
-schema. While looking at this, I found a few other USB host bindings 
-which are simple enough to use the 'generic' schemas.
+The "brcm,bcm3384-ohci" and "brcm,bcm3384-ehci" compatibles are already
+documented in generic-ohci.yaml and generic-ehci.yaml, respectively, so
+remove the old txt binding.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-Changes in v2:
-- Fix schema error for 'transceiver'
-- Split OMAP changes to separate patch and convert omap-ehci
-- Link to v1: https://lore.kernel.org/r/20230110-dt-usb-v1-0-8e366e326513@kernel.org
+ Documentation/devicetree/bindings/usb/brcm,bcm3384-usb.txt | 11 -----------
+ 1 file changed, 11 deletions(-)
 
----
-Rob Herring (5):
-      dt-bindings: usb: Remove obsolete brcm,bcm3384-usb.txt
-      dt-bindings: usb: Convert multiple "usb-ohci" bindings to DT schema
-      dt-bindings: usb: Convert OMAP OHCI/EHCI bindings to schema
-      dt-bindings: usb: Convert Marvell Orion EHCI to DT schema
-      dt-bindings: usb: Convert Nuvoton EHCI to DT schema
+diff --git a/Documentation/devicetree/bindings/usb/brcm,bcm3384-usb.txt b/Documentation/devicetree/bindings/usb/brcm,bcm3384-usb.txt
+deleted file mode 100644
+index 452c45c7bf29..000000000000
+--- a/Documentation/devicetree/bindings/usb/brcm,bcm3384-usb.txt
++++ /dev/null
+@@ -1,11 +0,0 @@
+-* Broadcom USB controllers
+-
+-Required properties:
+-- compatible: "brcm,bcm3384-ohci", "brcm,bcm3384-ehci"
+-
+-  These currently use the generic-ohci and generic-ehci drivers.  On some
+-  systems, special handling may be needed in the following cases:
+-
+-  - Restoring state after systemwide power save modes
+-  - Sharing PHYs with the USBD (UDC) hardware
+-  - Figuring out which controllers are disabled on ASIC bondout variants
 
- .../devicetree/bindings/mfd/omap-usb-host.txt      |  8 ++---
- .../devicetree/bindings/powerpc/nintendo/wii.txt   | 10 -------
- .../devicetree/bindings/usb/brcm,bcm3384-usb.txt   | 11 -------
- .../devicetree/bindings/usb/ehci-omap.txt          | 31 -------------------
- .../devicetree/bindings/usb/ehci-orion.txt         | 22 --------------
- .../devicetree/bindings/usb/generic-ehci.yaml      |  5 ++++
- .../devicetree/bindings/usb/generic-ohci.yaml      | 32 +++++++++++++++++---
- .../devicetree/bindings/usb/npcm7xx-usb.txt        | 20 -------------
- Documentation/devicetree/bindings/usb/ohci-nxp.txt | 24 ---------------
- .../devicetree/bindings/usb/ohci-omap3.txt         | 15 ----------
- Documentation/devicetree/bindings/usb/pxa-usb.txt  |  2 +-
- .../devicetree/bindings/usb/spear-usb.txt          | 35 ----------------------
- 12 files changed, 38 insertions(+), 177 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230110-dt-usb-1c637752a83b
-
-Best regards,
 -- 
-Rob Herring <robh@kernel.org>
+2.39.0
 
