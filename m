@@ -2,191 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9433672141
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5604E672142
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjARP2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S231655AbjARP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjARP1V (ORCPT
+        with ESMTP id S229994AbjARP1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:27:21 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C9040BF3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:27:19 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id w24-20020a5d8458000000b00704bf40efecso4598477ior.21
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:27:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSHU3L3O8m2f5qhh1xzMaWO9cyJv2viK8s/JnzrdiaM=;
-        b=UXmQCP4aSihwyP+aStukoDGLeAIE2XvQKcydw8VM2m22dF1oj02Ih2me2EaPmJpOPy
-         F0EKY+Bob9Z6+1zm9Ot5mE+KhyKbsNIRh2LGeePBdU6SJX1Swv24nX9JL+39HM5puuTN
-         hG2qmU4rTeIl7duBSJktVZzYm7qnbK3a6c5vb+yCgmxhP3yNoyNuMjPDSI1fIepsTAte
-         CY/q8NLa/N7Z7i5G5lI0BAti7ZuLbjAfI/IznYbfZDdX4Hy/M7mxY2zqMb5j32z5EqYT
-         C3uzPAqHmx8ahlVVk+bRPMNa++0w3M3tS4i3AD4HtTQNK9f5HF0vWcZA4+PEaCfPyELE
-         m7fw==
-X-Gm-Message-State: AFqh2kpLpk0TYZ0wq6Jvth5euQ0CgcsxPwtZl6JV0xfuHQ+p++GT5zg5
-        8BxLFb5vg8YdeWRRvRQVydQBwFYSy57BL3qcl1x+xcvdZhnf
-X-Google-Smtp-Source: AMrXdXvOVrXYt8iuPJjiRCmJe/PTCHPgF3F0lFyh1ydL+i4txdOI7v+eCHxocamLsHxgLPnRmpTNWMGXVTCamp+oQRBIoQqiucvg
+        Wed, 18 Jan 2023 10:27:25 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C37C212F;
+        Wed, 18 Jan 2023 07:27:22 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id B06F020E09F3; Wed, 18 Jan 2023 07:27:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B06F020E09F3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1674055641;
+        bh=nyM2Q/9B+FBlb3H/YYpaI5gb/MfRcINPjbbYDRtXRvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B4qKpnRqJ7WP304w/B16ae2Q649R06mFxTS7U97Kex+JcUGcCcovw8E04oBMJ3hyA
+         wYOYr4TT92Y/UV6eOljcJ1Gg2ah8qaVp3BvZRT+4wLybZD4TxUG8uTXl8mO846sa8H
+         NdAMJP3V0PzHbjg/PQZCf9vZONzArtpPyWj2EmZQ=
+Date:   Wed, 18 Jan 2023 07:27:21 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v7 44/64] KVM: SVM: Remove the long-lived GHCB host
+ map
+Message-ID: <20230118152721.GA24742@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-45-michael.roth@amd.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:d41:b0:30d:87b7:cfd3 with SMTP id
- h1-20020a056e020d4100b0030d87b7cfd3mr913719ilj.196.1674055638407; Wed, 18 Jan
- 2023 07:27:18 -0800 (PST)
-Date:   Wed, 18 Jan 2023 07:27:18 -0800
-In-Reply-To: <20230118150448.3071-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a9632e05f28b7373@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
-From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214194056.161492-45-michael.roth@amd.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 14, 2022 at 01:40:36PM -0600, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> On VMGEXIT, sev_handle_vmgexit() creates a host mapping for the GHCB GPA,
+> and unmaps it just before VM-entry. This long-lived GHCB map is used by
+> the VMGEXIT handler through accessors such as ghcb_{set_get}_xxx().
+> 
+> A long-lived GHCB map can cause issue when SEV-SNP is enabled. When
+> SEV-SNP is enabled the mapped GPA needs to be protected against a page
+> state change.
+> 
+> To eliminate the long-lived GHCB mapping, update the GHCB sync operations
+> to explicitly map the GHCB before access and unmap it after access is
+> complete. This requires that the setting of the GHCBs sw_exit_info_{1,2}
+> fields be done during sev_es_sync_to_ghcb(), so create two new fields in
+> the vcpu_svm struct to hold these values when required to be set outside
+> of the GHCB mapping.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> [mdr: defer per_cpu() assignment and order it with barrier() to fix case
+>       where kvm_vcpu_map() causes reschedule on different CPU]
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 131 ++++++++++++++++++++++++++---------------
+>  arch/x86/kvm/svm/svm.c |  18 +++---
+>  arch/x86/kvm/svm/svm.h |  24 +++++++-
+>  3 files changed, 116 insertions(+), 57 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index d5c6e48055fb..6ac0cb6e3484 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2921,15 +2921,40 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+>  	kvfree(svm->sev_es.ghcb_sa);
+>  }
+>  
+> +static inline int svm_map_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
+> +{
+> +	struct vmcb_control_area *control = &svm->vmcb->control;
+> +	u64 gfn = gpa_to_gfn(control->ghcb_gpa);
+> +
+> +	if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
+> +		/* Unable to map GHCB from guest */
+> +		pr_err("error mapping GHCB GFN [%#llx] from guest\n", gfn);
+> +		return -EFAULT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline void svm_unmap_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
+> +{
+> +	kvm_vcpu_unmap(&svm->vcpu, map, true);
+> +}
+> +
+>  static void dump_ghcb(struct vcpu_svm *svm)
+>  {
+> -	struct ghcb *ghcb = svm->sev_es.ghcb;
+> +	struct kvm_host_map map;
+>  	unsigned int nbits;
+> +	struct ghcb *ghcb;
+> +
+> +	if (svm_map_ghcb(svm, &map))
+> +		return;
+> +
+> +	ghcb = map.hva;
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Read in io_req_caches_free
+dump_ghcb() is called from sev_es_validate_vmgexit() with the ghcb already
+mapped. How about passing 'struct kvm_host_map *' (or struct ghcb *) as a
+param to avoid double mapping?
 
-==================================================================
-BUG: KASAN: use-after-free in wq_stack_extract io_uring/slist.h:126 [inline]
-BUG: KASAN: use-after-free in io_alloc_req io_uring/io_uring.h:356 [inline]
-BUG: KASAN: use-after-free in io_req_caches_free+0x1a8/0x201 io_uring/io_uring.c:2745
-Read of size 8 at addr ffff8880711c7938 by task kworker/u4:5/1184
-
-CPU: 1 PID: 1184 Comm: kworker/u4:5 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: events_unbound io_ring_exit_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- wq_stack_extract io_uring/slist.h:126 [inline]
- io_alloc_req io_uring/io_uring.h:356 [inline]
- io_req_caches_free+0x1a8/0x201 io_uring/io_uring.c:2745
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2977
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 5597:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 1184:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1c4/0x201 io_uring/io_uring.c:2747
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2977
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-The buggy address belongs to the object at ffff8880711c78c0
- which belongs to the cache io_kiocb of size 224
-The buggy address is located 120 bytes inside of
- 224-byte region [ffff8880711c78c0, ffff8880711c79a0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001c471c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x711c7
-memcg:ffff88802b0a9f01
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff88801c3f03c0 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88802b0a9f01
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5597, tgid 5596 (syz-executor.0), ts 92319099413, free_ts 80415300921
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
- __folio_put_small mm/swap.c:106 [inline]
- __folio_put+0xc5/0x140 mm/swap.c:129
- folio_put include/linux/mm.h:1203 [inline]
- put_page include/linux/mm.h:1272 [inline]
- anon_pipe_buf_release+0x3fb/0x4c0 fs/pipe.c:138
- pipe_buf_release include/linux/pipe_fs_i.h:183 [inline]
- pipe_read+0x614/0x1110 fs/pipe.c:324
- call_read_iter include/linux/fs.h:1846 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x7fa/0x930 fs/read_write.c:470
- ksys_read+0x1ec/0x250 fs/read_write.c:613
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff8880711c7800: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
- ffff8880711c7880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff8880711c7900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff8880711c7980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880711c7a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
-Tested on:
-
-commit:         0a093b28 Add linux-next specific files for 20230112
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11b06c96480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1056f519480000
-
+>  
+>  	/* Re-use the dump_invalid_vmcb module parameter */
+>  	if (!dump_invalid_vmcb) {
+>  		pr_warn_ratelimited("set kvm_amd.dump_invalid_vmcb=1 to dump internal KVM state.\n");
+> -		return;
+> +		goto e_unmap;
+>  	}
+>  
+>  	nbits = sizeof(ghcb->save.valid_bitmap) * 8;
+> @@ -2944,12 +2969,21 @@ static void dump_ghcb(struct vcpu_svm *svm)
+>  	pr_err("%-20s%016llx is_valid: %u\n", "sw_scratch",
+>  	       ghcb->save.sw_scratch, ghcb_sw_scratch_is_valid(ghcb));
+>  	pr_err("%-20s%*pb\n", "valid_bitmap", nbits, ghcb->save.valid_bitmap);
+> +
+> +e_unmap:
+> +	svm_unmap_ghcb(svm, &map);
+>  }
+>  
+> -static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
+> +static bool sev_es_sync_to_ghcb(struct vcpu_svm *svm)
+>  {
+>  	struct kvm_vcpu *vcpu = &svm->vcpu;
+> -	struct ghcb *ghcb = svm->sev_es.ghcb;
+> +	struct kvm_host_map map;
+> +	struct ghcb *ghcb;
+> +
+> +	if (svm_map_ghcb(svm, &map))
+> +		return false;
+> +
+> +	ghcb = map.hva;
+>  
+>  	/*
+>  	 * The GHCB protocol so far allows for the following data
+> @@ -2963,13 +2997,24 @@ static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
+>  	ghcb_set_rbx(ghcb, vcpu->arch.regs[VCPU_REGS_RBX]);
+>  	ghcb_set_rcx(ghcb, vcpu->arch.regs[VCPU_REGS_RCX]);
+>  	ghcb_set_rdx(ghcb, vcpu->arch.regs[VCPU_REGS_RDX]);
+> +
+> +	/*
+> +	 * Copy the return values from the exit_info_{1,2}.
+> +	 */
+> +	ghcb_set_sw_exit_info_1(ghcb, svm->sev_es.ghcb_sw_exit_info_1);
+> +	ghcb_set_sw_exit_info_2(ghcb, svm->sev_es.ghcb_sw_exit_info_2);
+> +
+> +	trace_kvm_vmgexit_exit(svm->vcpu.vcpu_id, ghcb);
+> +
+> +	svm_unmap_ghcb(svm, &map);
+> +
+> +	return true;
+>  }
+>  
+> -static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
+> +static void sev_es_sync_from_ghcb(struct vcpu_svm *svm, struct ghcb *ghcb)
+>  {
+>  	struct vmcb_control_area *control = &svm->vmcb->control;
+>  	struct kvm_vcpu *vcpu = &svm->vcpu;
+> -	struct ghcb *ghcb = svm->sev_es.ghcb;
+>  	u64 exit_code;
+>  
+>  	/*
+> @@ -3013,20 +3058,25 @@ static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
+>  	memset(ghcb->save.valid_bitmap, 0, sizeof(ghcb->save.valid_bitmap));
+>  }
+>  
+> -static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+> +static int sev_es_validate_vmgexit(struct vcpu_svm *svm, u64 *exit_code)
+>  {
+> -	struct kvm_vcpu *vcpu;
+> +	struct kvm_vcpu *vcpu = &svm->vcpu;
+> +	struct kvm_host_map map;
+>  	struct ghcb *ghcb;
+> -	u64 exit_code;
+>  	u64 reason;
+>  
+> -	ghcb = svm->sev_es.ghcb;
+> +	if (svm_map_ghcb(svm, &map))
+> +		return -EFAULT;
+> +
+> +	ghcb = map.hva;
+> +
+> +	trace_kvm_vmgexit_enter(vcpu->vcpu_id, ghcb);
+>  
+>  	/*
+>  	 * Retrieve the exit code now even though it may not be marked valid
+>  	 * as it could help with debugging.
+>  	 */
+> -	exit_code = ghcb_get_sw_exit_code(ghcb);
+> +	*exit_code = ghcb_get_sw_exit_code(ghcb);
+>  
+>  	/* Only GHCB Usage code 0 is supported */
+>  	if (ghcb->ghcb_usage) {
+> @@ -3119,6 +3169,9 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>  		goto vmgexit_err;
+>  	}
+>  
+> +	sev_es_sync_from_ghcb(svm, ghcb);
+> +
+> +	svm_unmap_ghcb(svm, &map);
+>  	return 0;
+>  
+>  vmgexit_err:
+> @@ -3129,10 +3182,10 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>  			    ghcb->ghcb_usage);
+>  	} else if (reason == GHCB_ERR_INVALID_EVENT) {
+>  		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx is not valid\n",
+> -			    exit_code);
+> +			    *exit_code);
+>  	} else {
+>  		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx input is not valid\n",
+> -			    exit_code);
+> +			    *exit_code);
+>  		dump_ghcb(svm);
+>  	}
+>  
+> @@ -3142,6 +3195,8 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>  	ghcb_set_sw_exit_info_1(ghcb, 2);
+>  	ghcb_set_sw_exit_info_2(ghcb, reason);
+>  
+> +	svm_unmap_ghcb(svm, &map);
+> +
+>  	/* Resume the guest to "return" the error code. */
+>  	return 1;
+>  }
