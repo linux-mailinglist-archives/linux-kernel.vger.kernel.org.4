@@ -2,225 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AFF671FAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F343B671FB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjAROej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S230478AbjAROfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjAROeI (ORCPT
+        with ESMTP id S231393AbjAROez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:34:08 -0500
-Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03284DBD8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1674051765;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=+sZbL7fRbpTAv6J497fVGDtB8o3ODgLCHg183tsTS64=;
-  b=ezbImeZOR0CfVxFbDQjF9BT4Jk5ZLo9U3KDS6HJHc76MqN5/VfjG3nX9
-   z1RVm2iAX1Adg5oFp2hyizVcv3t4Tcadk8ueZA99mXh+PRSN6G2XqKt3v
-   CEtHFPYfVQDWCCZxpvHeEoiXUOF93M001czgYKcijUhdF5dTuuQCzqzHI
-   A=;
-X-IronPort-RemoteIP: 104.47.70.108
-X-IronPort-MID: 93213683
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:nf2mxaDGZUJehRVW/6riw5YqxClBgxIJ4kV8jS/XYbTApDJ2hDNRz
- WMbDWjSbPeLajf0KtwiYY2y/U4HuMOEytBgQQY4rX1jcSlH+JHPbTi7wuUcHAvJd5GeExg3h
- yk6QoOdRCzhZiaE/n9BCpC48T8nk/nNHuCnYAL9EngZbRd+Tys8gg5Ulec8g4p56fC0GArIs
- t7pyyHlEAbNNwVcbyRFtMpvlDs15K6p4GpB7gRiDRx2lAS2e0c9Xcp3yZ6ZdxMUcqEMdsamS
- uDKyq2O/2+x13/B3fv8z94X2mVTKlLjFVDmZkh+AsBOsTAbzsAG6Y4pNeJ0VKtio27hc+ada
- jl6ncfYpQ8BZsUgkQmGOvVSO3kW0aZuoNcrLZUj2CA6IoKvn3bEmp1T4E8K0YIw691dUEQRy
- PYkMSkLNxbcpfya6paFc7w57igjBJGD0II3nFhFlGmcJ9B5BJfJTuPN+MNS2yo2ioZWB/HCa
- sEFaD1pKhPdfxlIPVRRA5U79AuqriCnL3sE9xTK/exuuzi7IA9ZidABNPL8fNCQSNoTtUGfv
- m/cpEzyAw0ANczZwj2Amp6prr6Ux3qgBtJJfFG+3uZRhwaMw2c9MhRMDFe2nOC0jkyTdfsKf
- iT4/QJr98De7neDQsb4QEeQoXiKpBcQVtNcVeog52mlyKXO5B2CLnMZVTMHY9sj3OctXiAj3
- FKNm9LvBBRsvaeTRHbb8a2bxRuiNC5QIWIcaCssSQoe/8KlsIw1lgjITNtoDOiylNKdMTXxx
- S2a6SsznbMeieYV2Kihu1PKmTShot7OVAFdzhnYWnKN6gJ/eZK/YIqp+R7X4J5oNI+ESnGRs
- X5CnNKRhN3iFrmInS2JBe8LQ7eg4q/dNCWG2AY/WZ486z6q5nivO5hK5y1zL1toNcBCfiL1Z
- EjUukVa45o70GaWUJKbqrmZU6wCpZUM3/y/PhwIRrKiuqRMSTI=
-IronPort-HdrOrdr: A9a23:OSrXA66vssb6filftwPXwMbXdLJyesId70hD6qkRc3Bom6mj/P
- xG88516faZslgssRMb+exoSZPgfZq0z/cci+Qs1NyZLWrbUQWTXeRfxLqn7zr8GzDvss5xvJ
- 0QF5SW0eeAb2RHsQ==
-X-IronPort-AV: E=Sophos;i="5.97,226,1669093200"; 
-   d="scan'208";a="93213683"
-Received: from mail-bn7nam10lp2108.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.108])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jan 2023 09:22:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dVJGqGghpa5RvgI7rnWIA0cOmdMyL1fpKXS8q9oToljuQ14FkiKfVzhfb/yCpaU3XwXBYO1BdlR5iRlFOAxtNXCZVARgrNfG1XdLoycLZiGKZWIhGVc6ola8/g+NOxw8Z4ZQqTS65f5TlzNQ/eEXQUbUPApumh80dDowDUmv1U14RwPKIqh06wkdhnxIE2HWqN+ooaj395rCmbsuXj2mjOdl40Oh0mFVEJ/OrNfajSNmuI0L24l5RB0A56VFkQ6HSk+P+6y/T93YAg3zjheSw9S0ey4HhFBG905AMQF3X8YXb4L4pHMpiYtqe7wZIYt1DdLNyR+kOeKm0Rrd0yXh9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+sZbL7fRbpTAv6J497fVGDtB8o3ODgLCHg183tsTS64=;
- b=P/uIzgkoFi3VfcV23OI3RJAw7JXW3IfYFHE8S72d0TCPiVAs50HaH8fV4n5v9z4+u4VCqDVE0kuaB20QqjPkzuJAnCrOLMjHcirSWwZIvKTyoJGGY2lgsJHsTJuTXGYqI32ArbwRNat5l6Z70fNVopd8gC5opoZ0g2XROxoPIECHD9twFml6miYhN6gSdVqtivy/0qODTjCUtTIiqjb1PkpavzRIh9dGJRklz16MC+X2nKrmNFHTxpdihW8WjTpn/7bFnVNzl6uRKc1W2JvtOrrkBLn3DX93rN66uBdO/Yru//kG4vyFT4sdZqDcvTRDIWcBUaPCVO0vouVHvTJNGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+sZbL7fRbpTAv6J497fVGDtB8o3ODgLCHg183tsTS64=;
- b=FnuNNuTFDH+coNOA229hs0M7n54HuvDOtqyaqAag3dQoDh4/eSWh2GNmRi0f6AyrXS11XaaWJrV3QSK+OAgXrR0orYiU5sHxYoCCJ9Q8dg6cRU+cJUkpmQ3FVRqt32qTMgDMi3bBO1LP/C/mBY5X3nbN5uwNbAhKXKA2rwT9JSI=
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by CH2PR03MB5336.namprd03.prod.outlook.com (2603:10b6:610:94::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
- 2023 14:22:42 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::c679:226f:52fa:4c19]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::c679:226f:52fa:4c19%6]) with mapi id 15.20.6002.024; Wed, 18 Jan 2023
- 14:22:41 +0000
-From:   Andrew Cooper <Andrew.Cooper3@citrix.com>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Durrant <paul@xen.org>
-Subject: Re: [PATCH] xen: Allow platform PCI interrupt to be shared
-Thread-Topic: [PATCH] xen: Allow platform PCI interrupt to be shared
-Thread-Index: AQHZKze3xTuOiK3Or0K7Zn5gBYHKJq6kMguAgAADsQCAAAR6gA==
-Date:   Wed, 18 Jan 2023 14:22:41 +0000
-Message-ID: <973f9ebd-173e-6753-7799-a660994e38de@citrix.com>
-References: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
- <e0b75988-bee6-e0c7-0dda-86e1e973ba74@citrix.com>
- <82e6a68f3cb8c0e440f7dc848fa3444725b3f893.camel@infradead.org>
-In-Reply-To: <82e6a68f3cb8c0e440f7dc848fa3444725b3f893.camel@infradead.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR03MB3623:EE_|CH2PR03MB5336:EE_
-x-ms-office365-filtering-correlation-id: f5a68534-ff2e-493d-4e36-08daf95f75b2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nTCryijanJ9I6oNGT3reIDNxPpMOMv4I/rCFXOaxAoZI56FH+crDLiPKhXVqK5K0mzWxGKZefUIb1efPC4WmNL+bshq90/GdHbcRLVkHbWCX3kNj2QHtn/FpYzBK35oNMeLO9K79DoZgRYvSlkEiHbjeMPCExU+TDc8FDl4lZG4QzxZFYxW1KMuPEPgKcWeiKdYSVFLyUaNYWDaDL0ma9oJW+rs9ReWXqWW/iVC5HRIjW+xeII9mwq/oSALtwfqpkJelSXHT8qvvMTdsK749shADfOBygfIA1Kzk+k+W7oVgsJHlTJ44w+plt6L6WSZI+Nf8FHtGnXHAoHlldnymIBVQ8ar6hoTe3ykc00BSSy8zpd//ePHvxjTjcuWIiIShlbDaUITHkHou97EPjAY9h1d+6DuvBCaETOao7tFGR+AmSTSfMaCsLCiqN4ftEHWykDpkSXgCUJZOLu7f/FnXGUBmHCS0gP9fzuOFiUkfBrgM2oRdT1jDNfzB7Yph6l2DdL9Bebcbt+pcKyVdBm9COKC0xi54dNopCLpY91xAeaa5ZGBcZiAYaXI+yWupc9tniNWEi6hbENJZZk59x8+yTcbdlEULxhkDkhB5T4o+VHy1hxv0hRrOnIRgfmdaeNqno47VCAMtMpB7WyJUhrx11xmyq8lOTtza3KZcV76JdJE6jFRaGaPBdh6bKO36NlfoY7WdCUWCUQXu49tdJ2HtVhJa6W4/D8mMAejYKBCbIOwZ2QWy6lEJseNxUpO4+edbIMnk53V6BJnDiRiniVHqWg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199015)(36756003)(64756008)(8676002)(83380400001)(31696002)(86362001)(41300700001)(53546011)(186003)(91956017)(26005)(66476007)(6512007)(66946007)(76116006)(66556008)(66446008)(2616005)(316002)(71200400001)(6506007)(478600001)(110136005)(38100700002)(122000001)(2906002)(38070700005)(6486002)(82960400001)(8936002)(5660300002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eXhpbnlSYjB1TG1YTWVyenBHSUwyZ0wySlhMVU9MZ0M4WXVwVE1YSmRyL2dJ?=
- =?utf-8?B?ZVhQdDk5S1pXMzNiZjNtd1VtY1dJak85aHpYZjJKUFFqVm5mVEk0My8xb0ls?=
- =?utf-8?B?WlUxdnBORTYwZkJBbHRWWWhIUFViUE1oKy9VeWtuY20rYmtNUUlBRHNtQkll?=
- =?utf-8?B?eHBPL1Vra2xlSS9BaHJ6Z0VNa1drd3FQV1RyeEEvdUVKVTJvZE5UZ0NqSmkx?=
- =?utf-8?B?SXpzSEpyS05uTnpxTGwwQUNsRzh0Z25TbzdIa0JRZU1ISVVFWEM5MERTVWsr?=
- =?utf-8?B?aDZzWE1BR09EZndMTHZpeEVDNklXaWxuVWdjUnN3WEhGcjBqZ3AwTjAyVG1N?=
- =?utf-8?B?TzB5ZHVZQUQwbmhHaGU5Yk5BVzdEczl4TXpReTBCVHRvbnF6cTdpK0sySXJW?=
- =?utf-8?B?bjRnbktrMjVGWHNIY0xLMkNCdjZpSEdwTy91d2VpOFZOS21GSmpzR1RjTFlj?=
- =?utf-8?B?SUdxNUEwS1RVenJ2OUFJNldBMVhoaUpXcVhpTm1vZnppOWVldnpVclo3dnlz?=
- =?utf-8?B?UEhleFEzSlQzUG02dWQ1Rzc1c2xtWUpIVFZsajVOeThHM1pwbWVwSWJQUm1Y?=
- =?utf-8?B?TzVvb2p3VjMxTjRoREtxd0s0SW4zUjVGS0xOYkJLcVFaQ3dWQ3pFaUZLK2sw?=
- =?utf-8?B?bmMvQTVoTTVDbUNtRlU2TnRKTmJKVnhhOUppNXJRZitIRTBTOHlBOHBrNVdW?=
- =?utf-8?B?dTRFaE5heTY3dkU3cVV6bWZPWTg3QmovZ05xRy9yWi82KzFHY3ZlcTB4MlV4?=
- =?utf-8?B?OXpTVFhRYWJ1cXFpKzRBbWgrR0dwYnNnUjlkQXZtWXdsOGVjdXdYRmx6Ym1j?=
- =?utf-8?B?VnI2QXhOcWlQVTJpa1dKR2RWSytYNUw2RWZhV0U2ZUVnTGl4UXhoVVpEa0M3?=
- =?utf-8?B?STZ4TDRocEtLeExaZ2pObnVCRzJoT09WYVhBL2xlSUVOWC8rY2llZEUvWm5t?=
- =?utf-8?B?WjRrOVVHOVBSSmtPV1U0NGNEVkZrd1JkYnZVTmJzMHJ6U0lOQTRORWZSeWJq?=
- =?utf-8?B?K3NqMk96K0NKSU05YXJUdU94WnU4OTczQTJlTzhMTGlxY21JRll3Ynp2NnQx?=
- =?utf-8?B?ZmRkMzU1VVVzaW02RnIvaUJxNkJqMkNmYU13YTRNQWlVNHlOZHoxMHFkQzRL?=
- =?utf-8?B?bWxZUm9aYXpJbUlrU2xHb3EvczRsVGduVndLVEFQQkoyeU51dlphclBHQkNs?=
- =?utf-8?B?ZThicTdPNzloZldFdXZtZ1V2SWcwcndKWU13YnNZRjdPWEh1eTRZL1g4ZkNs?=
- =?utf-8?B?cHN5YW1oY0x3aEZOcGFGM21UbmR2VlRXMFVkNEFmeXZneXE3OXNEOEFEVVg2?=
- =?utf-8?B?Q0N2YkFIR3lCWko4N0VGdy9PSGtRT014YTRmOU5IakM3Ni9lVjdzVUkyeTNE?=
- =?utf-8?B?ZnkyZUZac2ZCWFpPTVQxSnowU0ExT1BCaDRpcGlFY2JCTEhjRU9qQndOdS9D?=
- =?utf-8?B?cm5jWDFlbHNtNWRGQVFiOUs3RGpWOEdkV1MvK3plbUJPeEFyTU9TN2c3SUlY?=
- =?utf-8?B?amQzRzlMdUdMUHppVjYyUkRTT25zNmFibHFZYUNldFJ5OVNManphRTQvd0Vx?=
- =?utf-8?B?K3NJM2Z2N1M5RTJNN1R2WTE4Qm5OQVVZRFh1bG1ZMVJOcFFBQUY2dVlsODE1?=
- =?utf-8?B?dFJxa09UNHhMczNKY2s4RmtQR3Q5SG54RW8vOGtBYWRGOVpLRFVvZjRsVnBT?=
- =?utf-8?B?b285cmpnaEhZUTdxeGkvc3pWSkRLRVlqSmdnRkF0UlRyaktzWmoxZDZEeGFQ?=
- =?utf-8?B?MnVHRGhNNEhqbXJoWE9YVGp2d1hCSUpROHQxdlJQVVplL0VBV2RpMW9mYWJE?=
- =?utf-8?B?cmVpUUk1NkNlOVRsM0ZQa2h5R0l0WkVEeU1TcTl5YmVCQkZyYW9NMm5qdkdV?=
- =?utf-8?B?K0N2MmxDb3ZkS3VncjJPbWRzc0pidnFrNmQzLzEyandXZGFFQzcybTR3bExz?=
- =?utf-8?B?bU1BbmJ5dkFCR3plYldOeUplOVk2K0R5R0grcXc5bzNYZmFhL2lwQW5nVDIw?=
- =?utf-8?B?YnpuWUJ5ejdvQ3NDc3dEazhWQTArUlRKSHp1MzcrUnJoZXlaY01hVUZrVExG?=
- =?utf-8?B?OGVVUlovdDRVRld0MkxXVXBGdCtYTTAyaGJXOVprMFJHS0ZxNGM3bTUvK2dU?=
- =?utf-8?B?RitWc2oyWHpiRzlNdG5ZR21xQmsra3E2QndFTCt1M2RCQm81eDRXNDg2c3Bi?=
- =?utf-8?B?VGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5369FA15838AED4C865011484F15B5A1@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 18 Jan 2023 09:34:55 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B322748C;
+        Wed, 18 Jan 2023 06:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674051842; x=1705587842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JW3Z4qGJkww64HEvaFHH2zXhHyqrRqOdAVZDOpAtKk8=;
+  b=QaI4ogYNVLn/Yyb6QADgDDFmYQ7YIhwojhhpFnzhtaCb5e1Mendtx/Hv
+   41SVq+aqav0mpoAkiRTK0Asis/NMKZ3ID+DOJW0rguyhu0HzpGoAigTIP
+   mZzZPDpxtmRD5XgNFZJlILuhfEyWyRVlBTAiZUmrD7qg/E8zg44o23wq5
+   oL+PzSZtNhxlKNxoa7czIGtKkEVWQgx6y2VU4q5GLcQXXIV50WR7Rzqd1
+   fDpGNiCmOQbMfGrCi0vpa8stDQOv3XouOyo//TQ9HiqNdz0/tPdP4ZQAo
+   9jF7NkfH/yo3jQwVL4zYjjdJfBDKdIjpN45cOZ2pV2LHGLM2MtqGFx8Qo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="352239982"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="352239982"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 06:24:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="833598833"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="833598833"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jan 2023 06:23:56 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pI9M1-00BDkv-1i;
+        Wed, 18 Jan 2023 16:23:53 +0200
+Date:   Wed, 18 Jan 2023 16:23:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
+Message-ID: <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?OVYxbXFMa1hZdkxNellWU1BnMldER2pRMjhYdGhIN01xcjFhM0k5UnoyaFdy?=
- =?utf-8?B?Z3BzZ1ZhZTlhWFI4UHUrZXF2UHdTU1pWUWhJVXZsQlg1cTNkeTl6TWwyM2pC?=
- =?utf-8?B?MU5FUCs0Y1Y2UVhIeTIyU1JhTUFoSmJKMktyNC9IVElYeW11K1hYUkIrMUFR?=
- =?utf-8?B?OVRlTDcwUExmdVdtS1Z3S1p4bTM4T1c1YWJYeEsxZnRGdERDNGRmREJxeGxu?=
- =?utf-8?B?VU9VTm9LN3FRazNDcEhSNXBNc0pxZGplZFR1VHgyTDIxblljcG9ZS05GTE9Y?=
- =?utf-8?B?Q2JaK01RRUhFVjNPdHdmNDQvWXZwSHBiL1pHR1QxaFVxYUIybG5rZm1ndDda?=
- =?utf-8?B?ZlNid2I5SkFoVG9ycldoa2hxQVdKRnFEeUxsNU10SWtLTDZZNENzNnZDVWph?=
- =?utf-8?B?R0ZDcVNHL0dDOXpOZVBCaUdvTGlnU0plTXJpNkZRTUkyaEFCMTFuaDBPcjVP?=
- =?utf-8?B?L2thRkdrN3NzQklMR2x0K2c2UFlNVVZzZHlVcHlVaWxpT0FXY2xINDNUUVJW?=
- =?utf-8?B?SE9xOGFHTlJQaWlzTGxJY1BHZEtnakFNRVdhS2VVeGp1MGF2SVlReE9VZ29z?=
- =?utf-8?B?M2F3cmhxVlJXN244OGhMenJ3MGxLZDFVWUxVUnEzeG5JeWFWZ2VHbG5lc01R?=
- =?utf-8?B?cUNGY0FtdWFnLytacldaWW94b1Rpa0g1OGRVK3JDQTN4ZUl2L2lYUGE1Kzg2?=
- =?utf-8?B?MFY0OTBuSnpnK0VzQ3R1SHB1UFF0RkdxRjNEbTFLaVNJamQxd1Vza21uQnhB?=
- =?utf-8?B?cHp1czBjYWMycFpkR2FXQ0ZxVVd5aXArcit6L243QTdDcDUwVm0wT3JOSXNF?=
- =?utf-8?B?cVdYRllaWFlNblVxSUJQRFVjM0FJam80TTMybGRzUjlyT1BoY2I5VTJMSXBv?=
- =?utf-8?B?dnBKQ2R2dnp1a3RsdlBFa3N0V09wNnBYTy8vT0EzWHJndzd4Z2RpWGF1TC9n?=
- =?utf-8?B?cU1zK056WmcvSnVMekNZV0MraW0rc2tPTXNNTHRraEpzT1ZmSXJZa2JGdHRz?=
- =?utf-8?B?NE1Fdi9QR2ZNaVNYTkk0WTltNkE2V05Wek16Yzl0TzU0SmJlM0d6M2ZxbXMv?=
- =?utf-8?B?dXk5YmNLMlJYOUFpUDl6UERoa25OUlMxWlZnWDV1ek4wZjV2VFBSZ2wwYm5L?=
- =?utf-8?B?Ylh2aVRIYXhDMG41MVhmZkF1NTRTc1lveVJjSHFwL1BiN0NGOE1TeUwwaFJz?=
- =?utf-8?B?by81U3ZtRFdKY2RwOHBaeCtaT0o3WW5OQ2FxRXlpOE1iNkU5OStOYnh3SDNU?=
- =?utf-8?B?YkRjUTdGK1Y2Sk03Qk5rSEwrSEFmSUdxZngvaXA0RUhkVzRUUT09?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5a68534-ff2e-493d-4e36-08daf95f75b2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 14:22:41.7706
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BmA2AL/K2zK/c1YPY5PxQUYSVJMhQu6vw0C122AgTIaJedBhKMwFWglriDTnBmg4H1p50aUyYFU3AzbtOZiCOFSFmdpVYthWlvLT0JTbTVc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5336
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTgvMDEvMjAyMyAyOjA2IHBtLCBEYXZpZCBXb29kaG91c2Ugd3JvdGU6DQo+IE9uIFdlZCwg
-MjAyMy0wMS0xOCBhdCAxMzo1MyArMDAwMCwgQW5kcmV3IENvb3BlciB3cm90ZToNCj4+IE9uIDE4
-LzAxLzIwMjMgMTI6MjIgcG0sIERhdmlkIFdvb2Rob3VzZSB3cm90ZToNCj4+PiBTaWduZWQtb2Zm
-LWJ5OiBEYXZpZCBXb29kaG91c2UgPGR3bXdAYW1hem9uLmNvLnVrPg0KPj4+IC0tLQ0KPj4+IFdo
-YXQgZG9lcyB4ZW5fZXZ0Y2huX2RvX3VwY2FsbCgpIGV4aXN0IGZvcj8gQ2FuIHdlIGRlbGV0ZSBp
-dD8gSSBkb24ndA0KPj4+IHNlZSBpdCBiZWluZyBjYWxsZWQgYW55d2hlcmUuDQo+PiBTZWVtcyB0
-aGUgY2FsbGVyIHdhcyBkcm9wcGVkIGJ5DQo+PiBjYjA5ZWEyOTI0Y2JmMWE0MmRhNTliZDMwYTU5
-Y2MxODM2MjQwYmNiLCBidXQgdGhlIENPTkZJR19QVkhWTSBsb29rcw0KPj4gYm9ndXMgYmVjYXVz
-ZSB0aGUgcHJlY29uZGl0aW9uIHRvIHNldHRpbmcgaXQgdXAgd2FzIGJlaW5nIGluIGEgWGVuIEhW
-TQ0KPj4gZ3Vlc3QsIGFuZCB0aGUgZ3Vlc3QgaXMgdGFraW5nIGV2dGNobnMgYnkgdmVjdG9yIGVp
-dGhlciB3YXkuDQo+Pg0KPj4gUFYgZ3Vlc3RzIHVzZSB0aGUgZW50cnlwb2ludCBjYWxsZWQgZXhj
-X3hlbl9oeXBlcnZpc29yX2NhbGxiYWNrIHdoaWNoDQo+PiByZWFsbHkgb3VnaHQgdG8gZ2FpbiBh
-IFBWIGluIGl0cyBuYW1lIHNvbWV3aGVyZS7CoCBBbHNvIHRoZSBjb21tZW50cyBsb29rDQo+PiBk
-aXN0aW5jdGx5IHN1c3BlY3QuDQo+IFllYWguIEkgY291bGRuJ3QgKnNlZSogYW55IGFzbSBvciBt
-YWNybyBtYWdpYyB3aGljaCB3b3VsZCByZWZlcmVuY2UNCj4geGVuX2V2dGNobl9kb191cGNhbGws
-IGFuZCByZW1vdmluZyBpdCBmcm9tIG15IGJ1aWxkICh3aXRoIENPTkZJR19YRU5fUFYNCj4gZW5h
-YmxlZCkgYWxzbyBkaWRuJ3QgYnJlYWsgYW55dGhpbmcuDQo+DQo+PiBTb21lIHRpZHlpbmcgaW4g
-dGhpcyBhcmVhIHdvdWxkIGJlIHZhbHVhYmxlLg0KPiBJbmRlZWQuIEkganVzdCBuZWVkIFBhdWwg
-b3IgbXlzZWxmIHRvIHRocm93IGluIGEgYmFzaWMgWGVuU3RvcmUNCj4gaW1wbGVtZW50YXRpb24g
-c28gd2UgY2FuIHByb3ZpZGUgYSBQViBkaXNrLCBhbmQgSSBzaG91bGQgYmUgYWJsZSB0byBkbw0K
-PiBxdWlja2ZpcmUgdGVzdGluZyBvZiBQViBndWVzdHMgdG9vIHdpdGggJ3FlbXUgLWtlcm5lbCcg
-YW5kIGEgUFYgc2hpbS4NCj4NCj4gUFZIVk0gd291bGQgYmUgYW4gZW50ZXJ0YWluaW5nIHRoaW5n
-IHRvIHN1cHBvcnQgdG9vOyBJIHN1cHBvc2UgdGhhdCdzDQo+IG1vc3RseSBhIGNhc2Ugb2YgYmFz
-aW5nIGl0IG9uIHRoZSBtaWNyb3ZtIHFlbXUgcGxhdGZvcm0sIG9yIHBlcmhhcHMNCj4gZXZlbiAq
-bW9yZSogbWluaW1hbCB4ODYtYmFzZWQgcGxhdGZvcm0/DQoNClRoZXJlIGlzIG5vIGFjdHVhbCB0
-aGluZyBjYWxsZWQgUFZIVk0uwqAgVGhhdCBkaWFncmFtIGhhcyBjYXVzZWQgZmFyIG1vcmUNCmRh
-bWFnZSB0aGFuIGdvb2QuLi4NCg0KVGhlcmUncyBIVk0gKGFuZCBieSB0aGlzLCBJIG1lYW4gdGhl
-IGh5cGVydmlzb3IncyBpbnRlcnByZXRhdGlvbiBtZWFuaW5nDQpWVC14IG9yIFNWTSksIGFuZCBh
-IHNwZWN0cnVtIG9mIHRoaW5ncyB0aGUgZ3Vlc3Qga2VybmVsIGNhbiBkbyBpZiBpdA0KZGVzaXJl
-cy4NCg0KSSdtIHByZXR0eSBzdXJlIExpbnV4IGtub3dzIGFsbCBvZiB0aGVtLg0KDQp+QW5kcmV3
-DQo=
+On Wed, Jan 18, 2023 at 02:40:25PM +0200, Tomi Valkeinen wrote:
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+> slave "upstream" port and N master "downstream" ports, and forwards
+> transactions from upstream to the appropriate downstream port. But is
+> is different in that the forwarded transaction has a different slave
+
+is is ?
+
+> address. The address used on the upstream bus is called the "alias"
+> and is (potentially) different from the physical slave address of the
+> downstream chip.
+> 
+> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+> implementing ATR features in a device driver. The helper takes care or
+> adapter creation/destruction and translates addresses at each transaction.
+
+...
+
+> +A typical example follows.
+> +
+> +Topology::
+> +
+> +                      Slave X @ 0x10
+> +              .-----.   |
+> +  .-----.     |     |---+---- B
+> +  | CPU |--A--| ATR |
+> +  `-----'     |     |---+---- C
+> +              `-----'   |
+> +                      Slave Y @ 0x10
+> +
+> +Alias table:
+> +
+> +.. table::
+> +
+> +   ======   =====
+> +   Client   Alias
+> +   ======   =====
+> +   X        0x20
+> +   Y        0x30
+> +   ======   =====
+> +
+> +Transaction:
+> +
+> + - Slave X driver sends a transaction (on adapter B), slave address 0x10
+> + - ATR driver rewrites messages with address 0x20, forwards to adapter A
+> + - Physical I2C transaction on bus A, slave address 0x20
+> + - ATR chip propagates transaction on bus B with address translated to 0x10
+> + - Slave X chip replies on bus B
+> + - ATR chip forwards reply on bus A
+> + - ATR driver rewrites messages with address 0x10
+> + - Slave X driver gets back the msgs[], with reply and address 0x10
+
+I'm not sure I got the real / virtual status of the adapters. Are the B and C
+virtual ones, while A is the real?
+
+...
+
+> +#define ATR_MAX_ADAPTERS 99	/* Just a sanity limit */
+
+Hmm... It's not clear why this is not 100, for example, and how 99 below is
+related to that, assuming channel numbering is started from 0.
+
+> +#define ATR_MAX_SYMLINK_LEN 16	/* Longest name is 10 chars: "channel-99" */
+
+...
+
+> +	/* Ensure we have enough room to save the original addresses */
+> +	if (unlikely(chan->orig_addrs_size < num)) {
+> +		u16 *new_buf;
+> +
+> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+
+I remember that I asked why we don't use krealloc_array() here... Perhaps
+that we don't need to copy the old mapping table? Can we put a short comment
+to clarify this in the code?
+
+> +		if (!new_buf)
+> +			return -ENOMEM;
+> +
+> +		kfree(chan->orig_addrs);
+> +		chan->orig_addrs = new_buf;
+> +		chan->orig_addrs_size = num;
+> +	}
+
+...
+
+> +struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
+> +			    const struct i2c_atr_ops *ops, int max_adapters)
+> +{
+> +	struct i2c_atr *atr;
+> +	int ret;
+> +
+> +	if (max_adapters > ATR_MAX_ADAPTERS)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (!ops || !ops->attach_client || !ops->detach_client)
+> +		return ERR_PTR(-EINVAL);
+
+> +	atr = devm_kzalloc(dev, struct_size(atr, adapter, max_adapters),
+> +			   GFP_KERNEL);
+
+How do you know (or why do we limit) that the scope of this function will be
+only in ->probe()? Even though, I would replace devm_ by non-devm_ since there
+is the tear-down function has to be called by the user anyway.
+
+> +	if (!atr)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	mutex_init(&atr->lock);
+> +
+> +	atr->parent = parent;
+> +	atr->dev = dev;
+> +	atr->ops = ops;
+> +	atr->max_adapters = max_adapters;
+> +
+> +	if (parent->algo->master_xfer)
+> +		atr->algo.master_xfer = i2c_atr_master_xfer;
+> +	if (parent->algo->smbus_xfer)
+> +		atr->algo.smbus_xfer = i2c_atr_smbus_xfer;
+> +	atr->algo.functionality = i2c_atr_functionality;
+> +
+> +	atr->i2c_nb.notifier_call = i2c_atr_bus_notifier_call;
+> +	ret = bus_register_notifier(&i2c_bus_type, &atr->i2c_nb);
+> +	if (ret) {
+> +		mutex_destroy(&atr->lock);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return atr;
+> +}
+
+...
+
+> +void i2c_atr_del_adapter(struct i2c_atr *atr, u32 chan_id)
+> +{
+> +	char symlink_name[ATR_MAX_SYMLINK_LEN];
+
+> +
+
+Redundant blank line.
+
+> +	struct i2c_adapter *adap = atr->adapter[chan_id];
+> +	struct i2c_atr_chan *chan = adap->algo_data;
+> +	struct fwnode_handle *fwnode = dev_fwnode(&adap->dev);
+> +	struct device *dev = atr->dev;
+
+> +	if (!adap)
+> +		return;
+
+Redundant check (it will be optimized out by compiler) or wrong assignments
+above.
+
+> +	dev_dbg(dev, "Removing ATR child bus %d\n", i2c_adapter_id(adap));
+> +
+> +	snprintf(symlink_name, sizeof(symlink_name), "channel-%u",
+> +		 chan->chan_id);
+> +	sysfs_remove_link(&dev->kobj, symlink_name);
+> +	sysfs_remove_link(&chan->adap.dev.kobj, "atr_device");
+> +
+> +	i2c_del_adapter(adap);
+> +
+> +	atr->adapter[chan_id] = NULL;
+> +
+> +	fwnode_handle_put(fwnode);
+> +	mutex_destroy(&chan->orig_addrs_lock);
+> +	kfree(chan->orig_addrs);
+> +	kfree(chan);
+> +}
+
+...
+
+> +void i2c_atr_set_driver_data(struct i2c_atr *atr, void *data)
+> +{
+> +	atr->priv = data;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(i2c_atr_set_driver_data, I2C_ATR);
+> +
+> +void *i2c_atr_get_driver_data(struct i2c_atr *atr)
+> +{
+> +	return atr->priv;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(i2c_atr_get_driver_data, I2C_ATR);
+
+Just to be sure: Is it really _driver_ data and not _device instance_ data?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
