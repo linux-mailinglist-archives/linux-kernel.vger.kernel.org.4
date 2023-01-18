@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79D66714C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8696714EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjARHQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S230072AbjARHRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjARHQO (ORCPT
+        with ESMTP id S229778AbjARHQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:16:14 -0500
+        Wed, 18 Jan 2023 02:16:27 -0500
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8D77A51B;
-        Tue, 17 Jan 2023 22:39:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8408D7A537;
+        Tue, 17 Jan 2023 22:40:00 -0800 (PST)
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30I4rh1S024646;
-        Wed, 18 Jan 2023 01:39:17 -0500
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30I50Ve4024672;
+        Wed, 18 Jan 2023 01:39:40 -0500
 Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n6048mc4j-1
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n6048mc65-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 01:39:17 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 30I6dFkH050794
+        Wed, 18 Jan 2023 01:39:39 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 30I6dc57050855
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Jan 2023 01:39:15 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 18 Jan 2023 01:39:14 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 18 Jan 2023 01:39:14 -0500
+        Wed, 18 Jan 2023 01:39:38 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 18 Jan
+ 2023 01:39:37 -0500
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
  (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 18 Jan 2023 01:39:12 -0500
+ Transport; Wed, 18 Jan 2023 01:39:37 -0500
 Received: from okan.localdomain ([10.158.40.55])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 30I6ccUr005042;
-        Wed, 18 Jan 2023 01:38:41 -0500
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 30I6ccUs005042;
+        Wed, 18 Jan 2023 01:39:20 -0500
 From:   Okan Sahin <okan.sahin@analog.com>
 To:     <okan.sahin@analog.com>
 CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
         William Breathitt Gray <william.gray@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Caleb Connolly" <caleb.connolly@linaro.org>,
         Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-iio@vger.kernel.org>
-Subject: [PATCH v3 0/5]  Add MAX77541/MAX77540 PMIC Support
-Date:   Wed, 18 Jan 2023 09:38:07 +0300
-Message-ID: <20230118063822.14521-1-okan.sahin@analog.com>
+Subject: [PATCH v3 1/5] drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support
+Date:   Wed, 18 Jan 2023 09:38:08 +0300
+Message-ID: <20230118063822.14521-2-okan.sahin@analog.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230118063822.14521-1-okan.sahin@analog.com>
+References: <20230118063822.14521-1-okan.sahin@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: 8dAlMa-Jf9SkRa18AD1Af-xwQOk-rPSS
-X-Proofpoint-ORIG-GUID: 8dAlMa-Jf9SkRa18AD1Af-xwQOk-rPSS
+X-Proofpoint-GUID: OnZDbr9-KLpnTyXzsvlDWDcey9as2QNj
+X-Proofpoint-ORIG-GUID: OnZDbr9-KLpnTyXzsvlDWDcey9as2QNj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-18_01,2023-01-17_01,2022-06-22_01
@@ -84,94 +81,452 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MFD, regulator and ADC driver and related bindings for MAX77540/MAX77541.
-The patches are requeired to be applied in sequence.
+MFD driver for MAX77541/MAX77540 to enable its sub
+devices.
 
-Changes in v3:
-* Patch 1: "drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support"
-  * Change struct name from max77541_dev to max77541
-  * Adjust max-line-length lower than 80
-* Patch 2: "dt-bindings: mfd: Add ADI MAX77541/MAX77540"
-  * Remove adc object as we do not need
-  * Remove adc node from example
-* Patch 3: "drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support"
-  * Change node name from "BUCK#_id" to "buck#_id" in regulator desc
-* Patch 4: "dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator"
-  * Change node name from "BUCK" to "buck" in regulators
-* Patch 5: "drivers: iio: adc: Add ADI MAX77541 ADC Support"
-  * Convert voltage values from V to mV for scaling.
-  * Convert temperature values from C to miliC for scale and offset
-  * Do not set offset bit in info_mask_separate for voltage that does not need offset
-  * Remove unnecessary dev_get_drvdata() instead of it use dev_get_regmap to have regmap.
-  * Assing hard coded name for adc dev name
+The MAX77541 is a multi-function devices. It includes
+buck converter and ADC.
 
-Changes in v2:
-* Patch 1: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
-  * Drop "this patch adds" from commit message.
-  * Drop redundant blank lines.
-  * Drop module version
-  * Use definition for parameter of devm_mfd_add_devices(.., -1,..)
-  * Use desc in chip_info to adding desc for different devices.
-  * Add missing headers and forward declarations.
-  * Drop unused elements from max77541_dev struct
-  * Add chip_info into max77541_dev struct to identify different devices.
-* Patch 2: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
-  * Drop "this patch adds" from commit message.
-  * Fix $ref path
-  * Drop adc part under allOf
-  * Keep only one example (more complex one)
-  * Fix make dt_binding_check errors.(trailing space, No newline)
-* Patch 3: "drivers: regulator: Add MAX77541 Regulator Support"
-  * Drop "this patch adds" from commit message.
-  * Add trailing comma for required structs.
-  * Fix wrong indentation.
-  * Drop redundant blank lines.
-  * Drop max77541_regulator_dev struct.
-  * Use "regulator_desc *desc" for both regulator
-    regarding to "max77541->id"
-* Patch 4: "dt-bindings: regulator: max77541-regulator.yaml Add MAX77541
-            Regulator bindings"
-  * Drop "this patch adds" from commit message.
-  * Chance filename (matching compatible), so adi,max77541-regulator.yaml
-  * Fix make dt_binding_check errors.(trailing space, No newline)
-* Patch 5: "drivers: iio: adc: Add MAX77541 ADC Support"
-  * Drop "this patch adds" from commit message.
-  * Drop redundant blank lines.
-  * Fix wrong include path.
-  * Use switch instead of if-else for range setting in max77541_adc_scale
-  * Move max77541_adc_range enum from max77541.h to here.
-  * Use definition from units.h
-  * Drop unused elements from max77541_adc_iio struct
-  * Drop the .data from platform_device_id
+The MAX77540 is a high-efficiency buck converter
+with two 3A switching phases.
 
-Okan Sahin (5):
-  drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support
-  dt-bindings: mfd: Add ADI MAX77541/MAX77540
-  drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support
-  dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator
-  drivers: iio: adc: Add ADI MAX77541 ADC Support
+They have same regmap except for ADC part of MAX77541.
 
- .../devicetree/bindings/mfd/adi,max77541.yaml |  87 ++++++
- .../regulator/adi,max77541-regulator.yaml     |  44 +++
- MAINTAINERS                                   |  11 +
- drivers/iio/adc/Kconfig                       |  11 +
- drivers/iio/adc/Makefile                      |   1 +
- drivers/iio/adc/max77541-adc.c                | 200 ++++++++++++++
- drivers/mfd/Kconfig                           |  13 +
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/max77541.c                        | 250 ++++++++++++++++++
- drivers/regulator/Kconfig                     |   9 +
- drivers/regulator/Makefile                    |   1 +
- drivers/regulator/max77541-regulator.c        | 160 +++++++++++
- include/linux/mfd/max77541.h                  | 108 ++++++++
- 13 files changed, 896 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
- create mode 100644 drivers/iio/adc/max77541-adc.c
+Signed-off-by: Okan Sahin <okan.sahin@analog.com>
+---
+ MAINTAINERS                  |   7 +
+ drivers/mfd/Kconfig          |  13 ++
+ drivers/mfd/Makefile         |   1 +
+ drivers/mfd/max77541.c       | 250 +++++++++++++++++++++++++++++++++++
+ include/linux/mfd/max77541.h | 108 +++++++++++++++
+ 5 files changed, 379 insertions(+)
  create mode 100644 drivers/mfd/max77541.c
- create mode 100644 drivers/regulator/max77541-regulator.c
  create mode 100644 include/linux/mfd/max77541.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..af94d06bb9f0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12497,6 +12497,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
+ F:	drivers/regulator/max20086-regulator.c
+ 
++MAXIM MAX77541 PMIC MFD DRIVER
++M:	Okan Sahin <okan.sahin@analog.com>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	drivers/mfd/max77541.c
++F:	include/linux/mfd/max77541.h
++
+ MAXIM MAX77650 PMIC MFD DRIVER
+ M:	Bartosz Golaszewski <brgl@bgdev.pl>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 8b93856de432..e6bf621cbc8e 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -791,6 +791,19 @@ config MFD_MAX14577
+ 	  additional drivers must be enabled in order to use the functionality
+ 	  of the device.
+ 
++config MFD_MAX77541
++	tristate "Analog Devices MAX77541/77540 PMIC Support"
++	depends on I2C=y
++	select MFD_CORE
++	select REGMAP_I2C
++	select REGMAP_IRQ
++	help
++	  Say yes here to add support for Analog Devices
++	  MAX77541 and MAX77540 Power Management ICs.This
++	  driver provides common support for accessing the
++	  device;additional drivers must be enabled in order
++	  to use the functionality of the device.
++
+ config MFD_MAX77620
+ 	bool "Maxim Semiconductor MAX77620 and MAX20024 PMIC Support"
+ 	depends on I2C=y
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 7ed3ef4a698c..bf21228f5742 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
+ obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
+ 
+ obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
++obj-$(CONFIG_MFD_MAX77541)	+= max77541.o
+ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+ obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+ obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+diff --git a/drivers/mfd/max77541.c b/drivers/mfd/max77541.c
+new file mode 100644
+index 000000000000..0ccb96df5db0
+--- /dev/null
++++ b/drivers/mfd/max77541.c
+@@ -0,0 +1,250 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (c) 2022 Analog Devices, Inc.
++ * Mfd core driver for the MAX77540 and MAX77541
++ */
++
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/max77541.h>
++#include <linux/regmap.h>
++
++static const struct regmap_config max77541_regmap_config = {
++	.reg_bits   = 8,
++	.val_bits   = 8,
++};
++
++static const struct regmap_irq max77541_src_irqs[] = {
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_INT_SRC_TOPSYS),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_INT_SRC_BUCK),
++};
++
++static const struct regmap_irq_chip max77541_src_irq_chip = {
++	.name		= "max77541-src",
++	.status_base	= MAX77541_REG_INT_SRC,
++	.mask_base	= MAX77541_REG_INT_SRC,
++	.num_regs	= 1,
++	.irqs		= max77541_src_irqs,
++	.num_irqs       = ARRAY_SIZE(max77541_src_irqs),
++};
++
++static const struct regmap_irq max77541_topsys_irqs[] = {
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_TJ_120C),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_TJ_140C),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_TSHDN),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_UVLO),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_ALT_SWO),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_TOPSYS_INT_EXT_FREQ_DET),
++};
++
++static const struct regmap_irq_chip max77541_topsys_irq_chip = {
++	.name		= "max77541-topsys",
++	.status_base	= MAX77541_REG_TOPSYS_INT,
++	.mask_base	= MAX77541_REG_TOPSYS_INT_M,
++	.num_regs	= 1,
++	.irqs		= max77541_topsys_irqs,
++	.num_irqs	= ARRAY_SIZE(max77541_topsys_irqs),
++};
++
++static const struct regmap_irq max77541_buck_irqs[] = {
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_BUCK_INT_M1_POK_FLT),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_BUCK_INT_M2_POK_FLT),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_BUCK_INT_M1_SCFLT),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_BUCK_INT_M2_SCFLT),
++};
++
++static const struct regmap_irq_chip max77541_buck_irq_chip = {
++	.name		= "max77541-buck",
++	.status_base	= MAX77541_REG_BUCK_INT,
++	.mask_base	= MAX77541_REG_BUCK_INT_M,
++	.num_regs	= 1,
++	.irqs		= max77541_buck_irqs,
++	.num_irqs	= ARRAY_SIZE(max77541_buck_irqs),
++};
++
++static const struct regmap_irq max77541_adc_irqs[] = {
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_ADC_INT_CH1_I),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_ADC_INT_CH2_I),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_ADC_INT_CH3_I),
++	MAX77541_REGMAP_IRQ_REG(MAX77541_BIT_ADC_INT_CH6_I),
++};
++
++static const struct regmap_irq_chip max77541_adc_irq_chip = {
++	.name		= "max77541-adc",
++	.status_base	= MAX77541_REG_ADC_INT,
++	.mask_base	= MAX77541_REG_ADC_MSK,
++	.num_regs	= 1,
++	.irqs		= max77541_adc_irqs,
++	.num_irqs	= ARRAY_SIZE(max77541_adc_irqs),
++};
++
++static const struct mfd_cell max77540_devs[] = {
++	MFD_CELL_OF("max77540-regulator", NULL, NULL, 0, 0,
++		    "adi,max77540-regulator"),
++};
++
++static const struct mfd_cell max77541_devs[] = {
++	MFD_CELL_OF("max77541-regulator", NULL, NULL, 0, 0,
++		    "adi,max77541-regulator"),
++	MFD_CELL_OF("max77541-adc", NULL, NULL, 0, 0,
++		    NULL),
++};
++
++static const struct chip_info chip[] = {
++	[MAX77540] = {
++		.n_devs = ARRAY_SIZE(max77540_devs),
++		.devs = max77540_devs,
++	},
++	[MAX77541] = {
++		.n_devs = ARRAY_SIZE(max77541_devs),
++		.devs = max77541_devs,
++	},
++};
++
++static int max77541_pmic_irq_init(struct device *dev)
++{
++	struct max77541 *max77541 = dev_get_drvdata(dev);
++	int irq = max77541->i2c->irq;
++	int ret;
++
++	ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
++				       IRQF_ONESHOT | IRQF_SHARED, 0,
++				       &max77541_src_irq_chip,
++				       &max77541->irq_data);
++	if (ret)
++		return ret;
++
++	ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
++				       IRQF_ONESHOT | IRQF_SHARED, 0,
++				       &max77541_topsys_irq_chip,
++				       &max77541->irq_topsys);
++	if (ret)
++		return ret;
++
++	ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
++				       IRQF_ONESHOT | IRQF_SHARED, 0,
++				       &max77541_buck_irq_chip,
++				       &max77541->irq_buck);
++	if (ret)
++		return ret;
++
++	if (max77541->id == MAX77541) {
++		ret = devm_regmap_add_irq_chip(dev, max77541->regmap, irq,
++					       IRQF_ONESHOT | IRQF_SHARED, 0,
++					       &max77541_adc_irq_chip,
++					       &max77541->irq_adc);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static int max77541_pmic_setup(struct device *dev)
++{
++	struct max77541 *max77541 = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = max77541_pmic_irq_init(dev);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to initialize IRQ\n");
++
++	ret = regmap_read(max77541->regmap, MAX77541_REG_INT_SRC, &val);
++	if (ret)
++		return ret;
++
++	ret = regmap_read(max77541->regmap, MAX77541_REG_TOPSYS_INT, &val);
++	if (ret)
++		return ret;
++
++	ret = regmap_read(max77541->regmap, MAX77541_REG_BUCK_INT, &val);
++	if (ret)
++		return ret;
++
++	ret = device_init_wakeup(dev, true);
++	if (ret)
++		return dev_err_probe(dev, ret, "Unable to init wakeup\n");
++
++	switch (max77541->id) {
++	case MAX77540:
++		return devm_mfd_add_devices(dev, -1, max77540_devs,
++					    ARRAY_SIZE(max77540_devs),
++					    NULL, 0, NULL);
++	case MAX77541:
++		return devm_mfd_add_devices(dev, -1, max77541_devs,
++					    ARRAY_SIZE(max77541_devs),
++					    NULL, 0, NULL);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int max77541_i2c_probe(struct i2c_client *client,
++			      const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct max77541 *max77541;
++	const void *match;
++
++	max77541 = devm_kzalloc(&client->dev, sizeof(*max77541), GFP_KERNEL);
++	if (!max77541)
++		return -ENOMEM;
++
++	i2c_set_clientdata(client, max77541);
++	max77541->i2c = client;
++
++	match = device_get_match_data(dev);
++	if (match)
++		max77541->id = (enum max7754x_ids)match;
++	else if (id)
++		max77541->id = id->driver_data;
++	else
++		return -ENODEV;
++
++	max77541->chip = &chip[max77541->id];
++
++	max77541->regmap = devm_regmap_init_i2c(client,
++						&max77541_regmap_config);
++	if (IS_ERR(max77541->regmap))
++		return dev_err_probe(dev, PTR_ERR(max77541->regmap),
++				     "Failed to allocate register map\n");
++
++	return max77541_pmic_setup(dev);
++}
++
++static const struct of_device_id max77541_of_id[] = {
++	{
++		.compatible = "adi,max77540",
++		.data = (void *)MAX77540,
++	},
++	{
++		.compatible = "adi,max77541",
++		.data = (void *)MAX77541,
++	},
++	{ /* sentinel */  }
++};
++MODULE_DEVICE_TABLE(of, max77541_of_id);
++
++static const struct i2c_device_id max77541_i2c_id[] = {
++	{ "max77540", MAX77540 },
++	{ "max77541", MAX77541 },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(i2c, max77541_i2c_id);
++
++static struct i2c_driver max77541_i2c_driver = {
++	.driver = {
++		.name = "max77541",
++		.of_match_table = max77541_of_id,
++	},
++	.probe = max77541_i2c_probe,
++	.id_table = max77541_i2c_id,
++};
++module_i2c_driver(max77541_i2c_driver);
++
++MODULE_DESCRIPTION("MAX7740/MAX7741 MFD Driver");
++MODULE_AUTHOR("Okan Sahin <okan.sahin@analog.com>");
++MODULE_LICENSE("GPL");
++MODULE_VERSION("1.0");
+diff --git a/include/linux/mfd/max77541.h b/include/linux/mfd/max77541.h
+new file mode 100644
+index 000000000000..44c3c0c2aa97
+--- /dev/null
++++ b/include/linux/mfd/max77541.h
+@@ -0,0 +1,108 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef __MAX77541_MFD_H__
++#define __MAX77541_MFD_H__
++
++#include <linux/bits.h>
++#include <linux/types.h>
++
++/*      REGISTERS       */
++
++/*      GLOBAL CONFIG1       */
++#define MAX77541_REG_INT_SRC                    0x00
++#define MAX77541_REG_INT_SRC_M                  0x01
++#define MAX77541_REG_TOPSYS_INT                 0x02
++#define MAX77541_REG_TOPSYS_INT_M               0x03
++
++#define MAX77541_REG_EN_CTRL                    0x0B
++
++/*      BUCK CONFIG       */
++#define MAX77541_REG_BUCK_INT                   0x20
++#define MAX77541_REG_BUCK_INT_M                 0x21
++
++#define MAX77541_REG_M1_VOUT                    0x23
++#define MAX77541_REG_M1_CFG1                    0x25
++
++#define MAX77541_REG_M2_VOUT                    0x33
++#define MAX77541_REG_M2_CFG1                    0x35
++
++/* INTERRUPT MASKS*/
++#define MAX77541_REG_INT_SRC_MASK               0x00
++#define MAX77541_REG_TOPSYS_INT_MASK            0x00
++#define MAX77541_REG_BUCK_INT_MASK              0x00
++
++/*BITS OF REGISTERS*/
++
++#define MAX77541_BIT_INT_SRC_TOPSYS             BIT(0)
++#define MAX77541_BIT_INT_SRC_BUCK               BIT(1)
++
++#define MAX77541_BIT_TOPSYS_INT_TJ_120C         BIT(0)
++#define MAX77541_BIT_TOPSYS_INT_TJ_140C         BIT(1)
++#define MAX77541_BIT_TOPSYS_INT_TSHDN           BIT(2)
++#define MAX77541_BIT_TOPSYS_INT_UVLO            BIT(3)
++#define MAX77541_BIT_TOPSYS_INT_ALT_SWO         BIT(4)
++#define MAX77541_BIT_TOPSYS_INT_EXT_FREQ_DET    BIT(5)
++
++#define MAX77541_BIT_BUCK_INT_M1_POK_FLT        BIT(0)
++#define MAX77541_BIT_BUCK_INT_M2_POK_FLT        BIT(1)
++#define MAX77541_BIT_BUCK_INT_M1_SCFLT          BIT(4)
++#define MAX77541_BIT_BUCK_INT_M2_SCFLT          BIT(5)
++
++#define MAX77541_BIT_M1_EN                      BIT(0)
++#define MAX77541_BIT_M2_EN                      BIT(1)
++
++#define MAX77541_BITS_MX_VOUT                   GENMASK(7, 0)
++#define MAX77541_BITS_MX_CFG1_RNG               GENMASK(7, 6)
++
++/*      ADC       */
++#define MAX77541_REG_ADC_INT                    0x70
++#define MAX77541_REG_ADC_MSK                    0x71
++
++#define MAX77541_REG_ADC_DATA_CH1               0x72
++#define MAX77541_REG_ADC_DATA_CH2               0x73
++#define MAX77541_REG_ADC_DATA_CH3               0x74
++#define MAX77541_REG_ADC_DATA_CH6               0x77
++
++#define MAX77541_BIT_ADC_INT_CH1_I              BIT(0)
++#define MAX77541_BIT_ADC_INT_CH2_I              BIT(1)
++#define MAX77541_BIT_ADC_INT_CH3_I              BIT(2)
++#define MAX77541_BIT_ADC_INT_CH6_I              BIT(5)
++
++#define MAX77541_MAX_REGULATORS 2
++
++#define MAX77541_REGMAP_IRQ_REG(_mask)	\
++	{ .mask = (_mask) }
++
++enum max7754x_ids {
++	MAX77540 = 1,
++	MAX77541 = 2,
++};
++
++enum max77541_regulators {
++	MAX77541_BUCK1 = 1,
++	MAX77541_BUCK2,
++};
++
++struct chip_info {
++	int n_devs;
++	const struct mfd_cell *devs;
++};
++
++struct regmap;
++struct regmap_irq_chip_data;
++struct i2c_client;
++
++struct max77541 {
++	enum max7754x_ids id;
++	const struct chip_info *chip;
++
++	struct regmap_irq_chip_data *irq_data;
++	struct regmap_irq_chip_data *irq_buck;
++	struct regmap_irq_chip_data *irq_topsys;
++	struct regmap_irq_chip_data *irq_adc;
++
++	struct i2c_client *i2c;
++	struct regmap *regmap;
++};
++
++#endif /* __MAX77541_MFD_H__ */
 -- 
 2.30.2
 
