@@ -2,339 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D448672663
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE886672666
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjARSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S230414AbjARSLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjARSLW (ORCPT
+        with ESMTP id S230400AbjARSLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:11:22 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB324ED0C;
-        Wed, 18 Jan 2023 10:11:15 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M6H7o-1pKOks0aQy-006i5j; Wed, 18 Jan 2023 19:10:58 +0100
-Message-ID: <07d1b3e2-9072-d12f-98e3-48d0f9d712d2@i2se.com>
-Date:   Wed, 18 Jan 2023 19:10:57 +0100
+        Wed, 18 Jan 2023 13:11:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D9F55290
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:11:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37ECBB81E13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C680DC433D2;
+        Wed, 18 Jan 2023 18:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674065492;
+        bh=gr6AG1xtmIKls/C6W3LPutwiHESNaUcxHVkX4DZbsZc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XreLFk/FgMeXNYJSoGZ/LIwfMUrSzm6RhNMqDrADHCeE+HlpL0uu8rfCbJE1TDdFo
+         vEI18sb59X8CCiXSwar2vTJIAYJbXSULjK/y5Qv9Wo/tKxae8mJCg2FBD90JugLenn
+         V5LOqJ3vEjm7p78Qhd2VppGs27NGyHrBDw7kkg6tIsxcvAXfv72gCNLA4B0L7BUxt8
+         sCMZV65CP8rZO+tBnjswRvthHZiDQ1QdYxengtPICMOpxhFA+gO0xz0+CuQLCLYsXP
+         UHrkyvPTvrjfc2P63ACpdnXSZjuclYzVanNYr1M5tRhzf5JcxAWZXLc0aEaMVG83pA
+         J+/tLoBu9blqQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6D8435C0920; Wed, 18 Jan 2023 10:11:32 -0800 (PST)
+Date:   Wed, 18 Jan 2023 10:11:32 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] sched/deadline: fix inactive_task_timer splat with
+ CONFIG_PREEMPT_RT
+Message-ID: <20230118181132.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230104181701.43224-1-wander@redhat.com>
+ <20230110013333.GH4028633@paulmck-ThinkPad-P17-Gen-1>
+ <CAAq0SUm+VkoM38ULJE6zuajA3Tc7KYbiH51uc9oKjGE+RhDmXg@mail.gmail.com>
+ <20230110222725.GT4028633@paulmck-ThinkPad-P17-Gen-1>
+ <xhsmha62fj0nh.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 4/4] staging: vc04_services: Drop remnants of custom
- logging
-Content-Language: en-US
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        Phil Elwell <phil@raspberrypi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-staging@lists.linux.dev,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <20230118115810.21979-5-umang.jain@ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230118115810.21979-5-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:k7ngXy/iSumtDiFB+K8JBW2wWj1T7x3yIwjvbBUbCWCqrEqvZWt
- tywPaZuP/k8XUvN8Tfuh56mXZ04KANOrctghw7RZXoR+w18/K4zOmgZwl7//q1vcdBjIRui
- hU/SYZg+JBdF08zC3g2GYDikFZUGm3xSblMMPyJivrfxawvMRjUe2HMPO/wRsLrVYJ2xdFS
- spBtDGyTvQWFnGbUeeXEg==
-UI-OutboundReport: notjunk:1;M01:P0:cVK7N9Dh1wE=;2mb+vgyA+kOLzoavtsm0dzadBc/
- WcheQbSg8YOMtu1HTkbx0UtwjbxYqD6gxocTuyDsfkHit2I5saTy7ekpPSalZDDLROU9s9Zz2
- 9Ok/C/eFx+1Sbhtx4aAZJLilboJha8hcQUaj175Ypw2Sk07SqaE6ATma37vu3ySF687ZsRPxA
- FvettuoWhcqO7W0y4NZdBKKyju9EOSa925kGL+EfwGh+GxpFxlFhIGRH2SpY2bVlJYYPax1d0
- MsRT4tSHEY6s2vVhtW7HVM1WQ3OhrjxhybzQFlKWvCdq9gEsRUgI5Y3XffhaQAK4pNx/wUhTZ
- zoWT78a22yp38wi9aF/5HftpdSRqhJMdtq9LsLFUWacVghKJYWXdF/uTpfT3tLNLuJ/9S1D5C
- yzTf1jCbyz8cxea6qyVyCMZyqB6nvRq2Rue7ufUEWuqzf1tG0Ks9BQEj3giV8VPCqUqK7LXbv
- 7JrbQm4XxsENjla72PhI9YAgZYpNNSWkqIuhCWu8NNJSuXClfN85mTk4IV+dL9mnkMRKx7yhI
- SaROFG1nCikWpF0ezh7pAwVNcZPca3PuDZLBthMTtDfHpw/od69rK5wofP6bVWk6fqSA4MY0o
- 7fy50o3HeCQzbT2tZ4xSJc8tly7bd8dR7znzvJ7lWMxCcjiBRUGbquTHUBNgikPbbIGZwBiW5
- +Bxpe5RYr4e4fKjU5mS1jnltySHmrnzMqwSI+aBHEQ==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmha62fj0nh.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On Wed, Jan 18, 2023 at 03:57:38PM +0000, Valentin Schneider wrote:
+> On 10/01/23 14:27, Paul E. McKenney wrote:
+> > On Tue, Jan 10, 2023 at 05:52:03PM -0300, Wander Lairson Costa wrote:
+> >> On Mon, Jan 9, 2023 at 10:40 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >> >
+> >> > On Wed, Jan 04, 2023 at 03:17:01PM -0300, Wander Lairson Costa wrote:
+> >> > > inactive_task_timer() executes in interrupt (atomic) context. It calls
+> >> > > put_task_struct(), which indirectly acquires sleeping locks under
+> >> > > PREEMPT_RT.
+> >> > >
+> >> > > Below is an example of a splat that happened in a test environment:
+> >> > >
+> >> > >  CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
+> >> > >  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
+> >> > >  Call Trace:
+> >> > >  dump_stack_lvl+0x57/0x7d
+> >> > >  mark_lock_irq.cold+0x33/0xba
+> >> > >  ? stack_trace_save+0x4b/0x70
+> >> > >  ? save_trace+0x55/0x150
+> >> > >  mark_lock+0x1e7/0x400
+> >> > >  mark_usage+0x11d/0x140
+> >> > >  __lock_acquire+0x30d/0x930
+> >> > >  lock_acquire.part.0+0x9c/0x210
+> >> > >  ? refill_obj_stock+0x3d/0x3a0
+> >> > >  ? rcu_read_lock_sched_held+0x3f/0x70
+> >> > >  ? trace_lock_acquire+0x38/0x140
+> >> > >  ? lock_acquire+0x30/0x80
+> >> > >  ? refill_obj_stock+0x3d/0x3a0
+> >> > >  rt_spin_lock+0x27/0xe0
+> >> > >  ? refill_obj_stock+0x3d/0x3a0
+> >> > >  refill_obj_stock+0x3d/0x3a0
+> >> > >  ? inactive_task_timer+0x1ad/0x340
+> >> > >  kmem_cache_free+0x357/0x560
+> >> > >  inactive_task_timer+0x1ad/0x340
+> >> > >  ? switched_from_dl+0x2d0/0x2d0
+> >> > >  __run_hrtimer+0x8a/0x1a0
+> >> > >  __hrtimer_run_queues+0x91/0x130
+> >> > >  hrtimer_interrupt+0x10f/0x220
+> >> > >  __sysvec_apic_timer_interrupt+0x7b/0xd0
+> >> > >  sysvec_apic_timer_interrupt+0x4f/0xd0
+> >> > >  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
+> >> > >  asm_sysvec_apic_timer_interrupt+0x12/0x20
+> >> > >  RIP: 0033:0x7fff196bf6f5
+> >> > >
+> >> > > Instead of calling put_task_struct() directly, we defer it using
+> >> > > call_rcu(). A more natural approach would use a workqueue, but since
+> >> > > in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
+> >> > > the code would become more complex because we would need to put the
+> >> > > work_struct instance in the task_struct and initialize it when we
+> >> > > allocate a new task_struct.
+> >> > >
+> >> > > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> >> > > Cc: Paul McKenney <paulmck@kernel.org>
+> >> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> > > ---
+> >> > >  kernel/sched/build_policy.c |  1 +
+> >> > >  kernel/sched/deadline.c     | 24 +++++++++++++++++++++++-
+> >> > >  2 files changed, 24 insertions(+), 1 deletion(-)
+> >> > >
+> >> > > diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
+> >> > > index d9dc9ab3773f..f159304ee792 100644
+> >> > > --- a/kernel/sched/build_policy.c
+> >> > > +++ b/kernel/sched/build_policy.c
+> >> > > @@ -28,6 +28,7 @@
+> >> > >  #include <linux/suspend.h>
+> >> > >  #include <linux/tsacct_kern.h>
+> >> > >  #include <linux/vtime.h>
+> >> > > +#include <linux/rcupdate.h>
+> >> > >
+> >> > >  #include <uapi/linux/sched/types.h>
+> >> > >
+> >> > > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> >> > > index 9ae8f41e3372..ab9301d4cc24 100644
+> >> > > --- a/kernel/sched/deadline.c
+> >> > > +++ b/kernel/sched/deadline.c
+> >> > > @@ -1405,6 +1405,13 @@ static void update_curr_dl(struct rq *rq)
+> >> > >       }
+> >> > >  }
+> >> > >
+> >> > > +static void delayed_put_task_struct(struct rcu_head *rhp)
+> >> > > +{
+> >> > > +     struct task_struct *task = container_of(rhp, struct task_struct, rcu);
+> >> > > +
+> >> > > +     __put_task_struct(task);
+> >> >
+> >> > Please note that BH is disabled here.  Don't you therefore
+> >> > need to schedule a workqueue handler?  Perhaps directly from
+> >> > inactive_task_timer(), or maybe from this point.  If the latter, one
+> >> > way to skip the extra step is to use queue_rcu_work().
+> >> >
+> >>
+> >> My initial work was using a workqueue [1,2]. However, I realized I
+> >> could reach a much simpler code with call_rcu().
+> >> I am afraid my ignorance doesn't allow me to get your point. Does
+> >> disabling softirq imply atomic context?
+> >
+> > Given that this problem occurred in PREEMPT_RT, I am assuming that the
+> > appropriate definition of "atomic context" is "cannot call schedule()".
+> > And you are in fact not permitted to call schedule() from a bh-disabled
+> > region.
+> >
+> > This also means that you cannot acquire a non-raw spinlock in a
+> > bh-disabled region of code in a PREEMPT_RT kernel, because doing
+> > so can invoke schedule.
+> 
+> But per the PREEMPT_RT lock "replacement", non-raw spinlocks end up
+> invoking schedule_rtlock(), which should be safe vs BH disabled
+> (local_lock() + rcu_read_lock()):
+> 
+>   6991436c2b5d ("sched/core: Provide a scheduling point for RT locks")
+> 
+> Unless I'm missing something else?
 
-[add Phil]
+No, you miss nothing.  Apologies for my confusion!
 
-Am 18.01.23 um 12:58 schrieb Umang Jain:
-> Drop remnants of custom logging such as header definitions and such.
-> Also migrate the vchiq_debugfs to use the log levels coming from
-> include/linux/kern_levels.h instead.
-since we switch to default kernel logging, i would prefer to drop all of 
-these logging specific debugfs entries too. Or just leave one entry to 
-specify a logging mask as suggested before.
->
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->   .../interface/vchiq_arm/vchiq_arm.c           |  4 --
->   .../interface/vchiq_arm/vchiq_core.c          | 39 +++++++------------
->   .../interface/vchiq_arm/vchiq_core.h          | 39 -------------------
->   .../interface/vchiq_arm/vchiq_debugfs.c       | 26 ++++++++-----
->   4 files changed, 31 insertions(+), 77 deletions(-)
->
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index ed3773b996a3..45e28ca368ee 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -60,10 +60,6 @@
->   #define KEEPALIVE_VER 1
->   #define KEEPALIVE_VER_MIN KEEPALIVE_VER
->   
-> -/* Run time control of log level, based on KERN_XXX level. */
-> -int vchiq_arm_log_level = VCHIQ_LOG_DEFAULT;
-> -int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
-> -
->   DEFINE_SPINLOCK(msg_queue_spinlock);
->   struct vchiq_state g_state;
->   
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> index 7b3c57326d28..4cf710a3ca28 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> @@ -9,6 +9,7 @@
->   #include <linux/wait.h>
->   #include <linux/delay.h>
->   #include <linux/slab.h>
-> +#include <linux/kern_levels.h>
->   #include <linux/kref.h>
->   #include <linux/rcupdate.h>
->   #include <linux/sched/signal.h>
-> @@ -103,10 +104,8 @@ static_assert((unsigned int)VCHIQ_PORT_MAX <
->   
->   #define BULK_INDEX(x) ((x) & (VCHIQ_NUM_SERVICE_BULKS - 1))
->   
-> -#define SRVTRACE_LEVEL(srv) \
-> -	(((srv) && (srv)->trace) ? VCHIQ_LOG_TRACE : vchiq_core_msg_log_level)
->   #define SRVTRACE_ENABLED(srv, lev) \
-> -	(((srv) && (srv)->trace) || (vchiq_core_msg_log_level >= (lev)))
-> +	(((srv) && (srv)->trace) || (LOGLEVEL_DEFAULT >= (lev)))
->   
->   #define NO_CLOSE_RECVD	0
->   #define CLOSE_RECVD	1
-> @@ -154,11 +153,6 @@ static inline void check_sizes(void)
->   	BUILD_BUG_ON_NOT_POWER_OF_2(VCHIQ_MAX_SERVICES);
->   }
->   
-> -/* Run time control of log level, based on KERN_XXX level. */
-> -int vchiq_core_log_level = VCHIQ_LOG_DEFAULT;
-> -int vchiq_core_msg_log_level = VCHIQ_LOG_DEFAULT;
-> -int vchiq_sync_log_level = VCHIQ_LOG_DEFAULT;
-> -
->   DEFINE_SPINLOCK(bulk_waiter_spinlock);
->   static DEFINE_SPINLOCK(quota_spinlock);
->   
-> @@ -1035,8 +1029,7 @@ queue_message(struct vchiq_state *state, struct vchiq_service *service,
->   			return -EINVAL;
->   		}
->   
-> -		if (SRVTRACE_ENABLED(service,
-> -				     VCHIQ_LOG_INFO))
-> +		if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO))
->   			vchiq_log_dump_mem("Sent", 0,
->   					   header->data,
->   					   min_t(size_t, 16, callback_result));
-> @@ -1144,6 +1137,7 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
->   	struct vchiq_shared_state *local;
->   	struct vchiq_header *header;
->   	ssize_t callback_result;
-> +	int svc_fourcc;
->   
->   	local = state->local;
->   
-> @@ -1184,8 +1178,7 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
->   	}
->   
->   	if (service) {
-> -		if (SRVTRACE_ENABLED(service,
-> -				     VCHIQ_LOG_INFO))
-> +		if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO))
->   			vchiq_log_dump_mem("Sent", 0,
->   					   header->data,
->   					   min_t(size_t, 16, callback_result));
-> @@ -1199,19 +1192,15 @@ queue_message_sync(struct vchiq_state *state, struct vchiq_service *service,
->   	header->size = size;
->   	header->msgid = msgid;
->   
-> -	if (vchiq_sync_log_level >= VCHIQ_LOG_TRACE) {
-> -		int svc_fourcc;
->   
-> -		svc_fourcc = service
-> -			? service->base.fourcc
-> -			: VCHIQ_MAKE_FOURCC('?', '?', '?', '?');
-> +	svc_fourcc = service ? service->base.fourcc
-> +			     : VCHIQ_MAKE_FOURCC('?', '?', '?', '?');
->   
-> -		dev_dbg(state->dev,
-> -			"Sent Sync Msg %s(%u) to %c%c%c%c s:%u d:%d len:%d",
-> -			msg_type_str(VCHIQ_MSG_TYPE(msgid)), VCHIQ_MSG_TYPE(msgid),
-> -			VCHIQ_FOURCC_AS_4CHARS(svc_fourcc), VCHIQ_MSG_SRCPORT(msgid),
-> -			VCHIQ_MSG_DSTPORT(msgid), size);
-> -	}
-> +	dev_dbg(state->dev,
-> +		"Sent Sync Msg %s(%u) to %c%c%c%c s:%u d:%d len:%d",
-> +		msg_type_str(VCHIQ_MSG_TYPE(msgid)), VCHIQ_MSG_TYPE(msgid),
-> +		VCHIQ_FOURCC_AS_4CHARS(svc_fourcc), VCHIQ_MSG_SRCPORT(msgid),
-> +		VCHIQ_MSG_DSTPORT(msgid), size);
->   
->   	remote_event_signal(&state->remote->sync_trigger);
->   
-> @@ -1624,7 +1613,7 @@ parse_message(struct vchiq_state *state, struct vchiq_header *header)
->   		break;
->   	}
->   
-> -	if (SRVTRACE_ENABLED(service, VCHIQ_LOG_INFO)) {
-> +	if (SRVTRACE_ENABLED(service, LOGLEVEL_INFO)) {
->   		int svc_fourcc;
->   
->   		svc_fourcc = service
-> @@ -2031,7 +2020,7 @@ sync_func(void *v)
->   			continue;
->   		}
->   
-> -		if (vchiq_sync_log_level >= VCHIQ_LOG_TRACE) {
-> +		if (vchiq_sync_log_level >= LOGLEVEL_DEBUG) {
->   			int svc_fourcc;
->   
->   			svc_fourcc = service
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> index ec3505424718..960bf4efeab5 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> @@ -30,39 +30,6 @@
->   #define VCHIQ_SLOT_SIZE     4096
->   #define VCHIQ_MAX_MSG_SIZE  (VCHIQ_SLOT_SIZE - sizeof(struct vchiq_header))
->   
-> -/* Run time control of log level, based on KERN_XXX level. */
-> -#define VCHIQ_LOG_DEFAULT  4
-> -#define VCHIQ_LOG_ERROR    3
-> -#define VCHIQ_LOG_WARNING  4
-> -#define VCHIQ_LOG_INFO     6
-> -#define VCHIQ_LOG_TRACE    7
-> -
-> -#define VCHIQ_LOG_PREFIX   KERN_INFO "vchiq: "
-> -
-> -#ifndef vchiq_log_error
-> -#define vchiq_log_error(cat, fmt, ...) \
-> -	do { if (cat >= VCHIQ_LOG_ERROR) \
-> -		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
-> -#endif
-> -#ifndef vchiq_log_warning
-> -#define vchiq_log_warning(cat, fmt, ...) \
-> -	do { if (cat >= VCHIQ_LOG_WARNING) \
-> -		 printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
-> -#endif
-> -#ifndef vchiq_log_info
-> -#define vchiq_log_info(cat, fmt, ...) \
-> -	do { if (cat >= VCHIQ_LOG_INFO) \
-> -		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
-> -#endif
-> -#ifndef vchiq_log_trace
-> -#define vchiq_log_trace(cat, fmt, ...) \
-> -	do { if (cat >= VCHIQ_LOG_TRACE) \
-> -		printk(VCHIQ_LOG_PREFIX fmt "\n", ##__VA_ARGS__); } while (0)
-> -#endif
-> -
-> -#define vchiq_loud_error(...) \
-> -	vchiq_log_error(vchiq_core_log_level, "===== " __VA_ARGS__)
-> -
->   #define VCHIQ_SLOT_MASK        (VCHIQ_SLOT_SIZE - 1)
->   #define VCHIQ_SLOT_QUEUE_MASK  (VCHIQ_MAX_SLOTS_PER_SIDE - 1)
->   #define VCHIQ_SLOT_ZERO_SLOTS  DIV_ROUND_UP(sizeof(struct vchiq_slot_zero), \
-> @@ -496,12 +463,6 @@ vchiq_dump_state(void *dump_context, struct vchiq_state *state);
->   extern int
->   vchiq_dump_service_state(void *dump_context, struct vchiq_service *service);
->   
-> -extern void
-> -vchiq_loud_error_header(void);
-> -
-> -extern void
-> -vchiq_loud_error_footer(void);
-> -
->   extern void
->   request_poll(struct vchiq_state *state, struct vchiq_service *service,
->   	     int poll_type);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
-> index dc667afd1f8c..1d142752351d 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_debugfs.c
-> @@ -5,6 +5,8 @@
->    */
->   
->   #include <linux/debugfs.h>
-> +#include <linux/kern_levels.h>
-> +
->   #include "vchiq_core.h"
->   #include "vchiq_arm.h"
->   #include "vchiq_debugfs.h"
-> @@ -22,6 +24,12 @@
->   static struct dentry *vchiq_dbg_dir;
->   static struct dentry *vchiq_dbg_clients;
->   
-> +int vchiq_arm_log_level = LOGLEVEL_DEFAULT;
-> +int vchiq_susp_log_level = LOGLEVEL_ERR;
-> +int vchiq_core_log_level = LOGLEVEL_DEFAULT;
-> +int vchiq_core_msg_log_level = LOGLEVEL_DEFAULT;
-> +int vchiq_sync_log_level = LOGLEVEL_DEFAULT;
-> +
->   /* Log category debugfs entries */
->   struct vchiq_debugfs_log_entry {
->   	const char *name;
-> @@ -42,16 +50,16 @@ static int debugfs_log_show(struct seq_file *f, void *offset)
->   	char *log_value = NULL;
->   
->   	switch (*levp) {
-> -	case VCHIQ_LOG_ERROR:
-> +	case LOGLEVEL_ERR:
->   		log_value = VCHIQ_LOG_ERROR_STR;
->   		break;
-> -	case VCHIQ_LOG_WARNING:
-> +	case LOGLEVEL_WARNING:
->   		log_value = VCHIQ_LOG_WARNING_STR;
->   		break;
-> -	case VCHIQ_LOG_INFO:
-> +	case LOGLEVEL_INFO:
->   		log_value = VCHIQ_LOG_INFO_STR;
->   		break;
-> -	case VCHIQ_LOG_TRACE:
-> +	case LOGLEVEL_DEBUG:
->   		log_value = VCHIQ_LOG_TRACE_STR;
->   		break;
->   	default:
-> @@ -85,15 +93,15 @@ static ssize_t debugfs_log_write(struct file *file,
->   	kbuf[count - 1] = 0;
->   
->   	if (strncmp("error", kbuf, strlen("error")) == 0)
-> -		*levp = VCHIQ_LOG_ERROR;
-> +		*levp = LOGLEVEL_ERR;
->   	else if (strncmp("warning", kbuf, strlen("warning")) == 0)
-> -		*levp = VCHIQ_LOG_WARNING;
-> +		*levp = LOGLEVEL_WARNING;
->   	else if (strncmp("info", kbuf, strlen("info")) == 0)
-> -		*levp = VCHIQ_LOG_INFO;
-> +		*levp = LOGLEVEL_INFO;
->   	else if (strncmp("trace", kbuf, strlen("trace")) == 0)
-> -		*levp = VCHIQ_LOG_TRACE;
-> +		*levp = LOGLEVEL_DEBUG;
->   	else
-> -		*levp = VCHIQ_LOG_DEFAULT;
-> +		*levp = LOGLEVEL_DEFAULT;
->   
->   	*ppos += count;
->   
+(I could have sworn that someone else corrected me on this earlier,
+but I don't see it right off hand.)
+
+							Thanx, Paul
