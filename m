@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7660F671BBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E3D671BBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjARMQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S230302AbjARMQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjARMQG (ORCPT
+        with ESMTP id S229635AbjARMQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 07:16:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD924875BF;
-        Wed, 18 Jan 2023 03:37:53 -0800 (PST)
-Date:   Wed, 18 Jan 2023 11:37:51 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFA687640;
+        Wed, 18 Jan 2023 03:37:54 -0800 (PST)
+Date:   Wed, 18 Jan 2023 11:37:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1674041872;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5XOWWhVeVAOMndfqq8i24CNy11DrE3XLqdZTXMAnqN8=;
-        b=WqHZvzjhTdWZsNYNrIKU83e66QbSNwqjgZrHZo75ibugKQrq7y81ZE7kwut/WV2jqfcUtT
-        X3aAqnqMbVHBJw2q9PWbhGd66Naqsx5f9JXIuZBc7l363l9jVPk5fq6hhDmTe7eZWPWDVg
-        nCAGhcnHVWIKMoV8V9eEpLKfUYaupeMT/IjPVcAx5EdPJBlgVZS14GnYWKKvFzS8ZWUx7X
-        FJJds45OnsfSpJ3cJc18lxwKh3IA6qcr7hgq8/jfS7lz/Q1vHj5jvkF7xufFw53VgI2mCU
-        1wYO0APOcT9iW7oDThhI0s91h7S3A/gx1bFAY5Z9DHeWsWhF2b7zcHYGMIt2EA==
+        bh=AAfH2mbDwrruX13M/8HQDfaHA8NrXxBb6pWZoIxPJqA=;
+        b=B+lZt4CL53ffQMt3/gagAIcoOS1D+mKikPZuN0tPaqZkRnbmru1yo6//V2cyyuZ1KtwYz5
+        3P+bp8ZaPahgLl8K0e7cjIfpwv+2E8l1WU+RLNLs0momyqwbyoCX8UbOO3/3f6sXS+5biy
+        NtCKQQnJPYL7c2tKEVZwzHlEOr4xH3gisqubNfq5Lrq8osZZXm4Pi4jiHOMfo3DGhUgKZv
+        OvQK52AAXP0CFV2G9DUz6MXcY4wodijxMjw1MMvZfzrxa4qLxWP+kJwJKKFtno6F3DCR74
+        MEyqb+IoYudH0CeRzxWKsnf2fNUYz3K0jTXNun5S/byh9lBT/KVJIRNHwtjbZg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1674041872;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5XOWWhVeVAOMndfqq8i24CNy11DrE3XLqdZTXMAnqN8=;
-        b=0EBcDAg+zhZ2uG2J6kQ38Pa8bkOR6LdNOOK2DrH7pFZowsKrUDK2TB/OFVmX670VAEMc/P
-        /PUTtPISt+ayIoCg==
+        bh=AAfH2mbDwrruX13M/8HQDfaHA8NrXxBb6pWZoIxPJqA=;
+        b=rboG5UO6RFv3mZ58GZ9kvUbNNcMVJaeEoLd+rnyG/hWMardd0ThTC5MR2sKchdNW10vqN9
+        NhvrGVRiM3X3liDQ==
 From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/core: Set data->sample_flags in perf_prepare_sample()
+Subject: [tip: perf/core] perf/core: Add perf_sample_save_brstack() helper
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230118060559.615653-6-namhyung@kernel.org>
-References: <20230118060559.615653-6-namhyung@kernel.org>
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230118060559.615653-5-namhyung@kernel.org>
+References: <20230118060559.615653-5-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <167404187184.4906.18122536452263093575.tip-bot2@tip-bot2>
+Message-ID: <167404187214.4906.5082914513672443558.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,225 +68,232 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     bb447c27a4674628ea50341cfa4b31618f2010af
-Gitweb:        https://git.kernel.org/tip/bb447c27a4674628ea50341cfa4b31618f2010af
+Commit-ID:     eb55b455ef9c7123bdfa7e8a7f1ebeaa8034eb83
+Gitweb:        https://git.kernel.org/tip/eb55b455ef9c7123bdfa7e8a7f1ebeaa8034eb83
 Author:        Namhyung Kim <namhyung@kernel.org>
-AuthorDate:    Tue, 17 Jan 2023 22:05:56 -08:00
+AuthorDate:    Tue, 17 Jan 2023 22:05:55 -08:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Wed, 18 Jan 2023 11:57:20 +01:00
 
-perf/core: Set data->sample_flags in perf_prepare_sample()
+perf/core: Add perf_sample_save_brstack() helper
 
-The perf_prepare_sample() function sets the perf_sample_data according
-to the attr->sample_type before copying it to the ring buffer.  But BPF
-also wants to access the sample data so it needs to prepare the sample
-even before the regular path.
-
-That means perf_prepare_sample() can be called more than once.  Set
-the data->sample_flags consistently so that it can indicate which fields
-are set already and skip them if sets.
-
-Also update the filtered_sample_type to have the dependent flags to
-reduce the number of branches.
+When we saves the branch stack to the perf sample data, we needs to
+update the sample flags and the dynamic size.  To make sure this is
+done consistently, add the perf_sample_save_brstack() helper and
+convert all call sites.
 
 Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Tested-by: Jiri Olsa <jolsa@kernel.org>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230118060559.615653-6-namhyung@kernel.org
+Link: https://lore.kernel.org/r/20230118060559.615653-5-namhyung@kernel.org
 ---
- kernel/events/core.c | 85 ++++++++++++++++++++++++++++++++-----------
- 1 file changed, 65 insertions(+), 20 deletions(-)
+ arch/powerpc/perf/core-book3s.c |  3 +-
+ arch/x86/events/amd/core.c      |  6 +--
+ arch/x86/events/intel/core.c    |  6 +--
+ arch/x86/events/intel/ds.c      |  9 +---
+ include/linux/perf_event.h      | 66 +++++++++++++++++++-------------
+ kernel/events/core.c            | 16 ++------
+ 6 files changed, 53 insertions(+), 53 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index bd20705..7135cb9 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7046,12 +7046,21 @@ out_put:
- 	ring_buffer_put(rb);
+diff --git a/arch/powerpc/perf/core-book3s.c b/arch/powerpc/perf/core-book3s.c
+index bf318dd..8c1f7de 100644
+--- a/arch/powerpc/perf/core-book3s.c
++++ b/arch/powerpc/perf/core-book3s.c
+@@ -2313,8 +2313,7 @@ static void record_and_restart(struct perf_event *event, unsigned long val,
+ 			struct cpu_hw_events *cpuhw;
+ 			cpuhw = this_cpu_ptr(&cpu_hw_events);
+ 			power_pmu_bhrb_read(event, cpuhw);
+-			data.br_stack = &cpuhw->bhrb_stack;
+-			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
++			perf_sample_save_brstack(&data, event, &cpuhw->bhrb_stack);
+ 		}
+ 
+ 		if (event->attr.sample_type & PERF_SAMPLE_DATA_SRC &&
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 4386b10..8c45b19 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -928,10 +928,8 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+ 		if (!x86_perf_event_set_period(event))
+ 			continue;
+ 
+-		if (has_branch_stack(event)) {
+-			data.br_stack = &cpuc->lbr_stack;
+-			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+-		}
++		if (has_branch_stack(event))
++			perf_sample_save_brstack(&data, event, &cpuc->lbr_stack);
+ 
+ 		if (perf_event_overflow(event, &data, regs))
+ 			x86_pmu_stop(event, 0);
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 29d2d04..14f0a74 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -3036,10 +3036,8 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
+ 
+ 		perf_sample_data_init(&data, 0, event->hw.last_period);
+ 
+-		if (has_branch_stack(event)) {
+-			data.br_stack = &cpuc->lbr_stack;
+-			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+-		}
++		if (has_branch_stack(event))
++			perf_sample_save_brstack(&data, event, &cpuc->lbr_stack);
+ 
+ 		if (perf_event_overflow(event, &data, regs))
+ 			x86_pmu_stop(event, 0);
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 158cf84..07c8a2c 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1720,10 +1720,8 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+ 		data->sample_flags |= PERF_SAMPLE_TIME;
+ 	}
+ 
+-	if (has_branch_stack(event)) {
+-		data->br_stack = &cpuc->lbr_stack;
+-		data->sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+-	}
++	if (has_branch_stack(event))
++		perf_sample_save_brstack(data, event, &cpuc->lbr_stack);
  }
  
-+/*
-+ * A set of common sample data types saved even for non-sample records
-+ * when event->attr.sample_id_all is set.
-+ */
-+#define PERF_SAMPLE_ID_ALL  (PERF_SAMPLE_TID | PERF_SAMPLE_TIME |	\
-+			     PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |	\
-+			     PERF_SAMPLE_CPU | PERF_SAMPLE_IDENTIFIER)
-+
- static void __perf_event_header__init_id(struct perf_event_header *header,
- 					 struct perf_sample_data *data,
- 					 struct perf_event *event,
- 					 u64 sample_type)
- {
- 	data->type = event->attr.sample_type;
-+	data->sample_flags |= data->type & PERF_SAMPLE_ID_ALL;
- 	header->size += event->id_header_size;
+ static void adaptive_pebs_save_regs(struct pt_regs *regs,
+@@ -1883,8 +1881,7 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
  
- 	if (sample_type & PERF_SAMPLE_TID) {
-@@ -7554,6 +7563,11 @@ perf_callchain(struct perf_event *event, struct pt_regs *regs)
- 	return callchain ?: &__empty_callchain;
- }
+ 		if (has_branch_stack(event)) {
+ 			intel_pmu_store_pebs_lbrs(lbr);
+-			data->br_stack = &cpuc->lbr_stack;
+-			data->sample_flags |= PERF_SAMPLE_BRANCH_STACK;
++			perf_sample_save_brstack(data, event, &cpuc->lbr_stack);
+ 		}
+ 	}
  
-+static __always_inline u64 __cond_set(u64 flags, u64 s, u64 d)
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 569dfac..7db0e9c 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1102,6 +1102,31 @@ extern u64 perf_event_read_value(struct perf_event *event,
+ 
+ extern struct perf_callchain_entry *perf_callchain(struct perf_event *event, struct pt_regs *regs);
+ 
++static inline bool branch_sample_no_flags(const struct perf_event *event)
 +{
-+	return d * !!(flags & s);
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
 +}
 +
- void perf_prepare_sample(struct perf_event_header *header,
- 			 struct perf_sample_data *data,
- 			 struct perf_event *event,
-@@ -7569,14 +7583,24 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	header->misc |= perf_misc_flags(regs);
- 
- 	/*
--	 * Clear the sample flags that have already been done by the
--	 * PMU driver.
-+	 * Add the sample flags that are dependent to others.  And clear the
-+	 * sample flags that have already been done by the PMU driver.
- 	 */
--	filtered_sample_type = sample_type & ~data->sample_flags;
-+	filtered_sample_type = sample_type;
-+	filtered_sample_type |= __cond_set(sample_type, PERF_SAMPLE_CODE_PAGE_SIZE,
-+					   PERF_SAMPLE_IP);
-+	filtered_sample_type |= __cond_set(sample_type, PERF_SAMPLE_DATA_PAGE_SIZE |
-+					   PERF_SAMPLE_PHYS_ADDR, PERF_SAMPLE_ADDR);
-+	filtered_sample_type |= __cond_set(sample_type, PERF_SAMPLE_STACK_USER,
-+					   PERF_SAMPLE_REGS_USER);
-+	filtered_sample_type &= ~data->sample_flags;
++static inline bool branch_sample_no_cycles(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
++}
 +
- 	__perf_event_header__init_id(header, data, event, filtered_sample_type);
++static inline bool branch_sample_type(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
++}
++
++static inline bool branch_sample_hw_index(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
++}
++
++static inline bool branch_sample_priv(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
++}
++
  
--	if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
-+	if (filtered_sample_type & PERF_SAMPLE_IP) {
- 		data->ip = perf_instruction_pointer(regs);
-+		data->sample_flags |= PERF_SAMPLE_IP;
-+	}
+ struct perf_sample_data {
+ 	/*
+@@ -1210,6 +1235,21 @@ static inline void perf_sample_save_raw_data(struct perf_sample_data *data,
+ 	data->sample_flags |= PERF_SAMPLE_RAW;
+ }
  
- 	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
- 		perf_sample_save_callchain(data, event, regs);
-@@ -7593,10 +7617,15 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		data->sample_flags |= PERF_SAMPLE_BRANCH_STACK;
- 	}
- 
--	if (sample_type & (PERF_SAMPLE_REGS_USER | PERF_SAMPLE_STACK_USER))
-+	if (filtered_sample_type & PERF_SAMPLE_REGS_USER)
- 		perf_sample_regs_user(&data->regs_user, regs);
- 
--	if (sample_type & PERF_SAMPLE_REGS_USER) {
-+	/*
-+	 * It cannot use the filtered_sample_type here as REGS_USER can be set
-+	 * by STACK_USER (using __cond_set() above) and we don't want to update
-+	 * the dyn_size if it's not requested by users.
-+	 */
-+	if ((sample_type & ~data->sample_flags) & PERF_SAMPLE_REGS_USER) {
- 		/* regs dump ABI info */
- 		int size = sizeof(u64);
- 
-@@ -7606,9 +7635,10 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		}
- 
- 		data->dyn_size += size;
-+		data->sample_flags |= PERF_SAMPLE_REGS_USER;
- 	}
- 
--	if (sample_type & PERF_SAMPLE_STACK_USER) {
-+	if (filtered_sample_type & PERF_SAMPLE_STACK_USER) {
- 		/*
- 		 * Either we need PERF_SAMPLE_STACK_USER bit to be always
- 		 * processed as the last one or have additional check added
-@@ -7631,23 +7661,30 @@ void perf_prepare_sample(struct perf_event_header *header,
- 
- 		data->stack_user_size = stack_size;
- 		data->dyn_size += size;
-+		data->sample_flags |= PERF_SAMPLE_STACK_USER;
- 	}
- 
--	if (filtered_sample_type & PERF_SAMPLE_WEIGHT_TYPE)
-+	if (filtered_sample_type & PERF_SAMPLE_WEIGHT_TYPE) {
- 		data->weight.full = 0;
-+		data->sample_flags |= PERF_SAMPLE_WEIGHT_TYPE;
-+	}
- 
--	if (filtered_sample_type & PERF_SAMPLE_DATA_SRC)
-+	if (filtered_sample_type & PERF_SAMPLE_DATA_SRC) {
- 		data->data_src.val = PERF_MEM_NA;
-+		data->sample_flags |= PERF_SAMPLE_DATA_SRC;
-+	}
- 
--	if (filtered_sample_type & PERF_SAMPLE_TRANSACTION)
-+	if (filtered_sample_type & PERF_SAMPLE_TRANSACTION) {
- 		data->txn = 0;
-+		data->sample_flags |= PERF_SAMPLE_TRANSACTION;
-+	}
- 
--	if (sample_type & (PERF_SAMPLE_ADDR | PERF_SAMPLE_PHYS_ADDR | PERF_SAMPLE_DATA_PAGE_SIZE)) {
--		if (filtered_sample_type & PERF_SAMPLE_ADDR)
--			data->addr = 0;
-+	if (filtered_sample_type & PERF_SAMPLE_ADDR) {
-+		data->addr = 0;
-+		data->sample_flags |= PERF_SAMPLE_ADDR;
- 	}
- 
--	if (sample_type & PERF_SAMPLE_REGS_INTR) {
-+	if (filtered_sample_type & PERF_SAMPLE_REGS_INTR) {
- 		/* regs dump ABI info */
- 		int size = sizeof(u64);
- 
-@@ -7660,19 +7697,22 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		}
- 
- 		data->dyn_size += size;
-+		data->sample_flags |= PERF_SAMPLE_REGS_INTR;
- 	}
- 
--	if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
--	    filtered_sample_type & PERF_SAMPLE_PHYS_ADDR)
-+	if (filtered_sample_type & PERF_SAMPLE_PHYS_ADDR) {
- 		data->phys_addr = perf_virt_to_phys(data->addr);
-+		data->sample_flags |= PERF_SAMPLE_PHYS_ADDR;
-+	}
- 
- #ifdef CONFIG_CGROUP_PERF
--	if (sample_type & PERF_SAMPLE_CGROUP) {
-+	if (filtered_sample_type & PERF_SAMPLE_CGROUP) {
- 		struct cgroup *cgrp;
- 
- 		/* protected by RCU */
- 		cgrp = task_css_check(current, perf_event_cgrp_id, 1)->cgroup;
- 		data->cgroup = cgroup_id(cgrp);
-+		data->sample_flags |= PERF_SAMPLE_CGROUP;
- 	}
++static inline void perf_sample_save_brstack(struct perf_sample_data *data,
++					    struct perf_event *event,
++					    struct perf_branch_stack *brs)
++{
++	int size = sizeof(u64); /* nr */
++
++	if (branch_sample_hw_index(event))
++		size += sizeof(u64);
++	size += brs->nr * sizeof(struct perf_branch_entry);
++
++	data->br_stack = brs;
++	data->dyn_size += size;
++	data->sample_flags |= PERF_SAMPLE_BRANCH_STACK;
++}
++
+ /*
+  * Clear all bitfields in the perf_branch_entry.
+  * The to and from fields are not cleared because they are
+@@ -1827,30 +1867,4 @@ static inline void perf_lopwr_cb(bool mode)
+ }
  #endif
  
-@@ -7681,13 +7721,17 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	 * require PERF_SAMPLE_ADDR, kernel implicitly retrieve the data->addr,
- 	 * but the value will not dump to the userspace.
- 	 */
--	if (sample_type & PERF_SAMPLE_DATA_PAGE_SIZE)
-+	if (filtered_sample_type & PERF_SAMPLE_DATA_PAGE_SIZE) {
- 		data->data_page_size = perf_get_page_size(data->addr);
-+		data->sample_flags |= PERF_SAMPLE_DATA_PAGE_SIZE;
-+	}
- 
--	if (sample_type & PERF_SAMPLE_CODE_PAGE_SIZE)
-+	if (filtered_sample_type & PERF_SAMPLE_CODE_PAGE_SIZE) {
- 		data->code_page_size = perf_get_page_size(data->ip);
-+		data->sample_flags |= PERF_SAMPLE_CODE_PAGE_SIZE;
-+	}
- 
--	if (sample_type & PERF_SAMPLE_AUX) {
-+	if (filtered_sample_type & PERF_SAMPLE_AUX) {
- 		u64 size;
- 
- 		header->size += sizeof(u64); /* size */
-@@ -7705,6 +7749,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 
- 		WARN_ON_ONCE(size + header->size > U16_MAX);
- 		data->dyn_size += size + sizeof(u64); /* size above */
-+		data->sample_flags |= PERF_SAMPLE_AUX;
+-#ifdef CONFIG_PERF_EVENTS
+-static inline bool branch_sample_no_flags(const struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
+-}
+-
+-static inline bool branch_sample_no_cycles(const struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
+-}
+-
+-static inline bool branch_sample_type(const struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
+-}
+-
+-static inline bool branch_sample_hw_index(const struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+-}
+-
+-static inline bool branch_sample_priv(const struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
+-}
+-#endif /* CONFIG_PERF_EVENTS */
+ #endif /* _LINUX_PERF_EVENT_H */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 17108a2..bd20705 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7310,7 +7310,7 @@ void perf_output_sample(struct perf_output_handle *handle,
  	}
  
- 	header->size += data->dyn_size;
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+-		if (data->sample_flags & PERF_SAMPLE_BRANCH_STACK) {
++		if (data->br_stack) {
+ 			size_t size;
+ 
+ 			size = data->br_stack->nr
+@@ -7587,16 +7587,10 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 		data->sample_flags |= PERF_SAMPLE_RAW;
+ 	}
+ 
+-	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+-		int size = sizeof(u64); /* nr */
+-		if (data->sample_flags & PERF_SAMPLE_BRANCH_STACK) {
+-			if (branch_sample_hw_index(event))
+-				size += sizeof(u64);
+-
+-			size += data->br_stack->nr
+-			      * sizeof(struct perf_branch_entry);
+-		}
+-		data->dyn_size += size;
++	if (filtered_sample_type & PERF_SAMPLE_BRANCH_STACK) {
++		data->br_stack = NULL;
++		data->dyn_size += sizeof(u64);
++		data->sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+ 	}
+ 
+ 	if (sample_type & (PERF_SAMPLE_REGS_USER | PERF_SAMPLE_STACK_USER))
