@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C666718D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21ED6718D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjARKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S229684AbjARKWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjARKUb (ORCPT
+        with ESMTP id S229851AbjARKV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:20:31 -0500
+        Wed, 18 Jan 2023 05:21:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24F7798E6;
-        Wed, 18 Jan 2023 01:25:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27D3442DD;
+        Wed, 18 Jan 2023 01:27:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70D31B81C11;
-        Wed, 18 Jan 2023 09:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0287FC433EF;
-        Wed, 18 Jan 2023 09:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674033952;
-        bh=KlUPGKsZLEMxW1G8jfwVen6ljbFd7VXHSO70h2nSXKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JWCyvuyz7uf/Kb7lnxvy3/MFAUTdmCGWdoadgzJguVTIgKQrgNzrjH+MJuTFboAyp
-         DKnAd3xZV0DNSuNHwo3bXRfT8/QYiOKf8g50aZh4fXuYcEwGN8alGYldTcdA/s5wKA
-         V7a7dRDlHxBXxx9mNBV75zXOQi/xCXCQxWoFjFN+2GW0XhupAwAQvGOc/IRW23LMaV
-         ey18YCyqhbhK6mK8fqgjHsJByTfTsTG720rE1ca+YHzZPQg6BxLVdl3/za/yz92Sjs
-         6bbVc5Dhy7M8u0xXmsbB9ULRXztPf71s1oTUhY4jPeuk5DN6U9ayxq8z+E1D8XvKcH
-         sfuOk7Obu5H8w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pI4i0-0001fe-Aa; Wed, 18 Jan 2023 10:26:16 +0100
-Date:   Wed, 18 Jan 2023 10:26:16 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 07/19] irqdomain: Look for existing mapping only once
-Message-ID: <Y8e7OGlPXolkC1+R@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-8-johan+linaro@kernel.org>
- <87wn5kkfqo.ffs@tglx>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAC0FB81C0F;
+        Wed, 18 Jan 2023 09:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F6FC433D2;
+        Wed, 18 Jan 2023 09:26:58 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v6.2-rc5
+Date:   Wed, 18 Jan 2023 17:26:51 +0800
+Message-Id: <20230118092651.2452402-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wn5kkfqo.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:34:07PM +0100, Thomas Gleixner wrote:
-> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> > Avoid looking for an existing mapping twice when creating a new mapping
-> > using irq_create_fwspec_mapping() by factoring out the actual allocation
-> > which is shared with irq_create_mapping_affinity().
-> 
-> This changelog is incomplete and it took me a while to figure out why
-> this is before the race fix.
-> 
-> The point is that you need __irq_create_mapping_affinity() later to fix
-> the shared mapping race. The double check avoidance is just a nice side
-> effect.
-> 
-> So please spell it out and make it clear that this needs to be
-> backported too, e.g. by adding:
-> 
-> The split out internal function will be used to fix a shared interrupt
-> mapping race. This change is therefore tagged with the same fixes tag.
-> 
-> Fixes: ....
+The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
 
-Sure. It was originally part of the fix of the race, but I was told to
-clean up the code first (and not worry about backporting).
+  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
 
-I'll see what I can do about reordering these again with the aim of
-making things easier to backport.
+are available in the Git repository at:
 
-> > +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
-> > +						  irq_hw_number_t hwirq,
-> > +						  const struct irq_affinity_desc *affinity)
-> 
-> Please rename to irq_create_mapping_affinity_locked() so it's clear what
-> this is about and what the calling convention is. A lockdep assert to
-> that effect would be nice too.
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.2-1
 
-Will do.
+for you to fetch changes up to dc74a9e8a8c57966a563ab078ba91c8b2c0d0a72:
 
-Johan
+  LoongArch: Add generic ex-handler unwind in prologue unwinder (2023-01-17 11:42:16 +0800)
+
+----------------------------------------------------------------
+LoongArch fixes for v6.2-rc5
+
+Fix a missing elf_hwcap, fix some stack unwinder bugs and two trivial
+cleanups.
+----------------------------------------------------------------
+Huacai Chen (1):
+      LoongArch: Add HWCAP_LOONGARCH_CPUCFG to elf_hwcap
+
+Jinyang He (5):
+      LoongArch: Adjust PC value when unwind next frame in unwinder
+      LoongArch: Get frame info in unwind_start() when regs is not available
+      LoongArch: Use correct sp value to get graph addr in stack unwinders
+      LoongArch: Strip guess unwinder out from prologue unwinder
+      LoongArch: Add generic ex-handler unwind in prologue unwinder
+
+Tiezhu Yang (1):
+      LoongArch: Use common function sign_extend64()
+
+Youling Tang (1):
+      LoongArch: Simplify larch_insn_gen_xxx implementation
+
+ arch/loongarch/include/asm/ftrace.h     |   2 -
+ arch/loongarch/include/asm/inst.h       |   9 +-
+ arch/loongarch/include/asm/unwind.h     |  41 +++++-
+ arch/loongarch/kernel/Makefile          |   2 +-
+ arch/loongarch/kernel/alternative.c     |   6 +-
+ arch/loongarch/kernel/cpu-probe.c       |   2 +-
+ arch/loongarch/kernel/genex.S           |   3 +
+ arch/loongarch/kernel/inst.c            |  45 +-----
+ arch/loongarch/kernel/process.c         |  12 +-
+ arch/loongarch/kernel/traps.c           |   3 -
+ arch/loongarch/kernel/unwind.c          |  32 ++++
+ arch/loongarch/kernel/unwind_guess.c    |  49 +------
+ arch/loongarch/kernel/unwind_prologue.c | 252 +++++++++++++++++++-------------
+ arch/loongarch/mm/tlb.c                 |   2 +-
+ 14 files changed, 247 insertions(+), 213 deletions(-)
+ create mode 100644 arch/loongarch/kernel/unwind.c
