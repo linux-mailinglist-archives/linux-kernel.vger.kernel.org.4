@@ -2,146 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB39867256F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB05672571
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjARRsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S229941AbjARRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjARRrr (ORCPT
+        with ESMTP id S229986AbjARRru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:47:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E05CFD7;
-        Wed, 18 Jan 2023 09:46:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BB46ACE1B53;
-        Wed, 18 Jan 2023 17:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A58C4C433F0;
-        Wed, 18 Jan 2023 17:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674063988;
-        bh=MWdNzb1aQw4NJSMQBvu2jSlHNAYyl/IhJuxAJiXZHWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ol5PtcjeQNn+GhJ8Y0tkDbOmz6I1a6MuIpO0o+ECwx+qtLepmgkkSFN+XzFPUwF9Y
-         OE5kcKAHreizCqXe5hiHEYN9PeZ4EY2nc4KOlhgGVBOQGRldjGyqH9GoCZhOwCx4I7
-         MgBU2EoMBvhaT8NiDcHbQthWohhLpmWAiQQHwTh+zprkwvS/UkZP29uOKyVUEUSll2
-         QcFFgOmjmi6qKEup3A3yCn19kDiLCgwqUxa2qb9y36Yq8P9d1IWTb8G0rlQQoUcuoH
-         YFhNldU8FD01eYT0tq+Tn2YrCluJAZQFgz3B1DhQ2DuiqiW8U+6eWTMDFbsDvr6lIF
-         U6qc/sXrcfLJw==
-Date:   Wed, 18 Jan 2023 11:46:25 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
-Subject: Re: [PATCH v6 01/17] EDAC/device: Respect any driver-supplied
- workqueue polling value
-Message-ID: <20230118174625.oo5gi36q45kfbgoq@builder.lan>
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
+        Wed, 18 Jan 2023 12:47:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D6CC37;
+        Wed, 18 Jan 2023 09:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674064011; x=1705600011;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/y2B7Acpa6FvFH8fazzDGApEBpGDAqK/p5/R7++N3iA=;
+  b=jbbVgpMHalHpnfj3NhmdA8JYuPh+GSx+HKNwYTTmD22kkzSMWNPCfy6m
+   oNfQoNrkBnCKp42zr16QuUkllnqd5a3fdtij3GAJPte4UZW6sbKS3Fb4Y
+   I4NDrlKx2SPPoTAzaQi9puu541LYiUtxf3wJaTivnXrSV12Y0I42Qb0Nw
+   lEnjK3AmUXGQ7qWvo3QY+c2BmP6Wwt6a/y2vtOWmN1wiJxWuTEGLOlwWq
+   546VRGjvcmefOdQaTMOFGRcbLk8LrBoPQqglqlOJmjCLzoxrhiaZsr8S4
+   XLqNdzAjhOChq0P5xOxClP27H89OAOoeUCna+MPC9vvhtd39Mposws8cR
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,226,1669100400"; 
+   d="scan'208";a="197188845"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jan 2023 10:46:49 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 18 Jan 2023 10:46:49 -0700
+Received: from che-lt-i67786lx.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 10:46:45 -0700
+From:   Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+Subject: [PATCH v2 net] net: dsa: microchip: ksz9477: port map correction in ALU table entry register
+Date:   Wed, 18 Jan 2023 23:17:35 +0530
+Message-ID: <20230118174735.702377-1-rakesh.sankaranarayanan@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
-> The EDAC drivers may optionally pass the poll_msec value. Use that value
-> if available, else fall back to 1000ms.
-> 
->   [ bp: Touchups. ]
-> 
-> Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
-> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+ALU table entry 2 register in KSZ9477 have bit positions reserved for
+forwarding port map. This field is referred in ksz9477_fdb_del() for
+clearing forward port map and alu table.
 
-Your S-o-b should be the last one to indicate that you are the  one
-certifying the origin of this patch.
+But current fdb_del refer ALU table entry 3 register for accessing forward
+port map. Update ksz9477_fdb_del() to get forward port map from correct
+alu table entry register.
 
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+With this bug, issue can be observed while deleting static MAC entries.
+Delete any specific MAC entry using "bridge fdb del" command. This should
+clear all the specified MAC entries. But it is observed that entries with
+self static alone are retained.
 
-If the two of you wrote the patch, please add a Co-developed-by.
+Tested on LAN9370 EVB since ksz9477_fdb_del() is used common across
+LAN937x and KSZ series.
 
-Thanks,
-Bjorn
+Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
+Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
-> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-> Cc: <stable@vger.kernel.org> # 4.9
-> Link: https://lore.kernel.org/r/COZYL8MWN97H.MROQ391BGA09@otso
-> ---
->  drivers/edac/edac_device.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 19522c568aa5..a50b7bcfb731 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -34,6 +34,9 @@
->  static DEFINE_MUTEX(device_ctls_mutex);
->  static LIST_HEAD(edac_device_list);
->  
-> +/* Default workqueue processing interval on this instance, in msecs */
-> +#define DEFAULT_POLL_INTERVAL 1000
-> +
->  #ifdef CONFIG_EDAC_DEBUG
->  static void edac_device_dump_device(struct edac_device_ctl_info *edac_dev)
->  {
-> @@ -336,7 +339,7 @@ static void edac_device_workq_function(struct work_struct *work_req)
->  	 * whole one second to save timers firing all over the period
->  	 * between integral seconds
->  	 */
-> -	if (edac_dev->poll_msec == 1000)
-> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
->  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
->  	else
->  		edac_queue_work(&edac_dev->work, edac_dev->delay);
-> @@ -366,7 +369,7 @@ static void edac_device_workq_setup(struct edac_device_ctl_info *edac_dev,
->  	 * timers firing on sub-second basis, while they are happy
->  	 * to fire together on the 1 second exactly
->  	 */
-> -	if (edac_dev->poll_msec == 1000)
-> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
->  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
->  	else
->  		edac_queue_work(&edac_dev->work, edac_dev->delay);
-> @@ -398,7 +401,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
->  {
->  	unsigned long jiffs = msecs_to_jiffies(value);
->  
-> -	if (value == 1000)
-> +	if (value == DEFAULT_POLL_INTERVAL)
->  		jiffs = round_jiffies_relative(value);
->  
->  	edac_dev->poll_msec = value;
-> @@ -443,11 +446,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
->  		/* This instance is NOW RUNNING */
->  		edac_dev->op_state = OP_RUNNING_POLL;
->  
-> -		/*
-> -		 * enable workq processing on this instance,
-> -		 * default = 1000 msec
-> -		 */
-> -		edac_device_workq_setup(edac_dev, 1000);
-> +		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ?: DEFAULT_POLL_INTERVAL);
->  	} else {
->  		edac_dev->op_state = OP_RUNNING_INTERRUPT;
->  	}
-> -- 
-> 2.25.1
-> 
+---
+
+v1->v2
+- Based on the community feedback, removed patch from series and
+  added as independent patch.
+- Added Reviewed-by tag.
+
+---
+---
+ drivers/net/dsa/microchip/ksz9477.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 47b54ecf2c6f..6178a96e389f 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -540,10 +540,10 @@ int ksz9477_fdb_del(struct ksz_device *dev, int port,
+ 		ksz_read32(dev, REG_SW_ALU_VAL_D, &alu_table[3]);
+ 
+ 		/* clear forwarding port */
+-		alu_table[2] &= ~BIT(port);
++		alu_table[1] &= ~BIT(port);
+ 
+ 		/* if there is no port to forward, clear table */
+-		if ((alu_table[2] & ALU_V_PORT_MAP) == 0) {
++		if ((alu_table[1] & ALU_V_PORT_MAP) == 0) {
+ 			alu_table[0] = 0;
+ 			alu_table[1] = 0;
+ 			alu_table[2] = 0;
+-- 
+2.34.1
+
