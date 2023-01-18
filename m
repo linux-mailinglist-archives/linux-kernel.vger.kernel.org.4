@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9918B671078
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2365E67107C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjARCBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S229685AbjARCBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjARCBL (ORCPT
+        with ESMTP id S229614AbjARCBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:01:11 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 174334F870
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:06 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxLuviUsdjTz0CAA--.6819S3;
-        Wed, 18 Jan 2023 10:01:06 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuTeUsdjPhYbAA--.17049S6;
-        Wed, 18 Jan 2023 10:01:04 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as non-kprobe-able
-Date:   Wed, 18 Jan 2023 10:01:00 +0800
-Message-Id: <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8DxTuTeUsdjPhYbAA--.17049S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uw45Wr4fCw45ZrWUGFW7urg_yoW8Kr17pw
-        1DAr4vgrs5Gr1fJry7tF1UZ3yDZws7Gr12v3W29FW8CF47WF18Zry093yDXFyxtw43GFWF
-        qFn5J3929F4UJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 21:01:13 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4D0521DE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:13 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4b718cab0e4so449251607b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4E07Mrlokbjok8NyF8LoBrAZNQWCs1UWN04ZvvsKt1E=;
+        b=k9nZqbAy6zimnKuDQP5Wi59ksf9yl4aqdPitA84ns9UlmkktReAp9H08OJzyEbCc9J
+         jlDJGMFtUt+DQUFCjpFjACsoOm7c2T8Ko3BIWmNfotQIa4DTLkedyccK3mJJ5Ty52tU7
+         Pjqt7Q630XACChklgKzdcQGHFItj196tBjXccVmZpdBJCyn6CNLYisPTgri5QyuUVR+7
+         dmUvvZbw8Qidf7u0joBcNRjhlVUuqFpoLv2ThdeXP2UpNCfOLsBXBlqXHkBQXH0g/JiS
+         Ag8FlCGONB7nFbeNMrZ59yFKtUHJpRow7tNRX5eRbp7wzA9oeEkB6FFhJC81J/OTedMt
+         9Sfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4E07Mrlokbjok8NyF8LoBrAZNQWCs1UWN04ZvvsKt1E=;
+        b=NqkOzkf30clDOc3duIngOoW9kFccEmWfAXYgZV/9Lq+lhrCrGT7JC6JCqaOyrlg+EC
+         XsbmKhWhw+kHyFi1jBFeQG6cfkQP63tO9wiY1wVtxwwY1CTvFDIv6+/uCzk4PIP2JoLX
+         WAEz6fooDAwKg7K9UTzmA0rw2J5mR6+cLTrBgFqAb0WKck8iC5eZgAtUSI1S6bi5n9hk
+         LRINe69pTNyLnaeTERS+Bov7hTVlDxwjX6q1cYY1di7iiqqaGn9Y2wbaeyNtHfYf0MIn
+         J5+FmJM2rB0D1XZ331LJNSJi4tnSTJP37VYnZ1ntjvzWwUQVPR/YPO2+lZQLAdhu2Z+a
+         YK+g==
+X-Gm-Message-State: AFqh2kqwiYCC2G9ZZnFHCNnCSs7tX8dM/NMpS68CxgCepA6V6R0FaF+J
+        nYHcmUCsK8+R1zHIuU33B4JnEkDofwaaWceC16jqqw==
+X-Google-Smtp-Source: AMrXdXsZWeD7TD1LZKXqm18TxRLwIraaKkRGisl2ohrjniYmFM7Qtmaw6wJy/oQcDtGLbtaO2lGyLeazDPZnc+XZmGs=
+X-Received: by 2002:a81:1d2:0:b0:433:f1c0:3f1c with SMTP id
+ 201-20020a8101d2000000b00433f1c03f1cmr704506ywb.438.1674007272153; Tue, 17
+ Jan 2023 18:01:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-18-surenb@google.com>
+ <Y8a734ufLZjPHgtT@dhcp22.suse.cz>
+In-Reply-To: <Y8a734ufLZjPHgtT@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 17 Jan 2023 18:01:01 -0800
+Message-ID: <CAJuCfpGoYaF2-z7FCiN4X8gEGD6nAwnQC+=n3tUHuMWZa7zx8Q@mail.gmail.com>
+Subject: Re: [PATCH 17/41] mm/mmap: move VMA locking before
+ anon_vma_lock_write call
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some assembler symbols are not kprobe safe, such as handle_syscall
-(used as syscall exception handler), *memcpy* (may cause recursive
-exceptions), they can not be instrumented, just blacklist them for
-kprobing.
+On Tue, Jan 17, 2023 at 7:16 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 09-01-23 12:53:12, Suren Baghdasaryan wrote:
+> > Move VMA flag modification (which now implies VMA locking) before
+> > anon_vma_lock_write to match the locking order of page fault handler.
+>
+> Does this changelog assumes per vma locking in the #PF?
 
-Here is a related problem and discussion:
-Link: https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+Hmm, you are right. Page fault handlers do not use per-vma locks yet
+but the changelog already talks about that. Maybe I should change it
+to simply:
+```
+Move VMA flag modification (which now implies VMA locking) before
+vma_adjust_trans_huge() to ensure the modifications are done after VMA
+has been locked.
+```
+Is that better?
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/asm.h | 10 ++++++++++
- arch/loongarch/kernel/entry.S    |  1 +
- arch/loongarch/lib/memcpy.S      |  3 +++
- 3 files changed, 14 insertions(+)
-
-diff --git a/arch/loongarch/include/asm/asm.h b/arch/loongarch/include/asm/asm.h
-index 40eea6a..f591b32 100644
---- a/arch/loongarch/include/asm/asm.h
-+++ b/arch/loongarch/include/asm/asm.h
-@@ -188,4 +188,14 @@
- #define PTRLOG		3
- #endif
- 
-+/* Annotate a function as being unsuitable for kprobes. */
-+#ifdef CONFIG_KPROBES
-+#define _ASM_NOKPROBE(name)				\
-+	.pushsection "_kprobe_blacklist", "aw";		\
-+	.quad	name;					\
-+	.popsection
-+#else
-+#define _ASM_NOKPROBE(name)
-+#endif
-+
- #endif /* __ASM_ASM_H */
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index d53b631..55e23b1 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
- 
- 	RESTORE_ALL_AND_RET
- SYM_FUNC_END(handle_syscall)
-+_ASM_NOKPROBE(handle_syscall)
- 
- SYM_CODE_START(ret_from_fork)
- 	bl	schedule_tail		# a0 = struct task_struct *prev
-diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
-index 7c07d59..3b7e1de 100644
---- a/arch/loongarch/lib/memcpy.S
-+++ b/arch/loongarch/lib/memcpy.S
-@@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
- 	ALTERNATIVE	"b __memcpy_generic", \
- 			"b __memcpy_fast", CPU_FEATURE_UAL
- SYM_FUNC_END(memcpy)
-+_ASM_NOKPROBE(memcpy)
- 
- EXPORT_SYMBOL(memcpy)
- 
-@@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
- 2:	move	a0, a3
- 	jr	ra
- SYM_FUNC_END(__memcpy_generic)
-+_ASM_NOKPROBE(__memcpy_generic)
- 
- /*
-  * void *__memcpy_fast(void *dst, const void *src, size_t n)
-@@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
- 3:	move	a0, a3
- 	jr	ra
- SYM_FUNC_END(__memcpy_fast)
-+_ASM_NOKPROBE(__memcpy_fast)
--- 
-2.1.0
-
+>
+> --
+> Michal Hocko
+> SUSE Labs
