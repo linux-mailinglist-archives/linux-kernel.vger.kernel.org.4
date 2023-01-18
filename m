@@ -2,94 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6F1672B3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBE3672B41
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjARWZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S229905AbjARW0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjARWZm (ORCPT
+        with ESMTP id S229446AbjARW00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:25:42 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0059863081
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:25:39 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id p188so301216yba.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:25:39 -0800 (PST)
+        Wed, 18 Jan 2023 17:26:26 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC5C64DAF
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:26:24 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id q10so110315wrs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:26:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uJRlUJgto8uB5cGkRdE7zVVbQyEtoN07TyJzGKXUrGM=;
-        b=cOiYLD26GMRo0sNZd8nju2ANkQ+n3qs8Xjf5D7XTwBgaPEvmZz9M1Z27xdRO85T2FM
-         xExT7Rjf7Y6CNd8+OAZrG6hsCG8G+r+uQZx/eAXNCCaYYfC1z+pp99Ld0GcOx+rlL3ve
-         TzfoVnhIYEHpZwVXwdbdWcuFLOeJUWSWTHdULy/DKVTs30/a4k+cZFX/EIdVAOik7NfT
-         581mEfAXBvXkZm66DT0dp2web4Si4t34BPfC1T6H/p5xSYTAYQS6+uZXKY7okji3z55v
-         kj2sBaQcK9Rd/aSl2v98RAzHqUQ5rx2TAeo+1Arm1Hp5LAxaygH/kQyKZjfUSz+lhHjl
-         QWjQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZiyYIQERyoQDZx5EhXQDAi77/yaNBI4sXFn9DiwCNs=;
+        b=YPYqlz+xHhe24OpPAn+LNnN3Koe8wjxIjSvVz5I/7Jjr25c0z3FTjYXb5q6WFGBbtb
+         VUUWXDa96j9cU/FWN2b41d2kv8+vPjvlHRJ4M7QmaAoH8VwUzl8/+NeECrYGDTjhfn8O
+         KKJXsGQNonRZNVyWUSS35cC3DHPKupzIYZGZLznBjJutXq9ncBOAfnZq2kf+u15yBwb8
+         b9BzEBisLqVElsrhI2Q9/Ik7g+KDgW4v8/DzLkzl6UStl78+ofqQ5Dz4ryT/eEAW7Ves
+         kJR9yNfZ0kaSkFPL1C99I2XhydDZwlyJH3Lst2Kl+S7pEQuNzPuxCLeRaN9CmEOtpOVw
+         wp/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uJRlUJgto8uB5cGkRdE7zVVbQyEtoN07TyJzGKXUrGM=;
-        b=DrfiE/gH99KiqmJvQhvo+67+SO3IKlHzkdFEl4Qy2f8bsT3ET5pB4ttL+EeZwcVaKV
-         YwW1Z3/VvZO5xqTrDYYKY4z+4r/aPQZDuqxpYTk5oenwmh6jBBjsdLKo6q5bPG0T2zWW
-         BzaO2jEFF5zTrc70pCYzfHg311UqGG8k5ddz5txhp2Zkz999+EkDK3gwB8R1cnVHZpD+
-         egFnnTuKVp2uBh6oirMm70bqb3Vi9TWlNlgRNlp7JojlPPyqFji1rmnK/v9MdHGCC/wl
-         kFQExzk+8lqQDvzq5Kmq46vG5Z6M6WCjRGaWwQIwloti6wb23toi+BihyuxTpFmnNfWR
-         XCoA==
-X-Gm-Message-State: AFqh2kq5qwJTN296FILb/Cyndh+Oj7zSSoUNmEpMXuuWMIDm4Lypszrd
-        rYjm7Glr4muzsltq2dmw8dPN5B6emEkg8B3VLUTAqw==
-X-Google-Smtp-Source: AMrXdXuI5hg5AIFwh0/mT980lHJf5WTph67P2AuKuLGHPSAAZV2ksJng7e5hfUWSF+/PtO/j5sWYbhLL4bpWiw9PsAk=
-X-Received: by 2002:a25:8746:0:b0:70b:87d5:4a73 with SMTP id
- e6-20020a258746000000b0070b87d54a73mr772093ybn.584.1674080739210; Wed, 18 Jan
- 2023 14:25:39 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5ZiyYIQERyoQDZx5EhXQDAi77/yaNBI4sXFn9DiwCNs=;
+        b=QTDlZlUrHJLPFJERwmtkywfGmeSuObvoul2WczhTrKDIHEmkgxE2r9Tnv0+yyfs5Zz
+         4xL8btpNPzt1JQc3p0lMMZfVb0ySHNHTUNuKCCKtkAgYTPbLBXGlkFNhzMn+WqvXAGeg
+         t9+vYnFKPx858+OIjq+XgqOH4KlAsSbeyFjmtDQeAIQI5dIYRUGnZkV/xIEN0dRJZbc0
+         tIPWo4lSnyJkDxBuuL0s11oKXmvQyBnBdYD2wd0Pb4AcZifnjtlWDwpzon2O2m4QJ5Q3
+         W0VlCAcVPzImSiFjJf3SoohZwBd8KoCsPc+kUAL56NTwd48TEg34pkJsUJR5R8GvCNK1
+         iz3w==
+X-Gm-Message-State: AFqh2kpWjtZqkpg/OeSFvyNtbMz/S1acTkcfBaXza/ndeHmbqzNhIMry
+        15RscOJXW3KUa5mMFq8f5womBw==
+X-Google-Smtp-Source: AMrXdXtcjUpeIxxnEUDjtsSxM6s+gch9zqzPnXBZ0708WwUezrD/yB8TVQbkMm1cx8av67Q/ZUMenA==
+X-Received: by 2002:a5d:66c6:0:b0:2bd:d966:7fff with SMTP id k6-20020a5d66c6000000b002bdd9667fffmr8331359wrw.20.1674080782807;
+        Wed, 18 Jan 2023 14:26:22 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm26353554wrv.11.2023.01.18.14.26.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 14:26:22 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] thermal/drivers/armada: Use the thermal_zone_get_crit_temp()
+Date:   Wed, 18 Jan 2023 23:26:10 +0100
+Message-Id: <20230118222610.186088-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230118154817.97364-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230118154817.97364-1-u.kleine-koenig@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 18 Jan 2023 23:25:28 +0100
-Message-ID: <CACRpkdZHqn9Pma1jUG-16S6ygJkemgk6KwS=owovn5K6JRVFYQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] pwm: ab8500: Fix .apply() and implement .get_state()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+The driver browses the trip point to find out the critical trip
+temperature. However the function thermal_zone_get_crit_temp() does
+already that, so the routine is pointless in the driver.
 
-On Wed, Jan 18, 2023 at 4:48 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+Use thermal_zone_get_crit_temp() instead of inspecting all the trip
+points.
 
-> during review of my previous pwm-ab8500 patch I learned that there is a
-> (somewhat) publically available reference manual. Reading in it showed
-> that .apply() is still more broken that I assumed by just reading the
-> code.
->
-> This series first fixes .apply() to not be off by a factor of ~3000 and
-> then adds a .get_state() callback.
->
-> Note this is only compile tested as I don't have the hardware.
-> Also note this breaks all consumers that relied on the previously broken
-> behaviour.
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/armada_thermal.c | 38 +++++++++++++-------------------
+ 1 file changed, 15 insertions(+), 23 deletions(-)
 
-I looked over the patch and I can't find anything to comment on
-it just seems well researched and correct so:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index db040dbdaa0a..c6d51d8acbf0 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -784,34 +784,26 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
+ 					 int sensor_id)
+ {
+ 	/* Retrieve the critical trip point to enable the overheat interrupt */
+-	struct thermal_trip trip;
++	int temperature;
+ 	int ret;
+-	int i;
+-
+-	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
+-
+-		ret = thermal_zone_get_trip(tz, i, &trip);
+-		if (ret)
+-			return ret;
+-
+-		if (trip.type != THERMAL_TRIP_CRITICAL)
+-			continue;
+-
+-		ret = armada_select_channel(priv, sensor_id);
+-		if (ret)
+-			return ret;
+ 
+-		armada_set_overheat_thresholds(priv, trip.temperature,
+-					       trip.hysteresis);
+-		priv->overheat_sensor = tz;
+-		priv->interrupt_source = sensor_id;
++	ret = thermal_zone_get_crit_temp(tz, &temperature);
++	if (ret)
++		return ret;
+ 
+-		armada_enable_overheat_interrupt(priv);
++	ret = armada_select_channel(priv, sensor_id);
++	if (ret)
++		return ret;
+ 
+-		return 0;
+-	}
++	/*
++	 * A critical temperature does not have a hysteresis
++	 */
++	armada_set_overheat_thresholds(priv, temperature, 0);
++	priv->overheat_sensor = tz;
++	priv->interrupt_source = sensor_id;
++	armada_enable_overheat_interrupt(priv);
+ 
+-	return -EINVAL;
++	return 0;
+ }
+ 
+ static int armada_thermal_probe(struct platform_device *pdev)
+-- 
+2.34.1
 
-Yours,
-Linus Walleij
