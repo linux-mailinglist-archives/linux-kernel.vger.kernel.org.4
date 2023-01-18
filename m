@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA8C67208E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB23672090
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjARPHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S231513AbjARPHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjARPHY (ORCPT
+        with ESMTP id S231281AbjARPHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:07:24 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806DB3C21
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:07:23 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id 3so36015055vsq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C8wyUQXeegRLF3CuYjsfzh5QAgXDnILh78T7CIz6G4s=;
-        b=mOEc+THH3zT9L2WiC02QNm4zeY1Um5JRy2avTZO4y87DVKj2sBsz8+qZ1lMyR8CCVy
-         9BkRO9J7IQ73de0qb8ppWkmpkWfN/2zMyeWDSMQ+Ej2ZVMPaT4GKFF374OdHJJ1v9i3t
-         2+JuddVGOB2bUclkYEovh9lngTJN9MsvBYSQqVdlD38u8l+Q2UwGgTXMVIYa7HifZYHt
-         v1yk442Cga29dvZryyV9pOk5H0BYQnSXQLEMZpXIWd+QIuUpVlBGzuB3nv1I9gxzyAml
-         u7qsPAnAVRTOa7FBesy5z1QTXf2p7NFNVD++gbemYkHnpDk0UoTXT+kbbpzAo+G/TACS
-         k51A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C8wyUQXeegRLF3CuYjsfzh5QAgXDnILh78T7CIz6G4s=;
-        b=nyPkr4oFktYyXJzQHFPThFSPNT9E1g6T396LKh6FfCUHr3DeaUge1xBiatRX42IUVj
-         IMLwitYKDkF8eqEJpLnhoqaxY3IEoWH7Gc4613Ts10VRdeNSjadqbwwhQyNH9rWUzIV+
-         eTSTJCD0vOLXCpQ7lVFf5sfSVR1QXYQYUJYjnMWkT4B1Rs0dkiQKWgsvBg4fSQ6MlfQF
-         edDQpNP+Aslyfu0J5KhNopAh1lnEI3StIqA5zJzdWNdoOrNfhMrv+UzDvHMdoFIAy7CY
-         ZL9/7TYGKJfyjwL8I7du6HqoAGQeqKFCPql2MBcIJODc26TQ2jO2Q11lppAyp4js5tTu
-         2YjQ==
-X-Gm-Message-State: AFqh2kpgMjyqAKYSs+9uIjDE9CfiaMu5ViKo/o+boZSpAVoczJftQ5Z1
-        nv+jqPbOAC5GrulBwzM3ccq55+dfA9dzbPmKpx6zexGFxhnvcQ==
-X-Google-Smtp-Source: AMrXdXsHb+tGKpWdSSf463JrNN2O0LaBnWELi296lJmMtCCVOKE2FWiOCt1XJ35HbQ777p3fpErRvSty/Yc9trCHk5A=
-X-Received: by 2002:a67:c387:0:b0:3d2:3577:2d05 with SMTP id
- s7-20020a67c387000000b003d235772d05mr912178vsj.9.1674054442628; Wed, 18 Jan
- 2023 07:07:22 -0800 (PST)
+        Wed, 18 Jan 2023 10:07:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3591A4AA;
+        Wed, 18 Jan 2023 07:07:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=xhFVQwoO2lkjv9nSA2b817JkR90qQlSjNN6ZfOzjzd0=; b=pOKfESI7xIN2zuFLgcHfU7E+J6
+        I6dzZsWXkpu4laeHuUhFIlCVEf3uhb/e5JxiHDAWTcqdJVCVagDuzi3TrAHCouwRUFKcwQ94WEI0M
+        DJqtglvitIE0PO94WhXZsK0MuT5bRIFZUTeCSa4OwX+yXpMbMakT+HZIlW7cvk7CKD2zqSQAKl7Zk
+        8PfNyN5qzZlyjP2w9CpfHh+LAScS/unEneETNJfcRE3Np3ys0WOtdZYFnJINgz4MTHFM+lbc/fvLe
+        6Qik9F00/hV2RqZiajh/F32dkI8f/3hJ7I4pyF1utZk3wD2BZERs+WBNVQCvRBRupx0SKoY6JLSgg
+        lSiEn69w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIA26-0005bw-Tj; Wed, 18 Jan 2023 15:07:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DC77430012F;
+        Wed, 18 Jan 2023 16:07:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 97A9420A60F37; Wed, 18 Jan 2023 16:07:17 +0100 (CET)
+Date:   Wed, 18 Jan 2023 16:07:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+Message-ID: <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
+References: <20230106220959.3398792-1-song@kernel.org>
+ <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
+ <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
+ <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
+ <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu>
 MIME-Version: 1.0
-References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-3-brgl@bgdev.pl>
- <20230118145914.3012-1-hdanton@sina.com>
-In-Reply-To: <20230118145914.3012-1-hdanton@sina.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 18 Jan 2023 16:07:11 +0100
-Message-ID: <CAMRc=MfEt50RE3KWE5_4g509bbUgZcCrtEFvikskuKYaGLQU0w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: dev: don't allow user-space to deadlock the kernel
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 3:59 PM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Thu, 29 Dec 2022 17:00:45 +0100 Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > @@ -44,8 +45,14 @@ struct i2c_dev {
-> >       struct i2c_adapter *adap;
-> >       struct device dev;
-> >       struct cdev cdev;
-> > +     struct rw_semaphore sem;
->
->         int                     state;
-> #define STATE_RELEASED 1
-> #define STATE_DETACHED 2
-> >  };
->
-> Because syscalls like read, write and ioctl have completed upon release,
-> serializing the release and detach pathes is a cure to the issue.
->
+On Tue, Jan 10, 2023 at 06:31:41AM +0000, Christophe Leroy wrote:
+> Le 09/01/2023 à 21:51, Song Liu a écrit :
 
-Please elaborate because I have no idea what you mean by that.
+> > Do you mean one tree will cause addr_[min|max] to be inaccurate?
+> > 
+> 
+> Yes at least. On powerpc you will have module text below kernel, 
+> somewhere between 0xb0000000 and 0xcfffffff, and you will have module 
+> data in vmalloc area, somewhere between 0xf0000000 and 0xffffffff.
+> 
+> If you have only one tree, any address between 0xc0000000 and 0xefffffff 
+> will trigger a tree search.
 
-Bart
+The current min/max thing is tied to the tree because of easy update on
+remove, but module-insert/remove is not a performance critical path.
+
+So I think it should be possible to have {min,max}[TYPES] pairs.  Either
+brute force the removal -- using a linear scan of the mod->list to find
+the new bounds on removal.
+
+Or overengineer the whole thing and use an augmented tree to keep that
+many heaps in sync during the update -- but this seems total overkill.
+
+The only consideration is testing that many ranges in
+__module_address(), this is already 2 cachelines worth of range-checks
+-- which seems a little excessive.
+
+(also, I note that module_addr_{min,max} are unused these days)
