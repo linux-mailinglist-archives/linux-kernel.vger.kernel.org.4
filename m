@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598156718E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF766718EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjARK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S229651AbjARK0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjARKZ7 (ORCPT
+        with ESMTP id S229913AbjARKZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:25:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923E17D663
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:30:21 -0800 (PST)
+        Wed, 18 Jan 2023 05:25:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02666EEA;
+        Wed, 18 Jan 2023 01:30:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 07CDFCE1BDC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303B3C433D2;
-        Wed, 18 Jan 2023 09:30:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C1FEB81C13;
+        Wed, 18 Jan 2023 09:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C573EC433D2;
+        Wed, 18 Jan 2023 09:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674034218;
-        bh=pUmitdCWgBZAVCI5fSjyfp0oSa/dGTogN9eI1BRZzrs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gwxTJQ77MUNvbysMBAN4/g9PBW68M3KSkeVAUYbBd4nDgMtihXlrtfGnEp8W+P5Mw
-         fizsYN1JvKhCZcRTxr1+ZE5zMGsWBd4fxLYarfFaoSu3434LeHKYeU5ysqFW2t+zGx
-         ucnrF/g1B5QlWKw0pwjH5xmPL+Pn7Zlpo7cEbe2tJr3ry9B1sDmJKMjxwLMAyGiWph
-         fWVTfk+d1eO9xgH8qV9r4+p8z96Y3nnfvRl+Qa86z0XtLf6TYOEcT+ra9rezyV9u7k
-         XtnDrzzgtIAClHuwHcPK6hCZ6QRdYIRocPww2ORNSIxuIUGhbpOiagnxV7aEdzvgCp
-         oT01Ddi2oC/2Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Lewis Huang <Lewis.Huang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: fix dp_retrieve_lttpr_cap() return value
-Date:   Wed, 18 Jan 2023 10:29:56 +0100
-Message-Id: <20230118093011.3796248-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        s=k20201202; t=1674034205;
+        bh=3XyBFQNLnTyo9L+X0vrC5knpbLQfzzDd/EREfX7SuV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MiOTsPzfhCtG5D2uMQmCk52l/VOS8fqxJvZPWk57KOq8xyLCHSOgS6UY4qI+N7kPI
+         /JOk6EDQXbDnhyqJuIDv8wP9EfKfmhNa5WIaVYIF05q1YvJOEcOyYUjNYFEBrCDH9Y
+         ItuJ+LdqkqD39zPRSoLHzSyaHNXURNNkWUZsGJs2erhOqDliW7SGP8I4WeeFLT1Y7R
+         7y3XZQHlKo4yxIgYBWQcFXtoigA0dKA0ioeiG7D4zLHgLO6HQPGL1GLnnfYDoLC7Ut
+         AfrVDOuoOVdg+pGi/Cbi8sE+qokWA6U2JBzMGzMgLhpvlP0PSczfsxmiV2U4bp3GPN
+         chX0f98MBfIEA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pI4m6-0001jE-0W; Wed, 18 Jan 2023 10:30:30 +0100
+Date:   Wed, 18 Jan 2023 10:30:30 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 08/19] irqdomain: Refactor __irq_domain_alloc_irqs()
+Message-ID: <Y8e8Nm2lu1jFE6Mx@hovoldconsulting.com>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-9-johan+linaro@kernel.org>
+ <87v8l4kfpr.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8l4kfpr.ffs@tglx>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,47 +62,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jan 17, 2023 at 10:34:40PM +0100, Thomas Gleixner wrote:
+> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
 
-gcc-13 notices a mismatch between the return type of dp_retrieve_lttpr_cap()
-and the returned value:
+> > -int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
+> > -			    unsigned int nr_irqs, int node, void *arg,
+> > -			    bool realloc, const struct irq_affinity_desc *affinity)
+> > +static int ___irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
+> > +				    unsigned int nr_irqs, int node, void *arg,
+> > +				    bool realloc, const struct irq_affinity_desc *affinity)
+> 
+> __ vs. ___ is almost undistinguishable.
+> 
+> irq_domain_alloc_irqs_locked() nicely explains what this is about, no?
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_dp_capability.c: In function 'dp_retrieve_lttpr_cap':
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_dp_capability.c:1465:24: error: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Werror=enum-conversion]
- 1465 |                 return false;
-      |                        ^~~~~
+Yeah, wasn't too happy about those three underscores either, but with
+the exported function unfortunately already having a double underscore
+prefix... I'll try switching to a 'locked' suffix instead.
 
-Change the value to an actual dc_status code and remove the bogus
-initialization that was apparently meant to get returned here.
-
-Fixes: b473bd5fc333 ("drm/amd/display: refine wake up aux in retrieve link caps")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
-index 088f4291bfbf..e72ad1b8330f 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
-@@ -1455,14 +1455,14 @@ static bool dpcd_read_sink_ext_caps(struct dc_link *link)
- enum dc_status dp_retrieve_lttpr_cap(struct dc_link *link)
- {
- 	uint8_t lttpr_dpcd_data[8];
--	enum dc_status status = DC_ERROR_UNEXPECTED;
--	bool is_lttpr_present = false;
-+	enum dc_status status;
-+	bool is_lttpr_present;
- 
- 	/* Logic to determine LTTPR support*/
- 	bool vbios_lttpr_interop = link->dc->caps.vbios_lttpr_aware;
- 
- 	if (!vbios_lttpr_interop || !link->dc->caps.extended_aux_timeout_support)
--		return false;
-+		return DC_ERROR_UNEXPECTED;
- 
- 	/* By reading LTTPR capability, RX assumes that we will enable
- 	 * LTTPR extended aux timeout if LTTPR is present.
--- 
-2.39.0
-
+Johan
