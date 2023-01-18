@@ -2,212 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693FB671B54
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F50671B60
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjARL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S230020AbjARMAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjARL7V (ORCPT
+        with ESMTP id S229475AbjARMAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:59:21 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9494465F1E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:16:43 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so1150545wml.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:16:43 -0800 (PST)
+        Wed, 18 Jan 2023 07:00:05 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9168195776;
+        Wed, 18 Jan 2023 03:17:20 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id mg12so10057839ejc.5;
+        Wed, 18 Jan 2023 03:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BXTrb1mABL6hk1/BqMq0qMil187bfL2xGvlv7UgmT0Q=;
-        b=hXSceJ/dNoFBoLniQES5KcDs9PBOnRePs09Q5cNcDJYOXchU9Srb7BtZ3kKQOj5LKJ
-         yiRMNoXaDHvD1qeXzidVOy8iY6oqozq6pZdfdpc24RIYKYVfP7XnKiqR2QFBQG70c5Jk
-         Eiy7wQvWLnYRoNVWRyAf7R3Lu0CVMN0DFlmTkZzz4TjPneYfCM/nYqrrpJWZUS4/tGSZ
-         A0vmd9KNhaOqacln1S75gmPCVNhgvY6UFSAyZejBgh8tZJAk/Me4VHntSeuIkiD/rIAv
-         TSzqHPo6sHNnChR7XRjnh2VNO0ypF0hDD8O9b6Fpd2SNR67XLj6XmNOOclaIZN3UMnf8
-         eRCQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+WvnsyBwq6I214G0UUbVvw7PrEfVlf2amNboiSNP2xM=;
+        b=coxosbpnlBUyGHvBHIQJT57uSVRTV6tgCiHpsrGO1DnSSC5BrJ5fz6uOeimTEf7ktM
+         jmAOSAF7keOAEvddSDQX11c9YWiluXWyEnwOxlYI9isYNLsnqUrj2FA0we/7czFrQI1j
+         a8CZy+kaWCltxnp69uj9Sg1GqCTUP/KLqOZj2EhjKpeYGAPGkhekTtVVAyM+Jmwg9YFi
+         F7PybMW6TDnBgZWlqZbknFYEFCCQ2N0jI6jOhFirtuslAZTnb020oRZxJPDCjxspYlfA
+         pJZVzhY2ZtzJhom37wV+3SVj4qwujDB/WpMbazNa5nBTons04cMgzsB0BCAz2bt1fuIA
+         Wuhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BXTrb1mABL6hk1/BqMq0qMil187bfL2xGvlv7UgmT0Q=;
-        b=FRV5k+T37Szgaw7Y5Ft5VhVJvNtUoECoKZv1JgP9Tw9QGbgPM+9UW+lf9Mf4zl609P
-         LzCq/JJOq0gRLSP8JrIItTLj/p6u9InNA3tL2J/nxWAvRuPO1XLNNEdOSbDFmRf6/z9e
-         2ar+cb68j3PdViMqrCIkKSwQFB1+H29Vfft9N7ks+iNDaqWE3kuHRvsQJZFgT9oEgAsN
-         2HTm/4TWY5fWard0eExd2D6WrqFTy5DcBgAu/T4H24nCMV5X+hYupu26lg1FxZD1WVO0
-         2OOE0aGlvrkby6AKJlD/zm98tgDoCTdaIBIrej6VJTSWGWtr0x5ZeCyaXvgw1MONhESj
-         7wnQ==
-X-Gm-Message-State: AFqh2kpfCqjGJPQOUIH+/VeXFp4SmvjM2LT+Yib4XWe7gmb9gY1HYfC1
-        b3mDNY3o6Rfbg7jeCfDfnHAr0T4UHUl5FkZAYzo=
-X-Google-Smtp-Source: AMrXdXs/LkjEROa0/2eNNV5b8/rnJ4ctFRVNHSplW9I5u+kBJFkH9CbKaB20dngBSdjBfjnROe9eBw==
-X-Received: by 2002:a05:600c:3489:b0:3db:693:3fc9 with SMTP id a9-20020a05600c348900b003db06933fc9mr5581523wmq.27.1674040602089;
-        Wed, 18 Jan 2023 03:16:42 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id ay22-20020a05600c1e1600b003dafbd859a6sm1657411wmb.43.2023.01.18.03.16.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 03:16:41 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus/core): Generalize pmbus status flag map
-Date:   Wed, 18 Jan 2023 12:15:36 +0100
-Message-Id: <20230118111536.3276540-1-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+WvnsyBwq6I214G0UUbVvw7PrEfVlf2amNboiSNP2xM=;
+        b=lrg9Tz4GMTVLzeZXuaDfWgDYK6yrvpGZqL60pabIEETjWtTkTAbH8mQwBeB09ik688
+         XE2XrpvJOb9bUwI8HDuaKRdM3jrNr0NcGaBolXVR+F9pdOlWop+PieyQsgiTK5WSo0n4
+         pZKITYEOB9OuILZSfFUrfl2sQp3K8UoZKzMjf8mEe94XrsSmSSrFZL07JU/dHIMlxHkE
+         qeyXs657/Ok6JNnjm2q4Q2cTA9G/jLcuBbEuk5mPrB4Vm8KZmUCDxF9CDsv9FjJ6hIBN
+         37I816aSlgry+fAwQekFn0MmwCvh79/l9TzfaFjt4Xkz/eBEdAiI3hzTsde+kB+YBslK
+         bjlA==
+X-Gm-Message-State: AFqh2kq3Tj4FUwCuYdMvImGm8R5jQ0QgEK/xelRJycE3iztZ5Y36TIUg
+        ilavlHboQl4CYKybQiCplZzOqykrq4Tm3TFUVpU=
+X-Google-Smtp-Source: AMrXdXu6ivjAMpYq0/MbznNJ8/8XkS/dsP5olPmeYxo76R8LvmnQuWvdq5qppZXtVJxss1X21mknCwF5gxbkCB+eeXo=
+X-Received: by 2002:a17:907:a2c4:b0:877:5ff6:e340 with SMTP id
+ re4-20020a170907a2c400b008775ff6e340mr101142ejc.163.1674040636721; Wed, 18
+ Jan 2023 03:17:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
+ <20230113110738.1505973-2-keguang.zhang@gmail.com> <63fdd223-c5e1-302d-ffef-9e582874e938@linaro.org>
+ <CAJhJPsV5wC_fNgP9iSi1bUp+HFY=dgyh4-x0OueZ8fQO=p7r8w@mail.gmail.com> <4f56e6b3-c698-0909-17a0-ec8c39b6c25d@linaro.org>
+In-Reply-To: <4f56e6b3-c698-0909-17a0-ec8c39b6c25d@linaro.org>
+From:   Kelvin Cheung <keguang.zhang@gmail.com>
+Date:   Wed, 18 Jan 2023 19:16:59 +0800
+Message-ID: <CAJhJPsXOX16SA0bb8zWJ=wSxshjv38g038cR0b3u0CDDm1aUQw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add binding for Loongson-1 clock driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the PMBus status flag map (pmbus_regulator_status_flag_map)
-outside of the regulator #if block and update the associated
-variable/struct name to reflect a generic PMBus status. Also retain
-the regulator error flag for use in determining regulator specific error.
+Hi Krzysztof,
 
-This will make the PMBus status flag map more versatile and easier to
-incorporate into different contexts and functions.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2023=E5=B9=B4=
+1=E6=9C=8817=E6=97=A5=E5=91=A8=E4=BA=8C 18:47=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 17/01/2023 11:31, Kelvin Cheung wrote:
+> >>> +  "#clock-cells":
+> >>> +    const: 0
+> >>> +
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - loongson,ls1b-clk-pll
+> >>> +      - loongson,ls1b-clk-cpu
+> >>> +      - loongson,ls1b-clk-ahb
+> >>> +      - loongson,ls1c-clk-pll
+> >>> +      - loongson,ls1c-clk-cpu
+> >>> +      - loongson,ls1c-clk-ahb
+> >>
+> >> Are you registering single clocks? It looks like. No, make a proper
+> >> clock controller.
+> >
+> > This binding contains two types of clock, pll-clk and div-clk.
+> > Should I split the binding to two bindings files?
+>
+> No, you should register rather one clock controller. Why this have to be
+> 3 separate clock controllers?
+>
+This sounds like a big change for the driver.
+Could you please show me a good example of one clock controller?
+Thanks very much!
+> >>
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clocks:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +required:
+> >>> +  - "#clock-cells"
+> >>> +  - compatible
+> >>> +  - clocks
+> >>> +  - reg
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    clocks {
+> >>
+> >> No, not really related to the binding.
+> >
+> > Should I remove the "clocks" section?
+>
+> Yes.
+>
+> >>
+> >>> +        #address-cells =3D <1>;
+> >>> +        #size-cells =3D <1>;
+> >>> +        ranges;
+> >>> +
+> >>> +        xtal: xtal {
+> >>
+> >> Incorrect in this context. Missing unit address.
+> >
+> > XTAL doesn't have reg property.
+>
+> Yeah, but DTS is not correct now, is it? If you doubt, build your DTB
+> with W=3D1.
+>
+No doubt.
+I just want to know the right way to declare XTAL.
+Could you please show me an example?
+Thanks again!
+> >>
+> >>> +            compatible =3D "fixed-clock";
+> >>> +            #clock-cells =3D <0>;
+> >>> +            clock-frequency =3D <33000000>;
+> >>> +        };
+> >>> +
+>
+> Best regards,
+> Krzysztof
+>
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 94 ++++++++++++++++----------------
- 1 file changed, 47 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 95e95783972a..1b70cf3be313 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2692,6 +2692,49 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	return 0;
- }
- 
-+/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-+struct pmbus_status_assoc {
-+	int pflag, rflag;
-+};
-+
-+/* PMBus->regulator bit mappings for a PMBus status register */
-+struct pmbus_status_category {
-+	int func;
-+	int reg;
-+	const struct pmbus_status_assoc *bits; /* zero-terminated */
-+};
-+
-+static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[] = {
-+	{
-+		.func = PMBUS_HAVE_STATUS_VOUT,
-+		.reg = PMBUS_STATUS_VOUT,
-+		.bits = (const struct pmbus_status_assoc[]) {
-+			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-+			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_IOUT,
-+		.reg = PMBUS_STATUS_IOUT,
-+		.bits = (const struct pmbus_status_assoc[]) {
-+			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-+			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-+			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_TEMP,
-+		.reg = PMBUS_STATUS_TEMPERATURE,
-+		.bits = (const struct pmbus_status_assoc[]) {
-+			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-+			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-+			{ },
-+		},
-+	},
-+};
-+
- #if IS_ENABLED(CONFIG_REGULATOR)
- static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
- {
-@@ -2738,54 +2781,11 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
- 	return _pmbus_regulator_on_off(rdev, 0);
- }
- 
--/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
--struct pmbus_regulator_status_assoc {
--	int pflag, rflag;
--};
--
--/* PMBus->regulator bit mappings for a PMBus status register */
--struct pmbus_regulator_status_category {
--	int func;
--	int reg;
--	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
--};
--
--static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
--	{
--		.func = PMBUS_HAVE_STATUS_VOUT,
--		.reg = PMBUS_STATUS_VOUT,
--		.bits = (const struct pmbus_regulator_status_assoc[]) {
--			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
--			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
--			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
--			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
--			{ },
--		},
--	}, {
--		.func = PMBUS_HAVE_STATUS_IOUT,
--		.reg = PMBUS_STATUS_IOUT,
--		.bits = (const struct pmbus_regulator_status_assoc[]) {
--			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
--			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
--			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
--			{ },
--		},
--	}, {
--		.func = PMBUS_HAVE_STATUS_TEMP,
--		.reg = PMBUS_STATUS_TEMPERATURE,
--		.bits = (const struct pmbus_regulator_status_assoc[]) {
--			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
--			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
--			{ },
--		},
--	},
--};
--
- static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
- {
- 	int i, status;
--	const struct pmbus_regulator_status_category *cat;
--	const struct pmbus_regulator_status_assoc *bit;
-+	const struct pmbus_status_category *cat;
-+	const struct pmbus_status_assoc *bit;
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
-@@ -2796,8 +2796,8 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- 
- 	mutex_lock(&data->update_lock);
- 
--	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
--		cat = &pmbus_regulator_flag_map[i];
-+	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
-+		cat = &pmbus_status_flag_map[i];
- 		if (!(func & cat->func))
- 			continue;
- 
+--=20
+Best regards,
 
-base-commit: 774dccfe77dcd8cf1d82df1f61fe95a720dc76e4
--- 
-2.38.1
-
+Kelvin Cheung
