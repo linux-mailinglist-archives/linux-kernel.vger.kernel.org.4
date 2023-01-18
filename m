@@ -2,236 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D70671494
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADB7671498
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjARG6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 01:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S229964AbjARHC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjARG5j (ORCPT
+        with ESMTP id S229969AbjARHAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:57:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFCA63E05;
-        Tue, 17 Jan 2023 22:29:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F325615AA;
-        Wed, 18 Jan 2023 06:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB4DC433D2;
-        Wed, 18 Jan 2023 06:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674023379;
-        bh=jTAtI1meqFg4A1MDMWrkwGfJrx8IetaItUUhiM5XP7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rw0IDKyFoQxUlNX+pSkSdIBdBRfJz/1UjBUXRFdDKP7ykkumrHyN0X3G4Q5Ancekb
-         8kclUtiki+/uXvRJBN9j82v3fp96LYDVFcuS5qgAd5SWk3cDvOxUU1GkWShItsRmbM
-         hgv7PwIQ6iFTm6FB8/CG1ocnSlFy0/dMP1iq51Xdxxb8H/tOBufMuIcrycX5iBJBEA
-         evDrZv5eikro5z0yvM/OJNdH7OBTi6xW+j3rKdW+XdSmYVS9tMCeUeXqkCirkKujR8
-         qIzKTd6OkNJpGCePqSf579kx56nKe6qqMybX30xFgBJff6ykHP32D0gx710Vwylva6
-         E0+R8auaeI5gA==
-Date:   Wed, 18 Jan 2023 11:59:35 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Lizhi Hou <lizhi.hou@amd.com>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com, tumic@gpxsee.org
-Subject: Re: [RESEND PATCH V11 XDMA 2/2] dmaengine: xilinx: xdma: Add user
- logic interrupt support
-Message-ID: <Y8eRz2sXrnCtSib+@matsya>
-References: <1673988842-43631-1-git-send-email-lizhi.hou@amd.com>
- <1673988842-43631-3-git-send-email-lizhi.hou@amd.com>
+        Wed, 18 Jan 2023 02:00:50 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFE165EF6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:33:06 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g205so8312453pfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DkvDjC4+wQHsjoNXwjNuJHLSlLIOGpCPF00a5pWew8=;
+        b=JiceMX0TWkJc6gOrwosaDJT/narGqlJWljJ+KSVAWhZnbVF/NKNCkFfB+tNJVKhnM1
+         NYZa88f/U0eOqdjL0VYe+dAbUL0xiNnd+qlCaV0FEsLrqlrmc+9abL/rub+4hJcC+YLh
+         6QaBacb+B8HnPcatvh/ta/Jbz56g72FxHAblg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0DkvDjC4+wQHsjoNXwjNuJHLSlLIOGpCPF00a5pWew8=;
+        b=NffeohaW0f6buMCWVdNLas5dNtC4fFNMEaH/WL1mIUu33PgvLnRKhStV4P4Xj/ROHX
+         Nvryml+acnaRmDiSoirmQaJBGwKe08QXKeVGCLLqWzD+Ntkw/EWL5/eEkSIsDz8Gas94
+         onGyknD7NEZre4usHw4PP5T9Gh4zjSu9IBGhGMABywP1BldScxJAY+QrGqvk1rOHIMHb
+         Ov1MY/e38Li+ycW6BhXr9ZWlVuw+jCpg9AfNr9/AGE0oNCPP2uidmvIGHDSQZ5NQIK7Q
+         OhK2Px9DW/eeD5gATj4v2J7NP+6HQFVpfF8yvxpYiGqc3wj+46+NBttGsAZctm+RaG+R
+         +9/g==
+X-Gm-Message-State: AFqh2koQlKkZ77kzptR23tyL5fqlJQRXxKpfQxNqNpuPHP6BjJcvm23i
+        JUnnk7QiaDKWCFQubeJT42LL/UAkYb/wGuysGjCeFw==
+X-Google-Smtp-Source: AMrXdXvwd/vXI3oVt7N2/H+zgXnOvfjce0HMDh9mZhUoz/QU03Jl/Up0DJFkmpZWkkm8RNKl2tX7NWURmpIKcb8K0Rg=
+X-Received: by 2002:a63:2003:0:b0:48e:bdef:b6fb with SMTP id
+ g3-20020a632003000000b0048ebdefb6fbmr355777pgg.457.1674023554993; Tue, 17 Jan
+ 2023 22:32:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1673988842-43631-3-git-send-email-lizhi.hou@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112202939.19562-1-ajit.khaparde@broadcom.com>
+ <20230112202939.19562-2-ajit.khaparde@broadcom.com> <20230113221042.5d24bdde@kernel.org>
+ <CACZ4nhuKo-h_dcSGuzAm4vJJuuxmnVo8jYO2scCxfqtktbCjfw@mail.gmail.com>
+ <20230116205625.394596cc@kernel.org> <Y8aVBTAVFQPPx47H@unreal>
+In-Reply-To: <Y8aVBTAVFQPPx47H@unreal>
+From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
+Date:   Tue, 17 Jan 2023 22:32:18 -0800
+Message-ID: <CACZ4nhuLuJbaaEHCqNgFn3tX5D38c=cWSgzz_iq1xwWJ9sKH3A@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 1/8] bnxt_en: Add auxiliary driver support
+To:     Leon Romanovsky <leonro@nvidia.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, andrew.gospodarek@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        michael.chan@broadcom.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, selvin.xavier@broadcom.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000005dfdfd05f283fbf1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-01-23, 12:54, Lizhi Hou wrote:
-> The Xilinx DMA/Bridge Subsystem for PCIe (XDMA) provides up to 16 user
-> interrupt wires to user logic that generate interrupts to the host.
-> This patch adds APIs to enable/disable user logic interrupt for a given
-> interrupt wire index.
-> 
-> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-> Signed-off-by: Max Zhen <max.zhen@amd.com>
-> Signed-off-by: Brian Xu <brian.xu@amd.com>
-> Tested-by: Martin Tuma <tumic@gpxsee.org>
-> ---
->  MAINTAINERS                  |  1 +
->  drivers/dma/xilinx/xdma.c    | 85 ++++++++++++++++++++++++++++++++++++
->  include/linux/dma/amd_xdma.h | 16 +++++++
->  3 files changed, 102 insertions(+)
->  create mode 100644 include/linux/dma/amd_xdma.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d598c4e23901..eaf6590dda19 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22583,6 +22583,7 @@ L:	dmaengine@vger.kernel.org
->  S:	Supported
->  F:	drivers/dma/xilinx/xdma-regs.h
->  F:	drivers/dma/xilinx/xdma.c
-> +F:	include/linux/dma/amd_xdma.h
->  F:	include/linux/platform_data/amd_xdma.h
->  
->  XILINX ZYNQMP DPDMA DRIVER
-> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-> index 118528295fb7..846f10317bba 100644
-> --- a/drivers/dma/xilinx/xdma.c
-> +++ b/drivers/dma/xilinx/xdma.c
-> @@ -25,6 +25,7 @@
->  #include <linux/dmapool.h>
->  #include <linux/regmap.h>
->  #include <linux/dmaengine.h>
-> +#include <linux/dma/amd_xdma.h>
->  #include <linux/platform_device.h>
->  #include <linux/platform_data/amd_xdma.h>
->  #include <linux/dma-mapping.h>
-> @@ -713,6 +714,7 @@ static int xdma_set_vector_reg(struct xdma_device *xdev, u32 vec_tbl_start,
->  static int xdma_irq_init(struct xdma_device *xdev)
->  {
->  	u32 irq = xdev->irq_start;
-> +	u32 user_irq_start;
->  	int i, j, ret;
->  
->  	/* return failure if there are not enough IRQs */
-> @@ -755,6 +757,18 @@ static int xdma_irq_init(struct xdma_device *xdev)
->  		goto failed_init_c2h;
->  	}
->  
-> +	/* config user IRQ registers if needed */
-> +	user_irq_start = XDMA_CHAN_NUM(xdev);
-> +	if (xdev->irq_num > user_irq_start) {
-> +		ret = xdma_set_vector_reg(xdev, XDMA_IRQ_USER_VEC_NUM,
-> +					  user_irq_start,
-> +					  xdev->irq_num - user_irq_start);
-> +		if (ret) {
-> +			xdma_err(xdev, "failed to set user vectors: %d", ret);
-> +			goto failed_init_c2h;
-> +		}
-> +	}
-> +
->  	/* enable interrupt */
->  	ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_CHAN_INT_EN_W1S, ~0);
->  	if (ret)
-> @@ -780,6 +794,77 @@ static bool xdma_filter_fn(struct dma_chan *chan, void *param)
->  	return chan_info->dir == xdma_chan->dir;
->  }
->  
-> +/**
-> + * xdma_disable_user_irq - Disable user interrupt
-> + * @pdev: Pointer to the platform_device structure
-> + * @irq_num: System IRQ number
-> + */
-> +void xdma_disable_user_irq(struct platform_device *pdev, u32 irq_num)
-> +{
-> +	struct xdma_device *xdev = platform_get_drvdata(pdev);
-> +	u32 user_irq_index;
-> +
-> +	user_irq_index = irq_num - xdev->irq_start;
-> +	if (user_irq_index < XDMA_CHAN_NUM(xdev) ||
-> +	    user_irq_index >= xdev->irq_num) {
-> +		xdma_err(xdev, "invalid user irq number");
-> +		return;
-> +	}
-> +	user_irq_index -= XDMA_CHAN_NUM(xdev);
-> +
-> +	xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1C,
-> +		       (1 << user_irq_index));
-> +}
-> +EXPORT_SYMBOL(xdma_disable_user_irq);
-> +
-> +/**
-> + * xdma_enable_user_irq - Enable user logic interrupt
-> + * @pdev: Pointer to the platform_device structure
-> + * @irq_num: System IRQ number
-> + */
-> +int xdma_enable_user_irq(struct platform_device *pdev, u32 irq_num)
-> +{
-> +	struct xdma_device *xdev = platform_get_drvdata(pdev);
-> +	u32 user_irq_index;
-> +	int ret;
-> +
-> +	user_irq_index = irq_num - xdev->irq_start;
-> +	if (user_irq_index < XDMA_CHAN_NUM(xdev) ||
-> +	    user_irq_index >= xdev->irq_num) {
-> +		xdma_err(xdev, "invalid user irq number");
-> +		return -EINVAL;
-> +	}
-> +	user_irq_index -= XDMA_CHAN_NUM(xdev);
-> +
-> +	ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1S,
-> +			     (1 << user_irq_index));
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(xdma_enable_user_irq);
-> +
-> +/**
-> + * xdma_get_user_irq - Get system IRQ number
-> + * @pdev: Pointer to the platform_device structure
-> + * @user_irq_index: User logic IRQ wire index
-> + *
-> + * Return: The system IRQ number allocated for the given wire index.
-> + */
-> +int xdma_get_user_irq(struct platform_device *pdev, u32 user_irq_index)
-> +{
-> +	struct xdma_device *xdev = platform_get_drvdata(pdev);
-> +
-> +	if (XDMA_CHAN_NUM(xdev) + user_irq_index >= xdev->irq_num) {
-> +		xdma_err(xdev, "invalid user irq index");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return xdev->irq_start + XDMA_CHAN_NUM(xdev) + user_irq_index;
-> +}
-> +EXPORT_SYMBOL(xdma_get_user_irq);
-> +
->  /**
->   * xdma_remove - Driver remove function
->   * @pdev: Pointer to the platform_device structure
-> diff --git a/include/linux/dma/amd_xdma.h b/include/linux/dma/amd_xdma.h
-> new file mode 100644
-> index 000000000000..ceba69ed7cb4
-> --- /dev/null
-> +++ b/include/linux/dma/amd_xdma.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#ifndef _DMAENGINE_AMD_XDMA_H
-> +#define _DMAENGINE_AMD_XDMA_H
-> +
-> +#include <linux/interrupt.h>
-> +#include <linux/platform_device.h>
-> +
-> +int xdma_enable_user_irq(struct platform_device *pdev, u32 irq_num);
-> +void xdma_disable_user_irq(struct platform_device *pdev, u32 irq_num);
-> +int xdma_get_user_irq(struct platform_device *pdev, u32 user_irq_index);
+--0000000000005dfdfd05f283fbf1
+Content-Type: text/plain; charset="UTF-8"
 
-who is the user of these APIs? It is not clear to me how this is to be
-used...
+On Tue, Jan 17, 2023 at 4:31 AM Leon Romanovsky <leonro@nvidia.com> wrote:
+>
+> On Mon, Jan 16, 2023 at 08:56:25PM -0800, Jakub Kicinski wrote:
+> > On Sat, 14 Jan 2023 12:39:09 -0800 Ajit Khaparde wrote:
+> > > > > +static void bnxt_aux_dev_release(struct device *dev)
+> > > > > +{
+> > > > > +     struct bnxt_aux_dev *bnxt_adev =
+> > > > > +             container_of(dev, struct bnxt_aux_dev, aux_dev.dev);
+> > > > > +     struct bnxt *bp = netdev_priv(bnxt_adev->edev->net);
+> > > > > +
+> > > > > +     bnxt_adev->edev->en_ops = NULL;
+> > > > > +     kfree(bnxt_adev->edev);
+> > > >
+> > > > And yet the reference counted "release" function accesses the bp->adev
+> > > > like it must exist.
+> > > >
+> > > > This seems odd to me - why do we need refcounting on devices at all
+> > > > if we can free them synchronously? To be clear - I'm not sure this is
+> > > > wrong, just seems odd.
+> > > I followed the existing implementations in that regard. Thanks
+> >
+> > Leon, could you take a look? Is there no problem in assuming bnxt_adev
+> > is still around in the release function?
+>
+> You caught a real bug. The auxdev idea is very simple - it needs to
+> behave like driver core, but in the driver itself.
+>
+> As such, bnxt_aux_dev_free() shouldn't be called after bnxt_rdma_aux_device_uninit().
+> Device will be released through auxiliary_device_uninit();
+Ok. But..
+bnxt_aux_dev_free() is actually freeing up the private memory allocated
+for holding the pointer returned by my_aux_dev_alloc(xxx);
+The aux device is freed via the auxiliary_device_uninit only.
 
+>
+> BTW, line 325 from below shouldn't exist too.
+ACK
 
-> +
-> +#endif /* _DMAENGINE_AMD_XDMA_H */
-> -- 
-> 2.27.0
+>
+>   312 void bnxt_rdma_aux_device_uninit(struct bnxt *bp)
+>   313 {
+> ...
+>   325         if (bnxt_adev->id >= 0)
+>   326                 ida_free(&bnxt_aux_dev_ids, bnxt_adev->id);
+>
+> And one line bnxt_aux_dev_alloc() needs to be deleted too.
+To avoid confusion, I will refactor and rename the code handling
+auxiliary_device alloc, cleanup and the alloc, cleanup of priv
+pointers used for bookkeeping.
 
--- 
-~Vinod
+I hope the new patchset will address the concerns raised.
+
+>
+> Thanks
+
+--0000000000005dfdfd05f283fbf1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
+K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
+xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
+OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
+aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
+KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
+aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
+u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
+4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILIKjvIUpUdCwGjZE8ki
+QLqSNrhSrG7xJT31qjc0ylfyMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIzMDExODA2MzIzNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCSdmVixznIsWl6USvwPDvIAkoP8gxiPL5FZoTQ
+aeqcuoGivwa0Zc7xGFwvoL03hWJlds1MxFPNkNUcnHFRzYR7mJOYdBW+PhSpPDX72qIfgduFZdfc
+mDN6qqipua02Xo6ogRje78ZvU6QuR52kxvE0EupvnffaYDmhC5e+7ubW2XKSIfU7gLEKIz6paTET
+M5vIVKpw+zvoOcYGYLEFTVQPNeZerKM4k9/PXKK3C5tsoF9piiA7iQ0Exey5mkGOS97h0zSEgltn
+FPSFoXJn23nngZlF7A7wptW8se4jCdIUHhIwhi58pQt1FlN1dUlcgK4iAu7XvZro9iWtP1K+Ys3a
+--0000000000005dfdfd05f283fbf1--
