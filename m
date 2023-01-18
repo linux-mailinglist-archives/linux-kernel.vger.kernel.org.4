@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB5A672B18
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CA0672B19
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjARWIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S229933AbjARWKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjARWIh (ORCPT
+        with ESMTP id S229626AbjARWKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:08:37 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE24465EEE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:08:34 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qx13so810736ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:08:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
-        b=RPs3G3yaRI38mu07PInL0zlQ4NpGuyeOd3fENbN9pdSeXncTIqPXNQHPKRy43JB/3F
-         zfzkVqE0QVBsy8LjVOHmjjAqLmgoK+MDJli+sLeVBMD5q+noCwt/eJobexdY3Uv/VhIa
-         cQHD0JA1Ge+yBrnhJsQla+FqEyUj7QEivoRy7eO6OKDvBpO5Xvve6Tu0V8Zts+Um0wFa
-         gzFr5iM6+8IIWtDwn05AH5E1gKesFcaoud5gaefMVL1OXGhuoTFSEmaTlSFIxmjp6BKj
-         YMuQWoJcYYD8/ju8uYn2z9j3P/6U2/M4GTXrLFowclwee6G+z4kf4mNp/pdAXKJFcvRl
-         eG5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
-        b=YaA921VTIMwUPLKGkMcelDsEVPevRsHLND89sEbBwVJ5lei6D2EANmnYsmjE2inm6j
-         XrL1g3hug1kZhppnqggLGTERqyAv+0zwflhBTDemyEEwoHr/Co4+NZoJJzZAQtXc7Tu1
-         HvFOU2zzBwCchQsQB8fDFmyMHqimRhymxKYxEDzB3gcltzIGkqMX5rSf3zxgkwMW6y/7
-         N/FOg/N3ZW8OkUap+mTFWwVx1Muv+cPedcxYoUWBaGsFEWyen4XMO5XnzGyHyy1d/sP8
-         O9uIq+Y18CLBeVK4l/P7rKGck6+zKbZJcDcnXlrqe1xgZQgP9qa857OKpGDJPVtfaXR+
-         Loyw==
-X-Gm-Message-State: AFqh2kpQe9HqDAx89VAeN8DAfo1xjnETCsVC301WIOc4I89nMVNygd7o
-        IA7xU+c6bnMFmRacKSNMRrJJkdyDtbg=
-X-Google-Smtp-Source: AMrXdXuoP9buq/9xeOZMQrDs8wmC3sV3DPSD3AnBMCB6t4asRU/ZI9mXB+wJrwJWBOLVCWsYuz3trg==
-X-Received: by 2002:a17:906:95d2:b0:7c1:37:6d5e with SMTP id n18-20020a17090695d200b007c100376d5emr8257533ejy.2.1674079713014;
-        Wed, 18 Jan 2023 14:08:33 -0800 (PST)
-Received: from Semens-MBP.fritz.box (84-87-100-184.fixed.kpn.net. [84.87.100.184])
-        by smtp.gmail.com with ESMTPSA id 14-20020a170906308e00b0084d3acda5fasm13718704ejv.189.2023.01.18.14.08.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 18 Jan 2023 14:08:32 -0800 (PST)
-From:   Semen Zhydenko <semen.zhydenko@gmail.com>
-To:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com
-Cc:     Semen Zhydenko <semen.zhydenko@gmail.com>
-Subject: [PATCH] Fixed typo in comments
-Date:   Wed, 18 Jan 2023 23:08:28 +0100
-Message-Id: <20230118220828.85115-1-semen.zhydenko@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230116222254.74479-1-semen.zhydenko@gmail.com>
-References: <20230116222254.74479-1-semen.zhydenko@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 17:10:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539B56309E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:10:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D516E61A30
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 22:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D299C433EF;
+        Wed, 18 Jan 2023 22:10:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674079838;
+        bh=ueXijbmlVWlIGrmmQBHyx5f7RsmjeluYmLaqFHXUtSw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=1wseDJaWiRCEW5j/92bmCxmg+D0Y02g3H9KMmX3ipF8BgSxn1AQewK+nrcIoqY/hh
+         5YAyXeNk/IWkD35xe+vRqxqFX7GIGAmPFWE6vziQYexkLTD74qoj3ua3qDhGYrGtVv
+         LUcyfTwMhC3vENTljiMSId6BwUXdifFzJvxaB168=
+Date:   Wed, 18 Jan 2023 14:10:37 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Herton R. Krzesinski" <herton@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, vbabka@suse.cz, jforbes@redhat.com,
+        dzickus@redhat.com, scweaver@redhat.com
+Subject: Re: [PATCH] tools/vm: allow users to provide additional
+ cflags/ldflags
+Message-Id: <20230118141037.3d5e6df707125353435bfbae@linux-foundation.org>
+In-Reply-To: <Y8f4aUx7P45qHlpl@localhost.localdomain>
+References: <20230116224921.4106324-1-herton@redhat.com>
+        <20230117165326.3e693a12a45a1962ca0c40af@linux-foundation.org>
+        <Y8f4aUx7P45qHlpl@localhost.localdomain>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To change one typo in kernel/time/timer.c
-Typo is "aquisition" proper spelling should be "acquisition".
+On Wed, 18 Jan 2023 10:47:21 -0300 "Herton R. Krzesinski" <herton@redhat.com> wrote:
 
-Signed-off-by: Semen Zhydenko <semen.zhydenko@gmail.com>
----
- kernel/time/timer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Tue, Jan 17, 2023 at 04:53:26PM -0800, Andrew Morton wrote:
+> > On Mon, 16 Jan 2023 19:49:21 -0300 "Herton R. Krzesinski" <herton@redhat.com> wrote:
+> > 
+> > > Right now there is no way to provide additional cflags/ldflags when
+> > > building tools/vm binaries. And using eg. make CFLAGS=<options> will
+> > > override the CFLAGS being set in the Makefile, making the build fail
+> > > since it requires the include of the ../lib dir (for libapi).
+> > > 
+> > > This change then allows you to specify:
+> > > CFLAGS=<options> LDFLAGS=<options> make V=1 -C tools/vm
+> > > 
+> > > And the options will be correctly appended as can be seen from the
+> > > make output.
+> > > 
+> > > ...
+> > >
+> > > --- a/tools/vm/Makefile
+> > > +++ b/tools/vm/Makefile
+> > > @@ -8,8 +8,8 @@ TARGETS=page-types slabinfo page_owner_sort
+> > >  LIB_DIR = ../lib/api
+> > >  LIBS = $(LIB_DIR)/libapi.a
+> > >  
+> > > -CFLAGS = -Wall -Wextra -I../lib/
+> > > -LDFLAGS = $(LIBS)
+> > > +CFLAGS += -Wall -Wextra -I../lib/
+> > > +LDFLAGS += $(LIBS)
+> > >  
+> > 
+> > I think EXTRA_CFLAGS is more conventional?
+> > 
+> 
+> I was looking and there is no standard under tools/
+> 
+> Some use it, some not. To given an example of what uses CFLAGS:
+> tools/arch/x86/kcpuid/Makefile:override CFLAGS += -O2 -Wall -I../../../include
+> tools/arch/x86/intel_sdsi/Makefile:override CFLAGS += -O2 -Wall
+> tools/iio/Makefile:override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> tools/thermal/tmon/Makefile:override CFLAGS += $(shell $(PKG_CONFIG) --cflags $(STATIC) panelw ncursesw 2> /dev/null || \
+> tools/gpio/Makefile:override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> tools/pci/Makefile:CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> tools/spi/Makefile:CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> tools/wmi/Makefile:CFLAGS += -D__EXPORTED_HEADERS__ -I../../include/uapi -I../../include
+> tools/io_uring/Makefile:CFLAGS += -Wall -Wextra -g -D_GNU_SOURCE
+> tools/counter/Makefile:override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> 
+> I can however use EXTRA_CFLAGS, not a problem, eg. doing instead:
+> CFLAGS = -Wall -Wextra -I../lib/ $(EXTRA_CFLAGS)
+> LDFLAGS = $(LIBS) $(EXTRA_LDFLAGS)
+> 
+> Let me know and I'll resend the patch using EXTRA_* instead.
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 63a8ce7177dd..6430c00b05a9 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1324,7 +1324,7 @@ static int __timer_delete(struct timer_list *timer, bool shutdown)
- 	 * If @shutdown is set then the lock has to be taken whether the
- 	 * timer is pending or not to protect against a concurrent rearm
- 	 * which might hit between the lockless pending check and the lock
--	 * aquisition. By taking the lock it is ensured that such a newly
-+	 * acquisition. By taking the lock it is ensured that such a newly
- 	 * enqueued timer is dequeued and cannot end up with
- 	 * timer->function == NULL in the expiry code.
- 	 *
---
-2.37.1 (Apple Git-137.1)
+Well drat, I was hoping you'd decide ;)
+
+I'll grab it as-is, thanks.
+
+(of course, we could always use both!)
