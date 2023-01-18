@@ -2,201 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8449F6715C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6D36715C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjARIAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S229468AbjARIDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjARHzj (ORCPT
+        with ESMTP id S230118AbjARH4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:55:39 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10655CE4F
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:30:49 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230118073045epoutp04689d2b0900c6000ba652f70ee8e4e025~7VrppfAyN3027130271epoutp04A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:30:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230118073045epoutp04689d2b0900c6000ba652f70ee8e4e025~7VrppfAyN3027130271epoutp04A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1674027045;
-        bh=Mk/gVMHoQkviJHB/RZY8wpTqchJN8FLsYyp7/T+vxaQ=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=LjjFrmPF/eR4V4aDWQbDX3tAhLGjY9Z+JMk+Kdt5vYyfrVjFCXAypSYw6IymdOPWC
-         P+sVC3tfaq+jViAFLdecdzVxGjMmsrfNfXlU8Olrbk04sqQ4IGLGEgN3Y4iyLWDZhk
-         8woMEAgkvKTI/lbPQ9Km5km5wSUFcsbg/g3/gh1o=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230118073044epcas1p1d8eeb0bd5f2af8e3a8cf72bcd29944f7~7VrpOPmqA2248322483epcas1p1L;
-        Wed, 18 Jan 2023 07:30:44 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.241]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Nxcqm2DPWz4x9Px; Wed, 18 Jan
-        2023 07:30:44 +0000 (GMT)
-X-AuditID: b6c32a35-7ba26a8000014e05-9f-63c7a024ce89
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FD.01.19973.420A7C36; Wed, 18 Jan 2023 16:30:44 +0900 (KST)
+        Wed, 18 Jan 2023 02:56:41 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE24D5D114
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:32:18 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6FA845C00DC;
+        Wed, 18 Jan 2023 02:32:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 18 Jan 2023 02:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674027136; x=1674113536; bh=Dtk1WJnznf
+        +PzMyNOebVNgDSKkdCzLVaDG2VU6k2wHQ=; b=OJ6IWFlQoH6Wf94rHtNwgP8aGu
+        zPCg1IER5MvxGQb6kJ4QNkrqXAeRQuPdKB/kDpWsaWIcOnw9yxCFuNZFsbZu+4at
+        jXc18c75YHtnKm4lh4mbP2sHnx4XQxq/hYnbXEx3hz+Lpu9dKN4V2sjSswYDFRgN
+        COA1zBR6qYVUFL0v/vjCErIBtMeeiF1So4jBEnhw1ewWj0GoIzTe4Uc3R8dLm3dc
+        GZTqhjIESdXhaBPnLTMjlb7IaEjGmLE5hmZiGak/uQxvfLnsx3AxoDcuH8INUdb+
+        TAj7JOq5vaBMRy8plF/0f3rvR/lPTUiKCovoxiCFT9Ve5Hy8XMQ/4Hlv5oJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674027136; x=1674113536; bh=Dtk1WJnznf+PzMyNOebVNgDSKkdC
+        zLVaDG2VU6k2wHQ=; b=GV5tKQAUG3x1NdoSLRsMQxwzAxDK3V3lYkODWNpxk5JF
+        kzG7VsR0gcCApJVEwdSz6HKwcaiUdzSUC8nLuNRsBKPqAwitqwdqE12rmEEg1m/9
+        WXwihPoI94XEVq/lTigVRHRUwZBDujSK2SporF7Ulx5ljHO0n69PyWvvyHoeesNF
+        bmGoXr9H8RW7eNQnk7DT6fkg5Ufa4FOFcX+NhQR6wdLtTGGRq7uZ/3BVNKou8aju
+        IcZWuGIpG+QF6xbBzuPoNxJeFB2Id0iuMPBFDfno+k62fa4bkfzD0JR710D/PDIy
+        k4UN3NB+VvnPBSEUHbGwBHRt/0WgyzFC3N45sD3nRw==
+X-ME-Sender: <xms:gKDHY729WOrMR867P2Bk3CGsSQShPAhmt4YfG996zAWDcELS8IXs6w>
+    <xme:gKDHY6Gzcpp78qgMXZq9lFPs8hyC0CgtK91PMU0L9P5q82NBNrNwsRXYQcC1h2R2X
+    H7BTl_PI_hwpXc8w-w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtjedgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:gKDHY755Bf6xHev079dwWd0chKFyYDs6mzNz17NbwMM9K2Vws9ccLg>
+    <xmx:gKDHYw32wFcoQ9Bq25ErgGo7vZ-ZjnZW5eahrMT9vT-u-s6U4rrPyA>
+    <xmx:gKDHY-E1eBDuh7kZWhuBZizvu5evBmrVRbkOco3qif64ab497HQ6xA>
+    <xmx:gKDHY8ZNHiy6tbk_Za47nnyKScUh-s8tm2ftSJf9n-EUvpfdbABp3w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 16BEEB60086; Wed, 18 Jan 2023 02:32:15 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
 Mime-Version: 1.0
-Subject: Re: [PATCH] dma-buf: system_heap: avoid reclaim for order 4
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     John Stultz <jstultz@google.com>
-CC:     "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>,
-        "T.J. Mercier" <tjmercier@google.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230118073043epcms1p8b5cfde0d773e296770775581b6ce7105@epcms1p8>
-Date:   Wed, 18 Jan 2023 16:30:43 +0900
-X-CMS-MailID: 20230118073043epcms1p8b5cfde0d773e296770775581b6ce7105
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEJsWRmVeSWpSXmKPExsWy7bCmga7KguPJBg1tvBZz1q9hs1j48C6z
-        xepNvhbdm2cyWvS+f8Vk8efERjaLy7vmsFncW/Of1eL1t2XMFqfufma3eLf+C5sDt8fhN++Z
-        PfZ+W8DisXPWXXaPBZtKPTat6mTz2PRpErvHnWt72DxOzPjN4tG3ZRWjx+dNcgFcUdk2GamJ
-        KalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUAXKymUJeaUAoUC
-        EouLlfTtbIryS0tSFTLyi0tslVILUnIKzAr0ihNzi0vz0vXyUkusDA0MjEyBChOyM/Z+PsRe
-        sCW84tyCHSwNjAccuxg5OSQETCTe3T/NAmILCexglHjUKtnFyMHBKyAo8XeHMEhYWMBF4vbq
-        PmaIEiWJsz+usEPEdSWauleDtbIJaEu8XzCJFcQWEVCReDj3J1sXIxcHs8BJZokrfw6xQezi
-        lZjR/pQFwpaW2L58KyOIzSkQKLF34S5miLioxM3Vb9lh7PfH5jNC2CISrffOQtUISjz4uRsq
-        LiVxrvs4E4RdLrFjzn6oXRUSv/uXQc3Rl7jSPxOshlfAV2L2lFawQ1kEVCVOvrnPClHjItHT
-        +QGsl1lAXmL72znMoHBgFtCUWL9LH6JEUWLn77mMECV8Eu++9rDCvLVj3hOoE9QkWp59hYrL
-        SPz99wzK9pBoXtPEAgoTIYF+Jon+9VdZJzAqzEIE9Swkm2chbF7AyLyKUSy1oDg3PbXYsMAQ
-        HrnJ+bmbGMGJV8t0B+PEtx/0DjEycTAeYpTgYFYS4fXbdThZiDclsbIqtSg/vqg0J7X4EKMp
-        0M8TmaVEk/OBqT+vJN7QxNLAxMzIxMLY0thMSZzXJmJdspBAemJJanZqakFqEUwfEwenVAPT
-        AVObM9aTL87f/Hzf9S0bbTlu/N83iT3gxpzeSVsTl9z+2BGYflWjR3DNjuM7voedUT0Td2XV
-        96zPki+LanJP/q/edlPvzKH4gp2a9nd/t4rYqltmL/FQa1bp8hE/tYp1ahqHv7nF1VOTr17n
-        Wh56hPv0tRjB7+f5PocZmE58nmifaKvbevH76ewHk3fH8M7qSnU7vXZlTIxnXhXjJIYF05UY
-        1WP2P1+mcNWjnOPLt/6YlW9KTC/efc2mrPIk4rfXqxz3wMjvz/dfPzcx+t+KZUc+ZvlEBU6V
-        Lepf/Vfe6pLrcukZsxvXPn0ftSQxMnCHLvfUzDfX5Z98jdKYa1GSd1tN+fyePSzsB88vCJzu
-        ukaJpTgj0VCLuag4EQA3viykRQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230117082521epcas1p22a709521a9e6d2346d06ac220786560d
-References: <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
-        <20230117082508.8953-1-jaewon31.kim@samsung.com>
-        <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
-        <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p8>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <55cb1658-488e-4ed3-b5f9-5d97c0041dd9@app.fastmail.com>
+In-Reply-To: <40bf8f6c-c2a1-88cd-163a-256d8d0bb029@amd.com>
+References: <20230117164133.1245749-1-arnd@kernel.org>
+ <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
+ <eec4d2fd-f305-452a-a47f-83203da494df@app.fastmail.com>
+ <40bf8f6c-c2a1-88cd-163a-256d8d0bb029@amd.com>
+Date:   Wed, 18 Jan 2023 08:31:55 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Michal Simek" <michal.simek@amd.com>,
+        "Tanmay Shah" <tanmays@amd.com>, "Arnd Bergmann" <arnd@kernel.org>,
+        "Michal Simek" <michal.simek@xilinx.com>
+Cc:     soc@kernel.org, "Tanmay Shah" <tanmay.shah@xilinx.com>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        "Ben Levinsky" <ben.levinsky@amd.com>,
+        "Ronak Jain" <ronak.jain@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: zynqmp: fix declarations for gcc-13
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Tue, Jan 17, 2023 at 12:31 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
->> > Using order 4 pages would be helpful for many IOMMUs, but it could spend
->> > quite much time in page allocation perspective.
->> >
->> > The order 4 allocation with __GFP_RECLAIM may spend much time in
->> > reclaim and compation logic. __GFP_NORETRY also may affect. These cause
->> > unpredictable delay.
->> >
->> > To get reasonable allocation speed from dma-buf system heap, use
->> > HIGH_ORDER_GFP for order 4 to avoid reclaim.
+On Wed, Jan 18, 2023, at 08:29, Michal Simek wrote:
+> On 1/17/23 21:03, Arnd Bergmann wrote:
+>> 
+>> On Tue, Jan 17, 2023, at 20:53, Tanmay Shah wrote:
+>>> This looks good to me. Thanks for fixing this.
+>>>
+>>> Something must have gone wrong when I ran sparse check on this patch.
+>> 
+>> I don't think any of our previous tooling caught this, only gcc-13
+>> changed some of the behavior around enums.
+>> 
+>>> Just one question, does this patch need "fixes:" tag?
+>> 
+>> Probably a good idea:
+>> 
+>> Fixes: a5e56980cfb7 ("firmware: xilinx: Add RPU configuration APIs")
+>> 
+>> I can apply this directly to the soc fixes branch if you like
+>> and add that line.
 >
->Thanks for sharing this!
->The case where the allocation gets stuck behind reclaim under pressure
->does sound undesirable, but I'd be a bit hesitant to tweak numbers
->that have been used for a long while (going back to ion) without a bit
->more data.
->
->It might be good to also better understand the tradeoff of potential
->on-going impact to performance from using low order pages when the
->buffer is used.  Do you have any details like or tests that you could
->share to help ensure this won't impact other users?
->
->TJ: Do you have any additional thoughts on this?
->
->thanks
->-john
+> I have other patches in my soc branch to send you too.
+> Around next week I will be sending PR for it.
+> I can include this one too but up2you.
 
-Let me share what I tested with trace events of compaction, direct_reclaim.
-This log was captured within one dma-buf alloc for 1,957,888 byte size.
-It shows direct reclaim spent 4.973 msec total so that it could reclaim 209 pages total.
-But it spent 12.606 msec in compaction.
-I might miss preempted time but I think compaction is quite time consuming job.
+Since this is required for building with the latest compiler
+I think we want this in 6.2 and backported to stable kernels
+quickly. I'm about to send a fixes pull request for 6.2, so I'll
+just include it here.
 
-Sorry I don't know how much the current gfp is helpful to IOMMU.
-I think the default should be set like my change to improve allocation,
-and the current gfp could be set if need through other options like cmdline.
-
--5972    [006] ....  7971.248176: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.248394: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xac800 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.248399: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.248922: mm_vmscan_direct_reclaim_end: nr_reclaimed=17                                                                                  
--5972    [006] ....  7971.248974: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xacc00 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.249063: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xb5c00 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.249067: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.249768: mm_vmscan_direct_reclaim_end: nr_reclaimed=18                                                                                  
--5972    [006] ....  7971.249843: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xb6000 free_pfn=0xafc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.249845: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xb6000 free_pfn=0xafc00 zone_end=0x100000, mode=async status=partial_skipped
--5972    [006] ....  7971.249849: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.250116: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.250152: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xaf800 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.250305: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xac400 free_pfn=0xaf800 zone_end=0x100000, mode=async status=success        
--5972    [006] ....  7971.250375: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xac800 free_pfn=0xaf800 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.250380: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xaf800 free_pfn=0xaf800 zone_end=0x100000, mode=async status=partial_skipped
--5972    [006] ....  7971.250384: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.250597: mm_vmscan_direct_reclaim_end: nr_reclaimed=20                                                                                  
--5972    [006] ....  7971.251289: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xaf000 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.251497: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xac400 free_pfn=0xaf000 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.251502: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.251797: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.251890: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x5b400 free_pfn=0xb0400 zone_end=0x100000, mode=sync                      
--5972    [006] ....  7971.252740: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x63800 free_pfn=0xb0400 zone_end=0x100000, mode=sync status=success         
--5972    [006] ....  7971.252774: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x63c00 free_pfn=0xb0000 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.253325: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x74e20 free_pfn=0xade92 zone_end=0x100000, mode=async status=success        
--5972    [006] ....  7971.253333: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x83400 free_pfn=0xafc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.253683: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xac400 free_pfn=0xafc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.253688: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.254134: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.254206: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xad000 free_pfn=0xafc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.254289: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xae1c0 free_pfn=0xae000 zone_end=0x100000, mode=async status=partial_skipped
--5972    [006] ....  7971.254304: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.254510: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x74db0 free_pfn=0xadcc1 zone_end=0x100000, mode=async status=success        
--5972    [006] ....  7971.254519: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x75000 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.254612: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xac400 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.254617: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.255303: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.255307: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x75000 free_pfn=0xffc00 zone_end=0x100000, mode=sync                      
--5972    [006] ....  7971.260198: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x751e5 free_pfn=0xaa83f zone_end=0x100000, mode=sync status=success         
--5972    [006] ....  7971.260236: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.260883: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xb5c00 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.260891: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.261174: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.261178: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x75000 free_pfn=0xffc00 zone_end=0x100000, mode=sync                      
--5972    [006] ....  7971.264861: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x75681 free_pfn=0xffc00 zone_end=0x100000, mode=sync status=success         
--5972    [006] ....  7971.264873: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xbbc00 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.264889: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xc1400 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [006] ....  7971.264891: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [006] ....  7971.265141: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [002] ....  7971.265585: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0xc1800 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [002] ....  7971.265669: mm_compaction_end: zone_start=0x40000 migrate_pfn=0xc2c00 free_pfn=0xffc00 zone_end=0x100000, mode=async status=contended      
--5972    [002] ....  7971.265678: mm_vmscan_direct_reclaim_begin: order=4 gfp_flags=GFP_HIGHUSER|__GFP_NOWARN|__GFP_COMP|__GFP_ZERO                              
--5972    [002] ....  7971.266987: mm_vmscan_direct_reclaim_end: nr_reclaimed=22                                                                                  
--5972    [006] ....  7971.267466: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x40000 free_pfn=0xffc00 zone_end=0x100000, mode=sync                      
--5972    [006] ....  7971.267778: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x5d000 free_pfn=0xffc00 zone_end=0x100000, mode=sync status=success         
--5972    [006] ....  7971.267927: mm_compaction_begin: zone_start=0x40000 migrate_pfn=0x5c000 free_pfn=0xffc00 zone_end=0x100000, mode=async                     
--5972    [006] ....  7971.268092: mm_compaction_end: zone_start=0x40000 migrate_pfn=0x74d70 free_pfn=0xffc00 zone_end=0x100000, mode=async status=success        
-
-Thank you
-Jaewon Kim
+    Arnd
