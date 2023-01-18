@@ -2,160 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0165F672474
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E36D67247E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjARRHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        id S230153AbjARRIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjARRG6 (ORCPT
+        with ESMTP id S229852AbjARRIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:06:58 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425E44ABCE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:06:54 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id n7so8560036wrx.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VWQ584Y2nMdX85zP2zBoUd1q5AWvsub5/EGESd2pImA=;
-        b=nUdxqOrzGd38yu2vPUk7VSI0BgJXhO3l0fnqMHCB8GWyTziBjYokyUPf3Bbjv9CPbQ
-         rU7uwbqxYQdTJCN3A8viBxq7Erjj5/JafRMQqBpvOALxf6wS7XGIDjDN8DR1/T4YOnlm
-         /7sxj/OlcgRgIO2hC5cpZSFW3dHFy/HfifJW5v2HngVr2oQGDwYGdUs5qkfJa5DWMSwb
-         Dk5xC1xoxbLs4nk2L6YAPBKwYTx4DPiw+f7ZVRRTNVfyQBJ5ILQEedHFE/g+9YI+wP9I
-         hE5oOAHeEYZarW27Fzff6320VNDfHCedb2k5G+ZeY0JhWMgFXdUl6ZSAUBz4UVD58vr+
-         mEPA==
+        Wed, 18 Jan 2023 12:08:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0781F54208
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674061671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBANv9H3NJKZ6sjNqm34M+TVsHXbeGsvXhw690AG2bM=;
+        b=DLiaB+U+atgut1xhP5ZUlXwXDOLyl69+GcQWmcEhZfYU9/98iohoOf1nKQgpLTJX1ZHLQ+
+        yEO3BMDbPt7MPV+LPW2kdgGJCI8EGtvX7RjLtygoLjUMREzc9RPbc6Drj4w/pVG9uA8qHv
+        T8VIMTds5f6kN8jKzUov8uPbyb5Ft4c=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-96-feDjGFwpNGCA-GBCj4V04g-1; Wed, 18 Jan 2023 12:07:49 -0500
+X-MC-Unique: feDjGFwpNGCA-GBCj4V04g-1
+Received: by mail-ed1-f70.google.com with SMTP id z2-20020a056402274200b0049e48d86760so1983063edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:07:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWQ584Y2nMdX85zP2zBoUd1q5AWvsub5/EGESd2pImA=;
-        b=V8apZV2w2bjaMQ0mpj5TZ3+D258M53lfahZ+0hhZONkhaIhlB4k6X75MH7np91PtfQ
-         /n71PhTmIQnRmtU+2rHhr/ZZw/bZMQfo95vackQEHz7h03Du9LuE+cY5MZC/aYAbMLD7
-         v+bwfRUU/NI22utoHwh8ZN6zBu7tnRvTLNbqpht0WhH6pGonPzcJLT7jBgss9DVZoF36
-         9LB8yX1+FVH8+kQKGPd5TKB4ltH+2nT+iwCIajncRttUncy+bsjKLiz9l07h5BiZMPJy
-         lVbpYrGP1if95MqP/HlKID8WXMy5S5GMF6TizwC1C6G8/FnjQRLv9X3JYtfsp2Hsc3wm
-         o95w==
-X-Gm-Message-State: AFqh2krJQJBB2gRIiFyJTtrH9um33kGw2DC31t9bFdc99aPo2dMBv+5l
-        93mZexVahTJxRMDubstxnDJwNA==
-X-Google-Smtp-Source: AMrXdXtjSaoQnGJL2cmOmv2BcbWJCZQKa03nVTS+9kuhJZfyeGFyGYalXJkIr65AlcO8+X1nnDSepw==
-X-Received: by 2002:a5d:684d:0:b0:263:9208:2dd with SMTP id o13-20020a5d684d000000b00263920802ddmr14442437wrw.18.1674061613357;
-        Wed, 18 Jan 2023 09:06:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm31405992wrx.21.2023.01.18.09.06.51
+        bh=fBANv9H3NJKZ6sjNqm34M+TVsHXbeGsvXhw690AG2bM=;
+        b=ugOGH9jmtj0+ziu4RJ+AM3KMy92b53TQ4iA6jZYdEq9oK+0eHPb1WHn88ZBGiqP1gy
+         R+8o0ITnTrSILorC5FP/3ir9CI6v8gNAUvSOOtMaqdNuCL9QtZYLCK56+zmdePTBmQBz
+         XhjqlnNmgPJfSQHVZ5BRo0DTY+PJXkVpNwV4WM9NDvr0BM0ejWmwMtp+LRm0AvlMWxxY
+         nOvkqxZM/P8LPUgozueqfmcq8Taa9EzKdRnT2tSxdRiJOgBnPmI6QYX9srabr0S4upaq
+         Da03dNucNLe7828zzMq69Er08F09tr28l/UZbziSYrYdqzk42X338FGAX/uTh68SO2tl
+         XWUA==
+X-Gm-Message-State: AFqh2ko4EEL2DEgMvCTc8FAGxw48fzjzVPUpjxHyjtSrY/1niUYmpkSF
+        mpy6KAZ9+in50oI2Ecs8ZzZz6uVjTgtDSrgIQB8O4XM0pc3ChfsFas0+LXD23PqYOn3QNGS410W
+        JfMe22ZDYnZ/2oNMXDqJmZ5t7
+X-Received: by 2002:a05:6402:3496:b0:48e:9c36:6c39 with SMTP id v22-20020a056402349600b0048e9c366c39mr10655816edc.0.1674061667348;
+        Wed, 18 Jan 2023 09:07:47 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuM6N50uo34MhuDQ2myK4tmuRftD6RxUPFaD0W5wWJaH1S/YZtVCY64QmVFCMkp4Ewl6ol/wg==
+X-Received: by 2002:a05:6402:3496:b0:48e:9c36:6c39 with SMTP id v22-20020a056402349600b0048e9c366c39mr10655801edc.0.1674061667188;
+        Wed, 18 Jan 2023 09:07:47 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id g13-20020a170906538d00b0085a958808c6sm10297082ejo.7.2023.01.18.09.07.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:06:52 -0800 (PST)
-Message-ID: <978b0335-ae9d-7d7a-ad70-6861d6dfcc43@linaro.org>
-Date:   Wed, 18 Jan 2023 18:06:50 +0100
+        Wed, 18 Jan 2023 09:07:46 -0800 (PST)
+Message-ID: <3d51f766-bd80-870d-c939-99660526c654@redhat.com>
+Date:   Wed, 18 Jan 2023 18:07:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
- device on SDM845
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
- <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
- <20230118155919.GD4690@thinkpad>
- <3ca41414-df2e-4ba0-9dc7-cacea2413fe6@linaro.org>
- <20230118162657.GE4690@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118162657.GE4690@thinkpad>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] iio: light: cm32181: Fix PM support on system with 2
+ I2C resources
+Content-Language: en-US, nl
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
+Cc:     Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230118170422.339619-1-kai.heng.feng@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230118170422.339619-1-kai.heng.feng@canonical.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 17:26, Manivannan Sadhasivam wrote:
-> On Wed, Jan 18, 2023 at 05:05:28PM +0100, Krzysztof Kozlowski wrote:
->> On 18/01/2023 16:59, Manivannan Sadhasivam wrote:
->>> On Wed, Jan 18, 2023 at 04:37:29PM +0100, Krzysztof Kozlowski wrote:
->>>> On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
->>>>> The platforms based on SDM845 SoC locks the access to EDAC registers in the
->>>>> bootloader. So probing the EDAC driver will result in a crash. Hence,
->>>>> disable the creation of EDAC platform device on all SDM845 devices.
->>>>>
->>>>> The issue has been observed on Lenovo Yoga C630 and DB845c.
->>>>>
->>>>> Cc: <stable@vger.kernel.org> # 5.10
->>>>> Reported-by: Steev Klimaszewski <steev@kali.org>
->>>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>>>> ---
->>>>>  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
->>>>>  1 file changed, 12 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->>>>> index 7b7c5a38bac6..8d840702df50 100644
->>>>> --- a/drivers/soc/qcom/llcc-qcom.c
->>>>> +++ b/drivers/soc/qcom/llcc-qcom.c
->>>>> @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>>>>  
->>>>>  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
->>>>>  
->>>>> -	llcc_edac = platform_device_register_data(&pdev->dev,
->>>>> -					"qcom_llcc_edac", -1, drv_data,
->>>>> -					sizeof(*drv_data));
->>>>> -	if (IS_ERR(llcc_edac))
->>>>> -		dev_err(dev, "Failed to register llcc edac driver\n");
->>>>> +	/*
->>>>> +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
->>>>> +	 * in bootloader. So probing the EDAC driver will result in a crash.
->>>>> +	 * Hence, disable the creation of EDAC platform device on SDM845.
->>>>> +	 */
->>>>> +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
->>>>
->>>> Don't spread of_device_is_compatible() in driver code. You have driver
->>>> data for this.
->>>>
->>>
->>> Yeah, but there is no ID to in the driver data to identify an SoC. 
->>
->> What do you mean there is no? You use exactly the same compatible as the
->> one in driver data.
->>
-> 
-> Right, but I was saying that there is no unique field to identify an SoC.
-> 
->>
->>> I could add
->>> one but is that really worth doing so? Is using of_device_is_compatible() in
->>> drivers discouraged nowadays?
->>
->> Because it spreads variant matching all over. It does not scale. drv
->> data fields are the way or better quirks/flags.
->>
-> 
-> The driver quirk/flags are usually beneficial if it applies to multiple
-> platforms, otherwise they are a bit overkill IMO just like in this case.
-> 
-> One can argue that this matching could spread to other SoCs in the future, but
-> I don't think that could happen for this case.
+Hi,
 
-That's the argument for every flag/quirk/field. Driver already uses it -
-see need_llcc_cfg being set for only one (!!!) variant. Now you add
-orthogonal field just as of_device_is_compatible(). No, that's why we
-have driver data and as I said - it is already used.
+On 1/18/23 18:04, Kai-Heng Feng wrote:
+> Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
+> with 2 I2C resources") creates a second client for the actual I2C
+> address, but the "struct device" passed to PM ops is the first I2C
+> client that can't talk to the sensor.
+> 
+> That means the I2C transfers in both suspend and resume routines can
+> fail and blocking the whole suspend process.
+> 
+> Instead of using the first client for I2C transfer, use the I2C client
+> stored in the cm32181 private struct so the PM ops can get the correct
+> I2C client to really talk to the sensor device.
+> 
+> Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
+> BugLink: https://bugs.launchpad.net/bugs/1988346
+> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
+> Tested-by: Wahaj <wahajaved@protonmail.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Best regards,
-Krzysztof
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+> ---
+> v2:
+>  - Removed setting drvdata to the dummy client.
+>  - Added bug links.
+>  - Wording.
+> 
+>  drivers/iio/light/cm32181.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+> index 001055d097509..b1674a5bfa368 100644
+> --- a/drivers/iio/light/cm32181.c
+> +++ b/drivers/iio/light/cm32181.c
+> @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
+>  	if (!indio_dev)
+>  		return -ENOMEM;
+>  
+> +	i2c_set_clientdata(client, indio_dev);
+> +
+>  	/*
+>  	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
+>  	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
+> @@ -460,8 +462,6 @@ static int cm32181_probe(struct i2c_client *client)
+>  			return PTR_ERR(client);
+>  	}
+>  
+> -	i2c_set_clientdata(client, indio_dev);
+> -
+>  	cm32181 = iio_priv(indio_dev);
+>  	cm32181->client = client;
+>  	cm32181->dev = dev;
+> @@ -490,7 +490,8 @@ static int cm32181_probe(struct i2c_client *client)
+>  
+>  static int cm32181_suspend(struct device *dev)
+>  {
+> -	struct i2c_client *client = to_i2c_client(dev);
+> +	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+> +	struct i2c_client *client = cm32181->client;
+>  
+>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>  					 CM32181_CMD_ALS_DISABLE);
+> @@ -498,8 +499,8 @@ static int cm32181_suspend(struct device *dev)
+>  
+>  static int cm32181_resume(struct device *dev)
+>  {
+> -	struct i2c_client *client = to_i2c_client(dev);
+>  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+> +	struct i2c_client *client = cm32181->client;
+>  
+>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+>  					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
 
