@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526B36713DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F8A6713E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjARGXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 01:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
+        id S229677AbjARGXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 01:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjARGTT (ORCPT
+        with ESMTP id S229481AbjARGUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:19:19 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF41E5C2;
-        Tue, 17 Jan 2023 22:06:23 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id 200so19187999pfx.7;
-        Tue, 17 Jan 2023 22:06:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bUmpjVqBBhi1SGzypxOnduAfDJL57JgsOCLfCSRMLnM=;
-        b=gMYlUezqD4qdnPjzfuEndSrnOUf+/3VDb7WsD0wt6b1eQ/7cmXmHEoMuaO8AJymobm
-         VE2rRZgaEtg4NN4R2aR+6OBouY8AG0013mcrh0nOlrsF6i7c0epALpEKg3dAlzlC7ORP
-         TGTmfKyyf0uKhOeV0jAhC3mzXc3ocd5P/oKZay0kHtTt1a0zQyWb2hsmfNp///3MPZo9
-         aXUm6e0H+VG5DmwjFhuQXBPuhLAUQ8ApezyyT7h3yd2hHy7msmnHingkccsYoZEWvjP4
-         myQROjtlZDFxXNlOd2k2OfSgZUESDLjXcuz7R4/xzFNWHr4hGpbZuU3dTtZnjMc4Y0AY
-         yh/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bUmpjVqBBhi1SGzypxOnduAfDJL57JgsOCLfCSRMLnM=;
-        b=5iz+RMzBBME9gRJHdBJWKfdRDSFZehYUT8id016Ho+FJ2AfMBSVguEHcI+daxLKBNr
-         6pg2s3vOngMiKZX4cBBWxyKSDsDZrfx8rZ90Ii0dKOPW9C/zAGke6jLmVF/7U/8AhXY2
-         57LcQIJ+ChIkx/ocd2JLSSA5K4c9vF3QMT9C+LQG58QDPCVxTjJ9mDWcMkCTa8YK9E9a
-         50hDkCzaXPuPllHfVUnERZSz7qzyCnLJ2Nx7lOmG6GhoZBP7U/3NVocPh3r5xS69fUMA
-         srw2HLZfS75WEGmSDkE6Baa9ZMB9qk5ES+VylIb2wnjDSe0IDcgwVbncMXEHRbX1v0Be
-         vX6g==
-X-Gm-Message-State: AFqh2kqQnEMYDBoYx3z3nq8rkfQdiBzKPPHPl0Z4WBwweJuNr2+jTsf3
-        W7XjdVg4V+p5YXICrkOvMkcvNBeVAPk=
-X-Google-Smtp-Source: AMrXdXsdPLCheZ3jUOMo/Qj75/URZVynP1f95P6cPTisA/avRtODJkMMK3ZtPoOUZ/EoHsZLSnMV0A==
-X-Received: by 2002:a62:1615:0:b0:587:df0a:804d with SMTP id 21-20020a621615000000b00587df0a804dmr6672554pfw.27.1674021972075;
-        Tue, 17 Jan 2023 22:06:12 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:3749:9eb3:dfb5:f449])
-        by smtp.gmail.com with ESMTPSA id b126-20020a62cf84000000b00574e84ed847sm10990180pfg.24.2023.01.17.22.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 22:06:11 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: [PATCH 8/8] perf/core: Call perf_prepare_sample() before running BPF
-Date:   Tue, 17 Jan 2023 22:05:59 -0800
-Message-Id: <20230118060559.615653-9-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230118060559.615653-1-namhyung@kernel.org>
-References: <20230118060559.615653-1-namhyung@kernel.org>
+        Wed, 18 Jan 2023 01:20:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C646D75;
+        Tue, 17 Jan 2023 22:08:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F254615B0;
+        Wed, 18 Jan 2023 06:08:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FE7C433D2;
+        Wed, 18 Jan 2023 06:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674022107;
+        bh=wJKzVtiwlBDSkpF0tCKhmbESueBYIIC1ljEZoRcApd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UQ16+kTHXljxWWrlz3cs8bXXZ6YbI+m3Uex9mKKd1yJV/xr2tYPhJ6ZGY8W1m5jeB
+         sr68AvpDIoQam4Wf0ZRHJ55sUrExyTU86RiaGLW7fP0HsV4+0espWmqNnwzvaM7div
+         rfzB5YZtd891k2SRyXuVgY1LzPFEeZ9uXb7yZ6UQ=
+Date:   Wed, 18 Jan 2023 07:08:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Wang Yugui <wangyugui@e16-tech.com>
+Cc:     hch@lst.de, stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
+Message-ID: <Y8eM1ln+uGaR5h72@kroah.com>
+References: <20230117151136.CB79.409509F4@e16-tech.com>
+ <Y8Znr6CAFi8ikhdH@kroah.com>
+ <20230118101433.734D.409509F4@e16-tech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118101433.734D.409509F4@e16-tech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As BPF can access sample data, it needs to populate the data.  Also
-remove the logic to get the callchain specifically as it's covered by
-the perf_prepare_sample() now.
+On Wed, Jan 18, 2023 at 10:14:35AM +0800, Wang Yugui wrote:
+> Hi,
+> 
+> > On Tue, Jan 17, 2023 at 03:11:37PM +0800, Wang Yugui wrote:
+> > > Hi,
+> > > 
+> > > fstests(generic/034, xfs) panic when 6.1.7-rc1, but not panic when 6.1.6.
+> > > 
+> > > It seems patch *1 related.
+> > > *1 Subject: blk-mq: move the srcu_struct used for quiescing to the tagset
+> > > From: Christoph Hellwig <hch@lst.de>
+> > > 
+> > > This patch has been drop from 6.1.2-rc1. and it now added in 6.1.7-rc1 again.
+> > > 
+> > > the panic in 6.1.7-rc1 is almost same as that in 6.1.2-rc1.
+> > 
+> > Argh, yes, let me go drop these again.
+> > 
+> > Sasha, can you blacklist these from your tools so they don't get picked
+> > up again?
+> 
+> this panic does not happen on  upstream 6.2.0-rc4.
+> or maybe we need a bigger patch set?
 
-Cc: bpf@vger.kernel.org
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Song Liu <song@kernel.org>
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/events/core.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 73c40ce84c48..5af61d0292ab 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10363,13 +10363,7 @@ static void bpf_overflow_handler(struct perf_event *event,
- 	rcu_read_lock();
- 	prog = READ_ONCE(event->prog);
- 	if (prog) {
--		if (prog->call_get_stack &&
--		    (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
--		    !(data->sample_flags & PERF_SAMPLE_CALLCHAIN)) {
--			data->callchain = perf_callchain(event, regs);
--			data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
--		}
--
-+		perf_prepare_sample(data, event, regs);
- 		ret = bpf_prog_run(prog, &ctx);
- 	}
- 	rcu_read_unlock();
--- 
-2.39.0.314.g84b9a713c41-goog
-
+We just need to stop attempting to backport these to 6.1 :)
