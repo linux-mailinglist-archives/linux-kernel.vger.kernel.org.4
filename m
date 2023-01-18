@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61CC671246
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0FD67124B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjARD4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
+        id S229513AbjAREKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 23:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjARD4h (ORCPT
+        with ESMTP id S229450AbjAREKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:56:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864E954227;
-        Tue, 17 Jan 2023 19:56:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 17 Jan 2023 23:10:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6053F91;
+        Tue, 17 Jan 2023 20:10:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FA776160E;
-        Wed, 18 Jan 2023 03:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78111C433D2;
-        Wed, 18 Jan 2023 03:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674014189;
-        bh=GqWHxua0L6lPQIAKNKiopte/74IpSnqlqs2H7TJq2CY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IsHlAjKa0F21eCJONlHnQ09ZgmN3Ee1N/60k4+a1P9S1q8BgaBbWNPXkmkx7jsT4L
-         GqL7yV9k5hPlNt0zIFq0VDALvsKynyX9yvNru//R2857HCbm/CIKUSlCSzwH7tzfhg
-         uS5CEVlF2W+p8rSoPdkaB2x/GeAtrNbImkFwFPPyzC+kbqrU14yahamYETyTnxNAcZ
-         UDjCKvXutsebE6Vdn/J21JpxtGjyTF7Wn4xovwCGuGqbJOuhYOOt9vVN7OnAPWv5hy
-         fsBcalCiLh2ODwqVdwI52Gv7BGT8FMiviv6R85bU4DoMcmw3U0aoM1aQAD7SMP2i+6
-         V+zXgzmkVileA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2A9985C1052; Tue, 17 Jan 2023 19:56:29 -0800 (PST)
-Date:   Tue, 17 Jan 2023 19:56:29 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH rcu v2 17/20] kvm: Remove "select SRCU"
-Message-ID: <20230118035629.GT2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
- <20230113001132.3375334-17-paulmck@kernel.org>
- <Y8dLCJKXn5fL/2Iq@google.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxXNj2LQVz4xN1;
+        Wed, 18 Jan 2023 15:10:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674015029;
+        bh=u6vMH/fNh5tDTyWkHrjyEqVd/qKhfxttm6Rbx/mW+sA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=D63sEux0pTsqJD7vO0i57PZMjAvWSwXGvj5OfIKcxxUddaNYYBnMRcSl8zwyzsgM1
+         G/WLJPJjjiY0RLi+00pykS8o3wEZMyok/tcsygsoNrROkFLhO+aJSp94XIareuoGOa
+         nMOwIyrxZUp8g/4lxk0SzDsO/SNr3s8HG7/jdZ04WMI1wRFZQrpmKv01eIE8XIjtbz
+         WcjqcSTmHPDgpyTBMd9CQ1vRC2lcOe5D5Um0aPgJeigVkawynExGDJ5wnsn7CCFBkD
+         99CKhWAMLjFznicuIWCm+HfMlkui7cT2/3dYXcyzWwQ2L2PMmv/2BnWqrjTXF8Qocd
+         Y9cuqaey+Behw==
+Date:   Wed, 18 Jan 2023 15:10:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the risc-v tree
+Message-ID: <20230118151028.1602fb47@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8dLCJKXn5fL/2Iq@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_gOJlxZcVGqlPCr6yW46Fz+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 01:27:36AM +0000, Sean Christopherson wrote:
-> On Thu, Jan 12, 2023, Paul E. McKenney wrote:
-> > Now that the SRCU Kconfig option is unconditionally selected, there is
-> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> > Kconfig statements from the various KVM Kconfig files.
-> > 
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: <kvm@vger.kernel.org>
-> > Acked-by: Marc Zyngier <maz@kernel.org> (arm64)
-> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> > Acked-by: Anup Patel <anup@brainfault.org> (riscv)
-> > Acked-by: Heiko Carstens <hca@linux.ibm.com> (s390)
-> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
-> > ---
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> 
-> 
-> Ugh, my apologies Paul.  I didn't realize 0cd7e350abc4 ("rcu: Make SRCU mandatory")
-> is already in Linus' tree, i.e. bundling this in a single patch was unnecessary work
-> for you.
-> 
-> Anyways, since there isn't an external dependency, this can go through the KVM
-> tree.  Unless you prefer to take it directly, I'll make sure Paolo sends it along
-> at some point before v6.2 final.
+--Sig_/_gOJlxZcVGqlPCr6yW46Fz+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I am very happy to have you guys take it.  Just let me know when you
-have it in place, and I will drop my copy on my next rebase after that.
+Hi all,
 
-							Thanx, Paul
+Commit
+
+  632a9d999162 ("RISC-V: fix incorrect type of ARCH_CANAAN_K210_DTB_SOURCE")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_gOJlxZcVGqlPCr6yW46Fz+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHcTQACgkQAVBC80lX
+0GwboQf/W24+rDD4efYy4rqwYIqieQS614ixYTE6HA0AyRDgr2HAyIc30PX6ahfu
+jiy0QZvRnQjBKRb+0tv6yMkrHxngsYmHaF0qH9p56R4T9tV31KX2wDQms70qbtzJ
+nWJ8SW0SQSdefgYeJ3MOsGf5q4wXTfT46e4rJY5Y8V4+TsZaNDDeM9oXVusjRsbG
++PTvqhndRgQYnZxXGRu32fo9oz0x2kNqNdSRTxQUtMjJiudcCX63UJ53NP2cI85S
+ZcZWdQq15nVDxX3GC8QHcwoNuE7zapwZe8fgCKgYwp/cAW3WAqOhnWHlgheb2sbe
+UkJiqsXo35G9V+eCBQZi4egESLJMFA==
+=J7cU
+-----END PGP SIGNATURE-----
+
+--Sig_/_gOJlxZcVGqlPCr6yW46Fz+--
