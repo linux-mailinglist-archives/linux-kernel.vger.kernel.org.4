@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4B6671108
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9855C67110D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjARCST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S229558AbjARCVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjARCSR (ORCPT
+        with ESMTP id S229450AbjARCVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:18:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE751C74
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:17:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674008248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PP8025B7vYjGqOUOci8HcWNNJvoXEzim4g39pJBVbi4=;
-        b=Vp2dr/aoU3v6Xoiiy7daHKIfyMyg1S6FYC4ox2FrS77k40dDmNJUicQPJuxv6AJhchg3S+
-        uYNkLR18ItsPvWsJvceJFYHZNwPQCRoxnjMAGmhC9gCTAQBbF7LNb0gRQWxhDKbabhEcJB
-        KTCeFkthjwDHp9dlIkcXgAyKPgvrHAo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-g9rajeCaO32cmZEiYBLGwQ-1; Tue, 17 Jan 2023 21:17:23 -0500
-X-MC-Unique: g9rajeCaO32cmZEiYBLGwQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 403931871D97;
-        Wed, 18 Jan 2023 02:17:23 +0000 (UTC)
-Received: from localhost (ovpn-13-29.pek2.redhat.com [10.72.13.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7F504C159BB;
-        Wed, 18 Jan 2023 02:17:22 +0000 (UTC)
-Date:   Wed, 18 Jan 2023 10:17:19 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, linux-mm@kvack.org, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        urezki@gmail.com, lstoakes@gmail.com, stephen.s.brennan@oracle.com,
-        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y8dWrydYsYAbnMwT@fedora>
-References: <20230113031921.64716-4-bhe@redhat.com>
- <202301132345.KVjvHMFq-lkp@intel.com>
- <Y8QI977QBDbuuGW5@fedora>
- <Y8VMUUOlkwuu5xn6@kadam>
+        Tue, 17 Jan 2023 21:21:31 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EE33E0B8;
+        Tue, 17 Jan 2023 18:21:30 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v10-20020a17090abb8a00b00229c517a6eeso828947pjr.5;
+        Tue, 17 Jan 2023 18:21:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iWYTihBJS74YNhLStx6/+KX0Vup6pyB8J1ojVOxW77s=;
+        b=IIEBhucqwIjVzETPDncrlgqtMmeISCPNb/OAE63apeu3wCenKBObN5WUJkzVQRFrc8
+         rDmquwUcx0wyw/n0l//veBN95GoQa8QHMzTx+jIsvPXD4giCNFdnzgpUBrKrMmET/5YV
+         EymvzQBl+XsIi1QHoxqWzRXYzD3WAv/1WLR65vjQ8AVzN2x4ceL6dVCiouCk/4c0j8IH
+         k1kYKn9Mgp+fj2HaSfZwlqMhBw5vjV2AvKPVV7gGjd/lcNTgCEC3BdNfGvPxeRgq6cz2
+         1kmrqG8zjufFxVnOL9M3xKQoVEKMoi4d2DxKiADzkDKjZ6OP+WkGUksU+07ppwkUvTFz
+         /HWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iWYTihBJS74YNhLStx6/+KX0Vup6pyB8J1ojVOxW77s=;
+        b=fGdzQZmJtb3MJRLQDKVqRCJ3UQ4LqQ9p6HWTd5f7lpg2PTOe3XCBwujxtWRKTpSnft
+         yVilkMRQ1M8VWKmJ80TYoyuwJeWBnFOe/Mos6ynSHXSxPtgzSnZKnVgA4Shndswtxwn4
+         QmUjuNv1IlYDCRnTXqq1FX4lGafriifZM/nu0tuLf6A/VOFTN+17DyBELffW+47y89k/
+         oDkNsqXKNmbLOm8R8JD1RmcT/u0jz/fEgRQdATwT695ZqW6qMbeDsM3lnB0nbAO30ikB
+         fDdtWIEm1QPkcvYEbTrew1Y+0mENxcurJfV5Ngi92ZUceRKCvoXQ23O7BCDD2R2pG4/K
+         tGxw==
+X-Gm-Message-State: AFqh2krUowT/5oHwUNLLLBFYpFlIuUg6lk1BuBW3+o0c9YP2504zFEVq
+        Nc6iGyNWGbITrmEHghOMTso=
+X-Google-Smtp-Source: AMrXdXtwXQpDynSdIkPgl6syh577OrdWqmpYPyKHat0a84Nho4mEAsmISNgGqvkNXgoCecdUCkR+hQ==
+X-Received: by 2002:a17:903:1ce:b0:193:29db:e0b7 with SMTP id e14-20020a17090301ce00b0019329dbe0b7mr8025365plh.54.1674008489679;
+        Tue, 17 Jan 2023 18:21:29 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170902684500b0019488a36e2asm5726884pln.277.2023.01.17.18.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 18:21:29 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 005861016F2; Wed, 18 Jan 2023 09:21:25 +0700 (WIB)
+Date:   Wed, 18 Jan 2023 09:21:25 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Deming Wang <wangdeming@inspur.com>, corbet@lwn.net,
+        fmdefrancesco@gmail.com, akpm@linux-foundation.org,
+        bigeasy@linutronix.de, ira.weiny@intel.com, rppt@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/highmem: fix spelling mistakeo
+Message-ID: <Y8dXpe5CCo5Kl3Zg@debian.me>
+References: <20230118004356.4198-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Mw4POEwxCQT0tDQk"
 Content-Disposition: inline
-In-Reply-To: <Y8VMUUOlkwuu5xn6@kadam>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230118004356.4198-1-wangdeming@inspur.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/16/23 at 04:08pm, Dan Carpenter wrote:
-> On Sun, Jan 15, 2023 at 10:08:55PM +0800, Baoquan He wrote:
-> > > f181234a5a21fd0 Chen Wandun             2021-09-02  3650  	if ((unsigned long)addr + count <= va->va_start)
-> > > f181234a5a21fd0 Chen Wandun             2021-09-02  3651  		goto finished;
-> > > f181234a5a21fd0 Chen Wandun             2021-09-02  3652  
-> > > f608788cd2d6cae Serapheim Dimitropoulos 2021-04-29  3653  	list_for_each_entry_from(va, &vmap_area_list, list) {
-> > > e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3654  		if (!count)
-> > > e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3655  			break;
-> > > e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3656  
-> > > 129dbdf298d7383 Baoquan He              2023-01-13  3657  		vm = va->vm;
-> > > 129dbdf298d7383 Baoquan He              2023-01-13  3658  		flags = va->flags & VMAP_FLAGS_MASK;
-> > > 129dbdf298d7383 Baoquan He              2023-01-13  3659  
-> > > 129dbdf298d7383 Baoquan He              2023-01-13  3660  		if (!vm && !flags)
-> > >                                                                             ^^^
-> > > vm can be NULL if a flag in VMAP_FLAGS_MASK is set.
-> > > 
-> > > e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3661  			continue;
-> > 
-> > Right, after the 'continue;' line, only two cases could happen when it
-> > comes here. (vm != null) or (vm->flags & VMAP_RAM) is true.
-> >
-> 
-> You're saying VMAP_RAM, but strictly speaking the code is checking
-> VMAP_FLAGS_MASK and not VMAP_RAM.
-> 
-> +#define VMAP_RAM               0x1 /* indicates vm_map_ram area*/
-> +#define VMAP_BLOCK             0x2 /* mark out the vmap_block sub-type*/
-> +#define VMAP_FLAGS_MASK                0x3
-> 
-> If we assume that vm is NULL, VMAP_BLOCK is set and VMAP_RAM is clear
-> then it would lead to a NULL dereference.  There might be reasons why
-> that combination is impossible outside the function but we can't tell
-> from the information we have here.
 
-VMAP_BLOCK has no chance to be set alone. It has to be set together with
-VMAP_RAM if needed.
+--Mw4POEwxCQT0tDQk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Which is fine, outside information is a common reason for false
-> positives with this check.  But I was just concerned about the mix of
-> VMAP_FLAGS_MASK and VMAP_RAM.
+On Tue, Jan 17, 2023 at 07:43:56PM -0500, Deming Wang wrote:
+> Substitute occurrencies of "higmem" with "highmem".
+>=20
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  Documentation/mm/highmem.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
+> index 59d1078f53df..7da4a0d175f0 100644
+> --- a/Documentation/mm/highmem.rst
+> +++ b/Documentation/mm/highmem.rst
+> @@ -83,7 +83,7 @@ list shows them in order of preference of use.
+>    for pages which are known to not come from ZONE_HIGHMEM. However, it is
+>    always safe to use kmap_local_page() / kunmap_local().
+> =20
+> -  While it is significantly faster than kmap(), for the higmem case it
+> +  While it is significantly faster than kmap(), for the highmem case it
+>    comes with restrictions about the pointers validity. Contrary to kmap()
+>    mappings, the local mappings are only valid in the context of the call=
+er
+>    and cannot be handed to other contexts. This implies that users must
 
-Thanks, I see your point now, will consider how to improve it.
+Are you sure you have seen the other occurences of higmem in the same
+doc? If so, do s/higmem/highmem/g.
 
+Also, the patch subject prefix should have been Documentation: mm:
+highmem, and also s/mistakeo/mistake/ in the subject.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Mw4POEwxCQT0tDQk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8dXnAAKCRD2uYlJVVFO
+o08VAQDEEhStJpa6Cgxi3uNSqAxm4VevQ6Z9DCxAAmI3m26C8gD+L+leay6lI/iN
+n7nFfjH+K05bGxtoIlBFVRxXFTKe1Q0=
+=vy/I
+-----END PGP SIGNATURE-----
+
+--Mw4POEwxCQT0tDQk--
