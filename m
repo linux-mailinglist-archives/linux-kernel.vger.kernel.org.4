@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6445B672454
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6AA67245C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjARRAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S229905AbjARRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjARRAW (ORCPT
+        with ESMTP id S230055AbjARRBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:00:22 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7441458BD
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:00:20 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id l125so17048745vsc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:00:20 -0800 (PST)
+        Wed, 18 Jan 2023 12:01:23 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AD45BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:22 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15f64f2791dso5829088fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gVS0ttI/4bB+mxtYXUXdE9Vy1l0C8qSZnW3LXzS45yM=;
-        b=XDeY55Q6iWV3pDYpheM1QUBJdMuDvKiPLlLDrBKxY2OrVKXgCTUHzOXYin7LwtCEwo
-         aE595vrT732LnIndSSJmoMG1YzzDhi6nRZrU34VkQjZyy+nnMaS8H6IxDmgBQyAQJzOE
-         z95duu7DtZbNBtBJrXJ9BAhrWSCjw9mxcsX4/caB+OaY4LPkBcwvItrDXd6g4Zq2In2z
-         4Ab8gr/ZBkeVJfAZ7If9LEoEU/aZXNpBJVPudQ+nGRaXHEAWh0WOF4nhMyj0kZh2t00a
-         efXvH7i1NW/F9SXBCm8GVKxMr14j6F9xs375H9DbnhnClUBdso7Flp7qaZOH4V2JZNd+
-         0BLQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DJBZdN4kSLIlLl8kPVsTumsNteLxan9/Bu7rB/h9NIk=;
+        b=ecAOyczQCTbiITKL2h/jHtACGOR0iJ2EQF7lthUuPAgymOdRLiYelJAF++vP6TGAOc
+         MXa0wIhKP64NJxuPY6hUpfJY50pLqfUviyFQgxwmkZDdvvVY7y4piI+iuclZDGar5zvO
+         hxbZlC4EfpSx2dm9/weoMEVNjOuSothO2LjCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gVS0ttI/4bB+mxtYXUXdE9Vy1l0C8qSZnW3LXzS45yM=;
-        b=NP6gOr+Mf47Tuf13vZo0sQPvSbq0Rw9cpSsSYPZPhVg4sOIwakFxHOzYaGoMzGtt0e
-         zy3E4LB04DokvY1dbCEONnaQKezFv6EgZqNPC/v97QK1gBXmz9yoywKi+Dz354mlUU23
-         57KWEe4886NQ9KTpVW6hUNX8oHxIVzEbbJ/nwusKiS/2Zzvc5X3zXYbs5Zuh96E2MIuV
-         lGRpjJ63mSPlav5/iDl1eDw350+n/BCxm/csAf1yKL5DggS4+pHBKPhYLoVyfzCEt2Ib
-         E+A0ni4fcK6c+VRJcL8v0q411J1UWhsvesSWebOSpfEdhv4vVkQoY+Ug0ShGFWNzsSYu
-         BgDQ==
-X-Gm-Message-State: AFqh2krqK/Bz9DQ+ojL3KLLuMcIYY4TFE0wiiDpCN25ze/DSynp2RQUl
-        YWC3LjryHRtm1VHpRIbBNEU=
-X-Google-Smtp-Source: AMrXdXud3IrhSSd7y9EKMeFVoOK7kAjqlf/wSvqtUPI8QnK9N0g3Ouj/pyZ5R2fAE63zGLiPMrCvWQ==
-X-Received: by 2002:a05:6102:a49:b0:3d2:3263:e637 with SMTP id i9-20020a0561020a4900b003d23263e637mr5847959vss.30.1674061219721;
-        Wed, 18 Jan 2023 09:00:19 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id d136-20020ae9ef8e000000b006ef1a8f1b81sm22314218qkg.5.2023.01.18.09.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:00:19 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8625D27C0054;
-        Wed, 18 Jan 2023 12:00:18 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 18 Jan 2023 12:00:18 -0500
-X-ME-Sender: <xms:oSXIY7Q3VMy3hdQoHQuYI95EPpkR3SDqWgyCWkr26QffjDnpp3dFKg>
-    <xme:oSXIY8yLzWOrY0mOERccesfLWU5fjviix6PVCHrjHGtGQK56dzu5ZAXYJEZxKnwTR
-    dnbKBcvlMp5P91MDQ>
-X-ME-Received: <xmr:oSXIYw0mjunHp79DQs4gtcZiQD73Xk4QbaogGofcUfao5SIuyuUzCt31w6k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtkedgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:oSXIY7BNlcaItw3kV14cAbwbJlJm1M53KTMuI6mcI5nfYyWxSIgDpg>
-    <xmx:oSXIY0j44SsyFdPqGdf5a0fyJW3-49feVyJd09hpT_KMC0fZxLciVQ>
-    <xmx:oSXIY_oCjoeLlqwrp-bL5JMidEkx3CEuJ4tvH7V_ZgeB-x-PzB8BeA>
-    <xmx:oiXIY7Tb9FTYxZiGD_LpAGIT0YWKLU3dDAaTlk4uVnpqlYzKq7iM0A>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jan 2023 12:00:16 -0500 (EST)
-Date:   Wed, 18 Jan 2023 08:59:55 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        npiggin <npiggin@gmail.com>, dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y8gli5C/HqPRYv9Y@boqun-archlinux>
-References: <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
- <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8aKlNY4Z0z2Yqs0@andrea>
- <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8dWMyBfz1iiaF8M@rowland.harvard.edu>
- <20230118051704.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8gYV81O80BtMvWm@rowland.harvard.edu>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DJBZdN4kSLIlLl8kPVsTumsNteLxan9/Bu7rB/h9NIk=;
+        b=aQc9l873VsdIzVrpqk1L1DizIDOrxJ1SDYICWxd4OgbwJ9XbBjfwK7Vfro66B54MMz
+         okzs13VHMdeDzAdf0vfrEUjlvCCcaEfJGYMES0py2NloA933OUdyp2K/e2EvAujoSVNM
+         crocyhEmNr5eI4qcDJoTkjOO2j9h+eMHvWrBGHjhplgy7KqORbZ4g/wHYQLwfXQh8H8x
+         Eteq9i/l69FvcH9akmVReLPa7nuGMaO6g8sdsGFpgPqRrFQ3CJFjQztsqPo1WmWcikL0
+         RmqrzeSsQUcvhzsdW51xaPXDsbb7ymCX3tn8JY92ZI6srJRvu8XRVnsoZ1iWQvJAKG7c
+         tpEQ==
+X-Gm-Message-State: AFqh2krchPZ0p0AJ8tV9QPW+0wzC7CnbwOU2qzr2pkqnFgjEt7WgL/yh
+        Wxd4ZAj2T9zO7ZNchIKynhxkRPhxfFpjNbzy
+X-Google-Smtp-Source: AMrXdXums2QA/bUwPK7TpSTwP9ELAXyhEFonaJZ14pVVsbRfYrjPfCGe6TopbYTi0oBuuxxM27/CdA==
+X-Received: by 2002:a05:6870:3b0f:b0:15f:9ab4:a308 with SMTP id gh15-20020a0568703b0f00b0015f9ab4a308mr162452oab.7.1674061281153;
+        Wed, 18 Jan 2023 09:01:21 -0800 (PST)
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b007054feab4aesm22506939qki.27.2023.01.18.09.01.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 09:01:20 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id d13so24157279qvj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:01:20 -0800 (PST)
+X-Received: by 2002:a05:6214:5f82:b0:534:252f:b091 with SMTP id
+ ls2-20020a0562145f8200b00534252fb091mr343909qvb.130.1674061280149; Wed, 18
+ Jan 2023 09:01:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8gYV81O80BtMvWm@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
+ <20230111123736.20025-2-kirill.shutemov@linux.intel.com> <Y8gVJUDEFE5U7xAq@hirez.programming.kicks-ass.net>
+ <CAHk-=wj4PDt_73n5rG9obkXrRQFcxN8vUhG6T9DipxozybH9_w@mail.gmail.com> <Y8gi+/Y0qcjtRf6m@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y8gi+/Y0qcjtRf6m@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 18 Jan 2023 09:01:01 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjtUnjYSttxsYtXu2VtsTeBjoaL8Je8cjWqFMJzw1-MhQ@mail.gmail.com>
+Message-ID: <CAHk-=wjtUnjYSttxsYtXu2VtsTeBjoaL8Je8cjWqFMJzw1-MhQ@mail.gmail.com>
+Subject: Re: [PATCHv14 01/17] x86/mm: Rework address range check in get_user()
+ and put_user()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,43 +91,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:03:35AM -0500, Alan Stern wrote:
-> On Tue, Jan 17, 2023 at 09:17:04PM -0800, Paul E. McKenney wrote:
-> > On Tue, Jan 17, 2023 at 09:15:15PM -0500, Alan Stern wrote:
-> > > Maybe we don't.  Please test the patch below; I think it will do what 
-> > > you want -- and it doesn't rule out nesting.
-> > 
-> > It works like a champ on manual/kernel/C-srcu*.litmus in the litmus
-> > repository on github, good show and thank you!!!
-> > 
-> > I will make more tests, and am checking this against the rest of the
-> > litmus tests in the repo, but in the meantime would you be willing to
-> > have me add your Signed-off-by?
-> 
-> I'll email a real patch submission in the not-too-distant future, 
-> assuming you don't find any problems with the new code.
+On Wed, Jan 18, 2023 at 8:49 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> > We'll still return -EFAULT, of course, we're just getting rid of the
+> >
+> >         WARN_ONCE(trapnr == X86_TRAP_GP,
+> >                 "General protection fault in user access.
+> > Non-canonical address?");
+> >
+> > issue that comes from not being so exact about the address limit any more.
+>
+> Ah indeed, so for !LAM we'd now print the message were we would not
+> before (the whole TASK_SIZE_MAX+ range).
 
-I haven't tested the following, but I think we also need it to avoid
-(although rare) mixing srcu_struct with normal memory access?
+Yeah.
 
-Since you are working on a patch, I think I better mention this ;-)
+We could just remove that warning entirely, but it has been useful for
+syzbot catching random user addresses that weren't caught by
+"access_ok()" when people did bad bad things (ie using the
+non-checking "__copy_from_user()" and friends).
 
-Regards,
-Boqun
+I'm not sure how much that warning is worth any more - and for
+get_user() and put_user() itself it buys us nothing, since by
+definition _those_ do the range checking. Christoph getting rid of the
+set_fs() model simplified a lot of our user address checking.
 
-diff --git a/tools/memory-model/lock.cat b/tools/memory-model/lock.cat
-index 6b52f365d73a..c134c2027224 100644
---- a/tools/memory-model/lock.cat
-+++ b/tools/memory-model/lock.cat
-@@ -37,7 +37,7 @@ let RU = try RU with emptyset
- let LF = LF | RL
+But I think it's easier to just keep that existing warning about "how
+did you get a non-canonical address here" for other user accesses, and
+just make get/put_user() use that _ASM_EXTABLE() version that doesn't
+do it.
 
- (* There should be no ordinary R or W accesses to spinlocks *)
--let ALL-LOCKS = LKR | LKW | UL | LF | RU
-+let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock
- flag ~empty [M \ IW] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
-
- (* Link Lock-Reads to their RMW-partner Lock-Writes *)
-
-> 
-> Alan
+               Linus
