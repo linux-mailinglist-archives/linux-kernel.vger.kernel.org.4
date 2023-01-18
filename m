@@ -2,97 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFB967114C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37666671153
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjARCpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S229524AbjARCua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjARCpb (ORCPT
+        with ESMTP id S229561AbjARCu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:45:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DBF4FC14
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:45:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MGpdnLSCsy4iJTcYeMqTf0hkShjXgJaZl556rybxYcc=; b=LgtkpNzsFyaJdmFoM4zFTvjFAt
-        Ao0YdH63TZt9RuzJ6Jp2atj9NKcViphPYwdS+B9R56VTZ6LdgTBITlFfMh6TzB/XcRGNXjsOOtgu6
-        aIPuxzOdZSS0yVjg747/T0PwNU+0/508fiqbDMy2yO/t7mf0IfznrHag7q8RjS5XJVA4VMfqYuwl0
-        ulHk6RyXVZHBP8284w9PmU5Ys9jP5MaL1tYqADfmpXKvKQXHiR+iAXVdGRcYnzrfwH8PupJzp9apk
-        +hGZy6biK6xGQhULog6BkfaGpEdf2xnt5Y/7Oy5OU1xCO7Ns1R6g+Y5KfUc2AdfpOCbogT6bTwOeC
-        bnYjNyHg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHyRY-00AHX7-0B; Wed, 18 Jan 2023 02:44:52 +0000
-Date:   Wed, 18 Jan 2023 02:44:51 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 28/41] mm: introduce lock_vma_under_rcu to be used from
- arch-specific code
-Message-ID: <Y8ddI7vcKw8oecsr@casper.infradead.org>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-29-surenb@google.com>
- <Y8bDAVC/aiL9tCyz@dhcp22.suse.cz>
- <CAJuCfpHRRsUMNHp2H3UiB4EZbe9CXTVcAC+oOR1dscENjp1Jbw@mail.gmail.com>
+        Tue, 17 Jan 2023 21:50:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800A14FC2B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:50:25 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id tz11so15583017ejc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+oWeg8meSzs44XhiL5Rp/pA/MJaJDS/aigL4xzCGs0U=;
+        b=DEL6t/7gj2s4mON5g5SB3CNFYOPx6YoirU9j0W7WYtN8eh30O2+T7Xun/VLqhea3xr
+         QBYfEgxQo2G2W17p8ZgIMTO4Gnl0B92A9Oo3nPYQSec58ESAb9ipigyC9RtOIQFPZDAs
+         FMhYHb75LBbnMHD55vJSrdxjPmXyRb9VY6ig7PuAGJrVX5+6URVQYHVr9Xw02TI5G+Qr
+         IvWSPFK1BR33xrd2J7NKxaCOjm2yY+dTQ2vWPyMmJaEK+yKfb6Y+uJtYcMA1CiygjlR0
+         XySUcKaf2oUM0AtsrXM5Z+j+Jp4ituhCmkF0wjEZaAq/M42Gux+n4+NyDWJ/4YGyDOtn
+         MXTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+oWeg8meSzs44XhiL5Rp/pA/MJaJDS/aigL4xzCGs0U=;
+        b=hM9qo4s9TLqmBktcvdjaTEFVfEx7T2uZAAUY55soo0ydDVQGl5frh/moubQ/M83J4T
+         mEBD8X57Ydl0HaJHTn3qAdW+GVKb33m+WKrZSJzI0R540DppOVITz/Z3RciAaXpBoM2O
+         6HIaa2I/TrxTlcATFTnRZagTuWJFPXaEBS8VG7c7/UZ07Zd8OH/Qz+AKrbAkeyzH9Cv5
+         f2FAYfNmfQjXtio8xF/qNn8CO9iv9JaZsFONvZ7iTmwtgY0XueIHUS9v0BIdKQIc+BbC
+         jv5Us2FbM/m1wqCeAtUzLbgfjsKb6FmKCFW9EXxIku3f10MNOnr/+eYGhCiwj/XBlh4Y
+         sTIQ==
+X-Gm-Message-State: AFqh2koWrU008JJTYr8uQFbfAamUwn0FG9rA+yVwsxeGxZJkTly9Ovqa
+        u/Xu6VsLs6ec29LRfVjp/9JDeQ==
+X-Google-Smtp-Source: AMrXdXsoTO6RqYHs+R3tr16MfQfaTjAir7uZ3UgRN3rJfitNwZUHfTX/Ux3TwerOOd+gF4amCKGOOA==
+X-Received: by 2002:a17:906:a09:b0:7c1:4a3a:dc97 with SMTP id w9-20020a1709060a0900b007c14a3adc97mr6765984ejf.0.1674010224043;
+        Tue, 17 Jan 2023 18:50:24 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170906314600b00781be3e7badsm13971460eje.53.2023.01.17.18.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 18:50:23 -0800 (PST)
+Message-ID: <5d0eff7d-147c-b75a-9236-232a5a98e42a@linaro.org>
+Date:   Wed, 18 Jan 2023 04:50:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpHRRsUMNHp2H3UiB4EZbe9CXTVcAC+oOR1dscENjp1Jbw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 2/3] dt-bindings: msm: dsi-controller-main: Document
+ clocks on a per compatible basis
+Content-Language: en-GB
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        dianders@chromium.org, david@ixit.cz,
+        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
+        konrad.dybcio@somainline.org, agross@kernel.org,
+        andersson@kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230116225217.1056258-1-bryan.odonoghue@linaro.org>
+ <20230116225217.1056258-3-bryan.odonoghue@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230116225217.1056258-3-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:06:57PM -0800, Suren Baghdasaryan wrote:
-> On Tue, Jan 17, 2023 at 7:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 09-01-23 12:53:23, Suren Baghdasaryan wrote:
-> > > Introduce lock_vma_under_rcu function to lookup and lock a VMA during
-> > > page fault handling. When VMA is not found, can't be locked or changes
-> > > after being locked, the function returns NULL. The lookup is performed
-> > > under RCU protection to prevent the found VMA from being destroyed before
-> > > the VMA lock is acquired. VMA lock statistics are updated according to
-> > > the results.
-> > > For now only anonymous VMAs can be searched this way. In other cases the
-> > > function returns NULL.
-> >
-> > Could you describe why only anonymous vmas are handled at this stage and
-> > what (roughly) has to be done to support other vmas? lock_vma_under_rcu
-> > doesn't seem to have any anonymous vma specific requirements AFAICS.
+On 17/01/2023 00:52, Bryan O'Donoghue wrote:
+> Each compatible has a different set of clocks which are associated with it.
+> Add in the list of clocks for each compatible.
 > 
-> TBH I haven't spent too much time looking into file-backed page faults
-> yet but a couple of tasks I can think of are:
-> - Ensure that all vma->vm_ops->fault() handlers do not rely on
-> mmap_lock being read-locked;
+> Acked-by: Rob Herring <robh@kernel.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>   .../display/msm/dsi-controller-main.yaml      | 219 ++++++++++++++++--
+>   1 file changed, 202 insertions(+), 17 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index 35668caa190c4..47faf08a37443 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
 
-I think this way lies madness.  There are just too many device drivers
-that implement ->fault.  My plan is to call the ->map_pages() method
-under RCU without even read-locking the VMA.  If that doesn't satisfy
-the fault, then drop all the way back to taking the mmap_sem for read
-before calling into ->fault.
+[skipped]
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8974-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 7
+> +        clock-names:
+> +          items:
+> +            - const: mdp_core
+> +            - const: iface
+> +            - const: bus
+> +            - const: vsync
+
+vsync clock is not used on msm8974 platform, it causes DT verification 
+errors.
+
+> +            - const: byte
+> +            - const: pixel
+> +            - const: core
+> +            - const: core_mmss
+> +-- 
+With best wishes
+Dmitry
 
