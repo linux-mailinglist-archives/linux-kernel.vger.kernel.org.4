@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF106671568
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610E367156B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjARHtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S229784AbjARHtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjARHsG (ORCPT
+        with ESMTP id S229512AbjARHsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:48:06 -0500
+        Wed, 18 Jan 2023 02:48:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4115145F45
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D82F45F46;
+        Tue, 17 Jan 2023 23:17:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E786EB81A90
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F55C4339B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:17:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDA42B81B3E;
+        Wed, 18 Jan 2023 07:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB21C433EF;
+        Wed, 18 Jan 2023 07:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674026232;
-        bh=kmI23F6YpP3wP+g6JxGd9ZmFmajQvU1haCUNlhO3JMw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IKAFn5uTcg+8TtVkywsk3Sfdgh218KJjHAOtNH61GBkSXJkYhsFJgkCvmdkkjJaJE
-         jIKlUtyS9GCuUeAYRbkYeV8E9TmSqxkHk+duZKEymJl8Ik01QKAh9yH0m5K63d1lts
-         6QjZnFsRRY+PIN43IuhYpp1VXkw8HlC8CKJOmFmyk74R7poDsvq9XojRQijqNB33RQ
-         7jqI1+0U4HtZp7BGOFjsCCdEigHReSb75PpXi4MbwFEnbFaSBO1BcPBo2Q9YEFrYUz
-         dPbQd99tfvdfN2Cik+QnAFEFN3G/+YuPMKzaxmJDmVD2NXslariAeFFFvNR0Uxxlct
-         dF/7XjyvOC8Ow==
-Received: by mail-ej1-f41.google.com with SMTP id u19so80917501ejm.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:17:12 -0800 (PST)
-X-Gm-Message-State: AFqh2kqPT8tSNnJm7Iz6VRR35hH+FmEEK977YFv5bdYhorLnDUYCmWx9
-        ggWJkXiYH6DTVwd6tAbkqgcv9FxsimGjMlW6R1w=
-X-Google-Smtp-Source: AMrXdXvw3gfeEzkqEdPNf8APUQ9AeGM5NX4sydYdm5mAAml2mXeWFM9jEmlnJQaCbiXRL/ZwaKYwQWpkjcxm8fUlNXc=
-X-Received: by 2002:a17:906:f86:b0:7b2:7e7a:11c1 with SMTP id
- q6-20020a1709060f8600b007b27e7a11c1mr511388ejj.684.1674026230719; Tue, 17 Jan
- 2023 23:17:10 -0800 (PST)
-MIME-Version: 1.0
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn> <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
- <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn> <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
- <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
-In-Reply-To: <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 18 Jan 2023 15:17:00 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
-Message-ID: <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
-Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as non-kprobe-able
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Jinyang He <hejinyang@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
+        s=k20201202; t=1674026236;
+        bh=TPFbez4kRFQWTS4pIsn2TRE2Yeh3bO7Q6hZYSQ1W6pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gBE1GvKyWgekNTYsa39JH90glVPf/zresTYnQ0oYxuizvsX6fM5mfbTi+0R6Ij98l
+         YyaDFKnsM6lTyQmL6e2hpKrsC5rvStWq4oOvBnVVT0o/wKzFhIVItTIkr2TYxKT23l
+         7rqy5WkpcyR27VdIF1yTxHowykDskkvhjoUUG53ZfOQR2moXA8Jxhb1pFtb7BfhQWW
+         P0tpyi+0OtQuTEKt00PruI9rK9RKu8zppqgEd/TVL/h3TTTQsh2MB7hpZmsviYbo8P
+         vLSJorCADin7THDqDQl/r4t7iaa9cPH75VNP1IT+BlbB2MeyX2Jv7uPewvM9XoZFkR
+         ObUnV48z0C9Bg==
+Date:   Tue, 17 Jan 2023 23:17:14 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Bryan Tan <bryantan@vmware.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Israel Rukshin <israelr@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: Re: [PATCH rdma-next 00/13] Add RDMA inline crypto support
+Message-ID: <Y8ec+vUqitvvLKHL@sol.localdomain>
+References: <cover.1673873422.git.leon@kernel.org>
+ <Y8eWEPZahIFAfnoI@sol.localdomain>
+ <95692a47-09e7-0055-2006-46d085b2eadb@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95692a47-09e7-0055-2006-46d085b2eadb@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,153 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 2:24 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
->
->
-> On 01/18/2023 02:05 PM, Jinyang He wrote:
-> >
-> > On 2023-01-18 12:23, Tiezhu Yang wrote:
+On Wed, Jan 18, 2023 at 07:14:30AM +0000, Chaitanya Kulkarni wrote:
+> Eric,
+> 
+> >> Notes:
+> >>   - At plaintext mode only, the user set a master key and the fscrypt
+> >>     driver derived from it the DEK and the key identifier.
+> >>   - 152c41b2ea39fa3d90ea06448456e7fb is the derived key identifier
+> >>   - Only on the first IO, nvme-rdma gets a callback to load the derived DEK.
 > >>
+> >> There is no special configuration to support crypto at nvme modules.
 > >>
-> >> On 01/18/2023 12:14 PM, Huacai Chen wrote:
-> >>> If memcpy should be blacklisted, then what about memset and memmove?
-> >>
-> >> According to the test results, there are no problems to probe
-> >> memset and memmove, so no need to blacklist them for now,
-> >> blacklist memcpy is because it may cause recursive exceptions,
-> >> there is a detailed discussion in the following link:
-> >>
-> >> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
-> >>
-> >
-> > Hi, Tiezhu,
-> >
-> > I cannot reproduce the results when kprobe memcpy. Could you please give
-> > some details. Emm, I just replace "kernel_clone" with "memcpy" in
-> > kprobe_example.c.
->
-> Please remove the related "_ASM_NOKPROBE(memcpy)" code in
-> arch/loongarch/lib/memcpy.S, and then compile and update kernel,
-> execute the following cmd after reboot, I can reproduce the hang
-> problem easily (it will take a few minutes).
->
-> modprobe kprobe_example symbol="memcpy"
-Then, why is handle_syscall different from other exception handlers?
+> >> Thanks
+> > 
+> > Very interesting work!  Can you Cc me on future versions?
+> > 
+> > I'm glad to see that this hardware allows all 16 IV bytes to be specified.
+> > 
+> > Does it also handle programming and evicting keys efficiently?
+> > 
+> > Also, just checking: have you tested that the ciphertext that this inline
+> > encryption hardware produces is correct?  That's always super important to test.
+> > There are xfstests that test for it, e.g. generic/582.  Another way to test it
+> > is to just manually test whether encrypted files that were created when the
+> > filesystem was mounted with '-o inlinecrypt' show the same contents when the
+> > filesystem is *not* mounted with '-o inlinecrypt' (or vice versa).
+> > 
+> > - Eric
+> > 
+> 
+> I'm wondering which are the xfstests that needs to run in order
+> to establish the correctness/stability apart from generic/582
+> this work ?
+> 
 
-Huacai
->
-> >
-> > And for your call trace,
-> >
-> >  handler_pre()
-> >    pr_info()
-> >      printk()
-> >       _printk()
-> >         vprintk()
-> >           vprintk_store()
-> >             memcpy()
-> >
-> > I think when we should skip this time kprobe which triggered in
-> > handler_{pre, post}. That means this time kprobe will not call
-> > handler_{pre, post} agian, and not cause recursion. I remember
-> > your codes had done this skip action. So, that's so strange if
-> > recursion in handler_{pre, post}.
-> >
-> >
-> > Thanks,
-> >
-> > Jinyang
-> >
-> >
-> >>
-> >> Thanks,
-> >> Tiezhu
-> >>
-> >>>
-> >>> Huacai
-> >>>
-> >>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn>
-> >>> wrote:
-> >>>>
-> >>>> Some assembler symbols are not kprobe safe, such as handle_syscall
-> >>>> (used as syscall exception handler), *memcpy* (may cause recursive
-> >>>> exceptions), they can not be instrumented, just blacklist them for
-> >>>> kprobing.
-> >>>>
-> >>>> Here is a related problem and discussion:
-> >>>> Link:
-> >>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
-> >>>>
-> >>>>
-> >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> >>>> ---
-> >>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
-> >>>>  arch/loongarch/kernel/entry.S    |  1 +
-> >>>>  arch/loongarch/lib/memcpy.S      |  3 +++
-> >>>>  3 files changed, 14 insertions(+)
-> >>>>
-> >>>> diff --git a/arch/loongarch/include/asm/asm.h
-> >>>> b/arch/loongarch/include/asm/asm.h
-> >>>> index 40eea6a..f591b32 100644
-> >>>> --- a/arch/loongarch/include/asm/asm.h
-> >>>> +++ b/arch/loongarch/include/asm/asm.h
-> >>>> @@ -188,4 +188,14 @@
-> >>>>  #define PTRLOG         3
-> >>>>  #endif
-> >>>>
-> >>>> +/* Annotate a function as being unsuitable for kprobes. */
-> >>>> +#ifdef CONFIG_KPROBES
-> >>>> +#define _ASM_NOKPROBE(name)                            \
-> >>>> +       .pushsection "_kprobe_blacklist", "aw";         \
-> >>>> +       .quad   name;                                   \
-> >>>> +       .popsection
-> >>>> +#else
-> >>>> +#define _ASM_NOKPROBE(name)
-> >>>> +#endif
-> >>>> +
-> >>>>  #endif /* __ASM_ASM_H */
-> >>>> diff --git a/arch/loongarch/kernel/entry.S
-> >>>> b/arch/loongarch/kernel/entry.S
-> >>>> index d53b631..55e23b1 100644
-> >>>> --- a/arch/loongarch/kernel/entry.S
-> >>>> +++ b/arch/loongarch/kernel/entry.S
-> >>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
-> >>>>
-> >>>>         RESTORE_ALL_AND_RET
-> >>>>  SYM_FUNC_END(handle_syscall)
-> >>>> +_ASM_NOKPROBE(handle_syscall)
-> >>>>
-> >>>>  SYM_CODE_START(ret_from_fork)
-> >>>>         bl      schedule_tail           # a0 = struct task_struct *prev
-> >>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
-> >>>> index 7c07d59..3b7e1de 100644
-> >>>> --- a/arch/loongarch/lib/memcpy.S
-> >>>> +++ b/arch/loongarch/lib/memcpy.S
-> >>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
-> >>>>         ALTERNATIVE     "b __memcpy_generic", \
-> >>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
-> >>>>  SYM_FUNC_END(memcpy)
-> >>>> +_ASM_NOKPROBE(memcpy)
-> >>>>
-> >>>>  EXPORT_SYMBOL(memcpy)
-> >>>>
-> >>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
-> >>>>  2:     move    a0, a3
-> >>>>         jr      ra
-> >>>>  SYM_FUNC_END(__memcpy_generic)
-> >>>> +_ASM_NOKPROBE(__memcpy_generic)
-> >>>>
-> >>>>  /*
-> >>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
-> >>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
-> >>>>  3:     move    a0, a3
-> >>>>         jr      ra
-> >>>>  SYM_FUNC_END(__memcpy_fast)
-> >>>> +_ASM_NOKPROBE(__memcpy_fast)
-> >>>> --
-> >>>> 2.1.0
-> >>>>
-> >>
->
->
+See https://docs.kernel.org/filesystems/fscrypt.html#tests.
+
+- Eric
