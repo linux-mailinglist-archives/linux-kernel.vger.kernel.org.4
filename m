@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609A46728C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483266728CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjARTzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S229631AbjART4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjARTzh (ORCPT
+        with ESMTP id S229606AbjART4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:55:37 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2693F5954B;
-        Wed, 18 Jan 2023 11:55:31 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id x10so146031edd.10;
-        Wed, 18 Jan 2023 11:55:31 -0800 (PST)
+        Wed, 18 Jan 2023 14:56:31 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF6559549;
+        Wed, 18 Jan 2023 11:56:30 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id d188so18399885oia.3;
+        Wed, 18 Jan 2023 11:56:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yQTDNe7yFHyxNpHt+5GYWQ4fTkN36Wo6nFC2zV7ddRA=;
-        b=UdRUtm22/nVwd2/yhLyFOkTfSiQXuXeMFQ3Kp6hVPDDBU4Z/NMpGYTxQL2IX4MA87a
-         52su/8R5xmPukNXLrUu/X39YO1pBFOSNi/hRGpzJawBunHm6YSvV7a4rnOem/sGoa2QH
-         DCjMhA8cXwbD1UB6OLGLG3R+Wfs4tp9rOnYKtdFFyl9Zb+LgIanoIwQYAyIn+LzU832H
-         GRvjRAaqT/YcnPSZXBG6mQwRkKmmQ6FGn0Pb4hW5a5w9SmA7U0zJ2FUZYdvZ/dWZpbyH
-         Sve/8mlqFgY2QG7nK1IrIO2XtaYAg0izF7rPFxnVi+CVHnDG2Ge3mHmXsCm5UxDn7jCN
-         qKLA==
-X-Gm-Message-State: AFqh2kqprf4nISB5XnyWJuqbbUqQZqMW4omqpZocJZmQXdIBePTReBzH
-        SzjuLD8e3tAlNtW0tfKIavWqe4IbD5Ej1do6fsY=
-X-Google-Smtp-Source: AMrXdXufxEuzBCgs6edR0DKECeIru46xUZ4hMNXNamwvHSWkmE+7Nka2sXtX+eHIroy5RNXVkD9xY9GYYRBKHTFJazI=
-X-Received: by 2002:a05:6402:40d6:b0:46d:53d7:d1f6 with SMTP id
- z22-20020a05640240d600b0046d53d7d1f6mr918494edb.211.1674071730393; Wed, 18
- Jan 2023 11:55:30 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=akZulwLnMRZAXk7khxYZKnUiCXgcGRehJrIuYvwvNb0=;
+        b=xSUOYlDCZPOPhoTSZG57XG3xt0KI6uL/8sfHwVd83BrMWZLYD+fWSbSMF89A5o0Kd4
+         4opnTOuF9jlDB54eMFmEQtgG6PuTT3bpWDtVqlE+ach6Vd4pgxUD2SCTvKhtvFE/iJeq
+         rY9zWUIMNWEn+SpTdzmRTErCg9+RE/OgRqzx5T2/VESdviR4qSTjO1+9SrpWpyHWnY/6
+         clwb03FuPDb9wOzChfhjmEnV11rHf+TXWybzP3OHH5NeYw2pqZGe9gewCL2Fx15MALZF
+         9ozGh8mf5BHdcreh048Ka6YG9t2e1OUvumUlwFsyfNvNq4SgmghaSBCI+15ibhaOo2o7
+         QL+w==
+X-Gm-Message-State: AFqh2kphms+iv6RQ6clB9hJMK6WOcNWEsptIu90fGJAMK5baEzpe4nNv
+        Ft9OJm/oYPjE/pD6QqL/kg==
+X-Google-Smtp-Source: AMrXdXs9lF5ksgkjo+IhPIHJNNYeSJLIwYvkoIWS/Qllw83zdH43zruP0gkDfhp+tqRcnjdJWEHDfw==
+X-Received: by 2002:a54:469a:0:b0:363:b22c:4c7 with SMTP id k26-20020a54469a000000b00363b22c04c7mr3447152oic.7.1674071789726;
+        Wed, 18 Jan 2023 11:56:29 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id r42-20020a056808212a00b00364e8f85c08sm6095948oiw.21.2023.01.18.11.56.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 11:56:29 -0800 (PST)
+Received: (nullmailer pid 706834 invoked by uid 1000);
+        Wed, 18 Jan 2023 19:56:28 -0000
+Date:   Wed, 18 Jan 2023 13:56:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "linux-rockchip@lists.infradead.org , Heiko Stuebner" 
+        <heiko@sntech.de>
+Subject: Re: [PATCH] dt-bindings: PCI: Convert Rockchip RK3399 PCIe to DT
+ schema
+Message-ID: <167407178127.706640.6877082216577984494.robh@kernel.org>
+References: <20221219191209.1975834-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 18 Jan 2023 20:55:19 +0100
-Message-ID: <CAJZ5v0gdWWmAj9JMe--wUM+Z=MZLof65hbwHCGGgWknAnw61UQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] device property: Make fwnode_graph_for_each_endpoint()
- consistent
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219191209.1975834-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 4:21 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Make fwnode_graph_for_each_endpoint() consistent with the rest of
-> for_each_*() definitions in the file, i.e. use the form of
->
->         for (iter = func(NULL); iter; \
->              iter = func(iter))
->
-> as it's done in all the rest of the similar macro definitions.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-and I think that you need to resend it and CC Greg (who picks up
-device property patches nowadays).
-
+On Mon, 19 Dec 2022 13:12:08 -0600, Rob Herring wrote:
+> Convert the Rockchip RK3399 PCIe Host/Endpoint controller to DT schema
+> format. Like most dual mode PCI controllers, we need to split the schema
+> into common, host and endpoint schemas.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  include/linux/property.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 37179e3abad5..f090419818a2 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -436,9 +436,9 @@ fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
->  unsigned int fwnode_graph_get_endpoint_count(struct fwnode_handle *fwnode,
->                                              unsigned long flags);
->
-> -#define fwnode_graph_for_each_endpoint(fwnode, child)                  \
-> -       for (child = NULL;                                              \
-> -            (child = fwnode_graph_get_next_endpoint(fwnode, child)); )
-> +#define fwnode_graph_for_each_endpoint(fwnode, child)                          \
-> +       for (child = fwnode_graph_get_next_endpoint(fwnode, NULL); child;       \
-> +            child = fwnode_graph_get_next_endpoint(fwnode, child))
->
->  int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
->                                 struct fwnode_endpoint *endpoint);
-> --
+> Shawn (or anyone from Rockchip), Note and please ack the license change.
+> ---
+>  .../pci/rockchip,rk3399-pcie-common.yaml      |  69 +++++++++
+>  .../bindings/pci/rockchip,rk3399-pcie-ep.yaml |  68 +++++++++
+>  .../bindings/pci/rockchip,rk3399-pcie.yaml    | 132 +++++++++++++++++
+>  .../bindings/pci/rockchip-pcie-ep.txt         |  62 --------
+>  .../bindings/pci/rockchip-pcie-host.txt       | 135 ------------------
+>  MAINTAINERS                                   |   2 +-
+>  6 files changed, 270 insertions(+), 198 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-common.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt
+>  delete mode 100644 Documentation/devicetree/bindings/pci/rockchip-pcie-host.txt
+> 
+
+Applied, thanks!
