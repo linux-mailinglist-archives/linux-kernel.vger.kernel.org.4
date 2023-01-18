@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC1667151B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F084667151F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjARHgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
+        id S229830AbjARHhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjARHfX (ORCPT
+        with ESMTP id S229554AbjARHgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:35:23 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222E093724
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id j185so3627925vsc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
+        Wed, 18 Jan 2023 02:36:24 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C585953B3F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:54:34 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id e130so7508812yba.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
-        b=B3s3j3N0gG+bNvJM1kixcYCNP/GKIWVHPyV4lr3MVXl/p0N7BMpYjYlyLkA+JDNEwK
-         YPBayZkNvzY9TJMNbLdgwh74aQGMywjDnB+HgnS0sAYfB7rOXeKINkcC80Dq9Chxv1DM
-         1Tew2QJlCzFdNmJd4aYvCOrI3jZfPsBDrEg+t6exzkc3wFZhl1TDhr3dj3POyWbweOYR
-         +7Npg6iCsUQcJq8UB4rK0rr2tOPePqrnq2X7W6XikqLyrIoHUkuWy0cFKeDRI/7G0kUt
-         bC9HiI6ACpwicvuUfC9hiCdSxpSHxHZNDelqvQnkWIAm1HWc1SKEmSTBl5163j53Jqb9
-         dDlg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W7K3U7J7q8qsq+5DG9vwDrzu00VfL71S9pskbFVpOu8=;
+        b=VG7uElnzUvxurmTqRBuxo8pIwPUkjkLFH93ePb1S/RRa+9e3X/gk+Ays3E/Aj0ScsZ
+         nEeKOt1yq8l1m3AGFkVNLFOqdiVl0sCWCopXdj7VO1VtPQgimxzGXt1+eXS2tbCN9u40
+         BAhw4kdTo8TD8U6/gcv6b0PI84ehLnvOo1sjT0K+aHk+7Oi12GbPSpzbYefzcr0nKVUW
+         ztb9AdK/xZcin5xFlajIdgGeHPf3ml9uxwvnuVSwFTB5EAIVJgHxpj+qxr9Jo1TvIkej
+         5xn2dBDFfgN9a7yuwZWDpxIuBjr+aOMXxUiZcPo7wpuQFPqRInmSsHJwBaVphTJB77p8
+         CU7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
-        b=6Jn1jww5je59JuaSW9/K1NP9NDFXGCcA1kjZTE8tsvLZuLYWCUXIZ8X4xmtAdcY5an
-         litSlfRRlJ1THRy6eC6qGBvZ9P2gh/VTygnGvQ15akgfl3yHZodIU0ZjfS2omi0uQF0I
-         cDojC3qVI5W+WUapNFGeY66NnCJ7UE/ILBPDsUl+L5yZS9fg6ONuJTT33fMPLsPmxGbu
-         HBWQbJ9GCRxNntOELDFq8p5VKTvJsPd17NuIv16t9zeCTkMbQGSitmwdZjhKlyrwrZTj
-         yrsTydh36pEH1hvu84q+dvdA/eZ4Z6eMcuGsk6s2Tdw607+aZHVI7GGD/I2I67RRF6dF
-         vovA==
-X-Gm-Message-State: AFqh2kpznz1JRPLvrl1TBBl750HKF6QILpIKDDZENPmwuXnJEgypOtcp
-        yFzzVWgxUoG8IHDfAx6NqIegNoLcpvC6RkCzO1s6Ag==
-X-Google-Smtp-Source: AMrXdXsAPqq2grhhH7dWv3ibNzidh83nP0UMQkpPzASvjBVgkLMqi0nHLe5BmrNOLAwh7gP3eyGxpJ7a7jWlLotqW3o=
-X-Received: by 2002:a05:6102:5587:b0:3b5:32d0:edcc with SMTP id
- dc7-20020a056102558700b003b532d0edccmr779063vsb.24.1674024677099; Tue, 17 Jan
- 2023 22:51:17 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W7K3U7J7q8qsq+5DG9vwDrzu00VfL71S9pskbFVpOu8=;
+        b=5pa6j+ISS1G5wGK4dTvmMva7pOmhx0bmBYeA0S8B4SCiWElIrJWLS4SZlkQyHvhUIu
+         tF1/9TSk9wBRmyuLHLxtcI1tZUP3CkPkom1muyVA16tIH+GXP0JMAlRKGqo5koUw7RJT
+         JXdrM8ihUEKUn4lcmgGmmhUv++8XxkRLw4hSlF5nN8ZP51CLGmtp7nZEcGiUxW/BYW7y
+         7c1mp7BpVrh4zTcwKLsx2QueLqWIj3EQ9sKw6DyvRvqg4zdpaCEl423VcSy8OtPL644F
+         VqJUfGRzo/Q2Dx3pfcedOuyloXMaJFCREufTRhBt2KB+VF8+WAGaztplID3WePK4cdHa
+         Rk5Q==
+X-Gm-Message-State: AFqh2kodUUG8ZWaIDGDfR3sG9QlqRPeokfADYCLsOO2UktISn036WlED
+        bj2N2Ihqf01yE84GTo4h55p2WFa8XZg7ooE3QN8Q
+X-Google-Smtp-Source: AMrXdXu0f4baWvNWXO3k4JGT4NSiS5o+ls9nfcsi3GrRwWaGIwkKPTGqimdXbFSdiOkRg974+cYEIe9bl8tX7aaaPgo=
+X-Received: by 2002:a25:d451:0:b0:7ce:4650:5e5a with SMTP id
+ m78-20020a25d451000000b007ce46505e5amr753159ybf.123.1674024873890; Tue, 17
+ Jan 2023 22:54:33 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 18 Jan 2023 12:21:06 +0530
-Message-ID: <CA+G9fYs+ZDoW8Xm8M5quk7J3aE942D4c34oDWM2Xjg-DQFm+Bw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/msm/gpu: Add devfreq tuning debugfs
-To:     dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p6>
+ <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
+In-Reply-To: <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 17 Jan 2023 22:54:22 -0800
+Message-ID: <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: system_heap: avoid reclaim for order 4
+To:     jaewon31.kim@samsung.com
+Cc:     "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>,
+        "T.J. Mercier" <tjmercier@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regression noticed on Linux next-20230118.
+On Tue, Jan 17, 2023 at 12:31 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+> > Using order 4 pages would be helpful for many IOMMUs, but it could spend
+> > quite much time in page allocation perspective.
+> >
+> > The order 4 allocation with __GFP_RECLAIM may spend much time in
+> > reclaim and compation logic. __GFP_NORETRY also may affect. These cause
+> > unpredictable delay.
+> >
+> > To get reasonable allocation speed from dma-buf system heap, use
+> > HIGH_ORDER_GFP for order 4 to avoid reclaim.
 
-Regressions found on arm:
-    - build/gcc-8-imx_v6_v7_defconfig
-    - build/gcc-12-imx_v6_v7_defconfig
-    - build/clang-15-imx_v6_v7_defconfig
-    - build/clang-nightly-imx_v6_v7_defconfig
+Thanks for sharing this!
+The case where the allocation gets stuck behind reclaim under pressure
+does sound undesirable, but I'd be a bit hesitant to tweak numbers
+that have been used for a long while (going back to ion) without a bit
+more data.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+It might be good to also better understand the tradeoff of potential
+on-going impact to performance from using low order pages when the
+buffer is used.  Do you have any details like or tests that you could
+share to help ensure this won't impact other users?
 
-WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-  Depends on [n]: PM_DEVFREQ [=n]
-  Selected by [y]:
-  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
-SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
-IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
-(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
-QCOM_COMMAND_DB [=n]=n)
+TJ: Do you have any additional thoughts on this?
 
-WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-  Depends on [n]: PM_DEVFREQ [=n]
-  Selected by [y]:
-  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
-SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
-IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
-(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
-QCOM_COMMAND_DB [=n]=n)
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
-In file included from drivers/gpu/drm/msm/msm_gpu.h:18,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
-drivers/gpu/drm/msm/msm_drv.h:237:45: error: field
-'gpu_devfreq_config' has incomplete type
-  237 |         struct devfreq_simple_ondemand_data gpu_devfreq_config;
-      |                                             ^~~~~~~~~~~~~~~~~~
-
-Build log:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230118/testrun/14250189/suite/build/test/gcc-12-imx_v6_v7_defconfig/log
-
-This was already reported a while back on lore,
-https://lore.kernel.org/all/202301130108.fslQjvJ8-lkp@intel.com/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+thanks
+-john
