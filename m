@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0576726CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872C66726D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjARS0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
+        id S230131AbjARS0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjARS0A (ORCPT
+        with ESMTP id S229589AbjARS0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:26:00 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155E654217;
-        Wed, 18 Jan 2023 10:26:00 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so3270581pjg.4;
-        Wed, 18 Jan 2023 10:26:00 -0800 (PST)
+        Wed, 18 Jan 2023 13:26:34 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F53C4F87F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:26:33 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4d59d518505so311469637b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gfdBFnYu5sNZX5xFe5dSgbNFlKRXmyEjirqJcinL8sM=;
-        b=KLz8M1LacL19djpn1QnVHpwDLfqm5ZPqvEkxH+PEoCS88M/dddzhvXp+B5xsuS3dRq
-         Dozgqm8vdidtYNCMjy93Bjj+GA64O/FZh7XHnfyW/F+71TYelRGQNaVj6/VQ79r9XpnJ
-         9eEchAroDQfDazRdPqrrfUVkePd61pk4FxXxPt6FudJnG1gYkllewxhez8Q/xr5dniZH
-         03DD12mqiseHav5y7aI9Nr3lPsL82m26Rfura9SbI4eEtY0NrmPkKwZKUXEuVz/sIPMZ
-         x2Hil+L2EjPt1eOgaqUes2EAHjEXktuePQ0epQsYCuhplCJy+mM+v/GG9oVvQQh4Fqcc
-         nGsg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=833qF7g8LvqhqpatlwuROZztNoyMIiISRypz9Ugf/c0=;
+        b=fW4W7Rj79IsrBXfq/8IyPW5hmnLVrANmQQurZBfP66+XEKzxsdPvQyznrjaydZ3Rme
+         JVVQoE0xuV7m+0cl2I3Xhc7L72rKm35GAd73eeemoJJt1671F3L+IFUP7lxBD8eBWg9F
+         gOn0ZsOILw46H9fiQOHvewyqTdeSDnyHkjvWM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gfdBFnYu5sNZX5xFe5dSgbNFlKRXmyEjirqJcinL8sM=;
-        b=dWmssoRoB0zOk9bK7QzC9+wnWeMHu1qSz+wUu6OElLMWeFIyy7pXnJEsW8BC4UmgzG
-         vaZteQ4KMoOXy4R9rXven61hteWQSnzY3GE/u01myJRPHiAsIRcBoHZvm2tMMOGt7UkT
-         zkzJbfkeYkOT7hiBoS9GD8loULLUK6EzEZPdYzHxjP5g/kUn8CSJBvJ0d0b8mXYswwxq
-         BsaWCjvCKWl6qAHAj9s6JmwALTkGoisrtHLAwp34su1DndISfA1DhEJ4ng2ug0R15KsM
-         Tx2HhIms58p0oDrBJz5wknyNA4woZZ8x+EdGU3g3PLa6b/Qp4423FtK/sdJcMJ+uNmq2
-         bI3A==
-X-Gm-Message-State: AFqh2kpeh05l8tMGKfNX1HOjodt7Vd82gwHLGVJ2m7tFkRI17jZiDLpr
-        h1oZR7R81wxMrPVkBHBlJFbDn/CbX98=
-X-Google-Smtp-Source: AMrXdXuddP+QLqbpiJjVVoBjiKzMya8ya11h0O34Qm4U4bXH8ycZ+67WnlQwbpCawBq+FhbU3MQ+bw==
-X-Received: by 2002:a17:90a:430f:b0:229:46f0:6f71 with SMTP id q15-20020a17090a430f00b0022946f06f71mr7957578pjg.45.1674066359379;
-        Wed, 18 Jan 2023 10:25:59 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090a640400b0022910fa4d1csm1626154pjj.46.2023.01.18.10.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 10:25:59 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 18 Jan 2023 08:25:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Sandeep Dhavale <dhavale@google.com>
-Cc:     Nathan Huckleberry <nhuck@google.com>,
-        Daeho Jeong <daehojeong@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] workqueue: Add WQ_SCHED_FIFO
-Message-ID: <Y8g5tR8tup8LHbb7@slm.duckdns.org>
-References: <20230113210703.62107-1-nhuck@google.com>
- <Y8HI+42TxxlJxT6D@slm.duckdns.org>
- <CAJkfWY7vmvrU8sW3OWpSa9zygY=6e8BTTkktPe-VScdOcLL-sw@mail.gmail.com>
- <Y8gxu7l8BUWewuMg@slm.duckdns.org>
- <CAB=BE-Q9jtJnqPwGzSTQ6-soZ9STvqAebeONy=Eyo08H+eg-rQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=833qF7g8LvqhqpatlwuROZztNoyMIiISRypz9Ugf/c0=;
+        b=6s3SsGQJOsJwo0vu9U179/dC2ZheKeBKWe3Tbt7NAIPRtIQyEHwrmapMRR3bKxmLWA
+         e553kepJjf5sGJveyVvjiE/2712zRyOR0enyB+oweaLZzf7nV8Flg6n3/7meGEmHR0Pi
+         x9Myfdftg8Z4o1O5wHp2UCsf2RkkAC87fOwkSSN6ho1YOtf/UAnuiSZXe2C6uSD+dRFc
+         76TFH8t3Nl4dG7+r95ma9KHWnbB8J8jJk+nkB3dTLCUeKUbbfKHr+M4CYzJU9ZvFUziK
+         d4bd77QUIBXzE6rsZGNAdDFDzm/3HidJpeL3Y2ypZuJMZCGvqSBf/xjXd5Nr6KkOu7TA
+         gRgw==
+X-Gm-Message-State: AFqh2kry0GGFH1BnhorNhv0yxBWOJNJVk+PsftPyCL0V4/CLDySSdPpK
+        brOCNcmUmJ99jlMB0Nqe8EfpwfpCrrzhLvDNx26vDw==
+X-Google-Smtp-Source: AMrXdXvKMwvUyxaaa6SVXjJaCVv6vG8DoqKnn6zsV3pbWofoZQgF2Ozt9hB0EmH+XPmWBMdp9JBR9sS5yO/h46HMe0c=
+X-Received: by 2002:a81:848c:0:b0:4e3:a9b2:55d0 with SMTP id
+ u134-20020a81848c000000b004e3a9b255d0mr1172136ywf.197.1674066392438; Wed, 18
+ Jan 2023 10:26:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB=BE-Q9jtJnqPwGzSTQ6-soZ9STvqAebeONy=Eyo08H+eg-rQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230118031514.1278139-1-pmalani@chromium.org> <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
+In-Reply-To: <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 18 Jan 2023 10:26:21 -0800
+Message-ID: <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:22:32AM -0800, Sandeep Dhavale wrote:
-> If with the kernel config option, every WQ_HIGHPRI is elevated to
-> sched_fifo_low, wouldn't that be kind of defeating the purpose? Having
-> another class for even more urgent work is better in my opinion.
+Hi Heikki,
 
-I mean, everybody thinks their work items are the most important. Even with
-explicit FIFO, you're still gonna have similar problems as people crowd that
-flag. If this is a concern, please benchmark with realistic scenarios and
-consider other options (e.g. maybe that problematic workqueue doesn't need
-to be HIGHPRI or should be split somehow). Right now, I don't think there
-are enough justifications for adding another level.
+Thanks for reviewing the patch.
 
-Thanks.
+On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
+> > Update the altmode "active" state when we receive Acks for Enter and
+> > Exit Mode commands. Having the right state is necessary to change Pin
+> > Assignments using the 'pin_assignment" sysfs file.
+>
+> The idea was that the port drivers take care of this, not the altmode
+> drivers.
 
--- 
-tejun
+For the port's typec_altmode struct, that makes sense.
+Should the port driver be taking care of the state for the partner's altmode
+too, i.e "/sys/class/typec/port1-partner/port1-partner.0/active" ?
+
+It seemed like the port driver should be forwarding the VDMs without snooping
+the header, or IOW, it should let the altmode driver parse the VDMs (which it's
+doing in this case) and manage the partner altmode state.
+
+"pin_assignment_store" seems to only work if the partner's altmode
+"active" bit is set to active [1]
+
+FWIW, I think we can make the typec_altmode_update_active() calls from
+our (cros-ec-typec) port driver too, but displayport.c is parsing the header
+anyway, so it seemed repetitive. Just wanted to clarify the intention here.
+
+BR,
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/altmodes/displayport.c#n474
