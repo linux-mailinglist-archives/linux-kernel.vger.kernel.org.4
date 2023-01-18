@@ -2,109 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2365E67107C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AF467107A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjARCBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S229665AbjARCBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjARCBN (ORCPT
+        with ESMTP id S229608AbjARCBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:01:13 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4D0521DE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:13 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4b718cab0e4so449251607b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4E07Mrlokbjok8NyF8LoBrAZNQWCs1UWN04ZvvsKt1E=;
-        b=k9nZqbAy6zimnKuDQP5Wi59ksf9yl4aqdPitA84ns9UlmkktReAp9H08OJzyEbCc9J
-         jlDJGMFtUt+DQUFCjpFjACsoOm7c2T8Ko3BIWmNfotQIa4DTLkedyccK3mJJ5Ty52tU7
-         Pjqt7Q630XACChklgKzdcQGHFItj196tBjXccVmZpdBJCyn6CNLYisPTgri5QyuUVR+7
-         dmUvvZbw8Qidf7u0joBcNRjhlVUuqFpoLv2ThdeXP2UpNCfOLsBXBlqXHkBQXH0g/JiS
-         Ag8FlCGONB7nFbeNMrZ59yFKtUHJpRow7tNRX5eRbp7wzA9oeEkB6FFhJC81J/OTedMt
-         9Sfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4E07Mrlokbjok8NyF8LoBrAZNQWCs1UWN04ZvvsKt1E=;
-        b=NqkOzkf30clDOc3duIngOoW9kFccEmWfAXYgZV/9Lq+lhrCrGT7JC6JCqaOyrlg+EC
-         XsbmKhWhw+kHyFi1jBFeQG6cfkQP63tO9wiY1wVtxwwY1CTvFDIv6+/uCzk4PIP2JoLX
-         WAEz6fooDAwKg7K9UTzmA0rw2J5mR6+cLTrBgFqAb0WKck8iC5eZgAtUSI1S6bi5n9hk
-         LRINe69pTNyLnaeTERS+Bov7hTVlDxwjX6q1cYY1di7iiqqaGn9Y2wbaeyNtHfYf0MIn
-         J5+FmJM2rB0D1XZ331LJNSJi4tnSTJP37VYnZ1ntjvzWwUQVPR/YPO2+lZQLAdhu2Z+a
-         YK+g==
-X-Gm-Message-State: AFqh2kqwiYCC2G9ZZnFHCNnCSs7tX8dM/NMpS68CxgCepA6V6R0FaF+J
-        nYHcmUCsK8+R1zHIuU33B4JnEkDofwaaWceC16jqqw==
-X-Google-Smtp-Source: AMrXdXsZWeD7TD1LZKXqm18TxRLwIraaKkRGisl2ohrjniYmFM7Qtmaw6wJy/oQcDtGLbtaO2lGyLeazDPZnc+XZmGs=
-X-Received: by 2002:a81:1d2:0:b0:433:f1c0:3f1c with SMTP id
- 201-20020a8101d2000000b00433f1c03f1cmr704506ywb.438.1674007272153; Tue, 17
- Jan 2023 18:01:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-18-surenb@google.com>
- <Y8a734ufLZjPHgtT@dhcp22.suse.cz>
-In-Reply-To: <Y8a734ufLZjPHgtT@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 17 Jan 2023 18:01:01 -0800
-Message-ID: <CAJuCfpGoYaF2-z7FCiN4X8gEGD6nAwnQC+=n3tUHuMWZa7zx8Q@mail.gmail.com>
-Subject: Re: [PATCH 17/41] mm/mmap: move VMA locking before
- anon_vma_lock_write call
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 21:01:11 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4368751C4D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:01:07 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxIfDiUsdjUT0CAA--.7087S3;
+        Wed, 18 Jan 2023 10:01:06 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuTeUsdjPhYbAA--.17049S7;
+        Wed, 18 Jan 2023 10:01:06 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v12 5/5] samples/kprobes: Add LoongArch support
+Date:   Wed, 18 Jan 2023 10:01:01 +0800
+Message-Id: <1674007261-9198-6-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+In-Reply-To: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8DxTuTeUsdjPhYbAA--.17049S7
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWrZw4rWrW5CF1fJw1xZFWDJwb_yoW8JF1fpF
+        n0y3W5t3yFyw13WFW3Jayvgry0yryjkay8u3ykC34Yya429ry5AF1rKayjyw4kur90qF43
+        tr1FvryUGF1xZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b2xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4
+        xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWx
+        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcHUqUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 7:16 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 09-01-23 12:53:12, Suren Baghdasaryan wrote:
-> > Move VMA flag modification (which now implies VMA locking) before
-> > anon_vma_lock_write to match the locking order of page fault handler.
->
-> Does this changelog assumes per vma locking in the #PF?
+Add LoongArch specific info in handler_pre() and handler_post().
 
-Hmm, you are right. Page fault handlers do not use per-vma locks yet
-but the changelog already talks about that. Maybe I should change it
-to simply:
-```
-Move VMA flag modification (which now implies VMA locking) before
-vma_adjust_trans_huge() to ensure the modifications are done after VMA
-has been locked.
-```
-Is that better?
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ samples/kprobes/kprobe_example.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
+index fd346f5..ef44c61 100644
+--- a/samples/kprobes/kprobe_example.c
++++ b/samples/kprobes/kprobe_example.c
+@@ -55,6 +55,10 @@ static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
+ 	pr_info("<%s> p->addr, 0x%p, ip = 0x%lx, flags = 0x%lx\n",
+ 		p->symbol_name, p->addr, regs->psw.addr, regs->flags);
+ #endif
++#ifdef CONFIG_LOONGARCH
++	pr_info("<%s> p->addr = 0x%p, era = 0x%lx, estat = 0x%lx\n",
++		p->symbol_name, p->addr, regs->csr_era, regs->csr_estat);
++#endif
+ 
+ 	/* A dump_stack() here will give a stack backtrace */
+ 	return 0;
+@@ -92,6 +96,10 @@ static void __kprobes handler_post(struct kprobe *p, struct pt_regs *regs,
+ 	pr_info("<%s> p->addr, 0x%p, flags = 0x%lx\n",
+ 		p->symbol_name, p->addr, regs->flags);
+ #endif
++#ifdef CONFIG_LOONGARCH
++	pr_info("<%s> p->addr = 0x%p, estat = 0x%lx\n",
++		p->symbol_name, p->addr, regs->csr_estat);
++#endif
+ }
+ 
+ static int __init kprobe_init(void)
+-- 
+2.1.0
+
