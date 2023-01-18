@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9E46711F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CD86711FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjARD3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S229806AbjARDam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjARD3p (ORCPT
+        with ESMTP id S229734AbjARDac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:29:45 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D6F5087C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:29:43 -0800 (PST)
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 17 Jan 2023 22:30:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADF95399C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:30:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0AE1342218
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674012581;
-        bh=feJKHenVKLzvev+T8z7P650W/iTpSN+ayNZKXPAdc74=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=eMifTxHl8pDX6pZZcYoNrJzpq48I5yW7cGtMEc5hW/xt+7PuedWur323HH+uNIZv6
-         UUTi4Ix3+narMujN0lOhUUgCJrd5zcgd+dHo2+j/Ielvew9l9m+vuMTXnIRSCfp+6f
-         QVFLAuxH10krGg+UcdpXHpdr4W9FdR7GREz8bNJJUmhaSV0efAZHjhagPGuh0VtYKb
-         KMFTxSxpa9VqvNB+Pe87UpYp7B1QWzumSpyMECZRBpM7bxinpAvQ7GIQwQLNuocFTE
-         elY29cnhmecmjtJeNSCVhh6spQ8hmA4mf+AG/OV9gX+EtqvDkQRl9fdfTrQvwlfV3N
-         PdnUiA5szpyxg==
-Received: by mail-pl1-f199.google.com with SMTP id l15-20020a170902f68f00b001948ddc7cddso5438164plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:29:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=feJKHenVKLzvev+T8z7P650W/iTpSN+ayNZKXPAdc74=;
-        b=lYdsIHo85B8t02J1TNZqr2HqKzTjP0GKwI5drZ1soGCs8lKGIcmJJOQxhkBlMrPS8p
-         dI6Sw4x6MuOkQ+1JE5Yvgvgcn8ajhnqMb+7fPl03aW4sR9wlG9phxZuc5EnhX6D1xSn9
-         b2r9fOdy4cnaHfJ8TcngVR/sKgfEHZb68cHOe6f84uS6A3mDRo0SC5jBd55XfqU8cuqc
-         9gi/hspAlnR+mDSLrsBhYqJEIH5K1jnvpnfPGD1vO2tPMidD1AmQOMYtCj5qSUxL6tGZ
-         WfGpX0CLhKeFNU1rp3u7eEbgP0haTpjLdYBgxhutSCMV5lF2XdoOr+fyeH8mJW2Gez/+
-         cvgw==
-X-Gm-Message-State: AFqh2kptOqv7BuWEgHmNa+KaNlTKwxZTYf5VWasmdcIcTBvRd0wxCKaI
-        5Go7Kvvi32WQiVLG+VTW81el8VnkCMcpH3TsATJrH9MoZpi8URQOrE+C9NATVNczPRlCDYD94Ul
-        Os1Vq5S6Vu5qVptVG3b4KNAM8tgXIHmjw9eXUdOG6At+yrLctO9+Hoyr2vg==
-X-Received: by 2002:a17:90a:8a0d:b0:229:2799:f149 with SMTP id w13-20020a17090a8a0d00b002292799f149mr493607pjn.110.1674012579649;
-        Tue, 17 Jan 2023 19:29:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuiufXDZvjsIdQAJnH5w1Sl2NhHYIvgso/aIW7r1aWR2lDegNcwb1PKmoOGqqzW0KJamEVmJXdrlAYKdTZdsi8=
-X-Received: by 2002:a17:90a:8a0d:b0:229:2799:f149 with SMTP id
- w13-20020a17090a8a0d00b002292799f149mr493600pjn.110.1674012579225; Tue, 17
- Jan 2023 19:29:39 -0800 (PST)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EC15B81B05
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B695EC433F0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674012622;
+        bh=cpni+bkqRqN1WNgmDR5iu5hF6r8xKU8JzSc8T2oCWkk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a2VgN/SnRLw/oI+J31Dsy2kSkxRKJHQDpSA70nwjaPGq25fzDITQw8BPgkenz1B18
+         iHZqxFxvtW2C/rpwz+wdftr6aAupYikzKIhcByPS2YNaAMl2g3N1UMrjXSdqVld0e7
+         1831PHFmoCQlmndfgKd6nBiBe78DIq2IHy/9vpGj2EokxI2zr4XpLpDkiEmIvhyxoT
+         RCD1QaO306NRnblKyml7vSHffTF4s7gzVdAVcz/QJ5Ay4G/iOjOp4pz3QT3Cgw1Bfj
+         2RziUBaNiO46d5Z0fky0MWAFv3lZq+neyiDD64UNgpYJ7R0UiBlKC/3NsnTyklL3Nj
+         2GOcc39UwHrhg==
+Received: by mail-ed1-f45.google.com with SMTP id v6so47814228edd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:30:22 -0800 (PST)
+X-Gm-Message-State: AFqh2kpoIVe3KcaiR26ebdJWO2nBclojF6LdxRSTMpjrHylKtUDDg15O
+        Kd4v77oS10241EGvzdX6IpP1fZGGk2MAmAQbdME=
+X-Google-Smtp-Source: AMrXdXsUoxKHh4L31qjc2cdz/d5NeAHxJlRtJwGLhgguluIzdmU1vjggktYL21VUWhrZRtUSAF3j1xZcKGfpTsOmcVc=
+X-Received: by 2002:a05:6402:40a:b0:49d:aca5:9ae0 with SMTP id
+ q10-20020a056402040a00b0049daca59ae0mr664839edv.106.1674012620989; Tue, 17
+ Jan 2023 19:30:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117160951.282581-1-kai.heng.feng@canonical.com> <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
-In-Reply-To: <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 18 Jan 2023 11:29:27 +0800
-Message-ID: <CAAd53p5DFUMjMNAyp6YVONwCpGs8rRVORj0=OSgj+Z0f3QpeCg@mail.gmail.com>
-Subject: Re: [PATCH] iio: light: cm32181: Fix PM support on system with 2 I2C resources
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de,
-        Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 18 Jan 2023 11:30:11 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
+Message-ID: <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
+Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,118 +62,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+Hi, Masami,
 
-On Wed, Jan 18, 2023 at 1:21 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 1/17/23 17:09, Kai-Heng Feng wrote:
-> > Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
-> > with 2 I2C resources") creates a second client for the actual I2C
-> > address, but the "struct device" passed to PM ops is the first client
-> > that can't talk to the sensor.
-> >
-> > That means the I2C transfers in both suspend and resume routines can
-> > fail and blocking the whole suspend process.
-> >
-> > Instead of using the first client for I2C transfer, store the cm32181
-> > private struct on both cases so the PM ops can get the correct I2C
-> > client to perfrom suspend and resume.
-> >
-> > Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
-> > Tested-by: Wahaj <wahajaved@protonmail.com>
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->
-> Thank you for this fix. I had looking into this on my todo list,
-> since I have been seeing some bug reports about this too.
->
-> One remark inline:
->
-> > ---
-> >  drivers/iio/light/cm32181.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-> > index 001055d097509..0f319c891353c 100644
-> > --- a/drivers/iio/light/cm32181.c
-> > +++ b/drivers/iio/light/cm32181.c
-> > @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
-> >       if (!indio_dev)
-> >               return -ENOMEM;
-> >
-> > +     i2c_set_clientdata(client, indio_dev);
-> > +
->
-> Why move this up, the suspend/resume callbacks cannot run until
-> probe() completes, so no need for this change.
+Could you please pay some time to review this series? Thank you.
 
-The intention is to save indio_dev as drvdata in the first (i.e.
-original) i2c_client's dev.
+Huacai
 
+On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> >       /*
-> >        * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
-> >        * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
-> > @@ -458,9 +460,9 @@ static int cm32181_probe(struct i2c_client *client)
-> >               client = i2c_acpi_new_device(dev, 1, &board_info);
-> >               if (IS_ERR(client))
-> >                       return PTR_ERR(client);
-> > -     }
-> >
-> > -     i2c_set_clientdata(client, indio_dev);
-> > +             i2c_set_clientdata(client, indio_dev);
-> > +     }
+> v12:
+>   -- Rebase on the latest code
+>   -- Fix -Wmissing-prototypes warning when make W=1
+>   -- Drop patch #6 "Use common function sign_extend64()"
+>      since it has been applied yet
 >
-> And moving it inside the if block here (instead of just dropping it)
-> is also weird. I guess you meant to just delete it since you moved it up.
-
-Doesn't i2c_acpi_new_device() creates a new i2c_client (and its dev embedded)?
-
-So the intention is to save indio_dev for the second (ARA case) i2c_client too.
-
+> v11:
+>   -- Rebase on the latest code
+>   -- Address all the review comments, thank you all
+>   -- Modify arch_prepare_kprobe() and setup_singlestep()
+>      to make the probe logic more clear
+>   -- Mark some assembler symbols as non-kprobe-able
+>   -- Use common function sign_extend64()
+>   -- Test 20 times about 36 hours for all the 71 assembler
+>      functions annotated with SYM_CODE_START and SYM_FUNC_START
+>      under arch/loongarch, especially test memset alone for 10
+>      hours, no hang problems
 >
-> >
-> >       cm32181 = iio_priv(indio_dev);
-> >       cm32181->client = client;
+> v10:
+>   -- Remove sign_extend() based on the latest code
+>   -- Rename insns_are_not_supported() to insns_not_supported()
+>   -- Rename insns_are_not_simulated() to insns_not_simulated()
+>   -- Set KPROBE_HIT_SSDONE if cur->post_handler is not NULL
+>   -- Enable preemption for KPROBE_REENTER in kprobe_fault_handler()
 >
-> Also note that the ->client used in suspend/resume now is not set until
-> here, so moving the i2c_set_clientdata() up really does not do anything.
+> v9:
+>   -- Rename sign_extended() to sign_extend()
+>   -- Modify kprobe_fault_handler() to handle all of kprobe_status
 >
-> I beleive it would be best to just these 2 hunks from the patch and
-> only keep the changes to the suspend/resume callbacks.
-
-Yes, it seems like those 2 hunks are not necessary. Let me send a new patch.
-
-But I do wonder what happens for the removing case? Will the second
-i2c_client leak?
-
-Kai-Heng
-
+> v8:
+>   -- Put "regs->csr_prmd &= ~CSR_PRMD_PIE;" ahead to save one line
+>   -- Add code comment of preempt_disable()
+>   -- Put kprobe_page_fault() in __do_page_fault()
+>   -- Modify the check condition of break insn in kprobe_breakpoint_handler()
 >
-> Regards,
+> v7:
+>   -- Remove stop_machine_cpuslocked() related code
 >
-> Hans
+> v6:
+>   -- Add a new patch to redefine larch_insn_patch_text() with
+>      stop_machine_cpuslocked()
+>   -- Modify kprobe_breakpoint_handler() to consider the original
+>      insn is break and return the correct value
+>   -- Modify do_bp() to refresh bcode when original insn is break
 >
+> v5:
+>   -- Rebase on the latest code
+>   -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
 >
-> > @@ -490,7 +492,8 @@ static int cm32181_probe(struct i2c_client *client)
-> >
-> >  static int cm32181_suspend(struct device *dev)
-> >  {
-> > -     struct i2c_client *client = to_i2c_client(dev);
-> > +     struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> > +     struct i2c_client *client = cm32181->client;
-> >
-> >       return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
-> >                                        CM32181_CMD_ALS_DISABLE);
-> > @@ -498,8 +501,8 @@ static int cm32181_suspend(struct device *dev)
-> >
-> >  static int cm32181_resume(struct device *dev)
-> >  {
-> > -     struct i2c_client *client = to_i2c_client(dev);
-> >       struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> > +     struct i2c_client *client = cm32181->client;
-> >
-> >       return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
-> >                                        cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
+> v4:
+>   -- Remove kprobe_exceptions_notify() in kprobes.c
+>   -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
+>      in do_bp()
+>
+> v3:
+>   -- Rebase on the latest code
+>   -- Check the alignment of PC in simu_branch() and simu_pc()
+>   -- Add ibar in flush_insn_slot()
+>   -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+>   -- Add preempt_disable() and preempt_enable_no_resched()
+>   -- Remove r0 save/restore and do some minor changes
+>      in kprobes_trampoline.S
+>   -- Do not enable CONFIG_KPROBES by default
+>
+> v2:
+>   -- Split simu_branch() and simu_pc() into a single patch
+>   -- Call kprobe_page_fault() in do_page_fault()
+>   -- Add kprobes_trampoline.S for kretprobe
+>
+> Tiezhu Yang (5):
+>   LoongArch: Simulate branch and PC* instructions
+>   LoongArch: Add kprobe support
+>   LoongArch: Add kretprobe support
+>   LoongArch: Mark some assembler symbols as non-kprobe-able
+>   samples/kprobes: Add LoongArch support
+>
+>  arch/loongarch/Kconfig                     |   2 +
+>  arch/loongarch/include/asm/asm.h           |  10 +
+>  arch/loongarch/include/asm/inst.h          |  20 ++
+>  arch/loongarch/include/asm/kprobes.h       |  61 +++++
+>  arch/loongarch/include/asm/ptrace.h        |   1 +
+>  arch/loongarch/kernel/Makefile             |   2 +
+>  arch/loongarch/kernel/entry.S              |   1 +
+>  arch/loongarch/kernel/inst.c               | 123 +++++++++
+>  arch/loongarch/kernel/kprobes.c            | 405 +++++++++++++++++++++++++++++
+>  arch/loongarch/kernel/kprobes_trampoline.S |  96 +++++++
+>  arch/loongarch/kernel/traps.c              |  11 +-
+>  arch/loongarch/lib/memcpy.S                |   3 +
+>  arch/loongarch/mm/fault.c                  |   3 +
+>  samples/kprobes/kprobe_example.c           |   8 +
+>  14 files changed, 741 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/loongarch/include/asm/kprobes.h
+>  create mode 100644 arch/loongarch/kernel/kprobes.c
+>  create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+>
+> --
+> 2.1.0
+>
 >
