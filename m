@@ -2,171 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FC86727FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB099672801
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjARTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S229939AbjARTSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjARTRc (ORCPT
+        with ESMTP id S229575AbjARTS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:17:32 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5683CE26;
-        Wed, 18 Jan 2023 11:17:30 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id vm8so85633206ejc.2;
-        Wed, 18 Jan 2023 11:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IpoGDyyHiMyxVVqXlDO8VXUaDac4ka8Hm9JUqwyeyEs=;
-        b=atkQCQJMxd0XKviaE+UGS4QaMizaO5XFY9lGdr8QkLZNebZ3/1c4AJuHBGKorF+ald
-         ucp1wwZb9t9kt9ing+5GrUMjg/lBgAMx961qMXBf9skjzhdB0VCB8dai/YWVmixds1vu
-         FH+2JvlD3wmvzx/WbdAibxi10VD6q34Bb6dPf5RJT8PbGNpl6yoD7qzzZ8sq+BgmqLZQ
-         copT2IyjOrNnH/2HkjNQPgM7SpoNpwSRurrxiYf9bNXDHMIwKe5nNWL1dZL1HDpjoV+k
-         FZmZXFIfHnm9CLEACZmwH89MLsEcakoxgibu0h5YCciqGMLx87NDachpPAjcNvdJVYFw
-         Kutg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IpoGDyyHiMyxVVqXlDO8VXUaDac4ka8Hm9JUqwyeyEs=;
-        b=8NRXweSxUgK/2VUTQG/ETVu0qNGdfqdcQKHtfqFkavg0Cf33t1Bt5H5Vh1xE/K+TKn
-         OXiFw9iWtQ+WW2cAad5aNK+WzMVACacZdgyVBQrqjXqowDVw3nV89IUhxRc7704UZwxA
-         6/02JqCMZ1G+ysNr7YxpVeqG3QzhPvA2h+I6uAASKQ2Oyu9TGnHMsdkjZ/1YuB8a5ttV
-         Bn101rEildR5xnJlZc5iWjfTi2964Jom2VzaWFUg5RwzeR67sLg9Bnn5Vn7YYCWO5UAN
-         t80OHe6Cdl9faGFVUtZw+NRjrySznjmkSUNmMU7UEmbCxaqa7onszfCPJwJrtqQtgNNR
-         +TNg==
-X-Gm-Message-State: AFqh2krltE2snnhihOFUMYBEnnb0prGVoOmLEMCfACtA2QfURM4kveM/
-        pya4kfpHtUvvqYzB4Vn3k9AvPdsdWEcoyYRJd4Y=
-X-Google-Smtp-Source: AMrXdXvtXTlbwhBPmycKaEdv4lJMm5Eg+oxV9M8XAggIWPaTaOGLbfWlK5wovvMFonSRuGsooqZ5pDcDH1/PhUnQDes=
-X-Received: by 2002:a17:906:816:b0:86a:d572:93ae with SMTP id
- e22-20020a170906081600b0086ad57293aemr741640ejd.273.1674069449336; Wed, 18
- Jan 2023 11:17:29 -0800 (PST)
+        Wed, 18 Jan 2023 14:18:29 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B8A38B45;
+        Wed, 18 Jan 2023 11:18:28 -0800 (PST)
+Received: from umang.jainideasonboard.com (unknown [IPv6:2405:204:820c:4b28:9aaf:3c:ef34:ecdd])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 823C61056;
+        Wed, 18 Jan 2023 20:18:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674069506;
+        bh=NUtoaUOXXBCb4O4OISOp0RPw4+o1avzzrDCkBQ+9ZBk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xwl+sGMSXaw5AKSwfNyDNLMS7RWfe/vUf/AdKIbGtO12dte3Mh4Na4roSMe6eOvRv
+         a/Wcj0Ry+svv2WUlDw+mBwgirt9ATalFLus0IAqXuMzO//K0bm505Ik4IkUOfyqrdP
+         Kpcw5YjNHoI/4rD5ihNus1mbDtp6FnYEzNcafuFk=
+From:   Umang Jain <umang.jain@ideasonboard.com>
+To:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH v4 0/6] staging: vc04_services: vchiq: Register devices with a custom bus_type
+Date:   Thu, 19 Jan 2023 00:48:05 +0530
+Message-Id: <20230118191811.208552-1-umang.jain@ideasonboard.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230118061256.2689-1-dakr@redhat.com> <db4fa0fc-c9a6-9a48-c45f-1d655b30aff9@amd.com>
- <02b0bcb8-f69f-93cf-1f56-ec883cb33965@redhat.com> <3602500f-05f5-10b8-5ec6-0a6246e2bb6b@amd.com>
- <bcbef353-f579-4e90-1c77-be36bbe61c0f@redhat.com> <CADnq5_PGaXFW-z3gt+R+W+vBVdeuL4wMuMOQh4muxU13Bemy3A@mail.gmail.com>
- <0f2d6e1a-a3b5-f323-a29d-caade427292c@redhat.com> <CADnq5_Nh-1esiHzvTG+qFBCfMjy21efX-YN2jfGG=WC+-4LwLQ@mail.gmail.com>
-In-Reply-To: <CADnq5_Nh-1esiHzvTG+qFBCfMjy21efX-YN2jfGG=WC+-4LwLQ@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Thu, 19 Jan 2023 05:17:16 +1000
-Message-ID: <CAPM=9txMZO1uYj+kVdTfmCwV2Fq8uu_b3i4eq4xhqPEPKBW8Eg@mail.gmail.com>
-Subject: Re: [PATCH drm-next 00/14] [RFC] DRM GPUVA Manager & Nouveau VM_BIND UAPI
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Danilo Krummrich <dakr@redhat.com>, tzimmermann@suse.de,
-        corbet@lwn.net, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bskeggs@redhat.com,
-        jason@jlekstrand.net, airlied@redhat.com,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 at 02:54, Alex Deucher <alexdeucher@gmail.com> wrote:
->
-> On Wed, Jan 18, 2023 at 11:50 AM Danilo Krummrich <dakr@redhat.com> wrote=
-:
-> >
-> >
-> >
-> > On 1/18/23 17:30, Alex Deucher wrote:
-> > > On Wed, Jan 18, 2023 at 11:19 AM Danilo Krummrich <dakr@redhat.com> w=
-rote:
-> > >>
-> > >> On 1/18/23 16:37, Christian K=C3=B6nig wrote:
-> > >>> Am 18.01.23 um 16:34 schrieb Danilo Krummrich:
-> > >>>> Hi Christian,
-> > >>>>
-> > >>>> On 1/18/23 09:53, Christian K=C3=B6nig wrote:
-> > >>>>> Am 18.01.23 um 07:12 schrieb Danilo Krummrich:
-> > >>>>>> This patch series provides a new UAPI for the Nouveau driver in
-> > >>>>>> order to
-> > >>>>>> support Vulkan features, such as sparse bindings and sparse resi=
-dency.
-> > >>>>>>
-> > >>>>>> Furthermore, with the DRM GPUVA manager it provides a new DRM co=
-re
-> > >>>>>> feature to
-> > >>>>>> keep track of GPU virtual address (VA) mappings in a more generi=
-c way.
-> > >>>>>>
-> > >>>>>> The DRM GPUVA manager is indented to help drivers implement
-> > >>>>>> userspace-manageable
-> > >>>>>> GPU VA spaces in reference to the Vulkan API. In order to achiev=
-e
-> > >>>>>> this goal it
-> > >>>>>> serves the following purposes in this context.
-> > >>>>>>
-> > >>>>>>       1) Provide a dedicated range allocator to track GPU VA
-> > >>>>>> allocations and
-> > >>>>>>          mappings, making use of the drm_mm range allocator.
-> > >>>>>
-> > >>>>> This means that the ranges are allocated by the kernel? If yes th=
-at's
-> > >>>>> a really really bad idea.
-> > >>>>
-> > >>>> No, it's just for keeping track of the ranges userspace has alloca=
-ted.
-> > >>>
-> > >>> Ok, that makes more sense.
-> > >>>
-> > >>> So basically you have an IOCTL which asks kernel for a free range? =
-Or
-> > >>> what exactly is the drm_mm used for here?
-> > >>
-> > >> Not even that, userspace provides both the base address and the rang=
-e,
-> > >> the kernel really just keeps track of things. Though, writing a UAPI=
- on
-> > >> top of the GPUVA manager asking for a free range instead would be
-> > >> possible by just adding the corresponding wrapper functions to get a
-> > >> free hole.
-> > >>
-> > >> Currently, and that's what I think I read out of your question, the =
-main
-> > >> benefit of using drm_mm over simply stuffing the entries into a list=
- or
-> > >> something boils down to easier collision detection and iterating
-> > >> sub-ranges of the whole VA space.
-> > >
-> > > Why not just do this in userspace?  We have a range manager in
-> > > libdrm_amdgpu that you could lift out into libdrm or some other
-> > > helper.
-> >
-> > The kernel still needs to keep track of the mappings within the various
-> > VA spaces, e.g. it silently needs to unmap mappings that are backed by
-> > BOs that get evicted and remap them once they're validated (or swapped
-> > back in).
->
-> Ok, you are just using this for maintaining the GPU VM space in the kerne=
-l.
->
+The main patch (6/6) is laregly unchanged from v3.
+Specific details are elaborated in its commit message.
 
-Yes the idea behind having common code wrapping drm_mm for this is to
-allow us to make the rules consistent across drivers.
+This series just introduces five extra patches for dropping include
+directives from Makefiles (suggested by Greg KH) and rebased.
 
-Userspace (generally Vulkan, some compute) has interfaces that pretty
-much dictate a lot of how VMA tracking works, esp around lifetimes,
-sparse mappings and splitting/merging underlying page tables, I'd
-really like this to be more consistent across drivers, because already
-I think we've seen with freedreno some divergence from amdgpu and we
-also have i915/xe to deal with. I'd like to at least have one place
-that we can say this is how it should work, since this is something
-that *should* be consistent across drivers mostly, as it is more about
-how the uapi is exposed.
+Changes in v4: 
+- Introduce patches to drop include directives from Makefile
 
-Dave.
+Changes in v3:
+- Rework entirely to replace platform devices/driver model
+
+-v2:
+https://lore.kernel.org/all/20221222191500.515795-1-umang.jain@ideasonboard.com/
+
+-v1:
+https://lore.kernel.org/all/20221220084404.19280-1-umang.jain@ideasonboard.com/
+
+Umang Jain (6):
+  staging: vc04_services: Drop __VCCOREVER__ remnants
+  vc04_services: bcm2835-audio: Drop include Makefile directive
+  vc04_services: bcm2835-camera: Drop include Makefile directive
+  vc04_services: vchiq-mmal: Drop include Makefile directive
+  vc04_services: interface: Drop include Makefile directive
+  staging: vc04_services: vchiq: Register devices with a custom bus_type
+
+ drivers/staging/vc04_services/Makefile        |   2 -
+ .../vc04_services/bcm2835-audio/Makefile      |   2 -
+ .../vc04_services/bcm2835-audio/bcm2835.c     |  19 ++-
+ .../vc04_services/bcm2835-audio/bcm2835.h     |   3 +-
+ .../vc04_services/bcm2835-camera/Makefile     |   5 -
+ .../bcm2835-camera/bcm2835-camera.c           |  27 ++--
+ .../vc04_services/bcm2835-camera/controls.c   |   6 +-
+ .../interface/vchiq_arm/vchiq_arm.c           | 121 +++++++++++++++---
+ .../interface/vchiq_arm/vchiq_arm.h           |   1 +
+ .../interface/vchiq_arm/vchiq_core.h          |   2 +-
+ .../interface/vchiq_arm/vchiq_ioctl.h         |   3 +-
+ .../staging/vc04_services/vchiq-mmal/Makefile |   5 -
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     |   2 +-
+ 13 files changed, 131 insertions(+), 67 deletions(-)
+
+-- 
+2.39.0
+
