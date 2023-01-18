@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C04670F76
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D160670F78
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjARBFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S229596AbjARBGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjARBEj (ORCPT
+        with ESMTP id S229768AbjARBEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:04:39 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5006A3669C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:53:39 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bk16so32376861wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:53:39 -0800 (PST)
+        Tue, 17 Jan 2023 20:04:42 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15DB5D7D0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:53:40 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n7so6330397wrx.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:53:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NgXna0bBgsjljycY2CPxK95hatbPatnCou/f0zztZCA=;
-        b=wUBxCjtlt4ukuMe/tt2TXIf2JHa4uGMbSukplOXoVRDRgF1fK65/8bZB1poBs85Qzr
-         cW30k9BfMjEEB1/MQE7quZU+piPAzNrQ6XqTJFJNzeHqaYUCeZQ93jeUeb40Uaghcg2D
-         RV500btQYaXNGvMgO1s/bycAwYlBa2/xK02xyYzc+OTXFLpsjEu3TaWlca0vuwOCDxkA
-         5jRQ9UTWcVjm93teLGvULcjQ6OWQP5Ayn+iD3lmqFLCTlPliBiO/v9o3iuduVcn3tlE7
-         +BgRUmIAhMEynDrqisOL48wvZhRWN9eBB3J1FC9U6r+LSNZC2FZrTOPyNyedR0RXkFcO
-         a/ig==
+        bh=iDRnB/Z4jSJBt/qZSOzeyTcHByoxHG9CkcxLpEDk5ZU=;
+        b=TpWrnOfE0QFW+wvo9VFucznjolY/Sv/rk6A989y6OOr7eiIEDaGOCXx3t0wAulcm6D
+         sV3f5QlJqAyci2djCsz3NZIQXKAfjZyEy1nS7rcIhJ2fY9zSqNq9ZrNpc6bDvQkr0HOy
+         wOtk1MbXgpGRpjRbstJZWswz3xhy4gUxrS12UFr4TDzYD+EJbEZqfIedGhulnBjubg4y
+         egb8pMoELB7c0iWT90Bn9s2D2+qBINREnwVJY41zm30IvlZSNlRNPpwDJs3t5kfwb3Gt
+         0irvumsN9wpMKGqZtAH6d8B3JFIAty90nEEuVxRI0/vaZqYJXzUvnhq3ZRTmIl2PCI/w
+         SdvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NgXna0bBgsjljycY2CPxK95hatbPatnCou/f0zztZCA=;
-        b=JWm6r5lO2x10+l9AEKTBj0nOZMR8YgPXJYTwa6dCMiV6xRp4C9vejAURS429upwHAV
-         AAy8tsyKCOu4+AiVwfU6LQEWf8XpJW6TjY7AJV/jHkFbQCEL1LpE10J5ATLe+FXpGGmw
-         9mQyTeQUaY7lE23b6BApum+kNoMcmMvnLSPCqzaVCT97+saocJVV3ylBuMRGmxn1gnb+
-         MKN63CMsfFbt22fHBv/UaTbi9rA4bNBlpbf6dQP/hHYXasHfz6Uftlws2BamMQ/jfND8
-         YglLDLxekfVJ53ozVaiBFkZGoOcpkOqJNpBCIOMsVi9/uRzbHq1Fp/omhLGB7iGo78Af
-         go9w==
-X-Gm-Message-State: AFqh2koUITOvvCZB8oqpR08WnNfDR0waPJ6wkxPTwxMrWRevNd/Czzld
-        xBHt5nL5Sd7y0Sxy3sMrPobUvg==
-X-Google-Smtp-Source: AMrXdXstzkZJavEtuQkz5iiSkPIdHzaFAUQE1rOywD6/eAYKthKXzToRG/7qME4figGCySBS0eb3OA==
-X-Received: by 2002:adf:f606:0:b0:24b:b74d:8012 with SMTP id t6-20020adff606000000b0024bb74d8012mr4176350wrp.18.1674003217914;
-        Tue, 17 Jan 2023 16:53:37 -0800 (PST)
+        bh=iDRnB/Z4jSJBt/qZSOzeyTcHByoxHG9CkcxLpEDk5ZU=;
+        b=ObpU64QdLpzcyDoVzdKJZHfE1tIQK0Q+gwIFkmZhTNGfu65m9xuuT8kEvTSbzOlBlN
+         QKBuZ/KD3oKVVbiPUCiQsKbczKaYECHcwX/A7Otqn36p1uDTynAbjEGHxpjbvyBUu0sZ
+         9MH9Dq7gCYaBi6IrIPLYead0HeBJlYMqu+UVKL3QXULweDZK8X6N/S8oawzPi/mxSTMj
+         bP/xefbdySiNJA3bBe8SeePq5j5jDHKHFgr5mS/yYUaz0OiZ5xHfNpbxns6Vjy/G90k3
+         p3+5d1cQc/hjvYMV3ZGTk3F/wUfPaHITcB556nhJ/l4955RnQOm05oDGsnWmtFTBtd+z
+         fbQw==
+X-Gm-Message-State: AFqh2kr/iytPMZYRVV6/XISJZF6W6nrxBubTJibS61s9Y7Pm/pLI64LC
+        SdgQ/rhfxaLRk0PnVuYI3h09vw==
+X-Google-Smtp-Source: AMrXdXvwoWaDUjCW/o2PsWtNwA4jr3V4JW6+kw1jiRmnKo2KMQHXYLMx2LITNwt0ANp0jhWtFq1QDQ==
+X-Received: by 2002:a5d:58f0:0:b0:2bc:7f51:41f with SMTP id f16-20020a5d58f0000000b002bc7f51041fmr4652024wrd.45.1674003219153;
+        Tue, 17 Jan 2023 16:53:39 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm29609705wrx.21.2023.01.17.16.53.36
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm29609705wrx.21.2023.01.17.16.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 16:53:37 -0800 (PST)
+        Tue, 17 Jan 2023 16:53:38 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH v3 5/8] phy: qcom-qmp: pcs-pcie: Add v6.20 register offsets
-Date:   Wed, 18 Jan 2023 02:53:25 +0200
-Message-Id: <20230118005328.2378792-6-abel.vesa@linaro.org>
+Subject: [PATCH v3 6/8] phy: qcom-qmp: qserdes-txrx: Add v6.20 register offsets
+Date:   Wed, 18 Jan 2023 02:53:26 +0200
+Message-Id: <20230118005328.2378792-7-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230118005328.2378792-1-abel.vesa@linaro.org>
 References: <20230118005328.2378792-1-abel.vesa@linaro.org>
@@ -81,57 +81,79 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The new SM8550 SoC bumps up the HW version of QMP phy to v6.20 for
-PCIE g4x2. Add the new PCS PCIE specific offsets in a dedicated
-header file.
+PCIE g4x2. Add the new qserdes TX RX PCIE specific offsets in a
+dedicated header file.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |  1 +
- .../qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h    | 23 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+ .../phy-qcom-qmp-qserdes-txrx-v6_20.h         | 45 +++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |  1 +
+ 2 files changed, 46 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index d4ca38f31e3f..bffb9e138715 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -30,6 +30,7 @@
- #include "phy-qcom-qmp-pcs-pcie-v5.h"
- #include "phy-qcom-qmp-pcs-pcie-v5_20.h"
- #include "phy-qcom-qmp-pcs-pcie-v6.h"
-+#include "phy-qcom-qmp-pcs-pcie-v6_20.h"
- #include "phy-qcom-qmp-pcie-qhp.h"
- 
- /* QPHY_SW_RESET bit */
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
 new file mode 100644
-index 000000000000..e3eb08776339
+index 000000000000..5385a8b60970
 --- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
-@@ -0,0 +1,23 @@
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
+@@ -0,0 +1,45 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2023, Linaro Limited
 + */
 +
-+#ifndef QCOM_PHY_QMP_PCS_PCIE_V6_20_H_
-+#define QCOM_PHY_QMP_PCS_PCIE_V6_20_H_
++#ifndef QCOM_PHY_QMP_QSERDES_TXRX_PCIE_V6_20_H_
++#define QCOM_PHY_QMP_QSERDES_TXRX_PCIE_V6_20_H_
 +
-+/* Only for QMP V6_20 PHY - PCIE have different offsets than V5 */
-+#define QPHY_PCIE_V6_20_PCS_POWER_STATE_CONFIG2		0x00c
-+#define QPHY_PCIE_V6_20_PCS_TX_RX_CONFIG		0x018
-+#define QPHY_PCIE_V6_20_PCS_ENDPOINT_REFCLK_DRIVE	0x01c
-+#define QPHY_PCIE_V6_20_PCS_OSC_DTCT_ATCIONS		0x090
-+#define QPHY_PCIE_V6_20_PCS_EQ_CONFIG1			0x0a0
-+#define QPHY_PCIE_V6_20_PCS_EQ_CONFIG5			0x108
-+#define QPHY_PCIE_V6_20_PCS_G4_PRE_GAIN			0x15c
-+#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG1	0x17c
-+#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG3	0x184
-+#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG5	0x18c
-+#define QPHY_PCIE_V6_20_PCS_G3_FOM_EQ_CONFIG5		0x1ac
-+#define QPHY_PCIE_V6_20_PCS_G4_FOM_EQ_CONFIG5		0x1c0
++#define QSERDES_V6_20_TX_RES_CODE_LANE_OFFSET_TX		0x30
++#define QSERDES_V6_20_TX_RES_CODE_LANE_OFFSET_RX		0x34
++#define QSERDES_V6_20_TX_TRAN_DRVR_EMP_EN			0xac
++#define QSERDES_V6_20_TX_LANE_MODE_1				0x78
++#define QSERDES_V6_20_TX_LANE_MODE_2				0x7c
++#define QSERDES_V6_20_TX_LANE_MODE_3				0x80
++
++#define QSERDES_V6_20_RX_UCDR_FO_GAIN_RATE_2			0x08
++#define QSERDES_V6_20_RX_UCDR_FO_GAIN_RATE_3			0x0c
++#define QSERDES_V6_20_RX_UCDR_PI_CONTROLS			0x20
++#define QSERDES_V6_20_RX_UCDR_SO_ACC_DEFAULT_VAL_RATE3		0x34
++#define QSERDES_V6_20_RX_IVCM_CAL_CTRL2				0x9c
++#define QSERDES_V6_20_RX_IVCM_POSTCAL_OFFSET			0xa0
++#define QSERDES_V6_20_RX_DFE_3					0xb4
++#define QSERDES_V6_20_RX_VGA_CAL_MAN_VAL			0xe8
++#define QSERDES_V6_20_RX_GM_CAL					0x10c
++#define QSERDES_V6_20_RX_EQU_ADAPTOR_CNTRL4			0x120
++#define QSERDES_V6_20_RX_SIGDET_ENABLES				0x148
++#define QSERDES_V6_20_RX_PHPRE_CTRL				0x188
++#define QSERDES_V6_20_RX_DFE_CTLE_POST_CAL_OFFSET		0x194
++#define QSERDES_V6_20_RX_Q_PI_INTRINSIC_BIAS_RATE32		0x1dc
++#define QSERDES_V6_20_RX_MODE_RATE2_B0				0x1f4
++#define QSERDES_V6_20_RX_MODE_RATE2_B1				0x1f8
++#define QSERDES_V6_20_RX_MODE_RATE2_B2				0x1fc
++#define QSERDES_V6_20_RX_MODE_RATE2_B3				0x200
++#define QSERDES_V6_20_RX_MODE_RATE2_B4				0x204
++#define QSERDES_V6_20_RX_MODE_RATE2_B5				0x208
++#define QSERDES_V6_20_RX_MODE_RATE2_B6				0x20c
++#define QSERDES_V6_20_RX_MODE_RATE3_B0				0x210
++#define QSERDES_V6_20_RX_MODE_RATE3_B1				0x214
++#define QSERDES_V6_20_RX_MODE_RATE3_B2				0x218
++#define QSERDES_V6_20_RX_MODE_RATE3_B3				0x21c
++#define QSERDES_V6_20_RX_MODE_RATE3_B4				0x220
++#define QSERDES_V6_20_RX_MODE_RATE3_B5				0x224
++#define QSERDES_V6_20_RX_MODE_RATE3_B6				0x228
 +
 +#endif
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.h b/drivers/phy/qualcomm/phy-qcom-qmp.h
+index 760de4c76e5b..e5974e6caf51 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.h
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.h
+@@ -23,6 +23,7 @@
+ 
+ #include "phy-qcom-qmp-qserdes-com-v6.h"
+ #include "phy-qcom-qmp-qserdes-txrx-v6.h"
++#include "phy-qcom-qmp-qserdes-txrx-v6_20.h"
+ 
+ #include "phy-qcom-qmp-qserdes-pll.h"
+ 
 -- 
 2.34.1
 
