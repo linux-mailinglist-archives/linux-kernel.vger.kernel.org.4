@@ -2,159 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804836716B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E946716B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjARI5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S229770AbjARI6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjARI4c (ORCPT
+        with ESMTP id S229674AbjARI5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:56:32 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF7676CC;
-        Wed, 18 Jan 2023 00:10:41 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so824391wma.1;
-        Wed, 18 Jan 2023 00:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I0vdur1hQdUSHTad6H0g8tY0U7ro6sZT4Qb9ft9KwkQ=;
-        b=Ns1R7g2r4HqaDOX1lehqhdR8/aT28lzgpN6iBJ2oIAtjOcAweyo8tHpkPLuzcn8bRe
-         Yp9+8lBjMU2joLa+pXHsFX/pjGSHKdwBXnIRFBqOeGGIDj2cmIOhSGR1ohHopERg0PJN
-         DbFx5visakm9nRdUBmZRbJuJACT/jYsV2EzrNQQC3cAjZj6jOsUdYlnJ3f4IFTK6NTZo
-         LOZAOvbn1ctsLXz1NYeIDx+zIJ1YNVtcC7014fPCmIYmE4VL1Jzvoek2xmAEMxeamqOi
-         v19uztFwd9Ll3fGjeHlx1iNv2LXUOh9/ZDw14NAC+UI0WrSm+/sqF8JxfZIocFAO7gjz
-         YXLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I0vdur1hQdUSHTad6H0g8tY0U7ro6sZT4Qb9ft9KwkQ=;
-        b=vT+SlV+2mb1pHhTvORovLGaMUt2kmCKlweOjv/rbss/gu5p4JaqKlLJwTR1Eqpst5k
-         1ytWNyFRFmES0l9AFwfjr4iH2wkTb6TuZfqgWtgw6Y4JhzNXwmWndyMxOGWryIDT41I2
-         jPSAFWDyepKrCEeIKP29WKMVl2imWxLcn+yN8HFmGWVUYsFDcQy5x1MxT8wiE83qJG2U
-         PGdu8MCGE2gL+yzgpBXatJYpWoOu3GJovG4jOtlxNdvwVrmcVEXEDuAh/bz2P/SSoseI
-         IfZnHZKdpwdoOcxShgTHz4VtGbQpThWflahYeGnxMyWHwuVPgYCtBi85MIddt+vnX5Yv
-         13HA==
-X-Gm-Message-State: AFqh2krhliFXFOR/02REsvp0xNx+ez7q+dMUBqeu28UPTq8bjmRHkzOZ
-        SPQvzqvT5LmVNWfJxXjJHJ0=
-X-Google-Smtp-Source: AMrXdXtfUflEd8kBxt0LTVMbUrV2vxV9ff6ftk/N9Vn690FwkH6mfDV65DPuZ5jZla2bkg/2L8CuMw==
-X-Received: by 2002:a05:600c:d2:b0:3da:f475:6480 with SMTP id u18-20020a05600c00d200b003daf4756480mr5741538wmm.7.1674029439508;
-        Wed, 18 Jan 2023 00:10:39 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id q24-20020a05600c331800b003d1de805de5sm1151356wmp.16.2023.01.18.00.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 00:10:39 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 18 Jan 2023 09:10:36 +0100
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix build errors if
- CONFIG_NF_CONNTRACK=m
-Message-ID: <Y8epfNbNDYikDYSr@krava>
-References: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
+        Wed, 18 Jan 2023 03:57:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEE36779B;
+        Wed, 18 Jan 2023 00:11:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17510B81B9B;
+        Wed, 18 Jan 2023 08:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A985BC433D2;
+        Wed, 18 Jan 2023 08:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674029516;
+        bh=fLeRuQVxiw9tI+APR9Y667hU7+gwUKduzbj3LXSGHSA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IsCICPXwLinPf+G54q3VEBv/bfjrnmeq8gDvENV6ITJQUO/FPkdBX6BZvZan4WWPO
+         Lhr2kDVBzWgr7OlPznLcxBbTj+cF5zJk3Qrz9VVK4anYBaus4USGiVUZp43C4sau/K
+         GNWJJcApq37VdoOO9UsNjFtiU5YfxqYK71H6iem3lzR44FFI4iruG+fhurOC59qbZs
+         wGXoHJkUD9YjMfLAZyFi0eb6+PgxMSqJrRm+Si5KzKJJanzXQAFf2zRwmInWTY7Zyo
+         B7cgQROkfDSXTqB1/k7X0qN8M3EGhsjqZdnvmj7Cqz8B2zI7rZ/QUcdhw1uwKOGeSJ
+         j00VZPN2Y9aaQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pI3YM-0000aA-Je; Wed, 18 Jan 2023 09:12:15 +0100
+Date:   Wed, 18 Jan 2023 09:12:14 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/6] dt-bindings: phy: Add QMP UFS PHY comptible for
+ SM8550
+Message-ID: <Y8ep3jXNRPSIVwUy@hovoldconsulting.com>
+References: <20230117224148.1914627-1-abel.vesa@linaro.org>
+ <20230117224148.1914627-2-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230117224148.1914627-2-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:56:44PM +0800, Tiezhu Yang wrote:
-> If CONFIG_NF_CONNTRACK=m, there are no definitions of NF_NAT_MANIP_SRC
-> and NF_NAT_MANIP_DST in vmlinux.h, build test_bpf_nf.c failed.
+On Wed, Jan 18, 2023 at 12:41:43AM +0200, Abel Vesa wrote:
+> Document the QMP UFS PHY compatible for SM8550.
 > 
-> $ make -C tools/testing/selftests/bpf/
-> 
->   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
->                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
->                                                        ^
-> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
->                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
->                                                        ^
-> 2 errors generated.
-> 
-> Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c,
-> in order to avoid redefinitions if CONFIG_NF_CONNTRACK=y, rename them with
-> ___local suffix. This is similar with commit 1058b6a78db2 ("selftests/bpf:
-> Do not fail build if CONFIG_NF_CONNTRACK=m/n").
-> 
-> Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I hit the same problem, thanks
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
-> ---
->  tools/testing/selftests/bpf/progs/test_bpf_nf.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> index 227e85e..9fc603c 100644
-> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> @@ -34,6 +34,11 @@ __be16 dport = 0;
->  int test_exist_lookup = -ENOENT;
->  u32 test_exist_lookup_mark = 0;
->  
-> +enum nf_nat_manip_type___local {
-> +	NF_NAT_MANIP_SRC___local,
-> +	NF_NAT_MANIP_DST___local
-> +};
-> +
->  struct nf_conn;
->  
->  struct bpf_ct_opts___local {
-> @@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
->  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
->  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
->  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
-> -			int port, enum nf_nat_manip_type) __ksym;
-> +			int port, enum nf_nat_manip_type___local) __ksym;
->  
->  static __always_inline void
->  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
-> @@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
->  
->  		/* snat */
->  		saddr.ip = bpf_get_prandom_u32();
-> -		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-> +		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
->  		/* dnat */
->  		daddr.ip = bpf_get_prandom_u32();
-> -		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-> +		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
->  
->  		ct_ins = bpf_ct_insert_entry(ct);
->  		if (ct_ins) {
-> -- 
-> 2.1.0
-> 
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
