@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CF06715B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91A16715B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjARH6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S229932AbjARH6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjARHxc (ORCPT
+        with ESMTP id S229653AbjARHxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 02:53:32 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86C439BB4;
-        Tue, 17 Jan 2023 23:28:28 -0800 (PST)
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1F039CC4;
+        Tue, 17 Jan 2023 23:28:32 -0800 (PST)
 Received: from toolbox.int.toradex.com ([213.55.225.137]) by
  mrelay.perfora.net (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0Lh8XB-1otzex3rKZ-00oSyE; Wed, 18 Jan 2023 08:28:17 +0100
+ 0M2bYp-1oPncX1ond-00sQx2; Wed, 18 Jan 2023 08:28:21 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-imx@nxp.com,
@@ -29,29 +29,29 @@ Cc:     linux-kernel@vger.kernel.org, linux-imx@nxp.com,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH v4 16/17] arm64: dts: freescale: apalis-imx8: fix reserved-memory node names
-Date:   Wed, 18 Jan 2023 08:26:54 +0100
-Message-Id: <20230118072656.18845-17-marcel@ziswiler.com>
+Subject: [PATCH v4 17/17] arm64: dts: freescale: apalis-imx8: enable vpu
+Date:   Wed, 18 Jan 2023 08:26:55 +0100
+Message-Id: <20230118072656.18845-18-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230118072656.18845-1-marcel@ziswiler.com>
 References: <20230118072656.18845-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:HmKRXVYH4yGPrupSIwZB9fowjSMc6Boy1FuMZBIZ7AjIstGAxks
- eznLkN13AxAMFDD2EFsIHMJdkphXtpE9jeuLLk+CaZa/2XYa18A8SSpnHd9vEEklBrkLX05
- VKvZV0BpR+a8ucqA1CGorJaI6I64BVGVEJJHsrR3d6/s+6wFDe4J5ckhYFxrUWxcJwiSrAw
- Q4AKn5XWxPK0gpoESgDdQ==
-UI-OutboundReport: notjunk:1;M01:P0:7G61kjY2w4g=;1SE0RQfTPa/5VNK7/96ZQ35HFG4
- DXFMcncfjNcS+yrlWJgA/Y0OZmtW6gZkG/CZriCBbpZa8Gz/2RdWVVz2XgpqZvmJ20DTPeE8c
- 3Kt4D1/gD1k8VRhDNam2m9k4MF+ftfq1tYjExTXLt54OoQAlDJqk5olAm/kdbaljWVWWA9i0f
- ee9QZXDjk4BVpDdo8C5nxJDKINIh3M9j6WR3dj4LUU1WwebkKFNnCVN8ZHQeA/Q/MBbd2z4Ox
- irlvswyv6pUad5hOCJjJSJeSLphKLQaOkumzcF9pzBFdLNDg30k7XtCha1uYlzLCIZkOVhmb2
- u10Db+DkMREOS6m8MaJgYcSUihr9FUhdueDKoiwPe6xcrwcSLKI0lzx5sVvyHK9021fYGTjGx
- xiYWVxQFIime+bGPnzRvELv8ISu/YfaUtzOyduiwqOrbGFtOtW2tuDFyx0JZwjOzCpkCidEsx
- P1ZL7fQN3ygi1rqdqWK6nfmqEgigvhkSXd5w0IOpP3FRHHpH966kOwjpJGnS1fz1nI51Kp7ns
- WZKZ/1gYAOcCOQ8wh+fkEVD/t2dWTDiX5PZ3AYkQtpAFRtSzMPreqWs1OlEp4FnHhKS4/Lcmu
- nc/MffddGSoQ6vAWAvUGGv32pdLW8YgrERKfJUTdc8kRWUTmPzexMZmexAqR1wiF5o1AQTsAg
- +DB22aiz5NOv/OfsCo2OjBkbYUCve78kxOPYEx7IrA==
+X-Provags-ID: V03:K1:5rAhW80Ovxy9KtsBhzm1WJlP0qfWqOKjQ/UtfptOMvek2i8I+I9
+ S4rZFXHOgtAkJOomr0+F2N8tnu/A9G63As5kRrtcH7knXT8GZPqYzwIZ2KLpo9fKMI/0XTz
+ ssRJj5KUPCr11ojphitOyZg8zlatnWt6gxdtdx6Qo4Ij6ZKLp0cbmpLj8XLDKgs4n7BtoYg
+ WGykQxxGpioaJWSt6rVaA==
+UI-OutboundReport: notjunk:1;M01:P0:KPqVSrklASc=;clesvU5X50K2jTXzZMTQUgrVhHw
+ kIeRlXZJJNd4//AHkhA5okE7v8dTZJQyb+ZSn+E3vsmlcL/mgov5n8wa6aqcNHBmcBdALrXZi
+ wPTzSZaD/iwCQvjJOphDttI9hkc4zq9pQykZtxbPmyHl5cUGQJhx5OtSMR1D9denNmmMA9VV2
+ 6jQD7k3Z5ESQO8vzC4StxDoheKF7WpS8c4VnL9dtsSVZjd2NdO3LeUuw/QlM53FbTp1fg0GRV
+ GV1zSzwXJB4TAi+1UfxHj4i5JFIciwOq7xHTVXvYweTnhKAie8o7P1zlWUNk0poQ0S18LlwZf
+ 1Jfo/jibA06xFlyszi0BoTXUP+qqbkDQWrrytzMWazKN5rRhdIO1sI3vQDo/RMW6kuA8DfBWL
+ GxsUeXTjhxWakdrBbXXi0NIKOIToRfbZQyXMWOxS5kQrsDfxCiiPPlvHAmn1ySADIETE0XBwR
+ cjR+AJYO+KLKcZGtYoUnHC3/RU8VMxmzSosrIdWO+gkcwKyyEVs6isQsAvLFyl7njksVuDCzl
+ s0cHn5nQwBypIQXy5tYTW41yq4ylwo+Rh5+nK6fel6/0UOY0AdfFnnABGhtaWDRZ0KcJMKryp
+ TDQks+qmC7bG4NyW94XdNi2/JHWFyl96iXUIeczOgXS+79ifjytQpXzuMyQNaQENcy7qE0vvA
+ AhWvXgQ8N5Ta2JXIaxllwpOzeUXGJB/dOzg36JFQnQ==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,67 +63,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Fix reserved-memory node names using dashes rather than underscores.
+Enable Video Processing Unit (VPU) decoder and encoder functionality.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 ---
 
 Changes in v4:
-- New patch fixing reserved-memory node names.
+- New patch enabling VPU functionality.
 
- arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi b/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
-index 70c00b92cb05..6217e0a48f96 100644
+index 6217e0a48f96..37c5fa20f0a4 100644
 --- a/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
-@@ -133,17 +133,17 @@ reserved-memory {
- 		#size-cells = <2>;
- 		ranges;
+@@ -781,7 +781,29 @@ &usdhc3 {
+ 	pinctrl-2 = <&pinctrl_usdhc3_200mhz>, <&pinctrl_sd1_cd>;
+ };
  
--		decoder_boot: decoder_boot@84000000 {
-+		decoder_boot: decoder-boot@84000000 {
- 			no-map;
- 			reg = <0 0x84000000 0 0x2000000>;
- 		};
+-/* TODO: Video Processing Unit (driver upstream but device tree part missing) */
++/* Video Processing Unit */
++&vpu {
++	compatible = "nxp,imx8qm-vpu";
++	status = "okay";
++};
++
++&vpu_core0 {
++	memory-region = <&decoder_boot>, <&decoder_rpc>;
++	reg = <0x2d080000 0x10000>;
++	status = "okay";
++};
++
++&vpu_core1 {
++	memory-region = <&encoder1_boot>, <&encoder1_rpc>;
++	reg = <0x2d090000 0x10000>;
++	status = "okay";
++};
++
++&vpu_core2 {
++	memory-region = <&encoder2_boot>, <&encoder2_rpc>;
++	reg = <0x2d0a0000 0x10000>;
++	status = "okay";
++};
  
--		encoder1_boot: encoder1_boot@86000000 {
-+		encoder1_boot: encoder1-boot@86000000 {
- 			no-map;
- 			reg = <0 0x86000000 0 0x200000>;
- 		};
- 
--		encoder2_boot: encoder2_boot@86200000 {
-+		encoder2_boot: encoder2-boot@86200000 {
- 			no-map;
- 			reg = <0 0x86200000 0 0x200000>;
- 		};
-@@ -170,7 +170,7 @@ vdevbuffer: vdevbuffer@90400000 {
- 			no-map;
- 		};
- 
--		decoder_rpc: decoder_rpc@92000000 {
-+		decoder_rpc: decoder-rpc@92000000 {
- 			no-map;
- 			reg = <0 0x92000000 0 0x200000>;
- 		};
-@@ -180,12 +180,12 @@ dsp_reserved: dsp@92400000 {
- 			reg = <0 0x92400000 0 0x2000000>;
- 		};
- 
--		encoder1_rpc: encoder1_rpc@94400000 {
-+		encoder1_rpc: encoder1-rpc@94400000 {
- 			no-map;
- 			reg = <0 0x94400000 0 0x700000>;
- 		};
- 
--		encoder2_rpc: encoder2_rpc@94b00000 {
-+		encoder2_rpc: encoder2-rpc@94b00000 {
- 			no-map;
- 			reg = <0 0x94b00000 0 0x700000>;
- 		};
+ &iomuxc {
+ 	pinctrl-names = "default";
 -- 
 2.35.1
 
