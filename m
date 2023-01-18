@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D03C67179C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6392267178E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjARJ00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S230157AbjARJYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjARJVP (ORCPT
+        with ESMTP id S230195AbjARJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:21:15 -0500
-Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767AF5D7CD
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:45:01 -0800 (PST)
-Received: from localhost (fx601.security-mail.net [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id 3632334997B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:44:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674031499;
-        bh=WwGy6LWSOQ5SJyonbI5rWpgW7QWdqYGjLuHllAVb+WE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=XPT4WogQDik/URvJgsuwrtwmhSY2pANuuVkORmEQUlhLX37Z1cd7xRgQBey+Pv5pU
-         9yi598lHQgToGSqkhxKmDJsPZzULYWdg49Dzy1GTJP/rYk92A1dAMNshy9vWRTIZGl
-         vhLlGfi1YPy9G7jZiQfuogY+E0gGx7oo7ijSAH+A=
-Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
- fx601.security-mail.net (Postfix) with ESMTP id F3DB03498FF; Wed, 18 Jan
- 2023 09:44:58 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx601.security-mail.net (Postfix) with ESMTPS id 3B5313498C4; Wed, 18 Jan
- 2023 09:44:58 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 12AC927E041F; Wed, 18 Jan 2023
- 09:44:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id EC84327E042C; Wed, 18 Jan 2023 09:44:57 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- BBmFW3appBD3; Wed, 18 Jan 2023 09:44:57 +0100 (CET)
-Received: from [127.0.0.1] (unknown [192.168.37.161]) by zimbra2.kalray.eu
- (Postfix) with ESMTPSA id A1AD727E041F; Wed, 18 Jan 2023 09:44:57 +0100
- (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <16215.63c7b18a.38895.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu EC84327E042C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674031498;
- bh=bf7v0SEN3SyB8aE/V6Wx1brZXEnyAC5SOTVF4J3ECRk=;
- h=Message-ID:Date:MIME-Version:To:From;
- b=cp5d2izr0T5HRQ4N44k37mgSB4M9E0YUAom1Et1CwYen/GyqLyQwR3+S4SmxXYo3s
- TieJh2yUSipzQl9kKYX5/ptw/IGSG7nudhWZ/hQDLdFiohbNSwXY7U9KbpWVpbMHNp
- 97ObM/Jis5Ri9iDLT7GJxeyv5SIBdP/HlAIin+vw=
-Message-ID: <59004ccf-4262-7acf-dfe5-3468000016c9@kalray.eu>
-Date:   Wed, 18 Jan 2023 09:44:57 +0100
+        Wed, 18 Jan 2023 04:21:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE0B5D929;
+        Wed, 18 Jan 2023 00:46:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D00CCB81BD9;
+        Wed, 18 Jan 2023 08:46:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED2FC433EF;
+        Wed, 18 Jan 2023 08:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674031566;
+        bh=BfVz+1XSSoBmIGSKdQBPSPKSsPjEBMB8GohAlfIZU4w=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=CdLuO4+Dv0QA+8RJr998SMrveSx9ciXPAx3TNhJIFKKiHNxerqnVOr4nGTbMOa+Ai
+         +szkBCXg+7OWDSvXfWpZ5ymTOavGOsageZjS/jWGPHCwdUS+t7Cr9uWuWmCXLJgBOk
+         iXD23AEVocndO07IgsLBXjeBlYLqOdMe2Qxjqd22kE16gQ2bjhrj0BCfk+8783biD2
+         ZHJk3PVNffThUgWLIvtJ4PzXzoeqGhrtyB9B4n/vNTNu9kR6RybS+NycYgTxbaOuDN
+         v4lof1LHIsMqv9HdJT9Quo39uM+aOty9ffimaVCEq6iPte7ivjPXrzdZzywsYt6mBq
+         D8QgqX8CmzoIQ==
+Date:   Wed, 18 Jan 2023 09:46:07 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] HID: uclogic: Add support for XP-PEN Deco PRO SW
+ and MW
+In-Reply-To: <20221226125454.16106-1-jose.exposito89@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2301180945190.1734@cbobk.fhfr.pm>
+References: <20221226125454.16106-1-jose.exposito89@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 01/25] Documentation: kvx: Add basic documentation
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <20230103164359.24347-2-ysionneau@kalray.eu> <874jt7fqxt.fsf@meer.lwn.net>
-Content-Language: en-us
-From:   Yann Sionneau <ysionneau@kalray.eu>
-In-Reply-To: <874jt7fqxt.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,42 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 18:50, Jonathan Corbet wrote:
+On Mon, 26 Dec 2022, José Expósito wrote:
 
-> Yann Sionneau <ysionneau@kalray.eu> writes:
->
->> Add some documentation for kvx arch and its Linux port.
->>
->> CC: Jonathan Corbet <corbet@lwn.net>
->> CC: linux-doc@vger.kernel.org
->> CC: linux-kernel@vger.kernel.org
->> Co-developed-by: Clement Leger <clement.leger@bootlin.com>
->> Signed-off-by: Clement Leger <clement.leger@bootlin.com>
->> Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
->> Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
->> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
->> ---
->>   Documentation/kvx/kvx-exceptions.txt | 246 ++++++++++++++++++++++++
->>   Documentation/kvx/kvx-iommu.txt      | 183 ++++++++++++++++++
->>   Documentation/kvx/kvx-mmu.txt        | 272 +++++++++++++++++++++++++++
->>   Documentation/kvx/kvx-smp.txt        |  36 ++++
->>   Documentation/kvx/kvx.txt            | 268 ++++++++++++++++++++++++++
->>   5 files changed, 1005 insertions(+)
->>   create mode 100644 Documentation/kvx/kvx-exceptions.txt
->>   create mode 100644 Documentation/kvx/kvx-iommu.txt
->>   create mode 100644 Documentation/kvx/kvx-mmu.txt
->>   create mode 100644 Documentation/kvx/kvx-smp.txt
->>   create mode 100644 Documentation/kvx/kvx.txt
-> Please write this documentation in the RST format (you're 95% of the way
-> there now) and incorporate into the kernel docs build.
+> Hi!
+> 
+> This series add support for the XP-PEN Deco PRO SW and MW drawing
+> tablets.
+> 
+> Both tablets are similar, the only difference between them is their
+> size and their IDs. I own one of them and Andreas helped me test the
+> other one, so thanks a lot!
+> 
+> Please note that this series might cause conflicts with [1], but they
+> should be really easy to fix/I can rebase once it is merged.
+> 
+> About the patches:
+> 
+>  - The first patch introduces a quirks to be able to fix the frame type
+>    reported by these devices.
+>  - The second patch adds another quirks to know whether a tablet has
+>    battery or not. I didn't find any difference in the information
+>    reported by the firmware nor in the Windows driver to obtain this
+>    information, so I added a manual flag.
+>  - The fourth patch adds a generic mechanism to schedule jobs when an
+>    event is received, in this case, to reconnect the tablet.
+>  - The last two patches add support for the tablets.
+> 
+> Best wishes,
+> José Expósito
+> 
+> [1] [PATCH] HID: uclogic: Add support for XP-PEN Deco 01 V2
+>     https://lore.kernel.org/linux-input/20221226123456.14822-1-jose.exposito89@gmail.com/T/
 
-Ack, it will be part of the V2, thanks for the review.
+I have queued this in for-6.3/uclogic branch. The conflict is a nobrainer, 
+so that shouldn't be an issue at all.
+
+Thanks,
 
 -- 
-
-Yann
-
-
-
-
+Jiri Kosina
+SUSE Labs
 
