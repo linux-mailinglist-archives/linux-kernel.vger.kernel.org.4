@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F360E672179
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02294672227
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjARPhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        id S230017AbjARPwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbjARPhg (ORCPT
+        with ESMTP id S230479AbjARPve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:37:36 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27693B3C5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:37:33 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso1816583wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9MUTzLHzBmFsx6voDKaBAKveK68NwSUI+xI02exchoI=;
-        b=vL8HdVo204ElRdFkg75ULWXDUJz5E8sZk8BZrq3OHoFsHZW3i4ljANsFIYNT0ZFDPr
-         Ok0kHbRrWX9mBxnodxf0d2zz/uQUt9tNhkBYSy4ZM7flZv4bmd+L93CPToC4VqNVlLPG
-         Qnd8yk9UoKu59jSlDDL9iGIPUnW42P7AtV6czYp/Hmn33GCyCBg5c2pSaxgHKF/XULUu
-         7ECJ/9t0YNUYrtF3ifFGuVd3b5OAneNKwkg8hvHRAgNWX9qUbpsqt1D7P/NTh8C6pVUE
-         x1Y5W8RdFp+umRxNQ8+8oWnHGbv8ReLMF/KKYdqgxLHW9atxA5sGaf3Ie5XrrdWdz1UF
-         Ng5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MUTzLHzBmFsx6voDKaBAKveK68NwSUI+xI02exchoI=;
-        b=tS6HTLK/daZONZgzc3jI2wBuh66BSRgUGBFiDIDD5wm/F0cV5jGL71HJ9+RshuZjPg
-         oXX+eR9dxmw5LXJJwHs+Bpl66111Ti86e6tYchxFJPonEiUKrCUGi/bLOXtTOPMjIDib
-         lmRwuYHUWNcsWnY//1N2u8JOSdvU2mXrW3tSVdj9IAjrkfJUqwfkN6Y/7XI/bCf7k4VX
-         Ys0AzgQ8J6i30UC+38riI9DhNvE5L2Gibp7bzprR1q+q1GcUAhrAPvJ7dj9qwM1cUXBP
-         4d7y/0hqbBxC2xK8xINx3WxavEeTcOXHTDd2+8dFh2SvI/dU8gfxpdVh8nMgf16i7ZHr
-         16yw==
-X-Gm-Message-State: AFqh2kp9quIRVaF6kTaVZyXmMuT1FHIT30dgfkdvwfdOp5+ThOekqa1j
-        eeQqUMx/slR/W6dNdHAKsPINIA==
-X-Google-Smtp-Source: AMrXdXuDqlWhXHYAvFp3Xph5TSdx8V0BuxL3WrSKE2aqK4/6KM0lTlBDNXeOeWuW16esJh9MGXJQjg==
-X-Received: by 2002:a05:600c:1c96:b0:3d9:e9a2:eea3 with SMTP id k22-20020a05600c1c9600b003d9e9a2eea3mr6977425wms.37.1674056252297;
-        Wed, 18 Jan 2023 07:37:32 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003cf894dbc4fsm2349091wmq.25.2023.01.18.07.37.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 07:37:31 -0800 (PST)
-Message-ID: <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
-Date:   Wed, 18 Jan 2023 16:37:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
- device on SDM845
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
-        stable@vger.kernel.org
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 18 Jan 2023 10:51:34 -0500
+X-Greylist: delayed 313 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 07:49:46 PST
+Received: from cnc.isely.net (cnc.isely.net [192.69.181.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D445233;
+        Wed, 18 Jan 2023 07:49:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=isely.net; s=deb;
+        t=1674056364; bh=PUCorUQZC6FeLowATjHfocaMvZBn2st6AioBFC89WJI=;
+        l=1781; h=Date:From:Reply-To:To:cc:Subject:In-Reply-To:References;
+        b=BUZEbEqT1HJhDjTohgOQaLFLfu6tNIuWeAx8CtryC0Y4PiR7So2vdM9viJgIy6VTu
+         BNCQ3MzQRyYgTk0FJIzX2KDaP8UdVymGBQ9l7zrjkAvysxDhtZBdzMNkxu9bxLQJrd
+         Z2yjvxMGD+pUaO1AIJ8oNIlLgBHznaWw+G0ffiO0FHt1WSjikF/nzG+/OtGrF
+Original-Reply-To: Mike Isely at pobox <isely@pobox.com>
+Original-Subject: Re: [PATCH] media: pvrusb2: fix DVB_CORE dependency
+Original-From: Mike Isely <isely@isely.net>
+Original-cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+  Lecopzer Chen <lecopzer.chen@mediatek.com>,
+  Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+  Arnd Bergmann <arnd@arndb.de>,
+  "=?ISO-8859-2?Q?=A3ukasz_Stelmach?=" <l.stelmach@samsung.com>,
+  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+  Jacopo Mondi <jacopo@jmondi.org>,
+  Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+  linux-media@vger.kernel.org,
+  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+  Mike Isely at pobox <isely@pobox.com>
+Received: from ts3-dock1.isely.net (ts3-dock1.isely.net [::ffff:192.168.23.13])
+  (AUTH: PLAIN isely, TLS: TLS1.3,256bits,ECDHE_RSA_AES_256_GCM_SHA384)
+  by cnc.isely.net with ESMTPSA
+  id 000000000008033F.0000000063C812AC.00006E06; Wed, 18 Jan 2023 09:39:24 -0600
+Date:   Wed, 18 Jan 2023 09:39:24 -0600 (CST)
+From:   Mike Isely <isely@isely.net>
+Reply-To: Mike Isely at pobox <isely@pobox.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "=?ISO-8859-2?Q?=A3ukasz_Stelmach?=" <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Isely at pobox <isely@pobox.com>
+Subject: Re: [PATCH] media: pvrusb2: fix DVB_CORE dependency
+In-Reply-To: <20230117171055.2714621-1-arnd@kernel.org>
+Message-ID: <f045d0c6-0043-8feb-a423-954ce381396d@isely.net>
+References: <20230117171055.2714621-1-arnd@kernel.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
-> The platforms based on SDM845 SoC locks the access to EDAC registers in the
-> bootloader. So probing the EDAC driver will result in a crash. Hence,
-> disable the creation of EDAC platform device on all SDM845 devices.
+
+That doesn't seem right.  The pvrusb2 module should reference that 
+symbol like any other.  There is no special treatment of it within 
+pvrusb2 - so why is that requiring special treatment here?
+
+Is it possible that dvb_module_probe and dvb_module_release are not 
+exported?  (Or that there are two corresponding different exported 
+symbol names that pvrusb2 should be using instead?)
+
+  -Mike
+
+On Tue, 17 Jan 2023, Arnd Bergmann wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The issue has been observed on Lenovo Yoga C630 and DB845c.
+> Now that DVB_CORE can be a loadable module, pvrusb2 can run into
+> a link error:
 > 
-> Cc: <stable@vger.kernel.org> # 5.10
-> Reported-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ld.lld: error: undefined symbol: dvb_module_probe
+> >>> referenced by pvrusb2-devattr.c
+> >>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_lgdt3306a_attach) in archive vmlinux.a
+> ld.lld: error: undefined symbol: dvb_module_release
+> >>> referenced by pvrusb2-devattr.c
+> >>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_dual_fe_attach) in archive vmlinux.a
+> 
+> Refine the Kconfig dependencies to avoid this case.
+> 
+> Fixes: 7655c342dbc4 ("media: Kconfig: Make DVB_CORE=m possible when MEDIA_SUPPORT=y")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  drivers/media/usb/pvrusb2/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> index 7b7c5a38bac6..8d840702df50 100644
-> --- a/drivers/soc/qcom/llcc-qcom.c
-> +++ b/drivers/soc/qcom/llcc-qcom.c
-> @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->  
->  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
->  
-> -	llcc_edac = platform_device_register_data(&pdev->dev,
-> -					"qcom_llcc_edac", -1, drv_data,
-> -					sizeof(*drv_data));
-> -	if (IS_ERR(llcc_edac))
-> -		dev_err(dev, "Failed to register llcc edac driver\n");
-> +	/*
-> +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
-> +	 * in bootloader. So probing the EDAC driver will result in a crash.
-> +	 * Hence, disable the creation of EDAC platform device on SDM845.
-> +	 */
-> +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
-
-Don't spread of_device_is_compatible() in driver code. You have driver
-data for this.
-
-Best regards,
-Krzysztof
-
+> diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
+> index f2b64e49c5a2..e02a25d2d029 100644
+> --- a/drivers/media/usb/pvrusb2/Kconfig
+> +++ b/drivers/media/usb/pvrusb2/Kconfig
+> @@ -37,6 +37,7 @@ config VIDEO_PVRUSB2_DVB
+>  	bool "pvrusb2 ATSC/DVB support"
+>  	default y
+>  	depends on VIDEO_PVRUSB2 && DVB_CORE
+> +	depends on VIDEO_PVRUSB2=m || DVB_CORE=y
+>  	select DVB_LGDT330X if MEDIA_SUBDRV_AUTOSELECT
+>  	select DVB_S5H1409 if MEDIA_SUBDRV_AUTOSELECT
+>  	select DVB_S5H1411 if MEDIA_SUBDRV_AUTOSELECT
+> 
