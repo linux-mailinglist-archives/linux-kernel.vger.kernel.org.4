@@ -2,181 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80C0671DA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577F8671DA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjARNYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S230035AbjARNYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjARNXs (ORCPT
+        with ESMTP id S229605AbjARNYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:23:48 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E33E11E80
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:50:57 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id j34-20020a05600c1c2200b003da1b054057so1319007wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:50:57 -0800 (PST)
+        Wed, 18 Jan 2023 08:24:00 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EA839CE8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:51:19 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id 3so35580944vsq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:51:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=h6UofrQemZ4+eX1QPPo3KJD1icPLPcDXcolqW+JUoFQ=;
-        b=Cuq7EjnurKOrCWygPW2yM9RPlSaKj8NbC5g3CcHISAxiBoQTfL0TxFoby3SalLb0en
-         xdJ1dNFPlaVmAyovwRg26cBcjDQX+IK98f1YU/m5Jhq6HmeXtkK5ElIh83pdeHU8UInm
-         EIjJw1DMRk3dEm0iTYdO4H/KyEUutsz/7yGkO8u+sK9PdQCMPS8/DKdIfdrC9E2HcbRA
-         9CtuZ0M0R5tuR6HWeak7YE/I3dX2k1WfkNeOclyM6G11fTTMkDmehN9Otic4mn5uD+r+
-         uG5Qg7VIT0C4pMH79BAOqveRsMP6E1NKDde0LCcfvQVJ2wbAZ2FAvLIMZRnAyPhWug4C
-         6kcA==
+        bh=rQ7ZyW+SMgnOs4ZSUaGsgK0nMgf/0oqpbtKXM5Uvnyg=;
+        b=S5ZrlQMovxgQ6/5BqwiZs0z19HziLVNewPF65Ayj3b+WxASGC5UwcS1nmQLduJBF0J
+         sbm2yxGr/GEFGvF+veJ1JFBLTvwN43OWkgJ9wGJFC2n/KbSmarcqvmgkIhXUwgYzSSLq
+         7Az8gd20TTV6OXZRuNjElLrcgyzWYV282ABpeB3CdPnWMIV5nbgNI98ybR2sS7bpJq7X
+         37v8aCRFWWvebUgzwm5aGl/GkRyZ7YqOrjFu29DcSISRt2X9w+HD5rxE+PmufG+rLbiz
+         ol+BkqP7QMmbGxfQSFy9THTjSNSP6if8p/iuQozpNcZStpb8NWGYSTOJYFK1u7/Yv9/l
+         2aCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6UofrQemZ4+eX1QPPo3KJD1icPLPcDXcolqW+JUoFQ=;
-        b=5MRg3FPDJm4GoNRetbZNHkucoQfA0sqWeySz/jy97uqBaqb2NrJqUm6caURZXyqm7X
-         pIviwSeHyyJS+Sks2bL0Gb2wKE51KO2FQ9wfyvKmWxwhuqjIONn6asuWL98SHvw0Vfzo
-         Igm4XXfaOW8k2RoJspqnUN5k9VSHwy0fkRR3Yue2RyREldrBsYolp4wO4YwVLKkANcQD
-         kp8FyR88TC4Uh7BWKJeMVUlWYtN689tNmsAgSqzNUS//IqoFgHcXEveJ/RqgmJV+clrL
-         KMo6DaY7oPGFmyfFmMwOAYplUa70fC6CtuHINv4nuI50V2ab9aas6R046O3Q9IaLl5Js
-         Aihg==
-X-Gm-Message-State: AFqh2kotpd69BwrH8QjeIYfZlUxv8FsN0Viz6E2vZl/YMwjdNJBJtrgM
-        RmGb97kXqep2PrC6StnjWp9Wsw==
-X-Google-Smtp-Source: AMrXdXtQ0z5537FCj9ntjVW+joNiKI3tv3JZd/zlO+3v+/CSF+vqDDmlfBlrEksX79ozb6+vGn0Jiw==
-X-Received: by 2002:a05:600c:3d10:b0:3da:e4c:2a3c with SMTP id bh16-20020a05600c3d1000b003da0e4c2a3cmr6874947wmb.41.1674046255745;
-        Wed, 18 Jan 2023 04:50:55 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id k34-20020a05600c1ca200b003cfd4e6400csm2114848wms.19.2023.01.18.04.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 04:50:55 -0800 (PST)
-Message-ID: <8a704b63-9ef1-ed4d-3ee5-35ebfd2a2318@linaro.org>
-Date:   Wed, 18 Jan 2023 12:50:54 +0000
+        bh=rQ7ZyW+SMgnOs4ZSUaGsgK0nMgf/0oqpbtKXM5Uvnyg=;
+        b=QRncmFBGHThtDnNcfRcHOREJ/iy5FnB7FMYxkSswZK0gC/36/SuvHWecQr7kclR9zs
+         TREnkikDuLRf48SE8WPwv5jnzvsVxvGSKSuvlJ6K2GRc8DZTmJlUZc8xgzIeMnTuF2Ao
+         jMv4cOzu9pHDHOz34RsGBzOmVaGYVooy6eaFmc8BK/9xPifR1FC9Sf15UZhRaxdKvLmg
+         9EtIe5bp91+dFKRCqkCeTEw4Icv0A7CtzPDBv3t9VHhVucXeJnuuHAks9KFFEGjF0aXr
+         ZtI96Cf3MKUxa3BocqnTPWf8z+HAk0aQI3UCVcpizQOXUTy72ZzKOgP0AjM2P37i1NSQ
+         H5Pg==
+X-Gm-Message-State: AFqh2krAYZp8KHtPCI8W/h8N20zUir7xEB0ggj14DPLMVgWmOHpvyF+q
+        fF6fVbwkkdJCI6/xCjDXj4akqY92RbCPHa29Bxft8w==
+X-Google-Smtp-Source: AMrXdXtc6tQN3SNXacW8wfHMgdsbBjfVruZT16ptflt+enjnFrWWaSpTvbCEDNrS9g2P9MOurE8r4zyDaXRIhn5/yWs=
+X-Received: by 2002:a67:c387:0:b0:3d2:3577:2d05 with SMTP id
+ s7-20020a67c387000000b003d235772d05mr844832vsj.9.1674046278314; Wed, 18 Jan
+ 2023 04:51:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
- <Y8fC/GCHfENQmBNC@gerhold.net>
- <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
-In-Reply-To: <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229160045.535778-1-brgl@bgdev.pl> <20221229160045.535778-3-brgl@bgdev.pl>
+ <Y8bvf9k2K62EscEo@ninjato>
+In-Reply-To: <Y8bvf9k2K62EscEo@ninjato>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 18 Jan 2023 13:51:07 +0100
+Message-ID: <CAMRc=MdbncCAH5ESdpkU+QoFQ16od1QdLMi1b_q4MuO5KYiemA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] i2c: dev: don't allow user-space to deadlock the kernel
+To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 11:50, Bryan O'Donoghue wrote:
->>> +                clocks = <&gcc GCC_MDSS_MDP_CLK>,
->>> +                     <&gcc GCC_MDSS_AHB_CLK>,
->>> +                     <&gcc GCC_MDSS_AXI_CLK>,
->>> +                     <&gcc GCC_MDSS_BYTE1_CLK>,
->>> +                     <&gcc GCC_MDSS_PCLK1_CLK>,
->>> +                     <&gcc GCC_MDSS_ESC1_CLK>;
->>> +                clock-names = "mdp_core",
->>> +                          "iface",
->>> +                          "bus",
->>> +                          "byte",
->>> +                          "pixel",
->>> +                          "core";
->>> +                assigned-clocks = <&gcc BYTE1_CLK_SRC>,
->>> +                          <&gcc PCLK1_CLK_SRC>;
->>> +                assigned-clock-parents = <&dsi_phy1 0>,
->>> +                             <&dsi_phy1 1>;
->>
->> Does this work? Confusingly, BYTE1/PCLK1_CLK_SRC can only have dsi0pll
->> as parent in gcc-msm8939 and not the dsi1pll. <&dsi_phy1 0/1> is not a
->> valid parent for those clocks.
-> 
-> No you're right, its all wrong. I will correct it
-> 
->          mdss_dsi0: qcom,mdss_dsi@1a98000 {
->                  compatible = "qcom,mdss-dsi-ctrl";
->                  label = "MDSS DSI CTRL->0";
->                  cell-index = <0>;
->                  reg = <0x1a98000 0x25c>,
->                        <0x1a98500 0x2b0>,
->                        <0x193e000 0x30>;
->                  reg-names = "dsi_ctrl", "dsi_phy", "mmss_misc_phys";
->                  qcom,mdss-fb-map = <&mdss_fb0>;
->                  qcom,mdss-mdp = <&mdss_mdp>;
->                  gdsc-supply = <&gdsc_mdss>;
->                  vdda-supply = <&pm8916_l2>;
->                  vdd-supply = <&pm8916_l17>;
->                  vddio-supply = <&pm8916_l6>;
->                  clocks = <&clock_gcc clk_gcc_mdss_mdp_clk>,
->                           <&clock_gcc clk_gcc_mdss_ahb_clk>,
->                           <&clock_gcc clk_gcc_mdss_axi_clk>,
->                           <&clock_gcc_mdss clk_gcc_mdss_byte0_clk>,
->                           <&clock_gcc_mdss clk_gcc_mdss_pclk0_clk>,
->                           <&clock_gcc clk_gcc_mdss_esc0_clk>;
+On Tue, Jan 17, 2023 at 7:57 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> Hi Bartosz,
+>
+> > If we open an i2c character device and then unbind the underlying i2c
+> > adapter (either by unbinding it manually via sysfs or - for a real-life
+> > example - when unplugging a USB device with an i2c adaper), the kernel
+> > thread calling i2c_del_adapter() will become blocked waiting for the
+> > completion that only completes once all references to the character
+> > device get dropped.
+> >
+> > In order to fix that, we introduce a couple changes. They need to be
+> > part of a single commit in order to preserve bisectability. First, drop
+> > the dev_release completion. That removes the risk of a deadlock but
+> > we now need to protect the character device structures against NULL
+> > pointer dereferences. To that end introduce an rw semaphore. It will
+> > protect the dummy i2c_client structure against dropping the adapter from
+> > under it. It will be taken for reading by all file_operations callbacks
+> > and for writing by the notifier's unbind handler. This way we don't
+> > prohibit the syscalls that don't get in each other's way from running
+> > concurrently but the adapter will not be unbound before all syscalls
+> > return.
+> >
+> > Finally: upon being notified about an unbind event for the i2c adapter,
+> > we take the lock for writing and set the adapter pointer in the character
+> > device's structure to NULL. This "numbs down" the device - it still exists
+> > but is no longer functional. Meanwhile every syscall callback checks that
+> > pointer after taking the lock but before executing any code that requires
+> > it. If it's NULL, we return an error to user-space.
+> >
+> > This way we can safely open an i2c device from user-space, unbind the
+> > device without triggering a deadlock and any subsequent system-call for
+> > the file descriptor associated with the removed adapter will gracefully
+> > fail.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> First of all, thank you for tackling this problem. It was long overdue
+> and I really appreciate that you took the initiative to get it solved.
+>
+> Here are some review comments already. I'd like to do some more testing.
+> So far, everything works nicely. Also, I'd like to invite more people to
+> have a look at this code. We really don't want to have a regression
+> here, so more eyes are very welcome.
+>
+>
+> > @@ -1713,25 +1715,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+> >
+> >       i2c_host_notify_irq_teardown(adap);
+> >
+> > -     /* wait until all references to the device are gone
+> > -      *
+> > -      * FIXME: This is old code and should ideally be replaced by an
+> > -      * alternative which results in decoupling the lifetime of the struct
+> > -      * device from the i2c_adapter, like spi or netdev do. Any solution
+> > -      * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+>
+> Have you done this? Debugging with DEBUG_KOBJECT_RELEASE enabled?
+>
 
-Sorry what am I saying that's the wrong dsiX
+Yes, I ran a simple test script with this option enabled - nothing
+suspicious reported.
 
-Here's downstream - byte1, plck1, esc1 exist
+> > -      */
+> > -     init_completion(&adap->dev_released);
+> >       device_unregister(&adap->dev);
+> > -     wait_for_completion(&adap->dev_released);
+>
+> So, this is basically the key change. I think you handled the userspace
+> part via i2c-dev well. I don't have proof yet, but my gut feeling
+> wonders if this is complete. Aren't there maybe sysfs-references as
+> well. I need to check.
+>
+> > -
+> > -     /* free bus id */
+> > -     mutex_lock(&core_lock);
+> > -     idr_remove(&i2c_adapter_idr, adap->nr);
+> > -     mutex_unlock(&core_lock);
+> > -
+> > -     /* Clear the device structure in case this adapter is ever going to be
+> > -        added again */
+> > -     memset(&adap->dev, 0, sizeof(adap->dev));
+>
+> Any reason you didn't add this to release function above? Reading the
+> introducing commit, the old drivers needings this still exist IMO.
+> (Yes, they should be converted to use the i2c-mux subsystem, but I don't
+> think someone will do this)
+>
 
-         mdss_dsi1: qcom,mdss_dsi@1aa0000 {
-                 compatible = "qcom,mdss-dsi-ctrl";
-                 label = "MDSS DSI CTRL->1";
-                 cell-index = <1>;
-                 reg = <0x1aa0000 0x25c>,
-                       <0x1aa0500 0x2b0>,
-                       <0x193e000 0x30>;
-                 reg-names = "dsi_ctrl", "dsi_phy", "mmss_misc_phys";
-                 qcom,mdss-fb-map = <&mdss_fb0>;
-                 qcom,mdss-mdp = <&mdss_mdp>;
-                 gdsc-supply = <&gdsc_mdss>;
-                 vdda-supply = <&pm8916_l2>;
-                 vdd-supply = <&pm8916_l17>;
-                 vddio-supply = <&pm8916_l6>;
-                 clocks = <&clock_gcc clk_gcc_mdss_mdp_clk>,
-                          <&clock_gcc clk_gcc_mdss_ahb_clk>,
-                          <&clock_gcc clk_gcc_mdss_axi_clk>,
-                          <&clock_gcc_mdss clk_gcc_mdss_byte1_clk>,
-                          <&clock_gcc_mdss clk_gcc_mdss_pclk1_clk>,
-                          <&clock_gcc clk_gcc_mdss_esc1_clk>;
-                 clock-names = "mdp_core_clk", "iface_clk", "bus_clk",
-                                 "byte_clk", "pixel_clk", "core_clk";
+Good catch, added it back.
 
+> > @@ -44,8 +45,14 @@ struct i2c_dev {
+> >       struct i2c_adapter *adap;
+> >       struct device dev;
+> >       struct cdev cdev;
+> > +     struct rw_semaphore sem;
+>
+> I'd like to name it 'rwsem' so it is always super-clear what it is.
+>
+> >  };
+> >
+> > +static inline struct i2c_dev *to_i2c_dev(struct inode *ino)
+>
+> I'd also prefer a more specific 'inode_to_i2c_dev' function name.
+> Personally, I'd also name the argument 'inode' but I'll leave that to
+> you.
+>
+> > +{
+> > +     return container_of(ino->i_cdev, struct i2c_dev, cdev);
+> > +}
+>
+> ...
+>
+> Doesn't the function 'name_show()' also need protection? It dereferences
+> i2c_dev->adap.
+>
 
-Parent clock is gpll0a but they waggle different rcgr addresses
+Another good catch.
 
-static struct clk_rcg2 byte0_clk_src = {
-         .cmd_rcgr = 0x4d044,    <- here
-         .hid_width = 5,
-         .parent_map = gcc_xo_gpll0a_dsibyte_map,
-         .clkr.hw.init = &(struct clk_init_data){
-                 .name = "byte0_clk_src",
+> So much for now,
+>
+>    Wolfram
+>
 
-static struct clk_rcg2 byte1_clk_src = {
-         .cmd_rcgr = 0x4d0b0,    <- and here
-         .hid_width = 5,
-         .parent_map = gcc_xo_gpll0a_dsibyte_map,
-         .clkr.hw.init = &(struct clk_init_data){
-                 .name = "byte1_clk_src",
+Thanks, will send a v2 shortly.
 
-It *should* work even with the wrong name but, I will send a GCC update 
-to address the naming, which looks wrong.
-
----
-bod
+Bart
