@@ -2,181 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D57672B23
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11849672B26
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjARWNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:13:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S230034AbjARWOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjARWM6 (ORCPT
+        with ESMTP id S229468AbjARWOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:12:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D903654ED
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:12:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674079930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MspJ78t8fpxKGkTfcthNkvOr56UzNjzkTKTIZByHk64=;
-        b=Be/be34c6o0TtDWuezxnrvwOsU4VOuTutbU3Ek/Co/+PmYpm8yq3Wjdlo+FyfBOm7WhCpu
-        pOBsok4NanqybW4OZP8Yk9ZiwyjHxgPYBnxJXXyxxaaubLyxSFqy3LSs7csc6rkiVT4+6j
-        /wUmWi4c0Ztr3/yakFr90TKJn7Bs7R4=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-512-RvtsJ5GzMWKQibb-RoW7ZQ-1; Wed, 18 Jan 2023 17:12:09 -0500
-X-MC-Unique: RvtsJ5GzMWKQibb-RoW7ZQ-1
-Received: by mail-qv1-f71.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so70140qvb.20
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:12:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MspJ78t8fpxKGkTfcthNkvOr56UzNjzkTKTIZByHk64=;
-        b=edEeve482TAOejGLJaHVNkdb1HD5xRbVxoSCxE4l9ik7BYCXsrD6MnV5XZp3EPMC/g
-         ututFDGxFczay3mg9WCyoUjcX6IxMa12LZDmssIoSz0NgGhgiLzuxavvgXQPBgxHIl8a
-         jeGV75FrzFxqHbp4bpxUqFZbqYgpOWqOPP3J2P7AtssjnJq9jCbdMW8+EeugUkDuJO4V
-         lStbfhC8qbkIoNOqIvMO9TwF/8y5Tun8WM+68OX2QUTp8Iz0j6unmy8n/4OBQfhmn++s
-         NkyOx4GMtK5iejKlVBit37XIeUusWIWBTO2jR93uR/NFM1TIacBATc8COWnZ1acjFve7
-         /M9w==
-X-Gm-Message-State: AFqh2kopBrTmbAMW0QTl0L4eaaMUj6Vsm964z2Tmc5v535Jx2xCH+f2L
-        IIMyDycchaJ5S2clim7rxLbeswfaXcE5G/2/MF5+lQZWWJJMsPu9lEUcMOROBQlV8ld7adstWxR
-        AJMlpT/c4F8nuRktBf5BCVicf
-X-Received: by 2002:ac8:4696:0:b0:3b6:3334:5b95 with SMTP id g22-20020ac84696000000b003b633345b95mr10187267qto.11.1674079928305;
-        Wed, 18 Jan 2023 14:12:08 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtqYoS7t97z3YRqQ/yIG2PkokwFud7oGhOXmiSrF/oiJiOgqIp1lh3R8UW5pGPmzBq5qufe2w==
-X-Received: by 2002:ac8:4696:0:b0:3b6:3334:5b95 with SMTP id g22-20020ac84696000000b003b633345b95mr10187245qto.11.1674079928003;
-        Wed, 18 Jan 2023 14:12:08 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id z24-20020ac875d8000000b003b68c7aeebfsm342908qtq.3.2023.01.18.14.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 14:12:07 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:12:04 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 0/4] Implement IOCTL to get and/or the clear info
- about PTEs
-Message-ID: <Y8hutCGec6je5toG@x1n>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
+        Wed, 18 Jan 2023 17:14:05 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FD864682;
+        Wed, 18 Jan 2023 14:14:02 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id CB2F818837A5;
+        Wed, 18 Jan 2023 22:14:00 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id BAF2B25003AB;
+        Wed, 18 Jan 2023 22:14:00 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id A73C791201E4; Wed, 18 Jan 2023 22:14:00 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230109064519.3555250-1-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Wed, 18 Jan 2023 23:14:00 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [RFC PATCH net-next 1/5] net: bridge: add dynamic flag to
+ switchdev notifier
+In-Reply-To: <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
+References: <20230117185714.3058453-1-netdev@kapio-technology.com>
+ <20230117185714.3058453-2-netdev@kapio-technology.com>
+ <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <a3bba3eb856a00b5e5e0c1e2ffe8749a@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 11:45:15AM +0500, Muhammad Usama Anjum wrote:
-> *Changes in v7:*
-> - Add uffd wp async
-> - Update the IOCTL to use uffd under the hood instead of soft-dirty
->   flags
+On 2023-01-18 00:08, Vladimir Oltean wrote:
+> On Tue, Jan 17, 2023 at 07:57:10PM +0100, Hans J. Schultz wrote:
+>> To be able to add dynamic FDB entries to drivers from userspace, the
+>> dynamic flag must be added when sending RTM_NEWNEIGH events down.
+>> 
+>> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+>> ---
+>>  include/net/switchdev.h   | 1 +
+>>  net/bridge/br_switchdev.c | 1 +
+>>  2 files changed, 2 insertions(+)
+>> 
+>> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+>> index ca0312b78294..aaf918d4ba67 100644
+>> --- a/include/net/switchdev.h
+>> +++ b/include/net/switchdev.h
+>> @@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
+>>  	u8 added_by_user:1,
+>>  	   is_local:1,
+>>  	   locked:1,
+>> +	   is_dyn:1,
+>>  	   offloaded:1;
+>>  };
+>> 
+>> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+>> index 7eb6fd5bb917..60c05a00a1df 100644
+>> --- a/net/bridge/br_switchdev.c
+>> +++ b/net/bridge/br_switchdev.c
+>> @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct 
+>> net_bridge *br,
+>>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+>> +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
 > 
-> Stop using the soft-dirty flags for finding which pages have been
-> written to. It is too delicate and wrong as it shows more soft-dirty
-> pages than the actual soft-dirty pages. There is no interest in
-> correcting it [A][B] as this is how the feature was written years ago.
-> It shouldn't be updated to changed behaviour. Peter Xu has suggested
-> using the async version of the UFFD WP [C] as it is based inherently
-> on the PTEs.
+> Why reverse logic? Why not just name this "is_static" and leave any
+> further interpretations up to the consumer?
 > 
-> So in this patch series, I've added a new mode to the UFFD which is
-> asynchronous version of the write protect. When this variant of the
-> UFFD WP is used, the page faults are resolved automatically by the
-> kernel. The pages which have been written-to can be found by reading
-> pagemap file (!PM_UFFD_WP). This feature can be used successfully to
-> find which pages have been written to from the time the pages were
-> write protected. This works just like the soft-dirty flag without
-> showing any extra pages which aren't soft-dirty in reality.
-> 
-> [A] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
-> [B] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
-> [C] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
-> 
-> *Changes in v6:*
-> - Updated the interface and made cosmetic changes
-> 
-> *Cover Letter in v5:*
-> Hello,
 
-Please consider either drop the cover letter below this point or rephrase,
-otherwise many of them are not true anymore and it can confuse the
-reviewers.
+My reasoning for this is that the common case is to have static entries, 
+thus is_dyn=false, so whenever someone uses a 
+switchdev_notifier_fdb_info struct the common case does not need to be 
+entered.
+Otherwise it might also break something when someone uses this struct 
+and if it was 'is_static' and they forget to code is_static=true they 
+will get dynamic entries without wanting it and it can be hard to find 
+such an error.
 
-I have a few high level comments/questions here, please bare with me if any
-of them are already discussed by others in the old versions; I'd be happy
-to read them when there's a pointer to the relevant answers.
-
-Firstly, doc update is more than welcomed to explain the new interface
-first (before throwing the code..).  That can be done in pagemap.rst on
-pagemap changes, or userfaultfd.rst on userfaultfd.
-
-Besides, can you provide more justification on the new pagemap-side
-interface design?
-
-It seems it came from the Windows API GetWriteWatch(), but it's definitely
-not exactly that.  Let me spell some points out..
-
-There're four kinds of masks (required/anyof/excluded/return).  Are they
-all needed?  Why this is a good interface design?
-
-I saw you used page_region structure to keep the information.  I think you
-wanted to have a densed output, especially if counting in the "return mask"
-above it starts to make more sense. If with a very limited return mask it
-means many of the (continuous) page information can be merged into a single
-page_region struct when the kernel is scanning.
-
-However, at the meantime the other three masks (required/anyof/excluded)
-made me quite confused - it means you wanted to somehow filter the pages
-and only some of them will get collected.  The thing is for a continuous
-page range if any of the page got skipped due to the masks (e.g. not in
-"required" or in "excluded") it also means it can never be merged into
-previous page_region either.  That seems to be against the principle of
-having densed output.
-
-I hope you can help clarify what's the major use case here.
-
-There's also the new interface to do atomic "fetch + update" on wrprotected
-pages.  Is that just for efficiency or is the accuracy required in some of
-the applications?
-
-Thanks,
-
--- 
-Peter Xu
-
+>>  	item->locked = false;
+>>  	item->info.dev = (!p || item->is_local) ? br->dev : p->dev;
+>>  	item->info.ctx = ctx;
+>> --
+>> 2.34.1
+>> 
