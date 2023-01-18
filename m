@@ -2,173 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650AB671C9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAB5671C98
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjARMwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S231175AbjARMwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjARMvv (ORCPT
+        with ESMTP id S230367AbjARMvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:51:51 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029D04347C;
-        Wed, 18 Jan 2023 04:13:46 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Nxl6J36nzz501Sc;
-        Wed, 18 Jan 2023 20:13:44 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl2.zte.com.cn with SMTP id 30ICD0IN038239;
-        Wed, 18 Jan 2023 20:13:00 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp04[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Wed, 18 Jan 2023 20:13:03 +0800 (CST)
-Date:   Wed, 18 Jan 2023 20:13:03 +0800 (CST)
-X-Zmail-TransId: 2b0663c7e24fffffffff983002a8
-X-Mailer: Zmail v1.0
-Message-ID: <202301182013032211005@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <willy@infradead.org>, <bagasdotme@gmail.com>
-Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <iamjoonsoo.kim@lge.com>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjRdIHN3YXBfc3RhdGU6IHVwZGF0ZSBzaGFkb3dfbm9kZXMgZm9yIGFub255bW91cyBwYWdl?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 30ICD0IN038239
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7E278.000/4Nxl6J36nzz501Sc
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 18 Jan 2023 07:51:50 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CC64E50C;
+        Wed, 18 Jan 2023 04:13:27 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id mp20so36146978ejc.7;
+        Wed, 18 Jan 2023 04:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zSiUjqeIhXTuZdT6eBiGLcbiQdlWY4D946T8IZEq1tM=;
+        b=dKanFbSavWhQ2T04eS+23uXizOzrzix2u0Cn/8NyzbdwfmUOqEwbG0Mvvs/5qQAZYw
+         E9SMCML7RNO6mwGoYvIku1ZYootIDWCeVdQy4IOV9nnp5z9QMjUlEcQnoSIKsIEx4BuJ
+         ANNkfnb3q0U5o5qoR2AxxjfX55b1fjCrbA/clrv/NzXcYQ1K6icZHfFK3HCaDyb2Mzbl
+         W4iwTVmvr1HjtdQwfFXUlIwRHQJI+A58LMkUrbvyzCXpWKppAklGEwHAp0xqR1jcZ+pZ
+         OJGYYZxgSkoRYiN5wwame4F5h8Vyoad7PzXPCsFNSiUysNL3v82BgUkf8PgkyPZ+MqE8
+         5OpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zSiUjqeIhXTuZdT6eBiGLcbiQdlWY4D946T8IZEq1tM=;
+        b=Wt82lhEoccIh4J4Tam9mIeJrwnBuhWghOLr1xb/8Asu7wJc00yveUtjis8WM1jY6AJ
+         hOUOuewTZc0/sE5RBH0+1d2ZnR7UYFWcctwPK5/IRbFKkm3Tj/AuQj/HWKdlJjwyaaj5
+         grZYOR6CMZbetteq+C49kizbpmlXFsXhwrhXgeUgNweA1BHALU3msdpRLo/sj1AROsj5
+         emS70NVUOppdgc+m3k9MwyN/jXkFp93ysQYd/bOk950uyQ5zy116KrfEcANi4OAO/JFh
+         uCClHZi3wBJVPV82bb/35UV8UJMKjkws1c2dnF432ABt1gjyy3NW7W7n950OOAwB4d40
+         4tew==
+X-Gm-Message-State: AFqh2kqAPmtd1AhQS2uVhVM2xX5dSELTAdQed2BXvoXJhyu6frJQ3d4A
+        gVP6kdSwwNJF+PJe4aFp3os=
+X-Google-Smtp-Source: AMrXdXuJB5h75c09Lnc02md4iwcnhiUM2jh4kDT+SpXEP089W+YmPnXFzPBoQG85j5oV/lLrbE//Iw==
+X-Received: by 2002:a17:907:86a5:b0:870:d4f3:61b3 with SMTP id qa37-20020a17090786a500b00870d4f361b3mr8604731ejc.12.1674044005883;
+        Wed, 18 Jan 2023 04:13:25 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id r24-20020aa7da18000000b004704658abebsm14187212eds.54.2023.01.18.04.13.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 04:13:25 -0800 (PST)
+Message-ID: <08de3f4b-e33f-95c8-3297-814ea107272a@gmail.com>
+Date:   Wed, 18 Jan 2023 13:13:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 1/4] dt-bindings: gpio: rockchip,gpio-bank: add compatible
+ string per SoC
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+Currently all Rockchip gpio nodes have the same compatible.
+Replace all the compatibles in gpio nodes to be able to
+give them a consistent ID independent from probe order or alias.
 
-Shadow_nodes is for shadow nodes reclaiming of workingset handling,
-it is updated when page cache add or delete since long time ago
-workingset only supported page cache. But when workingset supports
-anonymous page detection, we missied updating shadow nodes for
-it. This caused that shadow nodes of anonymous page will never be
-reclaimd by scan_shadow_nodes() even they use much memory and
-system memory is tense.
-
-So update shadow_nodes of anonymous page when swap cache is
-add or delete by calling xas_set_update(..workingset_update_node).
-
-Fixes: aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
-change for v4
-- Fix kernel panic while calling spin_trylock(&mapping->host->i_lock) in shadow_lru_isolate().
-For anonymous page mapping->host is NULL, so add a check. Thanks to Matthew Wilcox.
-change for v3
-- Modify git log of explain of what this patch do in imperative mood. Thanks to
-Bagas Sanjaya.
-change for v2
-- Include a description of the user-visible effect. Add fixes tag. Modify comments.
-Also call workingset_update_node() in clear_shadow_from_swap_cache(). Thanks
-to Matthew Wilcox.
----
- include/linux/xarray.h |  3 ++-
- mm/swap_state.c        |  6 ++++++
- mm/workingset.c        | 21 +++++++++++++--------
- 3 files changed, 21 insertions(+), 9 deletions(-)
+ .../bindings/gpio/rockchip,gpio-bank.yaml         | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index 44dd6d6e01bc..741703b45f61 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
-  * @update: Function to call when updating a node.
-  *
-  * The XArray can notify a caller after it has updated an xa_node.
-- * This is advanced functionality and is only needed by the page cache.
-+ * This is advanced functionality and is only needed by the page
-+ * cache and swap cache.
-  */
- static inline void xas_set_update(struct xa_state *xas, xa_update_node_t update)
- {
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index cb9aaa00951d..7a003d8abb37 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -94,6 +94,8 @@ int add_to_swap_cache(struct folio *folio, swp_entry_t entry,
- 	unsigned long i, nr = folio_nr_pages(folio);
- 	void *old;
+diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+index affd823c8..72fdfcc65 100644
+--- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
++++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+@@ -13,7 +13,22 @@ properties:
+   compatible:
+     enum:
+       - rockchip,gpio-bank
++      - rockchip,px30-gpio-bank
++      - rockchip,rk3036-gpio-bank
++      - rockchip,rk3066a-gpio-bank
++      - rockchip,rk3128-gpio-bank
++      - rockchip,rk3188-gpio-bank
+       - rockchip,rk3188-gpio-bank0
++      - rockchip,rk3228-gpio-bank
++      - rockchip,rk3288-gpio-bank
++      - rockchip,rk3328-gpio-bank
++      - rockchip,rk3308-gpio-bank
++      - rockchip,rk3368-gpio-bank
++      - rockchip,rk3399-gpio-bank
++      - rockchip,rk3568-gpio-bank
++      - rockchip,rk3588-gpio-bank
++      - rockchip,rv1108-gpio-bank
++      - rockchip,rv1126-gpio-bank
 
-+	xas_set_update(&xas, workingset_update_node);
-+
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
-@@ -145,6 +147,8 @@ void __delete_from_swap_cache(struct folio *folio,
- 	pgoff_t idx = swp_offset(entry);
- 	XA_STATE(xas, &address_space->i_pages, idx);
+   reg:
+     maxItems: 1
+--
+2.20.1
 
-+	xas_set_update(&xas, workingset_update_node);
-+
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
-@@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
- 		struct address_space *address_space = swap_address_space(entry);
- 		XA_STATE(xas, &address_space->i_pages, curr);
-
-+		xas_set_update(&xas, workingset_update_node);
-+
- 		xa_lock_irq(&address_space->i_pages);
- 		xas_for_each(&xas, old, end) {
- 			if (!xa_is_value(old))
-diff --git a/mm/workingset.c b/mm/workingset.c
-index f194d13beabb..00c6f4d9d9be 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -657,11 +657,14 @@ static enum lru_status shadow_lru_isolate(struct list_head *item,
- 		goto out;
- 	}
-
--	if (!spin_trylock(&mapping->host->i_lock)) {
--		xa_unlock(&mapping->i_pages);
--		spin_unlock_irq(lru_lock);
--		ret = LRU_RETRY;
--		goto out;
-+	/* For page cache we need to hold i_lock */
-+	if (mapping->host != NULL) {
-+		if (!spin_trylock(&mapping->host->i_lock)) {
-+			xa_unlock(&mapping->i_pages);
-+			spin_unlock_irq(lru_lock);
-+			ret = LRU_RETRY;
-+			goto out;
-+		}
- 	}
-
- 	list_lru_isolate(lru, item);
-@@ -683,9 +686,11 @@ static enum lru_status shadow_lru_isolate(struct list_head *item,
-
- out_invalid:
- 	xa_unlock_irq(&mapping->i_pages);
--	if (mapping_shrinkable(mapping))
--		inode_add_lru(mapping->host);
--	spin_unlock(&mapping->host->i_lock);
-+	if (mapping->host != NULL) {
-+		if (mapping_shrinkable(mapping))
-+			inode_add_lru(mapping->host);
-+		spin_unlock(&mapping->host->i_lock);
-+	}
- 	ret = LRU_REMOVED_RETRY;
- out:
- 	cond_resched();
--- 
-2.25.1
