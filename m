@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA19E672937
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B621167293A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjARUXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S229845AbjARUYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjARUXm (ORCPT
+        with ESMTP id S229865AbjARUYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:23:42 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E235D91E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:23:40 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vm8so197131ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7ygh0J7KEHHboyD4LVUdzwenmNBGdT5Fep7mOK/62k=;
-        b=YQWH9e0IWtfRphBxBJP11yHpKqk+5NLgiUf+ZJb39bL6BtSi3WxGNKPLWUPXk/s+d9
-         D+igmFt49cI/pmTyX1FBayb0wdnd4BvdDOd6aFYT0vpO90hfeFJDumGu1x/aE0LafL4F
-         js2mQRgDmoGwjoICJ98TTbtJqStlwHApVeiHIKk6+LnwFZtGONpjQCDLe1ZLKZMABVOG
-         5gz0FI7b9N5u4IFn5BT46k4/daxcmuNa/fT+/dJI3XChKw7c9glb0qvhvwoUwTIvPs5/
-         9QXnFCSjCT92XleOeZGjqB+q5cFcJOvptnzoFZhPw1G+ckFTi6XYAB7JJOKbT8XyZTGy
-         PfnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l7ygh0J7KEHHboyD4LVUdzwenmNBGdT5Fep7mOK/62k=;
-        b=sBGHsFrs/If6zBdm7MBaVXiUwopFKaG6KkC0aJO1BswjuHddwYsrM1tN2B7sTdMo+n
-         JUAGK6YfPAkPtEXf4pLb8yEiSOmXMw6okUY6iBuWwITLdnX2zVH7bkPQTk1azQ2GcoD/
-         LpIChVNVI+bNAZA2On5LT5Jmmb/ozYykDWQ0YOENwGBY+PVDARL2tVcwnOSKgrn8JA8L
-         BwpdvvXnpFrNzZXiP9bwvLhcEM/pyVB3P6UYlB5o4GY+iqZBF+jzJ0ynYJT+OSg43ZlI
-         8GD0FgwVeFMLiV3aL3Am2UArHtkJ1+u9bvubvu8ljOVdrUGKV66s3XVC+Tz3QL6CNgVb
-         C2zg==
-X-Gm-Message-State: AFqh2krVMlPg7nxy4fTKsNQZ3o6QEmIi0p7UPbOf1L0H/lAv/mS7Zk7G
-        zJLk7wNyjJq81XphOfdbVg4=
-X-Google-Smtp-Source: AMrXdXsEan2QlNe1yfOts3N3sqMyGbVsRrtFvhKXOKm85zfbYdsXEAjwEMO4GB0kJHQFdZvhw86LIw==
-X-Received: by 2002:a17:906:c409:b0:863:73ee:bb67 with SMTP id u9-20020a170906c40900b0086373eebb67mr8620229ejz.73.1674073419361;
-        Wed, 18 Jan 2023 12:23:39 -0800 (PST)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id w15-20020a17090633cf00b008711cab8875sm4093029eja.216.2023.01.18.12.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:23:38 -0800 (PST)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] x86/pvclock: improve atomic update of last_value in pvclock_clocksource_read
-Date:   Wed, 18 Jan 2023 21:23:30 +0100
-Message-Id: <20230118202330.3740-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 18 Jan 2023 15:24:05 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4F85356B;
+        Wed, 18 Jan 2023 12:24:03 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IIOelA030659;
+        Wed, 18 Jan 2023 20:23:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=XrsPjAfjNYVpI0CBxJ+6XW0c7xBfNRTLwjUs9hVrdos=;
+ b=taIFUGfF2t91/32Qj0yX7hJn+6ygpO6CzL+ER/cOYw4I/Bmn4TJHo9vXM2Y9SpOsQ8bY
+ ta/r9RZDJrrxfta+u/OfXhwkTjQMneE/S7GyKODZsLbLc0L5wZQdQNpKDMyTUbXfmSvR
+ SW0IBAozg44KMLE11Wm31TdCp242OW9x4o0Ql/Fgf+bQWhYqd+XQmS7AnmyCLZaXwydE
+ g/wmA2jRRVvLmOLKJY3Unh0Ae6ZJkwEJBMG0vI1EPpbm2A1/dIxyxeGjhNTn8gohNjUV
+ /PLNvnnlko3azrZBT39qDFU1gqvyv0PBDIGN3Tr+YmtQMtDwEZfCw8+fLT1LNNU7SK4r uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6hem2faq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 20:23:48 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30IKHf9K011612;
+        Wed, 18 Jan 2023 20:23:47 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6hem2fad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 20:23:47 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IK7SiA005708;
+        Wed, 18 Jan 2023 20:23:46 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3n3m17qq7u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 20:23:46 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IKNjS8262694
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Jan 2023 20:23:45 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11E345805C;
+        Wed, 18 Jan 2023 20:23:45 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D92FB5805A;
+        Wed, 18 Jan 2023 20:23:43 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.7.111])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Jan 2023 20:23:43 +0000 (GMT)
+Message-ID: <ba437ae5bd782ec2a6a8351f4c667aa16014af97.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] evm: Support small xattr in dump_security_xattr()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 18 Jan 2023 15:23:43 -0500
+In-Reply-To: <20221226102419.16189-1-xiujianfeng@huawei.com>
+References: <20221226102419.16189-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QVl3p5LspGjUqoPehqRSDQLvJBQLcXyr
+X-Proofpoint-GUID: HoT13UCoBDTOHLH5VTXd3u0LFDCHQgK9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=763 impostorscore=0 clxscore=1011 phishscore=0
+ lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301180169
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +92,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve atomic update of last_value in pvclock_clocksource_read:
+Hi Xiu,
 
-- Atomic update can be skipped if the "last_value" is already
-  equal to "ret".
+Thank you for cleaning up the code.  The purpose of this patch is to
+remove code duplication.   Perhaps rename the patch to "evm: call
+dump_security_xattr() in all cases to remove code duplication".
 
-- The detection of atomic update failure is not correct. The value,
-  returned by atomic64_cmpxchg should be compared to the old value
-  from the location to be updated. If these two are the same, then
-  atomic update succeeded and "last_value" location is updated to
-  "ret" in an atomic way. Otherwise, the atomic update failed and
-  it should be retried with the value from "last_value" - exactly
-  what atomic64_try_cmpxchg does in a correct and more optimal way.
+On Mon, 2022-12-26 at 18:24 +0800, Xiu Jianfeng wrote:
+> Currently the debug function of dumping xattr is splited into two parts,
+> when the length of xattr is less than 64 bytes, it uses pr_debug()
+> directly. Merge it into dump_security_xattr() to simplify the code, no
+> functional changes here.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
----
- arch/x86/kernel/pvclock.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Please reword the patch description in terms of removing code
+duplication.
 
-diff --git a/arch/x86/kernel/pvclock.c b/arch/x86/kernel/pvclock.c
-index eda37df016f0..5a2a517dd61b 100644
---- a/arch/x86/kernel/pvclock.c
-+++ b/arch/x86/kernel/pvclock.c
-@@ -102,10 +102,9 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
- 	 */
- 	last = atomic64_read(&last_value);
- 	do {
--		if (ret < last)
-+		if (ret <= last)
- 			return last;
--		last = atomic64_cmpxchg(&last_value, last, ret);
--	} while (unlikely(last != ret));
-+	} while (!atomic64_try_cmpxchg(&last_value, &last, ret));
- 
- 	return ret;
- }
 -- 
-2.39.0
+thanks,
+
+Mimi
 
