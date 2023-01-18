@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87805671BFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3343F671C04
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjARMYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
+        id S230319AbjARM0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjARMXS (ORCPT
+        with ESMTP id S230424AbjARMZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:23:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FDDC65F00;
-        Wed, 18 Jan 2023 03:45:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 491331477;
-        Wed, 18 Jan 2023 03:45:45 -0800 (PST)
-Received: from [10.1.196.46] (eglon.cambridge.arm.com [10.1.196.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B5EE3F71A;
-        Wed, 18 Jan 2023 03:45:02 -0800 (PST)
-Message-ID: <99b295ed-7157-0c95-cafb-9cf8afdf41f2@arm.com>
-Date:   Wed, 18 Jan 2023 11:44:54 +0000
+        Wed, 18 Jan 2023 07:25:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC00C69213;
+        Wed, 18 Jan 2023 03:45:30 -0800 (PST)
+Date:   Wed, 18 Jan 2023 11:45:28 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674042329;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eguYxvYQvWOq87mQBf1IYFW3ssD3uE2OjKvba4U0DD0=;
+        b=1nb7vQZEh7dBfP1gioow3zjqH0CKSY6VxOyhclmTJiGAK/2gQxPxcHsAwniiKMX0+lXDVl
+        x0NLLRMBdy1HgLgU8nHNeXMaIj9OnfaCMVKUDILvgEm5fg0+m9pmrldf3FS+XSt+yfZA6Q
+        ngySeo4PNVOO9KNNcPlHgaO7uKy+ObN//8aHM9Hh8n+sDLTzLap9FZPLEqNZKxglX82I7Y
+        9ScOc+21ZBXHp+hP6GYKrb9EBwbr8cgvGeWD71yv8ayX5sl6Yt/PZPULtJr3WBsThJN3K/
+        tVfeCcJVoUyJgOJn08tkHOgxeypGxgRBrSTYjKeb4cQT0xrXI9JBzBXNb3Zlbg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674042329;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eguYxvYQvWOq87mQBf1IYFW3ssD3uE2OjKvba4U0DD0=;
+        b=nOak67VhUZDY2Wh9xxZntDJf+2uQ6xyI9i3j8ooOE9w4d6QyPMJMdp/y4UMzcv5RYWgteq
+        AmG+W6VMIOeIpiAQ==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] perf/x86/intel/cstate: Add Emerald Rapids
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230106160449.3566477-2-kan.liang@linux.intel.com>
+References: <20230106160449.3566477-2-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ia64: Fix build error due to switch case label appearing
- next to declaration
-Content-Language: en-GB
-To:     Sergei Trofimovich <slyich@gmail.com>
-Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        matoro <matoro_mailinglist_kernel@matoro.tk>,
-        =?UTF-8?Q?=c3=89meric_Maschino?= <emeric.maschino@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230117151632.393836-1-james.morse@arm.com>
- <20230117193109.5650fd6f@nz>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <20230117193109.5650fd6f@nz>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167404232856.4906.5130030313856361485.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergei,
+The following commit has been merged into the perf/urgent branch of tip:
 
-On 17/01/2023 19:31, Sergei Trofimovich wrote:
-> On Tue, 17 Jan 2023 15:16:32 +0000
-> James Morse <james.morse@arm.com> wrote:
-> 
->> Since commit aa06a9bd8533 ("ia64: fix clock_getres(CLOCK_MONOTONIC) to
->> report ITC frequency"), gcc 10.1.0 fails to build ia64 with the gnomic:
->> | ../arch/ia64/kernel/sys_ia64.c: In function 'ia64_clock_getres':
->> | ../arch/ia64/kernel/sys_ia64.c:189:3: error: a label can only be part of a statement and a declaration is not a statement
->> |   189 |   s64 tick_ns = DIV_ROUND_UP(NSEC_PER_SEC, local_cpu_data->itc_freq);
->>
->> This line appears immediately after a case label in a switch.
->>
->> Move the declarations out of the case, to the top of the function.
->>
->> Fixes: aa06a9bd8533 ("ia64: fix clock_getres(CLOCK_MONOTONIC) to report ITC frequency")
->> Signed-off-by: James Morse <james.morse@arm.com>
+Commit-ID:     5a8a05f165fb18d37526062419774d9088c2a9b9
+Gitweb:        https://git.kernel.org/tip/5a8a05f165fb18d37526062419774d9088c2a9b9
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Fri, 06 Jan 2023 08:04:47 -08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 18 Jan 2023 12:42:49 +01:00
 
-> Out of curiosity what compiler version behaves like that? I think I and
-> matoro build-/run-tested it on gcc-12 and maybe gcc-11.
+perf/x86/intel/cstate: Add Emerald Rapids
 
-| # ia64-linux-gcc --version
-| ia64-linux-gcc (GCC) 10.1.0
-| Copyright (C) 2020 Free Software Foundation, Inc.
-| This is free software; see the source for copying conditions.  There is NO
-| warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+>From the perspective of Intel cstate residency counters,
+Emerald Rapids is the same as the Sapphire Rapids and Ice Lake.
+Add Emerald Rapids model.
 
-The toolchain originally came from https://mirrors.edge.kernel.org/pub/tools/crosstool/
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230106160449.3566477-2-kan.liang@linux.intel.com
+---
+ arch/x86/events/intel/cstate.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The really odd thing I'm doing is cross compiling for ia64 on arm64 ... but I wouldn't
-have thought the toolchain configuration was any different.
-
-
-> Thank you!
-> 
-> Reviewed-by: Sergei Trofimovich <slyich@gmail.com>
-
-
-Thanks,
-
-James
+diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
+index 3019fb1..551741e 100644
+--- a/arch/x86/events/intel/cstate.c
++++ b/arch/x86/events/intel/cstate.c
+@@ -677,6 +677,7 @@ static const struct x86_cpu_id intel_cstates_match[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&icx_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&icx_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&icx_cstates),
++	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,	&icx_cstates),
+ 
+ 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		&icl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,		&icl_cstates),
