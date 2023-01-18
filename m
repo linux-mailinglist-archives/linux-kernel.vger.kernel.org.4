@@ -2,243 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978B26717E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76FE6717E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjARJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S229746AbjARJiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjARJfA (ORCPT
+        with ESMTP id S230040AbjARJfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:35:00 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665D0A25B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:54:42 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id o8so1353882uaw.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=49hVYpdfpGudyxPMxCrvPN1QUwNU0gvklZbqsfCUCE0=;
-        b=MZvIz4ucU3ckbBoYyb8BHSztHdYfF/T1xOUu1DUJwso2pkiuOZ9WKT3l57A3A+BLVS
-         np+t3nXZ8jvTIt3eDrkpglsgxVgpdwfyIS4zTEMzpEytvCCVF8Wv5NYLIXaze6GMPCS9
-         MYcDnL0ttRjUdcBD+Px/1KIY6a7pveaN5qeSKBGSUuZ5tViGxlsOzRANMMeXisd+Ch+U
-         MdyGvlHGraIECEzxgcIHSrW9Evfq3lcTOxSn5kF33OLUweKXvjFbv2SSP3k3cHxg11rZ
-         mbEt+edQSeZukvlMHL77SnJBtxEb3mjK4LyDJhiCqWWf72zEo4OsRKZPRF/56ZYYcLFh
-         x1gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=49hVYpdfpGudyxPMxCrvPN1QUwNU0gvklZbqsfCUCE0=;
-        b=Ry0D9sQLU93BKESwW4wBGd/uQqAgyIYTo98SGE2vbhf3a4rJX5VdiXj0nogqGOSNkV
-         sWNWA5NGj5X8QE8mV9jfZy++tgc0TCXhvlLGd0jzYNrPagkESD97Xkj2jTzfuRIJWLq/
-         sqFGBr/P1A0KmXQuGpoSoZEfXnHdEajRPDnc5cp/rB1YGuz5ZvXf42Ej2IDz2WUQqFrI
-         Utgew389koLIL/CKmOC8u076dfXTYkrJG0JhmWxEYSqf628Z3fjMafITyQHXTDIpN2TX
-         Hc4FlJFB0LzA5xgMZSJu9wYmesx8VnBeNXBrYRFh/QVU2G7fIAI1wz4NPpg8EdxrgBfq
-         dBVQ==
-X-Gm-Message-State: AFqh2krqbDf8BI+S323EyJKWMfNEihaP8j21x3WVbqU7qVh1haLeveIk
-        Mb0hT3uPKiGZgQoxCN7l2Ck9ckAPOtP0QVEoqKql6w==
-X-Google-Smtp-Source: AMrXdXugKCqXvSeRnMwos6ZAe03rDqs6gyi4RAQrNJ/ogr4rbIIcW04mOaSGMLnhgth9bR1KUu84pU6rVNG0Hgd9XxY=
-X-Received: by 2002:ab0:784f:0:b0:5a4:c264:fb05 with SMTP id
- y15-20020ab0784f000000b005a4c264fb05mr759518uaq.22.1674032081336; Wed, 18 Jan
- 2023 00:54:41 -0800 (PST)
+        Wed, 18 Jan 2023 04:35:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0396A193DE;
+        Wed, 18 Jan 2023 00:54:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F81BB8118F;
+        Wed, 18 Jan 2023 08:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D8DC433F0;
+        Wed, 18 Jan 2023 08:54:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674032086;
+        bh=qpbIsiLmAWo/Yyxp9eZJRCZtQ25fsobPBsJ/XpH9rEA=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=YhCyzSQcoTw8iqjo7c+CNIZCUhXds2k7rVb4XcN+Joyx3dW8gmlKluhfsTdV3fZnk
+         Iz/A/2/KJqWZgb5dto5rbgTDx2HxISQyNyOvPDB3IC69jd1xhL4gLmFmRq29q4K9eF
+         R1MdX8X/dqciwv9WSJhx3AiF0ixAjtKGqI1J8QIyYRXMIcZSL7Pfae6XvKRahJjr5M
+         HoFCeHmLT7BnzDvklHdLeuatRGc2TIMBnxKgYUQRpYLdDwhCj68WLntkVR/AiX+XOY
+         kwxMEVSNtdsO8rOkSoLI50KY1EWy6g6QYy/vfrlN9Mdw3Z/DJse9EfEO7wZjEuxDao
+         0P70JC9bKnDbA==
+Date:   Wed, 18 Jan 2023 09:54:46 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Aditya Garg <gargaditya08@live.com>
+cc:     "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "orlandoch.dev@gmail.com" <orlandoch.dev@gmail.com>,
+        "ronald@innovation.ch" <ronald@innovation.ch>
+Subject: Re: [PATCH v3] HID: Recognize sensors with application collections
+In-Reply-To: <9E66CF6F-99A0-4CC5-9FA0-3A9DCFCA0388@live.com>
+Message-ID: <nycvar.YFH.7.76.2301180953340.1734@cbobk.fhfr.pm>
+References: <8DA00FF4-DB08-4CEC-A5B4-47A71DC09C13@live.com> <01D620E2-18CA-40F6-A330-454CBC20C542@live.com> <EFCEA45A-C6F4-477A-B011-9C9E6E61E488@live.com> <9E66CF6F-99A0-4CC5-9FA0-3A9DCFCA0388@live.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20230117124546.116438951@linuxfoundation.org>
-In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 18 Jan 2023 14:24:30 +0530
-Message-ID: <CA+G9fYsbfzY1=5dZvdHfBqv5nX8wovpXVH2vb_Q1mo+jcTv0eA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 at 18:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 176 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.7-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, 11 Jan 2023, Aditya Garg wrote:
 
+> From: Ronald Tschalär <ronald@innovation.ch>
+> 
+> According to HUTRR39 logical sensor devices may be nested inside
+> physical collections or may be specified in multiple top-level
+> application collections (see page 59, strategies 1 and 2). However,
+> the current code was only recognizing those with physical collections.
+> 
+> This issue turned up in the T2 MacBook Pros which define the ALS in
+> a top-level application collection.
+> 
+> Signed-off-by: Ronald Tschalär <ronald@innovation.ch>
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Makes sense. Queued in for-6.3/hid-core. Thanks,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-- 
+Jiri Kosina
+SUSE Labs
 
-## Build
-* kernel: 6.1.7-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: 507f83506c2bc81502508bb12fc4970dec7b1746
-* git describe: v6.1.5-194-g507f83506c2b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.5=
--194-g507f83506c2b
-
-## Test Regressions (compared to v6.1.5-11-g5eedeabf82ee)
-
-## Metric Regressions (compared to v6.1.5-11-g5eedeabf82ee)
-
-## Test Fixes (compared to v6.1.5-11-g5eedeabf82ee)
-
-## Metric Fixes (compared to v6.1.5-11-g5eedeabf82ee)
-
-## Test result summary
-total: 177864, pass: 147712, fail: 4982, skip: 25143, xfail: 27
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 147 total, 144 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* i386: 35 total, 29 passed, 6 failed
-* mips: 26 total, 26 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 34 total, 30 passed, 4 failed
-* riscv: 12 total, 12 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 40 total, 35 passed, 5 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
