@@ -2,100 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03163672C2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640B672C35
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjARXBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S229615AbjARXEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjARXBm (ORCPT
+        with ESMTP id S229476AbjARXEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:01:42 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73BD4FC35;
-        Wed, 18 Jan 2023 15:01:40 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id hw16so1153383ejc.10;
-        Wed, 18 Jan 2023 15:01:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JG0zmDr4Gx7JTYrA4JUjYF+9TusUlPQwAzE14ZbaLBE=;
-        b=oRqBiOJYIlMdDowmL/wHGABFcI0fDixl2PMB36ctD5uSKk3azFGtf6qd2Fvk85nbjC
-         RZGiY6WOS6aL3GADhFTaSpq9sDvNd66O4zvJIfSzbuoiU8TfqAStjiekALks5NkGSaKe
-         ovGZ8gH0HmxO9jFlluSL74dBYh1vn5KfO7NSBBuv+DCGaPm6jsuW1hq8QeP+fNTfmlqX
-         3IcskUgDBjlFzRib6paxCj+S90vgVnJVBiNY0ccVMPpVBJ9PeZVJOHdXXs+2uIBtQoT/
-         vlsHkNs0iO6OaL9F9gRjvD02YML4zxlAojbWSyksCeYa74+TLtrx2SxLVb3arsFe5b7r
-         ZhGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JG0zmDr4Gx7JTYrA4JUjYF+9TusUlPQwAzE14ZbaLBE=;
-        b=3KyCHuspMJPJVqNIBs8eJvSsb0B8lAFbzzjJRt9QmrH0LkaKJTyqos4GncvXh9n6VD
-         UgTEAJ2VKj57KpaKi8ZNu9Zs8J1SgRRt1ckX4X7wQZPJkjxEdXP2e3/j3RO2ziiM2ZmU
-         kYLZ/tTB2Sgk5LkuffCZ3+C2VzBkf+uAwkBuMbwtHklAt5Je9L8PetSahda6MnuVnbnA
-         xy7n2UwkkJ1EC89Ns+p8c1pgPRsGcjgJkADkmQrA/poT1ajBhW5Wms2kw6HTL5olkz22
-         +keeC+fRmhR65gqhMM1GDG09IvveFj9Pof/JncqSiEhaJ4Gsj5D+js4svCvX2t/LQX5p
-         FgDg==
-X-Gm-Message-State: AFqh2koC9x8S2KT1jN8X++boGvEe3EScoKlSB1WmU2t+1HDRl8S+rFSd
-        bJLQ7o+fJocj6z22aDnRAB0=
-X-Google-Smtp-Source: AMrXdXuoqpi45+sG2pftBtwBbFskPfB44UC+cRcWbZWXXc+n+Hirrb16NdbKE6aaVF+8KoKPwtvNJQ==
-X-Received: by 2002:a17:907:1019:b0:84c:69f8:2ec2 with SMTP id ox25-20020a170907101900b0084c69f82ec2mr8598505ejb.22.1674082899134;
-        Wed, 18 Jan 2023 15:01:39 -0800 (PST)
-Received: from skbuf ([188.27.185.42])
-        by smtp.gmail.com with ESMTPSA id k11-20020a1709062a4b00b0073022b796a7sm15579629eje.93.2023.01.18.15.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 15:01:38 -0800 (PST)
-Date:   Thu, 19 Jan 2023 01:01:35 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [RFC PATCH net-next 2/5] net: dsa: propagate flags down towards
- drivers
-Message-ID: <20230118230135.szu6a7kvt2mjb3i5@skbuf>
-References: <20230117185714.3058453-1-netdev@kapio-technology.com>
- <20230117185714.3058453-3-netdev@kapio-technology.com>
- <20230117231750.r5jr4hwvpadgopmf@skbuf>
- <e4acb7edb300d41a9459890133b928b4@kapio-technology.com>
+        Wed, 18 Jan 2023 18:04:07 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2853A305FB;
+        Wed, 18 Jan 2023 15:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6dWUI5icFFmxxhB3zoj79O8xUzc1bN/i/tm3I5lQXJU=; b=WNX9/lZWP0n5ceC+COxrRxCY4i
+        LIqiQjw7YxNsyy1dUOy+TIz40RbUuU8Qpm7ExiMRbW9kMprvytFCmxy1qCSdRVQiEbZe/JQulm4Mx
+        Fndvm/lYebesmLUJQyC3icibaC2llpY1Eclokrn2LYyw8X7P6jVqnZNdYchgJSDPVvtBVfEKyfSJA
+        Z6IKyctzuqiXpiJ1JrKvG3ZYmxxxdlPNdCNGm+oku9+2OKQ9TiA6kgQv5zVnqR1H5o0yFce5bx9On
+        jbiD7OjO6mehbLyuuNYzA8V9nQlLJLAmAPD6YehSe6lYAvUlK3BBS0ptGZDE2vMhulB7C2K+Zkr5P
+        kA6Qw52Q==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIHTE-002dMI-1h;
+        Wed, 18 Jan 2023 23:03:52 +0000
+Date:   Wed, 18 Jan 2023 23:03:52 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v6 03/34] iov_iter: Pass I/O direction into
+ iov_iter_get_pages*()
+Message-ID: <Y8h62KsnI8g/xaRz@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391050409.2311931.7103784292954267373.stgit@warthog.procyon.org.uk>
+ <Y8ZU1Jjx5VSetvOn@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e4acb7edb300d41a9459890133b928b4@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y8ZU1Jjx5VSetvOn@infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,32 +60,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:35:08PM +0100, netdev@kapio-technology.com wrote:
-> I am not sure I understand you entirely.
-> From my standpoint I see it as so: that until now any fdb entry coming to
-> port_fdb_add() (or port_fdb_del()) are seen as static entries. And this
-> changes nothing with respect to those static entries as how drivers handle
-> them.
-
-This is true; it is implicit that the port_fdb_add() and port_fdb_del()
-DSA methods request switches to operate on static FDB entries (in hardware).
-
-> When the new dynamic flag is true, all drivers will ignore it in patch #3,
-> so basically nothing will change by that.
-
-This is not true, because it assumes that DSA never called port_fdb_add()
-up until now for bridge FDB entries with the BR_FDB_STATIC flag unset,
-which is incorrect (it did).
-
-So what will change is that drivers which used to react to those bridge
-FDB entries will stop doing so.
-
-> Then in patch #5 the dynamic flag is handled by the mv88e6xxx driver.
+On Mon, Jan 16, 2023 at 11:57:08PM -0800, Christoph Hellwig wrote:
+> On Mon, Jan 16, 2023 at 11:08:24PM +0000, David Howells wrote:
+> > Define FOLL_SOURCE_BUF and FOLL_DEST_BUF to indicate to get_user_pages*()
+> > and iov_iter_get_pages*() how the buffer is intended to be used in an I/O
+> > operation.  Don't use READ and WRITE as a read I/O writes to memory and
+> > vice versa - which causes confusion.
+> > 
+> > The direction is checked against the iterator's data_source.
 > 
-> I don't know the assisted_learning_on_cpu_port feature you mention, but
-> there has still not been anything but static entries going towards
-> port_fdb_add() yet...
+> Why can't we use the existing FOLL_WRITE?
 
-For starters, you can read the commit message of the patch that
-introduced it, which is d5f19486cee7 ("net: dsa: listen for
-SWITCHDEV_{FDB,DEL}_ADD_TO_DEVICE on foreign bridge neighbors").
+	I'm really not fond of passing FOLL_... stuff into iov_iter
+primitives.  That space contains things like FOLL_PIN, which makes
+no sense whatsoever for non-user-backed iterators; having the
+callers pass it in makes them automatically dependent upon the
+iov_iter flavour.
