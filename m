@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAAA6722DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845D96722E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjARQVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S229879AbjARQWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjARQUr (ORCPT
+        with ESMTP id S230367AbjARQWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:20:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A71D54B2E;
-        Wed, 18 Jan 2023 08:17:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7C25AD7;
-        Wed, 18 Jan 2023 08:18:24 -0800 (PST)
-Received: from [10.1.196.21] (e125579.cambridge.arm.com [10.1.196.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4F963F67D;
-        Wed, 18 Jan 2023 08:17:40 -0800 (PST)
-Message-ID: <69457060-ede6-c805-af1d-a6e2b05fd55e@arm.com>
-Date:   Wed, 18 Jan 2023 16:17:31 +0000
+        Wed, 18 Jan 2023 11:22:10 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98960233C9;
+        Wed, 18 Jan 2023 08:19:23 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NxrT96t04z67ZTx;
+        Thu, 19 Jan 2023 00:15:25 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 18 Jan
+ 2023 16:19:21 +0000
+Date:   Wed, 18 Jan 2023 16:19:20 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+CC:     <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 1/5] iio: core: Point users of extend_name field
+ to read_label callback
+Message-ID: <20230118161920.0000207c@Huawei.com>
+In-Reply-To: <20230116220909.196926-2-marijn.suijten@somainline.org>
+References: <20230116220909.196926-1-marijn.suijten@somainline.org>
+        <20230116220909.196926-2-marijn.suijten@somainline.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <20230117163841.d5jv6ysqf5kmvvmh@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230117163841.d5jv6ysqf5kmvvmh@airbuntu>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,83 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 16:38, Qais Yousef wrote:
-> On 01/16/23 09:07, Dietmar Eggemann wrote:
+On Mon, 16 Jan 2023 23:09:05 +0100
+Marijn Suijten <marijn.suijten@somainline.org> wrote:
+
+> As mentioned and discussed in [1] extend_name should not be used for
+> full channel labels (and most drivers seem to only use it to express a
+> short type of a channel) as this affects sysfs filenames, while the
+> label name is supposed to be extracted from the *_label sysfs file
+> instead.  This appears to have been unclear to some drivers as
+> extend_name is also used when read_label is unset, achieving an initial
+> goal of providing sensible names in *_label sysfs files without noticing
+> that sysfs filenames are (negatively and likely unintentionally)
+> affected as well.
 > 
-> [...]
+> Point readers of iio_chan_spec::extend_name to iio_info::read_label by
+> mentioning deprecation and side-effects of this field.
 > 
->> Not sure if people get what `performance requirements` mean here? I know
->> we want to use `performance` rather `bandwidth hint` to describe what
->> uclamp is. So shouldn't we use `utilization but also uclamp`?
+> [1]: https://lore.kernel.org/linux-arm-msm/20221221223432.si2aasbleiicayfl@SoMainline.org/
 > 
-> We do have the uclamp doc now which explains this, no? I'm not keen on
-> utilization because it's an overloaded term. In the context of uclamp
-
-And `performance` isn't ? ;-) True, the doc refers to uclamp as a
-`performance requirements`.
-
-> - utilization _signal_ in the scheduler is used to indicate performance
-> requirements of a workload, no?
-
-I was referring to:
-
- 4569 static inline int task_fits_cpu(struct task_struct *p, int cpu)
- 4570 {
- 4571   unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
- 4572   unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
- 4573   unsigned long util = task_util_est(p);
- 4574   /*
- 4575   * Return true only if the cpu fully fits the task requirements,
- 4576   * which include the utilization but also the performance.
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 4577   */
- 4578   return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
- 4579 }
-
-So here we explicitly talk about `utilization` (util_avg/util_est)
-versus `uclamp (max/min)` and the latter is referred as `performance`.
-You're right, we shouldn't refer to `uclamp (min/max)` as `utilization`
-either.
-
-In other places we use:
-
-select_idle_capacity()
-
-/* This CPU fits with all capacity and performance requirements */
-                          ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
-
-`capacity` is probably equal `utilization`? and `performance
-requirements` stand for `uclamp (min/max)`.
-
-/* Only the min performance (i.e. uclamp_min) doesn't fit */
-            ^^^^^^^^^^^^^^^
-here we link `min performance` explicitly to `uclamp_min`.
-
-/* Look for the CPU with highest performance capacity.
-                                 ^^^^^^^^^^^^^^^^^^^^
-I guess this stands for `cap_orig - thermal_load_avg()`
-
-feec()
-
-/* Both don't fit performance (i.e. uclamp_min) but best energy cpu has
-                  ^^^^^^^^^^^  ^^^^^^^^^^^^^^^
-better performance. */
-^^^^^^ ^^^^^^^^^^^
-
-Here I assume `better performance` stands for higher `cap_orig -
-thermal_pressure', not for `uclamp min or max`?
-
----
-
-IMHO, referring to `uclamp (min/max)` as `performance (min/max)
-hint/(requirement)` is fine as long as it's done consistently in
-comments and the alias is not used for other items.
-
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  include/linux/iio/iio.h | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> Using 'uclamp hint' if you found it really confusing, is fine by me. But I'd
-> rather steer away from 'bandwidth' or 'utilization' when describing uclamp and
-> its intention.
-> 
-> I like using performance requirements because it enforces what this hint
-> actually means.
+> diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
+> index 81413cd3a3e7..36c89f238fb9 100644
+> --- a/include/linux/iio/iio.h
+> +++ b/include/linux/iio/iio.h
+> @@ -221,6 +221,9 @@ struct iio_event_spec {
+>   * @extend_name:	Allows labeling of channel attributes with an
+>   *			informative name. Note this has no effect codes etc,
+>   *			unlike modifiers.
+> + *			This field is deprecated in favour of overriding read_label
+> + *			in iio_info, which unlike @extend_name does not affect sysfs
+> + *			filenames.
+Perhaps reword as
+
+This field is deprecated in favour of overriding the default label
+by providing a read_label() callback in iio_info, which unlike
+@extend_name does not affect sysfs filenames.
+?
+>   * @datasheet_name:	A name used in in-kernel mapping of channels. It should
+>   *			correspond to the first name that the channel is referred
+>   *			to by in the datasheet (e.g. IND), or the nearest
 
