@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DF2671508
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EAB671510
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjARH3d convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 Jan 2023 02:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S229995AbjARHcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjARH2k (ORCPT
+        with ESMTP id S229837AbjARHa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:28:40 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D95C5CFF3;
-        Tue, 17 Jan 2023 22:45:46 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7759024DC7D;
-        Wed, 18 Jan 2023 14:45:45 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 18 Jan
- 2023 14:45:45 +0800
-Received: from [192.168.125.95] (113.72.144.40) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 18 Jan
- 2023 14:45:44 +0800
-Message-ID: <0ce3f9ba-4cb4-4257-21f3-818ff0b959cd@starfivetech.com>
-Date:   Wed, 18 Jan 2023 14:45:43 +0800
+        Wed, 18 Jan 2023 02:30:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8725CFFC;
+        Tue, 17 Jan 2023 22:47:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4353B616D0;
+        Wed, 18 Jan 2023 06:47:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3876C433D2;
+        Wed, 18 Jan 2023 06:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674024466;
+        bh=+e8Tu1yzNoIuZRv3cfV5EujT7Y0Ki8eK75d8fyjGjYU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=up1oXAKUJlDbL/vu1dR4uq8tknJjJA23u+OsMvEiOFOxbAVe+XYnvnejYPlUGbgDo
+         lyEe1ps9KO6JDBm4ID1AsIgfS2qHN/ICu64ZJQ5+oY3hEmnohorCfK4BCb4qFCFrjX
+         FjJwR91gNSiiwXNqo5HSvTS4Q3ZP6pVTv8xTy7oBt4rZdxU4nR1dgnvnJQ8V50TRQH
+         m3ajM+v+eAcHBgs/CxO7qx6Xs+6d8Be90kZ809xg6cvUXLVKCrBoFUx/Kh+dQ1bxCn
+         UPMPI6OL3LbjH/9q8wLMCa9nwbOXoqN35WN+81n52gI/+QQCatBVN06vsdwRFLsEj1
+         2zEWpihkxf+Nw==
+Date:   Tue, 17 Jan 2023 22:47:44 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Bryan Tan <bryantan@vmware.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Israel Rukshin <israelr@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: Re: [PATCH rdma-next 00/13] Add RDMA inline crypto support
+Message-ID: <Y8eWEPZahIFAfnoI@sol.localdomain>
+References: <cover.1673873422.git.leon@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 2/3] soc: starfive: Add StarFive JH71XX pmu driver
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230116074259.22874-1-walker.chen@starfivetech.com>
- <20230116074259.22874-3-walker.chen@starfivetech.com>
- <10209933.nUPlyArG6x@diego>
-Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <10209933.nUPlyArG6x@diego>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.144.40]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1673873422.git.leon@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,174 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/17 18:09, Heiko Stübner wrote:
-> Hi Walker,
-> 
-> Am Montag, 16. Januar 2023, 08:42:58 CET schrieb Walker Chen:
->> +static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_on)
->> +{
->> +	struct jh71xx_pmu *pmu = pmd->pmu;
->> +
->> +	if (!mask) {
->> +		*is_on = false;
-> 
-> nit: While it's not necessarily bad, I don't think callers of
-> jh71xx_pmu_get_state() should expect this to be set in error case.
+Hi Leon,
 
-Maybe setting 'is_on' in this case is redundant operation. Will be dropped.
+On Mon, Jan 16, 2023 at 03:05:47PM +0200, Leon Romanovsky wrote:
+> >From Israel,
+> 
+> The purpose of this patchset is to add support for inline
+> encryption/decryption of the data at storage protocols like nvmf over
+> RDMA (at a similar way like integrity is used via unique mkey).
+> 
+> This patchset adds support for plaintext keys. The patches were tested
+> on BF-3 HW with fscrypt tool to test this feature, which showed reduce
+> in CPU utilization when comparing at 64k or more IO size. The CPU utilization
+> was improved by more than 50% comparing to the SW only solution at this case.
+> 
+> How to configure fscrypt to enable plaintext keys:
+>  # mkfs.ext4 -O encrypt /dev/nvme0n1
+>  # mount /dev/nvme0n1 /mnt/crypto -o inlinecrypt
+>  # head -c 64 /dev/urandom > /tmp/master_key
+>  # fscryptctl add_key /mnt/crypto/ < /tmp/master_key
+>  # mkdir /mnt/crypto/test1
+>  # fscryptctl set_policy 152c41b2ea39fa3d90ea06448456e7fb /mnt/crypto/test1
+>    ** “152c41b2ea39fa3d90ea06448456e7fb” is the output of the
+>       “fscryptctl add_key” command.
+>  # echo foo > /mnt/crypto/test1/foo
+> 
+> Notes:
+>  - At plaintext mode only, the user set a master key and the fscrypt
+>    driver derived from it the DEK and the key identifier.
+>  - 152c41b2ea39fa3d90ea06448456e7fb is the derived key identifier
+>  - Only on the first IO, nvme-rdma gets a callback to load the derived DEK. 
+> 
+> There is no special configuration to support crypto at nvme modules.
+> 
+> Thanks
 
-> 
->> +		return -EINVAL;
->> +	}
->> +
->> +	*is_on = readl(pmu->base + JH71XX_PMU_CURR_POWER_MODE) & mask;
->> +
->> +	return 0;
->> +}
-> 
-> [...]
-> 
->> +static int jh71xx_pmu_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct device_node *np = dev->of_node;
->> +	const struct jh71xx_pmu_match_data *match_data;
->> +	struct jh71xx_pmu *pmu;
->> +	unsigned int i;
->> +	int ret;
->> +
->> +	pmu = devm_kzalloc(dev, sizeof(*pmu), GFP_KERNEL);
->> +	if (!pmu)
->> +		return -ENOMEM;
->> +
->> +	pmu->base = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(pmu->base))
->> +		return PTR_ERR(pmu->base);
->> +
->> +	pmu->irq = platform_get_irq(pdev, 0);
->> +	if (pmu->irq < 0)
->> +		return pmu->irq;
->> +
->> +	ret = devm_request_irq(dev, pmu->irq, jh71xx_pmu_interrupt,
->> +			       0, pdev->name, pmu);
->> +	if (ret)
->> +		dev_err(dev, "failed to request irq\n");
->> +
->> +	match_data = of_device_get_match_data(dev);
->> +	if (!match_data)
->> +		return -EINVAL;
->> +
->> +	pmu->genpd = devm_kcalloc(dev, match_data->num_domains,
->> +				  sizeof(struct generic_pm_domain *),
->> +				  GFP_KERNEL);
->> +	if (!pmu->genpd)
->> +		return -ENOMEM;
->> +
->> +	pmu->dev = dev;
->> +	pmu->match_data = match_data;
->> +	pmu->genpd_data.domains = pmu->genpd;
->> +	pmu->genpd_data.num_domains = match_data->num_domains;
->> +
->> +	for (i = 0; i < match_data->num_domains; i++) {
->> +		ret = jh71xx_pmu_init_domain(pmu, i);
->> +		if (ret) {
->> +			dev_err(dev, "failed to initialize power domain\n");
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	spin_lock_init(&pmu->lock);
->> +	jh71xx_pmu_int_enable(pmu, JH71XX_PMU_INT_ALL_MASK & ~JH71XX_PMU_INT_PCH_FAIL, true);
->> +
->> +	ret = of_genpd_add_provider_onecell(np, &pmu->genpd_data);
->> +	if (ret) {
->> +		dev_err(dev, "failed to register genpd driver: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	dev_info(dev, "registered %u power domains\n", i);
-> 
-> nit: I guess that could be a dev_dbg to not spam the kernel log too much?
+Very interesting work!  Can you Cc me on future versions?
 
-OK, will be used with dev_dbg().
+I'm glad to see that this hardware allows all 16 IV bytes to be specified.
 
-> 
-> 
->> +	return 0;
->> +}
->> +
->> +static const struct jh71xx_domain_info jh7110_power_domains[] = {
->> +	[JH7110_PD_SYSTOP] = {
->> +		.name = "SYSTOP",
->> +		.bit = 0,
->> +		.flags = GENPD_FLAG_ALWAYS_ON,
->> +	},
->> +	[JH7110_PD_CPU] = {
->> +		.name = "CPU",
->> +		.bit = 1,
->> +		.flags = GENPD_FLAG_ALWAYS_ON,
->> +	},
->> +	[JH7110_PD_GPUA] = {
->> +		.name = "GPUA",
->> +		.bit = 2,
->> +	},
->> +	[JH7110_PD_VDEC] = {
->> +		.name = "VDEC",
->> +		.bit = 3,
->> +	},
->> +	[JH7110_PD_VOUT] = {
->> +		.name = "VOUT",
->> +		.bit = 4,
->> +	},
->> +	[JH7110_PD_ISP] = {
->> +		.name = "ISP",
->> +		.bit = 5,
->> +	},
->> +	[JH7110_PD_VENC] = {
->> +		.name = "VENC",
->> +		.bit = 6,
->> +	},
->> +};
->> +
->> +static const struct jh71xx_pmu_match_data jh7110_pmu = {
->> +	.num_domains = ARRAY_SIZE(jh7110_power_domains),
->> +	.domain_info = jh7110_power_domains,
->> +};
->> +
->> +static const struct of_device_id jh71xx_pmu_of_match[] = {
->> +	{
->> +		.compatible = "starfive,jh7110-pmu",
->> +		.data = (void *)&jh7110_pmu,
->> +	}, {
->> +		/* sentinel */
->> +	}
->> +};
->> +
->> +static struct platform_driver jh71xx_pmu_driver = {
->> +	.driver = {
->> +		.name = "jh71xx-pmu",
->> +		.of_match_table = jh71xx_pmu_of_match,
-> 
-> In the rockchip pm-domains driver we have
-> 
->                 /*
->                  * We can't forcibly eject devices from the power
->                  * domain, so we can't really remove power domains
->                  * once they were added.
->                  */
->                 .suppress_bind_attrs = true,
-> 
-> here, which might be valid for your pmu driver as well.
+Does it also handle programming and evicting keys efficiently?
 
-Okay, this attribute will be added in next version.
+Also, just checking: have you tested that the ciphertext that this inline
+encryption hardware produces is correct?  That's always super important to test.
+There are xfstests that test for it, e.g. generic/582.  Another way to test it
+is to just manually test whether encrypted files that were created when the
+filesystem was mounted with '-o inlinecrypt' show the same contents when the
+filesystem is *not* mounted with '-o inlinecrypt' (or vice versa).
 
-> 
-> 
-> Other than that
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> 
-
-Thanks for your review.
-
-Best regards,
-Walker Chen
+- Eric
