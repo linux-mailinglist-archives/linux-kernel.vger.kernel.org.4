@@ -2,274 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8886729AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004DE6729B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjARUtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:49:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        id S230153AbjARUue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjARUtL (ORCPT
+        with ESMTP id S229988AbjARUu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:49:11 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0F75F381
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:49:09 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id cf42so202408lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+89tqwjByMFlJh+90XLRKeR8816WhLFrnnBbHdowVik=;
-        b=U1YUNL0D28nLvQgCR8Fy4GZ1L2J1U3r/URkWeo5z9ZP8T2B4mt/3rlzutsVRHXu9j8
-         tc7kgJDU86gGGpFk8I/uVfpzR5xUOxXRxjZ23/CAqEnJG7Xa74zdvW4ANeaIyUAY0M6R
-         Sv/a2JvPaLsTQa/UY8P5By5ftMJZp8+coa18jrcv5yNCMJB/eKxfVJ/SOipqpwBo4aqz
-         T8X6SuZ0VatpeN4E+Kh63soN0mKVlmG1VSVJJK9guQGE87o1b/PeXFjWMhILTJR16uXx
-         RLxkkb/G+sq+mCQxB6oiSHRmucaJkTS7su255I2VVA5uKknjcVYH5PL+xG37gZ8jkJ1y
-         J1aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+89tqwjByMFlJh+90XLRKeR8816WhLFrnnBbHdowVik=;
-        b=DSsPsPSd284mFYg7wEmI0ce9ZyHgbe9rZdV4WyYPbDPGOO21piyV+Wyg+e52c6KTYO
-         30xieTIvbSwSFyksOX3BnErIJLC56gSIPkQKFUHEd985wF64EJH7woLz5AYSbTBeK0nM
-         0lGBH3WCHQBj4IJ0EX6U3FSo3r32yhVAA6yMNDrP1MEsgmCaWw/WbnL+OidDC14BHuxQ
-         iwNTLVBn+i1vs2GlQOTTGl2AOmrHtIKw8WtVuq8qQdP72MhRFdrykEXn1Lqi2dBSmEOy
-         m/A6Iggr6Labbx0MfgM7YSbFyaDZQroAsyn9FuTkS1a7QEEdHSU4OJV1ioBhHo/+j1ra
-         tTxw==
-X-Gm-Message-State: AFqh2koK0RMruwZ77cnlV7v1gnL6bhYjOX+w3+h56COwrSXbHOei1mSE
-        lTB7LhdoUzPj/AyQrzwqS+DT0/EPO3fQAd2zzvEuBw==
-X-Google-Smtp-Source: AMrXdXuLqfBIbdobOBxh7C5PpKfcFLwskMtjKLFdmaNSOgQ52gElbzEEAL+UqKv3gWXfHMrLyPxrgTN3ZBz9CyUFJRk=
-X-Received: by 2002:a05:6512:409:b0:4cc:7876:9f35 with SMTP id
- u9-20020a056512040900b004cc78769f35mr458836lfk.125.1674074947228; Wed, 18 Jan
- 2023 12:49:07 -0800 (PST)
+        Wed, 18 Jan 2023 15:50:28 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1FB5F380
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674075027; x=1705611027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NPMhzzz0RKilWU/5JQolES+uiAaNFvLIHnBZFC8yZxM=;
+  b=ks/ArLw3b2pEG0E6bJMbqVjpN1SipGnD3JN6n3lGDJeo4rfwuAtLP+HL
+   xZ2xekIDVz+Iavz/2AVUl17f3mqGnj1GOoBpqr+KASC3/7ugIDb+6dpx+
+   SOyEtxCAecC1+QkX+oD0U2Yrsz7zyvZqIQ6YbcnuoyKPcM6JrVyg/hWT1
+   t+Ns6u8DZx7akgv7xJrrqZ49rjq7Yn7APBZcZ1vDR7fr92RzVp5Uwm/px
+   9l+8zLaQ1UxW1yOQOvQZf3aYoSDltPQEgkn7t/me2S2oJjIoZNREh8/CX
+   DY/VYzfXrFox2ADSIwamZ/+zh4lBOx53w48T5P1mU9cS6Wz5TGWmrnUyj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323784126"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="323784126"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:50:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="833739565"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="833739565"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jan 2023 12:50:26 -0800
+From:   kan.liang@linux.intel.com
+To:     joro@8bytes.org, will@kernel.org, baolu.lu@linux.intel.com,
+        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V2 0/7] iommu/vt-d: Support performance monitoring for IOMMU
+Date:   Wed, 18 Jan 2023 12:49:59 -0800
+Message-Id: <20230118205006.3182907-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20230118203428.910992-1-bhupesh.sharma@linaro.org> <77fbf01f-58fc-55a2-415b-c39d991e7c96@linaro.org>
-In-Reply-To: <77fbf01f-58fc-55a2-415b-c39d991e7c96@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 19 Jan 2023 02:18:55 +0530
-Message-ID: <CAH=2Ntw4hMyV2mqRu1t=WWG24=wKq96PB+eYFtZ4qYQz8dteog@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add CPU idle-states
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 at 02:10, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 18.01.2023 21:34, Bhupesh Sharma wrote:
-> > Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 104 +++++++++++++++++++++++++++
-> >  1 file changed, 104 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > index 478c5d009272..29c05cbb5fd7 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > @@ -44,6 +44,8 @@ CPU0: cpu@0 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_0>;
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> > +                     power-domains = <&CPU_PD0>;
-> > +                     power-domain-names = "psci";
-> >                       L2_0: l2-cache {
-> >                               compatible = "cache";
-> >                               cache-level = <2>;
-> > @@ -59,6 +61,8 @@ CPU1: cpu@1 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_0>;
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> > +                     power-domains = <&CPU_PD1>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               CPU2: cpu@2 {
-> > @@ -70,6 +74,8 @@ CPU2: cpu@2 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_0>;
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> > +                     power-domains = <&CPU_PD2>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               CPU3: cpu@3 {
-> > @@ -81,6 +87,8 @@ CPU3: cpu@3 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_0>;
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> > +                     power-domains = <&CPU_PD3>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               CPU4: cpu@100 {
-> > @@ -92,6 +100,8 @@ CPU4: cpu@100 {
-> >                       dynamic-power-coefficient = <282>;
-> >                       next-level-cache = <&L2_1>;
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> > +                     power-domains = <&CPU_PD4>;
-> > +                     power-domain-names = "psci";
-> >                       L2_1: l2-cache {
-> >                               compatible = "cache";
-> >                               cache-level = <2>;
-> > @@ -107,6 +117,8 @@ CPU5: cpu@101 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_1>;
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> > +                     power-domains = <&CPU_PD5>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               CPU6: cpu@102 {
-> > @@ -118,6 +130,8 @@ CPU6: cpu@102 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_1>;
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> > +                     power-domains = <&CPU_PD6>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               CPU7: cpu@103 {
-> > @@ -129,6 +143,8 @@ CPU7: cpu@103 {
-> >                       enable-method = "psci";
-> >                       next-level-cache = <&L2_1>;
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> > +                     power-domains = <&CPU_PD7>;
-> > +                     power-domain-names = "psci";
-> >               };
-> >
-> >               cpu-map {
-> > @@ -168,6 +184,41 @@ core3 {
-> >                               };
-> >                       };
-> >               };
-> > +
-> > +             idle-states {
-> > +                     entry-method = "psci";
-> > +
-> > +                     LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-> > +                             compatible = "arm,idle-state";
-> > +                             idle-state-name = "silver-rail-power-collapse";
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                             entry-latency-us = <290>;
-> > +                             exit-latency-us = <376>;
-> > +                             min-residency-us = <800>;
-> I think this value is incorrect, see:
->
-> https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tags/android-11.0.0_r0.56/qcom/bengal-pm.dtsi#99
->
-> > +                             local-timer-stop;
-> > +                     };
-> > +
-> > +                     BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-> > +                             compatible = "arm,idle-state";
-> > +                             idle-state-name = "gold-rail-power-collapse";
-> > +                             arm,psci-suspend-param = <0x40000003>;
-> > +                             entry-latency-us = <297>;
-> > +                             exit-latency-us = <324>;
-> > +                             min-residency-us = <1110>;
-> > +                             local-timer-stop;
-> > +                     };
-> > +             };
-> > +
-> > +             domain-idle-states {
-> > +                     CLUSTER_SLEEP_0: cluster-sleep-0 {
-> > +                             compatible = "domain-idle-state";
-> > +                             idle-state-name = "cluster-power-collapse";
-> > +                             arm,psci-suspend-param = <0x41000043>;
-> > +                             entry-latency-us = <800>;
-> > +                             exit-latency-us = <2118>;
-> > +                             min-residency-us = <7376>;
-> These values vary per cluster, see qcom,pm-cluster-level@2 in the
-> file linked above.. We should either split that, or at least take
-> max() of each value between the two nodes to make sure the sleep
-> state is exited properly on both types of cores.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Ack to both the above observations. Will send a fixed v2 shortly.
+Changes since V1:
+- The cap and ecap registers are always in the first page. It's not
+  necessary to use the reg size in dmar_validate_one_drhd(). (Patch 1)
+- Move reg_size up and pair it with reg_base_addr in struct
+  dmar_drhd_unit (Patch 1)
+- Update the year of Copyright (Patch 2)
+- Return 0 if PMS is not supported (Patch 2)
+- Refine the comments and add a pr_warn for per-counter capabilities
+  check (Patch 2)
+- Remove unnecessary iommu_pmu->num_cntr = i (Patch 2)
+- Remove has_ob of ecmd_submit_sync() (Patch 3)
+- Remove the helpers from non-INTEL_IOMMU. (Patch 3)
+- Still keep #ifdef CONFIG_INTEL_IOMMU for ecmd_submit_sync() to
+  avoid compile warning with non-INTEL_IOMMU config.
+- Use pr_warn_once() to replace WARN_ONCE() (Patch 4 & 6)
+- Free iommu PMU if it fails to be registered. (Patch 4)
+- Remove unnecessary 'handled' variable. (Patch 6)
 
-Thanks,
-Bhupesh
+A performance monitoring infrastructure, perfmon, is introduced with
+the VT-d Spec 4.0. The purpose of perfmon is to support collection of
+information about key events occurring during operation of the remapping
+hardware, to aid performance tuning and debug. The patch series is to
+support the perfmon for IOMMU.
 
-> > +                     };
-> > +             };
-> >       };
-> >
-> >       firmware {
-> > @@ -191,6 +242,59 @@ pmu {
-> >       psci {
-> >               compatible = "arm,psci-1.0";
-> >               method = "smc";
-> > +
-> > +             CPU_PD0: power-domain-cpu0 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD1: power-domain-cpu1 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD2: power-domain-cpu2 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD3: power-domain-cpu3 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD4: power-domain-cpu4 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD5: power-domain-cpu5 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD6: power-domain-cpu6 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CPU_PD7: power-domain-cpu7 {
-> > +                     #power-domain-cells = <0>;
-> > +                     power-domains = <&CLUSTER_PD>;
-> > +                     domain-idle-states = <&BIG_CPU_SLEEP_0>;
-> > +             };
-> > +
-> > +             CLUSTER_PD: power-domain-cpu-cluster0 {
-> > +                     #power-domain-cells = <0>;
-> > +                     domain-idle-states = <&CLUSTER_SLEEP_0>;
-> > +             };
-> >       };
-> >
-> >       reserved_memory: reserved-memory {
+To facilitate the perfmon support, the patch series also supports two
+new generic features of VT-d Spec 4.0.
+- Support the 'size' field to retrieve the accurate size of the register
+  set for each dmar device from DRHD. (Patch 1)
+- Support the new Enhanced Command Interface. (Patch 3)
+
+With the patch series, users can collect the performance data of IOMMU
+via Linux perf tool. For example,
+
+ $ perf stat -e dmar0/iommu_requests,filter_ats=0/ -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+              2135      dmar0/iommu_requests,filter_ats=0/
+
+       1.001087695 seconds time elapsed
+
+The IOMMU PMUs can be found under /sys/bus/event_source/devices/dmar*
+
+The available filters and event format can be found at the format folder
+ $ ls /sys/bus/event_source/devices/dmar0/format/
+event  event_group  filter_ats  filter_page_table
+
+The supported events can be found at the events folder
+
+ $ ls /sys/bus/event_source/devices/dmar0/events/
+ats_blocked        int_cache_hit_nonposted  iommu_mrds
+pasid_cache_lookup
+ctxt_cache_hit     int_cache_hit_posted     iommu_requests
+pg_req_posted
+ctxt_cache_lookup  int_cache_lookup         iotlb_hit
+pw_occupancy
+fs_nonleaf_hit     iommu_clocks             iotlb_lookup
+ss_nonleaf_hit
+fs_nonleaf_lookup  iommu_mem_blocked        pasid_cache_hit
+ss_nonleaf_lookup
+
+Kan Liang (7):
+  iommu/vt-d: Support size of the register set in DRHD
+  iommu/vt-d: Retrieve IOMMU perfmon capability information
+  iommu/vt-d: Support Enhanced Command Interface
+  iommu/vt-d: Add IOMMU perfmon support
+  iommu/vt-d: Support cpumask for IOMMU perfmon
+  iommu/vt-d: Add IOMMU perfmon overflow handler support
+  iommu/vt-d: Enable IOMMU perfmon support
+
+ .../sysfs-bus-event_source-devices-iommu      |  32 +
+ drivers/iommu/intel/Kconfig                   |   9 +
+ drivers/iommu/intel/Makefile                  |   1 +
+ drivers/iommu/intel/dmar.c                    |  91 +-
+ drivers/iommu/intel/iommu.c                   |   3 +
+ drivers/iommu/intel/iommu.h                   | 101 ++-
+ drivers/iommu/intel/perfmon.c                 | 850 ++++++++++++++++++
+ drivers/iommu/intel/perfmon.h                 |  65 ++
+ drivers/iommu/intel/svm.c                     |   2 +-
+ include/acpi/actbl1.h                         |   2 +-
+ include/linux/cpuhotplug.h                    |   1 +
+ include/linux/dmar.h                          |   1 +
+ 12 files changed, 1151 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
+ create mode 100644 drivers/iommu/intel/perfmon.c
+ create mode 100644 drivers/iommu/intel/perfmon.h
+
+-- 
+2.35.1
+
