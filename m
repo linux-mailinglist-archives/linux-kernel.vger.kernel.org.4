@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF05672483
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3654672487
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjARRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S229459AbjARRLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjARRJt (ORCPT
+        with ESMTP id S229831AbjARRLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:09:49 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C653C577FC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:09:39 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id q64so36442437pjq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:09:39 -0800 (PST)
+        Wed, 18 Jan 2023 12:11:04 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284CD4ABCE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:11:04 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id x5so6725500qti.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:11:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1WGfWh/zHmol+2Tw3XXG4jVv6PUDBSBBQZSscxBuklU=;
-        b=mK6kGMN/rEiKZDELQxhZim27kifJzxaqluXyKU+4ExEOuZ40hTiclMDYcWW5SMzcnd
-         z/B626AVqbpaIScKxqXmmeO6/A42ZcYj3fwOdRK2Q/HuXaltTF/hSwC7aVqKCZI5X203
-         NjwdBAab4rV13ti/tjDwe906nKzz72rWoJBik50lusX0rDs3noH7ZehEvggmuIHHeqWk
-         dwyulZ2TwCGjOoMxtn4njf6AJeYX7php6fvqp2PbSmEQSQdfGyaJCRxVid+qqPacTaSD
-         4g6Ry4Qqij026xFUvHbsMrwHzQLbjUAhk64362DLL4IvTmhIBBrR5mqWkgPYmIgoFIZa
-         6esA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fdqIaz/OuT3KiECAYbJfl+d3yacajyE8FY/hHAgDXU4=;
+        b=bW+I6GT3472rBqyqGwRHftx7r2GGIogKz2Y0oQTedgzUrfMCpXWKof68tlXZFbetUY
+         2WATXsTp3RN1pb5gw6psBaXonl0PhuZDMJziCI8xLhFsEUJHCwD7EFzPgWd1Kuk7vxkd
+         FZsGsrkAAdXlgWHrdqvwR81hEpMUYuiE/bHLE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1WGfWh/zHmol+2Tw3XXG4jVv6PUDBSBBQZSscxBuklU=;
-        b=pQ5Z0DHgk9C4J/wNbH2p4cXB18Qi5O6vdST2KG7eJYzPhFWBbJGQrIGukUM4t26Teq
-         3nmJSXvgY+MuUjt94PgxqsXG07u5eiXkyK6Iy8M+2PkP9FKsZSTETawCFXVNbYuI0wH/
-         MWPS9v1jMwL5gLZJzDanbBR1nrf8E+lZrKULs4s4fPICMYZZICDEO7HNXrGz6J7Cml7w
-         ysurzGvqElpT3x9pA2opOjC6nZYTInqimDfMNxOrNkSwx9BmjzEjlTJAqudP3JPNaXhQ
-         Vs2e1rKd7h2dgKV7YS4W0rHfso5ID5995cyO7RYmqn6OVY4WE3sIJipVmB572racaTCO
-         /Grw==
-X-Gm-Message-State: AFqh2kq0jSgw2cNwLMKQVGafk92W1ahgiCLnflblIWvqkQqLgWE4i99d
-        iwf/HFTmdGLucIIDZG12+4I=
-X-Google-Smtp-Source: AMrXdXvr0eQnszyMROWr11Gg6xDwKAU+pPtxVu/K5xZECg96vcWBYEH9NSp4CfBFov/AYkfX1RBoUg==
-X-Received: by 2002:a17:90b:1197:b0:229:46f0:6f6d with SMTP id gk23-20020a17090b119700b0022946f06f6dmr8475165pjb.42.1674061778863;
-        Wed, 18 Jan 2023 09:09:38 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:68ba:bd93:858:15d5])
-        by smtp.gmail.com with ESMTPSA id r89-20020a17090a43e200b0022941908b80sm1560900pjg.47.2023.01.18.09.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:09:38 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 18 Jan 2023 09:09:36 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH 1/3] mm: return the number of pages successfully paged out
-Message-ID: <Y8gn0KQDWC/5CZ/w@google.com>
-References: <20230117231632.2734737-1-minchan@kernel.org>
- <Y8e3lHsYoWjFWbRU@dhcp22.suse.cz>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fdqIaz/OuT3KiECAYbJfl+d3yacajyE8FY/hHAgDXU4=;
+        b=j0j3T6SbZ1asqztfQD647I3lb6qyU5yi4Etmkc4muXD4e0xWlubpryAwbWij3IWOcW
+         6j2zAk7INoKpj3LylcLRGud8SFdTYp5ONFXQOrjzhGm0I5BJrBoDQ72kpmO8wSVTB5dV
+         Oq8gIpe3xqf9JcvKKVelCdlYRSx7IDJ6bOH+mEvBwiWgz1yfdr5Wl2zclQ0FMLNZnYf5
+         vqoUczYVONX+PrSSARY6we6moP8nUa9wa6ZDAJ/cu20g9rS3Q3mo+hLqUEHgkJOdMMxj
+         Rgdgm11t9GzGvaxp0mzTM3RdNAM0mtM5f0UfDOp7LH7HlUen3KVQMRaDDLAn7kC+kKCS
+         hxSg==
+X-Gm-Message-State: AFqh2kr7PopMr9u5+LxqnTIsmwyOhzGSQciH8ulU5NJ2i/64Y6woS6X7
+        WErsAtnvcqPzpOwj4HG5Dd1N2ydZvhaAX21D
+X-Google-Smtp-Source: AMrXdXuyQSrKQF/2/p4PvGgNaWuZT+ychvqiooJSsRAhMiV+OldHjK6JWAPVUx+k1IHK6lr67wV2nA==
+X-Received: by 2002:a05:622a:428a:b0:3ab:7391:28b with SMTP id cr10-20020a05622a428a00b003ab7391028bmr11197802qtb.6.1674061862854;
+        Wed, 18 Jan 2023 09:11:02 -0800 (PST)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
+        by smtp.gmail.com with ESMTPSA id l6-20020ac81486000000b003a981f7315bsm17769107qtj.44.2023.01.18.09.11.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 09:11:01 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id h10so24190083qvq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:11:01 -0800 (PST)
+X-Received: by 2002:a05:6214:5f82:b0:534:252f:b091 with SMTP id
+ ls2-20020a0562145f8200b00534252fb091mr345510qvb.130.1674061861468; Wed, 18
+ Jan 2023 09:11:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8e3lHsYoWjFWbRU@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <202301170941.49728982-oliver.sang@intel.com> <2f483247-da76-9ec9-3e51-f690939f4585@suse.cz>
+ <Y8ZVxJSZdtEk8Nco@feng-clx> <Y8aSc5xGO+rW2pyo@feng-clx> <CAHk-=wiS84nS9apjs_Vt=jjZ_+j+F8HQ3B+ABSvbzcqtW9x5Kg@mail.gmail.com>
+ <Y8f0miUc//BQXN3A@feng-clx>
+In-Reply-To: <Y8f0miUc//BQXN3A@feng-clx>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 18 Jan 2023 09:10:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh0pdJm6tS4-ywR3Zi70PnBjMXeCkuQKnu8utcSKjxNEw@mail.gmail.com>
+Message-ID: <CAHk-=wh0pdJm6tS4-ywR3Zi70PnBjMXeCkuQKnu8utcSKjxNEw@mail.gmail.com>
+Subject: Re: [linus:master] [hugetlb] 7118fc2906: kernel_BUG_at_lib/list_debug.c
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Sang, Oliver" <oliver.sang@intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        lkp <lkp@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jann Horn <jannh@google.com>,
+        "Song, Youquan" <youquan.song@intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>, hongjiu.lu@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:10:44AM +0100, Michal Hocko wrote:
-> On Tue 17-01-23 15:16:30, Minchan Kim wrote:
-> > The reclaim_pages MADV_PAGEOUT uses needs to return the number of
-> > pages paged-out successfully, not only the number of reclaimed pages
-> > in the operation because those pages paged-out successfully will be
-> > reclaimed easily at the memory pressure due to asynchronous writeback
-> > rotation(i.e., PG_reclaim with folio_rotate_reclaimable).
-> > 
-> > This patch renames the reclaim_pages with paging_out(with hope that
-> > it's clear from operation point of view) and then adds a additional
-> > stat in reclaim_stat to represent the number of paged-out but kept
-> > in the memory for rotation on writeback completion.
-> > 
-> > With that stat, madvise_pageout can know how many pages were paged-out
-> > successfully as well as reclaimed. The return value will be used for
-> > statistics in next patch.
-> 
-> I really fail to see the reson for the rename and paging_out doesn't
-> even make much sense as a name TBH.
+On Wed, Jan 18, 2023 at 5:33 AM Feng Tang <feng.tang@intel.com> wrote:
+>
+> > Finally, your objdump version also does some horrendous decoding, like
+> >
+> >   c13b3e29:       8d b4 26 00 00 00 00    lea    0x0(%esi,%eiz,1),%esi
+>
+> I know little about these tools, and I tried objdump tool from
+> Cent OS 9 (objdump version 2.35.2) and Ubuntu 22.04 (objdump version
+> 2.38), they both dumped similar assembly. Please let me know if you
+> want us to try other version of objdump.
 
-Currently, what we are doing to reclaim memory is
+It's fine - it just makes things even less legible than they already were.
 
-reclaim_folio_list
-    shrink_folio_list
-        if (folio_mapped(folio))
-            try_to_unmap(folio)
+I personally very seldom try to look at objdump output - I tend to do
+things like
 
-        if (folio_test_dirty(folio))
-            pageout
+     make mm/page_alloc.s
 
-Based on the structure, pageout is just one of way to reclaim memory.
+and look at the compiler-generated assembly instead. That ends up
+generally being a lot more legible for various reasons, not the least
+of which is the variable name commentary that the compiler also
+outputs.
 
-With MADV_PAGEOUT, what user want to know how many pages
-were paged out as they requested(from userspace PoV, how many times
-pages fault happens in future accesses), not the number of reclaimed
-pages shrink_folio_list returns currently.
+So objdump is kind of a last resort, and then you just have to deal
+with the fact that its output format is very nasty.
 
-In the sense, I wanted to distinguish between reclaim and pageout.
+> We modify the kconfig to disable GCOV and UBSAN, and the issue can't
+> be reproudced in 1000 runs.
+
+Ok, it does seem like this is a compiler bug, as per Vlastimil's decoding.
+
+And the reason it happens on 32-bit is probably that we just have much
+fewer registers available there, and the 64-bit GCOV counts then
+complicate things even more, and then some interaction between that
+and UBSAN just generates crazy code.
+
+And it probably has very little compiler test coverage in real life anyway.
+
+From Vlastimil's decode, it does look like gcc has mixed up the
+"update GCOV counts" with actual real values for "nr_pages", and is
+using %eax for both things because of some register allocation
+mistake.
+
+So I think we can dismiss this one as a compiler bug. It might be good
+to see if it happens with a newer version of gcc too, and even perhaps
+post a gcc bugzilla entry, but since this probably isn't really a very
+interesting config for real life, I'm not sure how interested people
+are going to be.
+
+                Linus
