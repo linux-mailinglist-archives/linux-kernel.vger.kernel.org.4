@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6607672AE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B6B672AFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjARVx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S229949AbjARWCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjARVxJ (ORCPT
+        with ESMTP id S229935AbjARWBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:53:09 -0500
+        Wed, 18 Jan 2023 17:01:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB385EF8C;
-        Wed, 18 Jan 2023 13:53:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699821042E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:01:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC8CD619E3;
-        Wed, 18 Jan 2023 21:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBDFC433F2;
-        Wed, 18 Jan 2023 21:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674078786;
-        bh=odow2u7c9P22z89GlE8wddINSjSouNXYUoKkWII7NXs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h7S4iKaMBVhXD6Mid/6Pu30NLvr5uMEY79CRxCk71ReJWT1+IcfTxD73tCd0r1ErB
-         Fgvs4h2CjbLLCZY+w8FTSGYrgg/IVq2CMWwk3udpa6WNaidpuTOMuVKkyZ8QpkcC7U
-         Jc8jE86jy3R6c/i0K39ITC/ZVSqDcME5qpQcvRQ+iktW+ekT48JhUD/jkjIuJOxBZC
-         jIbxzqV0Zr0wD/nDWOnmHNnlPWjkI2gpHZBwMmcJE+tvC8I5pzCErBHEDKIC6nnNeo
-         YbWO9RWctpvm4UZHjuLd9h6SZcl5UL9JL24gitS1atcmFhCNj3qZM9w8totlDZylrv
-         Qe1GNOoHEQVug==
-Received: by mail-lf1-f43.google.com with SMTP id a11so480505lfg.0;
-        Wed, 18 Jan 2023 13:53:06 -0800 (PST)
-X-Gm-Message-State: AFqh2kqSyVQcasDJ9X7gdur83yf+VgEIBighmcAvShvtoHzx+08ZDwah
-        XoWxorI+szHJq6Nm3yXx5eUR9qu0vwIASWLJRug=
-X-Google-Smtp-Source: AMrXdXsIYoPqzlt5WFxkF4QqJmZ9bQ2Owu4F2RyxtPss5r3kOuLu3tPTpBvuDvsbnywwBMCF2DGauDICsmP/lTXxaZY=
-X-Received: by 2002:a05:6512:2115:b0:4cb:1d3e:685b with SMTP id
- q21-20020a056512211500b004cb1d3e685bmr476566lfr.126.1674078784233; Wed, 18
- Jan 2023 13:53:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
- <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com> <20230118074047.GA27385@lst.de>
-In-Reply-To: <20230118074047.GA27385@lst.de>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 18 Jan 2023 13:52:51 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
-Message-ID: <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0549061A30
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 22:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E739C433D2;
+        Wed, 18 Jan 2023 22:01:47 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1pIGV8-002H8r-0y;
+        Wed, 18 Jan 2023 17:01:46 -0500
+Message-ID: <20230118215435.016435760@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Wed, 18 Jan 2023 16:54:35 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "John Warthog9 Hawley" <warthog9@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [for-linus][PATCH 0/3] ktest.pl: Fix ssh hanging and reseting of console
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:40 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Tue, Jan 17, 2023 at 10:50:55AM -0800, Song Liu wrote:
-> > Hi Thomas and Luis,
-> >
-> > Could you please share your comments on this? Specifically, is this on
-> > the right direction? And, what's your preference with Christophe's
-> > suggestions?
-> >
-> > "I dislike how it looks with enums, things like
-> > mod->mod_mem[MOD_MEM_TYPE_INIT
-> > _TEXT] are odd and don't read nicely.
-> > Could we have something nicer like mod->mod_mem_init_text ?
-> > I know it will complicate your for_each_mod_mem_type() but it would look
-> > nicer."
->
-> FYI, I don't particularly like the array either.  But if it makes
-> the code much simpler I can live with it.
+I've noticed that my ssh sessions would hang during test runs, which
+is really frustrating when you kick off a 13 hour test before going to
+bed, and the second test (1 hour into it) hangs, and you need to kick
+it off again in the morning (wasting all that time over night).
 
-How about we do something like this
+I finally figured out the cause. There is a disconnect between
+the run_command that executes the test, and the "wait_for_input" that
+monitors the test. The wait_for_input has a default of 2 minute timeout
+if it doesn't see any output it returns. The run_command takes the
+empty string from wait_for_input as the test is finished, and then
+stops monitoring it, and calls waitpid() waiting for the test to
+exit.
 
-struct module {
-...
-        /* rbtree is accessed frequently, so keep together. */
-        union {
-                struct module_memory mod_mem[MOD_MEM_NUM_TYPES]
-__module_memory_align;
-                struct {
-                        /* keep the same order as enum mod_mem_type */
-                        struct module_memory core_text;
-                        struct module_memory core_data;
-                        struct module_memory core_rodata;
-                        struct module_memory core_ro_after_init;
-                        struct module_memory init_text;
-                        struct module_memory init_data;
-                        struct module_memory init_rodata;
-                };
-        };
-...
-};
+The problem is that if the test has a lot of output, it will continue
+writing into the pipe that was suppose to go to the monitor, which has
+now exited the loop. When the pipe fills up, it will not finish.
+When the test is over, it just hangs waiting for the pipe to flush
+(which never happens).
 
-In this way we can use the array in the for loops, and use mod->core_text,
-etc. when we only need to access one of them.
+To fix this, change the run_command to by default have an infinite
+run (which can be overridden by the new RUN_TIMEOUT option), and
+make the wait_for_input also wait indefinitely in this case. It now
+Now the tests will have its content continuously read and will exit
+normally.
 
-Thanks,
-Song
+While debugging this, I also found out why you can lose stdout on
+the terminal sometimes. Especially if you hit Ctrl^C while the monitor
+is running. It was due to missing "end_monitor" which gives back the
+tty to the terminal. The first two patches fix that.
 
-PS: Do we need __no_randomize_layout somewhere?
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-ktest.git
+devel
+
+Head SHA1: aa9aba9382884554fe6a303744884866d137422d
+
+
+Steven Rostedt (3):
+      ktest.pl: Fix missing "end_monitor" when machine check fails
+      ktest.pl: Give back console on Ctrt^C on monitor
+      ktest.pl: Add RUN_TIMEOUT option with default unlimited
+
+----
+ tools/testing/ktest/ktest.pl    | 26 +++++++++++++++++++++-----
+ tools/testing/ktest/sample.conf |  5 +++++
+ 2 files changed, 26 insertions(+), 5 deletions(-)
