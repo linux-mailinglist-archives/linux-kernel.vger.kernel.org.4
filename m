@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD972670F20
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12887670F21
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjARAv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S229886AbjARAwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjARAuO (ORCPT
+        with ESMTP id S230060AbjARAuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:50:14 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB948597;
-        Tue, 17 Jan 2023 16:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=0HCpBuDUlZrcaYoduPW/Z+1qpg8yIbgenbGVPx9MOfk=; b=vV
-        m8kryVeZkEM87hthlDf5125GXBr4uT2ZkjLFASwXfys3F2ONkUp9EskecwNpN7VRj3Sj/KSDpL8fT
-        P90u4Q0CiTJIhrrwLW//dJIvE2InyPGwgK+0Tw8gKPqnt1lYMUlq/8So4Ta8zQ9FnghNrN3KWu6s2
-        brSv+//fMoHqXo0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pHwTR-002NcW-Ps; Wed, 18 Jan 2023 01:38:41 +0100
-Date:   Wed, 18 Jan 2023 01:38:41 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com, sean.wang@mediatek.com,
-        Landen.Chao@mediatek.com, linus.walleij@linaro.org,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hkallweit1@gmail.com, jaz@semihalf.com,
-        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
-Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API
- to fwnode_
-Message-ID: <Y8c/kQiZ4S11ua3z@lunn.ch>
-References: <20230116173420.1278704-1-mw@semihalf.com>
- <20230116173420.1278704-3-mw@semihalf.com>
- <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk>
- <20230116181618.2iz54jywj7rqzygu@skbuf>
- <Y8XJ3WoP+YKCjTlF@lunn.ch>
- <CAPv3WKc8gfBb7BDf5kwyPCNRxmS_H8AgQKRitbsqvL7ihbP1DA@mail.gmail.com>
+        Tue, 17 Jan 2023 19:50:22 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845E43D930
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:39:16 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id 7-20020a17090a098700b002298931e366so597504pjo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cieqYlPdo1uMWFm7OPSzxr4vtAv43xHg4HwlwY6s/6o=;
+        b=nqQE3I29WTuB1rTwY0pbYNlIricDb7eFHBNxiFmsUP4hf5TXOZ5GFeHK+Dc+y19rzX
+         vXOAwjPfo5kUNQrn1Uhl9kDcYlzIEgBvtYDIhP5olHCrhliwZ/+7LCZTgfOwpxi9FEzQ
+         Z19T+0nFI64YC4Q/e2MbQ92gOYUxsOAMW3/gU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cieqYlPdo1uMWFm7OPSzxr4vtAv43xHg4HwlwY6s/6o=;
+        b=ckVQRudkHBL76fNNKLusxa6D1aQNHRwxG+sQEGa+ym1sHi5uMfxaGMzSYLjnO4rPPr
+         Oinegak+3YgZpsqMOeNSxMMA7oYEPgMPMtVAjGfXCwvSTIz7rrAE12Dfo7/SE3gePHhD
+         gTQQNsWyTEdmoEVwI8Nsusln+L2h2kJNWy5qOYI0HGrS+uN8N91TfsXTsorsNuOL/cat
+         xr6FlyVB2QMu5zdYN2Oy6GxV0BvvL2kGphYwbJNmTEWTCNjjDRW63e5/g3LpIJ/oc21G
+         DZpjoZ0Z49HuDx7PdwbRuVA7s8mLbprzGBbZRLet4reeCmuVtA+zonx6Ndhdeg/utvo6
+         F7Tg==
+X-Gm-Message-State: AFqh2koWjHqSdnQJTT4LLMb6mWKpx+0vrC35FVeoYbKYqC7wzK7jQjK4
+        Zp0QCGJBj3/HC0lg5Blkf7Hkow==
+X-Google-Smtp-Source: AMrXdXsxsUh+Q9DUm2Lt/KUAvDoICVDTOfIvhFZwMf74WyXYTToyIVobuxF0eu6ruM5544gvUcn0eg==
+X-Received: by 2002:a17:902:ec90:b0:188:6b9c:d17d with SMTP id x16-20020a170902ec9000b001886b9cd17dmr35963362plg.16.1674002356047;
+        Tue, 17 Jan 2023 16:39:16 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id ja15-20020a170902efcf00b0019493c84880sm4589973plb.188.2023.01.17.16.39.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 16:39:15 -0800 (PST)
+Date:   Wed, 18 Jan 2023 09:39:11 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nhat Pham <nphamcs@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] zsmalloc: avoid unused-function warning
+Message-ID: <Y8c/ryHYsC1DjjbW@google.com>
+References: <20230117170507.2651972-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPv3WKc8gfBb7BDf5kwyPCNRxmS_H8AgQKRitbsqvL7ihbP1DA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117170507.2651972-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:05:53PM +0100, Marcin Wojtas wrote:
-> Hi Andrew and Vladimir,
+On (23/01/17 18:04), Arnd Bergmann wrote:
+> obj_allocated() can be called from two places that are each
+> inside of an #ifdef. When both are disabled, the compiler warns:
 > 
-> pon., 16 sty 2023 o 23:04 Andrew Lunn <andrew@lunn.ch> napisał(a):
-> >
-> > On Mon, Jan 16, 2023 at 08:16:18PM +0200, Vladimir Oltean wrote:
-> > > On Mon, Jan 16, 2023 at 05:50:13PM +0000, Russell King (Oracle) wrote:
-> > > > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
-> > > > > fixed-link PHYs API is used by DSA and a number of drivers
-> > > > > and was depending on of_. Switch to fwnode_ so to make it
-> > > > > hardware description agnostic and allow to be used in ACPI
-> > > > > world as well.
-> > > >
-> > > > Would it be better to let the fixed-link PHY die, and have everyone use
-> > > > the more flexible fixed link implementation in phylink?
-> > >
-> > > Would it be even better if DSA had some driver-level prerequisites to
-> > > impose for ACPI support - like phylink support rather than adjust_link -
-> > > and we would simply branch off to a dsa_shared_port_link_register_acpi()
-> > > function, leaving the current dsa_shared_port_link_register_of() alone,
-> > > with all its workarounds and hacks? I don't believe that carrying all
-> > > that logic over to a common fwnode based API is the proper way forward.
+> mm/zsmalloc.c:900:13: error: 'obj_allocated' defined but not used [-Werror=unused-function]
 > 
-> In the past couple of years, a number of subsystems have migrated to a
-> more generic HW description abstraction (e.g. a big chunk of network,
-> pinctrl, gpio). ACPI aside, with this patchset one can even try to
-> describe the switch topology with the swnode (I haven't tried that
-> though). I fully agree that there should be no 0-day baggage in the
-> DSA ACPI binding (FYI the more fwnode- version of the
-> dsa_shared_port_validate_of() cought one issue in the WIP ACPI
-> description in my setup). On the other hand, I find fwnode_/device_
-> APIs really helpful for most of the cases - ACPI/OF/swnode differences
-> can be hidden to a generic layer and the need of maintaining separate
-> code paths related to the hardware description on the driver/subsystem
-> level is minimized.
+> Rather than trying to figure out the correct #ifdef, mark the
+> trivial function as 'inline', which implies __maybe_unused and
+> shuts up the warning.
+> 
+> Fixes: 796c71ac728e ("zsmalloc: fix a race with deferred_handles storing")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-It looks like we are heading towards three different descriptions. OF,
-ACPI and swnode. Each is likely to be different. OF has a lot of
-history in it, deprecated things etc, which should not appear in the
-others. So i see a big ugly block of code for the OF binding, and
-hopefully clean and tidy code for ACPI binding and a clean and tidy
-bit of code for swmode.,
-
-It would be nice if the results of that parsing could be presented to
-the drivers in a uniform way, so the driver itself does not need to
-care where the information came from. But to me it is clear that this
-uniform layer has no direct access to the databases, since the
-database as are different.
-
-	Andrew
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
