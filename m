@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A479D6718E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598156718E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjARK0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:26:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S229502AbjARK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjARKZj (ORCPT
+        with ESMTP id S229766AbjARKZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:25:39 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD07D66D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:29:53 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 18 Jan 2023 05:25:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923E17D663
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:30:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 12A903F3F7;
-        Wed, 18 Jan 2023 10:29:51 +0100 (CET)
-Date:   Wed, 18 Jan 2023 10:29:50 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
-Message-ID: <20230118092950.kctzkvz5h6rzi7rp@SoMainline.org>
-References: <20230117093944.72271-1-andriy.shevchenko@linux.intel.com>
- <20230117231204.fpvxryjscosg57a6@SoMainline.org>
- <Y8ejxsqeHL/pBTAY@smile.fi.intel.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07CDFCE1BDC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303B3C433D2;
+        Wed, 18 Jan 2023 09:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674034218;
+        bh=pUmitdCWgBZAVCI5fSjyfp0oSa/dGTogN9eI1BRZzrs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gwxTJQ77MUNvbysMBAN4/g9PBW68M3KSkeVAUYbBd4nDgMtihXlrtfGnEp8W+P5Mw
+         fizsYN1JvKhCZcRTxr1+ZE5zMGsWBd4fxLYarfFaoSu3434LeHKYeU5ysqFW2t+zGx
+         ucnrF/g1B5QlWKw0pwjH5xmPL+Pn7Zlpo7cEbe2tJr3ry9B1sDmJKMjxwLMAyGiWph
+         fWVTfk+d1eO9xgH8qV9r4+p8z96Y3nnfvRl+Qa86z0XtLf6TYOEcT+ra9rezyV9u7k
+         XtnDrzzgtIAClHuwHcPK6hCZ6QRdYIRocPww2ORNSIxuIUGhbpOiagnxV7aEdzvgCp
+         oT01Ddi2oC/2Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Lewis Huang <Lewis.Huang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: fix dp_retrieve_lttpr_cap() return value
+Date:   Wed, 18 Jan 2023 10:29:56 +0100
+Message-Id: <20230118093011.3796248-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ejxsqeHL/pBTAY@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-18 09:46:14, Andy Shevchenko wrote:
-> On Wed, Jan 18, 2023 at 12:12:04AM +0100, Marijn Suijten wrote:
-> > On 2023-01-17 11:39:44, Andy Shevchenko wrote:
-> > > The node name can contain an address part which is not used by
-> > > the driver. Cut it out before assigning the channel name.
-> > 
-> > This explanation doesn't cut it.  It's not that the driver "doesn't use"
-> 
-> Driver doesn't use it still. There is no contradiction, but I agree that
-> below part is good to have in the commit message.
+From: Arnd Bergmann <arnd@arndb.de>
 
-You can leave that in if you want but that's not the issue that I
-reported/described.  Having both describes the situation in full.
+gcc-13 notices a mismatch between the return type of dp_retrieve_lttpr_cap()
+and the returned value:
 
-> > the address part, it is that this string is propagated into the
-> > userspace label, sysfs /filenames/ *and breaking ABI*.
-> 
-> So I will add it into v2 in case the fix works (see below).
-> 
-> ...
-> 
-> > > -	const char *name = fwnode_get_name(fwnode), *channel_name;
-> > > +	const char *name, *channel_name;
-> > 
-> > I don't think this'll compile as name is still a pointer to const data,
-> > while you're assigning (a '\0' char) to it below.
-> 
-> Right, it's always hard for me to compile things for ARM on x86 :-)
-> Thanks for catching this up!
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_dp_capability.c: In function 'dp_retrieve_lttpr_cap':
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_dp_capability.c:1465:24: error: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Werror=enum-conversion]
+ 1465 |                 return false;
+      |                        ^~~~~
 
-Thanks for sending this in regardless; as said before I rather break ABI
-and clean the driver up properly (no more extend_name...) than sending a
-fix like this :)
+Change the value to an actual dc_status code and remove the bogus
+initialization that was apparently meant to get returned here.
 
-> But does this fix the issue after compilation fix?
+Fixes: b473bd5fc333 ("drm/amd/display: refine wake up aux in retrieve link caps")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-It does, no more @xx in sysfs filenames nor label contents!
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
+index 088f4291bfbf..e72ad1b8330f 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
+@@ -1455,14 +1455,14 @@ static bool dpcd_read_sink_ext_caps(struct dc_link *link)
+ enum dc_status dp_retrieve_lttpr_cap(struct dc_link *link)
+ {
+ 	uint8_t lttpr_dpcd_data[8];
+-	enum dc_status status = DC_ERROR_UNEXPECTED;
+-	bool is_lttpr_present = false;
++	enum dc_status status;
++	bool is_lttpr_present;
+ 
+ 	/* Logic to determine LTTPR support*/
+ 	bool vbios_lttpr_interop = link->dc->caps.vbios_lttpr_aware;
+ 
+ 	if (!vbios_lttpr_interop || !link->dc->caps.extended_aux_timeout_support)
+-		return false;
++		return DC_ERROR_UNEXPECTED;
+ 
+ 	/* By reading LTTPR capability, RX assumes that we will enable
+ 	 * LTTPR extended aux timeout if LTTPR is present.
+-- 
+2.39.0
 
-- Marijn
