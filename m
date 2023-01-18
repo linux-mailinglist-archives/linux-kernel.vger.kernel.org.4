@@ -2,115 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB05672571
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39B7672575
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjARRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S229854AbjARRsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjARRru (ORCPT
+        with ESMTP id S230247AbjARRry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:47:50 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D6CC37;
-        Wed, 18 Jan 2023 09:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674064011; x=1705600011;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/y2B7Acpa6FvFH8fazzDGApEBpGDAqK/p5/R7++N3iA=;
-  b=jbbVgpMHalHpnfj3NhmdA8JYuPh+GSx+HKNwYTTmD22kkzSMWNPCfy6m
-   oNfQoNrkBnCKp42zr16QuUkllnqd5a3fdtij3GAJPte4UZW6sbKS3Fb4Y
-   I4NDrlKx2SPPoTAzaQi9puu541LYiUtxf3wJaTivnXrSV12Y0I42Qb0Nw
-   lEnjK3AmUXGQ7qWvo3QY+c2BmP6Wwt6a/y2vtOWmN1wiJxWuTEGLOlwWq
-   546VRGjvcmefOdQaTMOFGRcbLk8LrBoPQqglqlOJmjCLzoxrhiaZsr8S4
-   XLqNdzAjhOChq0P5xOxClP27H89OAOoeUCna+MPC9vvhtd39Mposws8cR
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,226,1669100400"; 
-   d="scan'208";a="197188845"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jan 2023 10:46:49 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 10:46:49 -0700
-Received: from che-lt-i67786lx.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 10:46:45 -0700
-From:   Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-Subject: [PATCH v2 net] net: dsa: microchip: ksz9477: port map correction in ALU table entry register
-Date:   Wed, 18 Jan 2023 23:17:35 +0530
-Message-ID: <20230118174735.702377-1-rakesh.sankaranarayanan@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 18 Jan 2023 12:47:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551A63CE0D;
+        Wed, 18 Jan 2023 09:47:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E973161944;
+        Wed, 18 Jan 2023 17:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C15EC433EF;
+        Wed, 18 Jan 2023 17:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674064069;
+        bh=dTOao7OTnDD2Bljll1cIh3aZadqaefZ1UzKEm/3O13s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iT9y7TEGJZWJK/D9ZgOxj5SpFsBm9v0WjU7S38iXzcBR1FgigHN9MHeM0yaPntq7Q
+         g1H1dET0MsaTIHxWIZiLxvpDbso5Hso6mUsUylgH2M6wc0GosV82ee/BNvhviIt/KI
+         ILtW5yYOB4RrF4BumnY2jK7vq4YmY6sPooHzsjWRgJNI/v/dm+9AN9XdfSVmmPypO1
+         ijyf7ScoBCof2ZN0IcsF+AYAMV7vtvAkrRnWoQalqhAy0ge60BVoM5MwjJkngjZq6z
+         mJrtEYCtVP79xafZcEdcbxtHbilFsH4+D+90tkE/vsRx6HyyOLsIQLSKVnppepinWc
+         5EgLJv1JXFbqQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     agross@kernel.org, robh+dt@kernel.org, neil.armstrong@linaro.org,
+        mani@kernel.org, srinivas.kandagatla@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, amahesh@qti.qualcomm.com,
+        mathieu.poirier@linaro.org, konrad.dybcio@somainline.org
+Cc:     linux-arm-msm@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        elder@linaro.org, abel.vesa@linaro.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] remoteproc: qcom_q6v5_pas: add support for SM8550 adsp, cdsp & mpss
+Date:   Wed, 18 Jan 2023 11:47:47 -0600
+Message-Id: <167406406337.2924867.12230424280288709048.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
+References: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ALU table entry 2 register in KSZ9477 have bit positions reserved for
-forwarding port map. This field is referred in ksz9477_fdb_del() for
-clearing forward port map and alu table.
+On Wed, 18 Jan 2023 17:22:39 +0100, Neil Armstrong wrote:
+> This patchsets adds support for the aDSP, cDSP and MPSS found in the
+> SM8550 SoC.
+> 
+> The aDSP, cDSP and MPSS boot process on SM8550 now requires a secondary
+> "Devicetree" firmware to be passed along the main Firmware, and the cDSP
+> a new power domain named "NSP".
+> 
+> [...]
 
-But current fdb_del refer ALU table entry 3 register for accessing forward
-port map. Update ksz9477_fdb_del() to get forward port map from correct
-alu table entry register.
+Applied, thanks!
 
-With this bug, issue can be observed while deleting static MAC entries.
-Delete any specific MAC entry using "bridge fdb del" command. This should
-clear all the specified MAC entries. But it is observed that entries with
-self static alone are retained.
+[1/5] dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common
+      commit: cee616c6884616aea3be72a9debafd0614332682
+[2/5] dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp, cdsp & mpss compatible
+      commit: 084258d607128a7486311daf5e67ca414ee07cc9
+[3/5] remoteproc: qcom_q6v5_pas: add support for dtb co-firmware loading
+      commit: 29814986b82e820ae9d3eb7474cdcf66605bd114
+[4/5] remoteproc: qcom_q6v5_pas: add support for assigning memory to firmware
+      commit: c63c0a7cab91b930a6ee78c28b481b84bfa98b7f
+[5/5] remoteproc: qcom_q6v5_pas: add sm8550 adsp, cdsp & mpss compatible & data
+      commit: 7eddedc975638f9bf427e7964c74276450a3021d
 
-Tested on LAN9370 EVB since ksz9477_fdb_del() is used common across
-LAN937x and KSZ series.
-
-Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-
----
-
-v1->v2
-- Based on the community feedback, removed patch from series and
-  added as independent patch.
-- Added Reviewed-by tag.
-
----
----
- drivers/net/dsa/microchip/ksz9477.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 47b54ecf2c6f..6178a96e389f 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -540,10 +540,10 @@ int ksz9477_fdb_del(struct ksz_device *dev, int port,
- 		ksz_read32(dev, REG_SW_ALU_VAL_D, &alu_table[3]);
- 
- 		/* clear forwarding port */
--		alu_table[2] &= ~BIT(port);
-+		alu_table[1] &= ~BIT(port);
- 
- 		/* if there is no port to forward, clear table */
--		if ((alu_table[2] & ALU_V_PORT_MAP) == 0) {
-+		if ((alu_table[1] & ALU_V_PORT_MAP) == 0) {
- 			alu_table[0] = 0;
- 			alu_table[1] = 0;
- 			alu_table[2] = 0;
+Best regards,
 -- 
-2.34.1
-
+Bjorn Andersson <andersson@kernel.org>
