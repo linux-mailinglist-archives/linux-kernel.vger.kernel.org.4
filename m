@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3726D671D69
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F402671D60
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjARNRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S230024AbjARNQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjARNQV (ORCPT
+        with ESMTP id S230500AbjARNQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:16:21 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100E77D650;
-        Wed, 18 Jan 2023 04:40:56 -0800 (PST)
+        Wed, 18 Jan 2023 08:16:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9B97A539;
+        Wed, 18 Jan 2023 04:40:58 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A50DA6602E0B;
-        Wed, 18 Jan 2023 12:40:54 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F277E6602E0C;
+        Wed, 18 Jan 2023 12:40:56 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674045655;
-        bh=+loW/XVzSr0xbOK3szJGLSNgt77x/7ltGgyJxfGL0Dg=;
+        s=mail; t=1674045657;
+        bh=Q8iWargvHqJPqAQEN22KOji42+H6hFh4x33zjT3bNmk=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Lwg4co7MNW1JwE74DkaEE6ExU6hkaR3ExFGYuucN3sCUcKLmIp/UM73u3ickeVvn1
-         5EXe6WN6+PtIsV+oWvqpMc905xTdpKfu3DLpuNhuXAXxwjrjWExk2OinrAUn6wYS4T
-         fahWz4jcYoQUd8xgkSp2btTY/27JvHxMdd+sG3N6P/qbdtcqfChnCYSJaKLywzPlpl
-         gVJ4aYoskD5qSK63XTQjd/+5N/U3tbVTc1YT7bL/mpxL7i1bVkso+nhG2PBqAfCy7F
-         7SXMMlJRKd9bucWAWMvmfTiHdnlHm7TUmBjo3XRvqLGjAK2xbkCABWe5+3brWtOJBF
-         R4nIxrtcU81DA==
-Message-ID: <4da35cf7-5c8b-1086-36aa-760d20774c7c@collabora.com>
-Date:   Wed, 18 Jan 2023 13:40:52 +0100
+        b=d1l1KWQgSEfLpj6MFQZn6l+PeBZeFdXyEEUuMzki5yZdaI2Et2hXu37iCSkQ0/c3o
+         eS0WPYhQ81SuX2ZZqWgbhxgrKyCVE7EdjGrR/HqVDIStdWh0rd5nvT76SxCjgKXpa1
+         N6ckbLnPYcwM7Ml7RLjYorNT5FLm40r4kqOlOSADz9UytaZoyU1UZJ3dJf23ReJD3C
+         7uwSYTU88gbE1ph+MVygrbvgH7dxU6L48UZ+4vqjsPMlyq7memqkmRM6sGbBNw7AbO
+         986M6e2YT0G9CNc+NZ7dcmucL8iHuoM/Px5TMco2K40Ci03ZxZoy0+VgudEYCG2MXf
+         n8EUjlx+ld/pA==
+Message-ID: <640ba00d-8c04-0e24-75b4-7a997cb7780a@collabora.com>
+Date:   Wed, 18 Jan 2023 13:40:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v2 1/9] arm64: dts: mediatek: mt8186: Add MTU3 nodes
+Subject: Re: [PATCH v2 4/9] arm64: dts: mediatek: mt8186: Add ADSP mailbox
+ nodes
 Content-Language: en-US
 To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -54,10 +55,10 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
         hsinyi@chromium.org
 References: <20230118091829.755-1-allen-kh.cheng@mediatek.com>
- <20230118091829.755-2-allen-kh.cheng@mediatek.com>
+ <20230118091829.755-5-allen-kh.cheng@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230118091829.755-2-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20230118091829.755-5-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,93 +71,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 18/01/23 10:18, Allen-KH Cheng ha scritto:
-> Add MTU3 nodes for MT8186 SoC.
+> Add ADSP mailbox node for MT8186 SoC.
 > 
 > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 75 ++++++++++++++++++++++++
->   1 file changed, 75 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> index c0a3afd55eaf..3d88480913eb 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -908,6 +908,43 @@
->   			status = "disabled";
->   		};
->   
-> +		ssusb0: usb@11201000 {
-> +			compatible = "mediatek,mt8186-mtu3",
-> +				     "mediatek,mtu3";
 
-78 columns; compatibles fit in one line.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> +			reg = <0 0x11201000 0 0x2dff>,
-> +			      <0 0x11203e00 0 0x0100>;
 
-80 cols; regs fit in one line.
-
-> +			reg-names = "mac", "ippc";
-> +			clocks = <&topckgen CLK_TOP_USB_TOP>,
-> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_REF>,
-> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_HCLK>,
-> +				 <&infracfg_ao CLK_INFRA_AO_ICUSB>;
-> +			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck";
-> +			interrupts = <GIC_SPI 303 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port0 PHY_TYPE_USB2>;
-> +			power-domains = <&spm MT8186_POWER_DOMAIN_SSUSB>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			status = "disabled";
-> +
-> +			usb_host0: usb@11200000 {
-> +				compatible = "mediatek,mt8186-xhci",
-> +					     "mediatek,mtk-xhci";
-
-90 cols; fits in one line.
-
-...same comments for ssusb1 :-)
-
-> +				reg = <0 0x11200000 0 0x1000>;
-> +				reg-names = "mac";
-> +				clocks = <&topckgen CLK_TOP_USB_TOP>,
-> +					 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_REF>,
-> +					 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_HCLK>,
-> +					 <&infracfg_ao CLK_INFRA_AO_ICUSB>,
-> +					 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_XHCI>;
-> +				clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck", "xhci_ck";
-> +				interrupts = <GIC_SPI 294 IRQ_TYPE_LEVEL_HIGH 0>;
-> +				mediatek,syscon-wakeup = <&pericfg 0x420 2>;
-> +				wakeup-source;
-> +				status = "disabled";
-> +			};
-> +		};
-> +
->   		mmc0: mmc@11230000 {
->   			compatible = "mediatek,mt8186-mmc",
->   				     "mediatek,mt8183-mmc";
-> @@ -939,6 +976,44 @@
->   			status = "disabled";
->   		};
->   
-> +		ssusb1: usb@11281000 {
-> +			compatible = "mediatek,mt8186-mtu3",
-> +				     "mediatek,mtu3";
-> +			reg = <0 0x11281000 0 0x2dff>,
-> +			      <0 0x11283e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_SYS>,
-> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_REF>,
-> +				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_HCLK>,
-> +				 <&clk26m>;
-> +			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck";
-> +			interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			phys = <&u2port1 PHY_TYPE_USB2>,
-> +			       <&u3port1 PHY_TYPE_USB3>;
-
-phys fit in one line.
-
-Regards,
-Angelo
