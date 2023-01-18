@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B29671E63
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407AE671E87
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjARNwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S230115AbjARNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjARNve (ORCPT
+        with ESMTP id S230190AbjARNvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:51:34 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44225E35
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:22:26 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kt14so24292189ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:22:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SyETya9J8nxAxFrENMnlTL//0+Ln7pMx/qK2596DM28=;
-        b=XsiJYGgNlxZHyqh9V2BLU6R0hJmWC96Cf0IqgWjC2xCMob6bkx+XT5obQcHg+mVkVn
-         uv+sCDZOJfC9cN1TICvfQ/Zm1TwDNzWtvlf+l3tjSLpkexi6z5M+lB4DdX0Mz7BUsxfN
-         N6JhFfdKy0VY2kkpZ2q0Rtno/1KBk42j6Bp6RXlQEzgZaEZtXrLtomED+SSZCZ2buLKi
-         tbncdt8EIwyMjTYAi9n0YaFRIb5AHXmsrm6Ew0x5egNQrIu5XN3DsOsfpqf9c8gVlNbh
-         ZwsmaYW9ocEATG7lgVzTRrrOijDXgWRqeZfJhuIuq9e3gy401Pc6C+2mPvDwqcrz8v/4
-         rXBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyETya9J8nxAxFrENMnlTL//0+Ln7pMx/qK2596DM28=;
-        b=BUbyUrtRfd5Uhk07gbMwWq8G9HCXEczNM/G4O19K+Yv8poOWSVk7d09YUIBJlDlcoK
-         XE0LNx9Gzt26PlM3ZTZAosGPapyHdy69DVwa47hQz+ZbgBLAYuH4MRq7N49+9EaliOTQ
-         emOMJTmsSiFBVRt57Bcaop0FzHaaAsRAMq2r4MZ65izRMqO2A6VIzrNe0vBsncpxX6xu
-         TVad4x31Ug5rVIIikXC0UDzL08eu8mHrFEJLgEgwOqK5nIgjApzScYS24flkZr5kRWJx
-         z5TkYQTzcDEyudJgbhWhBeVvoZiaI1Ib3F+UjUjpsFdmuyy3oZcMEBlxXtV8WTttOZJw
-         2OJA==
-X-Gm-Message-State: AFqh2krf50d9gOBnw7J2r3fblFnXKhoS66qc1Z9JwoaVOlyrnTdr/xNn
-        2gmpSuPJVWAMaJy3r5E5UU/63g==
-X-Google-Smtp-Source: AMrXdXumI3LnLjrODIkRwdlfVo7XPFCzuq1zMuzKCmbVt3UZy2jZB9Y230A2uuDcYxpzosH4jmICAw==
-X-Received: by 2002:a17:907:6746:b0:84d:1c67:97d7 with SMTP id qm6-20020a170907674600b0084d1c6797d7mr7664734ejc.30.1674048145282;
-        Wed, 18 Jan 2023 05:22:25 -0800 (PST)
-Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
-        by smtp.gmail.com with ESMTPSA id lj1-20020a170906f9c100b0078d22b0bcf2sm14586201ejb.168.2023.01.18.05.22.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 05:22:24 -0800 (PST)
-Message-ID: <f4e65645-3951-3a38-63fd-d96f48608737@linaro.org>
-Date:   Wed, 18 Jan 2023 14:22:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] clk: qcom: rpmh: remove duplicate IPA clock reference
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
+        Wed, 18 Jan 2023 08:51:37 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C4910F0;
+        Wed, 18 Jan 2023 05:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674048169; x=1705584169;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nj0qpQdgtaOkN7UVN/SyAs7hEIf/6xEd/lNQJtbQvrk=;
+  b=Xt265l+HwZoCu+7oK//xxbw7qbit/qoOIrcXoamq9d/LT+NEfDwTlLfg
+   DWMu4Sq3hy+Z3Q96lDU+CtOt0sRC9l4GQNIV8lGa2EJtoak6RsBDzOx35
+   R7551QFIjv7lF+olv/lU7a05xTZlfn22z/gLOud6m/SS3RWbbm+8B9+Xr
+   lX6SHjdHwwURW+yNqDmp8DDwDwc/hR7Se0DbcskXPMZNKXzUwZeS1NFqK
+   HlVdue+dql9CF7cEBVRE9wdz9EFmCiV9jzdHDCyZiQGC2UykIFS0xB7lk
+   n3tRNGXmg0zrNuI5CTKdfskdQbqVHiWbExqMAW/bBn8dKhmH7ue8+Ux78
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="387330412"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="387330412"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 05:22:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="609649791"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="609649791"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2023 05:22:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pI8Oo-00BCHY-1j;
+        Wed, 18 Jan 2023 15:22:42 +0200
+Date:   Wed, 18 Jan 2023 15:22:42 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Alex Elder <elder@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230117170217.2462320-1-arnd@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230117170217.2462320-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v2 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
+Message-ID: <Y8fyonSp49QoAb8v@smile.fi.intel.com>
+References: <20230118100623.42255-1-andriy.shevchenko@linux.intel.com>
+ <20230118123528.oaxtjbdier3ojd3m@SoMainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118123528.oaxtjbdier3ojd3m@SoMainline.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 18, 2023 at 01:35:28PM +0100, Marijn Suijten wrote:
+> On 2023-01-18 12:06:23, Andy Shevchenko wrote:
+> > The node name can contain an address part which is unused
+> > by the driver. Moreover, this string is propagated into
+> > the userspace label, sysfs filenames *and breaking ABI*.
+> > 
+> > Cut the address part out before assigning the channel name.
+> > 
+> > Fixes: 4f47a236a23d ("iio: adc: qcom-spmi-adc5: convert to device properties")
+> > Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+Thank you!
+
+My answers below.
+
+...
+
+> > +	name = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", fwnode);
+> 
+> Is this better/cleaner than copying the string from fwnode_get_name?
+
+Coying to where? And what would be the lifetime of that string?
+
+With devm_kasprintf():
+- we don't care how long the string is
+- we don't care about corner cases of lifetime as it's the same as
+  device itself (i.o.w. the same as the IIO device container)
+
+...
+
+> > +	name[strchrnul(name, '@') - name] = '\0';
+> 
+> This is the same as *strchrnul(name, '@') = '\0'; if I'm not mistaken.
+
+Yes, But it's harder to read and understand. I believe the compiler has
+enough power to optimize this to the same assembly code.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 17.01.2023 18:02, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> One of the ones that were recently added was already there:
-> 
-> drivers/clk/qcom/clk-rpmh.c:578:35: error: initialized field overwritten [-Werror=override-init]
->   578 |         [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
-> 
-> Fixes: aa055bf158cd ("clk: qcom: rpmh: define IPA clocks where required")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/clk/qcom/clk-rpmh.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index 393b83f6020e..45ee370f3307 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -575,7 +575,6 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
->  	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
->  	[RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
->  	[RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
-> -	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
->  };
->  
->  static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
