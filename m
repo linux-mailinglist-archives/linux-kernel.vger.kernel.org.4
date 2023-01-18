@@ -2,132 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A32672CBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EA6672CC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjARXnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S230007AbjARXo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjARXnJ (ORCPT
+        with ESMTP id S229618AbjARXoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:43:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D41E656C3;
-        Wed, 18 Jan 2023 15:43:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4589D61AC2;
-        Wed, 18 Jan 2023 23:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403F0C433EF;
-        Wed, 18 Jan 2023 23:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674085386;
-        bh=Okd6MIEI+bnAJs2p19rWhJG6+ljN8iX62czvy5e5c4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FMWFJvg3ySJH0/xRmzFgX4ei12XCJ5lb0Yl/JzgdDT7Zm6buaZShV2CeaPY8LpDpY
-         8VOatkM9mAFJLZXAODl1O3ey0EzSTLWATSDKVJzes85RwWWLSnIompE0k5DP0Evk7n
-         rK9ErPDnQ+pEdhJBRWeDhGMyyMRWSXaGj9jNVT7wTRzWDaJZy/dIpaq+sm/5EuvpQf
-         y+wAYGHrI4ndrhR420aWYE1sXSPeU8zIlKWm6MkudIP9XTT4nXM/aG05Qv5sdOKkmm
-         czKMDGGowcBcNBvlsiErUA1e6EyVhYUclEFL8GRh/6HjroEMeuh7nCUPrbJO/CbZ6Y
-         S7HryQL2hYdcQ==
-Date:   Wed, 18 Jan 2023 23:43:00 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Wed, 18 Jan 2023 18:44:25 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC2E4CE76;
+        Wed, 18 Jan 2023 15:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674085464; x=1705621464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7Yh3EAC0PxCdi2jFquKgMR9NhSAoOEHy7pAX3WXIBO8=;
+  b=VTjrJBqoRR1pqkBa6JoDhzSkA1jguwvcENUYIfJJIz845NIuhJ4olPhc
+   d1ir/nCjpRYoNgj18+bcmfHlxeLRpeJH0RcuEifT9UiBANi+SithfrCO+
+   OFqR9c/aQjkpp1HRrV3Kq3+5/27skJLZ/gIJ9x2JkqGH4hT0PWbdnKh6D
+   RpOJwOHGIE7NkBpAIm9q+zV8NWIyaccYeck0RmAT7Qo+4f/6fX3e1gjSn
+   9sCxCnTXkkWoya/QuXqBm8CONJesoYfROFUJNB7f19X5vDLGrs+/laGna
+   FwrMfzi9BFROvA+zlcVfzXSumTfsUs+MvTWG5UQWIY3u0PldH9uRn1kMo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304820202"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="304820202"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:44:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="748679199"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="748679199"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Jan 2023 15:44:20 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pII6N-0000ow-1E;
+        Wed, 18 Jan 2023 23:44:19 +0000
+Date:   Thu, 19 Jan 2023 07:43:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gregory Price <gourry.memverge@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
- VisionFive 2 board device tree
-Message-ID: <Y8iEBOjLthlNX/xy@spud>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-8-hal.feng@starfivetech.com>
- <Y72nbfJxYdO2AojI@spud>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
+        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <202301190722.ouyr6mLZ-lkp@intel.com>
+References: <20230118201055.147228-4-gregory.price@memverge.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Ck4pvxVOY1Kfvyhk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y72nbfJxYdO2AojI@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118201055.147228-4-gregory.price@memverge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Gregory,
 
---Ck4pvxVOY1Kfvyhk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch! Perhaps something to improve:
 
-On Tue, Jan 10, 2023 at 05:59:09PM +0000, Conor Dooley wrote:
-> On Tue, Dec 20, 2022 at 09:12:47AM +0800, Hal Feng wrote:
->=20
-> > +	aliases {
-> > +		serial0 =3D &uart0;
-> > +	};
-> > +
-> > +	chosen {
-> > +		stdout-path =3D "serial0:115200n8";
-> > +	};
->=20
-> So I think this is wrong, and the stdout-path should be uart3 instead.
-> Per the QSG [0], GPIO5/6 are the suggested UART Tx/Rx to use.
-> This appears to map to uart3 rather than uart0.
-> FWIW, uart3 is also the stdout-path for the v1, see:
-> arch/riscv/boot/dts/starfive/jh7100-common.dtsi
->=20
-> At least, that change is what I needed to do in order to use the
-> JH7110_VisionFive2_upstream branch, AFAICT matches what you've got in
-> this series.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc4 next-20230118]
+[cannot apply to tip/core/entry]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I went and re-tried things again today, but with the clk & pinctrl series
-=66rom the ML instead of that branch.
-I'd gone and used that branch instead of the patches, as there were some
-build issues with the pinctrl driver from the patches.
-I fixed the build issues in the pinctrl driver and now uart0 works.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+patch link:    https://lore.kernel.org/r/20230118201055.147228-4-gregory.price%40memverge.com
+patch subject: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230119/202301190722.ouyr6mLZ-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bd6833b41ed48c444c09346f695efe229deec2e9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+        git checkout bd6833b41ed48c444c09346f695efe229deec2e9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k prepare
 
-Looking at it again, it makes sense for uart0 to be serial0, given
-there's pinconf stuff being done in this DT for pins 5 & 6 for uart0.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Perhaps by using that branch, I was using some older drivers etc given
-it seems to mostly contain commits dating from November?
-I'm still a bit confused about the whole thing, given I tried out a
-whole load of branches to get something booting with ethernet support
-that day!
+All warnings (new ones prefixed by >>):
 
-Since this seems to work with the fixed pinctrl driver, I don't think
-you need to change anything here.
+   In file included from include/linux/sched.h:31,
+                    from arch/m68k/kernel/asm-offsets.c:15:
+>> include/linux/syscall_user_dispatch.h:45:5: warning: no previous prototype for 'syscall_user_dispatch_get_config' [-Wmissing-prototypes]
+      45 | int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/syscall_user_dispatch.h:51:5: warning: no previous prototype for 'syscall_user_dispatch_set_config' [-Wmissing-prototypes]
+      51 | int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from include/linux/sched.h:31,
+                    from arch/m68k/kernel/asm-offsets.c:15:
+>> include/linux/syscall_user_dispatch.h:45:5: warning: no previous prototype for 'syscall_user_dispatch_get_config' [-Wmissing-prototypes]
+      45 | int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/syscall_user_dispatch.h:51:5: warning: no previous prototype for 'syscall_user_dispatch_set_config' [-Wmissing-prototypes]
+      51 | int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Apologies for the noise!
-Conor.
 
+vim +/syscall_user_dispatch_get_config +45 include/linux/syscall_user_dispatch.h
 
---Ck4pvxVOY1Kfvyhk
-Content-Type: application/pgp-signature; name="signature.asc"
+    44	
+  > 45	int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+    46		void __user *data)
+    47	{
+    48		return -EINVAL;
+    49	}
+    50	
+  > 51	int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+    52		void __user *data)
+    53	{
+    54		return -EINVAL;
+    55	}
+    56	
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8iEBAAKCRB4tDGHoIJi
-0ui9AQCEj0sA+NvX+A6mlsoSkQPrEOSs990I2Ni0LtP1f+xkRAEAw6Srrmpajmp3
-i9HfNdFUU1MPc0SrwlyKgR5faz0F7AU=
-=vX2v
------END PGP SIGNATURE-----
-
---Ck4pvxVOY1Kfvyhk--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
