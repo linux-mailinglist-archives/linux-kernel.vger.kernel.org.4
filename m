@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221C4671049
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4252367105E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjARBm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S229475AbjARBob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjARBmG (ORCPT
+        with ESMTP id S229863AbjARBoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:42:06 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AB3521EE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:40:35 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id e16so8199192ljn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=shjxwHFTr8u+xtmkHSiNEPjbEsIzgwDSfE4nzs+fRNw=;
-        b=KrhzIKzM90qTaCHwmda4g4cFsl9KD/JjaVWAW9LFfm+LeBPGK+w21ZswOITVgiHylo
-         ptD30erVVRaaMvBV70Q5d90mX31U4KJx2G0Mj2aSs2d/MOEZui38RCFdN0BHcDD1HBwG
-         wOL571cyO7AqTCv9OCQL9NPt5xEcQDLVTPG5h9Bj3jN65oluDS5vesZ2+aL4F6GYE8H9
-         r7KvAN9SLmZ8FrgjYXvZEuvmREvJfuTAIqA/yaZGvOMNMJh2lxa5/7wAlpKqMGrF+rjU
-         a0c+qckd2+VRljzCqy8o+TqH/c6wWDDFCPySuOufEFTCc3aHD9dkx9ZHr6YaBoeAJ53s
-         bPWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=shjxwHFTr8u+xtmkHSiNEPjbEsIzgwDSfE4nzs+fRNw=;
-        b=Z+lmKhty/Z0P3ZM72PqvD6JYW6tzqa7vjKDAKrAC7dNPhL1fCvgDzzon+q2reU2XXr
-         U/tH36rDGW3KpnUTB0bg22TwAZd7NauA4PqoVcyzRJaBK4CGGm4Qg/lIZNtHx9aSRCT8
-         O/BlE/Kj1S0qaKaY3F5oI5ALZW6VmjvjvP54+jcKixSGqKGOXZHjHxLL5tq/aI6El7SZ
-         kVoYY7KgVCt2mmQLBbv5I+hsSP2uF85AeAmEq9yLptLZ9T23I2mlLPgWz/b3wbGJqOOf
-         +Lse3TrhSu8yK0hYOTpEtzUjxhh7hRNXu56PPp10n34ef7DmezTXQ/DHiRKzj2ZF83f6
-         vI4A==
-X-Gm-Message-State: AFqh2kq6yZHVzbvBZ13eZh+0X6u92StJbYZS12vjO7mBr9xUQ4wLq0RH
-        eCwHfXF5o06vuETHSpqrzkJ2JN2bAU/SqP6Tm3o=
-X-Google-Smtp-Source: AMrXdXvAwUPKSzfj4epK+2tmhQyLB90xdP0y1j/zdjuaZQlH0y9EFMPG4XSSGEHCVXPsQ+wyBLtGhrlRml629G+FY/Y=
-X-Received: by 2002:a2e:a4a4:0:b0:27f:7ee5:8424 with SMTP id
- g4-20020a2ea4a4000000b0027f7ee58424mr278315ljm.114.1674006027132; Tue, 17 Jan
- 2023 17:40:27 -0800 (PST)
+        Tue, 17 Jan 2023 20:44:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6BD51C54;
+        Tue, 17 Jan 2023 17:43:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11D82615DA;
+        Wed, 18 Jan 2023 01:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7CFFC433EF;
+        Wed, 18 Jan 2023 01:43:10 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 20:43:09 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC PATCH 1/9] fprobe: Pass entry_data to handlers
+Message-ID: <20230117204309.1cd8f20f@gandalf.local.home>
+In-Reply-To: <166792256330.919356.14776044963704066797.stgit@devnote3>
+References: <166792255429.919356.14116090269057513181.stgit@devnote3>
+        <166792256330.919356.14776044963704066797.stgit@devnote3>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <1673943112-8620-1-git-send-email-zhaoyang.huang@unisoc.com>
- <20230117161731.ab69c2352a62a0693570cf70@linux-foundation.org>
- <CAGWkznHKJF1hiVTS2gAxgywnGz4T9u8UQtDV_Oj7r3cWqM5=nA@mail.gmail.com> <20230117173145.867a06c1585728da1e9b6a54@linux-foundation.org>
-In-Reply-To: <20230117173145.867a06c1585728da1e9b6a54@linux-foundation.org>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 18 Jan 2023 09:40:03 +0800
-Message-ID: <CAGWkznEusXRmi=ZEOvfK8qRfe+aKWa3X-bLG28=XoeGZ5umeuQ@mail.gmail.com>
-Subject: Re: [PATCHv2] mm: use stack_depot_early_init for kmemleak
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:31 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 18 Jan 2023 09:25:48 +0800 Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
->
-> > On Wed, Jan 18, 2023 at 8:17 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue, 17 Jan 2023 16:11:52 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
-> > >
-> > > > Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
-> > > > Solve this by having stackdepot use stack_depot_early_init. Extra Kconfig also
-> > > > done by moving kmemleak stuff to mm/Kconfig.debug.
-> > >
-> > > I don't understand - what was the reason for the Kconfig change?
-> > The items related to kmemleak are moved from lib/Kconfig.debug to
-> > mm/Kconfig.debug
->
-> Well yes, but why?
-It was suggested by Vlastimil in a previous comment. It makes more
-sense to have kmemleak's source code and Kconfig items under the same
-directory.
->
-> Is that related to this bug fix?  If not then please let's have that
-> change in a separate patch.
-The moved items are updated for this bug fix.
->
+On Wed,  9 Nov 2022 00:49:23 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index e8143e368074..fa25d09c9d57 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -17,14 +17,16 @@
+>  struct fprobe_rethook_node {
+>  	struct rethook_node node;
+>  	unsigned long entry_ip;
+> +	char data[];
+>  };
+>  
+>  static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+>  	struct fprobe_rethook_node *fpr;
+> -	struct rethook_node *rh;
+> +	struct rethook_node *rh = NULL;
+>  	struct fprobe *fp;
+> +	void *entry_data = NULL;
+>  	int bit;
+>  
+>  	fp = container_of(ops, struct fprobe, ops);
+> @@ -37,9 +39,6 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  		return;
+>  	}
+>  
+> -	if (fp->entry_handler)
+> -		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
+> -
+>  	if (fp->exit_handler) {
+>  		rh = rethook_try_get(fp->rethook);
+>  		if (!rh) {
+> @@ -48,9 +47,16 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  		}
+>  		fpr = container_of(rh, struct fprobe_rethook_node, node);
+>  		fpr->entry_ip = ip;
+> -		rethook_hook(rh, ftrace_get_regs(fregs), true);
+> +		if (fp->entry_data_size)
+> +			entry_data = fpr->data;
+>  	}
+>  
+> +	if (fp->entry_handler)
+> +		fp->entry_handler(fp, ip, ftrace_get_regs(fregs), entry_data);
+> +
+> +	if (rh)
+> +		rethook_hook(rh, ftrace_get_regs(fregs), true);
+> +
+>  out:
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+> @@ -81,7 +87,8 @@ static void fprobe_exit_handler(struct rethook_node *rh, void *data,
+>  
+>  	fpr = container_of(rh, struct fprobe_rethook_node, node);
+>  
+> -	fp->exit_handler(fp, fpr->entry_ip, regs);
+> +	fp->exit_handler(fp, fpr->entry_ip, regs,
+> +			 fp->entry_data_size ? (void *)fpr->data : NULL);
+>  }
+>  NOKPROBE_SYMBOL(fprobe_exit_handler);
+>  
+> @@ -146,7 +153,7 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
+>  	for (i = 0; i < size; i++) {
+>  		struct fprobe_rethook_node *node;
+>  
+> -		node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +		node = kzalloc(sizeof(*node) + fp->entry_data_size, GFP_KERNEL);
+
+		node = kzalloc(struct_size(node, data, fp->entry_data_size), GFP_KERNEL);
+
+Should use struct_size() for any tail structure allocations.
+
+-- Steve
+
+
+>  		if (!node) {
+>  			rethook_free(fp->rethook);
+>  			fp->rethook = NULL;
+> diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
+> index e0381b3ec410..34fa5a5bbda1 100644
