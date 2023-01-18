@@ -2,133 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520A5671A8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B124E671A94
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjARL2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S230014AbjARL3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 06:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjARL1l (ORCPT
+        with ESMTP id S229742AbjARL32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:27:41 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175FCBD145;
-        Wed, 18 Jan 2023 02:45:53 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id mg12so9851399ejc.5;
-        Wed, 18 Jan 2023 02:45:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FJaMI56CuLQSWiXvcFp/J8HGei2lr3N4VqMBnaci1Eg=;
-        b=h1pBp+ReYZJ1R2WXFgIEHoWl0UI1RZ8YxXFlZUuvlcn7bNNethjx3rZKL83ZRXIt1A
-         2tzcW98ytzjAjZUkpVYsIP9xVm481iP91GeIlzPkssYEKvxyKHfVbWP+rbxHABMVMFBx
-         n8iGaTiyh7PIcCzRfnVRFPUwfI2NncWMoAQVUbvW2GdKdBajOtC8X/RluZu6lKj0Y2zp
-         HUP8jb8ooNS8SAsclVxfsDLO2u4nyeIb89YrLKtNeS44tVrY/C+zF6tojUAcTVAHAWfj
-         h0iK9568MFunp7NedC8boxuY+DHoWCOrrXv4HcysNklsV0uSAt3Zva3Hch3hioRBmwyF
-         FoXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FJaMI56CuLQSWiXvcFp/J8HGei2lr3N4VqMBnaci1Eg=;
-        b=3mTIfZqT/5FqnJ6Z1/UYhqvQbxXUMXWVz6WBrLK9IfXQOR96W9ucFU8e/0Pyvk9UfD
-         YHOZ6f+WDjweHgxtsaOTjwuadGZtSSrQHHr9gzpNAYgX7Xv6GSI2Yx/B98iC93CL0M5R
-         Zi6wWKpjBl2P/FiTfzxWRqyugP3wiF0AvUNleeCboHYdIWAp6c1EQW2qXcIh1qEdBI/4
-         NYrNBBLIr/F4rlSdrjocZTHT+fsOa15Nfj8zra9jRPF5fVsNZF3YK0sgoqX56ovzwjsB
-         Ajl4bWJBPQ2RtxILiwNCkdUN6HGYJUTpQZdKUiKwz7xAC0J2XLXNedz0KXmnTtdss5Cd
-         xloQ==
-X-Gm-Message-State: AFqh2kq6KcHOcSn1MKj7jtNjPbC41uLvaLEl4pQmmrMTVt049akTXzoE
-        N2slDy1gNU9PYLi1+UZOB80=
-X-Google-Smtp-Source: AMrXdXtvhn2U2RX2/t9Rt422JPZkiRxbYqLS3xwB7ZOocBkenMXPFWgl4FYZh4Nlmxi0Bnir2UzbBQ==
-X-Received: by 2002:a17:906:fb0d:b0:856:6884:675f with SMTP id lz13-20020a170906fb0d00b008566884675fmr6467925ejb.52.1674038751892;
-        Wed, 18 Jan 2023 02:45:51 -0800 (PST)
-Received: from gmail.com ([31.46.242.11])
-        by smtp.gmail.com with ESMTPSA id f1-20020a17090631c100b007aea1dc1840sm14429002ejf.111.2023.01.18.02.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 02:45:51 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 18 Jan 2023 11:45:45 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <Y8fN2VQQTGUZ3ykw@gmail.com>
-References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
- <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+        Wed, 18 Jan 2023 06:29:28 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88017EE69
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:47:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=D75eo0h5T7Zuy+D/osTKqodsU7t
+        pNCZ6QKBRj8l+SQ4=; b=x44Yl7QNAoUxSwMGbDgJlt+BtwYpPmRWUxJc5G08bbv
+        fPnHFcxk+F0in4I2G2KPN9xsBk082WYKZ9uBTpj9YphK3IaZaeYg8zlB5c5Sci86
+        8jN1U8q4rBTDjig58GKog88edjZT04Kg5QQtNTngWwyjuICqkeGXAEZquDx4I0ZM
+        =
+Received: (qmail 3853298 invoked from network); 18 Jan 2023 11:46:58 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Jan 2023 11:46:58 +0100
+X-UD-Smtp-Session: l3s3148p1@BhQYiYfyHopehhrZ
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Date:   Wed, 18 Jan 2023 11:46:56 +0100
+Message-Id: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Cong Dang <cong.dang.xn@renesas.com>
 
-* Mel Gorman <mgorman@techsingularity.net> wrote:
+According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+setting is different on R-Car SoCs, i.e.
 
-> > > dio_truncate is not a realtime application but indefinite writer 
-> > > starvation
-> > 
-> > If so then the PI boosting would not work if we would have it ;)
-> > 
-> 
-> True, but it's still undesirable for a basic functional test using normal 
-> tasks with no prioritisation to stall forever.
+R-Car H3 ES1.*  : STRTIM[2:0] is set to 0x0
+R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+other R-Car Gen3: STRTIM[2:0] is set to 0x7
+other R-Car Gen4: STRTIM[3:0] is set to 0xf
 
-Agreed.
+To fix this issue, a DT match data was added to specify the setting
+for special use cases.
 
-> +/*
-> + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
-> + * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM implementation.
-> + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_timeout
-> + * is used to detect recent DL / RT tasks taking a read lock.
-> + */
-> +#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
-> +
-> +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
-> +{
-> +	/* No update required if DL / RT tasks already identified. */
-> +	if (rwb->waiter_timeout & 1)
-> +		return;
-> +
-> +	/*
-> +	 * Record a DL / RT task acquiring the lock for read. This may result
-> +	 * in indefinite writer starvation but DL / RT tasks should avoid such
-> +	 * behaviour.
-> +	 */
-> +	if (rt_task(current)) {
-> +		struct rt_mutex_base *rtm = &rwb->rtmutex;
-> +		unsigned long flags;
-> +
-> +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
-> +		rwb->waiter_timeout |= 1;
-> +		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
-> +	}
-> +}
+Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+[wsa: rebased, restructured a little, added Gen4 support]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-So I'm not sure this should be dependent on the task being an RT task.
+Change since V1:
 
-Starvation scenarios are bad no matter what scheduling policy is used.
+* use proper mask when updating STRTIM bits (thanks, Geert!)
 
-Should be unconditional - and all workloads should live with the new 
-behavior.
+look for 'RPCIF_PHYCNT_STRTIM', there is the change. Rest is the same.
 
-Thanks,
+ drivers/memory/renesas-rpc-if.c | 63 ++++++++++++++++++++++++++-------
+ include/memory/renesas-rpc-if.h |  6 ++++
+ 2 files changed, 56 insertions(+), 13 deletions(-)
 
-	Ingo
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index c36b407851ff..845b535a5350 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -7,6 +7,7 @@
+  * Copyright (C) 2019-2020 Cogent Embedded, Inc.
+  */
+ 
++#include <linux/bitops.h>
+ #include <linux/clk.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+@@ -15,6 +16,7 @@
+ #include <linux/of_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++#include <linux/sys_soc.h>
+ 
+ #include <memory/renesas-rpc-if.h>
+ 
+@@ -163,6 +165,36 @@ static const struct regmap_access_table rpcif_volatile_table = {
+ 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
+ };
+ 
++static const struct rpcif_info rpcif_info_r8a7795_es1 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 0,
++};
++
++static const struct rpcif_info rpcif_info_r8a7796_es1 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 6,
++};
++
++static const struct rpcif_info rpcif_info_gen3 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_rz_g2l = {
++	.type = RPCIF_RZ_G2L,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_gen4 = {
++	.type = RPCIF_RCAR_GEN4,
++	.strtim = 15,
++};
++
++static const struct soc_device_attribute rpcif_info_match[]  = {
++	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rpcif_info_r8a7795_es1 },
++	{ .soc_id = "r8a7796", .revision = "ES1.*", .data = &rpcif_info_r8a7796_es1 },
++	{ /* Sentinel. */ }
++};
+ 
+ /*
+  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
+@@ -256,6 +288,8 @@ static const struct regmap_config rpcif_regmap_config = {
+ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
++	const struct soc_device_attribute *attr;
++	const struct rpcif_info *info;
+ 	struct resource *res;
+ 
+ 	rpc->dev = dev;
+@@ -276,9 +310,14 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(rpc->dirmap))
+ 		return PTR_ERR(rpc->dirmap);
+-	rpc->size = resource_size(res);
+ 
+-	rpc->type = (uintptr_t)of_device_get_match_data(dev);
++	info = of_device_get_match_data(dev);
++	attr = soc_device_match(rpcif_info_match);
++	if (attr)
++		info = attr->data;
++
++	rpc->info = info;
++	rpc->size = resource_size(res);
+ 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 
+ 	return PTR_ERR_OR_ZERO(rpc->rstc);
+@@ -305,7 +344,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 
+ 	pm_runtime_get_sync(rpc->dev);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L) {
++	if (rpc->info->type == RPCIF_RZ_G2L) {
+ 		int ret;
+ 
+ 		ret = reset_control_reset(rpc->rstc);
+@@ -321,12 +360,10 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 	/* DMA Transfer is not supported */
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
+ 
+-	if (rpc->type == RPCIF_RCAR_GEN3)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
+-	else if (rpc->type == RPCIF_RCAR_GEN4)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
++	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++			   /* create mask with all affected bits set */
++			   RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strtim)) - 1),
++			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
+ 
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
+ 			   RPCIF_PHYOFFSET1_DDRTMG(3));
+@@ -337,7 +374,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
+ 				   RPCIF_PHYINT_WPVAL, 0);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L)
++	if (rpc->info->type == RPCIF_RZ_G2L)
+ 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+ 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
+ 				   RPCIF_CMNCR_BSZ(3),
+@@ -720,9 +757,9 @@ static int rpcif_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id rpcif_of_match[] = {
+-	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
+-	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
+-	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
++	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
++	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
++	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, rpcif_of_match);
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 862eff613dc7..75da785a18ff 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -63,6 +63,11 @@ enum rpcif_type {
+ 	RPCIF_RZ_G2L,
+ };
+ 
++struct rpcif_info {
++	enum rpcif_type type;
++	u8 strtim;
++};
++
+ struct rpcif {
+ 	struct device *dev;
+ 	void __iomem *base;
+@@ -71,6 +76,7 @@ struct rpcif {
+ 	struct reset_control *rstc;
+ 	size_t size;
+ 	enum rpcif_type type;
++	const struct rpcif_info *info;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
+ 	u8 xfer_size;
+-- 
+2.30.2
+
