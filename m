@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1592967226C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126F0672272
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjARQEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S230203AbjARQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjARQDp (ORCPT
+        with ESMTP id S230113AbjARQFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:03:45 -0500
-Received: from outbound-smtp05.blacknight.com (outbound-smtp05.blacknight.com [81.17.249.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771A03EC58
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:00:23 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp05.blacknight.com (Postfix) with ESMTPS id 210EFCCB81
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:00:22 +0000 (GMT)
-Received: (qmail 11314 invoked from network); 18 Jan 2023 16:00:21 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 Jan 2023 16:00:21 -0000
-Date:   Wed, 18 Jan 2023 16:00:20 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <20230118160020.jcubwokkipnm7fls@techsingularity.net>
-References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
- <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
- <Y8fN2VQQTGUZ3ykw@gmail.com>
+        Wed, 18 Jan 2023 11:05:43 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F120E58290;
+        Wed, 18 Jan 2023 08:02:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674057753; x=1705593753;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mYfGJuIXXRAEIbpAJg9uFdYN4T7ljyJ2hkxHWZSL2KI=;
+  b=G0Pt/2IJVEbHKHebwE5WKdZ25WjBDAD4Q8/2lUUxaTixL5uydFTVHr1E
+   Plp5BZe//9FhoSRQyaJN9r9b5K94WZ88kvXq3iiTh6eRfTSjMjmNQUiMg
+   hVSd1OwOam6Yv+2cfLa0Lh2RxQk2D8SC2Gvq7pg1zj4rV16x1wrYJ5yMr
+   3vUPeJwSFOx4vNItq6oZoUvO3oqh28ONfx2hcuAM7Ckiy2ehggWUL6/Ho
+   GC1u0GGx7VyqdFjk3Nw+lcqCCf4wiO4rMD3HpEshX0ubDHWh0R6pM1df+
+   I9Xjpi/ucxuDeOMcg3zOUobim8+crpm4GmD9/mFTeyp4rEfm7aWuiUw/1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411252681"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="411252681"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 08:01:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637333673"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="637333673"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2023 08:01:25 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pIAsM-00BG0e-1E;
+        Wed, 18 Jan 2023 18:01:22 +0200
+Date:   Wed, 18 Jan 2023 18:01:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
+Message-ID: <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8fN2VQQTGUZ3ykw@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:45:45AM +0100, Ingo Molnar wrote:
+On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:
+> Hi,
 > 
-> > +/*
-> > + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
-> > + * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM implementation.
-> > + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_timeout
-> > + * is used to detect recent DL / RT tasks taking a read lock.
-> > + */
-> > +#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
-> > +
-> > +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
-> > +{
-> > +	/* No update required if DL / RT tasks already identified. */
-> > +	if (rwb->waiter_timeout & 1)
-> > +		return;
-> > +
-> > +	/*
-> > +	 * Record a DL / RT task acquiring the lock for read. This may result
-> > +	 * in indefinite writer starvation but DL / RT tasks should avoid such
-> > +	 * behaviour.
-> > +	 */
-> > +	if (rt_task(current)) {
-> > +		struct rt_mutex_base *rtm = &rwb->rtmutex;
-> > +		unsigned long flags;
-> > +
-> > +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
-> > +		rwb->waiter_timeout |= 1;
-> > +		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
-> > +	}
-> > +}
+> You can find the v6 from:
 > 
-> So I'm not sure this should be dependent on the task being an RT task.
+> https://lore.kernel.org/all/20230105140307.272052-1-tomi.valkeinen@ideasonboard.com/
 > 
-> Starvation scenarios are bad no matter what scheduling policy is used.
+> Main changes:
 > 
-> Should be unconditional - and all workloads should live with the new 
-> behavior.
+> * i2c-atr: Use bus notifier. This allows us to drop the patch that adds
+>   the attach_client/detach_client callbacks. On the downside, it removes
+>   the option for error handling if the translation setup fails, and also
+>   doesn't provide us the pointer to the i2c_board_info. I belive both
+>   are acceptable downsides.
 > 
+> * Use fwnode in the fpdlink drivers instead of OF
+> 
+> * Addressed all the review comments (I hope)
+> 
+> * Lots of cosmetic or minor fixes which I came up while doing the fwnode
+>   change
 
-The DL / RT task special casing was based on feedback given here
-https://lore.kernel.org/r/Y7wxjBN9bDaZ0BKo@hirez.programming.kicks-ass.net.
-Based on that, I assumed that allowing write to blocks readers that
-may be depending on priority inheritance is potentially problematic for
-applications that likely have been designed with writer-starvation in mind.
-The first version of the patch did not care about the scheduling classes
-were but I admit there is a non-zero possibility that breaking reader bias
-for a writer may break some unknown RT-specific application that relied
-on writer starvation for DL / RT tasks.
+I believe my comments to the first driver applies to the next two, so please
+address them whenever you are agree / it's possible / it makes sense.
+
+About ATR implementation. We have the i2c bus (Linux representation of
+the driver model) and i2c_adapter and i2c_client objects there. Can't we
+have an i2c_client_aliased in similar way and be transparent with users?
+
+It's just a thought which may be well far from the possibility
+to be implemented if even possible...
 
 -- 
-Mel Gorman
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
+
+
