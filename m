@@ -2,177 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4675F672232
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EB567213B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjARPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S230194AbjARP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjARPyM (ORCPT
+        with ESMTP id S230507AbjARP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:54:12 -0500
-X-Greylist: delayed 887 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 07:51:05 PST
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9651B3A86B;
-        Wed, 18 Jan 2023 07:51:04 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674055580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oh1p6MQJBk1v+dZi/ao7mkvsZxgunqwy2zNpz53Nk9Q=;
-        b=gCR4Eo2NDzSBH5kJqEcQmic2x/rt7h3W3vJR5nVRP0pmoNtZthy5Ij3dVYCPtKxDOe7rze
-        Yh04QjizoCgCMeHeV0/Bm35tiKLymzlFhAj6NEaLjWKkO456Lkff5M+9K+PUFJ5NI7tTnV
-        OgFXO41CZsefCw4Xqk0Fh2eC0EAiUkI=
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH 2/2] fs/aio: obey min_nr when doing wakeups
-Date:   Wed, 18 Jan 2023 10:26:03 -0500
-Message-Id: <20230118152603.28301-2-kent.overstreet@linux.dev>
-In-Reply-To: <20230118152603.28301-1-kent.overstreet@linux.dev>
-References: <20230118152603.28301-1-kent.overstreet@linux.dev>
-MIME-Version: 1.0
+        Wed, 18 Jan 2023 10:27:13 -0500
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6385BA9;
+        Wed, 18 Jan 2023 07:26:15 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id 123-20020a4a0681000000b004faa9c6f6b9so879156ooj.11;
+        Wed, 18 Jan 2023 07:26:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nT7vo//zIHYtjuHwHvVEOuFwE5YKQ11WWGeqHMGeNf0=;
+        b=uTgpWe9P4CIdT+Q+FzQWm3ly8uH9REXn3e5KdRPdBuZcrRCMd8dPnIerWh5JNi9YzN
+         ABVUnOYZ4sUYXPwYD+AgED9E/7euME/lK9RrXFO6rJDaIKKK0tKnY2/TbGWXsOEajuLq
+         3uvBf9Vt1ZSqR4Q7+hoDX0QEbkpFbnMvu6o0F1vYiFIoB4RUsIIiTGwzQ1UcsSHam7UA
+         qYmt76lqxESlWXrEnKlxraiRir6a70i+DRn1mFy9MRQ+t/j53YWVtlKEyx5Qj0K6sTeB
+         eSIte1Ng6J1x5JbkFZ5DhCi35xCxQni2zYkW6B0Phm9UzwQkEJTIdhfQdX/oGy9qgDjo
+         sjAg==
+X-Gm-Message-State: AFqh2krorMvEFwLt581wDa7w7zgeycLZKSFniUvGkRPrxjoRyfIrBWSM
+        +IjE82fVXYOAbkT5tMKZsw==
+X-Google-Smtp-Source: AMrXdXvrHsL3B9As2RFndVMMqtmIzmNvUPOHglhiIYMLBz7EpgrDtHsKHz/dRPDHU+pft+uq8bi6Dg==
+X-Received: by 2002:a4a:b202:0:b0:4d1:c23:3c51 with SMTP id d2-20020a4ab202000000b004d10c233c51mr2822427ooo.9.1674055574338;
+        Wed, 18 Jan 2023 07:26:14 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id o10-20020a4aabca000000b004f22e40ad6fsm10435619oon.2.2023.01.18.07.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:26:13 -0800 (PST)
+Received: (nullmailer pid 30555 invoked by uid 1000);
+        Wed, 18 Jan 2023 15:26:13 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof =?utf-8?q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marek Vasut <marex@denx.de>, Shawn Tu <shawnx.tu@intel.com>
+In-Reply-To: <20230118103239.3409674-2-michael.riesch@wolfvision.net>
+References: <20230118103239.3409674-1-michael.riesch@wolfvision.net>
+ <20230118103239.3409674-2-michael.riesch@wolfvision.net>
+Message-Id: <167405509286.19309.13229390529677400429.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: media: i2c: add imx415 cmos image sensor
+Date:   Wed, 18 Jan 2023 09:26:13 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've been observing workloads where IPIs due to wakeups in
-aio_complete() are ~15% of total CPU time in the profile. Most of those
-wakeups are unnecessary when completion batching is in use in
-io_getevents().
 
-This plumbs min_nr through via the wait eventry, so that aio_complete()
-can avoid doing unnecessary wakeups.
+On Wed, 18 Jan 2023 11:32:38 +0100, Michael Riesch wrote:
+> Add devicetree binding for the Sony IMX415 CMOS image sensor.
+> 
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+>  .../bindings/media/i2c/sony,imx415.yaml       | 120 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 127 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> 
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Benjamin LaHaise <bcrl@kvack.org
-Cc: linux-aio@kvack.org
-Cc: linux-fsdevel@vger.kernel.org
----
- fs/aio.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 53 insertions(+), 10 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/fs/aio.c b/fs/aio.c
-index 3f795ed2a2..a03bc93016 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -1105,6 +1105,11 @@ static inline void iocb_destroy(struct aio_kiocb *iocb)
- 	kmem_cache_free(kiocb_cachep, iocb);
- }
- 
-+struct aio_waiter {
-+	struct wait_queue_entry	w;
-+	size_t			min_nr;
-+};
-+
- /* aio_complete
-  *	Called when the io request on the given iocb is complete.
-  */
-@@ -1113,7 +1118,7 @@ static void aio_complete(struct aio_kiocb *iocb)
- 	struct kioctx	*ctx = iocb->ki_ctx;
- 	struct aio_ring	*ring;
- 	struct io_event	*ev_page, *event;
--	unsigned tail, pos, head;
-+	unsigned tail, pos, head, avail;
- 	unsigned long	flags;
- 
- 	/*
-@@ -1157,6 +1162,10 @@ static void aio_complete(struct aio_kiocb *iocb)
- 	ctx->completed_events++;
- 	if (ctx->completed_events > 1)
- 		refill_reqs_available(ctx, head, tail);
-+
-+	avail = tail > head
-+		? tail - head
-+		: tail + ctx->nr_events - head;
- 	spin_unlock_irqrestore(&ctx->completion_lock, flags);
- 
- 	pr_debug("added to ring %p at [%u]\n", iocb, tail);
-@@ -1177,8 +1186,18 @@ static void aio_complete(struct aio_kiocb *iocb)
- 	 */
- 	smp_mb();
- 
--	if (waitqueue_active(&ctx->wait))
--		wake_up(&ctx->wait);
-+	if (waitqueue_active(&ctx->wait)) {
-+		struct aio_waiter *curr, *next;
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&ctx->wait.lock, flags);
-+		list_for_each_entry_safe(curr, next, &ctx->wait.head, w.entry)
-+			if (avail >= curr->min_nr) {
-+				list_del_init_careful(&curr->w.entry);
-+				wake_up_process(curr->w.private);
-+			}
-+		spin_unlock_irqrestore(&ctx->wait.lock, flags);
-+	}
- }
- 
- static inline void iocb_put(struct aio_kiocb *iocb)
-@@ -1294,7 +1313,9 @@ static long read_events(struct kioctx *ctx, long min_nr, long nr,
- 			struct io_event __user *event,
- 			ktime_t until)
- {
--	long ret = 0;
-+	struct hrtimer_sleeper	t;
-+	struct aio_waiter	w;
-+	long ret = 0, ret2 = 0;
- 
- 	/*
- 	 * Note that aio_read_events() is being called as the conditional - i.e.
-@@ -1310,12 +1331,34 @@ static long read_events(struct kioctx *ctx, long min_nr, long nr,
- 	 * the ringbuffer empty. So in practice we should be ok, but it's
- 	 * something to be aware of when touching this code.
- 	 */
--	if (until == 0)
--		aio_read_events(ctx, min_nr, nr, event, &ret);
--	else
--		wait_event_interruptible_hrtimeout(ctx->wait,
--				aio_read_events(ctx, min_nr, nr, event, &ret),
--				until);
-+	aio_read_events(ctx, min_nr, nr, event, &ret);
-+	if (until == 0 || ret < 0 || ret >= min_nr)
-+		return ret;
-+
-+	hrtimer_init_sleeper_on_stack(&t, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	if (until != KTIME_MAX) {
-+		hrtimer_set_expires_range_ns(&t.timer, until, current->timer_slack_ns);
-+		hrtimer_sleeper_start_expires(&t, HRTIMER_MODE_REL);
-+	}
-+
-+	init_wait(&w.w);
-+
-+	while (1) {
-+		w.min_nr = min_nr - ret;
-+
-+		ret2 = prepare_to_wait_event(&ctx->wait, &w.w, TASK_INTERRUPTIBLE) ?:
-+			!t.task ? -ETIME : 0;
-+
-+		if (aio_read_events(ctx, min_nr, nr, event, &ret) || ret2)
-+			break;
-+
-+		schedule();
-+	}
-+
-+	finish_wait(&ctx->wait, &w.w);
-+	hrtimer_cancel(&t.timer);
-+	destroy_hrtimer_on_stack(&t.timer);
-+
- 	return ret;
- }
- 
--- 
-2.39.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.example.dtb: camera-sensor@1a: port:endpoint: Unevaluated properties are not allowed ('clock-lanes', 'data-lanes' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.example.dtb: camera-sensor@1a: port:endpoint: 'link-frequencies' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118103239.3409674-2-michael.riesch@wolfvision.net
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
