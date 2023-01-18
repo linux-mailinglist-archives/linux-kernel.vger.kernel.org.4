@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F049671E3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C0C671E45
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjARNme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S230287AbjARNnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjARNle (ORCPT
+        with ESMTP id S230293AbjARNmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:41:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0995F3A3;
-        Wed, 18 Jan 2023 05:10:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7A2BB81CE7;
-        Wed, 18 Jan 2023 13:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E9AC433EF;
-        Wed, 18 Jan 2023 13:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674047428;
-        bh=bpt+30mxSsN1xvbBJxR1fwJPaqsxMgw/iJt4tPkYzhs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cruAZgTocHVjYBxF7ep1BPvOCz4QmGEG4hoSm3zu3ZjDO+x61RKhVlCTOeBEXmBqg
-         8OEDRR1M8PLakoU1RGjzEFszlft8+4XkYyiJdni3JEP/vu+EAcPElXTIa8iu9ErKhz
-         6oc4d3+DNarDkUyxEsw4q0PupqLq6u7V/OOo7hS714SC/9ukuc+Eb5X9uDsvNaXEvh
-         Xrr5FZegtAMYhuLVRS2S7Hq0Dkx//uqou4uYbiJ5hlWOL2XNn4yAFJsgmAOWSJWeQU
-         9/yqL/QUS6IV5y/z2jOGIDQ1c5TCXJ3MzCrp0hT2oBbCKkZxOWodoo2QsYcfiUVTtT
-         /dTRbJBGyggsQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pI8DM-0006AH-He; Wed, 18 Jan 2023 14:10:53 +0100
-Date:   Wed, 18 Jan 2023 14:10:52 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
-Message-ID: <Y8fv3KWoxmaykrP6@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-7-johan+linaro@kernel.org>
- <871qnslut3.ffs@tglx>
- <Y8e6Us0Qgt0p5S4R@hovoldconsulting.com>
- <87r0vshu1y.ffs@tglx>
+        Wed, 18 Jan 2023 08:42:25 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BEC6794D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:11:23 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id y11-20020a056e02178b00b0030c048d64a7so24996524ilu.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:11:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gb9ye5L384z0sJ9lHOgovYJTtmnNnzRSfStsIP9mHp4=;
+        b=2md0pQZiGXxq6h9S+0UQLbvoZhmkbSaRmAGwky7cYtacunuzJg12wFhB7mhANs1K8K
+         aZQWBPbBxqkApfyB5L25PVhdcM6FYHfD9rv9TTjGq54sQAbXvlJTBGnOvPWJEccQa7G9
+         uQ7+lp5nsBu0HPtuGI3NiGFBR+k+d9PzUOB6DGTzQKiSy/xAXCay1poAe3oS8jRJUYjW
+         X9ROoCQTUim3gdwQ4Fwk4S2s6MuKK8X9EX0++h/ZyXV/ZwfY9MRPoOyG+luMA4Uryhav
+         3KwYROd/hEaJJSosd9O11ryCiW2ZBAqZT8nB2Y6h0cr0qXYRhGmuhLYFiJ6aSGZYy3vH
+         oruQ==
+X-Gm-Message-State: AFqh2kqvsBCFLCGlrrn5V/fZxE/EuyOJaT1HkW5SrNx7dFfTHur2lBt4
+        vTvKknm9cvGsJ1JFhbjGY6rjs2os3dcjhYoRoiFS8l+gEIqf
+X-Google-Smtp-Source: AMrXdXuzeXKW4OevNrY1rNZ/gojCg/BXjtv/ERGhG5fJgGg1aitQlfltHaryjNoMWEuTb+ALgiV6PMylnyGQSAMulP7Z+slvC5Qd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r0vshu1y.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c643:0:b0:38a:c2a7:369d with SMTP id
+ k3-20020a02c643000000b0038ac2a7369dmr633850jan.245.1674047483287; Wed, 18 Jan
+ 2023 05:11:23 -0800 (PST)
+Date:   Wed, 18 Jan 2023 05:11:23 -0800
+In-Reply-To: <000000000000fbb2d505f27398cb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000941ee205f2898d65@google.com>
+Subject: Re: [syzbot] possible deadlock in release_sock
+From:   syzbot <syzbot+bbd35b345c7cab0d9a08@syzkaller.appspotmail.com>
+To:     cong.wang@bytedance.com, davem@davemloft.net, edumazet@google.com,
+        eric.dumazet@gmail.com, gnault@redhat.com, jakub@cloudflare.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 02:05:29PM +0100, Thomas Gleixner wrote:
-> On Wed, Jan 18 2023 at 10:22, Johan Hovold wrote:
-> > On Tue, Jan 17, 2023 at 10:23:20PM +0100, Thomas Gleixner wrote:
-> >> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> >> > The global irq_domain_mutex is now held in all paths that update the
-> >> > revmap structures so there is no longer any need for the revmap mutex.
-> >> 
-> >> This can also go after the 3rd race fix, but ...
-> >> 
-> >> >  static void irq_domain_clear_mapping(struct irq_domain *domain,
-> >> >  				     irq_hw_number_t hwirq)
-> >> >  {
-> >> > +	lockdep_assert_held(&irq_domain_mutex);
-> >> 
-> >> these lockdep asserts want to be part of the [dis]association race
-> >> fixes. They are completely unrelated to the removal of the revmap_mutex.
-> >
-> > No, they are very much related to the removal of the revmap_mutex. These
-> > functions deal with the revmap structures which before this patch were
-> > clearly only modified with the revmap_mutex held.
-> >
-> > The lockdep assert is here to guarantee that my claim that all current
-> > (and future) paths that end up modifying these structures do so under
-> > the irq_domain_mutex instead.
-> >
-> >> Your race fixes change the locking and you want to ensure that all
-> >> callers comply right there, no?
-> >
-> > I want to make sure that all callers of these function comply, yes.
-> > That's why the asserts belong in this patch.
-> 
-> You can do this in a two step approach.
-> 
->     1) Add the new locking and ensure that the lock is held when
->        the functions are called
+syzbot has bisected this issue to:
 
-But the new locking has nothing to do with these functions. They are
-added because they fix various races elsewhere. Adding lockdep
-assertions in unrelated function as part of those fixes doesn't really
-make much sense.
+commit 0b2c59720e65885a394a017d0cf9cab118914682
+Author: Cong Wang <cong.wang@bytedance.com>
+Date:   Sat Jan 14 03:01:37 2023 +0000
 
->     2) Safely remove the revmap_mutex because you already established
->        that revmap is protected by some other means
+    l2tp: close all race conditions in l2tp_tunnel_register()
 
-I still think it belongs in this patch.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15331c61480000
+start commit:   87b93b678e95 octeontx2-pf: Avoid use of GFP_KERNEL in atom..
+git tree:       net
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17331c61480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13331c61480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
+dashboard link: https://syzkaller.appspot.com/bug?extid=bbd35b345c7cab0d9a08
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1716b3a1480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e57a91480000
 
-Johan
+Reported-by: syzbot+bbd35b345c7cab0d9a08@syzkaller.appspotmail.com
+Fixes: 0b2c59720e65 ("l2tp: close all race conditions in l2tp_tunnel_register()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
