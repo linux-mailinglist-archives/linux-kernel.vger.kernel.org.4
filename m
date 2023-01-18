@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF766718EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E038B6718EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjARK0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S229654AbjARK0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjARKZn (ORCPT
+        with ESMTP id S229563AbjARK0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:25:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02666EEA;
-        Wed, 18 Jan 2023 01:30:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 18 Jan 2023 05:26:05 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0EE5DC28;
+        Wed, 18 Jan 2023 01:31:20 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6C73E20C5D;
+        Wed, 18 Jan 2023 09:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674034279; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bVp7KTcQDbxHoHXUlHU1XAYm2vJ+8Qy42f6yOSykfsw=;
+        b=n495Qf5SXOkdloH73gDVq4FvILM4H5GRWv25FvN0hgfoJWOj7Dk8oP1z3pHYZRuGI6zitG
+        eilW4gukzty5h+F7kdWDBvvJ0x0YlpSaeLJTljal56TtFfA6SxNOQtIHGe6sz+JnhpxVmq
+        3HcQXJPVCUYlRi1LTHHAxSGiN2FnCZY=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C1FEB81C13;
-        Wed, 18 Jan 2023 09:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C573EC433D2;
-        Wed, 18 Jan 2023 09:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674034205;
-        bh=3XyBFQNLnTyo9L+X0vrC5knpbLQfzzDd/EREfX7SuV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MiOTsPzfhCtG5D2uMQmCk52l/VOS8fqxJvZPWk57KOq8xyLCHSOgS6UY4qI+N7kPI
-         /JOk6EDQXbDnhyqJuIDv8wP9EfKfmhNa5WIaVYIF05q1YvJOEcOyYUjNYFEBrCDH9Y
-         ItuJ+LdqkqD39zPRSoLHzSyaHNXURNNkWUZsGJs2erhOqDliW7SGP8I4WeeFLT1Y7R
-         7y3XZQHlKo4yxIgYBWQcFXtoigA0dKA0ioeiG7D4zLHgLO6HQPGL1GLnnfYDoLC7Ut
-         AfrVDOuoOVdg+pGi/Cbi8sE+qokWA6U2JBzMGzMgLhpvlP0PSczfsxmiV2U4bp3GPN
-         chX0f98MBfIEA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pI4m6-0001jE-0W; Wed, 18 Jan 2023 10:30:30 +0100
-Date:   Wed, 18 Jan 2023 10:30:30 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 08/19] irqdomain: Refactor __irq_domain_alloc_irqs()
-Message-ID: <Y8e8Nm2lu1jFE6Mx@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-9-johan+linaro@kernel.org>
- <87v8l4kfpr.ffs@tglx>
+        by relay2.suse.de (Postfix) with ESMTPS id D346C2C141;
+        Wed, 18 Jan 2023 09:31:18 +0000 (UTC)
+Date:   Wed, 18 Jan 2023 10:31:16 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        coverity-bot <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        coverity-bot <keescook+coverity-bot@chromium.org>
+Subject: Re: [PATCH] printk: Use scnprintf() to print the message about the
+ dropped messages on a console
+Message-ID: <Y8e8ZCTdEWU0iUqJ@alley>
+References: <20230117161031.15499-1-pmladek@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87v8l4kfpr.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117161031.15499-1-pmladek@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:34:40PM +0100, Thomas Gleixner wrote:
-> On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-
-> > -int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
-> > -			    unsigned int nr_irqs, int node, void *arg,
-> > -			    bool realloc, const struct irq_affinity_desc *affinity)
-> > +static int ___irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
-> > +				    unsigned int nr_irqs, int node, void *arg,
-> > +				    bool realloc, const struct irq_affinity_desc *affinity)
+On Tue 2023-01-17 17:10:31, Petr Mladek wrote:
+> Use scnprintf() for printing the message about dropped messages on
+> a console. It returns the really written length of the message.
+> It prevents potential buffer overflow when the returned length is
+> later used to copy the buffer content.
 > 
-> __ vs. ___ is almost undistinguishable.
+> Note that the previous code was safe because the scratch buffer was
+> big enough and the message always fit in. But scnprintf() makes
+> it more safe, definitely.
 > 
-> irq_domain_alloc_irqs_locked() nicely explains what this is about, no?
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1530570 ("Memory - corruptions")
+> Fixes: c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
+> Link: https://lore.kernel.org/r/202301131544.D9E804CCD@keescook
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
 
-Yeah, wasn't too happy about those three underscores either, but with
-the exported function unfortunately already having a double underscore
-prefix... I'll try switching to a 'locked' suffix instead.
+JFYI, the patch has been comitted into printk/linux.git,
+branch rework/buffers-cleanup.
 
-Johan
+Best Regards,
+Petr
