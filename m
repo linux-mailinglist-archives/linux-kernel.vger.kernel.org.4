@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1860967153F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37561671541
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjARHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 02:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S229866AbjARHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjARHlN (ORCPT
+        with ESMTP id S229976AbjARHm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 02:41:13 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB6611CB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:05:02 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id o75so37067802yba.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RWIUcIYgcQkK0f/sIUCOgX2DuZrEEVB1UO5r6QoL9lw=;
-        b=ENzpBFhPlcCihyjjyCNhOyBYcpNs4eQRy9VQCTJjqeAdPU+XuQD15jm8kNXaZs3mVO
-         Rs/RYvncah5joqCL8p/hpgG9c6S6W4cgLhbQIw+bEkschv0gt/4mbpWidS+e+KfWOuMs
-         nfeUYHCA1NOPmnhFy+BiJf0b495/McVrE0LawulUeUE+j7nE62L29ww5wn2xjpAEFixi
-         V2Ymc7Q5+t3vZBa4bOtMNl38atsWdO9ZZXws01LVfnRYGgEUzYiRT7qzi7lNTCmZNmk3
-         iQ0hdyp0sUNtFrl98h3gU8nxKzglZ1lmP87NzD/Le4yL911F2GmCtkfuFU0nydPCta6u
-         7NEA==
+        Wed, 18 Jan 2023 02:42:28 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C2010D4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:06:23 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so24650525ila.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:06:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RWIUcIYgcQkK0f/sIUCOgX2DuZrEEVB1UO5r6QoL9lw=;
-        b=lTDoqc1kfb4bhKSHsOc2svu5wKck8ZQl9wFPYWkHfmLVWIv/RH9aWn1AlMCXRQN2ne
-         gJHK/4mKc2/WA6Ev8bO9yQ2WUxMnjoMNGtwIFqbS6a5ozbzAhq4nkXEE5rJv3tLuCPHH
-         c9TdrAbH8TAJI6SkXoU7/51jEgpKnZvsizfvCs88ahHB6S8a6ygOU8rLc0bRE7ufypDb
-         cGaT/7J+BGvMM85M0JWVJPFgmP0uwyZRB6ginz85tG3lioowexAvmRMPWtpQcIDKjTEd
-         fFP99yCt9YTVeQP1PwM5hik4Llk4AjkH0dMBUjhuN3yIgAkt5jVkEedOpGBV8ZqZeKg2
-         F06g==
-X-Gm-Message-State: AFqh2koUUtJpRf8yvQnwxYKSlwiw+Ah4F7oYMYsfjk9N9zzg8NlrAydQ
-        GtytrAd5eg4CaOS2c93xuwUZjroiDcrvtWVMP4MFrw==
-X-Google-Smtp-Source: AMrXdXu5Pbi5SOFwW0RWmqObqTSmr+IievVVthez/yxv4Os97jPuhnm0GaAa17j3AJPPgW1V0oaQ8oF8ZqwqXGb8cMY=
-X-Received: by 2002:a25:c092:0:b0:7d2:8687:aea5 with SMTP id
- c140-20020a25c092000000b007d28687aea5mr841276ybf.210.1674025501906; Tue, 17
- Jan 2023 23:05:01 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xoLVD7DSv10r8m9BhvDHnO2YyQGVzS0+5ft4DDuxF0g=;
+        b=q+ib++z4MjmRM7XpvUW3hB68lzxJ7jDZtiQPtMqbeuTZ+jU9UGu/Nwx5N1WWBOnimt
+         EIZu9OlPlNIP7r28gwf/dSWpNq+8JZuaBRBGR7oSLnvPtW8Muq1LQCh+e6T/KHpuXgEW
+         FHDPkDaTiB63TZ87hbJcITxkY9L4nt+GtEcZbhCT43z+a7PSldvKa0Bx5mm7ffoPaSlI
+         PcDSOZl+hq8wkj8T3ifnujH0dR/PyqYWrxPBdfw4031nv5m+xlvFkkUQHu/0EpbJ/1w8
+         NgH+VW0Q+lKzVpPrRR7Eyu5vdewN1pFcbicZm7QoKPiZwylN4mW/61/UbWCesT9lY+f9
+         l3cQ==
+X-Gm-Message-State: AFqh2krM2pRJiWNapg+LgQMFsHrRXPsaQviAVc1s3bOC4QTR9NERWyzT
+        hTYzuIy9QN2lX8lVjpq5pYk9iTQNoGnEMIMn1tG1RWA4wH5/
+X-Google-Smtp-Source: AMrXdXuydZc7a8azcHLNp4H8q/6tuxHNHkD2zDF3mMPSwz7NEZwJpFD+/WMi6shFmNLCOVlBxD506WsMkhmM7ezmhaRyvo0gyxUl
 MIME-Version: 1.0
-References: <20230103-gemini-fotg210-usb-v1-0-f2670cb4a492@linaro.org> <CACRpkdaE+b_=6mecuWe4EUfYP9C3j5cXZXMO0s2t7Bf3eMtV_A@mail.gmail.com>
-In-Reply-To: <CACRpkdaE+b_=6mecuWe4EUfYP9C3j5cXZXMO0s2t7Bf3eMtV_A@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 18 Jan 2023 08:04:50 +0100
-Message-ID: <CACRpkdaCUL+met+qvsn6VbFiRgPiHpZs5DfDdjSQ=97HGcBSCw@mail.gmail.com>
-Subject: Re: [PATCH 0/7] usb: fotg210: Various improvements
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Fabian Vogt <fabian@ritter-vogt.de>
+X-Received: by 2002:a05:6638:41a4:b0:38a:3770:2fa2 with SMTP id
+ az36-20020a05663841a400b0038a37702fa2mr536114jab.208.1674025582441; Tue, 17
+ Jan 2023 23:06:22 -0800 (PST)
+Date:   Tue, 17 Jan 2023 23:06:22 -0800
+In-Reply-To: <20230118055330.2780-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002fbfee05f2847467@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
+From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 8:03 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Wed, Jan 4, 2023 at 12:35 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> > This is some gradual improvements to the FOTG210 dual-mode
-> > USB host/gadget driver.
->
-> Been two weeks, something I should change or are these good to
-> go?
+Hello,
 
-Ah no wait I see it, a small change needed on the DT binding.
-I'll respin.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in io_ring_exit_work
 
-Yours,
-Linus Walleij
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 75 at io_uring/io_uring.c:2977 io_ring_exit_work+0x320/0xc80 io_uring/io_uring.c:2977
+Modules linked in:
+CPU: 0 PID: 75 Comm: kworker/u4:4 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Workqueue: events_unbound io_ring_exit_work
+RIP: 0010:io_ring_exit_work+0x320/0xc80 io_uring/io_uring.c:2977
+Code: 40 8c e8 57 f4 02 f8 48 8b 05 f0 59 74 02 31 ff 4c 8b 74 24 10 49 29 c6 4c 89 f6 e8 8e 21 b5 f7 4d 85 f6 79 10 e8 b4 24 b5 f7 <0f> 0b 48 c7 44 24 08 70 17 00 00 e8 a4 24 b5 f7 48 8b 74 24 08 48
+RSP: 0018:ffffc900020afbd0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88807e004838 RCX: 0000000000000000
+RDX: ffff888018ca57c0 RSI: ffffffff89cc982c RDI: 0000000000000007
+RBP: ffff88807e004000 R08: 0000000000000007 R09: 0000000000000000
+R10: fffffffffffffff9 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff88807e004040 R14: fffffffffffffff9 R15: ffff88807e0043c8
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055a8f42b70c0 CR3: 000000000c571000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+Tested on:
+
+commit:         0a093b28 Add linux-next specific files for 20230112
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=111bfc46480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=111aca96480000
+
