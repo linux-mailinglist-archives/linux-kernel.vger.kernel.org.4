@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988CE67228E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4A467229A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjARQJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S231219AbjARQKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjARQJF (ORCPT
+        with ESMTP id S230423AbjARQJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:09:05 -0500
+        Wed, 18 Jan 2023 11:09:06 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D3446159
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:05:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5EB4743D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:05:19 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IEDgrB022836;
-        Wed, 18 Jan 2023 10:05:08 -0600
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IEEjlB023722;
+        Wed, 18 Jan 2023 10:05:04 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=frUZfxKkTDkW87u5OQbfX6rw2QFXA5a5bNSyUepkgBc=;
- b=E3JIXvjHd/ksH23puwvZaV/38rQ5qDiH5szpk6owT2rX7sNDj9Ok5Ye+6U2MtHL3Vw1T
- FcAzKWiUca/5rPmnUJ76aFd4kIKioPDnav5Xx0i3Fxfj2CJLrmJhd8pAV5P8ymJ0TpPy
- OOucnoUgWROiEZ5UZVg3Dc3R0idqh5o5+qfAWDMvEY7eI6WJPinxMYLmDY0428xoAX1n
- hN1ie6extehDTziAHyqQ9ugPq+ReC7VbOxbSToeg9NvSbuuCJC6ce5ohvRu2EPWSpzG4
- amXYoqKZrIlWKhnUJKxA3USneIhvxASvivpkA0365vG7/CfS3PqlWXkDqeC22HICw7m7 og== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n3spx6vk9-6
+ bh=4DC3FmrYnv3q+s9o9tP2DW9U1wOvwrAGTeF6A0jvBHQ=;
+ b=SoRyZtEWS0ZMCaGg/MbazhydcTToCQHnCi7BeNte9Dd5nEPp9FoRk1I1GjIm0ph4AEvf
+ 7mE7JIM2JYkMkwRvBTeEQttvDyUeaJCZACz39yzJHInM9sRlF7CuUZQWvSGhJ9zPGNXt
+ iAy5QLIJnSrFC7Gnl8X9HqkhmJ8gNvG/orTs0ymCic3D1CJno3nWn4m+c/K7cdXRA+xm
+ wy8cfNVxZkjLapoHGEr9O+Z4QDSSH9bjY7c5StuipDFnzVClxucUjAlHrR42oWlAb5Lf
+ pF99rI61ds6Dw3Ko4hj8czopOjiUHAbydhs4ZjlxrZNkTGHx+e73EYZaJaO1uTvQR+ph Zg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n3spx6vk8-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 10:05:08 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 18 Jan 2023 10:05:04 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Wed, 18 Jan
  2023 10:04:58 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.7 via Frontend Transport; Wed, 18 Jan 2023 10:04:58 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
+ Transport; Wed, 18 Jan 2023 10:04:58 -0600
 Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id ED30B11CB;
-        Wed, 18 Jan 2023 16:04:57 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1A430B12;
+        Wed, 18 Jan 2023 16:04:58 +0000 (UTC)
 From:   Stefan Binding <sbinding@opensource.cirrus.com>
 To:     Mark Brown <broonie@kernel.org>,
         Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
         Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v2 7/8] ASoC: cs42l42: Don't set idle_bias_on
-Date:   Wed, 18 Jan 2023 16:04:51 +0000
-Message-ID: <20230118160452.2385494-8-sbinding@opensource.cirrus.com>
+Subject: [PATCH v2 8/8] ASoC: cs42l42: Wait for debounce interval after resume
+Date:   Wed, 18 Jan 2023 16:04:52 +0000
+Message-ID: <20230118160452.2385494-9-sbinding@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
 References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: lo4yHFbhzh4p8Z6_5t_7Dhw_IJrSF4LQ
-X-Proofpoint-ORIG-GUID: lo4yHFbhzh4p8Z6_5t_7Dhw_IJrSF4LQ
+X-Proofpoint-GUID: WuLPwJpdk5cA3HpxRI6bjl3uXaEa2-Gz
+X-Proofpoint-ORIG-GUID: WuLPwJpdk5cA3HpxRI6bjl3uXaEa2-Gz
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -69,43 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
+Since clock stop causes bus reset on Intel controllers, we need
+to wait for the debounce interval on resume, to ensure all the
+interrupt status registers are set correctly.
 
-idle_bias_on was set because cs42l42 has a "VMID" type pseudo-midrail
-supply (named FILT+), and these typically take a long time to charge.
-But the driver never enabled pm_runtime so it would never have powered-
-down the cs42l42 anyway.
-
-In fact, FILT+ can charge to operating voltage within 12.5 milliseconds
-of enabling HP or ADC. This time is already covered by the startup
-delay of the HP/ADC.
-
-The datasheet warning about FILT+ taking up to 1 second to charge only
-applies in the special cases that either the PLL is started or
-DETECT_MODE set to non-zero while both HP and ADC are off. The driver
-never does either of these.
-
-Removing idle_bias_on allows the Soundwire host controller to suspend
-if there isn't a snd_soc_jack handler registered.
-
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 ---
- sound/soc/codecs/cs42l42.c | 1 -
- 1 file changed, 1 deletion(-)
+ sound/soc/codecs/cs42l42-sdw.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index a92499876ce2a..aa2223bfb885a 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -597,7 +597,6 @@ const struct snd_soc_component_driver cs42l42_soc_component = {
- 	.num_dapm_routes	= ARRAY_SIZE(cs42l42_audio_map),
- 	.controls		= cs42l42_snd_controls,
- 	.num_controls		= ARRAY_SIZE(cs42l42_snd_controls),
--	.idle_bias_on		= 1,
- 	.endianness		= 1,
- };
- EXPORT_SYMBOL_NS_GPL(cs42l42_soc_component, SND_SOC_CS42L42_CORE);
+diff --git a/sound/soc/codecs/cs42l42-sdw.c b/sound/soc/codecs/cs42l42-sdw.c
+index 67800b275e422..27653ea0f947c 100644
+--- a/sound/soc/codecs/cs42l42-sdw.c
++++ b/sound/soc/codecs/cs42l42-sdw.c
+@@ -451,14 +451,22 @@ static int __maybe_unused cs42l42_sdw_handle_unattach(struct cs42l42_private *cs
+ 
+ static int __maybe_unused cs42l42_sdw_runtime_resume(struct device *dev)
+ {
++	static const unsigned int ts_dbnce_ms[] = { 0, 125, 250, 500, 750, 1000, 1250, 1500};
+ 	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
++	unsigned int dbnce;
+ 	int ret;
+ 
+ 	dev_dbg(dev, "Runtime resume\n");
+ 
+ 	ret = cs42l42_sdw_handle_unattach(cs42l42);
+-	if (ret < 0)
++	if (ret < 0) {
+ 		return ret;
++	} else if (ret > 0) {
++		dbnce = max(cs42l42->ts_dbnc_rise, cs42l42->ts_dbnc_fall);
++
++		if (dbnce > 0)
++			msleep(ts_dbnce_ms[dbnce]);
++	}
+ 
+ 	regcache_cache_only(cs42l42->regmap, false);
+ 
 -- 
 2.34.1
 
