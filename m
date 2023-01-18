@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40E2670F8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA5F670F95
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjARBIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S230021AbjARBJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjARBHS (ORCPT
+        with ESMTP id S229825AbjARBIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:07:18 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3293C24;
-        Tue, 17 Jan 2023 17:01:07 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HNt2IQ003851;
-        Wed, 18 Jan 2023 01:01:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BSHaOYw0kWSC5JTjpxcMKCWS430xiqp9tvd4qGTkfYE=;
- b=bUqyrgyptUZiXqOE4RET/JdJzHIAS+Qvube6lr8VxtUgaIDbX0NUDWvbDUKz7HUKegKh
- lUes4btsjr4x7qr8d1gdpkaEt2tyELjziRUarQKwsi+VAGvnCvU/wCJiq/IYegbN2D0T
- UqrMY3UhoYtF1gDQhOtVi+oqiw0s5HBZHa9gTeg7eKa8Ghjf9T/TdKy6b7hZ+xfbEUT8
- /6CE0GTUq56HaFd78+3ApbR3ArWcPG56/aSHC2Mr5+LmysTy0cWrk+v0FD1M/dW78Pzv
- UXmdcpcphm7KuxoQw+/zhKMujwrP/0v8yVUsrJBBA5+1LMQYsMTBArngLqYyDlrOoiOg pQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5b18av4b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 01:01:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30I113KO003926
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 01:01:03 GMT
-Received: from [192.168.142.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 17:01:02 -0800
-Subject: Re: [PATCH] rpmsg: glink: Release driver_override
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230109223818.1706292-1-quic_bjorande@quicinc.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-Message-ID: <dc0e1609-a872-08e7-2801-0ece573181ad@quicinc.com>
-Date:   Tue, 17 Jan 2023 17:01:01 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 17 Jan 2023 20:08:10 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96481193F9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:02:53 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 7-20020a17090a098700b002298931e366so642417pjo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:02:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7/mtfAEiznKTs6LljSjzgO8ce+jXldLwxAog2qB3K6U=;
+        b=TLkv8I36T8svQHzBurky16JF9NaohSi44H3po39FOfSOhftznrWgK2/wMmZ5V3Zp+w
+         Is3AexGXfjwZoha/7x6LUbsLbqOcSIEInugOIu28rvnoOAAy6BXDh23d8MQgAgiNMe3s
+         oxVyjVTMkZfyv/1qQD1peJ8Xn02/7pgzvSxuI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7/mtfAEiznKTs6LljSjzgO8ce+jXldLwxAog2qB3K6U=;
+        b=63zva3lH0knlpI3wGGyuP3fo009xgBi1YZl3h12xSx+6mI80fWpAiTHIxUXokU9gN/
+         Wqo2Eti0qsfVt7aSxqANmbH6GF+LIzbq6ScyI0/V0U4PjfroMplo6lKu/CO48yF25YtH
+         6nZi+KOWzPnFIiIYAZzJimy6m68083Xcl9WqnqpToMe6sSBh/e6YEAE1ojDxqU1atJte
+         yMAJArYNmWVk1aeyV9XvpdR91RYV7o+u7mJh1FcXtLu1y+FjHWlraIvIi01ApF5/1GEM
+         VP4LPrjp+E92HvHOQNhJI2hoOGAdX1rN2CezlPsPye1SQRsvYMjJi0jbLTqriM0B0IqI
+         BKNg==
+X-Gm-Message-State: AFqh2kpjJr4nydYmCFxUaQ/+XwQ78hSlbfOlUttzWTM7QmVkO2mn0WFy
+        X944VJsfPHHf4BAVPmtbifEUWw/OwFSzkYGO
+X-Google-Smtp-Source: AMrXdXt1EMyWu87VHXWBfxnQnROvKSYrYA7iFgYoKAjHN9BvJwpqVhhVYuD2asdrVj16faBYKdRU2Q==
+X-Received: by 2002:a17:902:a614:b0:192:8ca0:b86e with SMTP id u20-20020a170902a61400b001928ca0b86emr4457621plq.35.1674003773175;
+        Tue, 17 Jan 2023 17:02:53 -0800 (PST)
+Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2d4:203:ab54:d6ee:36f5:912d])
+        by smtp.gmail.com with ESMTPSA id x24-20020a1709027c1800b00192588bcce7sm126133pll.125.2023.01.17.17.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 17:02:52 -0800 (PST)
+From:   Khazhismel Kumykov <khazhy@chromium.org>
+X-Google-Original-From: Khazhismel Kumykov <khazhy@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        Khazhismel Kumykov <khazhy@google.com>
+Subject: [PATCH] gsmi: fix null-deref in gsmi_get_variable
+Date:   Tue, 17 Jan 2023 17:02:12 -0800
+Message-Id: <20230118010212.1268474-1-khazhy@google.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-In-Reply-To: <20230109223818.1706292-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AweWf2Q1Rb6VlTKUwyoEM91j9iiZSrGA
-X-Proofpoint-ORIG-GUID: AweWf2Q1Rb6VlTKUwyoEM91j9iiZSrGA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_11,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301180005
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We can get EFI variables without fetching the attribute, so we must
+allow for that in gsmi.
 
+commit 859748255b43 ("efi: pstore: Omit efivars caching EFI varstore
+access layer") added a new get_variable call with attr=NULL, which
+triggers panic in gsmi.
 
-On 1/9/2023 2:38 PM, Bjorn Andersson wrote:
-> Upon termination of the rpmsg_device, driver_override needs to be freed
-> to avoid leaking the potentially assigned string.
-> 
-> Fixes: 42cd402b8fd4 ("rpmsg: Fix kfree() of static memory on setting driver_override")
-> Fixes: 39e47767ec9b ("rpmsg: Add driver_override device attribute for rpmsg_device")
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->   drivers/rpmsg/qcom_glink_native.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index 8620eea1dc8a..046271e439c5 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -1454,6 +1454,7 @@ static void qcom_glink_rpdev_release(struct device *dev)
->   {
->   	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
->   
-> +	kfree(rpdev->driver_override);
+Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+---
+ drivers/firmware/google/gsmi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-I see in Krzysztof's original patch to fix up the driver_override we do 
-kfree in other areas of rpmsg.
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index 4e2575dfeb90..871bedf533a8 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -361,9 +361,10 @@ static efi_status_t gsmi_get_variable(efi_char16_t *name,
+ 		memcpy(data, gsmi_dev.data_buf->start, *data_size);
+ 
+ 		/* All variables are have the following attributes */
+-		*attr = EFI_VARIABLE_NON_VOLATILE |
+-			EFI_VARIABLE_BOOTSERVICE_ACCESS |
+-			EFI_VARIABLE_RUNTIME_ACCESS;
++		if (attr)
++			*attr = EFI_VARIABLE_NON_VOLATILE |
++				EFI_VARIABLE_BOOTSERVICE_ACCESS |
++				EFI_VARIABLE_RUNTIME_ACCESS;
+ 	}
+ 
+ 	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-More of a just curious as to why don't we use the driver_set_override 
-function to clear the string? It's mentioned in the rpmsg header that 
-the helper should be used.
-
---- include/linux/rpmsg.h
-  * @driver_override: driver name to force a match; do not set directly,
-  *                   because core frees it; use driver_set_override() to
-  *                   set or clear it.
-
->   	kfree(rpdev);
->   }
->   
-> @@ -1697,6 +1698,7 @@ static void qcom_glink_device_release(struct device *dev)
->   
->   	/* Release qcom_glink_alloc_channel() reference */
->   	kref_put(&channel->refcount, qcom_glink_channel_release);
-> +	kfree(rpdev->driver_override);
->   	kfree(rpdev);
->   }
->   
-> 
