@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E588671E2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA13671E33
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjARNlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        id S230330AbjARNlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjARNkn (ORCPT
+        with ESMTP id S230012AbjARNlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:40:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF16BFF73;
-        Wed, 18 Jan 2023 05:10:21 -0800 (PST)
+        Wed, 18 Jan 2023 08:41:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F9AA6C48;
+        Wed, 18 Jan 2023 05:10:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87AA8B81CEB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84A5FB81CE9;
         Wed, 18 Jan 2023 13:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F4179C433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 096A8C43398;
         Wed, 18 Jan 2023 13:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674047418;
-        bh=oYonSHuDZS4OI1phKo81M9gyFbCoy6DvJ3Gg4q/1aJ8=;
+        bh=ZjUASydz7Gcshr3yBAP5rGbkt3uJUSn+CqNygpWGjlg=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BcttJZE6TaTO152ngaAMmaU1axuYWO41WtMMzRTIgkas3/Xp/JqwS1TYSxUQEzzYv
-         egVZPTmmsJOEnlq7lEmZ+UEdv5D24qhvrH8917O4mr5+T7/wRBNmxSRu1nEC5G+foT
-         7U3UFdH+Dhb3cO5XsjQIaGNEWshMfq+2LjMs2xRJE9ThFuiu8dS76o1YgfqCKw7dKS
-         rcUKdKDaguKlfEPYgexdcpHjQ5ZgCkLRWffMT/KqGZqCKXqylswowewo0o1hsRHKnJ
-         GXmFeXdRuMxxT4VnyLksA5EVginMJ4A5aSYC5L4HJ2AZsuodgnQb65Q9A/TlX6DHtK
-         PWVBXbqw6uoMA==
+        b=LRipYjMCwNL09w96bX73Zb4Hg6mpPHfTCjTw3KJ9aR+TvAyMpAoto634j/C2MOi1P
+         od9+JT7xtxHPHeHLdAji50vbQxWjROIIUdLvIyMG9shWKLlIU/AYH+iy4OIIuNT6Fy
+         5/wU+7U0M3gkT/Wr6P3rf7P/A3giOI3z2i2G6ZIXZljbb2qvIJ6/lDCiXwa/CcRJro
+         sEwqDEyKPMGP1kP29owKQb8k9LXe/K4o/sUr6pJwHEFKNbr4tv3YnB7oKTK4TvlQTP
+         4E0PBCQgqk14Fv39KiUqZ7zHa0zQoI/SxVI6fVLoddfIQqtzF8KJ7X3jTjUHDnYL4K
+         xtVSem2mP+39A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC771C3959E;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4A74C5C7C4;
         Wed, 18 Jan 2023 13:10:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2 0/7] Add eqos and fec support for imx93
+Subject: Re: [PATCH net-next v2 0/3] Add PPS support to am65-cpts driver
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167404741783.5923.15821433404030533647.git-patchwork-notify@kernel.org>
+Message-Id: <167404741786.5923.11609204629264354932.git-patchwork-notify@kernel.org>
 Date:   Wed, 18 Jan 2023 13:10:17 +0000
-References: <20230113033347.264135-1-xiaoning.wang@nxp.com>
-In-Reply-To: <20230113033347.264135-1-xiaoning.wang@nxp.com>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     wei.fang@nxp.com, shenwei.wang@nxp.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux-imx@nxp.com, kernel@pengutronix.de,
+References: <20230116085534.440820-1-s-vadapalli@ti.com>
+In-Reply-To: <20230116085534.440820-1-s-vadapalli@ti.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        vigneshr@ti.com, rogerq@kernel.org, nsekhar@ti.com,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
+        srk@ti.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,39 +66,27 @@ Hello:
 This series was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 13 Jan 2023 11:33:40 +0800 you wrote:
-> Hi,
+On Mon, 16 Jan 2023 14:25:31 +0530 you wrote:
+> The CPTS hardware doesn't support PPS signal generation. Using the GenFx
+> (periodic signal generator) function, it is possible to model a PPS signal
+> followed by routing it via the time sync router to the CPTS_HWy_TS_PUSH
+> (hardware time stamp) input, in order to generate timestamps at 1 second
+> intervals.
 > 
-> This patchset add imx93 support for dwmac-imx glue driver.
-> There are some changes of GPR implement.
-> And add fec and eqos nodes for imx93 dts.
-> 
-> Clark Wang (7):
->   net: stmmac: add imx93 platform support
->   dt-bindings: add mx93 description
->   dt-bindings: net: fec: add mx93 description
->   arm64: dts: imx93: add eqos support
->   arm64: dts: imx93: add FEC support
->   arm64: dts: imx93-11x11-evk: enable eqos
->   arm64: dts: imx93-11x11-evk: enable fec function
+> This series adds driver support for enabling PPS signal generation.
+> Additionally, the documentation for the am65-cpts driver is updated with
+> the bindings for the "ti,pps" property, which is used to inform the
+> pair [CPTS_HWy_TS_PUSH, GenFx] to the cpts driver.
 > 
 > [...]
 
 Here is the summary with links:
-  - [V2,1/7] net: stmmac: add imx93 platform support
-    https://git.kernel.org/netdev/net-next/c/e5bf35ca4547
-  - [V2,2/7] dt-bindings: add mx93 description
-    https://git.kernel.org/netdev/net-next/c/b2274ffe90be
-  - [V2,3/7] dt-bindings: net: fec: add mx93 description
-    https://git.kernel.org/netdev/net-next/c/f743e7664dca
-  - [V2,4/7] arm64: dts: imx93: add eqos support
-    https://git.kernel.org/netdev/net-next/c/1f4263ea6a4b
-  - [V2,5/7] arm64: dts: imx93: add FEC support
-    https://git.kernel.org/netdev/net-next/c/eaaf47108540
-  - [V2,6/7] arm64: dts: imx93-11x11-evk: enable eqos
-    https://git.kernel.org/netdev/net-next/c/1b110dd678d9
-  - [V2,7/7] arm64: dts: imx93-11x11-evk: enable fec function
-    https://git.kernel.org/netdev/net-next/c/c897dc7f3a8d
+  - [net-next,v2,1/3] dt-binding: net: ti: am65x-cpts: add 'ti,pps' property
+    https://git.kernel.org/netdev/net-next/c/2b76af68d8e5
+  - [net-next,v2,2/3] net: ethernet: ti: am65-cpts: add pps support
+    https://git.kernel.org/netdev/net-next/c/b6d787123427
+  - [net-next,v2,3/3] net: ethernet: ti: am65-cpts: adjust pps following ptp changes
+    https://git.kernel.org/netdev/net-next/c/eb9233ce6751
 
 You are awesome, thank you!
 -- 
