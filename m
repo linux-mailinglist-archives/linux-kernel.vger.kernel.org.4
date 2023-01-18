@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925C8672468
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E3C672466
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjARRFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S230211AbjARRFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjARRFT (ORCPT
+        with ESMTP id S229499AbjARRFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:05:19 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4063A46D68;
-        Wed, 18 Jan 2023 09:05:15 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 18 Jan 2023 12:05:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFFFA5D3;
+        Wed, 18 Jan 2023 09:05:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id E3DC04380B;
-        Wed, 18 Jan 2023 17:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674061513;
-        bh=8C8DkVQ2gQHEAlCG1z28SbrUvr9harQd3HM2fc4Ri0U=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=tp8C1A9YqPwvyGlIkzPyTp6A17m/TQBE6HaR7TQMNpFzJp7gOiSyLsrnhOY+YqqJ1
-         +wf6DkU43RtGg2cD/ksyixp0cL0JwVE76rPFzMCdPYHQxkSyE/meNGuDJXr7rj6lDC
-         6PcJ/6G3i1wLoX2nbMEgYqgHngOvtW9/AJYTOghwZfc1DjPsw/rEd//WH++2Dcai0+
-         hB0CT5IqLhoOpLLLk9VnqMH7/OK9xSBI86d7gllXjQdiwll48he3fD2cR8jey0lXSz
-         EUMLzEe7inzqd4APT7mduN78Ss6o7zd/xVZzAmmqbbcoPlVzSpVMuhZOY0NNjN16Jz
-         pVEE55LLJxhuQ==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     hdegoede@redhat.com, Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iio: light: cm32181: Fix PM support on system with 2 I2C resources
-Date:   Thu, 19 Jan 2023 01:04:22 +0800
-Message-Id: <20230118170422.339619-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3266B81DE3;
+        Wed, 18 Jan 2023 17:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEFFC433D2;
+        Wed, 18 Jan 2023 17:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674061497;
+        bh=rR4Df/erjWsP9GOk0L3bcywVdAHQZXw0SV5ORmLxzZ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=aDzcpyZdaG3x7s6fAheRNzA6NiffEhz4slQEgEBhwtaleCVPKAyDxuN43JBXRKp9v
+         2//s1Z8HnYz4bKzNnHp+g8a9OFfyWXACYmcFkFkY+R1nHmYz3eLHcmScnrlJovyd7j
+         TwzMooDaHeKyyC7+GuQa63Xq0kE19j9kdcWfnXL+01j0M72DdzNvV4Y+7Cvbwy0gnw
+         i7I6BEC2EMxY3och7sMWC1a/8ZUYiQhmRzpLzbTzYqrN8t+O92Mz4bWpv0JCPiFhnO
+         nIiLxWK9gJLsEvjqT7lXYHRt6/sUERm7oGtVTKLRHnBdOpfkCYoyRIzrrG6vS9YKoI
+         cSO25hKk7dl4A==
+Date:   Wed, 18 Jan 2023 11:04:54 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Achal Verma <a-verma1@ti.com>
+Cc:     Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Milind Parab <mparab@cadence.com>, Jian Wang <jian-wang@ti.com>
+Subject: Re: [PATCH] PCI: cadence: Fix next function value in case of ARI
+Message-ID: <20230118170454.GA225634@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118072035.3381993-1-a-verma1@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,74 +59,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
-with 2 I2C resources") creates a second client for the actual I2C
-address, but the "struct device" passed to PM ops is the first I2C
-client that can't talk to the sensor.
+On Wed, Jan 18, 2023 at 12:50:35PM +0530, Achal Verma wrote:
+> From: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
+> 
+> Next function field in ARI_CAP_AND_CTR field register for last
+> function should be zero but thats not the case, so this patch
+> programs the next function field for last function as zero.
 
-That means the I2C transfers in both suspend and resume routines can
-fail and blocking the whole suspend process.
+s/thats/that's/
 
-Instead of using the first client for I2C transfer, use the I2C client
-stored in the cm32181 private struct so the PM ops can get the correct
-I2C client to really talk to the sensor device.
+When you fix the comment formatting, also update the commit log to be
+imperative style and use the terms from the spec, e.g.,
 
-Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
-BugLink: https://bugs.launchpad.net/bugs/1988346
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-Tested-by: Wahaj <wahajaved@protonmail.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Removed setting drvdata to the dummy client.
- - Added bug links.
- - Wording.
+  Clear the ARI Capability Next Function Number of the last function.
 
- drivers/iio/light/cm32181.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ARI_CAP_AND_CTR is a Cadence-specific name (and doesn't seem to appear
+even in that driver).  The commit log should use the PCIe term.
 
-diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-index 001055d097509..b1674a5bfa368 100644
---- a/drivers/iio/light/cm32181.c
-+++ b/drivers/iio/light/cm32181.c
-@@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
- 	if (!indio_dev)
- 		return -ENOMEM;
- 
-+	i2c_set_clientdata(client, indio_dev);
-+
- 	/*
- 	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
- 	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
-@@ -460,8 +462,6 @@ static int cm32181_probe(struct i2c_client *client)
- 			return PTR_ERR(client);
- 	}
- 
--	i2c_set_clientdata(client, indio_dev);
--
- 	cm32181 = iio_priv(indio_dev);
- 	cm32181->client = client;
- 	cm32181->dev = dev;
-@@ -490,7 +490,8 @@ static int cm32181_probe(struct i2c_client *client)
- 
- static int cm32181_suspend(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
-+	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-+	struct i2c_client *client = cm32181->client;
- 
- 	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
- 					 CM32181_CMD_ALS_DISABLE);
-@@ -498,8 +499,8 @@ static int cm32181_suspend(struct device *dev)
- 
- static int cm32181_resume(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
- 	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-+	struct i2c_client *client = cm32181->client;
- 
- 	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
- 					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
--- 
-2.34.1
+See https://chris.beams.io/posts/git-commit/
 
+> Signed-off-by: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
+> ---
+>  drivers/pci/controller/cadence/pcie-cadence-ep.c | 15 ++++++++++++++-
+>  drivers/pci/controller/cadence/pcie-cadence.h    |  6 ++++++
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> index b8b655d4047e..6b6904cf0123 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
+> @@ -565,7 +565,8 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+>  	struct cdns_pcie *pcie = &ep->pcie;
+>  	struct device *dev = pcie->dev;
+>  	int max_epfs = sizeof(epc->function_num_map) * 8;
+> -	int ret, value, epf;
+> +	int ret, epf, last_fn;
+> +	u32 reg, value;
+>  
+>  	/*
+>  	 * BIT(0) is hardwired to 1, hence function 0 is always enabled
+> @@ -573,6 +574,18 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
+>  	 */
+>  	cdns_pcie_writel(pcie, CDNS_PCIE_LM_EP_FUNC_CFG, epc->function_num_map);
+>  
+> +	/* Setup ARI Next Function Number.
+> +	 * This field should point to the next physical Function and 0 for
+> +	 * last Function.
+> +	 */
+> +	last_fn = find_last_bit(&epc->function_num_map, BITS_PER_LONG);
+> +	reg     = CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(last_fn);
+> +
+> +	// Clear Next Function Number for the last function used.
+> +	value  = cdns_pcie_readl(pcie, reg);
+> +	value &= ~CDNS_PCIE_ARI_CAP_NFN_MASK;
+> +	cdns_pcie_writel(pcie, reg, value);
+> +
+>  	if (ep->quirk_disable_flr) {
+>  		for (epf = 0; epf < max_epfs; epf++) {
+>  			if (!(epc->function_num_map & BIT(epf)))
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
+> index 190786e47df9..68c4c7878111 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence.h
+> +++ b/drivers/pci/controller/cadence/pcie-cadence.h
+> @@ -130,6 +130,12 @@
+>  #define CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET	0xc0
+>  #define CDNS_PCIE_EP_FUNC_SRIOV_CAP_OFFSET	0x200
+>  
+> +/*
+> + * Endpoint PF Registers
+> + */
+> +#define CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(fn)	(0x144 + (fn) * 0x1000)
+> +#define CDNS_PCIE_ARI_CAP_NFN_MASK	GENMASK(15, 8)
+> +
+>  /*
+>   * Root Port Registers (PCI configuration space for the root port function)
+>   */
+> -- 
+> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
