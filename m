@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225BC6720E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3EE6720B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjARPOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S231532AbjARPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjARPNV (ORCPT
+        with ESMTP id S231517AbjARPJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:13:21 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105B445BE2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:10:48 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g205so9328332pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4t3wjs91jqYDdhcaBgIoHHF665G49/NIuIJvlGrcfA=;
-        b=Do9F396SRyFEV5JxNfbhAFqRMWeNzyfD1WsRYMmoSI5NQ0nbug+TxY3SaKiPs5a9Pw
-         fdR8QaB4M85v9GsVqYcqCnDclRF/RVSxmYBMgKF1l3LucUAiXBAf/086AwtifvXmAe/B
-         MZBjJxOX4wrbKnG+PlVFDYcKiKCT09DhEsY/KikbgL/WiS1cQA2NFIM4RkmK+hru+Gfi
-         m/hpxzgMjZ8x8brdl3PgOhZaKWJszwS+5Rthb8IF4PjcH/k+wjpkYOT8XEB5cUv/G0Oy
-         1rcXFiGcE7RMaXs+ngfiDoWQqYvsrtt66hh3TzWLSVaDUTVKKlC/JhgxoeuhfqMu4NAS
-         UTnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t4t3wjs91jqYDdhcaBgIoHHF665G49/NIuIJvlGrcfA=;
-        b=uudhVfrFpCWH7mowHm4qb5JZrLbUw6aKNtHFW+RK0nDaAJCLoRJjU4H8MRxyKCC7cj
-         D4i4z5Ras2UTj4JnW4bFR0H0ch3Z0XAGS54dnYHeEsYb2FCqsrP/YUHgW5F5wvAPI1y1
-         b+DTar4mTJOWNcZr8j0/djFu+11UwSaeBnfuuPA0at/fQJNX3IrfiOGkitHfNYm/Qcz7
-         tSwA+Vv9SGb0ykJLxb1qCllKFuILj7mM4LfnTgTa1XxamBukcHRlNdK9EbixwB59A1Wo
-         9TtvRNhpTXBRt1gvn25Hj5B4Z7tTD8GPdEy0WMZVDNzV6ThFPYcgNT9amd7n+URWn+Y4
-         dCsQ==
-X-Gm-Message-State: AFqh2krMyT6XFv4gFH93OJ95XKngrOhkfNIJVuH3j8fjeK5co/J32wbl
-        rsmaD1b8+UZsW+iJ384/cZnK
-X-Google-Smtp-Source: AMrXdXsK7jXlYKJw2R2kMtVvIpTTwtJt9k0lK/4ARndplI5whavjRrr8Cxok5DG/utsHXMucEWMrog==
-X-Received: by 2002:a05:6a00:2986:b0:58c:8bdd:2e3c with SMTP id cj6-20020a056a00298600b0058c8bdd2e3cmr7663075pfb.20.1674054648177;
-        Wed, 18 Jan 2023 07:10:48 -0800 (PST)
-Received: from localhost.localdomain ([27.111.75.61])
-        by smtp.gmail.com with ESMTPSA id i15-20020aa796ef000000b0058d9623e7f1sm6721544pfq.73.2023.01.18.07.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:10:47 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform device on SDM845
-Date:   Wed, 18 Jan 2023 20:39:04 +0530
-Message-Id: <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
-References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+        Wed, 18 Jan 2023 10:09:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA9A23C63;
+        Wed, 18 Jan 2023 07:09:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 396B861882;
+        Wed, 18 Jan 2023 15:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 909BDC4339B;
+        Wed, 18 Jan 2023 15:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674054572;
+        bh=TGrJM/Z4UZIYD/nTOz+s34yWyW616YGOhgh+xuBnLNY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J61GpLi7jzMgLNpoIHP+duq/KfyDYFuj8uqjuwvViozeraO5UYrhND/YJwJaygn+V
+         vN+YB2AucxojyDBCSyrDuyxQXDBr7h3AKfm8/zf6JRqTIwRFB9eeza43WJtGbrN1Jf
+         9rIKxl20fDjoAPjlDjmZlriI03HxAP18fdIV0Tm0ksv0EPaWrarvPvbq4aauumy2eV
+         bxoHfqhZzxIGU/vvVUAsqCYNEkYIN7ITBuQz2QdhbhI/WszUY5OXkDq1s7aw+s1YER
+         ShlIs56SHZz5Hvz8PnZWFYdUSXP70QgRdUW8WIGRtZhvJYxFa2f10aH8MQSBWP6YRc
+         YZFa/JRRW1dkA==
+Received: by mail-lf1-f41.google.com with SMTP id o20so20136050lfk.5;
+        Wed, 18 Jan 2023 07:09:32 -0800 (PST)
+X-Gm-Message-State: AFqh2kpfbXVn7F8AlXIfpVykcutgeJRiSKXgbrTdBWqzUZXCXed7GwlV
+        NfvgIVFudijgB5svY26GuU9FHt2VXb9Xmudrtm4=
+X-Google-Smtp-Source: AMrXdXuEmpdbM2h2hznzVk51O5SZEGdzUoGrzdEAdYc2vIg2hGVA4VZFyoQzK5oflRTKM2a+w1VCxxrZYTGhwGOB/3o=
+X-Received: by 2002:ac2:4ade:0:b0:4d0:7b7:65dc with SMTP id
+ m30-20020ac24ade000000b004d007b765dcmr323651lfp.122.1674054570399; Wed, 18
+ Jan 2023 07:09:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230113212926.2904735-1-dionnaglaze@google.com>
+ <20230113222024.rp2erl54vx3grdbd@box.shutemov.name> <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
+ <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com> <1818a72f-31ef-07b0-d1b4-6a8904636db2@amd.com>
+In-Reply-To: <1818a72f-31ef-07b0-d1b4-6a8904636db2@amd.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 18 Jan 2023 16:09:18 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG7s_B1nyEgsxFRRvUzsWNXcFfTszRA2hKY=_a-L24PZg@mail.gmail.com>
+Message-ID: <CAMj1kXG7s_B1nyEgsxFRRvUzsWNXcFfTszRA2hKY=_a-L24PZg@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
+        "Min M. Xu" <min.m.xu@intel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platforms based on SDM845 SoC locks the access to EDAC registers in the
-bootloader. So probing the EDAC driver will result in a crash. Hence,
-disable the creation of EDAC platform device on all SDM845 devices.
+(cc'ing some folks whom I've discussed this with off-list today)
 
-The issue has been observed on Lenovo Yoga C630 and DB845c.
+Full discussion here:
+https://lore.kernel.org/linux-efi/20230113212926.2904735-1-dionnaglaze@google.com/
 
-Cc: <stable@vger.kernel.org> # 5.10
-Reported-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+On Mon, 16 Jan 2023 at 23:46, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 1/16/23 15:22, Dave Hansen wrote:
+> > On 1/16/23 02:56, Gerd Hoffmann wrote:
+> >>> And we add this protocol to address very temporary problem: once
+> >>> unaccepted memory support get upstream it is just a dead weight.
+> >> Maybe, maybe not.  unaccepted memory support has a Kconfig switch after
+> >> all.  If we figure in 3-5 years that all distros have enabled it anyway
+> >> we can drop it again.  For the transition period it will surely be
+> >> useful.
+> >
+> > I agree with Kirill here.
+> >
+> > Having unaccepted memory *AND* this firmware-driven feature really is
+> > just implementing the same thing twice.
+>
+> I'm not sure I follow you. This feature merely tells the firmware whether
+> or not the OS supports unaccepted memory, which then tells the firmware
+> whether it needs to accept the memory or whether the kernel can.
+>
+> We have had SNP guest support since 5.19 without support for unaccepted
+> memory. Imagine now using a newer OVMF that can support unaccepted memory.
+> How does the firmware know whether it must accept all the memory or
+> whether it can advertise unaccepted memory. By having the kernel call this
+> boot service protocol once support for unaccepted memory is in place, the
+> firmware now knows that it need not accept all the memory.
+>
 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 7b7c5a38bac6..8d840702df50 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 
- 	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
- 
--	llcc_edac = platform_device_register_data(&pdev->dev,
--					"qcom_llcc_edac", -1, drv_data,
--					sizeof(*drv_data));
--	if (IS_ERR(llcc_edac))
--		dev_err(dev, "Failed to register llcc edac driver\n");
-+	/*
-+	 * The platforms based on SDM845 SoC locks the access to EDAC registers
-+	 * in bootloader. So probing the EDAC driver will result in a crash.
-+	 * Hence, disable the creation of EDAC platform device on SDM845.
-+	 */
-+	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
-+		llcc_edac = platform_device_register_data(&pdev->dev,
-+						"qcom_llcc_edac", -1, drv_data,
-+						sizeof(*drv_data));
-+		if (IS_ERR(llcc_edac))
-+			dev_err(dev, "Failed to register llcc edac driver\n");
-+	}
- 
- 	return 0;
- err:
--- 
-2.25.1
+So if people deploying SEV agree that this is a useful feature to
+have, and people working on TDX saying this protocol must never exist,
+I think the obvious conclusion is that OVMF should only expose it when
+running on SEV.
 
+However, I am still failing to grasp why there is disagreement here.
+Linux already implements SEV support but unaccepted memory protocol is
+not supported yet, and so it is crystal clear that we need something
+to bridge the compatibility gap. Without this protocol, firmware must
+never accept memory, and the OS must always take charge of this, even
+if it prefers to accept memory eagerly.
+
+With this protocol in place, acceptance becomes a policy decision,
+where the default policy is 'accept' for OS implementations that have
+no understanding of unaccepted memory or the protocol. 'Enlightened'
+OSes can still decide not to call the protocol and therefore not
+having to bother with acceptance at all, given that the firmware will
+take care of it.
+
+As for the 'legacy' boot method: this bootloader can decide for itself
+whether or not it needs to invoke the protocol, and can invent its own
+methods for communicating/inspecting the OS image to obtain the
+information to base this decision on. This is outside of the scope of
+EFI. However, I also disagree with the binary 'no solution shall
+exist' vs 'a solution must cover every imaginable combination of
+bootloader and OS image': it makes sense to be pragmatic here, and
+limit ourselves to what people are actually deploying. And given the
+default behavior fo 'accept everything', the only penalty for ignoring
+the legacy bootloader case is a slower boot.
+
+I have been on the sidelines for most of the OVMF and Linux
+development regarding confidential compute, but where I did get
+involved, it was to try and reach consensus between the different
+technologies (including the ARM one), to avoid ending up with radical
+different approaches for doing the same thing.
+
+However, I guess we're at a point where SEV and TDX really want
+different solutions, so I think divergence might be the way to
+proceed.
