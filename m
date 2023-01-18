@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C42C671A9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEDF671AA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjARLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S230063AbjARLbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 06:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjARLas (ORCPT
+        with ESMTP id S229615AbjARLbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:30:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C2637B7E;
-        Wed, 18 Jan 2023 02:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QEjwjk7nYkF7C1b0ySKce0lxosAVpdDVB2lq1DmXAnM=; b=CSDAGEt7u8PgJj1YdvqY1s4UcQ
-        eU1z0IhtXGm3YRc8hvmx3oVUS+yIG/+cceJTwNs1ZkRCO9av5whDTjPVgAJ0C6mYzfwSQd6MuSO2x
-        8mWlYprGcjlxxrMVkyvQd+3EankpNkqXYImnzDuBvC6oi6/5bVUDOgJer3ozjg63ltEO8fSJNimHF
-        XJ/atO0/uWew6kbo++peb9H99xO3pxHC99r49GYgGKywwfNWXl9+aNzR2zRZUkfTirMf0TReCXJL8
-        Gc7KGbKYVzDsJ9wG1gu0ZClsGXquNXZi/0jQqFGuLs9FyZRPaf/RMn4Z8ICG0wXZPs5iMyS39oDRK
-        D+Ec217g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pI61x-00Aabq-61; Wed, 18 Jan 2023 10:50:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2C0153005C9;
-        Wed, 18 Jan 2023 11:50:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0621E20A60F37; Wed, 18 Jan 2023 11:50:38 +0100 (CET)
-Date:   Wed, 18 Jan 2023 11:50:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF (v3)
-Message-ID: <Y8fO/Tro6wstoAeo@hirez.programming.kicks-ass.net>
-References: <20230118060559.615653-1-namhyung@kernel.org>
+        Wed, 18 Jan 2023 06:31:19 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A513267979;
+        Wed, 18 Jan 2023 02:51:25 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30I8gARB008715;
+        Wed, 18 Jan 2023 02:51:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=qs0V0ygpj5cc1VQW8u1I085voWCcRSynlhyT7DTfW54=;
+ b=cXY6ZiLtf7wj17LJyieIAwzoQBmpi8Oj/NVt1/cngLeOOU+WOsFoADCTySFJQA8LNZTq
+ Jc7DaVg4vQOkXFM8VKF1Df/Vb907BvIrp7mch3efH3oxNg28Hr67ztyk3iStosWYrTow
+ NX4OfOgUsW+pcnVHBEfnTk6GWHeNVIKx2S6i2YVshpzoQl7Ma4aNiMhKjleT9suecBH6
+ tlZrJRr3gyyekqcF0WX0HZ8TqLM+V7DhPEHcXz/sDsKVxTe8NrsP3p6sWCIRM846I8A1
+ g+9B7E/xtoZzyEER1g3y8vKHM0edJT4mLHNBsYsNnH6HinP351hmm5U7PFzLbPPvfVXi oA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3n3vstggsy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 02:51:16 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 18 Jan
+ 2023 02:51:13 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Wed, 18 Jan 2023 02:51:13 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 532375B6938;
+        Wed, 18 Jan 2023 02:51:08 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <saeedm@nvidia.com>, <richardcochran@gmail.com>,
+        <tariqt@nvidia.com>, <linux-rdma@vger.kernel.org>,
+        <maxtram95@gmail.com>
+Subject: [net-next Patch v2 0/5] octeontx2-pf: HTB offload support
+Date:   Wed, 18 Jan 2023 16:21:02 +0530
+Message-ID: <20230118105107.9516-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118060559.615653-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ldkt2GmoDndztXPnsG6r-CgQaWc0OkTI
+X-Proofpoint-GUID: ldkt2GmoDndztXPnsG6r-CgQaWc0OkTI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_04,2023-01-18_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,17 +69,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:05:51PM -0800, Namhyung Kim wrote:
-> Namhyung Kim (8):
->   perf/core: Save the dynamic parts of sample data size
->   perf/core: Add perf_sample_save_callchain() helper
->   perf/core: Add perf_sample_save_raw_data() helper
->   perf/core: Add perf_sample_save_brstack() helper
->   perf/core: Set data->sample_flags in perf_prepare_sample()
->   perf/core: Do not pass header for sample id init
->   perf/core: Introduce perf_prepare_header()
->   perf/core: Call perf_prepare_sample() before running BPF
+octeontx2 silicon and CN10K transmit interface consists of five
+transmit levels starting from MDQ, TL4 to TL1. Once packets are
+submitted to MDQ, hardware picks all active MDQs using strict
+priority, and MDQs having the same priority level are chosen using
+round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
+Each level contains an array of queues to support scheduling and
+shaping.
 
-Thanks!,
+As HTB supports classful queuing mechanism by supporting rate and
+ceil and allow the user to control the absolute bandwidth to
+particular classes of traffic the same can be achieved by
+configuring shapers and schedulers on different transmit levels.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+This series of patches adds support for HTB offload,
+
+Patch1: Allow strict priority parameter in HTB offload mode.
+
+Patch2: defines APIs such that the driver can dynamically initialize/
+        deinitialize the send queues.
+
+Patch3: Refactors transmit alloc/free calls as preparation for QOS
+        offload code.
+
+Patch4: Adds devlink support for the user to configure round-robin
+        priority at TL1
+
+Hariprasad Kelam (2):
+  octeontx2-pf: Refactor schedular queue alloc/free calls
+  octeontx2-pf: Add devlink support to configure TL1 RR_PRIO
+
+Naveen Mamindlapalli (2):
+  sch_htb: Allow HTB priority parameter in offload mode
+  octeontx2-pf: Add support for HTB offload
+
+Subbaraya Sundeep (1):
+  octeontx2-pf: qos send queues management
+
+V2 * ensure other drivers won't effect by allowing 'prio'
+     parameter in htb offload mode.
+
+ .../ethernet/marvell/octeontx2/af/common.h    |    2 +-
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |    9 +-
+ .../net/ethernet/marvell/octeontx2/af/rvu.c   |   15 +
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |    1 +
+ .../marvell/octeontx2/af/rvu_debugfs.c        |    5 +
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |   84 +-
+ .../ethernet/marvell/octeontx2/nic/Makefile   |    2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  115 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   30 +-
+ .../marvell/octeontx2/nic/otx2_devlink.c      |   84 +
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   31 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |   93 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_reg.h |   13 +
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |    7 +-
+ .../marvell/octeontx2/nic/otx2_txrx.c         |   27 +-
+ .../marvell/octeontx2/nic/otx2_txrx.h         |    3 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |    8 +-
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  | 1547 +++++++++++++++++
+ .../net/ethernet/marvell/octeontx2/nic/qos.h  |   71 +
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  304 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |    6 +
+ include/net/pkt_cls.h                         |    1 +
+ net/sched/sch_htb.c                           |    7 +-
+ 23 files changed, 2378 insertions(+), 87 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.h
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+
+--
+2.17.1
