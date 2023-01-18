@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AB7671EE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85623671EEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjAROIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S229845AbjAROIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:08:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjAROHf (ORCPT
+        with ESMTP id S230362AbjAROIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:07:35 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946ACA732C;
-        Wed, 18 Jan 2023 05:43:42 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id p185so7526700oif.2;
-        Wed, 18 Jan 2023 05:43:42 -0800 (PST)
+        Wed, 18 Jan 2023 09:08:22 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F5146D6B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:47:12 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r9so11198643wrw.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:47:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=I17OzmZtLqMo8ET5jlEammDd0U/M5km1yFXfGeGmi8I=;
-        b=q7tGkRH5NIVOqqCXE+btX6WNLgFmVxuQJf/djr2FjaUVrqMYrmH2uwbF/r/5X+Iq8p
-         Pdci3xkbi9IOnkt1CJL7HLvNgIK7U7xBjYEDwv0uWeCvJxsdKeY3t8BmhJMwk1f73++X
-         6lqCJRbCVQnCYzkWrpHYw6OXcP87aIS3Q5T8ARZ+jciZd+X83v4A4cnRiaIiy9Vc7MAg
-         OEZgQTtMFlCAG7zO+npybi+sZdIqB+rKisouOAKTIAFo+g1/wlBqCS4lFO2iQpQkcwSF
-         zo80a37qk5ncQpg78AgEA+HUp91hn7mdRM9slWrX+6Xw6XEtr51TS1v2r/v9nu8vSj5K
-         rXkQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fr8Gz55U4TOXGvBsDrDEZEh2Yy8w/FVFBooraq51kv0=;
+        b=1uWwE4GmTr+03g5OABkJY6AGMGvrTIc7r5VQlFTSF6dZdeoJgMAIe707XW2VPiAXqd
+         J5GQYsPG2cw1ziqfrWhZNDCo+2n6w1bheWrJYUi+PQsAwJoIUB1FJNPHNksb7JMWNTyy
+         V7kjVnIlEnkpgy8qAvEvIzq6UgmfbxcgqNYlYFlhGrSoQU7ojU0Rm/qNE/7SXOSE2GqI
+         KFQcfmO3wo4Wctn6opMfzgqVmIB60ev9yCJCJ7o1DmgBT7PBt3PmVva9M8wlICiJoBWj
+         OOvhZ8oXXUTi7kmCGgUvSOHYBuZwpjU2WMk4gDvUBCYZ7SL9/z5R8uYYa6DfcYKoGBmR
+         oN9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=I17OzmZtLqMo8ET5jlEammDd0U/M5km1yFXfGeGmi8I=;
-        b=h8yzT/sG2/k5bv8vzyGSlpa73ETPKU9QjtlX5EQXEF+aYCmrQyOFYO+B1Up93VLgxC
-         Y6NGBj62Bv2h0KoLE2Dt1fymnD6NYu63lilhpAKsiZUq6GkKxOiUXuJ2Va7G5fQ8xBin
-         zw5pdMXMGEAied7oGk9HLtA8Zzis3GnOor9SIXbNsOXT4r/T89PYFpY4EO00/4RNATF8
-         OA5yhGnJdzCBVneC01+kaoOjMg9xLVwvPrOxzMIBHQ1GHjAEVLxdMVS3+tkiruLa0Nwp
-         sNGOHPh1T67JYCH7DILhmUU62E9jyy/z/RiJhJuYVRiUSS1wYm20T4EQ5/eYhXtDOKE7
-         HZyw==
-X-Gm-Message-State: AFqh2kqVIoayxxtlsGRESGBN73/AXWlY6jrVeOglvwZ4pEZEiqywhEa1
-        DGhu9iJapwv9TRwyDDLEH+4CP5zcRG8=
-X-Google-Smtp-Source: AMrXdXsiex4vRLUCJZaTwr5Ec7Cgd9e/38R7LfMnAyunSDDfqlUcLrTrkD2j6Q9LeW/wLG9QeiRtEA==
-X-Received: by 2002:aca:191a:0:b0:368:7897:cbd0 with SMTP id l26-20020aca191a000000b003687897cbd0mr2839334oii.12.1674049421823;
-        Wed, 18 Jan 2023 05:43:41 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c38-20020a05683034a600b00684b8ddde9asm11116790otu.18.2023.01.18.05.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 05:43:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f9a47a1a-dcce-87e1-be4e-4f62f8e60c78@roeck-us.net>
-Date:   Wed, 18 Jan 2023 05:43:39 -0800
+        bh=fr8Gz55U4TOXGvBsDrDEZEh2Yy8w/FVFBooraq51kv0=;
+        b=pwCsQ1ww9pYVKlK87wIDschWIDwXApYNPLujnKbpFrGyI0h9QNZfC/0oWkNvNOT/te
+         PctmvblrE06jOAKxp5jthj6pAqjNfUdjBJDTV7An3753WYC4NiXoVSveuP5qFkaswCtl
+         3SGpc+k5pLPhijNRvaIhR05pOmWEv76/NX+7JSDDDH3rO/XoBsiKkEObyRFKMLiha80F
+         /A2meerjjdcLZUhvg2/4LZh5BROP2erjdpIOjaWPK85UF0eKva4YoTJrXtord4buDo7l
+         GUbi+UoGlpATvF8xrbG7JEyMwyW1AbnGHuX3VFhzgzQv1soGvZzQ5wgyci59hlTug6Rl
+         8vzw==
+X-Gm-Message-State: AFqh2kqKanuWSQrTgn2/ri0nV4LR1maR0BLO5GZ3D+8+S+ilneUuWKzQ
+        0QsE1P1110Vy428JfX9MsZjvxcq32bOsEPkQ
+X-Google-Smtp-Source: AMrXdXsdim4iXuQyaIhNNQC4T1V90BS13OCnv/Ybnk9psMXZ+Tr3WU7q4bIjazUhCn6G9S1T8D+ElQ==
+X-Received: by 2002:a5d:5b0e:0:b0:250:22e4:b89e with SMTP id bx14-20020a5d5b0e000000b0025022e4b89emr7147933wrb.65.1674049630910;
+        Wed, 18 Jan 2023 05:47:10 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1866:5d91:a429:aba])
+        by smtp.gmail.com with ESMTPSA id t18-20020adff612000000b002be2f18938csm1562150wrp.41.2023.01.18.05.47.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 05:47:10 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2] i2c: dev: don't allow user-space to deadlock the kernel
+Date:   Wed, 18 Jan 2023 14:47:07 +0100
+Message-Id: <20230118134707.239900-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] hwmon: (pmbus/core): Generalize pmbus status flag map
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118111536.3276540-1-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230118111536.3276540-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,148 +68,382 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/23 03:15, Naresh Solanki wrote:
-> Move the PMBus status flag map (pmbus_regulator_status_flag_map)
-> outside of the regulator #if block and update the associated
-> variable/struct name to reflect a generic PMBus status. Also retain
-> the regulator error flag for use in determining regulator specific error.
-> 
-> This will make the PMBus status flag map more versatile and easier to
-> incorporate into different contexts and functions.
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Sorry, I don't see the point of moving a structure including
-regulator error codes outside regulator code.
+If we open an i2c character device and then unbind the underlying i2c
+adapter (either by unbinding it manually via sysfs or - for a real-life
+example - when unplugging a USB device with an i2c adaper), the kernel
+thread calling i2c_del_adapter() will become blocked waiting for the
+completion that only completes once all references to the character
+device get dropped.
 
-Guenter
+In order to fix that, we introduce a couple changes. They need to be
+part of a single commit in order to preserve bisectability. First, drop
+the dev_release completion. That removes the risk of a deadlock but
+we now need to protect the character device structures against NULL
+pointer dereferences. To that end introduce an rw semaphore. It will
+protect the dummy i2c_client structure against dropping the adapter from
+under it. It will be taken for reading by all file_operations callbacks
+and for writing by the notifier's unbind handler. This way we don't
+prohibit the syscalls that don't get in each other's way from running
+concurrently but the adapter will not be unbound before all syscalls
+return.
 
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 94 ++++++++++++++++----------------
->   1 file changed, 47 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 95e95783972a..1b70cf3be313 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2692,6 +2692,49 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->   	return 0;
->   }
->   
-> +/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-> +struct pmbus_status_assoc {
-> +	int pflag, rflag;
-> +};
-> +
-> +/* PMBus->regulator bit mappings for a PMBus status register */
-> +struct pmbus_status_category {
-> +	int func;
-> +	int reg;
-> +	const struct pmbus_status_assoc *bits; /* zero-terminated */
-> +};
-> +
-> +static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[] = {
-> +	{
-> +		.func = PMBUS_HAVE_STATUS_VOUT,
-> +		.reg = PMBUS_STATUS_VOUT,
-> +		.bits = (const struct pmbus_status_assoc[]) {
-> +			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-> +			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-> +			{ },
-> +		},
-> +	}, {
-> +		.func = PMBUS_HAVE_STATUS_IOUT,
-> +		.reg = PMBUS_STATUS_IOUT,
-> +		.bits = (const struct pmbus_status_assoc[]) {
-> +			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-> +			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-> +			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-> +			{ },
-> +		},
-> +	}, {
-> +		.func = PMBUS_HAVE_STATUS_TEMP,
-> +		.reg = PMBUS_STATUS_TEMPERATURE,
-> +		.bits = (const struct pmbus_status_assoc[]) {
-> +			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-> +			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-> +			{ },
-> +		},
-> +	},
-> +};
-> +
->   #if IS_ENABLED(CONFIG_REGULATOR)
->   static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->   {
-> @@ -2738,54 +2781,11 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
->   	return _pmbus_regulator_on_off(rdev, 0);
->   }
->   
-> -/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-> -struct pmbus_regulator_status_assoc {
-> -	int pflag, rflag;
-> -};
-> -
-> -/* PMBus->regulator bit mappings for a PMBus status register */
-> -struct pmbus_regulator_status_category {
-> -	int func;
-> -	int reg;
-> -	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
-> -};
-> -
-> -static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
-> -	{
-> -		.func = PMBUS_HAVE_STATUS_VOUT,
-> -		.reg = PMBUS_STATUS_VOUT,
-> -		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> -			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-> -			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-> -			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-> -			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-> -			{ },
-> -		},
-> -	}, {
-> -		.func = PMBUS_HAVE_STATUS_IOUT,
-> -		.reg = PMBUS_STATUS_IOUT,
-> -		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> -			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-> -			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-> -			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-> -			{ },
-> -		},
-> -	}, {
-> -		.func = PMBUS_HAVE_STATUS_TEMP,
-> -		.reg = PMBUS_STATUS_TEMPERATURE,
-> -		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> -			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-> -			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-> -			{ },
-> -		},
-> -	},
-> -};
-> -
->   static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
->   {
->   	int i, status;
-> -	const struct pmbus_regulator_status_category *cat;
-> -	const struct pmbus_regulator_status_assoc *bit;
-> +	const struct pmbus_status_category *cat;
-> +	const struct pmbus_status_assoc *bit;
->   	struct device *dev = rdev_get_dev(rdev);
->   	struct i2c_client *client = to_i2c_client(dev->parent);
->   	struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -2796,8 +2796,8 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->   
->   	mutex_lock(&data->update_lock);
->   
-> -	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
-> -		cat = &pmbus_regulator_flag_map[i];
-> +	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
-> +		cat = &pmbus_status_flag_map[i];
->   		if (!(func & cat->func))
->   			continue;
->   
-> 
-> base-commit: 774dccfe77dcd8cf1d82df1f61fe95a720dc76e4
+Finally: upon being notified about an unbind event for the i2c adapter,
+we take the lock for writing and set the adapter pointer in the character
+device's structure to NULL. This "numbs down" the device - it still exists
+but is no longer functional. Meanwhile every syscall callback checks that
+pointer after taking the lock but before executing any code that requires
+it. If it's NULL, we return an error to user-space.
+
+This way we can safely open an i2c device from user-space, unbind the
+device without triggering a deadlock and any subsequent system-call for
+the file descriptor associated with the removed adapter will gracefully
+fail.
+
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+v1 -> v2:
+- make symbol names more descriptive
+- protect the name_show() sysfs callback too
+- zero the adapter's struct device on device release
+- make sure the code works nicely with CONFIG_DEBUG_KOBJECT_RELEASE enabled
+
+ drivers/i2c/i2c-core-base.c |  32 ++++-------
+ drivers/i2c/i2c-dev.c       | 109 +++++++++++++++++++++++++++++++-----
+ include/linux/i2c.h         |   2 -
+ 3 files changed, 106 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 087e480b624c..ec8140d907c2 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1139,7 +1139,17 @@ EXPORT_SYMBOL_GPL(i2c_new_ancillary_device);
+ static void i2c_adapter_dev_release(struct device *dev)
+ {
+ 	struct i2c_adapter *adap = to_i2c_adapter(dev);
+-	complete(&adap->dev_released);
++
++	/* free bus id */
++	mutex_lock(&core_lock);
++	idr_remove(&i2c_adapter_idr, adap->nr);
++	mutex_unlock(&core_lock);
++
++	/*
++	 * Clear the device structure in case this adapter is ever going to be
++	 * added again.
++	 */
++	memset(&adap->dev, 0, sizeof(adap->dev));
+ }
+ 
+ unsigned int i2c_adapter_depth(struct i2c_adapter *adapter)
+@@ -1512,9 +1522,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+ 	return 0;
+ 
+ out_reg:
+-	init_completion(&adap->dev_released);
+ 	device_unregister(&adap->dev);
+-	wait_for_completion(&adap->dev_released);
+ out_list:
+ 	mutex_lock(&core_lock);
+ 	idr_remove(&i2c_adapter_idr, adap->nr);
+@@ -1713,25 +1721,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+ 
+ 	i2c_host_notify_irq_teardown(adap);
+ 
+-	/* wait until all references to the device are gone
+-	 *
+-	 * FIXME: This is old code and should ideally be replaced by an
+-	 * alternative which results in decoupling the lifetime of the struct
+-	 * device from the i2c_adapter, like spi or netdev do. Any solution
+-	 * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+-	 */
+-	init_completion(&adap->dev_released);
+ 	device_unregister(&adap->dev);
+-	wait_for_completion(&adap->dev_released);
+-
+-	/* free bus id */
+-	mutex_lock(&core_lock);
+-	idr_remove(&i2c_adapter_idr, adap->nr);
+-	mutex_unlock(&core_lock);
+-
+-	/* Clear the device structure in case this adapter is ever going to be
+-	   added again */
+-	memset(&adap->dev, 0, sizeof(adap->dev));
+ }
+ EXPORT_SYMBOL(i2c_del_adapter);
+ 
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 107623c4cc14..38c83ee408be 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -28,6 +28,7 @@
+ #include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/notifier.h>
++#include <linux/rwsem.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ 
+@@ -44,8 +45,14 @@ struct i2c_dev {
+ 	struct i2c_adapter *adap;
+ 	struct device dev;
+ 	struct cdev cdev;
++	struct rw_semaphore rwsem;
+ };
+ 
++static inline struct i2c_dev *inode_to_i2c_dev(struct inode *ino)
++{
++	return container_of(ino->i_cdev, struct i2c_dev, cdev);
++}
++
+ #define I2C_MINORS	(MINORMASK + 1)
+ static LIST_HEAD(i2c_dev_list);
+ static DEFINE_SPINLOCK(i2c_dev_list_lock);
+@@ -99,10 +106,21 @@ static ssize_t name_show(struct device *dev,
+ 			 struct device_attribute *attr, char *buf)
+ {
+ 	struct i2c_dev *i2c_dev = i2c_dev_get_by_minor(MINOR(dev->devt));
++	const char *name;
+ 
+ 	if (!i2c_dev)
+ 		return -ENODEV;
+-	return sysfs_emit(buf, "%s\n", i2c_dev->adap->name);
++
++	down_read(&i2c_dev->rwsem);
++	if (!i2c_dev->adap) {
++		up_read(&i2c_dev->rwsem);
++		return -ENODEV;
++	}
++
++	name = i2c_dev->adap->name;
++	up_read(&i2c_dev->rwsem);
++
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ static DEVICE_ATTR_RO(name);
+ 
+@@ -136,15 +154,23 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
+ {
+ 	char *tmp;
+ 	int ret;
+-
++	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
+ 	struct i2c_client *client = file->private_data;
+ 
+ 	if (count > 8192)
+ 		count = 8192;
+ 
++	down_read(&i2c_dev->rwsem);
++	if (!i2c_dev->adap) {
++		up_read(&i2c_dev->rwsem);
++		return -ENODEV;
++	}
++
+ 	tmp = kzalloc(count, GFP_KERNEL);
+-	if (tmp == NULL)
++	if (tmp == NULL) {
++		up_read(&i2c_dev->rwsem);
+ 		return -ENOMEM;
++	}
+ 
+ 	pr_debug("i2c-%d reading %zu bytes.\n", iminor(file_inode(file)), count);
+ 
+@@ -152,6 +178,7 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
+ 	if (ret >= 0)
+ 		if (copy_to_user(buf, tmp, ret))
+ 			ret = -EFAULT;
++	up_read(&i2c_dev->rwsem);
+ 	kfree(tmp);
+ 	return ret;
+ }
+@@ -161,18 +188,28 @@ static ssize_t i2cdev_write(struct file *file, const char __user *buf,
+ {
+ 	int ret;
+ 	char *tmp;
++	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
+ 	struct i2c_client *client = file->private_data;
+ 
+ 	if (count > 8192)
+ 		count = 8192;
+ 
++	down_read(&i2c_dev->rwsem);
++	if (!i2c_dev->adap) {
++		up_read(&i2c_dev->rwsem);
++		return -ENODEV;
++	}
++
+ 	tmp = memdup_user(buf, count);
+-	if (IS_ERR(tmp))
++	if (IS_ERR(tmp)) {
++		up_read(&i2c_dev->rwsem);
+ 		return PTR_ERR(tmp);
++	}
+ 
+ 	pr_debug("i2c-%d writing %zu bytes.\n", iminor(file_inode(file)), count);
+ 
+ 	ret = i2c_master_send(client, tmp, count);
++	up_read(&i2c_dev->rwsem);
+ 	kfree(tmp);
+ 	return ret;
+ }
+@@ -389,7 +426,8 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
+ 	return res;
+ }
+ 
+-static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++static long i2cdev_ioctl_unlocked(struct file *file, unsigned int cmd,
++				  unsigned long arg)
+ {
+ 	struct i2c_client *client = file->private_data;
+ 	unsigned long funcs;
+@@ -495,6 +533,20 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	return 0;
+ }
+ 
++static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
++	long ret;
++
++	down_read(&i2c_dev->rwsem);
++	if (!i2c_dev->adap)
++		ret = -ENODEV;
++	else
++		ret = i2cdev_ioctl_unlocked(file, cmd, arg);
++	up_read(&i2c_dev->rwsem);
++
++	return ret;
++}
+ #ifdef CONFIG_COMPAT
+ 
+ struct i2c_smbus_ioctl_data32 {
+@@ -516,10 +568,12 @@ struct i2c_rdwr_ioctl_data32 {
+ 	u32 nmsgs;
+ };
+ 
+-static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++static long compat_i2cdev_ioctl_unlocked(struct file *file, unsigned int cmd,
++					 unsigned long arg)
+ {
+ 	struct i2c_client *client = file->private_data;
+ 	unsigned long funcs;
++
+ 	switch (cmd) {
+ 	case I2C_FUNCS:
+ 		funcs = i2c_get_functionality(client->adapter);
+@@ -578,19 +632,39 @@ static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned lo
+ 		return i2cdev_ioctl(file, cmd, arg);
+ 	}
+ }
++
++static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd,
++				unsigned long arg)
++{
++	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
++	long ret;
++
++	down_read(&i2c_dev->rwsem);
++	if (!i2c_dev->adap)
++		ret = -ENODEV;
++	else
++		ret = compat_i2cdev_ioctl_unlocked(file, cmd, arg);
++	up_read(&i2c_dev->rwsem);
++
++	return ret;
++}
+ #else
+ #define compat_i2cdev_ioctl NULL
+ #endif
+ 
+ static int i2cdev_open(struct inode *inode, struct file *file)
+ {
+-	unsigned int minor = iminor(inode);
++	struct i2c_dev *i2c_dev = inode_to_i2c_dev(inode);
+ 	struct i2c_client *client;
+ 	struct i2c_adapter *adap;
++	int ret = 0;
+ 
+-	adap = i2c_get_adapter(minor);
+-	if (!adap)
+-		return -ENODEV;
++	down_read(&i2c_dev->rwsem);
++	adap = i2c_dev->adap;
++	if (!adap) {
++		ret = -ENODEV;
++		goto out_unlock;
++	}
+ 
+ 	/* This creates an anonymous i2c_client, which may later be
+ 	 * pointed to some address using I2C_SLAVE or I2C_SLAVE_FORCE.
+@@ -601,22 +675,23 @@ static int i2cdev_open(struct inode *inode, struct file *file)
+ 	 */
+ 	client = kzalloc(sizeof(*client), GFP_KERNEL);
+ 	if (!client) {
+-		i2c_put_adapter(adap);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out_unlock;
+ 	}
+ 	snprintf(client->name, I2C_NAME_SIZE, "i2c-dev %d", adap->nr);
+ 
+ 	client->adapter = adap;
+ 	file->private_data = client;
+ 
+-	return 0;
++out_unlock:
++	up_read(&i2c_dev->rwsem);
++	return ret;
+ }
+ 
+ static int i2cdev_release(struct inode *inode, struct file *file)
+ {
+ 	struct i2c_client *client = file->private_data;
+ 
+-	i2c_put_adapter(client->adapter);
+ 	kfree(client);
+ 	file->private_data = NULL;
+ 
+@@ -669,6 +744,8 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+ 	i2c_dev->dev.parent = &adap->dev;
+ 	i2c_dev->dev.release = i2cdev_dev_release;
+ 
++	init_rwsem(&i2c_dev->rwsem);
++
+ 	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
+ 	if (res)
+ 		goto err_put_i2c_dev;
+@@ -698,6 +775,10 @@ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
+ 	if (!i2c_dev) /* attach_adapter must have failed */
+ 		return NOTIFY_DONE;
+ 
++	down_write(&i2c_dev->rwsem);
++	i2c_dev->adap = NULL;
++	up_write(&i2c_dev->rwsem);
++
+ 	put_i2c_dev(i2c_dev, true);
+ 
+ 	pr_debug("adapter [%s] unregistered\n", adap->name);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index d84e0e99f084..3f31e4032044 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -14,7 +14,6 @@
+ #include <linux/bits.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/device.h>	/* for struct device */
+-#include <linux/sched.h>	/* for completion */
+ #include <linux/mutex.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/rtmutex.h>
+@@ -739,7 +738,6 @@ struct i2c_adapter {
+ 
+ 	int nr;
+ 	char name[48];
+-	struct completion dev_released;
+ 
+ 	struct mutex userspace_clients_lock;
+ 	struct list_head userspace_clients;
+-- 
+2.37.2
 
