@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182836723AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199196723A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjARQlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S230041AbjARQkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjARQjf (ORCPT
+        with ESMTP id S230512AbjARQjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:39:35 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6044711E86;
-        Wed, 18 Jan 2023 08:38:53 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id s3so24107500pfd.12;
-        Wed, 18 Jan 2023 08:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElQLm1bEEQyEGfnTuG8KWGBTmNlKMxnd1pxdVxQfdlc=;
-        b=C9BK4foCMALXszUpeGRdyt/EPpDmXUmv9gUXHKhxhbNHvEt0pi9wx3/si71AntsU7Z
-         xDaNR4xzWvkh+K8laG7LKl/RfCdLnTJQc73N46yGMbROy0wD/sPnNhYNb2OjrbQ7c+yp
-         qDnifb++/ZwBcAaPlfbD7GKzXuqPQChZloivW/IDAM2QZMp1oJn5FlqKnVCr3B0sVkzh
-         SbL8BjhVmIco2n4nWs/ZxNzPtKOXsWrrnYsgmGM8gtwdBDg44fFP65yf2WSk+KumCnWx
-         5KQ1ihPFRAhMY0mTydlyUfRnsY1YidE6xs6Mf6nfleNxByeN3EYk9NSflpt1eYbMT+Gz
-         +l1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ElQLm1bEEQyEGfnTuG8KWGBTmNlKMxnd1pxdVxQfdlc=;
-        b=ZrHZoLVuYhZom/r9pDPYzvMesp/kfIyTQpQ0G9qP0EXEeGROWVLUK4Kxf1pLI95K4F
-         wKDkBshiYmYJjzrDavdNlGwnhalQGcPQj955Is3fN9+iZR5qws5DBUV1Qk3cN+fpjpOD
-         B52CW+bHZqLmjE+IPlVbuChI0q9PGzgujZlvqJOd+CVZv4u67twXaCifS3kLuFfgN/YH
-         Yu6wMWaG4dsp0wxGJhLqBlwVpdBMr9YONykS8qHZnJJul+q+vnV0POjsn14X4up3N/1+
-         sZZ5WnfhmbPUTT/biJQ6FnZoHvmh0aPW0YoNMPKGtNUns4feg2+wjRZfTplY9Omfjqw3
-         hVJg==
-X-Gm-Message-State: AFqh2kq97i3U60HcwW4iS1AhaPiDXqaU8Y2e69GOR14SQpR7y1ibz0HL
-        8lzjMwbJlaj8BffHh8fiCtQRQPrVvngSUG4eVFtYoeASKIE=
-X-Google-Smtp-Source: AMrXdXuj4Set7eAlseRnIV1xV5bdym0f6Rg+/GJ16smJ3j4Mf/IJPNpvWeGt2soVY5rmLrgtUpEhWPf7qjkb4uY3IfY=
-X-Received: by 2002:a62:e40a:0:b0:580:8b92:ecff with SMTP id
- r10-20020a62e40a000000b005808b92ecffmr748474pfh.4.1674059932918; Wed, 18 Jan
- 2023 08:38:52 -0800 (PST)
+        Wed, 18 Jan 2023 11:39:46 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA25C4393C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:39:35 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CAFA92012A;
+        Wed, 18 Jan 2023 17:39:33 +0100 (CET)
+Date:   Wed, 18 Jan 2023 17:39:32 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/5] iio: core: Point users of extend_name field
+ to read_label callback
+Message-ID: <20230118163932.srskwgx6rhzozai6@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230116220909.196926-1-marijn.suijten@somainline.org>
+ <20230116220909.196926-2-marijn.suijten@somainline.org>
+ <20230118161920.0000207c@Huawei.com>
+ <20230118163525.hh6woxq5q74pmcmq@SoMainline.org>
 MIME-Version: 1.0
-References: <20230117124526.766388541@linuxfoundation.org>
-In-Reply-To: <20230117124526.766388541@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 18 Jan 2023 08:38:41 -0800
-Message-ID: <CAJq+SaBwSL+chM14Dod7qZRSuYSS+KE4GAPrsQi89OpcOp-t6w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118163525.hh6woxq5q74pmcmq@SoMainline.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.10.164 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On 2023-01-18 17:35:27, Marijn Suijten wrote:
+> On 2023-01-18 16:19:20, Jonathan Cameron wrote:
+> > On Mon, 16 Jan 2023 23:09:05 +0100
+> > Marijn Suijten <marijn.suijten@somainline.org> wrote:
+> > 
+> > > As mentioned and discussed in [1] extend_name should not be used for
+> > > full channel labels (and most drivers seem to only use it to express a
+> > > short type of a channel) as this affects sysfs filenames, while the
+> > > label name is supposed to be extracted from the *_label sysfs file
+> > > instead.  This appears to have been unclear to some drivers as
+> > > extend_name is also used when read_label is unset, achieving an initial
+> > > goal of providing sensible names in *_label sysfs files without noticing
+> > > that sysfs filenames are (negatively and likely unintentionally)
+> > > affected as well.
+> > > 
+> > > Point readers of iio_chan_spec::extend_name to iio_info::read_label by
+> > > mentioning deprecation and side-effects of this field.
+> > > 
+> > > [1]: https://lore.kernel.org/linux-arm-msm/20221221223432.si2aasbleiicayfl@SoMainline.org/
+> > > 
+> > > Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > > ---
+> > >  include/linux/iio/iio.h | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
+> > > index 81413cd3a3e7..36c89f238fb9 100644
+> > > --- a/include/linux/iio/iio.h
+> > > +++ b/include/linux/iio/iio.h
+> > > @@ -221,6 +221,9 @@ struct iio_event_spec {
+> > >   * @extend_name:	Allows labeling of channel attributes with an
+> > >   *			informative name. Note this has no effect codes etc,
+> > >   *			unlike modifiers.
+> > > + *			This field is deprecated in favour of overriding read_label
+> > > + *			in iio_info, which unlike @extend_name does not affect sysfs
+> > > + *			filenames.
+> > Perhaps reword as
+> > 
+> > This field is deprecated in favour of overriding the default label
+> > by providing a read_label() callback in iio_info, which unlike
+> > @extend_name does not affect sysfs filenames.
+> > ?
+> 
+> Agreed, explicitly stating "the default label by" makes this much more
+> clear.  Though, maybe swap that around into "in favour of providing
+> read_label() in iio_info to override the label"?  Otherwise this could
+> be interpreted as "overriding the default label" is preferred to setting
+> extend_name... which one would do to override the default label.
+> 
+> I can queue this up for v3 unless you'll fix it up while applying,
+> presuming no other changes have to be made (aside from dropping patch
+> 3/5).
+> 
+> Will read_label() turn into a link?  And is the @extend_name reference
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+Yes, if read_label is a function that exists (but it's a member)... and
+@extend_name will indeed reference the member anywhere.
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+> proper?  Is there something to link to iio_info, perhaps a hashtag - or
+> maybe fully qualify `#iio_info::read_label()` for linking purposes?
+> /me jumps over to kerneldoc documentation :)
 
-Thanks.
+Looks like that would be &iio_info->read_label() (not sure about the
+trailing () though):
+https://docs.kernel.org/doc-guide/kernel-doc.html#highlights-and-cross-references
+
+- Marijn
