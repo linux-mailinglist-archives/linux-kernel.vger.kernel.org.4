@@ -2,45 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B124E671A94
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058BF671A96
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjARL3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S229983AbjARLaU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 Jan 2023 06:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjARL32 (ORCPT
+        with ESMTP id S230107AbjARL3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:29:28 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88017EE69
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=D75eo0h5T7Zuy+D/osTKqodsU7t
-        pNCZ6QKBRj8l+SQ4=; b=x44Yl7QNAoUxSwMGbDgJlt+BtwYpPmRWUxJc5G08bbv
-        fPnHFcxk+F0in4I2G2KPN9xsBk082WYKZ9uBTpj9YphK3IaZaeYg8zlB5c5Sci86
-        8jN1U8q4rBTDjig58GKog88edjZT04Kg5QQtNTngWwyjuICqkeGXAEZquDx4I0ZM
-        =
-Received: (qmail 3853298 invoked from network); 18 Jan 2023 11:46:58 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Jan 2023 11:46:58 +0100
-X-UD-Smtp-Session: l3s3148p1@BhQYiYfyHopehhrZ
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
-Date:   Wed, 18 Jan 2023 11:46:56 +0100
-Message-Id: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 18 Jan 2023 06:29:52 -0500
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61BA125BA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:49:05 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id bp15so51116174lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:49:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TNJOWHq+We13SH7/7e+I5fS8M1OBmfqEsNTjgJP5AnE=;
+        b=T/kzo3eSyhYOqPubySsXPqyVkDUpj5nuR2jRv76nAinhVs6kn/qJXJLxSzzbh/xiXK
+         X8Sd0rB2zlJM9W/4r0D0SOOum4m76DIPJ33RLGIWj8bZOlSLkH5wq8nXCs2bl4VfzlOO
+         cJdXRfSSMMemvQcaSJtRgGRA/Ocqu5/F/zCJ/q8oduVSuQfadTO3oKaXUdYFqZVMXBhr
+         yJLJubUricGiGsLdOEE/8bzUQ7v3u4FixDIZQ6vyEO5CV+8fXlxQaMzfboUitAFRYF09
+         9fs7IEYMtQ+vteZNtlp/rI34iygxMeLSqCL5+Ts6AuizzbJjDUz8UQzzPpEElN8zUpqp
+         9l3g==
+X-Gm-Message-State: AFqh2kptm+fX1vo1oc505CrjCSUW1JQ/C9kkpf/EkSKS1ruqoI8nyr5r
+        fE4l1fm9FvvX1gGQEsABA1vKVvnSEIL40syR
+X-Google-Smtp-Source: AMrXdXvXEX2apJTSsh1b8R6BD5XYE6mdkrG4KhS9jxqQkvSNLS8owK2FV61uqs2gckSWoAp0uS2nqw==
+X-Received: by 2002:ac2:5474:0:b0:4cc:68bd:28d5 with SMTP id e20-20020ac25474000000b004cc68bd28d5mr5816176lfn.57.1674038942190;
+        Wed, 18 Jan 2023 02:49:02 -0800 (PST)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id p19-20020a056512235300b004cf646911easm2281525lfu.57.2023.01.18.02.48.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 02:48:59 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id a11so11014645lfg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:48:57 -0800 (PST)
+X-Received: by 2002:a05:6512:1153:b0:4b6:eaec:f7a6 with SMTP id
+ m19-20020a056512115300b004b6eaecf7a6mr364384lfg.586.1674038937447; Wed, 18
+ Jan 2023 02:48:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+References: <20230116073834.333129-1-bjorn@kernel.org> <20230116073834.333129-2-bjorn@kernel.org>
+In-Reply-To: <20230116073834.333129-2-bjorn@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 Jan 2023 11:48:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXi7yEiS73YhQAQKqj+3rTCNmuRrdnNKS4prvG96Xgqog@mail.gmail.com>
+Message-ID: <CAMuHMdXi7yEiS73YhQAQKqj+3rTCNmuRrdnNKS4prvG96Xgqog@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] riscv: Add instruction dump to RISC-V splats
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,190 +72,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cong Dang <cong.dang.xn@renesas.com>
+Hi Björn,
 
-According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
-setting is different on R-Car SoCs, i.e.
+On Mon, Jan 16, 2023 at 8:41 AM Björn Töpel <bjorn@kernel.org> wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+>
+> Add instruction dump (Code:) output to RISC-V splats. Dump 16b
+> parcels.
+>
+> An example:
+>   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>   Oops [#1]
+>   Modules linked in:
+>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc3-00302-g840ff44c571d-dirty #27
+>   Hardware name: riscv-virtio,qemu (DT)
+>   epc : kernel_init+0xc8/0x10e
+>    ra : kernel_init+0x70/0x10e
+>   epc : ffffffff80bd9a40 ra : ffffffff80bd99e8 sp : ff2000000060bec0
+>    gp : ffffffff81730b28 tp : ff6000007ff00000 t0 : 7974697275636573
+>    t1 : 0000000000000000 t2 : 3030303270393d6e s0 : ff2000000060bee0
+>    s1 : ffffffff81732028 a0 : 0000000000000000 a1 : ff60000080dd1780
+>    a2 : 0000000000000002 a3 : ffffffff8176a470 a4 : 0000000000000000
+>    a5 : 000000000000000a a6 : 0000000000000081 a7 : ff60000080dd1780
+>    s2 : 0000000000000000 s3 : 0000000000000000 s4 : 0000000000000000
+>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+>    s11: 0000000000000000 t3 : ffffffff81186018 t4 : 0000000000000022
+>    t5 : 000000000000003d t6 : 0000000000000000
+>   status: 0000000200000120 badaddr: 0000000000000000 cause: 000000000000000f
+>   [<ffffffff80003528>] ret_from_exception+0x0/0x16
+>   Code: 862a d179 608c a517 0069 0513 2be5 d0ef db2e 47a9 (c11c) a517
+>   ---[ end trace 0000000000000000 ]---
+>   Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+>   SMP: stopping secondary CPUs
+>   ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+>
+> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 
-R-Car H3 ES1.*  : STRTIM[2:0] is set to 0x0
-R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
-other R-Car Gen3: STRTIM[2:0] is set to 0x7
-other R-Car Gen4: STRTIM[3:0] is set to 0xf
+Thanks for your patch!
 
-To fix this issue, a DT match data was added to specify the setting
-for special use cases.
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -29,6 +29,27 @@ int show_unhandled_signals = 1;
+>
+>  static DEFINE_SPINLOCK(die_lock);
+>
+> +static void dump_kernel_instr(const char *loglvl, struct pt_regs *regs)
+> +{
+> +       char str[sizeof("0000 ") * 12 + 2 + 1], *p = str;
+> +       unsigned long addr = regs->epc;
 
-Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
-Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
-[wsa: rebased, restructured a little, added Gen4 support]
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Given you never use this as an unsigned long, what about
 
-Change since V1:
+    const u16 *insns = (u16 *)instruction_pointer(regs);
 
-* use proper mask when updating STRTIM bits (thanks, Geert!)
+so you no longer need casts below?
 
-look for 'RPCIF_PHYCNT_STRTIM', there is the change. Rest is the same.
+> +       long bad;
+> +       u16 val;
+> +       int i;
+> +
+> +       for (i = -10; i < 2; i++) {
+> +               bad = get_kernel_nofault(val, &((u16 *)addr)[i]);
+> +               if (!bad) {
+> +                       p += sprintf(p, i == 0 ? "(%04hx) " : "%04hx ", val);
+> +               } else {
+> +                       printk("%sCode: Unable to access instruction at 0x%lx.\n",
 
- drivers/memory/renesas-rpc-if.c | 63 ++++++++++++++++++++++++++-------
- include/memory/renesas-rpc-if.h |  6 ++++
- 2 files changed, 56 insertions(+), 13 deletions(-)
+%px, so you can drop the cast to long below.
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index c36b407851ff..845b535a5350 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -7,6 +7,7 @@
-  * Copyright (C) 2019-2020 Cogent Embedded, Inc.
-  */
- 
-+#include <linux/bitops.h>
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/module.h>
-@@ -15,6 +16,7 @@
- #include <linux/of_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/sys_soc.h>
- 
- #include <memory/renesas-rpc-if.h>
- 
-@@ -163,6 +165,36 @@ static const struct regmap_access_table rpcif_volatile_table = {
- 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
- };
- 
-+static const struct rpcif_info rpcif_info_r8a7795_es1 = {
-+	.type = RPCIF_RCAR_GEN3,
-+	.strtim = 0,
-+};
-+
-+static const struct rpcif_info rpcif_info_r8a7796_es1 = {
-+	.type = RPCIF_RCAR_GEN3,
-+	.strtim = 6,
-+};
-+
-+static const struct rpcif_info rpcif_info_gen3 = {
-+	.type = RPCIF_RCAR_GEN3,
-+	.strtim = 7,
-+};
-+
-+static const struct rpcif_info rpcif_info_rz_g2l = {
-+	.type = RPCIF_RZ_G2L,
-+	.strtim = 7,
-+};
-+
-+static const struct rpcif_info rpcif_info_gen4 = {
-+	.type = RPCIF_RCAR_GEN4,
-+	.strtim = 15,
-+};
-+
-+static const struct soc_device_attribute rpcif_info_match[]  = {
-+	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rpcif_info_r8a7795_es1 },
-+	{ .soc_id = "r8a7796", .revision = "ES1.*", .data = &rpcif_info_r8a7796_es1 },
-+	{ /* Sentinel. */ }
-+};
- 
- /*
-  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
-@@ -256,6 +288,8 @@ static const struct regmap_config rpcif_regmap_config = {
- int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
-+	const struct soc_device_attribute *attr;
-+	const struct rpcif_info *info;
- 	struct resource *res;
- 
- 	rpc->dev = dev;
-@@ -276,9 +310,14 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
- 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(rpc->dirmap))
- 		return PTR_ERR(rpc->dirmap);
--	rpc->size = resource_size(res);
- 
--	rpc->type = (uintptr_t)of_device_get_match_data(dev);
-+	info = of_device_get_match_data(dev);
-+	attr = soc_device_match(rpcif_info_match);
-+	if (attr)
-+		info = attr->data;
-+
-+	rpc->info = info;
-+	rpc->size = resource_size(res);
- 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 
- 	return PTR_ERR_OR_ZERO(rpc->rstc);
-@@ -305,7 +344,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
- 
- 	pm_runtime_get_sync(rpc->dev);
- 
--	if (rpc->type == RPCIF_RZ_G2L) {
-+	if (rpc->info->type == RPCIF_RZ_G2L) {
- 		int ret;
- 
- 		ret = reset_control_reset(rpc->rstc);
-@@ -321,12 +360,10 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
- 	/* DMA Transfer is not supported */
- 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
- 
--	if (rpc->type == RPCIF_RCAR_GEN3)
--		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
--				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
--	else if (rpc->type == RPCIF_RCAR_GEN4)
--		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
--				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
-+	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
-+			   /* create mask with all affected bits set */
-+			   RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strtim)) - 1),
-+			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
- 
- 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
- 			   RPCIF_PHYOFFSET1_DDRTMG(3));
-@@ -337,7 +374,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
- 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
- 				   RPCIF_PHYINT_WPVAL, 0);
- 
--	if (rpc->type == RPCIF_RZ_G2L)
-+	if (rpc->info->type == RPCIF_RZ_G2L)
- 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
- 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
- 				   RPCIF_CMNCR_BSZ(3),
-@@ -720,9 +757,9 @@ static int rpcif_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id rpcif_of_match[] = {
--	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
--	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
--	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
-+	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
-+	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
-+	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rpcif_of_match);
-diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
-index 862eff613dc7..75da785a18ff 100644
---- a/include/memory/renesas-rpc-if.h
-+++ b/include/memory/renesas-rpc-if.h
-@@ -63,6 +63,11 @@ enum rpcif_type {
- 	RPCIF_RZ_G2L,
- };
- 
-+struct rpcif_info {
-+	enum rpcif_type type;
-+	u8 strtim;
-+};
-+
- struct rpcif {
- 	struct device *dev;
- 	void __iomem *base;
-@@ -71,6 +76,7 @@ struct rpcif {
- 	struct reset_control *rstc;
- 	size_t size;
- 	enum rpcif_type type;
-+	const struct rpcif_info *info;
- 	enum rpcif_data_dir dir;
- 	u8 bus_size;
- 	u8 xfer_size;
--- 
-2.30.2
+> +                              loglvl, (long)&((u16 *)addr)[i]);
+> +                       return;
+> +               }
+> +       }
+> +       printk("%sCode: %s\n", loglvl, str);
+> +}
+> +
+>  void die(struct pt_regs *regs, const char *str)
+>  {
+>         static int die_counter;
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
