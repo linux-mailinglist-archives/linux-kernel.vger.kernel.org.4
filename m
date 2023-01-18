@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58E6672A6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C68672A74
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjARV00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S229635AbjARV10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 16:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjARV0M (ORCPT
+        with ESMTP id S229644AbjARV0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:26:12 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D466468C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:25:54 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso2304615wmc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:25:54 -0800 (PST)
+        Wed, 18 Jan 2023 16:26:48 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EE6646AD
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:26:28 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so1816493wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:26:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zil7aav59xp1kmtYrTwI3GdRzU8n332Kso/dG002S4A=;
-        b=i8WooNMldKqXXA62+jHgbA5SWV31eZG2CYd0AkjQv9BQmsf3ovny7eQ1Vb2iY3NOz/
-         2Wd1sZBhAwXgYm6rRcAcjWvSbEAZeaoVEfGKhoS0u0P7bOiigmDOOSWXeyW6Cgkc03mP
-         B9LcEuGynk7Cmp1zRQ7BpTv/xboiALK5tEukyV6uuhIM/UqVksF05dfemGxOMlp1k1os
-         JoOZEusYg5zfWWqlXBQRsPFKnbkK5Ice8lZrlWfZTeVBH7++FvC3aVtL/3zGVtULa+Kg
-         xj/mgyyOUaErjWAy/CVRCx/DwoCwPiR/qaJcTFS8+PA9FlsBa7XyXahgbbvGz7qzAPaX
-         wOoA==
+        bh=BNWfMzcYeamkU9A3XHuXYup3vqVICXPwHRdJttshl/M=;
+        b=obAuIdkG8VuuhCZCAxfhSKxsUvuWlxQ/jX9QW5cCs32svPYwdzoD9FMyk3in2n+U65
+         KzPq1weteBDx6RTOF1VqsI3O+7kPq/cBowlRGy84OH4/hKaNm+iKNtIK3ACAByQzl1N6
+         hL6y0T+whJfKLC5FFjEMFwKUAlsUTQNseYo0j1shVBCsI2LXsHFe0kLD6bfZecpfFnaz
+         oD7s6kcaCHB7fgOJ2tXqEsoTPSVsatuWaRH/SG7u7rwiUTRXgOoseLFoKYV1N8wlJYQ0
+         gD4Sb2+ELJKZMG0UrNeS+E1d4splOlsTBfT2wibPhHoRmrCCWVSkhD5MjN+Z8af+aURO
+         DGaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zil7aav59xp1kmtYrTwI3GdRzU8n332Kso/dG002S4A=;
-        b=L9zaogOq6uCTlIe/QZ11yXz9glzcuO3mFd3FTv+3ICiie0iJnelqKkJG7lmQjczgod
-         ZDBnXMPXJIxRozyXPTuzljsjcRr9qpJdQIzp7B6D5dwx9bj1U5VlFZHGGmoiLrhFN06K
-         0DuMVqXM0QX/0amZuh43F+11ES2P2jDyv6QE49aZfTL6xwdl/kTwUFsyB1vB87eoe5Iu
-         wckZoul6L7Sg4c5rm4PU+ExRC1z/3Ulc7zeSexDWXogGzZ8Z0vZrb/4XJEIzJ9rqIZK5
-         vLwYa2oV/vqSRSM7Jp07SxJeGhM2VimymsYBRSeE4hS13AQra/acmdCACDppe8sAPI+H
-         Ketw==
-X-Gm-Message-State: AFqh2kote81En6gQjxcnXS2IPFCn40Rsaay1GsQseeIuSdn13GuvX0Zc
-        lSRj0oYE9C6P2feKZD8fjP0KcQ==
-X-Google-Smtp-Source: AMrXdXvDFzyXbKQnmabWrlMlH8ff7a7TL7lghPjq1R4Hqk3e8Nt9Fq6g6cgsifSVeJ5sGdAssmVbDQ==
-X-Received: by 2002:a1c:7415:0:b0:3da:fd07:1e3 with SMTP id p21-20020a1c7415000000b003dafd0701e3mr7758444wmc.22.1674077152611;
-        Wed, 18 Jan 2023 13:25:52 -0800 (PST)
+        bh=BNWfMzcYeamkU9A3XHuXYup3vqVICXPwHRdJttshl/M=;
+        b=wVxqlEslcFfF+UmSdHjTOqs3Y+64cDl68mIX9Jm/nznyWjd3/zmpzZiACnEoNY2sn5
+         hStYBw9P9ZCIXKQ+UsmdaqnGhqoGavyJoZWKRRRBUxHaq8a2htAnXb1FACpI9HSKf+kO
+         cc0c7bhlzwZWeD1E9WzOgr0zRxwTnANE0MMQvE/5WCOOoGmMiuWSA5FwjBZ95/4pgRIs
+         HrvhHq0Dnn7jsEkxnu1xdR2/z8AKb3hfadh74IDr9BunYTS6LZAdPPpD1PyDyVHFJoz0
+         X+6qxFGKTvyFcjCRt98+NqVEwb7lqQsVg46DKZvMb2ZZg94WYGm+g+gnolMfBnwuYEFV
+         xxaQ==
+X-Gm-Message-State: AFqh2kqsJsSM71/dduKaLVrnD+l/Rmxb5FAXr0sFkmlI+RR3MMH44LJb
+        BbcxJz0AwfcZGApjkmkmlE9GPA==
+X-Google-Smtp-Source: AMrXdXumIxZ7ZIFmJzie7lBAasuJb4fWz+x1NAqSdv7PHesTMVvO/WmYlfjGGPpzt2B6bNRaZB4o8A==
+X-Received: by 2002:a05:600c:214f:b0:3cf:7197:e67c with SMTP id v15-20020a05600c214f00b003cf7197e67cmr8010542wml.25.1674077186762;
+        Wed, 18 Jan 2023 13:26:26 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id m9-20020a7bca49000000b003d98f92692fsm2926123wml.17.2023.01.18.13.25.51
+        by smtp.googlemail.com with ESMTPSA id r8-20020a05600c35c800b003daf672a616sm3613617wmq.22.2023.01.18.13.26.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 13:25:52 -0800 (PST)
-Message-ID: <97902a78-f1f8-3526-69a4-bf4c70597a89@linaro.org>
-Date:   Wed, 18 Jan 2023 22:25:51 +0100
+        Wed, 18 Jan 2023 13:26:26 -0800 (PST)
+Message-ID: <55a4f910-f504-76d1-21ad-689ec570b4bf@linaro.org>
+Date:   Wed, 18 Jan 2023 22:26:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: =?UTF-8?B?UmU6IFtQQVRDSF0gdGhlcm1hbDoga2lya3dvb2Q6IFVzZcKgZGV2bV9w?=
- =?UTF-8?Q?latform=5fget=5fand=5fioremap=5fresource=28=29?=
+Subject: Re: [PATCH] thermal: spear: Use
+ devm_platform_get_and_ioremap_resource()
 Content-Language: en-US
 To:     ye.xingchen@zte.com.cn
 Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <202301181642412733780@zte.com.cn>
+References: <202301181644433003839@zte.com.cn>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <202301181642412733780@zte.com.cn>
+In-Reply-To: <202301181644433003839@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,7 +77,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 09:42, ye.xingchen@zte.com.cn wrote:
+On 18/01/2023 09:44, ye.xingchen@zte.com.cn wrote:
 > From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
 > Convert platform_get_resource(), devm_ioremap_resource() to a single
@@ -88,8 +88,6 @@ On 18/01/2023 09:42, ye.xingchen@zte.com.cn wrote:
 > ---
 
 Applied, thanks
-
-In future, please send a series rather than individual patches
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
