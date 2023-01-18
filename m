@@ -2,180 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9476726FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742CD6726FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjARSbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S229660AbjARScJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjARSb3 (ORCPT
+        with ESMTP id S230235AbjARScE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:31:29 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1E8A9;
-        Wed, 18 Jan 2023 10:31:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W3PZZae8SoxdYYdnKORUtcIs3tVPlpJ8hmTDOnobmzH6t56LSL4639pVHKkDj0araK1jJZlAIZkXMHiHT8SKZ3RKEQToTWBgyY2S+BK9L7N8bhxN3mdoBPEuCzLbBGbOGcx7avaaTRlGDA8I2beHH2mbKMTvFKWP2VLJHJZe4OMzh1VaWzAbcMfo+JpnBd0w8J1IknskVrXgm2yKnCEA7cwrjbK2uM6Qq7HdS8pfVHsFHAr9lquNgx1yMxCRa2e7uzWoi1NMnDakUBwlFuF4WbGCedJOUimTD5yHXGBhZ7SQpL1mIqaqJ53RJUZ2U2dbE8vMnffLdvL6VyzOJVt2jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f64Nj1ui5cocnhNGz+vtcFzGWPgF8KuV2smkFowUEbw=;
- b=alheisd57mw8PJ3UxXpduEylqH5XgmmzvCD5Rd2Mp8FR7t4DMPB2yPMd+1tuOE5KfhmfVTRcyCJbQZBQwGZ8p50iFWt/Lt35JgOeTb8e4z/AOdHBQXmVeTQvXc2CohbHaXf0m9Yv1cU7RRoisBRufRicB4aDgMDlbAEnvw4GXVynbe3l3Iy5D+FMsAWu6Piz3ZwhzPX0ddPS70t0cdKy8zDKUp+sjoFWRTP0jK1BGT4mb44+W6Ziq92pWjCBc3hneefZBQpujyEhf5Ucs5oPtp02gLAoxHO2aAHCETc14PXtvLcN0Y0hEKHPju5XRab+b606ZrbJhmdOP4TvSyGsyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f64Nj1ui5cocnhNGz+vtcFzGWPgF8KuV2smkFowUEbw=;
- b=e+lXrny3+V21EBwocb+ef92wE4sGZyW3duWSKyng5FLPAy6sQqnUrVQh49YniuC7U5+TMHfrFJdEPGCi2DHWY1bg5OTFw+ztp8zA3I43v8iXFHCE+wqANIzrYTysOeN36nz7FOHVvwIdzWzgej671RxAtgsjkXEdNEKuvuW6Tq8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by PH7PR12MB7793.namprd12.prod.outlook.com (2603:10b6:510:270::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
- 2023 18:31:23 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::8a66:1432:79ca:52ff]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::8a66:1432:79ca:52ff%6]) with mapi id 15.20.6002.024; Wed, 18 Jan 2023
- 18:31:23 +0000
-Date:   Wed, 18 Jan 2023 18:31:10 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Avadhut Naik <avadnaik@amd.com>, linux-edac@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, bp@alien8.de,
-        tony.luck@intel.com
-Subject: Re: [PATCH v1 3/3] x86/MCE/AMD: Handle reassigned bit definitions
- for CS SMCA
-Message-ID: <Y8g67l4GkCEwSOg9@yaz-fattaah>
-References: <20230116191102.4226-1-avadnaik@amd.com>
- <20230116191102.4226-4-avadnaik@amd.com>
- <Y8Zo+hj8qxYpZdAl@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8Zo+hj8qxYpZdAl@gmail.com>
-X-ClientProxiedBy: CH2PR20CA0007.namprd20.prod.outlook.com
- (2603:10b6:610:58::17) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Wed, 18 Jan 2023 13:32:04 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C553B0CB;
+        Wed, 18 Jan 2023 10:32:03 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHebue001013;
+        Wed, 18 Jan 2023 18:31:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mhdJfN6MC/RX1BW2utSBLAgdrNwe8Dkh3H8WgTj/kI8=;
+ b=MOF7x3EfSQqlSHa6xKtW5+5+/DmW0A0FCfPE/JhDJFkuZc8+WczpE3/kNkw+VwjKtweh
+ DchwHPQkQXOTDZq/YOjt303jcO39OZhX0/3wzCNU1ThDftvAQZolWQ5VH9Gi4GXuCSM+
+ 9ddiQg3nbJUjK5tAOgxxen15qSOAD7Y8UvZPtDs9LcicoAsUw3Q1wu9Ox670O/Go9pyN
+ SuC5naj1i+Jkx9zkVx4dNNj4tez0nB4Gnlq+0Y7ujr/sd5MJFcEvGf0OOmhnP+rphiSM
+ BlcLZQ4qqmy4z12qEMCKyAC2CAphYFuzZTT92+5N440hicu0BOBDQ5AW1hboqz1N+KLq IQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n602k2shv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:31:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30IIVrjL020308
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:31:53 GMT
+Received: from [10.216.38.144] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
+ 2023 10:31:46 -0800
+Message-ID: <16ee9cd0-94b4-2fae-f024-63a4d04bafa6@quicinc.com>
+Date:   Thu, 19 Jan 2023 00:01:43 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|PH7PR12MB7793:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c646ad3-6f58-46e4-2f82-08daf9823375
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tXadwKXYDnFciHk0b4Yrk3MJ7JREhFkxt2cYTD+28JgZAD5sbj0OGDgxlEvkeDUduTEi2QVCnWkE85xqLFFeBZTpZ6BFL7zdZr38eLIpr5ka80ppxMuV16ahedls12TEwCmogL0Xs5htdta8aVfkbv9ZlGSOFtSxbNOTto6r4cyOkG0MdnoOQyX/KjmwRnDYUyj1ReebJVRlZF7u4WS74l4yMCKXdyHZsaCv1/VTKHkFGT5JqktAW7dhgbQ5DmEsqVEQwX5aPM3NN/lrm/mNiTfyP7Zmxh8xG6I4z6JeBVa+YhCPnw6wA7l/fWquRsG3Bq1SczyKAglF95FttXS5wPgrJXTxTzZzB6lCS8Yfqyu89QtQFK3GRMccLw0V7fzgie7mJQ87daIlTegAkOsMMUMWhqsdX2FXC02N6KVUY+CWJ7D/uZFwbykzJDxWDv++hVYdt3j9xHnFA1J0zkP/P3pWWt8x9/BarGc7wS1dEBEP2U3fbxwnjmk91VRuaPHf0D4l3m7nSRx760EWZ/RIxCClQ2A4RsdPigyVJ9T6vds31NKgO8bJzxsGoz+tq9RrQwPlH/u4XPOSz1fm2Bl00MPxUP2groWY0gdrr2/N1m7hddtedZ8rBxO20lSLen3lHsomjdWh8De0pd4iMcfRfv3OIkqz+3fR4NdDpFpgOfcDtSNGz5yu0cLYi8tVF3mw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199015)(83380400001)(38100700002)(5660300002)(2906002)(6916009)(86362001)(66476007)(4326008)(66946007)(8676002)(44832011)(66556008)(8936002)(33716001)(478600001)(6506007)(186003)(26005)(9686003)(6512007)(316002)(6486002)(41300700001)(6666004)(21314003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TItCboSrgWBCnvBcQhNA3l4J3Fa98HfsgZ0qbWLWfspAmVbocP9OChX1PGKa?=
- =?us-ascii?Q?1uwgLc/d7Q23C1SovuyouB2nE1tOa3nueP08vwkBopqSlgaCB+xOX/MoDiN2?=
- =?us-ascii?Q?+mr4qilWI3qzdJLeWEuue84KTgDZto+SEIOkXK8lHgKkyQ+i/edaGnLyTHid?=
- =?us-ascii?Q?wXUuauZ/rHpUcbryd3reY7/cEStqxoosUJFQJ+Hqnc/CfW0MYO6ZluHGZEt4?=
- =?us-ascii?Q?fGgzaAAR77gGpnC/85LuWolWZZyExo8HV6FalONgAUyk7Cp282MPBxujjPuW?=
- =?us-ascii?Q?xTp/HJuEZrrUIQkVkP6l+gZmW6Bh2TYWf/IuLIPX536Wkf/0fE6xkY+1BCvV?=
- =?us-ascii?Q?PA0uRbDuiLFLBb1PdSuQmhUdzrLpYe6+nUJ5mW+DxfVrVCEN21mqLu83AgoU?=
- =?us-ascii?Q?F9R1rX86X/J8RQSs2EIYiAwDFiYTz8gjjo3uwBT7jOTfIw0DXFwODXEC9F02?=
- =?us-ascii?Q?kbNWB7yoF6V5bFymKicBikrqVkh6REfRsaiJloCR7ScYbLIT0cVK+c4Pfn7d?=
- =?us-ascii?Q?Azaf/5GewEKp7O2dVD2euZ0NowxeIkJvDrIrgh0yBewZQFDN7DYxK3phZSGK?=
- =?us-ascii?Q?tpaOMxC9ViqCM488LZHAC17Hk8sJNIbW/wONzdrEsSYFGYPo13xakvKadeOG?=
- =?us-ascii?Q?zg3yfoHz4K1i+XxKgSq5eApG8RXzsMB8+5X1H2d/pRUBeiV6S8sob20tHEry?=
- =?us-ascii?Q?OBAJu5cBy1A57jt7DiDgdI5OrluKigsZD0mcC36xRNxmcS/B5uhU4gPqPpfT?=
- =?us-ascii?Q?4I6olwkA2/vOMTfwqKl+ahXpAnNMKS9sYipsXoRiWFFXxJndPlCtnnMR7NPN?=
- =?us-ascii?Q?hCjkn3vjOKPEy8rplr+AzhZFpZZCeKpTgCAer+2eoU/fXhJ5AfX+cp3/xpZL?=
- =?us-ascii?Q?VvSzcWWSRIDwFFhJajVMtaezFDRLzTZexQo3TQ7Hn3gkwn74EzAdzbUx+SPG?=
- =?us-ascii?Q?wZ+/lTuFkNuhUSPJ658knAzc/TRt26bCoziWCAjCMr5MaIq4QKbTGwG0NkeI?=
- =?us-ascii?Q?O3d83SjrpvAS2mbXOuzrXv1ki9Wc6hxx253omTjoWZ61EBdAIcGr2K/V7klH?=
- =?us-ascii?Q?lp34OGBVh8OwRKisGCFeXW4dpMWavsV6gjP2jw1i0puEEzz3PKJqdaq5jgqM?=
- =?us-ascii?Q?5gN6x2ElHy6fl52/jXAUOwH7aQBn55VzINM2GZ6/423y/0V9kqgjaVmdgcoZ?=
- =?us-ascii?Q?BEPMaFWHrppixWGr4uHZmOVXkiXbUAQns95kdm5lH572oazt63vwF1neY9IX?=
- =?us-ascii?Q?K9Gyv8RbqcrMkVFoeey1wJ7ss66nPDawEE3gLnf/iPqQ1mqKbF8iLcEn8HQ7?=
- =?us-ascii?Q?UNo9QbdK4k0uC0nVoFQyh03AOVnZcXTnCFEjOFJsWITXBhV2Zu9x2vNqqGos?=
- =?us-ascii?Q?2u/D8ZkvJ//2kJq79eb6HhVvPpCvEnTWCSml2Nt4H49dSkTF82thiAA6nTDD?=
- =?us-ascii?Q?Rj0kQd9ar90yM+aFDt9CYZ65OPUAgS1TQPjRslJzOvEKjpMIzYp4tGhfLSmf?=
- =?us-ascii?Q?lTYh5Ezk2FeezrLFKW9KaP60yNcLIxln/m9EHMTv8/MSpM/3W50mn1Gp9Cuy?=
- =?us-ascii?Q?P/wEtPRupzhnD0tX0CU31kBWYmXLERcm57R0dVz9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c646ad3-6f58-46e4-2f82-08daf9823375
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 18:31:23.3072
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hiksaGsTV3dbJ6+ucaC486vZkaRlwjpPhaXyIaQRoVz3OG4ZYCdCwzJhHqqqTo69V6903yAXDclsqGEB4e4zGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7793
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC v4 5/5] arm: dts: msm: Add multiport controller node for usb
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-6-quic_kriskura@quicinc.com>
+ <20230118182847.GB3353734@hu-bjorande-lv.qualcomm.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230118182847.GB3353734@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: L5Faig9zkCX0sq5qXHXPlEZtmCU4ZvSV
+X-Proofpoint-GUID: L5Faig9zkCX0sq5qXHXPlEZtmCU4ZvSV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301180156
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:23:09AM +0100, Ingo Molnar wrote:
+
+
+On 1/18/2023 11:58 PM, Bjorn Andersson wrote:
+> On Sun, Jan 15, 2023 at 05:11:46PM +0530, Krishna Kurapati wrote:
+>> Add USB and DWC3 node for teritiary port of SC8280 along
+>> with multiport IRQ's and phy's.
+>>
 > 
-> * Avadhut Naik <avadnaik@amd.com> wrote:
+> Very nice.
 > 
-> > @@ -178,6 +178,8 @@ static const struct smca_hwid smca_hwid_mcatypes[] = {
-> >  	{ SMCA_CS,	 HWID_MCATYPE(0x2E, 0x0)	},
-> >  	{ SMCA_PIE,	 HWID_MCATYPE(0x2E, 0x1)	},
-> >  	{ SMCA_CS_V2,	 HWID_MCATYPE(0x2E, 0x2)	},
-> > +	/* Software defined SMCA bank type to handle erratum 1384*/
-> > +	{ SMCA_CS_V2_QUIRK, HWID_MCATYPE(0x0, 0x1)  },
-> >  
-> >  	/* Unified Memory Controller MCA type */
-> >  	{ SMCA_UMC,	 HWID_MCATYPE(0x96, 0x0)	},
-> > @@ -259,6 +261,17 @@ static inline void fixup_hwid(unsigned int *hwid_mcatype)
-> >  
-> >  	if (c->x86 == 0x19) {
-> >  		switch (c->x86_model) {
-> > +		/*
-> > +		 * Per Genoa's revision guide, erratum 1384, some SMCA Extended
-> > +		 * Error Codes and SMCA Control bits are incorrect for SMCA CS
-> > +		 * bank type.
-> > +		 */
-> > +		case 0x10 ... 0x1F:
-> > +		case 0x60 ... 0x7B:
-> > +		case 0xA0 ... 0xAF:
-> > +			if (*hwid_mcatype == HWID_MCATYPE(0x2E, 0x2))
-> > +				*hwid_mcatype = HWID_MCATYPE(0x0, 0x1);
+> Please make the subject prefix "arm64: dts: qcom: sc8280xp:", to match
+> other changes in the sc8280xp.dtsi.
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 49 +++++++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi   | 60 ++++++++++++++++++++++++
+>>   2 files changed, 109 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> index 84cb6f3eeb56..f9eb854c3444 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> @@ -422,6 +422,20 @@ &usb_1_qmpphy {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	status = "okay";
 > 
-> Why are we open-coding these types?
+> Please the status property last in the node.
 > 
-> Why not use smca_hwid_mcatypes[SMCA_CS_V2], etc.?
+>> +
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&usb2_en_state>,
+>> +			<&usb3_en_state>,
+>> +			<&usb4_en_state>,
+>> +			<&usb5_en_state>;
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+>> +};
+>> +
+>>   &usb_2_hsphy0 {
+>>   	vdda-pll-supply = <&vreg_l5a>;
+>>   	vdda18-supply = <&vreg_l7g>;
+>> @@ -472,6 +486,41 @@ &xo_board_clk {
+>>   	clock-frequency = <38400000>;
+>>   };
+>>   
+>> +/* PINCTRL */
 > 
-> > +			if (*hwid_mcatype == HWID_MCATYPE(0x2E, 0x2))
-> > +				*hwid_mcatype = HWID_MCATYPE(0x0, 0x1);
+> No need to repeat this comment, its purpose is to indicate that nodes
+> above are sorted alphabetically and pinctrl-related nodes are kept here
+> at the end of the file. Please place your nodes below the existing /*
+> PINCTRL */ comment below.
 > 
-> Ditto.
->
+> Thanks,
+> Bjorn
+> 
+>> +&pm8450c_gpios {
+>> +	usb2_en_state: usb2-en-state {
+>> +		pins = "gpio9";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +};
+>> +
+>> +&pm8450e_gpios {
+>> +	usb3_en_state: usb3-en-state {
+>> +		pins = "gpio5";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +};
+>> +
+>> +&pm8450g_gpios {
+>> +	usb4_en_state: usb4-en-state {
+>> +		pins = "gpio5";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +
+>> +	usb5_en_state: usb5-en-state {
+>> +		pins = "gpio9";
+>> +		function = "normal";
+>> +		output-high;
+>> +		power-source = <0>;
+>> +	};
+>> +};
+>> +
+>>   /* PINCTRL */
+>>   
+>>   &tlmm {
+>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> index 109c9d2b684d..e9866ab5c6e2 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> @@ -1969,6 +1969,66 @@ usb_1_dwc3: usb@a800000 {
+>>   			};
+>>   		};
+>>   
+>> +		usb_2: usb@a4f8800 {
+>> +			compatible = "qcom,sc8280xp-dwc3", "qcom,dwc3";
+>> +			reg = <0 0x0a4f8800 0 0x400>;
+>> +			#address-cells = <2>;
+>> +			#size-cells = <2>;
+>> +			ranges;
+>> +
+>> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
+>> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
+>> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
+>> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
+>> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+>> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+>> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+>> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+>> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+>> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
+>> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+>> +
+>> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
+>> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
+>> +			assigned-clock-rates = <19200000>, <200000000>;
+>> +
+>> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
+>> +						<&pdc 126 IRQ_TYPE_EDGE_RISING>,
+>> +						<&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +			interrupt-names = "dp_hs_phy_irq", "dm_hs_phy_irq",
+>> +						"ss_phy_irq";
+>> +
+>> +			power-domains = <&gcc USB30_MP_GDSC>;
+>> +
+>> +			resets = <&gcc GCC_USB30_MP_BCR>;
+>> +
+>> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
+>> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+>> +			interconnect-names = "usb-ddr", "apps-usb";
+>> +
+>> +			required-opps = <&rpmhpd_opp_nom>;
+>> +
+>> +			status = "disabled";
+>> +
+>> +			usb_2_dwc3: usb@a400000 {
+>> +				compatible = "snps,dwc3";
+>> +				reg = <0 0x0a400000 0 0xcd00>;
+>> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+>> +				iommus = <&apps_smmu 0x800 0x0>;
+>> +				num-ports = <4>;
+>> +				num-ss-ports = <2>;
+>> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
+>> +					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
+>> +					<&usb_2_hsphy2>,
+>> +					<&usb_2_hsphy3>;
+>> +				phy-names = "usb2-phy_port0", "usb3-phy_port0",
+>> +						"usb2-phy_port1", "usb3-phy_port1",
+>> +						"usb2-phy_port2",
+>> +						"usb2-phy_port3";
+>> +			};
+>> +		};
+>> +
+>>   		pdc: interrupt-controller@b220000 {
+>>   			compatible = "qcom,sc8280xp-pdc", "qcom,pdc";
+>>   			reg = <0 0x0b220000 0 0x30000>, <0 0x17c000f0 0 0x60>;
+>> -- 
+>> 2.39.0
+>>
 
-This code runs before matching on a struct with the enums. It seems simplest
-to fixup the hardware-provided value before setting things up rather than
-changing things later.
+Hi Bjorn,
 
-Current code flow:
-1) Read HWID/McaType values from hardware.
-2) Loop through known types and match on the HWID_MCATYPE() tuple.
-3) Continue setup based on matched type and its Linux enum.
+  Thanks for the review. Will make sure to incorporate these changes in 
+the next version.
 
-New code flow:
-1) Read HWID/McaType values from hardware.
---> Fixup HWID/McaType values due to any known hardware quirks.
-2) Loop through known types and match on the HWID_MCATYPE() tuple.
-3) Continue setup based on matched type and its Linux enum.
-
-What do you think?
-
-Also, a further update (maybe you're alluding to?) is get rid of the struct
-smca_hwid and just define an enum with "NAME = HWID_MCATYPE(XXX, YYY)".
-
-The struct smca_hwid had another field that was removed, so it seems
-unnecessary at the moment.
-
-Thanks,
-Yazen
+Regards,
+Krishna,
