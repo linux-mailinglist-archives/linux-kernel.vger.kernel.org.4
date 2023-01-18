@@ -2,237 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8031671725
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF96D67172C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjARJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S229693AbjARJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjARJJY (ORCPT
+        with ESMTP id S230044AbjARJLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:09:24 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D27967967
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:29:00 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id i185so34948455vsc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:29:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EgwkxFA/5hxmqEfVpVeMVFmrcPYGb/v+fJDmHhdHR3o=;
-        b=eRMTBBitDmXLUDrc+w7LsAc+KvobQW8SbRV7Td5vH8RB1qq33GnD/MCBj7IRL9qSzE
-         4Fu9uBHrpek/EDo/CwYhoyTQQcQFj7+ZD+6BVhZD67HngX6rwhZFv004220336p6kj4w
-         y0FV7LaxHYu29/Y4qCIz1g1OeJdSU7SyTeYBMh+zftMhVXddXYxplU93KbOkUfhAshi5
-         Dv4A2Z5FmZhPOkQqOJkNTYxNbexxGr9u607ZxdHwJjXw3/tnrNe0cr5E6TuAVEvQ2qru
-         xRMlfBmREH7Qd0h/r+KjNrmK673A1/hxDVEGNQh0QWmo4d9rKt4kPrV6SKfcg1PzYdzr
-         phhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EgwkxFA/5hxmqEfVpVeMVFmrcPYGb/v+fJDmHhdHR3o=;
-        b=XfvwVgUQj+/bfYECzzGrqY7jeGs/XsROECXOOEYd3NMJD8O+7uQyCBo2ROY6fE4Bow
-         C178f7NF5TOs/zzdU+T9gijoSnAn3GldxjAjRpJ/EY1RQpyffgDLk+G/pdGpx1KtUVGS
-         vndYkHLJeMCzmGoz9bYLWs8IXW+8XyCXZxcb+57FhiUoFTesa3RRUftJaVLRd5w1V7y2
-         ATQMaOMHIV1B284vPPJAV8GnM9pJUCz/HNQBYVZyBne5UomNkZ0WgP+zsx98XKE3d16u
-         VdLJ49wO7pT41NHIJfUmbW0hKQgriAuFXF0hHGdaJNaWCT/e8LJJUsNKguHyT8FOVOzW
-         WgGA==
-X-Gm-Message-State: AFqh2kpLA1rtozSq5fOx8hygCpzs5v7+hpwbV4isX9tHtl+LjJnPAdLy
-        EnxWbxVTgbcwAKxX1iu+KF82o7ZouwcXk0Rmgbe8ag==
-X-Google-Smtp-Source: AMrXdXvGUOZPwaV+QEUIGHCU3lvb/IGqsRJFa/dzFFJWVja/uIqybMB72t/g7Dquhl8e+BKtZLHFICGU4ar1Zdx7YMw=
-X-Received: by 2002:a67:b102:0:b0:3d3:dd2d:88d1 with SMTP id
- w2-20020a67b102000000b003d3dd2d88d1mr751429vsl.83.1674030532755; Wed, 18 Jan
- 2023 00:28:52 -0800 (PST)
+        Wed, 18 Jan 2023 04:11:06 -0500
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C16B982;
+        Wed, 18 Jan 2023 00:29:38 -0800 (PST)
+Received: from myt6-23a5e62c0090.qloud-c.yandex.net (myt6-23a5e62c0090.qloud-c.yandex.net [IPv6:2a02:6b8:c12:1da3:0:640:23a5:e62c])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 4626E5FC94;
+        Wed, 18 Jan 2023 11:29:21 +0300 (MSK)
+Received: from [IPV6:2a02:6b8:0:107:fa75:a4ff:fe7d:8480] (unknown [2a02:6b8:0:107:fa75:a4ff:fe7d:8480])
+        by myt6-23a5e62c0090.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id JTga380WqSw1-B9XH7fYV;
+        Wed, 18 Jan 2023 11:29:20 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1674030560; bh=yiD1Vkbj+kmxhrQkFdbJH/d7ECbVLT1jRqOPP0wH7qE=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=WQp0q1LTwLsMsxK48WwAhSG6iTAxv4yASez4MLIZMGQs3MpWiZnCvDSp+FPfTVUAU
+         4RWkdcWEWI/mNb14L4v3+/w2alBE2EpaWNXA+n2A/xoFt5biSwGlC8Z8c8SY1hrqAu
+         BDoDCgAiTJKU+NN+TwTWj1Ogxji93ML14FvdFP6Y=
+Authentication-Results: myt6-23a5e62c0090.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Message-ID: <e246efa2-7bc1-5413-32d0-c2927ebb001e@yandex-team.ru>
+Date:   Wed, 18 Jan 2023 11:29:19 +0300
 MIME-Version: 1.0
-References: <20230117124526.766388541@linuxfoundation.org>
-In-Reply-To: <20230117124526.766388541@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 18 Jan 2023 13:58:41 +0530
-Message-ID: <CA+G9fYt9XmoHM-YBQGxxsWx972e4aZ1wzD5-DY470Mre5QtXdA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH net 1/2] net/ethernet/chelsio: fix cxgb4_getpgtccfg wrong
+ memory access
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, anish@chelsio.com,
+        hariprasad@chelsio.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230116152100.30094-1-davydov-max@yandex-team.ru>
+ <20230116152100.30094-2-davydov-max@yandex-team.ru> <Y8ZonuQJn8gO9GX5@unreal>
+Content-Language: en-US
+From:   Maksim Davydov <davydov-max@yandex-team.ru>
+In-Reply-To: <Y8ZonuQJn8gO9GX5@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 at 18:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+On 1/17/23 12:21, Leon Romanovsky wrote:
+> On Mon, Jan 16, 2023 at 06:20:59PM +0300, Maksim Davydov wrote:
+>> *pgid can be in range 0 to 0xF (bitmask 0xF) but valid values for PGID
+>> are between 0 and 7. Also the size of pgrate is 8. Thus, we are needed
+>> additional check to make sure that this code doesn't have access to tsa.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+>> static analysis tool.
+>>
+>> Fixes: 76bcb31efc06 ("cxgb4 : Add DCBx support codebase and dcbnl_ops")
+>> Signed-off-by: Maksim Davydov <davydov-max@yandex-team.ru>
+>> ---
+>>   drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
+>> index 7d5204834ee2..3aa65f0f335e 100644
+>> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
+>> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
+>> @@ -471,7 +471,10 @@ static void cxgb4_getpgtccfg(struct net_device *dev, int tc,
+>>   		return;
+>>   	}
+>>   
+>> -	*bw_per = pcmd.u.dcb.pgrate.pgrate[*pgid];
+>> +	/* Valid values are: 0-7 */
+> How do you see it?
 >
-> This is the start of the stable review cycle for the 5.10.164 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> There are lines below that assume something different.
+>     477         /* prio_type is link strict */
+>     478         if (*pgid != 0xF)
+>     479                 *prio_type = 0x2;
 >
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
+But if *pgid == 0xF we get value for *bw_per from pgrate.tsa, it seems 
+not correct
+
+Thanks for reviewing,
+Maksim Davydov
+>> +	if (*pgid <= 7)
+>> +		*bw_per = pcmd.u.dcb.pgrate.pgrate[*pgid];
+> Why do you think that it is valid simply do not set *bw_per?
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.164-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.164-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: eeaac3cf2eb302f0b8478a43f9d199b1bea51e15
-* git describe: v5.10.162-852-geeaac3cf2eb3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.162-852-geeaac3cf2eb3
-
-## Test Regressions (compared to v5.10.162)
-
-## Metric Regressions (compared to v5.10.162)
-
-## Test Fixes (compared to v5.10.162)
-
-## Metric Fixes (compared to v5.10.162)
-
-## Test result summary
-total: 144322, pass: 121403, fail: 3574, skip: 19028, xfail: 317
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 147 total, 133 passed, 14 failed
-* arm64: 45 total, 41 passed, 4 failed
-* i386: 35 total, 28 passed, 7 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 28 total, 22 passed, 6 failed
-* riscv: 12 total, 12 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 38 total, 31 passed, 7 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Thanks
