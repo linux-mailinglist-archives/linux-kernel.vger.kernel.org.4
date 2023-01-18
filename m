@@ -2,193 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F6B67170F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB9C671713
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjARJGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S229960AbjARJGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjARJEc (ORCPT
+        with ESMTP id S230173AbjARJFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:04:32 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A53838658
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:23:58 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m15so2863508wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:23:58 -0800 (PST)
+        Wed, 18 Jan 2023 04:05:00 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB172D17D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:26:45 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso969139wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:26:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntwZ5V+lwcuNIqseOgUdBN0ZeQdpnadVeyJPes4mYw0=;
-        b=qAcvkdrwZWHVcNstCzsHYwDd5iq0jfV72sZQA0qYP8uX8umaa01DrLKu7RGHAk4vGG
-         I9aL8yJosuURm/xZ5+jXWYLa0hZDIXXhgrtYIlv/j8WEFHmUqPoyv4MdizN1EpH8D6yh
-         HJpxOME8v3DZCcN83nIfQ982zhP+oHkPXqvf5GfuAaj1r2VNP6pqF8QvM2zCFCDMa18x
-         2oKG8SiCWy6Outaf/qowvVJIqcjE8jJfhKsooNZGBECFSRs87sP6oXywAQ/U78srKbAs
-         N42F60mtqV8Z0BzJznjKg2zSmhQxtRV4MX2MEf2DMdAfmMKWFOdz61ixV/ZzLhoYh0Mf
-         gWXg==
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIpUx6UqHWkJ4zuJvTxUu8V93VcUMi8yc/wqvH0Omdg=;
+        b=G0l67gl6kvyMGKR4WY+7lC6Fs144ntkeeyy8IBP8BmkT4EtFY763aPrfBV3u1rcI50
+         EN+z+Etl4zPqcPxKuYNId0RuMPU5t0sysboAed/ueHM7Mk3sVxDGuli99WnwiS65PoV/
+         xYvBBDD5a0fJdIoqRVaQTMRp8ScrDark5XkKaM6XlG5n5j73AF2qON0rBZp2tvC85OFv
+         ofS1/eXM/6wSLZFNXvwKew0PKjvszjMv1mnYicA37SknRntqLsHUnnk3VSZRf5mJdyh9
+         7mjIx3GhzEgk2N6uoccWW7c37taUlT6YCFNkA/cn1oHrNc3kfg6OiV18gdLABoGfVhjM
+         NSsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntwZ5V+lwcuNIqseOgUdBN0ZeQdpnadVeyJPes4mYw0=;
-        b=nmn8bngXvIh4IGIiiJAA2IJbwG9yrOqPjX8ZPk/Cwga4MiFTKqibclOUWMeKOuyJiS
-         sNhKWqd0CDFJ0jiZ/LE9wI6PbZC9TU2xXKssBoGk+A4A12DPnKBbXSgA9lpuZSNsy35r
-         WBvW4v+EpY/vsUJ5Xjy3bLR/nNWSR/RjPfEJqzSW8YI0uGCpsVgYTwpP/5bYF6Wq3kW7
-         IA8ZMRZrGspg+AnC6Rs8mMvk9Uh3gJa+Yth7JZt8z+50nHvf/MRIvsFByxAoaosD9b6/
-         wOewHUyoFzZF48WFFuXFnrH4nCbSB5rbKIgRN+jFvO75TFI5itIG7OGszfgyszMZwIqb
-         /f3g==
-X-Gm-Message-State: AFqh2ko9LxV0I1HWz2A/t+DTY+mBusbhjGavUhpPgrMmPPtx1oiYSovk
-        awOSr9RRxOUulzfH2p/jugMBIw==
-X-Google-Smtp-Source: AMrXdXvv1P6q/BEGO+kEaR3NCNAI+uTRe2+X7D0g9xb/FAwoHRKuCJQWY4YCGlUA2C6RsSokNfa59w==
-X-Received: by 2002:a05:600c:5545:b0:3d9:f806:2d26 with SMTP id iz5-20020a05600c554500b003d9f8062d26mr6133937wmb.7.1674030236698;
-        Wed, 18 Jan 2023 00:23:56 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id u20-20020a05600c19d400b003c6f1732f65sm1245803wmq.38.2023.01.18.00.23.55
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HIpUx6UqHWkJ4zuJvTxUu8V93VcUMi8yc/wqvH0Omdg=;
+        b=rQspS5ysUT2FG74UAI/8FDxzUtJhMg/UMk2sixp3H0x16YUorznrgsP7Joz8T1OTlS
+         Puenx4GH3XZD4QKJFVIwypQ3dngBZ182WkUn9t3gwoCJEIg0BQA3Ul+bSFz8BfTCo8Ee
+         QKv7yymAeG1EHEftD1xgizS2JAAG3WEb4dRj/vxKTYBl4pLW3qO5+3NJpCrEOMIkradx
+         7+F+AElHqNCfweoo7WgudvQs0caljD94HPdYvAH0+oj6BVG8WbdpzietRNTfTapJD+jD
+         mEmsBYq87lRNLASvWdMVdJKIIYxWmx1wdNbD6NHXAAdAGqAoHcl5UOQm3Jcr7jUNuPj8
+         vdGA==
+X-Gm-Message-State: AFqh2kprS0k3MajGm6JMNib50wkXo3nvgpbVUIQm7WbVgT54PG+HN3dH
+        pVvdtldOfyzRAHgxbWSwM5ybiw==
+X-Google-Smtp-Source: AMrXdXtxBm2mv1p0bJ5Nyphmqp547N7dW7SQll7t+PfgPw+rdH+xTpqBsjPzMxXobNsBOaz7fM1eHA==
+X-Received: by 2002:a1c:4c0a:0:b0:3db:210:6a24 with SMTP id z10-20020a1c4c0a000000b003db02106a24mr5678854wmf.8.1674030404004;
+        Wed, 18 Jan 2023 00:26:44 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:37dc:5071:959c:93e4? ([2a01:e0a:982:cbb0:37dc:5071:959c:93e4])
+        by smtp.gmail.com with ESMTPSA id k14-20020a05600c1c8e00b003d9ed40a512sm1576767wms.45.2023.01.18.00.26.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 00:23:56 -0800 (PST)
-Message-ID: <b1bf9ec6-f762-e993-edc6-1c293584c51a@linaro.org>
-Date:   Wed, 18 Jan 2023 09:23:55 +0100
+        Wed, 18 Jan 2023 00:26:43 -0800 (PST)
+Message-ID: <21daccb8-9e27-af65-4b90-4bae062be559@linaro.org>
+Date:   Wed, 18 Jan 2023 09:26:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: WARNING in __thermal_cooling_device_register()
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 2/9] ARM: dts: amlogic: Used onboard usb hub reset to
+ enable usb hub
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-amlogic@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230118044418.875-1-linux.amoon@gmail.com>
+ <20230118044418.875-3-linux.amoon@gmail.com>
 Content-Language: en-US
-To:     Frank Rowand <frowand.list@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <06ed7c15-cd37-a0ce-b75e-b0c8d3188f3a@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <06ed7c15-cd37-a0ce-b75e-b0c8d3188f3a@gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230118044418.875-3-linux.amoon@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18/01/2023 05:44, Anand Moon wrote:
+> On Odroid c1 previously use gpio-hog to reset the usb hub,
+> switch to used on board usb hub reset to enable the usb hub
+> and enable power to usb hub.
+> 
+> Add usb hub regulator as per the schematic.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> v2 - drop the vendor name from compatible string.
+>     - move the hub node to USB controller node.
+>     - drop the usb_otg_pwr since it only liked to OTG port
+>       and link p5v0 to the vdd-supply.
+> ---
+>   arch/arm/boot/dts/meson8b-odroidc1.dts | 24 +++++++++++-------------
+>   1 file changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/meson8b-odroidc1.dts b/arch/arm/boot/dts/meson8b-odroidc1.dts
+> index 04356bc639fa..d1f9ce4742a8 100644
+> --- a/arch/arm/boot/dts/meson8b-odroidc1.dts
+> +++ b/arch/arm/boot/dts/meson8b-odroidc1.dts
+> @@ -281,19 +281,6 @@ &gpio_ao {
+>   			  "J7 Header Pin 6", "J7 Header Pin 5",
+>   			  "J7 Header Pin 7", "HDMI_CEC",
+>   			  "SYS_LED", "", "";
+> -
+> -	/*
+> -	 * WARNING: The USB Hub on the Odroid-C1/C1+ needs a reset signal
+> -	 * to be turned high in order to be detected by the USB Controller.
+> -	 * This signal should be handled by a USB specific power sequence
+> -	 * in order to reset the Hub when USB bus is powered down.
+> -	 */
+> -	usb-hub {
+> -		gpio-hog;
+> -		gpios = <GPIOAO_4 GPIO_ACTIVE_HIGH>;
+> -		output-high;
+> -		line-name = "usb-hub-reset";
+> -	};
+>   };
+>   
+>   &ir_receiver {
+> @@ -381,5 +368,16 @@ &usb1_phy {
+>   };
+>   
+>   &usb1 {
+> +	dr_mode = "host";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+>   	status = "okay";
+> +
+> +	hub@1 {
+> +		/* Genesys Logic GL852G usb hub */
+> +		compatible = "usb5e3,610";
+> +		reg = <1>;
+> +		vdd-supply = <&p5v0>;
+> +		reset-gpio = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_LOW>;
+> +	};
+>   };
 
-Hi Frank,
-
-Thanks for reporting the WARNING.
-
-It is currently being fixed:
-
-https://lore.kernel.org/all/20230112154721.452292-1-caleb.connolly@linaro.org/
-
-   -- Daniel
-
-
-On 18/01/2023 08:38, Frank Rowand wrote:
-> I am getting two new warning traces in v6.2-rc1 on boot that are not present in v6.1-rc1.
-> 
-> I have not done a bisect yet, but wanted to report the issue without further delay.
-> 
-> The configuration is qcom_defconfig
-> 
-> The system is a Qualcomm Dragon 8074
-> 
-> I have not done any debugging, but noted some changes to the file that contains
-> __thermal_cooling_device_register() since 6.1-rc1:
-> 
-> linux--6.2-rc> git log --oneline v6.1-rc1.. -- drivers/thermal/thermal_core.c
-> 4748f9687caa thermal: core: fix some possible name leaks in error paths
-> b778b4d782d4 thermal/core: Protect thermal device operations against thermal device removal
-> 05eeee2b51b4 thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-> 1c439dec359c thermal/core: Introduce locked version of thermal_zone_device_update
-> 30b2ae07d3d6 thermal/core: Delete device under thermal device zone lock
-> d35f29ed9d11 thermal/core: Destroy thermal zone device mutex in release function
-> e49a1e1ee078 thermal/core: fix error code in __thermal_cooling_device_register()
-> c408b3d1d9bb thermal: Validate new state in cur_state_store()
-> 
-> 
-> 
-> The stack traces are:
-> 
-> -----------[ cut here ]------------
-> WARNING: CPU: 0 PID: 31 at lib/kobject.c:718 kobject_put+0x114/0x29c
-> kobject: '(null)' ((ptrval)): is not initialized, yet kobject_put() is being called.
-> Modules linked in:
-> CPU: 0 PID: 31 Comm: kworker/u8:2 Not tainted 6.2.0-rc1 #1
-> Hardware name: Generic DT based system
-> Workqueue: events_unbound deferred_probe_work_func
->   unwind_backtrace from show_stack+0x10/0x14
->   show_stack from dump_stack_lvl+0x40/0x4c
->   dump_stack_lvl from __warn+0x7c/0x15c
->   __warn from warn_slowpath_fmt+0x98/0xcc
->   warn_slowpath_fmt from kobject_put+0x114/0x29c
->   kobject_put from __thermal_cooling_device_register+0x11c/0x388
->   __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
->   __power_supply_register from devm_power_supply_register+0x54/0x90
->   devm_power_supply_register from smbb_charger_probe+0x358/0x61c
->   smbb_charger_probe from platform_probe+0x5c/0xb8
->   platform_probe from really_probe+0xe0/0x3dc
->   really_probe from __driver_probe_device+0x9c/0x208
->   __driver_probe_device from driver_probe_device+0x30/0xcc
->   driver_probe_device from __device_attach_driver+0xa8/0x120
->   __device_attach_driver from bus_for_each_drv+0x84/0xd4
->   bus_for_each_drv from __device_attach+0x108/0x1d8
->   __device_attach from bus_probe_device+0x84/0x8c
->   bus_probe_device from deferred_probe_work_func+0x9c/0xdc
->   deferred_probe_work_func from process_one_work+0x1d4/0x510
->   process_one_work from worker_thread+0x1fc/0x4d0
->   worker_thread from kthread+0xf4/0x124
->   kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xf0901fb0 to 0xf0901ff8)
-> 1fa0:                                     00000000 00000000 00000000 00000000
-> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 31 at lib/refcount.c:28 __thermal_cooling_device_register+0x11c/0x388
-> refcount_t: underflow; use-after-free.
-> Modules linked in:
-> CPU: 0 PID: 31 Comm: kworker/u8:2 Tainted: G        W          6.2.0-rc1 #1
-> Hardware name: Generic DT based system
-> Workqueue: events_unbound deferred_probe_work_func
->   unwind_backtrace from show_stack+0x10/0x14
->   show_stack from dump_stack_lvl+0x40/0x4c
->   dump_stack_lvl from __warn+0x7c/0x15c
->   __warn from warn_slowpath_fmt+0x98/0xcc
->   warn_slowpath_fmt from __thermal_cooling_device_register+0x11c/0x388
->   __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
->   __power_supply_register from devm_power_supply_register+0x54/0x90
->   devm_power_supply_register from smbb_charger_probe+0x358/0x61c
->   smbb_charger_probe from platform_probe+0x5c/0xb8
->   platform_probe from really_probe+0xe0/0x3dc
->   really_probe from __driver_probe_device+0x9c/0x208
->   __driver_probe_device from driver_probe_device+0x30/0xcc
->   driver_probe_device from __device_attach_driver+0xa8/0x120
->   __device_attach_driver from bus_for_each_drv+0x84/0xd4
->   bus_for_each_drv from __device_attach+0x108/0x1d8
->   __device_attach from bus_probe_device+0x84/0x8c
->   bus_probe_device from deferred_probe_work_func+0x9c/0xdc
->   deferred_probe_work_func from process_one_work+0x1d4/0x510
->   process_one_work from worker_thread+0x1fc/0x4d0
->   worker_thread from kthread+0xf4/0x124
->   kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xf0901fb0 to 0xf0901ff8)
-> 1fa0:                                     00000000 00000000 00000000 00000000
-> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> ---[ end trace 0000000000000000 ]---
-> 
-> 
-> -Frank
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
