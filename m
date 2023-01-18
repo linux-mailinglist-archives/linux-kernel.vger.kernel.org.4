@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B205F6720EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F546720F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjARPQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S230305AbjARPRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbjARPPr (ORCPT
+        with ESMTP id S232083AbjARPP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:15:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9E34AA6B;
-        Wed, 18 Jan 2023 07:11:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC9561882;
-        Wed, 18 Jan 2023 15:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485B7C433EF;
-        Wed, 18 Jan 2023 15:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674054679;
-        bh=sCr67gWivJseBF45jgOCyYIoZmtdfEOxspjP2kKsFN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bg6UDs8jtgE5JPen7pxURdeNdaiDy8g9RB2czgHGlm9tLQ5UgYmmHm3DyKtwYqxqx
-         YZ+aXKioVXtG1BpFYS83XKQiMwckISE4pkyAIXg8vfFjJumLsLwLBuZxa1vQnFtIJb
-         kJo3wDacC3/cq1EUcaaQYEehBvne/ZiUD4+X+jBteqgnadYJQ4LSqqlPiGA9T/1MLb
-         XhfextH7IoYJ5ovfb5xV4f5hmZUIkDcdf0zNWNb2y2ZfmkjqL6zzHvswYsLzMCi/vr
-         DftT+0cOmxbtprdjejXNTBcYzjpobxVuCGDo40w0GestkCU88OqT6RGjOijbElqfTK
-         Nsy1oR68xhTOA==
-Date:   Wed, 18 Jan 2023 15:11:14 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     benjamin.tissoires@redhat.com, avid.rheinsberg@gmail.com,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH 1/2] HID: core: Provide new max_buffer_size attribute to
- over-ride the default
-Message-ID: <Y8gMEn+wivZRhIsd@google.com>
-References: <20230113150557.1308176-1-lee@kernel.org>
- <nycvar.YFH.7.76.2301181002550.1734@cbobk.fhfr.pm>
- <Y8fTd0VJXqKkPIuo@google.com>
- <nycvar.YFH.7.76.2301181554370.1734@cbobk.fhfr.pm>
+        Wed, 18 Jan 2023 10:15:57 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596937B47;
+        Wed, 18 Jan 2023 07:11:34 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so1365362wmq.1;
+        Wed, 18 Jan 2023 07:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr87MGTJq8u+Ua6FRs2K3EZ+5I9LJ/lJvLM/9Z6W26c=;
+        b=j254BJ6QRqipO4iTY9+H2li6wfIse1SV91FB2Khs8Q81y2Xl0EisADXtc5OC0vC9lg
+         aOxoh6ppGHuSRBhp/6mzexL/Zh4+tUQ5B+jKEbflLIO+sUlNdLjtdJlEOhaXuSrJapIM
+         uP3nW81+eIddLAH13WClcVmUHMxf4YLUsHqxzzlGk7C7r5zcf+06WBX9YCX2l1J3FeOc
+         LjDpsf1qug7OoihKcyX2cioXgOwx2G/4eoR/i8JkJRjYFdzo9ndLy2pWsmOP+yOT31As
+         g8kmSAVg6g0P/EZYsHEcmgMcpy1sEWddSf5VM70tR0bIWCUIWPt+Xfg1f2okv83U7xqK
+         xMBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hr87MGTJq8u+Ua6FRs2K3EZ+5I9LJ/lJvLM/9Z6W26c=;
+        b=O+ut5qwlrVkQcOVv+QhY2T5HUamS7DHHivR4PGI7jt5ZrAAWpuQ43sQOnrBF/2cDt5
+         UnWZVX9K8i4mZsJ44rXZ5eGEx5YSW010xmyXEGLbtJstjhIbcHifSpHmj/tzPbG3tesG
+         tveWyqY7wB7O9vJ1/EAv6IWZQs3TSoxKLyzlHlSafRu5USMxYw+fzEV0d/XzVDh2M33k
+         nMIzGoEU0hi5f6Js0WWyHQ70Brb76ksDLCou6uwc8szoFLXtuN1R2iVDDjemS95UFSYQ
+         NwVpepeBhWlwH1EwVxaXmy95HLetuMwPKtIBAo8QHCpYa1pu4wtzZY5Va9MxZ6N72GDR
+         oPYQ==
+X-Gm-Message-State: AFqh2kqg+DptsAU90guJev/mLPYNlMQQTBciQarE3RdRB7BaBJ0NHW81
+        wxQiN/Bd7EV20GmBh99OU0TjmdoAvEqWmA==
+X-Google-Smtp-Source: AMrXdXtJKLeOjHVScXSkppz7oZtxD2NOefE/FO6/f9hI9n8XM4LwxcLiBp1Ux4pbstgNpRWEqT3+tw==
+X-Received: by 2002:a05:600c:4f86:b0:3db:15b1:fb28 with SMTP id n6-20020a05600c4f8600b003db15b1fb28mr2289859wmq.19.1674054692951;
+        Wed, 18 Jan 2023 07:11:32 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i18-20020a05600c355200b003d9df9e59c4sm2640809wmq.37.2023.01.18.07.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:11:32 -0800 (PST)
+Date:   Wed, 18 Jan 2023 18:11:24 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Petr Machata <petrm@nvidia.com>
+Cc:     Daniel Machon <daniel.machon@microchip.com>,
+        netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        joe@perches.com, horatiu.vultur@microchip.com,
+        Julia.Lawall@inria.fr, vladimir.oltean@nxp.com,
+        maxime.chevallier@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 3/6] net: dcb: add new rewrite table
+Message-ID: <Y8gMHLLymftuSki4@kadam>
+References: <20230116144853.2446315-1-daniel.machon@microchip.com>
+ <20230116144853.2446315-4-daniel.machon@microchip.com>
+ <87lem0w1k3.fsf@nvidia.com>
+ <Y8gLRF7/0sttKkPx@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <nycvar.YFH.7.76.2301181554370.1734@cbobk.fhfr.pm>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8gLRF7/0sttKkPx@kadam>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023, Jiri Kosina wrote:
+On Wed, Jan 18, 2023 at 06:07:48PM +0300, Dan Carpenter wrote:
+> In Smatch, I thought it would be easy but it turned out I need to add
+> a hack around to change the second nla_nest_start_noflag() from unknown
+> to valid pointer.
 
-> On Wed, 18 Jan 2023, Lee Jones wrote:
-> 
-> > > > Presently, when a report is processed, its size is compared solely 
-> > > > against the value specified by user-space.  
-> > > 
-> > > While I am generally fine with the idea, I don't understand this sentence. 
-> > > What exactly do you mean by 'specified by user-space'? It's defined as a 
-> > > compile-time constant.
-> > > 
-> > > > If the received report ends up being smaller than this, the
-> > > > remainder of the buffer is zeroed. 
-> > 
-> > Apologies for any ambiguity.
-> > 
-> > "its size" == "compile-time constant"
-> > 
-> > Would "its maximum size" read better?
-> 
-> I think that the confusion comes from the fact that the changelog is 
-> written solely with the UHID usercase on mind ... ? (which is dealt with 
-> in the independent followup patch).
+The second nla_nest_start_noflag() *return*, I meant.
 
-Quite possibly, yes.  Since this is the way the bug was reported to me
-and how I presently view it.  However, I suppose reports do not always
-originate from user-space.  Good point.
+> +nla_nest_start_noflag 0-u64max 4096-ptr_max
 
-How would you like me to move forward?  Would you like me to re-write
-the commit log to be more generic?
+regards,
+dan carpenter
 
--- 
-Lee Jones [李琼斯]
+
