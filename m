@@ -2,175 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71F3671190
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59065671192
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjARDLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S229638AbjARDMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjARDLh (ORCPT
+        with ESMTP id S229557AbjARDMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:11:37 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FD04FC30
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:11:34 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id fd15so19019259qtb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:11:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/O6TD2UxbHDujiY75DmgUHIPiPd0aX829avGoEwLLE=;
-        b=WqLneCjmhoTwRgGiLm+Ml7BnvpEfV6yRe8J6XaBaq6pWJyj70uS10AGwEOJYrMkRDX
-         hTl89dIowzLO/LiwhInh6/g7gYzYWMXtSxMTMMKqKNp+ck4Jd2q5QFXZq0tp6lYCoqkn
-         lHmMMrOJc9Q9l9YkQFgwT1JfHwjeApUk05ME5gWbvPkxol0PwNjul8cMCuUhjno3xAz8
-         pOyJjFf5W5tjyYMW+Su9eN8z//WRLf3MvTAWmB0rf7LI7LOJO8h6YA+mgCy33oL2xPsF
-         Ted19SuOrljFn161n7k37VqVyZ6YmZUsupAKLUg1zuNE6kN667wpoAbANdJuCQ3Sb5Qp
-         8MgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O/O6TD2UxbHDujiY75DmgUHIPiPd0aX829avGoEwLLE=;
-        b=kC0oNzwWpt6diae8+pawcz/gXgIzc02vk7YE05B0/p6dRfGXFaWG4YNqmeEtWq6Dwa
-         5xC+TKJBkYbDepIHoPDGot/G9Wref3EK/JYYBsFFu1Dmet0vuf5K8B7MhRYWVRE8lHXu
-         d5pRQd9pzNkTghFxDUv61/ofti8TqHWSgP3qNKzZSG78iaZVIoa1vscmbfGFgf8li2Oa
-         yPCq90B5Sdr+RY6dWTq7/p9g6E3sOHySvCbh5QF25pTtNflQirkxriYHIAlWLdhHcTti
-         Ss0hoPcV0RVHjui60gUfhA1+xW6cynuKhr3LD2TCEKX8rTGGASMoMijVaHl3TLKtPIN4
-         04pA==
-X-Gm-Message-State: AFqh2kpoujuhsSWXhXWc7KDhd7Xd6z02k4VubDFJGZvAIA/Gr3yqgCXE
-        k/48MNQHftsJp+ij/qdr+bFLB3rMzawTzwSoKZ/Q3w==
-X-Google-Smtp-Source: AMrXdXsNuQYklUXOFJf3Rc0J/2dCMJ2WqQvDmdpaawKr/fUxyI25Cx//ZShQv4veGsp/RtXzV/66alDe+xzAYDxpsnE=
-X-Received: by 2002:a05:622a:2308:b0:3ab:754e:f0b3 with SMTP id
- ck8-20020a05622a230800b003ab754ef0b3mr248629qtb.583.1674011493792; Tue, 17
- Jan 2023 19:11:33 -0800 (PST)
+        Tue, 17 Jan 2023 22:12:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ED54FADB;
+        Tue, 17 Jan 2023 19:12:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99D96B81601;
+        Wed, 18 Jan 2023 03:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2FC433D2;
+        Wed, 18 Jan 2023 03:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674011555;
+        bh=qZKIw3YHSpLbGC0IBsO+16g8GkAkcZudfly6vo0JCm4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MrfkiqjFpIa4RzjEUYWAbVP0lein/lPR5F3tORe3N0Z3TAecMj7r+Lz7wEY8muZGJ
+         CxPk/BY2YXWzddJSTFaaVmlSUyAFlE6nwYnYVnnOLdW4k2EmV4Nu/mAFr5rBfFsAmm
+         ZWN+ko/7hS3J4Nk3JXkoQsbFluZr5WwFsibMZTxxt8GpmYC2+NwTb5jXBBhShqonF0
+         WZ6NWdjZm2wI3czovJRhsODenuOsx3BSkyDQzBGwxQ3M5QiG+britQkck+/ymVuckU
+         bej6DyWxBCxcHS/qMG6BjyiS5z08JvR03pBNBCBXEHiTUZH8HX/4y7cYfFxQ9ADw1H
+         V4l3+TLDdB/Vg==
+Date:   Tue, 17 Jan 2023 19:12:33 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michael Walle <michael@walle.cc>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net-next] regmap: Rework regmap_mdio_c45_{read|write}
+ for new C45 API.
+Message-ID: <20230117191233.1d8ac5a3@kernel.org>
+In-Reply-To: <Y8VjkgcWHjR9TzNw@sirena.org.uk>
+References: <20230116111509.4086236-1-michael@walle.cc>
+        <Y8VjkgcWHjR9TzNw@sirena.org.uk>
 MIME-Version: 1.0
-References: <20221205232341.4131240-1-vannapurve@google.com> <Y8dG3WDxY2OCGPby@google.com>
-In-Reply-To: <Y8dG3WDxY2OCGPby@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 17 Jan 2023 19:11:22 -0800
-Message-ID: <CAGtprH_hsLPDzFREbSehsxQRj7piVC75xPXD7OsKLUULWiS1fw@mail.gmail.com>
-Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 5:09 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > This series implements selftests targeting the feature floated by Chao via:
-> > https://lore.kernel.org/lkml/20221202061347.1070246-10-chao.p.peng@linux.intel.com/T/
-> >
-> > Below changes aim to test the fd based approach for guest private memory
-> > in context of normal (non-confidential) VMs executing on non-confidential
-> > platforms.
-> >
-> > private_mem_test.c file adds selftest to access private memory from the
-> > guest via private/shared accesses and checking if the contents can be
-> > leaked to/accessed by vmm via shared memory view before/after conversions.
-> >
-> > Updates in V2:
-> > 1) Simplified vcpu run loop implementation API
-> > 2) Removed VM creation logic from private mem library
->
-> I pushed a rework version of this series to:
->
->   git@github.com:sean-jc/linux.git x86/upm_base_support
->
+On Mon, 16 Jan 2023 14:47:46 +0000 Mark Brown wrote:
+> regmap: Rework regmap_mdio_c45_{read|write} for new C45 API.
+> 
+> This reworks the regmap MDIO handling of C45 addresses in
+> preparation for some forthcoming updates to the networking code.
 
-Thanks for the review and spending time to rework this series. The
-revised version [1] looks cleaner and lighter.
-
-> Can you take a look and make sure that I didn't completely botch anything, and
-> preserved the spirit of what you are testing?
->
-
-Yeah, the reworked selftest structure [1] looks good to me in general.
-Few test cases that are missing in the reworked version:
-* Checking if contents of GPA ranges corresponding to private memory
-are not leaked to host userspace when accessing guest memory using HVA
-ranges
-* Checking if private to shared conversion of memory affects nearby
-private pages.
-
-> Going forward, no need to send a v3 at this time.  Whoever sends v11 of the series
-> will be responsible for including tests.
->
-
-Sounds good to me.
-
-> No need to respond to comments either, unless of course there's something you
-> object to, want to clarify, etc., in which case definitely pipe up.
->
-> Beyond the SEV series, do you have additional UPM testcases written?  If so, can
-> you post them, even if they're in a less-than-perfect state?  If they're in a
-> "too embarassing to post" state, feel from to send them off list :-)
->
-
-Ackerley (ackerleytng@google.com) is working on publishing the rfc v3
-version of TDX selftests that include UPM specific selftests. He plans
-to publish them this week.
-
-> Last question, do you have a list of testcases that you consider "required" for
-> UPM?  My off-the-cuff list of selftests I want to have before merging UPM is pretty
-> short at this point:
->
->   - Negative testing of the memslot changes, e.g. bad alignment, bad fd,
->     illegal memslot updates, etc.
->   - Negative testing of restrictedmem, e.g. various combinations of overlapping
->     bindings of a single restrictedmem instance.
->   - Access vs. conversion stress, e.g. accessing a region in the guest while it's
->     concurrently converted by the host, maybe with fancy guest code to try and
->     detect TLB or ordering bugs?
-
-List of testcases that I was tracking (covered by the current
-selftests) as required:
-1) Ensure private memory contents are not accessible to host userspace
-using the HVA
-2) Ensure shared memory contents are visible/accessible from both host
-userspace and the guest
-3) Ensure 1 and 2 holds across explicit memory conversions
-4) Exercise memory conversions with mixed shared/private memory pages
-in a huge page to catch issues like [2]
-5) Ensure that explicit memory conversions don't affect nearby GPA ranges
-
-Test Cases that will be covered by TDX/SNP selftests (in addition to
-above scenarios):
-6) Ensure 1 and 2 holds across implicit memory conversions
-7) Ensure that implicit memory conversions don't affect nearby GPA ranges
-
-Additional testcases possible:
-8) Running conversion tests for non-overlapping GPA ranges of
-same/different memslots from multiple vcpus
-
-[1] - https://github.com/sean-jc/linux/commit/7e536bf3c45c623425bc84e8a96634efc3a619ed
-[2] - https://lore.kernel.org/linux-mm/CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com/
+Pulled, thanks!
