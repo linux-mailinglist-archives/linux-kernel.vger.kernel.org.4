@@ -2,211 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C66F6729D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4CA6729D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjARVAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S230168AbjARVCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 16:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjARVAF (ORCPT
+        with ESMTP id S230242AbjARVB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:00:05 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4349589AF
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:00:00 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id v6so396668ejg.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:00:00 -0800 (PST)
+        Wed, 18 Jan 2023 16:01:28 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B89611C7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:01:27 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j17so132968wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhCjbWtkLmo4KnsVEQWWwW2foKxi10gJ8nRMMaIaGsI=;
-        b=MML9x2fQ5AIVSlzjl2iGJ0bx+t4j3W56aJwgkfmdOpZG8FITSTlYOosipeiubA/Sbp
-         d/xy++8MwS7OijhvxUb4ctmVo+/m7FmIJixaKkiwuw2Ag/G2Ly2X2QNWAyDGoMr+epoB
-         RCX+4sx7XdMSqkL6usW8f7GMlz020eu6MALTw=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=knANNtPJ6XIo6dhH/TJiHGKaWP7/nXyBF8BdTVUEzFg=;
+        b=pPouJEbcun1aMaef0XckXv6aaN/Kc7o4lkDjrpzkElM69nO9Kw7QQB/dMR1PuTzBQQ
+         nHL7j8hbYLZpXYwlGEt6Zr3rCwXEwe2GYHe6HkLClgs01pjBRZOWner8EFFw1T/FTFSB
+         0ndN3ChDWYK51the37SIDugqABFI22zaiS6J2r9T5t7q2+gb2KNPA5l8n3LEN61qLe5F
+         yXdis2TNVHUR0rmZDh5snxNirBN/p5a0Y0sqvRZOqYMcEC1hy71Zw/6y/D1xVbH25XRZ
+         XsdS7FjsoLgRx8QOKHLXldpRqJUVEBGoWYMY0Y/Kk4XK+uzFdA04ElJwHQThrNe6Ctkk
+         4aHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vhCjbWtkLmo4KnsVEQWWwW2foKxi10gJ8nRMMaIaGsI=;
-        b=w67YImmoJq3a+vXejP6PF4BvhA5ZH1A7klUzpC4A9f5uTsaXfjoWM7D+dDfW1Wbrri
-         HM2+UgrsIwJd7GlGSPCUUYvn5JT+2cgZI2lf8N+SlWLWFzOhDRHN9Z0aZtveyUVUFzsY
-         t6RdgCPnrNWZiBu1VOshVThe5xMSTq8NrIn0107cJAfI2z01Plnnw5bDvgm7zn97R3h2
-         BUFsJrDZQENnByJaIbxcRNrChBRrc7tyX5lZ8pPoccbhFq8rkRfrvnmFXJO6A/Un0LeN
-         2w7+DKfaEuLFVOP1FLBT+yWjDqBayHcx8d1QSNniJ1WrHarj83fOBrlD7Z9CdjnRbjmN
-         XGSg==
-X-Gm-Message-State: AFqh2koqyrgTpvkpV8ckEsJ8XG1b6Sd3/FJKjj6Q5bfSG2CTI/aGFOhI
-        z+U+E6D0S4C82MXoXYWIzsABOKk6DdvdY+uVgwsDvA==
-X-Google-Smtp-Source: AMrXdXsE1DbRex0OlQJomrOsg36FznkMet18w+RvYUajjYeDJTxgnINu/ijbycB5WrA3C8WtOuewInWrbWMbnM/qaYY=
-X-Received: by 2002:a17:906:9394:b0:7c4:efcf:3bc8 with SMTP id
- l20-20020a170906939400b007c4efcf3bc8mr1084302ejx.702.1674075598966; Wed, 18
- Jan 2023 12:59:58 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=knANNtPJ6XIo6dhH/TJiHGKaWP7/nXyBF8BdTVUEzFg=;
+        b=04NvSwiU0WOH4heFprWBpcDRiyQQ2MeDxnRVD6Lb81OhkrbBFg//qtVE291J3AoY1n
+         8wzVfyN7yXpvXZAj/CCOIMKLFHnw7YnFo0DJonzbDdvXVXyLvqFFyQ6NMKhYHWqPOVBs
+         R4g76Siwn0Q1iHgOJRNesodwNhgRnE/RXJLha7kD3ZcuhwxMMAUbvleZ8zpEe9e8hihw
+         ahEbfzR6etCF0i0FeEHsW5p2D5ANjxmuK1zmlwdatLhkIGTRyRCctzTon1V43PuSIYs3
+         xkYl7Tcn3ofPpsr9Inlt+05k2U36yUMLFux/A0li+EDKm20ESFYXfHv2y3zwjga/GXTi
+         qedg==
+X-Gm-Message-State: AFqh2krbQ7qDdIGDWW//1izn773kXl8JR2aCBX4oQp/DvsxocSPBLkkb
+        mjf82sbG0085Qy8zpb0zFJKFQetoibkj3P2G
+X-Google-Smtp-Source: AMrXdXuiJafH4K8yLFpEO1UCI043pMNN7DvU69liShaUlZWracQ11ODpgvhwOGR3LnbnIFCOwzAu1A==
+X-Received: by 2002:a05:600c:540e:b0:3da:fc41:198c with SMTP id he14-20020a05600c540e00b003dafc41198cmr7975647wmb.40.1674075685468;
+        Wed, 18 Jan 2023 13:01:25 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id a3-20020a05600c348300b003db09692364sm3074111wmq.11.2023.01.18.13.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 13:01:25 -0800 (PST)
+Message-ID: <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org>
+Date:   Wed, 18 Jan 2023 22:01:23 +0100
 MIME-Version: 1.0
-References: <20230118203457.never.612-kees@kernel.org>
-In-Reply-To: <20230118203457.never.612-kees@kernel.org>
-From:   Michael Chan <michael.chan@broadcom.com>
-Date:   Wed, 18 Jan 2023 12:59:47 -0800
-Message-ID: <CACKFLinj6Kn=hsbEWfcPtYjLOZjyMbj1vZG_68r7LrMa7Jf6Rg@mail.gmail.com>
-Subject: Re: [PATCH] bnxt: Do not read past the end of test names
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Niklas Cassel <Niklas.Cassel@wdc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006e46d005f2901905"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+ <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
+ <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+ <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
+ <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
+ <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+ <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000006e46d005f2901905
-Content-Type: text/plain; charset="UTF-8"
+On 18/01/2023 21:53, srinivas pandruvada wrote:
+> On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
+>> On 18/01/2023 20:16, srinivas pandruvada wrote:
+>>
+>> [ ... ]
+>>
+>>>>> But we'd better wait for the thermald test result from
+>>>>> Srinvias.
+>>>>
+>>>> A quick test show that things still work with thermald and these
+>>>> changes.
+>>>
+>>> But I have a question. In some devices trip point temperature is
+>>> not
+>>> static. When hardware changes, we get notification. For example
+>>> INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
+>>> Currently get_trip can get the latest changed value. But if we
+>>> preregister, we need some mechanism to update them.
+>>
+>> When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
+>> call
+>> int340x_thermal_read_trips() which in turn updates the trip points.
+>>
+> 
+> Not sure how we handle concurrency here when driver can freely update
+> trips while thermal core is using trips.
 
-On Wed, Jan 18, 2023 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Test names were being concatenated based on a offset beyond the end of
-> the first name, which tripped the buffer overflow detection logic:
->
->  detected buffer overflow in strnlen
->  [...]
->  Call Trace:
->  bnxt_ethtool_init.cold+0x18/0x18
->
-> Refactor struct hwrm_selftest_qlist_output to use an actual array,
-> and adjust the concatenation to use snprintf() rather than a series of
-> strncat() calls.
->
-> Reported-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-> Link: https://lore.kernel.org/lkml/Y8F%2F1w1AZTvLglFX@x1-carbon/
-> Tested-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-> Fixes: eb51365846bc ("bnxt_en: Add basic ethtool -t selftest support.")
-> Cc: Michael Chan <michael.chan@broadcom.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Don't we have the same race without this patch ? The thermal core can 
+call get_trip_temp() while there is an update, no ?
 
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-> index 2686a714a59f..a5408879e077 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-> @@ -10249,14 +10249,7 @@ struct hwrm_selftest_qlist_output {
->         u8      unused_0;
->         __le16  test_timeout;
->         u8      unused_1[2];
-> -       char    test0_name[32];
-> -       char    test1_name[32];
-> -       char    test2_name[32];
-> -       char    test3_name[32];
-> -       char    test4_name[32];
-> -       char    test5_name[32];
-> -       char    test6_name[32];
-> -       char    test7_name[32];
-> +       char    test_name[8][32];
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-bnxt_hsi.h is a generated file.  I will need to make a request so that
-future versions will be generated like this.
-
-Thanks.
-
->         u8      eyescope_target_BER_support;
->         #define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E8_SUPPORTED  0x0UL
->         #define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E9_SUPPORTED  0x1UL
-> --
-> 2.34.1
->
-
---0000000000006e46d005f2901905
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
-/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
-L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
-kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
-5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
-hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
-E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDziaZeXSzDnk/cYFUBn3KxHU71tJsyz
-6cYzc4CfnvbRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDEx
-ODIwNTk1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAB0NlWJXMG4jf7I05ig8lAQavdqgjsyC6jU4ZVBdwpFWMaYw46
-n3Nr/JreqW9WsyIumpisMT3/r4JieBFpbkqoB++QOiN5N9LpDUEhWnxCKx6dNm1EKmtnq/CKXbte
-7maX+p+b1fMZvq1yX7qDgdVz3ozCqMjPYd45ZryJl/Rhh7ey+z8GNhaIrwCUBrgZ87SPwC0gi1wK
-cElz9AzxQIVbTHILjtqOL6XFA0z+LNr77KO19fl4NyqHAr3KsdInAmMWMAGQqzMLRR27unMzHpsR
-ZRLBvNUfueZheAL1qsUeFDWL78rI1b6fn3XJOMjKcTJS62h1SkQRl3Ui/xvDtCuk
---0000000000006e46d005f2901905--
