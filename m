@@ -2,176 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17BA6724F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FD06724FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjARRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S229774AbjARRcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjARRaE (ORCPT
+        with ESMTP id S230450AbjARRcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:30:04 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8EF4AA56
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:30:01 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHHSYM013300;
-        Wed, 18 Jan 2023 18:29:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=ZyZacvmPX30CnzTNwDG1lwIQ0Nni4QdJteNf/VXJ/S8=;
- b=1xDLVJPrDMSNWFhGPGMhI01oyod1zhndHSgCXMtMcGDXpQZZekbqz6lUAfpeAQ3hXZwT
- jJFlI7MKTpjSi2QCb8OIvVr51F1uNvWPvMGxdKG78Cmcn5w/ibL+p/S1jFpfTY2r0rAm
- 9jeLwBg28ipR6ZGkfnYovzhpc1hkoPWVnzAInAx/agqvX5dPUr1f3Qx5QoQvTaaRxe4J
- 52qySX24f2MGAm4NQkxN4YTXWxUVlu55mmyG+KeX2mm+IV4jn96LtmuwTFNRyzgJMT/E
- DzY/B9ghg8+9knj3bi08Qp1REvI18E6UlCNKnB4dwm2kDXDwfwdTJwpv48o8eBRLhNbO qg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n5mc4uhmb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 18:29:51 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DF0C410002A;
-        Wed, 18 Jan 2023 18:29:50 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DA2EE228A21;
-        Wed, 18 Jan 2023 18:29:50 +0100 (CET)
-Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 18 Jan
- 2023 18:29:50 +0100
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Etienne CARRIERE <etienne.carriere@linaro.org>,
-        Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
-        Lionel DEBIEVE <lionel.debieve@foss.st.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v6 3/3] nvmem: stm32: detect bsec pta presence for STM32MP15x
-Date:   Wed, 18 Jan 2023 18:29:39 +0100
-Message-ID: <20230118182856.v6.3.I59210046e368cfc22bd3cca2afe1653674f8ece8@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230118172940.841094-1-patrick.delaunay@foss.st.com>
-References: <20230118172940.841094-1-patrick.delaunay@foss.st.com>
+        Wed, 18 Jan 2023 12:32:01 -0500
+Received: from outbound-smtp40.blacknight.com (outbound-smtp40.blacknight.com [46.22.139.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EE958670
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:31:34 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp40.blacknight.com (Postfix) with ESMTPS id CC22E1C392F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:31:32 +0000 (GMT)
+Received: (qmail 18706 invoked from network); 18 Jan 2023 17:31:32 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 Jan 2023 17:31:32 -0000
+Date:   Wed, 18 Jan 2023 17:31:30 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8gPhTGkfCbGwoUu@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y8gPhTGkfCbGwoUu@linutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On STM32MP15x SoC, the SMC backend is optional when OP-TEE is used;
-the PTA BSEC should be used as it is done on STM32MP13x platform,
-but the BSEC SMC can be also used: it is a legacy mode in OP-TEE,
-not recommended but used in previous OP-TEE firmware.
+On Wed, Jan 18, 2023 at 04:25:57PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2023-01-17 16:50:21 [+0000], Mel Gorman wrote:
+> 
+> > diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+> > index c201aadb9301..99d81e8d1f25 100644
+> > --- a/kernel/locking/rwbase_rt.c
+> > +++ b/kernel/locking/rwbase_rt.c
+> > @@ -65,6 +69,64 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
+> >  	return 0;
+> >  }
+> >  
+> > +/*
+> > + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
+> > + * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM implementation.
+> > + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_timeout
+> > + * is used to detect recent DL / RT tasks taking a read lock.
+> > + */
+> > +#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
+> > +
+> > +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
+> > +{
+> > +	/* No update required if DL / RT tasks already identified. */
+> > +	if (rwb->waiter_timeout & 1)
+> > +		return;
+> > +
+> > +	/*
+> > +	 * Record a DL / RT task acquiring the lock for read. This may result
+> > +	 * in indefinite writer starvation but DL / RT tasks should avoid such
+> > +	 * behaviour.
+> > +	 */
+> > +	if (rt_task(current)) {
+> > +		struct rt_mutex_base *rtm = &rwb->rtmutex;
+> > +		unsigned long flags;
+> > +
+> > +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+> > +		rwb->waiter_timeout |= 1;
+> 
+> Let me see of I parsed the whole logic right:
+> 
+> _After_ the RT reader acquired the lock, the lowest bit is set. This may
+> be immediately if the timeout did not occur yet.
+> With this flag set, all following reader incl. SCHED_OTHER will acquire
+> the lock.
+> 
 
-The presence of OP-TEE is dynamically detected in STM32MP15x device tree
-and the supported NVMEM backend is dynamically detected:
-- PTA with stm32_bsec_pta_find
-- SMC with stm32_bsec_check
+Correct. The intent was to track if there were any DL / RT tasks since
+the last write unlock in case there was a mix of SCHED_OTHER and rt_tasks
+contending on the same lock with unknown arrival times.
 
-With OP-TEE but without PTA and SMC detection, the probe is deferred for
-STM32MP15x devices.
+> If so, then I don't know why this is a good idea.
+> 
+> If _only_ the RT reader is allowed to acquire the lock while the writer
+> is waiting then it make sense to prefer the RT tasks. (So the check is
+> on current and not on the lowest bit).
+> All other (SCHED_OTHER) reader would have to block on the rtmutex after
+> the timeout. This makes sense to avoid the starvation.
+> 
 
-On STM32MP13x platform, only the PTA is supported with cfg->ta = true
-and this detection is skipped.
+Ok, fair enough.
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
+> If we drop that "we prefer the RT reader" then it would block on the
+> RTmutex. It will _still_ be preferred over the writer because it will be
+> enqueued before the writer in the queue due to its RT priority. The only
+> downside is that it has to wait until all readers are left.
+
+The writer has to wait until all the readers have left anyway.
+
+> So by allowing the RT reader to always acquire the lock as long as the
+> WRITER_BIAS isn't set, we would allow to enter early while the other
+> reader are still in and after the timeout you would only have RT reader
+> going in and out. All SCHED_OTHER reader block on the RTmutex.
+> 
+> I think I like this.
+> 
+
+If I understand you correctly, the patch becomes this;
+
+--8<--
+locking/rwbase: Prevent indefinite writer starvation
+
+rw_semaphore and rwlock are explicitly unfair to writers in the presense
+of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
+("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
+
+        The implementation is writer unfair, as it is not feasible to do
+        priority inheritance on multiple readers, but experience has shown
+        that real-time workloads are not the typical workloads which are
+        sensitive to writer starvation.
+
+While atypical, it's also trivial to block writers with PREEMPT_RT
+indefinitely without ever making forward progress. Since LTP-20220121,
+the dio_truncate test case went from having 1 reader to having 16 readers
+and the number of readers is sufficient to prevent the down_write ever
+succeeding while readers exist. Eventually the test is killed after 30
+minutes as a failure.
+
+dio_truncate is not a realtime application but indefinite writer starvation
+is undesirable. The test case has one writer appending and truncating files
+A and B while multiple readers read file A. The readers and writer are
+contending for one file's inode lock which never succeeds as the readers
+keep reading until the writer is done which never happens.
+
+This patch records a timestamp when the first writer is blocked. DT /
+RT tasks can continue to take the lock for read as long as readers exist
+indefinitely. Other readers can acquire the read lock unless a writer
+has been blocked for a minimum of 4ms. This is sufficient to allow the
+dio_truncate test case to complete within the 30 minutes timeout.
+
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 ---
+ include/linux/rwbase_rt.h  |  3 +++
+ kernel/locking/rwbase_rt.c | 45 ++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 45 insertions(+), 3 deletions(-)
 
-Changes in v6:
-- added reviewed by Etienne Carriere
-
-Changes in v5:
-- update the BSEC SMC detection logic in stm32_romem_probe()
-  after Etienne Carierre review to support NVMEM probe after OP-TEE probe
-
-Changes in v3:
-- use of_find_compatible_node in optee_presence_check function
-  instead of of_find_node_by_path("/firmware/optee")
-
-Changes in v2:
-- Added patch in the serie for BSEC PTA support on STM32MP15x
-  with dynamic detection of OP-TEE presence and SMC support (legacy mode)
-
- drivers/nvmem/stm32-romem.c | 38 +++++++++++++++++++++++++++++++++----
- 1 file changed, 34 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index 978a63edf297..ba779e26937a 100644
---- a/drivers/nvmem/stm32-romem.c
-+++ b/drivers/nvmem/stm32-romem.c
-@@ -159,6 +159,31 @@ static int stm32_bsec_pta_write(void *context, unsigned int offset, void *buf,
- 	return stm32_bsec_optee_ta_write(priv->ctx, priv->lower, offset, buf, bytes);
+diff --git a/include/linux/rwbase_rt.h b/include/linux/rwbase_rt.h
+index 1d264dd08625..b969b1d9bb85 100644
+--- a/include/linux/rwbase_rt.h
++++ b/include/linux/rwbase_rt.h
+@@ -10,12 +10,14 @@
+ 
+ struct rwbase_rt {
+ 	atomic_t		readers;
++	unsigned long		waiter_timeout;
+ 	struct rt_mutex_base	rtmutex;
+ };
+ 
+ #define __RWBASE_INITIALIZER(name)				\
+ {								\
+ 	.readers = ATOMIC_INIT(READER_BIAS),			\
++	.waiter_timeout = 0,					\
+ 	.rtmutex = __RT_MUTEX_BASE_INITIALIZER(name.rtmutex),	\
  }
  
-+static bool stm32_bsec_smc_check(void)
+@@ -23,6 +25,7 @@ struct rwbase_rt {
+ 	do {							\
+ 		rt_mutex_base_init(&(rwbase)->rtmutex);		\
+ 		atomic_set(&(rwbase)->readers, READER_BIAS);	\
++		(rwbase)->waiter_timeout = 0;			\
+ 	} while (0)
+ 
+ 
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index c201aadb9301..84c5e4e4d25b 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -39,7 +39,10 @@
+  * major surgery for a very dubious value.
+  *
+  * The risk of writer starvation is there, but the pathological use cases
+- * which trigger it are not necessarily the typical RT workloads.
++ * which trigger it are not necessarily the typical RT workloads. SCHED_OTHER
++ * reader acquisitions will be forced into the slow path if a writer is
++ * blocked for more than RWBASE_RT_WAIT_TIMEOUT jiffies. New DL / RT readers
++ * can still starve a writer indefinitely.
+  *
+  * Fast-path orderings:
+  * The lock/unlock of readers can run in fast paths: lock and unlock are only
+@@ -65,6 +68,35 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
+ 	return 0;
+ }
+ 
++/*
++ * Allow reader bias for SCHED_OTHER tasks with a pending writer for a
++ * minimum of 4ms or 1 tick. This matches RWSEM_WAIT_TIMEOUT for the
++ * generic RWSEM implementation.
++ */
++#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
++
++/* rtmutex->wait_lock must be held. */
++static void __sched set_writer_blocked(struct rwbase_rt *rwb)
 +{
-+	u32 val;
-+	int ret;
-+
-+	/* check that the OP-TEE support the BSEC SMC (legacy mode) */
-+	ret = stm32_bsec_smc(STM32_SMC_READ_SHADOW, 0, 0, &val);
-+
-+	return !ret;
++	/* Record the timeout based on the the first writer to block. */
++	if (!rwb->waiter_timeout)
++		rwb->waiter_timeout = jiffies + RWBASE_RT_WAIT_TIMEOUT;
 +}
 +
-+static bool optee_presence_check(void)
++static bool __sched rwbase_allow_reader_bias(struct rwbase_rt *rwb)
 +{
-+	struct device_node *np;
-+	bool tee_detected = false;
++	/*
++	 * Allow reader bias for DL / RT tasks. Such tasks should be
++	 * designed to avoid heavy writer contention or indefinite
++	 * starvation.
++	 */
++	if (rt_task(current))
++		return true;
 +
-+	/* check that the OP-TEE node is present and available. */
-+	np = of_find_compatible_node(NULL, NULL, "linaro,optee-tz");
-+	if (np && of_device_is_available(np))
-+		tee_detected = true;
-+	of_node_put(np);
-+
-+	return tee_detected;
++	/* Allow reader bias unless a writer timeout is reached. */
++	return time_before(jiffies, rwb->waiter_timeout);
 +}
 +
- static int stm32_romem_probe(struct platform_device *pdev)
+ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 				      unsigned int state)
  {
- 	const struct stm32_romem_cfg *cfg;
-@@ -195,11 +220,16 @@ static int stm32_romem_probe(struct platform_device *pdev)
- 	} else {
- 		priv->cfg.size = cfg->size;
- 		priv->lower = cfg->lower;
--		if (cfg->ta) {
-+		if (cfg->ta || optee_presence_check()) {
- 			rc = stm32_bsec_optee_ta_open(&priv->ctx);
--			/* wait for OP-TEE client driver to be up and ready */
--			if (rc)
--				return rc;
-+			if (rc) {
-+				/* wait for OP-TEE client driver to be up and ready */
-+				if (rc == -EPROBE_DEFER)
-+					return -EPROBE_DEFER;
-+				/* BSEC PTA is required or SMC not supported */
-+				if (cfg->ta || !stm32_bsec_smc_check())
-+					return rc;
-+			}
- 		}
- 		if (priv->ctx) {
- 			rc = devm_add_action_or_reset(dev, stm32_bsec_optee_ta_close, priv->ctx);
--- 
-2.25.1
-
+@@ -74,9 +106,11 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 	raw_spin_lock_irq(&rtm->wait_lock);
+ 	/*
+ 	 * Allow readers, as long as the writer has not completely
+-	 * acquired the semaphore for write.
++	 * acquired the semaphore for write and reader bias is still
++	 * allowed.
+ 	 */
+-	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
++	if (atomic_read(&rwb->readers) != WRITER_BIAS &&
++	    rwbase_allow_reader_bias(rwb)) {
+ 		atomic_inc(&rwb->readers);
+ 		raw_spin_unlock_irq(&rtm->wait_lock);
+ 		return 0;
+@@ -264,12 +298,17 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+ 		if (__rwbase_write_trylock(rwb))
+ 			break;
+ 
++		/* Record first new read/write contention. */
++		set_writer_blocked(rwb);
++
+ 		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+ 		rwbase_schedule();
+ 		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+ 
+ 		set_current_state(state);
+ 	}
++
++	rwb->waiter_timeout = 0;
+ 	rwbase_restore_current_state();
+ 	trace_contention_end(rwb, 0);
+ 
