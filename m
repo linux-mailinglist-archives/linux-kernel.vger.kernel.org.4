@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3324F67218C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6305672137
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjARPlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S229646AbjARP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjARPlj (ORCPT
+        with ESMTP id S231264AbjARP1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:41:39 -0500
-X-Greylist: delayed 1136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 07:41:38 PST
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E9C10D8;
-        Wed, 18 Jan 2023 07:41:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=gGJRB0GXL6+zSud4WzArEqgR5WzATKM/41V/LwUdSE0=; b=cd22TKwbGHNBlWxEstfxcPg2Kq
-        q6TCfeRCdMd8o3uMtMkfgsPYX6KMh9jMtL7xJ4SxCJk3SmwoY9zleiggRcSKvadG7S4ULFzkzshVI
-        Ci+ZObOuzZ5+KPXB76HiJbp2vd0p4zd4hMMtmmP1z3llmke8FzAoiX9N00OA8ycC2eH8Of7wNS1Te
-        41OikXcPMJdTmd7zQt/2CC4HQItkPFpbGHEAB1eorXfvgUbgFhrI+DhymubZ1vFMr9DUjK9hRTyBZ
-        DtpYUePVFQ/DLk+uQ1rjX0ZiGEcFuULNvp7tVy7eu4+ethZqTeNysqa+2yh+8XrKXzFMKV9ckqope
-        7bPS612Q==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pIAGm-0003fk-V6; Wed, 18 Jan 2023 16:22:32 +0100
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pIAGm-000Np7-KZ; Wed, 18 Jan 2023 16:22:32 +0100
-Message-ID: <5f9b713b-9c71-7da6-e674-b6ebd28dc5d5@metafoo.de>
-Date:   Wed, 18 Jan 2023 07:22:30 -0800
+        Wed, 18 Jan 2023 10:27:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5C17298;
+        Wed, 18 Jan 2023 07:26:01 -0800 (PST)
+Date:   Wed, 18 Jan 2023 16:25:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674055558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BkBdwCC72vnFXKz7wAyBwaI38/pVFTFiaN/Bh+nVBec=;
+        b=0zN9/jm9ajNMr+mXoKrxvbTMD1MMQw2XozYf/rTD5Rd38p/D5vt982AvYA1EGF0zFjF3Zz
+        U44RC2U/oKbyDxKdxdkYPnRP6xOlyI4S6Z9+lO+et/NO6ggLq4K8CIdDsv2MAB8Kf+rd0M
+        IJnJfwjlkCl6U7rZwCe4GdhSMVTSqv2gtqYe2HAgUXp770vUvpoqyRdBtyYgFeaiowgbbc
+        Kbo0IyIrR4OEPFGwvS5eCUK3mmISlbHdx/einy6lkmXTCVDgLZQYpN0PXhml9lnpIcjHLN
+        FzWflrNs3w1GeZGYrFweVTD0+7JBuw4dvyUWnya2mdFPy4+E+YQqa3ZeE7+ORw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674055558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BkBdwCC72vnFXKz7wAyBwaI38/pVFTFiaN/Bh+nVBec=;
+        b=xYvHBkcXAL87G9vS7nzryaX9fr+1OJLj2dwhyt1g2IyitBFq+Fh0Q+ACn2B2bADJCgsf5r
+        pyFqbuoQ6I0iA9Cg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <Y8gPhTGkfCbGwoUu@linutronix.de>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/2] iio: core: Replace
- iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>
-References: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26785/Wed Jan 18 09:42:40 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,70 +61,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 23:48, Andy Shevchenko wrote:
-> None of the current users is using gaps in the list of the items.
-> No need to have a specific function for that, just replace it by
-> library available __sysfs_match_string().
+On 2023-01-17 16:50:21 [+0000], Mel Gorman wrote:
 
-Hm, I specifically remember adding this for a driver where there were 
-gaps. One of the DACs. But it might be that the driver itself never made 
-it upstream.
+> diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+> index c201aadb9301..99d81e8d1f25 100644
+> --- a/kernel/locking/rwbase_rt.c
+> +++ b/kernel/locking/rwbase_rt.c
+> @@ -65,6 +69,64 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Allow reader bias with a pending writer for a minimum of 4ms or 1 tick.
+> + * This matches RWSEM_WAIT_TIMEOUT for the generic RWSEM implementation.
+> + * The granularity is not exact as the lowest bit in rwbase_rt->waiter_timeout
+> + * is used to detect recent DL / RT tasks taking a read lock.
+> + */
+> +#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
+> +
+> +static void __sched update_dlrt_reader(struct rwbase_rt *rwb)
+> +{
+> +	/* No update required if DL / RT tasks already identified. */
+> +	if (rwb->waiter_timeout & 1)
+> +		return;
+> +
+> +	/*
+> +	 * Record a DL / RT task acquiring the lock for read. This may result
+> +	 * in indefinite writer starvation but DL / RT tasks should avoid such
+> +	 * behaviour.
+> +	 */
+> +	if (rt_task(current)) {
+> +		struct rt_mutex_base *rtm = &rwb->rtmutex;
+> +		unsigned long flags;
+> +
+> +		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+> +		rwb->waiter_timeout |= 1;
 
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/iio/industrialio-core.c | 32 +-------------------------------
->   1 file changed, 1 insertion(+), 31 deletions(-)
->
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> index 52e690f031cb..26e357f14db8 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -205,36 +205,6 @@ bool iio_buffer_enabled(struct iio_dev *indio_dev)
->   }
->   EXPORT_SYMBOL_GPL(iio_buffer_enabled);
->   
-> -/**
-> - * iio_sysfs_match_string_with_gaps - matches given string in an array with gaps
-> - * @array: array of strings
-> - * @n: number of strings in the array
-> - * @str: string to match with
-> - *
-> - * Returns index of @str in the @array or -EINVAL, similar to match_string().
-> - * Uses sysfs_streq instead of strcmp for matching.
-> - *
-> - * This routine will look for a string in an array of strings.
-> - * The search will continue until the element is found or the n-th element
-> - * is reached, regardless of any NULL elements in the array.
-> - */
-> -static int iio_sysfs_match_string_with_gaps(const char * const *array, size_t n,
-> -					    const char *str)
-> -{
-> -	const char *item;
-> -	int index;
-> -
-> -	for (index = 0; index < n; index++) {
-> -		item = array[index];
-> -		if (!item)
-> -			continue;
-> -		if (sysfs_streq(item, str))
-> -			return index;
-> -	}
-> -
-> -	return -EINVAL;
-> -}
-> -
->   #if defined(CONFIG_DEBUG_FS)
->   /*
->    * There's also a CONFIG_DEBUG_FS guard in include/linux/iio/iio.h for
-> @@ -569,7 +539,7 @@ ssize_t iio_enum_write(struct iio_dev *indio_dev,
->   	if (!e->set)
->   		return -EINVAL;
->   
-> -	ret = iio_sysfs_match_string_with_gaps(e->items, e->num_items, buf);
-> +	ret = __sysfs_match_string(e->items, e->num_items, buf);
->   	if (ret < 0)
->   		return ret;
->   
+Let me see of I parsed the whole logic right:
+
+_After_ the RT reader acquired the lock, the lowest bit is set. This may
+be immediately if the timeout did not occur yet.
+With this flag set, all following reader incl. SCHED_OTHER will acquire
+the lock.
+
+If so, then I don't know why this is a good idea.
+
+If _only_ the RT reader is allowed to acquire the lock while the writer
+is waiting then it make sense to prefer the RT tasks. (So the check is
+on current and not on the lowest bit).
+All other (SCHED_OTHER) reader would have to block on the rtmutex after
+the timeout. This makes sense to avoid the starvation.
+
+If we drop that "we prefer the RT reader" then it would block on the
+RTmutex. It will _still_ be preferred over the writer because it will be
+enqueued before the writer in the queue due to its RT priority. The only
+downside is that it has to wait until all readers are left.
+So by allowing the RT reader to always acquire the lock as long as the
+WRITER_BIAS isn't set, we would allow to enter early while the other
+reader are still in and after the timeout you would only have RT reader
+going in and out. All SCHED_OTHER reader block on the RTmutex.
+
+I think I like this.
 
 
+> +		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+> +	}
+> +}
+> +
+
+Sebastian
