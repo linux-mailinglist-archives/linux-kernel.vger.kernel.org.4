@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02294672227
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA89F67218E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjARPwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S230460AbjARPl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjARPve (ORCPT
+        with ESMTP id S230412AbjARPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:51:34 -0500
-X-Greylist: delayed 313 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 07:49:46 PST
-Received: from cnc.isely.net (cnc.isely.net [192.69.181.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D445233;
-        Wed, 18 Jan 2023 07:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=isely.net; s=deb;
-        t=1674056364; bh=PUCorUQZC6FeLowATjHfocaMvZBn2st6AioBFC89WJI=;
-        l=1781; h=Date:From:Reply-To:To:cc:Subject:In-Reply-To:References;
-        b=BUZEbEqT1HJhDjTohgOQaLFLfu6tNIuWeAx8CtryC0Y4PiR7So2vdM9viJgIy6VTu
-         BNCQ3MzQRyYgTk0FJIzX2KDaP8UdVymGBQ9l7zrjkAvysxDhtZBdzMNkxu9bxLQJrd
-         Z2yjvxMGD+pUaO1AIJ8oNIlLgBHznaWw+G0ffiO0FHt1WSjikF/nzG+/OtGrF
-Original-Reply-To: Mike Isely at pobox <isely@pobox.com>
-Original-Subject: Re: [PATCH] media: pvrusb2: fix DVB_CORE dependency
-Original-From: Mike Isely <isely@isely.net>
-Original-cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-  Lecopzer Chen <lecopzer.chen@mediatek.com>,
-  Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-  Arnd Bergmann <arnd@arndb.de>,
-  "=?ISO-8859-2?Q?=A3ukasz_Stelmach?=" <l.stelmach@samsung.com>,
-  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-  Jacopo Mondi <jacopo@jmondi.org>,
-  Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-  linux-media@vger.kernel.org,
-  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-  Mike Isely at pobox <isely@pobox.com>
-Received: from ts3-dock1.isely.net (ts3-dock1.isely.net [::ffff:192.168.23.13])
-  (AUTH: PLAIN isely, TLS: TLS1.3,256bits,ECDHE_RSA_AES_256_GCM_SHA384)
-  by cnc.isely.net with ESMTPSA
-  id 000000000008033F.0000000063C812AC.00006E06; Wed, 18 Jan 2023 09:39:24 -0600
-Date:   Wed, 18 Jan 2023 09:39:24 -0600 (CST)
-From:   Mike Isely <isely@isely.net>
-Reply-To: Mike Isely at pobox <isely@pobox.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "=?ISO-8859-2?Q?=A3ukasz_Stelmach?=" <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Isely at pobox <isely@pobox.com>
-Subject: Re: [PATCH] media: pvrusb2: fix DVB_CORE dependency
-In-Reply-To: <20230117171055.2714621-1-arnd@kernel.org>
-Message-ID: <f045d0c6-0043-8feb-a423-954ce381396d@isely.net>
-References: <20230117171055.2714621-1-arnd@kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Wed, 18 Jan 2023 10:41:53 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F67112596;
+        Wed, 18 Jan 2023 07:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674056512; x=1705592512;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oDbeD+94j2sqIaSf3nZfHg8M7FyaDfrDoJHJdLgJFy8=;
+  b=nhdHuPRMsyZFez6Qtnuu1/LECYRTnsXzmyol10rcP7DGqgZolaHt2Iqu
+   5H8ZX9Voyxkaeb6hAF/icLkQag1xXt1n/BGpiDNt2pcW18oOg4vhpi76Y
+   TPFsOcz8ssKJpxtKf6//uoE6fpxouNJWgQo3HKDL9f8/mnSxm1Mt4+gdL
+   UK61phUk/qGF3r+KKq/CC4wLZPL99rgsqUjiv99SzNe0aRZwx1MtC2tMV
+   rVlnRar4O6E7f1mVZypfBQ9S5b7tP5UpqeTPiKaSOQizoQkkB8Y3euuVq
+   hFbJk5EhXUrfT0ZeYdZ1eOevYipU392pzDnPlHaqQiYEvEMoiJuUvJPLS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304692977"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="304692977"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:39:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="723128703"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="723128703"
+Received: from megreen-mobl.amr.corp.intel.com (HELO [10.209.72.115]) ([10.209.72.115])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:39:50 -0800
+Message-ID: <e1986845-9eb9-2147-5073-5d7a45633aba@intel.com>
+Date:   Wed, 18 Jan 2023 07:40:05 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
+        "Min M. Xu" <min.m.xu@intel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230113212926.2904735-1-dionnaglaze@google.com>
+ <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
+ <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
+ <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
+ <1818a72f-31ef-07b0-d1b4-6a8904636db2@amd.com>
+ <CAMj1kXG7s_B1nyEgsxFRRvUzsWNXcFfTszRA2hKY=_a-L24PZg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMj1kXG7s_B1nyEgsxFRRvUzsWNXcFfTszRA2hKY=_a-L24PZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/18/23 07:09, Ard Biesheuvel wrote:
+> However, I guess we're at a point where SEV and TDX really want
+> different solutions, so I think divergence might be the way to
+> proceed.
 
-That doesn't seem right.  The pvrusb2 module should reference that 
-symbol like any other.  There is no special treatment of it within 
-pvrusb2 - so why is that requiring special treatment here?
+I don't think they want different things really.
 
-Is it possible that dvb_module_probe and dvb_module_release are not 
-exported?  (Or that there are two corresponding different exported 
-symbol names that pvrusb2 should be using instead?)
+TDX doesn't need this protocol.  It sounds like SEV does need it,
+though.  That doesn't mean they really diverge.  They're *both* going to
+have to poke at this protocol knob to get the firmware to not accept the
+memory.
 
-  -Mike
+This does slightly change the motivation for doing explicit unaccepted
+memory support in the kernel.
 
-On Tue, 17 Jan 2023, Arnd Bergmann wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Now that DVB_CORE can be a loadable module, pvrusb2 can run into
-> a link error:
-> 
-> ld.lld: error: undefined symbol: dvb_module_probe
-> >>> referenced by pvrusb2-devattr.c
-> >>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_lgdt3306a_attach) in archive vmlinux.a
-> ld.lld: error: undefined symbol: dvb_module_release
-> >>> referenced by pvrusb2-devattr.c
-> >>>               drivers/media/usb/pvrusb2/pvrusb2-devattr.o:(pvr2_dual_fe_attach) in archive vmlinux.a
-> 
-> Refine the Kconfig dependencies to avoid this case.
-> 
-> Fixes: 7655c342dbc4 ("media: Kconfig: Make DVB_CORE=m possible when MEDIA_SUPPORT=y")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/media/usb/pvrusb2/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-> index f2b64e49c5a2..e02a25d2d029 100644
-> --- a/drivers/media/usb/pvrusb2/Kconfig
-> +++ b/drivers/media/usb/pvrusb2/Kconfig
-> @@ -37,6 +37,7 @@ config VIDEO_PVRUSB2_DVB
->  	bool "pvrusb2 ATSC/DVB support"
->  	default y
->  	depends on VIDEO_PVRUSB2 && DVB_CORE
-> +	depends on VIDEO_PVRUSB2=m || DVB_CORE=y
->  	select DVB_LGDT330X if MEDIA_SUBDRV_AUTOSELECT
->  	select DVB_S5H1409 if MEDIA_SUBDRV_AUTOSELECT
->  	select DVB_S5H1411 if MEDIA_SUBDRV_AUTOSELECT
-> 
+I also don't know _quite_ how this will look to a guest.  For instance,
+will they see different memory maps based on which protocol they are
+using?  I assume so, but didn't see any of that explicitly mentioned in
+this patch.
