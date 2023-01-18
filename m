@@ -2,203 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D1F670EF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3307B670EF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjARAoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        id S229738AbjARArp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjARAnN (ORCPT
+        with ESMTP id S229862AbjARArI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:43:13 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA0A54B0E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:22:45 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso567375pjf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZabAU69kzrS+JlD6u3p/eokT1Xy/TCkqyu/YUto0/Ws=;
-        b=bNgJ7mGfmxJpyJk7YI84f7nG4msD6s4J4JmN1EPghdNBOuCNluQcCi1Swcg1TiC3c2
-         ozA70KYSMLsJu/PD/QzAfK+i8UNfBvX/+97HD0y0C1QKkte+2j6N36nKd4x1q4J7RSiC
-         TNScLNaFOSudcM0bBvgMC7ZoY+nNp6LVmExiJPYlr1Wsvyh4ovVMX5+bIO3UioZS4yrR
-         tRHguYB8v4aOygf/iJku39qyCxHX0wXit7zVLrnUm6et8GeXe6uH2aYd552FAgjrZIye
-         KoLkDudyOkGNYTFPNxxktGbMmat5QjC1Z+/wVixOc4EjGLs58La34uLOizbcim1w+8kk
-         DmSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZabAU69kzrS+JlD6u3p/eokT1Xy/TCkqyu/YUto0/Ws=;
-        b=5qB+z0FqviwpZSRgWnfwt0vfZh+AMezmrIDO2wfxBuasW0E+7yhJqiIcrGAnHK1cad
-         LePhOJt3hQb67Rf26geFXD6XmFdhicG7jUQS8skEQKcCAERO+V7/cBNwB/5p8BUE1N7W
-         5oVci1t5e8iUMWuj8RJElBSwTp2IDASY5isfReYmZt+ok5evT09E/TSbkTaj10Xh1MVk
-         MAIIToBYbFAptDXLcFkaEtBdZBG71Ft6BFEiTXZpx2bO4oA2W3DgRm7MqqYUgp+C4uxD
-         F7kzNYJFL4MM3k1qPXXhVEEIqTdwHN5x/4iVRgmXBnXOUpu2PVe1DanHnyGKCq9Elluo
-         wOkA==
-X-Gm-Message-State: AFqh2koCvKKf4HW1UO3ZYUwTj8Rfa8fySjltuiI0k2CYXlbbstX82ZLO
-        U8XzpQVdRLZ3DERNT3Z/7wpzCA==
-X-Google-Smtp-Source: AMrXdXsnE4uTo9Sd2trzRSUN8IJ7cXKOr8CKXxHjD2NB2cLB/x8JUyyCdAmzDB4PvK09dTddfEhVMg==
-X-Received: by 2002:a17:90a:7e08:b0:219:672a:42db with SMTP id i8-20020a17090a7e0800b00219672a42dbmr4827377pjl.19.1674001365228;
-        Tue, 17 Jan 2023 16:22:45 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-146-207.pa.vic.optusnet.com.au. [49.186.146.207])
-        by smtp.gmail.com with ESMTPSA id ei7-20020a17090ae54700b00227223c58ecsm121029pjb.42.2023.01.17.16.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 16:22:44 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pHwDy-004LZS-3X; Wed, 18 Jan 2023 11:22:42 +1100
-Date:   Wed, 18 Jan 2023 11:22:42 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Giuseppe Scrivano <gscrivan@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Yurii Zubrytskyi <zyy@google.com>,
-        Eugene Zemtsov <ezemtsov@google.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-Message-ID: <20230118002242.GB937597@dread.disaster.area>
-References: <d3c63da908ef16c43a6a65a22a8647bf874695c7.camel@redhat.com>
- <0a144ffd-38bb-0ff3-e8b2-bca5e277444c@linux.alibaba.com>
- <9d44494fdf07df000ce1b9bafea7725ea240ca41.camel@redhat.com>
- <d7c4686b-24cc-0991-d6db-0dec8fb9942e@linux.alibaba.com>
- <2856820a46a6e47206eb51a7f66ec51a7ef0bd06.camel@redhat.com>
- <8f854339-1cc0-e575-f320-50a6d9d5a775@linux.alibaba.com>
- <CAOQ4uxh34udueT-+Toef6TmTtyLjFUnSJs=882DH=HxADX8pKw@mail.gmail.com>
- <20230117101202.4v4zxuj2tbljogbx@wittgenstein>
- <87fsc9gt7b.fsf@redhat.com>
- <20230117152756.jbwmeq724potyzju@wittgenstein>
+        Tue, 17 Jan 2023 19:47:08 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFCC4497;
+        Tue, 17 Jan 2023 16:31:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674001907; x=1705537907;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=62EDyxsF4lIIGJBsxN/0U5ODRNkedVcoG4tlga2KVug=;
+  b=XjjrddGqVM+5my6mNoHZJERrqWDxhX08z/IcAPjprjmK/s6gcZ0abLQb
+   /R2mmxzdNWo0Rw11zmSydFUO3KQGTwxbwpDKSguzPPHChuZyigW6CbkSy
+   WCuYZW981gFsTKdtIm7kQ7egdFkojnwd+MRsI94xHTznsZNv90s1ZerEX
+   Ww5wWCQSZLDcOgZYYi6fOPuhGaz/9JZ74Q378ocdoktTIVRzcTsLglv9r
+   KUxfbu1QRZbviLksWHG5P1NrMktigdKyLMwz9DTW0FvQv2RpIOneNP/qf
+   LacM537O3nMCwRdyt4yyOGL6H0vxTliovyklhiY//1DMq/DPc5+lDtYEC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="352106436"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="352106436"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 16:31:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="783448333"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="783448333"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 16:31:46 -0800
+Date:   Tue, 17 Jan 2023 16:32:19 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Marco Pagani <marpagan@redhat.com>
+cc:     andriy.shevchenko@linux.intel.com, bagasdotme@gmail.com,
+        basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
+        geert+renesas@glider.be, gregkh@linuxfoundation.org,
+        hao.wu@intel.com, ilpo.jarvinen@linux.intel.com,
+        jirislaby@kernel.org, johan@kernel.org, linux-doc@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, lukas@wunner.de, macro@orcam.me.uk,
+        mdf@kernel.org, niklas.soderlund+renesas@ragnatech.se,
+        russell.h.weight@intel.com, tianfei.zhang@intel.com,
+        trix@redhat.com, yilun.xu@intel.com
+Subject: Re: [PATCH v11 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <28f1f1bf-d490-2630-d41f-1344baa0eea9@redhat.com>
+Message-ID: <alpine.DEB.2.22.394.2301171631550.1389057@rhweight-WRK1>
+References: <20230115151447.1353428-1-matthew.gerlach@linux.intel.com> <20230115151447.1353428-5-matthew.gerlach@linux.intel.com> <28f1f1bf-d490-2630-d41f-1344baa0eea9@redhat.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117152756.jbwmeq724potyzju@wittgenstein>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-448638966-1674001943=:1389057"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 04:27:56PM +0100, Christian Brauner wrote:
-> On Tue, Jan 17, 2023 at 02:56:56PM +0100, Giuseppe Scrivano wrote:
-> > Christian Brauner <brauner@kernel.org> writes:
-> > 2) no multi repo support:
-> > 
-> > Both reflinks and hardlinks do not work across mount points, so we
-> 
-> Just fwiw, afaict reflinks work across mount points since at least 5.18.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The might work for NFS server *file clones* across different exports
-within the same NFS server (or server cluster), but they most
-certainly don't work across mountpoints for local filesystems, or
-across different types of filesystems.
+--8323328-448638966-1674001943=:1389057
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-I'm not here to advocate that composefs as the right solution, I'm
-just pointing out that the proposed alternatives do not, in any way,
-have the same critical behavioural characteristics as composefs
-provides container orchestration systems and hence do not solve the
-problems that composefs is attempting to solve.
 
-In short: any solution that requires userspace to create a new
-filesystem heirarchy one file at a time via standard syscall
-mechanisms is not going to perform acceptibly at scale - that's a
-major problem that composefs addresses.
 
-The whole problem with file copying to create images - even with
-reflink or hardlinks avoiding data copying - is the overhead of
-creating and destroying those copies in the first place. A reflink
-copy of a tens of thousands of files in a complex directory
-structure is not free - each individual reflink has a time, CPU,
-memory and IO cost to it. The teardown cost is similar - the only
-way to remove the "container image" built with reflinks is "rm -rf",
-and that has significant time, CPU memory and IO costs associated
-with it as well.
+On Mon, 16 Jan 2023, Marco Pagani wrote:
 
-Further, you can't ship container images to remote hosts using
-reflink copies - they can only be created at runtime on the host
-that the container will be instantiated on. IOWs, the entire cost of
-reflink copies for container instances must be taken at container
-instantiation and destruction time.
+>
+> On 2023-01-15 16:14, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add a Device Feature List (DFL) bus driver for the Altera
+>> 16550 implementation of UART.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Reviewed-by: Marco Pagani <marpagan@redhat.com>
 
-When you have container instances that might only be needed for a
-few seconds, taking half a minute to set up the container instance
-and then another half a minute to tear it down just isn't viable -
-we need instantiation and teardown times in the order of a second or
-two.
+Thanks for the review,
+Matthew Gerlach
 
-From my reading of the code, composefs is based around the concept
-of a verifiable "shipping manifest", where the filesystem namespace
-presented to users by the kernel is derived from the manifest rahter
-than from some other filesystem namespace. Overlay, reflinks, etc
-all use some other filesystem namespace to generate the container
-namespace that links to the common data, whilst composefs uses the
-manifest for that.
-
-The use of a minfest file means there is almost zero container setup
-overhead - ship the manifest file, mount it, all done - and zero
-teardown overhead as unmounting the filesystem is all that is needed
-to remove all traces of the container instance from the system.
-
-In having a custom manifest format, the manifest can easily contain
-verification information alongside the pointer to the content the
-namespace should expose. i.e. the manifest references a secure
-content addressed repository that is protected by fsverity and
-contains the fsverity digests itself. Hence it doesn't rely on the
-repository to self-verify, it actually ensures that the repository
-files actually contain the data the manifest expects them to
-contain.
-
-Hence if the composefs kernel module is provided with a mechanism
-for validating the chain of trust for the manifest file that a user
-is trying to mount, then we just don't care who the mounting user
-is.  This architecture is a viable path to rootless mounting of
-pre-built third party container images.
-
-Also, with the host's content addressed repository being managed
-separately by the trusted host and distro package management, the
-manifest is not be unique to a single container host. The distro can
-build manifests so that containers are running known, signed and
-verified container images built by the distro. The container
-orchestration software or admin could also build manifests on demand
-and sign them.
-
-If the manifest is not signed, not signed with a key loaded
-into the kernel keyring, or does not pass verification, then we
-simply fall back to root-in-the-init-ns permissions being required
-to mount the manifest. This fallback is exactly the same security
-model we have for every other type of filesystem image that the
-linux kernel can mount - we trust root not to be mounting malicious
-images.
-
-Essentially, I don't think any of the filesystems in the linux
-kernel currently provide a viable solution to the problem that
-composefs is trying to solve. We need a different way of solving the
-ephemeral container namespace creation and destruction overhead
-problem. Composefs provides a mechanism that not only solves this
-problem and potentially several others, whilst also being easy to
-retrofit into existing production container stacks.
-
-As such, I think composefs is definitely worth further time and
-investment as a unique line of filesystem development for Linux.
-Solve the chain of trust problem (i.e. crypto signing for the
-manifest files) and we potentially have game changing container
-infrastructure in a couple of thousand lines of code...
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+>
+>> ---
+>> v11: sizeof(u64) -> sizeof(*pval)
+>>      16650 -> 16550
+>>
+>> v10: track change to dfh_find_param()
+>>
+>> v9: add Rb Andy Shevchenko
+>>     move dfh_get_u64_param_vals to static version of dfh_get_u64_param_val
+>>
+>> v8: use dfh_get_u64_param_vals()
+>>
+>> v7: no change
+>>
+>> v6: move driver specific parameter definitions to limit scope
+>>
+>> v5: removed unneeded blank line
+>>     removed unneeded includes
+>>     included device.h and types.h
+>>     removed unneeded local variable
+>>     remove calls to dev_dbg
+>>     memset -> { }
+>>     remove space after period
+>>     explicitly include used headers
+>>     remove redundant Inc from Copyright
+>>     fix format specifier
+>>
+>> v4: use dev_err_probe() everywhere that is appropriate
+>>     clean up noise
+>>     change error messages to use the word, unsupported
+>>     tried again to sort Makefile and KConfig better
+>>     reorder probe function for easier error handling
+>>     use new dfh_find_param API
+>>
+>> v3: use passed in location of registers
+>>     use cleaned up functions for parsing parameters
+>>
+>> v2: clean up error messages
+>>     alphabetize header files
+>>     fix 'missing prototype' error by making function static
+>>     tried to sort Makefile and Kconfig better
+>> ---
+>>  drivers/tty/serial/8250/8250_dfl.c | 167 +++++++++++++++++++++++++++++
+>>  drivers/tty/serial/8250/Kconfig    |  12 +++
+>>  drivers/tty/serial/8250/Makefile   |   1 +
+>>  3 files changed, 180 insertions(+)
+>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+>> new file mode 100644
+>> index 000000000000..6c5ff019df4b
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/8250/8250_dfl.c
+>> @@ -0,0 +1,167 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Driver for FPGA UART
+>> + *
+>> + * Copyright (C) 2022 Intel Corporation.
+>> + *
+>> + * Authors:
+>> + *   Ananda Ravuri <ananda.ravuri@intel.com>
+>> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/device.h>
+>> +#include <linux/dfl.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/ioport.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/types.h>
+>> +
+>> +#include <linux/serial.h>
+>> +#include <linux/serial_8250.h>
+>> +
+>> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
+>> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
+>> +
+>> +#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
+>> +#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
+>> +#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
+>> +
+>> +struct dfl_uart {
+>> +	int line;
+>> +};
+>> +
+>> +static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
+>> +{
+>> +	size_t psize;
+>> +	u64 *p;
+>> +
+>> +	p = dfh_find_param(dfl_dev, param_id, &psize);
+>> +	if (IS_ERR(p))
+>> +		return PTR_ERR(p);
+>> +
+>> +	if (psize != sizeof(*pval))
+>> +		return -EINVAL;
+>> +
+>> +	*pval = *p;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
+>> +{
+>> +	struct device *dev = &dfl_dev->dev;
+>> +	u64 fifo_len, clk_freq, reg_layout;
+>> +	u32 reg_width;
+>> +	int ret;
+>> +
+>> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "missing CLK_FRQ param\n");
+>> +
+>> +	uart->port.uartclk = clk_freq;
+>> +
+>> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "missing FIFO_LEN param\n");
+>> +
+>> +	switch (fifo_len) {
+>> +	case 32:
+>> +		uart->port.type = PORT_ALTR_16550_F32;
+>> +		break;
+>> +
+>> +	case 64:
+>> +		uart->port.type = PORT_ALTR_16550_F64;
+>> +		break;
+>> +
+>> +	case 128:
+>> +		uart->port.type = PORT_ALTR_16550_F128;
+>> +		break;
+>> +
+>> +	default:
+>> +		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
+>> +	}
+>> +
+>> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "missing REG_LAYOUT param\n");
+>> +
+>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
+>> +	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
+>> +	switch (reg_width) {
+>> +	case 4:
+>> +		uart->port.iotype = UPIO_MEM32;
+>> +		break;
+>> +
+>> +	case 2:
+>> +		uart->port.iotype = UPIO_MEM16;
+>> +		break;
+>> +
+>> +	default:
+>> +		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
+>> +
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
+>> +{
+>> +	struct device *dev = &dfl_dev->dev;
+>> +	struct uart_8250_port uart = { };
+>> +	struct dfl_uart *dfluart;
+>> +	int ret;
+>> +
+>> +	uart.port.flags = UPF_IOREMAP;
+>> +	uart.port.mapbase = dfl_dev->mmio_res.start;
+>> +	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
+>> +
+>> +	ret = dfl_uart_get_params(dfl_dev, &uart);
+>> +	if (ret < 0)
+>> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+>> +
+>> +	if (dfl_dev->num_irqs == 1)
+>> +		uart.port.irq = dfl_dev->irqs[0];
+>> +
+>> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
+>> +	if (!dfluart)
+>> +		return -ENOMEM;
+>> +
+>> +	dfluart->line = serial8250_register_8250_port(&uart);
+>> +	if (dfluart->line < 0)
+>> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
+>> +
+>> +	dev_set_drvdata(dev, dfluart);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
+>> +{
+>> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
+>> +
+>> +	serial8250_unregister_port(dfluart->line);
+>> +}
+>> +
+>> +#define FME_FEATURE_ID_UART 0x24
+>> +
+>> +static const struct dfl_device_id dfl_uart_ids[] = {
+>> +	{ FME_ID, FME_FEATURE_ID_UART },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
+>> +
+>> +static struct dfl_driver dfl_uart_driver = {
+>> +	.drv = {
+>> +		.name = "dfl-uart",
+>> +	},
+>> +	.id_table = dfl_uart_ids,
+>> +	.probe = dfl_uart_probe,
+>> +	.remove = dfl_uart_remove,
+>> +};
+>> +module_dfl_driver(dfl_uart_driver);
+>> +
+>> +MODULE_DESCRIPTION("DFL Intel UART driver");
+>> +MODULE_AUTHOR("Intel Corporation");
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+>> index b0f62345bc84..020ef532940d 100644
+>> --- a/drivers/tty/serial/8250/Kconfig
+>> +++ b/drivers/tty/serial/8250/Kconfig
+>> @@ -370,6 +370,18 @@ config SERIAL_8250_FSL
+>>  	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
+>>  	  enables support for ACPI enumeration.
+>>
+>> +config SERIAL_8250_DFL
+>> +	tristate "DFL bus driver for Altera 16550 UART"
+>> +	depends on SERIAL_8250 && FPGA_DFL
+>> +	help
+>> +	  This option enables support for a Device Feature List (DFL) bus
+>> +	  driver for the Altera 16550 UART. One or more Altera 16550 UARTs
+>> +	  can be instantiated in a FPGA and then be discovered during
+>> +	  enumeration of the DFL bus.
+>> +
+>> +	  To compile this driver as a module, chose M here: the
+>> +	  module will be called 8250_dfl.
+>> +
+>>  config SERIAL_8250_DW
+>>  	tristate "Support for Synopsys DesignWare 8250 quirks"
+>>  	depends on SERIAL_8250
+>> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
+>> index 1615bfdde2a0..4e1a32812683 100644
+>> --- a/drivers/tty/serial/8250/Makefile
+>> +++ b/drivers/tty/serial/8250/Makefile
+>> @@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+>>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+>>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+>>  obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
+>> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+>>  obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
+>>  obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
+>>  obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
+>
+>
+--8323328-448638966-1674001943=:1389057--
