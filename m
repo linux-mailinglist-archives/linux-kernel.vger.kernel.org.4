@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ED26716D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CB16716DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjARJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S229637AbjARJAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjARI6p (ORCPT
+        with ESMTP id S229771AbjARI7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:58:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0896F558D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:17:00 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3cu-0005iS-4F; Wed, 18 Jan 2023 09:16:56 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3ct-006rqX-8R; Wed, 18 Jan 2023 09:16:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3cs-00Do1d-I9; Wed, 18 Jan 2023 09:16:54 +0100
-Date:   Wed, 18 Jan 2023 09:16:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20230118081654.qggjaockxwg2u2sg@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
- <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
- <CVZAKR.06MA7BGA170W3@crapouillou.net>
- <20221117132927.mom5klfd4eww5amk@pengutronix.de>
- <SKFJLR.07UMT1VWJOD52@crapouillou.net>
- <20230117213556.vdurctncvnjom62g@pengutronix.de>
- <846b27400a72db8ca9b7497a6c032bdaacd62fc6.camel@crapouillou.net>
+        Wed, 18 Jan 2023 03:59:13 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30CF10433
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:17:14 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id n7so7002434wrx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z5CDdoCUnCUysD4OwVm5x8AKmJcxld25F1lQaxRj+UE=;
+        b=EsaEmOoj/k5hWYVjzW4wymx3f62KDXfpdzhsx0vO65rwsFrA+poJW2jsK6zGT+xXoH
+         rbq/Yms8ZK0EGiUaZqM6luB0uS21dzPoPAkOVY9u9y9ezrG+9wCSnuQ5SQHLnhM3GgVN
+         B5w7wMLLDYaHUBH8SdHPka1xEFAgmgFAcaAzkVWDMEesOhVTFnosQ8eX6reNJf1igI4A
+         tFA4KJpQvkiM5GNLdqooZUWLarVAEqR9yOg0Mp+cMJqcLaxsFs61HCJqGE3fbfIPk1Ha
+         McC6WDlEKw1zN6WKcBI58mxObiE7nYHTjs8WGvpYgo0LU9iSXC4xsPAUdicr5BWW7o4n
+         MKEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z5CDdoCUnCUysD4OwVm5x8AKmJcxld25F1lQaxRj+UE=;
+        b=6hyq8+60V8cpHBh/zwEOazaYE4oGY+XTyBOZuGlfCw/MhgtnRLKPw8PBZTsQ5F/a5D
+         bl6bR3FoVyyHT/hW6PdynQH1HhrHix2mc3gWWJCM6sgPhvsKgAXpsaLIrRbYgisDKg13
+         uEr13yVDcrdteU5QSqTowjpOtwZgfJYz7Eh9ftiIQDF96Y4y4437l/qEfDt55k6IZwVc
+         Zi9M1bWpZCrCSyrXLXhEveyRMpLeeGxv6tohKoIGb6TIJImyVXFvg9u9dJxiMEstLPBm
+         ERQDHzqkjHm7eT1tth1QILvgbqNrkROr2Q3WzK8wDjhRDHmV0GzJngpVPgNmskZ64LGP
+         8obw==
+X-Gm-Message-State: AFqh2krHuVt6Msr7j4+wVJC0KdZ3BAbA1wUBnWVkd1CPDYLF90taxcGs
+        AgGuodtk5e2B7pug46vIpl9Wig==
+X-Google-Smtp-Source: AMrXdXsrGhBFxvpmGjjvtTlnHTlkVNbgpbSMNOaiPhI0paRO2JgxMEJbIW6PDkO2ecInUF59pt+Kww==
+X-Received: by 2002:a05:6000:1f0f:b0:2b4:e5e:c0a3 with SMTP id bv15-20020a0560001f0f00b002b40e5ec0a3mr1566357wrb.21.1674029833248;
+        Wed, 18 Jan 2023 00:17:13 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm24778523wrv.11.2023.01.18.00.17.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 00:17:12 -0800 (PST)
+Message-ID: <5378f107-7676-d8c6-5bd4-d82fe12fdbe5@linaro.org>
+Date:   Wed, 18 Jan 2023 09:17:10 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j264dxttbxzuunju"
-Content-Disposition: inline
-In-Reply-To: <846b27400a72db8ca9b7497a6c032bdaacd62fc6.camel@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/9] dt-bindings: usb: Add device id for Genesys Logic
+ hub controller
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     linux-amlogic@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118044418.875-1-linux.amoon@gmail.com>
+ <20230118044418.875-2-linux.amoon@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230118044418.875-2-linux.amoon@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,46 +84,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18/01/2023 05:44, Anand Moon wrote:
+> Add usb hub device id for Genesys Logic, Inc. GL852G Hub USB 2.0
+> root hub.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> v2: - drop the vendor name from compatible string.
+>     - drop the -OTG and -QFN76 suffix from commit message.
+>     - drop the GL3523 USB 3.1 root hub device id.
 
---j264dxttbxzuunju
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Hello Paul,
+Best regards,
+Krzysztof
 
-On Tue, Jan 17, 2023 at 11:05:10PM +0000, Paul Cercueil wrote:
-> > I really lost track of the problem here and would appreciate a new
-> > submission of the remaining (and improved?) patches.
->=20
-> Sure. I still have the patchset on the backburner and plan to
-> (eventually) send an updated version.
->=20
-> If you are fishing for patches I think you can take patches 3/5 and 4/5
-> of this patchset. Then I won't have to send them again in v2.
-
-These are already in Linus' tree :-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---j264dxttbxzuunju
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHqvMACgkQwfwUeK3K
-7AmjYQf/WDoRbGo4RiKUlL/jqsaejKvM+ue+qPcwVdGY4h9cxjc4Gn4B9atEPSoB
-sPQpq1or9Zz5YwRRVeNTrLl386e0HzoKJXJl9lc+bdIjweHZCr1XvW2naauqtwjP
-pXaDGv2YJrCzbIl4qIrFSsu2xO+B68UVocfAF93jEaNJqdgD7UvDSjhAf9MIuryV
-SpCK3vIyUrkEdNY7TnRQFKprUE47XzoE6IUrMnqeaTN+i2IKKTPHnDYvD33axQ3v
-9vOC9NDpGCqxgwo8moEO5ESaUvbgVr8wX54ar/Z2pH1opR/WQ382S92SmO0d/cCs
-zTFvsc+MzysY135/3omJsXTfHuO4HQ==
-=V8+j
------END PGP SIGNATURE-----
-
---j264dxttbxzuunju--
