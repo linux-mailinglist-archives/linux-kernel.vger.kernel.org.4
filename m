@@ -2,148 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4986E672ABC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6901A672AC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjARVmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S231236AbjARVpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 16:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjARVlt (ORCPT
+        with ESMTP id S230401AbjARVpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:41:49 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F315F63E0C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:41:25 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id k8so20846843wrc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
-        b=eCtXeYsP+ADhvJqyR5obWxJN2h47MVmxSPM3WN/yFWVLL7Bofz6ALMqkQ5FmPFSW8x
-         UWaka0KuTIy7rIQGm6zFjHry+P1eL6Sk8lHn9fP+GlFKwmKfj/Q6EGvopu1kINYq/tef
-         zm8zNYOALlS2vhNm+EkXcXVPzdDc/TXwTPpHmjgDI6AlVHBF2UVGGn5IwZJjA1mkQrTd
-         W7/8pHqfbBiiPSMO3n8KjIvPtsQCwLJhGfGrg9lAgqPV+bv5lqOuwfh93c0xePh+Wkpp
-         2YLAsoMIKNpdfYZLV7cFr9MhZ4e3JlmJFQlcJhphihQuV+4yzmbAlgwjxUanzoyThCaw
-         x8Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
-        b=aI6PZEt+N2DPN1o6U6SAcc3u5tBOzb31+4HYpxE8VhTR3hThQeeFuGwzJwQbXX4FN9
-         lI7JRWJ+3Yq0d/UgMuQ2ShgRalKbzsNMIhV/wa/OjkAAAYqrBl55WnJLBkGyzJZbxBbt
-         6HNJMrt0E6ohXAWOWpx4Yl9/FQoqG1D74JyYpUZl24MWu6zE8EO4mnsS7UR7rAhXzAD1
-         OZAcCM3D/Y3upvv/ekXji/M1VGJL0KOCbFzmk6bDtjDJ57GLEJh4r2oIBeHbzFCrZ0cc
-         PCZDWTKejMM5U3BJH0MlOxPH+l2/2njWwFJAsnM6vd3rgkmGlnCcV7vK8x0jDyPfFm5l
-         txLg==
-X-Gm-Message-State: AFqh2krsEIFiGwfUKK8UB0Jub19Zb/wWFgbDk98E6e/XNqKTyXRNznb/
-        6P7AKiV2GjyBzuOltwhqYUKMQKXhlYsvXvRM
-X-Google-Smtp-Source: AMrXdXs9dt7f2UXQjFy9Tfqdc9IqVLQbqXGCkdLvQFCWCdoKDt4UIeux1A+ib39qTp53lS2eyE54aQ==
-X-Received: by 2002:a5d:5b0e:0:b0:250:22e4:b89e with SMTP id bx14-20020a5d5b0e000000b0025022e4b89emr8426197wrb.65.1674078084270;
-        Wed, 18 Jan 2023 13:41:24 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056000024500b00267bcb1bbe5sm33186349wrz.56.2023.01.18.13.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 13:41:23 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH v4 4/4] crypto/Documentation: Add crypto_pool kernel API
-Date:   Wed, 18 Jan 2023 21:41:11 +0000
-Message-Id: <20230118214111.394416-5-dima@arista.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230118214111.394416-1-dima@arista.com>
-References: <20230118214111.394416-1-dima@arista.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 18 Jan 2023 16:45:22 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7710CC;
+        Wed, 18 Jan 2023 13:45:21 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ILSRgZ031782;
+        Wed, 18 Jan 2023 21:45:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=UzADFY1L/BfeucqpU0xMyyeXHhyIthrN7gMK7UVkCb8=;
+ b=fKn02Sj9buheV6gLQVxSd0Rr1EcU0yDl3ubhyaIxSTxPWf9tBHr6s5Upwr0GZ3PN9u3+
+ FMDpYwia+vrLhozvKCL2rtB++JNPLH7naf1uChsAnUSpBv+i4Tluq1Qqhs7roDor/mH3
+ Yjhm62JuFsI4LEc9750Ga6YDISqqHw3zoDMxRhS7ZhUR3Hq5j7N4gPEQVTOFNRpel1Pg
+ WbxX3HIiuVIhNroiYWQuSOLmMykxO+DeL4iQSf/8XqQWUJQk1y6DNzfo+xuAPtIIygU3
+ gF4H9cch7yWI3jLlVKaS1IVp5X7h+Ie74WcReXrGD6UP8KMjotv8RxnULrIqCcC6p7UU Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf57-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 21:45:05 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ILj0YL005466;
+        Wed, 18 Jan 2023 21:45:04 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 21:45:04 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IK4h9D022043;
+        Wed, 18 Jan 2023 21:45:04 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17g5sn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 21:45:03 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30ILj37U63308280
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Jan 2023 21:45:03 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D8FC58052;
+        Wed, 18 Jan 2023 21:45:03 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F3105805A;
+        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.7.111])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
+Message-ID: <3c34c1e8c74722110e5d7e87146b090791734916.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 18 Jan 2023 16:45:02 -0500
+In-Reply-To: <20221228030248.94285-1-xiujianfeng@huawei.com>
+References: <20221228030248.94285-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zEE8R_E7ZXjdtyO48DZjtIZp6t3ze7zy
+X-Proofpoint-ORIG-GUID: _FNfmYn35NGQBAGX_ShXks7MvFjettbF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301180180
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- Documentation/crypto/crypto_pool.rst | 36 ++++++++++++++++++++++++++++
- Documentation/crypto/index.rst       |  1 +
- 2 files changed, 37 insertions(+)
- create mode 100644 Documentation/crypto/crypto_pool.rst
+On Wed, 2022-12-28 at 11:02 +0800, Xiu Jianfeng wrote:
+> Currently it uses __vfs_setxattr_noperm() to update "security.evm",
+> however there are two lsm hooks(inode_post_setxattr and inode_setsecurity)
+> being called inside this function, which don't make any sense for xattr
+> "security.evm", because the handlers of these two hooks, such as selinux
+> and smack, only care about their own xattr.
 
-diff --git a/Documentation/crypto/crypto_pool.rst b/Documentation/crypto/crypto_pool.rst
-new file mode 100644
-index 000000000000..84abd1f2ee80
---- /dev/null
-+++ b/Documentation/crypto/crypto_pool.rst
-@@ -0,0 +1,36 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Per-CPU pool of crypto requests
-+===============================
-+
-+Overview
-+--------
-+The crypto pool API manages pre-allocated per-CPU pool of crypto requests,
-+providing ability to use crypto requests on fast paths, potentially in atomic
-+contexts. The allocation and initialization of the requests should be done
-+before their usage as it's slow-path and may sleep.
-+
-+Order of operations
-+-------------------
-+You are required to allocate a new pool prior using it and manage its lifetime.
-+You can allocate a per-CPU pool of ahash requests by crypto_pool_alloc_ahash().
-+It will give you a pool id that you can use further on fast-path for hashing.
-+You can increase the reference counter for an allocated pool via
-+crypto_pool_get(). Decrease the reference counter by crypto_pool_release().
-+When the refcounter hits zero, the pool is scheduled for destruction and you
-+can't use the corresponding crypto pool id anymore.
-+Note that crypto_pool_get() and crypto_pool_release() must be called
-+only for an already existing pool and can be called in atomic contexts.
-+
-+crypto_pool_start() disables bh and returns you back ``struct crypto_pool *``,
-+which is a generic type for different crypto requests and has ``scratch`` area
-+that can be used as a temporary buffer for your operation.
-+
-+crypto_pool_end() enables bh back once you've done with your crypto
-+operation.
-+
-+.. kernel-doc:: include/crypto/pool.h
-+   :identifiers:
-+
-+.. kernel-doc:: crypto/crypto_pool.c
-+   :identifiers:
-diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
-index 21338fa92642..3eaf4e964e5b 100644
---- a/Documentation/crypto/index.rst
-+++ b/Documentation/crypto/index.rst
-@@ -25,6 +25,7 @@ for cryptographic use cases, as well as programming examples.
-    devel-algos
-    userspace-if
-    crypto_engine
-+   crypto_pool
-    api
-    api-samples
-    descore-readme
--- 
-2.39.0
+Updating the security.ima hash triggers re-calculating and writing the
+security.evm HMAC.  Refer to evm_inode_post_setxattr().
+
+Mimi
+
+> 
+> On the other hand, there is a literally rather than actually cyclical
+> callchain as follows:
+> security_inode_post_setxattr
+>   ->evm_inode_post_setxattr
+>     ->evm_update_evmxattr
+>       ->__vfs_setxattr_noperm
+>         ->security_inode_post_setxattr
+> 
+> So use __vfs_setxattr() to update "security.evm".
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  security/integrity/evm/evm_crypto.c   | 7 +++----
+>  security/integrity/ima/ima_appraise.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index fa5ff13fa8c9..d8275dfa49ef 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -376,10 +376,9 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
+>  			   xattr_value_len, &data);
+>  	if (rc == 0) {
+>  		data.hdr.xattr.sha1.type = EVM_XATTR_HMAC;
+> -		rc = __vfs_setxattr_noperm(&init_user_ns, dentry,
+> -					   XATTR_NAME_EVM,
+> -					   &data.hdr.xattr.data[1],
+> -					   SHA1_DIGEST_SIZE + 1, 0);
+> +		rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
+> +				    XATTR_NAME_EVM, &data.hdr.xattr.data[1],
+> +				    SHA1_DIGEST_SIZE + 1, 0);
+>  	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
+>  		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
+>  	}
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index ee6f7e237f2e..d2de9dc6c345 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -98,10 +98,10 @@ static int ima_fix_xattr(struct dentry *dentry,
+>  		iint->ima_hash->xattr.ng.type = IMA_XATTR_DIGEST_NG;
+>  		iint->ima_hash->xattr.ng.algo = algo;
+>  	}
+> -	rc = __vfs_setxattr_noperm(&init_user_ns, dentry, XATTR_NAME_IMA,
+> -				   &iint->ima_hash->xattr.data[offset],
+> -				   (sizeof(iint->ima_hash->xattr) - offset) +
+> -				   iint->ima_hash->length, 0);
+> +	rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
+> +			    XATTR_NAME_IMA, &iint->ima_hash->xattr.data[offset],
+> +			    (sizeof(iint->ima_hash->xattr) - offset) +
+> +			    iint->ima_hash->length, 0);
+>  	return rc;
+>  }
+>  
+
 
