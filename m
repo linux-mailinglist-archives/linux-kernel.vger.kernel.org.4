@@ -2,156 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F32672C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E61C672C4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjARXHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S229766AbjARXJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjARXHr (ORCPT
+        with ESMTP id S229708AbjARXJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:07:47 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88486539A9;
-        Wed, 18 Jan 2023 15:07:44 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ILmkJt021437;
-        Wed, 18 Jan 2023 23:07:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=F+L6ussDGC+AnqyfHTjB+nk0FGUphDeCAg0WYZrbyTA=;
- b=oiXyBrjQvFQIOerQ/5CO67PXrOWoyg654RqvDmV7vmrKG/FIFaWPtfAcDR3LZ7gZ4Ljg
- KoBDAAVyIBf4T1M14yJKYk2HyWdB4SANh7Aoni18Savhx4kCo0tKbFn1j1cWFTuOBtUJ
- nMqGLKlI0HVSENKyVREe5rP5BbjQvFEDfhMFVzly0FK1iqn7YIXJfy73RZaJVDolwXyN
- /cfLcLsq0RGiEF6PTLCllSVx2cj9Pit3ofXy6y6P48zioazEbdAuyGKjzLss35xq1TOh
- 5c1IrJL1Jy5ww+VEGoHvzik/SK1+ZV7ANGwFbSU1PRXjwfe3XcgSwIJsvBA7tXUhObpR cg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3m0trva1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 23:07:29 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30IMMCxr028846;
-        Wed, 18 Jan 2023 23:07:28 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2047.outbound.protection.outlook.com [104.47.51.47])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n6qufw7af-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 23:07:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f9tfNqh9SXY+JxSzx8Br00J1ueDAWRjqQKE1LOJYGM9L/NL8NOmBjISezuDc7/Oy/s7HcOt6+ddL4vGswk0rTqGGRyJO/5hTOPuQGPSd079O/5xfiUnlZyaDPEkryNjmZ3bZ8o2YnYH4v0RRz/Vh+ADTRHVjbMJeije7bnovci3fEeZ+FBXG0MzEDREhwH3X9UedwR5T9IIf5W+9fD9coWX+ovTk0pfMNDlcTYq0vEuN673PpHugVUhhqdf0ETg0oiPZMA19MvMRuUJ2P34BFNmSMD/MYaS6L6xGuOp+Ri5FF9153brYdXMF2cFo13zn+V3G/ASomgHaAerGpx6AYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F+L6ussDGC+AnqyfHTjB+nk0FGUphDeCAg0WYZrbyTA=;
- b=eMTFEl0Ui6XP692i6uy86pAlQ/o+UjbxNuVyOPDzH7xpqbkYaC5gfx5wJWsDImtdxfnN9KDk+mqJ157xwTUf+LoSkJQwK//7mB8IbRrR9d8CTzgAjd1D38nG9JVAGjlGISFv/xmdVMJKsuQQ0wnuZE1MUFqwj3MvgiHO2QJS3J+gq6+8UL7tNOHjjmqdWXe/f2m3WepEaPIawq33ZaTbbft6LQSUliLgDTWl2hap9xf2Cod8KOcJGvSfUPynobbHQCsZJ7o6zrC38dsH/RryGUt3aw5asq6aqfM0BaitmPl+kP31JeAdZ/i6QSSxUPKI60YvpJO3COnxDnITzezBLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 18 Jan 2023 18:09:45 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3770859251
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 15:09:44 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id g10so261129qvo.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 15:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F+L6ussDGC+AnqyfHTjB+nk0FGUphDeCAg0WYZrbyTA=;
- b=0CysUQ0KCdNMT5rn2GX3gryjuZcBqEQDqgFG9ZonKr2L6dW4AJ6c8GNHtqoytgbK2XmALTSvECAKU2j8P0vmCoBR+ccIVn6Kr4tckkYu9qoZfls6yePChhGDdYHMCREed631bu83bGG5myofxfGy6CW9B0wVNGgK3csnBO0r4K0=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- CY5PR10MB6011.namprd10.prod.outlook.com (2603:10b6:930:28::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.11; Wed, 18 Jan 2023 23:07:27 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::c888:aca:1eb9:ca4f]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::c888:aca:1eb9:ca4f%5]) with mapi id 15.20.6002.024; Wed, 18 Jan 2023
- 23:07:27 +0000
-Message-ID: <c3bd2bf7-e174-3afd-43d2-7010d9809815@oracle.com>
-Date:   Wed, 18 Jan 2023 17:07:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] scsi: fix iscsi rescan fails to create block
-Content-Language: en-US
-To:     Zhong Jinghua <zhongjinghua@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, bvanassche@acm.org, emilne@redhat.com,
-        hare@suse.de
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com, houtao1@huawei.com
-References: <20230117030114.2131734-1-zhongjinghua@huawei.com>
-From:   Mike Christie <michael.christie@oracle.com>
-In-Reply-To: <20230117030114.2131734-1-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR13CA0048.namprd13.prod.outlook.com
- (2603:10b6:610:b2::23) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=IW0EUvtT/eTM9SmHYjRtSH3zHytSpiwiMW5t3cRiuAs=;
+        b=VVvluB8ybqWVdG8DneWpqFlJKu3ekgdrPKpAh+LYsXTF/FWsvMeX9MT6UfKFaG9ycC
+         EVjmcu6c3llYI8UM+ruubyAbcw7J2SujwXetwgxLrqVbpeZB4rjC+FD8zBlhQ+AzYhb/
+         +MnXYxuq8WS6WXwnLKH2kHDcOEpXdSuyVwBeQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IW0EUvtT/eTM9SmHYjRtSH3zHytSpiwiMW5t3cRiuAs=;
+        b=U1LGwuhnNGatu46dGtVemGGAuqnc8bk0GYFwsC+N5tT2YXyaIItTtvrtBHbl3NtN7Z
+         N7ZgNFeG7IcYGwrL1YKz7mjollEPzI8EBkrVsAyQTwaPIx6UO2fsxHjxXwzorYpxq+x5
+         aEy4IQF8SOzErTWam5r8vyD/DNixu8ezRI6StrCZMVTMVu9vNFTzQJthsOSJ4ShxwF8Y
+         FcObHQw6szPaPXAKbF2FVRbosGdNVXFxHTg5xfdr7Xqv9Pl/ED3vBtGKag5/MPzxjieZ
+         9vjdnnWat16UQAHQrS49aiErIycRs5qQ5h1TyLZAAgEYmM5x97cfl4ckNHR0JopD2yDw
+         SveQ==
+X-Gm-Message-State: AFqh2kqskMtllWAdHdcUfV47GHaIJwIUjhS1iGCC+Oewa5PIrNA24fPH
+        9zA6V5tlWFLW+HsVTBJBcmADgkYgYLmjAPyhJ31NaIknQ74XMDEGS8+NPdotCb1ZE1yIOCU3vbZ
+        6GbbP3qgM6GC40P05UnLhjjbM1nUcso8LFF8R6osgKH1pALGfp/GGSSsJKkNUBOUviel4KCa7/r
+        CWsQvnEdtpAt4=
+X-Google-Smtp-Source: AMrXdXuUH363paSmTVFb7SeUGD1ZbUW6gIvxCELUWLysFPNYJS5yINTLkC5WaKXszfKReXZ3CKqrfw==
+X-Received: by 2002:a05:6214:5494:b0:4c7:7237:770f with SMTP id lg20-20020a056214549400b004c77237770fmr13005475qvb.50.1674083382773;
+        Wed, 18 Jan 2023 15:09:42 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b00704a9942708sm23171314qki.73.2023.01.18.15.09.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 18 Jan 2023 15:09:41 -0800 (PST)
+Subject: Re: [PATCH 10/16] spi: bcm63xx-hsspi: Make dummy cs workaround as an
+ option
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-11-william.zhang@broadcom.com>
+ <Y8BMiOvbjncXK4RO@sirena.org.uk>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <6a69a859-d942-3c86-24f1-c041190d20d3@broadcom.com>
+Date:   Wed, 18 Jan 2023 15:09:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|CY5PR10MB6011:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4a106e1-0dcb-4b7b-1889-08daf9a8c43f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qijfxW/7XAFxY03zLC+sLQXmLdVMP6R6TXyduLFlx5aLpc4xi82Fhl+QIE8BkdJSNSlTJD+joft9NIt/dReItLdpEPTYKR+devAhbDWs6bkNqYo0h76Kob8wkUl4t2p77Kxqi2A3tcxVMyRzvycXPmyZLhdzpuCTaX7LE2mv/UWiUBTOk245omzDcPsAwRKtnNuYzoqgd03hEuDc7wzZ8ZGfof7tgKPhRNoWSNC/6LG4Y0WMXqPS8QncoGn+JtbykFHtBg8PIjdhjRc2tXxE60bCgENGKRZJPsdSHyWCSU/GUpeXEukeUIBToEGeFU82IAvl4I4dre6zf54pS7CRfrikhZA1aufQTaBhUnMFRH8GuNk23ItIWskySBwOqPf1jXSwVeYBdk+0BhR0diS5QN0gIZub2uTEN1x/++NZgASghapvHRja2XqtjaTHXTDpg3A3/9FdYByJYg2jv9eU4fvbVc4bUexp35o8YoY4kxxiaYxHYLZPqsxa9Gv/R+Poanb9Bk3f6CQe7o6kpYBldl6kX9bnzLm9QHZ9kQCmxsffjLsbA2heD0X/b9rbz/MMK2S9esogrhtLDcbnfsDKJ3TPzY53mNJEL/3wkZfKhU/i5QlMclj5qIJA+c8tXKNEctLp/9jKYFqbbzZs1nI4RXp9mnDHQ3bTYjQGk0yvfrmip1SOdsnhwkpBVr06Uewmf2bhU4kQlmVFn6QMcXOX5422awfFyV6TAi7Sdq90v7s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199015)(83380400001)(5660300002)(38100700002)(66476007)(86362001)(8936002)(8676002)(7416002)(31696002)(66946007)(2906002)(66556008)(4326008)(41300700001)(6506007)(2616005)(6512007)(186003)(53546011)(26005)(316002)(6486002)(478600001)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVErdVptTlhkQmRhcHcrWldZb1l5dVl6UVNhWXZqbGxpZEZ0bTh6djFOK3dG?=
- =?utf-8?B?cXp2amtQVm96QTJCQXFvVEtGM0s3eThBOXlGd3JLSE8wRk5lUWFXdXpxbVRJ?=
- =?utf-8?B?Z0ZuNVMwZWowblN5cFF1WjErVWF6Q3BVVVk5QVpKQk9zUkg4YU9nRmtLUUU4?=
- =?utf-8?B?SzU1VW96VGNCMTNrbWNENlQ1QURLV3NFTU9HMW1RUTQxTTVFVnh4SkhOTU56?=
- =?utf-8?B?OVhueFB0K3k1K3RBb05vSVM3UVhIZURTODVMdnZhb2I1aVR1Qng4blNFbllL?=
- =?utf-8?B?YUJoNVp2WGd3eXF0TnNvWk9icmhRSnkyVW1BdW5kTTFWSmkzNGp4SU16VFBO?=
- =?utf-8?B?aXRHaUtaSHVWc0RYdkEvSkFjQ1hrY2xtVE5TYWpIQm80Q2kzZDQ2TkVyeWpJ?=
- =?utf-8?B?VXFpV0tKTm1Ecm9BVUF2WlQzdHRMejJqdUVZNTdYYWh3RE9GenVrSFNpbkp3?=
- =?utf-8?B?NXlQNVllUDYvSmE4eGx6RWt4d2FRTlM3eno4VHZlYWFoRW1zRDRrWWUvamtv?=
- =?utf-8?B?WkhNRWRoYmtrbFl4Q3luS1ZFeXZMcGNMb1BLdXBHOGJ2Y2x4c3BTbkVSdmNI?=
- =?utf-8?B?cmFFK09VQTFpa2JIYXAvNkc1TzJ0OHB0VXVLT3RFUCtab0s2MCs1S0VOeUFk?=
- =?utf-8?B?eURYT0Q3QmYraE1ZQWhyMUwyS2hJNHIxRG1DZVB0ZUpDdXgzTFVaRGV5VTVx?=
- =?utf-8?B?bUFJeGh0ZW1jVElHM0h2b3BjSzFRTEVNL2t2VE1wZ1laUUFhZk8zSjFob2dS?=
- =?utf-8?B?Y0xZQXZmdEhXVEFpc0R0cDVReHlGVDhxQjBTSC9ReldkajU0OCtpd3Q4dU94?=
- =?utf-8?B?enpzdmExZzBzNnZnZkxJblRDZm1JYmE1Q2pEanFSYmtocHJJb1FPTHJVTUdT?=
- =?utf-8?B?MjM0Q1RtaWdmTTFXd0U5ZlljV1NpTTJRM3o2RUFmNFNYTitJZVpUMElDV0dO?=
- =?utf-8?B?QlpBUk81ZUlrQWk1MDBob1NIYUlQVkdLQzZiNS9oTEVFQm5LdFF3OVRrTVIx?=
- =?utf-8?B?OUNGb0krUkVDOE9uakg0eXVFS0ovMWJCdjFGcENzQm1wZng4K3FuTklveXZm?=
- =?utf-8?B?OUk0aFhNTyttUklwLzgxNTAvRTRER3NTZDh3V1pIQzlhWTYxTHZPRCtaVmNS?=
- =?utf-8?B?WmMwUzhNTTRyMXcrTXo0a0d1WE1GRHBsbkwrSTlUSTFVT1ZPWkxLNnVRZ3g4?=
- =?utf-8?B?clpzQ2Z2anhPSHppbHpXSEVJQkxwK2pwRytKQldiT1YwYW9abDF1V2grMWd6?=
- =?utf-8?B?Q2ZvYVRjK3RCbms3T29XYjZCYU9TUDFvTlJ5UjVxTHZUUjJYcWZvVDVBZnYv?=
- =?utf-8?B?ZHBhOHloRy9pSjF5MHhBWmhRbjJtVmZHVm93L3NDT2FZZVlZWGx4ZS8wYnFP?=
- =?utf-8?B?N3E0WjRtTWNFMnVZTkhPK3ZRYkVhTUJMOUJPNU9XN09QMzZFV3FQQTZrWWZM?=
- =?utf-8?B?cnFMSHVlcHdrZVlpM1Q0YUNhZm9mWTcxcVlPN250UlV6Tk1EZEc4U0Yzdk91?=
- =?utf-8?B?eG5mSnhsZGFMNjA1UGoydVJxWWtlUm4wNmZCNUtPaExwVXo1RVI3eFUyZTdG?=
- =?utf-8?B?eHB0VWhOUjhvbEc2SmdTVFV5d011bHF5N3JaVnMyckZuQTcvNjVEUDlZS1l4?=
- =?utf-8?B?cHJEMERSZHJlc21qODBzUmhQVFpPcmEzUU5OT0hLQXlYR2F5eUJwNGl1enAv?=
- =?utf-8?B?VUxWYjR6QXZaNXV1MmIzUEVpQytXaTBUYjZaNURPVGdzeFo0OGx5QXkxcjlU?=
- =?utf-8?B?Rm1kVkw0WGIyR1NvRkx3QkpLeXFBdEcvQVlRUW5zb3F0ZXJkN3o1a0Irc1VY?=
- =?utf-8?B?Y0tUN2VkbDF4d2VqNnExa0thcFRwQTVpWklhZXNBMGV2OTZhQ3RWazdWZ1JB?=
- =?utf-8?B?QnFmdFkzMFlYTnVJWG5XK3VuUU11N0xTSkNCWjUzdEVBRjdjT29BRUZkQW9R?=
- =?utf-8?B?MzJGazVZQW16a3ZBdHdtN0pJV2NjeXBacmYxekdlaFp5TExycjJLUGZqWnY4?=
- =?utf-8?B?QmVVakFQVEpPa3pxV3R6Rjc3TXNWWnJlUXdZVExvNml3SFd6a1JBaitLRGJF?=
- =?utf-8?B?YVF1NUN6emdQQzQ0SjRwMHVETkc5QTY0NWFxZ2p3NnZxc08weXU5YzZpZjB4?=
- =?utf-8?B?RVV0UW9hK2NyV05ld0QrYjVOb1dJZmU5NlJLQzI2U1k2QldXVUI2YzZ4bzh4?=
- =?utf-8?B?VWc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: FuZV8fZi4s24Dh0IHu5gXDyZI2lDTrwEZ/BXgFxc9rBlIrabX8gxo7m1GAahZAuRyRavfBP5qTapN60htm05/cYY73QiePjRz5uqzdSpQh/ALDaSPeJz5mIe+aeSToZQNKl2YeVQRDiIOk+2DGXw+29UvMRHeREQRWPjFT686K9cBl1EqPbY7NN4YpT0Q+6j75/upHAwHj5B+EG9C2zBRjFgXe4Izi6DCyvvaLsQqNjdMxcul54Yo/lwudSTRLc5AZFtdFcd6HTQTaQbCReqH/qRzI2649v/Iy6oOwjApH1yIR/NS4EiE2NBU9ngH9j12R/4rT7Cb1Oud7SVG7zPMkbFSTyoBCRXxUfJf/H8d4niszwGXUxtI5zWh47b56EKNot3laDju4qF4RP7/uo4TJGyuqSNkEj5BMCB6b9rleYHFiSrUdYltpI1gnfcU2g8X/WrSUGAkByVGzSkZTWrx2THObgucqX/NfMi94YiLsbjdgVBw3JzX5ELLTsoEzb6hltaeAM9KLjzow/I4/xZWl+Q2wYt50JzZTljYZMBELpc4v0DLVSk5K4ZPg6e8VMJARX0ydBLcptQxDy+GO29thOaMNYr0KL97kHXJ5NobO7lOVv7gNFIPErRAqv2/0EtrO9tqUPkPJHFdjjCXN11e86GGiLzvOia69Dv77caOyiMO2YIGNa4+/OLmUPbrFbh5nO3vo8KzgKw5CTfwD4LF0f9z8R+Dr4Lgb2SwCRzDqMpXARDiQqaH+5Kz6gr7RHCML4tgRq7xD7kORqo7ZKR5UvNbcHh+CijbgTtXfMng2/jF3P0vri0P2ckezURbJYzOG1HMkyRMVGho7BLm5JGAflb0d5R/AN6Qdg+aqF2jHLCscVnRUfDUZe+gIMln4SYzeP82dVIb20jxuqlPlkW8A==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4a106e1-0dcb-4b7b-1889-08daf9a8c43f
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 23:07:27.0981
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1M6FIQqEeX/g37mV/XWVt3/sfmn7TCK9FSW64Qwp/ETA69p5WversMKnR5SeCbpCSEgGuCZnevVBo25eFKzt01QkbCY6X+90MnqawuwKj3I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6011
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301180192
-X-Proofpoint-GUID: XmV-Y00tipLSuLGhlxoNr0Xn56nOAbvZ
-X-Proofpoint-ORIG-GUID: XmV-Y00tipLSuLGhlxoNr0Xn56nOAbvZ
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <Y8BMiOvbjncXK4RO@sirena.org.uk>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000062063405f291e957"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,48 +80,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 21:01, Zhong Jinghua wrote:
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index 42db9c52208e..e7893835b99a 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -1503,6 +1503,13 @@ void scsi_remove_device(struct scsi_device *sdev)
->  }
->  EXPORT_SYMBOL(scsi_remove_device);
->  
-> +static int scsi_device_try_get(struct scsi_device *sdev)
-> +{
-> +	if (!kobject_get_unless_zero(&sdev->sdev_gendev.kobj))
-> +		return -ENXIO;
-> +	return 0;
-> +}
-> +
->  static void __scsi_remove_target(struct scsi_target *starget)
->  {
->  	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
-> @@ -1521,9 +1528,7 @@ static void __scsi_remove_target(struct scsi_target *starget)
->  		if (sdev->channel != starget->channel ||
->  		    sdev->id != starget->id)
->  			continue;
-> -		if (sdev->sdev_state == SDEV_DEL ||
-> -		    sdev->sdev_state == SDEV_CANCEL ||
-> -		    !get_device(&sdev->sdev_gendev))
-> +		if (scsi_device_try_get(sdev))
->  			continue;
->  		spin_unlock_irqrestore(shost->host_lock, flags);
->  		scsi_remove_device(sdev);
+--00000000000062063405f291e957
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-I think the patch will work ok. I don't think we want to mix
-in our own reference getting function that works on kobjects
-directly with the put_device use a little below that line above.
+Hi Mark,
 
-Since this is the second time (looks like Hannes was wanting one
-when he originally fixed this) we've wanted a get_unless_zero type
-function did you send Greg a get_device_unless_zero type of patch
-already and was that rejected?
+Sorry for the late reply. Please see my comments below.
 
-Why doesn't scsi_forget_host have the same issue with other drivers and
-similar scan/delete/host-removal type of tests? Is there something that
-flushes those async scans? I'm just wondering if we can do something
-similar for the target removal or if the host removal needs a similar
-fix.
+On 01/12/2023 10:08 AM, Mark Brown wrote:
+> On Fri, Jan 06, 2023 at 12:08:02PM -0800, William Zhang wrote:
+> 
+>> Due to the controller limitation to keep the chip select low during the
+>> bus idle time between the transfer, a dummy cs workaround was used when
+>> this driver was first upstreamed to the kernel.
+>>
+>> The workaround picks dummy_cs as !actual_cs and usually cs is 0 and
+>> dummy cs is 1. But this does not work out in all the situations as
+>> customer reported issues for their board design. Due to SPI block design
+>> constrain, the controller works in different mode internally depending
+>> on the clock. When clock is 30MHz or above, controller works in faster
+>> mode and cs 1 signal is used internally as feedback from the pad. So cs
+>> 1 pin must be brought out and configured as chip select function in
+>> pinmux. When clock is below 30MHz, only cs 0 pin is used. In summary
+>> when clock is below 30MHz, the workaround always works as only cs 0 is
+>> involved. For clock faster than 30MHz, it require cs1 pin used in the
+>> board design and configured as chip selection function.
+> 
+>> In a typical usage of SPI flash on cs 0 that normally runs at 100MHz,
+>> cs 1 pin must be used in the board design but this is not always the
+>> case for many customer boards.
+> 
+>> For voice daughtercard usage,  the SoC alway uses internal cs 7 for
+>> voice card SPI control. Then it requires cs 0 pin as the dummy cs but
+>> board with voice design may not use cs 0 pin at all.
+> 
+> So I think what this is trying to say is that operation over 30MHz with
+> the existing workaround requires that the board be designed to bring out
+> the chip select used as the dummy as a physical chip select (or
+> potentially it has to be the actual chip select for the device?) 
+Yes as the physical chip select and its pinmux must set as spi slave 
+chip select function.  If that pin is configured as GPIO function, this 
+workaround won't work. For the old SoCs, this dummy cs 1 pin are default 
+to cs pinmux function so the issue was not revealed. For all new SoC, 
+the cs 1 pin is default to GPIO function so it stops working.
+
+> but that likely won't have been done?
+Correct. This was never a requirement from Broadcom for any board design 
+because the Broadcom in-house SPI bus driver in its initial software 
+release was essentially based on prepend mode so no such hardware design 
+requirement and it does not make sense to reserve the dummy cs1 pin 
+while customer only have one spi device at cs0. So no customer board 
+would do that unless they have two devices. We decided to switch to the 
+upstream  driver with prepend mode addition as default in our late 
+software release couple years ago. It has been running pretty smooth in 
+the field.
+
+> And potentially this only works if CS
+> 1 is the one brought out?  I'm unclear if CS 1 is just the most common
+> dummy chip select or if there's something else going on here.
+> 
+Yes with pinmux set correctly. It can be other cs but the code set 
+dummy_cs = !actual_cs. So it can be either 1 or 0. In most common case, 
+board only have one spi device on cs 0. So dummy is mostly cs1.
+
+>> The controller actually has a prepend feature that can combine multiple
+>> SPI transfers in a SPI message into one single transfer when the
+>> transfers meet certain requirements. So there is no need for keeping cs
+>> low when the message only has one transfer. Most of the SPI devices
+>> including SPI NOR, SPI NAND flash, Broadcom voice card and etc can use
+>> this feature without the dummy cs workaround.
+> 
+>> This patch makes the dummy cs workaround as an option based on the
+>> dts flag brcm,use-cs-workaround. By default dummy cs workaround is
+>> hard coded to enable. We will use the prepend feature and disable this
+>> workaround as default in the next patch of this series unless this flag
+>> is set in dts.
+> 
+> ...and based on your other comments I gather it's difficult to disable
+> the workaround per message?  I'm also guessing that the overhead from
+> always doing full duplex transfers is noticable so it's better to try
+> the workaround.
+> 
+The main issue the max_message/transfer_size setup during the driver 
+probe function. prepend mode has a max size of 512 bytes while dummy cs 
+does not. I don't think it is safe to update these function ptr at 
+runtime and it will be too late for the driver to update.
+
+But I think we can always set the max size as in prepend mode. It does 
+looses some performance for dummy cs (about 15% slower on throughput 
+when test on 100MHz SPI NAND) because the size limit. The prepend buffer 
+copy and other handling is insignificant. But since dummy cs does not 
+work on 100MHz in general, it is still much better throughput when doing 
+prepend mode at 100Mhz with size limit comparing dummy cs at 30MHz.
+
+> I wonder if we can't do this by selecting the workaround based on the
+> configured device speed.  If the device is configured to use more than
+> 30MHz then disable the workaround, if it's set to lower then use it.  In
+> practice most devices don't change their speed after setup, and the
+> driver could check for and handle that case I guess (eg, limit the speed
+> configured if the workaround has been activated or rewrite the message
+> to a single transfer if neded).  That would be less error prone for
+> users, there wouldn't be any possibility of them setting this flag
+> incorrectly.
+> 
+I agree.  We can get rid of the cs workaround dts flag and make run time 
+decision based on the device speed. And for the cut off frequency,  we 
+want to make it bit more conservative.  According to our VSLI designer, 
+the cut off freq depends on the chip floor plan - the distance from the 
+SPI peripheral block to the SPI pins. So for some chips, the freq is 
+25Mhz, for some is 30Mhz.  So we think 25MHz is good number to use.
+
+As our SDK release uses prepend mode as default and it has been field 
+tested with different and multiple SPI devices simultaneously in our 
+large customer bases, I don't feel like to change the default mode to 
+dummy cs mode and I am more comfortable to stick with prepend mode.
+
+So my preferred choice is to use prepend mode as default. In the 
+unlikely event that SPI transfers can not be merged for prepend mode, 
+we switch to dummy cs workaround mode and force the transfer to run at 
+25MHz. This make sure everything works under the hood automatically and 
+no dts setting is required. I can add sysfs knobs to override this 
+behavior and force to use either mode just in case. Does this sounds 
+good to you?
+
+
+
+--00000000000062063405f291e957
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPYlUOUjcbiTZDltTF/3gcS/Yv6l
+gdPBTMX9G+kXon+BMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExODIzMDk0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAHnpTfDyQR5WIq+UPupDhYn9cwIXsKDX05jucmajXRK+Ck
+juVhNb6A7cXN3ZZ6gXM2zIo+TgFi2Vkyb4A3eVZs4qSXOp+Bq2lRhELVdVy0bUbLOMkkDgvHiHRj
+RYvFkzh1fIUPxr5AdIXgAbBJlFlaZfX8V8MOQt9SGz6/8BnFlGATd6wIHxe3jtBm338How0pRvZi
+cApbOjp0oEa+jQSM2uCm+UzIYFrryWzHeJ81UbjFkpRnyOrowl+21E6ELv/VIZvficHgpqPVX4Yp
+LC2kYQuZUXv5cOORIUiJgbc+EhSmsJ7piJJhd7GLLod9R5BdjU48Mz/ZqcHtJk5+iNJG
+--00000000000062063405f291e957--
