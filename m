@@ -2,175 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16B16724CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC98B6724D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjARRYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S229658AbjARR0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjARRYV (ORCPT
+        with ESMTP id S229989AbjARR0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:24:21 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B50117CEE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:24:20 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v23so32669888plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:24:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/85bp1vP3MXzWpfyCclueqY4UFzXVuo4Z5G90xwNDEM=;
-        b=oeQXKrGvKYFACksCj40O6ZOV+KsKYJTJcM15HKNJi2nGzi8DOXHzkQNmZAavcl1Zdr
-         Nl9RNhA4kekUTTnQ7BntkiLaM946I2WRsNS6OeMgQBkpr6CqZ3Jo7njS8trzAz+OobJO
-         R89kFIJOdngL4Bw3xngUPHhUQ/xsLCzJt8asUpWzNzuLYT8lwUUicK4InXO1Pu2DpzWm
-         nzJALoexrT2nz568WkEl6I0OA0uLlH8yHJHNG7zpqJCin2ovij3MJQwQaUl65nDHEp2q
-         6T9UIvIPu7+oe8iQNx5H3QXxtSSxMf+BjJzELJ8O7aNBBD8x+TFyUXpBhke8Pg5DQ2hI
-         k0Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/85bp1vP3MXzWpfyCclueqY4UFzXVuo4Z5G90xwNDEM=;
-        b=itQk8v9naxU/cTREgiBFs8C31aW4uGYtghras0/X95/bFIZA7ynqMrefVZIQt7HAIk
-         uyi4nwDRTvhdf7ptNtAPGhRRRseh1q76mmzG5b1oQ3Z4sEsa5p8Agb3UdDLyKjBXWwaj
-         xAf43naOj++zoqr+hemaJF0g5cSnpKxvSs0JOArypAUoMoOPrxbTqvlqI/O1LtyvAUFk
-         A1d8LA0Bqt/UsjfP0ZVWoCmsv+baCSvDWju1cOgTFrNfepLZvyomXUKsRyeY+6N+uC8y
-         Cc3jPFb1jcLICzRlpgZhas71hjw4068wuxMAkLOrnko6gyyHjpdY39GCmPy6hL5ZKHgj
-         p+9w==
-X-Gm-Message-State: AFqh2kpTfGXsttB81hiRHNQZVwg58vQo1+qCC7ZP4kA+N3koED2wl2Rx
-        1RrXsdh/UhrKlUGQlorM8ZYWRjMyBtZJTwbq
-X-Google-Smtp-Source: AMrXdXtiocEKCjs8eTcEsQA32wuVtG465QX3tzHebeE/Is8RJXfNhsdVvaN/MEfsH7q73N8hC/wbxQ==
-X-Received: by 2002:a05:6a21:3294:b0:a4:414c:84c5 with SMTP id yt20-20020a056a21329400b000a4414c84c5mr10069900pzb.12.1674062659386;
-        Wed, 18 Jan 2023 09:24:19 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:4866:b240:c533:54ae])
-        by smtp.gmail.com with ESMTPSA id z7-20020a63e547000000b00476d1385265sm19156114pgj.25.2023.01.18.09.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:24:18 -0800 (PST)
-Date:   Wed, 18 Jan 2023 10:24:16 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.J. Wang" <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH v3] remoteproc: imx_dsp_rproc: add module parameter to
- ignore ready flag from remote processor
-Message-ID: <20230118172416.GB3394216@p14s>
-References: <20230117110357.15091-1-iuliana.prodan@oss.nxp.com>
+        Wed, 18 Jan 2023 12:26:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 411E1125AB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:26:08 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99DB92B;
+        Wed, 18 Jan 2023 09:26:49 -0800 (PST)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A68C43F445;
+        Wed, 18 Jan 2023 09:26:06 -0800 (PST)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     will@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v3] iommu: Optimise PCI SAC address trick
+Date:   Wed, 18 Jan 2023 17:26:00 +0000
+Message-Id: <e9abc601b00e26fd15a583fcd55f2a8227903077.1674061620.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117110357.15091-1-iuliana.prodan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iuliana,
+Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
+PCI SAC address trick") and its subsequent revert, this mechanism no
+longer serves its original purpose, but now only works around broken
+hardware/drivers in a way that is unfortunately too impactful to remove.
 
-On Tue, Jan 17, 2023 at 01:03:57PM +0200, Iuliana Prodan (OSS) wrote:
-> From: Iuliana Prodan <iuliana.prodan@nxp.com>
-> 
-> There are cases when we want to test a simple "hello world"
-> application on the DSP and we don't have IPC between the cores.
-> Therefore, skip the wait for remote processor to start.
-> 
-> Added "ignore_dsp_ready" flag while inserting the module to ignore
-> remote processor reply after start.
-> By default, this is off - do not ignore reply from rproc.
-> 
-> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-> 
-> ---
-> Changes since v2
-> - s/ignoreready/ignore_dsp_ready
-> 
-> Changes since v1
-> - change BIT(31) to BIT(1) for REMOTE_SKIP_WAIT
-> 
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 95da1cbefacf..22e2ef068c67 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -26,9 +26,20 @@
->  #include "remoteproc_elf_helpers.h"
->  #include "remoteproc_internal.h"
->  
-> +#define IMX_DSP_IGNORE_REMOTE_READY		0
-> +
-> +/*
-> + * Module parameters
-> + */
-> +static unsigned int imx_dsp_rproc_ignore_ready = IMX_DSP_IGNORE_REMOTE_READY;
+This does not, however prevent us from solving the performance impact
+which the workaround imposes on large-scale systems that don't need it.
+That is felt once the 32-bit IOVA space fills up and we keep
+unsuccessfully trying to allocate from it. However, if we get to that
+point then in fact it's already the endgame. The nature of the allocator
+is such that the first IOVA we give to a device after the 32-bit space
+runs out will be the highest possible address for that device, ever.
+If that works, then great, we can be pretty sure it's safe to optimise
+for speed by always allocating from the full range. And if it doesn't,
+then the worst has already happened and any brokenness is now showing,
+so there's no point continuing to try to hide it.
 
-Static variables are initialised to '0' and as such this is not needed.
+To that end, implement a flag to refine this into a per-device policy
+that can automatically get itself out of the way if and when it stops
+being useful.
 
-> +module_param_named(ignore_dsp_ready, imx_dsp_rproc_ignore_ready, int, 0644);
-> +MODULE_PARM_DESC(ignore_dsp_ready,
-> +		 "Ignore remote proc reply after start, default is 0 (off).");
-> +
->  #define DSP_RPROC_CLK_MAX			5
->  
->  #define REMOTE_IS_READY				BIT(0)
-> +#define REMOTE_SKIP_WAIT			BIT(1)
->  #define REMOTE_READY_WAIT_MAX_RETRIES		500
->  
->  /* att flags */
-> @@ -285,6 +296,9 @@ static int imx_dsp_rproc_ready(struct rproc *rproc)
->  	if (!priv->rxdb_ch)
->  		return 0;
->  
-> +	if (priv->flags & REMOTE_SKIP_WAIT)
-> +		return 0;
-> +
+CC: John Garry <john.garry@huawei.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
 
-This looks very hackish to me...
+v3: Expand the flag name, add a print with inline commentary for good
+    measure, and refactor the code flow even more (too many ifs and
+    indents...) such that I didn't presume to carry forward John's R-b.
 
-Here priv->rxdb_ch is valid and as such the DB mailbox has been setup, which
-contradicts the commit log where it is stated that "we don't have IPC between
-cores".  Moreover, the commit log mentions to "skip the wait for remote
-processor to start".  How can the remote processor executed an sample
-application if it is not ready?
+ drivers/iommu/dma-iommu.c | 26 ++++++++++++++++++++------
+ drivers/iommu/dma-iommu.h |  8 ++++++++
+ drivers/iommu/iommu.c     |  3 +++
+ include/linux/iommu.h     |  2 ++
+ 4 files changed, 33 insertions(+), 6 deletions(-)
 
-Lastly, is there even a need to call imx_dsp_rproc_mbox_init() if an IPC is not
-needed?
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index f798c44e0903..1dccee3628cf 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -627,7 +627,7 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+ {
+ 	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+ 	struct iova_domain *iovad = &cookie->iovad;
+-	unsigned long shift, iova_len, iova = 0;
++	unsigned long shift, iova_len, iova;
+ 
+ 	if (cookie->type == IOMMU_DMA_MSI_COOKIE) {
+ 		cookie->msi_iova += size;
+@@ -642,15 +642,29 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+ 	if (domain->geometry.force_aperture)
+ 		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
+ 
+-	/* Try to get PCI devices a SAC address */
+-	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
++	/*
++	 * Try to use all the 32-bit PCI addresses first. The original SAC vs.
++	 * DAC reasoning loses relevance with PCIe, but enough hardware and
++	 * firmware bugs are still lurking out there that it's safest not to
++	 * venture into the 64-bit space until necessary.
++	 *
++	 * If your device goes wrong after seeing the notice then likely either
++	 * its driver is not setting DMA masks accurately, the hardware has
++	 * some inherent bug in handling >32-bit addresses, or not all the
++	 * expected address bits are wired up between the device and the IOMMU.
++	 */
++	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_32bit_workaround) {
+ 		iova = alloc_iova_fast(iovad, iova_len,
+ 				       DMA_BIT_MASK(32) >> shift, false);
++		if (iova)
++			goto done;
+ 
+-	if (!iova)
+-		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
+-				       true);
++		dev->iommu->pci_32bit_workaround = false;
++		dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
++	}
+ 
++	iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift, true);
++done:
+ 	return (dma_addr_t)iova << shift;
+ }
+ 
+diff --git a/drivers/iommu/dma-iommu.h b/drivers/iommu/dma-iommu.h
+index 942790009292..c829f1f82a99 100644
+--- a/drivers/iommu/dma-iommu.h
++++ b/drivers/iommu/dma-iommu.h
+@@ -17,6 +17,10 @@ int iommu_dma_init_fq(struct iommu_domain *domain);
+ void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list);
+ 
+ extern bool iommu_dma_forcedac;
++static inline void iommu_dma_set_pci_32bit_workaround(struct device *dev)
++{
++	dev->iommu->pci_32bit_workaround = !iommu_dma_forcedac;
++}
+ 
+ #else /* CONFIG_IOMMU_DMA */
+ 
+@@ -38,5 +42,9 @@ static inline void iommu_dma_get_resv_regions(struct device *dev, struct list_he
+ {
+ }
+ 
++static inline void iommu_dma_set_pci_32bit_workaround(struct device *dev)
++{
++}
++
+ #endif	/* CONFIG_IOMMU_DMA */
+ #endif	/* __DMA_IOMMU_H */
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index de91dd88705b..b189ed345057 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -353,6 +353,9 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+ 	mutex_unlock(&iommu_probe_device_lock);
+ 	iommu_device_link(iommu_dev, dev);
+ 
++	if (dev_is_pci(dev))
++		iommu_dma_set_pci_32bit_workaround(dev);
++
+ 	return 0;
+ 
+ out_release:
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 46e1347bfa22..d37bf28faf82 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -401,6 +401,7 @@ struct iommu_fault_param {
+  * @iommu_dev:	 IOMMU device this device is linked to
+  * @priv:	 IOMMU Driver private data
+  * @max_pasids:  number of PASIDs this device can consume
++ * @pci_32bit_workaround: Limit DMA allocations to 32-bit IOVAs
+  *
+  * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+  *	struct iommu_group	*iommu_group;
+@@ -413,6 +414,7 @@ struct dev_iommu {
+ 	struct iommu_device		*iommu_dev;
+ 	void				*priv;
+ 	u32				max_pasids;
++	bool				pci_32bit_workaround;
+ };
+ 
+ int iommu_device_register(struct iommu_device *iommu,
+-- 
+2.36.1.dirty
 
-I'm fine with the module parameter but would much rather see a solution that
-does not configure any kind of IPC related mechanic when it is not needed.
-
-Thanks,
-Mathieu
-
->  	for (i = 0; i < REMOTE_READY_WAIT_MAX_RETRIES; i++) {
->  		if (priv->flags & REMOTE_IS_READY)
->  			return 0;
-> @@ -903,6 +917,9 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
->  	priv->rproc = rproc;
->  	priv->dsp_dcfg = dsp_dcfg;
->  
-> +	if (imx_dsp_rproc_ignore_ready)
-> +		priv->flags |= REMOTE_SKIP_WAIT;
-> +
->  	dev_set_drvdata(dev, rproc);
->  
->  	INIT_WORK(&priv->rproc_work, imx_dsp_rproc_vq_work);
-> -- 
-> 2.17.1
-> 
