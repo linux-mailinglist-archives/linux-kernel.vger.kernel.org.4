@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973D76719B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D27D6719C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjARKxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        id S230121AbjARK4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjARKvA (ORCPT
+        with ESMTP id S229993AbjARKxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:51:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F289A45F40;
-        Wed, 18 Jan 2023 02:00:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674036041; x=1705572041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2kzgrBUfMBAY/+H5vDRwbImFOagJJve1sIaVm+YscYE=;
-  b=UefuBp1NLFFuMnkqf4VPFFpP4d3UJcidkltE1mvqxinv8jl4A6c8nClB
-   T/QhABpFTbDLwlDGaQZ2X5X1D0Q0PkSWhbybz5Hcq93bDo4sJBSBRTId0
-   ESZnsivQgU+vo0zyuHyNQJEkzWSuR9qgH7STZv8Gxc6LYcihYzMApuNFO
-   RvTVcQy0+ZZ/PZ/VWZHr0zcy4V46jEMi1RVcxJbre1vMOeImwM66cgvnH
-   8Yv9RwUNjAuBaZ4v3KYlUAYkvN0DYVi/BPOKRo042Vcw0qPeORPIm7VbV
-   0ksrLCqEU9J1gSgCGiHeTnmV2jzH29Pb93HoTI+pwYsKO2lrlQgBiC3+Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="308508848"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="308508848"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 02:00:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="783612749"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="783612749"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2023 02:00:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pI5FF-00B6yP-0G;
-        Wed, 18 Jan 2023 12:00:37 +0200
-Date:   Wed, 18 Jan 2023 12:00:36 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] HID: i2c-hid: acpi: Drop unneded NULL check of
- adev
-Message-ID: <Y8fDRJ9tL8BzUKJD@smile.fi.intel.com>
-References: <20230116154621.16135-1-andriy.shevchenko@linux.intel.com>
- <nycvar.YFH.7.76.2301181006170.1734@cbobk.fhfr.pm>
+        Wed, 18 Jan 2023 05:53:01 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498CF8100B;
+        Wed, 18 Jan 2023 02:01:46 -0800 (PST)
+Received: from mwalle01.sab.local (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id A0F67125C;
+        Wed, 18 Jan 2023 11:01:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1674036104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mJlXAa/qkylSd69OPqPPuscGxs/BZYHJRgJ6yHTXKPg=;
+        b=VaR2ztJS25J2+GUfFLOhG2pduVTooXBz0fDVkqPYjDtmtBuK8u3CKFU+dCFUgrwrNcpZSS
+        xqxvsR7Bk6WX3t/v1YyPzUaJSNzLOehrazKHtwxm7ZTv7aDkl0d7N4xUWWFqUHqWRHM2oS
+        xMI1F4W0V9wL9zlAu21aClmH7pWuPublyh4GOjk2/y6nhEVHh87g7j83e6KZQVieB98SmY
+        SkKV4IIXSBo5J5r/tD0/deEP7t51oHQLSPm5AF3F5jiKOhyJ/xqaAEywzt0PNyp6kWDAOt
+        oc4njm15cQ4lf/w51vdgNUpIjVDItdFirWL0zQGTyS+rjWAhT+PJY6pew2RICQ==
+From:   Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next v2 0/6] net: phy: Remove probe_capabilities
+Date:   Wed, 18 Jan 2023 11:01:35 +0100
+Message-Id: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <nycvar.YFH.7.76.2301181006170.1734@cbobk.fhfr.pm>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH/Dx2MC/5WOQQ6CMBBFr0Jm7ZiWIoor72FYTMsgTaCQtkEM4
+ e4WEg/gYhY/L//NXyGwtxzgnq3gebbBji6F/JSB6ci9GG2TMuQiV0LKEh3HdEtEz8M4M05+1IyG
+ JtK2tzG5UKimELJQVWtKSCJNgVF7cqbbVQOFyH4Hk+fWLsf3J/zEUCfS2RBH/zlmzfLg/yyYJQq
+ 8EOXVVd0oFR9v6ns+GwP1tm1f2oxXifYAAAA=
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org, Andrew Lunn <andrew@lunn.ch>,
+        Michael Walle <michael@walle.cc>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,22 +78,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:06:32AM +0100, Jiri Kosina wrote:
-> On Mon, 16 Jan 2023, Andy Shevchenko wrote:
-> 
-> > The driver is enumerated on ACPI platforms, so adev is valid.
-> > Since there is no valid I²C ID table provided, there is no
-> > possibility to bind a device to this driver via user space.
-> > Hence, drop unneeded NULL check of adev.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Applied both to hid.git#for-6.3/i2c-hid. Thanks,
+With all the drivers which used .probe_capabilities converted to the
+new c45 MDIO access methods, we can now decide based upon these whether
+a bus driver supports c45 and we can get rid of the not widely used
+probe_capabilites.
 
-Thank you and HNY!
+Unfortunately, due to a now broader support of c45 scans, this will
+trigger a bug on some boards with a (c22-only) Micrel PHY. These PHYs
+don't ignore c45 accesses correctly, thinking they are addressed
+themselves and distrupt the MDIO access. To avoid this, a blacklist
+for c45 scans is introduced.
 
+To: Heiner Kallweit <hkallweit1@gmail.com>
+To: Russell King <linux@armlinux.org.uk>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Felix Fietkau <nbd@nbd.name>
+To: John Crispin <john@phrozen.org>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Mark Lee <Mark-MC.Lee@mediatek.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Bryan Whitehead <bryan.whitehead@microchip.com>
+To: UNGLinuxDriver@microchip.com
+To: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+To: Jose Abreu <joabreu@synopsys.com>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+To: Joel Stanley <joel@jms.id.au>
+To: Andrew Jeffery <andrew@aj.id.au>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-aspeed@lists.ozlabs.org
+Cc: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Michael Walle <michael@walle.cc>
+
+---
+- Link to v1: https://lore.kernel.org/r/20230116-net-next-remove-probe-capabilities-v1-0-5aa29738a023@walle.cc
+
+---
+Andrew Lunn (6):
+      net: mdio: Move mdiobus_scan() within file
+      net: mdio: Rework scanning of bus ready for quirks
+      net: mdio: Add workaround for Micrel PHYs which are not C45 compatible
+      net: mdio: scan bus based on bus capabilities for C22 and C45
+      net: phy: Decide on C45 capabilities based on presence of method
+      net: phy: Remove probe_capabilities
+
+ drivers/net/ethernet/adi/adin1110.c               |   1 -
+ drivers/net/ethernet/freescale/xgmac_mdio.c       |   1 -
+ drivers/net/ethernet/marvell/pxa168_eth.c         |   2 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c       |   1 -
+ drivers/net/ethernet/microchip/lan743x_main.c     |   2 -
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c |   3 -
+ drivers/net/mdio/mdio-aspeed.c                    |   1 -
+ drivers/net/phy/mdio_bus.c                        | 197 +++++++++++++++-------
+ drivers/net/phy/phy_device.c                      |   2 +-
+ include/linux/micrel_phy.h                        |   2 +
+ include/linux/phy.h                               |  10 +-
+ 11 files changed, 140 insertions(+), 82 deletions(-)
+---
+base-commit: c12e2e5b76b2e739ccdf196bee960412b45d5f85
+change-id: 20230116-net-next-remove-probe-capabilities-03d401439fc6
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Michael Walle <michael@walle.cc>
