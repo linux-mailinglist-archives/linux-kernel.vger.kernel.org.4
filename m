@@ -2,174 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B22D6728BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3036728C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjARTto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
+        id S229518AbjARTwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjARTtm (ORCPT
+        with ESMTP id S229459AbjARTwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:49:42 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2078.outbound.protection.outlook.com [40.107.102.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBF9589B6;
-        Wed, 18 Jan 2023 11:49:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YnvtqwsugXT1xK3v2lrpNkwY6w5DWx+xnOz5KxCo294VI8R7SDRWycrTknYJzLus+bbq3T5kVP1nQHgPfLvhxGMP9DWTqBTY3bwr5ipAdHgqre9qVUc4qS39p5kaaUX0OUf+OiiMkwWaCNwh9TLHuMYRE5eucw698pYtp+pZ23VCspPitbEa5erYbcEaEJwV6QwihR6uDwMZIpBOjGUCsozjLRpMwDXLdrBBgeFYTtVr8p7p6TLynjBRjuBaeCkRDYqA/f/OqtIC7sNPZ4RclmebutJ/yHvfoOcrSZ7fWXhiUFG2JR4j+fqxfhvHeOA6IgdvdCC/E9u9xgHyRHn93g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3GR7kaDUtecz2CnVtQpUfau8LwlRk9NTmbTmidaEDrQ=;
- b=B2uP1UDeAYx+XTcNFgdxoRCitfww7NjsmiFKBQKiucTlsUbnrWEk2r3oV/ICqFmRO32Xguh7ua+6XjS9jArZ6aGQvmZiuV+wr3UlxXF+d4LWkFNpw07/S7xJ74JutxMraTqIsPL0wORKAUFN1YVZcjiDBhX23AAYBqe7eIFiYCb7aFRbdPy485gb00Kiyg4oKWPuD2onIQO3Im+e6Jz4HuBaHbN8k2Y89RzdgtyvIEYXhrnCaQWQzdCdiCE1rOMAV2gOP8UViVOvz5eun1cjg/dIzOOj8RFLjmqZf0m/HdgFatX28Z3t70UzScVjVZc8lTdu8QFo7ELyjeSp9Q/VdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3GR7kaDUtecz2CnVtQpUfau8LwlRk9NTmbTmidaEDrQ=;
- b=VX6cEAE4ugvkg0UKKR1H04lJQdI5AW7oWOKlBP8ziIAjcX5a6bemep+eJXmSHaZNpMqilDp/TjHX1/9Uer4KcMM9slDF/SAloSNLAvdKXVZvx1plK/s6j5e9svXd64OLWciOV6UfKsuLnX7yjbD/iL0uXmazo6siNO3v69m3ow0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
- by SJ0PR17MB5072.namprd17.prod.outlook.com (2603:10b6:a03:3ac::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Wed, 18 Jan
- 2023 19:49:38 +0000
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 19:49:38 +0000
-Date:   Wed, 18 Jan 2023 14:49:31 -0500
-From:   Gregory Price <gregory.price@memverge.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
-        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User
- Dispatch Suspension
-Message-ID: <Y8hNS4aCkkOLv1M/@memverge.com>
-References: <20230109153348.5625-1-gregory.price@memverge.com>
- <20230109153348.5625-2-gregory.price@memverge.com>
- <Y8gpZ+T/re7mEDjB@hirez.programming.kicks-ass.net>
- <CAD3UvdSpOMAOUm1CYJ5vOyEsiVZCQdiWaTmXjq1vWVFq1DhQ0w@mail.gmail.com>
+        Wed, 18 Jan 2023 14:52:16 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 54F7A58983
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:52:15 -0800 (PST)
+Received: (qmail 221383 invoked by uid 1000); 18 Jan 2023 14:52:14 -0500
+Date:   Wed, 18 Jan 2023 14:52:14 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
+References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD3UvdSpOMAOUm1CYJ5vOyEsiVZCQdiWaTmXjq1vWVFq1DhQ0w@mail.gmail.com>
-X-ClientProxiedBy: BY5PR17CA0016.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::29) To BN6PR17MB3121.namprd17.prod.outlook.com
- (2603:10b6:405:7c::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|SJ0PR17MB5072:EE_
-X-MS-Office365-Filtering-Correlation-Id: e04d6dea-a9b6-485d-ced0-08daf98d21b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qEPWeLocyCSHsak4UsJt3577E2Tx071P2d94CQ5HTeKcvosGJUtffD7ZaWZ7KYXE7KjGc2dNqjmP2BokrxY7qo9gxqeC4lIkvpXEZ8NBLiQ1CbBq2CX+qcZyPT0iribN/1Pbnt9XSGMYo7O3mArzYuQk8RA0TrqPwG6R7U5tJ/JEPPUyzG7qU9XVKDWTIDdKxqc9//++kh3FynzLxHbaM280tO5py8Gx0QtM4d5S9Fcr07GmfwbxmWy1wgVCYwNFxGuDt+Or5P6RIfhCIis7MMkLb2PhLgSRuLlEkMrtQ1hql1YStXyIeqI58M/hf1UrACghkAnIdcIcF9lEwdcn/t+I/gMg3wY6ym47hmiX/L5JfF9Dbu/LAzOTy6cEkikFU86Odk7QaI22gcoD/KBhc/Pqy0M1AEkFFTKtKDDG9Pa+/XDsABh1nVDzgzga0bY6K3cA9K2+6bacGhLZSYw7EemGLB+VMCt40pBzrV4VEhJEJ+eyNU+Enest6A4xp5KkhKdHd+Knb/lcn3KxHI8AN7FkuzSDrmdmUcyRl1AipPVfTwPPZ+amKc4RStTJ06D1ukg7ZHLZeexxBnN1Z3AYBGpASC92NgRy34I1a+6RAJh9JCS4/c91NtM0XG2nuD0EIi0JYdPVDOO+e5QiNXia0w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(346002)(39840400004)(376002)(366004)(451199015)(2616005)(38100700002)(107886003)(6666004)(26005)(186003)(6512007)(478600001)(86362001)(6486002)(36756003)(83380400001)(41300700001)(5660300002)(53546011)(7416002)(6506007)(8936002)(6916009)(66476007)(8676002)(4326008)(66946007)(66556008)(44832011)(2906002)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fqd3G1W7E41plgrC+CMghmTANMYzs3kWsUwvYis5lBhiEcREEVDt/2yprzuc?=
- =?us-ascii?Q?BOn9PpDPqRVCz52Kuv/JvKq0LjvHLM6YTtwbqNrexYmBwi4RJlT2pi9vLoj9?=
- =?us-ascii?Q?LkljVGdLifnBpeYLT0LhN39BAYHGDuzci/dw55sOeSZcWZh+PyumyRgzwUzh?=
- =?us-ascii?Q?5UDMRATmEXUdKf4FUiBqG3ml8kYO85Qu0aM7fw2BXSbzVANTN05qrACe+8mx?=
- =?us-ascii?Q?K2QKGFV1AuuOaHcJPEdQzf4h5r5F49q5U35bO9EqaqG+YNKSMVqf+xAbLs7j?=
- =?us-ascii?Q?bCmpcC3D9p1S44zAjVehydVOpOonUJ7mdQKwzZ1hAvV1+jlWUenJLdAwUzQy?=
- =?us-ascii?Q?3GjhgDewVbfuto6L5HHcz+QOm2ZOdM8yl70X2vzguS7WZ5vAF2/xo5ZlSzIi?=
- =?us-ascii?Q?ipgRzKARcgNP9PSfm/xnG0Alik6kZJVWMxogJ6wPaPeWp3Jxm13BbX7YnnqU?=
- =?us-ascii?Q?RvzKF4lLUlnTlWqBe90WcBiOwX+TT69A4opokymYTwPjfGdE3MbTYJPu39PS?=
- =?us-ascii?Q?/Do93mld4CXnFPNd0Ck5+lyh7W65W0mE93zfhBm00T+drdnEZgH6P3Ckp9Es?=
- =?us-ascii?Q?DbsIxYOhYTUSDWvUiKdxZcGFxg4BmcceRF2ZlTCaRCZ4XEFDu3tmsSJzn4Ry?=
- =?us-ascii?Q?VrYcD9hyljIB6QO/IcmxHX4Lf9YPA6I/whN/Q1Lm2iug/l4TBQvkizjtUT7b?=
- =?us-ascii?Q?aISYVOlbFUmKcdYCoHPBbbsowFGQXnYCxXRd8+uO9nCV8q6YojmYphS+CuA2?=
- =?us-ascii?Q?NCQpzCerz+EE7q2T98TA3TPFwqmqE9ao05sqV42sS+9KTCco/9jBEC/SDO7y?=
- =?us-ascii?Q?B59djeUA5yQEwh2iH+YDYOrtlgHKWhwOd5ZqDfNeq8HLMLyWZrUuku9UNkzz?=
- =?us-ascii?Q?JADFkK48qtaVrXi1EaQAYW4P8ygFGGQY23CqVthxcNQYdD4lghlqomuXNrTr?=
- =?us-ascii?Q?g+MrpfzBuHcFtnRqeMFLjTc4gQg72E5rM0p5a7hcFAxzvrwg5jCE4OPuPI8A?=
- =?us-ascii?Q?Omz2pxDKniCEGuQtb4BUdJCQ/IAGzDPpahOVpK8ZG2KFUfQTlrAQyoYBx+0r?=
- =?us-ascii?Q?JoNKHUG7v4c+Lz3DlF2kHnI6Io7uKSURhUkdVdvUOCYxyDDWZiPyev3svxrp?=
- =?us-ascii?Q?75IzHegukFhh1VDKVcFhM7uPLfTRjwkUkdqXDKOALsy1gNimIDjAFL+8F5R1?=
- =?us-ascii?Q?530d96K5TiX5Puy8GKBcSLXScVUDqMwuPIxDwpY5uPFBqdlUyxYku7Ave2T5?=
- =?us-ascii?Q?tJb/Rbfnb2W7BNsXQsBVUAp0RAqMBbBVmicTwA2ZK5Vb+VcmYGIw3gi5d1nW?=
- =?us-ascii?Q?IklMqSylw7DRGx4Sjx/ZqUDRNSvO4cnDXOXL/7Na1Mq6Di0LCm8f/uLC2E4n?=
- =?us-ascii?Q?scQOmp9NhYQAtKDw9GiLybtk5BmOu6JM2OTOnpEWdGXKsWkNUBHUk1j12EJO?=
- =?us-ascii?Q?gm/mIdorTT/TXx0+1VAzjLIV+MSlQLtAVxmBHDlwc71IsuVMGO9Miz01jIEZ?=
- =?us-ascii?Q?YaQVQCzNx/YBN+scXNotaHNzjMbsucLF7poXwxkSbV2CQ4ZG2Dh2EibD0Q1o?=
- =?us-ascii?Q?blB+SZLTAEDHhG5s5kwMz7pKcYewcBiZ17afx1RLl/++b1zSMVPxKthS57aS?=
- =?us-ascii?Q?uQ=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e04d6dea-a9b6-485d-ced0-08daf98d21b7
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 19:49:37.9932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RYG87N1XREfPv9hzkkoIrso5AF5LvSYyO5c9nlkHZOlC0gJpfQIagcovlkAZ3zG6ZYHJjOVCHjnFy0N93Hush3gh0NU8RzXfOJT+BbCFKCQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR17MB5072
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 02:41:00PM -0500, Gregory Price wrote:
-> ---------- Forwarded message ---------
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Wed, Jan 18, 2023 at 12:16 PM
-> Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall
-> User Dispatch Suspension
-> To: Gregory Price <gourry.memverge@gmail.com>
+On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
+> As stated in the documentation and implied by its name, the ppo
+> (preserved program order) relation is intended to link po-earlier
+> to po-later instructions under certain conditions.  However, a
+> corner case currently allows instructions to be linked by ppo that
+> are not executed by the same thread, i.e., instructions are being
+> linked that have no po relation.
 > 
+> This happens due to the mb/strong-fence relations, which (as one
+> case) provide order when locks are passed between threads followed
+> by an smp_mb__after_unlock_lock() fence.  This is illustrated in
+> the following litmus test (as can be seen when using herd7 with
+> `doshow ppo`):
 > 
-> On Mon, Jan 09, 2023 at 10:33:46AM -0500, Gregory Price wrote:
-> > @@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
-> >       struct syscall_user_dispatch *sd = &current->syscall_dispatch;
-> >       char state;
-> >
-> > +     if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
-> > +                     unlikely(current->ptrace &
-> PT_SUSPEND_SYSCALL_USER_DISPATCH))
-> > +             return false;
-> > +
-> >       if (likely(instruction_pointer(regs) - sd->offset < sd->len))
-> >               return false;
-> >
+> P0(int *x, int *y)
+> {
+>     spin_lock(x);
+>     spin_unlock(x);
+> }
 > 
-> So by making syscall_user_dispatch() return false, we'll make
-> syscall_trace_enter() continue to handle things, and supposedly you want
-> to land in ptrace_report_syscall_entry(), right?
->
-> ... snip ...
+> P1(int *x, int *y)
+> {
+>     spin_lock(x);
+>     smp_mb__after_unlock_lock();
+>     *y = 1;
+> }
 > 
-> Should setting this then not also depend on having
-> SYSCALL_WORK_SYSCALL_TRACE set? Because without that, you get 'funny'
-> things.
+> The ppo relation will link P0's spin_lock(x) and P1's *y=1,
+> because P0 passes a lock to P1 which then uses this fence.
+> 
+> The patch makes ppo a subrelation of po by eliminating this
+> possibility from mb and strong-fence, and instead introduces the
+> notion of strong ordering operations, which are allowed to link
+> events of distinct threads.
+> 
+> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> ---
 
-Hm, this is an interesting question.  My thoughts are that I want the
-process to handle the syscall as-if syscall user dispatch was not
-present at all, regardless of SYSCALL_TRACE.
+I'm just going to comment on the changes to the cat file.  I'll review 
+the documentation changes later.
 
-This is because some software, like CRIU, actually injects syscalls to
-run in the context of the software in an effort to collect resources.
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index 07f884f9b2bf..1d91edbc10fe 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -36,9 +36,7 @@ let wmb = [W] ; fencerel(Wmb) ; [W]
+>  let mb = ([M] ; fencerel(Mb) ; [M]) |
+>  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+>  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> -		fencerel(After-unlock-lock) ; [M])
+> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
 
-So I actually *want* those 'funny' things to occur, because they're most
-likely intentional.  I don't necessarily want to intercept system calls
-that subsequently occur (although i might).
+Shouldn't the po case of (co | po) remain intact here?
 
-So if this feature required SYSCALL_TRACE, you would no longer be able
-to inject system calls ala CRIU.
+>  let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+>  let strong-fence = mb | gp
+>  
+> @@ -91,8 +89,12 @@ acyclic hb as happens-before
+>  (* Write and fence propagation ordering *)
+>  (****************************************)
+>  
+> -(* Propagation: Each non-rf link needs a strong fence. *)
+> -let pb = prop ; strong-fence ; hb* ; [Marked]
+> +(* Strong ordering operations *)
+> +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
+> +		[After-unlock-lock] ; po ; [M])
 
-That's also my understanding of the SECCOMP_SUSPEND feature as well,
-it's intended specifically to allow *otherwise disallowed* syscalls to
-be injected into the process and SECCOMP bypassed. (in this case,
-SECCOMP_SUSPEND requires root for exactly this reason).
+This is not the same as the definition removed above.  In particular, 
+po-unlock-lock-po only allows one step along the locking chain -- it has 
+rf where the definition above has co.
+
+> +
+> +(* Propagation: Each non-rf link needs a strong ordering operation. *)
+> +let pb = prop ; strong-order ; hb* ; [Marked]
+>  acyclic pb as propagation
+>  
+>  (*******)
+> @@ -141,7 +143,7 @@ let rec rcu-order = rcu-gp | srcu-gp |
+>  	(rcu-order ; rcu-link ; rcu-order)
+>  let rcu-fence = po ; rcu-order ; po?
+>  let fence = fence | rcu-fence
+
+It would be nice here to have a separate term for a potentially 
+cross-CPU fence.
+
+In fact, why don't we make a concerted effort to straighten out the 
+terminology more fully?  Now seems like a good time to do it.
+
+To begin with, let's be more careful about the difference between an 
+order-inducing object (an event or pair of events) and the relation of 
+being ordered by such an object.  For instance, given:
+
+	A: WRITE_ONCE(x, 1);
+	B: smp_mb();
+	C: r1 = READ_ONCE(y);
+
+then B is an order-inducing object (a memory barrier), and (A,C) is a 
+pair of events ordered by that object.  In general, an order is related 
+to an order-inducing object by:
+
+	order = po ; [order-inducing object] ; po
+
+with suitable modifications for things like smp_store_release where 
+one of the events being ordered _is_ the order-inducing event.
+
+So for example, we could consistently refer to all order-inducing events 
+as either barriers or fences, and all order-reflecting relations as 
+orders.  This would require widespread changes to the .cat file, but I 
+think it would be worthwhile.
+
+(Treating "barrier" and "fence" as synonyms seems to be too deeply 
+entrenched to try and fight against.)
+
+Once that is straightened out, we can distinguish between fences or 
+orders that are weak vs. strong.  And then we can divide up strong 
+fences/orders into single-CPU vs. cross-CPU, if we want to.
+
+How does that sound?
+
+Alan
+
+> -let strong-fence = strong-fence | rcu-fence
+> +let strong-order = strong-order | rcu-fence
+>  
+>  (* rb orders instructions just as pb does *)
+>  let rb = prop ; rcu-fence ; hb* ; pb* ; [Marked]
+> @@ -169,7 +171,7 @@ flag ~empty mixed-accesses as mixed-accesses
+>  (* Executes-before and visibility *)
+>  let xbstar = (hb | pb | rb)*
+>  let vis = cumul-fence* ; rfe? ; [Marked] ;
+> -	((strong-fence ; [Marked] ; xbstar) | (xbstar & int))
+> +	((strong-order ; [Marked] ; xbstar) | (xbstar & int))
+>  
+>  (* Boundaries for lifetimes of plain accesses *)
+>  let w-pre-bounded = [Marked] ; (addr | fence)?
+> @@ -180,9 +182,9 @@ let r-post-bounded = (nonrw-fence | ([~Noreturn] ; fencerel(Rmb) ; [R4rmb]))? ;
+>  	[Marked]
+>  
+>  (* Visibility and executes-before for plain accesses *)
+> -let ww-vis = fence | (strong-fence ; xbstar ; w-pre-bounded) |
+> +let ww-vis = fence | (strong-order ; xbstar ; w-pre-bounded) |
+>  	(w-post-bounded ; vis ; w-pre-bounded)
+> -let wr-vis = fence | (strong-fence ; xbstar ; r-pre-bounded) |
+> +let wr-vis = fence | (strong-order ; xbstar ; r-pre-bounded) |
+>  	(w-post-bounded ; vis ; r-pre-bounded)
+>  let rw-xbstar = fence | (r-post-bounded ; xbstar ; w-pre-bounded)
+>  
+> -- 
+> 2.17.1
+> 
