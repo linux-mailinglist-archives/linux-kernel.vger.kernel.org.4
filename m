@@ -2,115 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C3E6712A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD346712AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 05:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjAREey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 23:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S229582AbjAREgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 23:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAREeq (ORCPT
+        with ESMTP id S229485AbjAREgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 23:34:46 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31B2539A5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:34:43 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so80379089ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9QRiqEIm/55SzWiod6J1S0tN8S9gHuqwPIfY3LIUzYE=;
-        b=CkQ+nrOAkSuCp7mMrD3K8TzSBuvsFxd2aXjwpTLPYTAkNV16EF5Z6NGuL0SdCyqF3Y
-         b8dVqPf6pVcRtIHzg0ddcGEJ8R72DWRX40wLruO9IUtwo02lmr36z0aj45JOpKoKrcZ9
-         AiYWHjFlZPErZb8FSbFNnQ5sNI0O+HN3yGLHfpgwqmuPstOZ7GwZDegGt3EwlCUfDsg8
-         qqFF35IK18d49bkLp9b7TpH2Vk4XdEPneiueBJldHD/XcIb0H04RDrjjizEmy0K7VJpC
-         xDsPZKtFU3f7j05ngH3ojWbAPu3fGrVjT1CVv6jHmEIkFIca1qlnr7Ic4TdsN8chI5s1
-         1cjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9QRiqEIm/55SzWiod6J1S0tN8S9gHuqwPIfY3LIUzYE=;
-        b=mqBmB+JhAjmkYnsGkyG2i+aYTqnyv+OlTkRkZnwKx2PJvdLrtTyxozBviCueFgUwgJ
-         oS+gHwxzwIDrckQGqsHpHRiMExAm6BUkVuHKvAll+LeO+Yjvvc5OAPeXJcI4Eksubgk2
-         rLY8igW6S7qNuyFxk9pTHZWqTjmVPNBRCQQ5Kfufw4apZQdVf5WEN5+LN+ZxFDXtyxQq
-         CHBVuZ2CpeYJGOQIDHX46epVm7EncMp1oxsBlEY9oBM2/kLSrS+aobYekNnaNnU9FNZM
-         wP7GPQYiB+uJfsdI/wuYn4CEOszxPAFQvoFuL1EB2Ym/vZ5Ac1X6CbTGOld2sIp/WFGu
-         sszA==
-X-Gm-Message-State: AFqh2kp+Dk8A10uPO7w86uTFouGLmYQJwTaEXhQ9wuUzqa0sJlWBtPNX
-        tMvRQzF07QxPWMAmuhWj+MGZOw==
-X-Google-Smtp-Source: AMrXdXu2NLT2a5zzlRnQMmqm67QQgZ3iKnxMMDzynioxIR+84++bUki1rW6n724CqDRQgXpq66VxZA==
-X-Received: by 2002:a17:907:9b06:b0:872:f259:a7ea with SMTP id kn6-20020a1709079b0600b00872f259a7eamr5343432ejc.53.1674016482610;
-        Tue, 17 Jan 2023 20:34:42 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0087276f66c6asm1872325ejf.115.2023.01.17.20.34.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 20:34:42 -0800 (PST)
-Message-ID: <7fe0c49e-a628-8e76-8294-ab8faadb3a70@linaro.org>
-Date:   Wed, 18 Jan 2023 06:34:41 +0200
+        Tue, 17 Jan 2023 23:36:00 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC4053E62
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 20:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1674016548; bh=h+yNXhI9SXruukfRpDrTnL9XhmTYUttAOhF6jVnhhPs=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=kBVF1LSuqs3GiQe6sbeb3Vgk9iHm8OZzmhl/rE4w8FMeZn0+npta5fe3X64YPUyyT
+         5XawHHTgJjsqIgduLYzekJhG123Y75FFzTO2tq8gqA1FYCVRCS6IE2tkKvsWjzxLMn
+         bUiT3AgF9O7jTHLEhULIiW6ooqzpeyr5prSqGqXo=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed, 18 Jan 2023 05:35:48 +0100 (CET)
+X-EA-Auth: dndQyncSMpdoSSBz0DuJYA1aUe4jkgKbDtg7hP1Upzhqv3Hh/YDlWow/JyLI5I/FbI5PjyEyX9qy7Y0S+XEOJUM7FVz8hBr7
+Date:   Wed, 18 Jan 2023 10:05:44 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: [PATCH v2] staging: wlan-ng: Remove unused code
+Message-ID: <Y8d3IOQ8fry2xmz4@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 8/8] phy: qcom-qmp-pcie: Add support for SM8550 g3x2
- and g4x2 PCIEs
-Content-Language: en-GB
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20230118005328.2378792-1-abel.vesa@linaro.org>
- <20230118005328.2378792-9-abel.vesa@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230118005328.2378792-9-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 02:53, Abel Vesa wrote:
-> Add the SM8550 both g4 and g3 configurations. In addition, there is a
-> new "lane shared" table that needs to be configured for g4, along with
-> the No-CSR list of resets.
-> 
-> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 369 +++++++++++++++++++++++
->   1 file changed, 369 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index bffb9e138715..6f82604bd430 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -1506,6 +1506,234 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_ep_pcs_misc_tbl[] =
->   	QMP_PHY_INIT_CFG(QPHY_V5_20_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x08),
->   };
+Following structs are defined but never used. Remove such dead code.
+	hfa384x_pdr_pcb_partnum
+	hfa384x_pdr_pcb_tracenum
+	hfa384x_pdr_nic_serial
+	hfa384x_pdr_mkk_measurements
+	hfa384x_pdr_nic_ramsize
+	hfa384x_pdr_refdac_measurements
+	hfa384x_pdr_vgdac_measurements
+	hfa384x_pdr_level_comp_measurements
+	hfa384x_pdr_mac_address
+	hfa384x_pdr_mkk_callname
+	hfa384x_pdr_regdomain
+	hfa384x_pdr_allowed_channel
+	hfa384x_pdr_default_channel
+	hfa384x_pdr_privacy_option
+	hfa384x_pdr_temptype
+	hfa384x_pdr_refdac_setup
+	hfa384x_pdr_vgdac_setup
+	hfa384x_pdr_level_comp_setup
+	hfa384x_pdr_trimdac_setup
+	hfa384x_pdr_ifr_setting
+	hfa384x_pdr_rfr_setting
+	hfa384x_pdr_hfa3861_baseline
+	hfa384x_pdr_hfa3861_shadow
+	hfa384x_pdr_hfa3861_ifrf
+	hfa384x_pdr_hfa3861_chcalsp
+	hfa384x_pdr_hfa3861_chcali
+	hfa384x_pdr_hfa3861_nic_config
+	hfa384x_pdr_hfo_delay
+	hfa384x_pdr_hfa3861_manf_testsp
+	hfa384x_pdr_hfa3861_manf_testi
+	hfa384x_pdr_end_of_pda
 
-I see that the last two patches still use 'shrd' a lot. Does this 
-correspond to hw register names or is it just a vendor kernel code 
-convention?
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Changes in v2:
+   - Include struct names being removed in the commit log.
+     Suggested by Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+Note: Proposed change is compile tested only.
+
+
+ drivers/staging/wlan-ng/hfa384x.h | 171 ------------------------------
+ 1 file changed, 171 deletions(-)
+
+diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
+index 0611e37df6ac..e33dd1b9c40e 100644
+--- a/drivers/staging/wlan-ng/hfa384x.h
++++ b/drivers/staging/wlan-ng/hfa384x.h
+@@ -904,40 +904,6 @@ union hfa384x_usbin {
+  *--------------------------------------------------------------------
+  */
+ 
+-struct hfa384x_pdr_pcb_partnum {
+-	u8 num[8];
+-} __packed;
+-
+-struct hfa384x_pdr_pcb_tracenum {
+-	u8 num[8];
+-} __packed;
+-
+-struct hfa384x_pdr_nic_serial {
+-	u8 num[12];
+-} __packed;
+-
+-struct hfa384x_pdr_mkk_measurements {
+-	double carrier_freq;
+-	double occupied_band;
+-	double power_density;
+-	double tx_spur_f1;
+-	double tx_spur_f2;
+-	double tx_spur_f3;
+-	double tx_spur_f4;
+-	double tx_spur_l1;
+-	double tx_spur_l2;
+-	double tx_spur_l3;
+-	double tx_spur_l4;
+-	double rx_spur_f1;
+-	double rx_spur_f2;
+-	double rx_spur_l1;
+-	double rx_spur_l2;
+-} __packed;
+-
+-struct hfa384x_pdr_nic_ramsize {
+-	u8 size[12];		/* units of KB */
+-} __packed;
+-
+ struct hfa384x_pdr_mfisuprange {
+ 	u16 id;
+ 	u16 variant;
+@@ -959,150 +925,13 @@ struct hfa384x_pdr_nicid {
+ 	u16 minor;
+ } __packed;
+ 
+-struct hfa384x_pdr_refdac_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_vgdac_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_level_comp_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_mac_address {
+-	u8 addr[6];
+-} __packed;
+-
+-struct hfa384x_pdr_mkk_callname {
+-	u8 callname[8];
+-} __packed;
+-
+-struct hfa384x_pdr_regdomain {
+-	u16 numdomains;
+-	u16 domain[5];
+-} __packed;
+-
+-struct hfa384x_pdr_allowed_channel {
+-	u16 ch_bitmap;
+-} __packed;
+-
+-struct hfa384x_pdr_default_channel {
+-	u16 channel;
+-} __packed;
+-
+-struct hfa384x_pdr_privacy_option {
+-	u16 available;
+-} __packed;
+-
+-struct hfa384x_pdr_temptype {
+-	u16 type;
+-} __packed;
+-
+-struct hfa384x_pdr_refdac_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_vgdac_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_level_comp_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_trimdac_setup {
+-	u16 trimidac;
+-	u16 trimqdac;
+-} __packed;
+-
+-struct hfa384x_pdr_ifr_setting {
+-	u16 value[3];
+-} __packed;
+-
+-struct hfa384x_pdr_rfr_setting {
+-	u16 value[3];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_baseline {
+-	u16 value[50];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_shadow {
+-	u32 value[32];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_ifrf {
+-	u32 value[20];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_chcalsp {
+-	u16 value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_chcali {
+-	u16 value[17];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_nic_config {
+-	u16 config_bitmap;
+-} __packed;
+-
+-struct hfa384x_pdr_hfo_delay {
+-	u8 hfo_delay;
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_manf_testsp {
+-	u16 value[30];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_manf_testi {
+-	u16 value[30];
+-} __packed;
+-
+-struct hfa384x_pdr_end_of_pda {
+-	u16 crc;
+-} __packed;
+-
+ struct hfa384x_pdrec {
+ 	__le16 len;		/* in words */
+ 	__le16 code;
+ 	union pdr {
+-		struct hfa384x_pdr_pcb_partnum pcb_partnum;
+-		struct hfa384x_pdr_pcb_tracenum pcb_tracenum;
+-		struct hfa384x_pdr_nic_serial nic_serial;
+-		struct hfa384x_pdr_mkk_measurements mkk_measurements;
+-		struct hfa384x_pdr_nic_ramsize nic_ramsize;
+ 		struct hfa384x_pdr_mfisuprange mfisuprange;
+ 		struct hfa384x_pdr_cfisuprange cfisuprange;
+ 		struct hfa384x_pdr_nicid nicid;
+-		struct hfa384x_pdr_refdac_measurements refdac_measurements;
+-		struct hfa384x_pdr_vgdac_measurements vgdac_measurements;
+-		struct hfa384x_pdr_level_comp_measurements level_compc_measurements;
+-		struct hfa384x_pdr_mac_address mac_address;
+-		struct hfa384x_pdr_mkk_callname mkk_callname;
+-		struct hfa384x_pdr_regdomain regdomain;
+-		struct hfa384x_pdr_allowed_channel allowed_channel;
+-		struct hfa384x_pdr_default_channel default_channel;
+-		struct hfa384x_pdr_privacy_option privacy_option;
+-		struct hfa384x_pdr_temptype temptype;
+-		struct hfa384x_pdr_refdac_setup refdac_setup;
+-		struct hfa384x_pdr_vgdac_setup vgdac_setup;
+-		struct hfa384x_pdr_level_comp_setup level_comp_setup;
+-		struct hfa384x_pdr_trimdac_setup trimdac_setup;
+-		struct hfa384x_pdr_ifr_setting ifr_setting;
+-		struct hfa384x_pdr_rfr_setting rfr_setting;
+-		struct hfa384x_pdr_hfa3861_baseline hfa3861_baseline;
+-		struct hfa384x_pdr_hfa3861_shadow hfa3861_shadow;
+-		struct hfa384x_pdr_hfa3861_ifrf hfa3861_ifrf;
+-		struct hfa384x_pdr_hfa3861_chcalsp hfa3861_chcalsp;
+-		struct hfa384x_pdr_hfa3861_chcali hfa3861_chcali;
+-		struct hfa384x_pdr_hfa3861_nic_config nic_config;
+-		struct hfa384x_pdr_hfo_delay hfo_delay;
+-		struct hfa384x_pdr_hfa3861_manf_testsp hfa3861_manf_testsp;
+-		struct hfa384x_pdr_hfa3861_manf_testi hfa3861_manf_testi;
+-		struct hfa384x_pdr_end_of_pda end_of_pda;
+ 
+ 	} data;
+ } __packed;
 -- 
-With best wishes
-Dmitry
+2.34.1
+
+
 
