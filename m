@@ -2,125 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3F26726A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0996C6726B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjARSUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S229758AbjARSWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjARSUX (ORCPT
+        with ESMTP id S229379AbjARSWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:20:23 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E603C2B;
-        Wed, 18 Jan 2023 10:20:23 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHdkNE023566;
-        Wed, 18 Jan 2023 18:20:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=rpn9fyJ7ZA2G8q62ByZIrUVodtb/mfp/4RpDzItXdv0=;
- b=BpuOUX7OK0DVfyxv34PGpS8J9MOJmO/FObun2prGx2P4Uian3SgPTrZTW3Yhj+xXtx4Z
- 0RZqCjQeC1l4KDnptrJZrphBLYK3m/e0A3ULyNZJcTa/OCPHeHNInGJBHHcxT6PkRgaZ
- vwfv70lX61e/wQtd+bIgg0MekXBeIv6mLo+1y7u3oROIvvgsbofztc/Xa8w9z1R0bKcX
- 050Mbohyq1brB1LirsgnpfEKpZE2xycELTmVKobyhs3dWQOsHWtbT5jzmqv0ygk58Yn1
- qzB5xXOl5979K+f+WUmystquG493poL0r0nUBriiTqlKACvVPBMPjehm23Sa1r1PILqW qQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5b18csw5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 18:20:11 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30IIKBot000931
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 18:20:11 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 18 Jan 2023 10:20:10 -0800
-Date:   Wed, 18 Jan 2023 10:20:08 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
-Message-ID: <20230118182008.GA3353734@hu-bjorande-lv.qualcomm.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
+        Wed, 18 Jan 2023 13:22:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868903A846
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:21:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674066109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kkfAUPkyScTipaKcC/XWnnaZrRP9e8MsdaN4fyf8AEA=;
+        b=H/b6oe7XQMjGl/qhAacev4HrGGMYSpEPDt3k5jnGbbtojFnZx2ygBeHKoalWEvo8LrRMqC
+        c7864uhk27a4Adf8i7SGWqhfcMluH+mYrRq+nu7qbK1pDfyVlLxxoGrY+AcaaMYEh6uUld
+        /PgdvP6yNzdvzNRBDRmfSZbwPKi8qQs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-627-H9wWZdjVPQq4IHG0_9sXwQ-1; Wed, 18 Jan 2023 13:21:46 -0500
+X-MC-Unique: H9wWZdjVPQq4IHG0_9sXwQ-1
+Received: by mail-wm1-f72.google.com with SMTP id r15-20020a05600c35cf00b003d9a14517b2so1628511wmq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:21:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kkfAUPkyScTipaKcC/XWnnaZrRP9e8MsdaN4fyf8AEA=;
+        b=eXl2jWfSBAqjp0AsrKoTW424nVdjScRKRqiFPxL4XimWs2ZWUAcsobb+2806AicYJX
+         tTx/uFHRvbAdi4DStueVVrJykY0SYBWKDns2NNmWzyVjkd0XhwGBubGIy58iTOIoMFSt
+         aJaGsFp/P3nTsAsqGcxtLoB+7xsPKPUv/CMjE+whMEEXGxoRH7sZuY3THCVQPcdzKeEy
+         eqgg4UliP5E6xp75oHneYLZv/bQTWzCxqVy0fb9mxpzakFGpYUrdu7kDcLL2FAvnEOvr
+         sM9F2XFZ+UXnUYNHOnEkUJAYHmtB72JH0rrkxlURe54tQfpD7MZgZeYEkyTjKuNhWwkr
+         04pQ==
+X-Gm-Message-State: AFqh2koTsKSiDj8SjgRrdEGEODUQpKMjZsV60OrE5B+p5+KhNMwx5twk
+        2zPKWCdlxGbvMioy6ZFcTR0yokVLwzlIOilO7WJOCAOUF5kye+XneCOYY16b0d+SCtYZ7KE5h3Z
+        7SmnU4Vgi17VoHNC1i4i28Tgp
+X-Received: by 2002:a7b:c4d0:0:b0:3d1:f6b3:2ce3 with SMTP id g16-20020a7bc4d0000000b003d1f6b32ce3mr7892198wmk.35.1674066105813;
+        Wed, 18 Jan 2023 10:21:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsVMq3n/sWCHIZHI3DCzEo1tb18y6AtjBtsP27kjnzqUSTu2zjaZeGBExx2m/EzgjVws3Jj3Q==
+X-Received: by 2002:a7b:c4d0:0:b0:3d1:f6b3:2ce3 with SMTP id g16-20020a7bc4d0000000b003d1f6b32ce3mr7892185wmk.35.1674066105554;
+        Wed, 18 Jan 2023 10:21:45 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:800:1a88:f98a:d223:c454? (p200300cbc70508001a88f98ad223c454.dip0.t-ipconnect.de. [2003:cb:c705:800:1a88:f98a:d223:c454])
+        by smtp.gmail.com with ESMTPSA id fm11-20020a05600c0c0b00b003c21ba7d7d6sm2585970wmb.44.2023.01.18.10.21.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 10:21:44 -0800 (PST)
+Message-ID: <941f0f8f-a2c2-0021-0773-6cfaa81aabd7@redhat.com>
+Date:   Wed, 18 Jan 2023 19:21:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TI3iKUx2MIaZvawDWmj-NVQDmq9c2cJf
-X-Proofpoint-ORIG-GUID: TI3iKUx2MIaZvawDWmj-NVQDmq9c2cJf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=443 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301180155
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <Y78+/wleTEC3gyqu@x1n>
+ <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
+ <Y8AnROAtMngKntnq@x1n>
+ <CADrL8HWFfqCqbpmvv8BSpvvzJ9aEeBEN30bMLuWGancsfMXv2w@mail.gmail.com>
+ <Y8BtJzBLTpw5IR+H@x1n>
+ <CADrL8HUi-j4ais45Xq8Jpb6a7DsWiXrKNeJfsqBRMi1Lier8xA@mail.gmail.com>
+ <Y8B8mW2zSWDDwp7G@x1n> <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
+ <CADrL8HUdg1Fr=tLEQRkDjeTzNzzSM6EPhvDgzURxSZSBMLgjoQ@mail.gmail.com>
+ <6548b3b3-30c9-8f64-7d28-8a434e0a0b80@redhat.com> <Y8gRpEonhXgqfb41@x1n>
+ <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
+ walk_hugetlb_range
+In-Reply-To: <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-[..]
->    phy-names:
->      minItems: 1
-> -    maxItems: 2
-> -    items:
-> -      enum:
-> -        - usb2-phy
-> -        - usb3-phy
-> +    maxItems: 8
-> +    oneOf:
-> +    - items:
-> +        enum:
-> +          - usb2-phy
-> +          - usb3-phy
-> +    - items:
-> +        enum:
-> +          - usb2-phy_port0
-> +          - usb2-phy_port1
-> +          - usb2-phy_port2
-> +          - usb2-phy_port3
-> +          - usb3-phy_port0
-> +          - usb3-phy_port1
-> +          - usb3-phy_port2
-> +          - usb3-phy_port3
+>>> Once the last piece is unmapped (or simpler: once the complete subtree of
+>>> page tables is gone), we decrement refcount+mapcount. Might require some
+>>> brain power to do this tracking, but I wouldn't call it impossible right
+>>> from the start.
+>>>
+>>> Would such a design violate other design aspects that are important?
+> 
+> This is actually how mapcount was treated in HGM RFC v1 (though not
+> refcount); it is doable for both [2].
+> 
+> One caveat here: if a page is unmapped in small pieces, it is
+> difficult to know if the page is legitimately completely unmapped (we
+> would have to check all the PTEs in the page table). In RFC v1, I
+> sidestepped this caveat by saying that "page_mapcount() is incremented
+> if the hstate-level PTE is present". A single unmap on the whole
+> hugepage will clear the hstate-level PTE, thus decrementing the
+> mapcount.
+> 
+> On a related note, there still exists an (albeit minor) API difference
+> vs. THPs: a piece of a page that is legitimately unmapped can still
+> have a positive page_mapcount().
+> 
+> Given that this approach allows us to retain the hugetlb vmemmap
+> optimization (and it wouldn't require a horrible amount of
+> complexity), I prefer this approach over the THP-like approach.
 
-How about expressing this as:
+If we can store (directly/indirectly) metadata in the highest pgtable 
+that HGM-maps a hugetlb page, I guess what would be reasonable:
 
-    oneOf:
-      - items:
-          enum: [ usb2-phy, usb3-phy ]
-      - items:
-          pattern: "^usb[23]-phy_port[0-3]$"
+* hugetlb page pointer
+* mapped size
 
-Regards,
-Bjorn
+Whenever mapping/unmapping sub-parts, we'd have to update that information.
+
+Once "mapped size" dropped to 0, we know that the hugetlb page was 
+completely unmapped and we can drop the refcount+mapcount, clear 
+metadata (including hugetlb page pointer) [+ remove the page tables?].
+
+Similarly, once "mapped size" corresponds to the hugetlb size, we can 
+immediately spot that everything is mapped.
+
+Again, just a high-level idea.
+
+-- 
+Thanks,
+
+David / dhildenb
+
