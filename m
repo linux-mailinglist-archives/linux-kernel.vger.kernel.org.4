@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8A2672B33
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C05672B37
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjARWTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S229864AbjARWUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjARWTH (ORCPT
+        with ESMTP id S229591AbjARWUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:19:07 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BBA65EE0;
-        Wed, 18 Jan 2023 14:19:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=afuJng7oPx7uuacLqACHC95XAapdL6M+Vp9I11Mjg/c=; b=P94xXEwVLF+0g3HlNxc3bGIzfh
-        z2kHnyswepqw17ESp0zp12Fr/epS2ALte+qk7FXKrlOnaUK4+NItHlBs/RvoU7jWpjnUYwkIPk+Hw
-        3/DM1+54lHP82PB85J+GdtJ8pQQyMBnsV8dYnwbw2RRtDbyHoBVt93UPeuyXG+6cvH2JEeKttZYdL
-        oLIIi4jQBdYrqjHm/0F2ykrks+lDZr5grzRFv8+rTt2qxD/XORjJz++MmWGTgFIjpSehhojHTA+82
-        GQBd02LTe7Dg1qLRuhKd+0/Y5P5RdWgCxCQEVUUlh4Eip5lEq0L+vFQdxZQGpP8k8SvCMRpPyctPJ
-        uncilvcQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pIGlh-002d3w-11;
-        Wed, 18 Jan 2023 22:18:53 +0000
-Date:   Wed, 18 Jan 2023 22:18:53 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/34] iov_iter: Use IOCB/IOMAP_WRITE/op_is_write
- rather than iterator direction
-Message-ID: <Y8hwTQZziwA6U+bn@ZenIV>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
- <167391049698.2311931.13641162904441620555.stgit@warthog.procyon.org.uk>
- <Y8ZUXEB/W+K0Jt6k@infradead.org>
+        Wed, 18 Jan 2023 17:20:48 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA0764682;
+        Wed, 18 Jan 2023 14:20:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny0ZZ0ctMz4x1D;
+        Thu, 19 Jan 2023 09:20:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674080438;
+        bh=H8dlIxPWHf9WYTAj5L1JkHBaFreeBBLNaHVidd7nSMM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i9oDwmwbOpmtVi9loYASNDBfGjw+7QxW2BWJebMv2URTjmHj0tN2AxWh53RGKztlp
+         dV2fD6XfdrJsIYTReGK5LgoSrdUyKr5XqhAQx/sJRO/rH8M6Da8obq6PaDFDFsVcQ/
+         y8vE91PqPYESXFr2IUINTSzxXzRlogEPyzsQEZtGNp9h8ivVoyew5UXp0leXEfgC88
+         OOqmDtpV6NW6MoDZT3l45C9fK/HLCzQA0uq/pmW7xtfz5i+5VpNr5vjZmko+exKx+a
+         17BHej9wPXrwRqk9jUqgkSm1stdTioOTPkBX1IhePdDisqLXoPllnxlpgv6canYIQF
+         yrhzmdViPWE2g==
+Date:   Thu, 19 Jan 2023 09:20:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the devicetree-fixes tree
+Message-ID: <20230119092037.7fc4f401@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ZUXEB/W+K0Jt6k@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/GJL/91woSgvS+TO8SGF.1q/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:55:08PM -0800, Christoph Hellwig wrote:
-> On Mon, Jan 16, 2023 at 11:08:17PM +0000, David Howells wrote:
-> > Use information other than the iterator direction to determine the
-> > direction of the I/O:
-> > 
-> >  (*) If a kiocb is available, use the IOCB_WRITE flag.
-> > 
-> >  (*) If an iomap_iter is available, use the IOMAP_WRITE flag.
-> > 
-> >  (*) If a request is available, use op_is_write().
-> 
-> The really should be three independent patches.  Plus another one
-> to drop the debug checks in cifs.
-> 
-> The changes themselves look good to me.
-> 
-> >  
-> > +static unsigned char iov_iter_rw(const struct iov_iter *i)
-> > +{
-> > +	return i->data_source ? WRITE : READ;
-> > +}
-> 
-> It might as well make sense to just open code this in the only
-> caller as well (yet another patch).
+--Sig_/GJL/91woSgvS+TO8SGF.1q/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Especially since
-		/* if it's a destination, tell g-u-p we want them writable */
-                if (!i->data_source)
-			gup_flags |= FOLL_WRITE;
-is less confusing than the current
-                if (iov_iter_rw(i) != WRITE)
-			gup_flags |= FOLL_WRITE;
+Hi all,
 
+After merging the devicetree-fixes tree, today's linux-next build
+(powerpc ppc64_defconfig) failed like this:
+
+
+Caused by commit
+
+  2d681d6a23a1 ("of: Make of framebuffer devices unique")
+
+I have used the devicetree-fixes tree from next-20230118 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GJL/91woSgvS+TO8SGF.1q/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPIcLUACgkQAVBC80lX
+0GxF3gf9HvYXWsz2C5MTzcX3lxTPoLGg4cBnF6vBYRJbyBDypkNHzC9hNMIqp/at
+Qkr256yFchQUd8y2SRaycXTf6kD5dOQotw4egEO1rJb3ADNEho5IpcOOpPzriqAu
+1lQUemwPDhjeOpf/5mD9u35mO8E9XlLtSr2R3VflEUALKb+w+TrfkbOrGz9/7dgy
+XCc04iOJwJfJXzKX7t343HtjU2/tvLwtHyo2cUPuwe1gB0Hu86BvxSDrUc6F7mt4
+E9/LQhdcFEneal09amov2tjsmBeQXyR9/Vf7d6G445F2UdfFyqD/V3OL6wIxtGOc
+fDt5MTtJK5dxZ3U9vjXKpmxjOE64kw==
+=dRT9
+-----END PGP SIGNATURE-----
+
+--Sig_/GJL/91woSgvS+TO8SGF.1q/--
