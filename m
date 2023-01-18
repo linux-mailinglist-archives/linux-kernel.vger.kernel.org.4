@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC82671DB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228E2671DBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjARN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S229754AbjARN2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjARNZj (ORCPT
+        with ESMTP id S231395AbjARN2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:25:39 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFA59EE09;
-        Wed, 18 Jan 2023 04:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1674046363;
-  x=1705582363;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9tpzvI7fdZDoAPrHN+US7UGk+e/yxtX1rAxxB7G8nrs=;
-  b=Iy+5CP26+TNYmwUfX0m5NAr/r09Z11LCCPN4aobXxgHRcPSxR7vic8KZ
-   tYWuvLK71Du6z7TegR/4dE/T3fikMYoTgr0uKmyrpjesCts4H8JC2uBL7
-   Li8Ba1JrWooLLUsJ+KMcel0TPlWgB5g0N+fn/AujQihFdHfsrVHeTYUUs
-   /NLiUoFH915l91i0X/+nNCY3taUVndjIOH3UBqWcafbJ/tjv79YM+D/cE
-   phw96VsabNtBz08UTAkVPTZJ8hpPWIvu7uZANxGeBoIkodtPzFgTutOFK
-   8AGsq6XYngTSiCrKruMrprpkZ3xyaUFtX9l0KKeiAamf6iYsu/uJZg2S9
-   Q==;
-From:   Astrid Rost <astrid.rost@axis.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-CC:     <kernel@axis.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, Astrid Rost <astrid.rost@axis.com>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH v1 4/4] ASoC: dt-bindings: simple-card: create jack for aux_devs
-Date:   Wed, 18 Jan 2023 13:52:26 +0100
-Message-ID: <20230118125226.333214-5-astrid.rost@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230118125226.333214-1-astrid.rost@axis.com>
-References: <20230118125226.333214-1-astrid.rost@axis.com>
+        Wed, 18 Jan 2023 08:28:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD03E5924F;
+        Wed, 18 Jan 2023 04:54:03 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D4EE76602DFF;
+        Wed, 18 Jan 2023 12:54:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674046441;
+        bh=W0maxCKa2xr4pnTX1HqInnogwxcqmMSgRc+NoZCdKOY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P2GIpFG0pdcWYxZdlMkFPN/2kgFVwaVu/WECh/MB7dooeOxYJSI3SVx1TjURSjkWx
+         cYudLUfd27Y7Qc8W81DBRt9wKpZ+4zoDh0jfRjVpYCQCGtMjHnbXO6PFj3dUA/5OoG
+         7XvrrhjKbvXAGvFHmT5NmfZbHsWdBLIO9XioxvzbaIr68WFGnK1pC6FjzDox/Arvzl
+         0kXG3FdVlnqa3RZCci0FnSw/4gNJA7YdUl5V5L0Jr9PCu5igDqZBJ+tLEMkXGZwm7X
+         +Ts+zuQJHrbag4d/u6Bc//5N/NzyFIXeLn+Dlu/PS9xY7AWQ90lMv3Whp4Pa3ZWmhG
+         PL6tC9Z1wmLAw==
+Message-ID: <0dc9466d-9baa-451b-98fa-7caf424acd4c@collabora.com>
+Date:   Wed, 18 Jan 2023 13:53:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 2/2] thermal: mediatek: add support for MT7986 and
+ MT7981
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>,
+        Frank Wunderlich <frank-w@public-files.de>
+References: <cover.1674012985.git.daniel@makrotopia.org>
+ <aa957c759b1182aee00cc35178667f849f941b42.1674012985.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <aa957c759b1182aee00cc35178667f849f941b42.1674012985.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add simple-card,aux-jack-types:
-Array of snd_jack_type to create jack-input-event for jack devices in
-aux-devs. If the setting is 0, the supported type of the device is used.
-A device which has the functions set_jack and get_jack_supported_type
-counts as jack device.
+Il 18/01/23 04:55, Daniel Golle ha scritto:
+> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+> Brings code to assign values from efuse as well as new function to
+> convert raw temperature to millidegree celsius, as found in MediaTek's
+> SDK sources (but cleaned up and de-duplicated)
+> 
+> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>   drivers/thermal/mtk_thermal.c | 137 ++++++++++++++++++++++++++++++++--
+>   1 file changed, 132 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 992750ee09e62..171f485a809bb 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
 
-Signed-off-by: Astrid Rost <astrid.rost@axis.com>
----
- .../bindings/sound/simple-card.yaml           | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+..snip..
 
-diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
-index ed19899bc94b..2635b1c04fc9 100644
---- a/Documentation/devicetree/bindings/sound/simple-card.yaml
-+++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
-@@ -199,6 +199,13 @@ properties:
-     maxItems: 1
-   simple-audio-card,mic-det-gpio:
-     maxItems: 1
-+  simple-audio-card,aux-jack-types:
-+    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-+    description: |
-+      Array of snd_jack_type to create jack-input-event for jack
-+      devices in aux-devs. If the setting is 0, the supported
-+      type of the device is used. A device which has the functions
-+      set_jack and get_jack_supported_type counts as jack device.
- 
- patternProperties:
-   "^simple-audio-card,cpu(@[0-9a-f]+)?$":
-@@ -498,3 +505,31 @@ examples:
-             };
-         };
-     };
-+#--------------------
-+# Add a headphone and a headset mic jack,
-+# which use an auxiliary jack detector e.g. via i2c.
-+# The events, which should be enabled are:
-+# SND_JACK_HEADPHONE = 1
-+# SND_JACK_MICROPHONE = 2
-+#--------------------
-+  - |
-+    sound {
-+        compatible = "simple-audio-card";
-+        simple-audio-card,widgets =
-+            "Headphone", "Headphone Jack",
-+            "Headset Mic", "Headset Mic Jack";
-+        simple-audio-card,routing =
-+            "Headphone Jack", "HPLEFT",
-+            "Headphone Jack", "HPRIGHT",
-+            "LEFTIN", "Headset Mic",
-+            "RIGHTIN", "Headset Mic";
-+        simple-audio-card,aux-devs = <&hp_jack>, <&hs_mic_jack>;
-+        simple-audio-card,aux-jack-types = <1 2>;
-+        simple-audio-card,cpu {
-+            sound-dai = <&ssi2>;
-+        };
-+        simple-audio-card,codec {
-+            sound-dai = <&codec>;
-+            clocks = <&clocks>;
-+        };
-+    };
--- 
-2.30.2
+>   		.data = (void *)&mt8183_thermal_data,
+> @@ -1068,15 +1186,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   		goto err_disable_clk_auxadc;
+>   	}
+>   
+> -	if (mt->conf->version == MTK_THERMAL_V2) {
+> +	if (mt->conf->version != MTK_THERMAL_V1) {
+>   		mtk_thermal_turn_on_buffer(apmixed_base);
+>   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>   	}
+>   
+> -	if (mt->conf->version == MTK_THERMAL_V1)
+> +	switch (mt->conf->version) {
+> +	case MTK_THERMAL_V1:
+>   		mt->raw_to_mcelsius = raw_to_mcelsius_v1;
+> -	else
+> +		break;
+> +	case MTK_THERMAL_V2:
+>   		mt->raw_to_mcelsius = raw_to_mcelsius_v2;
+> +		break;
+> +	case MTK_THERMAL_V3:
+> +		mt->raw_to_mcelsius = raw_to_mcelsius_v3;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+
+Either directly use a switch in your commit [1/2] or follow `else if` here.
+
+I would prefer if you changed your first commit to use a switch, but I don't
+really have strong opinions, which is why I gave you a Reviewed-by tag on
+[1/2].
+
+Your choice - but please don't "change the game" all of a sudden in a commit
+whose purpose is to add support for a new version of MTK_THERMAL. :-)
+
+Cheers,
+Angelo
 
