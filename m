@@ -2,202 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27615672779
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BC567277B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjARSsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S229522AbjARSv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjARSsd (ORCPT
+        with ESMTP id S229515AbjARSv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:48:33 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A34589A8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:48:31 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1674067710;
+        Wed, 18 Jan 2023 13:51:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D225421A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674067866;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=z83rSeniNFHS7zJ60IN7wkL4BhzNsSKsud/i88hiibE=;
-        b=jGtjR3tDpDLgkIXwpbeUAb575h46pQ2z5e51T7U93HFtA6L/t2gJ2lEBRdAqeOVJQTtATY
-        t5Ali9Zl4oCiQmBNUc75O84Z5iNt5+6K8kZ+gnfCVCCHNC0aIxn762x8w/eHnr4DPZE1Ap
-        qjOKSvk2XeqZssdaMBtfsweGGbT1bPg=
-From:   Rayyan Ansari <rayyan@ansari.sh>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rayyan Ansari <rayyan@ansari.sh>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] drm/simpledrm: Allow physical width and height configuration via DT
-Date:   Wed, 18 Jan 2023 18:48:17 +0000
-Message-Id: <20230118184817.608551-1-rayyan@ansari.sh>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8WAlP8B66I5tb7fPfxSgpp0jqfCeWEECxb5EHCZvLs4=;
+        b=Ow4NWnlFU4kOLlWHhPjUKWrqTicEdg2To6NExsQfMP97KgJ2WjsVgiH6YyQXuOQWIBu0JG
+        soddtzvsSy/1iBF2IsjD+8fnP9/1wxxEFy6VwPXjAyeiGy6A+wdwDvHWjM9sTXhNhFHDm9
+        qDk4X01i9zOO9TnvfFbJCzy4h5cNawU=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-634-TR8wGlluPuKLRizGNu4UQA-1; Wed, 18 Jan 2023 13:49:50 -0500
+X-MC-Unique: TR8wGlluPuKLRizGNu4UQA-1
+Received: by mail-pj1-f69.google.com with SMTP id om10-20020a17090b3a8a00b002299e350deaso1950331pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:49:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8WAlP8B66I5tb7fPfxSgpp0jqfCeWEECxb5EHCZvLs4=;
+        b=4Np6Zq30A2dbx1o5mWvO/qRMP54lzj80wM6t4rJ+cnP+YE2dNeIzMk/sRmCmhF4aKd
+         7aeVX5o7wPojPJ+5AQ0E3ertmR9BvFSxMk5PSbZxmyRxZu2doHj/F4SbJqlkr64+qh0Q
+         oScD2NomRtu2nJnvYIHD9PyqKe4zzWlHOxSF5P7f+YCx04IiH0UsYIfBCeBIrMwnTpej
+         x22FsQmpo1HL7Ho4jhbPD3pT4cLffIrLjfkF6nTsZ80xRwLkFwaKdTDXKvleSKxF60P9
+         IlbBDNid6J+A5tTCV+Ot6V6G9MULBfv71lJvbBixW/mlyhI5Q5+MG9ScfU9bMcN7FyRk
+         r5ag==
+X-Gm-Message-State: AFqh2kowVTf54eOQX78GYRtSOkSF15tnMJvMAdEk7pA7tjZHvTmLFYab
+        jA59RmAjP2n8FntNTweAErxDsX9F334sQLoNZhpq8InYHNlPYJgCIPE8y67HuEiJW96141lZS7v
+        pPAyUDFYiU+8nC2qS6kv/IqaD5YUD2VcY6pdeGjtt
+X-Received: by 2002:aa7:8602:0:b0:576:b4ce:42b4 with SMTP id p2-20020aa78602000000b00576b4ce42b4mr768495pfn.61.1674067789124;
+        Wed, 18 Jan 2023 10:49:49 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv6F6hQyxY0MjeFbXI35oPjHV+cXzxRlNG/f3aV5rcWjp346prf28GNPnspJI02eD8dcvOHx/Sic2WBXsZt0uk=
+X-Received: by 2002:aa7:8602:0:b0:576:b4ce:42b4 with SMTP id
+ p2-20020aa78602000000b00576b4ce42b4mr768492pfn.61.1674067788798; Wed, 18 Jan
+ 2023 10:49:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117172649.52465-1-wander@redhat.com> <875yd4k8qd.ffs@tglx>
+In-Reply-To: <875yd4k8qd.ffs@tglx>
+From:   Wander Lairson Costa <wander@redhat.com>
+Date:   Wed, 18 Jan 2023 15:49:37 -0300
+Message-ID: <CAAq0SUkN38V00HqV3Hk3ee_-=vfkKxG9xtR3n=4gAT+zCs+=Zg@mail.gmail.com>
+Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-The following draft patch adds support for configuring the
-height-mm and width-mm DRM properties in the simpledrm driver
-via devicetree.
-This is useful to get proper scaling in UIs such as Phosh.
-An example of using this property is this, taken from my local tree:
+On Tue, Jan 17, 2023 at 9:05 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Wander!
+>
+> On Tue, Jan 17 2023 at 14:26, Wander Lairson Costa wrote:
+> > In task_blocked_on_lock() we save the owner, release the wait_lock and
+> > call rt_mutex_adjust_prio_chain(). Before we acquire the wait_lock
+> > again, the owner may release the lock and deboost.
+>
+> This does not make sense in several aspects:
+>
+>   1) Who is 'we'? You, me, someone else? None of us does anything of the
+>      above.
+>
+>         https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
+>
+>   2) What has task_blocked_on_lock() to do with the logic in
+>      rt_mutex_adjust_prio_chain() which is called by other callsites
+>      too?
+>
+>   3) If the owner releases the lock and deboosts then this has
+>      absolutely nothing to do with the lock because the priority of a
+>      the owner is determined by its own priority and the priority of the
+>      top most waiter. If the owner releases the lock then it marks the
+>      lock ownerless, wakes the top most waiter and deboosts itself. In
+>      this owner deboost rt_mutex_adjust_prio_chain() is not involved at
+>      all. Why?
+>
+>      Because the owner deboost does not affect the priority of the
+>      waiters at all. It's the other way round: Waiter priority affects
+>      the owner priority if the waiter priority is higher than the owner
+>      priority.
+>
+> > rt_mutex_adjust_prio_chain() acquires the wait_lock. In the requeue
+> > phase, waiter may be initially in the top of the queue, but after
+> > dequeued and requeued it may no longer be true.
+>
+> That's related to your above argumentation in which way?
+>
 
-		framebuffer0: framebuffer@3200000 {
-			compatible = "simple-framebuffer";
-			reg = <0x3200000 0x800000>;
-			format = "a8r8g8b8";
-			width = <720>;
-			height = <1280>;
-			stride = <(720 * 4)>;
-			width-mm = /bits/ 16 <58>;
-			height-mm = /bits/ 16 <103>;
+I think I made the mistake of not explicitly saying at least three
+tasks are involved:
 
-			clocks = <&mmcc MDSS_AHB_CLK>,
-				 <&mmcc MDSS_AXI_CLK>,
-				 <&mmcc MDSS_BYTE0_CLK>,
-				 <&mmcc MDSS_MDP_CLK>,
-				 <&mmcc MDSS_PCLK0_CLK>,
-				 <&mmcc MDSS_VSYNC_CLK>;
-			power-domains = <&mmcc MDSS_GDSC>;
-		};
+- A Task T1 that currently holds the mutex
+- A Task T2 that is the top waiter
+- A Task T3 that changes the top waiter
 
-I have tested this on my Lumia 735, and it does indeed
-allow Phosh to scale correctly on the screen.
+T3 tries to acquire the mutex, but as T1 holds it, it calls
+task_blocked_on_lock() and saves the owner. It eventually calls
+rt_mutex_adjust_prio_chain(), but it releases the wait lock before
+doing so. This opens a window for T1 to release the mutex and wake up
+T2. Before T2 runs, T3 acquires the wait lock again inside
+rt_mutex_adjust_prio_chain(). If the "dequeue/requeue" piece of code
+changes the top waiter, then 1) When T2 runs, it will verify that it
+is no longer the top waiter and comes back to sleep 2) As you observed
+below, the waiter doesn't point to the top waiter and, therefore, it
+will wake up the wrong task.
 
-However, I would like to get some feedback before I write the
-documentation.
-- What data type should be used?
-	The width_mm and height_mm properties of the drm_display_mode
-	struct are defined as u16. I have also made the devicetree
-	properties as the u16 type, but this requires specifying
-	"/bits/ 16" before the value. Should u32 be used instead to get
-	rid of this? If so, how could the conversion from u32->u16 be
-	handled?
-- Style?
-	I have split the arguments to the DRM_MODE_INIT macro across
-	multiple lines to increase readability. I'm not sure if this
-	is the correct style though.
-- Anything else?
-	This is my first time writing code for a Linux driver, so I
-	would be grateful if you have any suggestions for improvements.
- 
-Thanks,
-Rayyan.
----
- drivers/gpu/drm/tiny/simpledrm.c | 49 +++++++++++++++++++++++++++-----
- 1 file changed, 42 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-index 162eb44dcba8..92109f870b35 100644
---- a/drivers/gpu/drm/tiny/simpledrm.c
-+++ b/drivers/gpu/drm/tiny/simpledrm.c
-@@ -116,6 +116,15 @@ simplefb_get_format_pd(struct drm_device *dev,
- 	return simplefb_get_validated_format(dev, pd->format);
- }
- 
-+static void
-+simplefb_read_u16_of_optional(struct drm_device *dev, struct device_node *of_node,
-+		     const char *name, u16 *value)
-+{
-+	int ret = of_property_read_u16(of_node, name, value);
-+	if (ret)
-+		value = 0;
-+}
-+
- static int
- simplefb_read_u32_of(struct drm_device *dev, struct device_node *of_node,
- 		     const char *name, u32 *value)
-@@ -184,6 +193,21 @@ simplefb_get_format_of(struct drm_device *dev, struct device_node *of_node)
- 	return simplefb_get_validated_format(dev, format);
- }
- 
-+static u16
-+simplefb_get_width_mm_of(struct drm_device *dev, struct device_node *of_node)
-+{
-+	u16 width_mm;
-+	simplefb_read_u16_of_optional(dev, of_node, "width-mm", &width_mm);
-+	return width_mm;
-+}
-+
-+static u16
-+simplefb_get_height_mm_of(struct drm_device *dev, struct device_node *of_node)
-+{
-+	u16 height_mm;
-+	simplefb_read_u16_of_optional(dev, of_node, "height-mm", &height_mm);
-+	return height_mm;
-+}
- /*
-  * Simple Framebuffer device
-  */
-@@ -599,16 +623,24 @@ static const struct drm_mode_config_funcs simpledrm_mode_config_funcs = {
-  */
- 
- static struct drm_display_mode simpledrm_mode(unsigned int width,
--					      unsigned int height)
-+					      unsigned int height,
-+					      u16 width_mm,
-+					      u16 height_mm)
- {
- 	/*
--	 * Assume a monitor resolution of 96 dpi to
--	 * get a somewhat reasonable screen size.
-+	 * Assume a monitor resolution of 96 dpi if physical
-+	 * dimensions are not specified to get a somewhat reasonable
-+	 * screen size.
- 	 */
-+
- 	const struct drm_display_mode mode = {
--		DRM_MODE_INIT(60, width, height,
--			      DRM_MODE_RES_MM(width, 96ul),
--			      DRM_MODE_RES_MM(height, 96ul))
-+		DRM_MODE_INIT(
-+			60,
-+			width,
-+			height,
-+			(width_mm ? width_mm : DRM_MODE_RES_MM(width, 96ul)),
-+			(height_mm ? height_mm : DRM_MODE_RES_MM(height, 96ul))
-+			)
- 	};
- 
- 	return mode;
-@@ -622,6 +654,7 @@ static struct simpledrm_device *simpledrm_device_create(struct drm_driver *drv,
- 	struct simpledrm_device *sdev;
- 	struct drm_device *dev;
- 	int width, height, stride;
-+	u16 width_mm, height_mm;
- 	const struct drm_format_info *format;
- 	struct resource *res, *mem;
- 	void __iomem *screen_base;
-@@ -676,6 +709,8 @@ static struct simpledrm_device *simpledrm_device_create(struct drm_driver *drv,
- 		format = simplefb_get_format_of(dev, of_node);
- 		if (IS_ERR(format))
- 			return ERR_CAST(format);
-+		width_mm = simplefb_get_width_mm_of(dev, of_node);
-+		height_mm = simplefb_get_height_mm_of(dev, of_node);
- 	} else {
- 		drm_err(dev, "no simplefb configuration found\n");
- 		return ERR_PTR(-ENODEV);
-@@ -686,7 +721,7 @@ static struct simpledrm_device *simpledrm_device_create(struct drm_driver *drv,
- 			return ERR_PTR(-EINVAL);
- 	}
- 
--	sdev->mode = simpledrm_mode(width, height);
-+	sdev->mode = simpledrm_mode(width, height, width_mm, height_mm);
- 	sdev->format = format;
- 	sdev->pitch = stride;
- 
--- 
-2.39.0
+> rt_mutex_adjust_prio_chain()
+>
+>         lock->wait_lock is held across the whole operation
+>
+>         prerequeue_top_waiter = rt_mutex_top_waiter(lock);
+>
+>   This saves the current top waiter before the dequeue()/enqueue()
+>   sequence.
+>
+>         rt_mutex_dequeue(lock, waiter);
+>         waiter_update_prio(waiter, task);
+>         rt_mutex_enqueue(lock, waiter);
+>
+>         if (!rt_mutex_owner(lock)) {
+>
+>   This is the case where the lock has no owner, i.e. the previous owner
+>   unlocked and the chainwalk cannot be continued.
+>
+>   Now the code checks whether the requeue changed the top waiter task:
+>
+>                 if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
+>
+>   What can make this condition true?
+>
+>     1) @waiter is the new top waiter due to the requeue operation
+>
+>     2) @waiter is not longer the top waiter due to the requeue operation
+>
+>   So in both cases the new top waiter must be woken up so it can take over
+>   the ownerless lock.
+>
+>   Here is where the code is buggy. It only considers case #1, but not
+>   case #2, right?
+>
+> So your patch is correct, but the explanation in your changelog has
+> absolutely nothing to do with the problem.
+>
+> Why?
+>
+>   #2 is caused by a top waiter dropping out due to a signal or timeout
+>      and thereby deboosting the whole lock chain.
+>
+>   So the relevant callchain which causes the problem originates from
+>   remove_waiter()
+>
+> See?
+>
+
+Another piece of information I forgot: I spotted the bug in the
+spinlock_rt, which uses a rtmutex under the hood. It has a different
+code path in the lock scenario, and there is no call to
+remove_waiter() (or I am missing something).
+Anyway, you summed it up pretty well here: "@waiter is no longer the
+top waiter due to the requeue operation". I tried (and failed) to
+explain the call chain that ends up in the buggy scenario, but now I
+think I should just describe the fundamental problem (the waiter
+doesn't point to the top waiter).
+
+> Thanks,
+>
+>         tglx
+>
 
