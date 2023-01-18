@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C3A671F83
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAC1671F85
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjAROZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S230183AbjARO0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjAROZ2 (ORCPT
+        with ESMTP id S229845AbjARO0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:25:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E923D8B303;
-        Wed, 18 Jan 2023 06:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MFcR0OGBOZF6nFAA9jXYIyh+Hu0YfDAUMAAwjfRCkqc=; b=3SD7Vdt5AdW0YvzZzC12FMR9aL
-        W9WO1g7u7H/F/QxKA94pPX4KgPaws20mnQRb9EWhS61g3sN+SkwoJNIApn55lUy+3+rwB1CfjS10z
-        rUdZ4zwzUYCfdxtc36QlvXCRBE5ze8P3CniwiDeoU5yAFhtanBI30KfBwMSN1YGPtqlUAmO416saT
-        tctAs+YVGlvg9RsOb/6dtOVKnuJPD+NXC+2sewv4aTXnZND9MFqgCwy2HHGlE4BNSn5rtJiOFakcJ
-        ix7/T8E6dBA/F6hiLhPZcDu701pHd2DriNYKHCiWtW35N+VL5Jdwz1quemNt9yDeCbx6mzsc2PpBj
-        DlBYgbjA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pI985-001HFU-3c; Wed, 18 Jan 2023 14:09:29 +0000
-Date:   Wed, 18 Jan 2023 06:09:29 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 09/34] bio: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED
- and invert the meaning
-Message-ID: <Y8f9mSt+QuxuHOm9@infradead.org>
-References: <167391054631.2311931.7588488803802952158.stgit@warthog.procyon.org.uk>
- <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
- <2673696.1674050454@warthog.procyon.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2673696.1674050454@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 09:26:15 -0500
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 96EDD8EFC2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:10:20 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [106.117.76.92])
+        by mail-app3 (Coremail) with SMTP id cC_KCgBHv6q5_cdj+OUMDA--.39835S2;
+        Wed, 18 Jan 2023 22:10:10 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [RESEND PATCH v2] Revert "char: pcmcia: cm4000_cs: Replace mdelay with usleep_range in set_protocol"
+Date:   Wed, 18 Jan 2023 22:10:00 +0800
+Message-Id: <20230118141000.5580-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgBHv6q5_cdj+OUMDA--.39835S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4fJr1UXw4rZFWUJry8Grg_yoW8Wr4UpF
+        4FkF90yF48G39av3WDAa10934YgaySq34xKF4fG3s8ZF9Yq3WDKrykJFW3Kr1DXrZ5Jw1S
+        v3Waqay3KF4jkrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry5
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUe_M3DUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcTAVZdtdRVzwAmsB
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 02:00:54PM +0000, David Howells wrote:
-> Actually, should I make it so that the bottom two bits of bi_flags are a
-> four-state variable and make it such that bio_release_page() gives a warning
-> if the state is 0 - ie. unset?
-> 
-> The states would then be, say:
-> 
-> 	0	WARN(), do no cleanup
-> 	1	FOLL_GET
-> 	2	FOLL_PUT
-> 	3	do no cleanup
-> 
-> This should help debug any places, such as iomap_dio_zero() that I just found,
-> that add pages with refs without calling iov_iter_extract_pages().
+This reverts commit be826ada52f1fcabed5b5217c94609ebf5967211.
 
-I don't really see a point.  The fundamental use case of the bio itself
-isn't really to this at all.  So we're stealing one, or in the future
-two bits mostly to optimize some direct I/O use cases.  In fact I
-wonder if instead we should just drop this micro-optimization entirely
-an just add a member for the foll flags to the direct I/O container
-structures (struct blkdev_dio, strut iomap_dio, struct dio, or just on
-stack for __blkdev_direct_IO_simple and zonefs_file_dio_append) and
-pass that to bio_release_pages.
+The function monitor_card() is a timer handler that runs in an
+atomic context, but it calls usleep_range() that can sleep.
+As a result, the sleep-in-atomic-context bugs will happen.
+The process is shown below:
+
+    (atomic context)
+monitor_card()
+  set_protocol()
+    usleep_range() //sleep
+
+The origin commit c1986ee9bea3 ("[PATCH] New Omnikey Cardman
+4000 driver") works fine.
+
+Fixes: be826ada52f1 ("char: pcmcia: cm4000_cs: Replace mdelay with usleep_range in set_protocol")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Add comments so that this will not be changed again in the future.
+
+ drivers/char/pcmcia/cm4000_cs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
+index adaec8fd4b1..e656f42a28a 100644
+--- a/drivers/char/pcmcia/cm4000_cs.c
++++ b/drivers/char/pcmcia/cm4000_cs.c
+@@ -529,7 +529,8 @@ static int set_protocol(struct cm4000_dev *dev, struct ptsreq *ptsreq)
+ 			DEBUGP(5, dev, "NumRecBytes is valid\n");
+ 			break;
+ 		}
+-		usleep_range(10000, 11000);
++		/* can not sleep as this is in atomic context */
++		mdelay(10);
+ 	}
+ 	if (i == 100) {
+ 		DEBUGP(5, dev, "Timeout waiting for NumRecBytes getting "
+@@ -549,7 +550,8 @@ static int set_protocol(struct cm4000_dev *dev, struct ptsreq *ptsreq)
+ 			}
+ 			break;
+ 		}
+-		usleep_range(10000, 11000);
++		/* can not sleep as this is in atomic context */
++		mdelay(10);
+ 	}
+ 
+ 	/* check whether it is a short PTS reply? */
+-- 
+2.17.1
+
