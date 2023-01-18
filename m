@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B5C6723FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD25D6723FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjARQs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S229665AbjARQsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjARQsZ (ORCPT
+        with ESMTP id S229685AbjARQsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:48:25 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3045E303FB
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v13so16343438eda.11
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
-        b=HizGboq0OC8XKjblNCtaASyrgCAdADxGBXfBRPO0jB68wVvbLXM4u0qhGOWDDTpuvR
-         vWCLZtvyaQuS/2Tvgp8bOpAfEckgpLrxcy5zLW0IgBJnZ/2FBnHftxND5Orp/JQO2+QN
-         w0lV1rBbetb161VYgvAGjqfouX4oSB/Mze3U7GkG5LwSwZvNRm6LaogH7pTGimcdqgdS
-         rekFnb9L2Xqd3vw4vLdKMB9fFMwTcafX4NR/HTDErB122lvv40HlRUY72iycyj7FNkYF
-         10neXwmBGMjE+j8Zi9yw0lYAUimir2PwovgeaQOFOAI62f7SFiQbsdQvsv1hq1HynPJe
-         g95Q==
+        Wed, 18 Jan 2023 11:48:40 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC089303F9;
+        Wed, 18 Jan 2023 08:48:37 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-15f64f2791dso5783524fac.7;
+        Wed, 18 Jan 2023 08:48:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
-        b=KF10i6st1O1XHEDEMEXnqEGEwyfrils71GXDauRU9qj6snx/J7XNX51WabW2O05ssH
-         QABJ5wtNynPfXWkUKRkcUm0eTvQ4S0vE7sabEGmzW5CFvNRJgcrHjomyZafn0dtXe8+m
-         XCd4yUOFq/5QZZkkQRyzyY/9hEHQ+SJBsSSChXj2KuZljKCYCw5KC17fZuUtCGH64Hbl
-         rjczt4I6i5LZqc3qBUYFSGnw7On49zLBpSfCzjFhwQ+NjCtJmqyP2qw78gX6GXiHBIyn
-         fyG/ZRQlWZyYUWIa3qDUdDI+afezYun4a5kWNUathH0xtl6QlP8ug8JesEg9wurMMetJ
-         goLQ==
-X-Gm-Message-State: AFqh2kr5gH86e8f7dyYprwf6ae1MuSLEvXZ9/a9pscRO7vhRf3J9t48N
-        U6GhBQqI2KYLKXrdtT9HietQrA==
-X-Google-Smtp-Source: AMrXdXstpqo7orPGoSroBhoJGiliGWm2gYQm8T8Kt7XTBTrW3BxHgSVYkNk8R0Vxu7qfafQKn9xGwA==
-X-Received: by 2002:a05:6402:2989:b0:461:1998:217f with SMTP id eq9-20020a056402298900b004611998217fmr7661275edb.4.1674060502714;
-        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id k22-20020a1709063fd600b00862497eafb2sm8867294ejj.103.2023.01.18.08.48.21
+        bh=hxaC/+vj0+0cmZsvPmWAUPTa0igCb7E0vBb71/KtRnM=;
+        b=LK/ZJ/9TwSnXclLORbG1KImadD5WQutaOqYLdyv612o9daaFIql0N+GYvMubo9TVDT
+         78Cs+qqYHEm3HNUmKL6iNeOjDnV5xSjfoVnHfCITcoFyXkaxPzoPrtgEUWBUrS4id8NK
+         Uaca3M+4mlRHTmPor4IcWnEMz3U/nS+Mn2VSOAbhb2AixhbqJKduI9/fiWUqFKBtPHh4
+         YSL6DwM4FwsgUGc8KUHtWbaXfJVCds5hPSUoeLro3sxt+2H4Dpv9r/FMFKREwkpWyPJx
+         6Mky9OyQzlY5bDA8hohYBiKycALZLIZNb4iYLDbDno+aiSXFwUa3ZL0yGToZ32FGRGY4
+         wHww==
+X-Gm-Message-State: AFqh2kozCKh2EUFIcAoRBC0Zt+xvOhWjYJcjOvraSA61St58rGMLjJXU
+        S+0lSOkyvpyiyCPCPbeMAA==
+X-Google-Smtp-Source: AMrXdXspzsuKKi9p1SkaPBh1bqyhnNkFKbA/1xoHvQifmJAODs5ghXonjK8iX+dUNoevRqaM1aT+Ag==
+X-Received: by 2002:a05:6871:430e:b0:155:37ac:d907 with SMTP id lu14-20020a056871430e00b0015537acd907mr3681620oab.18.1674060517072;
+        Wed, 18 Jan 2023 08:48:37 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id q187-20020a4a4bc4000000b004a3c359fdaesm16818498ooa.30.2023.01.18.08.48.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
-Date:   Wed, 18 Jan 2023 16:48:20 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230118164820.r37yfigmwwdske4r@airbuntu>
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
- <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
- <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+        Wed, 18 Jan 2023 08:48:36 -0800 (PST)
+Received: (nullmailer pid 147773 invoked by uid 1000);
+        Wed, 18 Jan 2023 16:48:35 -0000
+Date:   Wed, 18 Jan 2023 10:48:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chester Lin <clin@suse.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        linux-gpio@vger.kernel.org,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <mbrugger@suse.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        s32@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: pinctrl: add schema for NXP S32 SoCs
+Message-ID: <167406051498.147713.15394591575288533598.robh@kernel.org>
+References: <20230118094728.3814-1-clin@suse.com>
+ <20230118094728.3814-2-clin@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230118094728.3814-2-clin@suse.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,107 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/18/23 09:15, Vincent Guittot wrote:
-> On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >
-> > On 16/01/2023 12:23, Vincent Guittot wrote:
-> > > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> > >>
-> > >> On 13/01/2023 14:40, Vincent Guittot wrote:
-> >
-> > [...]
-> >
-> > >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
-> > >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
-> > >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
-> > >>>
-> > >>> +     /* Return true only if the utlization doesn't fit its capacity */
-> > >>
-> > >> s/utlization/utilization
-> > >> s/its/CPU ?
-> > >>
-> > >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
-> > >>>  }
-> > >>
-> > >> cpu_overutilized() is the only place where we now only test for
-> > >> !util_fits_cpu(). The new comment says we only care about utilization
-> > >> not fitting CPU capacity.
-> > >>
-> > >> Does this mean the rq uclamp values are not important here and we could
-> > >> go back to use fits_capacity()?
-> > >>
-> > >> Not sure since util_fits_cpu() is still coded differently:
-> > >
-> > > uclamp_min is not important but uclamp_max still cap the utilization
-> >
-> > OK, makes sense.
-> >
-> > I.e. we could pass in `rq_util_min = 0` to avoid fetching it
-> > unnecessary? In case `fits == 1` before the uclamp_min condition in
-> > util_fits_cpu() it doesn't matter if we switch to return `-1` when
-> > called from cpu_overutilized(). Detail though ...
+
+On Wed, 18 Jan 2023 17:47:26 +0800, Chester Lin wrote:
+> Add DT schema for the pinctrl driver of NXP S32 SoC family.
 > 
-> One comment from Qais was to minimize knowledge outside
-> util_fits_cpu() that's why I pass both uclamp_min and uclamp_max.
+> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>
+> Signed-off-by: Chester Lin <clin@suse.com>
+> ---
 > 
-> >
-> > [...]
-> >
-> > >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
-> > >>>
-> > >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
-> > >>>                       continue;
-> > >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
-> > >>> +
-> > >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
-> > >>> +
-> > >>> +             /* This CPU fits with all capacity and performance requirements */
-> > >>
-> > >> In task_fits_cpu() `utilization and performance (better uclamp)
-> > >> requirements` term was used. I assume it's the same thing here?
-> > >>
-> > >>> +             if (fits > 0)
-> > >>>                       return cpu;
-> > >>> +             /*
-> > >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
-> > >>> +              * for the CPU with highest performance capacity.
-> > >>                                             ^^^^^^^^^^^^^^^^^^^^
-> > >>
-> > >> Do we use a new CPU capacity value `performance capacity (1)` here?
-> > >>
-> > >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
-> > >>
-> > >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
-> > >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
-> > >> to return -1. Shouldn't (1) and (2) be the same?
-> > >
-> > > I'm all in favor of both being capacity_orig_of(cpu) -
-> > > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
-> >
-> > I think we need a handy name for this new capacity value, which seems to
-> > be `capacity_orig - capacity reduced by thermal`. And we should either
-> > use `thermal_load_avg` or `thermal pressure` for the latter part. And
-> > then we should use this consistently in all these places:
-> > util_fits_cpu(), feec(), sic().
+> Changes in v4:
+> - Change the representation of available slew-rate DT values from register
+>   values to real frequencies.
 > 
-> Ok, let me change this everywhere
+>  .../pinctrl/nxp,s32g2-siul2-pinctrl.yaml      | 123 ++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,s32g2-siul2-pinctrl.yaml
+> 
 
-I'm not keen on this :-/
-
-Changing this everywhere could have implications beyond our simple capabilities
-of testing now :(
-
-Current choice (in util_fits_cpu()) was based on a direct feedback from Xuewen.
-I think we should discuss how we can improve the situation instead rather than
-worry about consistency. I don't think we can be consistent without doing some
-improvements on thermal pressure response time.
-
-A separate proposal patch to invoke some testing and discussion is fine by me.
-
-Better keep it a separate work item please?
-
-
-Cheers
-
---
-Qais Yousef
+Reviewed-by: Rob Herring <robh@kernel.org>
