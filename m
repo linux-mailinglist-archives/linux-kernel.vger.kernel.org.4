@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260796713DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFC56713D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 07:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjARGX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 01:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S229522AbjARGWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 01:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjARGTv (ORCPT
+        with ESMTP id S229739AbjARGTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:19:51 -0500
+        Wed, 18 Jan 2023 01:19:19 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D71134617D;
-        Tue, 17 Jan 2023 22:07:17 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxSurmi8dj40QCAA--.6799S3;
-        Wed, 18 Jan 2023 14:04:22 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axvr7ki8djMysbAA--.56965S3;
-        Wed, 18 Jan 2023 14:04:21 +0800 (CST)
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix undeclared identifier build
- errors of test_bpf_nf.c
-To:     Yonghong Song <yhs@meta.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-References: <1673844908-11533-1-git-send-email-yangtiezhu@loongson.cn>
- <14e0f634f084d0f07e447638c490da60943507d6.camel@gmail.com>
- <556dc633-e7fb-da8a-1fa9-757684edd3a4@oracle.com>
- <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
- <d299be28-42f5-b387-5b54-74694ff5f340@loongson.cn>
- <f8b5ef05-4dd1-eb3e-c6e0-af47169d7b8e@meta.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <2e396e21-1a91-aebe-35b2-09774fe71cf7@loongson.cn>
-Date:   Wed, 18 Jan 2023 14:04:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AF7B46158
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 22:07:07 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8BxZ+lBjMdj_UQCAA--.1648S3;
+        Wed, 18 Jan 2023 14:05:53 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+Q+jMdjdisbAA--.16958S3;
+        Wed, 18 Jan 2023 14:05:52 +0800 (CST)
+Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as
+ non-kprobe-able
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+ <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+ <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
+Date:   Wed, 18 Jan 2023 14:05:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <f8b5ef05-4dd1-eb3e-c6e0-af47169d7b8e@meta.com>
+In-Reply-To: <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Axvr7ki8djMysbAA--.56965S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3tF1kur45AF48Kr4DZw48tFb_yoW8Jw1fKo
-        ZxGF1fKa17Kr1xXa40g3ZYkrZxWw10kryrJryUKw15Jay5t342kr1UCw4UZF4jvF4rG3Z7
-        W3ZxCw43Za45WF1kn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E
-        4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcApnDUUUU
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Bxb+Q+jMdjdisbAA--.16958S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXFW7Gr4UZr15Jr1xGr1kuFg_yoWrZFW5pr
+        1kAFs8trZ5Gr18Jry7tw18X34Utrn7G3Wjqw1jyFy8Jr47Xr1jgry0gr4q9FyxJw4xGr10
+        qF1rXrnrZF45Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzZ2-UUUUU
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,374 +69,134 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 2023-01-18 12:23, Tiezhu Yang wrote:
+>
+>
+> On 01/18/2023 12:14 PM, Huacai Chen wrote:
+>> If memcpy should be blacklisted, then what about memset and memmove?
+>
+> According to the test results, there are no problems to probe
+> memset and memmove, so no need to blacklist them for now,
+> blacklist memcpy is because it may cause recursive exceptions,
+> there is a detailed discussion in the following link:
+>
+> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/ 
+>
 
-On 01/18/2023 02:29 AM, Yonghong Song wrote:
->
->
-> On 1/17/23 1:52 AM, Tiezhu Yang wrote:
->>
->>
->> On 01/17/2023 02:48 PM, Yonghong Song wrote:
->>>
->>>
->>> On 1/16/23 5:54 AM, Alan Maguire wrote:
->>>> On 16/01/2023 12:30, Eduard Zingerman wrote:
->>>>> On Mon, 2023-01-16 at 12:55 +0800, Tiezhu Yang wrote:
->>>>>> $ make -C tools/testing/selftests/bpf/
->>>>>>
->>>>>>    CLNG-BPF [test_maps] test_bpf_nf.bpf.o
->>>>>> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier
->>>>>> 'NF_NAT_MANIP_SRC'
->>>>>>                  bpf_ct_set_nat_info(ct, &saddr, sport,
->>>>>> NF_NAT_MANIP_SRC);
->>>>>>                                                         ^
->>>>>> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier
->>>>>> 'NF_NAT_MANIP_DST'
->>>>>>                  bpf_ct_set_nat_info(ct, &daddr, dport,
->>>>>> NF_NAT_MANIP_DST);
->>>>>>                                                         ^
->>>>>> 2 errors generated.
->>>>>>
->>>>>> Copy the definitions in include/net/netfilter/nf_nat.h to
->>>>>> test_bpf_nf.c
->>>>>> to fix the above build errors.
->>>>>>
->>>>>> Fixes: b06b45e82b59 ("selftests/bpf: add tests for
->>>>>> bpf_ct_set_nat_info kfunc")
->>>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>>>> ---
->>>>>>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
->>>>>>   1 file changed, 5 insertions(+)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>>>> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>>>> index 227e85e..114f961 100644
->>>>>> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>>>> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>>>> @@ -34,6 +34,11 @@ __be16 dport = 0;
->>>>>>   int test_exist_lookup = -ENOENT;
->>>>>>   u32 test_exist_lookup_mark = 0;
->>>>>>   +enum nf_nat_manip_type {
->>>>>> +    NF_NAT_MANIP_SRC,
->>>>>> +    NF_NAT_MANIP_DST
->>>>>> +};
->>>>>> +
->>>>>
->>>>> This is confusing, when I build the kernel/tests I get the declaration
->>>>> the "enum nf_nat_manip_type" from the vmlinux.h (which is included
->>>>> from test_bpf_nf.c).
->>>>> Which means that this patch results in compilation error with my
->>>>> configuration.
->>>>> Is there a chance that your kernel is configured without some
->>>>> necessary netfilter
->>>>> configuration options? Have you tried this patch with BPF CI?
->>>>>
->>>>
->>>> Yep; I suspect if CONFIG_NF_NAT=m , the required definitions won't
->>>> make it
->>>> into vmlinux.h. The reference tools/testing/seftests/bpf/config has
->>>> CONFIG_NF_NAT=y so it is at least documented in the referenced config.
->>>>
->>>> I'd suggest going the route of
->>>>
->>>> commit aa67961f3243dfff26c47769f87b4d94b07ec71f
->>>> Author: Martin KaFai Lau <martin.lau@kernel.org>
->>>> Date:   Tue Dec 6 11:35:54 2022 -0800
->>>>
->>>>      selftests/bpf: Allow building bpf tests with
->>>> CONFIG_XFRM_INTERFACE=[m|n]
->>>>      ...and adding/using local definitons like:
->>>>
->>>> enum nf_nat_manip_type_local {
->>>>     NF_NAT_MANIP_SRC_LOCAL,
->>>>     NF_NAT_MANIP_DST_LOCAL
->>>> };
->>>
->>> The above won't support core, and since preserve_access_index attribute
->>> does not support enum for now. We need to use bpf_core_enum_value to
->>> retrieve the proper value through CORE.
->>>
->>> could you try the following?
->>>
->>> enum nf_nat_manip_type___local {
->>>     NF_NAT_MANIP_SRC___LOCAL,
->>>     NF_NAT_MANIP_DST___LOCAL,
->>> };
->>
->> This is OK, it is similar with commit 1058b6a78db2 ("selftests/bpf: Do
->> not fail build if CONFIG_NF_CONNTRACK=m/n").
->>
->>>
->>> ...
->>> bpf_ct_set_nat_info(ct, &saddr, sport, bpf_core_enum_value(enum
->>> nf_nat_manip_type___local,  NF_NAT_MANIP_SRC___LOCAL));
->>> ...
->>>
->>> bpf_ct_set_nat_info(ct, &daddr, dport, bpf_core_enum_value(enum
->>> nf_nat_manip_type___local,  NF_NAT_MANIP_DST___LOCAL));
->>>
->>> whether it works or not? Could you also try if the
->>> enumerator sequence in enum nf_nat_manip_type___local changed?
->>>
->>>>
->>>> ...to avoid the name clash.
->>>>
->>>>
->>>> Alan
->>
->> I tested this on x86_64 fedora 36, using config-5.17.5-300.fc36.x86_64
->> to generate .config, CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, there are
->> no definitions of NF_NAT_MANIP_SRC and NF_NAT_MANIP_DST in vmlinux.h,
->> build test_bpf_nf.c failed.
->
-> Thanks for trying. Yes, I tried in my environment and it failed because
-> I didn't change the enum nf_nat_manip_type type for kfunc:
-> int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
->                         int port, enum nf_nat_manip_type) __ksym;
->
-> But when I changed 'enum nf_nat_manip_type' to
-> 'enum nf_nat_manip_type___local', kernel complains kfunc argument
-> mismatch. The reason most likely is 'enum nf_nat_manip_type___local'
-> is not converted to 'enum nf_nat_manip_type' by libbpf.
->
-> This might be expected as preserve_access_index attribute only
-> supports record (struct/union) type and libbpf might just do that.
-> Could you double check whether this is the case or not?
->
-> Maybe it is time to implement preserve_access_index support
-> for enum type in clang now.
->
-> But we need to resolve the issue, even temporarily for now.
-> See below.
->
->>
->> $ grep -w CONFIG_NF_CONNTRACK /boot/config-5.17.5-300.fc36.x86_64
->> CONFIG_NF_CONNTRACK=m
->> $ grep -w CONFIG_NF_NAT /boot/config-5.17.5-300.fc36.x86_64
->> CONFIG_NF_NAT=m
->>
->> I tested with various configs, the definitions of NF_NAT_MANIP_SRC and
->> NF_NAT_MANIP_DST in vmlinux.h only depend on CONFIG_NF_CONNTRACK=y.
->>
->> (1) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, no definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> CONFIG_NF_CONNTRACK=m
->> $ grep -w CONFIG_NF_NAT .config
->> CONFIG_NF_NAT=m
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $
->>
->> (2) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=y, no definitions
->> This case is unable, because CONFIG_NF_NAT depends on
->> CONFIG_NF_CONNTRACK.
->>
->> (3) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=n, no definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> CONFIG_NF_CONNTRACK=m
->> $ grep -w CONFIG_NF_NAT .config
->> # CONFIG_NF_NAT is not set
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $
->>
->> (4) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=m, have definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> CONFIG_NF_CONNTRACK=y
->> $ grep -w CONFIG_NF_NAT .config
->> CONFIG_NF_NAT=m
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_SRC = 0,
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_DST = 1,
->>
->> (5) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=y, have definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> CONFIG_NF_CONNTRACK=y
->> $ grep -w CONFIG_NF_NAT .config
->> CONFIG_NF_NAT=y
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_SRC = 0,
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_DST = 1,
->>
->> (6) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=n, have definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> CONFIG_NF_CONNTRACK=y
->> $ grep -w CONFIG_NF_NAT .config
->> # CONFIG_NF_NAT is not set
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_SRC = 0,
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->>      NF_NAT_MANIP_DST = 1,
->>
->> (7) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=n, no definitions
->> $ grep -w CONFIG_NF_CONNTRACK .config
->> # CONFIG_NF_CONNTRACK is not set
->> $ grep -w CONFIG_NF_NAT .config
->> $ grep NF_NAT_MANIP_SRC
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $ grep NF_NAT_MANIP_DST
->> tools/testing/selftests/bpf/tools/include/vmlinux.h
->> $
->>
->> (8) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=y, no definitions
->> This case is unable, because CONFIG_NF_NAT depends on
->> CONFIG_NF_CONNTRACK.
->>
->> Here is an alternative change to check whether CONFIG_NF_CONNTRACK
->> is m, enum nf_nat_manip_type___local is simple, which one is better?
->>
->> $ git diff tools/testing/selftests/bpf/
->> diff --git a/tools/testing/selftests/bpf/Makefile
->> b/tools/testing/selftests/bpf/Makefile
->> index 22533a18705e..f3cf02046c20 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -325,7 +325,7 @@ endif
->>
->>   CLANG_SYS_INCLUDES = $(call
->> get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
->>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH)
->> $(MENDIAN)          \
->> -            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
->> +            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) -I$(TOOLSINCDIR)  \
->>               -I$(abspath $(OUTPUT)/../usr/include)
->>
->>   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
->> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> index 227e85e85dda..f2101807072f 100644
->> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> @@ -2,6 +2,7 @@
->>   #include <vmlinux.h>
->>   #include <bpf/bpf_helpers.h>
->>   #include <bpf/bpf_endian.h>
->> +#include <linux/kconfig.h>
->>
->>   #define EAFNOSUPPORT 97
->>   #define EPROTO 71
->> @@ -34,6 +35,13 @@ __be16 dport = 0;
->>   int test_exist_lookup = -ENOENT;
->>   u32 test_exist_lookup_mark = 0;
->>
->> +#if IS_MODULE(CONFIG_NF_CONNTRACK)
->> +enum nf_nat_manip_type {
->> +       NF_NAT_MANIP_SRC,
->> +       NF_NAT_MANIP_DST
->> +};
->> +#endif
->> +
->
-> The above change does not work for me. The complication failed with
->
->   CLNG-BPF [test_maps]
-> btf__core_reloc_nesting___err_missing_container.bpf.o
->   CLNG-BPF [test_maps] test_sysctl_loop2.bpf.o
-> progs/test_bpf_nf.c:168:42: error: use of undeclared identifier
-> 'NF_NAT_MANIP_SRC'
->                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
->                                                        ^
-> progs/test_bpf_nf.c:171:42: error: use of undeclared identifier
-> 'NF_NAT_MANIP_DST'
->                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
->                                                        ^
-> 2 errors generated.
->
->
-> Apparently, IS_MODULE(...) is recognized but it returns 0.
-> I do have CONFIG_NF_CONNTRACK=m in my config.
-> Note that I build the kernel with KBUILD_OUTPUT=<another dir>
-> (make -j LLVM=1) so vmlinux is in a different place.
-> While I build selftest
-> with 'make -C tools/testing/selftests/bpf -j LLVM=1' which
-> is in-tree.
->
->>   struct nf_conn;
->>
->>   struct bpf_ct_opts___local {
->>
->> Note that when unset CONFIG_NF_CONNTRACK, there are much more
->> build errors, I do not know whether it is necessary to fix it
->> and how to fix it properly. Here, I only consider the failed
->> case CONFIG_NF_CONNTRACK=m.
->>
->> Thanks,
->> Tiezhu
->>
+Hi, Tiezhu,
 
-I have the following test environment:
+I cannot reproduce the results when kprobe memcpy. Could you please give
+some details. Emm, I just replace "kernel_clone" with "memcpy" in
+kprobe_example.c.
 
-system: x86_64 fedora 36
-kernel: the latest bpf-next
-clang: version 14.0.5 (Fedora 14.0.5-1.fc36)
-gcc: 12.2.1 20220819 (Red Hat 12.2.1-2)
+And for your call trace,
 
-With the following changes, there are no any build errors and
-warnings if
-(1) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m
-(2) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=m
-(3) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=y
+  handler_pre()
+    pr_info()
+      printk()
+       _printk()
+         vprintk()
+           vprintk_store()
+             memcpy()
 
-$ git diff
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c 
-b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 227e85e85dda..9fc603c9d673 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -34,6 +34,11 @@ __be16 dport = 0;
-  int test_exist_lookup = -ENOENT;
-  u32 test_exist_lookup_mark = 0;
+I think when we should skip this time kprobe which triggered in
+handler_{pre, post}. That means this time kprobe will not call
+handler_{pre, post} agian, and not cause recursion. I remember
+your codes had done this skip action. So, that's so strange if
+recursion in handler_{pre, post}.
 
-+enum nf_nat_manip_type___local {
-+       NF_NAT_MANIP_SRC___local,
-+       NF_NAT_MANIP_DST___local
-+};
-+
-  struct nf_conn;
-
-  struct bpf_ct_opts___local {
-@@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
-  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
-  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
-  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
--                       int port, enum nf_nat_manip_type) __ksym;
-+                       int port, enum nf_nat_manip_type___local) __ksym;
-
-  static __always_inline void
-  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple 
-*, u32,
-@@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, 
-struct bpf_sock_tuple *, u32,
-
-                 /* snat */
-                 saddr.ip = bpf_get_prandom_u32();
--               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-+               bpf_ct_set_nat_info(ct, &saddr, sport, 
-NF_NAT_MANIP_SRC___local);
-                 /* dnat */
-                 daddr.ip = bpf_get_prandom_u32();
--               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-+               bpf_ct_set_nat_info(ct, &daddr, dport, 
-NF_NAT_MANIP_DST___local);
-
-                 ct_ins = bpf_ct_insert_entry(ct);
-                 if (ct_ins) {
-
-I will send it as a normal patch for your review, let us see what is
-the status of BPF CI.
 
 Thanks,
-Tiezhu
+
+Jinyang
+
+
+>
+> Thanks,
+> Tiezhu
+>
+>>
+>> Huacai
+>>
+>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn> 
+>> wrote:
+>>>
+>>> Some assembler symbols are not kprobe safe, such as handle_syscall
+>>> (used as syscall exception handler), *memcpy* (may cause recursive
+>>> exceptions), they can not be instrumented, just blacklist them for
+>>> kprobing.
+>>>
+>>> Here is a related problem and discussion:
+>>> Link: 
+>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+>>>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>> ---
+>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
+>>>  arch/loongarch/kernel/entry.S    |  1 +
+>>>  arch/loongarch/lib/memcpy.S      |  3 +++
+>>>  3 files changed, 14 insertions(+)
+>>>
+>>> diff --git a/arch/loongarch/include/asm/asm.h 
+>>> b/arch/loongarch/include/asm/asm.h
+>>> index 40eea6a..f591b32 100644
+>>> --- a/arch/loongarch/include/asm/asm.h
+>>> +++ b/arch/loongarch/include/asm/asm.h
+>>> @@ -188,4 +188,14 @@
+>>>  #define PTRLOG         3
+>>>  #endif
+>>>
+>>> +/* Annotate a function as being unsuitable for kprobes. */
+>>> +#ifdef CONFIG_KPROBES
+>>> +#define _ASM_NOKPROBE(name)                            \
+>>> +       .pushsection "_kprobe_blacklist", "aw";         \
+>>> +       .quad   name;                                   \
+>>> +       .popsection
+>>> +#else
+>>> +#define _ASM_NOKPROBE(name)
+>>> +#endif
+>>> +
+>>>  #endif /* __ASM_ASM_H */
+>>> diff --git a/arch/loongarch/kernel/entry.S 
+>>> b/arch/loongarch/kernel/entry.S
+>>> index d53b631..55e23b1 100644
+>>> --- a/arch/loongarch/kernel/entry.S
+>>> +++ b/arch/loongarch/kernel/entry.S
+>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
+>>>
+>>>         RESTORE_ALL_AND_RET
+>>>  SYM_FUNC_END(handle_syscall)
+>>> +_ASM_NOKPROBE(handle_syscall)
+>>>
+>>>  SYM_CODE_START(ret_from_fork)
+>>>         bl      schedule_tail           # a0 = struct task_struct *prev
+>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+>>> index 7c07d59..3b7e1de 100644
+>>> --- a/arch/loongarch/lib/memcpy.S
+>>> +++ b/arch/loongarch/lib/memcpy.S
+>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
+>>>         ALTERNATIVE     "b __memcpy_generic", \
+>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
+>>>  SYM_FUNC_END(memcpy)
+>>> +_ASM_NOKPROBE(memcpy)
+>>>
+>>>  EXPORT_SYMBOL(memcpy)
+>>>
+>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
+>>>  2:     move    a0, a3
+>>>         jr      ra
+>>>  SYM_FUNC_END(__memcpy_generic)
+>>> +_ASM_NOKPROBE(__memcpy_generic)
+>>>
+>>>  /*
+>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
+>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
+>>>  3:     move    a0, a3
+>>>         jr      ra
+>>>  SYM_FUNC_END(__memcpy_fast)
+>>> +_ASM_NOKPROBE(__memcpy_fast)
+>>> -- 
+>>> 2.1.0
+>>>
+>
 
