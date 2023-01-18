@@ -2,149 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81388671FC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6975671FCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjAROiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S231373AbjAROir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjAROhl (ORCPT
+        with ESMTP id S231362AbjAROiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:37:41 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D26366A3;
-        Wed, 18 Jan 2023 06:26:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674052017; x=1705588017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bShIF2GzN0uCjfJDJnHZS1KX11YWPQMysT+sSLBfayw=;
-  b=epX4rTXnAtqmFGzxEYmG/Ivu0oLoT+HDjs4jvOTsoKWN6J43OlI/iVnG
-   Mg9vLyVKiUedBmtGXlur/J4FDF/hqc0oA6dLvEpN4Ucrg9Sxyk/dfXmyY
-   5mmMpq3x4nwE1uDPYavls4iq+J+8RlDrMAQ2uY2cQ93RDZM1ReFWAJ0h7
-   XcvF2n6QHHi/n47wlR6DTWev0f+S74hyJWwgUcgEJA4kkblSrLbLRHU/r
-   7hFuEtmywoNk2tTeauG+++YpStMg2tMyMRSdNZyHp9enWUsLfrIMPyN2v
-   vwmbKSjR2ivu3qlebifOwveJ54AouYs6jNizCydSgPm9lBz/uW724rAAA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="323678285"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="323678285"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 06:26:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="652961213"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="652961213"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jan 2023 06:26:51 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pI9Ot-0000Qe-0n;
-        Wed, 18 Jan 2023 14:26:51 +0000
-Date:   Wed, 18 Jan 2023 22:26:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Shravan Sudhakar <s.shravan@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/1] platform/x86: int1092: Switch to use
- acpi_evaluate_dsm_typed()
-Message-ID: <202301182233.vDnTdKEG-lkp@intel.com>
-References: <20230118095152.41427-1-andriy.shevchenko@linux.intel.com>
+        Wed, 18 Jan 2023 09:38:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F5588775
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:26:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674051973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g06cdjA6Y1YmHGhcKb7SPdcn8qSEd7bjUCxNp9yfSiQ=;
+        b=eqmuMXcHnkia/tgNj5U+9kLuByYqc32IENBTx2LkDgZft4+ZuzNgWzqF9zNPdYTobYwcLB
+        nbqAK5Ob0kr1eWdhYkym5i9VwF07mOiB3lCF+TEJqmTERqbsIHo2Hs0MvNX7lgbgV+xKho
+        Wk7pBNv3zRgUU8pqeX/LD8xSXCPGwSM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-623-fZPiOahAP9qbcf3hlqf3pg-1; Wed, 18 Jan 2023 09:26:11 -0500
+X-MC-Unique: fZPiOahAP9qbcf3hlqf3pg-1
+Received: by mail-wm1-f70.google.com with SMTP id z22-20020a7bc7d6000000b003daf671f7b2so560000wmk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:26:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g06cdjA6Y1YmHGhcKb7SPdcn8qSEd7bjUCxNp9yfSiQ=;
+        b=zXip3aIXNBIQWiMObz0/RrfSpkcvzVO0uFSzMlFRDPysDDFgsDRDGakasfAliByDb3
+         qYLufzcVTtylhiDDpIRnYuQvCpllIur2ciYIim2dm9vmwrNIkCk96eY4kQWVCVi/ltgh
+         eRtZCJ4+XkmdvSJwBOOgo3BpM+VijvugHPH9EnRtzs9qM8hDvENHBpUKXFSVwLpCA2uE
+         cRPPpl+oOEoEtfHIntYQdNHX00ujb0bm5xlqVQLtBTOfUwj5ORiOhbpc0YUQvifY9iWf
+         hD87qyG3M9kBLGsbOTYFlzBIt4gPXzuf7dQt+2bIPRGcxqtYdF5xESTImAI0BPiw2zho
+         m5LQ==
+X-Gm-Message-State: AFqh2koKHlKF9jgXbc7ibVhkQiLGwmey5SucDqz/sFm+U6pCiA8PPucJ
+        dBjJAAXfaS1pspNDTsCrvjHx/iQ/iuWBueZ/9jMpihLBDIXhIgZYwX1x2I8j5Ha+bU1ELQVR9Av
+        FaO+U+FNdeT4XRRMjnJJJygy5
+X-Received: by 2002:a1c:f617:0:b0:3d2:191d:2420 with SMTP id w23-20020a1cf617000000b003d2191d2420mr6765367wmc.7.1674051970243;
+        Wed, 18 Jan 2023 06:26:10 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs8qt2aUQTMf4NiwYQSMfy0TkaQhHKLrhb7WoCi5t6BJc9U5DppBmazAWsNoJuY1A5pOdpI3A==
+X-Received: by 2002:a1c:f617:0:b0:3d2:191d:2420 with SMTP id w23-20020a1cf617000000b003d2191d2420mr6765343wmc.7.1674051969945;
+        Wed, 18 Jan 2023 06:26:09 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:800:1a88:f98a:d223:c454? (p200300cbc70508001a88f98ad223c454.dip0.t-ipconnect.de. [2003:cb:c705:800:1a88:f98a:d223:c454])
+        by smtp.gmail.com with ESMTPSA id p4-20020a05600c1d8400b003da286f8332sm2273274wms.18.2023.01.18.06.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 06:26:09 -0800 (PST)
+Message-ID: <3704dcf0-bd0a-8ab2-7f4f-045fc7c73171@redhat.com>
+Date:   Wed, 18 Jan 2023 15:26:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118095152.41427-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202212300918477352037@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v5 6/6] selftest: add testing unsharing and counting ksm
+ zero page
+In-Reply-To: <202212300918477352037@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 30.12.22 02:18, yang.yang29@zte.com.cn wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> Add a function test_unmerge_zero_page() to test the functionality on
+> unsharing and counting ksm-placed zero pages and counting of this patch
+> series.
+> 
+> test_unmerge_zero_page() actually contains three subjct test objects:
+> 	1) whether the count of ksm zero page can react correctly to cow
+> 	   (copy on write);
+> 	2) whether the count of ksm zero page can react correctly to unmerge;
+> 	3) whether ksm zero pages are really unmerged.
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+> 
+> v4->v5:
+> fix error of "} while (end_scans < start_scans + 20);" to
+> "} while (end_scans < start_scans + 2);" in wait_two_full_scans().
+> ---
+>   tools/testing/selftests/vm/ksm_functional_tests.c | 103 +++++++++++++++++++++-
+>   1 file changed, 99 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/ksm_functional_tests.c b/tools/testing/selftests/vm/ksm_functional_tests.c
+> index b11b7e5115dc..b792798a54c4 100644
+> --- a/tools/testing/selftests/vm/ksm_functional_tests.c
+> +++ b/tools/testing/selftests/vm/ksm_functional_tests.c
+> @@ -27,6 +27,8 @@
+> 
+>   static int ksm_fd;
+>   static int ksm_full_scans_fd;
+> +static int ksm_zero_pages_fd;
+> +static int ksm_use_zero_pages_fd;
 
-I love your patch! Perhaps something to improve:
+If they are global, open them from main(), not from the test case.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc4 next-20230118]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>   static int pagemap_fd;
+>   static size_t pagesize;
+> 
+> @@ -57,6 +59,22 @@ static bool range_maps_duplicates(char *addr, unsigned long size)
+>   	return false;
+>   }
+> 
+> +static bool check_ksm_zero_pages_count(unsigned long zero_size)
+> +{
+> +	unsigned long pages_expected = zero_size / (4 * KiB);
+> +	char buf[20];
+> +	ssize_t read_size;
+> +	unsigned long ksm_zero_pages;
+> +
+> +	read_size = pread(ksm_zero_pages_fd, buf, sizeof(buf) - 1, 0);
+> +	if (read_size < 0)
+> +		return -errno;
+> +	buf[read_size] = 0;
+> +	ksm_zero_pages = strtol(buf, NULL, 10);
+> +
+> +	return ksm_zero_pages == pages_expected;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/platform-x86-int1092-Switch-to-use-acpi_evaluate_dsm_typed/20230118-184845
-patch link:    https://lore.kernel.org/r/20230118095152.41427-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] platform/x86: int1092: Switch to use acpi_evaluate_dsm_typed()
-config: i386-randconfig-a004-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182233.vDnTdKEG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6051c9fba08cdbd6ea1baeac8664b8f4462b427d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/platform-x86-int1092-Switch-to-use-acpi_evaluate_dsm_typed/20230118-184845
-        git checkout 6051c9fba08cdbd6ea1baeac8664b8f4462b427d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/int1092/
+Better call this function "ksm_get_zero_pages", do it similarly to 
+ksm_get_full_scans() and do the comparison in the kernel.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> +}
+> +
+>   static long ksm_get_full_scans(void)
+>   {
+>   	char buf[10];
+> @@ -70,15 +88,12 @@ static long ksm_get_full_scans(void)
+>   	return strtol(buf, NULL, 10);
+>   }
+> 
+> -static int ksm_merge(void)
+> +static int wait_two_full_scans(void)
+>   {
+>   	long start_scans, end_scans;
+> 
+> -	/* Wait for two full scans such that any possible merging happened. */
+>   	start_scans = ksm_get_full_scans();
+>   	if (start_scans < 0)
+> -		return start_scans;
+> -	if (write(ksm_fd, "1", 1) != 1)
+>   		return -errno;
 
-All warnings (new ones prefixed by >>):
+This change might not be required.
 
->> drivers/platform/x86/intel/int1092/intel_sar.c:134:6: warning: unused variable 'value' [-Wunused-variable]
-           int value;
-               ^
-   1 warning generated.
+>   	do {
+>   		end_scans = ksm_get_full_scans();
+> @@ -89,6 +104,34 @@ static int ksm_merge(void)
+>   	return 0;
+>   }
+> 
+> +static inline int ksm_merge(void)
+> +{
+> +	/* Wait for two full scans such that any possible merging happened. */
+> +	if (write(ksm_fd, "1", 1) != 1)
+> +		return -errno;
+> +	return wait_two_full_scans();
+> +}
+> +
+> +static inline int make_cow(char *map, char val, unsigned long size)
+> +{
+> +
+> +	memset(map, val, size);
+> +	return wait_two_full_scans();
+
+Why is that required?
+
+> +}
+> +
+> +static int unmerge_zero_page(char *start, unsigned long size)
+> +{
+> +	int ret;
+> +
+> +	ret = madvise(start, size, MADV_UNMERGEABLE);
+> +	if (ret) {
+> +		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return wait_two_full_scans();
+
+Dito, why is that required when unmerging?
+
+> +}
+> +
+>   static char *mmap_and_merge_range(char val, unsigned long size)
+>   {
+>   	char *map;
+> @@ -146,6 +189,56 @@ static void test_unmerge(void)
+>   	munmap(map, size);
+>   }
+> 
+> +static void test_unmerge_zero_pages(void)
+> +{
+> +	const unsigned int size = 2 * MiB;
+> +	char *map;
+> +
+> +	ksft_print_msg("[RUN] %s\n", __func__);
+> +
+> +	/* Confirm the interfaces*/
+> +	ksm_zero_pages_fd = open("/sys/kernel/mm/ksm/zero_pages_sharing", O_RDONLY);
+> +	if (ksm_zero_pages_fd < 0) {
+> +		ksft_test_result_skip("open(\"/sys/kernel/mm/ksm/zero_pages_sharing\") failed\n");
+> +		return;
+> +	}
+> +	ksm_use_zero_pages_fd = open("/sys/kernel/mm/ksm/use_zero_pages", O_RDWR);
+> +	if (ksm_use_zero_pages_fd < 0) {
+> +		ksft_test_result_skip("open \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
+> +		return;
+> +	}
+> +	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
+> +		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
+> +		return;
+> +	}
+> +
+> +	/* Mmap zero pages*/
+> +	map = mmap_and_merge_range(0x00, size);
+
+Not checking for map == MAP_FAILED. Best to follow what
+test_unmerge() does.
 
 
-vim +/value +134 drivers/platform/x86/intel/int1092/intel_sar.c
+> +
+> +	/* Case 1: make Writing on ksm zero pages (COW) */
+> +	if (make_cow(map, 0xcf, size / 2)) {
+> +		ksft_test_result_fail("COW failed\n");
+> +		goto unmap;
+> +	}
+> +	ksft_test_result(check_ksm_zero_pages_count(size / 2),
+> +						"zero page count react to cow\n");
+> +
 
-dcfbd31ef4bcf6 Shravan S       2021-07-24  117  
-dcfbd31ef4bcf6 Shravan S       2021-07-24  118  /**
-dcfbd31ef4bcf6 Shravan S       2021-07-24  119   * sar_get_device_mode: Extraction of information from BIOS via DSM calls
-dcfbd31ef4bcf6 Shravan S       2021-07-24  120   * @device: ACPI device for which to retrieve the data
-dcfbd31ef4bcf6 Shravan S       2021-07-24  121   *
-dcfbd31ef4bcf6 Shravan S       2021-07-24  122   * Retrieve the current device mode information from the BIOS.
-dcfbd31ef4bcf6 Shravan S       2021-07-24  123   *
-dcfbd31ef4bcf6 Shravan S       2021-07-24  124   * Return:
-dcfbd31ef4bcf6 Shravan S       2021-07-24  125   * AE_OK on success
-dcfbd31ef4bcf6 Shravan S       2021-07-24  126   * AE_ERROR on error
-dcfbd31ef4bcf6 Shravan S       2021-07-24  127   */
-dcfbd31ef4bcf6 Shravan S       2021-07-24  128  static acpi_status sar_get_device_mode(struct platform_device *device)
-dcfbd31ef4bcf6 Shravan S       2021-07-24  129  {
-dcfbd31ef4bcf6 Shravan S       2021-07-24  130  	struct wwan_sar_context *context = dev_get_drvdata(&device->dev);
-dcfbd31ef4bcf6 Shravan S       2021-07-24  131  	acpi_status status = AE_OK;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  132  	union acpi_object *out;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  133  	u32 rev = 0;
-dcfbd31ef4bcf6 Shravan S       2021-07-24 @134  	int value;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  135  
-6051c9fba08cdb Andy Shevchenko 2023-01-18  136  	out = acpi_evaluate_dsm_typed(context->handle, &context->guid, rev,
-6051c9fba08cdb Andy Shevchenko 2023-01-18  137  				      COMMAND_ID_DEV_MODE, NULL, ACPI_TYPE_INTEGER);
-6051c9fba08cdb Andy Shevchenko 2023-01-18  138  	if (!out) {
-dcfbd31ef4bcf6 Shravan S       2021-07-24  139  		dev_err(&device->dev, "DSM cmd:%d Failed to retrieve value\n", COMMAND_ID_DEV_MODE);
-dcfbd31ef4bcf6 Shravan S       2021-07-24  140  		status = AE_ERROR;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  141  		goto dev_mode_error;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  142  	}
-6051c9fba08cdb Andy Shevchenko 2023-01-18  143  	context->sar_data.device_mode = out->integer.value;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  144  	update_sar_data(context);
-dcfbd31ef4bcf6 Shravan S       2021-07-24  145  	sysfs_notify(&device->dev.kobj, NULL, SYSFS_DATANAME);
-dcfbd31ef4bcf6 Shravan S       2021-07-24  146  
-dcfbd31ef4bcf6 Shravan S       2021-07-24  147  dev_mode_error:
-dcfbd31ef4bcf6 Shravan S       2021-07-24  148  	ACPI_FREE(out);
-dcfbd31ef4bcf6 Shravan S       2021-07-24  149  	return status;
-dcfbd31ef4bcf6 Shravan S       2021-07-24  150  }
-dcfbd31ef4bcf6 Shravan S       2021-07-24  151  
+Let's keep COW tests to cow.c and focus on explicit unmerging here. Once 
+we add support for KSM in cow.c , we can also test that e.g., long-term 
+R/O pinning works as expected. I have that on my todo list but would be 
+pleasantly surprised if someone else could tackle it :)
+
+> +	/* Case 2: Call madvise(xxx, MADV_UNMERGEABLE)*/
+> +	if (unmerge_zero_page(map + size / 2, size / 4)) {
+> +		ksft_test_result_fail("unmerge_zero_page failed\n");
+> +		goto unmap;
+> +	}
+
+Just avoid that helper and do it like test_unmerge(). Keep it simple.
+
+> +	ksft_test_result(check_ksm_zero_pages_count(size / 4),
+> +						"zero page count react to unmerge\n");
+> +
+> +	/*Check if ksm pages are really unmerged */
+
+Missing space at the beginning. + the comment is superfluous.
+
+> +	ksft_test_result(!range_maps_duplicates(map + size / 2, size / 4),
+> +						"KSM zero pages were unmerged\n");
+> +
+> +unmap:
+> +	munmap(map, size);
+> +}
+> +
+>   static void test_unmerge_discarded(void)
+>   {
+>   	const unsigned int size = 2 * MiB;
+> @@ -261,11 +354,13 @@ int main(int argc, char **argv)
+>   	ksm_full_scans_fd = open("/sys/kernel/mm/ksm/full_scans", O_RDONLY);
+>   	if (ksm_full_scans_fd < 0)
+>   		ksft_exit_skip("open(\"/sys/kernel/mm/ksm/full_scans\") failed\n");
+> +
+
+Unrelated change.
+
+>   	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+>   	if (pagemap_fd < 0)
+>   		ksft_exit_skip("open(\"/proc/self/pagemap\") failed\n");
+> 
+>   	test_unmerge();
+> +	test_unmerge_zero_pages();
+>   	test_unmerge_discarded();
+>   #ifdef __NR_userfaultfd
+>   	test_unmerge_uffd_wp();
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
