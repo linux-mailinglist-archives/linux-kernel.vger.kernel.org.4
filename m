@@ -2,80 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E038B6718EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827AA6718EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjARK0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
+        id S229769AbjARK0p convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 Jan 2023 05:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjARK0F (ORCPT
+        with ESMTP id S229616AbjARK0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 05:26:05 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0EE5DC28;
-        Wed, 18 Jan 2023 01:31:20 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6C73E20C5D;
-        Wed, 18 Jan 2023 09:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674034279; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bVp7KTcQDbxHoHXUlHU1XAYm2vJ+8Qy42f6yOSykfsw=;
-        b=n495Qf5SXOkdloH73gDVq4FvILM4H5GRWv25FvN0hgfoJWOj7Dk8oP1z3pHYZRuGI6zitG
-        eilW4gukzty5h+F7kdWDBvvJ0x0YlpSaeLJTljal56TtFfA6SxNOQtIHGe6sz+JnhpxVmq
-        3HcQXJPVCUYlRi1LTHHAxSGiN2FnCZY=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D346C2C141;
-        Wed, 18 Jan 2023 09:31:18 +0000 (UTC)
-Date:   Wed, 18 Jan 2023 10:31:16 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        coverity-bot <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        coverity-bot <keescook+coverity-bot@chromium.org>
-Subject: Re: [PATCH] printk: Use scnprintf() to print the message about the
- dropped messages on a console
-Message-ID: <Y8e8ZCTdEWU0iUqJ@alley>
-References: <20230117161031.15499-1-pmladek@suse.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0385DC2A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:31:24 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-71-cy_NW6xyNAKHu3U4XRX-UA-1; Wed, 18 Jan 2023 09:31:20 +0000
+X-MC-Unique: cy_NW6xyNAKHu3U4XRX-UA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 18 Jan
+ 2023 09:31:18 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Wed, 18 Jan 2023 09:31:18 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@kernel.org>, Tejun Heo <tj@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Richard Clark <richard.xnu.clark@gmail.com>,
+        =?iso-8859-1?Q?Jonathan_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        "Andrey Grodzovsky" <andrey.grodzovsky@amd.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] workqueue: fix enum type for gcc-13
+Thread-Topic: [PATCH] workqueue: fix enum type for gcc-13
+Thread-Index: AQHZKpKFluEYnxF+H0aveYqsdFdjha6j5uGA
+Date:   Wed, 18 Jan 2023 09:31:18 +0000
+Message-ID: <99ea6e86d2594b40a6de96cc821c447b@AcuMS.aculab.com>
+References: <20230117164041.1207412-1-arnd@kernel.org>
+In-Reply-To: <20230117164041.1207412-1-arnd@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117161031.15499-1-pmladek@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-01-17 17:10:31, Petr Mladek wrote:
-> Use scnprintf() for printing the message about dropped messages on
-> a console. It returns the really written length of the message.
-> It prevents potential buffer overflow when the returned length is
-> later used to copy the buffer content.
+From: Arnd Bergmann
+> Sent: 17 January 2023 16:41
 > 
-> Note that the previous code was safe because the scratch buffer was
-> big enough and the message always fit in. But scnprintf() makes
-> it more safe, definitely.
+> In gcc-13, the WORK_STRUCT_WQ_DATA_MASK constant is a signed 64-bit
+> type on 32-bit architectures because the enum definition has both
+> negative numbers and numbers above LONG_MAX in it:
 > 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1530570 ("Memory - corruptions")
-> Fixes: c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
-> Link: https://lore.kernel.org/r/202301131544.D9E804CCD@keescook
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+...
+>  	/* convenience constants */
+>  	WORK_STRUCT_FLAG_MASK	= (1UL << WORK_STRUCT_FLAG_BITS) - 1,
+> -	WORK_STRUCT_WQ_DATA_MASK = ~WORK_STRUCT_FLAG_MASK,
+> +	WORK_STRUCT_WQ_DATA_MASK = (unsigned long)~WORK_STRUCT_FLAG_MASK,
+>  	WORK_STRUCT_NO_POOL	= (unsigned long)WORK_OFFQ_POOL_NONE << WORK_OFFQ_POOL_SHIFT,
 
-JFYI, the patch has been comitted into printk/linux.git,
-branch rework/buffers-cleanup.
+How can that make any difference?
+You aren't changing the value or type (which makes no difference)
+of WORK_STRUCT_WQ_DATA_MASK.
+Indeed you require it to have the high bit set.
 
-Best Regards,
-Petr
+So if the enum contains a -1 somewhere gcc-13 will promote
+everything to s64.
+
+Either declare gcc-13 as 'BROKEN' or change the:
+	return (void *)(data & WORK_STRUCT_WQ_DATA_MASK);
+to
+	return (void *)(data & ~WORK_STRUCT_FLAG_MASK);
+
+or use #defines.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
