@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8D7672935
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA19E672937
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjARUXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229963AbjARUXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjARUXd (ORCPT
+        with ESMTP id S229936AbjARUXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:23:33 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A438B4CE70
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674073393; bh=Q7RlEaXnEqFwS+6rzjpHzGGEkndrB2oRtxww9YVShds=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=n4ZGttawAHvU+kKNEXJmVo4kpmwLy1iWS4BTcFlEPCl+hd0lPTOxGbbFKxrJQOhpa
-         V2U8kWqW+c+Vc7u0MmR0RqwkXEvwQvr5iP6eAtGCuRELu8nLKOHGvfSI0kR7J7J0UD
-         dPMSrwtWERQ72yGh6ET0fbHadmoYQtIrYrZcv714=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed, 18 Jan 2023 21:23:13 +0100 (CET)
-X-EA-Auth: rt16gkipC8f0Y+X3/lLm2PRNoHDAozsEuaaEmgxjkK3S+royuqWHBe42Ov9MyTNsYUoydczrlMr84oArRF+WkOASpSQ3shXh
-Date:   Thu, 19 Jan 2023 01:53:07 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH v2] drm/i915/gvt: Avoid full proxy f_ops for debugfs
- attributes
-Message-ID: <Y8hVK6wuqm50iADP@ubun2204.myguest.virtualbox.org>
+        Wed, 18 Jan 2023 15:23:42 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E235D91E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:23:40 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vm8so197131ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l7ygh0J7KEHHboyD4LVUdzwenmNBGdT5Fep7mOK/62k=;
+        b=YQWH9e0IWtfRphBxBJP11yHpKqk+5NLgiUf+ZJb39bL6BtSi3WxGNKPLWUPXk/s+d9
+         D+igmFt49cI/pmTyX1FBayb0wdnd4BvdDOd6aFYT0vpO90hfeFJDumGu1x/aE0LafL4F
+         js2mQRgDmoGwjoICJ98TTbtJqStlwHApVeiHIKk6+LnwFZtGONpjQCDLe1ZLKZMABVOG
+         5gz0FI7b9N5u4IFn5BT46k4/daxcmuNa/fT+/dJI3XChKw7c9glb0qvhvwoUwTIvPs5/
+         9QXnFCSjCT92XleOeZGjqB+q5cFcJOvptnzoFZhPw1G+ckFTi6XYAB7JJOKbT8XyZTGy
+         PfnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l7ygh0J7KEHHboyD4LVUdzwenmNBGdT5Fep7mOK/62k=;
+        b=sBGHsFrs/If6zBdm7MBaVXiUwopFKaG6KkC0aJO1BswjuHddwYsrM1tN2B7sTdMo+n
+         JUAGK6YfPAkPtEXf4pLb8yEiSOmXMw6okUY6iBuWwITLdnX2zVH7bkPQTk1azQ2GcoD/
+         LpIChVNVI+bNAZA2On5LT5Jmmb/ozYykDWQ0YOENwGBY+PVDARL2tVcwnOSKgrn8JA8L
+         BwpdvvXnpFrNzZXiP9bwvLhcEM/pyVB3P6UYlB5o4GY+iqZBF+jzJ0ynYJT+OSg43ZlI
+         8GD0FgwVeFMLiV3aL3Am2UArHtkJ1+u9bvubvu8ljOVdrUGKV66s3XVC+Tz3QL6CNgVb
+         C2zg==
+X-Gm-Message-State: AFqh2krVMlPg7nxy4fTKsNQZ3o6QEmIi0p7UPbOf1L0H/lAv/mS7Zk7G
+        zJLk7wNyjJq81XphOfdbVg4=
+X-Google-Smtp-Source: AMrXdXsEan2QlNe1yfOts3N3sqMyGbVsRrtFvhKXOKm85zfbYdsXEAjwEMO4GB0kJHQFdZvhw86LIw==
+X-Received: by 2002:a17:906:c409:b0:863:73ee:bb67 with SMTP id u9-20020a170906c40900b0086373eebb67mr8620229ejz.73.1674073419361;
+        Wed, 18 Jan 2023 12:23:39 -0800 (PST)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id w15-20020a17090633cf00b008711cab8875sm4093029eja.216.2023.01.18.12.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 12:23:38 -0800 (PST)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/pvclock: improve atomic update of last_value in pvclock_clocksource_read
+Date:   Wed, 18 Jan 2023 21:23:30 +0100
+Message-Id: <20230118202330.3740-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-function adds the overhead of introducing a proxy file operation
-functions to wrap the original read/write inside file removal protection
-functions. This adds significant overhead in terms of introducing and
-managing the proxy factory file operations structure and function
-wrapping at runtime.
-As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-with debugfs_create_file_unsafe() is suggested to be used instead.  The
-DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-debugfs_file_put() wrappers to protect the original read and write
-function calls for the debug attributes. There is no need for any
-runtime proxy file operations to be managed by the debugfs core.
-Following coccicheck make command helped identify this change:
+Improve atomic update of last_value in pvclock_clocksource_read:
 
-make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+- Atomic update can be skipped if the "last_value" is already
+  equal to "ret".
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+- The detection of atomic update failure is not correct. The value,
+  returned by atomic64_cmpxchg should be compared to the old value
+  from the location to be updated. If these two are the same, then
+  atomic update succeeded and "last_value" location is updated to
+  "ret" in an atomic way. Otherwise, the atomic update failed and
+  it should be retried with the value from "last_value" - exactly
+  what atomic64_try_cmpxchg does in a correct and more optimal way.
+
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 ---
-Changes in v2:
-   - Following changes as suggested by Rodrigo Vivi <rodrigo.vivi@intel.com>
-      - Combine 2 patch series in a single patch 
-      - Base the patch on the i915/gvt to avoid conflicts
+ arch/x86/kernel/pvclock.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-
- drivers/gpu/drm/i915/gvt/debugfs.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/gvt/debugfs.c
-index 0616b73175f3..baccbf1761b7 100644
---- a/drivers/gpu/drm/i915/gvt/debugfs.c
-+++ b/drivers/gpu/drm/i915/gvt/debugfs.c
-@@ -147,9 +147,9 @@ vgpu_scan_nonprivbb_set(void *data, u64 val)
- 	return 0;
+diff --git a/arch/x86/kernel/pvclock.c b/arch/x86/kernel/pvclock.c
+index eda37df016f0..5a2a517dd61b 100644
+--- a/arch/x86/kernel/pvclock.c
++++ b/arch/x86/kernel/pvclock.c
+@@ -102,10 +102,9 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
+ 	 */
+ 	last = atomic64_read(&last_value);
+ 	do {
+-		if (ret < last)
++		if (ret <= last)
+ 			return last;
+-		last = atomic64_cmpxchg(&last_value, last, ret);
+-	} while (unlikely(last != ret));
++	} while (!atomic64_try_cmpxchg(&last_value, &last, ret));
+ 
+ 	return ret;
  }
- 
--DEFINE_SIMPLE_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
--			vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
--			"0x%llx\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
-+			 vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
-+			 "0x%llx\n");
- 
- static int vgpu_status_get(void *data, u64 *val)
- {
-@@ -165,7 +165,7 @@ static int vgpu_status_get(void *data, u64 *val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%llx\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%llx\n");
- 
- /**
-  * intel_gvt_debugfs_add_vgpu - register debugfs entries for a vGPU
-@@ -180,10 +180,10 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *vgpu)
- 
- 	debugfs_create_file("mmio_diff", 0444, vgpu->debugfs, vgpu,
- 			    &vgpu_mmio_diff_fops);
--	debugfs_create_file("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
--			    &vgpu_scan_nonprivbb_fops);
--	debugfs_create_file("status", 0644, vgpu->debugfs, vgpu,
--			    &vgpu_status_fops);
-+	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
-+				   &vgpu_scan_nonprivbb_fops);
-+	debugfs_create_file_unsafe("status", 0644, vgpu->debugfs, vgpu,
-+				   &vgpu_status_fops);
- }
- 
- /**
 -- 
-2.34.1
-
-
+2.39.0
 
