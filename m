@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6539672049
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C9A67204C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjAROyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S230414AbjAROyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjAROyD (ORCPT
+        with ESMTP id S230360AbjAROyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 09:54:03 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9CC17CEE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:48:53 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id v10so48720914edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:48:53 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648C021A0D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:48:54 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s3so11770786edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=grsecurity.net; s=grsec;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b6W0pZJ6ERcXnvSOd8zNWpB3EIqXZWM69qX+jHbVTMc=;
-        b=IBT0qj/RPtCvkxVkBIfHYd7QteXzIP67i647IqhTBlkd71McZh+opt3wap1cZCAih3
-         qyu/DTKBwBL6nJT2BGjW5K+gPq+wjvxNqGY4YPXwZLTySKFOF+VSovv5xJ7QsXwxK3y8
-         Q4c1c+jL2v1+8AQPHNvhgpgZInBCLehbKZ/7FKuYASFL00ghpeud/Qriwg/I3m+4SBAg
-         AM57y1MJKZI7tIx14X5KraP3NJ0/u8reJ3vBvZhwAfMvVJ8PPRnegZh9Na9R6sWEuY0Y
-         TiIys37zs94rkWlC81Vy9Hk1Sl/tH8OJSvrxfjuhAjZ2t0PaqTX3Ke3cW1I7Uw0NweEg
-         E4Rw==
+        bh=1X9cKTEOns6mbPxiAJGzCLzAUmWNA4hlvu/w3TuUZPU=;
+        b=XIcJS96oA67Hn1nXDnoKQbHuH4zcVXwA50Mjy6FlCanCgJYtLRHrD8yqDVgbDh6z+p
+         1I8ZymV+22mLjRbNpwIbZt99snoyWphLUFE+CVd+7gbAinmHhJ+RBTbocHZ3XQiud8yP
+         ukeMOSSnCGg3l//ciBp5SHyqmZ5CGHmlemY2A+SP54cAImPLvsUpH2jG3b2A6W4UjvHC
+         lHXz1ZBsjSmZLeuJhMuO/xk2ztPc1Q4k6fLxSHMG4aW518ZIJjm46LqKi1a+SoNzpKvz
+         hes3dNC0ovt5IEsubdBtgmMHyFnKhwLrIcv4/2pYj0uJgLxy8icT5CGlqtxmWUIKPFWb
+         6RZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b6W0pZJ6ERcXnvSOd8zNWpB3EIqXZWM69qX+jHbVTMc=;
-        b=YLv3tJJQY2N3DfTDYrqQXUu6qeqAoz4LnLc8J0m6ESjH+sKGJ6YIF+RjpslFD2DYiG
-         zBf6+MYHmaiTd1aQDV4tzc43PvrNtSWCNytJAO8FhJ5pBikK/Ep2KH2qTu037TxG84wD
-         RLSW2xFWZQtABYSfbWJgQbwB6gqkbpVO0teSqB7xFH7Q/+6UFxUFV0sLR1vzcu73aaVi
-         LwqA76DnoiX7xBUVKxgEIDAfF7B/goOTdDt4fOu8ZaKSGUAbVqaVLoigoov5lnjQRt7E
-         TdrgboGg2gbuzBWNtHWsk0T5drVn2/j64gqynLKWgzGrfF2o+31Ovvzi4KaFzleCn8Ht
-         I2/A==
-X-Gm-Message-State: AFqh2krGFqPocLidVNjBZIpCP2HyyaPy/MT8nrfSOSQe8dpMn0bshIH/
-        VT7/TttGOEioys6c31rtAiNYqw==
-X-Google-Smtp-Source: AMrXdXtppojCwB78sS5kdfJaEsCFQeirzrmEFUA3pTLC71BZn/8fPScn2OIOm+zqjicgcf0NIlV1yw==
-X-Received: by 2002:aa7:cb01:0:b0:495:fa3d:1d72 with SMTP id s1-20020aa7cb01000000b00495fa3d1d72mr7477248edt.8.1674053332042;
+        bh=1X9cKTEOns6mbPxiAJGzCLzAUmWNA4hlvu/w3TuUZPU=;
+        b=aEoyy5DQ6amJKwGXFNC84QvF/fK5UnU1oxoDcZ/mnSzHjrBqQkcXROcK5muNzoKYiJ
+         z74Ds5wyM3GLk78BAWm0eUG1a9A8tXVe+3R0PLp/YuqbcPizxnnkQhXIG85bhMQSmHD1
+         +a7sYG+D5PzL/VB4rHuFj2RfGyVIiuZCtocG/WcUZ04PcDdf5uJyh5WlvnGOkIpn0NJK
+         iFVCXrTuUWZ5Kq41vtMvwkXy/4aqNxYXGNOysn9/NJUuljzsKeNDAhka7hLqVrUSnf1L
+         DNDxO8bbMUcqyKT2ONx/J+8eWfhgJjugZvFg9vSqnbA99XkRDsQkyeGePpa0+cKaukBx
+         uKlA==
+X-Gm-Message-State: AFqh2koWt3Va+/S3waTctmJtcnP8wDibkT+ac/b/yIAIxBj1aPvAFTAV
+        J4KDERZLkg6Ee+o8Bw49oW92P6BmpbdzlmOa
+X-Google-Smtp-Source: AMrXdXtuGGFVNg9IigFu/jLBfkzvoyZVQlHooZu1GXXr6MADvaqWl+M62LJ9y0qGiQ3iYYzQP5VWkQ==
+X-Received: by 2002:a50:fa8f:0:b0:49e:31d5:6769 with SMTP id w15-20020a50fa8f000000b0049e31d56769mr6624614edr.41.1674053332988;
         Wed, 18 Jan 2023 06:48:52 -0800 (PST)
 Received: from nuc.fritz.box (p200300f6af03d2006e0fc0b921f9db5c.dip0.t-ipconnect.de. [2003:f6:af03:d200:6e0f:c0b9:21f9:db5c])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05640243cb00b0049e19136c22sm3627509edc.95.2023.01.18.06.48.51
+        by smtp.gmail.com with ESMTPSA id p11-20020a05640243cb00b0049e19136c22sm3627509edc.95.2023.01.18.06.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 06:48:51 -0800 (PST)
+        Wed, 18 Jan 2023 06:48:52 -0800 (PST)
 From:   Mathias Krause <minipli@grsecurity.net>
 To:     kvm@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v2 2/3] KVM: VMX: avoid retpoline call for control register caused exits
-Date:   Wed, 18 Jan 2023 15:50:29 +0100
-Message-Id: <20230118145030.40845-3-minipli@grsecurity.net>
+Subject: [PATCH v2 3/3] KVM: x86: do not unload MMU roots when only toggling CR0.WP
+Date:   Wed, 18 Jan 2023 15:50:30 +0100
+Message-Id: <20230118145030.40845-4-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230118145030.40845-1-minipli@grsecurity.net>
 References: <20230118145030.40845-1-minipli@grsecurity.net>
@@ -74,34 +74,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Complement commit 4289d2728664 ("KVM: retpolines: x86: eliminate
-retpoline from vmx.c exit handlers") and avoid a retpoline call for
-control register accesses as well.
+There is no need to unload the MMU roots for a direct MMU role when only
+CR0.WP has changed -- the paging structures are still valid, only the
+permission bitmap needs to be updated.
 
-This speeds up guests that make heavy use of it, like grsecurity
-kernels toggling CR0.WP to implement kernel W^X.
+One heavy user of toggling CR0.WP is grsecurity's KERNEXEC feature to
+implement kernel W^X.
 
+The optimization brings a huge performance gain for this case as the
+following micro-benchmark running 'ssdd 10 50000' from rt-tests[1] on a
+grsecurity L1 VM shows (runtime in seconds, lower is better):
+
+                       legacy     TDP    shadow
+kvm.git/queue          11.55s   13.91s    75.2s
+kvm.git/queue+patch     7.32s    7.31s    74.6s
+
+For legacy MMU this is ~36% faster, for TTP MMU even ~47% faster. Also
+TDP and legacy MMU now both have around the same runtime which vanishes
+the need to disable TDP MMU for grsecurity.
+
+Shadow MMU sees no measurable difference and is still slow, as expected.
+
+[1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+
+Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Mathias Krause <minipli@grsecurity.net>
 ---
-SVM may gain from a similar change as well, however, I've no AMD box to
-test this on.
+v2: handle the CR0.WP case directly in kvm_post_set_cr0() and only for
+the direct MMU role -- Sean
 
- arch/x86/kvm/vmx/vmx.c | 2 ++
- 1 file changed, 2 insertions(+)
+I re-ran the benchmark and it's even faster than with my patch, as the
+critical path is now the first one handled and is now inline. Thanks a
+lot for the suggestion, Sean!
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index c788aa382611..c8198c8a9b55 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6538,6 +6538,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
- 		return handle_external_interrupt(vcpu);
- 	else if (exit_reason.basic == EXIT_REASON_HLT)
- 		return kvm_emulate_halt(vcpu);
-+	else if (exit_reason.basic == EXIT_REASON_CR_ACCESS)
-+		return handle_cr(vcpu);
- 	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG)
- 		return handle_ept_misconfig(vcpu);
- #endif
+ arch/x86/kvm/x86.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 508074e47bc0..f09bfc0a3cc1 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -902,6 +902,15 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+ 
+ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
+ {
++	/*
++	 * Toggling just CR0.WP doesn't invalidate page tables per se, only the
++	 * permission bits.
++	 */
++	if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
++		kvm_init_mmu(vcpu);
++		return;
++	}
++
+ 	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+ 		kvm_clear_async_pf_completion_queue(vcpu);
+ 		kvm_async_pf_hash_reset(vcpu);
 -- 
 2.39.0
 
