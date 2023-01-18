@@ -2,270 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC49C67295E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E202D672965
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjARUcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:32:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S230126AbjARUc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjARUbd (ORCPT
+        with ESMTP id S230196AbjARUbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:31:33 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B230611C0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:31:10 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nxxz50dybz9v7Gk
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:23:13 +0800 (CST)
-Received: from [10.48.135.81] (unknown [10.48.135.81])
-        by APP2 (Coremail) with SMTP id GxC2BwA3CmHqVshjR2WoAA--.1190S2;
-        Wed, 18 Jan 2023 21:30:45 +0100 (CET)
-Message-ID: <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
-Date:   Wed, 18 Jan 2023 21:30:31 +0100
+        Wed, 18 Jan 2023 15:31:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC05EFAC;
+        Wed, 18 Jan 2023 12:31:21 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IJXt4b030516;
+        Wed, 18 Jan 2023 20:31:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=vdbuWZnwMezw/gbvgjJFXh/HqccZnKZWxamH7VX7DJo=;
+ b=q3snMdP+n/7jQ+AcBu0uqU4u1XONEijzt/DuxGq/r4tRDE4n+McCt75uefYo+fVV7EZi
+ bf/NMCG2YtIcttKrjvxhrxNkdiNb3nWL13a9zgn60dG92IeuHOBpTbWxaEkydLdyG1Ym
+ tFkAz1eIKiIqgUQrhkGLWW2ssk/AUCzgkdCEUdHVN/QBgZ+gVpdPXUm+bHQryRvIq+QC
+ MqYyhVNqdrsfVFd59k9FGthWJ/4ejiaivKq7J0W5jLzjarlzj4CbE1uZmhft//AUA1xH
+ rNYktOsuo1YBJ6JwgK7Ui5gxZw9diXxqpENr2BeIOA2hAZ5ZTcxGTZ/8EMJQ+gjjKTcz 6Q== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6hem2m32-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 20:31:21 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IKBbA8019324;
+        Wed, 18 Jan 2023 20:31:14 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3n3m17qrfm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 20:31:14 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IKVCws56361288
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Jan 2023 20:31:13 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF4095805D;
+        Wed, 18 Jan 2023 20:31:12 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5916F58055;
+        Wed, 18 Jan 2023 20:31:12 +0000 (GMT)
+Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.endicott.ibm.com (unknown [9.60.85.43])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Jan 2023 20:31:12 +0000 (GMT)
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, pasic@linux.ibm.com
+Subject: [PATCH v2 0/6] improve AP queue reset processing
+Date:   Wed, 18 Jan 2023 15:31:05 -0500
+Message-Id: <20230118203111.529766-1-akrowiak@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
- <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8aKlNY4Z0z2Yqs0@andrea>
- <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
- <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwA3CmHqVshjR2WoAA--.1190S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw1Utr4UuF4UZFykCFyUWrg_yoW3KFWUpF
-        ZYgFy3Kw1DJr1fZw1I9w1rWryjy3yrJFWUXrn5GFW8W3sYqrn3KF4xKa4Y9F9xCr4fCr4j
-        qF1vq3s7Z34UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ujBq2Wrpiv5suPc_yeP87umUC-E6oyxq
+X-Proofpoint-GUID: ujBq2Wrpiv5suPc_yeP87umUC-E6oyxq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=543 impostorscore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301180173
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series introduces several improvements to the function that performs
+AP queue resets:
 
+* Breaks up reset processing into multiple smaller, more concise functions.
 
-On 1/18/2023 9:19 PM, Paul E. McKenney wrote:
-> On Wed, Jan 18, 2023 at 08:42:36PM +0100, Jonas Oberhauser wrote:
->> On 1/18/2023 5:50 PM, Alan Stern wrote:
->>> On Tue, Jan 17, 2023 at 07:50:41PM -0800, Paul E. McKenney wrote:
->>>> On Tue, Jan 17, 2023 at 03:15:06PM -0500, Alan Stern wrote:
->>>>> On Tue, Jan 17, 2023 at 09
->>>>>> Given an Srcu-down and an Srcu-up:
->>>>>>
->>>>>> let srcu-rscs = ( return_value(Srcu-lock) ; (dep | rfi)* ;
->>>>>> 		  parameter(Srcu-unlock, 2) ) |
->>>>>> 		( return_value(Srcu-down) ; (dep | rf)* ;
->>>>>> 		  parameter(Srcu-up, 2) )
->>>>>>
->>>>>> Seem reasonable, or am I missing yet something else?
->>>>> Not at all reasonable.
->>>>>
->>>>> For one thing, consider this question: Which statements lie inside a
->>>>> read-side critical section?
->>>> Here srcu_down_read() and srcu_up_read() are to srcu_read_lock() and
->>>> srcu_read_unlock() as down_read() and up_read() are to mutex_lock()
->>>> and mutex_unlock().  Not that this should be all that much comfort
->>>> given that I have no idea how one would go about modeling down_read()
->>>> and up_read() in LKMM.
->>> It might make sense to work on that first, before trying to do
->>> srcu_down_read() and srcu_up_read().
->>>
->>>>> With srcu_read_lock() and a matching srcu_read_unlock(), the answer is
->>>>> clear: All statements po-between the two.  With srcu_down_read() and
->>>>> srcu_up_read(), the answer is cloudy in the extreme.
->>>> And I agree that it must be clearly specified, and my that previous try
->>>> was completely lacking.  Here is a second attempt:
->>>>
->>>> let srcu-rscs = (([Srcu-lock] ; data ; [Srcu-unlock]) & loc) |
->>>> 		(([Srcu-down] ; (data | rf)* ; [Srcu-up]) & loc)
->>>>
->>>> (And I see your proposal and will try it.)
->>>>
->>>>> Also, bear in mind that the Fundamental Law of RCU is formulated in
->>>>> terms of stores propagating to a critical section's CPU.  What are we to
->>>>> make of this when a single critical section can belong to more than one
->>>>> CPU?
->>>> One way of answering this question is by analogy with down() and up()
->>>> when used as a cross-task mutex.  Another is by mechanically applying
->>>> some of current LKMM.  Let's start with this second option.
->>>>
->>>> LKMM works mostly with critical sections, but we also discussed ordering
->>>> based on the set of events po-after an srcu_read_lock() on the one hand
->>>> and the set of events po-before an srcu_read_unlock() on the other.
->>>> Starting here, the critical section is the intersection of these two sets.
->>>>
->>>> In the case of srcu_down_read() and srcu_up_read(), as you say, whatever
->>>> might be a critical section must span processes.  So what if instead of
->>>> po, we used (say) xbstar?  Then given a set of A such that ([Srcu-down ;
->>>> xbstar ; A) and B such that (B ; xbstar ; [Srcu-up]), then the critical
->>>> section is the intersection of A and B.
->>>>
->>>> One objection to this approach is that a bunch of unrelated events could
->>>> end up being defined as part of the critical section.  Except that this
->>>> happens already anyway in real critical sections in the Linux kernel.
->>>>
->>>> So what about down() and up() when used as cross-task mutexes?
->>>> These often do have conceptual critical sections that protect some
->>>> combination of resource, but these critical sections might span tasks
->>>> and/or workqueue handlers.  And any reasonable definition of these
->>>> critical sections would be just as likely to pull in unrelated accesses as
->>>> the above intersection approach for srcu_down_read() and srcu_up_read().
->>>>
->>>> But I am just now making all this up, so thoughts?
->>> Maybe we don't really need to talk about read-side critical sections at
->>> all.  Once again, here's what explanation.txt currently says:
->>>
->>> 	For any critical section C and any grace period G, at least
->>> 	one of the following statements must hold:
->>>
->>> (1)	C ends before G does, and in addition, every store that
->>> 	propagates to C's CPU before the end of C must propagate to
->>> 	every CPU before G ends.
->>>
->>> (2)	G starts before C does, and in addition, every store that
->>> 	propagates to G's CPU before the start of G must propagate
->>> 	to every CPU before C starts.
->>>
->>> Suppose we change this to:
->>>
->>> 	For any RCU lock operation L and matching unlock operation U,
->>> 	and any matching grace period G, at least one of the following
->>> 	statements must hold:
->>>
->>> (1)	U executes before G ends, and in addition, every store that
->>> 	propagates to U's CPU before U executes must propagate to
->>> 	every CPU before G ends.
->>>
->>> (2)	G starts before L executes, and in addition, every store that
->>> 	propagates to G's CPU before the start of G must propagate
->>> 	to every CPU before L executes.
->>>
->>> (For SRCU, G matches L and U if it operates on the same srcu structure.)
->> I think for the formalization, the definition of "critical section" is
->> hidden inside the word "matching" here.
->> You will still need to define what matching means for up and down.
->> Can I understand down and up to create a large read-side critical section
->> that is shared between multiple threads, analogously to a semaphore? With
->> the restriction that for srcu, there are really multiple (two) such critical
->> sections that can be open in parallel, which are indexed by the return value
->> of down/the input of up?
->>
->> If so I suspect that every down matches with every up within a "critical
->> section"?
->> maybe you can define balancing along the co analous to the balancing along
->> po currently used for matching rcu_lock() and rcu_unlock(). I.e.,
->>
->> down ------------- up
->>     \down--------up/
->>         \down-up/
->>            \_/
->> where diagonal links are co links and the straight links are "balanced
->> match" links.
-> The SRCU read-side critical sections are fundamentally different than
-> those of RCU. [...]
-> In contrast, SRCU read-side critical sections are defined by the
-> return value of srcu_read_lock() being passed into the matching
-> srcu_read_unlock().
+* Use TAPQ to verify completion of a reset in progress rather than mulitple
+  invocations of ZAPQ.
 
-I'm a bit confused. I previously thought that there is 
-srcu_lock/srcu_unlock and srcu_down/srcu_up and that these are different 
-things.
+* Check TAPQ response codes when verifying successful completion of ZAPQ.
 
-Your explanation matches how I understood srcu_read_lock after reading 
-the paper and pretending that there wasn't a single counter, while my 
-understanding of srcu_read_down would be closer to the original 
-implementation in the 2009 paper where there was a single counter, and 
-thus srcu_read_down and srcu_read_up could open a multi-thread critical 
-section.
+* Fix erroneous handling of some error response codes.
 
-Is there only one thing and read_down *is* read_lock?
-If they are not the same, is my understand of read_down correct?
+* Increase the maximum amount of time to wait for successful completion of
+  ZAPQ.
+ 
+Change log v1 => v2:
+-------------------
+Remove patch 7/7 to restore original behavior since we don't know whether
+interrupts are disabled when an unexpected response code is returned from 
+ZAPQ. (Halil)
 
-And isn't it also true that the srcu_lock() needs to be on the same CPU 
-as the matching srcu_unlock()?
+Tony Krowiak (6):
+  s390/vfio-ap: verify reset complete in separate function
+  s390/vfio_ap: check TAPQ response code when waiting for queue reset
+  s390/vfio_ap: use TAPQ to verify reset in progress completes
+  s390/vfio_ap: verify ZAPQ completion after return of response code
+    zero
+  s390/vfio_ap: fix handling of error response codes
+  s390/vfio_ap: increase max wait time for reset verification
 
-I think for matching srcu_lock to srcu_unlock, you can just use the data 
-dependency (following the "hack" of defining them as reads and writes).
+ drivers/s390/crypto/vfio_ap_ops.c | 104 +++++++++++++++++++++---------
+ 1 file changed, 72 insertions(+), 32 deletions(-)
 
-What I was suggesting below is how to redefine "match" between read_down 
-and read_up that work more like a cross-thread semaphore.
-
-
->> Then everything that is enclosed within a pair of "balanced match" is
->> linked:
->>
->> match-down-up = co^-1?; balanced-srcu-updown ; co^-1?
->>
->> Since multiple critical sections can be in-flight, maybe you can use co &
->> same-value (or whatever the relation is) to define this?
->>
->>
->> let balanced-srcu-updown = let rec
->>          unmatched-locks = Srcu-down \ domain(matched)
->>      and unmatched-unlocks = Srcu-up \ range(matched)
->>      and unmatched = unmatched-locks | unmatched-unlocks
->>      and unmatched-co = [unmatched] ; co & same-value ; [unmatched]
->>      and unmatched-locks-to-unlocks =
->>          [unmatched-locks] ;  co & same-value ; [unmatched-unlocks]
->>      and matched = matched | (unmatched-locks-to-unlocks \
->>          (unmatched-co ; unmatched-co))
->>      in matched
->> let match-down-up = (co & same-value)^-1?; balanced-srcu-updown ; (co &
->> same-value)^-1?
-
-
-
->> Is the implementation of srcu-lock and srcu-unlock still anything like the
->> implementation in the 2009 paper?
-> The interaction between readers and grace period is now mediated by a
-> per-CPU pair of lock counters and of unlock counters, so the 2009 paper is
-> not the best guide.  But yes, you would likely need three or four pairwise
-> overlapping critical sections for the current SRCU implementation to end
-> "early".
-
-That makes sense.
-
-Have fun, jonas
+-- 
+2.31.1
 
