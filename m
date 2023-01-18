@@ -2,125 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3119C671F5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3A0671F66
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjAROVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S231266AbjAROW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjAROUj (ORCPT
+        with ESMTP id S229591AbjAROWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:20:39 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E995F485B6;
-        Wed, 18 Jan 2023 06:03:07 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id q15so6013731qtn.0;
-        Wed, 18 Jan 2023 06:03:07 -0800 (PST)
+        Wed, 18 Jan 2023 09:22:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2771E5AA4B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674050622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SPGQBg9MgduKKgBYZco3Nv67NZ90hWX2DplPWeCSJ94=;
+        b=FIFYgpjBUQPFrSIXCCyz6oa1oWRPv9h3rl22R93pnljXWNpNFh2F1fzDKYri5x9A+lCQOJ
+        O+41g5QblWycxcgpVIHjjM+Co+xQVxWBdvU/qEF0KFarsImpNCnNaq+MDNv+/b60hDbfKZ
+        pfY8FU4/iICVP5AKv8b+WADoKXVyYC4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-567-3GBISAN7NYe8kl5obkENyQ-1; Wed, 18 Jan 2023 09:03:41 -0500
+X-MC-Unique: 3GBISAN7NYe8kl5obkENyQ-1
+Received: by mail-wr1-f71.google.com with SMTP id m12-20020adfa3cc000000b002b881cb0cb4so6875134wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:03:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vKjCXevW62S/STV+8V15nuVhX39R6Lq27p721ZHl2aw=;
-        b=lZcMkFu9EFeTY9KEgGfz991NH1BrPtfath2yp5ZE3JD48ij9U1kGecgpTJxZ/Zbvgc
-         MyMV6/n85aOS+bP5vDq9JgnbuJLtPpvmKSZXpq5YVb1IiYiBK1jzEJ08L1xXE/InIV2C
-         1M5aNwO3U/q0SFDmvFhcGz5rIfZJuwfW1KhyKCOhlT7k0a0ga1Q9IBKRdO5caABSxUiO
-         0AsGZVWRWE9973iRTJowbRbjY+oV8W4BeRjwOIb5QOkDmvo4pKcoTbegM+JCmNwxJSlq
-         Y/EsUkD9hWMHTbBe+vEu+1HoOGPHYfPwCK6jCLXAaQpJYlLSfZI+UnSMibsAi8vwEqkY
-         rNhA==
-X-Gm-Message-State: AFqh2kqP8FC4w9idrXToQyGS/QJ7D0XUahTpcsbLMkZRX8k7kBGDFPwB
-        I4E6lrhi44gUCbpiPoUIesS+9Z2q8FXg+GJD
-X-Google-Smtp-Source: AMrXdXt4K0LpIFu00zVdb33y8xLd/D/WNmA1tBSGwBbl9L3zTTAxHUvzKm30u6UPzx80R/WfuMZ9Hg==
-X-Received: by 2002:ac8:709a:0:b0:3a4:f209:84cd with SMTP id y26-20020ac8709a000000b003a4f20984cdmr9340806qto.9.1674050586840;
-        Wed, 18 Jan 2023 06:03:06 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id fv13-20020a05622a4a0d00b003ae189c7454sm13547466qtb.91.2023.01.18.06.03.06
+        bh=SPGQBg9MgduKKgBYZco3Nv67NZ90hWX2DplPWeCSJ94=;
+        b=2X2xbLoU0EdEO16NhUEMWJT7S3dvpOGetO0LW3RBXGfeV/DUcRBguthet5AlW+4LMf
+         XJmzn/91YYhwiWBFTjFlcSFKENMa0Y5ugpdTc0TI2Vf6T9Zw9aMYmkHa8mHhdzsikBQP
+         QyyUO0UqmlQ1EBtRu4NFrzf88LzQKpz1im78GcFVzIiiLVrD0z9I4WH76mnvdQca08hp
+         L6fCPPjkmoWVt/RXsDU5Y32fdNKwCLvxRLMjpe2St/6ciz4ytp8V2lewBx0UvJSkm0Mg
+         B3p9Uy1K/cE71KZKbnXTe8fMX0IhIQ5E1KLJjxWP+tlsfBi4c7UtmUnowqQZg+L4N6z/
+         vjBg==
+X-Gm-Message-State: AFqh2krk4Gg8j4vqSHr2Awe0ZaK9w7M1b/GpNnFRkmqIhjW+Vp1W7AsP
+        v8OMo/sIhOGy6kEYuG/SHGc41PjYS44XZo3tEuIIKIEVlzv7lNvnsT4cRrxBgxJ+aZQBncPaAZj
+        72dj5GOwzsbRdhrY5rv8d5anX
+X-Received: by 2002:a05:600c:6014:b0:3da:2032:6c0f with SMTP id az20-20020a05600c601400b003da20326c0fmr15387774wmb.31.1674050619858;
+        Wed, 18 Jan 2023 06:03:39 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXubNs3zOMyVlXkvDDI43dE8RHNv9oeecf0SPH6HxZFoiy0PaZvJ2yugphCYiBNu97JGdbffZg==
+X-Received: by 2002:a05:600c:6014:b0:3da:2032:6c0f with SMTP id az20-20020a05600c601400b003da20326c0fmr15387751wmb.31.1674050619543;
+        Wed, 18 Jan 2023 06:03:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:800:1a88:f98a:d223:c454? (p200300cbc70508001a88f98ad223c454.dip0.t-ipconnect.de. [2003:cb:c705:800:1a88:f98a:d223:c454])
+        by smtp.gmail.com with ESMTPSA id i18-20020a05600c355200b003d9df9e59c4sm2440796wmq.37.2023.01.18.06.03.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 06:03:06 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-4f7b55575f7so5731867b3.11;
-        Wed, 18 Jan 2023 06:03:06 -0800 (PST)
-X-Received: by 2002:a0d:cbd7:0:b0:46f:bd6:957d with SMTP id
- n206-20020a0dcbd7000000b0046f0bd6957dmr709206ywd.383.1674050585830; Wed, 18
- Jan 2023 06:03:05 -0800 (PST)
+        Wed, 18 Jan 2023 06:03:39 -0800 (PST)
+Message-ID: <0e0c90a2-d12c-f965-9cce-ecd5d28c09dd@redhat.com>
+Date:   Wed, 18 Jan 2023 15:03:38 +0100
 MIME-Version: 1.0
-References: <20230118122003.132905-1-wsa+renesas@sang-engineering.com>
- <Y8fpg/WkR4OMrpOu@pendragon.ideasonboard.com> <CAMuHMdUegruzCdP_+_qNuhVvFWp-_8zvdYw=v3kmt6zDU8=w5Q@mail.gmail.com>
- <Y8f2elExwiwxK2n+@pendragon.ideasonboard.com>
-In-Reply-To: <Y8f2elExwiwxK2n+@pendragon.ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 Jan 2023 15:02:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXYsCN+evJB8idRFQ-v2B4bJ6vi+DSF=Zg6+QSiu+Op5Q@mail.gmail.com>
-Message-ID: <CAMuHMdXYsCN+evJB8idRFQ-v2B4bJ6vi+DSF=Zg6+QSiu+Op5Q@mail.gmail.com>
-Subject: Re: [PATCH] media: renesas: vsp1: blacklist r8a7795 ES1.*
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/6] ksm: abstract the function
+ try_to_get_old_rmap_item
+Content-Language: en-US
+To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202212300912449061763@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <202212300912449061763@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On 30.12.22 02:12, yang.yang29@zte.com.cn wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> A new function try_to_get_old_rmap_item is abstracted from
+> get_next_rmap_item. This function will be reused by the subsequent
+> patches about counting ksm_zero_pages.
+> 
+> The patch improves the readability and reusability of KSM code.
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+> ---
+>   mm/ksm.c | 25 +++++++++++++++++++------
+>   1 file changed, 19 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 83e2f74ae7da..5b0a7343ff4a 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -2214,23 +2214,36 @@ static void cmp_and_merge_page(struct page *page, struct ksm_rmap_item *rmap_ite
+>   	}
+>   }
+> 
+> -static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+> -					    struct ksm_rmap_item **rmap_list,
+> -					    unsigned long addr)
+> +static struct ksm_rmap_item *try_to_get_old_rmap_item(unsigned long addr,
+> +					 struct ksm_rmap_item **rmap_list)
+>   {
+> -	struct ksm_rmap_item *rmap_item;
+> -
+>   	while (*rmap_list) {
+> -		rmap_item = *rmap_list;
+> +		struct ksm_rmap_item *rmap_item = *rmap_list;
 
-On Wed, Jan 18, 2023 at 2:39 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Wed, Jan 18, 2023 at 02:30:51PM +0100, Geert Uytterhoeven wrote:
-> > On Wed, Jan 18, 2023 at 2:21 PM Laurent Pinchart wrote:
-> > > On Wed, Jan 18, 2023 at 01:20:02PM +0100, Wolfram Sang wrote:
-> > > > The earliest revision of these SoC may hang when underrunning. Later
-> > > > revisions have that fixed. Bail out when we detect a problematic
-> > > > version.
-> > > >
-> > > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > > > ---
-> > > >
-> > > > The BSP tries to work around the issue, yet this is neither upstreamable
-> > > > nor are we sure the solution is complete. Because the early SoC revision
-> > > > is hardly in use, we simply "document" the problem upstream.
-> > >
-> > > The workaround isn't upstreamable as-is, but I think it could be
-> > > upstreamed after being cleaned up.
-> > >
-> > > Overall, how much support do we still have upstream for H3 ES1.x, and do
-> > > we need to keep it ? H3 ES.1x is relatively old, does someone still rely
-> > > on it ?
-> >
-> > I think the upstream support level for R-Car H3 ES1.x is about the same
-> > as for H3 ES2.0.
->
-> Question is, do we need to keep it ? :-) And if we do, instead of
-> black-listing devices in the VSP driver, how about dropping them from
-> r8a77950.dtsi ?
+Empty line missing.
 
-I prefer blacklisting in the driver, as dropping them from r8a77950.dtsi
-wouldn't disable them when used with an older or out-of-tree DTB.
+>   		if ((rmap_item->address & PAGE_MASK) == addr)
+>   			return rmap_item;
+>   		if (rmap_item->address > addr)
+>   			break;
+>   		*rmap_list = rmap_item->rmap_list;
+> +		/* Running here indicates it's vma has been UNMERGEABLE */
 
->  We already delete quite a lot of devices there.
+"If we end up here, the VMA is UNMERGEABLE."
 
-... because they don't exist on H3 ES1.x.
+Although I am not sure if that is true?
 
-> Note that without VSP support, you will get no display either, so the
-> DU device (and the LVDS encoder) so also be deleted.
+>   		remove_rmap_item_from_tree(rmap_item);
+>   		free_rmap_item(rmap_item);
+>   	}
+> 
+> +	return NULL;
+> +}
+> +
+> +static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+> +					    struct ksm_rmap_item **rmap_list,
+> +					    unsigned long addr)
+> +{
+> +	struct ksm_rmap_item *rmap_item;
+> +
+> +	/* lookup if we have a old rmap_item matching the addr*/
 
-True...
+I suggest dropping that comment, "try_to_get_old_rmap_item()" is 
+expressive enough.
 
-Gr{oetje,eeting}s,
+> +	rmap_item = try_to_get_old_rmap_item(addr, rmap_list);
+> +	if (rmap_item)
+> +		return rmap_item;
+> +
+> +	/* Need to allocate a new rmap_item */
 
-                        Geert
+I suggest dropping that comment for the same reason.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>   	rmap_item = alloc_rmap_item();
+>   	if (rmap_item) {
+>   		/* It has already been zeroed */
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Thanks,
+
+David / dhildenb
+
