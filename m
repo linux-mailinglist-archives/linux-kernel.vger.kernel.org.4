@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1416729BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCE66729C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjARUvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S229879AbjARUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjARUup (ORCPT
+        with ESMTP id S229459AbjARUxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:50:45 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA34613CF
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:32 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id p24so260318plw.11
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=svbi23Bf7G7TpszzbredrX9t138yDUamrj0MjFsKqDs=;
-        b=Ja60k0uaY2y+uAHoC0XCVBogwu6cVGziixF8yj0njcBAiPvwPdFN3k5pw0dTXv5/Gx
-         LwVStbFNYvToriLeeH8kDuNTmVXteTYQd9vHcXFd00EDkYXnL0Aefll/2WHMBVJWBMjk
-         9SAXq+mxW00DrKkDX6YCKCsdWkZx8Cd2XfKIufUL1gbKr6jmS42KH9BpEAxxRPaSyvLI
-         h7uNQ+TfMOV1hLRZMfPD0mvsSpUlp86fDDpJOjuHhvlXoA9BZzZjumkEKwj6y72oXTI/
-         iuhj12Hq26EDMMc+95uU8XAXkQ3yI8+luWIzFyc1+tFVCELblF7sAKMvhmB3hZ8LWO9Q
-         GEpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=svbi23Bf7G7TpszzbredrX9t138yDUamrj0MjFsKqDs=;
-        b=UongLbz94YS8bMKw22Jlc9mqLrc615wvl5zL//qkRdZJeaSmQRrZnsdrWy+wf5uesa
-         GdMi01x5W45cotQ+wg7pLDCUMLsFhgt4mPS/4Si8aQJX+wgLzCxwyYIwlJdo8z0nAJJo
-         gJTURXHaeIq5oDZQpNv5XPW7pNkat7m4nlkR8Z5pgRmnUZpfSxoj66fsrt006QrbtYwK
-         0QJf1FipMdjt3LUVZEBDb6fXro/w9T5oIvkkGWgcrEjZ5ODVt1xpslOMqt1CZhIluhEH
-         A+0ko7mBXXfbvJkEVLFrIUOLV3RhGsU1OAkmbpmycSDuFNufJqShu7EKX71LpKnBG1pV
-         sdLA==
-X-Gm-Message-State: AFqh2kpI/CMY9fhFDg6yuQoTSlNjMdSkJQrnu+D0G65PMwLAc2L3oZz6
-        +FOiBIxykWWA24B95TNv0RYpKw==
-X-Google-Smtp-Source: AMrXdXtqGP0OSfyW0P1XNGdZx+AwtHEJl+79Y/0uccPkfRehsMuaJs1SnhYkPOwnKyhbkV3+IeHYpA==
-X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr3510690plg.1.1674075032263;
-        Wed, 18 Jan 2023 12:50:32 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c16-20020a170902d49000b00194afa2d4e5sm3236389plg.62.2023.01.18.12.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:50:31 -0800 (PST)
-Date:   Wed, 18 Jan 2023 20:50:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, pbonzini@redhat.com, andrew.jones@linux.dev,
-        vannapurve@google.com, Ackerley Tng <ackerleytng@google.com>
-Subject: Re: [PATCH V6 0/7] KVM: selftests: Add simple SEV test
-Message-ID: <Y8hblFklBZSS+tS/@google.com>
-References: <20230110175057.715453-1-pgonda@google.com>
+        Wed, 18 Jan 2023 15:53:34 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8DEA5D4;
+        Wed, 18 Jan 2023 12:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674075212; x=1705611212;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=l4SONC/Qdtv6CckCiaxSv423aZE7tdp+t6/ZdNoJapo=;
+  b=GdcZDIyrHIzwKmZzHuGzNLSz5h/MzRFceBhRsTs2D0uB9cigKeqrBMKq
+   ng1jlo/Pp7VKnwaCAxefgPGUpkgk94xAQv8V3B26uVAeMTYmcLy5bn2mj
+   jGYlJc5nSBPu9RLt2e7Z6E73mMgU2UDw4Hu9TraUWL7wAbOCRQAYJaj5q
+   Zlp3j0AoBkFeRmPnVv/pgw8KJyDVYcms3yVDB4PpLb5c/AYQQUZn3zmP9
+   2kbixE/x2ng0CThwdZNDd5k9G9GzEGFmMu2Yx08N0JTjkqzRKZCOvbe9C
+   FfKXA/XhmmLdFCEmS9VejKW0ajBSMzt3Zlp2gLCNIVNT7yNvus/++P0Fy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="325149644"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="325149644"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:31 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637432730"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="637432730"
+Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:30 -0800
+Message-ID: <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Date:   Wed, 18 Jan 2023 12:53:31 -0800
+In-Reply-To: <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
+         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
+         <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
+         <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110175057.715453-1-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023, Peter Gonda wrote:
-> This patch series continues the work Michael Roth has done in supporting
-> SEV guests in selftests. It continues on top of the work Sean
-> Christopherson has sent to support ucalls from SEV guests. Along with a
-> very simple version of the SEV selftests Michael originally proposed.
+On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
+> On 18/01/2023 20:16, srinivas pandruvada wrote:
+> 
+> [ ... ]
+> 
+> > > > But we'd better wait for the thermald test result from
+> > > > Srinvias.
+> > > 
+> > > A quick test show that things still work with thermald and these
+> > > changes.
+> > 
+> > But I have a question. In some devices trip point temperature is
+> > not
+> > static. When hardware changes, we get notification. For example
+> > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
+> > Currently get_trip can get the latest changed value. But if we
+> > preregister, we need some mechanism to update them.
+> 
+> When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
+> call 
+> int340x_thermal_read_trips() which in turn updates the trip points.
+> 
 
-I got two copies of this series.  AFAICT, the only difference is that LKML is
-Cc'd on the second send.  When resending an _identical_ series, e.g. because you
-forgot to Cc' someone or because mails got lost in transit, add RESEND in between
-the square braces in the subject of all patches so as not to confuse folks that
-get both (or multiple) copies.
+Not sure how we handle concurrency here when driver can freely update
+trips while thermal core is using trips.
+
+
+Thanks,
+Srinivas
+
+
+
+> 
+> 
+
