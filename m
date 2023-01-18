@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2F36718E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A479D6718E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjARKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 05:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S229883AbjARK0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjARKYZ (ORCPT
+        with ESMTP id S229712AbjARKZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:24:25 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC642B2D04;
-        Wed, 18 Jan 2023 01:28:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674034132; x=1705570132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=l27HwclIeNetABY6+nzs7YJaxeaFyHEyRmuPbaM03G8=;
-  b=HDxThLy8kTzCShiHxffNEa7AsAVQKfPHtGMWUGHBweT9NMM9VgMfp2G9
-   up/A/hcBowE2gC2VsEptY68HFtoXjtXWgOzIDnUswq4n6aIF2hEMwz/gJ
-   VIZNih0czKruV5J7OqhXFYI0zb4CpByS+XCWisEivEpG/tT8voZK6LJjZ
-   vL1AUIlQblc8D9LoUpEAkFSunX+AsOwguKMMOXM1ty/JMd5T/u9eaMxQ6
-   U6PrwnuqpFogrqmmt1rKobHp7/DVH7wQpkj23dexvwEiudcQoHjs5UJ0S
-   M3IlJ1F0+ipOAocp2zW53LAGu8f8uW/N7P9rSVYvbaQ+kbkZH6am79wdK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="411179885"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="411179885"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:28:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="723013897"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="723013897"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 01:28:50 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D10A0368; Wed, 18 Jan 2023 11:29:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH v1 1/1] net: hns: Switch to use acpi_evaluate_dsm_typed()
-Date:   Wed, 18 Jan 2023 11:29:22 +0200
-Message-Id: <20230118092922.39426-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 18 Jan 2023 05:25:39 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD07D66D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:29:53 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 12A903F3F7;
+        Wed, 18 Jan 2023 10:29:51 +0100 (CET)
+Date:   Wed, 18 Jan 2023 10:29:50 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
+Message-ID: <20230118092950.kctzkvz5h6rzi7rp@SoMainline.org>
+References: <20230117093944.72271-1-andriy.shevchenko@linux.intel.com>
+ <20230117231204.fpvxryjscosg57a6@SoMainline.org>
+ <Y8ejxsqeHL/pBTAY@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8ejxsqeHL/pBTAY@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The acpi_evaluate_dsm_typed() provides a way to check the type of the
-object evaluated by _DSM call. Use it instead of open coded variant.
+On 2023-01-18 09:46:14, Andy Shevchenko wrote:
+> On Wed, Jan 18, 2023 at 12:12:04AM +0100, Marijn Suijten wrote:
+> > On 2023-01-17 11:39:44, Andy Shevchenko wrote:
+> > > The node name can contain an address part which is not used by
+> > > the driver. Cut it out before assigning the channel name.
+> > 
+> > This explanation doesn't cut it.  It's not that the driver "doesn't use"
+> 
+> Driver doesn't use it still. There is no contradiction, but I agree that
+> below part is good to have in the commit message.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- .../net/ethernet/hisilicon/hns/hns_dsaf_misc.c   | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+You can leave that in if you want but that's not the issue that I
+reported/described.  Having both describes the situation in full.
 
-diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-index 740850b64aff..d8fb9ed96258 100644
---- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-+++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-@@ -554,11 +554,11 @@ static phy_interface_t hns_mac_get_phy_if_acpi(struct hns_mac_cb *mac_cb)
- 	argv4.package.count = 1;
- 	argv4.package.elements = &obj_args;
- 
--	obj = acpi_evaluate_dsm(ACPI_HANDLE(mac_cb->dev),
--				&hns_dsaf_acpi_dsm_guid, 0,
--				HNS_OP_GET_PORT_TYPE_FUNC, &argv4);
--
--	if (!obj || obj->type != ACPI_TYPE_INTEGER)
-+	obj = acpi_evaluate_dsm_typed(ACPI_HANDLE(mac_cb->dev),
-+				      &hns_dsaf_acpi_dsm_guid, 0,
-+				      HNS_OP_GET_PORT_TYPE_FUNC, &argv4,
-+				      ACPI_TYPE_INTEGER);
-+	if (!obj)
- 		return phy_if;
- 
- 	phy_if = obj->integer.value ?
-@@ -603,9 +603,9 @@ static int hns_mac_get_sfp_prsnt_acpi(struct hns_mac_cb *mac_cb, int *sfp_prsnt)
- 
- 	obj = acpi_evaluate_dsm(ACPI_HANDLE(mac_cb->dev),
- 				&hns_dsaf_acpi_dsm_guid, 0,
--				HNS_OP_GET_SFP_STAT_FUNC, &argv4);
--
--	if (!obj || obj->type != ACPI_TYPE_INTEGER)
-+				HNS_OP_GET_SFP_STAT_FUNC, &argv4,
-+				ACPI_TYPE_INTEGER);
-+	if (!obj)
- 		return -ENODEV;
- 
- 	*sfp_prsnt = obj->integer.value;
--- 
-2.39.0
+> > the address part, it is that this string is propagated into the
+> > userspace label, sysfs /filenames/ *and breaking ABI*.
+> 
+> So I will add it into v2 in case the fix works (see below).
+> 
+> ...
+> 
+> > > -	const char *name = fwnode_get_name(fwnode), *channel_name;
+> > > +	const char *name, *channel_name;
+> > 
+> > I don't think this'll compile as name is still a pointer to const data,
+> > while you're assigning (a '\0' char) to it below.
+> 
+> Right, it's always hard for me to compile things for ARM on x86 :-)
+> Thanks for catching this up!
 
+Thanks for sending this in regardless; as said before I rather break ABI
+and clean the driver up properly (no more extend_name...) than sending a
+fix like this :)
+
+> But does this fix the issue after compilation fix?
+
+It does, no more @xx in sysfs filenames nor label contents!
+
+- Marijn
