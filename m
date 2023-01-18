@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CD5670EE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434A7670EE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjARAm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S229682AbjARAmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjARAlb (ORCPT
+        with ESMTP id S229783AbjARAlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 19:41:31 -0500
-Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2C63CE18
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:48 -0800 (PST)
-Received: by mail-io1-xd49.google.com with SMTP id b21-20020a5d8d95000000b006fa39fbb94eso20260742ioj.17
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:48 -0800 (PST)
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B168C3B65E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:49 -0800 (PST)
+Received: by mail-io1-xd4a.google.com with SMTP id n8-20020a6bf608000000b007048850aa92so8061651ioh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTCu27j3NsgPeq6sMC4ftRhidA8hrlAj8BNmRhunsTg=;
-        b=KmtgBZ0ns5KBrFINUJN1UyCkT0OkztNePcFoXQ/KcNMIWVI4/Md6wgIu7rD9n2Z9W7
-         OHP52GbTDEUvON3Ld0n87PN+YeYWmganlqHvab14UiI2dOJRoBrxCTfp/qt8Xhwz53OB
-         mPEpoJUArFb1uvBq5NwobsbT+aICrf6M2jI1VnONWmew09b3yBrXI5tYV14dkq1e3YUD
-         0EHv/w9MXarhkO+fJBlUWX4vvx6dkSXDUwGOj0NKr7HEFADLxh0DrE/USqzuEbBO+WOd
-         QBw+bLV+MykCDnCfOAw7H7t3evyBdMLMvH1I1gxmNRV/8Dny+rXsipWoINWSU52z73y8
-         GcWQ==
+        bh=6H89U5IeidH5uN+ug8sUPQpQtuhKWJCjw7/0EqS2ku0=;
+        b=ehaqOT566l9lQNTopDpFadeCKqnbnQXDRjA4DPY/fYefKLjsNzYv9N4HuPSWfNkL/T
+         4Tg/kA81AyBkg4BImcq3oqRmF/8TJybpfdFgXPSLolkWJ5mw6QHUgFCZBkBVQDibpWXw
+         f/lXMaLAbJt0/JF5UEDKskx+8SxTkQBmDQJgygYwaPhtsoZOQXj+1AcNg97s38dmmyVz
+         p2SYvvXrygWzdMYec36TtEcLVug0YvASHX2223Ft7SAt6HO5CKdMQRQazFhMMGSgulaE
+         rAipKhxVwfCNyD+CnFMmGB/6pVkrS4W1S5qqf6Glc6OZDlHbiS2ijfudvQJ3gTUyA8mo
+         KJmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTCu27j3NsgPeq6sMC4ftRhidA8hrlAj8BNmRhunsTg=;
-        b=VAFbNQ3q6T/SBRKMw17E3WZa23g8n6og0zqdzKKeczaYHBhiVYiKmpwp88hhy4IRtB
-         QUPpc273ingzBDzp1974k3BZE2bfCCkYLMBOj2Lz6dlE6asy2ojHPuVRdket6INCvCoF
-         UADQWiPRUtRXVCsNUOO8stFUZqnIaj5wk8mllUKPA+pRj6a3DTKH7u7pbcqf60pX9aad
-         PRl/sJgisD/OW4H2euprCSYHkcm6GO1Pk6d4l9Jri8YU9t1mQJW953NeQlGvpkZHhyux
-         rReTdZbg/tKSxHfWBBFgAWaLChMT7TBYDZgBoYUngHQQCFFE6P095pI1Y4igqKLmnjaB
-         p2fg==
-X-Gm-Message-State: AFqh2kr56fqXMALbFPOsTUl5U5u1YiBiYba/UQLQI/epk/rkQtzebM+b
-        b8Zuv4gRuPJIZoVCBnxIql3O+aKjD2lgZQ==
-X-Google-Smtp-Source: AMrXdXuxcjNNoKg2rw1D3GgeuKMfxw+4OUiAhpy9aCzXSpOxc3V+thh4Ty8+l3G41CLAAnqXADnDMl74AePdDg==
+        bh=6H89U5IeidH5uN+ug8sUPQpQtuhKWJCjw7/0EqS2ku0=;
+        b=z6bfZu1apCYCWdVDKNrwBHg1s5MjST7cyzOcChzHM4K87wVFELT5JgYCXEU09ERzAm
+         of5/kZTVyMCUUKgRhAm7OriqnOZs5gYjI6DWKT9uHYV9omHfKEpm83ZxvFCTQNNGEVca
+         D1gLzUwAN0YojHuiqzXNCb7ZZtQSfsu/X5yb1BSvh9eAL410X7bCJTQ76KNc8szJtAKh
+         0jPkuJenaJ/CRaq1LZJG8GqDZBI8jIAEKsygX6Wr6co24YOU5Jr9Z5K77Tf7fECfmUjU
+         FFSRtfW7DUW4HO+WBlqbDoS9kFPz+aQagsKfWGQJwZLrE32u5C7QZj+a/N83FKxEE/aB
+         hQSA==
+X-Gm-Message-State: AFqh2krM6kv5LNlDTDPoGg06CqeaiARgk7d4eMav8YuhPwdZzw0eauiY
+        Y916ve/5auWu9EpKRiH6EVvYLrGXqjfV8A==
+X-Google-Smtp-Source: AMrXdXszXwn79l9Gfb+KYtiDbMPXtgqCNArs+vjslWDauUohP23J2vUQSyakr6tDwA+c7CfabNXqBrhVmzxocQ==
 X-Received: from talumbau.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:90d])
- (user=talumbau job=sendgmr) by 2002:a02:b795:0:b0:39e:9c44:3fe6 with SMTP id
- f21-20020a02b795000000b0039e9c443fe6mr578418jam.297.1674001128137; Tue, 17
- Jan 2023 16:18:48 -0800 (PST)
-Date:   Wed, 18 Jan 2023 00:18:26 +0000
+ (user=talumbau job=sendgmr) by 2002:a05:6e02:4a4:b0:30b:e92a:56b with SMTP id
+ e4-20020a056e0204a400b0030be92a056bmr547629ils.53.1674001129175; Tue, 17 Jan
+ 2023 16:18:49 -0800 (PST)
+Date:   Wed, 18 Jan 2023 00:18:27 +0000
 In-Reply-To: <20230118001827.1040870-1-talumbau@google.com>
 Mime-Version: 1.0
 References: <20230118001827.1040870-1-talumbau@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230118001827.1040870-7-talumbau@google.com>
-Subject: [PATCH mm-unstable v1 6/7] mm: multi-gen LRU: improve walk_pmd_range()
+Message-ID: <20230118001827.1040870-8-talumbau@google.com>
+Subject: [PATCH mm-unstable v1 7/7] mm: multi-gen LRU: simplify lru_gen_look_around()
 From:   "T.J. Alumbaugh" <talumbau@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -68,131 +68,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve readability of walk_pmd_range() and walk_pmd_range_locked().
+Update the folio generation in place with or without
+current->reclaim_state->mm_walk. The LRU lock is held for longer, if
+mm_walk is NULL and the number of folios to update is more than
+PAGEVEC_SIZE.
+
+This causes a measurable regression from the LRU lock contention
+during a microbencmark. But a tiny regression is not worth the
+complexity.
 
 Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 ---
- mm/vmscan.c | 40 ++++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
+ mm/vmscan.c | 73 +++++++++++++++++------------------------------------
+ 1 file changed, 23 insertions(+), 50 deletions(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index c2e6ad53447b..ff3b4aa3c31f 100644
+index ff3b4aa3c31f..ac51150d2d36 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -3999,8 +3999,8 @@ static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
- }
- 
- #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG)
--static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area_struct *vma,
--				  struct mm_walk *args, unsigned long *bitmap, unsigned long *start)
-+static void walk_pmd_range_locked(pud_t *pud, unsigned long addr, struct vm_area_struct *vma,
-+				  struct mm_walk *args, unsigned long *bitmap, unsigned long *first)
+@@ -4587,13 +4587,12 @@ static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
+ void lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
  {
  	int i;
- 	pmd_t *pmd;
-@@ -4013,18 +4013,19 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area
- 	VM_WARN_ON_ONCE(pud_leaf(*pud));
- 
- 	/* try to batch at most 1+MIN_LRU_BATCH+1 entries */
--	if (*start == -1) {
--		*start = next;
-+	if (*first == -1) {
-+		*first = addr;
-+		bitmap_zero(bitmap, MIN_LRU_BATCH);
- 		return;
- 	}
- 
--	i = next == -1 ? 0 : pmd_index(next) - pmd_index(*start);
-+	i = addr == -1 ? 0 : pmd_index(addr) - pmd_index(*first);
- 	if (i && i <= MIN_LRU_BATCH) {
- 		__set_bit(i - 1, bitmap);
- 		return;
- 	}
- 
--	pmd = pmd_offset(pud, *start);
-+	pmd = pmd_offset(pud, *first);
- 
- 	ptl = pmd_lockptr(args->mm, pmd);
- 	if (!spin_trylock(ptl))
-@@ -4035,15 +4036,16 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area
- 	do {
- 		unsigned long pfn;
- 		struct folio *folio;
--		unsigned long addr = i ? (*start & PMD_MASK) + i * PMD_SIZE : *start;
-+
-+		/* don't round down the first address */
-+		addr = i ? (*first & PMD_MASK) + i * PMD_SIZE : *first;
- 
- 		pfn = get_pmd_pfn(pmd[i], vma, addr);
- 		if (pfn == -1)
- 			goto next;
- 
- 		if (!pmd_trans_huge(pmd[i])) {
--			if (arch_has_hw_nonleaf_pmd_young() &&
--			    get_cap(LRU_GEN_NONLEAF_YOUNG))
-+			if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
- 				pmdp_test_and_clear_young(vma, addr, pmd + i);
- 			goto next;
- 		}
-@@ -4072,12 +4074,11 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area
- 	arch_leave_lazy_mmu_mode();
- 	spin_unlock(ptl);
- done:
--	*start = -1;
--	bitmap_zero(bitmap, MIN_LRU_BATCH);
-+	*first = -1;
- }
- #else
--static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area_struct *vma,
--				  struct mm_walk *args, unsigned long *bitmap, unsigned long *start)
-+static void walk_pmd_range_locked(pud_t *pud, unsigned long addr, struct vm_area_struct *vma,
-+				  struct mm_walk *args, unsigned long *bitmap, unsigned long *first)
- {
- }
- #endif
-@@ -4090,9 +4091,9 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
- 	unsigned long next;
- 	unsigned long addr;
- 	struct vm_area_struct *vma;
--	unsigned long pos = -1;
-+	unsigned long bitmap[BITS_TO_LONGS(MIN_LRU_BATCH)];
-+	unsigned long first = -1;
- 	struct lru_gen_mm_walk *walk = args->private;
+-	pte_t *pte;
+ 	unsigned long start;
+ 	unsigned long end;
+-	unsigned long addr;
+ 	struct lru_gen_mm_walk *walk;
+ 	int young = 0;
 -	unsigned long bitmap[BITS_TO_LONGS(MIN_LRU_BATCH)] = {};
++	pte_t *pte = pvmw->pte;
++	unsigned long addr = pvmw->address;
+ 	struct folio *folio = pfn_folio(pvmw->pfn);
+ 	struct mem_cgroup *memcg = folio_memcg(folio);
+ 	struct pglist_data *pgdat = folio_pgdat(folio);
+@@ -4610,25 +4609,28 @@ void lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
+ 	/* avoid taking the LRU lock under the PTL when possible */
+ 	walk = current->reclaim_state ? current->reclaim_state->mm_walk : NULL;
  
- 	VM_WARN_ON_ONCE(pud_leaf(*pud));
+-	start = max(pvmw->address & PMD_MASK, pvmw->vma->vm_start);
+-	end = min(pvmw->address | ~PMD_MASK, pvmw->vma->vm_end - 1) + 1;
++	start = max(addr & PMD_MASK, pvmw->vma->vm_start);
++	end = min(addr | ~PMD_MASK, pvmw->vma->vm_end - 1) + 1;
  
-@@ -4131,18 +4132,17 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
- 			if (pfn < pgdat->node_start_pfn || pfn >= pgdat_end_pfn(pgdat))
- 				continue;
- 
--			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &pos);
-+			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &first);
- 			continue;
+ 	if (end - start > MIN_LRU_BATCH * PAGE_SIZE) {
+-		if (pvmw->address - start < MIN_LRU_BATCH * PAGE_SIZE / 2)
++		if (addr - start < MIN_LRU_BATCH * PAGE_SIZE / 2)
+ 			end = start + MIN_LRU_BATCH * PAGE_SIZE;
+-		else if (end - pvmw->address < MIN_LRU_BATCH * PAGE_SIZE / 2)
++		else if (end - addr < MIN_LRU_BATCH * PAGE_SIZE / 2)
+ 			start = end - MIN_LRU_BATCH * PAGE_SIZE;
+ 		else {
+-			start = pvmw->address - MIN_LRU_BATCH * PAGE_SIZE / 2;
+-			end = pvmw->address + MIN_LRU_BATCH * PAGE_SIZE / 2;
++			start = addr - MIN_LRU_BATCH * PAGE_SIZE / 2;
++			end = addr + MIN_LRU_BATCH * PAGE_SIZE / 2;
  		}
- #endif
- 		walk->mm_stats[MM_NONLEAF_TOTAL]++;
- 
--		if (arch_has_hw_nonleaf_pmd_young() &&
--		    get_cap(LRU_GEN_NONLEAF_YOUNG)) {
-+		if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG)) {
- 			if (!pmd_young(val))
- 				continue;
- 
--			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &pos);
-+			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &first);
- 		}
- 
- 		if (!walk->force_scan && !test_bloom_filter(walk->lruvec, walk->max_seq, pmd + i))
-@@ -4159,7 +4159,7 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
- 		update_bloom_filter(walk->lruvec, walk->max_seq + 1, pmd + i);
  	}
  
--	walk_pmd_range_locked(pud, -1, vma, args, bitmap, &pos);
-+	walk_pmd_range_locked(pud, -1, vma, args, bitmap, &first);
+-	pte = pvmw->pte - (pvmw->address - start) / PAGE_SIZE;
++	/* folio_update_gen() requires stable folio_memcg() */
++	if (!mem_cgroup_trylock_pages(memcg))
++		return;
  
- 	if (i < PTRS_PER_PMD && get_next_vma(PUD_MASK, PMD_SIZE, args, &start, &end))
- 		goto restart;
+-	rcu_read_lock();
+ 	arch_enter_lazy_mmu_mode();
+ 
++	pte -= (addr - start) / PAGE_SIZE;
++
+ 	for (i = 0, addr = start; addr != end; i++, addr += PAGE_SIZE) {
+ 		unsigned long pfn;
+ 
+@@ -4653,56 +4655,27 @@ void lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
+ 		      !folio_test_swapcache(folio)))
+ 			folio_mark_dirty(folio);
+ 
++		if (walk) {
++			old_gen = folio_update_gen(folio, new_gen);
++			if (old_gen >= 0 && old_gen != new_gen)
++				update_batch_size(walk, folio, old_gen, new_gen);
++
++			continue;
++		}
++
+ 		old_gen = folio_lru_gen(folio);
+ 		if (old_gen < 0)
+ 			folio_set_referenced(folio);
+ 		else if (old_gen != new_gen)
+-			__set_bit(i, bitmap);
++			folio_activate(folio);
+ 	}
+ 
+ 	arch_leave_lazy_mmu_mode();
+-	rcu_read_unlock();
++	mem_cgroup_unlock_pages();
+ 
+ 	/* feedback from rmap walkers to page table walkers */
+ 	if (suitable_to_scan(i, young))
+ 		update_bloom_filter(lruvec, max_seq, pvmw->pmd);
+-
+-	if (!walk && bitmap_weight(bitmap, MIN_LRU_BATCH) < PAGEVEC_SIZE) {
+-		for_each_set_bit(i, bitmap, MIN_LRU_BATCH) {
+-			folio = pfn_folio(pte_pfn(pte[i]));
+-			folio_activate(folio);
+-		}
+-		return;
+-	}
+-
+-	/* folio_update_gen() requires stable folio_memcg() */
+-	if (!mem_cgroup_trylock_pages(memcg))
+-		return;
+-
+-	if (!walk) {
+-		spin_lock_irq(&lruvec->lru_lock);
+-		new_gen = lru_gen_from_seq(lruvec->lrugen.max_seq);
+-	}
+-
+-	for_each_set_bit(i, bitmap, MIN_LRU_BATCH) {
+-		folio = pfn_folio(pte_pfn(pte[i]));
+-		if (folio_memcg_rcu(folio) != memcg)
+-			continue;
+-
+-		old_gen = folio_update_gen(folio, new_gen);
+-		if (old_gen < 0 || old_gen == new_gen)
+-			continue;
+-
+-		if (walk)
+-			update_batch_size(walk, folio, old_gen, new_gen);
+-		else
+-			lru_gen_update_size(lruvec, folio, old_gen, new_gen);
+-	}
+-
+-	if (!walk)
+-		spin_unlock_irq(&lruvec->lru_lock);
+-
+-	mem_cgroup_unlock_pages();
+ }
+ 
+ /******************************************************************************
 -- 
 2.39.0.314.g84b9a713c41-goog
 
