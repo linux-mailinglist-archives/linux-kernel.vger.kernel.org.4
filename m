@@ -2,106 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9956715C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788216715BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 08:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjARIAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S229883AbjARH7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 02:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjARHxd (ORCPT
+        with ESMTP id S229674AbjARHxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 02:53:33 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2080.outbound.protection.outlook.com [40.107.220.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC679367FB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:29:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FnBtc9JXG9yzCQfs/4wzSegzqOdCZO1OqoPGlJyVTSiLMf0SKIQqnoj83BLodDG1uZWFeRQz9O4b9xU5YzGZLq4GGROPSUSMaM8zZ5CxZGEO9P5aXsRJjL+CCp18a6IWufaGZzTEvXcVDEpyRii3qquaYv1EdUocU4TLgN3cXkMf6AHMbUvrfz/Q/GXzGObED+a0HcKdm1xOfuDxSC8wr+z8ruqt75E0ZuismUOLZPuJmL1cR+S21xJ2lQ/0Kc7loLPcAeeaGQog8TZzCKMs0jj6QooVSsFlE/ZHotOJMCLSXH/HgRnfgGir4azHEgZexSb5SWjKGqRhyz46NiSZJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ahK1ri/jWr6AM3Bmmvox2fgvWwIOI7yOTrfmCTL0zOg=;
- b=L0/AL+qEAMNRzFfh5ttXgK8uieV7DBNry+Vzj0QrUUN2iY2GfjDuEWTJjB+RfgmBJq9+W1lLKM30YIwvzwrnTcrl+UEdriCuya2R44woIigtAA4FdJbzdLg1Hc4RsGN6Z2QzAI0/h7ZhseAPKsN/1dngn9osFwrNj7dAmLxkPaRVratEj5oqHzkg6Tan7jFwdbFSaiASNb9KV7RKBGJkef4W8UbND63yXGjhyr11gPvsFixUETMZJULAb1f6EIDiAJJNeWsQl+nutL7gCv+3jsUb53kxRwGZ+HT6nbDueV5IX890Ckr2xjGQKrFzcsAP1BDlqn06XoVmJ2HOn58ScQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ahK1ri/jWr6AM3Bmmvox2fgvWwIOI7yOTrfmCTL0zOg=;
- b=GLG6PpBWu9Uc6b/Pfs00CAH1253JlP/phSsn46jVBgzNgSBMG/8TeA0m+uafko6qTL63Gsdu/ol3bgO18z4R8o+4VChQDQiNSsmoMumQ5aYe3ERvPwzp9NsQHOiACTuVzuHvpJa6d1iyhZb2+e35ENO79LVd80eVfRAQWpg5z6w=
-Received: from DS7PR06CA0013.namprd06.prod.outlook.com (2603:10b6:8:2a::13) by
- IA1PR12MB8286.namprd12.prod.outlook.com (2603:10b6:208:3f8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
- 2023 07:29:28 +0000
-Received: from DS1PEPF0000E62E.namprd02.prod.outlook.com
- (2603:10b6:8:2a:cafe::c3) by DS7PR06CA0013.outlook.office365.com
- (2603:10b6:8:2a::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Wed, 18 Jan 2023 07:29:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000E62E.mail.protection.outlook.com (10.167.17.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.11 via Frontend Transport; Wed, 18 Jan 2023 07:29:27 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 18 Jan
- 2023 01:29:22 -0600
-Message-ID: <40bf8f6c-c2a1-88cd-163a-256d8d0bb029@amd.com>
-Date:   Wed, 18 Jan 2023 08:29:05 +0100
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36C559B56
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:29:21 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id bk16so32941471wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rNY6RUE7FrzMgk+W6uGQYyeAqKjNTh5GfoEKMQE7LIA=;
+        b=BqwsXWjmor6T0iJs9NLN0UA/EU66Fs3EoT1AELZcOObjlaU9QcePahWtF2yg9U2q7Q
+         55TeYlBUHbSZNzM7Ztrc4GRf0b1W6c/1PH6Ob1FPhlSkTcJo4CBvHkKe3g3LGJEyYw+q
+         RxCvLq6fF6mF3qOichTFdKVg0LW3Ibx0cCL0aTqEi4ZxXrQIfy0xPhSEPqGECBzOR8rD
+         XLr82gDHO/VQc/cxcqYg0jlZOB8L7XOsM3IurMzVYLFrenDlIj9eW7KBL4bZ/qujNgWZ
+         zCKA9c+WTfOqVX7O5LeXMt9pFJi7MniR7lDpo5kGR7nDfcjGVuS68+7ZMBWoSRI//yY5
+         qwqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rNY6RUE7FrzMgk+W6uGQYyeAqKjNTh5GfoEKMQE7LIA=;
+        b=pGwxIkwPM2CBVV+R0F0LIMF0Xk9ARiA+v901T8Z9iTPxmkqvcTeh2xwtXbA+JbsGmj
+         FFVLUJxSUqSKYHqC4Pm5/8lYCgox/sFAGLD3XJyifs1Lhvt2bmOFipoyrIoCuD3pKW+a
+         hvwgoPE/UMQogvNwsUAQo8mu5DlhFLpzGrPb2k4d0scldadX9eCAQZRc5pUyjes0rMvX
+         ARct+ZkK7v84cTcr73r5YKJzQKLjPu5hlnJOMOf+mu2q7Ttv0tpzisxyPjDJHx9PzQAz
+         kIhNUW/BacAvIUDbmv/553Gl5OUudnx0lV6v9RofLTyxMfGuuYAImaaasP6E6B2FbIrs
+         Li6w==
+X-Gm-Message-State: AFqh2ko7nC9qANGayDC0Q8mb8dM9WHE9OlmjGwFMO80e0GJnOyR6sVA7
+        c/i+X5jeXJjE1BOA7OW+apqXzQ1SsZLBVWTKR7vDrANaU+VIeg==
+X-Google-Smtp-Source: AMrXdXuw8yKdqSiq4l4w+/L3BrlumqSU8yZ9jgdGz1PAZxgQczucKPlDmrt6DLm+obCadLEht1/9+f7rGxZzRS22VR0=
+X-Received: by 2002:a05:6000:5c6:b0:242:5caa:5fbf with SMTP id
+ bh6-20020a05600005c600b002425caa5fbfmr143326wrb.300.1674026959721; Tue, 17
+ Jan 2023 23:29:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] firmware: zynqmp: fix declarations for gcc-13
-To:     Arnd Bergmann <arnd@arndb.de>, Tanmay Shah <tanmays@amd.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <soc@kernel.org>, Tanmay Shah <tanmay.shah@xilinx.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ben Levinsky <ben.levinsky@amd.com>,
-        Ronak Jain <ronak.jain@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230117164133.1245749-1-arnd@kernel.org>
- <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
- <eec4d2fd-f305-452a-a47f-83203da494df@app.fastmail.com>
-Content-Language: en-US
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <eec4d2fd-f305-452a-a47f-83203da494df@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E62E:EE_|IA1PR12MB8286:EE_
-X-MS-Office365-Filtering-Correlation-Id: 713b57f9-1e0a-422d-91b9-08daf925bb4f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ODEVc2Z7Mp/Jr9pP2mP5+E1pdqOBRYTRH4kvmMquKUoGRyb8V8EFP9+ljMGv+A5LmeH9gyEtFOE1nrzc43n2VlrzZDWy4qDhvG9gT4anND95+O5PZ8uEUx+TWsQJzNcuUdbJrbe3879+lrkWn+wgHzq6XsICK9DkJKbiNaVGoieVA2F0KNsn1UaQ9yk3eUzAoEmoyQXds+CF5mzwzdUs6MitMyF4RUs8MVTebE5lZ/UFlwHYBVLMKLr/xSEEWTXUbjGsT7eh/BZ/MSXlwnIR19q0SG2Aie4RRq1035lVgyjqjzZ8JMBlQC6BzXUo3JDRvhJk2b4L+RgPJ4b54p7nV0kAyY2oxLUNhSjhqBBst6fp4DDhH9yxj5jkyuJmuIwwiLA0Dhg6x/XtZqpyPTrXjFcR8xItS8dvq7m0h+0oNhNMigI11XVl/14WA7lM2pYoUWPIn/cijqNc1npqkayoWvxRFnE1U4fnYNB8130Rfv3v7riorle8eY5NsyyBfBw+dI3Ed6p89XQvNTYFDCd9XEZu8CECrnsRdl30ybW8ZjJVevtaHYzG4OOHbcRgcoR5CS2VBYkcEGpYgdPeNGp6uO6WIaQ1x18CjYIecXDZnlnVJp9iCbZZSIKTTw8DExu224N9eeUifNYschOqK1XB7O6HDqbHYJmymf1xCBPONPOAxHpcID2GecuFMFfEwtrOS0X4neCT/fLbLPyeotrDzLYMbANfOWhpHwVc1/FyhT4422ulISusSThNK5wmhNwZwXzFHlNbJxKkrjz56Wgk7Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(31686004)(36756003)(86362001)(356005)(2906002)(8676002)(8936002)(70586007)(70206006)(44832011)(4326008)(4744005)(31696002)(36860700001)(82740400003)(81166007)(5660300002)(40460700003)(110136005)(54906003)(316002)(16576012)(6666004)(41300700001)(40480700001)(2616005)(478600001)(426003)(82310400005)(336012)(47076005)(16526019)(26005)(53546011)(186003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 07:29:27.7225
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 713b57f9-1e0a-422d-91b9-08daf925bb4f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E62E.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8286
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230112220024.32709-1-irogers@google.com> <2568dad8-88b4-ebf9-3013-73cc6becdc1c@redhat.com>
+In-Reply-To: <2568dad8-88b4-ebf9-3013-73cc6becdc1c@redhat.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 17 Jan 2023 23:29:07 -0800
+Message-ID: <CAP-5=fW+jpi_iLCrpA2GeEQBzNYASF52qrX7ExrSNL82uaDREQ@mail.gmail.com>
+Subject: Re: [PATCH v2] perf script flamegraph: Avoid d3-flame-graph package dependency
+To:     Andreas Gerstmayr <agerstmayr@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        996839@bugs.debian.org, Martin Spier <spiermar@gmail.com>,
+        Brendan Gregg <brendan@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,33 +76,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jan 17, 2023 at 7:17 AM Andreas Gerstmayr <agerstmayr@redhat.com> wrote:
+>
+> On 12.01.23 23:00, Ian Rogers wrote:
+> > Currently flame graph generation requires a d3-flame-graph template to
+> > be installed. Unfortunately this is hard to come by for things like
+> > Debian [1]. If the template isn't installed then ask if it should be
+> > downloaded from jsdelivr CDN. The downloaded HTML file is validated
+> > against an md5sum. If the download fails, generate a minimal flame
+> > graph with the javascript coming from links to jsdelivr CDN.
+> >
+> > v2. Change the warning to a prompt about downloading and add the
+> >      --allow-download command line flag. Add an md5sum check for the
+> >      downloaded HTML.
+> >
+> > [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> Thank you for the changes. I've tested v2 with:
+>
+> * d3-flame-graph package installed
+> * template not installed, download template from jsdelivr
+> * download from jsdelivr, with --allow-download
+> * invalid checksum
+> * unreachable jsdelivr, creating a minimal template
+>
+> Everything works great except when I'm invoking "perf script flamegraph
+> -a -F 99 sleep 10" (combining perf report + perf script):
+>
+> [root@agerstmayr-thinkpad tmp]# perf script flamegraph -a -F 99 sleep 10
+> ------------------------------------------------------------
+> [...]
+> ------------------------------------------------------------
+> Warning: Flame Graph template
+> '/usr/share/d3-flame-graph/d3-flamegraph-base.html'
+> does not exist. To avoid this please install a package such as the
+> js-d3-flame-graph or libjs-d3-flame-graph, specify an existing flame
+> graph template (--template PATH) or use another output format (--format
+> FORMAT).
+> Do you wish to download a template from cdn.jsdelivr.net? (this warning
+> can be suppressed with --allow-download) [yn] Traceback (most recent
+> call last):
+>    File "/usr/libexec/perf-core/scripts/python/flamegraph.py", line 157,
+> in trace_end
+>      s = input("Do you wish to download a template from
+> cdn.jsdelivr.net? (this warning can be suppressed with --allow-download)
+> [yn] ").lower()
+>
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> OSError: [Errno 9] Bad file descriptor
+> Fatal Python error: handler_call_die: problem in Python trace event handler
+> Python runtime state: initialized
+>
+> Current thread 0x00007ff4053a3cc0 (most recent call first):
+>    <no Python frame>
+>
+> Extension modules: systemd._journal, systemd._reader, systemd.id128
+> (total: 3)
+> /usr/libexec/perf-core/scripts/python/bin/flamegraph-report: line 3:
+> 2135491 Aborted                 (core dumped) perf script -s
+> "$PERF_EXEC_PATH"/scripts/python/flamegraph.py -- "$@"
+>
+>
+> iirc when running "perf script flamegraph" the perf.data gets piped to
+> stdin of the flamegraph script, so we can't ask the user in this case.
+> You can check this condition with `self.args.input == "-". Not sure
+> what's the best action in this case, maybe just exit?
 
-On 1/17/23 21:03, Arnd Bergmann wrote:
-> 
-> On Tue, Jan 17, 2023, at 20:53, Tanmay Shah wrote:
->> This looks good to me. Thanks for fixing this.
->>
->> Something must have gone wrong when I ran sparse check on this patch.
-> 
-> I don't think any of our previous tooling caught this, only gcc-13
-> changed some of the behavior around enums.
-> 
->> Just one question, does this patch need "fixes:" tag?
-> 
-> Probably a good idea:
-> 
-> Fixes: a5e56980cfb7 ("firmware: xilinx: Add RPU configuration APIs")
-> 
-> I can apply this directly to the soc fixes branch if you like
-> and add that line.
+Thanks Andreas,
 
-I have other patches in my soc branch to send you too.
-Around next week I will be sending PR for it.
-I can include this one too but up2you.
+There's no way to handle command line arguments to the script in
+"live" mode and so I sent a v3 where the script warns and then
+quit()s. The only other option would have been to assume downloading,
+and we'd agreed to avoid that. Hopefully v3 is in the right shape now.
 
-Thanks,
-Michal
+Thanks again,
+Ian
 
-
-
+>
+> Cheers,
+> Andreas
+>
+>
+> > ---
+> >   tools/perf/scripts/python/flamegraph.py | 96 +++++++++++++++++++------
+> >   1 file changed, 74 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
+> > index b6af1dd5f816..086619053e4e 100755
+> > --- a/tools/perf/scripts/python/flamegraph.py
+> > +++ b/tools/perf/scripts/python/flamegraph.py
+> > @@ -19,12 +19,34 @@
+> >   # pylint: disable=missing-function-docstring
+> >
+> >   from __future__ import print_function
+> > -import sys
+> > -import os
+> > -import io
+> >   import argparse
+> > +import hashlib
+> > +import io
+> >   import json
+> > +import os
+> >   import subprocess
+> > +import sys
+> > +import urllib.request
+> > +
+> > +minimal_html = """<head>
+> > +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
+> > +</head>
+> > +<body>
+> > +  <div id="chart"></div>
+> > +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
+> > +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+> > +  <script type="text/javascript">
+> > +  const stacks = [/** @flamegraph_json **/];
+> > +  // Note, options is unused.
+> > +  const options = [/** @options_json **/];
+> > +
+> > +  var chart = flamegraph();
+> > +  d3.select("#chart")
+> > +        .datum(stacks[0])
+> > +        .call(chart);
+> > +  </script>
+> > +</body>
+> > +"""
+> >
+> >   # pylint: disable=too-few-public-methods
+> >   class Node:
+> > @@ -50,16 +72,6 @@ class FlameGraphCLI:
+> >           self.args = args
+> >           self.stack = Node("all", "root")
+> >
+> > -        if self.args.format == "html" and \
+> > -                not os.path.isfile(self.args.template):
+> > -            print("Flame Graph template {} does not exist. Please install "
+> > -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
+> > -                  "package, specify an existing flame graph template "
+> > -                  "(--template PATH) or another output format "
+> > -                  "(--format FORMAT).".format(self.args.template),
+> > -                  file=sys.stderr)
+> > -            sys.exit(1)
+> > -
+> >       @staticmethod
+> >       def get_libtype_from_dso(dso):
+> >           """
+> > @@ -128,16 +140,52 @@ class FlameGraphCLI:
+> >               }
+> >               options_json = json.dumps(options)
+> >
+> > +            template_md5sum = None
+> > +            if self.args.format == "html":
+> > +                if os.path.isfile(self.args.template):
+> > +                    template = f"file://{self.args.template}"
+> > +                else:
+> > +                    if not self.args.allow_download:
+> > +                        print(f"""Warning: Flame Graph template '{self.args.template}'
+> > +does not exist. To avoid this please install a package such as the
+> > +js-d3-flame-graph or libjs-d3-flame-graph, specify an existing flame
+> > +graph template (--template PATH) or use another output format (--format
+> > +FORMAT).""",
+> > +                              file=sys.stderr)
+> > +                        s = None
+> > +                        while s != "y" and s != "n":
+> > +                            s = input("Do you wish to download a template from cdn.jsdelivr.net? (this warning can be suppressed with --allow-download) [yn] ").lower()
+> > +                        if s == "n":
+> > +                            quit()
+> > +                    template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
+> > +                    template_md5sum = "143e0d06ba69b8370b9848dcd6ae3f36"
+> > +
+> >               try:
+> > -                with io.open(self.args.template, encoding="utf-8") as template:
+> > -                    output_str = (
+> > -                        template.read()
+> > -                        .replace("/** @options_json **/", options_json)
+> > -                        .replace("/** @flamegraph_json **/", stacks_json)
+> > -                    )
+> > -            except IOError as err:
+> > -                print("Error reading template file: {}".format(err), file=sys.stderr)
+> > -                sys.exit(1)
+> > +                with urllib.request.urlopen(template) as template:
+> > +                    output_str = "".join([
+> > +                        l.decode("utf-8") for l in template.readlines()
+> > +                    ])
+> > +            except Exception as err:
+> > +                print(f"Error reading template {template}: {err}\n"
+> > +                      "a minimal flame graph will be generated", file=sys.stderr)
+> > +                output_str = minimal_html
+> > +                template_md5sum = None
+> > +
+> > +            if template_md5sum:
+> > +                download_md5sum = hashlib.md5(output_str.encode("utf-8")).hexdigest()
+> > +                if download_md5sum != template_md5sum:
+> > +                    s = None
+> > +                    while s != "y" and s != "n":
+> > +                        s = input(f"""Unexpected template md5sum.
+> > +{download_md5sum} != {template_md5sum}, for:
+> > +{output_str}
+> > +continue?[yn] """).lower()
+> > +                    if s == "n":
+> > +                        quit()
+> > +
+> > +            output_str = output_str.replace("/** @options_json **/", options_json)
+> > +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
+> > +
+> >               output_fn = self.args.output or "flamegraph.html"
+> >           else:
+> >               output_str = stacks_json
+> > @@ -172,6 +220,10 @@ if __name__ == "__main__":
+> >                           choices=["blue-green", "orange"])
+> >       parser.add_argument("-i", "--input",
+> >                           help=argparse.SUPPRESS)
+> > +    parser.add_argument("--allow-download",
+> > +                        default=False,
+> > +                        action="store_true",
+> > +                        help="allow unprompted downloading of HTML template")
+> >
+> >       cli_args = parser.parse_args()
+> >       cli = FlameGraphCLI(cli_args)
+>
+> --
+> Red Hat Austria GmbH, Registered seat: A-1200 Vienna, Millennium Tower,
+> 26.floor, Handelskai 94-96, Austria
+> Commercial register: Commercial Court Vienna, FN 479668w
+>
