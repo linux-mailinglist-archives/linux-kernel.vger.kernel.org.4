@@ -2,155 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4EA672825
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D73672832
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjART21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S230120AbjARTaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjART2Y (ORCPT
+        with ESMTP id S229654AbjARTaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:28:24 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C63254113;
-        Wed, 18 Jan 2023 11:28:23 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so23142wms.2;
-        Wed, 18 Jan 2023 11:28:23 -0800 (PST)
+        Wed, 18 Jan 2023 14:30:21 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FE15411B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:30:20 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id s4so1742828qtx.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:30:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
-        b=jEiGMsYrAxCjCLHs6mkQRY+H0loWMOrPpIXi1xkSgx//vqy9s+DozWfgjSS4YBRZBs
-         MtHd3ILPtW2L3CSBBpV7fwzVyyasFhif6BaagMScsM10cwqj34DAnecbPHQ3g3qaZylV
-         BOK+XkMpujyyYY1flwZ5ef1MvNyiKhVcAHfBwO61evwXCkrreDof6lpvLAtEm5wlmCD2
-         CNnu0Nykkr2AbmJlXwgPf1lWdkjNVz+izsra+0L3KHH9il/gIgUrRF8z9t4JCDyT0pHA
-         5PC+tL/QI5wOYSz42qniVZWNiLATcIzp+3DxOAKnG46f0ANvCW3rwKhcSDBi34NCO1iJ
-         xodg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7xDPjbRpbW/1Y146BUFy3rG1PlEHIGh3rZX85WmAFk=;
+        b=YCT7NhsFTBwdjtcySMujXsQ9iT8sSkX9P2rJSOEi7MIf/vUZgLKWPIvYhDDJ5KX0h2
+         04Y3Gb4+aqh+eqPj9AsvYA5GWlhSgRiEEgTn4XOEJ1fZkP+7FFANL24g7AWuZkMKqdRP
+         aw1/btRMyKOiceej5xV2eo4/2E6hYFfTepV+k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
-        b=l89NevF1q/ea5uPvhrB2jJPaJY+n2Vf66OMiwDv+a3HAMoU6ehqIza115H7YrVzxeM
-         gxbOrIeP03nBnDOMnzY8GeDzvDsoovc5Av19PXNPprtp2jG/HG2z1+MLgJ/8DRmVZZkk
-         iJwxVxiVQoZ/GuZ2QL252M7ctMFrSxjWsSIuTaRZjGmYbUFjaifjyFWr2FjpwSxlHZ1+
-         VQEN59vswQfbifDkuHhnRX5m4yladz6+SOxjHh0A7n1HOayeF2f/O1vNKKqYCYq0W2W1
-         9np8thfVAVdLC9BIrZJ8ObITgWjhpNDLnQYnP8E9Cp6FvgbnsmU1SPCR+WqhOiUSFwXS
-         40Qg==
-X-Gm-Message-State: AFqh2koGNIDzGJNSLhMAZeB8FBod8sXiISWoPrqydYRsr7KOec82yHdb
-        J9Gk7Nn6N8qIwPFVCbcJT3k=
-X-Google-Smtp-Source: AMrXdXulDIOu6MQaY7fUorwFYHMU0SwJNoQe3B8HRZ22ZyxAxesr3erXMXwcA+pNQZqED4LmDew5rA==
-X-Received: by 2002:a05:600c:5d1:b0:3d0:761b:f86 with SMTP id p17-20020a05600c05d100b003d0761b0f86mr7756738wmd.28.1674070102037;
-        Wed, 18 Jan 2023 11:28:22 -0800 (PST)
-Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b003d04e4ed873sm3398843wmp.22.2023.01.18.11.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 11:28:21 -0800 (PST)
-Message-ID: <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Peter Foley <pefoley2@pefoley.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Date:   Wed, 18 Jan 2023 21:28:19 +0200
-In-Reply-To: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g7xDPjbRpbW/1Y146BUFy3rG1PlEHIGh3rZX85WmAFk=;
+        b=DLhp41zzrWwzN1SbfNcwJYcRVcpPyNbl4sUtVGv78f/B4C6GNDI3p6aJ58i2UL2l+D
+         DRvA7mU0cUg7cQnhcUIxtnGYVtYs/kakxsk+5IqYAVi53G96E0WfmCNm9BsbUEQNBsi0
+         Qcjy48+N6mhr+s5NQpDXFge4Tc721q3nF8XV1GLCO9ZNthGUtAp+aBrQgdyxjFr8j6Nx
+         RbR++QuMiAJTbQck4YtzSmnpDtovUC5KXKkdEWq8Yrd+d/lre+NjngbS+Vjo1cSqi5sl
+         Z7fn+UpMoJxC+R3OcFMk+YVfOpArjJbIQVMVMBHprLSppwM2MWeYNkm2O1N84b44XInt
+         yu2g==
+X-Gm-Message-State: AFqh2krS8IpnpbAaOgNgJA0zGA40PyqnmB62Zf9MoCYSXoI4dJdiqKqK
+        DwaA+EvRw17lnV1HQip1DHxSQg==
+X-Google-Smtp-Source: AMrXdXuZJIDRMFdvUl35vOCmEkGVlA3bW2dOxpF8adOcUqZuFBuN3qGMHLxiai/uwwErQRkgA/dCow==
+X-Received: by 2002:ac8:6b88:0:b0:3b0:4084:d6ad with SMTP id z8-20020ac86b88000000b003b04084d6admr11101265qts.58.1674070219105;
+        Wed, 18 Jan 2023 11:30:19 -0800 (PST)
+Received: from localhost (29.46.245.35.bc.googleusercontent.com. [35.245.46.29])
+        by smtp.gmail.com with UTF8SMTPSA id y2-20020a05620a44c200b006e42a8e9f9bsm8957331qkp.121.2023.01.18.11.30.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 11:30:18 -0800 (PST)
+From:   Mark Yacoub <markyacoub@chromium.org>
+X-Google-Original-From: Mark Yacoub <markyacoub@google.com>
+To:     quic_khsieh@quicinc.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        markyacoub@chromium.org, tzimmermann@suse.de,
+        ville.syrjala@linux.intel.com, stanislav.lisovskiy@intel.com,
+        matthew.d.roper@intel.com, imre.deak@intel.com,
+        lucas.demarchi@intel.com, manasi.d.navare@intel.com,
+        swati2.sharma@intel.com, bhanuprakash.modem@intel.com,
+        javierm@redhat.com, jose.souza@intel.com, lyude@redhat.com,
+        hbh25y@gmail.com, arun.r.murthy@intel.com,
+        ashutosh.dixit@intel.com, ankit.k.nautiyal@intel.com,
+        maxime@cerno.tech, swboyd@chromium.org,
+        christophe.jaillet@wanadoo.fr, quic_sbillaka@quicinc.com,
+        johan+linaro@kernel.org, dianders@chromium.org, marex@denx.de,
+        quic_jesszhan@quicinc.com, bjorn.andersson@linaro.org,
+        abhinavk@codeaurora.org, seanpaul@chromium.org
+Subject: [PATCH v6 00/10] drm/hdcp: Pull HDCP auth/exchange/check into helpers
+Date:   Wed, 18 Jan 2023 19:30:05 +0000
+Message-Id: <20230118193015.911074-1-markyacoub@google.com>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-14 at 18:00 -0500, Peter Foley wrote:
-> Avoid build errors on distros that force the stack protector on by
-> default.
-> e.g.
->   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
-> skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack=
-_chk_fail' is not supported.
-> int iter(struct bpf_iter__task_file *ctx)
->     ^
-> 1 error generated.
->=20
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> ---
->  tools/bpf/bpftool/Makefile    | 1 +
->  tools/bpf/runqslower/Makefile | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index f610e184ce02a..36ac0002e386f 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h=
- $(LIBBPF_BOOTSTRAP)
->  		-I$(or $(OUTPUT),.) \
->  		-I$(srctree)/tools/include/uapi/ \
->  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
-> +		-fno-stack-protector \
+From: Mark Yacoub <markyacoub@chromium.org>
 
-While working on clang patch to disable stack protector
-for BPF target I've noticed that there is an option to
-disable default configuration file altogether [1]:
+Hello,
 
-  --no-default-config
+I rebased this series which is authored by Sean Paul.
 
-Should we consider it instead of -fno-stack-protector
-to shield ourselves from any potential distro-specific
-changes?
+A major rebase conflict was that drm/drm_hdcp was split to drm/display/drm_hdcp & drm/display/drm_hdcp_helper.
 
-[1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-cl=
-ang-no-default-config
+Another major one was in msm dp where drm_connector was no longer tracked, but it's replaced by msm_dp_bridge to carry over its functionalities.
 
->  		-g -O2 -Wall -target bpf -c $< -o $@
->  	$(Q)$(LLVM_STRIP) -g $@
-> =20
-> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefil=
-e
-> index 8b3d87b82b7a2..f7313cc966a04 100644
-> --- a/tools/bpf/runqslower/Makefile
-> +++ b/tools/bpf/runqslower/Makefile
-> @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
->  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
-> =20
->  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
-> -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
-> -		 -c $(filter %.c,$^) -o $@ &&				      \
-> +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
-> +		 -fno-stack-protector 					\
-> +		 -c $(filter %.c,$^) -o $@ &&				\
->  	$(LLVM_STRIP) -g $@
-> =20
->  $(OUTPUT)/%.o: %.c | $(OUTPUT)
->=20
-> ---
-> base-commit: 97ec4d559d939743e8af83628be5af8da610d9dc
-> change-id: 20230114-bpf-918ae127b77a
->=20
-> Best regards,
+The first 4 patches modify DRM. They've been reviewed.
+Patches 5-7 are intel-only. Only patch 7 hasn't been reviewed.
+Patches 8-10 are msm-only. Only patch 9 hasn't been reviewed.
+
+Thanks,
+Mark
+
+Sean Paul (10):
+  drm/hdcp: Add drm_hdcp_atomic_check()
+  drm/hdcp: Avoid changing crtc state in hdcp atomic check
+  drm/hdcp: Update property value on content type and user changes
+  drm/hdcp: Expand HDCP helper library for enable/disable/check
+  drm/i915/hdcp: Consolidate HDCP setup/state cache
+  drm/i915/hdcp: Retain hdcp_capable return codes
+  drm/i915/hdcp: Use HDCP helpers for i915
+  dt-bindings: msm/dp: Add bindings for HDCP registers
+  arm64: dts: qcom: sc7180: Add support for HDCP in dp-controller
+  drm/msm: Implement HDCP 1.x using the new drm HDCP helpers
+
+ .../bindings/display/msm/dp-controller.yaml   |    8 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |    8 +
+ drivers/gpu/drm/display/drm_hdcp_helper.c     | 1202 +++++++++++++++++
+ drivers/gpu/drm/i915/display/intel_atomic.c   |    8 +-
+ drivers/gpu/drm/i915/display/intel_ddi.c      |   32 +-
+ .../drm/i915/display/intel_display_debugfs.c  |   11 +-
+ .../drm/i915/display/intel_display_types.h    |   60 +-
+ drivers/gpu/drm/i915/display/intel_dp_hdcp.c  |  348 ++---
+ drivers/gpu/drm/i915/display/intel_dp_mst.c   |   16 +-
+ drivers/gpu/drm/i915/display/intel_hdcp.c     | 1028 +++-----------
+ drivers/gpu/drm/i915/display/intel_hdcp.h     |   36 +-
+ drivers/gpu/drm/i915/display/intel_hdmi.c     |  270 ++--
+ drivers/gpu/drm/msm/Kconfig                   |    1 +
+ drivers/gpu/drm/msm/Makefile                  |    1 +
+ drivers/gpu/drm/msm/dp/dp_debug.c             |   48 +-
+ drivers/gpu/drm/msm/dp/dp_debug.h             |    6 +-
+ drivers/gpu/drm/msm/dp/dp_display.c           |   52 +-
+ drivers/gpu/drm/msm/dp/dp_display.h           |    5 +
+ drivers/gpu/drm/msm/dp/dp_drm.c               |  108 +-
+ drivers/gpu/drm/msm/dp/dp_drm.h               |   16 +-
+ drivers/gpu/drm/msm/dp/dp_hdcp.c              |  456 +++++++
+ drivers/gpu/drm/msm/dp/dp_hdcp.h              |   29 +
+ drivers/gpu/drm/msm/dp/dp_parser.c            |   20 +-
+ drivers/gpu/drm/msm/dp/dp_parser.h            |    4 +
+ drivers/gpu/drm/msm/dp/dp_reg.h               |   32 +-
+ drivers/gpu/drm/msm/msm_atomic.c              |   15 +
+ include/drm/display/drm_hdcp.h                |  168 ++-
+ include/drm/display/drm_hdcp_helper.h         |   33 +-
+ 28 files changed, 2667 insertions(+), 1354 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_hdcp.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_hdcp.h
+
+-- 
+2.39.0.246.g2a6d74b583-goog
 
