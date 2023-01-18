@@ -2,309 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCA2670EB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F063670EB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjARAg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
+        id S229712AbjARAhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjARAgW (ORCPT
+        with ESMTP id S229716AbjARAgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:36:22 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD363E09;
-        Tue, 17 Jan 2023 16:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZR/zKwfuyZJZgDgsd6BVo1jA66dvTFg1Bvt4qava1GI=; b=UVsJC/C/0DlAjRBsSx0O4LO/9K
-        zfqrBGJVi+zP+o2CiMGAUhwfudn1gdDNr1lthRcO6QzWO3AYPIjxnMQJYSQwSsP3Mdnypxa+bk1Mx
-        DjBGJWQjcjz/vSU5viO1PykJOQBy9L3ej3vr3npvlr/dhXa8Ea2+liFQwKo5WelkfDnnXjh95w6ZK
-        J/hVMFZBSCwfXXw+rDLENPtXqGpWCFhyDueqtdTNhHlnDkVp8zGRQjtVc6Xbifj2XoFZtGpGGmgbD
-        cmFFPPHAEwTYhVN9bdGY7Wjm3yL/WSh94cc+IJrOzauxbvcAt/IYf0jUWKpr+DtXPDlMy6I2wqR8F
-        wY5aU8Jw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHvwE-00GJGD-Mn; Wed, 18 Jan 2023 00:04:22 +0000
-Date:   Tue, 17 Jan 2023 16:04:22 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
+        Tue, 17 Jan 2023 19:36:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ADB61888
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:05:33 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674000331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6f8munmJxa/8WnZ4QEb9NOOrR0H3n/weATpS88Zphz4=;
+        b=ManIwOntKUGcBX+Zl5XyOLE1TbKTDL96EhAOtJMw3o0RIE1HmJNovqcBfPll3fxvGuO1nK
+        Lku9TV1YCyurN4Ddza8THbDIdyd7OvtDYfmXOWmlG0TnrlEoSEvsskaTNbH8dwqcqqH2ho
+        ErqBAiIPQVihMOYrILPW4d8pKbVza91CjqrhXJ+b5egGHctXX1GyuOByGvrORPhRY3R7f0
+        ptOobMxVs3SklkKEPq5EIMY24JfvGegU7U1Yo2pFx0MYTC6zrd3IcTba1B3iqg1YazFcio
+        Rj2USoBPDfCTpDpxjQ7SEfaIsXgoFPKJaJCRI8hQk4iLPOfVTPVzl+dKQIYnjg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674000331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6f8munmJxa/8WnZ4QEb9NOOrR0H3n/weATpS88Zphz4=;
+        b=P0spGLxiHd4tr08jO2UoMb13FcMmChoIGZykjqdTXS7U5XZs4ElAVNA23li/n4zxiVZwHV
+        JjqjAdzly1y44RCQ==
+To:     Wander Lairson Costa <wander@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Wander Lairson Costa <wander@redhat.com>
+Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
+In-Reply-To: <20230117172649.52465-1-wander@redhat.com>
+References: <20230117172649.52465-1-wander@redhat.com>
+Date:   Wed, 18 Jan 2023 01:05:30 +0100
+Message-ID: <875yd4k8qd.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5hRRnBGYaPby/RS@alley>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
-> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
-> > On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
-> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > > index d02d39c7174e..7a627345d4fd 100644
-> > > --- a/kernel/module/main.c
-> > > +++ b/kernel/module/main.c
-> > > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
-> > >  	sched_annotate_sleep();
-> > >  	mutex_lock(&module_mutex);
-> > >  	mod = find_module_all(name, strlen(name), true);
-> > > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> > > +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> > > +		|| mod->state == MODULE_STATE_GOING;
-> > >  	mutex_unlock(&module_mutex);
-> > >  
-> > >  	return ret;
-> > > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
-> > >  
-> > >  	mod->state = MODULE_STATE_UNFORMED;
-> > >  
-> > > -again:
-> > 
-> > So this is part of my biggest concern for regression, the removal of
-> > this tag and its use.
-> > 
-> > Before this we always looped back to trying again and again.
-> 
-> Just to be sure that we are on the same page.
-> 
-> The loop was _not_ infinite. It serialized all attempts to load
-> the same module. In our case, it serialized all failures and
-> prolonged the pain.
+Wander!
 
-That's fair yes. The loop happens so long as an already existing module is
-present with the same name.
+On Tue, Jan 17 2023 at 14:26, Wander Lairson Costa wrote:
+> In task_blocked_on_lock() we save the owner, release the wait_lock and
+> call rt_mutex_adjust_prio_chain(). Before we acquire the wait_lock
+> again, the owner may release the lock and deboost.
 
-> > >  	mutex_lock(&module_mutex);
-> > >  	old = find_module_all(mod->name, strlen(mod->name), true);
-> > >  	if (old != NULL) {
-> > > -		if (old->state != MODULE_STATE_LIVE) {
-> > > +		if (old->state == MODULE_STATE_COMING
-> > > +		    || old->state == MODULE_STATE_UNFORMED) {
-> > >  			/* Wait in case it fails to load. */
-> > >  			mutex_unlock(&module_mutex);
-> > >  			err = wait_event_interruptible(module_wq,
-> > >  					       finished_loading(mod->name));
-> > >  			if (err)
-> > >  				goto out_unlocked;
-> > > -			goto again;
-> > 
-> > We essentially bound this now, and before we didn't.
-> > 
-> > Yes we we wait for finished_loading() of the module -- but if udev is
-> > hammering tons of same requests, well, we *will* surely hit this, as
-> > many requests managed to get in before userspace saw the module present.
-> > 
-> > While this typically can be useful, it means *quite a bit* of conditions which
-> > definitely *did* happen before will now *bail out* fast, to the extent
-> > that I'm not even sure why we just re-try once now.
-> 
-> I do not understand this. We do _not_ re-try the load in the new
-> version. We just wait for the result of the parallel attempt to
-> load the module.
-> 
-> Maybe, you are confused that we repeat find_module_all(). But it is
-> the way how to find the result of the parallel load.
+This does not make sense in several aspects:
 
-My point is that prior to the buggy commit 6e6de3dee51a ("kernel/module.c: Only
-return -EEXIST for modules that have finished loading") and even after that
-commit it we 'goto again' if an old request is found. We now simply bound this
-right away. Yes, the loop was not infinite, but in theory at least a few
-iterations were possible before whereas now immediately return -EBUSY
-and I don't think all use cases may be ready yet.
+  1) Who is 'we'? You, me, someone else? None of us does anything of the
+     above.
 
-> > If we're going to 
-> > just re-check *once* why not do something graceful like *at least*
-> > cond_resched() to let the system breathe for a *tiny bit*.
-> 
-> We must check the result under module_mutex. We have to take this
-> sleeping lock. There is actually a rescheduling. I do not think that
-> cond_resched() would do any difference.
+        https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
-Makes sense.
+  2) What has task_blocked_on_lock() to do with the logic in
+     rt_mutex_adjust_prio_chain() which is called by other callsites
+     too?
 
-> > > +
-> > > +			/* The module might have gone in the meantime. */
-> > > +			mutex_lock(&module_mutex);
-> > > +			old = find_module_all(mod->name, strlen(mod->name),
-> > > +					      true);
-> > >  		}
-> > > -		err = -EEXIST;
-> > > +
-> > > +		/*
-> > > +		 * We are here only when the same module was being loaded. Do
-> > > +		 * not try to load it again right now. It prevents long delays
-> > > +		 * caused by serialized module load failures. It might happen
-> > > +		 * when more devices of the same type trigger load of
-> > > +		 * a particular module.
-> > > +		 */
-> > > +		if (old && old->state == MODULE_STATE_LIVE)
-> > > +			err = -EEXIST;
-> > > +		else
-> > > +			err = -EBUSY;
-> > 
-> > And for all those use cases we end up here now, with -EBUSY. So udev
-> > before was not bounded, and kept busy-looping on the retry in-kernel,
-> > and we now immediately bound its condition to just 2 tries to see if the
-> > old module existed and now *return* a new value to userspace.
-> > 
-> > My main concerns are:
-> > 
-> > 0) Why not use cond_resched() if we're just going to check twice?
-> 
-> We take module_mutex. It should cause even bigger delay than cond_resched().
+  3) If the owner releases the lock and deboosts then this has
+     absolutely nothing to do with the lock because the priority of a
+     the owner is determined by its own priority and the priority of the
+     top most waiter. If the owner releases the lock then it marks the
+     lock ownerless, wakes the top most waiter and deboosts itself. In
+     this owner deboost rt_mutex_adjust_prio_chain() is not involved at
+     all. Why?
 
-ACK.
+     Because the owner deboost does not affect the priority of the
+     waiters at all. It's the other way round: Waiter priority affects
+     the owner priority if the waiter priority is higher than the owner
+     priority.
 
-> > 1) How are we sure we are not regressing userspace by removing the boundless
-> > loop there? (even if the endless loop was stupid)
-> 
-> We could not be sure. On the other hand, if more attempts help to load
-> the module then it is racy and not reliable. The new approach would
-> make it better reproducible and fix the race.
+> rt_mutex_adjust_prio_chain() acquires the wait_lock. In the requeue
+> phase, waiter may be initially in the top of the queue, but after
+> dequeued and requeued it may no longer be true.
 
-Yes, but the short cut it is a userspace visible change.
+That's related to your above argumentation in which way?
 
-> > 2) How is it we expect that we won't resgress userspace now by bounding
-> > that check and pretty much returning -EBUSY right away? This last part
-> > seems dangerous, in that if userspace did not expect -EBUSY and if an
-> > error before caused a module to fail and fail boot, why wouldn't we fail
-> > boot now by bailing out faster??
-> 
-> Same answer as for 1)
-> 
-> 
-> > 3) *Fixing* a kernel regression by adding new expected API for testing
-> > against -EBUSY seems not ideal.
-> 
-> IMHO, the right solution is to fix the subsystems so that they send
-> only one uevent.
+rt_mutex_adjust_prio_chain()
 
-Makes sense, but that can take time and some folks are stuck on old kernels
-and perhaps porting fixes for this on subsystems may take time to land
-to some enterprisy kernels. And then there is also systemd that issues
-the requests too, at least that was reflected in commit 6e6de3dee51a
-("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-that commit claims it was systemd issueing the requests which I mean to
-interpret finit_module(), not calling modprobe.
+        lock->wait_lock is held across the whole operation
 
-The rationale for making a regression fix with a new userspace return value
-is fair given the old fix made things even much worse the point some kernel
-boots would fail. So the rationale to suggest we *must* short-cut
-parallel loads as effectively as possible seems sensible *iff* that
-could not make things worse too but sadly I've found an isssue
-proactively with this fix, or at least that this issue is also not fixed:
+        prerequeue_top_waiter = rt_mutex_top_waiter(lock);
 
-./tools/testing/selftests/kmod/kmod.sh -t 0006
-Tue Jan 17 23:18:13 UTC 2023
-Running test: kmod_test_0006 - run #0
-kmod_test_0006: OK! - loading kmod test
-kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
-----------------------------------------------------
-Custom trigger configuration for: test_kmod0
-Number of threads:      50
-Test_case:      TEST_KMOD_FS_TYPE (2)
-driver: test_module
-fs:     xfs
-----------------------------------------------------
-Test completed
+  This saves the current top waiter before the dequeue()/enqueue()
+  sequence.
 
-When can multiple get_fs_type() calls be issued on a system? When
-mounting a large number of filesystems. Sadly though this issue seems
-to have gone unnoticed for a while now. Even reverting commit
-6e6de3dee51a doesn't fix it, and I've run into issues with trying
-to bisect, first due to missing Kees' patch which fixes a compiler
-failure on older kernel [0] and now I'm seeing this while trying to
-build v5.1:
+	rt_mutex_dequeue(lock, waiter);
+	waiter_update_prio(waiter, task);
+	rt_mutex_enqueue(lock, waiter);
 
-ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
-arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
-ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
-ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
-ld: warning: creating DT_TEXTREL in a PIE
-make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
-make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
-make: *** [arch/x86/Makefile:283: bzImage] Error 2
+	if (!rt_mutex_owner(lock)) {
 
-[0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
+  This is the case where the lock has no owner, i.e. the previous owner
+  unlocked and the chainwalk cannot be continued.
 
-But we should try to bisect to see what cauased the above kmod test 0006
-to start failing.
+  Now the code checks whether the requeue changed the top waiter task:
 
-> The question is how the module loader would deal with "broken"
-> subsystems. Petr Pavlu, please, fixme. I think that there are
-> more subsystems doing this ugly thing.
-> 
-> I personally thing that returning -EBUSY is better than serializing
-> all the loads. It makes eventual problem easier to reproduce and fix.
+		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
 
-I agree with this assessment, however given the multiple get_fs_type()
-calls as an example, I am not sure if there are other areas which rely on the
-old busy-wait mechanism.
+  What can make this condition true?
 
-*If* we knew this issue was not so common I'd go so far as to say we
-should pr_warn_once() on failure, but at this point in time I think it'd
-be pretty chatty.
+    1) @waiter is the new top waiter due to the requeue operation
 
-I don't yet have confidence that the new fast track to -EXIST or -EBUSY may
-not create regressions, so the below I think would be too chatty. If it
-wasn't true, I'd say we should keep record of these uses so we fix the
-callers.
+    2) @waiter is not longer the top waiter due to the requeue operation
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d3be89de706d..d1ad0b510cb8 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2589,13 +2589,6 @@ static int add_unformed_module(struct module *mod)
- 					      true);
- 		}
- 
--		/*
--		 * We are here only when the same module was being loaded. Do
--		 * not try to load it again right now. It prevents long delays
--		 * caused by serialized module load failures. It might happen
--		 * when more devices of the same type trigger load of
--		 * a particular module.
--		 */
- 		if (old && old->state == MODULE_STATE_LIVE)
- 			err = -EEXIST;
- 		else
-@@ -2610,6 +2603,15 @@ static int add_unformed_module(struct module *mod)
- out:
- 	mutex_unlock(&module_mutex);
- out_unlocked:
-+	/*
-+	 * We get an error here only when there is an attempt to load the
-+	 * same module. Subsystems should strive to only issue one request
-+	 * for a needed module. Multiple requests might happen when more devices
-+	 * of the same type trigger load of a particular module.
-+	 */
-+	if (err)
-+		pr_warn_once("%: dropping duplicate module request, err: %d\n",
-+			     mod->name, err);
- 	return err;
- }
- 
+  So in both cases the new top waiter must be woken up so it can take over
+  the ownerless lock.
 
-  Luis
+  Here is where the code is buggy. It only considers case #1, but not
+  case #2, right?
+
+So your patch is correct, but the explanation in your changelog has
+absolutely nothing to do with the problem.
+
+Why?
+
+  #2 is caused by a top waiter dropping out due to a signal or timeout
+     and thereby deboosting the whole lock chain.
+
+  So the relevant callchain which causes the problem originates from
+  remove_waiter()
+
+See?
+
+Thanks,
+
+        tglx
