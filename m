@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895AC672014
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CC267201B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjAROro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S230183AbjAROtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjAROrS (ORCPT
+        with ESMTP id S229989AbjAROsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:47:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD44474D3;
-        Wed, 18 Jan 2023 06:40:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 729C5B81D6D;
-        Wed, 18 Jan 2023 14:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08E04C433F1;
-        Wed, 18 Jan 2023 14:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674052818;
-        bh=Tsm1APk/mXfgMvBuRY8ii5mqCI8QhhSSIAOswYeQn38=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BBBym8a4SW7BF4Nklul6hEwwo7OcPVfJKtt0lYp8g8UgMe6+NW8VL++DGVyRiLYel
-         VdWGIlgS6wwXJDZHoLtSqsOQYKp46+s3D4tYQCchR8nAU5s6sTiFUejGTsOmyxL4yP
-         BZLnf1QuJ1skOCUs+OfqHbYMNbwcoOsyGpektv8YVujt4nSZMD4EwFXiLKe/3A3E9M
-         vlpVmq3gguYE5gstMTH+vGeAQV+ZSUQBKfVlY7y2pVKW0PcOq0hcstnwwJTMwK4JQb
-         2IUX8WFqWo6/0BccWutNEhwpSakgF+cb0cD756On6pPTo0QAX6M4YXJO4DVgqSGvys
-         oVC/Gvv5VSIxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC890C3959E;
-        Wed, 18 Jan 2023 14:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 18 Jan 2023 09:48:31 -0500
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBAE46D50
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:41:07 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NxpNF0zXgzMq4SK;
+        Wed, 18 Jan 2023 15:41:01 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4NxpNC4kZnzFYS;
+        Wed, 18 Jan 2023 15:40:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1674052861;
+        bh=D3/v6IyvwMtBeEzhlKdhLBUfk5fPTY0u64kzIpDz1J0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GoM8tBfwYpZGJnIK5sm0DgOhMtp6Irc9vghCPnv4SJFQUf+qd/DbS9KQmKmmk0t/y
+         f2uESyOG7LA4JwqTNNb/EZU+nHDgLIsCwtSd56lj080v14Tt93M+mF+ZmV+eUuXpb+
+         amYwI0l9Xzf1wjBgMzmbgMAbei76fQGg81CxWWhk=
+From:   Philippe Schenker <dev@pschenker.ch>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] arm64: dts: imx8m(m|p): Add yavia carrier board
+Date:   Wed, 18 Jan 2023 15:40:39 +0100
+Message-Id: <20230118144042.7705-1-dev@pschenker.ch>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] Improve locking in the VCAP API
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167405281789.22945.18204552117628849446.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 Jan 2023 14:40:17 +0000
-References: <20230117085544.591523-1-steen.hegelund@microchip.com>
-In-Reply-To: <20230117085544.591523-1-steen.hegelund@microchip.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
-        rdunlap@infradead.org, casper.casan@gmail.com,
-        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
-        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
-        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Tue, 17 Jan 2023 09:55:39 +0100 you wrote:
-> This improves the VCAP cache and the VCAP rule list protection against
-> access from different sources.
-> 
-> The VCAP Admin lock protects the list of rules for the VCAP instance as
-> well as the cache used for encoding and decoding rules.
-> 
-> This series provides dedicated functions for accessing rule statistics,
-> decoding rule content, verifying if a rule exists and getting a rule with
-> the lock held, as well as ensuring the use of the lock when the list of
-> rules or the cache is accessed.
-> 
-> [...]
+This series adds the new Yavia Carrier Board for the Verdin family.
+Specifically for Verdin iMX8M Mini and Verdin iMX8M Plus.
 
-Here is the summary with links:
-  - [net-next,1/5] net: microchip: sparx5: Add support for rule count by cookie
-    https://git.kernel.org/netdev/net-next/c/27d293cceee5
-  - [net-next,2/5] net: microchip: sparx5: Add support to check for existing VCAP rule id
-    https://git.kernel.org/netdev/net-next/c/975d86acaec7
-  - [net-next,3/5] net: microchip: sparx5: Add VCAP admin locking in debugFS
-    https://git.kernel.org/netdev/net-next/c/9579e2c271b4
-  - [net-next,4/5] net: microchip: sparx5: Improve VCAP admin locking in the VCAP API
-    https://git.kernel.org/netdev/net-next/c/1972b6d927ac
-  - [net-next,5/5] net: microchip: sparx5: Add lock initialization to the KUNIT tests
-    https://git.kernel.org/netdev/net-next/c/595655e08174
+Yavia is a compact carrier board providing easy access to the most
+common features of the Verdin family. The intended use of the carrier
+board is application software development. The board is compatible with
+all current and future Verdin SoMs.
 
-You are awesome, thank you!
+https://www.toradex.com/products/carrier-board/yavia
+
+
+Philippe Schenker (3):
+  dt-bindings: arm: fsl: Add verdin yavia carrier-board
+  arm64: dts: imx8mm-verdin: Add yavia carrier board
+  arm64: dts: imx8mp-verdin: Add yavia carrier board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   4 +
+ arch/arm64/boot/dts/freescale/Makefile        |   4 +
+ .../freescale/imx8mm-verdin-nonwifi-yavia.dts |  18 ++
+ .../freescale/imx8mm-verdin-wifi-yavia.dts    |  18 ++
+ .../dts/freescale/imx8mm-verdin-yavia.dtsi    | 155 ++++++++++++++
+ .../freescale/imx8mp-verdin-nonwifi-yavia.dts |  18 ++
+ .../freescale/imx8mp-verdin-wifi-yavia.dts    |  18 ++
+ .../dts/freescale/imx8mp-verdin-yavia.dtsi    | 199 ++++++++++++++++++
+ 8 files changed, 434 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0
 
