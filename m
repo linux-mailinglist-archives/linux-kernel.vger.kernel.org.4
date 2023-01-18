@@ -2,177 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C6D6727C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2216727C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjARTCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
+        id S229944AbjARTCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjARTCP (ORCPT
+        with ESMTP id S230095AbjARTCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 14:02:15 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055775D7EB
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:22 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4c24993965eso475246727b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:21 -0800 (PST)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6DC5D903
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:26 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id e3so25723945wru.13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8DSKYHJgJYKJvmPul/jqy2wXXzLUlUgLi7Tkf9YlXU=;
-        b=ejwY3+LKtxm5x3E+GJzfTUchB7m+L1YRon9Aa8Q50Ti4tQZzVZ6M7ddAXR8QuYX2/+
-         QbFt7G90bRjsGKuh+F1lDNIo0H7p5+Ztjzb+JsV1kzQB8MPN72CITN8khcfMdZzVCClr
-         0rfR86j8uR9XfP3lcG3CmwEZq8gGCNYy4GMw9BXNuo+B0XfUKFLgpaKByDGEKF5m5ob0
-         nAirCQpTYQiGnADXyL4rHN55X+6T7+KDx4Lknv/dk8Nf1obhK0VCQYfoZive5NaouN9J
-         rWZ8CpiuCsm5NmaCNzdlzyweXpQ+VQ7Pr9lxoMOtqkqySGFLw02OuYspEMabUBJR88+S
-         njvQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G2SXL+4FwJ1DXO3od+MaJWYSMQf4KAe8OpgLTFr+uMs=;
+        b=LHJjUqB1gLa7nctUv1iQSwqLrejhk3r2SuuwhR9BEASCQgqKQTRML48nkyLX8qsN12
+         XxK/4sC/sdzBO49fOM5eganFJPNXZ6y5Pk2jHSWHM2a3unIMdd5n/lAsUQO2eMW6kyt6
+         nYN19YsaVhP9eQVkhS019LDlQgrP/WahI9z2IyS8KzmaIXINBv+f3Bw43rcWPbRh3rLm
+         9sJlrbqb7vMBkB5fz2o8BsHCO1g+mCWGxa72BoVi3zYfIDcyTQtx4w6gOYvGmMq+8ClU
+         nZZIXJlUq7+jTwe2UWFoCg5ebKg1Fw6X62HcltT1Owfa5JccyiU8WbNJJA9F4Y/U4afO
+         ucoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z8DSKYHJgJYKJvmPul/jqy2wXXzLUlUgLi7Tkf9YlXU=;
-        b=5n05tczG4QyegsmSEKaiHwiB4AoXff0uXMMAjrBYm0Cm+cGTy76cICfDP+cadom17F
-         msta4lIXOvBk7EAgyLJ11hvqSz7r0Ve5Gzyl1Ybw9B/q8nuv06U7s/tONhTFxUxTDxua
-         OO5J+ccJ6a0RALc65qitRg8PWKQYUXgPryTX3UxQxKq9AmhXv9ONlt3HVbi1hD+lOibR
-         D/QGOJBXJG41Hhw24KitIQBhbP8MaEE3T+zwWNkes8nW3wAGbK5v2QOhxpGV5gnlkxAG
-         7KFhUEmqx+Ur13SmjxTanMmpsf7JxV5RUSOejf6B6l+O3MZ5rv0nlh2gTiTU2CZWrQGJ
-         GA/A==
-X-Gm-Message-State: AFqh2kp6EknkB1Hq4Gxc/MgkVx8UbriKgXNXHLatexlLHq8sVxMpV574
-        s/z9zh0FdufjFk1n5xFa6o4/iFs//wV3I9imKwC1uA==
-X-Google-Smtp-Source: AMrXdXubzcxtFjj0yWcsl/wowi8G0fcdGwos3LuYoWDDm/OjCNfgTh+Wjt7geFYZ2EGxVPVcRjYpoDeL03CkmRv1g5o=
-X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
- i135-20020a816d8d000000b0049089c321b0mr1053073ywc.132.1674068480621; Wed, 18
- Jan 2023 11:01:20 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G2SXL+4FwJ1DXO3od+MaJWYSMQf4KAe8OpgLTFr+uMs=;
+        b=guKdkJ7JAO9BWwRpLo+Utc4deAoB/FiEFxg5MdYnc5+WvASQjP8t/bbshBAzvEZcM0
+         lXQnTVctV72pi8ee0rUzQZZ9dXt2QYUaS0ydMnxGMUca7Udh5Gs98jVDQWSMRrDekpIx
+         X6eprVTIa0W1b3w06mQDO9w56D1NpcKrMoJa2omE3+z3g8J35X5nOGi+O1knFXSU+Tv/
+         wc411rw1vld/mcHRNb31195SE+tROMuNqFb2lDHScWt8acPT2bjQtLrrImFMw8eHW9Yb
+         BHkZW1TirJTozSkgYI6yasSvsNp2gKT3CpO/pJ262V+6yBDpE3WonNsEykf1Q2u3mQcM
+         o2qQ==
+X-Gm-Message-State: AFqh2kqWDX1wXnxP7lE2UJxB2sIJPD49HqDQu9r9cQyNU7t0SX9SLrkL
+        ruHthfkBT/2OL2iBNJZ4EqPmYA==
+X-Google-Smtp-Source: AMrXdXtAOA36jijzEE2xZF6Nq4/g5rngFFR7/3x1aM3HFccu7glvjmRbgOehS0Tj20HRkek+ncNmbw==
+X-Received: by 2002:a05:6000:1b85:b0:2be:f21:6af6 with SMTP id r5-20020a0560001b8500b002be0f216af6mr7064295wru.23.1674068485007;
+        Wed, 18 Jan 2023 11:01:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id d18-20020adfe852000000b002426d0a4048sm32726226wrn.49.2023.01.18.11.01.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 11:01:24 -0800 (PST)
+Message-ID: <6dd3e0ed-bda2-ac01-c995-20bb06fc5296@linaro.org>
+Date:   Wed, 18 Jan 2023 20:01:22 +0100
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
- <Y8bFdB47JT/luMld@dhcp22.suse.cz> <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
- <Y8fApgKJaTs9nrPO@dhcp22.suse.cz> <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
- <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 18 Jan 2023 11:01:08 -0800
-Message-ID: <CAJuCfpHZuKq45FL1gs+=rx5s2AOaZ9TPC1bdAWjYzfkrOABTOw@mail.gmail.com>
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
-To:     paulmck@kernel.org
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2] regulator: dt-bindings: qcom-labibb: Allow
+ regulator-common properties
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230118181810.119922-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230118181810.119922-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Wed, Jan 18, 2023 at 10:04:39AM -0800, Suren Baghdasaryan wrote:
-> > On Wed, Jan 18, 2023 at 1:49 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Tue 17-01-23 17:19:46, Suren Baghdasaryan wrote:
-> > > > On Tue, Jan 17, 2023 at 7:57 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > > > > > call_rcu() can take a long time when callback offloading is enabled.
-> > > > > > Its use in the vm_area_free can cause regressions in the exit path when
-> > > > > > multiple VMAs are being freed.
-> > > > >
-> > > > > What kind of regressions.
-> > > > >
-> > > > > > To minimize that impact, place VMAs into
-> > > > > > a list and free them in groups using one call_rcu() call per group.
-> > > > >
-> > > > > Please add some data to justify this additional complexity.
-> > > >
-> > > > Sorry, should have done that in the first place. A 4.3% regression was
-> > > > noticed when running execl test from unixbench suite. spawn test also
-> > > > showed 1.6% regression. Profiling revealed that vma freeing was taking
-> > > > longer due to call_rcu() which is slow when RCU callback offloading is
-> > > > enabled.
-> > >
-> > > Could you be more specific? vma freeing is async with the RCU so how
-> > > come this has resulted in a regression? Is there any heavy
-> > > rcu_synchronize in the exec path? That would be an interesting
-> > > information.
-> >
-> > No, there is no heavy rcu_synchronize() or any other additional
-> > synchronous load in the exit path. It's the call_rcu() which can block
-> > the caller if CONFIG_RCU_NOCB_CPU is enabled and there are lots of
-> > other call_rcu()'s going on in parallel. Note that call_rcu() calls
-> > rcu_nocb_try_bypass() if CONFIG_RCU_NOCB_CPU is enabled and profiling
-> > revealed that this function was taking multiple ms (don't recall the
-> > actual number, sorry). Paul's explanation implied that this happens
-> > due to contention on the locks taken in this function. For more
-> > in-depth details I'll have to ask Paul for help :) This code is quite
-> > complex and I don't know all the details of RCU implementation.
->
-> There are a couple of possibilities here.
->
-> First, if I am remembering correctly, the time between the call_rcu()
-> and invocation of the corresponding callback was taking multiple seconds,
-> but that was because the kernel was built with CONFIG_LAZY_RCU=y in
-> order to save power by batching RCU work over multiple call_rcu()
-> invocations.  If this is causing a problem for a given call site, the
-> shiny new call_rcu_hurry() can be used instead.  Doing this gets back
-> to the old-school non-laziness, but can of course consume more power.
+On 18/01/2023 19:18, Konrad Dybcio wrote:
+> Allow regulator-common properties on lab/ibb regulators, such as
+> regulator-always-on, etc.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-That would not be the case because CONFIG_LAZY_RCU was not an option
-at the time I was profiling this issue.
-Laxy RCU would be a great option to replace this patch but
-unfortunately it's not the default behavior, so I would still have to
-implement this batching in case lazy RCU is not enabled.
 
->
-> Second, there is a much shorter one-jiffy delay between the call_rcu()
-> and the invocation of the corresponding callback in kernels built with
-> either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
-> or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
-> on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
-> of this delay is to avoid lock contention, and so this delay is incurred
-> only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
-> This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
-> invoking call_rcu() at least 16 times within a given jiffy will incur
-> the added delay.  The reason for this delay is the use of a separate
-> ->nocb_bypass list.  As Suren says, this bypass list is used to reduce
-> lock contention on the main ->cblist.  This is not needed in old-school
-> kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
-> (including most datacenter kernels) because in that case the callbacks
-> enqueued by call_rcu() are touched only by the corresponding CPU, so
-> that there is no need for locks.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I believe this is the reason in my profiled case.
+Best regards,
+Krzysztof
 
->
-> Third, if you are instead seeing multiple milliseconds of CPU consumed by
-> call_rcu() in the common case (for example, without the aid of interrupts,
-> NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
-
-I don't think I've seen such a case.
-Thanks for clarifications, Paul!
-
->
-> Or have I lost track of some other slow case?
->
->                                                         Thanx, Paul
