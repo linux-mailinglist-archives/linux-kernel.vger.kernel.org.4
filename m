@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A0F6715DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524056715DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjARIIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S229982AbjARIJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjARIFl (ORCPT
+        with ESMTP id S230319AbjARIHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:05:41 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7B37550;
-        Tue, 17 Jan 2023 23:38:13 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id fd15so19332459qtb.9;
-        Tue, 17 Jan 2023 23:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H1iGZ5/GI1ftx5bXyZvLIEDu341DI6h5lnVp/beeYxs=;
-        b=Amv1SgoM8nsMpQnxAtYRnRwNKazGpBx7zF1RsVtZXMLUBGVhwls4EMgSXCRM09S7wm
-         g5k+YXRZuzjIQGhqBbagivPT93o36t2AJRThTi9F4/F1DtOPb/LNxqM2YzEEssdY3DSA
-         gNmmtl1xZX7+komBMD7ITD6/BhoslmephqMSS8NEIIVnhWb6CwBb3E+3uar6uJoRTiG0
-         tDz4yrOpyM/GxyQ0IYpfRjbslnwxunvPZ3IFyxjEL1q7Fm/Sh/3MLuvoZWqGpBT9+Saz
-         yyRBoiOAZ9yc1I8zLJr4HYlEhNStK0WaEX06taqQShabc60FqeUDHlbGT8ARK+75X0v+
-         5RJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H1iGZ5/GI1ftx5bXyZvLIEDu341DI6h5lnVp/beeYxs=;
-        b=cY7/pVzx9YqmfbHtHu0n128MzFlmRbJCnN818Q3wUH8wvnZVN41bhPhs/4BEjoWnEX
-         49VnkqjSLWF13Vks5ATtIwIekUA/yyV3HICZ0jDDlLIdnjN4fn50ouGBteNc3c4kJzf6
-         4rwnvHt3QOMMFbA7rqX2OGtXbSWgYoTGsn/oK0SLeCH6gI5e6MuLvvoRIgyixl/P8Z7F
-         HS48p11Yd7jaCs8Cwdad6FogXL9/ow4qvngHv/NabT7kubigXY7O800iiU121NEOPJ2X
-         grASqTuy/GicQxseZPobjt5KM1MygtN6Ce5egTIUmTpGv2ZH1gQB4RPsDkCNTTwdwYn2
-         V9LQ==
-X-Gm-Message-State: AFqh2koA7oiFuOqostueGRBO4CWAXOQgSOvgoy0YmJTv0piJaaIFoMKb
-        jgcsL8tTqg0tWmfXxbpypig=
-X-Google-Smtp-Source: AMrXdXuQFRVoyeqq1q8kvdW9qSsch1QYQOW3CtRIyQXLkYt3IrPA7GrYroSj6fA97gXAJOy/3TQvRA==
-X-Received: by 2002:ac8:65d4:0:b0:3b6:308e:94a8 with SMTP id t20-20020ac865d4000000b003b6308e94a8mr14626348qto.43.1674027492598;
-        Tue, 17 Jan 2023 23:38:12 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:f4b4:b4d2:cf71:89f7? ([2600:1700:2442:6db0:f4b4:b4d2:cf71:89f7])
-        by smtp.gmail.com with ESMTPSA id fe13-20020a05622a4d4d00b003a580cd979asm17326293qtb.58.2023.01.17.23.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 23:38:12 -0800 (PST)
-Message-ID: <06ed7c15-cd37-a0ce-b75e-b0c8d3188f3a@gmail.com>
-Date:   Wed, 18 Jan 2023 01:38:06 -0600
+        Wed, 18 Jan 2023 03:07:25 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811D5A80C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:39:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jqe0KubOuFYZW9aTrizjxI2VLK4ZF04dxWg90DA+S3J5DsRLflRvL3WeTUPChE53jyC4Pgt6BpJza331grEOmuPmmzJgWsi4FqPBpjxHr2i/qsS2VPAn2y1QMHdAwCBY7iFy1yn3jD9CuiJzhr6C4Bp3QN6BvfsCHDsma7g7oZJW+fNkVxnrcyzJDVnlyN4Ol+mVYZqAmyowGCRlxtyBy/kA5vO5mgHMVERTilIrecl4fTG6JsjlRffFCnr+fBCcM47yCWpNa/EKbV4gilZdWBtUA5LRZtX3bAX/7ZMo8lNx1xGE1hVnR0Lxbd5qsQ9m35HoC6ishYOWfxN+kcnPTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OVZjwWJWMFIH+4iiw3la4wg/joBIq0yh5WOPrrAFSoU=;
+ b=gHx5Hq6rQ2ZrxkH3qq72OZvE2bBWEuFWTbSLQz5LwEmjjyQD+NTfHc383r5CRKRdYuKX8IAf87QJBEuMauF2l1sCpEloOHnlgRVyK4q2bxK0C72iSDM5Ey8EoKVdagpUwNxSERxgRQUJi1Wa4QFRnBFenDwWSPZuUk8IsrV1GvCUDoHM1lcSSmMbfarH8QnKU3MqMRyqK3nwaVBhkOA9807VzPylVjRL+V56jby6+dcRFt4CwRzyCbtJxmnYDuq7kbjxqt0OAkrTtwUKVZy3jWjuNHDww18G8NOXHs4SPYeynPkw2JHHhzockYU9+f4HPnHSGbzHiqOoZiXm5njhHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OVZjwWJWMFIH+4iiw3la4wg/joBIq0yh5WOPrrAFSoU=;
+ b=sIFfUp/exN/FHoxt1a8ZCHftUoaIjt2zmClN6pz6G3wT6vfH8v1NRhdP7bOHgnqcg6AZiKk15eqLC5mInoscbOMB/GTysNJRLn8n2nO1bDMMExt2FwTAgJvc2AgFfe4VQgllkIVk503SubrJPEZTsmxNVF5knRBUY7ZvkTei/hE=
+Received: from CY5PR16CA0005.namprd16.prod.outlook.com (2603:10b6:930:10::8)
+ by LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Wed, 18 Jan
+ 2023 07:38:58 +0000
+Received: from CY4PEPF0000C96A.namprd02.prod.outlook.com
+ (2603:10b6:930:10:cafe::a0) by CY5PR16CA0005.outlook.office365.com
+ (2603:10b6:930:10::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
+ Transport; Wed, 18 Jan 2023 07:38:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000C96A.mail.protection.outlook.com (10.167.241.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.11 via Frontend Transport; Wed, 18 Jan 2023 07:38:58 +0000
+Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 18 Jan
+ 2023 01:38:54 -0600
+Message-ID: <c3ca6780-823f-9a34-3245-5f3ad9ad5eb2@amd.com>
+Date:   Wed, 18 Jan 2023 08:38:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] firmware: zynqmp: fix declarations for gcc-13
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Frank Rowand <frowand.list@gmail.com>
-Subject: WARNING in __thermal_cooling_device_register()
-Content-Type: text/plain; charset=UTF-8
+To:     Arnd Bergmann <arnd@arndb.de>, Tanmay Shah <tanmays@amd.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+CC:     <soc@kernel.org>, Tanmay Shah <tanmay.shah@xilinx.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ben Levinsky <ben.levinsky@amd.com>,
+        Ronak Jain <ronak.jain@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230117164133.1245749-1-arnd@kernel.org>
+ <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
+ <eec4d2fd-f305-452a-a47f-83203da494df@app.fastmail.com>
+ <40bf8f6c-c2a1-88cd-163a-256d8d0bb029@amd.com>
+ <55cb1658-488e-4ed3-b5f9-5d97c0041dd9@app.fastmail.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <55cb1658-488e-4ed3-b5f9-5d97c0041dd9@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C96A:EE_|LV2PR12MB5990:EE_
+X-MS-Office365-Filtering-Correlation-Id: 545a2c51-1252-45e7-ce32-08daf9270f3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jwVTJMMLpEOqtjBF86uKAfIsLRwPVzdwWTb72tMkQg77odB72DjBXeDdcashxoArHkIJPKikjBoawwjYvr768Hmn98Y0PsGdYmr4+m+VotHjFfEpcrd4jmBxQQUjfIYoMXu430izRKIe/9AGyHETClCpS6LlTS9Kh9zdbzL9NM9DyQ2bRCAY8JqvBI7pEJ2MqM9dCuwXWOZWv4dTnFg5HY1yBa3spXn1A2VHmqUQHxVXPqE8qhjfw78ju5vNeSid8/67WiAPg+ieRysyE1ZgAlc9GVhPoh8AViqb7hBT/8nHmXrXxNicMcLvka4K3CFih5fyaPggJXCCsp9XC1xT8Ow44pMlEu5AQ/g4D8wTX34EBO43ex5xy33fUBioJ/banMPo9NYshgVhsP7Dziwrqn3STpbtEJUBtXDxK0qKMT/XNXnaOFc/aOiOiTgBNrfVhVSDfFA+5VN2+u6j9yNi8+zdxzIHYALIlB7N70UJZM2TX1r1WQtzU9DDUojQ8WIp+q6fJZp4ZU9wRHV/1TMMXJ+WUVyUo/z7gP39p3aYkfHYxuZ68kGZ2t9OA1grTgOPihDWxoPjDqxHJzvC81Gy8dhkHmuKf2timhNHteB73OvLJt7AbjPOTe4Vbc+lTvDzd2K6qUtqvaqV81FCQNQwWr4aIEtIN0L181dQdlV/o/xlx8DjOhe3xPzUOQB7T+IpJCAxaYgooEzLZ7Cill0VQhND6pILBH1jUGiA88mk2Yfgahmru0kTJzz3xkfOhHqWPU/57nVK8BvA463AgYVRvA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199015)(46966006)(36840700001)(40470700004)(54906003)(110136005)(2616005)(26005)(70206006)(4326008)(336012)(70586007)(186003)(16526019)(31686004)(47076005)(478600001)(8676002)(66899015)(8936002)(83380400001)(44832011)(6666004)(5660300002)(41300700001)(426003)(2906002)(36860700001)(53546011)(316002)(81166007)(82740400003)(356005)(31696002)(86362001)(40460700003)(36756003)(16576012)(40480700001)(82310400005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 07:38:58.0132
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 545a2c51-1252-45e7-ce32-08daf9270f3f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C96A.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5990
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,98 +111,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am getting two new warning traces in v6.2-rc1 on boot that are not present in v6.1-rc1.
-
-I have not done a bisect yet, but wanted to report the issue without further delay.
-
-The configuration is qcom_defconfig
-
-The system is a Qualcomm Dragon 8074
-
-I have not done any debugging, but noted some changes to the file that contains
-__thermal_cooling_device_register() since 6.1-rc1:
-
-linux--6.2-rc> git log --oneline v6.1-rc1.. -- drivers/thermal/thermal_core.c
-4748f9687caa thermal: core: fix some possible name leaks in error paths
-b778b4d782d4 thermal/core: Protect thermal device operations against thermal device removal
-05eeee2b51b4 thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-1c439dec359c thermal/core: Introduce locked version of thermal_zone_device_update
-30b2ae07d3d6 thermal/core: Delete device under thermal device zone lock
-d35f29ed9d11 thermal/core: Destroy thermal zone device mutex in release function
-e49a1e1ee078 thermal/core: fix error code in __thermal_cooling_device_register()
-c408b3d1d9bb thermal: Validate new state in cur_state_store()
 
 
+On 1/18/23 08:31, Arnd Bergmann wrote:
+> On Wed, Jan 18, 2023, at 08:29, Michal Simek wrote:
+>> On 1/17/23 21:03, Arnd Bergmann wrote:
+>>>
+>>> On Tue, Jan 17, 2023, at 20:53, Tanmay Shah wrote:
+>>>> This looks good to me. Thanks for fixing this.
+>>>>
+>>>> Something must have gone wrong when I ran sparse check on this patch.
+>>>
+>>> I don't think any of our previous tooling caught this, only gcc-13
+>>> changed some of the behavior around enums.
+>>>
+>>>> Just one question, does this patch need "fixes:" tag?
+>>>
+>>> Probably a good idea:
+>>>
+>>> Fixes: a5e56980cfb7 ("firmware: xilinx: Add RPU configuration APIs")
+>>>
+>>> I can apply this directly to the soc fixes branch if you like
+>>> and add that line.
+>>
+>> I have other patches in my soc branch to send you too.
+>> Around next week I will be sending PR for it.
+>> I can include this one too but up2you.
+> 
+> Since this is required for building with the latest compiler
+> I think we want this in 6.2 and backported to stable kernels
+> quickly. I'm about to send a fixes pull request for 6.2, so I'll
+> just include it here.
 
-The stack traces are:
+ok. Deal.
 
------------[ cut here ]------------
-WARNING: CPU: 0 PID: 31 at lib/kobject.c:718 kobject_put+0x114/0x29c
-kobject: '(null)' ((ptrval)): is not initialized, yet kobject_put() is being called.
-Modules linked in:
-CPU: 0 PID: 31 Comm: kworker/u8:2 Not tainted 6.2.0-rc1 #1
-Hardware name: Generic DT based system
-Workqueue: events_unbound deferred_probe_work_func
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x40/0x4c
- dump_stack_lvl from __warn+0x7c/0x15c
- __warn from warn_slowpath_fmt+0x98/0xcc
- warn_slowpath_fmt from kobject_put+0x114/0x29c
- kobject_put from __thermal_cooling_device_register+0x11c/0x388
- __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
- __power_supply_register from devm_power_supply_register+0x54/0x90
- devm_power_supply_register from smbb_charger_probe+0x358/0x61c
- smbb_charger_probe from platform_probe+0x5c/0xb8
- platform_probe from really_probe+0xe0/0x3dc
- really_probe from __driver_probe_device+0x9c/0x208
- __driver_probe_device from driver_probe_device+0x30/0xcc
- driver_probe_device from __device_attach_driver+0xa8/0x120
- __device_attach_driver from bus_for_each_drv+0x84/0xd4
- bus_for_each_drv from __device_attach+0x108/0x1d8
- __device_attach from bus_probe_device+0x84/0x8c
- bus_probe_device from deferred_probe_work_func+0x9c/0xdc
- deferred_probe_work_func from process_one_work+0x1d4/0x510
- process_one_work from worker_thread+0x1fc/0x4d0
- worker_thread from kthread+0xf4/0x124
- kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xf0901fb0 to 0xf0901ff8)
-1fa0:                                     00000000 00000000 00000000 00000000
-1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 31 at lib/refcount.c:28 __thermal_cooling_device_register+0x11c/0x388
-refcount_t: underflow; use-after-free.
-Modules linked in:
-CPU: 0 PID: 31 Comm: kworker/u8:2 Tainted: G        W          6.2.0-rc1 #1
-Hardware name: Generic DT based system
-Workqueue: events_unbound deferred_probe_work_func
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x40/0x4c
- dump_stack_lvl from __warn+0x7c/0x15c
- __warn from warn_slowpath_fmt+0x98/0xcc
- warn_slowpath_fmt from __thermal_cooling_device_register+0x11c/0x388
- __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
- __power_supply_register from devm_power_supply_register+0x54/0x90
- devm_power_supply_register from smbb_charger_probe+0x358/0x61c
- smbb_charger_probe from platform_probe+0x5c/0xb8
- platform_probe from really_probe+0xe0/0x3dc
- really_probe from __driver_probe_device+0x9c/0x208
- __driver_probe_device from driver_probe_device+0x30/0xcc
- driver_probe_device from __device_attach_driver+0xa8/0x120
- __device_attach_driver from bus_for_each_drv+0x84/0xd4
- bus_for_each_drv from __device_attach+0x108/0x1d8
- __device_attach from bus_probe_device+0x84/0x8c
- bus_probe_device from deferred_probe_work_func+0x9c/0xdc
- deferred_probe_work_func from process_one_work+0x1d4/0x510
- process_one_work from worker_thread+0x1fc/0x4d0
- worker_thread from kthread+0xf4/0x124
- kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xf0901fb0 to 0xf0901ff8)
-1fa0:                                     00000000 00000000 00000000 00000000
-1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
----[ end trace 0000000000000000 ]---
+Acked-by: Michal Simek <michal.simek@amd.com>
 
-
--Frank
+Thanks,
+Michal
