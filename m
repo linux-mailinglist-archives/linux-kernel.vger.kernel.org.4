@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CC3671B8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87B1671B94
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjARMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S230329AbjARMKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjARMH4 (ORCPT
+        with ESMTP id S230057AbjARMJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:07:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DF946D63;
-        Wed, 18 Jan 2023 03:28:05 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IAC9CG017165;
-        Wed, 18 Jan 2023 11:28:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=tvFrcVsE9AvpsfvfGvwG4Rmqctry5gm2IoLVVjAJM4Y=;
- b=b1tRJYsybQrpf2Z3BIfdJ/2oAslMeUrii8UjhfbCdEWVhT0/buNKNHEdaPOFAg5c9egt
- iHpuLSF9HiQZKWVN7tO7pOxWYkQO4riukkH315tM4kCfGvPG8JQoP8Qk/WV8EHpOZZgy
- 5NY6lAPntn5g8PZKnMkS/vD65M6YkJiaSFRGlxDDzLzD0Dq8cQvapV8CWvfO+kPNGFiR
- l3CWrkEaBrPXqHA1UZnf1U9+OUNhYZCTPotXafhi4Ou8l8xZCiJG2vrUFByQd0qp6J1T
- MMyE5lTdXrKwwti/2uqoMoAVjpYm/Le1Dki4V4Mdu5bIF6RJC4cyh5EM8cOfc0hsbkLJ EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6et7snr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 11:28:04 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30IAx0hd001395;
-        Wed, 18 Jan 2023 11:28:04 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6et7snqb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 11:28:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30HMJ2WH023694;
-        Wed, 18 Jan 2023 11:28:01 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n3m16n6a1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 11:28:01 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IBRwgt48497012
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 11:27:58 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D3A92004B;
-        Wed, 18 Jan 2023 11:27:58 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7251A20043;
-        Wed, 18 Jan 2023 11:27:57 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.171.34.8])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 18 Jan 2023 11:27:57 +0000 (GMT)
-Date:   Wed, 18 Jan 2023 12:27:55 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2] s390/chsc: Switch over to memdup_user()
-Message-ID: <Y8fXu92IySboNxVY@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20230118095823.18785-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118095823.18785-1-jiapeng.chong@linux.alibaba.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: sea-_7jQo3b6fLv2sIPoinf0hHZYXHLM
-X-Proofpoint-ORIG-GUID: HPYg575DavTwW7NZzAdIdY-ctcvWiKgV
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 18 Jan 2023 07:09:43 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAB94956F;
+        Wed, 18 Jan 2023 03:28:19 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30IBS1xb057677;
+        Wed, 18 Jan 2023 05:28:01 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674041281;
+        bh=at1vaeGY8DDdVFlJntRD04T4GBNpSZ9lJveSQsHFpVI=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=clSpdEQmDyBTow75TnJqdDKLPN0BbuGugLIN1MDY3Jy73pki97acL7CI2ABC9pgco
+         R+kBD5OD92N8oX6XD6JbIrgbmBI/6dipxZos84qZqSIbya5TFqlsQfkgK1OeFb9Pl3
+         ppVNUGrK8JLPfSgRvm+p4Ep7H9Vqb4WuO5aZJ3es=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30IBS1Dd093279
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Jan 2023 05:28:01 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
+ Jan 2023 05:28:01 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 18 Jan 2023 05:28:01 -0600
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30IBRthi007034;
+        Wed, 18 Jan 2023 05:27:56 -0600
+Message-ID: <260c19fe-d831-eaac-d7fb-e38495f3eda0@ti.com>
+Date:   Wed, 18 Jan 2023 16:57:55 +0530
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_04,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- phishscore=0 adultscore=0 suspectscore=0 bulkscore=0 clxscore=1015
- mlxlogscore=999 mlxscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301180096
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next v6 3/3] net: ethernet: ti: am65-cpsw: Add support
+ for SERDES configuration
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20230104103432.1126403-1-s-vadapalli@ti.com>
+ <20230104103432.1126403-4-s-vadapalli@ti.com>
+ <CAMuHMdWiXu9OJxH4mRnneC3jhqTEcYXek3kbr7svhJ3cnPPwcw@mail.gmail.com>
+ <69d39885-68df-7c94-5a98-5f1e174c7316@ti.com>
+ <CAMuHMdX0+7UyjbR7HLVqghU3dpa+VEL9oV6tkLSZxcZdhM=UXQ@mail.gmail.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <CAMuHMdX0+7UyjbR7HLVqghU3dpa+VEL9oV6tkLSZxcZdhM=UXQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,50 +78,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 05:58:23PM +0800, Jiapeng Chong wrote:
-> Use memdup_user rather than duplicating its implementation, this is a
-> little bit restricted to reduce false positives.
-> 
-> ./drivers/s390/cio/chsc_sch.c:703:7-14: WARNING opportunity for
-> memdup_user.
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3785
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
-> Changes in v2:
->   -Add free_page((unsigned long)sccl_area); 
-> 
->  drivers/s390/cio/chsc_sch.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/s390/cio/chsc_sch.c b/drivers/s390/cio/chsc_sch.c
-> index 180ab899289c..09dcce7ff24b 100644
-> --- a/drivers/s390/cio/chsc_sch.c
-> +++ b/drivers/s390/cio/chsc_sch.c
-> @@ -700,15 +700,13 @@ static int chsc_ioctl_conf_comp_list(void __user *user_ccl)
->  	sccl_area = (void *)get_zeroed_page(GFP_KERNEL | GFP_DMA);
->  	if (!sccl_area)
->  		return -ENOMEM;
-> -	ccl = kzalloc(sizeof(*ccl), GFP_KERNEL);
-> -	if (!ccl) {
-> -		ret = -ENOMEM;
-> -		goto out_free;
-> -	}
-> -	if (copy_from_user(ccl, user_ccl, sizeof(*ccl))) {
-> -		ret = -EFAULT;
-> -		goto out_free;
-> +
-> +	ccl = memdup_user(user_ccl, sizeof(*ccl));
-> +	if (IS_ERR(ccl)) {
-> +		free_page((unsigned long)sccl_area);
-> +		return PTR_ERR(ccl);
->  	}
-> +
->  	sccl_area->request.length = 0x0020;
->  	sccl_area->request.code = 0x0030;
->  	sccl_area->fmt = ccl->req.fmt;
+Hello Geert,
 
-Such a change would have to address other similar patterns in this source.
-Besides, it is not that obvious that swapping GFP_KERNEL for GFP_USER
-(memdup_user() is called with) is issue-free.
+On 18/01/23 15:57, Geert Uytterhoeven wrote:
+> Hi Siddarth,
+> 
+> On Wed, Jan 18, 2023 at 6:48 AM Siddharth Vadapalli <s-vadapalli@ti.com> wrote:
+>> On 17/01/23 19:25, Geert Uytterhoeven wrote:
+>>> On Wed, Jan 4, 2023 at 11:37 AM Siddharth Vadapalli <s-vadapalli@ti.com> wrote:
+>>>> Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
+>>>>
+>>>> Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
+>>>> am65_cpsw_disable_serdes_phy() and am65_cpsw_enable_serdes_phy().
+>>>>
+>>>> Add new member "serdes_phy" to struct "am65_cpsw_slave_data" to store the
+>>>> SERDES PHY for each port, if it exists. Use it later while disabling the
+>>>> SERDES PHY for each port.
+>>>>
+>>>> Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
+>>>> by invoking am65_cpsw_enable_serdes_phy().
+>>>>
+>>>> Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
+>>>> am65_cpsw_disable_serdes_phy().
+>>>>
+>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>
+>>> Thanks for your patch, which is now commit dab2b265dd23ef8f ("net:
+>>> ethernet: ti: am65-cpsw: Add support for SERDES configuration")
+>>> in net-next.
+>>>
+>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> 
+>>>> +static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np,
+>>>> +                                    struct am65_cpsw_port *port)
+>>>> +{
+>>>> +       const char *name = "serdes-phy";
+>>>> +       struct phy *phy;
+>>>> +       int ret;
+>>>> +
+>>>> +       phy = devm_of_phy_get(dev, port_np, name);
+>>>> +       if (PTR_ERR(phy) == -ENODEV)
+>>>> +               return 0;
+>>>> +
+>>>> +       /* Serdes PHY exists. Store it. */
+>>>
+>>> "phy" may be a different error here (e.g. -EPROBE_DEFER)...
+>>
+>> The Serdes is automatically configured for multi-link protocol (Example: PCIe +
+>> QSGMII) by the Serdes driver, due to which it is not necessary to invoke the
+>> Serdes configuration via phy_init(). However, for single-link protocol (Example:
+>> Serdes has to be configured only for SGMII), the Serdes driver doesn't configure
+>> the Serdes unless requested. For this case, the am65-cpsw driver explicitly
+>> invokes phy_init() for the Serdes to be configured, by looking up the optional
+>> device-tree phy named "serdes-phy". For this reason, the above section of code
+>> is actually emulating a non-existent "devm_of_phy_optional_get()". The
+>> "devm_of_phy_optional_get()" function is similar to the
+>> "devm_phy_optional_get()" function in the sense that the "serdes-phy" phy in the
+>> device-tree is optional and it is not truly an error if the property isn't present.
+> 
+> Yeah, I noticed while adding devm_phy_optional_get(), and looking for
+> possible users.
+> See "[PATCH treewide 0/7] phy: Add devm_of_phy_optional_get() helper"
+> https://lore.kernel.org/all/cover.1674036164.git.geert+renesas@glider.be
+
+Thank you for working on this.
+
+> 
+>> Thank you for pointing out that if the Serdes driver is built as a module and
+>> the am65-cpsw driver runs first, then the "phy" returned for "serdes-phy" will
+>> be "-EPROBE_DEFER".
+>>
+>>>
+>>>> +       port->slave.serdes_phy = phy;
+>>>> +
+>>>> +       ret =  am65_cpsw_enable_phy(phy);
+>>>
+>>> ... so it will crash when dereferencing phy in phy_init().
+>>>
+>>> I think you want to add an extra check above:
+>>>
+>>>     if (IS_ERR(phy))
+>>>             return PTR_ERR(phy);
+>>
+>> Please let me know if posting a "Fixes" patch for fixing this net-next commit is
+>> the right process to address this.
+> 
+> I think it is, as devm_of_phy_optional_get() might not make it in time.
+
+I posted the patch at:
+https://lore.kernel.org/r/20230118112136.213061-1-s-vadapalli@ti.com
+
+> 
+>>>> @@ -1959,6 +2021,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
+>>>
+>>> Right out of context we have:
+>>>
+>>>                 port->slave.ifphy = devm_of_phy_get(dev, port_np, NULL);
+>>>                 if (IS_ERR(port->slave.ifphy)) {
+>>>                         ret = PTR_ERR(port->slave.ifphy);
+>>>                         dev_err(dev, "%pOF error retrieving port phy: %d\n",
+>>>                                 port_np, ret);
+>>>
+>>> So if there is only one PHY (named "serdes-phy") in DT, it will be
+>>> used for both ifphy and serdes_phy. Is that intentional?
+>>
+>> The PHY corresponding to "ifphy" is meant to be the CPSW MAC's PHY and not the
+>> Serdes PHY. The CPSW MAC's PHY is configured by the
+>> drivers/phy/ti/phy-gmii-sel.c driver and this is NOT an optional PHY, unlike the
+>> Serdes PHY. Therefore, it is assumed that the CPSW MAC's PHY is always provided
+>> in the device-tree, while the Serdes PHY is optional, depending on whether the
+>> Serdes is being configured for single-link protocol or multi-link protocol.
+>> Please let me know if this appears to be an issue and I will fix it based on
+>> your suggestion.
+> 
+> Hence this should be documented in the DT bindings. Please document
+> there can be 1 or 2 phys, with an optional "phys-names" property,
+> listing "ifphy" and "serdes-phy" (the DT people might request a rename).
+
+I will work on this.
+
+Regards,
+Siddharth.
