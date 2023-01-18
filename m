@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B6B672AFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F71E672B02
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 23:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjARWCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 17:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S230169AbjARWCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 17:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjARWBt (ORCPT
+        with ESMTP id S229950AbjARWBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 17:01:49 -0500
+        Wed, 18 Jan 2023 17:01:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699821042E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 14:01:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E41410A8F;
+        Wed, 18 Jan 2023 14:01:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0549061A30
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 22:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E739C433D2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABEB61A73;
+        Wed, 18 Jan 2023 22:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 947E7C433F2;
         Wed, 18 Jan 2023 22:01:47 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pIGV8-002H8r-0y;
+        id 1pIGV8-002H9N-1U;
         Wed, 18 Jan 2023 17:01:46 -0500
-Message-ID: <20230118215435.016435760@goodmis.org>
+Message-ID: <20230118220146.327085542@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 18 Jan 2023 16:54:35 -0500
+Date:   Wed, 18 Jan 2023 16:54:36 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "John Warthog9 Hawley" <warthog9@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-linus][PATCH 0/3] ktest.pl: Fix ssh hanging and reseting of console
+        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
+Subject: [for-linus][PATCH 1/3] ktest.pl: Fix missing "end_monitor" when machine check fails
+References: <20230118215435.016435760@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -43,50 +46,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've noticed that my ssh sessions would hang during test runs, which
-is really frustrating when you kick off a 13 hour test before going to
-bed, and the second test (1 hour into it) hangs, and you need to kick
-it off again in the morning (wasting all that time over night).
+From: Steven Rostedt <rostedt@goodmis.org>
 
-I finally figured out the cause. There is a disconnect between
-the run_command that executes the test, and the "wait_for_input" that
-monitors the test. The wait_for_input has a default of 2 minute timeout
-if it doesn't see any output it returns. The run_command takes the
-empty string from wait_for_input as the test is finished, and then
-stops monitoring it, and calls waitpid() waiting for the test to
-exit.
+In the "reboot" command, it does a check of the machine to see if it is
+still alive with a simple "ssh echo" command. If it fails, it will assume
+that a normal "ssh reboot" is not possible and force a power cycle.
 
-The problem is that if the test has a lot of output, it will continue
-writing into the pipe that was suppose to go to the monitor, which has
-now exited the loop. When the pipe fills up, it will not finish.
-When the test is over, it just hangs waiting for the pipe to flush
-(which never happens).
+In this case, the "start_monitor" is executed, but the "end_monitor" is
+not, and this causes the screen will not be given back to the console. That
+is, after the test, a "reset" command needs to be performed, as "echo" is
+turned off.
 
-To fix this, change the run_command to by default have an infinite
-run (which can be overridden by the new RUN_TIMEOUT option), and
-make the wait_for_input also wait indefinitely in this case. It now
-Now the tests will have its content continuously read and will exit
-normally.
+Cc: stable@vger.kernel.org
+Fixes: 6474ace999edd ("ktest.pl: Powercycle the box on reboot if no connection can be made")
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ tools/testing/ktest/ktest.pl | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-While debugging this, I also found out why you can lose stdout on
-the terminal sometimes. Especially if you hit Ctrl^C while the monitor
-is running. It was due to missing "end_monitor" which gives back the
-tty to the terminal. The first two patches fix that.
-
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-ktest.git
-devel
-
-Head SHA1: aa9aba9382884554fe6a303744884866d137422d
+diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
+index 6f9fff88cedf..f2f48ce6ac4d 100755
+--- a/tools/testing/ktest/ktest.pl
++++ b/tools/testing/ktest/ktest.pl
+@@ -1499,7 +1499,8 @@ sub reboot {
+ 
+ 	# Still need to wait for the reboot to finish
+ 	wait_for_monitor($time, $reboot_success_line);
+-
++    }
++    if ($powercycle || $time) {
+ 	end_monitor;
+     }
+ }
+-- 
+2.39.0
 
 
-Steven Rostedt (3):
-      ktest.pl: Fix missing "end_monitor" when machine check fails
-      ktest.pl: Give back console on Ctrt^C on monitor
-      ktest.pl: Add RUN_TIMEOUT option with default unlimited
-
-----
- tools/testing/ktest/ktest.pl    | 26 +++++++++++++++++++++-----
- tools/testing/ktest/sample.conf |  5 +++++
- 2 files changed, 26 insertions(+), 5 deletions(-)
