@@ -2,95 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2769670FAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3C2670FB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 02:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjARBNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 20:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S229951AbjARBNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 20:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjARBMl (ORCPT
+        with ESMTP id S229898AbjARBNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 20:12:41 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B874DCE8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:06:33 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so79645608ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:06:33 -0800 (PST)
+        Tue, 17 Jan 2023 20:13:13 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935D03C2E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:07:09 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4e4a6af2d99so128450497b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 17:07:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ShTmxSJXe9bG7EdfM5n7W4obQRT36vojvBzqe2LAzEY=;
-        b=pZshoTDIWonMzbts+iSk6eqAXIty/XSzGtUDl9PJeQ8XVUyN/eHTt2p93ttz9KQgTu
-         9wfLh03a2Yb3RFXF3Sru73t0ORxZsuNA+p8nNqcl89jHRmba9Nt5u7K6/H0O2u8Dy6Qq
-         I5UHAGKvsW2h2rCWGoKhMd7Zbo7kvESJIZWJ8RX79n7YMMu1z7Nz1jxAKVxhutkTa5OL
-         3lZJt4S31txk7HCAkWRoOz4c+86BN1b5X+30T1zblG8B/4T9LZDn6c8diFa/F/Fhl5r8
-         b5BLOL4Pz7VtVUp68bH80NkeocjPtgKEm4YLe8ons9LlWTl/LkY870OpXlxUItBZHYpG
-         qKug==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UzsDlXlC7t5BIJkt4S1C9pOgCAtRZ1rD2tVfs3+9vM=;
+        b=HR7OBma7oNcSAgyQdahWkS/+GYEiMo2K7u7SH7XKaEtDUcUden1EUbI6LD9VVF7J1x
+         W7lI2euLfggvfs2V0JWHWkHe3qxzN6ohS9ExKzTaJMGOQSZuOKR9RScixndA7s2QYaQ6
+         HfUWv9VD3eHjySCGt6xoaLyVVtj2EEONzfERHlbh0iPGw2sCO/lcesCY2eTVPQRoMJb+
+         gqR21sjs3J+x5zerViL5YkWvVAzNFkjnCi2vD95FzbGwg3CJYzMrtPoGRP4w9LZjSUIu
+         gRLpF7+BYQnoKYJBu29968t+KMhHg8v34Cty12VpH/W2gIUx8Z32jLwQzC5wkSaXhVBr
+         /4kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShTmxSJXe9bG7EdfM5n7W4obQRT36vojvBzqe2LAzEY=;
-        b=PO4daVUHAvSmqMWNczc3LohIcvBRahPjxmZRMrYdaam7Q+gEKhwGDWTtabV7SH31x1
-         z5wnUdvoXL0LiLjp6uVppkS4So72VXotq0ycl9fyCYGJ9l67+ZOlDcMS9F/w11EME7Am
-         PGQyaRgKfurEgFakiMO+OppsN3D44hLTIj1EoGxncXaI1/GgiEldXFVwzYhbePa0dl0r
-         Bi1Ps35Zo/YF8a1j6ZbdpyMjWAJNecOVxTWji/oYoGV/2exmUdhRFhNnEcXtMSjTENAX
-         PUPN0MedAPqJPg+FzLCCXs9JbN4tqflxejiaw+J5cps6q1zEA0HMbuapS4Few3ogC5bY
-         j2Zg==
-X-Gm-Message-State: AFqh2kovRBQfvDmS7MmrHE68g2U8HCJ7Os4zlNWGte5CeluIqPzoCwOY
-        J6dZfE4VBcAsjXAkvSOORjd3gg==
-X-Google-Smtp-Source: AMrXdXtu4QsednS1nJEdQYpyn+WjmVTWu3VSvaUMOChD1AOs4/QnNcqLZuuyzhNt6LzroTs4JBrteQ==
-X-Received: by 2002:a17:906:6844:b0:86e:f478:f598 with SMTP id a4-20020a170906684400b0086ef478f598mr4836197ejs.44.1674003990637;
-        Tue, 17 Jan 2023 17:06:30 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b007c0f2d051f4sm13786939ejt.203.2023.01.17.17.06.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 17:06:30 -0800 (PST)
-Message-ID: <e14e929b-884c-4250-bce8-0c21fe4f1c8f@linaro.org>
-Date:   Wed, 18 Jan 2023 03:06:29 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+UzsDlXlC7t5BIJkt4S1C9pOgCAtRZ1rD2tVfs3+9vM=;
+        b=Ou/F4nyyDKsg+aL+NPV0Umxp5z2J2LRkP3hK/Kgj0G8FOXbdMlQkJHfIm6EGzp3BNt
+         /COSP8zv8SogQGoScNIbEyPn550Me3sALBipcpdJ9+lAsyNB7U9lA/7uiPYRcZ2jnifa
+         uxHSIFnUF1+wNYLxr1svNGLhVucX8+C2rBO3fs9uHu3xzwJaZPibBo3VtTaTsS2QYwv/
+         f9MO75rB+3eK1gV+YLGowUUqegJ59u5rhmc824eiY6aR3uaJcBW5eMPbCgQ0i9dB7nQe
+         xG0zc1r3Qs2cVoE4oSq7H8veX8Vpm3VtGDhRAtXHfHUt9yg0WqmUBq0unIRPTFDr9bW0
+         sVXQ==
+X-Gm-Message-State: AFqh2kp68jAdbI8TYt9DP0kjQ1x3pjo5uW+qal3dCZhbJFw6Xa2kAldV
+        58YAZt/q5gA1C71L1+yywro5QzQJqxHDa1Gzzrg26g==
+X-Google-Smtp-Source: AMrXdXt1di0oM/b6morQivkbcXm4Ky5z3zOnzmSbWPfTQh0c+LbBSHcKZuP95W8tXfA3+CxNeZNf17AZY9H5yMUDV7E=
+X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
+ i135-20020a816d8d000000b0049089c321b0mr672398ywc.132.1674004028426; Tue, 17
+ Jan 2023 17:07:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/msm/gem: Add check for kmalloc
-Content-Language: en-GB
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20221212091117.43511-1-jiasheng@iscas.ac.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221212091117.43511-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-29-surenb@google.com>
+ <Y8bDAVC/aiL9tCyz@dhcp22.suse.cz>
+In-Reply-To: <Y8bDAVC/aiL9tCyz@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 17 Jan 2023 17:06:57 -0800
+Message-ID: <CAJuCfpHRRsUMNHp2H3UiB4EZbe9CXTVcAC+oOR1dscENjp1Jbw@mail.gmail.com>
+Subject: Re: [PATCH 28/41] mm: introduce lock_vma_under_rcu to be used from
+ arch-specific code
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2022 11:11, Jiasheng Jiang wrote:
-> Add the check for the return value of kmalloc in order to avoid
-> NULL pointer dereference in copy_from_user.
-> 
-> Fixes: 20224d715a88 ("drm/msm/submit: Move copy_from_user ahead of locking bos")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   drivers/gpu/drm/msm/msm_gem_submit.c | 4 ++++
->   1 file changed, 4 insertions(+)
+On Tue, Jan 17, 2023 at 7:47 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 09-01-23 12:53:23, Suren Baghdasaryan wrote:
+> > Introduce lock_vma_under_rcu function to lookup and lock a VMA during
+> > page fault handling. When VMA is not found, can't be locked or changes
+> > after being locked, the function returns NULL. The lookup is performed
+> > under RCU protection to prevent the found VMA from being destroyed before
+> > the VMA lock is acquired. VMA lock statistics are updated according to
+> > the results.
+> > For now only anonymous VMAs can be searched this way. In other cases the
+> > function returns NULL.
+>
+> Could you describe why only anonymous vmas are handled at this stage and
+> what (roughly) has to be done to support other vmas? lock_vma_under_rcu
+> doesn't seem to have any anonymous vma specific requirements AFAICS.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+TBH I haven't spent too much time looking into file-backed page faults
+yet but a couple of tasks I can think of are:
+- Ensure that all vma->vm_ops->fault() handlers do not rely on
+mmap_lock being read-locked;
+- vma->vm_file freeing like VMA freeing will need to be done after RCU
+grace period since page fault handlers use it. This will require some
+caution because simply adding it into __vm_area_free() called via
+call_rcu()  will cause corresponding fops->release() to be called
+asynchronously. I had to solve this issue with out-of-tree SPF
+implementation when asynchronously called snd_pcm_release() was
+problematic.
 
--- 
-With best wishes
-Dmitry
+I'm sure I'm missing more potential issues and maybe Matthew and
+Michel can pinpoint more things to resolve here?
 
+>
+> Also isn't lock_vma_under_rcu effectively find_read_lock_vma? Not that
+> the naming is really the most important part but the rcu locking is
+> internal to the function so why should we spread this implementation
+> detail to the world...
+
+I wanted the name to indicate that the lookup is done with no locks
+held. But I'm open to suggestions.
+
+>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/mm.h |  3 +++
+> >  mm/memory.c        | 51 ++++++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 54 insertions(+)
+> >
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index c464fc8a514c..d0fddf6a1de9 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -687,6 +687,9 @@ static inline void vma_assert_no_reader(struct vm_area_struct *vma)
+> >                     vma);
+> >  }
+> >
+> > +struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+> > +                                       unsigned long address);
+> > +
+> >  #else /* CONFIG_PER_VMA_LOCK */
+> >
+> >  static inline void vma_init_lock(struct vm_area_struct *vma) {}
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 9ece18548db1..a658e26d965d 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -5242,6 +5242,57 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+> >  }
+> >  EXPORT_SYMBOL_GPL(handle_mm_fault);
+> >
+> > +#ifdef CONFIG_PER_VMA_LOCK
+> > +/*
+> > + * Lookup and lock a VMA under RCU protection. Returned VMA is guaranteed to be
+> > + * stable and not isolated. If the VMA is not found or is being modified the
+> > + * function returns NULL.
+> > + */
+> > +struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+> > +                                       unsigned long address)
+> > +{
+> > +     MA_STATE(mas, &mm->mm_mt, address, address);
+> > +     struct vm_area_struct *vma, *validate;
+> > +
+> > +     rcu_read_lock();
+> > +     vma = mas_walk(&mas);
+> > +retry:
+> > +     if (!vma)
+> > +             goto inval;
+> > +
+> > +     /* Only anonymous vmas are supported for now */
+> > +     if (!vma_is_anonymous(vma))
+> > +             goto inval;
+> > +
+> > +     if (!vma_read_trylock(vma))
+> > +             goto inval;
+> > +
+> > +     /* Check since vm_start/vm_end might change before we lock the VMA */
+> > +     if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
+> > +             vma_read_unlock(vma);
+> > +             goto inval;
+> > +     }
+> > +
+> > +     /* Check if the VMA got isolated after we found it */
+> > +     mas.index = address;
+> > +     validate = mas_walk(&mas);
+> > +     if (validate != vma) {
+> > +             vma_read_unlock(vma);
+> > +             count_vm_vma_lock_event(VMA_LOCK_MISS);
+> > +             /* The area was replaced with another one. */
+> > +             vma = validate;
+> > +             goto retry;
+> > +     }
+> > +
+> > +     rcu_read_unlock();
+> > +     return vma;
+> > +inval:
+> > +     rcu_read_unlock();
+> > +     count_vm_vma_lock_event(VMA_LOCK_ABORT);
+> > +     return NULL;
+> > +}
+> > +#endif /* CONFIG_PER_VMA_LOCK */
+> > +
+> >  #ifndef __PAGETABLE_P4D_FOLDED
+> >  /*
+> >   * Allocate p4d page table.
+> > --
+> > 2.39.0
+>
+> --
+> Michal Hocko
+> SUSE Labs
