@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D4D67214B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAA067214F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjARPae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S231159AbjARPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:31:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjARP3w (ORCPT
+        with ESMTP id S230511AbjARPbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:29:52 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4109545F68
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:29:41 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r9so11535505wrw.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:29:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g/aLmWYhNKv7GH4DuCtvNQcDIMNkNsTtbotrrf7zjiA=;
-        b=dAUmF+XuY7jwyqIdcCmF0l7PlYH3GPW0DsYGSW9B2hk5CkXzg+v9LFbjNxv3GLjInU
-         I9/DvK6WvVzBfhD5wXdgY6Q/UmKejvOUIAmMm70YygoCPvU/3KiqHeqDOqazufqmC0dl
-         ViloPH6B1Wr8KbTXhXpefdHnZHw2IKSw/T+71IacGWZ3NJvTAOiENNfdlImZ3IQI3BQu
-         qAcRh8aaGXiDD4+R6qRystyKbnIlLcoEHIDUdU9kj+2GOxtR8516G8PwAPDB5uNXXuW3
-         TI7OJrA/0eWTom6gssGPuQemLE9Ek3NoJvS3odkBgophaWccAXWZHO3MWfXVO8PM/bgd
-         Wy+g==
+        Wed, 18 Jan 2023 10:31:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590063AB3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674055860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qyi/LW55EkVK757BkAA9VDtsr0MGQ7QA8hOcylTonLk=;
+        b=HdPN4d5PvPBjTBrnsO7KTiWmUvYGmG4YYQCkFWqxcessHo+1fDud8iIzIm3jJS6xK+uh1U
+        /8oHg2FpVs14dLGU/2gmsjqhTnJQq/w/a8Rl8Gyh5ox+uCWS8s/Cr35HTiU3llmpvilcYq
+        qTgHP/sdxuIuhniLM7K3PLchDn+lFnA=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-173-svdp9SfWPvm5VSasoez_4w-1; Wed, 18 Jan 2023 10:30:59 -0500
+X-MC-Unique: svdp9SfWPvm5VSasoez_4w-1
+Received: by mail-oo1-f69.google.com with SMTP id v19-20020a056820005300b004f2b398d526so3436644oob.17
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:30:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g/aLmWYhNKv7GH4DuCtvNQcDIMNkNsTtbotrrf7zjiA=;
-        b=aJj5afMS2uPI9yTPbgjWk2Lrhadh8bacDfKXDfJSjYmPzq+HAPILG6NWJR/+k/Kc6S
-         R/wxOWlfZC1l9K48LO2c9GAVk2fx4gFri3srOa2p6krUwhKbbWLF/xa5KYSGXgkPpqlx
-         PMnwK9I27r7oNkkUvD7zy29EmGVTVK+WyN86463d7LOycTMvBuTQHGhdmW6HK6+zOuiC
-         rzqn/H/D+jMhfK0RRZ2kDnXbPJRKUgBh4WsazO1oyuMLoIcHspCt0s2C+x8y9tNLaURw
-         835UhBYqsOlHbKzsTXw+hbpQ0PThGkJVCRuwTx9LrUMgdySngKR9FuQHm32vxvjVMsZa
-         WfRQ==
-X-Gm-Message-State: AFqh2koUecQEq0zc6qczw9B4whMW22gR6mxK1Plr3zRS2M0YeloGcaBi
-        qQhSqiZafA8coaa+qQcqdd4cEg==
-X-Google-Smtp-Source: AMrXdXsxCIHrIcEPYc3qMlgVpfKX2UUibBV126RLchHBNcq6Cfok29847L7anEX4KDvKklCjiK44pA==
-X-Received: by 2002:a05:6000:388:b0:2bc:7ec3:8b2 with SMTP id u8-20020a056000038800b002bc7ec308b2mr7422667wrf.68.1674055779869;
-        Wed, 18 Jan 2023 07:29:39 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l7-20020a5d6747000000b002b57bae7174sm31996847wrw.5.2023.01.18.07.29.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 07:29:39 -0800 (PST)
-Message-ID: <10a7ebd0-f174-a806-000a-6d50bfed8155@linaro.org>
-Date:   Wed, 18 Jan 2023 16:29:37 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qyi/LW55EkVK757BkAA9VDtsr0MGQ7QA8hOcylTonLk=;
+        b=LA19aQkSjs5M36YSzYpmP8rtpw297rmoR3LQceVafCwvpmraw+xvK6luVPvF6rbAl9
+         BCViYOwU6p9dYtpNPL6N6DSszxxWjZKy6rUNxW+mzxO91Xh19D0j6HrkWYgeus/3gpG/
+         TgF+NpEF6xtXSRZvBX7wD0UkfWjO+PcVIwoWe4HfSh20CB0zCVJEnk9/U95gLBy6piXc
+         9ONg7lGGViw0qPGpyWSXlNJvNi9bnaoGWxQ5QiRJw/CbdJgSq7I0JNqINVWR01hBTUTr
+         ca4lKaQl25prgkvr6r/vEhmPfFU2X8fm5ZJC7JIyKtBtvjnGvYfw4o/zoddrj4FvSFnQ
+         od5Q==
+X-Gm-Message-State: AFqh2krY1FHU/LcaA7yJDrrP3LZp18CdwXFGE0+fmfl6ua2AyX69S25z
+        1Alzb8iio9SoFLAx9wNPWe+jmdHzk8avGGQKjw6h7DDgH+rnN/tW3Tg/oFH5cV8VP9Jd/dHT4Ak
+        4uJZz8b/mVsqkTsOHw8paY/8Z
+X-Received: by 2002:a05:6870:1614:b0:143:9d79:e911 with SMTP id b20-20020a056870161400b001439d79e911mr4735546oae.46.1674055858466;
+        Wed, 18 Jan 2023 07:30:58 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvQD1ylfnV23NmH/gc49C3Ld8OeoMRj5utANK8r0Vbn9N2WPIQ/3o+cIGR6YM0+vkC8xg1Q6Q==
+X-Received: by 2002:a05:6870:1614:b0:143:9d79:e911 with SMTP id b20-20020a056870161400b001439d79e911mr4735523oae.46.1674055858208;
+        Wed, 18 Jan 2023 07:30:58 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id l3-20020a056870218300b00152c52608dbsm18681737oae.34.2023.01.18.07.30.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:30:57 -0800 (PST)
+Date:   Wed, 18 Jan 2023 09:30:54 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        edumazet@google.com, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ning Cai <ncai@quicinc.com>
+Subject: Re: [PATCH net] net: stmmac: enable all safety features by default
+Message-ID: <20230118153054.22vs2sqsuxifjpxg@halaney-x13s>
+References: <20230116193722.50360-1-ahalaney@redhat.com>
+ <20230117194348.3f098a18@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: arm: fsl: Add verdin yavia carrier-board
-Content-Language: en-US
-To:     Philippe Schenker <dev@pschenker.ch>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Li Yang <leoyang.li@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Marek Vasut <marex@denx.de>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-kernel@vger.kernel.org
-References: <20230118144042.7705-1-dev@pschenker.ch>
- <20230118144042.7705-2-dev@pschenker.ch>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118144042.7705-2-dev@pschenker.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117194348.3f098a18@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 15:40, Philippe Schenker wrote:
-> From: Philippe Schenker <philippe.schenker@toradex.com>
+On Tue, Jan 17, 2023 at 07:43:48PM -0800, Jakub Kicinski wrote:
+> On Mon, 16 Jan 2023 13:37:23 -0600 Andrew Halaney wrote:
+> > I've been working on a newer Qualcomm platform (sa8540p-ride) which has
+> > a variant of dwmac5 in it. This patch is something Ning stumbled on when
+> > adding some support for it downstream, and has been in my queue as I try
+> > and get some support ready for review on list upstream.
+> > 
+> > Since it isn't really related to the particular hardware I decided to
+> > pop it on list now. Please let me know if instead of enabling by default
+> > (which the original implementation did and is why I went that route) a
+> > message like "Safety features detected but not enabled in software" is
+> > preferred and platforms are skipped unless they opt-in for enablement.
 > 
-> Add the Verdin Yavia Carrier-Board that exists for both Verdin iMX8M
-> Plus and Verdin iMX8M Mini.
+> Could you repost and CC Wong Vee Khee, and maybe some other Intel folks
+> who have been touching stmmac recently? They are probably the best to
+> comment / review.
 > 
-> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-> ---
 
+Shoot, yes thank you I intended to do! Will resend.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+- Andrew
 
