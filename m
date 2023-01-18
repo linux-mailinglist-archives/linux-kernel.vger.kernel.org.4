@@ -2,181 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3229F671A13
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5474671A19
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 12:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjARLKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 06:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S229629AbjARLKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 06:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjARLJ6 (ORCPT
+        with ESMTP id S230188AbjARLJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 06:09:58 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9793059B63
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:22 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s3so10779277edd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:22 -0800 (PST)
+        Wed, 18 Jan 2023 06:09:59 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6EA5D7CE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:26 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 141so24168116pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 02:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=H6ol8sai5DSETE3D+zujMvxltBJArSra6pkGjRfRXcQ=;
-        b=OKuh87dDHhB4r7B/XfGPzn8hfY+yL11ZKBITLUzzh0qgBkiusgIeE1QTBPQBq+7LX/
-         FhoX/TBO0j3DrTmeRrjfOy75s5FP8iLPtpgWjG+OE8REU0nBtin/5/G1s3Ed6+b8HKtD
-         rDuu4lliSBOfsjFhexY9S8wHKAf290rP5+fTGS5fySCIWm0U1d6GWPfh0/eQw3S1+Lgv
-         lKWqAYPlrSEnqvkW7lOcOxEAiJadaetD07TXPTIM5UnHQKf+fctNnoQWGDMYDKfMQhk+
-         PwK+s8jrP6W5m7nYgwO9ccqUkjwi7Pw9S6h311EwltRvVGYiUyEGw3JqiD2LCgfkRNoB
-         GYUw==
+        bh=BQeetLMmwhbkZhzTjSGxZuP+z80kL1pLPDlk7u2lHZg=;
+        b=FSgocBv044IaFDw+4YBpsothX/Jjz2bDNUQyQoeQjaLaDup0NFBiF9rv/SMfV5zEI0
+         0e2TKejrMfLgfdrlwrDz9rEuJrYAzVeFhnyYJ6104+Kg4ms6MXiLulPPtbQqhxxy/4Gq
+         h4BtZhuCSfR30G7AUsMnk1ROJzUlTMGy6ehJiaSIQoIE5gpXyOmt/cuqH+7DqagmrIEQ
+         gnjFEFHH6OI79z3eOjRKdP89UFLO3tewz0lGXK6sIxiMCWmDrmJieKTB/nkPW7cJKcK4
+         5uvcPNTNsc7kUDFoVs3QlR/BDhtLnIpn7WiVKivEa1aR3B9f8T8EakVmTEGd6eOVvdvS
+         VDZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H6ol8sai5DSETE3D+zujMvxltBJArSra6pkGjRfRXcQ=;
-        b=5l26kmEzzkK930rDvaDYytnE1fHrdIEWhsb1ma7V77Xb3E1QslZLD2+xFKVX0JbiaC
-         W4cEpyxiwHkagnTwf2F2sdTbmS39nMHPEHS9hKIIxmTFq76YKmWxjbpQrysBLVyQPuqZ
-         87euBjBGhKnsfKJi1TkHaCEYKfxMPe0YA4FCKpAgQ9HCpJoeGx47pYuPKPXhge7758H8
-         ETb0wNt7rGqUlQw1iz4sNZdZEWT44ZCsa4gTfOhL1Jay9/AyOWpo9J2cM5Ql0tirq1Z0
-         V5d3azUvCpywkuEW6FHO7wsd7qbb6aPgVSz85H5bFMmJcpTld/Rve1wKH6cptZYkMUV2
-         Pg5g==
-X-Gm-Message-State: AFqh2kr6F9oECemJfk7uEz3EHc1WVFe0V6dRDx3ad1cR0gGOdsuut2Gm
-        RWlk6ZIAYIyFemT0W6BgjKFYKDnZ/tYsm2PI
-X-Google-Smtp-Source: AMrXdXtnqYQxYTHzWZ2KiGPhZG9eVT4RMx08GspQk3hYnE29LeJ7Ai1qxXVecF9Bx9ZV7W9flh8JQw==
-X-Received: by 2002:a05:6402:1012:b0:46b:34a:3945 with SMTP id c18-20020a056402101200b0046b034a3945mr6264556edu.31.1674037041150;
-        Wed, 18 Jan 2023 02:17:21 -0800 (PST)
-Received: from ?IPV6:2003:f6:af03:d200:ef9b:6781:7d3:df26? (p200300f6af03d200ef9b678107d3df26.dip0.t-ipconnect.de. [2003:f6:af03:d200:ef9b:6781:7d3:df26])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa7c6d4000000b004610899742asm13950048eds.13.2023.01.18.02.17.19
+        bh=BQeetLMmwhbkZhzTjSGxZuP+z80kL1pLPDlk7u2lHZg=;
+        b=cGLjDxN2C2xBO6U8dcQL3wCaB60jA62JCM6ObiCinr4oZYXTrf2+siIEf47JRPUrRU
+         QCnKLmn/3NK19zFd/6U9YxdQ/9uiXV6E4scQ3IFZRWRsV4JmRwrLLPnqic4gXfgozvht
+         2VU9yXBhmfgtnqMcBVwI4FcQHE231bRcP5xcopgxRrIKbaajFELKUkieG63v3wI5cGFK
+         tM83RmwalIbpLtcXvCx7/FJSLqSYFJocne6Ugb8oOaaF1asRrMaerCVimu4IGqFaAj8N
+         57GLGvZ/wJr8rnpKHdOQmPSni8TVdrmbjxZZZ+owMXOJBhT0EKHNOPNPjdc2lW+CTvzj
+         9+ZQ==
+X-Gm-Message-State: AFqh2kqrmO5/tOiTePezT80+aAG24D3ifdNBKzeLJA6zgX621Y88ouwo
+        731DbiDLMlZeKTPzlPvP8jGyoQ==
+X-Google-Smtp-Source: AMrXdXtMI0O5Xff2JQz11vEueijTgCy8F+DZvjFgH2o3CP2BFApVh4ULnOrlI6N4/gZqk5+2mixFZg==
+X-Received: by 2002:a62:6492:0:b0:58d:90ae:495c with SMTP id y140-20020a626492000000b0058d90ae495cmr6366994pfb.11.1674037045841;
+        Wed, 18 Jan 2023 02:17:25 -0800 (PST)
+Received: from [10.16.128.218] (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id u83-20020a627956000000b0058cda506a4fsm7327584pfc.145.2023.01.18.02.17.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 02:17:20 -0800 (PST)
-Message-ID: <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
-Date:   Wed, 18 Jan 2023 11:17:19 +0100
+        Wed, 18 Jan 2023 02:17:25 -0800 (PST)
+Message-ID: <1b26c1e2-62e5-920f-f480-b66b1f903e65@igel.co.jp>
+Date:   Wed, 18 Jan 2023 19:17:21 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/3] KVM: x86: do not unload MMU roots when only toggling
- CR0.WP
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 0/3] Deal with alignment restriction on EP side
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230117204556.16217-1-minipli@grsecurity.net>
- <20230117204556.16217-4-minipli@grsecurity.net> <Y8cTMnyBzNdO5dY3@google.com>
-From:   Mathias Krause <minipli@grsecurity.net>
-In-Reply-To: <Y8cTMnyBzNdO5dY3@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230117203215.GA144880@bhelgaas>
+From:   Shunsuke Mie <mie@igel.co.jp>
+In-Reply-To: <20230117203215.GA144880@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.01.23 22:29, Sean Christopherson wrote:
-> On Tue, Jan 17, 2023, Mathias Krause wrote:
->> There is no need to unload the MMU roots when only CR0.WP has changed --
->> the paging structures are still valid, only the permission bitmap needs
->> to be updated.
-> 
-> This doesn't hold true when KVM is using shadow paging, in which case CR0.WP
-> affects the shadow page tables.  I believe that also holds true for nNPT :-(
 
-Oh, I knew there would be a case I missed. Thank you for pointing it out!
-
-> nEPT doesn't consume CR0.WP so we could expedite that case as well, though
-> identifying that case might be annoying.
-
-I'm fine with starting with optimizing L1 only as the performance gain
-for this usual case is huge already. But sure, if more is possible, I'm
-all for it. It's just that I lack the knowledge about KVM internals to
-figure it out all by myself.
-
->> Change kvm_mmu_reset_context() to get passed the need for unloading MMU
->> roots and explicitly avoid it if only CR0.WP was toggled on a CR0 write
->> caused VMEXIT.
-> 
-> One thing we should explore on top of this is not intercepting CR0.WP (on Intel)
-> when TDP is enabled.  It could even trigger after toggling CR0.WP N times, e.g.
-> to optimize the grsecurity use case without negatively impacting workloads with
-> a static CR0.WP, as walking guest memory would require an "extra" VMREAD to get
-> CR0.WP in that case.
-
-That would be even better, agreed. I'll look into it and will try to
-come up with something.
-
-> Unfortunately, AMD doesn't provide per-bit controls.
-> 
->> This change brings a huge performance gain as the following micro-
->> benchmark running 'ssdd 10 50000' from rt-tests[1] on a grsecurity L1 VM
->> shows (runtime in seconds, lower is better):
+On 2023/01/18 5:32, Bjorn Helgaas wrote:
+> On Fri, Jan 13, 2023 at 06:03:47PM +0900, Shunsuke Mie wrote:
+>> Some PCIe EPC controllers have restriction to map PCIe address space to the
+>> local memory space. The mapping is needed to access memory of other side.
+>> On epf test, RC module prepares an aligned memory, and EP module maps the
+>> region. However, a EP module which emulate a device (e.g. VirtIO, NVMe and
+>> etc) cannot expect that a driver for the device prepares an aligned memory.
+>> So, a EP side should deal with the alignment restriction.
 >>
->>                       legacy MMU   TDP MMU
->> kvm.git/queue             11.55s    13.91s
->> kvm.git/queue+patch        7.44s     7.94s
+>> This patchset addresses with the alignment restriction on EP size. A
+>> content as follows:
+>> 1. Improve a pci epc unmap/map functions to cover the alignment restriction
+>> with adding epc driver support as EPC ops.
+>> 2. Implement the support function for DWC EPC driver.
+>> 3. Adapt the pci-epf-test to the map/unmap function updated at first patch.
 >>
->> For legacy MMU this is ~35% faster, for TTP MMU ~43% faster.
+>> I tested this changes on RENESAS board has DWC PCIeC.
 >>
->> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+>> This is a RFC, and it has patches for testing only. Following changes are
+>> not included yet:
+>> 1. Removing alignment codes on RC side completely
+>> 2. Adapting map/unmap() changes to pci-epf-ntb/vntb
 >>
->> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
->> ---
-> 
-> ...
-> 
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 508074e47bc0..d7c326ab94de 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -902,7 +902,9 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
->>  
->>  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
->>  {
->> -	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
->> +	unsigned long cr0_change = cr0 ^ old_cr0;
->> +
->> +	if (cr0_change & X86_CR0_PG) {
->>  		kvm_clear_async_pf_completion_queue(vcpu);
->>  		kvm_async_pf_hash_reset(vcpu);
->>  
->> @@ -914,10 +916,18 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
->>  			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
->>  	}
->>  
->> -	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
->> -		kvm_mmu_reset_context(vcpu);
->> +	if (cr0_change & KVM_MMU_CR0_ROLE_BITS) {
->> +		bool unload_mmu =
->> +			cr0_change & (KVM_MMU_CR0_ROLE_BITS & ~X86_CR0_WP);
-> 
-> As above, this needs to guarded with a check that the MMU is direct.  And rather
-> than add a flag to kvm_mmu_reset_context(), just call kvm_init_mmu() directly.
-> E.g. I think this would work?
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d07563d0e204..8f9fac6d81d2 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -927,6 +927,11 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
->  
->  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
->  {
-> +       if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
-> +               kvm_init_mmu(vcpu);
-> +               return;
-> +       }
-> +
->         if ((cr0 ^ old_cr0) & X86_CR0_PG) {
->                 kvm_clear_async_pf_completion_queue(vcpu);
->                 kvm_async_pf_hash_reset(vcpu);
+>> Best,
+>> Shunsuke
+>>
+>> Shunsuke Mie (3):
+>>    PCI: endpoint: support an alignment aware map/unmaping
+>>    PCI: dwc: support align_mem() callback for pci_epc_epc
+>>    PCI: endpoint: support pci_epc_mem_map/unmap API changes
+> s/unmaping/unmapping/
+>
+> Capitalize subject lines ("Support ...").
+>
+> Would be nice to say something more specific than "support ... API
+> changes."
+I'll reflect this remarks.
+>
+> The last patch seems to be for a test case.  Some previous changes to
+> it use the "PCI: pci-epf-test" prefix so it's distinct from the
+> pci-epc-core changes.
+I'll follow the previous changes.
+>>   .../pci/controller/dwc/pcie-designware-ep.c   | 13 +++
+>>   drivers/pci/endpoint/functions/pci-epf-test.c | 89 +++++--------------
+>>   drivers/pci/endpoint/pci-epc-core.c           | 57 +++++++++---
+>>   include/linux/pci-epc.h                       | 10 ++-
+>>   4 files changed, 90 insertions(+), 79 deletions(-)
+>>
+>> -- 
+>> 2.25.1
+>>
+Best,
 
-Looks much simpler and more direct. Nice. :)
+Shunsuke
 
-I'll re-test and send a v2 later today.
-
-Thanks,
-Mathias
