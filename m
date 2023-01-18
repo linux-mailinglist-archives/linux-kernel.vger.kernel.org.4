@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E39671233
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3BF671225
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjARDxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S229619AbjARDw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjARDw4 (ORCPT
+        with ESMTP id S229448AbjARDwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:52:56 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83B53F81;
-        Tue, 17 Jan 2023 19:52:55 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1674013973;
-        bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Oom12uDZEeK8c+uFQ7KYGYIyqHwcp2ZSwuXw7cXNu1ulczqYtzPUedbNlUtbhXorS
-         NNz13CSPU4OR/twlvI7sJU07iPrAerurNNi9NUFVMJhBO3SizaACCeic5Qa1PVyVQe
-         p2NrPcgUx+e3HFDPLrI3DnZ5Nv6JhUEReLHYoEx4=
-Date:   Wed, 18 Jan 2023 03:52:20 +0000
-Subject: [PATCH 3/3] tools/resolve_btfids: align kbuild messages to standard
+        Tue, 17 Jan 2023 22:52:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0B3539A2;
+        Tue, 17 Jan 2023 19:52:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B1B6160E;
+        Wed, 18 Jan 2023 03:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD745C433EF;
+        Wed, 18 Jan 2023 03:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674013943;
+        bh=i1VadpNoM63eIKc7YafNwYDH8B99ORLDSioJAK/BE34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HDk0iKijFpSBLtz3BzGz2gHS39W7dDBI6e1g87u3c76MWEiajL/rG53MwSrXRcGPo
+         eBDoU3QWobNd1lSOjZLCkyatWD2jErwr4ymEu2P170FVF2RM+y5Y+arLXdgixLJBUj
+         S5o/rmMbY17BRX55IBzNqREEz4rETV/4JP8YL16pxw191u6DYZjXNGT45Pbn0O5GnM
+         66l/wT5WoGIiCHWU18Uv48dl5FOd/+6P2obICQyKhd9Oa/dyMBUm2JQk3lNzE8DBnE
+         nR1CFo3hkWdiuIQTRnyWQ/TGUpr8bZanDFzfOtWkhRk7btRBvJZhLL7pNgZ3bcky3F
+         gADgcuIFHDZ4Q==
+Date:   Tue, 17 Jan 2023 19:52:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v3 net-next 12/12] net: mscc: ocelot: add MAC Merge
+ layer support for VSC9959
+Message-ID: <20230117195221.3e216f90@kernel.org>
+In-Reply-To: <20230117085947.2176464-13-vladimir.oltean@nxp.com>
+References: <20230117085947.2176464-1-vladimir.oltean@nxp.com>
+        <20230117085947.2176464-13-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-kbuild-alignment-v1-3-eb5e9fd55c92@weissschuh.net>
-References: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
-In-Reply-To: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=957;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
- b=Obt7j+FeHbwpRmVExoT9rOQOGNSXFjjaJMIksWp8W4sLuwDgrtpS2uqhIZKLUmb7QDAzdQ95cWPM
- 1Nksn1MlA61vBpCC2W73X/bGlu6pKqSBkOEDVsLjkbDgtHP1BCwG
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The common layout for kbuild messages is as follows:
+On Tue, 17 Jan 2023 10:59:47 +0200 Vladimir Oltean wrote:
+> Felix (VSC9959) has a DEV_GMII:MM_CONFIG block composed of 2 registers
+> (ENABLE_CONFIG and VERIF_CONFIG). Because the MAC Merge statistics and
+> pMAC statistics are already in the Ocelot switch lib even if just Felix
+> supports them, I'm adding support for the whole MAC Merge layer in the
+> common Ocelot library too.
+> 
+> There is an interrupt (shared with the PTP interrupt) which signals
+> changes to the MM verification state. This is done because the
+> preemptible traffic classes should be committed to hardware only once
+> the verification procedure has declared the link partner of being
+> capable of receiving preemptible frames.
+> 
+> We implement ethtool getters and setters for the MAC Merge layer state.
+> The "TX enabled" and "verify status" are taken from the IRQ handler,
+> using a mutex to ensure serialized access.
 
-- 2 spaces
-- 7 or more characters for the action
-- 1 space
-- name of the file being built/generated
-
-The custom message formatting included an additional space in the action
-part, which leads to misalignments with the rest of kbuild.
-
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/bpf/resolve_btfids/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 19a3112e271a..f4106d514b9c 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -12,7 +12,7 @@ else
-   ifeq ($(silent),1)
-     msg =
-   else
--    msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+    msg = @printf '  %-7s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-   endif
-   MAKEFLAGS=--no-print-directory
- endif
-
--- 
-2.39.1
+Doesn't build now.
