@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B03671831
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F75671834
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjARJvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S230088AbjARJwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 04:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjARJuD (ORCPT
+        with ESMTP id S230163AbjARJvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:50:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75F82BEF1;
-        Wed, 18 Jan 2023 01:01:55 -0800 (PST)
+        Wed, 18 Jan 2023 04:51:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A2E8CE53;
+        Wed, 18 Jan 2023 01:02:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96BF56172E;
-        Wed, 18 Jan 2023 09:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67AAC433D2;
-        Wed, 18 Jan 2023 09:01:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 301CCCE1BB0;
+        Wed, 18 Jan 2023 09:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2CD9C433D2;
+        Wed, 18 Jan 2023 09:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674032512;
-        bh=THV3Tcy6xKn4dLWFPpXMkIx/yzhzy/uhRugjcM+mCQw=;
+        s=k20201202; t=1674032549;
+        bh=EuAgTB/iPW4vJ/ZRJE/nY3/BVUH2eT5SYitsWMD6MXk=;
         h=From:To:Cc:Subject:Date:From;
-        b=eswJ/MjCDwkZofaT5ikZ6b7HXSzTGPGjVmvXuXARnnmJmyEg+aEoKMaGOSrFFiS8L
-         v8y93xxX2kFQna/QY9FLaTkKb2d/SQpJEDL0sRI0DU8NnHCbAao2QCwL3i5jb2Y7iE
-         H5BPi2/U/Lzy1pylzBgcegIPSIqEgvsre2wQG0qvpThEcS1/P4Q7JrSTT+eU8v7SI3
-         dySnY1foDWK63HYK+e3CTe23vWKf3cVbO5gHs0Be4gMHsvOgjBLVRlpZv626fTe8tK
-         vxmzIOlT/k7QLqaXZN8LxYf2zj1GWgDyq2x77/OczYehLnU6B8JrLMS2UQw6a2F+Hg
-         x+T0Yvf4f1G/g==
+        b=KjM6elgrcBl+tAIy6K9MSWdfuHOUYGcdsn8MmZRkX8t86g5RRK1AFOIfidSqqG9+c
+         12E26EhK9+ax/HMr2aFqjgbfSs65XfcbBtagFTZyyoV8K9NV63cTveHFvfXW8p81+Z
+         feeB66PxqeptnbKJX6Cyd7ImBXCXYLS0ZCN92bQbRJ2GpRSwdDLhkOnXd5V02IJkjl
+         qDirtVG2ogDjcOOCq64NNGLzkz0iZHoh3YlQ9vkJiaNzZMxEBaUMnL9MZWt6fM3ND/
+         mLWnXfrgOVx+V0AWDSiGLLn8F9PEaCGE8xgaNqMKfAbPuPFkEKI76mviiP81NsEmND
+         xOBJ1Nbr8+pUA==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Kushagra Verma <kushagra765@outlook.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: fix extcon dependency
-Date:   Wed, 18 Jan 2023 10:01:41 +0100
-Message-Id: <20230118090147.2126563-1-arnd@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: s3c: fix s3c64xx_set_timer_source prototype
+Date:   Wed, 18 Jan 2023 10:02:12 +0100
+Message-Id: <20230118090224.2162863-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,47 +60,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The dwc3 core support now links against the extcon subsystem,
-so it cannot be built-in when extcon is a loadable module:
+The prototype does not match the definition, as gcc-13 points
+out:
 
-arm-linux-gnueabi-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_extcon':
-core.c:(.text+0x572): undefined reference to `extcon_get_edev_by_phandle'
-arm-linux-gnueabi-ld: core.c:(.text+0x596): undefined reference to `extcon_get_extcon_dev'
-arm-linux-gnueabi-ld: core.c:(.text+0x5ea): undefined reference to `extcon_find_edev_by_node'
+arch/arm/mach-s3c/s3c64xx.c:169:13: error: conflicting types for 's3c64xx_set_timer_source' due to enum/integer mismatch; have 'void(unsigned int,  unsigned int)' [-Werror=enum-int-mismatch]
+  169 | void __init s3c64xx_set_timer_source(unsigned int event, unsigned int source)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from arch/arm/mach-s3c/s3c64xx.c:50:
+arch/arm/mach-s3c/s3c64xx.h:62:20: note: previous declaration of 's3c64xx_set_timer_source' with type 'void(enum s3c64xx_timer_mode,  enum s3c64xx_timer_mode)'
+   62 | extern void __init s3c64xx_set_timer_source(enum s3c64xx_timer_mode event,
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~
 
-There was already a Kconfig dependency in the dual-role support,
-but this is now needed for the entire dwc3 driver.
-
-It is still possible to build dwc3 without extcon, but this
-prevents it from being set to built-in when extcon is a loadable
-module.
-
-Fixes: d182c2e1bc92 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+Fixes: 4280506ac9bb ("ARM: SAMSUNG: Move all platforms to new clocksource driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/usb/dwc3/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-s3c/s3c64xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index b2f72b0e75c6..be954a9abbe0 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -3,6 +3,7 @@
- config USB_DWC3
- 	tristate "DesignWare USB3 DRD Core Support"
- 	depends on (USB || USB_GADGET) && HAS_DMA
-+	depends on (EXTCON || EXTCON=n)
- 	select USB_XHCI_PLATFORM if USB_XHCI_HCD
- 	select USB_ROLE_SWITCH if USB_DWC3_DUAL_ROLE
- 	help
-@@ -44,7 +45,6 @@ config USB_DWC3_GADGET
- config USB_DWC3_DUAL_ROLE
- 	bool "Dual Role mode"
- 	depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
--	depends on (EXTCON=y || EXTCON=USB_DWC3)
- 	help
- 	  This is the default mode of working of DWC3 controller where
- 	  both host and gadget features are enabled.
+diff --git a/arch/arm/mach-s3c/s3c64xx.c b/arch/arm/mach-s3c/s3c64xx.c
+index 32b1bc82d700..c5aa4d8ed8bd 100644
+--- a/arch/arm/mach-s3c/s3c64xx.c
++++ b/arch/arm/mach-s3c/s3c64xx.c
+@@ -166,7 +166,8 @@ static struct samsung_pwm_platform_data s3c64xx_pwm_variant = {
+ 	.tclk_mask	= (1 << 7) | (1 << 6) | (1 << 5),
+ };
+ 
+-void __init s3c64xx_set_timer_source(unsigned int event, unsigned int source)
++void __init s3c64xx_set_timer_source(enum s3c64xx_timer_mode event,
++				     enum s3c64xx_timer_mode source)
+ {
+ 	s3c64xx_pwm_variant.output_mask = BIT(SAMSUNG_PWM_NUM) - 1;
+ 	s3c64xx_pwm_variant.output_mask &= ~(BIT(event) | BIT(source));
 -- 
 2.39.0
 
