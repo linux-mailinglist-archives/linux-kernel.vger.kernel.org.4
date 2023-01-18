@@ -2,86 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39B7672575
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDEA672578
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjARRsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S229790AbjARRtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjARRry (ORCPT
+        with ESMTP id S230188AbjARRsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:47:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551A63CE0D;
-        Wed, 18 Jan 2023 09:47:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E973161944;
-        Wed, 18 Jan 2023 17:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C15EC433EF;
-        Wed, 18 Jan 2023 17:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674064069;
-        bh=dTOao7OTnDD2Bljll1cIh3aZadqaefZ1UzKEm/3O13s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iT9y7TEGJZWJK/D9ZgOxj5SpFsBm9v0WjU7S38iXzcBR1FgigHN9MHeM0yaPntq7Q
-         g1H1dET0MsaTIHxWIZiLxvpDbso5Hso6mUsUylgH2M6wc0GosV82ee/BNvhviIt/KI
-         ILtW5yYOB4RrF4BumnY2jK7vq4YmY6sPooHzsjWRgJNI/v/dm+9AN9XdfSVmmPypO1
-         ijyf7ScoBCof2ZN0IcsF+AYAMV7vtvAkrRnWoQalqhAy0ge60BVoM5MwjJkngjZq6z
-         mJrtEYCtVP79xafZcEdcbxtHbilFsH4+D+90tkE/vsRx6HyyOLsIQLSKVnppepinWc
-         5EgLJv1JXFbqQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, robh+dt@kernel.org, neil.armstrong@linaro.org,
-        mani@kernel.org, srinivas.kandagatla@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, amahesh@qti.qualcomm.com,
-        mathieu.poirier@linaro.org, konrad.dybcio@somainline.org
-Cc:     linux-arm-msm@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        elder@linaro.org, abel.vesa@linaro.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] remoteproc: qcom_q6v5_pas: add support for SM8550 adsp, cdsp & mpss
-Date:   Wed, 18 Jan 2023 11:47:47 -0600
-Message-Id: <167406406337.2924867.12230424280288709048.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
-References: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
+        Wed, 18 Jan 2023 12:48:53 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DF3C5A801
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:48:43 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94B1B2B;
+        Wed, 18 Jan 2023 09:49:25 -0800 (PST)
+Received: from [10.1.196.21] (e125579.cambridge.arm.com [10.1.196.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9038F3F445;
+        Wed, 18 Jan 2023 09:48:40 -0800 (PST)
+Message-ID: <c56855a7-14fd-4737-fc8b-8ea21487c5f6@arm.com>
+Date:   Wed, 18 Jan 2023 17:48:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v4 1/2] sched/fair: Introduce short duration task
+ check
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chen Yu <yu.c.chen@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org
+References: <cover.1671158588.git.yu.c.chen@intel.com>
+ <ec049fd9b635f76a9e1d1ad380fd9184ebeeca53.1671158588.git.yu.c.chen@intel.com>
+ <82689dd6-9db1-dd00-069b-73a637a21126@arm.com>
+ <Y8Un9nmJauxpuSVE@hirez.programming.kicks-ass.net>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <Y8Un9nmJauxpuSVE@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 17:22:39 +0100, Neil Armstrong wrote:
-> This patchsets adds support for the aDSP, cDSP and MPSS found in the
-> SM8550 SoC.
-> 
-> The aDSP, cDSP and MPSS boot process on SM8550 now requires a secondary
-> "Devicetree" firmware to be passed along the main Firmware, and the cDSP
-> a new power domain named "NSP".
-> 
-> [...]
+On 16/01/2023 10:33, Peter Zijlstra wrote:
+> On Thu, Jan 05, 2023 at 12:33:16PM +0100, Dietmar Eggemann wrote:
+>> On 16/12/2022 07:11, Chen Yu wrote:
 
-Applied, thanks!
+[...]
 
-[1/5] dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common
-      commit: cee616c6884616aea3be72a9debafd0614332682
-[2/5] dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp, cdsp & mpss compatible
-      commit: 084258d607128a7486311daf5e67ca414ee07cc9
-[3/5] remoteproc: qcom_q6v5_pas: add support for dtb co-firmware loading
-      commit: 29814986b82e820ae9d3eb7474cdcf66605bd114
-[4/5] remoteproc: qcom_q6v5_pas: add support for assigning memory to firmware
-      commit: c63c0a7cab91b930a6ee78c28b481b84bfa98b7f
-[5/5] remoteproc: qcom_q6v5_pas: add sm8550 adsp, cdsp & mpss compatible & data
-      commit: 7eddedc975638f9bf427e7964c74276450a3021d
+> You were thinking of the dynamic PELT window size thread? (which is what
+> I had to think of when I looked at this).
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Yes, indeed.
+
+> I think we can still do that with this prev_sum_exec_runtime_vol (can't
+> say I love the name though). At any point (assuming we update
+> sum_exec_runtime) sum_exec_runtime - prev_sum_exec_runtime_vol is the
+> duration of the current activation.
+
+I ran Jankbench with your UTIL_EST_FASTER patch and:
+
+    runtime = curr->se.sum_exec_runtime -
+              curr->se.prev_sum_exec_runtime_vol
+
+plus:
+
+    runtime >>= 10
+
+before doing:
+
+    util_est_fast = faster_est_approx(runtime * 2)
+                                              ^^^ (boost)
+
+on a Pixel6 and the results look promising:
+
+Max frame duration (ms)
+
++-------------------+-----------+------------+
+|      wa_path      | iteration |   value    |
++-------------------+-----------+------------+
+|        base       |    10     | 147.571352 |
+|    pelt-hl-m2     |    10     | 119.416351 |
+|    pelt-hl-m4     |    10     | 96.473412  |
+|  util_est_faster  |    10     | 84.834999  |
++-------------------+-----------+------------+
+
+Mean frame duration (average case)
+
++---------------+-------------------+-------+-----------+
+|   variable    |      kernel       | value | perc_diff |
++---------------+-------------------+-------+-----------+
+| mean_duration |        base       | 14.7  |   0.0%    |
+| mean_duration |    pelt-hl-m2     | 13.6  |   -7.5%   |
+| mean_duration |    pelt-hl-m4     | 13.0  |  -11.68%  |
+| mean_duration |  util_est_faster  | 12.6  |  -14.01%  |
++---------------+-------------------+-------+-----------+
+
+Jank percentage
+
++-----------+-------------------+-------+-----------+
+| variable  |      kernel       | value | perc_diff |
++-----------+-------------------+-------+-----------+
+| jank_perc |        base       |  1.8  |   0.0%    |
+| jank_perc |    pelt-hl-m2     |  1.8  |  -4.91%   |
+| jank_perc |    pelt-hl-m4     |  1.2  |  -36.61%  |
+| jank_perc |  util_est_faster  |  0.8  |  -57.8%   |
++-----------+-------------------+-------+-----------+
+
+Power usage [mW]
+
++--------------+-------------------+-------+-----------+
+|  chan_name   |      kernel       | value | perc_diff |
++--------------+-------------------+-------+-----------+
+| total_power  |        base       | 144.4 |   0.0%    |
+| total_power  |    pelt-hl-m2     | 141.6 |  -1.97%   |
+| total_power  |    pelt-hl-m4     | 163.2 |  12.99%   |
+| total_power  |  util_est_faster  | 150.9 |   4.45%   |
++--------------+-------------------+-------+-----------+
+
+At first glance it looks promising! Have to do more testing to
+understand the behaviour fully.
