@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAC9671FAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E9D671F9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjAROeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S230470AbjAROag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjAROdv (ORCPT
+        with ESMTP id S231476AbjAROaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:33:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A947EC4;
-        Wed, 18 Jan 2023 06:22:28 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3CCB35BF6C;
-        Wed, 18 Jan 2023 14:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674051747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Jcvj5AuIWP9Pb77zhjsuy7TzYwBrXQiPoMee0HPJxts=;
-        b=CsrbCjbTet6gaNQrGpoaGz/IEtIro4VUp3Tm0t/1pnCljnZcHFfpKeHMof9r4HGbDzZqmY
-        YFUBW3geSLzV9SRvpmlGjf+4M4NXV5Q2LhmxHOUv7/b5vpPo7OmZm0MCaWG38S/VJso7Jk
-        tfVX2DFFeNza6/S0Sn06q/z+fS3slhk=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 336D52C141;
-        Wed, 18 Jan 2023 14:22:27 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id D4828DA7FB; Wed, 18 Jan 2023 15:16:49 +0100 (CET)
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     David Sterba <dsterba@suse.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] AFFS fix for 6.2
-Date:   Wed, 18 Jan 2023 15:16:49 +0100
-Message-Id: <cover.1674051240.git.dsterba@suse.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 18 Jan 2023 09:30:06 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62D04ED12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:17:56 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id i188so35826985vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 06:17:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uFMItONQcV3wHNWf9eRWkDAG7Jn0b//4scmon3jUY88=;
+        b=aKWai454ujSTSFS0fZtyL9Ofw6bMu1l+gf9ScaqZz7alqskx7+l9YqvRppX31BIKOs
+         8x+8A6Vq7QYehwdCVYiPpHHBSjkUXA92nMh4MwbeRt8ZBMJokFtT/18lML3oBUGyO2yC
+         NT5mHKKDzcDnM+YBgoPQ9wOVhY3BAFUZpKXG4iLMvRI/x20KKLYtxQ4ccTq4cRTpBgdr
+         5GR+vZkwm0ZbEA35bpQocPmUqhkQ9gshidpRSxRmofNezfZCBDaLKdPRlRtQ4nyelCl8
+         H5irIe4/UuxG6HGGpcAPcOqAAaFvg4K1E3ZfphtjvOIkt/z+kH0HykGxEDdHzgzITE7U
+         R1/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uFMItONQcV3wHNWf9eRWkDAG7Jn0b//4scmon3jUY88=;
+        b=xNH97dO9mmRshU8IwbNH9vA0ier1+8drLi9CZfgRZJMcTyV6BGM4IY6iOmkZmgzaQw
+         9rmrDtSCOhMAex3ay0BYEp/mA5PcqsqKcsaPaQkuLas21x1cuqXnBsuChKcg0lYVkhNB
+         wF5Yggn7OqqpPbxIaBqC8EZOcwaZURzIcAS6TxqB/z4rT8sVj41DbQef/32pA+pWZbeh
+         JowlFfHL0Yt85qecQvI5SBkJRurd2HuKz0Zidl+FnSs5MnJnR1JEbmJJUiPIBm9Ayrhh
+         tGtbWQH+cXIfJm51L8RlH2cZ5AGuNeZkw/Xex5cw98Gq+FT/Be6npHZvgcGJrhexURuu
+         IL+A==
+X-Gm-Message-State: AFqh2kpqSR1QBEAI8h3gRWF/S45M31k9PnMpPAxUbOE2VepZvoM/+dwf
+        R66zRSOMsYmD6hHSpyRTTx5YyoXzph5CYdK5EsMIxw==
+X-Google-Smtp-Source: AMrXdXuHS6Odt7c746q/SzVyx1SvpsAZROmsMt5CMpsunNF6P9iqbTAjqIzBH7aSzbl2fZn8kgrakXkULaLTFEp7qSE=
+X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
+ j8-20020a0561023e0800b003c51ac1bf38mr1064643vsv.78.1674051475264; Wed, 18 Jan
+ 2023 06:17:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+References: <20230116124704.30470-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230116124704.30470-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 18 Jan 2023 15:17:44 +0100
+Message-ID: <CAMRc=MfR0TJ4RmuoL5-6w=vBgH9=vXGm2_a=RqxiC9Rav+0ygA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] gpio: pcf857x: Get rid of legacy platform data
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,26 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jan 16, 2023 at 1:46 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Platform data is a legacy interface to supply device properties
+> to the driver. In this case we don't have in-kernel users for it.
+> Moreover it uses plain GPIO numbers which is no-no for a new code.
+>
+> Just remove it for good.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-there's one minor fix for a KCSAN report. Please pull, thanks.
+Applied the entire series, thanks!
 
-----------------------------------------------------------------
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
-
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-for-6.2-tag
-
-for you to fetch changes up to eef034ac6690118c88f357b00e2b3239c9d8575d:
-
-  affs: initialize fsdata in affs_truncate() (2023-01-10 14:55:20 +0100)
-
-----------------------------------------------------------------
-Alexander Potapenko (1):
-      affs: initialize fsdata in affs_truncate()
-
- fs/affs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Bart
