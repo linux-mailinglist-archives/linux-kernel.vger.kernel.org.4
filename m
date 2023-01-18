@@ -2,151 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81A9671E8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458C1671E8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjARNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S229766AbjARNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjARNwY (ORCPT
+        with ESMTP id S230254AbjARNwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:52:24 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629C93865A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:10 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id j1so8135503iob.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:10 -0800 (PST)
+        Wed, 18 Jan 2023 08:52:22 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA29302AA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:07 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r9so11131325wrw.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:24:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0HpDGQASu6jsCGakE+zyQJRkRHgKI6AmZnZRKwM4p1o=;
-        b=KZxUrgqHOW6I35Thp3B9indQq7cNnlsKLrVWZ68ThfJfnc4b/iqwH1v/YsPHPNW6tp
-         V0YdIdO+lePrdsnwJWIzf9EZxzjMQV8s2oSdmZzbMaVvMUHcivT98VYHp4GmPgxfVJiY
-         QxdeupqxD5r1mKUYxTxYX6YDjubBfnW+bX+37WdITk+kfxRSs+qUwQDLOUr2sodzGy2R
-         MfEBWGAPloJqULLT0MZkW9ZE6qzOTFs7ToE5ut4M3pmXc0glt5lwYpTTirTHRVX3Wzu1
-         0tT6YSymo3X385zYRZoJUJCesQvXGA7sPFARjqlTbO3/6fTFQPXzfX9Xa13K1La1cvUB
-         MMjA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=aGtX6Xomvv0Zvw2ChFFYcesiMxlqQe3xiNuEHsKpSTI=;
+        b=aYMOE6r2RwGDo2+O3pCFAAAp4eGo7OmMUWFbRB3a77/fVjwokTqPn9kXh30jyVeMox
+         Hzmcc4N81HICUURefsIZFdfr6BFiYFGIxA3ij0PboFjTieLvkrWfzSb0h0ArvWRlvTk6
+         K0AagclJyek/0P62wwX5dxm1g8SDWefXV85XdUTC4ZDFBQ/ZkLdALrSJJHQEPqNGAwst
+         6BQwR4Y235nywAmhdYqBK51yE3NQzkHe2Eudk3ODs2xXc6N7znk2rHPD/zTBsJN7YBVJ
+         axnmE9tuSNVrjXUn0Q0euvj3Hr01NfVrIPvF/uyCo474SVyfPqZPNEzt8XLuhS0dKJP7
+         p2jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0HpDGQASu6jsCGakE+zyQJRkRHgKI6AmZnZRKwM4p1o=;
-        b=iK8HdUSefMxn1Fh8TyGUi2Ebiv+0d2K3qfRB/kcRcS+ZD79JdFWsZscou07L+JLHTz
-         Dg3BMugOs67/UMKcNzVmQW2RdVCpP5JtXCt8gqfOqWJb8truvOyzV2tmss5gPl0R3go5
-         GoURyZbCzyiFjkFeSbs1LMTnObuuoT+dJjMdU+v6UH246aLsEVRojQbui7aAlJoeJ8Xq
-         II0iEQPsFz9OQRPFvguRLxYUuTW28jTKb/HWt95k9Uc/sobb/iMDz7BVBUQKPGIKX/5+
-         5lM83+Z/RX1l3ra0l/7fWrH20OQ9cWKScanmxQYN3Wdod27PO2ljx3Xy2ttKriDeWiIo
-         uPLg==
-X-Gm-Message-State: AFqh2krQsA4SpsOp8Ag5aZbZzMcCoAJ/kJ2/Xirqs0tyzDyczdLBz9Xa
-        nH9NKO9FDXv7fMQHbTZrpM3xXLPK3Ugi6J/qygMzhg==
-X-Google-Smtp-Source: AMrXdXtVpr4jvFh+Nzy9mDXPMsxLoU3U3NYpeqIF3hovLZvVNxSrOgQi9liraHCx6fDJZNKaow5tcJKbajRkxzFbjws=
-X-Received: by 2002:a02:2a4b:0:b0:38c:886a:219a with SMTP id
- w72-20020a022a4b000000b0038c886a219amr814437jaw.133.1674048249506; Wed, 18
- Jan 2023 05:24:09 -0800 (PST)
+        bh=aGtX6Xomvv0Zvw2ChFFYcesiMxlqQe3xiNuEHsKpSTI=;
+        b=y0a9d54Yg7Z+yL8mQ+tbNiRfz/ianJYCXZD7/wPQ2H0/UiiT0pJ5QHx4qsg4/BXwUt
+         IPVTzRw2otbpNLDpxre8bDIHrsfoEZ0mnnKs3/hqXrwGcNkINqMH0/el2LOB49A/OzB6
+         Y1ZfSRsDEU6+v5bKmRroTv9wzhzggFsFQH7D0yXEmrRt9u3X2o7c31IulSY8iYu15Q/x
+         O4xl89O101TJudjoBG2Hkcrs1Ic7RsNkRGNKYY31YzSvXPVO8dKUtSRoucmCJLavjtZy
+         O3AGAhFI6AzJ1wdebARvp3pdzYP3NFt8kcJL+jwYC1MX9ihsEM+5A8xf/LtXwHjbfp4C
+         A3Vw==
+X-Gm-Message-State: AFqh2ko4wR34qKZ9UIfyB+HTwmWyfNF7RTsklDruduSX7qpAaKqHPsEt
+        6AiuNC76334EYRn7U6XtLeLEaQ==
+X-Google-Smtp-Source: AMrXdXsdPNHbsnLa957TyAPdquE49R/mFl4FzMmguPl+EyrKQ+vdLmzBBsVjlm87ZzA5gtRrAd6iEA==
+X-Received: by 2002:a5d:6952:0:b0:242:1415:ab02 with SMTP id r18-20020a5d6952000000b002421415ab02mr5805169wrw.9.1674048245943;
+        Wed, 18 Jan 2023 05:24:05 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:37dc:5071:959c:93e4? ([2a01:e0a:982:cbb0:37dc:5071:959c:93e4])
+        by smtp.gmail.com with ESMTPSA id b16-20020adff910000000b002bdf8dd6a8bsm9289920wrr.80.2023.01.18.05.24.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 05:24:05 -0800 (PST)
+Message-ID: <0dbefaec-e1de-fc3f-54f2-c5fe75a28c7c@linaro.org>
+Date:   Wed, 18 Jan 2023 14:24:04 +0100
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-13-surenb@google.com>
- <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com> <Y8fl8lqS4QHZO1gV@dhcp22.suse.cz>
-In-Reply-To: <Y8fl8lqS4QHZO1gV@dhcp22.suse.cz>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 18 Jan 2023 14:23:32 +0100
-Message-ID: <CAG48ez0dCo6KHPJrjAra=2Hm9aTm_3ERwCN3j64p3T82xNWScg@mail.gmail.com>
-Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
- control it
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, peterz@infradead.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 7/9] arm64: dts: amlogic: Used onboard usb hub reset on
+ odroid c4
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230118044418.875-1-linux.amoon@gmail.com>
+ <20230118044418.875-8-linux.amoon@gmail.com>
+ <b112ee8e-93ab-2c30-ced3-82ff858884b4@linaro.org>
+ <CANAwSgQ1b8vj+HCBS0ARnNqOwKHU8VzzsB7htL3L4Sr_v6Y=VQ@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CANAwSgQ1b8vj+HCBS0ARnNqOwKHU8VzzsB7htL3L4Sr_v6Y=VQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 1:28 PM Michal Hocko <mhocko@suse.com> wrote:
-> On Tue 17-01-23 19:02:55, Jann Horn wrote:
-> > +locking maintainers
-> >
-> > On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > Introduce a per-VMA rw_semaphore to be used during page fault handling
-> > > instead of mmap_lock. Because there are cases when multiple VMAs need
-> > > to be exclusively locked during VMA tree modifications, instead of the
-> > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
-> > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
-> > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
-> > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
-> > > locked.
-> > [...]
-> > > +static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > > +{
-> > > +       up_read(&vma->lock);
-> > > +}
-> >
-> > One thing that might be gnarly here is that I think you might not be
-> > allowed to use up_read() to fully release ownership of an object -
-> > from what I remember, I think that up_read() (unlike something like
-> > spin_unlock()) can access the lock object after it's already been
-> > acquired by someone else.
->
-> Yes, I think you are right. From a look into the code it seems that
-> the UAF is quite unlikely as there is a ton of work to be done between
-> vma_write_lock used to prepare vma for removal and actual removal.
-> That doesn't make it less of a problem though.
->
-> > So if you want to protect against concurrent
-> > deletion, this might have to be something like:
-> >
-> > rcu_read_lock(); /* keeps vma alive */
-> > up_read(&vma->lock);
-> > rcu_read_unlock();
-> >
-> > But I'm not entirely sure about that, the locking folks might know better.
->
-> I am not a locking expert but to me it looks like this should work
-> because the final cleanup would have to happen rcu_read_unlock.
->
-> Thanks, I have completely missed this aspect of the locking when looking
-> into the code.
->
-> Btw. looking at this again I have fully realized how hard it is actually
-> to see that vm_area_free is guaranteed to sync up with ongoing readers.
-> vma manipulation functions like __adjust_vma make my head spin. Would it
-> make more sense to have a rcu style synchronization point in
-> vm_area_free directly before call_rcu? This would add an overhead of
-> uncontended down_write of course.
+On 18/01/2023 12:55, Anand Moon wrote:
+> Hi Neil,
+> 
+> Thanks for your review comments.
+> 
+> On Wed, 18 Jan 2023 at 13:59, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>>
+>> On 18/01/2023 05:44, Anand Moon wrote:
+>>> On Odroid c4 previously use gpio-hog to reset the usb hub,
+>>> switch to used on-board usb hub reset to enable the usb hub
+>>> and enable power to hub.
+>>>
+>>> USB hub is combination of USB 2.0 and USB 3.0 root hub so
+>>> use peer-hub node to link then.
+>>>
+>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+>>> ---
+>>> v2: - fix the compatible string.
+>>>       - Fix the hub node to use peer-hub to link the usb 2.0 and usb 3.0.
+>>> ---
+>>>    .../boot/dts/amlogic/meson-sm1-odroid-c4.dts  | 36 ++++++++++++-------
+>>>    1 file changed, 23 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+>>> index 8c30ce63686e..d04768a66bfe 100644
+>>> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+>>> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
+>>> @@ -26,20 +26,30 @@ led-blue {
+>>>        sound {
+>>>                model = "ODROID-C4";
+>>>        };
+>>> -};
+>>>
+>>> -&gpio {
+>>> -     /*
+>>> -      * WARNING: The USB Hub on the Odroid-C4 needs a reset signal
+>>> -      * to be turned high in order to be detected by the USB Controller
+>>> -      * This signal should be handled by a USB specific power sequence
+>>> -      * in order to reset the Hub when USB bus is powered down.
+>>> -      */
+>>> -     hog-0 {
+>>> -             gpio-hog;
+>>> -             gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
+>>> -             output-high;
+>>> -             line-name = "usb-hub-reset";
+>>> +     /* USB hub supports both USB 2.0 and USB 3.0 root hub */
+>>> +     usb-hub {
+>>> +             dr_mode = "host";
+>>
+>> Is this really needed ?
+>>
+> I got carried forward from the other device tree binding,
+> If not needed I will drop this.
+> 
+>>> +             #address-cells = <1>;
+>>> +             #size-cells = <0>;
+>>> +
+>>> +             /* 2.0 hub on port 1 */
+>>> +             hub_2_0: hub@1 {
+>>> +                     compatible = "usb2109,2817";
+>>> +                     reg = <1>;
+>>> +                     peer-hub = <&hub_3_0>;
+>>> +                     reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
+>>> +                     vdd-supply = <&vcc_5v>;
+>>> +             };
+>>> +
+>>> +             /* 3.1 hub on port 4 */
+>>> +             hub_3_0: hub@2 {
+>>> +                     compatible = "usb2109,817";
+>>> +                     reg = <2>;
+>>> +                     peer-hub = <&hub_2_0>;
+>>> +                     reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
+>>> +                     vdd-supply = <&vcc_5v>;
+>>> +             };
+>>
+>> The final discussion in v1 was to drop this /usb-hub node and move the
+>> hub_2_0 & hub_3_0 node under the dwc3 node.
+>>
+> 
+> Yes, but It did not work back then, since these are two different events
+> USB node will try to bring the PHY and dwc2 and dwc2 nodes up.
+> USB hub supports the reset of the USB hub and links the power supply
+> to the ports.
+> This works on this board.
 
-Something along those lines might be a good idea, but I think that
-rather than synchronizing the removal, it should maybe be something
-that splats (and bails out?) if it detects pending readers. If we get
-to vm_area_free() on a VMA that has pending readers, we might already
-be in a lot of trouble because the concurrent readers might have been
-traversing page tables while we were tearing them down or fun stuff
-like that.
+Forget the dwc2 node, the dwc2 since GXL is device mode only, so you need to put both
+nodes in the dwc3 node which is host-only.
 
-I think maybe Suren was already talking about something like that in
-another part of this patch series but I don't remember...
+Neil
+
+> 
+>> Neil
+>>
+> Thanks
+> 
+> -Anand
+
