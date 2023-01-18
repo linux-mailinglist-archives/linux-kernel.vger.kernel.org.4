@@ -2,222 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F71667113B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8074867113D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 03:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjARCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 21:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S229695AbjARCg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 21:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjARCgB (ORCPT
+        with ESMTP id S229379AbjARCg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:36:01 -0500
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727544FAF6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:35:59 -0800 (PST)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 30I2Zkjp001017;
-        Wed, 18 Jan 2023 10:35:46 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 18 Jan 2023 10:35:42 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH] mm: move KMEMLEAK's Kconfig items from lib to mm
-Date:   Wed, 18 Jan 2023 10:35:27 +0800
-Message-ID: <1674009327-23493-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Tue, 17 Jan 2023 21:36:57 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB5D04FAE3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 18:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FsRc3
+        dlPiXgB3LAPOlDQBAkajjF4w8XOLXJBAk9YV2g=; b=oGBXlAHdCmM+qEztlkGMX
+        8bumnnMIXcid4d9LNV2urZhqIfsmmTXzzjG6nTXBwVXb9lbww8nLWEgUU/Gxieey
+        8Pf9bBouL6XteQvZbC3UUF0LQGE6nS9NDyZ7yrvk35j72i3E7Wua6/7umJ7jXyo7
+        puyLjQCiRjk6wb06CZh0MU=
+Received: from FB9D8C53FFFC188.internal.baidu.com (unknown [111.206.214.32])
+        by zwqz-smtp-mta-g2-4 (Coremail) with SMTP id _____wDnVtsPW8djvAoSAw--.61937S2;
+        Wed, 18 Jan 2023 10:35:59 +0800 (CST)
+From:   Guangju Wang <wgj900@163.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/microcode: Use DEVICE_ATTR_RO macro
+Date:   Wed, 18 Jan 2023 10:35:54 +0800
+Message-Id: <20230118023554.1898-1-wgj900@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 30I2Zkjp001017
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDnVtsPW8djvAoSAw--.61937S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw1DCry8WrW7GF17CF1xXwb_yoW8Gr1fpF
+        15Gay8KF48W3WDAa95Xrs7Zry5Aw1jg34fXws2gwn3K3W3t3srXa4xA34avry5u34rKa1S
+        gFZ2vFyxAFWxCrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j0_M-UUUUU=
+X-Originating-IP: [111.206.214.32]
+X-CM-SenderInfo: pzjmmiqq6rljoofrz/1tbiMBf6tlWB0aDO9AAAs0
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+From: "Guangju Wang[baidu]" <wgj900@163.com>
 
-Have the kmemleak's source code and Kconfig items be in the same directory.
+Use DEVICE_ATTR_RO() helper instead of plain DEVICE_ATTR(),
+which makes the code a bit shorter and easier to read.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Signed-off-by: Guangju Wang[baidu] <wgj900@163.com>
 ---
- lib/Kconfig.debug | 70 -------------------------------------------------------
- mm/Kconfig.debug  | 70 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 70 insertions(+), 70 deletions(-)
+ arch/x86/kernel/cpu/microcode/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 401ad4b..62884ac 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -716,76 +716,6 @@ config SHRINKER_DEBUG
- 	  visibility into the kernel memory shrinkers subsystem.
- 	  Disable it to avoid an extra memory footprint.
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 712aafff96e0..99abb318aa7f 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -507,7 +507,7 @@ static ssize_t version_show(struct device *dev,
+ 	return sprintf(buf, "0x%x\n", uci->cpu_sig.rev);
+ }
  
--config HAVE_DEBUG_KMEMLEAK
--	bool
--
--config DEBUG_KMEMLEAK
--	bool "Kernel memory leak detector"
--	depends on DEBUG_KERNEL && HAVE_DEBUG_KMEMLEAK
--	select DEBUG_FS
--	select STACKTRACE if STACKTRACE_SUPPORT
--	select KALLSYMS
--	select CRC32
--	select STACKDEPOT
--	help
--	  Say Y here if you want to enable the memory leak
--	  detector. The memory allocation/freeing is traced in a way
--	  similar to the Boehm's conservative garbage collector, the
--	  difference being that the orphan objects are not freed but
--	  only shown in /sys/kernel/debug/kmemleak. Enabling this
--	  feature will introduce an overhead to memory
--	  allocations. See Documentation/dev-tools/kmemleak.rst for more
--	  details.
--
--	  Enabling DEBUG_SLAB or SLUB_DEBUG may increase the chances
--	  of finding leaks due to the slab objects poisoning.
--
--	  In order to access the kmemleak file, debugfs needs to be
--	  mounted (usually at /sys/kernel/debug).
--
--config DEBUG_KMEMLEAK_MEM_POOL_SIZE
--	int "Kmemleak memory pool size"
--	depends on DEBUG_KMEMLEAK
--	range 200 1000000
--	default 16000
--	help
--	  Kmemleak must track all the memory allocations to avoid
--	  reporting false positives. Since memory may be allocated or
--	  freed before kmemleak is fully initialised, use a static pool
--	  of metadata objects to track such callbacks. After kmemleak is
--	  fully initialised, this memory pool acts as an emergency one
--	  if slab allocations fail.
--
--config DEBUG_KMEMLEAK_TEST
--	tristate "Simple test for the kernel memory leak detector"
--	depends on DEBUG_KMEMLEAK && m
--	help
--	  This option enables a module that explicitly leaks memory.
--
--	  If unsure, say N.
--
--config DEBUG_KMEMLEAK_DEFAULT_OFF
--	bool "Default kmemleak to off"
--	depends on DEBUG_KMEMLEAK
--	help
--	  Say Y here to disable kmemleak by default. It can then be enabled
--	  on the command line via kmemleak=on.
--
--config DEBUG_KMEMLEAK_AUTO_SCAN
--	bool "Enable kmemleak auto scan thread on boot up"
--	default y
--	depends on DEBUG_KMEMLEAK
--	help
--	  Depending on the cpu, kmemleak scan may be cpu intensive and can
--	  stall user tasks at times. This option enables/disables automatic
--	  kmemleak scan at boot up.
--
--	  Say N here to disable kmemleak auto scan thread to stop automatic
--	  scanning. Disabling this option disables automatic reporting of
--	  memory leaks.
--
--	  If unsure, say Y.
--
- config DEBUG_STACK_USAGE
- 	bool "Stack utilization instrumentation"
- 	depends on DEBUG_KERNEL && !IA64
-diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
-index ce8dded..d1893ac 100644
---- a/mm/Kconfig.debug
-+++ b/mm/Kconfig.debug
-@@ -207,3 +207,73 @@ config PTDUMP_DEBUGFS
- 	  kernel.
+-static ssize_t pf_show(struct device *dev,
++static ssize_t processor_flags_show(struct device *dev,
+ 			struct device_attribute *attr, char *buf)
+ {
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + dev->id;
+@@ -515,8 +515,8 @@ static ssize_t pf_show(struct device *dev,
+ 	return sprintf(buf, "0x%x\n", uci->cpu_sig.pf);
+ }
  
- 	  If in doubt, say N.
-+
-+config HAVE_DEBUG_KMEMLEAK
-+	bool
-+
-+config DEBUG_KMEMLEAK
-+	bool "Kernel memory leak detector"
-+	depends on DEBUG_KERNEL && HAVE_DEBUG_KMEMLEAK
-+	select DEBUG_FS
-+	select STACKTRACE if STACKTRACE_SUPPORT
-+	select KALLSYMS
-+	select CRC32
-+	select STACKDEPOT
-+	help
-+	  Say Y here if you want to enable the memory leak
-+	  detector. The memory allocation/freeing is traced in a way
-+	  similar to the Boehm's conservative garbage collector, the
-+	  difference being that the orphan objects are not freed but
-+	  only shown in /sys/kernel/debug/kmemleak. Enabling this
-+	  feature will introduce an overhead to memory
-+	  allocations. See Documentation/dev-tools/kmemleak.rst for more
-+	  details.
-+
-+	  Enabling DEBUG_SLAB or SLUB_DEBUG may increase the chances
-+	  of finding leaks due to the slab objects poisoning.
-+
-+	  In order to access the kmemleak file, debugfs needs to be
-+	  mounted (usually at /sys/kernel/debug).
-+
-+config DEBUG_KMEMLEAK_MEM_POOL_SIZE
-+	int "Kmemleak memory pool size"
-+	depends on DEBUG_KMEMLEAK
-+	range 200 1000000
-+	default 16000
-+	help
-+	  Kmemleak must track all the memory allocations to avoid
-+	  reporting false positives. Since memory may be allocated or
-+	  freed before kmemleak is fully initialised, use a static pool
-+	  of metadata objects to track such callbacks. After kmemleak is
-+	  fully initialised, this memory pool acts as an emergency one
-+	  if slab allocations fail.
-+
-+config DEBUG_KMEMLEAK_TEST
-+	tristate "Simple test for the kernel memory leak detector"
-+	depends on DEBUG_KMEMLEAK && m
-+	help
-+	  This option enables a module that explicitly leaks memory.
-+
-+	  If unsure, say N.
-+
-+config DEBUG_KMEMLEAK_DEFAULT_OFF
-+	bool "Default kmemleak to off"
-+	depends on DEBUG_KMEMLEAK
-+	help
-+	  Say Y here to disable kmemleak by default. It can then be enabled
-+	  on the command line via kmemleak=on.
-+
-+config DEBUG_KMEMLEAK_AUTO_SCAN
-+	bool "Enable kmemleak auto scan thread on boot up"
-+	default y
-+	depends on DEBUG_KMEMLEAK
-+	help
-+	  Depending on the cpu, kmemleak scan may be cpu intensive and can
-+	  stall user tasks at times. This option enables/disables automatic
-+	  kmemleak scan at boot up.
-+
-+	  Say N here to disable kmemleak auto scan thread to stop automatic
-+	  scanning. Disabling this option disables automatic reporting of
-+	  memory leaks.
-+
-+	  If unsure, say Y.
+-static DEVICE_ATTR(version, 0444, version_show, NULL);
+-static DEVICE_ATTR(processor_flags, 0444, pf_show, NULL);
++static DEVICE_ATTR_RO(version);
++static DEVICE_ATTR_RO(processor_flags);
+ 
+ static struct attribute *mc_default_attrs[] = {
+ 	&dev_attr_version.attr,
 -- 
-1.9.1
+2.25.1
 
