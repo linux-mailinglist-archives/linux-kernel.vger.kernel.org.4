@@ -2,191 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B758672641
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EAA672644
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjARSEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S230147AbjARSFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjARSEN (ORCPT
+        with ESMTP id S230460AbjARSEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:04:13 -0500
+        Wed, 18 Jan 2023 13:04:25 -0500
 Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D155D130
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:01 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q10so15472086wrs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CB5DC2F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:17 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id q10so15473373wrs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zp84JUX2wPLB6FAIMuryYBX4UoBq5satkVPoiHfbwC8=;
-        b=SuzsQHg+VL7NqkwjrA63pCX0Wh/ri6IncPBZXyPuINUTQvvp788mh5J4vJJxBa9Mc/
-         y/ttCKrX0uNIm+tw6/vqD5JFPoJIAH/m1xJd12MANZgmNBGvfqVoslitJaDVlpYG6Gcg
-         ljT6biT3+fWn72zFSlQeveqfkUxSwqcVzuAg0RUZL3rklTY4sVg1jBK14OM92QHKLI48
-         rjYxW/75SOrTLmszDt2eq00ibyhe+I+UMNVBKLJKKppm//AV5dM89TEYBDgLS70RCG60
-         7ZznQt3ixUsuMaRIYB+5yX51Oph7bYwjr0NIzHepDaw7N5dDr9M05cbdJmoCBItHwWrH
-         SkwQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m8l6H/Zs5B4MQGd630nTAm24Aa7PPunZI91/DoTYts8=;
+        b=RkXjr7lHJ3purNAEGKyte6RO0dU7BIHku1XLajH8wD4VlTGUJ+oNSGoV6TeoUknzC7
+         nfxMJWz0FMCcxY6/nFq9FBZPssMnHAI0exXolCDR9NlpUjWh1fv1OOacOOZU0k9L9FLd
+         vQSxN0prp6GMXZQa2d6teuBIpNWita/rB7WIxmsiqZG5rs3AvzSVWNDBg4M+SWkL4nPn
+         mAezwgA7ey9S7HLU9GY2tq3DwoQHcWEkEI1RwRWy0wppMa0JUebD6V/MSYW6Z26Zd/TK
+         ym+8uhc6JBHwvtO51zBx4U4UXhZsgGVPNTECDDLCNqVmMbTNfH1rpRCMfpzRiBH/jnLT
+         T4jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zp84JUX2wPLB6FAIMuryYBX4UoBq5satkVPoiHfbwC8=;
-        b=iZXKJpzkCmdT0R5fwfGRbJ8p+wEgrfW+KP1quvKsxtBVdEwjHBIMlukaO9BgFlTCN+
-         9ueTo4py1ATSkpL1nJ/R9nWw6IjqWCrjPsGvXZINwhhy6hZHqtqoayIVKX9Fx+t6H4fD
-         HLBvkCFJE6lkqow9sQrAw5RwGdO/z4O21ae/gvnDV8ot0aQdrhUjA6gw9HTq+z/xGApm
-         z2iiq2fyXR/dQARskZBzy64QNJRhJsixHHmZrtba4iJDfVvZlknzJD9ILtdq/tnxCPCe
-         oZgXMc4dqMHurH2ywtvq4C2JV1GhJ7tM43JR0ROSwhugeplD4FG22tkKkQG+9aPzmmpM
-         FuxQ==
-X-Gm-Message-State: AFqh2kpJwDEp9c6piTu3+54nTdpMNrXoFgPGDuHCtdY2azHEVMNMWOxz
-        VipPtIFqbs0icblmt49VJX7+LA==
-X-Google-Smtp-Source: AMrXdXv3mSWZmyjShmt7WtX7nY6Hcxtp9KvdQ4XjWZI2xRezvrvP5e54ZFq9WAbXPQXpGcFKgypXlQ==
-X-Received: by 2002:adf:efc8:0:b0:29d:f817:42d4 with SMTP id i8-20020adfefc8000000b0029df81742d4mr16973520wrp.19.1674064912700;
-        Wed, 18 Jan 2023 10:01:52 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w4-20020a5d4b44000000b002366dd0e030sm31657450wrs.68.2023.01.18.10.01.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 10:01:52 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Olivier Dautricourt <olivierdautricourt@gmail.com>,
-        Stefan Roese <sr@denx.de>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Green Wan <green.wan@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?q?=A1er?= <povik+lin@cutebit.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        - <chuanhua.lei@intel.com>, Long Cheng <long.cheng@mediatek.com>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Palmer Debbelt <palmer@sifive.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: dma: cleanup examples - indentation, lowercase hex
-Date:   Wed, 18 Jan 2023 19:01:44 +0100
-Message-Id: <20230118180144.364756-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
-References: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m8l6H/Zs5B4MQGd630nTAm24Aa7PPunZI91/DoTYts8=;
+        b=YED3271xO1IvuOGLq3Ke+XyqVksWfBQka+Nv1xApVoqV+2Erjs4hSwVAFBDUovzTMA
+         qs2Gqn4zbMSvp6DMFFMj6V9Trx15YOZb7j11Q7aLAbm0R25T4D7FXOfKeP/AsfkzznLM
+         xM8s1fSSGfFuwgji/snIzECBQHtF5c7ZD1jz/J0f9TWJUGn9OM8gfGXpZ9/NukyNdFeP
+         ubKYFsmUewviBypk5tDQRuWTsdrBGJ+m8wmD1xvtbb/kU/1rkkKytqVXxk6tdyhveDvJ
+         yEQnpwBkUVCZ+pJrFKVA1YWAqfwHmeoFioY7hdHmD3J5pJEXQ9XtOdh15D14LFcgFchC
+         8sLg==
+X-Gm-Message-State: AFqh2kpvM/iU3EoM/EJ13VC+xJHArvQ27ueVhT5GQ2DuCLk85zyHGsUH
+        TYiLmnbm+yTgTcDqGd0AhtppEejidjFMK9TAF4k5CQ==
+X-Google-Smtp-Source: AMrXdXu8hDRQ+czPoGTlX9n9vGPPlwX3WPI0/Aif+h9jtP/59bJGDwZYQkZlr3ktlPcR8jgXsFI4W88TQ8PNw85QBPY=
+X-Received: by 2002:a05:6000:5c6:b0:242:5caa:5fbf with SMTP id
+ bh6-20020a05600005c600b002425caa5fbfmr197446wrb.300.1674064937432; Wed, 18
+ Jan 2023 10:02:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230118175632.3165217-1-kan.liang@linux.intel.com>
+In-Reply-To: <20230118175632.3165217-1-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 18 Jan 2023 10:02:04 -0800
+Message-ID: <CAP-5=fWMPYmofTL262HQB1jOiqRD5dKtAhaWrBbT-vq-NYsXcg@mail.gmail.com>
+Subject: Re: [PATCH] perf vendor events intel: Add Emerald Rapids
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        artem.bityutskiy@linux.intel.com, andi.kleen@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup examples:
- - use 4-space indentation (for cases when it is neither 4 not 2 space),
- - use lowercase hex.
+On Wed, Jan 18, 2023 at 9:57 AM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> The event list of the Emerald Rapids is the same as the Sapphire
+> Rapids. Add the CPU model ID of Emerald Rapids into the mapfile.csv and
+> point it to the event list of Sapphire Rapids.
+>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/dma/snps,dw-axi-dmac.yaml        | 36 +++++++++----------
- .../bindings/dma/stericsson,dma40.yaml        |  4 +--
- 2 files changed, 20 insertions(+), 20 deletions(-)
+Acked-by: Ian Rogers <irogers@google.com>
 
-diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-index 2bedab1f74e0..d34d0fa62ab5 100644
---- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-+++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-@@ -113,21 +113,21 @@ additionalProperties: false
- 
- examples:
-   - |
--     #include <dt-bindings/interrupt-controller/arm-gic.h>
--     #include <dt-bindings/interrupt-controller/irq.h>
--     /* example with snps,dw-axi-dmac */
--     dmac: dma-controller@80000 {
--         compatible = "snps,axi-dma-1.01a";
--         reg = <0x80000 0x400>;
--         clocks = <&core_clk>, <&cfgr_clk>;
--         clock-names = "core-clk", "cfgr-clk";
--         interrupt-parent = <&intc>;
--         interrupts = <27>;
--         #dma-cells = <1>;
--         dma-channels = <4>;
--         snps,dma-masters = <2>;
--         snps,data-width = <3>;
--         snps,block-size = <4096 4096 4096 4096>;
--         snps,priority = <0 1 2 3>;
--         snps,axi-max-burst-len = <16>;
--     };
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    /* example with snps,dw-axi-dmac */
-+    dmac: dma-controller@80000 {
-+        compatible = "snps,axi-dma-1.01a";
-+        reg = <0x80000 0x400>;
-+        clocks = <&core_clk>, <&cfgr_clk>;
-+        clock-names = "core-clk", "cfgr-clk";
-+        interrupt-parent = <&intc>;
-+        interrupts = <27>;
-+        #dma-cells = <1>;
-+        dma-channels = <4>;
-+        snps,dma-masters = <2>;
-+        snps,data-width = <3>;
-+        snps,block-size = <4096 4096 4096 4096>;
-+        snps,priority = <0 1 2 3>;
-+        snps,axi-max-burst-len = <16>;
-+    };
-diff --git a/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml b/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
-index 664ee61a00d8..57395a810719 100644
---- a/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
-+++ b/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
-@@ -147,9 +147,9 @@ examples:
-     #include <dt-bindings/interrupt-controller/irq.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     #include <dt-bindings/mfd/dbx500-prcmu.h>
--    dma-controller@801C0000 {
-+    dma-controller@801c0000 {
-       compatible = "stericsson,db8500-dma40", "stericsson,dma40";
--      reg = <0x801C0000 0x1000>, <0x40010000 0x800>;
-+      reg = <0x801c0000 0x1000>, <0x40010000 0x800>;
-       reg-names = "base", "lcpa";
-       interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-       #dma-cells = <3>;
--- 
-2.34.1
+I note it currently isn't on the perfmon github:
+https://github.com/intel/perfmon/blob/main/mapfile.csv
+This will create a diff from the version of mapfile.csv generated by:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+Presumably there will be an update to solve that.
 
+Thanks,
+Ian
+
+> ---
+>  tools/perf/pmu-events/arch/x86/mapfile.csv | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+> index 711a4ef05fdf..5facdac6fe8e 100644
+> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
+> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+> @@ -21,7 +21,7 @@ GenuineIntel-6-A[AC],v1.00,meteorlake,core
+>  GenuineIntel-6-1[AEF],v3,nehalemep,core
+>  GenuineIntel-6-2E,v3,nehalemex,core
+>  GenuineIntel-6-2A,v17,sandybridge,core
+> -GenuineIntel-6-8F,v1.09,sapphirerapids,core
+> +GenuineIntel-6-(8F|CF),v1.09,sapphirerapids,core
+>  GenuineIntel-6-(37|4A|4C|4D|5A),v14,silvermont,core
+>  GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v53,skylake,core
+>  GenuineIntel-6-55-[01234],v1.28,skylakex,core
+> --
+> 2.35.1
+>
