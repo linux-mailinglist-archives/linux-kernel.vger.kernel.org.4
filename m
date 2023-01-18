@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48B2671663
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F762671676
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjARIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S229739AbjARIqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjARIhK (ORCPT
+        with ESMTP id S230506AbjARIpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:37:10 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 123247EE5B;
-        Tue, 17 Jan 2023 23:56:58 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxrvBJpsdjy0kCAA--.7296S3;
-        Wed, 18 Jan 2023 15:56:57 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+RHpsdjVzUbAA--.17363S2;
-        Wed, 18 Jan 2023 15:56:55 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Fix build errors if CONFIG_NF_CONNTRACK=m
-Date:   Wed, 18 Jan 2023 15:56:44 +0800
-Message-Id: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Cxf+RHpsdjVzUbAA--.17363S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAFykGr17ZryxCFyDXr4fZrb_yoW5XrW8pa
-        48Z3s0yr4kGw4UuF1xAFZ7Zr4rKFs29a4UJw1kJrWSkrZ5Xr1Utr1xKr43Ar9xurW09ay3
-        Za42gry7AFyrAaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jwnYwUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 03:45:18 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBB8F7E2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:00:23 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id k8so18537500wrc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 00:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6JHe7Mld7ca44zxKnapswWL8ppqp7gV/qk5d9Nzoevw=;
+        b=KTEP6I1p+vMcKWOb9+hnvxwJhNZClYy3mVLwvEaRmwrc3+YVVJ1SuxIoRZsnnhmQGi
+         /GnHcl1skgTY8B6z82bSuqdRFdYIel+Vg4WEEaP2iYUO4GnHRCa6P74G3zU7IPS1VyGT
+         I8WGfAj5FAoWzLc2mcs0ibz3ops67DOkZLXOJKYrpuVfP3vuGc0qCAEespNvrpu5AYGJ
+         Ldw/Xe/+zQtjzYJ/iv/riljurmbyz8fdRyf6p97zA0RBzok1XbAK6MqXtC1YSmuKwlPs
+         6XZXTBfV9oOVt02092OtdJZLlEDuUVXCc8B3UksAff2U5txyp0T/VH1e6N2Wi9r6EYKt
+         Z7+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JHe7Mld7ca44zxKnapswWL8ppqp7gV/qk5d9Nzoevw=;
+        b=GocHQmyxRR9YXrys3qYkWuiD5JN5ROZkVjnM5s4WkFii6z4R9GIfdwWFa9+JPCpuEu
+         f6irvfITms/UC6fDqxO55ZXjzKTsSPVXJe3wNhOw9BnU/OVLmTUpXC6gJwSIh4LwIKlN
+         PfABDptIAENHMXrKmJ0NqY5gbz8mDLKlE7YKnyo7rbmA03PsqKxeB/eeAfvLmEcIKqw7
+         wBKM8h+iPsqG2NCyBpW3KQ9j+8b+3VZFbqrMieZUQoUPVo0tZbrtmtJjtIsUYIPQW1Pr
+         54Oiw8cIzQEDxQ1GP/CY28IqFW1C5T90wkK1vVDGunS3vziO95OuhhlrWYGXYeKpqE8U
+         xBbQ==
+X-Gm-Message-State: AFqh2ko2TXA2SJLQNJqX5PfNN+ama8jKWVjuRmlpr//1mTTU/AfPyump
+        jkScASg3Dq0nSlmcxD7MxLxHGA==
+X-Google-Smtp-Source: AMrXdXuEmKllwaiidwPgTn+Gamv50gFRp4dBCIpq9KI5N/ug614mLjZGjAIslqwj4xHNNfCH7W417A==
+X-Received: by 2002:a5d:6a86:0:b0:2bb:e805:c1ef with SMTP id s6-20020a5d6a86000000b002bbe805c1efmr4981345wru.52.1674028807988;
+        Wed, 18 Jan 2023 00:00:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f8-20020a0560001b0800b002423edd7e50sm30387327wrz.32.2023.01.18.00.00.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 00:00:06 -0800 (PST)
+Message-ID: <787bb142-1ade-bd48-1f6a-0da992add3d3@linaro.org>
+Date:   Wed, 18 Jan 2023 09:00:04 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 4/7] dt-bindings: net: Add support StarFive dwmac
+Content-Language: en-US
+To:     yanhong wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230106030001.1952-1-yanhong.wang@starfivetech.com>
+ <20230106030001.1952-5-yanhong.wang@starfivetech.com>
+ <c114239e-2dae-3962-24f3-8277ff173582@linaro.org>
+ <9c59e7b4-ba5f-365c-7d71-1ff2953f6672@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9c59e7b4-ba5f-365c-7d71-1ff2953f6672@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_NF_CONNTRACK=m, there are no definitions of NF_NAT_MANIP_SRC
-and NF_NAT_MANIP_DST in vmlinux.h, build test_bpf_nf.c failed.
+On 18/01/2023 02:45, yanhong wang wrote:
+> 
+> 
+> On 2023/1/6 20:45, Krzysztof Kozlowski wrote:
+>> On 06/01/2023 03:59, Yanhong Wang wrote:
+>>> Add documentation to describe StarFive dwmac driver(GMAC).
+>>>
+>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>> ---
+>>>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
+>>>  .../bindings/net/starfive,jh7110-dwmac.yaml   | 113 ++++++++++++++++++
+>>>  MAINTAINERS                                   |   5 +
+>>
+>> Order the patches correctly. Why this binding patch is split from previous?
+>>
+> 
+> The previous binding patch was considered to be compatible with JH7100, but after discussion,
+> it is not compatible with JH7100 for the time being, so the name of binding has been modified
+> in this patch.
 
-$ make -C tools/testing/selftests/bpf/
+I am not asking about name, but why this was split from the patch using
+the compatible in the first time. This does not make any sense. Please
+squash.
 
-  CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-                bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-                                                       ^
-progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-                bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-                                                       ^
-2 errors generated.
-
-Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c,
-in order to avoid redefinitions if CONFIG_NF_CONNTRACK=y, rename them with
-___local suffix. This is similar with commit 1058b6a78db2 ("selftests/bpf:
-Do not fail build if CONFIG_NF_CONNTRACK=m/n").
-
-Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 227e85e..9fc603c 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -34,6 +34,11 @@ __be16 dport = 0;
- int test_exist_lookup = -ENOENT;
- u32 test_exist_lookup_mark = 0;
- 
-+enum nf_nat_manip_type___local {
-+	NF_NAT_MANIP_SRC___local,
-+	NF_NAT_MANIP_DST___local
-+};
-+
- struct nf_conn;
- 
- struct bpf_ct_opts___local {
-@@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
- int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
- int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
- int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
--			int port, enum nf_nat_manip_type) __ksym;
-+			int port, enum nf_nat_manip_type___local) __ksym;
- 
- static __always_inline void
- nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
-@@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 
- 		/* snat */
- 		saddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-+		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
- 		/* dnat */
- 		daddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-+		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
- 
- 		ct_ins = bpf_ct_insert_entry(ct);
- 		if (ct_ins) {
--- 
-2.1.0
+Best regards,
+Krzysztof
 
