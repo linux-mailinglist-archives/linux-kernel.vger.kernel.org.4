@@ -2,452 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791F3671F0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D31D671F14
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 15:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjAROJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 09:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S230301AbjAROJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 09:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjAROIs (ORCPT
+        with ESMTP id S231206AbjAROJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 09:08:48 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF425C0C6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:49:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so1235936wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:49:44 -0800 (PST)
+        Wed, 18 Jan 2023 09:09:03 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA99654DA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:50:03 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id mp20so36780261ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 05:50:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qQ3Ty+rdCpkk6ljZLYKXjmhZaZ6cKcW44gQP/rtIU/k=;
-        b=qMxMdj1/JzYWYbrXksZ/gXrOT9fA/r+XV7MZCDKVPGP+Aix6AKEZWZ35pzazYpbyqI
-         nxSrxH4xObPmkENAOD3811dqwZDpoNqH5lcJimjkt5RFXEzVlspEL6Prdno8utvJXfig
-         wBXoMBvCuCq3TqsTYf6/Q6bFHMdBB3KY1EhKuHYp9NneuvIG3qywK/eZTKz0StVxQFBG
-         kn94XYcVWarwn3dXjqdN8zUI8TFhuQTYX/6Zg846erYdBsWPpGeX9BQhKASJjqJLIv1v
-         w7Kafu2cegxP6kkGVPzd03QWvoYQrSoIM9ibxoGT+Hp0P/GzZYvQtZl9rrBhSfKMIPzh
-         8Gdg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G05wduJRdCzsbUdyzAteXIlTvf9uW/zufG8M+iMIX3U=;
+        b=a05iRmPG9JIaF65ZM9hOFu9ZjZJVxSt/IoTCk+wZUiS86mEK/ILyTvJvnVTYQnDnaN
+         iB44YpZdYqegBktvsPsn9dotAbt/20Px4KBm1UsfDlLY1AG41wELlpg0VN24BJp4z1LT
+         vHeHdVgjg9dF0m1S/55aFYzoeE43tDwwPh749PelLvGWM+sf4tPsFHbl86+FRtuEOCHO
+         ztSdEG0XJsxxBiHyHa0t1tsx/BbaVA8LJqOOOb1ushaPuSOHEEaVZFiAqIZDTkutoWGm
+         oXg/j5AG9DrWhdBpN1ALCMdzBkRIF2K65oFNhjX5Do/l15zn+6remwyfYkGhOTk7cffi
+         UPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qQ3Ty+rdCpkk6ljZLYKXjmhZaZ6cKcW44gQP/rtIU/k=;
-        b=jH8K4dUUymgU+AQ+dN9073NhCutEw3IBlbxV+4+v18fjsDaiooOwXWG2wfGS7Zb/S2
-         4+E2gfMbfAQd+NIlzRLL0HCmUcpnR/HLeNAnrIaVW8HEtsqvcSsf+HFyS9YvwrWQN5jF
-         Zi+m/4RgLwpoLvEZa56vODVaSHgTh9hXP1eNqngUqVaOeuwPH5nelfYAHKCe2tvYiS9a
-         egqnJ4SxiUM85l4uZNE3QAtaPV9pQVPNqjamMXmj/RXYle4S/yzErsvK7LE6FvzZBwnY
-         XkHqR1LtYoK17CV/xfHxwbdfTF2Q5QA8YxkloFKdVHd8LJM7d1lR7uE+oOz+Y1xib9CU
-         8SUQ==
-X-Gm-Message-State: AFqh2kqMvqkrle7+U3oYscojdEkHmDtO20EcibTEL/WmA4jL4VrbmOug
-        L5Ab/yu87zeSO7zuQUw+ca7gbA==
-X-Google-Smtp-Source: AMrXdXvUOYN2uN3R7Ey2rNpjEhiIxSWpQtb8kb4FfWiLMPhMn1k1dP7k1AGzgZ5fH62hp3CW3VzfdQ==
-X-Received: by 2002:a05:600c:6001:b0:3da:f80a:5e85 with SMTP id az1-20020a05600c600100b003daf80a5e85mr6636539wmb.26.1674049783126;
-        Wed, 18 Jan 2023 05:49:43 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1866:5d91:a429:aba])
-        by smtp.gmail.com with ESMTPSA id i18-20020a05600c355200b003d9df9e59c4sm2392363wmq.37.2023.01.18.05.49.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 05:49:42 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-Date:   Wed, 18 Jan 2023 14:49:40 +0100
-Message-Id: <20230118134940.240102-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G05wduJRdCzsbUdyzAteXIlTvf9uW/zufG8M+iMIX3U=;
+        b=T2GLuY8O+VfRNO3wUnn3CGppFWmnohPx9lUke8b/1ROn4xE0bgV9WCJNLQHtHPbpuK
+         EAInv5wc8fjJNkxeXs7vHI3KguEHorWFc7z78eM4W3iXxA3ShBMtxOJnK7oR3XEnmQGH
+         TTLTzUrqoePhlV2HqLdWFmTCS87wQIgF51TI+exciT99YfSaNlFplrxq+ySPPIk3TtDi
+         ikY2Uwps+xDfS+cWQRsHdfosXCRlA4cCNP2o5IMUE6HLcAJ7tVJFMLdHKrQRfwJpcYr7
+         NpQsaYfBj0StAfaBdoy4A7sdUkQqx8A5Drr+U5s6oBA2FGoiIu8WeZviIYVpuJtWmTc/
+         A1ew==
+X-Gm-Message-State: AFqh2krgXRTfzdvIGSKb63S1voRTwdNJTY0KfNVjQSOkE0XZOBb7ibh+
+        8UhBU4QDNa1T/T5ieKzFU53Nzw==
+X-Google-Smtp-Source: AMrXdXu9TbY+2mUcb8T41dwKNwp9Qz+AjvGZhwYnJh2pZThYE9pgpRfumKqnndR/Luqg++r+NVYZCg==
+X-Received: by 2002:a17:906:4094:b0:854:956:1438 with SMTP id u20-20020a170906409400b0085409561438mr7476861ejj.25.1674049802063;
+        Wed, 18 Jan 2023 05:50:02 -0800 (PST)
+Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
+        by smtp.gmail.com with ESMTPSA id g13-20020a170906538d00b0085a958808c6sm10035517ejo.7.2023.01.18.05.49.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 05:50:01 -0800 (PST)
+Message-ID: <cc1e0d0e-c678-ed5d-8874-418e43272f96@linaro.org>
+Date:   Wed, 18 Jan 2023 14:49:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 6/8] arm64: dts: qcom: Add msm8939-pm8916.dtsi include
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-7-bryan.odonoghue@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230117024846.1367794-7-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-If we open an i2c character device and then unbind the underlying i2c
-adapter (either by unbinding it manually via sysfs or - for a real-life
-example - when unplugging a USB device with an i2c adaper), the kernel
-thread calling i2c_del_adapter() will become blocked waiting for the
-completion that only completes once all references to the character
-device get dropped.
 
-In order to fix that, we introduce a couple changes. They need to be
-part of a single commit in order to preserve bisectability. First, drop
-the dev_release completion. That removes the risk of a deadlock but
-we now need to protect the character device structures against NULL
-pointer dereferences. To that end introduce an rw semaphore. It will
-protect the dummy i2c_client structure against dropping the adapter from
-under it. It will be taken for reading by all file_operations callbacks
-and for writing by the notifier's unbind handler. This way we don't
-prohibit the syscalls that don't get in each other's way from running
-concurrently but the adapter will not be unbound before all syscalls
-return.
+On 17.01.2023 03:48, Bryan O'Donoghue wrote:
+> From: Stephan Gerhold <stephan@gerhold.net>
+> 
+> The msm8939-pm8916.dtsi include configures the regulator supplies of
+> MSM8939 used together with PM8916, as recommended by Qualcomm. In rare
+> cases where boards deviate from the recommended design they can just
+> avoid using this include.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Finally: upon being notified about an unbind event for the i2c adapter,
-we take the lock for writing and set the adapter pointer in the character
-device's structure to NULL. This "numbs down" the device - it still exists
-but is no longer functional. Meanwhile every syscall callback checks that
-pointer after taking the lock but before executing any code that requires
-it. If it's NULL, we return an error to user-space.
-
-This way we can safely open an i2c device from user-space, unbind the
-device without triggering a deadlock and any subsequent system-call for
-the file descriptor associated with the removed adapter will gracefully
-fail.
-
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-v1 -> v2:
-- keep the device release callback and use it to free the IDR number
-- rebase on top of v6.2-rc1
-
-v2 -> v3:
-- make symbol names more descriptive
-- protect the name_show() sysfs callback too
-- zero the adapter's struct device on device release
-- make sure the code works nicely with CONFIG_DEBUG_KOBJECT_RELEASE enabled
-
- drivers/i2c/i2c-core-base.c |  32 ++++-------
- drivers/i2c/i2c-dev.c       | 109 +++++++++++++++++++++++++++++++-----
- include/linux/i2c.h         |   2 -
- 3 files changed, 106 insertions(+), 37 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 087e480b624c..ec8140d907c2 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1139,7 +1139,17 @@ EXPORT_SYMBOL_GPL(i2c_new_ancillary_device);
- static void i2c_adapter_dev_release(struct device *dev)
- {
- 	struct i2c_adapter *adap = to_i2c_adapter(dev);
--	complete(&adap->dev_released);
-+
-+	/* free bus id */
-+	mutex_lock(&core_lock);
-+	idr_remove(&i2c_adapter_idr, adap->nr);
-+	mutex_unlock(&core_lock);
-+
-+	/*
-+	 * Clear the device structure in case this adapter is ever going to be
-+	 * added again.
-+	 */
-+	memset(&adap->dev, 0, sizeof(adap->dev));
- }
- 
- unsigned int i2c_adapter_depth(struct i2c_adapter *adapter)
-@@ -1512,9 +1522,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 	return 0;
- 
- out_reg:
--	init_completion(&adap->dev_released);
- 	device_unregister(&adap->dev);
--	wait_for_completion(&adap->dev_released);
- out_list:
- 	mutex_lock(&core_lock);
- 	idr_remove(&i2c_adapter_idr, adap->nr);
-@@ -1713,25 +1721,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
- 
- 	i2c_host_notify_irq_teardown(adap);
- 
--	/* wait until all references to the device are gone
--	 *
--	 * FIXME: This is old code and should ideally be replaced by an
--	 * alternative which results in decoupling the lifetime of the struct
--	 * device from the i2c_adapter, like spi or netdev do. Any solution
--	 * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
--	 */
--	init_completion(&adap->dev_released);
- 	device_unregister(&adap->dev);
--	wait_for_completion(&adap->dev_released);
--
--	/* free bus id */
--	mutex_lock(&core_lock);
--	idr_remove(&i2c_adapter_idr, adap->nr);
--	mutex_unlock(&core_lock);
--
--	/* Clear the device structure in case this adapter is ever going to be
--	   added again */
--	memset(&adap->dev, 0, sizeof(adap->dev));
- }
- EXPORT_SYMBOL(i2c_del_adapter);
- 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 107623c4cc14..38c83ee408be 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -28,6 +28,7 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/notifier.h>
-+#include <linux/rwsem.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- 
-@@ -44,8 +45,14 @@ struct i2c_dev {
- 	struct i2c_adapter *adap;
- 	struct device dev;
- 	struct cdev cdev;
-+	struct rw_semaphore rwsem;
- };
- 
-+static inline struct i2c_dev *inode_to_i2c_dev(struct inode *ino)
-+{
-+	return container_of(ino->i_cdev, struct i2c_dev, cdev);
-+}
-+
- #define I2C_MINORS	(MINORMASK + 1)
- static LIST_HEAD(i2c_dev_list);
- static DEFINE_SPINLOCK(i2c_dev_list_lock);
-@@ -99,10 +106,21 @@ static ssize_t name_show(struct device *dev,
- 			 struct device_attribute *attr, char *buf)
- {
- 	struct i2c_dev *i2c_dev = i2c_dev_get_by_minor(MINOR(dev->devt));
-+	const char *name;
- 
- 	if (!i2c_dev)
- 		return -ENODEV;
--	return sysfs_emit(buf, "%s\n", i2c_dev->adap->name);
-+
-+	down_read(&i2c_dev->rwsem);
-+	if (!i2c_dev->adap) {
-+		up_read(&i2c_dev->rwsem);
-+		return -ENODEV;
-+	}
-+
-+	name = i2c_dev->adap->name;
-+	up_read(&i2c_dev->rwsem);
-+
-+	return sysfs_emit(buf, "%s\n", name);
- }
- static DEVICE_ATTR_RO(name);
- 
-@@ -136,15 +154,23 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
- {
- 	char *tmp;
- 	int ret;
--
-+	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
- 	struct i2c_client *client = file->private_data;
- 
- 	if (count > 8192)
- 		count = 8192;
- 
-+	down_read(&i2c_dev->rwsem);
-+	if (!i2c_dev->adap) {
-+		up_read(&i2c_dev->rwsem);
-+		return -ENODEV;
-+	}
-+
- 	tmp = kzalloc(count, GFP_KERNEL);
--	if (tmp == NULL)
-+	if (tmp == NULL) {
-+		up_read(&i2c_dev->rwsem);
- 		return -ENOMEM;
-+	}
- 
- 	pr_debug("i2c-%d reading %zu bytes.\n", iminor(file_inode(file)), count);
- 
-@@ -152,6 +178,7 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
- 	if (ret >= 0)
- 		if (copy_to_user(buf, tmp, ret))
- 			ret = -EFAULT;
-+	up_read(&i2c_dev->rwsem);
- 	kfree(tmp);
- 	return ret;
- }
-@@ -161,18 +188,28 @@ static ssize_t i2cdev_write(struct file *file, const char __user *buf,
- {
- 	int ret;
- 	char *tmp;
-+	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
- 	struct i2c_client *client = file->private_data;
- 
- 	if (count > 8192)
- 		count = 8192;
- 
-+	down_read(&i2c_dev->rwsem);
-+	if (!i2c_dev->adap) {
-+		up_read(&i2c_dev->rwsem);
-+		return -ENODEV;
-+	}
-+
- 	tmp = memdup_user(buf, count);
--	if (IS_ERR(tmp))
-+	if (IS_ERR(tmp)) {
-+		up_read(&i2c_dev->rwsem);
- 		return PTR_ERR(tmp);
-+	}
- 
- 	pr_debug("i2c-%d writing %zu bytes.\n", iminor(file_inode(file)), count);
- 
- 	ret = i2c_master_send(client, tmp, count);
-+	up_read(&i2c_dev->rwsem);
- 	kfree(tmp);
- 	return ret;
- }
-@@ -389,7 +426,8 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
- 	return res;
- }
- 
--static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+static long i2cdev_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				  unsigned long arg)
- {
- 	struct i2c_client *client = file->private_data;
- 	unsigned long funcs;
-@@ -495,6 +533,20 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	return 0;
- }
- 
-+static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+{
-+	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
-+	long ret;
-+
-+	down_read(&i2c_dev->rwsem);
-+	if (!i2c_dev->adap)
-+		ret = -ENODEV;
-+	else
-+		ret = i2cdev_ioctl_unlocked(file, cmd, arg);
-+	up_read(&i2c_dev->rwsem);
-+
-+	return ret;
-+}
- #ifdef CONFIG_COMPAT
- 
- struct i2c_smbus_ioctl_data32 {
-@@ -516,10 +568,12 @@ struct i2c_rdwr_ioctl_data32 {
- 	u32 nmsgs;
- };
- 
--static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+static long compat_i2cdev_ioctl_unlocked(struct file *file, unsigned int cmd,
-+					 unsigned long arg)
- {
- 	struct i2c_client *client = file->private_data;
- 	unsigned long funcs;
-+
- 	switch (cmd) {
- 	case I2C_FUNCS:
- 		funcs = i2c_get_functionality(client->adapter);
-@@ -578,19 +632,39 @@ static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned lo
- 		return i2cdev_ioctl(file, cmd, arg);
- 	}
- }
-+
-+static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd,
-+				unsigned long arg)
-+{
-+	struct i2c_dev *i2c_dev = inode_to_i2c_dev(file_inode(file));
-+	long ret;
-+
-+	down_read(&i2c_dev->rwsem);
-+	if (!i2c_dev->adap)
-+		ret = -ENODEV;
-+	else
-+		ret = compat_i2cdev_ioctl_unlocked(file, cmd, arg);
-+	up_read(&i2c_dev->rwsem);
-+
-+	return ret;
-+}
- #else
- #define compat_i2cdev_ioctl NULL
- #endif
- 
- static int i2cdev_open(struct inode *inode, struct file *file)
- {
--	unsigned int minor = iminor(inode);
-+	struct i2c_dev *i2c_dev = inode_to_i2c_dev(inode);
- 	struct i2c_client *client;
- 	struct i2c_adapter *adap;
-+	int ret = 0;
- 
--	adap = i2c_get_adapter(minor);
--	if (!adap)
--		return -ENODEV;
-+	down_read(&i2c_dev->rwsem);
-+	adap = i2c_dev->adap;
-+	if (!adap) {
-+		ret = -ENODEV;
-+		goto out_unlock;
-+	}
- 
- 	/* This creates an anonymous i2c_client, which may later be
- 	 * pointed to some address using I2C_SLAVE or I2C_SLAVE_FORCE.
-@@ -601,22 +675,23 @@ static int i2cdev_open(struct inode *inode, struct file *file)
- 	 */
- 	client = kzalloc(sizeof(*client), GFP_KERNEL);
- 	if (!client) {
--		i2c_put_adapter(adap);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_unlock;
- 	}
- 	snprintf(client->name, I2C_NAME_SIZE, "i2c-dev %d", adap->nr);
- 
- 	client->adapter = adap;
- 	file->private_data = client;
- 
--	return 0;
-+out_unlock:
-+	up_read(&i2c_dev->rwsem);
-+	return ret;
- }
- 
- static int i2cdev_release(struct inode *inode, struct file *file)
- {
- 	struct i2c_client *client = file->private_data;
- 
--	i2c_put_adapter(client->adapter);
- 	kfree(client);
- 	file->private_data = NULL;
- 
-@@ -669,6 +744,8 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
- 	i2c_dev->dev.parent = &adap->dev;
- 	i2c_dev->dev.release = i2cdev_dev_release;
- 
-+	init_rwsem(&i2c_dev->rwsem);
-+
- 	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
- 	if (res)
- 		goto err_put_i2c_dev;
-@@ -698,6 +775,10 @@ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
- 	if (!i2c_dev) /* attach_adapter must have failed */
- 		return NOTIFY_DONE;
- 
-+	down_write(&i2c_dev->rwsem);
-+	i2c_dev->adap = NULL;
-+	up_write(&i2c_dev->rwsem);
-+
- 	put_i2c_dev(i2c_dev, true);
- 
- 	pr_debug("adapter [%s] unregistered\n", adap->name);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index d84e0e99f084..3f31e4032044 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -14,7 +14,6 @@
- #include <linux/bits.h>
- #include <linux/mod_devicetable.h>
- #include <linux/device.h>	/* for struct device */
--#include <linux/sched.h>	/* for completion */
- #include <linux/mutex.h>
- #include <linux/regulator/consumer.h>
- #include <linux/rtmutex.h>
-@@ -739,7 +738,6 @@ struct i2c_adapter {
- 
- 	int nr;
- 	char name[48];
--	struct completion dev_released;
- 
- 	struct mutex userspace_clients_lock;
- 	struct list_head userspace_clients;
--- 
-2.37.2
-
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi | 82 ++++++++++++++++++++
+>  1 file changed, 82 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+> new file mode 100644
+> index 0000000000000..18a1b3cca01d6
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include "msm8939.dtsi"
+> +#include "pm8916.dtsi"
+> +
+> +&dsi0 {
+> +	vdda-supply = <&pm8916_l2>;
+> +	vddio-supply = <&pm8916_l6>;
+> +};
+> +
+> +&dsi1 {
+> +	vdda-supply = <&pm8916_l2>;
+> +	vddio-supply = <&pm8916_l6>;
+> +};
+> +
+> +&dsi_phy0 {
+> +	vddio-supply = <&pm8916_l6>;
+> +};
+> +
+> +&dsi_phy1 {
+> +	vddio-supply = <&pm8916_l6>;
+> +};
+> +
+> +&mpss {
+> +	pll-supply = <&pm8916_l7>;
+> +};
+> +
+> +&pronto {
+> +	vddpx-supply = <&pm8916_l7>;
+> +
+> +	iris {
+> +		vddxo-supply = <&pm8916_l7>;
+> +		vddrfa-supply = <&pm8916_s3>;
+> +		vddpa-supply = <&pm8916_l9>;
+> +		vdddig-supply = <&pm8916_l5>;
+> +	};
+> +};
+> +
+> +&sdhc_1 {
+> +	vmmc-supply = <&pm8916_l8>;
+> +	vqmmc-supply = <&pm8916_l5>;
+> +};
+> +
+> +&sdhc_2 {
+> +	vmmc-supply = <&pm8916_l11>;
+> +	vqmmc-supply = <&pm8916_l12>;
+> +};
+> +
+> +&usb_hs_phy {
+> +	v1p8-supply = <&pm8916_l7>;
+> +	v3p3-supply = <&pm8916_l13>;
+> +};
+> +
+> +&rpm_requests {
+> +	smd_rpm_regulators: regulators {
+> +		compatible = "qcom,rpm-pm8916-regulators";
+> +
+> +		/* pm8916_s1 is managed by rpmpd (MSM8939_VDDMDCX) */
+> +		/* pm8916_s2 is managed by rpmpd (MSM8939_VDDCX) */
+> +		pm8916_s3: s3 {};
+> +		pm8916_s4: s4 {};
+> +
+> +		pm8916_l1: l1 {};
+> +		pm8916_l2: l2 {};
+> +		/* pm8916_l3 is managed by rpmpd (MSM8939_VDDMX) */
+> +		pm8916_l4: l4 {};
+> +		pm8916_l5: l5 {};
+> +		pm8916_l6: l6 {};
+> +		pm8916_l7: l7 {};
+> +		pm8916_l8: l8 {};
+> +		pm8916_l9: l9 {};
+> +		pm8916_l10: l10 {};
+> +		pm8916_l11: l11 {};
+> +		pm8916_l12: l12 {};
+> +		pm8916_l13: l13 {};
+> +		pm8916_l14: l14 {};
+> +		pm8916_l15: l15 {};
+> +		pm8916_l16: l16 {};
+> +		pm8916_l17: l17 {};
+> +		pm8916_l18: l18 {};
+> +	};
+> +};
