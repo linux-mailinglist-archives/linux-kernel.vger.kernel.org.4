@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3627E6722D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6696722E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjARQUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S230103AbjARQWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjARQUE (ORCPT
+        with ESMTP id S229879AbjARQVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:20:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB78658291;
-        Wed, 18 Jan 2023 08:15:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 Jan 2023 11:21:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5F59242
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 08:17:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674058670;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pU6AC9cRWg3g9Q98YLxAbBqb6BOxub7aw+UutKP+hlQ=;
+        b=gG+pQyrmCSfMJhA+AUtBa7AVJtOyzt8bKZce8QwzaEhrL+7Gc8fN8IuR01CCqI+DLuDK/w
+        v8bahqG7BmxCoND8lmTVbltGtJIxvyBgBOW/CXOtnDZg/hKiASDx7x/EAyEsMBd/poTKla
+        H+MoIz2dhMTbznhZj1+urnBs3V/gQ/s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-435-ZFMX-FN7OVCPNumI5uwNgg-1; Wed, 18 Jan 2023 11:17:47 -0500
+X-MC-Unique: ZFMX-FN7OVCPNumI5uwNgg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 871A8618BF;
-        Wed, 18 Jan 2023 16:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4DEC433D2;
-        Wed, 18 Jan 2023 16:15:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674058540;
-        bh=snAInguPGhduXs4fSuUiGONd+cQGQeh1qPg6CYWz7a8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qsJvyZ2ZPED0QPElxEERjMWInHhox0jQ93URAlxnS0z49rMkaT4CB/pkBZ95FQOg1
-         iEaH/LBO/qE8XwFExmfIs7xKmdY/irHghrQwML+eyR0fzxeYVSdWoj7pKdshJ4NVot
-         +2O8/OpCDzM1+KD6Kfm/zBCnCWGYcE+s64/fLrqoalVQN96c6pTgmOjXLjlj0Z4gdr
-         KLU9kna49quMNMRiJxEpY0QxSVlYRRZLa4bYvWDAu2SbkvD1RIhI6KM6vqA2T6372/
-         olFf4omSupcarTBTzTjzoT7aICWzjC4lSwxRAxKa3e7ThFiTZZ/zGHplSzkLLnD0/D
-         19JB5SJ+WwgWQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jerome Neanne <jneanne@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>
-In-Reply-To: <20230114185736.2076-1-rdunlap@infradead.org>
-References: <20230114185736.2076-1-rdunlap@infradead.org>
-Subject: Re: [PATCH v2] regulator: tps65219: use IS_ERR() to detect an
- error pointer
-Message-Id: <167405853919.940051.11907042713819434692.b4-ty@kernel.org>
-Date:   Wed, 18 Jan 2023 16:15:39 +0000
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE2B91C05AB7;
+        Wed, 18 Jan 2023 16:17:46 +0000 (UTC)
+Received: from metal.redhat.com (ovpn-192-69.brq.redhat.com [10.40.192.69])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 531EE2026D4B;
+        Wed, 18 Jan 2023 16:17:44 +0000 (UTC)
+From:   Daniel Vacek <neelx@redhat.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Daniel Vacek <neelx@redhat.com>, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ice/ptp: fix the PTP worker retrying indefinitely if the link went down
+Date:   Wed, 18 Jan 2023 17:17:26 +0100
+Message-Id: <20230118161727.2485457-1-neelx@redhat.com>
+Reply-To: 20230117181533.2350335-1-neelx@redhat.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-77e06
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 14 Jan 2023 10:57:36 -0800, Randy Dunlap wrote:
-> Fix pointer comparison to integer warning from gcc & sparse:
-> 
-> GCC:
-> ../drivers/regulator/tps65219-regulator.c:370:26: warning: ordered comparison of pointer with integer zero [-Wextra]
->   370 |                 if (rdev < 0) {
->       |                          ^
-> 
-> [...]
+When the link goes down the ice_ptp_tx_tstamp() may loop re-trying to
+process the packets till the 2 seconds timeout finally drops them.
+In such a case it makes sense to just drop them right away.
 
-Applied to
+Signed-off-by: Daniel Vacek <neelx@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_ptp.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-   broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: tps65219: use IS_ERR() to detect an error pointer
-      commit: 2bbba115c3c9a647bcb3201b014fcc3728fe75c8
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
+index d63161d73eb16..cb776a7199839 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -680,6 +680,7 @@ static bool ice_ptp_tx_tstamp(struct ice_ptp_tx *tx)
+ 	struct ice_pf *pf;
+ 	struct ice_hw *hw;
+ 	u64 tstamp_ready;
++	bool link_up;
+ 	int err;
+ 	u8 idx;
+ 
+@@ -695,11 +696,14 @@ static bool ice_ptp_tx_tstamp(struct ice_ptp_tx *tx)
+ 	if (err)
+ 		return false;
+ 
++	/* Drop packets if the link went down */
++	link_up = hw->port_info->phy.link_info.link_info & ICE_AQ_LINK_UP;
++
+ 	for_each_set_bit(idx, tx->in_use, tx->len) {
+ 		struct skb_shared_hwtstamps shhwtstamps = {};
+ 		u8 phy_idx = idx + tx->offset;
+ 		u64 raw_tstamp = 0, tstamp;
+-		bool drop_ts = false;
++		bool drop_ts = !link_up;
+ 		struct sk_buff *skb;
+ 
+ 		/* Drop packets which have waited for more than 2 seconds */
+@@ -728,7 +732,7 @@ static bool ice_ptp_tx_tstamp(struct ice_ptp_tx *tx)
+ 		ice_trace(tx_tstamp_fw_req, tx->tstamps[idx].skb, idx);
+ 
+ 		err = ice_read_phy_tstamp(hw, tx->block, phy_idx, &raw_tstamp);
+-		if (err)
++		if (err && !drop_ts)
+ 			continue;
+ 
+ 		ice_trace(tx_tstamp_fw_done, tx->tstamps[idx].skb, idx);
+-- 
+2.39.0
 
