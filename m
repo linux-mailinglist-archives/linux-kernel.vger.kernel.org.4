@@ -2,287 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602DF67257D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE68F672581
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 18:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjARRuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 12:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S229965AbjARRuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 12:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjARRuJ (ORCPT
+        with ESMTP id S229739AbjARRuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:50:09 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28934EC57
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:50:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso2153640wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 09:50:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjYSw2n+Ps1iOJAbRHWuOEZaS8GB8SIlpqdkEMs8TMY=;
-        b=CJapJn14m/+bbp95Kyo9SGUMzxZCp/hwd1y8DIUfbcRdvhSGO0TmVif35R3TpzCtfh
-         2vk8h0Zl1oCeggG5n/iHEJaVwbtkxOPHOx5C8ctpSpBxXlvcGBfH/M/zfyqlO8sId7sA
-         2xlOPnDbl0172Rr4Q+xO1U/ZET4yumMTQyGt1oRNLQ0RZ/YmmS83W2YAq0YyAFp9H+Om
-         0SBlOwcM4gQqQIuvA0dVQSh8xfJJz+0gjE+R7qBpYcS6XXB80QMQEfw9jwMeDbOiJf2K
-         U6Y69vfIv1P2LMoga9MZV2cvQ/VN3ChqBnqHWWhxqxhFF6zbNFk5ZQcn9aQPx7ux+nB8
-         4JPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yjYSw2n+Ps1iOJAbRHWuOEZaS8GB8SIlpqdkEMs8TMY=;
-        b=K8C/rKdEJVgQ8ORlCYHPwOkcfiXLzC29uKb4DhMZHqT4b13IzUgpobVh9A6bD1FwyP
-         b7GfAYAQRGejOULbSY1qgbYhHnL1qJ1nVNfzsSJPD6/kSHLPRY1TVY+1RZJ9FS72Hhk6
-         /J6N5vQJM7s5z33767A1XZZtfUZNB24bln4MttkV1AGspebbBnqXcL83YLseHGfl5k8f
-         oIgnacgvO5xon8gpxoiiaiKbvvquE9YVq+y0srpHUzTfaPdBGepjt+H9D5IYk5KfCPfA
-         ZCDitm77jUtIiXKs0C8ZDyZaPVLWfVoxBVn8BSFmbsrQ51XT6pYdDAgdJmUT5I8XTOV6
-         iVrQ==
-X-Gm-Message-State: AFqh2koZ4mKY21ZpZomun4HNsliHl5StBGU1rZNrSVEU8CeB1ENqnwlo
-        98suGtKBtZgA00eGyRKLL2Np08Uszo8WpjQF
-X-Google-Smtp-Source: AMrXdXui/pL9AQaRfGB+nJ8v6XbmkLiMwkqomyCZ5il8ZXln2vQBhoUydeHqnkxo0/+Y04o+k5oWdw==
-X-Received: by 2002:a05:600c:4256:b0:3da:2a78:d7a3 with SMTP id r22-20020a05600c425600b003da2a78d7a3mr7279762wmm.33.1674064206347;
-        Wed, 18 Jan 2023 09:50:06 -0800 (PST)
-Received: from lmecxl1178.lme.st.com (lfbn-nan-1-1169-52.w86-212.abo.wanadoo.fr. [86.212.112.52])
-        by smtp.gmail.com with ESMTPSA id t2-20020a1c7702000000b003d995a704fdsm2503290wmi.33.2023.01.18.09.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:50:05 -0800 (PST)
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Subject: [PATCH v2] optee: add per cpu asynchronous notification
-Date:   Wed, 18 Jan 2023 18:49:09 +0100
-Message-Id: <20230118174909.2049638-1-etienne.carriere@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 Jan 2023 12:50:50 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE6637B72;
+        Wed, 18 Jan 2023 09:50:49 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHeIwW014949;
+        Wed, 18 Jan 2023 17:50:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=n13qaqBhQwvk6VRqBdj4Shf8iLETr+Tuc5gMC+2iR9k=;
+ b=SADa5xiswmAho9gj8Cpj+l4E55v8zcWbjg+gkkrDvwr7Z0qwZRnlE9XM++luhZWT6fjY
+ 4QxdvrJ0LqoMWnHagdFSLE5UYw0dPhpQhKympyPj6eaesWysZEGmkXlovMlxL70XWA3i
+ jUOGDXYBv2KXgrWNTNH6Ah+zwmDv7PD807ikYM7+wtpaeppN7q7Ov6Wn/siRFmQYgBdE
+ lE/b5S99oDQfLUEb2/0mZQt4laLAIqGZfb7uZWR+jGGguqfRW/sQWvuJWII+bWPDDmgh
+ i+WCktvr51jnQ5ADWR0epGoniLfQaj+92UftlgPZdJska2JQafDc8fTHQwD8DrrSK83s Dg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6debs5dq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 17:50:45 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30IHoigP029007
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 17:50:44 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 09:50:43 -0800
+Date:   Wed, 18 Jan 2023 09:50:42 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Chris Lew <quic_clew@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rpmsg: glink: Release driver_override
+Message-ID: <20230118175042.GA3322341@hu-bjorande-lv.qualcomm.com>
+References: <20230109223818.1706292-1-quic_bjorande@quicinc.com>
+ <dc0e1609-a872-08e7-2801-0ece573181ad@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dc0e1609-a872-08e7-2801-0ece573181ad@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Fsm2z8li2eCRGR9FmEzPI41kOtfxApmI
+X-Proofpoint-ORIG-GUID: Fsm2z8li2eCRGR9FmEzPI41kOtfxApmI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=999 adultscore=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301180151
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implements use of per CPU irq for optee asynchronous notification.
+On Tue, Jan 17, 2023 at 05:01:01PM -0800, Chris Lew wrote:
+> 
+> 
+> On 1/9/2023 2:38 PM, Bjorn Andersson wrote:
+> > Upon termination of the rpmsg_device, driver_override needs to be freed
+> > to avoid leaking the potentially assigned string.
+> > 
+> > Fixes: 42cd402b8fd4 ("rpmsg: Fix kfree() of static memory on setting driver_override")
+> > Fixes: 39e47767ec9b ("rpmsg: Add driver_override device attribute for rpmsg_device")
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> >   drivers/rpmsg/qcom_glink_native.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> > index 8620eea1dc8a..046271e439c5 100644
+> > --- a/drivers/rpmsg/qcom_glink_native.c
+> > +++ b/drivers/rpmsg/qcom_glink_native.c
+> > @@ -1454,6 +1454,7 @@ static void qcom_glink_rpdev_release(struct device *dev)
+> >   {
+> >   	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
+> > +	kfree(rpdev->driver_override);
+> 
+> I see in Krzysztof's original patch to fix up the driver_override we do
+> kfree in other areas of rpmsg.
+> 
 
-Existing optee async notif implementation allows OP-TE world to
-raise an interrupt for the Linux optee driver to query pending events
-bound to waiting tasks in Linux world or threaded bottom half tasks
-to be invoked in TEE world. This change allows the signaling interrupt
-to be a per cpu interrupt as with Arm GIC PPIs.
+Right, in the original patch what became driver_set_override() was open
+coded and hence there was a kfree().
 
-Cc: Jens Wiklander <jens.wiklander@linaro.org>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
+> More of a just curious as to why don't we use the driver_set_override
+> function to clear the string? It's mentioned in the rpmsg header that the
+> helper should be used.
+> 
+> --- include/linux/rpmsg.h
+>  * @driver_override: driver name to force a match; do not set directly,
+>  *                   because core frees it; use driver_set_override() to
+>  *                   set or clear it.
+> 
 
-Co-developed-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
-Changes since v1:
-- Fixed missing __percpu attribute reported by kernel test robot.
-- Rephrased commit message and added Cc tags.
----
- drivers/tee/optee/optee_private.h |  22 ++++++
- drivers/tee/optee/smc_abi.c       | 107 ++++++++++++++++++++++++++++--
- 2 files changed, 124 insertions(+), 5 deletions(-)
+Looking around the kernel, just calling kfree() in the release function
+seems to be how others are doing it as well. As such I presume that
+comment applies to the runtime state, rather than while we're cleaning
+things up.
 
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index 04ae58892608..e5bd3548691f 100644
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -94,11 +94,33 @@ struct optee_supp {
- 	struct completion reqs_c;
- };
- 
-+/*
-+ * struct optee_pcpu - per cpu notif private struct passed to work functions
-+ * @optee		optee device reference
-+ */
-+struct optee_pcpu {
-+	struct optee *optee;
-+};
-+
-+/*
-+ * struct optee_smc - optee smc communication struct
-+ * @invoke_fn		handler function to invoke secure monitor
-+ * @memremaped_shm	virtual address of memory in shared memory pool
-+ * @sec_caps:		secure world capabilities defined by
-+ *			OPTEE_SMC_SEC_CAP_* in optee_smc.h
-+ * @notif_irq		interrupt used as async notification by OP-TEE or 0
-+ * @optee_pcpu		per_cpu optee instance for per cpu work or NULL
-+ * @notif_pcpu_wq	workqueue for per cpu aynchronous notification or NULL
-+ * @notif_pcpu_work	work for per cpu asynchronous notification
-+ */
- struct optee_smc {
- 	optee_invoke_fn *invoke_fn;
- 	void *memremaped_shm;
- 	u32 sec_caps;
- 	unsigned int notif_irq;
-+	struct optee_pcpu __percpu *optee_pcpu;
-+	struct workqueue_struct *notif_pcpu_wq;
-+	struct work_struct notif_pcpu_work;
- };
- 
- /**
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index a1c1fa1a9c28..ffa3f3aa7244 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -993,12 +993,20 @@ static u32 get_async_notif_value(optee_invoke_fn *invoke_fn, bool *value_valid,
- 
- static irqreturn_t notif_irq_handler(int irq, void *dev_id)
- {
--	struct optee *optee = dev_id;
-+	struct optee *optee;
- 	bool do_bottom_half = false;
- 	bool value_valid;
- 	bool value_pending;
- 	u32 value;
- 
-+	if (irq_is_percpu_devid(irq)) {
-+		struct optee_pcpu __percpu *pcpu = (struct optee_pcpu *)dev_id;
-+
-+		optee = pcpu->optee;
-+	} else {
-+		optee = dev_id;
-+	}
-+
- 	do {
- 		value = get_async_notif_value(optee->smc.invoke_fn,
- 					      &value_valid, &value_pending);
-@@ -1011,8 +1019,13 @@ static irqreturn_t notif_irq_handler(int irq, void *dev_id)
- 			optee_notif_send(optee, value);
- 	} while (value_pending);
- 
--	if (do_bottom_half)
--		return IRQ_WAKE_THREAD;
-+	if (do_bottom_half) {
-+		if (irq_is_percpu_devid(irq))
-+			queue_work(optee->smc.notif_pcpu_wq, &optee->smc.notif_pcpu_work);
-+		else
-+			return IRQ_WAKE_THREAD;
-+	}
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -1025,7 +1038,7 @@ static irqreturn_t notif_irq_thread_fn(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static int optee_smc_notif_init_irq(struct optee *optee, u_int irq)
-+static int init_irq(struct optee *optee, u_int irq)
- {
- 	int rc;
- 
-@@ -1040,12 +1053,96 @@ static int optee_smc_notif_init_irq(struct optee *optee, u_int irq)
- 	return 0;
- }
- 
-+static void notif_pcpu_irq_work_fn(struct work_struct *work)
-+{
-+	struct optee_smc *optee_smc = container_of(work, struct optee_smc, notif_pcpu_work);
-+	struct optee *optee = container_of(optee_smc, struct optee, smc);
-+
-+	optee_smc_do_bottom_half(optee->ctx);
-+}
-+
-+static int init_pcpu_irq(struct optee *optee, u_int irq)
-+{
-+	struct optee_pcpu __percpu *optee_pcpu;
-+	spinlock_t lock;
-+	int cpu;
-+	int rc;
-+
-+	optee_pcpu = alloc_percpu(struct optee_pcpu);
-+	if (!optee_pcpu)
-+		return -ENOMEM;
-+
-+	for_each_present_cpu(cpu) {
-+		struct optee_pcpu __percpu *p = per_cpu_ptr(optee_pcpu, cpu);
-+
-+		p->optee = optee;
-+	}
-+
-+	rc = request_percpu_irq(irq, notif_irq_handler,
-+				"optee_pcpu_notification", optee_pcpu);
-+	if (rc)
-+		goto err_free_pcpu;
-+
-+	spin_lock_init(&lock);
-+
-+	spin_lock(&lock);
-+	enable_percpu_irq(irq, 0);
-+	spin_unlock(&lock);
-+
-+	INIT_WORK(&optee->smc.notif_pcpu_work, notif_pcpu_irq_work_fn);
-+	optee->smc.notif_pcpu_wq = create_workqueue("optee_pcpu_notification");
-+	if (!optee->smc.notif_pcpu_wq) {
-+		rc = -EINVAL;
-+		goto err_free_pcpu_irq;
-+	}
-+
-+	optee->smc.optee_pcpu = optee_pcpu;
-+	optee->smc.notif_irq = irq;
-+
-+	return 0;
-+
-+err_free_pcpu_irq:
-+	spin_lock(&lock);
-+	disable_percpu_irq(irq);
-+	spin_unlock(&lock);
-+	free_percpu_irq(irq, optee_pcpu);
-+err_free_pcpu:
-+	free_percpu(optee_pcpu);
-+
-+	return rc;
-+}
-+
-+static int optee_smc_notif_init_irq(struct optee *optee, u_int irq)
-+{
-+	if (irq_is_percpu_devid(irq))
-+		return init_pcpu_irq(optee, irq);
-+	else
-+		return init_irq(optee, irq);
-+}
-+
-+static void uninit_pcpu_irq(struct optee *optee)
-+{
-+	spinlock_t lock;
-+
-+	spin_lock_init(&lock);
-+	spin_lock(&lock);
-+	disable_percpu_irq(optee->smc.notif_irq);
-+	spin_unlock(&lock);
-+
-+	free_percpu_irq(optee->smc.notif_irq, optee->smc.optee_pcpu);
-+	free_percpu(optee->smc.optee_pcpu);
-+}
-+
- static void optee_smc_notif_uninit_irq(struct optee *optee)
- {
- 	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_ASYNC_NOTIF) {
- 		optee_smc_stop_async_notif(optee->ctx);
- 		if (optee->smc.notif_irq) {
--			free_irq(optee->smc.notif_irq, optee);
-+			if (irq_is_percpu_devid(optee->smc.notif_irq))
-+				uninit_pcpu_irq(optee);
-+			else
-+				free_irq(optee->smc.notif_irq, optee);
-+
- 			irq_dispose_mapping(optee->smc.notif_irq);
- 		}
- 	}
--- 
-2.25.1
+Regards,
+Bjorn
 
+> >   	kfree(rpdev);
+> >   }
+> > @@ -1697,6 +1698,7 @@ static void qcom_glink_device_release(struct device *dev)
+> >   	/* Release qcom_glink_alloc_channel() reference */
+> >   	kref_put(&channel->refcount, qcom_glink_channel_release);
+> > +	kfree(rpdev->driver_override);
+> >   	kfree(rpdev);
+> >   }
+> > 
