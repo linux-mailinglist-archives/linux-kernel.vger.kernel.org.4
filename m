@@ -2,161 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6901A672AC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12168672AC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 22:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjARVpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 16:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjARVpW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231224AbjARVpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 18 Jan 2023 16:45:22 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7710CC;
-        Wed, 18 Jan 2023 13:45:21 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ILSRgZ031782;
-        Wed, 18 Jan 2023 21:45:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=UzADFY1L/BfeucqpU0xMyyeXHhyIthrN7gMK7UVkCb8=;
- b=fKn02Sj9buheV6gLQVxSd0Rr1EcU0yDl3ubhyaIxSTxPWf9tBHr6s5Upwr0GZ3PN9u3+
- FMDpYwia+vrLhozvKCL2rtB++JNPLH7naf1uChsAnUSpBv+i4Tluq1Qqhs7roDor/mH3
- Yjhm62JuFsI4LEc9750Ga6YDISqqHw3zoDMxRhS7ZhUR3Hq5j7N4gPEQVTOFNRpel1Pg
- WbxX3HIiuVIhNroiYWQuSOLmMykxO+DeL4iQSf/8XqQWUJQk1y6DNzfo+xuAPtIIygU3
- gF4H9cch7yWI3jLlVKaS1IVp5X7h+Ie74WcReXrGD6UP8KMjotv8RxnULrIqCcC6p7UU Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:05 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ILj0YL005466;
-        Wed, 18 Jan 2023 21:45:04 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:04 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IK4h9D022043;
-        Wed, 18 Jan 2023 21:45:04 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17g5sn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:03 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30ILj37U63308280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 21:45:03 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D8FC58052;
-        Wed, 18 Jan 2023 21:45:03 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F3105805A;
-        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.7.111])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
-Message-ID: <3c34c1e8c74722110e5d7e87146b090791734916.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 18 Jan 2023 16:45:02 -0500
-In-Reply-To: <20221228030248.94285-1-xiujianfeng@huawei.com>
-References: <20221228030248.94285-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zEE8R_E7ZXjdtyO48DZjtIZp6t3ze7zy
-X-Proofpoint-ORIG-GUID: _FNfmYn35NGQBAGX_ShXks7MvFjettbF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 phishscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301180180
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231191AbjARVpU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 18 Jan 2023 16:45:20 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341FF1CACE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:45:18 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4d0f843c417so85367b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 13:45:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JgpeoTHHmirFYtBvQprCwslvQV+NLdgiQIToXq3uwZE=;
+        b=As8aSH9YqOQwxb84HSdDayQFHtJeebFHp/bWatci23d+ZcUuRI1zqiFa7kqzfJdPY4
+         6b+IdUTvG5GtLImu60sSAzg3fuOI/z1KJ8K8PVSMB/ikC7CUG0PWmYb+OljUgYExq3/D
+         YkXRlsoGCfYsZpFuwKn+fMlTo5yCmPbsZqMh/A2xQgbLJB4/S/GB4LtAVK7gdVS0eGMZ
+         M/1G7ZIN4/fcoqMPjkHJdj4qRBT320uoqpVjhp1SrGjLO4E+i/3+I0ScgEnlaLK1xZtE
+         sy1uA14H5BPKjCtl0W8puTAMiRspqLXz5hxqqL1vTZCNdJw44Ch+/9/QTYVHWDStgrkJ
+         nVzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JgpeoTHHmirFYtBvQprCwslvQV+NLdgiQIToXq3uwZE=;
+        b=T50vr+pnFTf5w6+8Oy3QPJU5pi/YHNkuAl4fSxqjuIFgZckknqRbDHrCDt/T/1BtiH
+         Maa4RkE5Sc3a/if+A/4b9DNkEVIKgg9BdAMJdjRpqmNzUd5P4S1wte70XTkm2eyEe4KQ
+         2DmDzX1FQRwrXJY91Uj1qtRODVjVPrcwjkzCPKYDzsvqhJ3U4PTZ6rLZvT75ND6sO86o
+         cL2KRrvfqY9o4khULqAxzbFY30fi3hbHFbIx3S5mWZ9jQCaryl4LrmbFakgizNijKgyL
+         2ufLyz/2MhSHItmuNy3K8SpnY7OInaxZ8JHTGXKnE0vl+G5eDaI06nxyO0WD/xyYU6Wp
+         WAgg==
+X-Gm-Message-State: AFqh2koYvbXiTftmbJwpRNpjXHaiLDaMBl+9j4SOrYeGwldn/bFdegrt
+        IH4gBdLl0e1PzPgk2izJJl67FGKNSFvGYNCBoELiNw==
+X-Google-Smtp-Source: AMrXdXtj/06io+C4o9XfWOcEkR8Ed8RhDt6Cs9tZ2bwiTynxrB/hq/5++WXBZDrP1jGLs/kZFy2FrmKnxDB9qMDztus=
+X-Received: by 2002:a0d:fc05:0:b0:3ea:454d:d1ef with SMTP id
+ m5-20020a0dfc05000000b003ea454dd1efmr1108320ywf.409.1674078317049; Wed, 18
+ Jan 2023 13:45:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-13-surenb@google.com>
+ <CAG48ez0RhQ6=W01brLUXDXqQxz2M1FEMNqd2OvL+LhcJQY=NqA@mail.gmail.com>
+ <Y8fl8lqS4QHZO1gV@dhcp22.suse.cz> <CAG48ez0dCo6KHPJrjAra=2Hm9aTm_3ERwCN3j64p3T82xNWScg@mail.gmail.com>
+ <Y8gMISwBLVNLhsAq@dhcp22.suse.cz> <CAJuCfpGGU9TpL62EzwUCjsUy0frmR33Nyk5BQiN=AiQUkiq7yg@mail.gmail.com>
+ <Y8hkdBYTXHf23huE@dhcp22.suse.cz>
+In-Reply-To: <Y8hkdBYTXHf23huE@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 18 Jan 2023 13:45:05 -0800
+Message-ID: <CAJuCfpG2bJrvVm7ioZVv+h_Aj6Eoh93Yjia8T-SsUpnT+26SSA@mail.gmail.com>
+Subject: Re: [PATCH 12/41] mm: add per-VMA lock and helper functions to
+ control it
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Jann Horn <jannh@google.com>, peterz@infradead.org,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-28 at 11:02 +0800, Xiu Jianfeng wrote:
-> Currently it uses __vfs_setxattr_noperm() to update "security.evm",
-> however there are two lsm hooks(inode_post_setxattr and inode_setsecurity)
-> being called inside this function, which don't make any sense for xattr
-> "security.evm", because the handlers of these two hooks, such as selinux
-> and smack, only care about their own xattr.
+On Wed, Jan 18, 2023 at 1:28 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 18-01-23 09:36:44, Suren Baghdasaryan wrote:
+> > On Wed, Jan 18, 2023 at 7:11 AM 'Michal Hocko' via kernel-team
+> > <kernel-team@android.com> wrote:
+> > >
+> > > On Wed 18-01-23 14:23:32, Jann Horn wrote:
+> > > > On Wed, Jan 18, 2023 at 1:28 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > On Tue 17-01-23 19:02:55, Jann Horn wrote:
+> > > > > > +locking maintainers
+> > > > > >
+> > > > > > On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > > > Introduce a per-VMA rw_semaphore to be used during page fault handling
+> > > > > > > instead of mmap_lock. Because there are cases when multiple VMAs need
+> > > > > > > to be exclusively locked during VMA tree modifications, instead of the
+> > > > > > > usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
+> > > > > > > exclusively and setting vma->lock_seq to the current mm->lock_seq. When
+> > > > > > > mmap_write_lock holder is done with all modifications and drops mmap_lock,
+> > > > > > > it will increment mm->lock_seq, effectively unlocking all VMAs marked as
+> > > > > > > locked.
+> > > > > > [...]
+> > > > > > > +static inline void vma_read_unlock(struct vm_area_struct *vma)
+> > > > > > > +{
+> > > > > > > +       up_read(&vma->lock);
+> > > > > > > +}
+> > > > > >
+> > > > > > One thing that might be gnarly here is that I think you might not be
+> > > > > > allowed to use up_read() to fully release ownership of an object -
+> > > > > > from what I remember, I think that up_read() (unlike something like
+> > > > > > spin_unlock()) can access the lock object after it's already been
+> > > > > > acquired by someone else.
+> > > > >
+> > > > > Yes, I think you are right. From a look into the code it seems that
+> > > > > the UAF is quite unlikely as there is a ton of work to be done between
+> > > > > vma_write_lock used to prepare vma for removal and actual removal.
+> > > > > That doesn't make it less of a problem though.
+> > > > >
+> > > > > > So if you want to protect against concurrent
+> > > > > > deletion, this might have to be something like:
+> > > > > >
+> > > > > > rcu_read_lock(); /* keeps vma alive */
+> > > > > > up_read(&vma->lock);
+> > > > > > rcu_read_unlock();
+> > > > > >
+> > > > > > But I'm not entirely sure about that, the locking folks might know better.
+> > > > >
+> > > > > I am not a locking expert but to me it looks like this should work
+> > > > > because the final cleanup would have to happen rcu_read_unlock.
+> > > > >
+> > > > > Thanks, I have completely missed this aspect of the locking when looking
+> > > > > into the code.
+> > > > >
+> > > > > Btw. looking at this again I have fully realized how hard it is actually
+> > > > > to see that vm_area_free is guaranteed to sync up with ongoing readers.
+> > > > > vma manipulation functions like __adjust_vma make my head spin. Would it
+> > > > > make more sense to have a rcu style synchronization point in
+> > > > > vm_area_free directly before call_rcu? This would add an overhead of
+> > > > > uncontended down_write of course.
+> > > >
+> > > > Something along those lines might be a good idea, but I think that
+> > > > rather than synchronizing the removal, it should maybe be something
+> > > > that splats (and bails out?) if it detects pending readers. If we get
+> > > > to vm_area_free() on a VMA that has pending readers, we might already
+> > > > be in a lot of trouble because the concurrent readers might have been
+> > > > traversing page tables while we were tearing them down or fun stuff
+> > > > like that.
+> > > >
+> > > > I think maybe Suren was already talking about something like that in
+> > > > another part of this patch series but I don't remember...
+> > >
+> > > This http://lkml.kernel.org/r/20230109205336.3665937-27-surenb@google.com?
+> >
+> > Yes, I spent a lot of time ensuring that __adjust_vma locks the right
+> > VMAs and that VMAs are freed or isolated under VMA write lock
+> > protection to exclude any readers. If the VM_BUG_ON_VMA in the patch
+> > Michal mentioned gets hit then it's a bug in my design and I'll have
+> > to fix it. But please, let's not add synchronize_rcu() in the
+> > vm_area_free().
+>
+> Just to clarify. I didn't suggest to add synchronize_rcu into
+> vm_area_free. What I really meant was synchronize_rcu like primitive to
+> effectivelly synchronize with any potential pending read locker (so
+> something like vma_write_lock (or whatever it is called). The point is
+> that vma freeing is an event all readers should be notified about.
 
-Updating the security.ima hash triggers re-calculating and writing the
-security.evm HMAC.  Refer to evm_inode_post_setxattr().
+I don't think readers need to be notified if we are ensuring that the
+VMA is not used by anyone else and is not reachable by the readers.
+This is currently done by write-locking the VMA either before removing
+it from the tree or before freeing it.
 
-Mimi
+> This can be done explicitly for each and every vma before vm_area_free
+> is called but this is just hard to review and easy to break over time.
+> See my point?
 
-> 
-> On the other hand, there is a literally rather than actually cyclical
-> callchain as follows:
-> security_inode_post_setxattr
->   ->evm_inode_post_setxattr
->     ->evm_update_evmxattr
->       ->__vfs_setxattr_noperm
->         ->security_inode_post_setxattr
-> 
-> So use __vfs_setxattr() to update "security.evm".
-> 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  security/integrity/evm/evm_crypto.c   | 7 +++----
->  security/integrity/ima/ima_appraise.c | 8 ++++----
->  2 files changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> index fa5ff13fa8c9..d8275dfa49ef 100644
-> --- a/security/integrity/evm/evm_crypto.c
-> +++ b/security/integrity/evm/evm_crypto.c
-> @@ -376,10 +376,9 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
->  			   xattr_value_len, &data);
->  	if (rc == 0) {
->  		data.hdr.xattr.sha1.type = EVM_XATTR_HMAC;
-> -		rc = __vfs_setxattr_noperm(&init_user_ns, dentry,
-> -					   XATTR_NAME_EVM,
-> -					   &data.hdr.xattr.data[1],
-> -					   SHA1_DIGEST_SIZE + 1, 0);
-> +		rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> +				    XATTR_NAME_EVM, &data.hdr.xattr.data[1],
-> +				    SHA1_DIGEST_SIZE + 1, 0);
->  	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
->  		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
->  	}
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index ee6f7e237f2e..d2de9dc6c345 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -98,10 +98,10 @@ static int ima_fix_xattr(struct dentry *dentry,
->  		iint->ima_hash->xattr.ng.type = IMA_XATTR_DIGEST_NG;
->  		iint->ima_hash->xattr.ng.algo = algo;
->  	}
-> -	rc = __vfs_setxattr_noperm(&init_user_ns, dentry, XATTR_NAME_IMA,
-> -				   &iint->ima_hash->xattr.data[offset],
-> -				   (sizeof(iint->ima_hash->xattr) - offset) +
-> -				   iint->ima_hash->length, 0);
-> +	rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> +			    XATTR_NAME_IMA, &iint->ima_hash->xattr.data[offset],
-> +			    (sizeof(iint->ima_hash->xattr) - offset) +
-> +			    iint->ima_hash->length, 0);
->  	return rc;
->  }
->  
+I understand your point now and if we really need that, one way would
+be to have a VMA refcount (like Laurent had in his version of SPF
+implementation). I don't think current implementation needs that level
+of VMA lifetime control unless I missed some location that should take
+the lock and does not.
 
-
+>
+> --
+> Michal Hocko
+> SUSE Labs
