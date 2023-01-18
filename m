@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23C0671BB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F28671BB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjARMQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S230184AbjARMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjARMQG (ORCPT
+        with ESMTP id S230215AbjARMQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:16:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD69E875BB;
+        Wed, 18 Jan 2023 07:16:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7387B875B6;
         Wed, 18 Jan 2023 03:37:53 -0800 (PST)
-Date:   Wed, 18 Jan 2023 11:37:50 -0000
+Date:   Wed, 18 Jan 2023 11:37:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1674041871;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zVrowPVlkqAmIujgyVf+EEgLijVC+lYFOBUR5Zwa8wE=;
-        b=LaAR433FVGITqKJYmekkmjNcvfI1S71MLXcc0nSYe0NW8cqHld8YGIkiG607o00+p6eEL8
-        FbBFc3mUqwy98e5YmUZUbKzYh73QBLr+TpGlRd+8mfWYWUOtbobnvxcFfSKXiKiUtxMk9+
-        OZ0cGKIUp1KxZEZQmqnN/TaSAeVZo7VTUpNmO51eC998Pn9oLsiQfNs8QJUYXXpDjX5uAU
-        CioCQZw4+cd7rBlmAK0CF+9qJSEK2m56UKmXzjs2prnqgrggqPRXROAO4LfjzJ1ZvtgS7+
-        bscJC5coz/JPO+lefgf3HPUH1UIjiE52/DTt0vGuHCChX2Z9ciqdQUJqeMVskw==
+        bh=oc6LSVj5uaQ9n8lKpp69By84LMttGwGUBFJoT+Qh+9E=;
+        b=ednBWYIGF63iNsMBPIBAy4uHwxgbk+WciCKC7rsJ1izsVMnELa/RF0AKmQ3Z8CpqtbAa4a
+        H+Z/VfZaMBnMPeqBEjUVZaW5ebwmZN3Oulh1UdJjGRvoFn1dWvzlY5dW2baOw7R0I+rAX3
+        sy+ulgqkUus185nNjHUsaBfx9dFlA6eaR+K0pPqBYNzRPBApogBLw86maa/xPHCy22VKXJ
+        en2Nt8PtRljcfQAlF2Cz5BAChilkDBIvSGT5s+LWDuPXtG6S7sZZveZliArl7WIiHocTOO
+        IGNOocALMQjj7WrB5MyFl/a14TG90faIuTP7IN4ZYnD9Z1u+Ej93a0aYPP5Mbg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1674041871;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zVrowPVlkqAmIujgyVf+EEgLijVC+lYFOBUR5Zwa8wE=;
-        b=SaVgS1kwa/S5KKkZJ9k8sNxMjkq1dfcRrEV4CQ8I7l2B2pITrGVv1lmEzF25Es3BfIDe4/
-        zZZPwhKSh8XAbVCA==
+        bh=oc6LSVj5uaQ9n8lKpp69By84LMttGwGUBFJoT+Qh+9E=;
+        b=xZDr/NjExB8Lle79hTpslsVVdyFPbfTfPU9oSCYwNRAuQPFDuA7wf2g7Ctu8Nt6gsh6Wv4
+        JJlnHIOai25ZMVDQ==
 From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/core: Call perf_prepare_sample() before running BPF
+Subject: [tip: perf/core] perf/core: Do not pass header for sample ID init
 Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Song Liu <song@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230118060559.615653-9-namhyung@kernel.org>
-References: <20230118060559.615653-9-namhyung@kernel.org>
+In-Reply-To: <20230118060559.615653-7-namhyung@kernel.org>
+References: <20230118060559.615653-7-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <167404187070.4906.11315546110666794035.tip-bot2@tip-bot2>
+Message-ID: <167404187141.4906.14797462329290153602.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,18 +67,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     0eed28220598cd990d094b7b9f8c832c425080c0
-Gitweb:        https://git.kernel.org/tip/0eed28220598cd990d094b7b9f8c832c425080c0
+Commit-ID:     a7c8d0daa87581cab8435c83cc6ecbfbcb8b60cf
+Gitweb:        https://git.kernel.org/tip/a7c8d0daa87581cab8435c83cc6ecbfbcb8b60cf
 Author:        Namhyung Kim <namhyung@kernel.org>
-AuthorDate:    Tue, 17 Jan 2023 22:05:59 -08:00
+AuthorDate:    Tue, 17 Jan 2023 22:05:57 -08:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 18 Jan 2023 11:57:21 +01:00
+CommitterDate: Wed, 18 Jan 2023 11:57:20 +01:00
 
-perf/core: Call perf_prepare_sample() before running BPF
+perf/core: Do not pass header for sample ID init
 
-As BPF can access sample data, it needs to populate the data.  Also
-remove the logic to get the callchain specifically as it's covered by
-the perf_prepare_sample() now.
+The only thing it does for header in __perf_event_header__init_id() is
+to update the header size with event->id_header_size.  We can do this
+outside and get rid of the argument for the later change.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
@@ -86,27 +86,59 @@ Tested-by: Jiri Olsa <jolsa@kernel.org>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Acked-by: Song Liu <song@kernel.org>
 Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230118060559.615653-9-namhyung@kernel.org
+Link: https://lore.kernel.org/r/20230118060559.615653-7-namhyung@kernel.org
 ---
- kernel/events/core.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ kernel/events/core.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 4aa73ed..380476a 100644
+index 7135cb9..47bfd99 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -10356,13 +10356,7 @@ static void bpf_overflow_handler(struct perf_event *event,
- 	rcu_read_lock();
- 	prog = READ_ONCE(event->prog);
- 	if (prog) {
--		if (prog->call_get_stack &&
--		    (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
--		    !(data->sample_flags & PERF_SAMPLE_CALLCHAIN)) {
--			data->callchain = perf_callchain(event, regs);
--			data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
--		}
--
-+		perf_prepare_sample(data, event, regs);
- 		ret = bpf_prog_run(prog, &ctx);
- 	}
- 	rcu_read_unlock();
+@@ -7054,14 +7054,12 @@ out_put:
+ 			     PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |	\
+ 			     PERF_SAMPLE_CPU | PERF_SAMPLE_IDENTIFIER)
+ 
+-static void __perf_event_header__init_id(struct perf_event_header *header,
+-					 struct perf_sample_data *data,
++static void __perf_event_header__init_id(struct perf_sample_data *data,
+ 					 struct perf_event *event,
+ 					 u64 sample_type)
+ {
+ 	data->type = event->attr.sample_type;
+ 	data->sample_flags |= data->type & PERF_SAMPLE_ID_ALL;
+-	header->size += event->id_header_size;
+ 
+ 	if (sample_type & PERF_SAMPLE_TID) {
+ 		/* namespace issues */
+@@ -7088,8 +7086,10 @@ void perf_event_header__init_id(struct perf_event_header *header,
+ 				struct perf_sample_data *data,
+ 				struct perf_event *event)
+ {
+-	if (event->attr.sample_id_all)
+-		__perf_event_header__init_id(header, data, event, event->attr.sample_type);
++	if (event->attr.sample_id_all) {
++		header->size += event->id_header_size;
++		__perf_event_header__init_id(data, event, event->attr.sample_type);
++	}
+ }
+ 
+ static void __perf_event__output_id_sample(struct perf_output_handle *handle,
+@@ -7577,7 +7577,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 	u64 filtered_sample_type;
+ 
+ 	header->type = PERF_RECORD_SAMPLE;
+-	header->size = sizeof(*header) + event->header_size;
++	header->size = sizeof(*header) + event->header_size + event->id_header_size;
+ 
+ 	header->misc = 0;
+ 	header->misc |= perf_misc_flags(regs);
+@@ -7595,7 +7595,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 					   PERF_SAMPLE_REGS_USER);
+ 	filtered_sample_type &= ~data->sample_flags;
+ 
+-	__perf_event_header__init_id(header, data, event, filtered_sample_type);
++	__perf_event_header__init_id(data, event, filtered_sample_type);
+ 
+ 	if (filtered_sample_type & PERF_SAMPLE_IP) {
+ 		data->ip = perf_instruction_pointer(regs);
