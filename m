@@ -2,110 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67149671855
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 10:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BF7671872
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 11:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjARJ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 04:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S229446AbjARKDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 05:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjARJ5y (ORCPT
+        with ESMTP id S230468AbjARKBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 04:57:54 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFAA44BE1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 01:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674032856; x=1705568856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DlLu1kd3RdoRwJ5tOhQx3lXAUHxd4RmhAiLGWWt9q9E=;
-  b=Bwsk2Ta53FvOV/1dOq/DJZ1TL9JPP8TSN29mn+Z7hnud2m1oHGMhS8c3
-   IdRQC7OoI3C7XrkkQDfZ3HB3RuU/V51QcXSBkog+4WxcnCvXsdgN/a5YH
-   4D3gCU77VaGZ9pX67yLfwqCwPyWd/ToJ+2vHQwsGxjgIvafrslOH4YayR
-   j8AqMyPjPh80Lj9apf5hkYXP9GW3OeqEAeY/dM0AWbIxzZXjsV8QmpwWE
-   C0TlwXFV6gAwrRUC2oWZPZ1zHz7nQV/fxseMZs5CLOFPEG4E0RCEftTVX
-   GW/w/0xZlPt7+c2T+EJ764gA3hoFWP8/Y4cajr5tXwiqnialO/oj3U337
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="387287295"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="387287295"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:07:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="767666271"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="767666271"
-Received: from tpalli-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.54.209])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 01:07:27 -0800
-Date:   Wed, 18 Jan 2023 10:07:24 +0100
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/selftest: fix
- intel_selftest_modify_policy argument types
-Message-ID: <Y8e2tBUUEF5o3E8G@ashyti-mobl2.lan>
-References: <20230117163743.1003219-1-arnd@kernel.org>
+        Wed, 18 Jan 2023 05:01:20 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8066C951B7;
+        Wed, 18 Jan 2023 01:08:58 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v30so48700077edb.9;
+        Wed, 18 Jan 2023 01:08:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TK3qq2DIZCRKV3EaJMeG+kJeMf3Jk06Hg2r49DutS2I=;
+        b=beBW8UEmmiP/XEulFLyOZ8zULhs3O8kJR1mGKaz5IB7yWI5puDGvj/ibNDyYEz7wBM
+         nAZKmm9wcEV2x5zFbxRUnQ5pLAG+BTk2GpTGoL03kSsiKLO733Fk2VOr+DYVfL5LsLog
+         B6Xrth4yzvh6vHP9MtKHZ1Xxz9oO2sW+nEvw80LX8HDY9qXgnPNvSZOhz3Lg0nTGKJhX
+         j/E03chxWNiHVijx08eZk4b7lZ7ImA/7ZXTaW4U45g5hriSyJMk51unWYPrdC2mrmsoy
+         ynG+Xud40Jjv0Yq590LD2jlCo76XukSunhXttKqSb4Newy8URoxnuj0+glfLQC4GS9zk
+         MNaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TK3qq2DIZCRKV3EaJMeG+kJeMf3Jk06Hg2r49DutS2I=;
+        b=1ZfeDly0oT4ePRMpDUKxYNtCkAIy4zNinGWb2h7yG2f+R3Rt+4lrmVaIAq7aJrq1J8
+         qznpWrvIFGEGHsRjNenmlwwDcF/XlgFMIl5L/qT2eBDLievS3Mn4qcPOOjP3CFYAyZbp
+         BjACz8tU9p+rvQYIE5XchUNOF/UiHwZqjxQgrHWVk1r+FAAQPqyTMs76knaCoDHSOABf
+         AP2IXZEXPT8ChxFfLg6rIKY7Vw9Z1ovaWC2DQtRiIcgGbU3RLN7RG+NmlmX5zV+E7FBV
+         mTisdaAXJfcp/dt7vIrbPwphk03eho3Urc6UrGU2/E4hnQ2SylznwLczWTq/igim4zYe
+         Cs2g==
+X-Gm-Message-State: AFqh2kp6563PLHHmJcRbs4WoGoEUBq9F81xEJPpDwDOapM3ZT64uWuf1
+        g49Kc5OHPQuOVOX/LPux24h6CmL/ERjUGDxpcL4=
+X-Google-Smtp-Source: AMrXdXt27Qm/P0OJ9NMULTf9tfxamPk7OkdvmaUnXQRQHp04wzC5i7h6K1ynpktCZZ9IKafJhd1jCUT26YRgag+pB0Y=
+X-Received: by 2002:a05:6402:643:b0:46f:77af:10ff with SMTP id
+ u3-20020a056402064300b0046f77af10ffmr808049edx.178.1674032937213; Wed, 18 Jan
+ 2023 01:08:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117163743.1003219-1-arnd@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117102645.24920-1-liujia6264@gmail.com> <9f29ff29-62bb-c92b-6d69-ccc86938929e@intel.com>
+ <5d96deeb-a59d-366d-dbb2-d88623cdfa2d@intel.com>
+In-Reply-To: <5d96deeb-a59d-366d-dbb2-d88623cdfa2d@intel.com>
+From:   Jia Liu <liujia6264@gmail.com>
+Date:   Wed, 18 Jan 2023 17:08:45 +0800
+Message-ID: <CA+eZsiZ81+AL1-mLb4mONZnMqO=uUPFcw=QWFhEY36_jg9MpiQ@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH] e1000e: Add ADP_I219_LM17 to ME S0ix blacklist
+To:     "Neftin, Sasha" <sasha.neftin@intel.com>
+Cc:     Jacob Keller <jacob.e.keller@intel.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>,
+        "Lifshits, Vitaly" <vitaly.lifshits@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:37:29PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The definition of intel_selftest_modify_policy() does not match the
-> declaration, as gcc-13 points out:
-> 
-> drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:29:5: error: conflicting types for 'intel_selftest_modify_policy' due to enum/integer mismatch; have 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, u32)' {aka 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, unsigned int)'} [-Werror=enum-int-mismatch]
->    29 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
->       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:11:
-> drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.h:28:5: note: previous declaration of 'intel_selftest_modify_policy' with type 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, enum selftest_scheduler_modify)'
->    28 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
->       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Change the type in the definition to match.
-> 
-> Fixes: 617e87c05c72 ("drm/i915/selftest: Fix hangcheck self test for GuC submission")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jan 18, 2023 at 1:20 PM Neftin, Sasha <sasha.neftin@intel.com> wrote:
+>
+> On 1/17/2023 21:34, Jacob Keller wrote:
+> >
+> >
+> > On 1/17/2023 2:26 AM, Jiajia Liu wrote:
+> >> I219 on HP EliteOne 840 All in One cannot work after s2idle resume
+> >> when the link speed is Gigabit, Wake-on-LAN is enabled and then set
+> >> the link down before suspend. No issue found when requesting driver
+> >> to configure S0ix. Add workround to let ADP_I219_LM17 use the dirver
+> >> configured S0ix.
+> >>
+> >> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216926
+> >> Signed-off-by: Jiajia Liu <liujia6264@gmail.com>
+> >> ---
+> >>
+> >> It's regarding the bug above, it looks it's causued by the ME S0ix.
+> >> And is there a method to make the ME S0ix path work?
+> No. This is a fragile approach. ME must get the message from us
+> (unconfigure the device from s0ix). Otherwise, ME will continue to
+> access LAN resources and the controller could get stuck.
+> I see two ways:
+> 1. you always can skip s0ix flow by priv_flag
+> 2. Especially in this case (HP platform) - please, contact HP (what is
+> the ME version on this system, and how was it released...). HP will open
+> a ticket with Intel. (then we can involve the ME team)
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+HP released BIOS including ME firmware on their website HP.com at
+https://support.hp.com/my-en/drivers/selfservice/hp-eliteone-840-23.8-inch-g9-all-in-one-desktop-pc/2101132389.
+There is upgrade interface on the BIOS setup menu which can connect
+HP.com and upgrade to newer BIOS.
 
-Andi
+The initial ME version was v16.0.15.1735 from BIOS 02.03.04.
+Then I upgraded to the latest one v16.1.25.1932v3 from BIOS 02.06.01
+released on Nov 28, 2022. Both of them can produce this issue.
 
-> ---
->  drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-> index 310fb83c527e..2990dd4d4a0d 100644
-> --- a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-> +++ b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-> @@ -28,8 +28,7 @@ struct intel_engine_cs *intel_selftest_find_any_engine(struct intel_gt *gt)
->  
->  int intel_selftest_modify_policy(struct intel_engine_cs *engine,
->  				 struct intel_selftest_saved_policy *saved,
-> -				 u32 modify_type)
-> -
-> +				 enum selftest_scheduler_modify modify_type)
->  {
->  	int err;
->  
-> -- 
-> 2.39.0
+I have only one setup. Is it possible to try on your system which has the
+same I219-LM to see if it's platform specific or not?
+
+> >>
+> >
+> > No idea. It does seem better to disable S0ix if it doesn't work properly
+> > first though...
+> >
+> >>   drivers/net/ethernet/intel/e1000e/netdev.c | 25 ++++++++++++++++++++++
+> >>   1 file changed, 25 insertions(+)
+> >>
+> >> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+> >> index 04acd1a992fa..7ee759dbd09d 100644
+> >> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+> >> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+> >> @@ -6330,6 +6330,23 @@ static void e1000e_flush_lpic(struct pci_dev *pdev)
+> >>      pm_runtime_put_sync(netdev->dev.parent);
+> >>   }
+> >>
+> >> +static u16 me_s0ix_blacklist[] = {
+> >> +    E1000_DEV_ID_PCH_ADP_I219_LM17,
+> >> +    0
+> >> +};
+> >> +
+> >> +static bool e1000e_check_me_s0ix_blacklist(const struct e1000_adapter *adapter)
+> >> +{
+> >> +    u16 *list;
+> >> +
+> >> +    for (list = me_s0ix_blacklist; *list; list++) {
+> >> +            if (*list == adapter->pdev->device)
+> >> +                    return true;
+> >> +    }
+> >> +
+> >> +    return false;
+> >> +}
+> >
+> > The name of this function seems odd..? "check_me"? It also seems like we
+> > could just do a simple switch/case on the device ID or similar.
+> >
+> > Maybe: "e1000e_device_supports_s0ix"?
+> >
+> >> +
+> >>   /* S0ix implementation */
+> >>   static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+> >>   {
+> >> @@ -6337,6 +6354,9 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+> >>      u32 mac_data;
+> >>      u16 phy_data;
+> >>
+> >> +    if (e1000e_check_me_s0ix_blacklist(adapter))
+> >> +            goto req_driver;
+> >> +
+> >>      if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
+> >>          hw->mac.type >= e1000_pch_adp) {
+> >>              /* Request ME configure the device for S0ix */
+> >
+> >
+> > The related code also seems to already perform some set of mac checks
+> > here...
+> >
+> >> @@ -6346,6 +6366,7 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+> >>              trace_e1000e_trace_mac_register(mac_data);
+> >>              ew32(H2ME, mac_data);
+> >>      } else {
+> >> +req_driver:>                /* Request driver configure the device to S0ix */
+> >>              /* Disable the periodic inband message,
+> >>               * don't request PCIe clock in K1 page770_17[10:9] = 10b
+> >> @@ -6488,6 +6509,9 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
+> >>      u16 phy_data;
+> >>      u32 i = 0;
+> >>
+> >> +    if (e1000e_check_me_s0ix_blacklist(adapter))
+> >> +            goto req_driver;
+> >> +
+> >
+> > Why not just combine this check into the statement below rather than
+> > adding a goto?
+> >
+> >>      if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
+> >>          hw->mac.type >= e1000_pch_adp) {
+> >>              /* Keep the GPT clock enabled for CSME */
+> >> @@ -6523,6 +6547,7 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
+> >>              else
+> >>                      e_dbg("DPG_EXIT_DONE cleared after %d msec\n", i * 10);
+> >>      } else {
+> >> +req_driver:
+> >>              /* Request driver unconfigure the device from S0ix */
+> >>
+> >>              /* Disable the Dynamic Power Gating in the MAC */
+> > _______________________________________________
+> > Intel-wired-lan mailing list
+> > Intel-wired-lan@osuosl.org
+> > https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+>
