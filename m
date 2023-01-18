@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEA867264F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0F667264E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjARSIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S230121AbjARSIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjARSHc (ORCPT
+        with ESMTP id S231153AbjARSHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 13:07:32 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0158B47E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:06:50 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4c24993965eso473195327b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:06:50 -0800 (PST)
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75330305E5;
+        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d8so5438161pjc.3;
+        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DP2jTh2XCGgairHOGKy1hg7eoz80OguUV+dRLV5vdAs=;
-        b=JiA4PBg0EH7+0/76J3FenR1bnlSGaQgdYOG4b+AglPSOYgfmCcBfM2ErnvDHL4NFM3
-         xzqZTQIqEjQ7PPX+1LzBhtUDNEk3yB9vFIDmaQSEgWuFp+80LEAWhkoKhNjeIyguxfi9
-         IcVLilDvjfgehE8DgUarM2edSxsBEPquLtlfDaMXkql9MVVejNVEQ1MrjYhWtOtK9eyN
-         NSxlm5igyPDlNkDxm+4IwWYaT5nE1kzWmkwzXV4INsZk1EToceOcNYpFDzz/xRE0hSNF
-         M6yMgEvu9cHqWkl44Z252S3wbtzdKexOyOHGlp1AVXAzplYZutMDn1Cqdg5ZcfOCxrOc
-         +ReA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
+        b=a/BjP6c+RXvAJ5fpcIIE7Z3Df2XqmGu0WVjZhlCP4QZweEp1D6ia0ryuOes2T5daAG
+         XypMlmzfAo19fqgw93mdtd4ekji3zoeJvxtGm8bUA1It609G5S/3qTzvQ243VF6UcFjl
+         Ht+u1xSsmRzlBMY+aIaI4zuFJ1jc4+WcZTM5bYxpnJPd8L8EaSXaI0GcXZLEqMcBAvjc
+         3+ba7eep3kAcDT8yDp40bK9hsP5tioL6C8dN+ndXdTLQ80hQPsaGKI9Ds6MJ08lYPCwi
+         Qc0pone/sWpfxcmRHAOWvuu+kkejlS1oF/cJPy4nGO2O2fd0maHt5WVJniL1T7AAI9L9
+         GRqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DP2jTh2XCGgairHOGKy1hg7eoz80OguUV+dRLV5vdAs=;
-        b=PwIxLv/2ux6BD7cAsEEsxjawoBA9lirfsK0L2Mw88LXBeuIZeCLDjvFrw8hoxAmkWg
-         n3Qg49j5XdnqB19J5QkpeIQsT1GzGyLf2cgKIGS5u9qYViwWFrZE+mZ5QQp2eXbTAlyA
-         4vQJp8ly98OGiNpMoGrf+AwttGl3IY0qU4bCYEphtABY5MTXg8Jzi6/1ZLJqB9Uz4pjU
-         J/j/Tx9BNhPxVSwFHXYus32VhixQ97ykDJe3qSdUQppAtPwzAvF+fUlH2pf1Rki1EAib
-         HOc/nydEopMfRmj7540YlWFXrKeESF9zgxf/rw/Q7wkT1jHkY+3JVJJbOfm8MICvDBjJ
-         O2wQ==
-X-Gm-Message-State: AFqh2kp1hJMShBihvdzSTHDrdZuS9VBgn50AkLYmbW9VNJNgUQynTySd
-        ffrU7FJEHSzgq3sBHb7Ke3HJaAgtsl/+0jJ9CMjdmw==
-X-Google-Smtp-Source: AMrXdXsZwoic0rKFMDYo0tkFJ6J1kb0TvUIjw3JJelHbDs2OjFUo53z0pnyKmSUsdBlmQsDCtwccF60TcE0BtbKLEzo=
-X-Received: by 2002:a0d:d484:0:b0:4dc:4113:f224 with SMTP id
- w126-20020a0dd484000000b004dc4113f224mr1111332ywd.455.1674065209076; Wed, 18
- Jan 2023 10:06:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
+        b=Ix01Jcmwgb8YZxGWXY5qXs66MoOQ6C/A70XxOa1suYtZcgRRjm0zdqykaeFF1AouYq
+         AFa3hVJyUcRNYIR3PF7t3oEfCauPo1Hk9v6la9wJHm3JWFVLXagWAfjeemvshRG8DLqj
+         yYUmLGiKb6SpO982ij+amKc0FEATfIX2gyIM7qZp3prZc/3g2Iiis4ge3TnV9Y8v0e1p
+         +vnNj7c4Jovu6FH+2JOIS8JpDrKGAHdwUWHz+GcZBP8U5MOBK0SJgVkbhzAS7+nMgKwu
+         bbCl0DYSuKBE30yLMr0SsbnxFbryPnGATKBsL2QxXcnoiC8Less1Hy2a5SCGWzEEEguw
+         MZZg==
+X-Gm-Message-State: AFqh2kqpfUHM4Rs6elzY/W80QowBHEnvIx9ARh++tJEh553/cKJMuzyA
+        E5LQfZIfbkVaSAYxcAAamrSgX3+3Ucw=
+X-Google-Smtp-Source: AMrXdXueiL3W/Jezt82y5r981JYjbBLjAmeVFwgCxnME+StrfxNCm+8TTZM1Gs1onLkI/fGuwOid0g==
+X-Received: by 2002:a17:90b:3c0e:b0:227:1c1e:7529 with SMTP id pb14-20020a17090b3c0e00b002271c1e7529mr8356052pjb.15.1674065213863;
+        Wed, 18 Jan 2023 10:06:53 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id pc3-20020a17090b3b8300b001fde655225fsm2786736pjb.2.2023.01.18.10.06.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 10:06:52 -0800 (PST)
+Message-ID: <2746ce9a-c44f-167d-7d2f-5dcd838af1d0@gmail.com>
+Date:   Wed, 18 Jan 2023 10:06:43 -0800
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-27-surenb@google.com>
- <Y8bB3TFLQV2HJZQ+@dhcp22.suse.cz> <CAJuCfpH8-wNiPXQcS=0j-Ex7iMqoBkUhjSN8QiAvq6FdXudRGQ@mail.gmail.com>
- <Y8e/N1m+YGFmxy+L@dhcp22.suse.cz>
-In-Reply-To: <Y8e/N1m+YGFmxy+L@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 18 Jan 2023 10:06:38 -0800
-Message-ID: <CAJuCfpEcQZSJMoeNyeFb=0xxCFS=bWWz6K6QPkYKTc=4nLLDVw@mail.gmail.com>
-Subject: Re: [PATCH 26/41] kernel/fork: assert no VMA readers during its destruction
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_thermal=3a_brcmstb=5fthermal=3a_Use?=
+ =?UTF-8?B?wqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, daniel.lezcano@linaro.org
+Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <202301181631362083446@zte.com.cn>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <202301181631362083446@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,68 +78,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 1:43 AM 'Michal Hocko' via kernel-team
-<kernel-team@android.com> wrote:
->
-> On Tue 17-01-23 17:53:00, Suren Baghdasaryan wrote:
-> > On Tue, Jan 17, 2023 at 7:42 AM 'Michal Hocko' via kernel-team
-> > <kernel-team@android.com> wrote:
-> > >
-> > > On Mon 09-01-23 12:53:21, Suren Baghdasaryan wrote:
-> > > > Assert there are no holders of VMA lock for reading when it is about to be
-> > > > destroyed.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > ---
-> > > >  include/linux/mm.h | 8 ++++++++
-> > > >  kernel/fork.c      | 2 ++
-> > > >  2 files changed, 10 insertions(+)
-> > > >
-> > > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > > index 594e835bad9c..c464fc8a514c 100644
-> > > > --- a/include/linux/mm.h
-> > > > +++ b/include/linux/mm.h
-> > > > @@ -680,6 +680,13 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
-> > > >       VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
-> > > >  }
-> > > >
-> > > > +static inline void vma_assert_no_reader(struct vm_area_struct *vma)
-> > > > +{
-> > > > +     VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock) &&
-> > > > +                   vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
-> > > > +                   vma);
-> > >
-> > > Do we really need to check for vm_lock_seq? rwsem_is_locked should tell
-> > > us something is wrong on its own, no? This could be somebody racing with
-> > > the vma destruction and using the write lock. Unlikely but I do not see
-> > > why to narrow debugging scope.
-> >
-> > I wanted to ensure there are no page fault handlers (read-lockers)
-> > when we are destroying the VMA and rwsem_is_locked(&vma->lock) alone
-> > could trigger if someone is concurrently calling vma_write_lock(). But
-> > I don't think we expect someone to be write-locking the VMA while we
->
-> That would be UAF, no?
+On 1/18/23 00:31, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Yes. That's why what I have is an overkill (which is also racy).
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
->
-> > are destroying it, so you are right, I'm overcomplicating things here.
-> > I think I can get rid of vma_assert_no_reader() and add
-> > VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock)) directly in
-> > __vm_area_free(). WDYT?
->
-> Yes, that adds some debugging. Not sure it is really necessary buyt it
-> is VM_BUG_ON so why not.
-
-I would like to keep it if possible. If it triggers that would be a
-clear signal what the issue is. Otherwise it might be hard to debug
-such a corner case.
-
-> --
-> Michal Hocko
-> SUSE Labs
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
