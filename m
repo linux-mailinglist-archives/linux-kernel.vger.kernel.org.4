@@ -2,185 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F013D671175
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D062267117F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 04:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjARDEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 22:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S229563AbjARDIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 22:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjARDEu (ORCPT
+        with ESMTP id S229454AbjARDIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:04:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C9A4FC3F;
-        Tue, 17 Jan 2023 19:04:48 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxVwt4lM1z4wgq;
-        Wed, 18 Jan 2023 14:04:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674011087;
-        bh=M3BcInVBdGIb/eB5yTCtLvBO8sYnUT7vEAWHpGvU/p8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rxpofKDtHQGO3VvuGcfmLroaX6kR+MQdUAci0CxVCxv2W9IhvCgSmZt3wSyLQmRNg
-         A8FVyjsDa7yc7mx/6AZqzOAwvxzpqCxaY6S3M2YpIobT0NzyCFfRCq+q/RS0mLTbzM
-         4o4lxrV44qlzjG6XudBb2iqgF0CGxRTOnNIbAxXh7OuyKYYw2vtLKUpijZjbd6VDde
-         vA8ol94I8/pG9Rw/gZdfzq+86VIPOLOsDdKbWtJlPWb3OhWFucOVlqyhh6pJR5DeWa
-         ENcrhYql/DiGenJsUvPgwYvHsb+zV6u3vk/pvt5Y/P0IhQkZr3MXoDlxXG8zPzZdZ9
-         yfJw0tlxL6cBA==
-Date:   Wed, 18 Jan 2023 14:04:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Danny Tsen <dtsen@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: crypto: p10-aes-gcm - Add asm markings necessary for kernel
- code
-Message-ID: <20230118140444.25353e67@canb.auug.org.au>
-In-Reply-To: <Y8ZNoBSX5P0ieJ3t@gondor.apana.org.au>
-References: <20230117144747.37115c52@canb.auug.org.au>
-        <Y8ZNoBSX5P0ieJ3t@gondor.apana.org.au>
+        Tue, 17 Jan 2023 22:08:15 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195274FCC4;
+        Tue, 17 Jan 2023 19:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=iHV7CytWlRD3302v/1nhCK0cn5pj1iojKylILrpkF5w=; b=SJahukxj2tI8oL1m0fY0hxQpVM
+        mi+h1t0LeaEEFYXe1wOVyClZxbfClPY4dRXyzJMpmNbJc7TW+pJdIEC3LXtoV3B/0Z9SXGivjqsxG
+        aLFlmT9X/yakTMbl71PJu7Os+8xMygLek9F+Iy1APbt93OK+e5KNzLyMIAjP9Kz7q7KA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pHyo4-002OGY-U5; Wed, 18 Jan 2023 04:08:08 +0100
+Date:   Wed, 18 Jan 2023 04:08:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] net: mdio: add amlogic gxl mdio mux support
+Message-ID: <Y8dimCI7ybeL09j0@lunn.ch>
+References: <20230116091637.272923-1-jbrunet@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/d5q8/40ndh9awWN2bgWdQ/3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116091637.272923-1-jbrunet@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/d5q8/40ndh9awWN2bgWdQ/3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 16, 2023 at 10:16:34AM +0100, Jerome Brunet wrote:
+> Add support for the MDIO multiplexer found in the Amlogic GXL SoC family.
+> This multiplexer allows to choose between the external (SoC pins) MDIO bus,
+> or the internal one leading to the integrated 10/100M PHY.
+> 
+> This multiplexer has been handled with the mdio-mux-mmioreg generic driver
+> so far. When it was added, it was thought the logic was handled by a
+> single register.
+> 
+> It turns out more than a single register need to be properly set.
+> As long as the device is using the Amlogic vendor bootloader, or upstream
+> u-boot with net support, it is working fine since the kernel is inheriting
+> the bootloader settings. Without net support in the bootloader, this glue
+> comes unset in the kernel and only the external path may operate properly.
+> 
+> With this driver (and the associated DT update), the kernel no longer relies
+> on the bootloader to set things up, fixing the problem.
 
-Hi Herbert,
+Ideally, you should also post an actual user of this driver, i.e. the
+DT updates.
 
-On Tue, 17 Jan 2023 15:26:24 +0800 Herbert Xu <herbert@gondor.apana.org.au>=
- wrote:
->
-> On Tue, Jan 17, 2023 at 02:47:47PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the crypto tree, today's linux-next build (powerpc
-> > pseries_le_defconfig) failed like this:
-> >=20
-> > arch/powerpc/crypto/p10_aes_gcm.o: warning: objtool: .text+0x884: unann=
-otated intra-function call
-> > arch/powerpc/crypto/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_k=
-ey+0x44: unannotated intra-function call
-> > ld: arch/powerpc/crypto/p10_aes_gcm.o: ABI version 1 is not compatible =
-with ABI version 2 output
-> > ld: failed to merge target specific data of file arch/powerpc/crypto/p1=
-0_aes_gcm.o
-> >=20
-> > Caused by commit
-> >=20
-> >   ca68a96c37eb ("crypto: p10-aes-gcm - An accelerated AES/GCM stitched =
-implementation")
-> >=20
-> > I have applied the following hack for today. =20
->=20
-> Thanks Stephen, I'm going to update the previous fix as follows:
+> This has been tested on the aml-s905x-cc (LePotato) for the internal path
+> and the aml-s912-pc (Tartiflette) for the external path.
 
-I still get:
+So these exist in mainline, which is enough for me.
 
-arch/powerpc/crypto/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_key+0=
-x44: unannotated intra-function call
-
-from the powerpc pseries_le_defconfig build (which is otherwise ok).
-
-Now I also get (from a powerpc allyesconfig build):
-
-tmp/cc8g6b4E.s: Assembler messages:
-tmp/cc8g6b4E.s: Error: .size expression for gcm_init_p8 does not evaluate t=
-o a constant
-tmp/cc8g6b4E.s: Error: .size expression for .gcm_init_p8 does not evaluate =
-to a constant
-tmp/cc8g6b4E.s: Error: .size expression for gcm_init_htable does not evalua=
-te to a constant
-tmp/cc8g6b4E.s: Error: .size expression for .gcm_init_htable does not evalu=
-ate to a constant
-tmp/cc8g6b4E.s: Error: .size expression for gcm_gmult_p8 does not evaluate =
-to a constant
-tmp/cc8g6b4E.s: Error: .size expression for .gcm_gmult_p8 does not evaluate=
- to a constant
-tmp/cc8g6b4E.s: Error: .size expression for gcm_ghash_p8 does not evaluate =
-to a constant
-tmp/cc8g6b4E.s: Error: .size expression for .gcm_ghash_p8 does not evaluate=
- to a constant
-make[4]: *** [next/scripts/Makefile.build:374: arch/powerpc/crypto/ghashp8-=
-ppc.o] Error 1
-tmp/ccNrBtc1.s: Assembler messages:
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_set_encrypt_key does not=
- evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_set_encrypt_key does no=
-t evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_set_decrypt_key does not=
- evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_set_decrypt_key does no=
-t evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_encrypt does not evaluat=
-e to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_encrypt does not evalua=
-te to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_decrypt does not evaluat=
-e to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_decrypt does not evalua=
-te to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_cbc_encrypt does not eva=
-luate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_cbc_encrypt does not ev=
-aluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_ctr32_encrypt_blocks doe=
-s not evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_ctr32_encrypt_blocks do=
-es not evaluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_xts_encrypt does not eva=
-luate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_xts_encrypt does not ev=
-aluate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for aes_p8_xts_decrypt does not eva=
-luate to a constant
-tmp/ccNrBtc1.s: Error: .size expression for .aes_p8_xts_decrypt does not ev=
-aluate to a constant
-make[4]: *** [next/scripts/Makefile.build:374: arch/powerpc/crypto/aesp8-pp=
-c.o] Error 1
-make[4]: Target 'arch/powerpc/crypto/' not remade because of errors.
-
-$ grep gcm_init_p8 arch/powerpc/crypto/ghashp8-ppc.s
-.align 2 ; .type gcm_init_p8,@function; .globl gcm_init_p8; gcm_init_p8:
-.size gcm_init_p8,.-.gcm_init_p8
-.size .gcm_init_p8,.-.gcm_init_p8
-
-I have just marked CRYPTO_P10_AES_GCM as BROKEN for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/d5q8/40ndh9awWN2bgWdQ/3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHYcwACgkQAVBC80lX
-0GziiAf/a7dQVij/7kJX36npVT5mYMIuyE334Zgbza3Gmd4KG//ah30gYZvin/7L
-tfdBgix0zKknGuSJATGs3vVxJUM5CahLwTYyN7XXO1JKuSTZ38Mo7aKMb7GA6leU
-4vhULq53kfckA4A7b49buAzXZVY/0uWM4csvbtto6Fp8oC6MHoBtpgm/7JHFFiUj
-WNir3nwi3J2OCu1emMBfF1Vna38FT+nZWU5z8nklS7oojuEm+JW26A3KRgjIdg5R
-oiU7IiOT0qYKd8WQfap74qkLaGxAd1ZIGIdMvpUks3iS3p9K/HiGXc8nKqRVXhyd
-hkIMeiBJVIAD9XEsx47ucLaP0acAPA==
-=wJm4
------END PGP SIGNATURE-----
-
---Sig_/d5q8/40ndh9awWN2bgWdQ/3--
+   Andrew
