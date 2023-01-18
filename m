@@ -2,155 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C56671DA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF63671DA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 14:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjARNY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 08:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S230195AbjARNYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 08:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjARNXx (ORCPT
+        with ESMTP id S230469AbjARNXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:23:53 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BB445F6F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:51:08 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id r71so7397637iod.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K7Rqiin9Kbad8ru/LcIchuAOUvYmmUjlYJik2JJBLXA=;
-        b=DhsG3zM8wnA8HofZfhQ4706XMhy790XGUqogcXCqHX85Tk8zZYxt5jMYu+eLJpJd0W
-         WeZPMkDrbovMJNBWiALe2hNQO8RzVtnNL439Lg2lNDDkCN2JbO2/orikCzbM4nXJ7Ric
-         pxfkouKT613poEWiZM0/S3Q0O76EFSePCk6Wx7nVSwD2fTxP6JpqrPF+F0bbjgoXhdSo
-         JRONC1h0hiGS5i3GPDsY5q0sJr2GonkT+Yc4S8N+6WB4gZtHvq+jv8OZ5eQyCbLl1GpR
-         opC+QyjARoxP8394hD2OHnWQsI8rTlz89//+DOWhBL6cmnhWRNKu2nd1HuPty+PyYUI0
-         rVjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K7Rqiin9Kbad8ru/LcIchuAOUvYmmUjlYJik2JJBLXA=;
-        b=2/SN+PICH65CsQmhNWclHIgsOyDYdLa7fcTbNIVlq2+OIWOnHa40icK9ZfC9XNBZFa
-         GprfD/pFiscTohQRMrE2n3spWNQNrG5gt2/KVeswpLZnzI+oRvugv29yerDcbdQz4Dvn
-         HbHFXv4348M0KOsyeQQvh1RJBDnQoHCaVQkJffIZ1NY7w+WfkiQ4UM9xaOPfq9jyeB8n
-         fvoIVZZSJ7c0OJ4hJK0eSbzq0RLhxVf4smIEpNnYvk65Lv6AI4G/M+4gXRNszzoynhLx
-         VpDcRZ7+sTfP5ApQF4R6HHVTxYWKd3FZpaZ22Hik/3Kdss8dh2SNRMwMPQUrYDLjjAnr
-         9nXA==
-X-Gm-Message-State: AFqh2krLBNIyaCGQthZZXlGIZ9fbv3JosfxUmudXJa+5/i0nKB6ZIdon
-        AS4gpiqRdXbTfTQWRoebz5ocS8UwPhF2boPKJ4clGg==
-X-Google-Smtp-Source: AMrXdXubEhuDA02ILCkh7B1Dp3y4Bt1fmHskBAwMDp3qrJV2IDmWe32RqObGG2ZP8z4nawtc1f2Tp/05rwFtfOAFxMY=
-X-Received: by 2002:a02:c884:0:b0:39e:9d33:a47 with SMTP id
- m4-20020a02c884000000b0039e9d330a47mr496380jao.58.1674046267428; Wed, 18 Jan
- 2023 04:51:07 -0800 (PST)
+        Wed, 18 Jan 2023 08:23:47 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F98F2A14C;
+        Wed, 18 Jan 2023 04:50:43 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CEEA16602DFF;
+        Wed, 18 Jan 2023 12:50:41 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674046242;
+        bh=oeiaamJgDNdwr5Xa4TX2CMdpkyV4DV3G1iGY486t7oc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=C66exSRmLAFtEfVKiRKdLHOOkLp00xNHSfwfEoiS8EQ5NgcS1lDJl2gfUi5B7DN16
+         ziuNv8KKiKqJEXzyCLFCc2AtUsEhimxWLXoIAk4WqmXzWW8i/8HS//173RFR+3ByOE
+         YhEYpXOh2xA1NsCadN5P0YjedH/7ppENuA5ZPiQxdtEu+U92+6hq7+vLDQkmN3L4/l
+         gPugrV7OooJfs2YQIhjOVrk7FaCF0YIj1aGFFxwif7qmYfZIAtuLFUe+0/TgG7EwBe
+         iZbJe0aVdGLXNY7coePIfuwLMYywKHcI4oJsdMoW/G026gMqBFfZDB3dm3q7yQov5I
+         UUwkD9x9IBqQw==
+Message-ID: <dfecf744-30c6-e9b5-5a75-045aca840cae@collabora.com>
+Date:   Wed, 18 Jan 2023 13:50:39 +0100
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-28-surenb@google.com>
-In-Reply-To: <20230109205336.3665937-28-surenb@google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 18 Jan 2023 13:50:31 +0100
-Message-ID: <CAG48ez3EAai=1ghnCMF6xcgUebQRm-u2xhwcpYsfP9=r=oVXig@mail.gmail.com>
-Subject: Re: [PATCH 27/41] mm/mmap: prevent pagefault handler from racing with
- mmu_notifier registration
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v9 5/6] soc: qcom: Add support for Core Power Reduction
+ v3, v4 and Hardened
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+References: <20230116093845.72621-1-konrad.dybcio@linaro.org>
+ <20230116093845.72621-6-konrad.dybcio@linaro.org>
+ <5ced2e01-367f-5e0d-8120-aa5ef4d4eeab@gmail.com>
+ <233f0d52-4f9d-a512-0450-77e2fb4da878@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <233f0d52-4f9d-a512-0450-77e2fb4da878@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> Page fault handlers might need to fire MMU notifications while a new
-> notifier is being registered. Modify mm_take_all_locks to write-lock all
-> VMAs and prevent this race with fault handlers that would hold VMA locks.
-> VMAs are locked before i_mmap_rwsem and anon_vma to keep the same
-> locking order as in page fault handlers.
->
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  mm/mmap.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 30c7d1c5206e..a256deca0bc0 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -3566,6 +3566,7 @@ static void vm_lock_mapping(struct mm_struct *mm, struct address_space *mapping)
->   * of mm/rmap.c:
->   *   - all hugetlbfs_i_mmap_rwsem_key locks (aka mapping->i_mmap_rwsem for
->   *     hugetlb mapping);
-> + *   - all vmas marked locked
+..snip..
 
-The existing comment above says that this is an *ordered* listing of
-which locks are taken.
+>>> +
+>>> +static const struct cpr_desc sdm630_cpr_desc = {
 
->   *   - all i_mmap_rwsem locks;
->   *   - all anon_vma->rwseml
->   *
-> @@ -3591,6 +3592,7 @@ int mm_take_all_locks(struct mm_struct *mm)
->         mas_for_each(&mas, vma, ULONG_MAX) {
->                 if (signal_pending(current))
->                         goto out_unlock;
-> +               vma_write_lock(vma);
->                 if (vma->vm_file && vma->vm_file->f_mapping &&
->                                 is_vm_hugetlb_page(vma))
->                         vm_lock_mapping(mm, vma->vm_file->f_mapping);
+..snip..
 
-Note that multiple VMAs can have the same ->f_mapping, so with this,
-the lock ordering between VMA locks and the mapping locks of hugetlb
-VMAs is mixed: If you have two adjacent hugetlb VMAs with the same
-->f_mapping, then the following operations happen:
+>>> +    },
+>>> +};
+>>
+>> Hi Konrad, I am trying to add IPQ8074 support to CPR as its the last thing
+>> missing for upstream CPU scaling, and I really want to get rid of the downstream driver.
+>>
+>> However, I am having hard time figuring some of these parameters, some are easy to
+>> read from the DTS or driver defines, however arent the fuse corners supposed to be read
+>> from the fuses and not hardcocded in the thread structures?
+> They reside in socname-regulator.dtsi most of the time.
+> Some parameters are read from fuses (per-unit capabilities
+> that let your specific chip run at a specific voltage offset),
+> but there's also some per-SoC-model data that needs to be
+> taken into account when performing the calculations.. This
+> is actually a smart move from Qualcomm (well, for them
+> anyway), as they put as little data in fuses as possible,
+> saving them space on this tiiiiny ROM.
+> 
+>>
+>> Mind you, I dont have any docs so I am mostly using the downstream kernel as the reference.
+> This driver doesn't do anything more than its downstream
+> counterpart, everything we need should be there on msm-X.Y.
+> 
+> One flaw in this revision is that it doesn't yet support
+> multiple speed bins, so if your SoC has n of those, you
+> may get confused by n sets of values.. This is easy to
+> improve on in future, but this initial submission is
+> already very fat to begin with..
+> 
+> 
 
-1. lock VMA 1
-2. lock mapping of VMAs 1 and 2
-3. lock VMA 2
-4. [second vm_lock_mapping() is a no-op]
+Hello Robert, Konrad,
 
-So for VMA 1, we ended up taking the VMA lock first, but for VMA 2, we
-took the mapping lock first.
+since it is a bit difficult to find and follow discussions started/written in
+a random place of a file (and reviews, as well), can you please cut off the
+unnecessary text before sending out a reply?
 
-The existing code has one loop per lock type to ensure that the locks
-really are taken in the specified order, even when some of the locks
-are associated with multiple VMAs.
+Anyway, the fuse corners are actually read from fuses; the values that you see
+hardcoded are references and safety min/max values which purpose is to both
+perform calculation after fuse reading and to ensure safety (example: you put
+a wrong bits range to read from fuses, the driver saves you by refusing to set
+a very high voltage on the CPU core[s]).
 
-If we don't care about the ordering between these two, maybe that's
-fine and you just have to adjust the comment; but it would be clearer
-to add a separate loop for the VMA locks.
+As for where to find the values, I personally don't precisely remember, as that
+was done more than 1.5 years ago, but what I recall is that they're scattered
+across multiple files, including devicetree and drivers.
 
-> @@ -3677,6 +3679,7 @@ void mm_drop_all_locks(struct mm_struct *mm)
->                 if (vma->vm_file && vma->vm_file->f_mapping)
->                         vm_unlock_mapping(vma->vm_file->f_mapping);
->         }
-> +       vma_write_unlock_mm(mm);
->
->         mutex_unlock(&mm_all_locks_mutex);
->  }
-> --
-> 2.39.0
->
+I also remember that I had to add debugging prints to the downstream driver in
+order to get one of the values right... but that may have been due to MSM8998
+values being a bit strange.
+
+Thanks,
+Angelo
+
