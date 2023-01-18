@@ -2,119 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563A7672997
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2F5672995
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjARUlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S230054AbjARUlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjARUlB (ORCPT
+        with ESMTP id S229748AbjARUk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:41:01 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76CD4A202;
-        Wed, 18 Jan 2023 12:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=md4uxanlxoNCe8b7gZ4uQll2YVbv50mEZqFSNP3ZnLU=; b=ILnzoL+FrViTUNFXn7/4Gknk1C
-        Hq3IMtMMl24o/v4Rk232I9bNeFJ8Vy0p0oF387AqCU8GVxQR9wkPOUH7oZ4PAFsk1YvfXRs3NFpqF
-        cr3w+1BNURAhHpGsoZmlnj/LoKnn5jy2n7aryqPFSVRzRBbnOyvTmxBerMZqvmAcNlbu9g1WfWnHE
-        NeUiWw2n5QyW3cReWUPgFLVbLLdx8tqHbCkomzUvpJVvUmLVUf65FeaXkUzuLyFP5NuUvGUG7fCZ1
-        +P8Ic49FpE3HdcMkaBW6oEbh75zvK8Zm+SiBgomFNP8VrOderQ4P57tgzm5XjBwpLp/F1qMWS93Oh
-        u4aPJMtA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pIFE7-00067h-1t;
-        Wed, 18 Jan 2023 20:40:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B06A300094;
-        Wed, 18 Jan 2023 21:40:33 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0C87823BD9D65; Wed, 18 Jan 2023 21:40:33 +0100 (CET)
-Date:   Wed, 18 Jan 2023 21:40:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
-        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org
-Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User
- Dispatch Suspension
-Message-ID: <Y8hZQI6UfDHhH3tj@hirez.programming.kicks-ass.net>
-References: <20230109153348.5625-1-gregory.price@memverge.com>
- <20230109153348.5625-2-gregory.price@memverge.com>
- <Y8gpZ+T/re7mEDjB@hirez.programming.kicks-ass.net>
- <CAD3UvdSpOMAOUm1CYJ5vOyEsiVZCQdiWaTmXjq1vWVFq1DhQ0w@mail.gmail.com>
- <Y8hNS4aCkkOLv1M/@memverge.com>
+        Wed, 18 Jan 2023 15:40:59 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132073A844
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:40:57 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bk15so232984ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/vO/4KjLR5OFSgF1jEIWY7wmER0epanj/ZLVzydWABo=;
+        b=CLP+uaiQzHUdvSSDuWzdihPPqyUthH7f4vPLbCUoySgYOnia3LP2vD2od9HwH+VGtc
+         sqGSUiVGksS55VFUqqIylQJ9h6dISv37BmOKjGGDgAFnV7IBQOxryX8Z4SmuPzFTErxl
+         dTLBS5KgyjEef4YYKxsBm78Vterl8sJ233wMJQ+i60V9F0kG3IFL3ISh6um9Mb9Od0Z9
+         aRWheTdYes2Ptj9DO2NhKksHIWnfPE0DIIc0gfPw7cxFFlThlGfAa4dNhInTtfD9CygX
+         zn06WmlH1f7vvTc411chqBF3PkjnXdomfQLhT/anJzAOS2vxckk3mCVt9zt/j0Fwdpae
+         TMmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/vO/4KjLR5OFSgF1jEIWY7wmER0epanj/ZLVzydWABo=;
+        b=muBRPOWuBVmpXxFmm9gc3bbtxmqYNOhYtuLfpeETJZIMfKFqdzFCCu4yqkhjL4tEL4
+         94oshIyvpeZGM7ncI04XUBLn3PBYpZJx7qaL0E1co07PkN333+ekWLX9QHcniqnR5c+h
+         WTmL1/sa8yvik5YPW2KE8ubTD2IJB3vsLUEqGgQ1YzmK8C+uYLgB5Vt3spmaaPEyR7H/
+         +KQfP+Sw2ykNG9YTmGi6vW9sWWzFspy+yjzhAzZG5LfNV1t8i0nPjXF3zvb43Pb91KTe
+         Bq5gSwgNpW2x3KAlHlxnoioR28qSheo+oyog6nYEb+4JY//cydUxYLKWNdNWXGK47KYU
+         MH2Q==
+X-Gm-Message-State: AFqh2korLVw2bxoqcwxh1E885roma5YJ/8x7zlc0zGSNeGvveDCwVPWl
+        7erHzuhGgB86bw3FJA0jPCn0DQ==
+X-Google-Smtp-Source: AMrXdXvtas7dE8lOX47LZPKM/W6Ik6fEI1CUyDFqYVLL7rJxY8KO85yMqzDSUVWhCekBl+VTkw2UwA==
+X-Received: by 2002:a17:906:758:b0:84d:12d8:e1e9 with SMTP id z24-20020a170906075800b0084d12d8e1e9mr7634780ejb.41.1674074455601;
+        Wed, 18 Jan 2023 12:40:55 -0800 (PST)
+Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709063ca100b007af0f0d2249sm15176216ejh.52.2023.01.18.12.40.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 12:40:55 -0800 (PST)
+Message-ID: <77fbf01f-58fc-55a2-415b-c39d991e7c96@linaro.org>
+Date:   Wed, 18 Jan 2023 21:40:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8hNS4aCkkOLv1M/@memverge.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add CPU idle-states
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230118203428.910992-1-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230118203428.910992-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 02:49:31PM -0500, Gregory Price wrote:
-> On Wed, Jan 18, 2023 at 02:41:00PM -0500, Gregory Price wrote:
-> > ---------- Forwarded message ---------
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > Date: Wed, Jan 18, 2023 at 12:16 PM
-> > Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall
-> > User Dispatch Suspension
-> > To: Gregory Price <gourry.memverge@gmail.com>
-> > 
-> > 
-> > On Mon, Jan 09, 2023 at 10:33:46AM -0500, Gregory Price wrote:
-> > > @@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
-> > >       struct syscall_user_dispatch *sd = &current->syscall_dispatch;
-> > >       char state;
-> > >
-> > > +     if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
-> > > +                     unlikely(current->ptrace &
-> > PT_SUSPEND_SYSCALL_USER_DISPATCH))
-> > > +             return false;
-> > > +
-> > >       if (likely(instruction_pointer(regs) - sd->offset < sd->len))
-> > >               return false;
-> > >
-> > 
-> > So by making syscall_user_dispatch() return false, we'll make
-> > syscall_trace_enter() continue to handle things, and supposedly you want
-> > to land in ptrace_report_syscall_entry(), right?
-> >
-> > ... snip ...
-> > 
-> > Should setting this then not also depend on having
-> > SYSCALL_WORK_SYSCALL_TRACE set? Because without that, you get 'funny'
-> > things.
-> 
-> Hm, this is an interesting question.  My thoughts are that I want the
-> process to handle the syscall as-if syscall user dispatch was not
-> present at all, regardless of SYSCALL_TRACE.
-> 
-> This is because some software, like CRIU, actually injects syscalls to
-> run in the context of the software in an effort to collect resources.
 
-Oh, right. I used to know that.
 
-> So I actually *want* those 'funny' things to occur, because they're most
-> likely intentional.  I don't necessarily want to intercept system calls
-> that subsequently occur (although i might).
+On 18.01.2023 21:34, Bhupesh Sharma wrote:
+> Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
 > 
-> So if this feature required SYSCALL_TRACE, you would no longer be able
-> to inject system calls ala CRIU.
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 104 +++++++++++++++++++++++++++
+>  1 file changed, 104 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index 478c5d009272..29c05cbb5fd7 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -44,6 +44,8 @@ CPU0: cpu@0 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD0>;
+> +			power-domain-names = "psci";
+>  			L2_0: l2-cache {
+>  				compatible = "cache";
+>  				cache-level = <2>;
+> @@ -59,6 +61,8 @@ CPU1: cpu@1 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD1>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		CPU2: cpu@2 {
+> @@ -70,6 +74,8 @@ CPU2: cpu@2 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD2>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		CPU3: cpu@3 {
+> @@ -81,6 +87,8 @@ CPU3: cpu@3 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD3>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		CPU4: cpu@100 {
+> @@ -92,6 +100,8 @@ CPU4: cpu@100 {
+>  			dynamic-power-coefficient = <282>;
+>  			next-level-cache = <&L2_1>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+> +			power-domains = <&CPU_PD4>;
+> +			power-domain-names = "psci";
+>  			L2_1: l2-cache {
+>  				compatible = "cache";
+>  				cache-level = <2>;
+> @@ -107,6 +117,8 @@ CPU5: cpu@101 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_1>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+> +			power-domains = <&CPU_PD5>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		CPU6: cpu@102 {
+> @@ -118,6 +130,8 @@ CPU6: cpu@102 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_1>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+> +			power-domains = <&CPU_PD6>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		CPU7: cpu@103 {
+> @@ -129,6 +143,8 @@ CPU7: cpu@103 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_1>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+> +			power-domains = <&CPU_PD7>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		cpu-map {
+> @@ -168,6 +184,41 @@ core3 {
+>  				};
+>  			};
+>  		};
+> +
+> +		idle-states {
+> +			entry-method = "psci";
+> +
+> +			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+> +				compatible = "arm,idle-state";
+> +				idle-state-name = "silver-rail-power-collapse";
+> +				arm,psci-suspend-param = <0x40000003>;
+> +				entry-latency-us = <290>;
+> +				exit-latency-us = <376>;
+> +				min-residency-us = <800>;
+I think this value is incorrect, see:
 
-Yeah, I suppose you're right. It makes it a very sharp instrument, but I
-suppose you get what you asked for.
+https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tags/android-11.0.0_r0.56/qcom/bengal-pm.dtsi#99
+
+> +				local-timer-stop;
+> +			};
+> +
+> +			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+> +				compatible = "arm,idle-state";
+> +				idle-state-name = "gold-rail-power-collapse";
+> +				arm,psci-suspend-param = <0x40000003>;
+> +				entry-latency-us = <297>;
+> +				exit-latency-us = <324>;
+> +				min-residency-us = <1110>;
+> +				local-timer-stop;
+> +			};
+> +		};
+> +
+> +		domain-idle-states {
+> +			CLUSTER_SLEEP_0: cluster-sleep-0 {
+> +				compatible = "domain-idle-state";
+> +				idle-state-name = "cluster-power-collapse";
+> +				arm,psci-suspend-param = <0x41000043>;
+> +				entry-latency-us = <800>;
+> +				exit-latency-us = <2118>;
+> +				min-residency-us = <7376>;
+These values vary per cluster, see qcom,pm-cluster-level@2 in the
+file linked above.. We should either split that, or at least take
+max() of each value between the two nodes to make sure the sleep
+state is exited properly on both types of cores.
+
+Konrad
+> +			};
+> +		};
+>  	};
+>  
+>  	firmware {
+> @@ -191,6 +242,59 @@ pmu {
+>  	psci {
+>  		compatible = "arm,psci-1.0";
+>  		method = "smc";
+> +
+> +		CPU_PD0: power-domain-cpu0 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD1: power-domain-cpu1 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD2: power-domain-cpu2 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD3: power-domain-cpu3 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD4: power-domain-cpu4 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD5: power-domain-cpu5 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD6: power-domain-cpu6 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CPU_PD7: power-domain-cpu7 {
+> +			#power-domain-cells = <0>;
+> +			power-domains = <&CLUSTER_PD>;
+> +			domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +		};
+> +
+> +		CLUSTER_PD: power-domain-cpu-cluster0 {
+> +			#power-domain-cells = <0>;
+> +			domain-idle-states = <&CLUSTER_SLEEP_0>;
+> +		};
+>  	};
+>  
+>  	reserved_memory: reserved-memory {
