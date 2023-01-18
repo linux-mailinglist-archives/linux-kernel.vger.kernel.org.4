@@ -2,84 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1803C672236
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BC167223A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 16:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjARP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 10:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S229967AbjARP5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 10:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjARPyw (ORCPT
+        with ESMTP id S230261AbjARP5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 10:54:52 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F044256ECD
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:51:19 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id g10so25013245wmo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:51:19 -0800 (PST)
+        Wed, 18 Jan 2023 10:57:11 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365E459567
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:52:55 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id i185so36182312vsc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 07:52:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cXztzz9eQE5yAeZKGMUMFg/Zj91bDlHuOhYcwUvF18o=;
-        b=GdYhmLDVzU5PawleUjy7HzJQlHRp0xzQEUubtVRgF2UOPS3DWbci8yK2YWVJHZNZXm
-         ss2vqx1iLlF7UivFNF/DEiz/B0eBf7jqxPlcF7RF6APAFktd4XDKr/ppuhS/OUz0YI8v
-         B9xJyVUyJrQlU/J1P2rESSuXHZOqmafSwSqWmOjF9XuYO8z5Oh1zHWNXrGmtRrwBFPRr
-         JZ4Ya68B5bnCZG/DyxF2QZInee68Ju5Ft0SAj285r8eJv46ovDyWDku52pZMkJOq7Wlw
-         rnG6GnLO0Qzmxpp2pf2WVS7cryB7T97mfWIIw4L+H7PKTVzYOctj1ZrvBIHTJ5Qa79Ia
-         Fo1A==
+        d=soleen.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e11pkTomTpxVYwWB/x5AvRv96kjActm3EnkRXWTwwk8=;
+        b=AqBeL7mq8lZay/paXXhXRpjjUJt08FG0+VU0ZB+QGYdRQOFLPBRNqL3f2d/9j0is0u
+         nC5nf83+Zr3iIdMxFZ5v+PbCMljIQEZ4/YitGIpzM0Qr4OAyiDmJJnwkl/gcWLDtVPof
+         y5M4pF3/e4Ch2yyIgXDvGLtEkimCCIq6390DO77T+SPfBnM7ooO9uB4bz/g7YzUONXzy
+         oRLmErk8+FAC7Qp5rgxRpmal6VR2HL4vzdyfJ+xbfD8OhrlbjVi0p/1hOiYJ4JGkUsVc
+         YQqunb6tYi3yrUadma6zoTzCssM7MmkzMpkH1e6janr+4wU5yfrR+UDySpft6rNGMZYm
+         QrFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXztzz9eQE5yAeZKGMUMFg/Zj91bDlHuOhYcwUvF18o=;
-        b=R5u5qD6xhaRmkwbD+BWqKy9fbpxRfKau70cxsNhs0RXhJq2cYzwrbzKuYiNkr/worv
-         HlKam9j2wSq08PaCdhJQn1aMkzXS/YaXFTM3qosXHIQ4vZy74dm8WEWsVSt+AWGkKWsu
-         kqIVaZ8VCCy9OenXQvgDrtR40rIwnsqEZQnPtKn8UqwN7AYTDcLoCH80qfQRuwcRFNJb
-         BvIVNc5CvQYGhAP24+UykFnlkBt8KIW0U/AYIWzgc48TsZwpof23nqInUVuOFmd/iS3n
-         /HLZwNqfrANkHoPj3o1BKtctmCpGSbebsazKRX6rUAR1depIkKSy6QpXFlgnIdZCyBaH
-         TyzA==
-X-Gm-Message-State: AFqh2kqQZxydTg4/pWHEBAC6BlXRkcY1qSk88vhUwn6BfXGDGhFPGGqx
-        jhaJ1lV/9D2J9wdMD2Vk/VKcpA==
-X-Google-Smtp-Source: AMrXdXsTZcClQl9bxcwiEKjoRnzSJ2yCZmooCIKBSadeADdTTA6+M/TsGtBVZ7NPee6iuUewrbzdtQ==
-X-Received: by 2002:a05:600c:5405:b0:3d3:5709:68e8 with SMTP id he5-20020a05600c540500b003d3570968e8mr6990822wmb.36.1674057078592;
-        Wed, 18 Jan 2023 07:51:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1cf601000000b003daf681d05dsm2330254wmc.26.2023.01.18.07.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 07:51:18 -0800 (PST)
-Message-ID: <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
-Date:   Wed, 18 Jan 2023 16:51:16 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e11pkTomTpxVYwWB/x5AvRv96kjActm3EnkRXWTwwk8=;
+        b=QvnvviM7oRrdBz8vV+EdrPzt+u550BepLclUlLCJ+BNMpJFujVHAG3WEuLA56pAqO6
+         /R2MUnr4/12Ys7L9+Rpjk3AyBo9MKcPVHeNpQx4a0MdKTW0as6kbQqgYUnp5vdpGo+7i
+         ptkMYiiPqa2ro6uLK7mcoMV42Iw/H+JfGF5ssvRF6lVqO3bzRuDf7whuHWoOz/6qp16E
+         qXxPC4TJr1AYflqx46M5WB0oENsuVj8yeafw23lPKh0Qo9WX8DSWb1DvDx8wlNXva7gm
+         91pQgbWWwM/y4LHbJuNMcmyqRC23gYzo5PNzbA60se8jUfRSMsEA7ybfq82vsqVxJW2U
+         1h7Q==
+X-Gm-Message-State: AFqh2kqt9k1iZZtAf0f5JInvYyOHxxVNf5ZUDmUtyydN8cat2dNywIF7
+        g+4ncrgEaqAdJfBAsKajAAeE0w==
+X-Google-Smtp-Source: AMrXdXtDAtxod2Jf4LXcipYYXHgxbN+j/hk/GhDfBM+ha9kvUk5VE4+MCQIKH0XfpAJYh1JMjv3T4Q==
+X-Received: by 2002:a05:6102:941:b0:3ce:b848:d673 with SMTP id a1-20020a056102094100b003ceb848d673mr5109816vsi.32.1674057174121;
+        Wed, 18 Jan 2023 07:52:54 -0800 (PST)
+Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05620a288900b006f9f714cb6asm21935932qkp.50.2023.01.18.07.52.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:52:53 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, rppt@kernel.org,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        david@redhat.com, quic_charante@quicinc.com,
+        lizhe.67@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v2] mm/page_ext: init page_ext early if there are no deferred struct pages
+Date:   Wed, 18 Jan 2023 15:52:51 +0000
+Message-Id: <20230118155251.2522985-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
- node
-Content-Language: en-US
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-7-yanhong.wang@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118061701.30047-7-yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,40 +69,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 07:17, Yanhong Wang wrote:
-> Add JH7110 ethernet device node to support gmac driver for the JH7110
-> RISC-V SoC.
-> 
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 93 ++++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index c22e8f1d2640..c6de6e3b1a25 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -433,5 +433,98 @@
->  			reg-shift = <2>;
->  			status = "disabled";
->  		};
-> +
-> +		stmmac_axi_setup: stmmac-axi-config {
+page_ext must be initialized after all struct pages are initialized.
+Therefore, page_ext is initialized after page_alloc_init_late(), and
+can optionally be initialized earlier via early_page_ext kernel
+parameter which as a side effect also disables deferred struct pages.
 
-Why your bindings example is different?
+Allow to automatically init page_ext early when there are no deferred
+struct pages in order to be able to use page_ext during kernel boot
+and track for example page allocations early.
 
-Were the bindings tested? Ahh, no they were not... Can you send only
-tested patches?
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+---
+ include/linux/page_ext.h | 2 ++
+ init/main.c              | 6 +++---
+ mm/page_alloc.c          | 6 +++++-
+ mm/page_ext.c            | 2 +-
+ 4 files changed, 11 insertions(+), 5 deletions(-)
 
-Was this tested?
+Changelog:
+v2: Fixed build issue with CONFIG_PAGE_EXTENSION=n
 
-> +			snps,lpi_en;
-> +			snps,wr_osr_lmt = <4>;
-> +			snps,rd_osr_lmt = <4>;
-> +			snps,blen = <256 128 64 32 0 0 0>;
-> +		};
-> +
-
-Best regards,
-Krzysztof
+diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+index 67314f648aeb..bc2e39090a1f 100644
+--- a/include/linux/page_ext.h
++++ b/include/linux/page_ext.h
+@@ -29,6 +29,8 @@ struct page_ext_operations {
+ 	bool need_shared_flags;
+ };
+ 
++extern bool deferred_struct_pages;
++
+ #ifdef CONFIG_PAGE_EXTENSION
+ 
+ /*
+diff --git a/init/main.c b/init/main.c
+index e1c3911d7c70..64cd2ff051c4 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -855,8 +855,8 @@ static void __init mm_init(void)
+ 	pgtable_init();
+ 	debug_objects_mem_init();
+ 	vmalloc_init();
+-	/* Should be run after vmap initialization */
+-	if (early_page_ext_enabled())
++	/* If no deferred init page_ext now, as vmap is fully initialized */
++	if (!deferred_struct_pages)
+ 		page_ext_init();
+ 	/* Should be run before the first non-init thread is created */
+ 	init_espfix_bsp();
+@@ -1628,7 +1628,7 @@ static noinline void __init kernel_init_freeable(void)
+ 	padata_init();
+ 	page_alloc_init_late();
+ 	/* Initialize page ext after all struct pages are initialized. */
+-	if (!early_page_ext_enabled())
++	if (deferred_struct_pages)
+ 		page_ext_init();
+ 
+ 	do_basic_setup();
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 99ebb08dc3f2..717f12e83b85 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -430,6 +430,8 @@ EXPORT_SYMBOL(nr_online_nodes);
+ 
+ int page_group_by_mobility_disabled __read_mostly;
+ 
++bool deferred_struct_pages __meminitdata;
++
+ #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+ /*
+  * During boot we initialize deferred pages on-demand, as needed, but once
+@@ -6803,8 +6805,10 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
+ 		if (context == MEMINIT_EARLY) {
+ 			if (overlap_memmap_init(zone, &pfn))
+ 				continue;
+-			if (defer_init(nid, pfn, zone_end_pfn))
++			if (defer_init(nid, pfn, zone_end_pfn)) {
++				deferred_struct_pages = true;
+ 				break;
++			}
+ 		}
+ 
+ 		page = pfn_to_page(pfn);
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index e2c22ffdbb81..dc1626be458b 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -92,7 +92,7 @@ unsigned long page_ext_size;
+ static unsigned long total_usage;
+ static struct page_ext *lookup_page_ext(const struct page *page);
+ 
+-bool early_page_ext;
++bool early_page_ext __meminitdata;
+ static int __init setup_early_page_ext(char *str)
+ {
+ 	early_page_ext = true;
+-- 
+2.39.0.314.g84b9a713c41-goog
 
