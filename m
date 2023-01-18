@@ -2,156 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E674672983
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFF4672986
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjARUgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S229657AbjARUhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjARUfn (ORCPT
+        with ESMTP id S230190AbjARUgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:35:43 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5375EFA0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:35:03 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id bj3so305688pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:35:03 -0800 (PST)
+        Wed, 18 Jan 2023 15:36:48 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8AF60490
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id bk15so203592ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlL87WtXYWnFJQ82sP+jz4ggPtw5DmAgZ3Db5gKK8ZQ=;
-        b=il1JhA1q5vUc1knM/UMIMPfx+vofRef7GCBMpvS6rXoUDeL/dRjy2yVdleC8GlWeGW
-         Y+ZhKWCQknCzc81YNavYwUgFBYJIN03JZoiyLHO3fqcvqvBA/QliZfpeytI0SrxGJ3He
-         308Zzo8NJoxbPUJbbPyiwU3dY4a3qKvEqPKQE=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
+        b=lVq0ApR7wpNjKYW+Y7W2kWZdE7dAbMEcdxD/z/duwXqDArTknD/x1iMrLDR9BRFywZ
+         nTkHZ6C+NL55NZOtp8YnWr5ma4BDNr9E8HXi9IEAgqxKVbbC+O1q0zjy7yTCBS+S6jXh
+         FequP/8M+mjc55qCEu97QPr83gLvIJhuGTILnyA4j3BXy3GJRXHgQCvphSDeGIo+RrGG
+         w28ez2s3kK1I4xYqIwj+Qj5wvxQqGlBzMv/4Sm6Asqxy/9zj47M2gcWTejQ1oFUVD5sH
+         +HzK7QUzb24f6O2RNsGjO99JNtjJl73x5oY+oDSGCLc3FWRXqqgH2iR8e3siPYuv+Mgz
+         vWNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GlL87WtXYWnFJQ82sP+jz4ggPtw5DmAgZ3Db5gKK8ZQ=;
-        b=CM99LVU7Rf/eGXpBGOuCnBPV3wwTFQ1+VE0xsQHrJB/WLx/daojlb3Eos+PKbNwVDB
-         o8IfwzjIaSxP0miip2wHSCZDwG4bYa4ZLXtA688q3dtbGFxM3iKO1fEqCoUfhpA9gA9J
-         0VkGt4C6Eca8JK0H8DxZRLKsZQP2aqERT2tTe6HOCDCvH6VglOYre0T/qBXLqWXXPq/K
-         F4XBfdd+CsuLIKQyZs/KkbMoQ58VVeAx0cHVpUz1wcVDmj83EXcZExRX1ToSB8umHbz5
-         3Bm3eKRvPFl6GoRhHDhUKTuf1ynV8EDoztKs3Yzycnm5KgaQmfiPXWVMIivqyTD8QTg1
-         WpiA==
-X-Gm-Message-State: AFqh2kriBPrr1hW6WF1QcSPXDWHuZFiqk6tBYSwVjXY0rod7TPo2xC2Z
-        l4v2qRH+l3c1P0CCTTxE9KdKAA==
-X-Google-Smtp-Source: AMrXdXu9WhoZzCPIiQOj9shw/cxiZ4ZpEMcBtMO4PMbDGQ4H7FcViutbdRywGGFecx6Uavr02u50oA==
-X-Received: by 2002:a17:90b:4d8d:b0:229:6b20:2424 with SMTP id oj13-20020a17090b4d8d00b002296b202424mr14337188pjb.11.1674074102970;
-        Wed, 18 Jan 2023 12:35:02 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 10-20020a17090a098a00b002192db1f8e8sm1731691pjo.23.2023.01.18.12.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:35:02 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael Chan <michael.chan@broadcom.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] bnxt: Do not read past the end of test names
-Date:   Wed, 18 Jan 2023 12:35:01 -0800
-Message-Id: <20230118203457.never.612-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
+        b=jOmxs/QJPZK41J/XIzzdhbGfhT7pnjm7NuqbLLyeN2T5l8BhD2eAShmgrpu7TTQ3KW
+         eYWQ3G859nu3SQa5f9RpgyhYcYxjoJOevDrwXGCrWMkk1HwEk4H3Ezd7maImkd1Agwlf
+         nO6V6ZnDbKpv9k5zbwxsrijENo4dUk/ZDwkq0gKywBWZVRk/SOYAbGbgP27iDCDGtJxy
+         qd2n3aI6a/gTWOeVA+YyCOAQpKN3qx2pypZW/QGKbYlm41a/Xve+8upy8mEWAPy+fbk0
+         aoHYEdZeSKnS+PvvhHTbH5oHhED7Mnsn+XUMkVTt+LVcc0NkDXpxG9HxGdQS1FsnjiHk
+         J10Q==
+X-Gm-Message-State: AFqh2kq02AAz5sNdyfIsR2t9MewyB9mc5XZw9w78sqK7yG+TfwTYPoxH
+        KCD9eyLXKrUADQt4IDeecwNpNQ==
+X-Google-Smtp-Source: AMrXdXsfUbRWYZbFT1n/j0VlmXtzaOPqFjXEhtYouuqtX8fD8Cyl5LNeGNI5+eJ4j8vqMxFUTaK4eA==
+X-Received: by 2002:a17:906:80d:b0:870:d15a:c2e0 with SMTP id e13-20020a170906080d00b00870d15ac2e0mr7826142ejd.51.1674074198540;
+        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
+Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0084d14646fd9sm14993594ejf.165.2023.01.18.12.36.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
+Message-ID: <8673ef49-a37e-2d76-b800-bf9b10875006@linaro.org>
+Date:   Wed, 18 Jan 2023 21:36:35 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3175; h=from:subject:message-id; bh=IkmNRS1zkCvBM7XN/FXavkfZ6bNyrS/zqS25w8Li07Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjyFf0kq0GA2aFV5NYCC3EK0yZjk6LWynNzeC3CrF5 fcBYaeCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY8hX9AAKCRCJcvTf3G3AJpWMEA CXM2ReEF/7ofukRqiz4IlPcLfa+oDa70G9tS+v0Fgp2EspSNzb1mGUP8qFNZMlrvzQW65P5RZVE45G IrRE0GIex7Q2uZvzyNlnSmXw31fdLv3Oiprw55rTUdfIgTWgeVysuesyL+D1ssHir3FjLUQ7b9oppA zfIooJQ8I00GMl4gNzjWEOlkaIZ/N1EL+9bs1WZTlCKV8nTimXU1PDesVUa6I4tpFFJ6+xZ7N1Lv+X zSfz7+xhsTRngfwkeGHrGQBKKmwv3hZhYa6C3NCx4s8pXI8l0jWzn3F3a4ZqecFwCQkRyg4xOoPF62 ++Vs/eIWaA6e6qVLLb9Twv0pFIQGIkRVyMpYBaojZJn/Y+UNXaGnYr/2hc2p+5hZDcsgx9BbV2LJGt iscSm0yEpfCaLfQNZCv1tM3T/DtcmFJuiK7xNGzZ9VybDaW1afNOk30A8b+QqCh+aduOZQQvsmiavc +2M0m/wU3kG6VG6ZpS0hM/fNdmyLzquF3ehEiIhRGZP7/BY/f6Y5RFwKbFkfs5bt1PECJZ6s6d7p/Q lsESHHaKo1tf5Bdj/ZFnO679VnLhkh0EcrcEezmGkf71GxWFWxl62DHQvG6UwqljRXM5HOzK5/HrFL 69Wn2oMZVFicU9r38BiN86KLir3RMs2NbVIkEF+CZL1YVkMcwwl3C7r1jNWg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/9] interconnect: qcom: rpm: Always set QoS params on
+ QNoC
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
+        Georgi Djakov <djakov@kernel.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
+ <20230116132152.405535-3-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230116132152.405535-3-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test names were being concatenated based on a offset beyond the end of
-the first name, which tripped the buffer overflow detection logic:
 
- detected buffer overflow in strnlen
- [...]
- Call Trace:
- bnxt_ethtool_init.cold+0x18/0x18
 
-Refactor struct hwrm_selftest_qlist_output to use an actual array,
-and adjust the concatenation to use snprintf() rather than a series of
-strncat() calls.
+On 16.01.2023 14:21, Konrad Dybcio wrote:
+> On newer SoCs, QoS parameters and RPM bandwidth requests are wholly
+> separate. Setting one should only depend on the description of the
+> interconnect node and not whether the other is present. If we don't
+> vote through RPM, QoS parameters should be set regardless, as we're
+> requesting additional bandwidth by setting the interconnect clock
+> rates.
+> 
+> With NoC (the old-SoC bus type), this is not the case and they are
+> mutually exclusive (so, the current upstream logic is correct).
+> 
+> For BIMC however, newer SoCs expect QoS params to be always set
+> (like QNoC) whereas older ones (like MSM8998) hang up completely when
+> doing so, hence this will be addressed in the next commit.
+> 
+> The Fixes tag references the commit in which this logic was added, it
+> has since been shuffled around to a different file, but it's the one
+> where it originates from.
+> 
+> Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+Would be very nice if somebody could test this one in particular
+on QCM2290 to make sure it does not regress that SoC..
 
-Reported-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-Link: https://lore.kernel.org/lkml/Y8F%2F1w1AZTvLglFX@x1-carbon/
-Tested-by: Niklas Cassel <Niklas.Cassel@wdc.com>
-Fixes: eb51365846bc ("bnxt_en: Add basic ethtool -t selftest support.")
-Cc: Michael Chan <michael.chan@broadcom.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c | 13 ++++---------
- drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h     |  9 +--------
- 2 files changed, 5 insertions(+), 17 deletions(-)
+Shawn, Loic?
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-index cbf17fcfb7ab..ec573127b707 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-@@ -3969,7 +3969,7 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		test_info->timeout = HWRM_CMD_TIMEOUT;
- 	for (i = 0; i < bp->num_tests; i++) {
- 		char *str = test_info->string[i];
--		char *fw_str = resp->test0_name + i * 32;
-+		char *fw_str = resp->test_name[i];
- 
- 		if (i == BNXT_MACLPBK_TEST_IDX) {
- 			strcpy(str, "Mac loopback test (offline)");
-@@ -3980,14 +3980,9 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		} else if (i == BNXT_IRQ_TEST_IDX) {
- 			strcpy(str, "Interrupt_test (offline)");
- 		} else {
--			strscpy(str, fw_str, ETH_GSTRING_LEN);
--			strncat(str, " test", ETH_GSTRING_LEN - strlen(str));
--			if (test_info->offline_mask & (1 << i))
--				strncat(str, " (offline)",
--					ETH_GSTRING_LEN - strlen(str));
--			else
--				strncat(str, " (online)",
--					ETH_GSTRING_LEN - strlen(str));
-+			snprintf(str, ETH_GSTRING_LEN, "%s test (%s)",
-+				 fw_str, test_info->offline_mask & (1 << i) ?
-+					"offline" : "online");
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-index 2686a714a59f..a5408879e077 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-@@ -10249,14 +10249,7 @@ struct hwrm_selftest_qlist_output {
- 	u8	unused_0;
- 	__le16	test_timeout;
- 	u8	unused_1[2];
--	char	test0_name[32];
--	char	test1_name[32];
--	char	test2_name[32];
--	char	test3_name[32];
--	char	test4_name[32];
--	char	test5_name[32];
--	char	test6_name[32];
--	char	test7_name[32];
-+	char	test_name[8][32];
- 	u8	eyescope_target_BER_support;
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E8_SUPPORTED  0x0UL
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E9_SUPPORTED  0x1UL
--- 
-2.34.1
-
+Konrad
+>  drivers/interconnect/qcom/icc-rpm.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 385a67c20956..b1337f90c975 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -239,15 +239,27 @@ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
+>  static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
+>  			  u64 sum_bw)
+>  {
+> +	struct qcom_icc_provider *qp = to_qcom_provider(n->provider);
+> +	bool vote_ap, vote_rpm;
+>  	int ret;
+>  
+> -	if (!qn->qos.ap_owned) {
+> -		/* send bandwidth request message to the RPM processor */
+> +	if (qp->type == QCOM_ICC_QNOC) {
+> +		vote_ap = true;
+> +		vote_rpm = true;
+> +	} else {
+> +		vote_ap = qn->qos.ap_owned;
+> +		vote_rpm = !vote_ap;
+> +	}
+> +
+> +	if (vote_rpm) {
+> +		/* Send bandwidth request message to the RPM processor */
+>  		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
+>  		if (ret)
+>  			return ret;
+> -	} else if (qn->qos.qos_mode != -1) {
+> -		/* set bandwidth directly from the AP */
+> +	}
+> +
+> +	if (vote_ap && qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
+> +		/* Set QoS params from the AP */
+>  		ret = qcom_icc_qos_set(n, sum_bw);
+>  		if (ret)
+>  			return ret;
