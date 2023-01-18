@@ -2,289 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F335667267D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF4F672689
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjARSP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S230339AbjARSQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjARSPv (ORCPT
+        with ESMTP id S229924AbjARSQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:15:51 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6732D15F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:15:50 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id g2so17446236ila.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:15:50 -0800 (PST)
+        Wed, 18 Jan 2023 13:16:35 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF059E5A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so2248221wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFMvi2a6L2BPNbil1Z3ukPsrERB30WY5FsfmzneS0xY=;
-        b=FXN2VCbM00KvzRkLSjJCig2q0kiMeLGNdPtqDsL6Sn+DpZ+Rfxrxmut8jlbmR5reSW
-         MrN/046C1mOXE04WG8BP9Ag0tGSdsv3J1z3DLT+Ft+cTDKo0Fc8nHcQtX93SChBeTB3S
-         v+M0dtOnqM6E0LcYWrXGlAWURLkqAyXlfgRZUmty3DrKEjdVUMAJTpxYB9sMafWHFfnQ
-         Hw1IkSK/+hFION0jdBrcEI5Z2Pi0CTrplRkhpS3r4GLCFizUFFazRU1xi37XSU1WjSSS
-         GhASTTqJtcHutSoQlKJhlVJhKCKta6qfDEEx/dft6aFS/IzYIBXXmaQXjCEYcOjx29Of
-         zquQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
+        b=gkpw9IZzYcl1dAnnjN/nEU/WYiGEqwjyeWRxvrttmz8Pjd7VUHlBIrXHE7G15slK0v
+         +KYozqf8E0OWNAZyZFQKiMp4q+OhBYWwC8TltkpP5eQJeyhZudH6WhKZN6QYD6krmp1e
+         w18W4n46yQkVCOawNbFlfbdWf5/lcqRzQPhMvMl/H6S2ZZ+TfgVuGYIuCZCcrjrVEETM
+         TYwXE+F7+PrNylzMCj3iaAk6Xv1Jrup7ahFxT2VTdmhEUDItNqTWM11dsUzbmZMeulhE
+         /kM0nGMN7L0I/YErnvmLcXJt5GOHD9A4sMnjRBrSjfqDYrWoqH4h6K8sVovsFvQYwHua
+         uGHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qFMvi2a6L2BPNbil1Z3ukPsrERB30WY5FsfmzneS0xY=;
-        b=3mRKsmrbFLmTm8tEKOXgyy2f9yiRTEa89U/4SSLsKnZGrJvnAmYSVxMAl7ai6TzRI/
-         dPWXcGCm8Z9pw5IoXYlTYTNA39yELpskdQ2glQVr8D/7kY/7xzIoCScJ0wNuGYG0hd2V
-         Zfw5u1z/3wWqt2nDvtazMFZdSGtQLy7XEchP+dDsIKWX6icV9jBl+0Xj/s+VkVXbGLGv
-         xxJhfhHmuN0yaHrlYSicBammfHhf01IRDP36LTw9Qg3l6az84nZZob6QWxHMCFpX4NZC
-         QyYimecYRdt65riWfPATQUWGM72wK0NV6s7BgUbhd8qVsTCNDaN0iLxvM20RSRUMgAbm
-         Yp6A==
-X-Gm-Message-State: AFqh2kokzK0ouRGcRRBhRsLS6kgFPQXxE+2uJS2QQcP1nNGSsOSbCFrF
-        yJNN193GTvxRsdC1if/B0Nk9KcM611XM8bmf1OaJAQ==
-X-Google-Smtp-Source: AMrXdXv6zW3mUb3uJJYwWd8l/Zc0mUhiArEpYUTm10kiV+NXSFLzq7Rpx0/aHPDhA/yUTebrZSMnVWp7fevFEhGvFro=
-X-Received: by 2002:a92:d911:0:b0:30d:a0c6:55a3 with SMTP id
- s17-20020a92d911000000b0030da0c655a3mr951212iln.199.1674065749311; Wed, 18
- Jan 2023 10:15:49 -0800 (PST)
+        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
+        b=G1985LaJ3nLL1L6TD3OMHjBTacD58VE+IVhVjvMpiGP7J3qdous3Gu1N0j9k6SRy2/
+         GFdEeJsxMVbCpD+l7X7lDLT78MWHYNnz0e9NfyL4xR2RZoSLpuZr9x5vcB53Pah2pUCK
+         kFuBpKXt76l774VdmgPt298ra8JxulcqP42qljVmxzrj3yfu21q8uREnDslFrM9SnTlD
+         xDon9kJCV8k9H2af4wlyONpAPgv5DWiQWm3NAtbA9KTQQq0sLhZevS8CIhNxJYKNSnpn
+         rMjhY+/tGcQrOlYFU5fZlcdNj/EO/tufw1V+T4H239LYEYji7LVeMYOew72b2VVTNEIE
+         uehQ==
+X-Gm-Message-State: AFqh2kr81OFaDwHHbYALglgwaXX7zlyRsGuADxCRVVCv7tOw0ney+xJk
+        fAR2SqBUz78/hFuSuZKrPx0yhg==
+X-Google-Smtp-Source: AMrXdXt+ChbNmzVtI4RDEGrkLSF2Y3zhi8ybIhr2xSOEdneD4pC+utw+QyexttzlYg2ialdSiQz1fA==
+X-Received: by 2002:a05:600c:995:b0:3da:f4f5:ad0e with SMTP id w21-20020a05600c099500b003daf4f5ad0emr7467231wmp.9.1674065791979;
+        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id c10-20020a05600c0a4a00b003db12112fcfsm2817414wmq.4.2023.01.18.10.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
+Date:   Wed, 18 Jan 2023 19:16:19 +0100
+Message-Id: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-45-michael.roth@amd.com>
- <20230118152721.GA24742@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230118152721.GA24742@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Alper Gun <alpergun@google.com>
-Date:   Wed, 18 Jan 2023 10:15:38 -0800
-Message-ID: <CABpDEunq_GwJZWw9LNEHB=67w7PHut=UfCr_0bmTHe6Ymng9vQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 44/64] KVM: SVM: Remove the long-lived GHCB host map
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, dgilbert@redhat.com,
-        jarkko@kernel.org, ashish.kalra@amd.com, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:27 AM Jeremi Piotrowski
-<jpiotrowski@linux.microsoft.com> wrote:
->
-> On Wed, Dec 14, 2022 at 01:40:36PM -0600, Michael Roth wrote:
-> > From: Brijesh Singh <brijesh.singh@amd.com>
-> >
-> > On VMGEXIT, sev_handle_vmgexit() creates a host mapping for the GHCB GPA,
-> > and unmaps it just before VM-entry. This long-lived GHCB map is used by
-> > the VMGEXIT handler through accessors such as ghcb_{set_get}_xxx().
-> >
-> > A long-lived GHCB map can cause issue when SEV-SNP is enabled. When
-> > SEV-SNP is enabled the mapped GPA needs to be protected against a page
-> > state change.
-> >
-> > To eliminate the long-lived GHCB mapping, update the GHCB sync operations
-> > to explicitly map the GHCB before access and unmap it after access is
-> > complete. This requires that the setting of the GHCBs sw_exit_info_{1,2}
-> > fields be done during sev_es_sync_to_ghcb(), so create two new fields in
-> > the vcpu_svm struct to hold these values when required to be set outside
-> > of the GHCB mapping.
-> >
-> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> > Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> > [mdr: defer per_cpu() assignment and order it with barrier() to fix case
-> >       where kvm_vcpu_map() causes reschedule on different CPU]
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > ---
-> >  arch/x86/kvm/svm/sev.c | 131 ++++++++++++++++++++++++++---------------
-> >  arch/x86/kvm/svm/svm.c |  18 +++---
-> >  arch/x86/kvm/svm/svm.h |  24 +++++++-
-> >  3 files changed, 116 insertions(+), 57 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index d5c6e48055fb..6ac0cb6e3484 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -2921,15 +2921,40 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
-> >       kvfree(svm->sev_es.ghcb_sa);
-> >  }
-> >
-> > +static inline int svm_map_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
-> > +{
-> > +     struct vmcb_control_area *control = &svm->vmcb->control;
-> > +     u64 gfn = gpa_to_gfn(control->ghcb_gpa);
-> > +
-> > +     if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
-> > +             /* Unable to map GHCB from guest */
-> > +             pr_err("error mapping GHCB GFN [%#llx] from guest\n", gfn);
-> > +             return -EFAULT;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static inline void svm_unmap_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
-> > +{
-> > +     kvm_vcpu_unmap(&svm->vcpu, map, true);
-> > +}
-> > +
-> >  static void dump_ghcb(struct vcpu_svm *svm)
-> >  {
-> > -     struct ghcb *ghcb = svm->sev_es.ghcb;
-> > +     struct kvm_host_map map;
-> >       unsigned int nbits;
-> > +     struct ghcb *ghcb;
-> > +
-> > +     if (svm_map_ghcb(svm, &map))
-> > +             return;
-> > +
-> > +     ghcb = map.hva;
->
-> dump_ghcb() is called from sev_es_validate_vmgexit() with the ghcb already
-> mapped. How about passing 'struct kvm_host_map *' (or struct ghcb *) as a
-> param to avoid double mapping?
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
-This also causes a soft lockup, PSC spin lock is already acquired in
-sev_es_validate_vmgexit. dump_ghcb will try to acquire the same lock
-again. So a guest can send an invalid ghcb page  and cause a host soft
-lockup.
+Convert ops content logic into generic trip points and register them with the
+thermal zone.
 
->
-> >
-> >       /* Re-use the dump_invalid_vmcb module parameter */
-> >       if (!dump_invalid_vmcb) {
-> >               pr_warn_ratelimited("set kvm_amd.dump_invalid_vmcb=1 to dump internal KVM state.\n");
-> > -             return;
-> > +             goto e_unmap;
-> >       }
-> >
-> >       nbits = sizeof(ghcb->save.valid_bitmap) * 8;
-> > @@ -2944,12 +2969,21 @@ static void dump_ghcb(struct vcpu_svm *svm)
-> >       pr_err("%-20s%016llx is_valid: %u\n", "sw_scratch",
-> >              ghcb->save.sw_scratch, ghcb_sw_scratch_is_valid(ghcb));
-> >       pr_err("%-20s%*pb\n", "valid_bitmap", nbits, ghcb->save.valid_bitmap);
-> > +
-> > +e_unmap:
-> > +     svm_unmap_ghcb(svm, &map);
-> >  }
-> >
-> > -static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
-> > +static bool sev_es_sync_to_ghcb(struct vcpu_svm *svm)
-> >  {
-> >       struct kvm_vcpu *vcpu = &svm->vcpu;
-> > -     struct ghcb *ghcb = svm->sev_es.ghcb;
-> > +     struct kvm_host_map map;
-> > +     struct ghcb *ghcb;
-> > +
-> > +     if (svm_map_ghcb(svm, &map))
-> > +             return false;
-> > +
-> > +     ghcb = map.hva;
-> >
-> >       /*
-> >        * The GHCB protocol so far allows for the following data
-> > @@ -2963,13 +2997,24 @@ static void sev_es_sync_to_ghcb(struct vcpu_svm *svm)
-> >       ghcb_set_rbx(ghcb, vcpu->arch.regs[VCPU_REGS_RBX]);
-> >       ghcb_set_rcx(ghcb, vcpu->arch.regs[VCPU_REGS_RCX]);
-> >       ghcb_set_rdx(ghcb, vcpu->arch.regs[VCPU_REGS_RDX]);
-> > +
-> > +     /*
-> > +      * Copy the return values from the exit_info_{1,2}.
-> > +      */
-> > +     ghcb_set_sw_exit_info_1(ghcb, svm->sev_es.ghcb_sw_exit_info_1);
-> > +     ghcb_set_sw_exit_info_2(ghcb, svm->sev_es.ghcb_sw_exit_info_2);
-> > +
-> > +     trace_kvm_vmgexit_exit(svm->vcpu.vcpu_id, ghcb);
-> > +
-> > +     svm_unmap_ghcb(svm, &map);
-> > +
-> > +     return true;
-> >  }
-> >
-> > -static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
-> > +static void sev_es_sync_from_ghcb(struct vcpu_svm *svm, struct ghcb *ghcb)
-> >  {
-> >       struct vmcb_control_area *control = &svm->vmcb->control;
-> >       struct kvm_vcpu *vcpu = &svm->vcpu;
-> > -     struct ghcb *ghcb = svm->sev_es.ghcb;
-> >       u64 exit_code;
-> >
-> >       /*
-> > @@ -3013,20 +3058,25 @@ static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
-> >       memset(ghcb->save.valid_bitmap, 0, sizeof(ghcb->save.valid_bitmap));
-> >  }
-> >
-> > -static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
-> > +static int sev_es_validate_vmgexit(struct vcpu_svm *svm, u64 *exit_code)
-> >  {
-> > -     struct kvm_vcpu *vcpu;
-> > +     struct kvm_vcpu *vcpu = &svm->vcpu;
-> > +     struct kvm_host_map map;
-> >       struct ghcb *ghcb;
-> > -     u64 exit_code;
-> >       u64 reason;
-> >
-> > -     ghcb = svm->sev_es.ghcb;
-> > +     if (svm_map_ghcb(svm, &map))
-> > +             return -EFAULT;
-> > +
-> > +     ghcb = map.hva;
-> > +
-> > +     trace_kvm_vmgexit_enter(vcpu->vcpu_id, ghcb);
-> >
-> >       /*
-> >        * Retrieve the exit code now even though it may not be marked valid
-> >        * as it could help with debugging.
-> >        */
-> > -     exit_code = ghcb_get_sw_exit_code(ghcb);
-> > +     *exit_code = ghcb_get_sw_exit_code(ghcb);
-> >
-> >       /* Only GHCB Usage code 0 is supported */
-> >       if (ghcb->ghcb_usage) {
-> > @@ -3119,6 +3169,9 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
-> >               goto vmgexit_err;
-> >       }
-> >
-> > +     sev_es_sync_from_ghcb(svm, ghcb);
-> > +
-> > +     svm_unmap_ghcb(svm, &map);
-> >       return 0;
-> >
-> >  vmgexit_err:
-> > @@ -3129,10 +3182,10 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
-> >                           ghcb->ghcb_usage);
-> >       } else if (reason == GHCB_ERR_INVALID_EVENT) {
-> >               vcpu_unimpl(vcpu, "vmgexit: exit code %#llx is not valid\n",
-> > -                         exit_code);
-> > +                         *exit_code);
-> >       } else {
-> >               vcpu_unimpl(vcpu, "vmgexit: exit code %#llx input is not valid\n",
-> > -                         exit_code);
-> > +                         *exit_code);
-> >               dump_ghcb(svm);
-> >       }
-> >
-> > @@ -3142,6 +3195,8 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
-> >       ghcb_set_sw_exit_info_1(ghcb, 2);
-> >       ghcb_set_sw_exit_info_2(ghcb, reason);
-> >
-> > +     svm_unmap_ghcb(svm, &map);
-> > +
-> >       /* Resume the guest to "return" the error code. */
-> >       return 1;
-> >  }
->
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ .../thermal/intel/intel_quark_dts_thermal.c   | 56 +++++++++----------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+index 3eafc6b0e6c3..4e1d1799ec22 100644
+--- a/drivers/thermal/intel/intel_quark_dts_thermal.c
++++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+@@ -84,6 +84,7 @@
+ #define QRK_DTS_MASK_TP_THRES		0xFF
+ #define QRK_DTS_SHIFT_TP		8
+ #define QRK_DTS_ID_TP_CRITICAL		0
++#define QRK_DTS_ID_TP_HOT		1
+ #define QRK_DTS_SAFE_TP_THRES		105
+ 
+ /* Thermal Sensor Register Lock */
+@@ -104,6 +105,7 @@ struct soc_sensor_entry {
+ 	u32 store_ptps;
+ 	u32 store_dts_enable;
+ 	struct thermal_zone_device *tzone;
++	struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
+ };
+ 
+ static struct soc_sensor_entry *soc_dts;
+@@ -172,7 +174,7 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+ 	return ret;
+ }
+ 
+-static int _get_trip_temp(int trip, int *temp)
++static int get_trip_temp(int trip, int *temp)
+ {
+ 	int status;
+ 	u32 out;
+@@ -197,17 +199,6 @@ static int _get_trip_temp(int trip, int *temp)
+ 	return 0;
+ }
+ 
+-static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
+-				int trip, int *temp)
+-{
+-	return _get_trip_temp(trip, temp);
+-}
+-
+-static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
+-{
+-	return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
+-}
+-
+ static int update_trip_temp(struct soc_sensor_entry *aux_entry,
+ 				int trip, int temp)
+ {
+@@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
+ 	return update_trip_temp(tzd->devdata, trip, temp);
+ }
+ 
+-static int sys_get_trip_type(struct thermal_zone_device *thermal,
+-		int trip, enum thermal_trip_type *type)
+-{
+-	if (trip)
+-		*type = THERMAL_TRIP_HOT;
+-	else
+-		*type = THERMAL_TRIP_CRITICAL;
+-
+-	return 0;
+-}
+-
+ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+ 				int *temp)
+ {
+@@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
+ 
+ static struct thermal_zone_device_ops tzone_ops = {
+ 	.get_temp = sys_get_curr_temp,
+-	.get_trip_temp = sys_get_trip_temp,
+-	.get_trip_type = sys_get_trip_type,
+ 	.set_trip_temp = sys_set_trip_temp,
+-	.get_crit_temp = sys_get_crit_temp,
+ 	.change_mode = sys_change_mode,
+ };
+ 
+@@ -344,7 +321,7 @@ static void free_soc_dts(struct soc_sensor_entry *aux_entry)
+ static struct soc_sensor_entry *alloc_soc_dts(void)
+ {
+ 	struct soc_sensor_entry *aux_entry;
+-	int err;
++	int err, temperature;
+ 	u32 out;
+ 	int wr_mask;
+ 
+@@ -385,10 +362,27 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
+ 			goto err_ret;
+ 	}
+ 
+-	aux_entry->tzone = thermal_zone_device_register("quark_dts",
+-			QRK_MAX_DTS_TRIPS,
+-			wr_mask,
+-			aux_entry, &tzone_ops, NULL, 0, polling_delay);
++	err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
++	if (err)
++		goto err_ret;
++
++	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
++	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
++
++	err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
++	if (err)
++		goto err_ret;
++
++	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = temperature;
++	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
++
++	aux_entry->tzone =
++		thermal_zone_device_register_with_trips("quark_dts",
++							aux_entry->trips,
++							QRK_MAX_DTS_TRIPS,
++							wr_mask,
++							aux_entry, &tzone_ops,
++							NULL, 0, polling_delay);
+ 	if (IS_ERR(aux_entry->tzone)) {
+ 		err = PTR_ERR(aux_entry->tzone);
+ 		goto err_ret;
+-- 
+2.34.1
+
