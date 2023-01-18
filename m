@@ -2,180 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4E4671B79
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3928671B7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 13:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjARMHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 07:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S229969AbjARMJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 07:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjARMGu (ORCPT
+        with ESMTP id S230297AbjARMHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 07:06:50 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B3824134;
-        Wed, 18 Jan 2023 03:25:18 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 42AAF581DE7;
-        Wed, 18 Jan 2023 06:25:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 18 Jan 2023 06:25:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1674041117; x=1674048317; bh=3r
-        HztNKFKDzP6FM37wshrSzfwbcQFDaDtmm5ss89k4A=; b=mxJ8Ow5LoW3L4wATqS
-        QRZc3mo+g/GkoyDuddkmVm6WUo4ggGW6bSF9USy+3MYpAerT0sGFFX+0wX/Z4TyB
-        MueZeyW0+/dxyLd8gBZxmEBbj598ORS+yezgLpM8o6S22Dfuy4CnY230cw4vwVfP
-        W4MYnBdh0688rBaZlIurvNVn5T3BJPP59w6BpAEHmE21fzHLb59jS2tbZmIrnWOH
-        rzFlh+AIj9STbV7OA+sRfLV6DU/9WW4CzsUKKjJN/JRpP6OLMWS+ZDRoID2shVSW
-        iaOzCz/PqkmTsjEa7bwaBbNG0z6j3ES4Qn9DUFkE4j9cTjOA9hxptoxS6rOAf5Jc
-        5JWw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674041117; x=1674048317; bh=3rHztNKFKDzP6FM37wshrSzfwbcQ
-        FDaDtmm5ss89k4A=; b=C+spHhDandahXHFa+N1IYo9iF9EF1hPn2Nh5/XYbXyjW
-        I7CBcs6UrA1ERS1xi993zVHrKcobSsQo22TGwkST1h9WcRnLktG81eVxjYVp2ekD
-        3qI/leuzV01/6CylFPxXfIhdLkBf1S/lO3XUf64qmUEY46d5cwyWaKXNCGIrCTNJ
-        WlIGFcgPuTLL8ROkUydAQJpZUvdoUi7HUwTyp+nTAmm4L9/NClWlL4iF9Ldwybe0
-        NX0FUm6lE/N880Kn4YdxDY4V70+IrJB3PWPWc3JmUX7dLH0x9cj29V3URhycxdf0
-        H8MxGF4IHT3TXwfgSE5fwlpvRAnSjYs/U45z6pm12A==
-X-ME-Sender: <xms:G9fHY_ep1MNRwtvIOOEMd19i0OqlrUclzwsljdwYKAEjA_UsC2jA0Q>
-    <xme:G9fHY1Nk6pvM6KeHQ7jq5h30qzvNcusT2e5KFW4AXTSNK3TD5KACjEUayuekKwXdI
-    JY1GhhtnH8QbIxOtB4>
-X-ME-Received: <xmr:G9fHY4ih02aM9oeJ3OiNr0KHSXCiahDUJ1xdid6Gk2NkrDT3xjS6G_NaV1cS6VrwggYgRQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtkedgvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeegvdevjeehleetkeeigfevkeehtdeklefgleef
-    leehuefgveevgfdvieejvedvveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhqvg
-    hmuhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:G9fHYw9jfwnpU4Nh4xAVbKbCm4tzw1x4eZ00yL-nE5V1K4GCoS0_hA>
-    <xmx:G9fHY7trVA4spyMhA9NVhPpA_nYklvmVkvzKxGv790UAvZgCJzbiew>
-    <xmx:G9fHY_F8Bu4CYoL1-3vPRx_UQyXcUQSYo1gFwSmk-COF02pgKlj2MQ>
-    <xmx:HdfHY7zYGKxeYUa8MD3orQFQtkqWHaHKrFajIvy7HqohsSp1J9MG0g>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jan 2023 06:25:14 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 6EBD1104CC6; Wed, 18 Jan 2023 14:25:11 +0300 (+03)
-Date:   Wed, 18 Jan 2023 14:25:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private
- memory
-Message-ID: <20230118112511.wrljyng2xiz3yktv@box.shutemov.name>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <Y8dG3WDxY2OCGPby@google.com>
+        Wed, 18 Jan 2023 07:07:32 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D1279A5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:25:39 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so1168804wml.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 03:25:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9S8ByPT+cY6acXLQiIcdNeZj1HoatdZe/caRBhsxuvQ=;
+        b=LQWSOv3YQ2h5aKJS4y8NJjzjDQiY/Fck2pr/3Gu2YJkTEVEKXF9o7PHxgFzW91V3mx
+         emFkQVe0kEcO/f5nmTsfo9esCNJ9q8czxRQncOOVxyCogxufPgDTXslRu4zK3iCId6Y/
+         HoxATEEYMqK8H2F2picHLhAVqGodKyvfh8k10HICSoNwLfwZO9t2AxAvmJxZR0QSarjO
+         HOPxViL9D74ANNY1Xu0CtKMdF5G+UpKb9fAVKpPBXHLaB1vv4MINK/lgKezSU4wnbR6/
+         fMDVXsQe/CUEEqbf7Ua5iRiOnFbLoIJgSVJP3t0rAekAYF2lft9mOF4762qSNKClKaPa
+         bRfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9S8ByPT+cY6acXLQiIcdNeZj1HoatdZe/caRBhsxuvQ=;
+        b=qAMAaRGtwx1wc+pXcdGsxWzGX3GGXVXYpYg4gBzfr0lAQeXCdGTc79WndYvS0FLD3s
+         w0qSb9nVqlPfg+f08q31xoLxWUvEdlAQ1FedoUn3VATjwP3dcz4xktm15D8cegTslyOA
+         /VqVsoufUHsAN5Uk/JHVRcKuhVS5oAhvzV//eiGLtZfDOzVTvZctmr6Pj1LBgbh3kh7n
+         nzCdaNRORzK6uNk9OKM2o/CLdLJR5sjMSwLckTKma2etmgq+z6Ph66j7d4cfSj5FKL+k
+         QPth88qhMTp0rVOwg0h3ksvlgRyCI09tKXEPU3Eikdk80QLMumUE/VCz56ozVzkQG8ms
+         11hg==
+X-Gm-Message-State: AFqh2krFyWPO0hl0edCma+P9B/7VGIj0Rh9T0LVv8sVJZZy2AglJI5DH
+        +RyS22WgJu3vedbuXan2xm9Plg==
+X-Google-Smtp-Source: AMrXdXvHoKu8bsx3tz1pLpniDjLrdVUdOpfIyyOb9hCGG1RqYdqx09IsxRagPtPlOw41/A8sDx+tJw==
+X-Received: by 2002:a05:600c:19cd:b0:3d9:922b:b148 with SMTP id u13-20020a05600c19cd00b003d9922bb148mr6527526wmq.27.1674041138553;
+        Wed, 18 Jan 2023 03:25:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u14-20020adfdd4e000000b002366e3f1497sm31460441wrm.6.2023.01.18.03.25.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 03:25:37 -0800 (PST)
+Message-ID: <331eed95-eaf7-5c5a-86c1-0ee7b5591b9a@linaro.org>
+Date:   Wed, 18 Jan 2023 12:25:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8dG3WDxY2OCGPby@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/3] ASoC: dt-bindings: qcom,wcd934x: Describe
+ slim-ifc-dev
+To:     Rob Herring <robh@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230113162214.117261-1-krzysztof.kozlowski@linaro.org>
+ <20230113162214.117261-2-krzysztof.kozlowski@linaro.org>
+ <20230117192724.GA3489389-robh@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230117192724.GA3489389-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 01:09:49AM +0000, Sean Christopherson wrote:
-> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > This series implements selftests targeting the feature floated by Chao via:
-> > https://lore.kernel.org/lkml/20221202061347.1070246-10-chao.p.peng@linux.intel.com/T/
-> > 
-> > Below changes aim to test the fd based approach for guest private memory
-> > in context of normal (non-confidential) VMs executing on non-confidential
-> > platforms.
-> > 
-> > private_mem_test.c file adds selftest to access private memory from the
-> > guest via private/shared accesses and checking if the contents can be
-> > leaked to/accessed by vmm via shared memory view before/after conversions.
-> > 
-> > Updates in V2:
-> > 1) Simplified vcpu run loop implementation API
-> > 2) Removed VM creation logic from private mem library
+On 17/01/2023 20:27, Rob Herring wrote:
+> On Fri, Jan 13, 2023 at 05:22:13PM +0100, Krzysztof Kozlowski wrote:
+>> The "slim-ifc-dev" property should not be just "true", because it allows
+>> any type.
 > 
-> I pushed a rework version of this series to:
-> 
->   git@github.com:sean-jc/linux.git x86/upm_base_support
+> Yes, but it is common, so it should be in a common schema. Though 
+> there's only one other binding using it (wcd9335.txt).
 
-It still has build issue with lockdep enabled that I mentioned before:
+This is still wcd9335 and wcd934x specific, not really common. Maybe
+next Qualcomm codec would also bring it so then we can define common
+schema for the codecs. But so far I think it is not really a common
+property.
 
-https://lore.kernel.org/all/20230116134845.vboraky2nd56szos@box.shutemov.name/
+Best regards,
+Krzysztof
 
-And when compiled with lockdep, it triggers a lot of warnings about missed
-locks, like this:
-
-[   59.632024] kvm: FIXME: Walk the memory attributes of the slot and set the mixed status appropriately
-[   59.684888] ------------[ cut here ]------------
-[   59.690677] WARNING: CPU: 2 PID: 138 at include/linux/kvm_host.h:2307 kvm_mmu_do_page_fault+0x19a/0x1b0
-[   59.693531] CPU: 2 PID: 138 Comm: private_mem_con Not tainted 6.1.0-rc4-00624-g7e536bf3c45c-dirty #1
-[   59.696265] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-[   59.699586] RIP: 0010:kvm_mmu_do_page_fault+0x19a/0x1b0
-[   59.700720] Code: d8 1c 00 00 eb e3 65 48 8b 0c 25 28 00 00 00 48 3b 4c 24 50 75 1b 48 83 c4 58 5b 41 5e 41 5f 5d c3 48 81 c0
-[   59.704711] RSP: 0018:ffffc90000323c80 EFLAGS: 00010246
-[   59.705830] RAX: 0000000000000000 RBX: ffff888103bc8000 RCX: ffffffff8107dff0
-[   59.707353] RDX: 0000000000000001 RSI: ffffffff82549d49 RDI: ffffffff825abe77
-[   59.708865] RBP: ffffc90000e59000 R08: 0000000000000000 R09: 0000000000000000
-[   59.710369] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-[   59.711859] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000180
-[   59.713338] FS:  00007f2e556de740(0000) GS:ffff8881f9d00000(0000) knlGS:0000000000000000
-[   59.714978] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   59.716168] CR2: 0000000000000000 CR3: 0000000100e90005 CR4: 0000000000372ee0
-[   59.717631] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   59.719086] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   59.721148] Call Trace:
-[   59.722661]  <TASK>
-[   59.723986]  ? lock_is_held_type+0xdb/0x150
-[   59.726501]  kvm_mmu_page_fault+0x41/0x170
-[   59.728946]  vmx_handle_exit+0x343/0x750
-[   59.731007]  kvm_arch_vcpu_ioctl_run+0x1d12/0x2790
-[   59.733319]  kvm_vcpu_ioctl+0x4a6/0x590
-[   59.735195]  __se_sys_ioctl+0x6a/0xb0
-[   59.736976]  do_syscall_64+0x3d/0x80
-[   59.738698]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   59.740743] RIP: 0033:0x7f2e557d8f6b
-[   59.741907] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 c7 04 24 10 00 00 00 b0
-[   59.747836] RSP: 002b:00007ffe8b84eb50 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[   59.750147] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f2e557d8f6b
-[   59.751754] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000007
-[   59.753361] RBP: 000000000042f880 R08: 0000000000000007 R09: 0000000000430210
-[   59.754952] R10: ca7f9f3d969d5d5c R11: 0000000000000246 R12: 000000000042d2a0
-[   59.756596] R13: 0000000100000000 R14: 0000000000422e00 R15: 00007f2e558f7000
-[   59.758231]  </TASK>
-[   59.758752] irq event stamp: 8637
-[   59.759540] hardirqs last  enabled at (8647): [<ffffffff8119ae18>] __up_console_sem+0x68/0x90
-[   59.761309] hardirqs last disabled at (8654): [<ffffffff8119adfd>] __up_console_sem+0x4d/0x90
-[   59.763022] softirqs last  enabled at (8550): [<ffffffff81123c7a>] __irq_exit_rcu+0xaa/0x130
-[   59.764731] softirqs last disabled at (8539): [<ffffffff81123c7a>] __irq_exit_rcu+0xaa/0x130
-[   59.766409] ---[ end trace 0000000000000000 ]---
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
