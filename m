@@ -2,110 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A0B67243D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A3F672441
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 17:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjARQzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 11:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S230241AbjARQzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 11:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjARQzG (ORCPT
+        with ESMTP id S230002AbjARQzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:55:06 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEA0A5D3;
-        Wed, 18 Jan 2023 08:55:05 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h192so24959550pgc.7;
-        Wed, 18 Jan 2023 08:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A7F6VPbhMnzjimtiCShZ77ZvG/bSXxm/Jis8nNrNKeM=;
-        b=XuT/m/jKqKU3pK9KFC1rR7pyI+ajP9HGz+9CmIHpgh9GlUoRUpIPOtc0TZvnqpZeyr
-         Ba3IlJooRL4qJQ3msXeozWveqt8Mcrz6dGVGKYWbzSDJ1UQCLQ+ws1lYXWPsIon2u4J9
-         lbFzmO0dVPXbG0hO2DHEJi/m9XEnW3NXwdDlu+62sjYnKx3N7prYNncVKORJG6bZ41UV
-         0lGBxSy1NHQ9hmvIlI/dFom49BtT0+7K3i2/vlrDyT2rV5g7bakA1oJe/3dcZ0yip8J2
-         ounssrODrQORokHwzX3OmhLnodUuQtZ1dAMe6Ii4bdqQ6lxlbD7WrllvZ0TnnMjRQAPq
-         BGqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A7F6VPbhMnzjimtiCShZ77ZvG/bSXxm/Jis8nNrNKeM=;
-        b=u6ENIEgpszcObogAeZcptc9DEXjADvwY2Hl0Px9O8QEt/WqTC6ulbndkqIB5A5u9I6
-         Ap8DeFY//NzOhtbdZUbeBGzcSyINb/3gja9h4M50osLWBkpsnuQiuSR4d7ImSpffWumY
-         n5EjBTOLohJo6la0nukJXY+8+pAGQgkfhD/JW2/Nxgk31mIPSS2JMW8N1soiUOpPkFPi
-         eteNM0GBerFzWRlpifJBth6FLOD/47ZRhYUvNREQRusdvZHy+Dv4h34Z5aVBrrVdGX/E
-         Ide5URQsDgavCmCR5MuvC/UIkgojKuEmYvug2WWd0tbAdFV1ZTaNKP3e9EMW5wk6Y79z
-         dG1A==
-X-Gm-Message-State: AFqh2kpqsD61dIfcUsyoiYWhYGVL/WqYddfAiDYdUSTGLnqB4NNEU/q8
-        45/RmTM1MvLe/sFZrZJW7PU=
-X-Google-Smtp-Source: AMrXdXs+OGZOmO9WlvaK+EhpkQaJZ6PalT95dARKAiUuR0XU75S0X40jmfEn0vKjeCb8nlVbTsm1kA==
-X-Received: by 2002:aa7:8bd6:0:b0:588:e132:a2f8 with SMTP id s22-20020aa78bd6000000b00588e132a2f8mr7610180pfd.23.1674060904743;
-        Wed, 18 Jan 2023 08:55:04 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id h28-20020a056a00001c00b0058bba6f06c5sm9837853pfk.8.2023.01.18.08.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:55:04 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 18 Jan 2023 06:55:03 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH -next v2 2/3] blk-cgroup: support to track if policy is
- online
-Message-ID: <Y8gkZzvhnL6+0YQz@slm.duckdns.org>
-References: <20230118123152.1926314-1-yukuai1@huaweicloud.com>
- <20230118123152.1926314-3-yukuai1@huaweicloud.com>
+        Wed, 18 Jan 2023 11:55:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A194A16AE9;
+        Wed, 18 Jan 2023 08:55:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDD9618CD;
+        Wed, 18 Jan 2023 16:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D86B7C433D2;
+        Wed, 18 Jan 2023 16:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674060943;
+        bh=KXVguWBBzZqFsfQ1lc00wLiy/2dhJ2rfbOtKjRQ+7Fc=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=I2i8rJpVWQewx83DF+4qKd3/0jlZUbp82IlICMCEhkUAxdW5Z/4zcU5F4tyIpNcdQ
+         WeZusJn5IK47rPyB7QjRElaoM1qd8obxUgoCpwQkXIfMrrpkITyQaRRFjOgdIKc6KD
+         8ZMBPfEeyteKjyvcFDzQgpEMn6yJ2k1UTFooe73GhPrgiUrVrJjM0VC2Kt+wt8VHJJ
+         GYJuqRO0YhlCimtYWviRn4iYqk4G4RuODGkhmcDON1FYe93ikRFWZBtd8tV1KvFRJX
+         VVVfEsdpLTETjDb8KwMuVNd+W2kx2bARCVbvoPrvkT2z+SiGGO9cB5dVsQN50w+aH4
+         jJlDu64EYJlEg==
+Date:   Wed, 18 Jan 2023 22:25:07 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "phy: qualcomm: usb28nm: Add MDM9607 init
+ sequence"
+Message-ID: <Y8gka33KTscXK3HK@matsya>
+References: <20221214223733.648167-1-marijn.suijten@somainline.org>
+ <Y8GY51Cfkj7o1MJs@matsya>
+ <20230116203549.5jzd2olxua662n6w@SoMainline.org>
+ <Y8YzzCEqGi3m9fWM@matsya>
+ <20230117091912.pzogxqvgf6kivi74@SoMainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118123152.1926314-3-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230117091912.pzogxqvgf6kivi74@SoMainline.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 08:31:51PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On 17-01-23, 10:19, Marijn Suijten wrote:
+> On 2023-01-17 11:06:12, Vinod Koul wrote:
+> <snip>
+> > > Thanks, it wasn't clear to me whether to suffix the title when already
+> > > included in the Revert: "phy: qualcomm: ..." title :)
+> > 
+> > A revert patch is a patch as well so the patch rules apply there as well,
+> > so should say "subsystem tag: other tags: Revert foo..."
 > 
-> A new field 'online' is added to blkg_policy_date to fix following
-                                                  ^
-                                                  a
-> 2 problem:
-> 
-> 1) In blkcg_activate_policy(), if pd_alloc_fn() with 'GFP_NOWAIT'
->    failed, 'queue_lock' will be dropped and pd_alloc_fn() will try again
->    without 'GFP_NOWAIT'. In the meantime, remove cgroup can race with
->    it, and pd_offline_fn() will be called without pd_init_fn() and
->    pd_online_fn(). This way null-ptr-deference can be triggered.
-> 
-> 2) In order to synchronize pd_free_fn() from blkg_free_workfn() and
->    blkcg_deactivate_policy(), 'list_del_init(&blkg->q_node)' will be
->    delayed to blkg_free_workfn(), hence pd_offline_fn() can be called
->    first in blkg_destroy(), and then blkcg_deactivate_policy() will
->    call it again, we must prevent it.
-> 
-> The new field 'online' will be set after pd_online_fn() and will be
-> cleared after pd_offline_fn(), in the meantime pd_offline_fn() will only
-> be called if 'online' is set.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Ack, but then /keep/ "subsystem tag: other tags:" /within/ the Revert
+> string, so "phy: qualcomm: Revert "phy: qualcomm: ...""?
 
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
+Ideally yes!
 
 -- 
-tejun
+~Vinod
