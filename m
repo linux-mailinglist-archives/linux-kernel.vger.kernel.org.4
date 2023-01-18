@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EAA672644
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878FD67264A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjARSFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S231266AbjARSHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjARSEZ (ORCPT
+        with ESMTP id S231273AbjARSGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:04:25 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CB5DC2F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:17 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q10so15473373wrs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:02:17 -0800 (PST)
+        Wed, 18 Jan 2023 13:06:44 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BBE5CE5B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:04:52 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4b718cab0e4so479788967b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:04:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m8l6H/Zs5B4MQGd630nTAm24Aa7PPunZI91/DoTYts8=;
-        b=RkXjr7lHJ3purNAEGKyte6RO0dU7BIHku1XLajH8wD4VlTGUJ+oNSGoV6TeoUknzC7
-         nfxMJWz0FMCcxY6/nFq9FBZPssMnHAI0exXolCDR9NlpUjWh1fv1OOacOOZU0k9L9FLd
-         vQSxN0prp6GMXZQa2d6teuBIpNWita/rB7WIxmsiqZG5rs3AvzSVWNDBg4M+SWkL4nPn
-         mAezwgA7ey9S7HLU9GY2tq3DwoQHcWEkEI1RwRWy0wppMa0JUebD6V/MSYW6Z26Zd/TK
-         ym+8uhc6JBHwvtO51zBx4U4UXhZsgGVPNTECDDLCNqVmMbTNfH1rpRCMfpzRiBH/jnLT
-         T4jA==
+        bh=ZmeatwLvsnhfsfO1/vmX5h6tsP0MwkkpxTHRWfYdQM4=;
+        b=Mtf8L2D1PhgJlzWzwjotEfjVuKX38JU222q+auWI4G2j0q5YtHekYj771Dhkp2GcsL
+         HDhNkGKRpjAR+kjPXD7ERMmqZqi6tMxaQHWTECXnzcywWm8J//b3A6EagHn7DlypEpQ4
+         Cpw58T97xq7K+rLqSTF5aaSGBUwZ6tOQyaE+127JgHNle7jNMu0hs4a0nG/uwPZbXmRI
+         xT5pUt95Wwx7KFEi+Hay8anthmFFMsA8dAo2cnCBZvoiTur1bsXgUihQ3rAI4pZO/ZWP
+         hbf2HdqSN+DbKwD2nFd64CgzevmW3m1IqCuzwC7PQduRR0Dz80K3WPLTv1MB5R1OaZsr
+         XF+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m8l6H/Zs5B4MQGd630nTAm24Aa7PPunZI91/DoTYts8=;
-        b=YED3271xO1IvuOGLq3Ke+XyqVksWfBQka+Nv1xApVoqV+2Erjs4hSwVAFBDUovzTMA
-         qs2Gqn4zbMSvp6DMFFMj6V9Trx15YOZb7j11Q7aLAbm0R25T4D7FXOfKeP/AsfkzznLM
-         xM8s1fSSGfFuwgji/snIzECBQHtF5c7ZD1jz/J0f9TWJUGn9OM8gfGXpZ9/NukyNdFeP
-         ubKYFsmUewviBypk5tDQRuWTsdrBGJ+m8wmD1xvtbb/kU/1rkkKytqVXxk6tdyhveDvJ
-         yEQnpwBkUVCZ+pJrFKVA1YWAqfwHmeoFioY7hdHmD3J5pJEXQ9XtOdh15D14LFcgFchC
-         8sLg==
-X-Gm-Message-State: AFqh2kpvM/iU3EoM/EJ13VC+xJHArvQ27ueVhT5GQ2DuCLk85zyHGsUH
-        TYiLmnbm+yTgTcDqGd0AhtppEejidjFMK9TAF4k5CQ==
-X-Google-Smtp-Source: AMrXdXu8hDRQ+czPoGTlX9n9vGPPlwX3WPI0/Aif+h9jtP/59bJGDwZYQkZlr3ktlPcR8jgXsFI4W88TQ8PNw85QBPY=
-X-Received: by 2002:a05:6000:5c6:b0:242:5caa:5fbf with SMTP id
- bh6-20020a05600005c600b002425caa5fbfmr197446wrb.300.1674064937432; Wed, 18
- Jan 2023 10:02:17 -0800 (PST)
+        bh=ZmeatwLvsnhfsfO1/vmX5h6tsP0MwkkpxTHRWfYdQM4=;
+        b=Q0g50tyegPIrjmqJl18EvwrW2hbToxvkAuY/LBsXwVvcTAYaPBail6dxijrfAUTTye
+         nm2CqpkXTnNZWlkVsJLGuGbsBhFJ/n+D46SeXfx3oP7CfyLB553OxIvYEw+6fC/C3186
+         TAJ5aBDgMbBVmPNNHOHZ7ww0xdRCIwrrZxIuEBveh6JuTevaGcKnMq7my0M3mTjXaJaW
+         CEbQG+iYThtrJotAxt+nwDwxBOe3kFu9DwgyDCpPiuk6VHFK0dmilmc947EEdIqxoWW2
+         ywiGp83lHVR8vb2ML+X+lg1EAIM8v2GQXy4wRKABDhZnG44Cx9EVp1sAUhb5rjNc+sDY
+         h4qg==
+X-Gm-Message-State: AFqh2kpmukMnM0D2WJcxiCr+d2zsfmokQy7VgmYsxz6lsewsnCsKkfCW
+        z77QGkc38bFyZsmlqcajAOkTzxflVgbjt1wqX4GGwg==
+X-Google-Smtp-Source: AMrXdXtMjwBQUdURBBz5ZgKZXjOXMVezYNYkyKU4WLD7CgzuxYNgtvI+JEVCsSBPA66t4nGGBzfjSicrSeLDwN7bPco=
+X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
+ i135-20020a816d8d000000b0049089c321b0mr1031972ywc.132.1674065091255; Wed, 18
+ Jan 2023 10:04:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118175632.3165217-1-kan.liang@linux.intel.com>
-In-Reply-To: <20230118175632.3165217-1-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 18 Jan 2023 10:02:04 -0800
-Message-ID: <CAP-5=fWMPYmofTL262HQB1jOiqRD5dKtAhaWrBbT-vq-NYsXcg@mail.gmail.com>
-Subject: Re: [PATCH] perf vendor events intel: Add Emerald Rapids
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        artem.bityutskiy@linux.intel.com, andi.kleen@intel.com
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8bFdB47JT/luMld@dhcp22.suse.cz> <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
+ <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
+In-Reply-To: <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 18 Jan 2023 10:04:39 -0800
+Message-ID: <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -69,44 +86,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:57 AM <kan.liang@linux.intel.com> wrote:
+On Wed, Jan 18, 2023 at 1:49 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> From: Kan Liang <kan.liang@linux.intel.com>
+> On Tue 17-01-23 17:19:46, Suren Baghdasaryan wrote:
+> > On Tue, Jan 17, 2023 at 7:57 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > multiple VMAs are being freed.
+> > >
+> > > What kind of regressions.
+> > >
+> > > > To minimize that impact, place VMAs into
+> > > > a list and free them in groups using one call_rcu() call per group.
+> > >
+> > > Please add some data to justify this additional complexity.
+> >
+> > Sorry, should have done that in the first place. A 4.3% regression was
+> > noticed when running execl test from unixbench suite. spawn test also
+> > showed 1.6% regression. Profiling revealed that vma freeing was taking
+> > longer due to call_rcu() which is slow when RCU callback offloading is
+> > enabled.
 >
-> The event list of the Emerald Rapids is the same as the Sapphire
-> Rapids. Add the CPU model ID of Emerald Rapids into the mapfile.csv and
-> point it to the event list of Sapphire Rapids.
->
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> Could you be more specific? vma freeing is async with the RCU so how
+> come this has resulted in a regression? Is there any heavy
+> rcu_synchronize in the exec path? That would be an interesting
+> information.
 
-Acked-by: Ian Rogers <irogers@google.com>
+No, there is no heavy rcu_synchronize() or any other additional
+synchronous load in the exit path. It's the call_rcu() which can block
+the caller if CONFIG_RCU_NOCB_CPU is enabled and there are lots of
+other call_rcu()'s going on in parallel. Note that call_rcu() calls
+rcu_nocb_try_bypass() if CONFIG_RCU_NOCB_CPU is enabled and profiling
+revealed that this function was taking multiple ms (don't recall the
+actual number, sorry). Paul's explanation implied that this happens
+due to contention on the locks taken in this function. For more
+in-depth details I'll have to ask Paul for help :) This code is quite
+complex and I don't know all the details of RCU implementation.
 
-I note it currently isn't on the perfmon github:
-https://github.com/intel/perfmon/blob/main/mapfile.csv
-This will create a diff from the version of mapfile.csv generated by:
-https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-Presumably there will be an update to solve that.
 
-Thanks,
-Ian
-
-> ---
->  tools/perf/pmu-events/arch/x86/mapfile.csv | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> index 711a4ef05fdf..5facdac6fe8e 100644
-> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> @@ -21,7 +21,7 @@ GenuineIntel-6-A[AC],v1.00,meteorlake,core
->  GenuineIntel-6-1[AEF],v3,nehalemep,core
->  GenuineIntel-6-2E,v3,nehalemex,core
->  GenuineIntel-6-2A,v17,sandybridge,core
-> -GenuineIntel-6-8F,v1.09,sapphirerapids,core
-> +GenuineIntel-6-(8F|CF),v1.09,sapphirerapids,core
->  GenuineIntel-6-(37|4A|4C|4D|5A),v14,silvermont,core
->  GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v53,skylake,core
->  GenuineIntel-6-55-[01234],v1.28,skylakex,core
 > --
-> 2.35.1
->
+> Michal Hocko
+> SUSE Labs
