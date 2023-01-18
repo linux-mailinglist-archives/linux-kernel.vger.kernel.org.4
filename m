@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF4F672689
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC09567268C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 19:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjARSQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 13:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S230393AbjARSRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 13:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjARSQf (ORCPT
+        with ESMTP id S230401AbjARSQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 13:16:35 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF059E5A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so2248221wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
+        Wed, 18 Jan 2023 13:16:36 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772C15A363
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:35 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l8so8223750wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 10:16:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
-        b=gkpw9IZzYcl1dAnnjN/nEU/WYiGEqwjyeWRxvrttmz8Pjd7VUHlBIrXHE7G15slK0v
-         +KYozqf8E0OWNAZyZFQKiMp4q+OhBYWwC8TltkpP5eQJeyhZudH6WhKZN6QYD6krmp1e
-         w18W4n46yQkVCOawNbFlfbdWf5/lcqRzQPhMvMl/H6S2ZZ+TfgVuGYIuCZCcrjrVEETM
-         TYwXE+F7+PrNylzMCj3iaAk6Xv1Jrup7ahFxT2VTdmhEUDItNqTWM11dsUzbmZMeulhE
-         /kM0nGMN7L0I/YErnvmLcXJt5GOHD9A4sMnjRBrSjfqDYrWoqH4h6K8sVovsFvQYwHua
-         uGHA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zxJbiMFPybMH7ivLVqW5OITYDgd53EwEIHVHwObfw3I=;
+        b=qyB/LtnhmSxHJrvWocFFevyKHuFEjEQiE5y2D3UO9aNo+RKqMQGFsOuP0uOVdwtO57
+         UA9A7H9roO1E3q6v24nvjOwhUhm2is6X+Yck2oDLefakLn+jbna/6PE8XcS1+Wkw+cOO
+         y1iZELhycvgDBXlU+lNuFTkXwmDjIqm+sMVBrYBjLyeizTjywTR3WJLK56i+NBLLBIfl
+         PTk6vjNuVHniqv08Y87dd/6pXY/P67dmzqtILvy0vpXjvfpPTBd4QlruumaAq4opM3Xl
+         fGu+pwWVh6CxYjk4JUc75b8ATSxu34a3djWnWmgAbDBuma/dsX8MaYSnUd+eBQbpGEb3
+         it4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
-        b=G1985LaJ3nLL1L6TD3OMHjBTacD58VE+IVhVjvMpiGP7J3qdous3Gu1N0j9k6SRy2/
-         GFdEeJsxMVbCpD+l7X7lDLT78MWHYNnz0e9NfyL4xR2RZoSLpuZr9x5vcB53Pah2pUCK
-         kFuBpKXt76l774VdmgPt298ra8JxulcqP42qljVmxzrj3yfu21q8uREnDslFrM9SnTlD
-         xDon9kJCV8k9H2af4wlyONpAPgv5DWiQWm3NAtbA9KTQQq0sLhZevS8CIhNxJYKNSnpn
-         rMjhY+/tGcQrOlYFU5fZlcdNj/EO/tufw1V+T4H239LYEYji7LVeMYOew72b2VVTNEIE
-         uehQ==
-X-Gm-Message-State: AFqh2kr81OFaDwHHbYALglgwaXX7zlyRsGuADxCRVVCv7tOw0ney+xJk
-        fAR2SqBUz78/hFuSuZKrPx0yhg==
-X-Google-Smtp-Source: AMrXdXt+ChbNmzVtI4RDEGrkLSF2Y3zhi8ybIhr2xSOEdneD4pC+utw+QyexttzlYg2ialdSiQz1fA==
-X-Received: by 2002:a05:600c:995:b0:3da:f4f5:ad0e with SMTP id w21-20020a05600c099500b003daf4f5ad0emr7467231wmp.9.1674065791979;
-        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zxJbiMFPybMH7ivLVqW5OITYDgd53EwEIHVHwObfw3I=;
+        b=uR4PnOLfvisuFyyI/ReUOGz6QybHMMsRDZhMeB/EiJXpxHejKznNGcS474/3xfTLxP
+         rjOzwaHuGONBVLs89Ixyrx4EMnzrQFnSpfrmMVytpCn8azxCaYIaJvNJQK2rdD/f5jKI
+         aOCaEquMnjutOy/tBFe5DCgX22+sQBo8njpLASQ06oFTgNU0vyxoLFCrd3loau1ES9rx
+         bzH7ij3wMIZ19RS9bCk6iAbMoRfbs6QcGiof9LlFlyJtQ70xBt8pT7RhFjFlrTeN+okc
+         csKZ7Dtp29qLXIv1vRFli8nyTLOxwBJ2q0R3kF9SMQOIbSDlbBQZPImcg95rYLgKFkwN
+         AxEg==
+X-Gm-Message-State: AFqh2kp8gwiP2Ejoiw6AuJ9tNqkPvuNz8xazJ4x8F8FK5sZXNjHcl0D9
+        ohK51zmbLy7XQAIANhUXV9c4TQ==
+X-Google-Smtp-Source: AMrXdXv2E22gh+vD4W7TR2GDM8bhtQIDNJcqhSCfxEQ1D83Cs6NJkinjjEX/ewrnDcha4kpIY233wQ==
+X-Received: by 2002:a1c:cc11:0:b0:3da:1d52:26b5 with SMTP id h17-20020a1ccc11000000b003da1d5226b5mr16204270wmb.14.1674065793891;
+        Wed, 18 Jan 2023 10:16:33 -0800 (PST)
 Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c10-20020a05600c0a4a00b003db12112fcfsm2817414wmq.4.2023.01.18.10.16.30
+        by smtp.gmail.com with ESMTPSA id c10-20020a05600c0a4a00b003db12112fcfsm2817414wmq.4.2023.01.18.10.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+        Wed, 18 Jan 2023 10:16:33 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
-Date:   Wed, 18 Jan 2023 19:16:19 +0100
-Message-Id: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+        Amit Kucheria <amitk@kernel.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>
+Subject: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for processor_thermal_device_pci
+Date:   Wed, 18 Jan 2023 19:16:20 +0100
+Message-Id: <20230118181622.33335-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,126 +85,89 @@ thermal zone.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- .../thermal/intel/intel_quark_dts_thermal.c   | 56 +++++++++----------
- 1 file changed, 25 insertions(+), 31 deletions(-)
+ .../processor_thermal_device_pci.c            | 53 ++++++++-----------
+ 1 file changed, 22 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index 3eafc6b0e6c3..4e1d1799ec22 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -84,6 +84,7 @@
- #define QRK_DTS_MASK_TP_THRES		0xFF
- #define QRK_DTS_SHIFT_TP		8
- #define QRK_DTS_ID_TP_CRITICAL		0
-+#define QRK_DTS_ID_TP_HOT		1
- #define QRK_DTS_SAFE_TP_THRES		105
- 
- /* Thermal Sensor Register Lock */
-@@ -104,6 +105,7 @@ struct soc_sensor_entry {
- 	u32 store_ptps;
- 	u32 store_dts_enable;
- 	struct thermal_zone_device *tzone;
-+	struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
- };
- 
- static struct soc_sensor_entry *soc_dts;
-@@ -172,7 +174,7 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
- 	return ret;
- }
- 
--static int _get_trip_temp(int trip, int *temp)
-+static int get_trip_temp(int trip, int *temp)
- {
- 	int status;
- 	u32 out;
-@@ -197,17 +199,6 @@ static int _get_trip_temp(int trip, int *temp)
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index bf1b1cdfade4..c7d50862bf56 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -144,34 +144,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
  	return 0;
  }
  
--static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
--				int trip, int *temp)
+-static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+-			     int trip, int *temp)
 -{
--	return _get_trip_temp(trip, temp);
--}
+-	struct proc_thermal_pci *pci_info = tzd->devdata;
+-	u32 _temp;
 -
--static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
--{
--	return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
--}
+-	proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0, &_temp);
+-	if (!_temp) {
+-		*temp = THERMAL_TEMP_INVALID;
+-	} else {
+-		int tjmax;
 -
- static int update_trip_temp(struct soc_sensor_entry *aux_entry,
- 				int trip, int temp)
- {
-@@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
- 	return update_trip_temp(tzd->devdata, trip, temp);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal,
--		int trip, enum thermal_trip_type *type)
--{
--	if (trip)
--		*type = THERMAL_TRIP_HOT;
--	else
--		*type = THERMAL_TRIP_CRITICAL;
+-		proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_TJMAX, &tjmax);
+-		_temp = tjmax - _temp;
+-		*temp = (unsigned long)_temp * 1000;
+-	}
 -
 -	return 0;
 -}
 -
- static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 				int *temp)
+-static int sys_get_trip_type(struct thermal_zone_device *tzd, int trip,
+-			      enum thermal_trip_type *type)
+-{
+-	*type = THERMAL_TRIP_PASSIVE;
+-
+-	return 0;
+-}
+-
+ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
  {
-@@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
+ 	struct proc_thermal_pci *pci_info = tzd->devdata;
+@@ -200,10 +172,26 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp
+ 	return 0;
+ }
  
++static int get_trip_temp(struct proc_thermal_pci *pci_info)
++{
++	int temp, tjmax;
++
++	proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0, &temp);
++	if (!temp)
++		return THERMAL_TEMP_INVALID;
++
++	proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_TJMAX, &tjmax);
++	temp = (tjmax - temp) * 1000;
++
++	return temp;
++}
++
++static struct thermal_trip psv_trip = {
++	.type = THERMAL_TRIP_PASSIVE,
++};
++
  static struct thermal_zone_device_ops tzone_ops = {
  	.get_temp = sys_get_curr_temp,
 -	.get_trip_temp = sys_get_trip_temp,
 -	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
--	.get_crit_temp = sys_get_crit_temp,
- 	.change_mode = sys_change_mode,
+ 	.set_trip_temp	= sys_set_trip_temp,
  };
  
-@@ -344,7 +321,7 @@ static void free_soc_dts(struct soc_sensor_entry *aux_entry)
- static struct soc_sensor_entry *alloc_soc_dts(void)
- {
- 	struct soc_sensor_entry *aux_entry;
--	int err;
-+	int err, temperature;
- 	u32 out;
- 	int wr_mask;
+@@ -251,7 +239,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
+ 	if (ret)
+ 		goto err_ret_thermal;
  
-@@ -385,10 +362,27 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
- 			goto err_ret;
- 	}
- 
--	aux_entry->tzone = thermal_zone_device_register("quark_dts",
--			QRK_MAX_DTS_TRIPS,
--			wr_mask,
--			aux_entry, &tzone_ops, NULL, 0, polling_delay);
-+	err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
-+	if (err)
-+		goto err_ret;
-+
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-+
-+	err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
-+	if (err)
-+		goto err_ret;
-+
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = temperature;
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-+
-+	aux_entry->tzone =
-+		thermal_zone_device_register_with_trips("quark_dts",
-+							aux_entry->trips,
-+							QRK_MAX_DTS_TRIPS,
-+							wr_mask,
-+							aux_entry, &tzone_ops,
-+							NULL, 0, polling_delay);
- 	if (IS_ERR(aux_entry->tzone)) {
- 		err = PTR_ERR(aux_entry->tzone);
- 		goto err_ret;
+-	pci_info->tzone = thermal_zone_device_register("TCPU_PCI", 1, 1, pci_info,
++	psv_trip.temperature = get_trip_temp(pci_info);
++	
++	pci_info->tzone = thermal_zone_device_register_with_trips("TCPU_PCI", &psv_trip,
++							1, 1, pci_info,
+ 							&tzone_ops,
+ 							&tzone_params, 0, 0);
+ 	if (IS_ERR(pci_info->tzone)) {
 -- 
 2.34.1
 
