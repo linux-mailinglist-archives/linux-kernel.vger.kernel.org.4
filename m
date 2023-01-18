@@ -2,109 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106806716B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804836716B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 09:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjARIzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 03:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S229583AbjARI5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 03:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjARIwj (ORCPT
+        with ESMTP id S229813AbjARI4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:52:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71EB5AA4F;
-        Wed, 18 Jan 2023 00:07:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A148EB81B3E;
-        Wed, 18 Jan 2023 08:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2522C433D2;
-        Wed, 18 Jan 2023 08:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674029233;
-        bh=jV7i9GOJFI/Ud+m8L/XR9u5kzqRqvbbtkxuVTnegFv0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hE9uf9tA9pYO+pI66/xY5O8+jR+zScqB63M3U6aiTPIAe1bwEzMc5i+1ivbvdYs8C
-         Y/NoVnKf6GSXY6DmNtXLL4WutHYj2zCjiy9q9zxjgrBaHX44DOd0ym+L63Z0kr54AN
-         uChgkqEihIGa9nIoOMWtS/qJCBpC8iEYmTq7BipJKGEUHhnYs1Yw9BERk97XugR8+P
-         D8JHi4jthfx/TajyRznKPg8X9J6MV6SzVBWukSRwkeO+TClzAywpoK6izRxeZsVvNV
-         O9RzDY6EQnSELfSMmuOsjcagdPrNhauThPFk+Azop9nDovIJ6gZoYMfbc5HQgb+3iz
-         i1t2zSYZ5Jw8A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kemeng Shi <shikemeng@huawei.com>,
-        Andreas Herrmann <aherrmann@suse.de>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Jinke Han <hanjinke.666@bytedance.com>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        Wed, 18 Jan 2023 03:56:32 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF7676CC;
+        Wed, 18 Jan 2023 00:10:41 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so824391wma.1;
+        Wed, 18 Jan 2023 00:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I0vdur1hQdUSHTad6H0g8tY0U7ro6sZT4Qb9ft9KwkQ=;
+        b=Ns1R7g2r4HqaDOX1lehqhdR8/aT28lzgpN6iBJ2oIAtjOcAweyo8tHpkPLuzcn8bRe
+         Yp9+8lBjMU2joLa+pXHsFX/pjGSHKdwBXnIRFBqOeGGIDj2cmIOhSGR1ohHopERg0PJN
+         DbFx5visakm9nRdUBmZRbJuJACT/jYsV2EzrNQQC3cAjZj6jOsUdYlnJ3f4IFTK6NTZo
+         LOZAOvbn1ctsLXz1NYeIDx+zIJ1YNVtcC7014fPCmIYmE4VL1Jzvoek2xmAEMxeamqOi
+         v19uztFwd9Ll3fGjeHlx1iNv2LXUOh9/ZDw14NAC+UI0WrSm+/sqF8JxfZIocFAO7gjz
+         YXLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I0vdur1hQdUSHTad6H0g8tY0U7ro6sZT4Qb9ft9KwkQ=;
+        b=vT+SlV+2mb1pHhTvORovLGaMUt2kmCKlweOjv/rbss/gu5p4JaqKlLJwTR1Eqpst5k
+         1ytWNyFRFmES0l9AFwfjr4iH2wkTb6TuZfqgWtgw6Y4JhzNXwmWndyMxOGWryIDT41I2
+         jPSAFWDyepKrCEeIKP29WKMVl2imWxLcn+yN8HFmGWVUYsFDcQy5x1MxT8wiE83qJG2U
+         PGdu8MCGE2gL+yzgpBXatJYpWoOu3GJovG4jOtlxNdvwVrmcVEXEDuAh/bz2P/SSoseI
+         IfZnHZKdpwdoOcxShgTHz4VtGbQpThWflahYeGnxMyWHwuVPgYCtBi85MIddt+vnX5Yv
+         13HA==
+X-Gm-Message-State: AFqh2krhliFXFOR/02REsvp0xNx+ez7q+dMUBqeu28UPTq8bjmRHkzOZ
+        SPQvzqvT5LmVNWfJxXjJHJ0=
+X-Google-Smtp-Source: AMrXdXtfUflEd8kBxt0LTVMbUrV2vxV9ff6ftk/N9Vn690FwkH6mfDV65DPuZ5jZla2bkg/2L8CuMw==
+X-Received: by 2002:a05:600c:d2:b0:3da:f475:6480 with SMTP id u18-20020a05600c00d200b003daf4756480mr5741538wmm.7.1674029439508;
+        Wed, 18 Jan 2023 00:10:39 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id q24-20020a05600c331800b003d1de805de5sm1151356wmp.16.2023.01.18.00.10.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 00:10:39 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 18 Jan 2023 09:10:36 +0100
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] blk-iocost: avoid 64-bit division in ioc_timer_fn
-Date:   Wed, 18 Jan 2023 09:07:01 +0100
-Message-Id: <20230118080706.3303186-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix build errors if
+ CONFIG_NF_CONNTRACK=m
+Message-ID: <Y8epfNbNDYikDYSr@krava>
+References: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jan 18, 2023 at 03:56:44PM +0800, Tiezhu Yang wrote:
+> If CONFIG_NF_CONNTRACK=m, there are no definitions of NF_NAT_MANIP_SRC
+> and NF_NAT_MANIP_DST in vmlinux.h, build test_bpf_nf.c failed.
+> 
+> $ make -C tools/testing/selftests/bpf/
+> 
+>   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                        ^
+> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                        ^
+> 2 errors generated.
+> 
+> Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c,
+> in order to avoid redefinitions if CONFIG_NF_CONNTRACK=y, rename them with
+> ___local suffix. This is similar with commit 1058b6a78db2 ("selftests/bpf:
+> Do not fail build if CONFIG_NF_CONNTRACK=m/n").
+> 
+> Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-The behavior of 'enum' types has changed in gcc-13, so now the
-UNBUSY_THR_PCT constant is interpreted as a 64-bit number because
-it is defined as part of the same enum definition as some other
-constants that do not fit within a 32-bit integer. This in turn
-leads to some inefficient code on 32-bit architectures as well
-as a link error:
+I hit the same problem, thanks
 
-arm-linux-gnueabi/bin/arm-linux-gnueabi-ld: block/blk-iocost.o: in function `ioc_timer_fn':
-blk-iocost.c:(.text+0x68e8): undefined reference to `__aeabi_uldivmod'
-arm-linux-gnueabi-ld: blk-iocost.c:(.text+0x6908): undefined reference to `__aeabi_uldivmod'
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Tested-by: Jiri Olsa <jolsa@kernel.org>
 
-Split the enum definition to keep the 64-bit timing constants in
-a separate enum type from those constants that can clearly fit
-within a smaller type.
+jirka
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- block/blk-iocost.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 6955605629e4..b691b6bb498f 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -258,6 +258,11 @@ enum {
- 	VRATE_MIN		= VTIME_PER_USEC * VRATE_MIN_PPM / MILLION,
- 	VRATE_CLAMP_ADJ_PCT	= 4,
- 
-+	/* switch iff the conditions are met for longer than this */
-+	AUTOP_CYCLE_NSEC	= 10LLU * NSEC_PER_SEC,
-+};
-+
-+enum {
- 	/* if IOs end up waiting for requests, issue less */
- 	RQ_WAIT_BUSY_PCT	= 5,
- 
-@@ -296,9 +301,6 @@ enum {
- 	/* don't let cmds which take a very long time pin lagging for too long */
- 	MAX_LAGGING_PERIODS	= 10,
- 
--	/* switch iff the conditions are met for longer than this */
--	AUTOP_CYCLE_NSEC	= 10LLU * NSEC_PER_SEC,
--
- 	/*
- 	 * Count IO size in 4k pages.  The 12bit shift helps keeping
- 	 * size-proportional components of cost calculation in closer
--- 
-2.39.0
-
+> ---
+>  tools/testing/selftests/bpf/progs/test_bpf_nf.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e..9fc603c 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -34,6 +34,11 @@ __be16 dport = 0;
+>  int test_exist_lookup = -ENOENT;
+>  u32 test_exist_lookup_mark = 0;
+>  
+> +enum nf_nat_manip_type___local {
+> +	NF_NAT_MANIP_SRC___local,
+> +	NF_NAT_MANIP_DST___local
+> +};
+> +
+>  struct nf_conn;
+>  
+>  struct bpf_ct_opts___local {
+> @@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+> -			int port, enum nf_nat_manip_type) __ksym;
+> +			int port, enum nf_nat_manip_type___local) __ksym;
+>  
+>  static __always_inline void
+>  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> @@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>  
+>  		/* snat */
+>  		saddr.ip = bpf_get_prandom_u32();
+> -		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+> +		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
+>  		/* dnat */
+>  		daddr.ip = bpf_get_prandom_u32();
+> -		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+> +		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
+>  
+>  		ct_ins = bpf_ct_insert_entry(ct);
+>  		if (ct_ins) {
+> -- 
+> 2.1.0
+> 
