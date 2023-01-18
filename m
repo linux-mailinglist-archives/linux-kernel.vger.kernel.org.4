@@ -2,171 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0995D6727BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C6D6727C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 20:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjARTC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 14:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S230100AbjARTCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 14:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjARTCH (ORCPT
+        with ESMTP id S230062AbjARTCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 14:02:07 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6695CFD8;
-        Wed, 18 Jan 2023 11:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674068468; x=1705604468;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=csT4HksI9oM/ml2mHEbILNsUNQxDWjDr4rLyUkDIzRE=;
-  b=G20Cf0W0gUunSk7mfjpp2Egv3xYMh1WZvhVbv2utcvUPDG9tG983x4Ok
-   HN89imn4SHVfZqKyz6kLZgol49zR32e+S181pzlZ2SOULuYew6t9aZpFy
-   G3fOHFpMlQ7bnez+9wWq5kAZPqYxyEsUgbeiYq34uuHd0X+1wy/Mzbo7I
-   twkTbwx5//xwSN/C+ZnBAuXbOjewQKk33Frz7s+9YDKfBF6wMhY8si5CZ
-   t3NnQ4SGyjmFIQUL5wSlThAS44MBgC6JFZ9jxMpW5pdfOng+KsjCMTmQc
-   V4Q5QqWkFt6xFm8+4Z4/cf088kG/+2mYUpZcLZKu2VWJsf9SeLPujER4X
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323756339"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="323756339"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:01:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="659907410"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="659907410"
-Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:01:01 -0800
-Message-ID: <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Date:   Wed, 18 Jan 2023 11:01:01 -0800
-In-Reply-To: <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
-         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
-         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 18 Jan 2023 14:02:15 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055775D7EB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:22 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4c24993965eso475246727b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 11:01:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8DSKYHJgJYKJvmPul/jqy2wXXzLUlUgLi7Tkf9YlXU=;
+        b=ejwY3+LKtxm5x3E+GJzfTUchB7m+L1YRon9Aa8Q50Ti4tQZzVZ6M7ddAXR8QuYX2/+
+         QbFt7G90bRjsGKuh+F1lDNIo0H7p5+Ztjzb+JsV1kzQB8MPN72CITN8khcfMdZzVCClr
+         0rfR86j8uR9XfP3lcG3CmwEZq8gGCNYy4GMw9BXNuo+B0XfUKFLgpaKByDGEKF5m5ob0
+         nAirCQpTYQiGnADXyL4rHN55X+6T7+KDx4Lknv/dk8Nf1obhK0VCQYfoZive5NaouN9J
+         rWZ8CpiuCsm5NmaCNzdlzyweXpQ+VQ7Pr9lxoMOtqkqySGFLw02OuYspEMabUBJR88+S
+         njvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z8DSKYHJgJYKJvmPul/jqy2wXXzLUlUgLi7Tkf9YlXU=;
+        b=5n05tczG4QyegsmSEKaiHwiB4AoXff0uXMMAjrBYm0Cm+cGTy76cICfDP+cadom17F
+         msta4lIXOvBk7EAgyLJ11hvqSz7r0Ve5Gzyl1Ybw9B/q8nuv06U7s/tONhTFxUxTDxua
+         OO5J+ccJ6a0RALc65qitRg8PWKQYUXgPryTX3UxQxKq9AmhXv9ONlt3HVbi1hD+lOibR
+         D/QGOJBXJG41Hhw24KitIQBhbP8MaEE3T+zwWNkes8nW3wAGbK5v2QOhxpGV5gnlkxAG
+         7KFhUEmqx+Ur13SmjxTanMmpsf7JxV5RUSOejf6B6l+O3MZ5rv0nlh2gTiTU2CZWrQGJ
+         GA/A==
+X-Gm-Message-State: AFqh2kp6EknkB1Hq4Gxc/MgkVx8UbriKgXNXHLatexlLHq8sVxMpV574
+        s/z9zh0FdufjFk1n5xFa6o4/iFs//wV3I9imKwC1uA==
+X-Google-Smtp-Source: AMrXdXubzcxtFjj0yWcsl/wowi8G0fcdGwos3LuYoWDDm/OjCNfgTh+Wjt7geFYZ2EGxVPVcRjYpoDeL03CkmRv1g5o=
+X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
+ i135-20020a816d8d000000b0049089c321b0mr1053073ywc.132.1674068480621; Wed, 18
+ Jan 2023 11:01:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8bFdB47JT/luMld@dhcp22.suse.cz> <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
+ <Y8fApgKJaTs9nrPO@dhcp22.suse.cz> <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
+ <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 18 Jan 2023 11:01:08 -0800
+Message-ID: <CAJuCfpHZuKq45FL1gs+=rx5s2AOaZ9TPC1bdAWjYzfkrOABTOw@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     paulmck@kernel.org
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-18 at 13:48 +0000, Zhang, Rui wrote:
-> On Wed, 2023-01-18 at 10:53 +0100, Daniel Lezcano wrote:
-> > Hi,
-> > 
-> > On 13/01/2023 19:02, Daniel Lezcano wrote:
-> > > Recently sent as a RFC, the thermal ACPI for generic trip points
-> > > is
-> > > a set of
-> > > functions to fill the generic trip points structure which will
-> > > become the
-> > > standard structure for the thermal framework and its users.
-> > > 
-> > > Different Intel drivers and the ACPI thermal driver are using the
-> > > ACPI tables to
-> > > get the thermal zone information. As those are getting the same
-> > > information,
-> > > providing this set of ACPI function with the generic trip points
-> > > will
-> > > consolidate the code.
-> > > 
-> > > Also, the Intel PCH and the Intel 34xx drivers are converted to
-> > > use
-> > > the generic
-> > > trip points relying on the ACPI generic trip point parsing
-> > > functions.
-> > > 
-> > > These changes have been tested on a Thinkpad Lenovo x280 with the
-> > > PCH and
-> > > INT34xx drivers. No regression have been observed, the trip
-> > > points
-> > > remain the
-> > > same for what is described on this system.
-> > 
-> > Are we ok with this series ?
-> > 
-> > Sorry for insisting but I would like to go forward with the generic
-> > thermal trip work. There are more patches pending depending on this
-> > series.
-> 
-> The whole series looks good to me.
-> 
-> Reviwed-by: Zhang Rui <rui.zhang@intel.com>
-> 
-> But we'd better wait for the thermald test result from Srinvias.
+On Wed, Jan 18, 2023 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Wed, Jan 18, 2023 at 10:04:39AM -0800, Suren Baghdasaryan wrote:
+> > On Wed, Jan 18, 2023 at 1:49 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Tue 17-01-23 17:19:46, Suren Baghdasaryan wrote:
+> > > > On Tue, Jan 17, 2023 at 7:57 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > > > multiple VMAs are being freed.
+> > > > >
+> > > > > What kind of regressions.
+> > > > >
+> > > > > > To minimize that impact, place VMAs into
+> > > > > > a list and free them in groups using one call_rcu() call per group.
+> > > > >
+> > > > > Please add some data to justify this additional complexity.
+> > > >
+> > > > Sorry, should have done that in the first place. A 4.3% regression was
+> > > > noticed when running execl test from unixbench suite. spawn test also
+> > > > showed 1.6% regression. Profiling revealed that vma freeing was taking
+> > > > longer due to call_rcu() which is slow when RCU callback offloading is
+> > > > enabled.
+> > >
+> > > Could you be more specific? vma freeing is async with the RCU so how
+> > > come this has resulted in a regression? Is there any heavy
+> > > rcu_synchronize in the exec path? That would be an interesting
+> > > information.
+> >
+> > No, there is no heavy rcu_synchronize() or any other additional
+> > synchronous load in the exit path. It's the call_rcu() which can block
+> > the caller if CONFIG_RCU_NOCB_CPU is enabled and there are lots of
+> > other call_rcu()'s going on in parallel. Note that call_rcu() calls
+> > rcu_nocb_try_bypass() if CONFIG_RCU_NOCB_CPU is enabled and profiling
+> > revealed that this function was taking multiple ms (don't recall the
+> > actual number, sorry). Paul's explanation implied that this happens
+> > due to contention on the locks taken in this function. For more
+> > in-depth details I'll have to ask Paul for help :) This code is quite
+> > complex and I don't know all the details of RCU implementation.
+>
+> There are a couple of possibilities here.
+>
+> First, if I am remembering correctly, the time between the call_rcu()
+> and invocation of the corresponding callback was taking multiple seconds,
+> but that was because the kernel was built with CONFIG_LAZY_RCU=y in
+> order to save power by batching RCU work over multiple call_rcu()
+> invocations.  If this is causing a problem for a given call site, the
+> shiny new call_rcu_hurry() can be used instead.  Doing this gets back
+> to the old-school non-laziness, but can of course consume more power.
 
-A quick test show that things still work with thermald and these
-changes.
+That would not be the case because CONFIG_LAZY_RCU was not an option
+at the time I was profiling this issue.
+Laxy RCU would be a great option to replace this patch but
+unfortunately it's not the default behavior, so I would still have to
+implement this batching in case lazy RCU is not enabled.
 
-Thanks,
-Srinivas
+>
+> Second, there is a much shorter one-jiffy delay between the call_rcu()
+> and the invocation of the corresponding callback in kernels built with
+> either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
+> or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
+> on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
+> of this delay is to avoid lock contention, and so this delay is incurred
+> only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
+> This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
+> invoking call_rcu() at least 16 times within a given jiffy will incur
+> the added delay.  The reason for this delay is the use of a separate
+> ->nocb_bypass list.  As Suren says, this bypass list is used to reduce
+> lock contention on the main ->cblist.  This is not needed in old-school
+> kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
+> (including most datacenter kernels) because in that case the callbacks
+> enqueued by call_rcu() are touched only by the corresponding CPU, so
+> that there is no need for locks.
 
-> 
-> thanks,
-> rui
-> > 
-> > Thanks
-> >    -- Daniel
-> > 
-> > > Changelog:
-> > >   - V5:
-> > >     - Fixed GTSH unit conversion, deciK -> milli C
-> > > 
-> > >   - V4:
-> > >     - Fixed Kconfig option dependency, select THERMAL_ACPI if
-> > > ACPI
-> > > is set
-> > >       only for the PCH driver
-> > > 
-> > >   - V3:
-> > >     - Took into account Rafael's comments
-> > >     - Used a silence option THERMAL_ACPI in order to stay
-> > > consistent
-> > >       with THERMAL_OF. It is up to the API user to select the
-> > > option.
-> > > 
-> > >   - V2:
-> > >     - Fix the thermal ACPI patch where the thermal_acpi.c was not
-> > > included in
-> > >       the series
-> > >     - Provide a couple of users of this API which could have been
-> > > tested on a
-> > >       real system
-> > > 
-> > > Daniel Lezcano (3):
-> > >    thermal/acpi: Add ACPI trip point routines
-> > >    thermal/drivers/intel: Use generic trip points for intel_pch
-> > >    thermal/drivers/intel: Use generic trip points int340x
-> > > 
-> > >   drivers/thermal/Kconfig                       |   4 +
-> > >   drivers/thermal/Makefile                      |   1 +
-> > >   drivers/thermal/intel/Kconfig                 |   1 +
-> > >   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
-> > >   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++-------
-> > > --
-> > > --
-> > >   .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
-> > >   drivers/thermal/intel/intel_pch_thermal.c     |  88 ++------
-> > >   drivers/thermal/thermal_acpi.c                | 210
-> > > ++++++++++++++++++
-> > >   include/linux/thermal.h                       |   8 +
-> > >   9 files changed, 286 insertions(+), 214 deletions(-)
-> > >   create mode 100644 drivers/thermal/thermal_acpi.c
-> > > 
+I believe this is the reason in my profiled case.
 
+>
+> Third, if you are instead seeing multiple milliseconds of CPU consumed by
+> call_rcu() in the common case (for example, without the aid of interrupts,
+> NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
+
+I don't think I've seen such a case.
+Thanks for clarifications, Paul!
+
+>
+> Or have I lost track of some other slow case?
+>
+>                                                         Thanx, Paul
