@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD95672D1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DFC672D21
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 00:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjARXz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 18:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S230097AbjARX4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 18:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjARXzw (ORCPT
+        with ESMTP id S230034AbjARXzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 18:55:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4251838B52;
-        Wed, 18 Jan 2023 15:55:51 -0800 (PST)
+        Wed, 18 Jan 2023 18:55:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3D37540;
+        Wed, 18 Jan 2023 15:55:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D332C61ADE;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC8CBB81E12;
+        Wed, 18 Jan 2023 23:55:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847BCC43392;
         Wed, 18 Jan 2023 23:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D74C433D2;
-        Wed, 18 Jan 2023 23:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674086150;
-        bh=huo7Dx5LeyKK14EKOI6NOXQrPu2uwkUxnWmXx2WLv+g=;
+        s=k20201202; t=1674086151;
+        bh=WAoXEdeh2Mmc67g3tKvBye5OCIEtuY/rTgZyEuIPps4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BYjKZgAKdT5SU2xGQscEpdRouie+4hiX6iQQ7SiOSXyDPGJmvRtJO0mogJBz4M9K2
-         8v2DFEo3RCdMojT9l9dEUZYae71xUuWfCvDrS2AyGP/8iD/8fFMZY/EpKrb0RMSK7L
-         +ardY7qiP0VL0FbLJ7EXpwvXKlNnWWMtIsRINPP+YAgHHqfWTBh3ieA/+OBHv4Wz23
-         OmoPpugs2YbeqrlGZuLqopO7/FZBWPULVjVp4gYq0nGQFQy4NjDcJ1PbS81oV272/v
-         iTxN56TTfgEEo73iL+41Khf2k1gr7bWVGpi/TSzC7w3FwGyVJfr9dU9tPU1F+UU580
-         05iyCNoBjGzXw==
+        b=K/UocZGeoOBXxMtWOm+7hH2fK1In1sQBfRK87a2rgPAtoPoW2Oy5Q8HIC7cx0/9sc
+         3JJt/ZoevFomIbYp6hum6sxyTqXp9epbXv+A6KyIyzoA8F+M1OVKwNCQQ1oeKRNkI7
+         aQjbIdWB7j0/OM6w65/YS7gPtolpjlHYSj3bi+CEetAwPhBVMZiezb1JLUwKwVRT6X
+         7pMW5s35RdRdfn5M/FxSAM1nWQJLtsb5Fc+eokwE75mVeX7grImBzgRkWHJI3kewgZ
+         NdSwpE/blEMZ0WBMt2EXOfe/jto2ACeC+gH46kUKUeylDEQbqtadLGtTNG58KOUyBQ
+         ex8XGPbljg+dQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, elder@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org
-Cc:     quic_jponduru@quicinc.com, caleb.connolly@linaro.org,
-        quic_subashab@quicinc.com, mka@chromium.org, evgreen@chromium.org,
-        devicetree@vger.kernel.org, quic_avuyyuru@quicinc.com,
-        quic_cpratapa@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, luca.weiss@fairphone.com,
-        elder@kernel.org
-Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: sm6350: enable IPA
-Date:   Wed, 18 Jan 2023 17:55:34 -0600
-Message-Id: <167408614062.2989059.13063218102847930815.b4-ty@kernel.org>
+To:     krzysztof.kozlowski@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     quic_sibis@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        djakov@kernel.org, linux-kernel@vger.kernel.org,
+        marijn.suijten@somainline.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: (subset) [PATCH v2 1/3] dt-bindings: interconnect: OSM L3: Add SM6350 OSM L3 compatible
+Date:   Wed, 18 Jan 2023 17:55:35 -0600
+Message-Id: <167408614062.2989059.3788980288889367002.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230104193759.3286014-1-elder@linaro.org>
-References: <20230104193759.3286014-1-elder@linaro.org>
+In-Reply-To: <20230104171643.1004054-1-konrad.dybcio@linaro.org>
+References: <20230104171643.1004054-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,22 +59,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 13:37:57 -0600, Alex Elder wrote:
-> Enable IPA for the SM6350 SoC, which implements IPA v4.7.  Enable it
-> on the Fairphone 4, which incorporates IPA definitions used for the
-> SM6350.
+On Wed, 4 Jan 2023 18:16:40 +0100, Konrad Dybcio wrote:
+> SM6350, similarly to SDM845, uses OSM hardware for L3 scaling.
+> Document it.
 > 
-> Version 2 of this series uses the new "qcom,gsi-loader" property to
-> specify that the AP should load firmware on this platform.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: sm6350: add IPA node
-      commit: aed7154a30239f0275b13d622e1edd9d4d356308
-[2/2] arm64: dts: qcom: sm7225-fairphone-fp4: enable IPA
-      commit: 60bf8740870e0377f29b44593c0bfbab379b4909
+[2/3] arm64: dts: qcom: sm6350: Add OSM L3 node
+      commit: e17a806571bb01bb951faeec645944850241eae3
+[3/3] arm64: dts: qcom: sm6350: Set up DDR & L3 scaling
+      commit: bba952275b81971d329189a879a5611bc8eb0dd1
 
 Best regards,
 -- 
