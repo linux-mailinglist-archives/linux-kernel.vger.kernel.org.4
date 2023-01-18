@@ -2,88 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C326729A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B58F6729A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 21:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjARUpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 15:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S229998AbjARUp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 15:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjARUou (ORCPT
+        with ESMTP id S229657AbjARUpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:44:50 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BC65F3AC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:44:49 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id d62so23536181ybh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 12:44:49 -0800 (PST)
+        Wed, 18 Jan 2023 15:45:23 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A055F3AC;
+        Wed, 18 Jan 2023 12:45:22 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bk16so35187427wrb.11;
+        Wed, 18 Jan 2023 12:45:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lxN0ifRPJLWymSPxr4LmL30NaXej0tc2KddBtHP7xgk=;
-        b=o/L/KAVnrxKsg6wfxIIKKTthzenbBpd8Yyjgu45Qrq8xfHYi9SJZ4WC3ePKrhqyRNg
-         0YWgPVF65SgQmhgKuSIT8Z35J7QzxNWKbJ7Mch1d4dIbub2+03oxAQhJ3OzwtUGbSDu6
-         IeONYzFGg8zICe9wX7jtU34Q+HHNzy3/mSlT0m9BQdc2iwNhYeYVxLOpuafpOJl8J6bV
-         es/KDYitXm0tt3HDdtiL2CEMzzYymJFNp2e1nyvq1m7OWfjdXl6a93j+FNHDWO6yHfx+
-         NjPLHNd1ZZULF1ATwHQ8s0jR0DUFaww5AQ+dNZmrpw04Vc/hiUi9H2jaK1McDF3hyape
-         MYyA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgIgSN11rEd8/t7p92lzCdZRCM1txWSCMaslInNbKCo=;
+        b=c0vu0i0WjNE2ZEaE4AK/7wjM7vXc9Hah4fdN6SqEkrSy/kAMPhVrwsffQmrdNGQl5l
+         GFbQW7t0/oXXHXUgeSx6yzAGFXwURiTmJKSnQgCFyygDeXoCOr3eySU+kqhfnwqTrZRE
+         7esI7IfQlxzPF36qE9WGQvM023KOLBSiYG/cCpmCBbBx2ckzjHKP+eE3pBCewXSJv7eP
+         enf3YAfWjozH4Zq4+GZD7RwFvuCJv4C/EQBBUMMDKEX+9R1nPcp3wmMY08yYkWA14XGv
+         eGkJvfDlLlSetrbW4C+Y9oUL3yX9HUnz4ySsHhboWxcLZUV+JmT9cBm3+Ro+s/FlDD8x
+         87CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lxN0ifRPJLWymSPxr4LmL30NaXej0tc2KddBtHP7xgk=;
-        b=C6ROPYIDiMNYn6r7klPyrI+cphVlfVTtLvZ/y8Ciu6lMgSzmXs8L+amjoxc18KN8d8
-         G5/+LkMW00139U+1eORlo5e9eVv2NQdGGs6iyvcfeCEnKF/R7sXm/T2cdSmqLodptxx7
-         2WgJZjpNc7MFJ75op0tEO63L5c4yY2McRPr+icfCmhqXCc5QM9ONCsB4GIxSXv5soCeo
-         7IQyWlkaM4R6yDuPsgPwz8Pa1jbhMDoY3AH6s3ZGY5rDIMSNWk2rEYJ85PyQXABWgRXd
-         fq0M2kpH9DpsAMbPnZxcYANGof3J+xArQdt6rC/cTQGRqOKpd0m3ksLYAJuM3qBt9zuZ
-         Y7SA==
-X-Gm-Message-State: AFqh2ko8fYtDzJnNdaulIod7npkTBcDDBL9Hci1oMBWfqDSh3DTRGfkj
-        /aSF3Or19R7dRe0gdi5jxmeEWK3pT/Ioyv5Gi/UTJg==
-X-Google-Smtp-Source: AMrXdXsmCi/frVC6VtreQlaKByYSty9vXl8uhPqMcWmgUNLPIBdL7eylfPOfYiXjvhn0Wg/c/y6sw3UwLYqAp0TyoEk=
-X-Received: by 2002:a25:9d88:0:b0:7c0:acd2:6300 with SMTP id
- v8-20020a259d88000000b007c0acd26300mr858664ybp.520.1674074689110; Wed, 18 Jan
- 2023 12:44:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgIgSN11rEd8/t7p92lzCdZRCM1txWSCMaslInNbKCo=;
+        b=iZyjLSZRAYr09/uJ9pdpGrX/mybM7EgW2DxCf+dPrVxO8apcpr3j34w8xshzCqj1UD
+         uWeOyPCLzIOUOkDFEUEYTK0w++cv82HP071g3AFbNBsyQ4j+8AfviRYtlQ4OtSI+pNCK
+         wbxovAlEBHxPcY9pDGTa3A+molZnvGKOfTJsZJZ9ka8wrkuovOavz5sFK7FfQQEAw4e7
+         foVFFZthWVGdfsx/y1lQnjOQdSNkL112f01k7EPKlJb+XMjM6ihS++/PQbO+b7egyQ5b
+         f/kmb3sU9NUYvSMiVig7Tj4/T6opfVDru0KxbNR7NeE8eJbi9wf6t+ao5SwHccS09DWe
+         ml9g==
+X-Gm-Message-State: AFqh2kq8xDwn/IF3PGyTC12M2al6ouPLFwwB2gMdvi+qHwIo51AcOblL
+        3tWtZsRDcaBS9qDZ2ls4pZ4=
+X-Google-Smtp-Source: AMrXdXuhv4CroI7UB3QJWrNv2/LetE7M7cz5upNyBmPvrGLBiJvq45o0CFeb+Rdnys9W28IJQzmXlA==
+X-Received: by 2002:adf:ed0c:0:b0:2be:f21:6b02 with SMTP id a12-20020adfed0c000000b002be0f216b02mr7175864wro.70.1674074720705;
+        Wed, 18 Jan 2023 12:45:20 -0800 (PST)
+Received: from [10.27.0.4] ([217.138.207.228])
+        by smtp.gmail.com with ESMTPSA id by12-20020a056000098c00b002bdd8f12effsm16743332wrb.30.2023.01.18.12.45.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 12:45:20 -0800 (PST)
+Message-ID: <2b0fdc2d-6457-059b-bbdf-27e7de59abeb@gmail.com>
+Date:   Wed, 18 Jan 2023 21:45:18 +0100
 MIME-Version: 1.0
-References: <20230116193702.31356-1-mario.limonciello@amd.com> <20230116193702.31356-3-mario.limonciello@amd.com>
-In-Reply-To: <20230116193702.31356-3-mario.limonciello@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 18 Jan 2023 21:44:37 +0100
-Message-ID: <CACRpkdaX+ZVA7zQDnADEi5KPpfd-gwsxPsKaZo5FxEmgjv4S3Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NL5xRU
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        regressions@lists.linux.dev,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-4-luzmaximilian@gmail.com>
+ <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 8:37 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On 1/17/23 09:24, Johan Hovold wrote:
+> On Sun, Jul 24, 2022 at 12:49:48AM +0200, Maximilian Luz wrote:
+>> On platforms using the Qualcomm UEFI Secure Application (uefisecapp),
+>> EFI variables cannot be accessed via the standard interface in EFI
+>> runtime mode. The respective functions return EFI_UNSUPPORTED. On these
+>> platforms, we instead need to talk to uefisecapp. This commit provides
+>> support for this and registers the respective efivars operations to
+>> access EFI variables from the kernel.
+>>
+>> Communication with uefisecapp follows the standard Qualcomm Trusted
+>> Environment (TEE or TrEE) / Secure OS conventions via the respective SCM
+>> call interface. This is also the reason why variable access works
+>> normally while boot services are active. During this time, said SCM
+>> interface is managed by the boot services. When calling
+>> ExitBootServices(), the ownership is transferred to the kernel.
+>> Therefore, UEFI must not use that interface itself (as multiple parties
+>> accessing this interface at the same time may lead to complications) and
+>> cannot access variables for us.
+>>
+>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+>> ---
+> 
+>> +static struct platform_driver qcom_uefisecapp_driver = {
+>> +	.probe = qcom_uefisecapp_probe,
+>> +	.remove = qcom_uefisecapp_remove,
+>> +	.driver = {
+>> +		.name = "qcom_tee_uefisecapp",
+>> +		.of_match_table = qcom_uefisecapp_dt_match,
+>> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>> +	},
+>> +};
+>> +module_platform_driver(qcom_uefisecapp_driver);
+> 
+> I noticed that for efivarfs to work, you're currently relying on having
+> the firmware still claim that the variable services are supported in the
+> RT_PROP table so that efi core registers the default ops at subsys init
+> time (which are later overridden by this driver).
+> 
+> Otherwise efivarfs may fail to initialise when built in:
+> 
+> 	static __init int efivarfs_init(void)
+> 	{
+> 		if (!efivars_kobject())
+> 			return -ENODEV;
+> 
+> 		return register_filesystem(&efivarfs_type);
+> 	}
+> 
+> 	module_init(efivarfs_init);
+> 
+> With recent X13s firmware the corresponding bit in the RT_PROP table has
+> been cleared so that efivarfs would fail to initialise. Similar problem
+> when booting with 'efi=noruntime'.
+> 
+> One way to handle this is to register also the qcom_uefisecapp_driver at
+> subsys init time and prevent it from being built as a module (e.g. as is
+> done for the SCM driver). I'm using the below patch for this currently.
 
-> However on Clevo NL5xRU there is a mistake in the ACPI tables that the
-> TP_ATTN# signal connected to GPIO 9 is configured as ActiveLow and level
-> triggered but connected to a pull up. As soon as the system suspends the
-> touchpad loses power and then the system wakes up.
+So I've had another look and I'm not sure this will work reliably:
 
-Now that is what I call proper root cause analysis. Hats off for this patch!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+First, you are correct in case the RT_PROP table is cleared. In that
+case, using subsys_initcall() will move the efivar registration before
+the efivarfs_init() call.
 
-Yours,
-Linus Walleij
+However, in case EFI indicates support for variables, we will then have
+generic_ops_register() and the uefisecapp's driver call running both in
+subsys_initcall(). So if I'm not mistaken, this could cause the generic
+ops to be registered after the uefisecapp ones, which we want to avoid.
+
+One solution is bumping uefisecapp to fs_initcall(). Or do you have any
+other suggestions?
+
+Regards,
+Max
+
+
+>  From 8fecce12d215bd8cab1b8c8f9f0d1e1fe20fe6e7 Mon Sep 17 00:00:00 2001
+> From: Johan Hovold <johan+linaro@kernel.org>
+> Date: Sun, 15 Jan 2023 15:32:34 +0100
+> Subject: [PATCH] firmware: qcom_tee_uefisecapp: register at subsys init
+> 
+> Register efivars at subsys init time so that it is available when
+> efivarfs probes. For the same reason, also prevent building the driver
+> as a module.
+> 
+> This is specifically needed on platforms such as the Lenovo Thinkpad
+> X13s where the firmware has cleared the variable services in the RT_PROP
+> table so that efi core does not register any efivar callbacks at subsys
+> init time (which are later overridden).
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/firmware/Kconfig               | 2 +-
+>   drivers/firmware/qcom_tee_uefisecapp.c | 7 ++++++-
+>   2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index 4e9e2c227899..48e712e363da 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -231,7 +231,7 @@ config QCOM_TEE
+>   	select QCOM_SCM
+>   
+>   config QCOM_TEE_UEFISECAPP
+> -	tristate "Qualcomm TrEE UEFI Secure App client driver"
+> +	bool "Qualcomm TrEE UEFI Secure App client driver"
+>   	select QCOM_TEE
+>   	depends on EFI
+>   	help
+> diff --git a/drivers/firmware/qcom_tee_uefisecapp.c b/drivers/firmware/qcom_tee_uefisecapp.c
+> index 65573e4b815a..e83bce4da70a 100644
+> --- a/drivers/firmware/qcom_tee_uefisecapp.c
+> +++ b/drivers/firmware/qcom_tee_uefisecapp.c
+> @@ -754,7 +754,12 @@ static struct platform_driver qcom_uefisecapp_driver = {
+>   		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>   	},
+>   };
+> -module_platform_driver(qcom_uefisecapp_driver);
+> +
+> +static int __init qcom_uefisecapp_init(void)
+> +{
+> +	return platform_driver_register(&qcom_uefisecapp_driver);
+> +}
+> +subsys_initcall(qcom_uefisecapp_init);
+>   
+>   MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
+>   MODULE_DESCRIPTION("Client driver for Qualcomm TrEE/TZ UEFI Secure App");
