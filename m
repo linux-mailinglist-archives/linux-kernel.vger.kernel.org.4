@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803D3674430
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98695674432
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjASVU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S229934AbjASVUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjASVTi (ORCPT
+        with ESMTP id S230318AbjASVUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:19:38 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6C3A9592
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:13:23 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 78so2595939pgb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:13:23 -0800 (PST)
+        Thu, 19 Jan 2023 16:20:02 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D97AA5CC;
+        Thu, 19 Jan 2023 13:13:46 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so9096914ejc.4;
+        Thu, 19 Jan 2023 13:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXQAX4zgQIEcR46hfecs8ivLI9Fp7qzLdoZtzRMFxAM=;
-        b=LeGGy9TXclqavq1GJEP5BeJuqLAP77mJj9M/dx+YZB1k8oz48n4eWPGqVlYjqDCLRE
-         41YHxOMQmIPn4GecoCfNdSfjX7LtOwzw481wfJI+TUHrlJT0YXSVbMTSxk7vLqaMm35k
-         isUkT8z/Zm8eLWKwPPOPPE3qKEIo5tMt4u/U9Z2tA27ZMD9AbBVh5NaY8RcniOdcvUMi
-         pyrAFAChvhZharJnDgULt0wPu06u8xTrPVKuwTv/MbeonFQrYfzcIF/B0ce5rWIFQ39h
-         ubIZ7WeGiuR3cNGBk8p1LMXvjgWovU46wbhWELbGrWsie3y+NdQUdLbxAI2m+8DqNVzX
-         1Jow==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YkgKBEweuJoBtcSoJVQXp+cGrWKeYRlSSEkuXBn/TRc=;
+        b=NmB5k4PwjXDSNszyL9U+RNTtAkeQBklwCe91u0F5mI44znTvQiNSKRARgZniExXlss
+         lMQrzM/TbqWvmO4uZ7yycjdM7OLrga87R4C21fGMbOyfFVM9QbFoxBK76Jmfc0rj7YDP
+         lSt5iQKwBePD8QeZtliMZLwAnR2Bt4wAJIMpq85R/4M2ZacbYBYlYB6IBLFUhqHRwkTx
+         d6KS+pkmDY+D1kI1I40b2sSwFiEHwv5VHWlXh0T0wMJ9hqK5Pw/KfTdhV/1L32QNHgXV
+         /p98pLuN132oBw9B+08QziGsExt0gFml6rfInkVVqmfVd7DT0LICtZWTSLyiSOcb7Rr6
+         DRSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fXQAX4zgQIEcR46hfecs8ivLI9Fp7qzLdoZtzRMFxAM=;
-        b=DeXByVsi6G8qchel4ltwQh0eHqjOljWXDcm8q7Mz1+bxdkefjUe1DVX8kC3tYKz8ba
-         WxkhQt1bwjvSXNXKTdrUjdwWKikCy4VJdxaOwdjfCif9tcbXfyXdqYta299ZaeYStkmS
-         GcsbriEwMmygMxIG2YjfZGKRn/NRRwDf7LvdD2wJkFpjdsgFZ2d+63cPw197snMMB9BA
-         SO4vMxJ3sjbWpm23nKCsOBLrnLGBNeLvJF2sPKi5f1gX+Fv9XxQ1d8tT/iZR3ISO3G6k
-         WLAfdvGhOQqRFxN04Q8Gf74fhtwd/Kh+wZ4f0f53bpoi3IrqTJv8EjYSQzUxGWGWTk4z
-         +mQA==
-X-Gm-Message-State: AFqh2kpx+BGdlxa88d+Qs/NEuQ5osPRqiTT5edMluPFub2RRHOBiTWsY
-        vysY2PeHXGBuLEv7PUTAmiE=
-X-Google-Smtp-Source: AMrXdXumu9XC7Z8ZOUJf2HdYTRDa5zAIDrKrYOpAsbDGhZlQd+VrdxHeJwh7Lw8m+T9WViOxlLj1cw==
-X-Received: by 2002:a05:6a00:f91:b0:583:319a:4413 with SMTP id ct17-20020a056a000f9100b00583319a4413mr13329053pfb.24.1674162800057;
-        Thu, 19 Jan 2023 13:13:20 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620645000000b00581172f7456sm7056240pfg.56.2023.01.19.13.13.19
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YkgKBEweuJoBtcSoJVQXp+cGrWKeYRlSSEkuXBn/TRc=;
+        b=zbqabmS6G6h7UeWVE3TXlCdx8PTIuWCBjjS3UvKct7h0E5//zPgplX1nNmZamks85w
+         hwmVqzIqVsr7Clc8oEE90L2PimDwLeNNTWhr//JLuORKvc+E1YaPyHCRdrkG9l8gyEai
+         BqGzUqkzqn1BqQoYF8XN/XPAPzJgifWdDJhWLQyUSzqGhjRccEowWwUtm6mNlGSQfNa7
+         lrGfBJDmW1uKk73RZ/49UPcX1V71dgTb81H737PrcquOq2GM9nYql6qC2kmofF39VPHj
+         M+7+GH58TGff6X7hCBI/CrIOWwsgzCpkNVOcEmKv3JA7FbK7e/AW6Tn/4QWH9sXg0rXX
+         w1ug==
+X-Gm-Message-State: AFqh2kpEP+prBpv8X86ypK0LGjsTOZA9C/5qS05HJcZRdpPo0RT8FbKl
+        4p2FfXXUA5/g6Wu0I1qBtnY=
+X-Google-Smtp-Source: AMrXdXuWT1VIH+6NSq5hQquJr3moZJFBW2VjfyKWOoVuxvsojM5tLJxltOvV6+JyemJ77K12KX6Qdg==
+X-Received: by 2002:a17:906:34c4:b0:86f:9e4:d13e with SMTP id h4-20020a17090634c400b0086f09e4d13emr12661182ejb.72.1674162820429;
+        Thu, 19 Jan 2023 13:13:40 -0800 (PST)
+Received: from krava ([83.240.63.129])
+        by smtp.gmail.com with ESMTPSA id a23-20020a1709066d5700b008733f1da848sm4208252ejt.170.2023.01.19.13.13.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:13:19 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/dma: Drop unbalanced obj unref
-Date:   Thu, 19 Jan 2023 13:13:25 -0800
-Message-Id: <20230119211325.2851211-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 19 Jan 2023 13:13:38 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 19 Jan 2023 22:13:34 +0100
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Christy Lee <christylee@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
+Message-ID: <Y8myfqy5EMit3Kr/@krava>
+References: <20230116010115.490713-1-irogers@google.com>
+ <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
+ <Y8mAuDvs566zwG67@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8mAuDvs566zwG67@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,30 +87,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu:
+> > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.com> wrote:
+> > > libbpf 1.0 was a major change in API. Perf has partially supported
+> > > older libbpf's but an implementation may be:
+> > > ..
+> > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > >        return -ENOTSUP;
+> > > ..
+> > >
+> > > Rather than build a binary that would fail at runtime it is
+> > > preferrential just to build libbpf statically and link against
+> > > that. The static version is in the kernel tools tree and newer than
+> > > 1.0.
+> > >
+> > > These patches change the libbpf test to only pass when at least
+> > > version 1.0 is installed, then remove the conditional build and
+> > > feature logic.
+> > >
+> > > The issue is discussed here:
+> > > https://lore.kernel.org/lkml/20230106151320.619514-1-irogers@google.com/
+> > > perf bpf:
+> > >
+> > > A variant of this fix was added to Linux 6.2 in:
+> > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIBBPF_DYNAMIC=1"
+> > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
+> > > This change goes further in removing logic that is now no longer
+> > > necessary.
+> > >
+> > > v2. Rebase now that breakage fix patch is in linus/master.
+> > 
+> > I missed the:
+> > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
+> > I believe we are waiting for package maintainer input.
+> 
+> Yes, as fedora:37 still is at libbpf 0.8.0 :-\
 
-In the error path, drm_gem_dma_mmap() is dropping an obj reference that
-it doesn't own.
+rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd be to move
+f37 to 1.x, but I had to do bulk update of like 10 other dependent packages
+for f38, so not sure how bad it'd be for f37
 
-Fixes: f5ca8eb6f9bd ("drm/cma-helper: Implement mmap as GEM CMA object functions")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/drm_gem_dma_helper.c | 2 --
- 1 file changed, 2 deletions(-)
+jirka
 
-diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c b/drivers/gpu/drm/drm_gem_dma_helper.c
-index 1e658c448366..784356d6f39d 100644
---- a/drivers/gpu/drm/drm_gem_dma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_dma_helper.c
-@@ -544,8 +544,6 @@ int drm_gem_dma_mmap(struct drm_gem_dma_object *dma_obj, struct vm_area_struct *
- 				  dma_obj->dma_addr,
- 				  vma->vm_end - vma->vm_start);
- 	}
--	if (ret)
--		drm_gem_vm_close(vma);
- 
- 	return ret;
- }
--- 
-2.38.1
-
+> 
+> This is what I have in the containers I test, sure, the older ones
+> already have NO_LIBBPF=1 and some will get this added, and some I still
+> need to ask for libbpf-devel (or the distro specific name, like
+> libbpf-dev):
+> 
+> [perfbuilder@five ~]$ podman images --format "{{.Repository}}:{{.Tag}}" | grep /acmel/ | grep -v '<none>' | sort -t: -Vk1,2 | grep -v -- -x- | while read image ; do echo -n $image: ; libbpf=$(podman run --rm -t --entrypoint=ls $image -la /usr/lib64/libbpf.so.1) ; echo $libbpf ; done
+> localhost/acmel/linux-perf-tools-build-almalinux:8:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-almalinux:9:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.12:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.13:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.14:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.15:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.16:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:3.17:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alpine:edge:ls: /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-alt:p9:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-alt:p10:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-alt:sisyphus:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-amazonlinux:2:ls: cannot access /usr/lib64/libbpf.so.1: No such file or directory
+> localhost/acmel/linux-perf-tools-build-amazonlinux:devel:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-archlinux:base:lrwxrwxrwx 1 root root 15 Oct 1 12:32 /usr/lib64/libbpf.so.1 -> libbpf.so.1.0.1
+> localhost/acmel/linux-perf-tools-build-centos:8:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-centos:stream:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-clearlinux:latest:lrwxrwxrwx 1 root root 15 Sep 30 16:01 /usr/lib64/libbpf.so.1 -> libbpf.so.1.0.1
+> localhost/acmel/linux-perf-tools-build-debian:10:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-debian:11:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-debian:experimental:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:26:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:27:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:28:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:29:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:30:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:31:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:32:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:33:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:34:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:35:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:36:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:37:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-fedora:38:lrwxrwxrwx. 1 root root 15 Dec 20 14:39 /usr/lib64/libbpf.so.1 -> libbpf.so.1.0.0
+> localhost/acmel/linux-perf-tools-build-fedora:rawhide:lrwxrwxrwx. 1 root root 15 Dec 20 14:39 /usr/lib64/libbpf.so.1 -> libbpf.so.1.0.0
+> localhost/acmel/linux-perf-tools-build-gentoo-stage3:latest:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-manjaro:base:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.0:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.1:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.2:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.3:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.4:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:15.5:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-opensuse:tumbleweed:lrwxrwxrwx. 1 root root 15 Nov 9 12:08 /usr/lib64/libbpf.so.1 -> libbpf.so.1.0.1
+> localhost/acmel/linux-perf-tools-build-oraclelinux:8:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-oraclelinux:9:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-rockylinux:8:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-rockylinux:9:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:18.04:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:20.04:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:21.04:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:21.10:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:22.04:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:22.10:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> localhost/acmel/linux-perf-tools-build-ubuntu:23.04:ls: cannot access '/usr/lib64/libbpf.so.1': No such file or directory
+> [perfbuilder@five ~]$
+> 
+> [perfbuilder@five linux-perf-tools-build]$ grep libbpf-dev */*/Dockerfile
+> debian/experimental/Dockerfile:	libbpf-dev \
+> fedora/35/Dockerfile:		   libtraceevent-devel libbpf-devel \
+> fedora/36/Dockerfile:		   libtraceevent-devel libbpf-devel \
+> fedora/37/Dockerfile:		   libtraceevent-devel libbpf-devel \
+> fedora/38/Dockerfile:		   libtraceevent-devel libbpf-devel \
+> fedora/rawhide/Dockerfile:	libtraceevent-devel libbpf-devel \
+> opensuse/tumbleweed/Dockerfile:	libbpf-devel libtraceevent-devel \
+> ubuntu/22.04/Dockerfile:	libelf-dev libiberty-dev libdw-dev libaudit-dev libtraceevent-dev libbpf-dev \
+> ubuntu/22.10/Dockerfile:	libelf-dev libiberty-dev libdw-dev libaudit-dev libtraceevent-dev libbpf-dev \
+> ubuntu/23.04/Dockerfile:	libelf-dev libiberty-dev libdw-dev libaudit-dev libtraceevent-dev libbpf-dev \
+> [perfbuilder@five linux-perf-tools-build]$
+> 
+> In some cases it gets dragged on differently, like with clearlinux,
+> gentoo, archlinux, etc.
+> 
+> Anyway, just a data point, I'll check if I'm missing installing it
+> somewhere.
+> 
+> - Arnaldo
