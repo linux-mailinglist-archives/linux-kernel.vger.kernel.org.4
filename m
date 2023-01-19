@@ -2,93 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FAC6733A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FA36733AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjASI1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
+        id S229501AbjASI3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 03:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjASI1O (ORCPT
+        with ESMTP id S229568AbjASI3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:27:14 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB5A677B3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:26:47 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id az20so3709587ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:26:47 -0800 (PST)
+        Thu, 19 Jan 2023 03:29:08 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD69330F2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:29:06 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v5so1934101edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
-        b=mNTM5AJg7ui9JlnhPVh3p6lzm3E55W75nfZxBi8IvEEpPbHDiegLCmh+CXKeCF5t9W
-         TW8matPBQKEDx68vOjbsaW7yPt6BS4mYQag7t+ozR8ajyxrgnWrgOOy89r5j0LZZvhU0
-         AORRebrGfwjOsie1UN/kT5ntEZOeEdK+biynWNsWWUNJYzbpl0ha6e/jKGJfBGXdqIZX
-         mCqWa/gFqQuMpdTayCqdDjzT0bs9sgmvBBGUfAazeVUDd33fidQYsqv5c0UQSjQUGo7B
-         IrFTbPJ7db5H4HM6YXvptJUMUe6HczD0yDDPwEdLfTfOMfNSaiwAu5sE2fgEW0eDwqai
-         kAGQ==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=x5ck+uBW+we5mcml99JIlI5hbqOexLvffduO15vMLCQ=;
+        b=JtUEKYA4ngIiCcO38C3pG5dWS8AmHuQYxbH7z4bS0gjTrWl2JjNzmgu+bHT1rhVvCF
+         1AyQtvmN+FtmrNaWPPlJxZ1bL2eW7Oditr9V7+Te0BCwylH/bu1UdZdtD74u9sKME4pq
+         4gLh+tfjkooAP7I3TeDdqGgUeUnakDAAJVoJn1lZJ0nt6ynYWYQ2hSzGBEW18rNJpTE7
+         X/bTKUyOfdx/C86S3LXuUQzM7SIH2k3OgDl+54FiyHI4lRaVEg82PMf5IzorscxABa4G
+         3rV6OMUb6N6Qq3ZkX/pp6a00uXYu/B094V6gztspTEq96rPZswMmsEwrXoIDCMXflQrs
+         Yk6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
-        b=oOiLiooBYKjCkG9IUZlZxBASxv07h1CYDGFiJf418AbZP4JnUE2QhoEiG8RyZGuLQo
-         T4uP+jCNKtcRYiZsL8VfXwjrRxiQjzcJbzJmAhl5SJIKb5kFLmcZCxRxeKJqy+wayus/
-         Xwb3Ic14bqIFhO5eZAcMq7vQ6PYtS4vrYWbbiJPBOZDwYzV8Z7inWHtnPUoa02mu8qvH
-         ukQ/Xtlzkl7hkJT1DLBc5NSqMLyKoqymFcy3eRIYjeT9uD2a5I+6sCypFt+tiTrsZCi4
-         PcK2I34y5rMeEq/cbarfJgg44OTCebHu+m53uBvWMc+V2LXD7I4Y5XEvzDz+FGrNXezt
-         fTsg==
-X-Gm-Message-State: AFqh2koQK71RmQx8HIucjvco8AQJc5SLiepFhPgExyqBblbjqvgvSjHW
-        A9roj1cHJOSp/eT7rBnBU6HU2AqCuv+xwA==
-X-Google-Smtp-Source: AMrXdXvfg1vygnOMkKjLYzjsXW/AFJ8TnYJAeatzVZsI3JwuD7syj+4F7Nrh1j18lKH3lwTqsbUGJQ==
-X-Received: by 2002:a17:906:f299:b0:7c0:fd1a:79ee with SMTP id gu25-20020a170906f29900b007c0fd1a79eemr10108518ejb.63.1674116805805;
-        Thu, 19 Jan 2023 00:26:45 -0800 (PST)
-Received: from localhost.localdomain (2a02-a420-f-f912-a404-9692-a1f8-1c00.mobile6.kpn.net. [2a02:a420:f:f912:a404:9692:a1f8:1c00])
-        by smtp.gmail.com with ESMTPSA id ov38-20020a170906fc2600b0084d4733c428sm13417193ejb.88.2023.01.19.00.26.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 19 Jan 2023 00:26:45 -0800 (PST)
-From:   Semen Zhydenko <semen.zhydenko@gmail.com>
-To:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
-        jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org
-Cc:     Semen Zhydenko <semen.zhydenko@gmail.com>
-Subject: [PATCH v2] Fixed typo in comments
-Date:   Thu, 19 Jan 2023 09:26:40 +0100
-Message-Id: <20230119082640.90793-1-semen.zhydenko@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x5ck+uBW+we5mcml99JIlI5hbqOexLvffduO15vMLCQ=;
+        b=0WMifGzV2PMludUcZssqIzMFMsNYDyytX1p0jaKNioWm82J+SFPbLEjRjvUwZnB2RM
+         fKnIsK2JKDEUpwBgUbADqZWo/lg6XYPqV05q4VvrtET91meCeqViZHev6aC+4wiWJ/EK
+         u0ag7eygnuLNChLoofy9+vSntb3TdDXs57QVmpu9tYIUaqyrSCUKUJUO+jNRJHD8nYGK
+         oXbj/UX3UYdeaaGua/TteHME6DKfOuq4pDbQ/9pUWZf7yjuwak8GtRvwyStZ+SZdsY0v
+         bdfVuJzGWSqOA3cMj+jcl3QC6ehAJwQunIu1XO8mpGqit/2xLLj/PoxWC3guJoKUYh7g
+         RP5g==
+X-Gm-Message-State: AFqh2kq99zkGKDJ+9fVEM9N6gMokQIHBZaGpYgpuTFxHubBCVAnCJjZD
+        ECtzBNUKWvfv7iYL9+d/VjzBTg==
+X-Google-Smtp-Source: AMrXdXt37wqPfFZsW/BhY2ZBx33uOivJd/nYfcmjoJqMYW92j1bl/42mtZmEp65y22+4CKilHwwZSg==
+X-Received: by 2002:a05:6402:b:b0:496:f517:d30d with SMTP id d11-20020a056402000b00b00496f517d30dmr10408911edu.38.1674116945288;
+        Thu, 19 Jan 2023 00:29:05 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id a3-20020aa7cf03000000b0049019b48373sm15294210edy.85.2023.01.19.00.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 00:29:04 -0800 (PST)
+Date:   Thu, 19 Jan 2023 09:29:03 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
+ riscv_cpufeature_patch_func to all ISA extensions
+Message-ID: <20230119082903.yk3uslfrjtxzassi@orel>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-6-jszhang@kernel.org>
+ <2398293.3Lj2Plt8kZ@diego>
+ <20230112092136.f2g43hrhmrqouy4y@orel>
+ <Y8F2YxMHUt+djhX4@wendy>
+ <Y8MRZQENua+wi34T@spud>
+ <Y8hqptFcUgjhns4F@spud>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8hqptFcUgjhns4F@spud>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To change one typo in kernel/time/timer.c
-Typo is "aquisition" proper spelling should be "acquisition".
+On Wed, Jan 18, 2023 at 09:54:46PM +0000, Conor Dooley wrote:
+> Hey!
+> 
+> I guess here is the right place to follow up on all of this stuff...
+> 
+> On Sat, Jan 14, 2023 at 08:32:37PM +0000, Conor Dooley wrote:
+> > On Fri, Jan 13, 2023 at 03:18:59PM +0000, Conor Dooley wrote:
+> > > On Thu, Jan 12, 2023 at 10:21:36AM +0100, Andrew Jones wrote:
+> > > > On Thu, Jan 12, 2023 at 12:29:57AM +0100, Heiko Stübner wrote:
+> > > > > Am Mittwoch, 11. Januar 2023, 18:10:19 CET schrieb Jisheng Zhang:
+> > > > > > riscv_cpufeature_patch_func() currently only scans a limited set of
+> > > > > > cpufeatures, explicitly defined with macros. Extend it to probe for all
+> > > > > > ISA extensions.
+> > > > > > 
+> > > > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > > > > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> > > > > > ---
+> > > > > >  arch/riscv/include/asm/errata_list.h |  9 ++--
+> > > > > >  arch/riscv/kernel/cpufeature.c       | 63 ++++------------------------
+> > > > > >  2 files changed, 11 insertions(+), 61 deletions(-)
+> > > > > 
+> > > > > hmmm ... I do see a somewhat big caveat for this.
+> > > > > and would like to take back my Reviewed-by for now
+> > > > > 
+> > > > > 
+> > > > > With this change we would limit the patchable cpufeatures to actual
+> > > > > riscv extensions. But cpufeatures can also be soft features like
+> > > > > how performant the core handles unaligned accesses.
+> > > > 
+> > > > I agree that this needs to be addressed and Jisheng also raised this
+> > > > yesterday here [*]. It seems we need the concept of cpufeatures, which
+> > > > may be extensions or non-extensions.
+> > > > 
+> > > > [*] https://lore.kernel.org/all/Y77xyNPNqnFQUqAx@xhacker/
+> > > > 
+> > > > > See Palmer's series [0].
+> > > > > 
+> > > > > 
+> > > > > Also this essentially codifies that each ALTERNATIVE can only ever
+> > > > > be attached to exactly one extension.
+> > > > > 
+> > > > > But contrary to vendor-errata, it is very likely that we will need
+> > > > > combinations of different extensions for some alternatives in the future.
+> > > > 
+> > > > One possible approach may be to combine extensions/non-extensions at boot
+> > > > time into pseudo-cpufeatures. Then, alternatives can continue attaching to
+> > > > a single "feature". (I'm not saying that's a better approach than the
+> > > > bitmap, I'm just suggesting it as something else to consider.)
+> > > 
+> > > 
+> > > > >         ALTERNATIVE_2("nop",
+> > > > >                       "j strcmp_zbb_unaligned", 0, CPUFEATURE_ZBB | CPUFEATURE_FAST_UNALIGNED, 0, CONFIG_RISCV_ISA_ZBB,
+> > > > >                       "j variant_zbb", 0, CPUFEATURE_ZBB, CPUFEATURE_FAST_UNALIGNED, CONFIG_RISCV_ISA_ZBB)
+> > > > > 
+> > > > > [the additional field there models a "not" component]
+> > > 
+> > > Since we're discussing theoretical implementations, and it's a little hard
+> > > to picture all that they entail in my head, I might be making a fool of
+> > > myself here with assumptions...
+> > > 
+> > > Heiko's suggestion sounded along the lines of: keep probing individual
+> > > "features" as we are now. Features in this case being the presence of
+> > > the extension or non-extension capability. And then in the alternative,
+> > > make all of the decisions about which to apply.
+> > > 
+> > > Drew's suggestion would have significantly more defined CPUFEATURE_FOOs,
+> > > but would offload the decision making about which extensions or non-
+> > > extension capabilities constitute a feature to regular old cpufeature
+> > > code. However, the order of precedence would remain in the alt macro, as
+> > > it does now.
+> > > 
+> > > I think I am just a wee bit biased, but adding the complexity somewhere
+> > > other than alternative macros seems a wise choice, especially as we are
+> > > likely to find that complexity increases over time?
+> > > 
+> > > The other thing that came to mind, and maybe this is just looking for
+> > > holes where they don't exist (or are not worth addressing), is that
+> > > order of precedence.
+> > > I can imagine that, in some cases, the order of precedence is not a
+> > > constant per psuedo-cpufeature, but determined by implementation of
+> > > the capabilities that comprise it?
+> > 
+> > Having spent longer than I maybe should've looking at your patches
+> > Heiko, given it's a Saturday evening, the precedence stuff is still
+> > sticking out to me..
+> > 
+> > For Zbb & fast unaligned, the order may be non-controversial, but in
+> > the general case I don't see how it can be true that the order of
+> > precedence for variants is a constant.
+> > 
+> > Creating pseudo cpufeatures as Drew suggested does seem like a way to
+> > extract complexity from the alternatives themselves (which I think is a
+> > good thing) but at the expense of eating up cpu_req_feature bits...
+> > By itself, it doesn't help with precedence, but it may better allow us
+> > to deal with some of the precedence in cpufeature.c, since the
+> > alternative would operate based on the pseudo cpufeature rather than on
+> > the individual capabilities that the pseudo cpufeature depends on.
+> > 
+> > I tried to come up with a suggestion for what to do about precedence,
+> > but everything I thought up felt a bit horrific tbh.
+> > The thing that fits the current model best is just allowing cpu vendors
+> > to add, yet more, "errata" that pick the variant that works best for
+> > their implementation... Although I'd be worried about ballooning some of
+> > these ALT_FOO macros out to a massive degree with that sort of approach.
+> > 
+> > > If my assumption/understanding holds, moving decision making out of the
+> > > alternative seems like it would better provision for scenarios like
+> > > that? I dunno, maybe that is whatever the corollary of "premature
+> > > optimisation" is for this discussion.
+> > > 
+> > > That's my unsolicited € 0.02, hopefully I wasn't off-base with the
+> > > assumptions I made.
+> > 
+> > The order in which an alternative is added to the macro does matter,
+> > right? At least, that's how I thought it worked and hope I've not had
+> > an incorrect interpretation there all along... I wasn't until I started
+> > reading your patch and couldn't understand why you had a construct that
+> > looked like
+> > 
+> > if (zbb && !fast_unaligned)
+> > ...
+> > else if (zbb && fast_unaligned)
+> > ...
+> > 
+> > rather than just inverting the order and dropping the !fast_unaligned
+> > that I realised I might have a gap in my understanding after all..
+> > 
+> > > Heiko, I figure you've got some sort of WIP stuff for this anyway since
+> > > you're interested in the fast unaligned? How close are you to posting any
+> > > of that?
+> > > 
+> > > While I think of it, w.r.t. extension versus (pseudo)cpufeature etc
+> > > naming, it may make sense to call the functions that this series adds
+> > > in patch 6 has_cpufeature_{un,}likely(), no matter what decision gets
+> > > made here?
+> > > IMO using cpufeature seems to make more sense for a general use API that
+> > > may be used later on for the likes of unaligned access, even if
+> > > initially it is not used for anything other than extensions. 
+> 
+> Today at [1] we talked a bit about the various bits going on here.
+> I'll attempt to summarise what I remember, but I meant to do this
+> several hours ago and am likely to make a hames of it.
+> 
+> For Zbb/unaligned stuff, the sentiment was along the lines of there
+> needing to be a performance benefit to justify the inclusion.
+> Some of us have HW that is (allegedly) capable of Zbb, and, if that's the
+> case, will give it a go.
+> I think it was similar for unaligned, since there is nothing yet that
+> supports this behaviour, we should wait until a benefit is demonstrable.
+> 
+> On the subject of grouping extension/non-extension capabilities into a
+> single cpufeature, Palmer mentioned that GCC does something similar,
+> for the likes of the Ventana vendor extensions, that are unlikely to be
+> present in isolation.
+> Those are (or were?) probed as a group of extensions rather than
+> individually.
+> I think it was said it'd make sense for us to unify extensions that will
+> only ever appear together single psuedo cpufeature too.
+> 
+> For the bitfield approach versus creating pseudo cpufeatures discussion
+> & how to deal with that in alternatives etc, I'm a bit less sure what the
+> outcome was.
+> IIRC, nothing concrete was said about either approach, but maybe it was
+> implied that we should do as GCC does, only grouping things that won't
+> ever been seen apart.
+> Figuring that out seems to have been punted down the road, as the
+> inclusion of our only current example of this (Zbb + unaligned) is
+> dependant on hardware showing up that actually benefits from it.
+> 
+> The plan then seemed to be press ahead with this series & test the
+> benefits of the Zbb str* functions in Zbb capable hardware before making
+> a decision there.
+> 
+> Hopefully I wasn't too far off with that summary...
 
-Signed-off-by: Semen Zhydenko <semen.zhydenko@gmail.com>
----
- kernel/time/timer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This matches my recollection. Thanks for the summary, Conor.
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 63a8ce7177dd..6430c00b05a9 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1324,7 +1324,7 @@ static int __timer_delete(struct timer_list *timer, bool shutdown)
- 	 * If @shutdown is set then the lock has to be taken whether the
- 	 * timer is pending or not to protect against a concurrent rearm
- 	 * which might hit between the lockless pending check and the lock
--	 * aquisition. By taking the lock it is ensured that such a newly
-+	 * acquisition. By taking the lock it is ensured that such a newly
- 	 * enqueued timer is dequeued and cannot end up with
- 	 * timer->function == NULL in the expiry code.
- 	 *
---
-2.37.1 (Apple Git-137.1)
+drew
+
+> 
+> Thanks,
+> Conor.
+> 
+> 1 - https://lore.kernel.org/linux-riscv/mhng-775d4068-6c1e-48a4-a1dc-b4a76ff26bb3@palmer-ri-x1c9a/
+
+
