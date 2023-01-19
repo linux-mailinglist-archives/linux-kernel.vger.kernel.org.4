@@ -2,156 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A9D6733A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FAC6733A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjASI0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229695AbjASI1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 03:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjASI0H (ORCPT
+        with ESMTP id S230153AbjASI1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:26:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA3677BD;
-        Thu, 19 Jan 2023 00:26:01 -0800 (PST)
-Date:   Thu, 19 Jan 2023 09:25:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674116757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UL5oma6ejlLF3N+uLlDTWSEseczx97uBZC0GZjrlM6k=;
-        b=3heCkZOhJTEFLLsQfzuQw1rsg0gkYuGSZcBGSYZrizUeXhblr1QlTKX4l3gAoEZTaOXBLj
-        +oy9RwlB0k1x2vhGJVHJNFyl+Jyyo3ILaceodBn3QE78poDYoBHDRzpRoVxZGuP6fyh1Fr
-        U2wZttowTwnmEx3PdMIp/pZ66gmIcdaGNfWbv7Uk28BGhhoIjonCqXlE9WkULC10JdWMKO
-        fCxgG2MzSsNdYMVzFcUygOffdNb4wRFW0QRsLbaBsrFaY8Jp5CAUloF4hc/sBEVO9MW4aK
-        PraAyUcbEa6Vr5AAIy7Hc3X3DlAQppPLkRrud/WV8Rxqf7fTfl//3ND5r1aOlg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674116757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UL5oma6ejlLF3N+uLlDTWSEseczx97uBZC0GZjrlM6k=;
-        b=lPxErHMuXBykY/ZAX21XfN/w1l/K9BFSybPlBcs0f7C3msLY1H0OlZyIPTY4uorB80wRrj
-        3ZF1qAsBFvXycQDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <Y8j+lENBWNWgt4mf@linutronix.de>
-References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
- <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
- <Y8gPhTGkfCbGwoUu@linutronix.de>
- <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+        Thu, 19 Jan 2023 03:27:14 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB5A677B3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:26:47 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id az20so3709587ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
+        b=mNTM5AJg7ui9JlnhPVh3p6lzm3E55W75nfZxBi8IvEEpPbHDiegLCmh+CXKeCF5t9W
+         TW8matPBQKEDx68vOjbsaW7yPt6BS4mYQag7t+ozR8ajyxrgnWrgOOy89r5j0LZZvhU0
+         AORRebrGfwjOsie1UN/kT5ntEZOeEdK+biynWNsWWUNJYzbpl0ha6e/jKGJfBGXdqIZX
+         mCqWa/gFqQuMpdTayCqdDjzT0bs9sgmvBBGUfAazeVUDd33fidQYsqv5c0UQSjQUGo7B
+         IrFTbPJ7db5H4HM6YXvptJUMUe6HczD0yDDPwEdLfTfOMfNSaiwAu5sE2fgEW0eDwqai
+         kAGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lSZwz/ZTlMLiExcToVQuiT8oFan8UFZmwdNwvgwFSac=;
+        b=oOiLiooBYKjCkG9IUZlZxBASxv07h1CYDGFiJf418AbZP4JnUE2QhoEiG8RyZGuLQo
+         T4uP+jCNKtcRYiZsL8VfXwjrRxiQjzcJbzJmAhl5SJIKb5kFLmcZCxRxeKJqy+wayus/
+         Xwb3Ic14bqIFhO5eZAcMq7vQ6PYtS4vrYWbbiJPBOZDwYzV8Z7inWHtnPUoa02mu8qvH
+         ukQ/Xtlzkl7hkJT1DLBc5NSqMLyKoqymFcy3eRIYjeT9uD2a5I+6sCypFt+tiTrsZCi4
+         PcK2I34y5rMeEq/cbarfJgg44OTCebHu+m53uBvWMc+V2LXD7I4Y5XEvzDz+FGrNXezt
+         fTsg==
+X-Gm-Message-State: AFqh2koQK71RmQx8HIucjvco8AQJc5SLiepFhPgExyqBblbjqvgvSjHW
+        A9roj1cHJOSp/eT7rBnBU6HU2AqCuv+xwA==
+X-Google-Smtp-Source: AMrXdXvfg1vygnOMkKjLYzjsXW/AFJ8TnYJAeatzVZsI3JwuD7syj+4F7Nrh1j18lKH3lwTqsbUGJQ==
+X-Received: by 2002:a17:906:f299:b0:7c0:fd1a:79ee with SMTP id gu25-20020a170906f29900b007c0fd1a79eemr10108518ejb.63.1674116805805;
+        Thu, 19 Jan 2023 00:26:45 -0800 (PST)
+Received: from localhost.localdomain (2a02-a420-f-f912-a404-9692-a1f8-1c00.mobile6.kpn.net. [2a02:a420:f:f912:a404:9692:a1f8:1c00])
+        by smtp.gmail.com with ESMTPSA id ov38-20020a170906fc2600b0084d4733c428sm13417193ejb.88.2023.01.19.00.26.44
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 19 Jan 2023 00:26:45 -0800 (PST)
+From:   Semen Zhydenko <semen.zhydenko@gmail.com>
+To:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
+        jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org
+Cc:     Semen Zhydenko <semen.zhydenko@gmail.com>
+Subject: [PATCH v2] Fixed typo in comments
+Date:   Thu, 19 Jan 2023 09:26:40 +0100
+Message-Id: <20230119082640.90793-1-semen.zhydenko@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-18 17:31:30 [+0000], Mel Gorman wrote:
- > If we drop that "we prefer the RT reader" then it would block on the
-> > RTmutex. It will _still_ be preferred over the writer because it will be
-> > enqueued before the writer in the queue due to its RT priority. The only
-> > downside is that it has to wait until all readers are left.
->=20
-> The writer has to wait until all the readers have left anyway.
+To change one typo in kernel/time/timer.c
+Typo is "aquisition" proper spelling should be "acquisition".
 
-I meant the READER in case it has RT priority. It will enqueue itself on
-the RTmutex, first in line, and wait until all other READER leave.
+Signed-off-by: Semen Zhydenko <semen.zhydenko@gmail.com>
+---
+ kernel/time/timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> If I understand you correctly, the patch becomes this;
-
-exactly.
-
-> --8<--
-=E2=80=A6
-> This patch records a timestamp when the first writer is blocked. DT /
-
-s/DT/DL
-
-> RT tasks can continue to take the lock for read as long as readers exist
-> indefinitely. Other readers can acquire the read lock unless a writer
-> has been blocked for a minimum of 4ms. This is sufficient to allow the
-> dio_truncate test case to complete within the 30 minutes timeout.
->=20
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
-=E2=80=A6
-> diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-> index c201aadb9301..84c5e4e4d25b 100644
-> --- a/kernel/locking/rwbase_rt.c
-> +++ b/kernel/locking/rwbase_rt.c
-> @@ -74,9 +106,11 @@ static int __sched __rwbase_read_lock(struct rwbase_r=
-t *rwb,
->  	raw_spin_lock_irq(&rtm->wait_lock);
->  	/*
->  	 * Allow readers, as long as the writer has not completely
-> -	 * acquired the semaphore for write.
-> +	 * acquired the semaphore for write and reader bias is still
-> +	 * allowed.
->  	 */
-> -	if (atomic_read(&rwb->readers) !=3D WRITER_BIAS) {
-> +	if (atomic_read(&rwb->readers) !=3D WRITER_BIAS &&
-> +	    rwbase_allow_reader_bias(rwb)) {
->  		atomic_inc(&rwb->readers);
->  		raw_spin_unlock_irq(&rtm->wait_lock);
->  		return 0;
-> @@ -264,12 +298,17 @@ static int __sched rwbase_write_lock(struct rwbase_=
-rt *rwb,
->  		if (__rwbase_write_trylock(rwb))
->  			break;
-> =20
-> +		/* Record first new read/write contention. */
-> +		set_writer_blocked(rwb);
-> +
->  		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
->  		rwbase_schedule();
->  		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
-> =20
->  		set_current_state(state);
->  	}
-> +
-> +	rwb->waiter_timeout =3D 0;
-
-Regarding memory ordering and ordering in general:
-- Should the writer leave from rwbase_schedule() due to a signal then
-  set_writer_blocked() sets a timeout but it is not cleared on the
-  signal leave.
-
-- There is only writer in that for loop within rwbase_write_lock()
-  because only one writer can own the rtmutex at a time. (A second
-  writer blocks on the RTmutex and needs to wait, I may have spread some
-  confusion earler). Therefore it should be okay to unconditionally set
-  the timeout (instead of checking for zero).
-
-- Once the writer removes READER_BIAS, it forces the reader into the
-  slowpath. At that time the writer does not own the wait_lock meaning
-  the reader _could_ check the timeout before writer had a chance to set
-  it. The worst thing is probably that if jiffies does not have the
-  highest bit set then it will always disable the reader bias here.
-  The easiest thing is probably to check timeout vs 0 and ensure on the
-  writer side that the lowest bit is always set (in the unlikely case it
-  will end up as zero).
-
->  	rwbase_restore_current_state();
->  	trace_contention_end(rwb, 0);
-
-Sebastian
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 63a8ce7177dd..6430c00b05a9 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1324,7 +1324,7 @@ static int __timer_delete(struct timer_list *timer, bool shutdown)
+ 	 * If @shutdown is set then the lock has to be taken whether the
+ 	 * timer is pending or not to protect against a concurrent rearm
+ 	 * which might hit between the lockless pending check and the lock
+-	 * aquisition. By taking the lock it is ensured that such a newly
++	 * acquisition. By taking the lock it is ensured that such a newly
+ 	 * enqueued timer is dequeued and cannot end up with
+ 	 * timer->function == NULL in the expiry code.
+ 	 *
+--
+2.37.1 (Apple Git-137.1)
