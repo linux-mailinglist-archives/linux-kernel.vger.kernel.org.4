@@ -2,67 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4426743F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39BB6743FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjASVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S229635AbjASVJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjASVJO (ORCPT
+        with ESMTP id S229699AbjASVJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:09:14 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA62117CC1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:01:56 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l8so2508760wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:01:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/D5AFaWAhCR0gGYjljSteRmQs5Q9XOUZKCf6TA7Htc=;
-        b=aH17Bd8bL7rFIslBv9Dgred+WzvkeFtC0MYX6E4BUgAyNx7g4pGkE8Oa4r22RN/DE6
-         EDHKLNTs6t7hdcXXs4pg/9v3Zkpsb8OELYsZyd2+IgmQCQBz1FeunTMQsbRAjv2D9PnF
-         OekoImj0rppOW6G9NUtR+e5GdrV06hzZnffn2sRT4xjRdTY1s63hFlBQ5v9nbPXg6vmo
-         diYQhcvUjoKY6e0HZsRDyFNnHHKPr/CJbjM1u3uNBjvzTaUcOTSmvPa3z/kZYpnC7q0j
-         excR0qFH0HyxJBjpAzQZTPQiCoP/yxo7z5ZiJkqtBceWiMwVibpg362WHhYgCIzJtNH0
-         xp+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r/D5AFaWAhCR0gGYjljSteRmQs5Q9XOUZKCf6TA7Htc=;
-        b=iCQnvuACC4gfQe1uTgUKyHRoCCJrRK0dzHXQ/4E1uKQxzx5xrbUkW3WkmEOUO66NfV
-         xox+ZQUPNxX/grvlKiBaGceZwTZoV6adXb7+DskUIY/wumU25UDhgFsHirFqUa7XQ9vk
-         ufGXUQEmLXVW+t731jq8N28LiG8vzLrggyKF7fAlPXIBZi1ilJSBJVQTLJNYuvKCbErm
-         e9A++TRksCWg/nY56BmGbNixmIGey0fHPTHOcY+oHjFDEH3k+rFBp7z3WejViTs7f+xc
-         xy3CruRi7wJiIY01sfVrH610XLvS65/rKxKZ0a0xMaXx1+kFunvqNwwLaiDWWrzfEqWL
-         CE5Q==
-X-Gm-Message-State: AFqh2kof70OqzGyMB5dW0b8TkgQcVynu5mQ8VYEA4bgJorWqvA6LOM9R
-        A+CBpsTI9+8Yuyu38XVH7W9UWDIgMLIUslt5VS2rOg==
-X-Google-Smtp-Source: AMrXdXuu+5oCXCZTe3GScRYJj9HvrrlyBhSpeEBW9O7MNtGBeWkn0umByLsXQZHm2KSZi2VagZgEmsnC9im4jvqRhWk=
-X-Received: by 2002:a05:600c:3412:b0:3d0:a619:c445 with SMTP id
- y18-20020a05600c341200b003d0a619c445mr518591wmp.17.1674162115239; Thu, 19 Jan
- 2023 13:01:55 -0800 (PST)
+        Thu, 19 Jan 2023 16:09:16 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815419F3B4;
+        Thu, 19 Jan 2023 13:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674162136; x=1705698136;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FF1FngTsxXLxRJaIWGfLc8X8uBHUK5zXK4uhRzBi68Q=;
+  b=Q+XT2V/Ewr03MBqKzeiZD/PcAwEW9m4geCj05haegtGzMgC0DBHJOHod
+   QueDZvboA4KuwbEc+Y0IE9wOHP6WOtqOOhvzGD3Rh0MMlYaszu715ebJl
+   4/t3tsqfX1y5X4DPlDWAcRuUeJyr9YNwV0scy51fgRiQWInm3/yjO5wZy
+   vmDNF2bp5SQVNfsgJndqjs9i6mSkVwLVIXTU7K8+p0gV1ens3k2G/kDQx
+   1fHSGFiFL3jKG1y/cEFcWJdg6mIK+SflBxBRBlUUeT90k06BoA3f051bO
+   49HQrF+ttzJvZgT/1eBvgbgK1CzLm4icr6tgs1yWY+LHNZeiIWFuMuvdx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="389940078"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="389940078"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:02:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="768379050"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="768379050"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 13:02:15 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 19 Jan 2023 13:02:15 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 19 Jan 2023 13:02:14 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 13:02:14 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 19 Jan 2023 13:02:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hpemmfgINjYluntkaoWOn9DTFV1CAW0KIBG9bBPlwZBcm5FcBnSDj8C4Aq3zozg0TddJg4wPpuoMVsqaT23sFJMrosTkU83o+7/eOMYl5SvMovww9CIEL6Tr/aQC7nUmBwEape1gqJlmiFCKH6KAphgo9rp0cFpQ1d+par602LcFe+1N/TTNBzaNyccC5F4ZYobuUqnh4pMlJ8uABroQcVb+St1OkkqepTRUyAk/3WU2GTkaQ2v70RMP2qhWM9qIIWLh6E9VN5ZWzyNnFiyL1TzcV7AY2ncVf0RlPq9uCz4T3IaQ4IyFzMxUKOLcN5CgjmPzdXMsO+NySEpD32o7cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gnaw6C7ftkj+HyfCFM7kni6SFUs5iXeLbpyYs9GLu+0=;
+ b=EtujsSIpWHh+soW9cBEqWMNRf1WKk3xtJY44tQsWTnZ7GfravXBoISlYx/fLDKfuFkQHNyQIdtH3jWfcdOI9l0Q+GpqR8873lFKVvZdqlkdgMR9y2eamx7s8SsAdTj3jUhMJPI3tX+yV+M73ibiicEiXnnu7an0tca4JjNzoZTv0Q1wLYQtbMXo+weq1NBj9y+O+RseTCq6D+1kfSUZvcXRv18eln0XUoCGFDR19LbsV6ORN90Dz4GN1QzUJ1kM3EA253kgqhsHbUOSRzJEY3YRaGBmVFslQAtlTZUCAVLfwWv3dVdLoep30zJ44nYO7OD1vrbRoAmRh1QI+pPEWRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by IA1PR11MB7824.namprd11.prod.outlook.com (2603:10b6:208:3f9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
+ 2023 21:02:12 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c743:ed9a:85d0:262e]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c743:ed9a:85d0:262e%5]) with mapi id 15.20.6002.026; Thu, 19 Jan 2023
+ 21:02:12 +0000
+Message-ID: <8756fac7-6107-57d3-c2fe-309dd8d3cf0a@intel.com>
+Date:   Thu, 19 Jan 2023 13:02:10 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net] net: fec: Use page_pool_put_full_page when freeing rx
+ buffers
+Content-Language: en-US
+To:     <wei.fang@nxp.com>, <shenwei.wang@nxp.com>,
+        <xiaoning.wang@nxp.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>
+CC:     <linux-imx@nxp.com>, <linux-kernel@vger.kernel.org>
+References: <20230119043747.943452-1-wei.fang@nxp.com>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20230119043747.943452-1-wei.fang@nxp.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4P220CA0024.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:303:115::29) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
 MIME-Version: 1.0
-References: <CAJuCfpEMEsSYcKakFiDK=QV+apW-2baLcUcw7uRyrmKkWVnR8A@mail.gmail.com>
- <20230113022555.2467724-1-kamatam@amazon.com> <CAJuCfpEH7kC=S8S_SRLW-X483kpaL4xdn5b35Ou08V7b56QdJA@mail.gmail.com>
- <CAJuCfpHV2-pnHd6U3paA1fO2gaYP1RTqAJwp_5QC7C2YR3JG5g@mail.gmail.com>
-In-Reply-To: <CAJuCfpHV2-pnHd6U3paA1fO2gaYP1RTqAJwp_5QC7C2YR3JG5g@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 19 Jan 2023 13:01:42 -0800
-Message-ID: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
-Subject: Re: another use-after-free in ep_remove_wait_queue()
-To:     Munehisa Kamata <kamatam@amazon.com>, Tejun Heo <tj@kernel.org>
-Cc:     ebiggers@kernel.org, hannes@cmpxchg.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mengcc@amazon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|IA1PR11MB7824:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e79fe0a-26b3-4a53-4340-08dafa606fc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dAUyQhz6Q5tB4KavPlu6tCGjRfr+A6WRLZjU7JIgbAtoYyl9D3hm2c28p5OEsBBo3amvmieWUHoHDNs9EblzSNpRN41/j5KTIkNqnlZNtiH8TVWpg4/QmiNFnF+Rboip7gbaG101+69k/VCcZxslUNL7cBuaqPPEEjsF4x+p+nOdkJ6qKwwcw40glrKyyzOs7VTsCM7mNLDg1SV3WVApnqmmfRSGGUFfaE2DwG5tOBYof2RBMrEPDfqhBP3O3LbUzO3JbnqhsQ4AVpO95O4GzzjB0frl02KHOXUmFDC6cm8JImTOsaq8zAh8EyHXovHHza3JjMK+2W733+izjEMEoD6A7IAuDiysGjAIBmoP7psdpPUf9DmOIhXSrXLXn/r/jfils1gMFZxoGxC0+dUuBdvJM2YkGKxL49IfDg+vHrRbdvL1ZtWKQnwg7l2zNUla2dk0O5Z3tNEM3sJKV/dbbXulL1JDoG2qwy/k5qE5yo/uDimTraJCsxclDWO+bmD34/YiHvkFBFkoryO2Da7a0LWd+jdqAUAjHxrAsALIjPM/6eIdvMP+LC5ovaebqpcr8xGwLMF3wOmKWmD1V3YCRxNUIi+EY8T29k3T5Yy+9uDdqXfn2AfW8SSU/yLVDc8v+fqhgoRmxLdTkI5KnyHk8aGvINpEMhlOcnIUR0pOi3km5iTsq98Djh9kSLXoSkOW5yqnpqNz9DrOgkWzF9H4fDxHr69VnG8upDKbGS0+2eA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(346002)(366004)(136003)(396003)(451199015)(38100700002)(86362001)(2906002)(82960400001)(31696002)(31686004)(5660300002)(2616005)(316002)(41300700001)(36756003)(66476007)(66946007)(26005)(8676002)(4744005)(6506007)(66556008)(6512007)(53546011)(7416002)(44832011)(186003)(8936002)(6486002)(4326008)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QnhQMFZnR0kzbEtZQzQyUk9SQjNkdWc1dmwvM21QMlNoSWNPUnV5dzYrVnJa?=
+ =?utf-8?B?MjhiSUFMZk5CNkc1Y2N6YXlSYWRkRWR4RXhzSU1KMWZRTGIrTWk3OFZvMjNN?=
+ =?utf-8?B?RldYY29uRFVjL0VPQ2RKZzVDSVZlY3Y0M3hJam5nbUFWL3ZFaXpZSWhLOGpo?=
+ =?utf-8?B?R1hsb2x2aFNqR0pJY2c2RE9UcWZWemQ1aGd6ZkNzc3NsMjFjRmZpM0xBT0dX?=
+ =?utf-8?B?YVZMQXlNQTYxcW5lOFBXTjZGOTdGbkZDNlZsSDdGMDlva3AyYnVJaHYwYnh6?=
+ =?utf-8?B?c2U3RE9NL1dMaGRCY2ZpbW9nTnlMamIxMFBmcStxdkM0VlVZTC9wWDl5V1Ix?=
+ =?utf-8?B?UXFUaVBkMjVsb0c1YkhrUTVKaEtnRWVRYmhFM05vYmdwRjdVNlp4RDZ2dHo5?=
+ =?utf-8?B?a0h3L1hoeFdHM1ZZa0NkQ0hVelJTMktZUVZoRGRzU2ZCdkp1QUg5WTJkSm00?=
+ =?utf-8?B?YzE4MkNuOEdzTEhKb1h4eG9qMEZ4Q3ZzbEZscC85MmwwaGVvdGpOWEpKcHl5?=
+ =?utf-8?B?ZmdMSU9uR2luclBZWjE5TU42WHMrQitjbWdGTXp5aTNLM3E3cTROUk0reUEv?=
+ =?utf-8?B?bTJqNS9mZjc5RkNRYzNVbGpmdzY0aDlpLzBsM0RUR2VNUlRiM3pLcUV4N0I2?=
+ =?utf-8?B?UzlHL0JaTDRNcXhoRTl3b0hLTCtjelVjSWllSGJlNUJodW1XdVV1ZXdvN0tH?=
+ =?utf-8?B?TEVsekt2dTA3ZVhjZk1zTjVJQWNBa25hWG5jVTRCQnB4UTFaaGpjU3ZGeGdX?=
+ =?utf-8?B?Rm5VY1NLNWpZWFpNR3R1WkQxWVBGM0gwUEVtVWRZQWhEd2hYUWp4Q0thcXY5?=
+ =?utf-8?B?eE1DTFBPZTBNenNhSy95c1FtVUNrUEJKUFdxZ2sxTFppMms5ajdnWC9BNlVq?=
+ =?utf-8?B?SHJ6TlpZL1FFNE9ETHRHcTJZWmJEQlp6bWYvZ3M4TkdUaS9DSE9kYWV4bkpy?=
+ =?utf-8?B?Z204WTJSMWxIalJFa1Eyb3pQUlRROHJLREFWMktMYnh3ZlJhS1doV2NOUkY3?=
+ =?utf-8?B?VkVwMFlSVG82N2doRzdPLzYwU1ZvRDJ5KzNZMURLaWs2cXhDTGZjNjZoZ09W?=
+ =?utf-8?B?Z0t1REhtVTFmUm8wcGZ6UVNaMlJrOGltcC9ZakNmQS9WRDBvRWtka01ORk44?=
+ =?utf-8?B?RExLZlVxN2VGSjFXMFd4aVFjbEQ1aDFKQVZmcjVzUzJXOFhRSTZoQXVoYjVZ?=
+ =?utf-8?B?TVNBR2VnVnF5ZFlsY01NSmFnd2hYd0Vnd3FRMC93aTh2Y0p6S0ZiRUtUNkJI?=
+ =?utf-8?B?Z21uc0VTclErSkNmYlppa3UrVnNkT3dMQ2V6RGtCL0FxQlRoclZJcFR6SUp5?=
+ =?utf-8?B?bHFQdGRKSDZVV0wzdGt2WUcyelNlMFFlN083N0JOaXN1cWt6Wm84b1ppaENG?=
+ =?utf-8?B?TC9PUXB0ZDI1UytZZlROSGUwWkRaNlpmU0N4VVp4cCtlN2M4OVR0ZkZVU21E?=
+ =?utf-8?B?SlV3ZlMrbTNhS2R1TXpCeElGS3E2ellwTk5jdVRIRFRlYktFWnN2V1lwWTZM?=
+ =?utf-8?B?Z3p0S3EwWVpyQ3NVTVVmeVZKZkx3YithcXo1MFdVYW02NzVCdGxWQkcySG9F?=
+ =?utf-8?B?K0tzaEpldWoyVEt4dzE0VGlaTU1WTEtyL0JrcmlvR2UwQ0NyY2hhMmh2c3Jr?=
+ =?utf-8?B?WHFTazNoZ3hiYTRIY0pyVTVrZSt6dWR4TEdoSnFLZ2drK3ZvVEpienFOQnRu?=
+ =?utf-8?B?ajZydGhoK1RqWjZ2N3czMTNIU0IvUFJwdk1FZWZQRHdDb3o4OS9YNUJYSFpq?=
+ =?utf-8?B?QXJJN2xFV1llVzhHSG9CSjc3QnRyL3FwUTJ5MldxU3FQRVMrMmNaMzY4TDhT?=
+ =?utf-8?B?Y3JGTElBd2diMzVkTGZ5L2FHWE5BSTNubFFUSmhXbTN0cGJGRStybWppdjhD?=
+ =?utf-8?B?UVBURnVwODZud1I4T3JFcWZSRWdnTlBTNTJEVy8rS0dMZzZ0LzhQK3YrWmhF?=
+ =?utf-8?B?VmErV2dhT3JZWURVZStreW5LZmZaRS8yekdkZmxETWpoRHhGWGROQ0swUEEz?=
+ =?utf-8?B?TW94c0wwMjJzOXhrZUpEVTRoT2FSb2FqZ0luQytJamRCb09kSFRKOG9GN05i?=
+ =?utf-8?B?RFpSVk92ZVJJVUJuampZVXRGa0Q2WmxpRk9HTVlUa3pEQ1pQMFhiNThRREo0?=
+ =?utf-8?B?MDBjSlpMbUkyeFlIMklLNWloMW85b1lpQmdrTVBtSExMYlFnU3pOYXNPL0Yx?=
+ =?utf-8?B?SlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e79fe0a-26b3-4a53-4340-08dafa606fc5
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 21:02:12.6755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 51p77ZHhcfGC2oo1bpD2fohNNvyWrgYO+X79bn8zROBiw1ub/JPAHV/ZIUf6S08hQHqdku3KdoWbGw6kcfB+fotwxRDBVGkO9tJQ4Fvsomo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7824
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,174 +164,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:06 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Fri, Jan 13, 2023 at 9:52 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > On Thu, Jan 12, 2023 at 6:26 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> > >
-> > > On Thu, 2023-01-12 22:01:24 +0000, Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Mon, Jan 9, 2023 at 7:06 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > >
-> > > > > On Mon, Jan 9, 2023 at 5:33 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > >
-> > > > > > On Sun, Jan 8, 2023 at 3:49 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > > > > >
-> > > > > > > On 8 Jan 2023 14:25:48 -0800 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> > > > > > > >
-> > > > > > > > That patch survived the repro in my original post, however, the waker
-> > > > > > > > (rmdir) was getting stuck until a file descriptor of the epoll instance or
-> > > > > > > > the pressure file got closed. So, if the following modified repro runs
-> > > > > > > > with the patch, the waker never returns (unless the sleeper gets killed)
-> > > > > > > > while holding cgroup_mutex. This doesn't seem to be what you expected to
-> > > > > > > > see with the patch, does it? Even wake_up_all() does not appear to empty
-> > > > > > > > the queue, but wake_up_pollfree() does.
-> > > > > > >
-> > > > > > > Thanks for your testing. And the debugging completes.
-> > > > > > >
-> > > > > > > Mind sending a patch with wake_up_pollfree() folded?
-> > > > > >
-> > > > > > I finally had some time to look into this issue. I don't think
-> > > > > > delaying destruction in psi_trigger_destroy() because there are still
-> > > > > > users of the trigger as Hillf suggested is a good way to go. Before
-> > > > > > [1] correct trigger destruction was handled using a
-> > > > > > psi_trigger.refcount. For some reason I thought it's not needed
-> > > > > > anymore when we placed one-trigger-per-file restriction in that patch,
-> > > > > > so I removed it. Obviously that was a wrong move, so I think the
-> > > > > > cleanest way would be to bring back the refcounting. That way the last
-> > > > > > user of the trigger (either psi_trigger_poll() or psi_fop_release())
-> > > > > > will free the trigger.
-> > > > > > I'll check once more to make sure I did not miss anything and if there
-> > > > > > are no objections, will post a fix.
-> > > > >
-> > > > > Uh, I recalled now why refcounting was not helpful here. I'm making
-> > > > > the same mistake of thinking that poll_wait() blocks until the call to
-> > > > > wake_up() which is not the case. Let me think if there is anything
-> > > > > better than wake_up_pollfree() for this case.
-> > > >
-> > > > Hi Munehisa,
-> > > > Sorry for the delay. I was trying to reproduce the issue but even
-> > > > after adding a delay before ep_remove_wait_queue() it did not happen.
-> > >
-> > > Hi Suren,
-> > >
-> > > Thank you for your help here.
-> > >
-> > > Just in case, do you have KASAN enabled in your config? If not, this may
-> > > just silently corrupt a certain memory location and not immediately
-> > > followed by obvious messages or noticeable event like oops.
-> >
-> > Yes, KASAN was enabled in my build.
-> >
-> > >
-> > > > One thing about wake_up_pollfree() solution that does not seem right
-> > > > to me is this comment at
-> > > > https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L253:
-> > > >
-> > > > `In the very rare cases where a ->poll() implementation uses a
-> > > > waitqueue whose lifetime is tied to a task rather than to the 'struct
-> > > > file' being polled, this function must be called before the waitqueue
-> > > > is freed...`
-> > > >
-> > > > In our case we free the waitqueue from cgroup_pressure_release(),
-> > > > which is the handler for `release` operation on cgroup psi files. The
-> > > > other place calling psi_trigger_destroy() is psi_fop_release(), which
-> > > > is also tied to the lifetime to the psi files.  Therefore the lifetime
-> > > > of the trigger's waitqueue is tied to the lifetime of the files and
-> > > > IIUC, we should not be required to use wake_up_pollfree().
-> > > > Could you please post your .config file? I might be missing some
-> > > > configuration which prevents the issue from happening on my side.
-> > >
-> > > Sure, here is my config.
-> > >
-> > >  https://gist.github.com/kamatam9/a078bdd9f695e7a0767b061c60e48d50
-> > >
-> > > I confirmed that it's reliably reproducible with v6.2-rc3 as shown below.
-> > >
-> > >  https://gist.github.com/kamatam9/096a79cf59d8ed8785c4267e917b8675
-> >
-> > Thanks! I'll try to figure out the difference.
->
-> Sorry for the slow progress on this issue. I'm multiplexing between
-> several tasks ATM but I did not forget about this one.
-> Even though I still can't get the kasan UAF report, I clearly see the
-> wrong order when tracing these functions and forcing the delay before
-> ep_remove_wait_queue(). I don't think that should be happening, so
-> something in the release process I think needs fixing. Will update
-> once I figure out the root cause, hopefully sometime this week.
+On 1/18/2023 8:37 PM, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> The page_pool_release_page was used when freeing rx buffers, and this
+> function just unmaps the page (if mapped) and does not recycle the page.
+> So after hundreds of down/up the eth0, the system will out of memory.
+> For more details, please refer to the following reproduce steps and
+> bug logs. To solve this issue and refer to the doc of page pool, the
+> page_pool_put_full_page should be used to replace page_pool_release_page.
+> Because this API will try to recycle the page if the page refcnt equal to
+> 1. After testing 20000 times, the issue can not be reproduced anymore
+> (about testing 391 times the issue will occur on i.MX8MN-EVK before).
 
-Hi Folks,
-I spent some more time digging into the details and this is what's
-happening. When we call rmdir to delete the cgroup with the pressure
-file being epoll'ed, roughly the following call chain happens in the
-context of the shell process:
+I had a look over other users in the kernel and it seems this bug hasn't 
+propagated anywhere that I see.
 
-do_rmdir
-  cgroup_rmdir
-    kernfs_drain_open_files
-      cgroup_file_release
-        cgroup_pressure_release
-          psi_trigger_destroy
+Thanks, for the fix, seems good to me.
 
-Later on in the context of our reproducer, the last fput() is called
-causing wait queue removal:
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 
-fput
-  ep_eventpoll_release
-    ep_free
-      ep_remove_wait_queue
-        remove_wait_queue
-
-By this time psi_trigger_destroy() already destroyed the trigger's
-waitqueue head and we hit UAF.
-I think the conceptual problem here (or maybe that's by design?) is
-that cgroup_file_release() is not really tied to the file's real
-lifetime (when the last fput() is issued). Otherwise fput() would call
-eventpoll_release() before f_op->release() and the order would be fine
-(we would remove the wait queue first in eventpoll_release() and then
-f_op->release() would cause trigger's destruction).
-Considering these findings, I think we can use the wake_up_pollfree()
-without contradicting the comment at
-https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L253
-because indeed, cgroup_file_release() and therefore
-psi_trigger_destroy() are not tied to the file's lifetime.
-
-I'm CC'ing Tejun to check if this makes sense to him and
-cgroup_file_release() is working as expected in this case.
-
-Munehisha, if Tejun confirms this is all valid, could you please post
-a patch replacing wake_up_interruptible() with wake_up_pollfree()? We
-don't need to worry about wake_up_all() because we have a limitation
-of one trigger per file descriptor:
-https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L1419,
-so there can be only one waiter.
-Thanks,
-Suren.
-
-
->
->
-> > Suren.
-> >
-> > >
-> > >
-> > > Regards,
-> > > Munehisa
-> > >
-> > >
-> > > > Thanks,
-> > > > Suren.
-> > > >
-> > > > >
-> > > > >
-> > > > > >
-> > > > > > [1] https://lore.kernel.org/lkml/20220111232309.1786347-1-surenb@google.com/
-> > > > > >
-> > > > > > Thanks,
-> > > > > > Suren.
-> > > > > >
-> > > > > > >
-> > > > > > > Hillf
-> > > >
-> > > >
