@@ -2,127 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FAA673FBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B7C673FC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjASRSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S230122AbjASRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjASRSW (ORCPT
+        with ESMTP id S229924AbjASRTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:18:22 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324762A14C;
-        Thu, 19 Jan 2023 09:18:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=goNppuvMsvAqTs2f6LDSEjPwHmSsgV4gH7uC2Dwvo8A=; b=JlTJVlLtDX5VBm3jpr+T7LKb8s
-        R8oUOd9OnwmO+diUvmHieYRV+PDwhqRgzuzFstpbcFeYi6IBjBBcT/0z7umETLxwcSrd1ZllMScRL
-        NsSeERJrV65F4oxWbeUwsqe5ORDdSBFu8ohfpsHXGaIVxjEvl9TB+OAIFwvV+KUGKzmU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pIYY1-002c22-I1; Thu, 19 Jan 2023 18:17:57 +0100
-Date:   Thu, 19 Jan 2023 18:17:57 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] net: mdio: add amlogic gxl mdio mux support
-Message-ID: <Y8l7Rc9Vde9J45ij@lunn.ch>
-References: <20230116091637.272923-1-jbrunet@baylibre.com>
- <20230116091637.272923-3-jbrunet@baylibre.com>
- <Y8dhUwIMb4tTeqWN@lunn.ch>
- <1jmt6eye1m.fsf@starbuckisacylon.baylibre.com>
+        Thu, 19 Jan 2023 12:19:32 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0306783DB;
+        Thu, 19 Jan 2023 09:19:31 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id n7so2552047wrx.5;
+        Thu, 19 Jan 2023 09:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fJ0JG+1+vzDx+1woc5zISYYnWWHU/+tyzkwsQk+BhPQ=;
+        b=HiutLUBgPNKoinxepplGwduI4t+6YJl/44EjhVyhwpIefpMjkY/j8ZBxN0L/qgCKM1
+         +ZQItAVsnNU27zgEcSz38sGnz3HBKHl5SSGgEJZNrzvOvBaHNO4YZ46BoYRs97u+qqET
+         AXUrXtXaDbPLj6Z4yPBh6TyMdfk15W7KsJxFTu/StnAGeSatFGSw7yG6ULv8DvRVqhOh
+         dlEV1pF/2wx2c90OAClSlkYyWqIvAdnm4LEMIYLHApBkS3fUTthqSWrqUrktb7yh5Jl6
+         u548RE7aoOxW/JvzvLr98mkcgWDEDH951UpcS7jlPr3pVTMLaq7wuPVNfmTJCbX1R5WP
+         Kz5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fJ0JG+1+vzDx+1woc5zISYYnWWHU/+tyzkwsQk+BhPQ=;
+        b=MQiRTGJL75sIka8rFhxD3EsxIfvKWmaAWV9sj+6DTFUWuuoQo8fxwcYq3oPWTEXVI9
+         W6oqOVKArmRhRFYXYpDLdxYxm3hyBKHK8FStj6ADpcbPlFy+LAbZf8QMJ/nFF2/vv1sd
+         a6yT1oSiHxzQ+u31yi/AQ2n5EuI7L1tWxGR+FjiPWHSsf5SgODns8IJg13CjVPoY2dhK
+         dQc3/kLwiEmTLGHHhP8DxRAvPFKumlWUafH6mfPXvNW1Dq74fVdLEJ4EZNlgj/X/+tw9
+         jk+8FnUR08AvXn9kR7bIEWOLkbEorqVEK1l4ztaWBZ5XAqDt128QFbZJ4UzG2aIBqNyJ
+         pTeQ==
+X-Gm-Message-State: AFqh2kqQl6wqz8De6EgxIgvl+szzEMB7grMwZShcPOhLCnXaX59zgw5G
+        jwGiXhQJUvRtiW2cs7Vs6yp6vWpDFWEajA==
+X-Google-Smtp-Source: AMrXdXtnhhV23wxbkvJ5TPod11uXEnITyMWelsTKmu03NNRfq7qQeiDNNiw0jOxkg9PrVROMM2wAAg==
+X-Received: by 2002:a5d:508f:0:b0:2bd:cb39:2ca3 with SMTP id a15-20020a5d508f000000b002bdcb392ca3mr6141237wrt.59.1674148769369;
+        Thu, 19 Jan 2023 09:19:29 -0800 (PST)
+Received: from [10.22.0.8] ([194.126.177.40])
+        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b002be25db0b7bsm6024396wro.10.2023.01.19.09.19.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 09:19:28 -0800 (PST)
+Message-ID: <f68a5ca0-3c57-2655-59ec-1bcae8050153@gmail.com>
+Date:   Thu, 19 Jan 2023 18:19:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1jmt6eye1m.fsf@starbuckisacylon.baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-4-luzmaximilian@gmail.com>
+ <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
+ <2b0fdc2d-6457-059b-bbdf-27e7de59abeb@gmail.com>
+ <Y8l0PdZlXLym//xS@hovoldconsulting.com>
+Content-Language: en-US
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <Y8l0PdZlXLym//xS@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> +
-> >> +	/* Set the internal phy id */
-> >> +	writel_relaxed(FIELD_PREP(REG2_PHYID, 0x110181),
-> >> +		       priv->regs + ETH_REG2);
-> >
-> > So how does this play with what Heiner has been reporting recently?
+On 1/19/23 17:47, Johan Hovold wrote:
+> On Wed, Jan 18, 2023 at 09:45:18PM +0100, Maximilian Luz wrote:
+>> On 1/17/23 09:24, Johan Hovold wrote:
+>>> On Sun, Jul 24, 2022 at 12:49:48AM +0200, Maximilian Luz wrote:
 > 
-> What Heiner reported recently is related to the g12 family, not the gxl
-> which this driver address.
+>>>> +module_platform_driver(qcom_uefisecapp_driver);
+>>>
+>>> I noticed that for efivarfs to work, you're currently relying on having
+>>> the firmware still claim that the variable services are supported in the
+>>> RT_PROP table so that efi core registers the default ops at subsys init
+>>> time (which are later overridden by this driver).
+>>>
+>>> Otherwise efivarfs may fail to initialise when built in:
+>>>
+>>> 	static __init int efivarfs_init(void)
+>>> 	{
+>>> 		if (!efivars_kobject())
+>>> 			return -ENODEV;
+>>>
+>>> 		return register_filesystem(&efivarfs_type);
+>>> 	}
+>>>
+>>> 	module_init(efivarfs_init);
+>>>
+>>> With recent X13s firmware the corresponding bit in the RT_PROP table has
+>>> been cleared so that efivarfs would fail to initialise. Similar problem
+>>> when booting with 'efi=noruntime'.
+>>>
+>>> One way to handle this is to register also the qcom_uefisecapp_driver at
+>>> subsys init time and prevent it from being built as a module (e.g. as is
+>>> done for the SCM driver). I'm using the below patch for this currently.
+>>
+>> So I've had another look and I'm not sure this will work reliably:
+>>
+>> First, you are correct in case the RT_PROP table is cleared. In that
+>> case, using subsys_initcall() will move the efivar registration before
+>> the efivarfs_init() call.
+>>
+>> However, in case EFI indicates support for variables, we will then have
+>> generic_ops_register() and the uefisecapp's driver call running both in
+>> subsys_initcall(). So if I'm not mistaken, this could cause the generic
+>> ops to be registered after the uefisecapp ones, which we want to avoid.
 > 
-> That being said, the g12 does things in a similar way - the glue
-> is just a bit different:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/mdio/mdio-mux-meson-g12a.c?h=v6.2-rc4#n165
+> Good catch, I was using 'efi=noruntime' on the CRD so I did not notice
+> that race.
 > 
-> > What is the reset default? Who determined this value?
+>> One solution is bumping uefisecapp to fs_initcall(). Or do you have any
+>> other suggestions?
 > 
-> It's the problem, the reset value is 0. That is why GXL does work with the
-> internal PHY if the bootloader has not initialized it before the kernel
-> comes up ... and there is no guarantee that it will.
+> I think it would be best to avoid that if we can, but that should work.
 > 
-> The phy id value is arbitrary, same as the address. They match what AML
-> is using internally.
-
-Please document where these values have come from. In the future we
-might need to point a finger when it all goes horribly wrong.
-
-> They have been kept to avoid making a mess if a vendor bootloader is
-> used with the mainline kernel, I guess.
+> The problem here is that the firmware claims to support the EFI variable
+> services even when it clearly does not and the corresponding callbacks
+> just return EFI_UNSUPPORTED. As far as I understand, this is still spec
+> compliant though so we just need to handle that.
 > 
-> I suppose any value could be used here, as long as it matches the value
-> in the PHY driver:
+> One way to address this could be to have efi core not register the
+> default efivars ops in this case. That would require checking that the
+> services are indeed available by making one of those calls during
+> initialisation.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/meson-gxl.c?h=v6.2-rc4#n253
-
-Some Marvell Ethernet switches with integrated PHYs have IDs with the
-vendor part set to Marvell, but the lower part is 0. The date sheet
-even says this is deliberate, you need to look at some other register
-in the switches address space to determine what the part is. That
-works O.K in the vendor crap monolithic driver, but not for Linux
-which separates the drivers up. So we have to intercept the reads and
-fill in the lower part. And we have no real knowledge if the PHYs are
-all the same, or there are differences. So we put in the switch ID,
-and the PHY driver then has an entry per switch. That gives us some
-future wiggle room if we find the PHYs are actually different.
-
-Is there any indication in the datasheets that the PHY is the exact
-same one as in the g12? Are we really safe to reuse this value between
-different SoCs?
-
-I actually find it an odd feature. Does the datasheet say anything
-about Why you can set the ID in software? The ID describes the
-hardware, and software configuration should not be able to change the
-hardware in any meaningful way.
-
-> >> +	/* Enable the internal phy */
-> >> +	val |= REG3_PHYEN;
-> >> +	writel_relaxed(val, priv->regs + ETH_REG3);
-> >> +	writel_relaxed(0, priv->regs + ETH_REG4);
-> >> +
-> >> +	/* The phy needs a bit of time to come up */
-> >> +	mdelay(10);
-> >
-> > What do you mean by 'come up'? Not link up i assume. But maybe it will
-> > not respond to MDIO requests?
+> This would however expose the fact that the Google SMI implementation
+> implicitly relies on overriding the default ops, but I think that's a
+> good thing as what we have now is racy in multiple ways.
 > 
-> Yes this MDIO multiplexer is also the glue that provides power and
-> clocks to the internal PHY. Once the internal PHY is selected, it needs
-> a bit a of time before it is usuable. 
+> Instead I think we should move the efivarfs availability check from
+> module init to mount time. That should allow the Google driver, and your
+> SCM implementation, to continue to be built as modules.
+> 
+> Any consumers (e.g. the Qualcomm RTC driver) would instead need to
+> check if efivars is available or else defer probe.
+> 
+> Alternatively, it seems all efivars implementation would need to be
+> always-built in which is not ideal for generic kernels.
+> 
+> I just posted a series here as food for thought:
+> 
+> 	https://lore.kernel.org/r/20230119164255.28091-1-johan+linaro@kernel.org
 
-O.K, please reword it to indicate power up, not link up.
+Thanks, I agree that those checks are probably the better option.
 
-     Andrew
+Regards,
+Max
