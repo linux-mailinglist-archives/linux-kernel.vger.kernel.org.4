@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCCE672FD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AE7672FD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 04:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjASD7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 22:59:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S230114AbjASD5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 22:57:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjASDmk (ORCPT
+        with ESMTP id S229888AbjASDoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 22:42:40 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116F96D698
+        Wed, 18 Jan 2023 22:44:24 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB776DB3D
         for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:41:14 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id w2so500450pfc.11
+Received: by mail-pj1-x102f.google.com with SMTP id bj3so1161596pjb.0
         for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ulh9dhCQ0Y1jVBFO0FQi7/v9JSmPpQrHfos2awuevGM=;
-        b=GaVHmjsZ+DpWxrEn+ErGek/cfIYIaI/KzyIYazQPM/SB27ypEJbkCgP1UcEg9/VVIs
-         eFc5QaFggoPXzVWRuO9sqEFEl1g/f1n4JZJyhvOFCHj+/YuZcMDvjq1k9xocFOTANSIW
-         rC9ivBoyyn8GHgBsajv/1IavM5z1F/wrms5h6uz3BvJbbsK0oXfCS2rRG6v/hDHCPtiw
-         BEjzWhCVHPGEMG5FUQAvN00kgEpVMROqrb+WmdeHK8b62Kg0yhnuOwLWkdb9jLIqq24F
-         5gWXgMOqnLtl7LWPqtj2VU1/HvwFOFH8eJG4lUpN+0uu8FZEGj4H2vXfI7PAAofPRU/0
-         qeTA==
+        bh=CbqxDJadqrHHWLEsqeIAFGgTZLiSV774ziT3BrEvhqw=;
+        b=OqFVgJ2CyegdNj4yCjQySTj/hxY5dmRFO2lZotk80k1FHPVx+fHgYVhtAA71OORn4O
+         6B8/NVU1ONqJO9Mz4qipuHNDxcGGdXeoLKnKhfYCFgsEUcAfX12H89Yet1CD7dznb9c7
+         w6KGjQQio9pf4mnHX/X6xgZ5vJVw0i9Ns32tXzFZH/8F0WwjqmJFkycp1IBL6HEcMsf3
+         WU0h8MBL2WnETZKPFdEGQUrVw8ThhHF5wyRRRT9Oeec8T59/kGBHk5BfLSmVwB71VckY
+         1a5EY7mfTP+xNocCdGuVHdSY85q1SERXEtFH5/hH1mAOQkkb82/Zo1V6VSLp55gqPCPP
+         6kog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ulh9dhCQ0Y1jVBFO0FQi7/v9JSmPpQrHfos2awuevGM=;
-        b=E+roBlhMLdR5QFoqTR9kOOCaSCZWmcBC+uqIj7uaOvlAwVy+kw02GY44/XZgTSSPKE
-         /zhBVBHI11q4JidhPvaSUZeskwh7uXRcEPjNNlU0wcWt64XTy11H5NU5MEJEYl70R+N8
-         Omf7jHEGNWqmdhigYPeZ150nQlgC2P/3TdeDO39XmgmYwefYLfCbJM69kLT71RM1EKKN
-         74Hhr/puOdm25BXImCwmhValtNPErCc9tP3DatBhr07SGF98lj3ZwYhPMau4rldCxHLe
-         6opwlDty+JLOIMCRiYUz1kh7FrZItcCELinpX2A9C7XDyFLeVux53DkR8Xgo7weAgPwN
-         NZaA==
-X-Gm-Message-State: AFqh2krIMCi5esGDRR4prutTTp1hKArySuPV/yWgUkc41SWcnQqroelD
-        dRQhIftFTpyuz5URIy2DwQo0hQ==
-X-Google-Smtp-Source: AMrXdXuOBw6fphSPEv9y9CFVXwOwgGsLGFBUJgvOuWSBGXL5pCvmfq2rfonHGrQ7bGCYELnHsyBmZQ==
-X-Received: by 2002:aa7:8bd6:0:b0:588:e132:a2f8 with SMTP id s22-20020aa78bd6000000b00588e132a2f8mr9180671pfd.23.1674099668598;
-        Wed, 18 Jan 2023 19:41:08 -0800 (PST)
+        bh=CbqxDJadqrHHWLEsqeIAFGgTZLiSV774ziT3BrEvhqw=;
+        b=HVBv8ZKTrMN1tlSxEgdC0MDoXJ12ULERe+YZg4Ae5XIz4ocMHaYwMB1jwfMgdhghwu
+         Hs31qYFVkngefD2j7OCr21w5MhZ1K+RaYN7n2phstPUyc9RC7JGCq30Qf+YgXgXscwDA
+         Z1frYqivJ9WPA+g0O11LcVmokZc/K6mRO7yU0VY1V8u53odbwD+RW1UyqfYZx+NV7mAS
+         0RdqeJN/LxUzdI45jYwWZvyO7cklrxWCo9zCyVCz8vkh4M5lZ+D5GMDilt3r94kSeQ4J
+         5M1Oq22TPDBAdyjpf+ueQYl1cTojNt1hSOpif15ztwFwNMeyfR24Z0KObuLs8eSxmZFn
+         H9lg==
+X-Gm-Message-State: AFqh2kr/sC6oFkCM/IndHyPDpsjBZx2K6i3zor4tSf2gQ0MfiP2rqohh
+        4fLb8WZpOvs40rd7++x1202LMw==
+X-Google-Smtp-Source: AMrXdXvq1Zn+btSljOEN963muFuSxu9AHd46dZobV/seDM1fVcM/gK4DWUWqMjnkOmpVN5LOLuRBOA==
+X-Received: by 2002:a05:6a20:4c8a:b0:b8:8e17:901c with SMTP id fq10-20020a056a204c8a00b000b88e17901cmr8034180pzb.52.1674099673971;
+        Wed, 18 Jan 2023 19:41:13 -0800 (PST)
 Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id f13-20020aa7968d000000b0056b4c5dde61sm11097879pfk.98.2023.01.18.19.41.06
+        by smtp.gmail.com with ESMTPSA id f13-20020aa7968d000000b0056b4c5dde61sm11097879pfk.98.2023.01.18.19.41.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 19:41:08 -0800 (PST)
+        Wed, 18 Jan 2023 19:41:13 -0800 (PST)
 From:   Brad Larson <brad@pensando.io>
 X-Google-Original-From: Brad Larson <blarson@amd.com>
 To:     linux-arm-kernel@lists.infradead.org
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
         ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v9 12/15] mmc: sdhci-cadence: Enable device specific override of writel()
-Date:   Wed, 18 Jan 2023 19:39:15 -0800
-Message-Id: <20230119033918.44117-13-blarson@amd.com>
+Subject: [PATCH v9 13/15] mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
+Date:   Wed, 18 Jan 2023 19:39:16 -0800
+Message-Id: <20230119033918.44117-14-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230119033918.44117-1-blarson@amd.com>
 References: <20230119033918.44117-1-blarson@amd.com>
@@ -82,99 +82,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SoCs with device specific Cadence implementation, such as setting
-byte-enables before the write, need to override writel().  Add a
-callback where the default is writel() for all existing chips.
+Add support for AMD Pensando Elba SoC which explicitly
+controls byte-lane enables on writes.
+
+Select MMC_SDHCI_IO_ACCESSORS for MMC_SDHCI_CADENCE which
+allows Elba SoC sdhci_elba_ops to overwrite the SDHCI
+IO memory accessors.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 ---
 
 Changes since v6:
-- No change to this patch but as some patches are deleted and this is
-  a respin the three successive patches to sdhci-cadence.c are
-  patches 12, 13, and 14 which do the following:
-
-  1. Add ability for Cadence specific design to have priv writel().
-  2. Add Elba SoC support that requires its own priv writel() for
-     byte-lane control .
-  3. Add support for mmc hardware reset.
+- Previously patch 16/17
 
 ---
- drivers/mmc/host/sdhci-cadence.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ drivers/mmc/host/Kconfig         |   1 +
+ drivers/mmc/host/sdhci-cadence.c | 131 ++++++++++++++++++++++++++++---
+ 2 files changed, 123 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 5e19a961c34d..9e41115cc753 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -255,6 +255,7 @@ config MMC_SDHCI_CADENCE
+ 	tristate "SDHCI support for the Cadence SD/SDIO/eMMC controller"
+ 	depends on MMC_SDHCI_PLTFM
+ 	depends on OF
++	select MMC_SDHCI_IO_ACCESSORS
+ 	help
+ 	  This selects the Cadence SD/SDIO/eMMC driver.
+ 
 diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index 6f2de54a5987..708d4297f241 100644
+index 708d4297f241..e92aa79a8be2 100644
 --- a/drivers/mmc/host/sdhci-cadence.c
 +++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -67,6 +67,7 @@ struct sdhci_cdns_phy_param {
+@@ -66,6 +66,8 @@ struct sdhci_cdns_phy_param {
+ 
  struct sdhci_cdns_priv {
  	void __iomem *hrs_addr;
++	void __iomem *ctl_addr;	/* write control */
++	spinlock_t wrlock;	/* write lock */
  	bool enhanced_strobe;
-+	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
+ 	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
  	unsigned int nr_phy_params;
- 	struct sdhci_cdns_phy_param phy_params[];
- };
-@@ -90,6 +91,12 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
- 	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+@@ -77,6 +79,11 @@ struct sdhci_cdns_phy_cfg {
+ 	u8 addr;
  };
  
-+static inline void cdns_writel(struct sdhci_cdns_priv *priv, u32 val,
-+			       void __iomem *reg)
-+{
-+	writel(val, reg);
-+}
++struct sdhci_cdns_drv_data {
++	int (*init)(struct platform_device *pdev);
++	const struct sdhci_pltfm_data pltfm_data;
++};
 +
- static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
- 				    u8 addr, u8 data)
- {
-@@ -104,17 +111,17 @@ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
- 
- 	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
- 	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
- 
- 	tmp |= SDHCI_CDNS_HRS04_WR;
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
- 
- 	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
- 	if (ret)
- 		return ret;
- 
- 	tmp &= ~SDHCI_CDNS_HRS04_WR;
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
- 
- 	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
- 				 0, 10);
-@@ -191,7 +198,7 @@ static void sdhci_cdns_set_emmc_mode(struct sdhci_cdns_priv *priv, u32 mode)
- 	tmp = readl(priv->hrs_addr + SDHCI_CDNS_HRS06);
- 	tmp &= ~SDHCI_CDNS_HRS06_MODE;
- 	tmp |= FIELD_PREP(SDHCI_CDNS_HRS06_MODE, mode);
--	writel(tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
-+	priv->priv_writel(priv, tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
+ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+ 	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
+ 	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
+@@ -316,6 +323,92 @@ static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
+ 		sdhci_set_uhs_signaling(host, timing);
  }
  
- static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
-@@ -223,7 +230,7 @@ static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
- 	 */
- 	for (i = 0; i < 2; i++) {
- 		tmp |= SDHCI_CDNS_HRS06_TUNE_UP;
--		writel(tmp, reg);
-+		priv->priv_writel(priv, tmp, reg);
++/* Elba control register bits [6:3] are byte-lane enables */
++#define ELBA_BYTE_ENABLE_MASK(x)	((x) << 3)
++
++/*
++ * The Pensando Elba SoC explicitly controls byte-lane enabling on writes
++ * which includes writes to the HRS registers.
++ */
++static void elba_priv_writel(struct sdhci_cdns_priv *priv, u32 val,
++			     void __iomem *reg)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&priv->wrlock, flags);
++	writel(ELBA_BYTE_ENABLE_MASK(0xf), priv->ctl_addr);
++	writel(val, reg);
++	spin_unlock_irqrestore(&priv->wrlock, flags);
++}
++
++static void elba_write_l(struct sdhci_host *host, u32 val, int reg)
++{
++	elba_priv_writel(sdhci_cdns_priv(host), val, host->ioaddr + reg);
++}
++
++static void elba_write_w(struct sdhci_host *host, u16 val, int reg)
++{
++	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
++	u32 byte_enables;
++	unsigned long flags;
++
++	byte_enables = GENMASK(1, 0) << (reg & 0x3);
++	spin_lock_irqsave(&priv->wrlock, flags);
++	writel(ELBA_BYTE_ENABLE_MASK(byte_enables), priv->ctl_addr);
++	writew(val, host->ioaddr + reg);
++	spin_unlock_irqrestore(&priv->wrlock, flags);
++}
++
++static void elba_write_b(struct sdhci_host *host, u8 val, int reg)
++{
++	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
++	u32 byte_enables;
++	unsigned long flags;
++
++	byte_enables = BIT(0) << (reg & 0x3);
++	spin_lock_irqsave(&priv->wrlock, flags);
++	writel(ELBA_BYTE_ENABLE_MASK(byte_enables), priv->ctl_addr);
++	writeb(val, host->ioaddr + reg);
++	spin_unlock_irqrestore(&priv->wrlock, flags);
++}
++
++static const struct sdhci_ops sdhci_elba_ops = {
++	.write_l = elba_write_l,
++	.write_w = elba_write_w,
++	.write_b = elba_write_b,
++	.set_clock = sdhci_set_clock,
++	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
++	.set_bus_width = sdhci_set_bus_width,
++	.reset = sdhci_reset,
++	.set_uhs_signaling = sdhci_cdns_set_uhs_signaling,
++};
++
++static int elba_drv_init(struct platform_device *pdev)
++{
++	struct sdhci_host *host = platform_get_drvdata(pdev);
++	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
++	struct resource *iomem;
++	void __iomem *ioaddr;
++
++	host->mmc->caps |= (MMC_CAP_1_8V_DDR | MMC_CAP_8_BIT_DATA);
++
++	iomem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (!iomem)
++		return -ENOMEM;
++
++	/* Byte-lane control register */
++	ioaddr = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(ioaddr))
++		return PTR_ERR(ioaddr);
++
++	priv->ctl_addr = ioaddr;
++	priv->priv_writel = elba_priv_writel;
++	spin_lock_init(&priv->wrlock);
++	writel(ELBA_BYTE_ENABLE_MASK(0xf), priv->ctl_addr);
++
++	return 0;
++}
++
+ static const struct sdhci_ops sdhci_cdns_ops = {
+ 	.set_clock = sdhci_set_clock,
+ 	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
+@@ -325,13 +418,24 @@ static const struct sdhci_ops sdhci_cdns_ops = {
+ 	.set_uhs_signaling = sdhci_cdns_set_uhs_signaling,
+ };
  
- 		ret = readl_poll_timeout(reg, tmp,
- 					 !(tmp & SDHCI_CDNS_HRS06_TUNE_UP),
-@@ -386,6 +393,7 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
- 	priv->nr_phy_params = nr_phy_params;
- 	priv->hrs_addr = host->ioaddr;
- 	priv->enhanced_strobe = false;
-+	priv->priv_writel = cdns_writel;
+-static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
+-	.ops = &sdhci_cdns_ops,
+-	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
++static const struct sdhci_cdns_drv_data sdhci_cdns_uniphier_drv_data = {
++	.pltfm_data = {
++		.ops = &sdhci_cdns_ops,
++		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
++	},
+ };
+ 
+-static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
+-	.ops = &sdhci_cdns_ops,
++static const struct sdhci_cdns_drv_data sdhci_elba_drv_data = {
++	.init = elba_drv_init,
++	.pltfm_data = {
++		.ops = &sdhci_elba_ops,
++	},
++};
++
++static const struct sdhci_cdns_drv_data sdhci_cdns_drv_data = {
++	.pltfm_data = {
++		.ops = &sdhci_cdns_ops,
++	},
+ };
+ 
+ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+@@ -357,7 +461,7 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+ static int sdhci_cdns_probe(struct platform_device *pdev)
+ {
+ 	struct sdhci_host *host;
+-	const struct sdhci_pltfm_data *data;
++	const struct sdhci_cdns_drv_data *data;
+ 	struct sdhci_pltfm_host *pltfm_host;
+ 	struct sdhci_cdns_priv *priv;
+ 	struct clk *clk;
+@@ -376,10 +480,10 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 
+ 	data = of_device_get_match_data(dev);
+ 	if (!data)
+-		data = &sdhci_cdns_pltfm_data;
++		data = &sdhci_cdns_drv_data;
+ 
+ 	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+-	host = sdhci_pltfm_init(pdev, data,
++	host = sdhci_pltfm_init(pdev, &data->pltfm_data,
+ 				struct_size(priv, phy_params, nr_phy_params));
+ 	if (IS_ERR(host)) {
+ 		ret = PTR_ERR(host);
+@@ -397,6 +501,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
  	host->mmc_host_ops.hs400_enhanced_strobe =
  				sdhci_cdns_hs400_enhanced_strobe;
++	if (data->init) {
++		ret = data->init(pdev);
++		if (ret)
++			goto free;
++	}
+ 	sdhci_enable_v4_mode(host);
+ 	__sdhci_read_caps(host, &version, NULL, NULL);
+ 
+@@ -461,7 +570,11 @@ static const struct dev_pm_ops sdhci_cdns_pm_ops = {
+ static const struct of_device_id sdhci_cdns_match[] = {
+ 	{
+ 		.compatible = "socionext,uniphier-sd4hc",
+-		.data = &sdhci_cdns_uniphier_pltfm_data,
++		.data = &sdhci_cdns_uniphier_drv_data,
++	},
++	{
++		.compatible = "amd,pensando-elba-sd4hc",
++		.data = &sdhci_elba_drv_data,
+ 	},
+ 	{ .compatible = "cdns,sd4hc" },
+ 	{ /* sentinel */ }
 -- 
 2.17.1
 
