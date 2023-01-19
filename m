@@ -2,37 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BB7674ACF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A13674B85
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjATEgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S230498AbjATE7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjATEgC (ORCPT
+        with ESMTP id S230492AbjATE7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:36:02 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DD9BC8B2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:33:58 -0800 (PST)
+        Thu, 19 Jan 2023 23:59:31 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCBBD05DE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674189238; x=1705725238;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
+  t=1674190077; x=1705726077;
+  h=resent-from:resent-date:resent-message-id:resent-to:from:
+   to:cc:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
   bh=rYq6vhVbEN0C0wtg/aG1JBfgnzFIZAFF2Xt8UqDJh9o=;
-  b=ak1dukcsXVxzzzj/T9FTs9vDePHlwIZ8xVA+GpPqUekQLimUrP/qinSM
-   GUvPmSkIUHZ5TuYenTVb5Z8P9Qvm7FSjKm/o9nLfY7DqVFKlaZ0RZxJLs
-   w6vs0SiMcFeynBT7xOOB/XjzFsrfIkyH8BYCszk/+q9YXu6HtBWy2+UV6
-   XWqDUZU8EYabuHuWF4pYHmAMo79ZwhnnQ4A1WM34/2TINkapXJp9JE/Kf
-   kF3uaY4ksEA/kntzUMoklgR6HmshZTAqusoidW8haNQWaN/hh8kdAezmx
-   SKuTZc4VILdmaa6GrXw7vf0ZFYwUcYaBESQRZs1rGUG0eoOhlLpLSYLya
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411526091"
+  b=HNK/Nr647puuoTv5pjdlZ8iY5lgG71wIzcJAKWiRyfTBd7dP9xh1yejq
+   aAofX0l9i8daFnhUycs+HFC/tgr6z3BJtx9txGCQ2l2BS7cR49TOu1AMB
+   m/DzyELq8nVpqLvPC/0UHSiIapLycjZjMZoO6q3K0BfbBJd1tP+G1ylvC
+   xeXAfW0FnzZLCECpTAd4ChVRCZIrRSh556XChEdgx9tW4/2r1aJFVe7Kp
+   b3Fa3Kklu/QvFGpQlLEzl0Xf/F8pgBJIAF1AzCxy2E7YxldMhDwq0KqWe
+   qWhDlK72aWWsM+HFGo4dywOCjNpO2cZ4KxtBKqc06hn/0q1iN/BX3Df6B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="308950295"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="411526091"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 05:57:06 -0800
+   d="scan'208";a="308950295"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 10:15:32 -0800
+X-ExtLoopCount2: 2 from 10.237.72.184
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="692518794"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="692518794"
+Received: from ubik.fi.intel.com (HELO ubik) ([10.237.72.184])
+  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2023 10:15:31 -0800
+Received: from ash by ubik with local (Exim 4.96)
+        (envelope-from <alexander.shishkin@intel.com>)
+        id 1pIZRQ-00EPK2-1N
+        for linux-kernel@vger.kernel.org;
+        Thu, 19 Jan 2023 20:15:12 +0200
+X-Original-To: alexander.shishkin@linux.intel.com
+Received: from linux.intel.com [10.54.29.200]
+        by ubik.fi.intel.com with IMAP (fetchmail-6.4.29)
+        for <ash@localhost> (single-drop); Thu, 19 Jan 2023 15:59:03 +0200 (EET)
+Received: from fmsmga005.fm.intel.com (fmsmga005.fm.intel.com [10.253.24.32])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 63FD1580AA4;
+        Thu, 19 Jan 2023 05:57:06 -0800 (PST)
 X-ExtLoop1: 1
 X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="988993908"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
@@ -55,9 +76,9 @@ In-Reply-To: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
 References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
