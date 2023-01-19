@@ -2,231 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2867672F19
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC20C672F1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjASCkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S229908AbjASCln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjASCka (ORCPT
+        with ESMTP id S229899AbjASClk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:40:30 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB5059259;
-        Wed, 18 Jan 2023 18:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674096029; x=1705632029;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=JKdooXNqgcnncM9S6ZvI5EAyD8bSGwNvizMF1iRC6/U=;
-  b=D8ft6QDPD9DWQQmro6xXhZ4VaN880k76n4I4DpXDesXDSlObkeTPHx8q
-   VjwL6vTBqh8yAlD1v4MjCcDv56brxteiLheUm7IK8XRerxKcSbRY5X/zj
-   5e3/p7eKCVAXeTAGh5kn75ghWuldRKsYYN9O7l9YzQt+zIAGJRYpMajqi
-   cH/IdisB/ZPAbftv2VtF1XWK/uT3LMMos5WVOPGKyex7ZzFGEnBd7/9kK
-   ovaKmR0NAXcQkfTMp6wCAILpsAIZ1NaAcm931ItJlXer2K2qglVBYzpC6
-   hz9v/0DYIfxZNs74QFSuv9ViO1dX+h82InKe+tHp3cnCVhoTmy/HxGt89
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304857043"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="304857043"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 18:40:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="802459885"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="802459885"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Jan 2023 18:40:21 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 18:40:21 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 18:40:20 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 18:40:20 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 18 Jan 2023 18:40:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zju4jlZfTUMmJTPdZysod7yMnomfQU1yDU4AXqForVwPpmZLKT8S6/IKs6tvu+TlEbtgastkBEnW8P5bMIIAueut6Z6djvXoNrIYqX/NCpcFIO2fq4H+ct62q8xx9JzvK2FHELUimd7zRJm9tJMYMg/AU9frJx3BBQ5smI/80VO97W+dom4A7yEK+JTUXuWV//9TXGAzfgtuv1/zGvLNRZluzFvi7LQT0VZHiUXaoMICNb74EEZL7kxkYQxHKAQQr6KL+aNMmNOKu5nTRaAWx8ex/IzqYOUbXd0v8wRF8aUSRtpomE0dPfV9WZPPukmXoEAz1ECtBfdrJd6n00Yo/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JKdooXNqgcnncM9S6ZvI5EAyD8bSGwNvizMF1iRC6/U=;
- b=k9ZbUVU4Pm0yEmlA7ReMEVt0X4HELs4nUXRHMmecNb6OdqqYW/zfpKxrrRcSlIUSiP+OitVPBNQWFSdu74yp51sxrFGBNtF8kW6F9lp0vtNEYpFscgWNCer4Y/Lw5FZnir8MmGlgbVqd8PlYOd4aaWY2V3mhL+ndX4kg678fV4R3sDkfDq+pfI5G7t8x6mY1ne/nuhmiiLoJoPkUUMKffYG8rRCIVMRX8D4CYDbcR11OST0FnZl+GzJbyuFA87GSKCp6nFbAeIkcMC1KUc1ICFJ4LD9GjX+tSX/lYtbDLwoIfSGP5nSews87TtfpEmXFlI8PXWMWEexK7bGXtwYNbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SJ0PR11MB4925.namprd11.prod.outlook.com (2603:10b6:a03:2df::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
- 2023 02:40:18 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a%8]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 02:40:17 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v11 016/113] KVM: TDX: Add place holder for TDX VM
- specific mem_enc_op ioctl
-Thread-Topic: [PATCH v11 016/113] KVM: TDX: Add place holder for TDX VM
- specific mem_enc_op ioctl
-Thread-Index: AQHZJqTwAeom7RMUz0mEVml2aXul+q6lEW6A
-Date:   Thu, 19 Jan 2023 02:40:17 +0000
-Message-ID: <19645255d65fdfd184b92b5192cac83a27c430fb.camel@intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
-         <e846968f2e1c554b3ecc1a876e0bb691727d34fc.1673539699.git.isaku.yamahata@intel.com>
-In-Reply-To: <e846968f2e1c554b3ecc1a876e0bb691727d34fc.1673539699.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SJ0PR11MB4925:EE_
-x-ms-office365-filtering-correlation-id: 4d505b49-9a65-4a4a-afad-08daf9c68054
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cJ6vgco/6VmQTCTan85CG6eJSEW+4pfFZEh8M6K4HHDOVFcJKOYDEbFpADy5w8uw66d/DoJLoxjBMg3rN7VkYIa+oCtrDYgcDlf6fJDmLcXOZl7wR/7vbzY0asjgNsoRBXBkL4+9qnMN6EQnQFLv0xVWC7WqO9YNLKZEwcHM1U/o710ZCKVmD1u116lMXpYYXDKlu7GIMe5q46dGYOLUTwdBMr/fBnbkkqSW7nZPbIe6bU6S57H9713gmC+FkXZutUwU2IuMK6EqMNU6thqSIAdPqgaOjuSQJ0PqfKtbZB/nLf8H3/mtigfTrG2H4J8KWKpNHOCftXIcc74bZXEE/o60nDhOFdiPcDLKs7pF3kwXCdRgOfQTy5og9vGLno7/oyI2as/xh/jb49tDekqp+On16hy/EQ1EifsvbZLGeFtmv5PVcDsaU4J5IZqJD8ST78Z9XsbXIVNsZnYwgFHvqtI0mO2vG7dvvlcaf2fHdvjcSBiWb43SD3yzOwpoRUN0mVJzf8SKy86nuWJoXOwBGwrlOgukwEzEZGTo5nd1mOSufAm+0lpaEkSrHUm7gv3kQrEBjSYdOv0S5VtTEU8Ckvrv+XFAlNyVqUNY/2hRtkG2D+l4utEJYA9kd2gviPQ1HxRYH+K6yQBKmrsLZk42jW8oar3SWTn7TC5Q+u2+rgdS7o33n0zQCyzY6HTQVNdgR6xplUkSNTGYLEh6JMnzTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199015)(38070700005)(86362001)(5660300002)(41300700001)(8936002)(122000001)(82960400001)(36756003)(38100700002)(6486002)(71200400001)(478600001)(110136005)(54906003)(6636002)(83380400001)(6512007)(6506007)(26005)(186003)(4326008)(8676002)(316002)(64756008)(66556008)(66946007)(66446008)(66476007)(76116006)(91956017)(2616005)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXM2M0hyVEl4VXk2SmtHa0c1cWZuMWFjNlcyc2ZTUGNOWGR3cVc3cUJ2Z1Vt?=
- =?utf-8?B?RzNudUxjTHZPYjZRcTVyKy9ZUVNIeGZjL2haUUZrVkhLQWZ6Z2psT0pxVEUx?=
- =?utf-8?B?YU9tVVdmWXAzMGo3dU9QOW5zeUcyQk9XWjFlaEFZbTVjdll2d0VCRVA1OWpy?=
- =?utf-8?B?REIrVms5NlFkU0h1S1pEZW90cFFZbXhRaFlZaTg2S3RzeEtXN0UwZWYvTDFL?=
- =?utf-8?B?ZnZldXozQXVyc2xVNWkwb3F3elY3Ym0veHFNOGdYbUNnQU9QYVdLVlJLdUxn?=
- =?utf-8?B?TlBwcC9OQ0pyNzlHaW4rc0N0cUNxdzdFdEZYSk9ncHBoMkxqdFMwNWdlSzJh?=
- =?utf-8?B?T0NoRUhjRzFRdVpwUS9pYWQybFh2NTRUQk9kbFZLbGpNbnoxdWxnOG1kUTBa?=
- =?utf-8?B?elZsdlNZMTMvNlhtOWo4UUxFa3Q4bTZPNGtCT0pJNDBWM1dNSU9WNHgySGR3?=
- =?utf-8?B?VlhDQmxPZXhsUWNRdjV2Yll5dFVxQXd6NTlmL2xOcEsyZitrY0dLcTVhSDZL?=
- =?utf-8?B?WGtUM1Y0UlZsQzVZbitFcld4QjJsRzVWTTJBNWJCMURJdlp3WW4rdmo3VEFv?=
- =?utf-8?B?VVR0M2RUdS91dVk0aHlCVFdkdmdTYll2UG9UeXA3RTFjOEdZcmRGcVVydStZ?=
- =?utf-8?B?VjZzVzh2SGszNFdyZDZUUTJDeU5rK3VlUERJdnVjbTZqbi9kVzI0R1hCdzlR?=
- =?utf-8?B?UU1BUDRsSU12aEloNTJMZnR6bkp5a0ZJRktmdk5HN0Fmay80Sys0YWdKSEFk?=
- =?utf-8?B?T3FLZXQ4dzM3TTZUeVlpblZJV2k5WmVZa0haY28rbmhseDRnWld6eWhUYm5i?=
- =?utf-8?B?dWRROEV0UkJVQkRKNHhTM1NTRGR5VThoZndwUEtoMVBwdlg2VHRCTGQyaE54?=
- =?utf-8?B?eXd4bkwvanoxKzBmRndlUWFhZ3IzS05oMkg3bG5lMUVFQ3B6NWRydk9MQlN0?=
- =?utf-8?B?WGZacWdiMUNLTjFVdDA3YWl4L1E0cDJocWZOZTRJQWdCVHBtYzliYVZWMnFT?=
- =?utf-8?B?Z1FuTnZ3UVlvSDVqdmZTRVdFUkVJMVFnZGl1K0lwcDlzNVZUYmx5eTM0ZlRR?=
- =?utf-8?B?UFBNVHpaSjJSNlZsbThRcFFMTUNSUlJpbDREZXMydmpHeER6SE51Ky9VOXJ6?=
- =?utf-8?B?WVAxaVZzTnhURHNreW5ZcTZERmNuY1FyaHlPdzZLQ2krMGZTMytIWVZmL0E3?=
- =?utf-8?B?VjBDWE1Kc3Nmc3hnOHNlbVUyNFFmRTBEckRGaTBvd2ljVk9OT2lUZGJKTENU?=
- =?utf-8?B?OHRweUFFSEQ1Y1BYZ1Zla2ZueGMwL0hybXV0ak1EY3R0cVdvYmZNTFNZaHZ5?=
- =?utf-8?B?VmtaQmo1c0tyVkU0dnh3L0wyQ3k2OHNIWmlYQktKaXRDbUZjdTN0WVNCV1Zy?=
- =?utf-8?B?NWxTZCtIRDUzQThkVWlCbjJqek5CN29mRXpxTitoUmdtdVFRdmdSd00xQkZq?=
- =?utf-8?B?dHpGdkZUT3FPdkNLcWd0a2hlLy9iaysxZ3dDcXdoMFVMT0VST0pPQnZudThl?=
- =?utf-8?B?VXVYeTBoeG9FUThZaXVNWnpVVE9FUW9RUkxBTSt0eFJEV2ZBQlJ5WTB1VWth?=
- =?utf-8?B?RjNpREdISU9lVms5c2pVSmZlWmI4akN3RU16VnE4UGt6UHFlcVgwb1N2NGY4?=
- =?utf-8?B?SSt1QXNzYk94N0RIT3dTU3JUQXVpY0ovVXFmVGxxb2ZCV0lvNWdOQmhFYWN2?=
- =?utf-8?B?S2dFbVdON2pzYkVWMWU2T0lCKzFCb3FRS0tQMzZ5NHVMY1hUOC92eFBNb0s2?=
- =?utf-8?B?amhidkVIK2NPZWp6SkdmZHVoWGFyM1BOSFg1Wk5VNXlrNlp4RTZqNnRNbzhC?=
- =?utf-8?B?UDFDTUoxOUpFRWtpWEtFdWNCQ1hkVEFvenRybEkvSVc4ZjBhcGFrQU5GbU9H?=
- =?utf-8?B?YklVNUlBUG1WTG16WUZBcUV0Q2R4Y05HUVFrTWZiV0V6enRDZy9Lbk9BeGlN?=
- =?utf-8?B?NWIyTFBkQThZTSs2OGd0dzN4OVI4OXM2K3g3a1R1UEdXaTlOZUZzY1NDRDVU?=
- =?utf-8?B?QmJuaGNvSEwrN3h5OGNQdm5sd0t2YTh0MVZ2ZXUxZFhDOEVmNURQaG85UXpO?=
- =?utf-8?B?NXh2Q2NLLzU0aUc0TTVTVGYyM3RENEhuOTZRN1RYOEJkSUJGcHRUSEtvTFla?=
- =?utf-8?B?c0RGaHBxSkEvajUzazBxcHQyR0p4dVhUcGhHYk15bmV2blRaSFROUHpaRGFm?=
- =?utf-8?B?Umc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <14E13A8B693D68429475ADD7F94F5EAD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 18 Jan 2023 21:41:40 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B780859259
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:41:38 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-15ebfdf69adso1208364fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Me2XPf4O6SWq3p7pWEomevXi2GmPF+VV+xeB9XNNvxw=;
+        b=I7Mdw90H5kynxYr9YWlCwQ7m9MOYGt7v6hTtnWmpyPjd7CfbamgEcA1zHC7tV4WCwm
+         9M/ZR1HcqjRqOlX9GK1z3GqtV/x6Xvgow5P7U7L6hwMFQutIFoLut2FOty0c5fjbFOjM
+         Vc0hw1Ce8kfSzMvQtElw0JFuPCAiwnNLxxrZD+F1erxGDKF3A/aGPanF42o4f3LNGjO6
+         TNP/MWqOmGNYL1AFmJsyHC0m/8MOLSPZuNWt4MxIRpTayUU34RtkW+zme2UNty0Wuris
+         D4oOuEqcpOM+cE5NG0URwslGA0zCgZG/6Q6n/3jLBZ65CejQaHVwbi9jwM+8fgrExpmK
+         aSaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Me2XPf4O6SWq3p7pWEomevXi2GmPF+VV+xeB9XNNvxw=;
+        b=M34sPilmj6gGAngSbJcjx5jyeGvleTbPhFRle0GkP2Ev+EBEPHMv3oG2uEvCH1Swkr
+         Q8tp9HjX6k2rglZbS/pYeogujI2j2aSCE5Fy7aB6MIvxvnq1eLadZterx/zVi0CWrq1M
+         u2S/uhev4qKebsuN1kWiq6BnYrM1VlXWkyvRnYL22Tsh/9Y1xqeFdg+NR+o1ZHwHTLFH
+         vMrVWHKMf7QELwOCZ2pydWbyLvU8oAgBBvHc/TpPGhX5u0ehbptVxy/XgoQqtCFPCTJY
+         Xh1ss/WfPnKa/Rm7b6z/7OQWIJYTVbDIigHtV+NYw7gPSDnUIp0qiBxot/PeroeLJvDN
+         4SfA==
+X-Gm-Message-State: AFqh2kpXM4I2r+5NwA1t1gYScDqXPeTRDazcR3HYp0M6Eqzb0M5LOduJ
+        2R7WmbSdPxUMeJZJQ+qxIA8wMSfR3U7hEGbXhMN2oQ==
+X-Google-Smtp-Source: AMrXdXs7i2pdD876eUEmuo5z11KKwoQV+8U0enpCfi2j1cyTfGutWr0JwGuxKyKXBWXfDRoO2CgwKzIPb7zQD9PJWJU=
+X-Received: by 2002:a05:6871:4090:b0:15e:dd91:cbd9 with SMTP id
+ kz16-20020a056871409000b0015edd91cbd9mr610195oab.228.1674096097812; Wed, 18
+ Jan 2023 18:41:37 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d505b49-9a65-4a4a-afad-08daf9c68054
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 02:40:17.7596
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FqfsU29UGVlBb94P+tYZgyul5/AkNzcg146+akKRHAw1pieH3GwTEMDggFBiJYkxjXaXiUWXwGr0KxPMG75kOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4925
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113210703.62107-1-nhuck@google.com> <d6ec50c4-5fc3-eb17-e9e8-fce334038193@linux.alibaba.com>
+ <CAJkfWY7duk+5tWpW3g1iMyV9Q5t5cGunC-dh3M0X25wNq0z-TA@mail.gmail.com>
+In-Reply-To: <CAJkfWY7duk+5tWpW3g1iMyV9Q5t5cGunC-dh3M0X25wNq0z-TA@mail.gmail.com>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Wed, 18 Jan 2023 18:41:26 -0800
+Message-ID: <CAB=BE-SBtqis6U423zP+-8MqYDqtokOdds=5B6rUrWJ6R1c99A@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Add WQ_SCHED_FIFO
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Daeho Jeong <daehojeong@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAxLTEyIGF0IDA4OjMxIC0wODAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+IEZyb206IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20+DQo+IA0KPiBBZGQgYSBwbGFjZSBob2xkZXIgZnVuY3Rpb24gZm9yIFREWCBzcGVjaWZpYyBW
-TS1zY29wZWQgaW9jdGwgYXMgbWVtX2VuY19vcC4NCj4gVERYIHNwZWNpZmljIHN1Yi1jb21tYW5k
-cyB3aWxsIGJlIGFkZGVkIHRvIHJldHJpZXZlL3Bhc3MgVERYIHNwZWNpZmljDQo+IHBhcmFtZXRl
-cnMuDQo+IA0KPiBLVk1fTUVNT1JZX0VOQ1JZUFRfT1Agd2FzIGludHJvZHVjZWQgZm9yIFZNLXNj
-b3BlZCBvcGVyYXRpb25zIHNwZWNpZmljIGZvcg0KPiBndWVzdCBzdGF0ZS1wcm90ZWN0ZWQgVk0u
-ICBJdCBkZWZpbmVkIHN1YmNvbW1hbmRzIGZvciB0ZWNobm9sb2d5LXNwZWNpZmljDQo+IG9wZXJh
-dGlvbnMgdW5kZXIgS1ZNX01FTU9SWV9FTkNSWVBUX09QLiAgRGVzcGl0ZSBpdHMgbmFtZSwgdGhl
-IHN1YmNvbW1hbmRzDQo+IGFyZSBub3QgbGltaXRlZCB0byBtZW1vcnkgZW5jcnlwdGlvbiwgYnV0
-IHZhcmlvdXMgdGVjaG5vbG9neS1zcGVjaWZpYw0KPiBvcGVyYXRpb25zIGFyZSBkZWZpbmVkLiAg
-SXQncyBuYXR1cmFsIHRvIHJlcHVycG9zZSBLVk1fTUVNT1JZX0VOQ1JZUFRfT1ANCj4gZm9yIFRE
-WCBzcGVjaWZpYyBvcGVyYXRpb25zIGFuZCBkZWZpbmUgc3ViY29tbWFuZHMuDQo+IA0KPiBURFgg
-cmVxdWlyZXMgVk0tc2NvcGVkIFREWC1zcGVjaWZpYyBvcGVyYXRpb25zIGZvciBkZXZpY2UgbW9k
-ZWwsIGZvcg0KPiBleGFtcGxlLCBxZW11LiAgR2V0dGluZyBzeXN0ZW0td2lkZSBwYXJhbWV0ZXJz
-LCBURFgtc3BlY2lmaWMgVk0NCj4gaW5pdGlhbGl6YXRpb24uDQoNClRoZXJlJ3MgZ3JhbW1hciBp
-c3N1ZSBpbiB0aGUgbGFzdCBwYXJhZ3JhcGguICBQbGVhc2UgdXNlIGdyYW1tYXIgY2hlY2suDQoN
-Cj4gDQo+IFNpZ25lZC1vZmYtYnk6IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0YUBpbnRl
-bC5jb20+DQo+IC0tLQ0KPiAgYXJjaC94ODYva3ZtL3ZteC9tYWluLmMgICAgfCAgOSArKysrKysr
-KysNCj4gIGFyY2gveDg2L2t2bS92bXgvdGR4LmMgICAgIHwgMjYgKysrKysrKysrKysrKysrKysr
-KysrKysrKysNCj4gIGFyY2gveDg2L2t2bS92bXgveDg2X29wcy5oIHwgIDQgKysrKw0KPiAgMyBm
-aWxlcyBjaGFuZ2VkLCAzOSBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94
-ODYva3ZtL3ZteC9tYWluLmMgYi9hcmNoL3g4Ni9rdm0vdm14L21haW4uYw0KPiBpbmRleCAxNjA1
-M2VjM2UwYWUuLjc4MWZiYzg5NjEyMCAxMDA2NDQNCj4gLS0tIGEvYXJjaC94ODYva3ZtL3ZteC9t
-YWluLmMNCj4gKysrIGIvYXJjaC94ODYva3ZtL3ZteC9tYWluLmMNCj4gQEAgLTM3LDYgKzM3LDE0
-IEBAIHN0YXRpYyBpbnQgdnRfdm1faW5pdChzdHJ1Y3Qga3ZtICprdm0pDQo+ICAJcmV0dXJuIHZt
-eF92bV9pbml0KGt2bSk7DQo+ICB9DQo+ICANCj4gK3N0YXRpYyBpbnQgdnRfbWVtX2VuY19pb2N0
-bChzdHJ1Y3Qga3ZtICprdm0sIHZvaWQgX191c2VyICphcmdwKQ0KPiArew0KPiArCWlmICghaXNf
-dGQoa3ZtKSkNCj4gKwkJcmV0dXJuIC1FTk9UVFk7DQo+ICsNCj4gKwlyZXR1cm4gdGR4X3ZtX2lv
-Y3RsKGt2bSwgYXJncCk7DQo+ICt9DQo+ICsNCj4gIHN0cnVjdCBrdm1feDg2X29wcyB2dF94ODZf
-b3BzIF9faW5pdGRhdGEgPSB7DQo+ICAJLm5hbWUgPSBLQlVJTERfTU9ETkFNRSwNCj4gIA0KPiBA
-QCAtMTc5LDYgKzE4Nyw3IEBAIHN0cnVjdCBrdm1feDg2X29wcyB2dF94ODZfb3BzIF9faW5pdGRh
-dGEgPSB7DQo+ICAJLnZjcHVfZGVsaXZlcl9zaXBpX3ZlY3RvciA9IGt2bV92Y3B1X2RlbGl2ZXJf
-c2lwaV92ZWN0b3IsDQo+ICANCj4gIAkuZGV2X21lbV9lbmNfaW9jdGwgPSB0ZHhfZGV2X2lvY3Rs
-LA0KPiArCS5tZW1fZW5jX2lvY3RsID0gdnRfbWVtX2VuY19pb2N0bCwNCj4gIH07DQoNCklJVUMs
-IG5vdyBib3RoIEFNRCBhbmQgSW50ZWwgaGF2ZSBtZW1fZW5jX2lvY3RsKCkgY2FsbGJhY2sgaW1w
-bGVtZW50ZWQsIHNvIHRoZQ0KS1ZNX1g4Nl9PUF9PUFRJT05BTCgpIG9mIGl0IGNhbiBiZSBjaGFu
-Z2VkIHRvIEtWTV9YODZfT1AoKSwgYW5kIHRoZSBmdW5jdGlvbg0KcG9pbnRlciBjaGVjayBjYW4g
-YmUgcmVtb3ZlZCBpbiB0aGUgSU9DVEw6DQoNCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRl
-L2FzbS9rdm0teDg2LW9wcy5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20va3ZtLXg4Ni0NCm9wcy5o
-DQppbmRleCA4ZGMzNDVjYzYzMTguLmE1OTg1MmZiNWUyYSAxMDA2NDQNCi0tLSBhL2FyY2gveDg2
-L2luY2x1ZGUvYXNtL2t2bS14ODYtb3BzLmgNCisrKyBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2t2
-bS14ODYtb3BzLmgNCkBAIC0xMTYsNyArMTE2LDcgQEAgS1ZNX1g4Nl9PUChlbnRlcl9zbW0pDQog
-S1ZNX1g4Nl9PUChsZWF2ZV9zbW0pDQogS1ZNX1g4Nl9PUChlbmFibGVfc21pX3dpbmRvdykNCiAj
-ZW5kaWYNCi1LVk1fWDg2X09QX09QVElPTkFMKG1lbV9lbmNfaW9jdGwpDQorS1ZNX1g4Nl9PUCht
-ZW1fZW5jX2lvY3RsKQ0KIEtWTV9YODZfT1BfT1BUSU9OQUwobWVtX2VuY19yZWdpc3Rlcl9yZWdp
-b24pDQogS1ZNX1g4Nl9PUF9PUFRJT05BTChtZW1fZW5jX3VucmVnaXN0ZXJfcmVnaW9uKQ0KIEtW
-TV9YODZfT1BfT1BUSU9OQUwodm1fY29weV9lbmNfY29udGV4dF9mcm9tKQ0KZGlmZiAtLWdpdCBh
-L2FyY2gveDg2L2t2bS94ODYuYyBiL2FyY2gveDg2L2t2bS94ODYuYw0KaW5kZXggYzkzNmY4ZDI4
-YTUzLi5kZmEyNzllMzU0NzggMTAwNjQ0DQotLS0gYS9hcmNoL3g4Ni9rdm0veDg2LmMNCisrKyBi
-L2FyY2gveDg2L2t2bS94ODYuYw0KQEAgLTY5MzcsMTAgKzY5MzcsNiBAQCBsb25nIGt2bV9hcmNo
-X3ZtX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxwLA0KICAgICAgICAgICAgICAgIGdvdG8gb3V0Ow0K
-ICAgICAgICB9DQogICAgICAgIGNhc2UgS1ZNX01FTU9SWV9FTkNSWVBUX09QOiB7DQotICAgICAg
-ICAgICAgICAgciA9IC1FTk9UVFk7DQotICAgICAgICAgICAgICAgaWYgKCFrdm1feDg2X29wcy5t
-ZW1fZW5jX2lvY3RsKQ0KLSAgICAgICAgICAgICAgICAgICAgICAgZ290byBvdXQ7DQotDQogICAg
-ICAgICAgICAgICAgciA9IHN0YXRpY19jYWxsKGt2bV94ODZfbWVtX2VuY19pb2N0bCkoa3ZtLCBh
-cmdwKTsNCiAgICAgICAgICAgICAgICBicmVhazsNCiAgICAgICAgfQ0KDQpbc25pcF0NCg0K
+On Sat, Jan 14, 2023 at 1:01 PM Nathan Huckleberry <nhuck@google.com> wrote:
+>
+> On Fri, Jan 13, 2023 at 6:20 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+> >
+> > Hi Nathan!
+> >
+> > On 2023/1/14 05:07, Nathan Huckleberry wrote:
+> > > Add a WQ flag that allows workqueues to use SCHED_FIFO with the least
+> > > imporant RT priority.  This can reduce scheduler latency for IO
+> > > post-processing when the CPU is under load without impacting other RT
+> > > workloads.  This has been shown to improve app startup time on Android
+> > > [1].
+> >
+> > Thank you all for your effort on this.  Unfortunately I have no time to
+> > setup the test [1] until now.  If it can be addressed as a new workqueue
+> > feature, that would be much helpful to me.  Otherwise, I still need to
+> > find a way to resolve the latest Android + EROFS latency problem.
+> >
+>
+> The above patch and following diff should have equivalent performance
+> to [1], but I have not tested it.
+>
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index ccf7c55d477f..a9c3893ad1d4 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -201,7 +201,7 @@ static inline int z_erofs_init_workqueue(void)
+>          * scheduling overhead, perhaps per-CPU threads should be better?
+>          */
+>         z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+> -                                           WQ_UNBOUND | WQ_HIGHPRI,
+> +                                           WQ_SCHED_FIFO,
+>                                             onlinecpus + onlinecpus / 4);
+>         return z_erofs_workqueue ? 0 : -ENOMEM;
+>
+> Thanks,
+> Huck
+>
+>  }
+>
+Hello All,
+With WQ_SCHED_FIFO and erofs patch mentioned above, I see that average
+sched latency improves in the same ballpark as my previous
+work proposed in [1] doing the same experiment (app launch tests) and
+variation is reduced significantly.
+
+Here is the table
+|--------------+-----------+---------------+---------|
+|              | Workqueue | WQ_SCHED_FIFO | Delta   |
+|--------------+-----------+---------------+---------|
+| Average (us) | 15253     | 3514          | -76.96% |
+|--------------+-----------+---------------+---------|
+| Median (us)  | 14001     | 3450          | -75.36% |
+|--------------+-----------+---------------+---------|
+| Minimum (us) | 3117      | 3097          | -0.64%  |
+|--------------+-----------+---------------+---------|
+| Maximum (us) | 30170     | 4896          | -83.77% |
+|--------------+-----------+---------------+---------|
+| Stdev        | 7166      | 319           |         |
+|--------------+-----------+---------------+---------|
+
+Thanks,
+Sandeep.
+
+[1] https://lore.kernel.org/linux-erofs/20230106073502.4017276-1-dhavale@google.com/
+
+>
+> > >
+> > > Scheduler latency affects several drivers as evidenced by [1], [2], [3],
+> > > [4].  Some of these drivers have moved post-processing into IRQ context.
+> > > However, this can cause latency spikes for real-time threads and jitter
+> > > related jank on Android.  Using a workqueue with SCHED_FIFO improves
+> > > scheduler latency without causing latency problems for RT threads.
+> >
+> > softirq context is actually mainly for post-interrupt handling I think.
+> > but considering decompression/verification/decryption all workload are much
+> > complex than that and less important than real post-interrupt handling.
+> > I don't think softirq context is the best place to handle these
+> > CPU-intensive jobs.  Beside, it could cause some important work moving to
+> > softirqd unexpectedly in the extreme cases.  Also such many post-processing
+> > jobs are as complex as they could sleep so that softirq context is
+> > unsuitable as well.
+> >
+> > Anyway, I second this proposal if possible:
+> >
+> > Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> >
+> > Thanks,
+> > Gao Xiang
+> >
+> > >
+> > > [1]:
+> > > https://lore.kernel.org/linux-erofs/20230106073502.4017276-1-dhavale@google.com/
+> > > [2]:
+> > > https://lore.kernel.org/linux-f2fs-devel/20220802192437.1895492-1-daeho43@gmail.com/
+> > > [3]:
+> > > https://lore.kernel.org/dm-devel/20220722093823.4158756-4-nhuck@google.com/
+> > > [4]:
+> > > https://lore.kernel.org/dm-crypt/20200706173731.3734-1-ignat@cloudflare.com/
+> > >
+> > > This change has been tested on dm-verity with the following fio config:
+> > >
+> > > [global]
+> > > time_based
+> > > runtime=120
+> > >
+> > > [do-verify]
+> > > ioengine=sync
+> > > filename=/dev/testing
+> > > rw=randread
+> > > direct=1
+> > >
+> > > [burn_8x90%_qsort]
+> > > ioengine=cpuio
+> > > cpuload=90
+> > > numjobs=8
+> > > cpumode=qsort
+> > >
+> > > Before:
+> > > clat (usec): min=13, max=23882, avg=29.56, stdev=113.29 READ:
+> > > bw=122MiB/s (128MB/s), 122MiB/s-122MiB/s (128MB/s-128MB/s), io=14.3GiB
+> > > (15.3GB), run=120001-120001msec
+> > >
+> > > After:
+> > > clat (usec): min=13, max=23137, avg=19.96, stdev=105.71 READ:
+> > > bw=180MiB/s (189MB/s), 180MiB/s-180MiB/s (189MB/s-189MB/s), io=21.1GiB
+> > > (22.7GB), run=120012-120012msec
+> > >
+> > > Cc: Sandeep Dhavale <dhavale@google.com>
+> > > Cc: Daeho Jeong <daehojeong@google.com>
+> > > Cc: Eric Biggers <ebiggers@kernel.org>
+> > > Cc: Sami Tolvanen <samitolvanen@google.com>
+> > > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> > > ---
+> > >   Documentation/core-api/workqueue.rst | 12 ++++++++++
+> > >   include/linux/workqueue.h            |  9 +++++++
+> > >   kernel/workqueue.c                   | 36 +++++++++++++++++++++-------
+> > >   3 files changed, 48 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/Documentation/core-api/workqueue.rst b/Documentation/core-api/workqueue.rst
+> > > index 3b22ed137662..26faf2806c66 100644
+> > > --- a/Documentation/core-api/workqueue.rst
+> > > +++ b/Documentation/core-api/workqueue.rst
+> > > @@ -216,6 +216,18 @@ resources, scheduled and executed.
+> > >
+> > >     This flag is meaningless for unbound wq.
+> > >
+> > > +``WQ_SCHED_FIFO``
+> > > +  Work items of a fifo wq are queued to the fifo
+> > > +  worker-pool of the target cpu.  Fifo worker-pools are
+> > > +  served by worker threads with scheduler policy SCHED_FIFO and
+> > > +  the least important real-time priority.  This can be useful
+> > > +  for workloads where low latency is imporant.
+> > > +
+> > > +  A workqueue cannot be both high-priority and fifo.
+> > > +
+> > > +  Note that normal and fifo worker-pools don't interact with
+> > > +  each other.  Each maintains its separate pool of workers and
+> > > +  implements concurrency management among its workers.
+> > >
+> > >   ``max_active``
+> > >   --------------
+> > > diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+> > > index ac551b8ee7d9..43a4eeaf8ff4 100644
+> > > --- a/include/linux/workqueue.h
+> > > +++ b/include/linux/workqueue.h
+> > > @@ -134,6 +134,10 @@ struct workqueue_attrs {
+> > >        * @nice: nice level
+> > >        */
+> > >       int nice;
+> > > +     /**
+> > > +      * @sched_fifo: is using SCHED_FIFO
+> > > +      */
+> > > +     bool sched_fifo;
+> > >
+> > >       /**
+> > >        * @cpumask: allowed CPUs
+> > > @@ -334,6 +338,11 @@ enum {
+> > >        * http://thread.gmane.org/gmane.linux.kernel/1480396
+> > >        */
+> > >       WQ_POWER_EFFICIENT      = 1 << 7,
+> > > +     /*
+> > > +      * Low real-time priority workqueues can reduce scheduler latency
+> > > +      * for latency sensitive workloads like IO post-processing.
+> > > +      */
+> > > +     WQ_SCHED_FIFO           = 1 << 8,
+> > >
+> > >       __WQ_DESTROYING         = 1 << 15, /* internal: workqueue is destroying */
+> > >       __WQ_DRAINING           = 1 << 16, /* internal: workqueue is draining */
+> > > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > > index 5dc67aa9d696..99c5e0a3dc28 100644
+> > > --- a/kernel/workqueue.c
+> > > +++ b/kernel/workqueue.c
+> > > @@ -85,7 +85,7 @@ enum {
+> > >       WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |
+> > >                                 WORKER_UNBOUND | WORKER_REBOUND,
+> > >
+> > > -     NR_STD_WORKER_POOLS     = 2,            /* # standard pools per cpu */
+> > > +     NR_STD_WORKER_POOLS     = 3,            /* # standard pools per cpu */
+> > >
+> > >       UNBOUND_POOL_HASH_ORDER = 6,            /* hashed by pool->attrs */
+> > >       BUSY_WORKER_HASH_ORDER  = 6,            /* 64 pointers */
+> > > @@ -1949,7 +1949,8 @@ static struct worker *create_worker(struct worker_pool *pool)
+> > >
+> > >       if (pool->cpu >= 0)
+> > >               snprintf(id_buf, sizeof(id_buf), "%d:%d%s", pool->cpu, id,
+> > > -                      pool->attrs->nice < 0  ? "H" : "");
+> > > +                      pool->attrs->sched_fifo ? "F" :
+> > > +                      (pool->attrs->nice < 0  ? "H" : ""));
+> > >       else
+> > >               snprintf(id_buf, sizeof(id_buf), "u%d:%d", pool->id, id);
+> > >
+> > > @@ -1958,7 +1959,11 @@ static struct worker *create_worker(struct worker_pool *pool)
+> > >       if (IS_ERR(worker->task))
+> > >               goto fail;
+> > >
+> > > -     set_user_nice(worker->task, pool->attrs->nice);
+> > > +     if (pool->attrs->sched_fifo)
+> > > +             sched_set_fifo_low(worker->task);
+> > > +     else
+> > > +             set_user_nice(worker->task, pool->attrs->nice);
+> > > +
+> > >       kthread_bind_mask(worker->task, pool->attrs->cpumask);
+> > >
+> > >       /* successful, attach the worker to the pool */
+> > > @@ -4323,9 +4328,17 @@ static void wq_update_unbound_numa(struct workqueue_struct *wq, int cpu,
+> > >
+> > >   static int alloc_and_link_pwqs(struct workqueue_struct *wq)
+> > >   {
+> > > -     bool highpri = wq->flags & WQ_HIGHPRI;
+> > > +     int pool_index = 0;
+> > >       int cpu, ret;
+> > >
+> > > +     if (wq->flags & WQ_HIGHPRI && wq->flags & WQ_SCHED_FIFO)
+> > > +             return -EINVAL;
+> > > +
+> > > +     if (wq->flags & WQ_HIGHPRI)
+> > > +             pool_index = 1;
+> > > +     if (wq->flags & WQ_SCHED_FIFO)
+> > > +             pool_index = 2;
+> > > +
+> > >       if (!(wq->flags & WQ_UNBOUND)) {
+> > >               wq->cpu_pwqs = alloc_percpu(struct pool_workqueue);
+> > >               if (!wq->cpu_pwqs)
+> > > @@ -4337,7 +4350,7 @@ static int alloc_and_link_pwqs(struct workqueue_struct *wq)
+> > >                       struct worker_pool *cpu_pools =
+> > >                               per_cpu(cpu_worker_pools, cpu);
+> > >
+> > > -                     init_pwq(pwq, wq, &cpu_pools[highpri]);
+> > > +                     init_pwq(pwq, wq, &cpu_pools[pool_index]);
+> > >
+> > >                       mutex_lock(&wq->mutex);
+> > >                       link_pwq(pwq);
+> > > @@ -4348,13 +4361,13 @@ static int alloc_and_link_pwqs(struct workqueue_struct *wq)
+> > >
+> > >       cpus_read_lock();
+> > >       if (wq->flags & __WQ_ORDERED) {
+> > > -             ret = apply_workqueue_attrs(wq, ordered_wq_attrs[highpri]);
+> > > +             ret = apply_workqueue_attrs(wq, ordered_wq_attrs[pool_index]);
+> > >               /* there should only be single pwq for ordering guarantee */
+> > >               WARN(!ret && (wq->pwqs.next != &wq->dfl_pwq->pwqs_node ||
+> > >                             wq->pwqs.prev != &wq->dfl_pwq->pwqs_node),
+> > >                    "ordering guarantee broken for workqueue %s\n", wq->name);
+> > >       } else {
+> > > -             ret = apply_workqueue_attrs(wq, unbound_std_wq_attrs[highpri]);
+> > > +             ret = apply_workqueue_attrs(wq, unbound_std_wq_attrs[pool_index]);
+> > >       }
+> > >       cpus_read_unlock();
+> > >
+> > > @@ -6138,7 +6151,8 @@ static void __init wq_numa_init(void)
+> > >    */
+> > >   void __init workqueue_init_early(void)
+> > >   {
+> > > -     int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL };
+> > > +     int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL, 0 };
+> > > +     bool std_sched_fifo[NR_STD_WORKER_POOLS] = { false, false, true };
+> > >       int i, cpu;
+> > >
+> > >       BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
+> > > @@ -6158,8 +6172,10 @@ void __init workqueue_init_early(void)
+> > >                       BUG_ON(init_worker_pool(pool));
+> > >                       pool->cpu = cpu;
+> > >                       cpumask_copy(pool->attrs->cpumask, cpumask_of(cpu));
+> > > -                     pool->attrs->nice = std_nice[i++];
+> > > +                     pool->attrs->nice = std_nice[i];
+> > > +                     pool->attrs->sched_fifo = std_sched_fifo[i];
+> > >                       pool->node = cpu_to_node(cpu);
+> > > +                     i++;
+> > >
+> > >                       /* alloc pool ID */
+> > >                       mutex_lock(&wq_pool_mutex);
+> > > @@ -6174,6 +6190,7 @@ void __init workqueue_init_early(void)
+> > >
+> > >               BUG_ON(!(attrs = alloc_workqueue_attrs()));
+> > >               attrs->nice = std_nice[i];
+> > > +             attrs->sched_fifo = std_sched_fifo[i];
+> > >               unbound_std_wq_attrs[i] = attrs;
+> > >
+> > >               /*
+> > > @@ -6183,6 +6200,7 @@ void __init workqueue_init_early(void)
+> > >                */
+> > >               BUG_ON(!(attrs = alloc_workqueue_attrs()));
+> > >               attrs->nice = std_nice[i];
+> > > +             attrs->sched_fifo = std_sched_fifo[i];
+> > >               attrs->no_numa = true;
+> > >               ordered_wq_attrs[i] = attrs;
+> > >       }
