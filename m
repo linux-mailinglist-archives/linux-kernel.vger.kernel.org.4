@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83D2673C3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB069673C5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjASOj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S231515AbjASOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjASOjV (ORCPT
+        with ESMTP id S231726AbjASOkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:39:21 -0500
+        Thu, 19 Jan 2023 09:40:02 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F1367974
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:37:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88589798F2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:37:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674139034;
+        s=mimecast20190719; t=1674139041;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EP4LqydUSiQVulPj8M4fIZioGJfqcQn9EHXEOk9M9cI=;
-        b=bC7g3R+WxRUw4AqotPOsv5bsMSv0g5XuBkznfRe9msy/wXX8drkiW2GzNz6G2Kum8KQj+z
-        RjZLhbWluOEuX3JwNYCo0If0u+8CJDA2Wv8wg26YuUn74L6/vMNO5uOPB+TXF7/Wcaz05Z
-        I+FiHgXXQ77tQ7Utra7AvUOCu4jj4LY=
+        bh=6o4aDoMnOyw6oIKqxXD/63VXzreRgu7lohjEhFx0NNg=;
+        b=NOUSsWO90MmztNBVkxe29zZUNrBhMRI6PJEia9uhb+oj3nGBbxDVuzqbkfTY870Z9uVmum
+        sQ65kxHz2BkEkRESWvBTGruR/qzwVLzCc+NGkrnUdvOS9GUPdzpi4lpCEZ5AeOqch1hnzp
+        to8xBurBkDt2b06pqYTG04g1k5jv1/0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-CTfrtppuN2mnyWpz4_YWkA-1; Thu, 19 Jan 2023 09:37:12 -0500
-X-MC-Unique: CTfrtppuN2mnyWpz4_YWkA-1
+ us-mta-116-G32uewm1PsutaaFx4gNlJA-1; Thu, 19 Jan 2023 09:37:18 -0500
+X-MC-Unique: G32uewm1PsutaaFx4gNlJA-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FA9F811E9C;
-        Thu, 19 Jan 2023 14:37:10 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93863101A521;
+        Thu, 19 Jan 2023 14:37:16 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 465E82026D68;
-        Thu, 19 Jan 2023 14:37:06 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E80B32026D68;
+        Thu, 19 Jan 2023 14:37:10 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -66,9 +66,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH v4 3/7] smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
-Date:   Thu, 19 Jan 2023 14:36:15 +0000
-Message-Id: <20230119143619.2733236-4-vschneid@redhat.com>
+Subject: [PATCH v4 4/7] irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+Date:   Thu, 19 Jan 2023 14:36:16 +0000
+Message-Id: <20230119143619.2733236-5-vschneid@redhat.com>
 In-Reply-To: <20230119143619.2733236-1-vschneid@redhat.com>
 References: <20230119143619.2733236-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -84,42 +84,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This simply wraps around the arch function and prepends it with a
-tracepoint, similar to send_call_function_single_ipi().
+IPIs sent to remote CPUs via irq_work_queue_on() are now covered by
+trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
+self-IPIs.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/smp.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ kernel/irq_work.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index e2ca1e2f31274..93b4386cd3096 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -160,6 +160,13 @@ void __init call_function_init(void)
- 	smpcfd_prepare_cpu(smp_processor_id());
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index 7afa40fe5cc43..c33e88e32a67a 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -22,6 +22,8 @@
+ #include <asm/processor.h>
+ #include <linux/kasan.h>
+ 
++#include <trace/events/ipi.h>
++
+ static DEFINE_PER_CPU(struct llist_head, raised_list);
+ static DEFINE_PER_CPU(struct llist_head, lazy_list);
+ static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+@@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
+ 	 */
  }
  
-+static __always_inline void
-+send_call_function_ipi_mask(const struct cpumask *mask)
++static __always_inline void irq_work_raise(struct irq_work *work)
 +{
-+	trace_ipi_send_cpumask(mask, _RET_IP_, NULL);
-+	arch_send_call_function_ipi_mask(mask);
++	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
++		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
++				       _RET_IP_,
++				       work->func);
++
++	arch_irq_work_raise();
 +}
 +
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
+ /* Enqueue on current CPU, work must already be claimed and preempt disabled */
+ static void __irq_work_queue_local(struct irq_work *work)
+ {
+@@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
  
- static DEFINE_STATIC_KEY_FALSE(csdlock_debug_enabled);
-@@ -970,7 +977,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		if (nr_cpus == 1)
- 			send_call_function_single_ipi(last_cpu);
- 		else if (likely(nr_cpus > 1))
--			arch_send_call_function_ipi_mask(cfd->cpumask_ipi);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi);
+ 	/* If the work is "lazy", handle it from next tick if any */
+ 	if (!lazy_work || tick_nohz_tick_stopped())
+-		arch_irq_work_raise();
++		irq_work_raise(work);
+ }
  
- 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
- 	}
+ /* Enqueue the irq work @work on the current CPU */
 -- 
 2.31.1
 
