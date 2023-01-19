@@ -2,150 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF920674149
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FD767414C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjASSwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S229987AbjASSxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjASSwT (ORCPT
+        with ESMTP id S229798AbjASSxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:52:19 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5A194315
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:52:16 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 203so3738150yby.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:52:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ToHyrSNIoPykkmHjpmy+AXA0uDswLz8tCL1AkqWK5E4=;
-        b=mo0ihRCw6Y3aWSIWf6n6XXsp3Czez4pmBoLn4xxcvfC7MIJwMGncIVEoR+KlAAsFdZ
-         X+KL3ImyMm7CDvgKDNaitAKtQYJmfDiQS5wzretGPDK1Mi1wi1p+dYAlWVDWQ7EB8COm
-         73VnlegayZ9CXqL1k0bgORj7azfFIJkz0+xJkhEfX5/5LxFj6WaWcB6V5foMDa3ZSoca
-         mTUKfpVRCQYGi2+eL0D4ZMiEMZnLqo9cHtAvJNd2hYyr8+pslpkuYm69SorYbX73aFGZ
-         KE1jn5AwD+MqZBLCrvWROTxITII/UL5w0qzHVSzaDoEabOI+otr/5WNJbNSN6S8nkrsZ
-         TpOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ToHyrSNIoPykkmHjpmy+AXA0uDswLz8tCL1AkqWK5E4=;
-        b=P76m3i8UdGv5Y+lvwbRBxVY4fd+VRcDUafDaYsJw5vxe3rmRSYT/C5luPApcP29+kL
-         txuYrd0IS1fHjQe1RHmnr41OTPNjW8yxMYtpnPECHFTJi8qXWsWEVLU4NbsXt5vgLUuO
-         nO7YP2NAkpLRfOWytSi7n+QCK0t1+ux/e9BPNjFT1Uzd+8L6h/bAXwnYhO3ZkFH3c05h
-         jwbGvGdYtqtGfQmSdxC3RSM4ONZ+Xe5A0b5oKVjrFMS58sCvktL9LpHmeLSBtJd4xc9Q
-         pAV+pig60FiqaZHZkY4repA2UAmZnhQXWjdd3YGgM4gDA0c8T0Um+NJ1r3MtnwBNggsm
-         SbZw==
-X-Gm-Message-State: AFqh2kqk2d1MfVF59Drv+RMSMtukefW7XnSF4/ATHKlh9IydjMsuk2zT
-        tkBetExS11i/La2wpEh1hW+P//iAdVfYTvW8TFC2lQ==
-X-Google-Smtp-Source: AMrXdXv4wX6M2y+O+IjiMg3HAJdiZYlyaI74hGgkr4eEujY3dQUI2lPzn402SgrjGkBzZXopyxNC269/MaskvyV/RAQ=
-X-Received: by 2002:a25:9801:0:b0:7d5:b884:3617 with SMTP id
- a1-20020a259801000000b007d5b8843617mr1116250ybo.380.1674154334935; Thu, 19
- Jan 2023 10:52:14 -0800 (PST)
+        Thu, 19 Jan 2023 13:53:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20230E97;
+        Thu, 19 Jan 2023 10:53:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA30F60C57;
+        Thu, 19 Jan 2023 18:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FECC433D2;
+        Thu, 19 Jan 2023 18:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674154381;
+        bh=IEM/NhpOS/BK6K/lF+qt2bY3THc98viDeEJqCDo/z7I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ERURQNZ48Yg/1tB6hJ1TznD4tDfuRCeae+Cx33jzYVDP7f1WFbEk1XGFQN4L2rQ5t
+         k9xD90KtaFyVQUrrI52oABAt01NiQEPcRTmENatYc6vIZzz1qb6HS/+D0kSCAwBOuj
+         V9yarn3LAmz+OK42+G6iFI5k6u9607CJyW5zg37V2ncFgqHeCVEvSmmettDu0B3QUX
+         VGkowcfou1uB4axYFFnLZEF3/aP9OjCZ/LFy96E4jiTkYcBcOjDrciZHNZh/c8Nju+
+         HXoR73WDqlm7a5tqpQRiwiRpHhiAJCCxM80vexI6FU/vzQzoSUrqmdZJltrbBxGihL
+         kCgul+AtVtRnw==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Subject: [PULL] Networking for v6.2-rc5
+Date:   Thu, 19 Jan 2023 10:53:00 -0800
+Message-Id: <20230119185300.517048-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
- <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
-In-Reply-To: <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 19 Jan 2023 10:52:03 -0800
-Message-ID: <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > call_rcu() can take a long time when callback offloading is enabled.
-> > Its use in the vm_area_free can cause regressions in the exit path when
-> > multiple VMAs are being freed. To minimize that impact, place VMAs into
-> > a list and free them in groups using one call_rcu() call per group.
->
-> After some more clarification I can understand how call_rcu might not be
-> super happy about thousands of callbacks to be invoked and I do agree
-> that this is not really optimal.
->
-> On the other hand I do not like this solution much either.
-> VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
-> much with processes with a huge number of vmas either. It would still be
-> in housands of callbacks to be scheduled without a good reason.
->
-> Instead, are there any other cases than remove_vma that need this
-> batching? We could easily just link all the vmas into linked list and
-> use a single call_rcu instead, no? This would both simplify the
-> implementation, remove the scaling issue as well and we do not have to
-> argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+Hi Linus!
 
-Yes, I agree the solution is not stellar. I wanted something simple
-but this is probably too simple. OTOH keeping all dead vm_area_structs
-on the list without hooking up a shrinker (additional complexity) does
-not sound too appealing either. WDYT about time domain throttling to
-limit draining the list to say once per second like this:
+The WiFi fixes here were likely the most eagerly awaited.
 
-void vm_area_free(struct vm_area_struct *vma)
-{
-       struct mm_struct *mm = vma->vm_mm;
-       bool drain;
+The following changes since commit d9fc1511728c15df49ff18e49a494d00f78b7cd4:
 
-       free_anon_vma_name(vma);
+  Merge tag 'net-6.2-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-01-12 18:20:44 -0600)
 
-       spin_lock(&mm->vma_free_list.lock);
-       list_add(&vma->vm_free_list, &mm->vma_free_list.head);
-       mm->vma_free_list.size++;
--       drain = mm->vma_free_list.size > VM_AREA_FREE_LIST_MAX;
-+       drain = jiffies > mm->last_drain_tm + HZ;
+are available in the Git repository at:
 
-       spin_unlock(&mm->vma_free_list.lock);
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.2-rc5
 
--       if (drain)
-+       if (drain) {
-              drain_free_vmas(mm);
-+             mm->last_drain_tm = jiffies;
-+       }
-}
+for you to fetch changes up to 6c977c5c2e4c5d8ad1b604724cc344e38f96fe9b:
 
-Ultimately we want to prevent very frequent call_rcu() calls, so
-throttling in the time domain seems appropriate. That's the simplest
-way I can think of to address your concern about a quick spike in VMA
-freeing. It does not place any restriction on the list size and we
-might have excessive dead vm_area_structs if after a large spike there
-are no vm_area_free() calls but I don't know if that's a real problem,
-so not sure we should be addressing it at this time. WDYT?
+  net: dsa: microchip: ksz9477: port map correction in ALU table entry register (2023-01-19 09:28:31 -0800)
 
+----------------------------------------------------------------
+Including fixes from wireless, bluetooth, bpf and netfilter.
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+Current release - regressions:
+
+ - Revert "net: team: use IFF_NO_ADDRCONF flag to prevent ipv6
+   addrconf", fix nsna_ping mode of team
+
+ - wifi: mt76: fix bugs in Rx queue handling and DMA mapping
+
+ - eth: mlx5:
+   - add missing mutex_unlock in error reporter
+   - protect global IPsec ASO with a lock
+
+Current release - new code bugs:
+
+ - rxrpc: fix wrong error return in rxrpc_connect_call()
+
+Previous releases - regressions:
+
+ - bluetooth: hci_sync: fix use of HCI_OP_LE_READ_BUFFER_SIZE_V2
+
+ - wifi:
+   - mac80211: fix crashes on Rx due to incorrect initialization of
+     rx->link and rx->link_sta
+   - mac80211: fix bugs in iTXQ conversion - Tx stalls, incorrect
+     aggregation handling, crashes
+   - brcmfmac: fix regression for Broadcom PCIe wifi devices
+   - rndis_wlan: prevent buffer overflow in rndis_query_oid
+
+ - netfilter: conntrack: handle tcp challenge acks during connection
+   reuse
+
+ - sched: avoid grafting on htb_destroy_class_offload when destroying
+
+ - virtio-net: correctly enable callback during start_xmit, fix stalls
+
+ - tcp: avoid the lookup process failing to get sk in ehash table
+
+ - ipa: disable ipa interrupt during suspend
+
+Previous releases - always broken:
+
+ - bpf:
+   - fix pointer-leak due to insufficient speculative store bypass
+     mitigation (Spectre v4)
+   - skip task with pid=1 in send_signal_common() to avoid a splat
+   - fix BPF program ID information in BPF_AUDIT_UNLOAD as well as
+     PERF_BPF_EVENT_PROG_UNLOAD events
+   - fix potential deadlock in htab_lock_bucket from same bucket index
+     but different map_locked index
+
+ - bluetooth:
+   - fix a buffer overflow in mgmt_mesh_add()
+   - hci_qca: fix driver shutdown on closed serdev
+   - ISO: fix possible circular locking dependency
+   - CIS: hci_event: fix invalid wait context
+
+ - wifi: brcmfmac: fixes for survey dump handling
+
+ - mptcp: explicitly specify sock family at subflow creation time
+
+ - netfilter: nft_payload: incorrect arithmetics when fetching VLAN
+   header bits
+
+ - l2tp: close all race conditions in l2tp_tunnel_register()
+
+ - eth: mlx5: fixes for QoS config and eswitch configuration
+
+ - eth: enetc: avoid deadlock in enetc_tx_onestep_tstamp()
+
+ - eth: stmmac: fix invalid call to mdiobus_get_phy()
+
+Misc:
+
+ - ethtool: add netlink attr in rss get reply only if the value is
+   not empty
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Adham Faris (1):
+      net/mlx5e: Remove redundant xsk pointer check in mlx5e_mpwrq_validate_xsk
+
+Alexander Wetzel (3):
+      wifi: mac80211: Proper mark iTXQs for resumption
+      wifi: mac80211: sdata can be NULL during AMPDU start
+      wifi: mac80211: Fix iTXQ AMPDU fragmentation handling
+
+Aloka Dixit (1):
+      wifi: mac80211: reset multiple BSSID options in stop_ap()
+
+Arend van Spriel (3):
+      wifi: brcmfmac: avoid handling disabled channels for survey dump
+      wifi: brcmfmac: avoid NULL-deref in survey dump for 2G only device
+      wifi: brcmfmac: fix regression for Broadcom PCIe wifi devices
+
+Caleb Connolly (1):
+      net: ipa: disable ipa interrupt during suspend
+
+Chris Mi (2):
+      net/mlx5e: Set decap action based on attr for sample
+      net/mlx5: E-switch, Fix switchdev mode after devlink reload
+
+Clément Léger (1):
+      net: lan966x: add missing fwnode_handle_put() for ports node
+
+Cong Wang (2):
+      l2tp: convert l2tp_tunnel_list to idr
+      l2tp: close all race conditions in l2tp_tunnel_register()
+
+David Howells (1):
+      rxrpc: Fix wrong error return in rxrpc_connect_call()
+
+David S. Miller (3):
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+      Merge branch 'l2tp-races'
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+
+Eric Dumazet (3):
+      net/sched: sch_taprio: fix possible use-after-free
+      Revert "wifi: mac80211: fix memory leak in ieee80211_if_add()"
+      l2tp: prevent lockdep issue in l2tp_tunnel_register()
+
+Esina Ekaterina (1):
+      net: wan: Add checks for NULL for utdm in undo_uhdlc_init and unmap_si_regs
+
+Felix Fietkau (3):
+      wifi: mac80211: fix initialization of rx->link and rx->link_sta
+      wifi: mac80211: fix MLO + AP_VLAN check
+      wifi: mt76: dma: fix a regression in adding rx buffers
+
+Florian Westphal (2):
+      selftests: netfilter: fix transaction test script timeout handling
+      netfilter: conntrack: handle tcp challenge acks during connection reuse
+
+Gavrilov Ilia (1):
+      netfilter: ipset: Fix overflow before widen in the bitmap_ip_create() function.
+
+Geetha sowjanya (1):
+      octeontx2-pf: Avoid use of GFP_KERNEL in atomic context
+
+Hao Sun (2):
+      bpf: Skip invalid kfunc call in backtrack_insn
+      bpf: Skip task with pid=1 in send_signal_common()
+
+Harshit Mogalapalli (1):
+      Bluetooth: Fix a buffer overflow in mgmt_mesh_add()
+
+Heiner Kallweit (2):
+      net: mdio: validate parameter addr in mdiobus_get_phy()
+      net: stmmac: fix invalid call to mdiobus_get_phy()
+
+Jakub Kicinski (8):
+      Merge tag 'wireless-2023-01-12' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
+      Merge branch 'amd-xgbe-pfc-and-kr-training-fixes'
+      Merge branch 'mptcp-userspace-pm-create-sockets-for-the-right-family'
+      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      Merge tag 'for-net-2023-01-17' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
+      Merge tag 'wireless-2023-01-18' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
+      net: sched: gred: prevent races when adding offloads to stats
+      MAINTAINERS: add networking entries for Willem
+
+Jason Wang (1):
+      virtio-net: correctly enable callback during start_xmit
+
+Jason Xing (1):
+      tcp: avoid the lookup process failing to get sk in ehash table
+
+Jisoo Jang (1):
+      net: nfc: Fix use-after-free in local_cleanup()
+
+Kevin Hao (1):
+      octeontx2-pf: Fix the use of GFP_KERNEL in atomic context on rt
+
+Krzysztof Kozlowski (1):
+      Bluetooth: hci_qca: Fix driver shutdown on closed serdev
+
+Kurt Kanzenbach (1):
+      net: stmmac: Fix queue statistics reading
+
+Leon Romanovsky (2):
+      net/mlx5e: Remove optimization which prevented update of ESN state
+      net/mlx5e: Protect global IPsec ASO
+
+Lorenzo Bianconi (2):
+      wifi: mt76: dma: do not increment queue head if mt76_dma_add_buf fails
+      wifi: mt76: handle possible mt76_rx_token_consume failures
+
+Luis Gerhorst (1):
+      bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation
+
+Luiz Augusto von Dentz (4):
+      Bluetooth: hci_sync: Fix use HCI_OP_LE_READ_BUFFER_SIZE_V2
+      Bluetooth: ISO: Fix possible circular locking dependency
+      Bluetooth: hci_event: Fix Invalid wait context
+      Bluetooth: ISO: Fix possible circular locking dependency
+
+Maor Dickman (2):
+      net/mlx5: E-switch, Fix setting of reserved fields on MODIFY_SCHEDULING_ELEMENT
+      net/mlx5e: QoS, Fix wrongfully setting parent_element_id on MODIFY_SCHEDULING_ELEMENT
+
+Matthieu Baerts (2):
+      mptcp: netlink: respect v4/v6-only sockets
+      selftests: mptcp: userspace: validate v4-v6 subflows mix
+
+Pablo Neira Ayuso (1):
+      netfilter: nft_payload: incorrect arithmetics when fetching VLAN header bits
+
+Paolo Abeni (3):
+      mptcp: explicitly specify sock family at subflow creation time
+      Merge tag 'mlx5-fixes-2023-01-18' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
+      net/ulp: use consistent error code when blocking ULP
+
+Paul Moore (2):
+      bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and PERF_BPF_EVENT_PROG_UNLOAD
+      bpf: remove the do_idr_lock parameter from bpf_prog_free_id()
+
+Rahul Rameshbabu (1):
+      sch_htb: Avoid grafting on htb_destroy_class_offload when destroying htb
+
+Raju Rangoju (2):
+      amd-xgbe: TX Flow Ctrl Registers are h/w ver dependent
+      amd-xgbe: Delay AN timeout during KR training
+
+Rakesh Sankaranarayanan (1):
+      net: dsa: microchip: ksz9477: port map correction in ALU table entry register
+
+Randy Dunlap (1):
+      net: mlx5: eliminate anonymous module_init & module_exit
+
+Robert Hancock (1):
+      net: macb: fix PTP TX timestamp failure due to packet padding
+
+Shyam Sundar S K (1):
+      MAINTAINERS: Update AMD XGBE driver maintainers
+
+Sriram R (1):
+      mac80211: Fix MLO address translation for multiple bss case
+
+Sudheer Mogilappagari (1):
+      ethtool: add netlink attr in rss get reply only if value is not null
+
+Szymon Heidrich (2):
+      wifi: rndis_wlan: Prevent buffer overflow in rndis_query_oid
+      net: usb: sr9700: Handle negative len
+
+Tonghao Zhang (1):
+      bpf: hash map, avoid deadlock with suitable hash mask
+
+Vlad Buslov (1):
+      net/mlx5e: Avoid false lock dependency warning on tc_ht even more
+
+Vladimir Oltean (1):
+      net: enetc: avoid deadlock in enetc_tx_onestep_tstamp()
+
+Willem de Bruijn (1):
+      selftests/net: toeplitz: fix race on tpacket_v3 block close
+
+Xin Long (1):
+      Revert "net: team: use IFF_NO_ADDRCONF flag to prevent ipv6 addrconf"
+
+Yang Yingliang (1):
+      net/mlx5: fix missing mutex_unlock in mlx5_fw_fatal_reporter_err_work()
+
+Ying Hsu (1):
+      Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+
+Zhengchao Shao (2):
+      Bluetooth: hci_conn: Fix memory leaks
+      Bluetooth: hci_sync: fix memory leak in hci_update_adv_data()
+
+ MAINTAINERS                                        |  21 +-
+ drivers/bluetooth/hci_qca.c                        |   7 +
+ drivers/net/dsa/microchip/ksz9477.c                |   4 +-
+ drivers/net/ethernet/amd/xgbe/xgbe-dev.c           |  23 ++-
+ drivers/net/ethernet/amd/xgbe/xgbe-mdio.c          |  24 +++
+ drivers/net/ethernet/amd/xgbe/xgbe.h               |   2 +
+ drivers/net/ethernet/cadence/macb_main.c           |   9 +-
+ drivers/net/ethernet/freescale/enetc/enetc.c       |   4 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_common.c   |  11 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_common.h   |   2 +
+ drivers/net/ethernet/mellanox/mlx5/core/en/htb.c   |   4 +-
+ .../net/ethernet/mellanox/mlx5/core/en/params.c    |   3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/tc/sample.c |   5 +-
+ .../ethernet/mellanox/mlx5/core/en_accel/ipsec.h   |   7 +-
+ .../mellanox/mlx5/core/en_accel/ipsec_offload.c    |  12 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |   3 +
+ drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c  |  18 +-
+ drivers/net/ethernet/mellanox/mlx5/core/eswitch.c  |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/health.c   |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/main.c     |   8 +-
+ drivers/net/ethernet/mellanox/mlx5/core/qos.c      |   3 +-
+ drivers/net/ethernet/mellanox/mlx5/core/qos.h      |   2 +-
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  |  13 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_ethtool.c   |   8 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   5 +
+ drivers/net/ipa/ipa_interrupt.c                    |  10 +
+ drivers/net/ipa/ipa_interrupt.h                    |  16 ++
+ drivers/net/ipa/ipa_power.c                        |  17 ++
+ drivers/net/phy/mdio_bus.c                         |   7 +-
+ drivers/net/team/team.c                            |   2 -
+ drivers/net/usb/sr9700.c                           |   2 +-
+ drivers/net/virtio_net.c                           |   6 +-
+ drivers/net/wan/fsl_ucc_hdlc.c                     |   6 +-
+ .../broadcom/brcm80211/brcmfmac/cfg80211.c         |  37 ++--
+ .../wireless/broadcom/brcm80211/brcmfmac/pcie.c    |   2 +-
+ drivers/net/wireless/mediatek/mt76/dma.c           | 131 +++++++-----
+ drivers/net/wireless/mediatek/mt76/mt7915/mmio.c   |   7 +
+ drivers/net/wireless/mediatek/mt76/tx.c            |   7 +-
+ drivers/net/wireless/rndis_wlan.c                  |  19 +-
+ include/linux/bpf.h                                |   2 +-
+ include/net/mac80211.h                             |   4 -
+ include/net/sch_generic.h                          |   7 +
+ kernel/bpf/hashtab.c                               |   4 +-
+ kernel/bpf/offload.c                               |   3 -
+ kernel/bpf/syscall.c                               |  24 +--
+ kernel/bpf/verifier.c                              |  10 +-
+ kernel/trace/bpf_trace.c                           |   3 +
+ net/bluetooth/hci_conn.c                           |  18 +-
+ net/bluetooth/hci_event.c                          |   5 +-
+ net/bluetooth/hci_sync.c                           |  19 +-
+ net/bluetooth/iso.c                                |  64 +++---
+ net/bluetooth/mgmt_util.h                          |   2 +-
+ net/bluetooth/rfcomm/sock.c                        |   7 +-
+ net/ethtool/rss.c                                  |  11 +-
+ net/ipv4/inet_hashtables.c                         |  17 +-
+ net/ipv4/inet_timewait_sock.c                      |   8 +-
+ net/ipv4/tcp_ulp.c                                 |   2 +-
+ net/l2tp/l2tp_core.c                               | 102 +++++-----
+ net/mac80211/agg-tx.c                              |   8 +-
+ net/mac80211/cfg.c                                 |   7 +
+ net/mac80211/debugfs_sta.c                         |   5 +-
+ net/mac80211/driver-ops.c                          |   3 +
+ net/mac80211/driver-ops.h                          |   2 +-
+ net/mac80211/ht.c                                  |  31 +++
+ net/mac80211/ieee80211_i.h                         |   2 +-
+ net/mac80211/iface.c                               |   5 +-
+ net/mac80211/rx.c                                  | 225 ++++++++++-----------
+ net/mac80211/tx.c                                  |  34 ++--
+ net/mac80211/util.c                                |  42 +---
+ net/mptcp/pm.c                                     |  25 +++
+ net/mptcp/pm_userspace.c                           |   7 +
+ net/mptcp/protocol.c                               |   2 +-
+ net/mptcp/protocol.h                               |   6 +-
+ net/mptcp/subflow.c                                |   9 +-
+ net/netfilter/ipset/ip_set_bitmap_ip.c             |   4 +-
+ net/netfilter/nf_conntrack_proto_tcp.c             |  15 ++
+ net/netfilter/nft_payload.c                        |   2 +-
+ net/nfc/llcp_core.c                                |   1 +
+ net/rxrpc/call_object.c                            |   2 +-
+ net/sched/sch_gred.c                               |   2 +
+ net/sched/sch_htb.c                                |  27 ++-
+ net/sched/sch_taprio.c                             |   3 +
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |  47 +++++
+ tools/testing/selftests/net/toeplitz.c             |  12 +-
+ .../selftests/netfilter/nft_trans_stress.sh        |  16 +-
+ tools/testing/selftests/netfilter/settings         |   1 +
+ 86 files changed, 783 insertions(+), 543 deletions(-)
+ create mode 100644 tools/testing/selftests/netfilter/settings
