@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D231F6734DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC45F6734DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjASJz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S229976AbjASJzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjASJzz (ORCPT
+        with ESMTP id S229699AbjASJzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:55:55 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DF35D7F8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:55:53 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 69so1831934ybn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUMk1/bi5g5h2y9BS6a518UMzb1yi0+ArEb6kSFCYTA=;
-        b=hxk7z6pogAGXNsbFa2NUorj+q891Jf2Kx66+E9euuWPJgOu31CzAc9Sguknk6DcRrc
-         k6BfM7NV2ImBfVJBNSMtKxArPi69QhV4lZCgVkwgXRlylXxAREtRNfatWdnETIvDn0DN
-         BET2w4ie5jTYs8hkxvuTye8meojQ9lV3CRf6s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gUMk1/bi5g5h2y9BS6a518UMzb1yi0+ArEb6kSFCYTA=;
-        b=fr4OS9l5/RBgZFb5uiTNEJeJ8TcWt9M6NJQjjPy1G9VVZhwADCF/fe/eYjv0cGo/SX
-         JPJkViXyM32ZpcBapf1a4cjyKDJkV0pgX7gVmmTjkWq95w4JuypgAERTooPDJDLq5C1H
-         4hfhpLWWdrHB+JpbhjSltbh1kHX1xr+79XcPsYzS5Y/7PcvcaGTv/QSA7cGzWnyCVzhI
-         TcBt6nQFGhppvfFtqxOlHg4dqvJv3/E5sCidfjzMZdVHfeAPqCTFbXjw2mQYJ6OrSCo4
-         4DuS8oOB0LAJnDb52tLTk0IJvtDn4eJnCtq1JPfZhRdYMcB2+noFGVyQ9k0EDoNjJE5G
-         UuVg==
-X-Gm-Message-State: AFqh2koF2UNRseSVri5nWfS4UKnmaoEdckdVi/ze7jmnIFshzi39av2J
-        2Ml8Dmguf/TfBegmmb/suH5ZXf2UwmNhSmT1FG25VdUlDKGn8A==
-X-Google-Smtp-Source: AMrXdXu2wOZm8SvlpFm+Y/g4LaM8lC0oZde0PPAZDmHwD9+lPipdeWVB/AmiwXG2X1HAKRYLf4v4bAA0huQL41e10JQ=
-X-Received: by 2002:a5b:384:0:b0:7d2:ea96:9038 with SMTP id
- k4-20020a5b0384000000b007d2ea969038mr1011610ybp.56.1674122152439; Thu, 19 Jan
- 2023 01:55:52 -0800 (PST)
+        Thu, 19 Jan 2023 04:55:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25A665D106;
+        Thu, 19 Jan 2023 01:55:49 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 666DA1758;
+        Thu, 19 Jan 2023 01:56:30 -0800 (PST)
+Received: from [10.57.75.229] (unknown [10.57.75.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 521673F71A;
+        Thu, 19 Jan 2023 01:55:47 -0800 (PST)
+Message-ID: <8cfad7ad-a375-3ca8-45fe-a1753e77dac5@arm.com>
+Date:   Thu, 19 Jan 2023 09:55:45 +0000
 MIME-Version: 1.0
-References: <20230118031514.1278139-1-pmalani@chromium.org>
- <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com> <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
- <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
-In-Reply-To: <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 19 Jan 2023 01:55:41 -0800
-Message-ID: <CACeCKaceu1KCPtpavBn23qyM29Eacxhm6L9SN78ZQxdzRCOk6Q@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/2] hwtracing: hisi_ptt: Only add the supported
+ devices to the filters list
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     mathieu.poirier@linaro.org, jonathan.cameron@huawei.com,
+        yangyicong@hisilicon.com, alexander.shishkin@linux.intel.com,
+        helgaas@kernel.org, linux-pci@vger.kernel.org,
+        prime.zeng@huawei.com, linuxarm@huawei.com,
+        linux-kernel@vger.kernel.org
+References: <20230112112201.16283-1-yangyicong@huawei.com>
+ <252ff08d-55ed-b733-6b66-4ea40f07e501@huawei.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <252ff08d-55ed-b733-6b66-4ea40f07e501@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 1:26 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Prashant,
->
-> On Wed, Jan 18, 2023 at 10:26:21AM -0800, Prashant Malani wrote:
-> > Hi Heikki,
-> >
-> > Thanks for reviewing the patch.
-> >
-> > On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
-> > FWIW, I think we can make the typec_altmode_update_active() calls from
-> > our (cros-ec-typec) port driver too, but displayport.c is parsing the header
-> > anyway, so it seemed repetitive. Just wanted to clarify the intention here.
->
-> The alt modes may have been entered even if there are no drivers for
-> them, if for example the PD controller handles the mode entry. In
-> those cases the port driver needs to update the active state of the
-> partner alt mode.
+On 19/01/2023 09:10, Yicong Yang wrote:
+> Hi Suzuki,
+> 
+> Any comments or is it ok to pick these two patches?
+> Hope to not miss this cycle since there's one fix :)
 
-Ack. Thanks for explaining the rationale here.
+Apologies, I will queue this, once I clear my queue.
 
->
-> Since the port drivers have to handle that in some cases, for the sake
-> of consistency I thought that they might as well take care of it in
-> every case.
->
-> On the other hand, it should be safe to do it in both the port driver
-> and the altmode driver.
->
-> If you prefer that the altmode drivers always do this, I'm not against
-> it. But in that case could you patch tcpm.c while at it - in the same
-> series:
+Thanks
+Suzuki
 
-Sure, I will send out a v2 with the below diff as Patch 2/2 (I will mark you as
-"Suggested-by" but as always LMK if you prefer another way to
-denote attribution).
 
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4ce2f0c..0f5a9d4db105a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->                         }
->                         break;
->                 case CMD_ENTER_MODE:
-> -                       if (adev && pdev) {
-> -                               typec_altmode_update_active(pdev, true);
-> +                       if (adev && pdev)
->                                 *adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
-> -                       }
->                         return 0;
->                 case CMD_EXIT_MODE:
->                         if (adev && pdev) {
-> -                               typec_altmode_update_active(pdev, false);
->                                 /* Back to USB Operation */
->                                 *adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
->                                 return 0;
->
-> That's the only driver that will definitely always requires the
-> altmode drivers, so perhaps it would be good to drop the calls
-> from it at the same time.
->
-> thanks,
->
-> --
-> heikki
+> 
+> Thanks,
+> Yicong
+> 
+> On 2023/1/12 19:22, Yicong Yang wrote:
+>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>
+>> The PTT device can only support the devices on the same PCIe core,
+>> within BDF range [lower_bdf, upper_bdf]. It's not correct to assume
+>> the devices on the root bus are from the same PCIe core, there are
+>> cases that root ports from different PCIe core are sharing the same
+>> bus. So check when initializing the filters list.
+>>
+>> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> ---
+>> Change since v2:
+>> - Refine the commit per Bjorn
+>> Link: https://lore.kernel.org/linux-pci/20230110130833.53474-1-yangyicong@huawei.com/
+>>
+>> Change since v1:
+>> - Add tags from Jonathan
+>> Link: https://lore.kernel.org/linux-pci/20221122120209.25682-1-yangyicong@huawei.com/raw
+>>
+>>   drivers/hwtracing/ptt/hisi_ptt.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> index 5d5526aa60c4..30f1525639b5 100644
+>> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+>> @@ -356,8 +356,18 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
+>>   
+>>   static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
+>>   {
+>> +	struct pci_dev *root_port = pcie_find_root_port(pdev);
+>>   	struct hisi_ptt_filter_desc *filter;
+>>   	struct hisi_ptt *hisi_ptt = data;
+>> +	u32 port_devid;
+>> +
+>> +	if (!root_port)
+>> +		return 0;
+>> +
+>> +	port_devid = PCI_DEVID(root_port->bus->number, root_port->devfn);
+>> +	if (port_devid < hisi_ptt->lower_bdf ||
+>> +	    port_devid > hisi_ptt->upper_bdf)
+>> +		return 0;
+>>   
+>>   	/*
+>>   	 * We won't fail the probe if filter allocation failed here. The filters
+>>
+
