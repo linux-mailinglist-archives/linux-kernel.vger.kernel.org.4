@@ -2,164 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBD4674650
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A13674653
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjASWlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S230007AbjASWnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjASWkq (ORCPT
+        with ESMTP id S230418AbjASWmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:40:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF92645BE8;
-        Thu, 19 Jan 2023 14:22:41 -0800 (PST)
-Date:   Thu, 19 Jan 2023 22:22:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674166960;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Dl7CD/D7G+lEEnQAkMUvyaCXOdQrmVHbu2hv3zw7wS4=;
-        b=YYaNfLX37nPmqRGXTrjCpTAOYLZPNqRJJmdTb1zEc+kWrUmpOaFHlvPiItv7IsLhWKum+P
-        OgxqAtitccCGygSTSR+VDPPWTS9q714/WvRE//+jPl7HrLiQTA6tNzU9ZUHcWHRX4eIXOY
-        /cY2J/qH/30Mji2QNBqnUHdzZ4xNsocpgddCHpsjZL8ys1bAB/qDeHf7KlhPgp29/cqbTN
-        8u46YcVkxG7hwLA3p1bMVJjxb3fqDj67Qn+Sqx3b+3P1537bFSlXFpOqkEiyB3lKJ5aPTH
-        ZuvxhSiZnGARFiJsvbrNk0uwcUpR2s4Oj3lcfO9vqLqP/zNArwYORh3O4xk8eg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674166960;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Dl7CD/D7G+lEEnQAkMUvyaCXOdQrmVHbu2hv3zw7wS4=;
-        b=pxNV52oubP0oYTEICwRZIfeuv8AG/eouBTkHsFGWNTPue8NVmjMF0Zde0bLSKfGikKWAVj
-        gpFg8HQqVzY9A1BQ==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] acpi: Fix suspend with Xen PV
-Cc:     marmarek@invisiblethingslab.com, Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, x86@kernel.org,
+        Thu, 19 Jan 2023 17:42:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023BEB4E19
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:23:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674166990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KxWTZPauMXnpTaH3mq+4KakgefY9/3sGM9X+qHRltHo=;
+        b=Mr2BfM4gsKDAocFljRR4R36pPr+LsmPcuwZnQ2EoyR7pAdYaYSiK9w+nDxohrMeuw56RSh
+        QnTDS/XtRq5nHoX+blOfCwafBvm+jIEk+YdTUBBS615Xamxkt4epwEqt0z5cJndSRguyy3
+        rqR1orfGAFBkyvh2fRAfetYR+BsYP44=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-648-jYmHHfthN5aq2FcldYAV6g-1; Thu, 19 Jan 2023 17:23:09 -0500
+X-MC-Unique: jYmHHfthN5aq2FcldYAV6g-1
+Received: by mail-qt1-f200.google.com with SMTP id bs22-20020ac86f16000000b003b686e0ef0bso1598515qtb.19
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:23:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KxWTZPauMXnpTaH3mq+4KakgefY9/3sGM9X+qHRltHo=;
+        b=ahZTd6XZfFD13/kmZwIwheDEMoNMZi4+TgiSjeVhOU8jjOp10vz87SsQRtcj7462/7
+         f4AnvnLnZZK+j0wXuQWwnMCbl1fBlIyWy+PeK6H/TNs6WE7nDAV0RYuC0ZyIw9uIU96V
+         azXcgd6RsZj3wCvLjxzgQObEaKv9SWo0LSktqU92Qp/SgyhqPu3ccPcS7xb9WdeXtwlr
+         aneksKSrGUi7shRIalU8cbcA7NAg/n6fFpZ+PHyr0wwZryixPnDTrVb0K+lhn2Ioiu8i
+         1dR3nOwvf+JJchS+2cFnnyJuEoM9j4UDmt/V+vHWUlQLikX0ONMRl2FSleoJvaVHc2aJ
+         0f4A==
+X-Gm-Message-State: AFqh2koDZ5ItD7XGQq3h1b9HUE1hHHWaEDFA3AOAFLaBKoGdFDmwNd0E
+        BbSLfrKJB+l0d7QIgEOJiwIO6PBeeefwfhLGIREoNlm2BMfmzNE/kCGWRZj1liUmM/Y3+EGyW6j
+        B4th5Lzp55/tKCpnqOqD/RWZo
+X-Received: by 2002:a05:6214:15d0:b0:519:ff36:a873 with SMTP id p16-20020a05621415d000b00519ff36a873mr19530730qvz.41.1674166988554;
+        Thu, 19 Jan 2023 14:23:08 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs1AilgOcAVjjfASECLApaVO/xdOmtsX1eluQMpvPfGGDkVwpLpBddnCkQ10P5KIXePFNEYTA==
+X-Received: by 2002:a05:6214:15d0:b0:519:ff36:a873 with SMTP id p16-20020a05621415d000b00519ff36a873mr19530695qvz.41.1674166988300;
+        Thu, 19 Jan 2023 14:23:08 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id dt41-20020a05620a47a900b00705e7daf6f0sm9684773qkb.129.2023.01.19.14.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 14:23:07 -0800 (PST)
+Date:   Thu, 19 Jan 2023 17:23:06 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     James Houghton <jthoughton@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
+ walk_hugetlb_range
+Message-ID: <Y8nCyqLF71g88Idv@x1n>
+References: <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
+ <CADrL8HUdg1Fr=tLEQRkDjeTzNzzSM6EPhvDgzURxSZSBMLgjoQ@mail.gmail.com>
+ <6548b3b3-30c9-8f64-7d28-8a434e0a0b80@redhat.com>
+ <Y8gRpEonhXgqfb41@x1n>
+ <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
+ <Y8hITxr/BBMuO6WX@monkey>
+ <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
+ <Y8l+f2wNp2gAjvYg@monkey>
+ <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
+ <Y8m9gJX4PNoIrpjE@monkey>
 MIME-Version: 1.0
-Message-ID: <167416695968.4906.1267929896543710738.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8m9gJX4PNoIrpjE@monkey>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Thu, Jan 19, 2023 at 02:00:32PM -0800, Mike Kravetz wrote:
+> I do not know much about the (primary) live migration use case.  My
+> guess is that page table lock contention may be an issue?  In this use
+> case, HGM is only enabled for the duration the live migration operation,
+> then a MADV_COLLAPSE is performed.  If contention is likely to be an
+> issue during this time, then yes we would need to pass around with
+> something like hugetlb_pte.
 
-Commit-ID:     fe0ba8c23f9a35b0307eb662f16dd3a75fcdae41
-Gitweb:        https://git.kernel.org/tip/fe0ba8c23f9a35b0307eb662f16dd3a75fc=
-dae41
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Tue, 17 Jan 2023 16:57:23 +01:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 19 Jan 2023 13:52:05 -08:00
+I'm not aware of any such contention issue.  IMHO the migration problem is
+majorly about being too slow transferring a page being so large.  Shrinking
+the page size should resolve the major problem already here IIUC.
 
-acpi: Fix suspend with Xen PV
+AFAIU 4K-only solution should only reduce any lock contention because locks
+will always be pte-level if VM_HUGETLB_HGM set.  When walking and creating
+the intermediate pgtable entries we can use atomic ops just like generic
+mm, so no lock needed at all.  With uncertainty on the size of mappings,
+we'll need to take any of the multiple layers of locks.
 
-Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
-Xen PV guest") missed one code path accessing real_mode_header, leading
-to dereferencing NULL when suspending the system under Xen:
+[...]
 
-    [  348.284004] PM: suspend entry (deep)
-    [  348.289532] Filesystems sync: 0.005 seconds
-    [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) =
-done.
-    [  348.292457] OOM killer disabled.
-    [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seco=
-nds) done.
-    [  348.396612] printk: Suspending console(s) (use no_console_suspend to d=
-ebug)
-    [  348.749228] PM: suspend devices took 0.352 seconds
-    [  348.769713] ACPI: EC: interrupt blocked
-    [  348.816077] BUG: kernel NULL pointer dereference, address: 00000000000=
-0001c
-    [  348.816080] #PF: supervisor read access in kernel mode
-    [  348.816081] #PF: error_code(0x0000) - not-present page
-    [  348.816083] PGD 0 P4D 0
-    [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
-    [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.f=
-c32.qubes.x86_64 #1
-    [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/0=
-3/2022
-    [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
+> > None of these complexities are particularly major in my opinion.
+> 
+> Perhaps not.  I was just thinking about the overall complexity of the
+> hugetlb code after HGM.  Currently, it is 'relatively simple' with
+> fixed huge page sizes.  IMO, much simpler than THP with two possible
+> mapping sizes.  With HGM and intermediate mapping sizes, it seems
+> things could get more complicated than THP.  Perhaps it is just me.
 
-Fix that by adding an optional acpi callback allowing to skip setting
-the wakeup address, as in the Xen PV case this will be handled by the
-hypervisor anyway.
+Please count me in. :) I'm just still happy to see what it'll look like if
+James think having that complexity doesn't greatly affect the whole design.
 
-Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as Xen P=
-V guest")
-Reported-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Link: https://lore.kernel.org/all/20230117155724.22940-1-jgross%40suse.com
----
- arch/x86/include/asm/acpi.h | 8 ++++++++
- drivers/acpi/sleep.c        | 6 +++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-index 65064d9..8eb74cf 100644
---- a/arch/x86/include/asm/acpi.h
-+++ b/arch/x86/include/asm/acpi.h
-@@ -14,6 +14,7 @@
- #include <asm/mmu.h>
- #include <asm/mpspec.h>
- #include <asm/x86_init.h>
-+#include <asm/cpufeature.h>
-=20
- #ifdef CONFIG_ACPI_APEI
- # include <asm/pgtable_types.h>
-@@ -63,6 +64,13 @@ extern int (*acpi_suspend_lowlevel)(void);
- /* Physical address to resume after wakeup */
- unsigned long acpi_get_wakeup_address(void);
-=20
-+static inline bool acpi_skip_set_wakeup_address(void)
-+{
-+	return cpu_feature_enabled(X86_FEATURE_XENPV);
-+}
-+
-+#define acpi_skip_set_wakeup_address acpi_skip_set_wakeup_address
-+
- /*
-  * Check if the CPU can handle C2 and deeper
-  */
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index 0b557c0..4ca6672 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -60,13 +60,17 @@ static struct notifier_block tts_notifier =3D {
- 	.priority	=3D 0,
- };
-=20
-+#ifndef acpi_skip_set_wakeup_address
-+#define acpi_skip_set_wakeup_address() false
-+#endif
-+
- static int acpi_sleep_prepare(u32 acpi_state)
- {
- #ifdef CONFIG_ACPI_SLEEP
- 	unsigned long acpi_wakeup_address;
-=20
- 	/* do we have a wakeup address for S2 and S3? */
--	if (acpi_state =3D=3D ACPI_STATE_S3) {
-+	if (acpi_state =3D=3D ACPI_STATE_S3 && !acpi_skip_set_wakeup_address()) {
- 		acpi_wakeup_address =3D acpi_get_wakeup_address();
- 		if (!acpi_wakeup_address)
- 			return -EFAULT;
+-- 
+Peter Xu
+
