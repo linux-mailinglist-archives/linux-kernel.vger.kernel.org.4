@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B94C67346F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5F0673475
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjASJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S229792AbjASJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjASJ2o (ORCPT
+        with ESMTP id S230162AbjASJao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:28:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E108C6C556;
-        Thu, 19 Jan 2023 01:28:20 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J7hQnq026513;
-        Thu, 19 Jan 2023 09:28:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=MBUcw4nivj5N87UcNlA5CYSKXZFDAtGtlae095FlqwE=;
- b=oXrU8rpFnJzd+VobTsR6MueZ9ryVUqyOZIuxRKHGP8E0ANcnOkZKFbEXwwRbP0hLoIcx
- go/+gRzgbAsqoaBza1XcxV31WYyoOGAsymYMymCwWR9AGDdxxcyLktIqaDKe99PGYqnM
- T+5R7Sxrxt0/olgaK8xpwmFMoZz3joi/Wb12xRRRzPH+7jsNTqsM1lbEVMD/vX6sXOjw
- GfBeu7MLhqZXur+5WuW+5Pu2e6P5Tzy3UQ4QOV2zq85srSrxcWf2UhIUlBhKdXg3N1Wy
- cRPswbyChe39FbzHJyko+N+VK93GmIWrHiId4YGo0Y9CWSBE6NmEIVnkhgOq+C+xJPkO PQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n69uyu9ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 09:28:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J9SDaD024611
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 09:28:13 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 19 Jan 2023 01:28:09 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v4 6/6] clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
-Date:   Thu, 19 Jan 2023 14:57:24 +0530
-Message-ID: <1674120444-23706-7-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1674120444-23706-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1674120444-23706-1-git-send-email-quic_srivasam@quicinc.com>
+        Thu, 19 Jan 2023 04:30:44 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB766840F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:30:41 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id l8so996891wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jhnJi4E9sVUGqGUkCWG7nWSX0QsmXM9XnP6ncuKyEHg=;
+        b=O1+2E6ROy3ivIGtDdoRnwXKd36Hq/Niu9lmsGsdB0LYqcgv/kU3gNm+AtviRK7tIcJ
+         jytvFeN1D2wThPYDyiKmnI0ulomRVPjPU+8+YvD0YBKGb+icXkkVrCboVXZDzjedkVm/
+         U9XgrekTIG+c8YSlqFN/bucsactpMQxVM8hwxbFaRCUC+QZPXB9YeZU96W5Qp6YulHZS
+         77t/ZZpg5ZZyhNETEpeiAjS6f9dKS8GWPMaJI4YUi7JdM86MoWbUo1YY2oeGOjPHb4MK
+         5n0f5YVqRJWEJeqGOEOtV3i6wdFCB4wgdievYyvg7pWoKZdOl0DblPpUOnnpfLQ5ZMTI
+         8OhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jhnJi4E9sVUGqGUkCWG7nWSX0QsmXM9XnP6ncuKyEHg=;
+        b=R+2VD0kZqBjBBD1sx9+cuta3NGO/0Uw4GwZBbqxGH2R5dQL+2O6g6Iuv4U7fAQpWAE
+         Zfjyn1jvElOUjymsPtJ0kES1LrByPbNvWuAx9L6rwWcsjGRHSrBB4g6a8HaRha7uV4g8
+         TCBWNOq7t3uZdlCkjs3LwJhIWVnyOrWOsfmD2f5rM+70EPN2kbf9k8lyzJgb9i+mUR8a
+         E/T2juw/UYF7h7w/Zz/tdmudyjH19ocBvfculqJoPJPD6q063RwOLs62o9Kz+OCtYFx+
+         0DH0UNpxkiuuy2i2yF3vphOQstgWTRQZBWvsahJQVtTi9VResLQCyHdSfHGZOH2wzJdA
+         HTAw==
+X-Gm-Message-State: AFqh2kqlazJaOK3/K7jBtNDYRwMT2I7wq7e4YrBg8vChShWSBrRRtr3G
+        JTIH0aInIl8oC20Fa4jqGbbd2S/8Z6sNMu3W
+X-Google-Smtp-Source: AMrXdXsaV7kG3/vMfBxbKk0tSIsvYEESQ3zjv7ECywgahy3brNpKw+vpcXRtWy6qssPU9RwPq3cQkw==
+X-Received: by 2002:a05:600c:35c1:b0:3db:1424:e781 with SMTP id r1-20020a05600c35c100b003db1424e781mr4859886wmq.23.1674120639282;
+        Thu, 19 Jan 2023 01:30:39 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g9-20020a05600c310900b003c21ba7d7d6sm849700wmo.44.2023.01.19.01.30.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 01:30:38 -0800 (PST)
+Message-ID: <db701c97-883e-f231-68fa-c851c6a1a862@linaro.org>
+Date:   Thu, 19 Jan 2023 10:30:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -5ejd1D5t8DDYZZdXDu9D-lFDIog9RE4
-X-Proofpoint-GUID: -5ejd1D5t8DDYZZdXDu9D-lFDIog9RE4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_07,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 adultscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190076
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
+ <20230118211123.111493-3-daniel.lezcano@linaro.org>
+ <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip lpass_aon_cc_pll configuration for ADSP based platforms
-based on qcom,adsp-pil-mode property.
-This is to avoid ADSP out of reset fail.
+On 19/01/2023 08:41, Zhang, Rui wrote:
+> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
+>> If the thermal framework fails to initialize, the mutex can be used
+>> by
+>> the different functions registering a thermal zone anyway.
+> 
+> Hmm, even with no governors and unregistered thermal sysfs class?
+> 
+> IMO, thermal APIs for registering a thermal_zone/cooling_device should
+> yield early if thermal_init fails.
+> For other APIs that relies on a valid
+> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
+> be changed.
+> 
+> what do you think?
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- drivers/clk/qcom/lpassaudiocc-sc7280.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I think you are right.
 
-diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-index 18f7a50..e135c09 100644
---- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-+++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-@@ -826,7 +826,8 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
- 		goto exit;
- 	}
- 
--	clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
-+	if (!of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode"))
-+		clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
- 
- 	ret = qcom_cc_really_probe(pdev, &lpass_aon_cc_sc7280_desc, regmap);
- 	if (ret) {
+It would be nice if we can check if the thermal class is registered and 
+bail out if not. But there is no function to check that AFAICS.
+
+Alternatively we can convert the thermal class static structure to a 
+pointer and set it to NULL in case of error in thermal_init() ?
+
+
 -- 
-2.7.4
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
