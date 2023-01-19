@@ -2,220 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29F767390A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B4167390E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjASM5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S230160AbjASM6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjASM4v (ORCPT
+        with ESMTP id S230304AbjASM5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:56:51 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2082.outbound.protection.outlook.com [40.107.8.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670DE4B4B9;
-        Thu, 19 Jan 2023 04:56:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SAu+oykyfnm0cWo1RAxxeKbqTm0LhZ2vuf+gc71SQnJU6Nb3F9aciKEl1LZSLxcVZSzemEzowl3j20U9wlEReIUAf7/s4A0jtNsXUzxRZALNI/ovC5IpQij6etrramZEYhSghZlS2M7ABJS3TGLsTQ2VxyNWZErTMqSA3BvJbu2/0sRdQ/bthpRObZ/LGroIl2xWiWwKYUkmjHYfOuhHvSjQDJyQQh/FHKsyeWYJr1JOv0bpKFYcnDHRsN8HrelBIGOi81m449xeeoHB7OU4q/OqZezt4Is7A2ozZxvbnErdiQ2W/G3LYmNFooppxcOZOd1+ysoAiOrlDeyyEINJwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w0j2iDIXE+LlH7kzbp+5QNgAHmuHIMvaUt6pTrBJEO0=;
- b=ntWSq2lLciCE/B+CPsPjBp0QjM7KJhcsTdy2M+M6jVM6V3+RlrQdAohADBj9MVmHSfpltcysYsE8txuGyFSHXqzsffHD6v3FaCXkBQF4WRy6YcuTbw5qA4CWaqjekYHJR2/KzF6/vtweUWUq47G7PFpXJdo1ywYbKogXFa46uuZbtYsqOGy8hr7npnsfKQjv/G39rMExtlhaap/o/goMyBNMBLK5OHMIFU54lvzYYtHm9BR5QxHDsioV+CSCNjGqv4/LW9Rz8owjGVMySmNpH/0An9jolNUD86UPeAvXNoqN4NJss9if7F5SFTv9/uU2k57zhG2JgSfHFSyl4b4bvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w0j2iDIXE+LlH7kzbp+5QNgAHmuHIMvaUt6pTrBJEO0=;
- b=Dl7hzxAEx5AKpmUZwdiUf4nCvLvCoEVFSquSd3tlQeLkl+F5PyqlWvqxJlEBomBHn5dYKVBnu2Wq52SLLX1Bh80K7vxVe1sAVPA3QEDR0u7dBBet0hY8+o6fYFhjZddXI8w7Mk1co24ZrI6/U9K5K05Lzpf4kLZ+l8fSFUBXEx4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by AS2PR08MB9245.eurprd08.prod.outlook.com (2603:10a6:20b:59f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
- 2023 12:56:35 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4718:6092:e763:4219]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4718:6092:e763:4219%2]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 12:56:35 +0000
-Message-ID: <c97a8778-2f02-d74e-d38a-d11829fc15d9@wolfvision.net>
-Date:   Thu, 19 Jan 2023 13:56:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/5] drm/rockchip: rgb: embed drm_encoder into
- rockchip_encoder
-Content-Language: en-US
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20221130140217.3196414-1-michael.riesch@wolfvision.net>
- <20221130140217.3196414-2-michael.riesch@wolfvision.net>
- <20221207064507.GV29728@pengutronix.de>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-In-Reply-To: <20221207064507.GV29728@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0502CA0019.eurprd05.prod.outlook.com
- (2603:10a6:803:1::32) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        Thu, 19 Jan 2023 07:57:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8191838B47;
+        Thu, 19 Jan 2023 04:57:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7C1360EEC;
+        Thu, 19 Jan 2023 12:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7298BC433F0;
+        Thu, 19 Jan 2023 12:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674133069;
+        bh=rhavputJ017eS44fDBAjIKmqhA8MGnBkVgBQfgF1Wq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oo4tlIZksqs8y0QjfN03K7khBibYDE7X3dJX3W7PWas5X0LDDz7TtJMronclaG/Dg
+         vT14zzYVr2rZVYX6+wbO9miw1WAwTmzmNP/EuWRbcvLWvMgRMLM0kcIIHH++Qgylcy
+         3Fo/LPgBvOpnPaMn+gttVDXJPc4WChkO7w9Pp18su4ZXe1rwKN4Et8L3Jt1aPdOmG/
+         /TGpHIrbhHbJDHypSAglO1EJBTcboxq0J4BB4By/BctwyMF1xatMkPLaeO72RzaxVU
+         Ku3ApiqMmy2Ld38fNPzRWYh9uduM0Bqa99VfkpkLclmeh/9NUSpD3+BazrN1rWneqp
+         ScqrUhZUYYiaA==
+Date:   Thu, 19 Jan 2023 12:57:45 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 00/15] Support AMD Pensando Elba SoC
+Message-ID: <Y8k+SXQ5YtjDbKMG@sirena.org.uk>
+References: <20230119035136.21603-1-blarson@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AS2PR08MB9245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38a62e34-87c3-4fc0-f60e-08dafa1c989e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ozxhzoHarlZ7iL7MSuctmU7cqKHRFT6NPP3RiKd+ObYjh3W2cgtJvdfeLAbn6ByR9lDumUaXXHSnuy0Oy1BfW/l4loEqjnXsGZG9Yn9BgRYvtXzi1OnAZUGcHiByWljtNRbTEbOFb+7jEWccKSI/Yp5tbFgM5lW12tnpQ4xgdqfNwPt5/aCVHO1GvV0Im2KDoGktfInKTUWzD7EI/wTE1WY8gGyL59UIcRhS0OB4BZCNcgBvz+R5TR6kBYOb9PNQEofpTgliSUZsbBqa3bkoj/h1QGwPrvzSGfc9hRrcUEeF62dKIKtzAoHOVxHycsf6aYLpUmRI1frZ0J3+s1yWCEqK7aKu2VVZosxYok/LSsXnrLnHZTwPFMr38QCPLdtsU2iUG/eJDLyyYwTM7xqbFicJ6s9HSX6jTME/uxXuapx1eDLbhV94DbOneJlo0L4EJWBtHM8DJbxZJBAhysrClZjIuLnmm7+d4OCkcpyGFzRC7WwXERHewuaGacd8d9ROQBdQhn4tdgrKt+47ujUONoZFY/CaBvPWobDA5gymJvcygB3OBf7bYFiE8KxpGpd59apfLckUNAG38gr8lkir7LiwGOv4TBGs16WyLPUGX2WadEvdD8RZm+GzzKmV6AqrTnGAEHD8C/aH4l9wtqClT7ivJjxGE9KsdKhLvQFSJdP27AEv4i+icWTUN4dl5NpViclOH0rdQU80U7Of02xapMzVDjOGK9gEsAkuvi7ICfE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(376002)(39840400004)(136003)(451199015)(2906002)(38100700002)(31686004)(2616005)(8676002)(316002)(52116002)(86362001)(54906003)(31696002)(36756003)(7416002)(83380400001)(66476007)(44832011)(66946007)(4326008)(41300700001)(5660300002)(66556008)(6916009)(53546011)(6506007)(6666004)(8936002)(6486002)(186003)(478600001)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MEFQQjlFcmNRZFlRSU0wUWlhOGE4MEpaQ0Z6TUNnQ1VxcE9pUmtRaDNqS2dQ?=
- =?utf-8?B?RU9mVGxHV3FwRlhobTF4QzQ1RUtEOGVaaUJWcDFCUVdZWDFBaUhUWUFBRVJB?=
- =?utf-8?B?RXJUaTlXQXYxRXU2dWFRaktHOUZkQjFDZEdZblpNYlBWRi9BSlNZY3g2QzhP?=
- =?utf-8?B?WERydDRvdndUUHdGczVtNVlyR0pRRWdOSkZnSjdseGR1VFUyeDN2bGdXcThP?=
- =?utf-8?B?M3FRTDE5SlFtNzQrVWFVRnRvRk43YStDZlpsd3NKTnhZR0pVZTFtRHBpbnZi?=
- =?utf-8?B?M1FwRTVxSGk5QVVDK2tuVXN1NTFud29taWdRaU41dlRIQVNESWxrTmMzZjVt?=
- =?utf-8?B?Q2d6ajVNMHZyOGFKUU1PNmU2SEM1NDlzOGZHS3dxUm1wQktiNU82V3FFZGpO?=
- =?utf-8?B?Um5FL0tMUTRYbUw2WUFmaEdKYzZBeDI2dHYweWtJWTk2UXVmM2R3enFCT1k4?=
- =?utf-8?B?N3FQYytwS09NbURiV0JjMEVlb2xzMHZXUlBwWmtFVmZqZWxHa3BYdHl6N01o?=
- =?utf-8?B?dEw1aWR0Y0JReFZleG84Y2w3cDErNkNFbzl1bXZXdlZjd2VuZFQydldKMy9a?=
- =?utf-8?B?WWlhVVJQSThsZGx4K0NMMXlQdElhRmNjQ1VZaHZXaVNyZ3J2K3JmekhUYlYx?=
- =?utf-8?B?Y0VLeFB1Y0l6cllaUVJpeE44Tjdxd2gxSWNnTlE4M0lZNUNUdndaSTBDNzNL?=
- =?utf-8?B?YythalpnRGp1VmFLcVhycnQwbUkyVE9RL1k0M2FwSmovbW9GTmFWZkZaS0U3?=
- =?utf-8?B?bFRoUmxIaTk3ejViZ3BQOXovRXhiM1h1ZjMzRVJnM2dPMEZnNDVoMVlVM3RV?=
- =?utf-8?B?cW9zWUw3K3M2bzk5UTVWcVlMK0dSNGhWbHVGZWtMbVhoMWJZcVE3SGwvUFBh?=
- =?utf-8?B?Q1lzamNWa0NabHF0T0ZuVjZKa1ZSZlBzSThoNk9XWnVOUmRnaXRJdnNqWm81?=
- =?utf-8?B?cDR5OEM0UnZrWmcxaGlHbWM0OExIckN2WGdlazdXbEJjdzFNTlU4RmNYLzZE?=
- =?utf-8?B?Q0FZSDlvVkVWWS94YWIvUFZJeVUrUnQ3WVg3a2FpMlB0ZjlLRTBNb0Z6TVdp?=
- =?utf-8?B?U3pIT0Rvc2JDZThwS1Q1bVRYZGpCOUhoNUg4Yk02TFBBU3VsRFdYbjFPMFJj?=
- =?utf-8?B?T05pOHBVZUNDZFFaL3hISnI0bHltQjhpTmVXaEV6UDNaaGZqQmc4cnNNd0Q1?=
- =?utf-8?B?ZWlpQzM3SThFMW5OUENyRG9BOVBZRzBxdThUdk45N041Q21hd25BNS9TSnNo?=
- =?utf-8?B?R1ExVEtZU1A4d1RUdncwL0c1VWJVN1JzY25NNVAxMm90eEk4amJWWS9BTmdB?=
- =?utf-8?B?RVg3eHhuQ3dvS2Qxd3VMK2d5cGJlNkt3bFZXeTkvQzN0WGJySEJXRGNKOXRX?=
- =?utf-8?B?d3RjWG9CTGtaRHFKRDFrUjAxWmg0RlI0RVI3TXNRSEIrYnNHaWN5ZjNJbnE1?=
- =?utf-8?B?aXJlbVU3SGFEcTRrcDBjM2NneDIrRkRPa0tYWkprcTVxSEJuUmRKOXJYTEF2?=
- =?utf-8?B?dTdkTUE4QWpuQnVTR0I3cyttWkJodEhybFlweW9OSTBDNFZDLzRCRjRHQjBh?=
- =?utf-8?B?ZWUwNDFRUmFaZnN3c2N1eC9qajlhWktrdjJtZUpGT3Qzb3dQUnA5UmQyZkta?=
- =?utf-8?B?SjJoZEhJUGQ0WGVQQTNaQjZpcWVWRFVNdXg4aURnM1JMM3ZsY0ZNckprZEpX?=
- =?utf-8?B?aU16ZVZDN3djZU04YjZvTjU4SWd0c01UczVEb1dmSmZibi9Hc0NXcnVkalN1?=
- =?utf-8?B?UjBueHl2NTNPb2JlaS9iUHRTTmxHSUVRREVmUzVSbTBlOWJKcy9Xd1lPYXZm?=
- =?utf-8?B?bTlzWVIrYUpMelQvZTBMZmFMTFhUZWVRc3lIVk1yRVNFMDh6SUR1MXF6K0tS?=
- =?utf-8?B?d25lSEN3TFlRTnFoYnpWTlJaR2orR1pMWll1eHJpNEJKS3NuVXhRNXJjQkQ5?=
- =?utf-8?B?aFgxc0o3aGN4STVxa2dEa1VsbysrcnlkOEZRSHpSMnFZZDR0YXErNzFiaUJO?=
- =?utf-8?B?RkN1RVgxdCt4WThoYnN0OXNKL3UzNEk2YUphWWcrSVo5bGRqblgvVERWR3Vx?=
- =?utf-8?B?Y280THgweFVTcXd1T0ZCWXl6Ri9tOGU3QkszZFlEYTFUck1wVk1OZVJYR2lW?=
- =?utf-8?B?S0FzdkpUN0ZUekdxVis3bDQvSklsU1hUVlVDYllrelR1ejVUbHlvUnRKQWFC?=
- =?utf-8?B?QktZWmhKVzFHN2gyUDV1M3ZLNURuYythbFBPUGs4ZEtadHlZTEI4Z2ZsTEhR?=
- =?utf-8?Q?fZHGHaWHqgB6tyO22Ue/ClmtFpK8KxiFasEFM59lTE=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38a62e34-87c3-4fc0-f60e-08dafa1c989e
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 12:56:35.3867
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iJ6sHmJpWMuM5j56FcEvCh0rWOF17crUZ6oEJmSD8DzJuyVVDuOv7DOpETs++cL9DV56g5CSE5AVoG83ZCXkNcvQjtXDOdEEMjmWJOUPwRw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9245
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="duu0q9TD4wNe08AR"
+Content-Disposition: inline
+In-Reply-To: <20230119035136.21603-1-blarson@amd.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sascha,
 
-Thanks for your comments!
+--duu0q9TD4wNe08AR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 12/7/22 07:45, Sascha Hauer wrote:
-> On Wed, Nov 30, 2022 at 03:02:13PM +0100, Michael Riesch wrote:
->> Commit 540b8f271e53 ("drm/rockchip: Embed drm_encoder into
->> rockchip_decoder") provides the means to pass the endpoint ID to the
->> VOP2 driver, which sets the interface MUX accordingly. However, this
->> step has not yet been carried out for the RGB output block. Embed the
->> drm_encoder structure into the rockchip_encoder structure and set the
->> endpoint ID correctly.
->>
->> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
->> ---
->>  drivers/gpu/drm/rockchip/rockchip_rgb.c | 12 +++++++-----
->>  1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
->> index 75eb7cca3d82..16201a5cf1e8 100644
->> --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
->> +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
->> @@ -18,17 +18,17 @@
->>  #include <drm/drm_probe_helper.h>
->>  #include <drm/drm_simple_kms_helper.h>
->>  
->> +#include <dt-bindings/soc/rockchip,vop2.h>
->> +
->>  #include "rockchip_drm_drv.h"
->>  #include "rockchip_drm_vop.h"
->>  #include "rockchip_rgb.h"
->>  
->> -#define encoder_to_rgb(c) container_of(c, struct rockchip_rgb, encoder)
->> -
->>  struct rockchip_rgb {
->>  	struct device *dev;
->>  	struct drm_device *drm_dev;
->>  	struct drm_bridge *bridge;
->> -	struct drm_encoder encoder;
->> +	struct rockchip_encoder encoder;
->>  	struct drm_connector connector;
->>  	int output_mode;
->>  };
->> @@ -125,7 +125,7 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
->>  		return ERR_PTR(ret);
->>  	}
->>  
->> -	encoder = &rgb->encoder;
->> +	encoder = &rgb->encoder.encoder;
->>  	encoder->possible_crtcs = drm_crtc_mask(crtc);
->>  
->>  	ret = drm_simple_encoder_init(drm_dev, encoder, DRM_MODE_ENCODER_NONE);
->> @@ -161,6 +161,8 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
->>  		goto err_free_encoder;
->>  	}
->>  
->> +	rgb->encoder.crtc_endpoint_id = ROCKCHIP_VOP2_EP_RGB0;
-> 
-> This is vop2 specific. This code is used with the vop1 as well, so it
-> doesn't look like it belongs here, at least not hidden in a patch titled
-> "embed drm_encoder into rockchip_encoder".
+On Wed, Jan 18, 2023 at 07:51:21PM -0800, Brad Larson wrote:
+> This series enables support for AMD Pensando Elba SoC based platforms.
 
-OK, the very least I can do is to create an extra patch that sets the
-crtc_endpoint_id.
+> The Elba SoC has the following features:
+> - Sixteen ARM64 A72 cores
+> - Dual DDR 4/5 memory controllers
+> - 32 lanes of PCIe Gen3/4 to the Host
+> - Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+>   also a single 1GE management port.
+> - Storage/crypto offloads and 144 programmable P4 cores.
+> - QSPI and EMMC for SoC storage
+> - Two SPI interfaces for peripheral management
+> - I2C bus for platform management
 
-> Normally the crtc_endpoint_id is set by the encoder, coming from the
-> encoder node, asking the question "To which port on the VOP am I
-> connected to?"
-> 
-> Here the situation is different. We are called from the VOP and the
-> question instead is: "Is there something connected to VPx endpoint id
-> ROCKCHIP_VOP2_EP_RGB0?"
-> 
-> You might need a vop2 specific entry to this code.
+Are there any interdependencies between the different leaf
+drivers here?  Generally it's better to make the series doing
+baseline enablement for the SoC as small as possible and submit
+other things separately to simplify issues with dependences.
 
-I just realized that rockchip_rgb_init parses the endpoint ID. If I am
-not mistaken, we can directly store it in the crtc_endpoint_id member.
+--duu0q9TD4wNe08AR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Seeing that this would be pretty generic, can it be included in one
-patch (or should I still split this into a separate patch)?
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Michael
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPJPkYACgkQJNaLcl1U
+h9B+8gf+O9EFbrK1+BmyGN1sU7gIT3V9CwdRRLQo2RsEid331miI+CKveOmwnd74
+B47SAVhfZy9ydlw7dkSC6pQPF6LJ4cs3E2RR+lOSrLUjxAXey9fAEPq3caKxIDx2
+50wshkCNbkUQ0PBdaX9gN3xxH9lgfBoksoSCrMXsRV6HLMD4l7eqzDii+xCWoGVx
+b1SZEivvDEdOPEMpAS7YX9KHKmo4XWe9ckpOMBrEYk1T+LZU8VtO8s8yFZKAMGA1
+t4NwUClDk7MKm3PN3SolBsL87FEUCJ2YfGDYqVwIciTGNOPhbbWAVTmrIMGHkr32
+k8MPkLG61N9FfqbjAs2kERVWHA0oYg==
+=ZAqK
+-----END PGP SIGNATURE-----
+
+--duu0q9TD4wNe08AR--
