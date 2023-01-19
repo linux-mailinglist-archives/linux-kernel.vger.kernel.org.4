@@ -2,49 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C397E673F2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13345673F33
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjASQny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S230342AbjASQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjASQns (ORCPT
+        with ESMTP id S230384AbjASQpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:43:48 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB25A7EE5;
-        Thu, 19 Jan 2023 08:43:47 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4BF5E68D0D; Thu, 19 Jan 2023 17:43:45 +0100 (CET)
-Date:   Thu, 19 Jan 2023 17:43:45 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     tj@kernel.org, hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH -next v3 3/3] blk-cgroup: synchronize pd_free_fn() from
- blkg_free_workfn() and blkcg_deactivate_policy()
-Message-ID: <20230119164345.GC3332@lst.de>
-References: <20230119110350.2287325-1-yukuai1@huaweicloud.com> <20230119110350.2287325-4-yukuai1@huaweicloud.com>
+        Thu, 19 Jan 2023 11:45:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D1A86BB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:44:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674146698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=guUDzcYcYwMFnknqXHCyHjuKgr1G1lOnW/X0/GRq4JQ=;
+        b=M6Ztzg6pMW4hzx0QrPRjUWFpbSlsPcxlaUJFM4YRg+k7d5eJeT3cEkX97cTHCfvQy3yrq6
+        065YeU2UuoEZpzzNro4brz07nBZ1hbX934pGOORGOSDU5LzAdyJDd7pfBZ+sRzA+qcul6V
+        QWbez0Z4Ji+ZAGKolTzJkalSW7vV+sA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-275-_H9fMNALMY6LF6QrvrotQw-1; Thu, 19 Jan 2023 11:44:53 -0500
+X-MC-Unique: _H9fMNALMY6LF6QrvrotQw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FC323C16E94;
+        Thu, 19 Jan 2023 16:44:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BF33112131E;
+        Thu, 19 Jan 2023 16:44:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y8iwXJ2gMcCyXzm4@ZenIV>
+References: <Y8iwXJ2gMcCyXzm4@ZenIV> <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk> <167391063242.2311931.3275290816918213423.stgit@warthog.procyon.org.uk>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     dhowells@redhat.com, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs-developer@lists.sourceforge.net,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 21/34] 9p: Pin pages rather than ref'ing if appropriate
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119110350.2287325-4-yukuai1@huaweicloud.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3030211.1674146654.1@warthog.procyon.org.uk>
+Date:   Thu, 19 Jan 2023 16:44:14 +0000
+Message-ID: <3030212.1674146654@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The this change itself looks good, but it will clash badly with my
-"switch blk-cgroup to work on gendisk" series:
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Wait a sec; just how would that work for ITER_KVEC?  AFAICS, in your
+> tree that would blow with -EFAULT...
 
-Can I get some reviews for that series once I rebase and repost it
-after this series is merged?
+You're right.  I wonder if I should handle ITER_KVEC in
+iov_iter_extract_pages(), though I'm sure I've been told that a kvec might
+point to data that doesn't have a matching page struct.  Or maybe it's that
+the refcount shouldn't be changed on it.
+
+A question for the 9p devs:
+
+Looking more into p9_virtio_zc_request(), it might be better to use
+netfs_extract_iter_to_sg(), since the page list is going to get turned into
+one, instead of calling p9_get_mapped_pages() and pack_sg_list().
+
+This would, however, require that chan->sg[] be populated outside of the
+spinlock'd section - is there any reason that this can't be the case?  There's
+nothing inside the locked section that makes sure the chan can be used before
+it launches into loading up the scatterlist.  There is a wait afterwards, but
+it has to drop the lock first, so wouldn't stop a parallel op from clobbering
+chan->sg[] anyway.
+
+Further, if virtqueue_add_sgs() fails with -ENOSPC and we go round again to
+req_retry_pinned, do we actually need to reload chan->sg[]?
+
+David
+
