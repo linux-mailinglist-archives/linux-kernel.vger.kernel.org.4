@@ -2,77 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7436738C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5ECE6738D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjASMjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
+        id S230197AbjASMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjASMiX (ORCPT
+        with ESMTP id S229751AbjASMkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:38:23 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460F7ED71
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:35:03 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id n85so894575iod.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:35:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQbD+o3e6AGfj4JrXLW4n4TAW6xDycZlCjij+AwmP6o=;
-        b=aanUOmVhKuSxk0yM3zH/O4Bjwh/zn6MBXyuKl5D09cefgSzjBCDl2Fclox+DWN8z7N
-         91ylZu8dGXzVcWRWIb+BnWQ+CHRmcSRbQrk/TaigbldmAX0gI/6ZOYUA3WCHrS0Ft3Yq
-         /4AZZ+5LXqc8bYs9t52ZnmMIToiS20OhzLmGoNQ2vXCsnt12Ls5YiRmtqe3Z+AD5Mog3
-         WvIZWhKpuD2j8bl3O5v9PMc54YzpRsdPaOGQJq6GmKft2w8tR/hkV7pxukgBygJY76G0
-         llMeVtjx5UhzJj7D4rscEYgnnVZok68N2LGZHfDJdtZQXOO7Nloy2dPpYArvoR+ht1uQ
-         uLog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nQbD+o3e6AGfj4JrXLW4n4TAW6xDycZlCjij+AwmP6o=;
-        b=nrWm3FS4KVnI2cd+sehHy/4Vu4/3zsuOFKCiFuKxg4Ejv0no5atA0HSu9zI4p6F5FJ
-         pxtYJIZiuravo98ynUcXDVvUpMHM+nsLRixDcWi314Ru3tmwrXMSeZj5gz7+24cuj4Xr
-         RtuoAiS25ZTehEB7rJuNJJYzHWRJ2jchkW4dUQm/3P1rCmomKERJ65+kCsLXlFzcdb04
-         +Yd2sVEwQxlf5scWoG6Qf7WkZOUZsXAsOi2x9uVbtvPdRRvH/QLodG4rtDdRtWuy+5lH
-         7dPyjl9I4BsoUu4O/GA1+PeEeost2EelMMMBxvJv9Kd3Ntpd2vxRbAcPIRD0lze4fRbr
-         jzjQ==
-X-Gm-Message-State: AFqh2kpL5AC7gojZrfNUzQkBvrUazWLvduFA+ZooZRrF3CHwKFc5aWuB
-        qIYD9F0xlBXBaafqOVDvC/aLz8YiLf8N4g+rkbA=
-X-Google-Smtp-Source: AMrXdXuHR2fsJzwVzNKCk7JHcBcd1sWvREZZdinhjj6Spy/5aZQ2oSQijhzFqmNRTR4OSt1EusNZ9O7oJ6ejR7S2ISI=
-X-Received: by 2002:a5d:8492:0:b0:704:a571:c597 with SMTP id
- t18-20020a5d8492000000b00704a571c597mr700063iom.215.1674131655878; Thu, 19
- Jan 2023 04:34:15 -0800 (PST)
+        Thu, 19 Jan 2023 07:40:46 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CA151C77;
+        Thu, 19 Jan 2023 04:37:30 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 956321C09F6; Thu, 19 Jan 2023 13:37:28 +0100 (CET)
+Date:   Thu, 19 Jan 2023 13:37:28 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: Re: [ANNOUNCE] 5.10.162-rt78
+Message-ID: <Y8k5iGfwGJRQRi1Q@duo.ucw.cz>
+References: <Y8VSslRJZpFbo1/u@uudg.org>
+ <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com>
+ <Y8krsVFguwWLy+zT@duo.ucw.cz>
 MIME-Version: 1.0
-Received: by 2002:a92:d783:0:b0:30b:f2e2:b9eb with HTTP; Thu, 19 Jan 2023
- 04:34:14 -0800 (PST)
-Reply-To: te463602@gmail.com
-From:   "Dr. Anthony Omoyibo" <anthonyomoyibo9@gmail.com>
-Date:   Thu, 19 Jan 2023 04:34:14 -0800
-Message-ID: <CAN5Lstyx3GEf3iHhWBCa56q-YKp54L+sc6=z3ukVP8pTuiDkYw@mail.gmail.com>
-Subject: Very Urgent,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="3TX4iDTAe6OJlpVP"
+Content-Disposition: inline
+In-Reply-To: <Y8krsVFguwWLy+zT@duo.ucw.cz>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hi,
-I tried e-mailing you more than twice but my email bounced back
-failure, Note this, soonest you receive this email revert to me before
-I deliver the message it's importunate, pressing, crucial. Await your
-response.
 
-Best regards
-Dr. Anthony Omoyibo
+--3TX4iDTAe6OJlpVP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> > > I'm pleased to announce the 5.10.162-rt78 stable release.
+> > >=20
+> > > You can get this release via the git tree at:
+> > >=20
+> > >   git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+> > >=20
+> > >   branch: v5.10-rt
+> > >   Head SHA1: 143ef105f40a65f3ddd57121d4b4bc36eb10cc06
+> > >=20
+> > > Or to build 5.10.162-rt78 directly, the following patches should be a=
+pplied:
+>=20
+> > I see that vanilla 5.10.162-rt78 fails to build with arm64 defconfig. [=
+0] Full log [1]
+> > Any pointers on what maybe wrong?
+>=20
+> We see the same failure.=20
+>=20
+> >   AS      arch/arm64/kernel/entry.o
+> > arch/arm64/kernel/entry.S: Assembler messages:
+> > arch/arm64/kernel/entry.S:763: Error: immediate out of range at operand=
+ 3 -- `and x2,x19,#((1<<1)|(1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<5)|(1<<6)|(1<<13=
+)|(1<<7))'
+> > make[2]: *** [scripts/Makefile.build:367: arch/arm64/kernel/entry.o] Er=
+ror 1
+> > make[1]: *** [scripts/Makefile.build:503: arch/arm64/kernel] Error 2
+> > make: *** [Makefile:1837: arch/arm64] Error 2
+>=20
+> The line is:
+>=20
+> >        and     x2, x19, #_TIF_WORK_MASK
+>=20
+> And I believe there were some cleanups in stable in that area. Let me
+> search for them.
+
+Commit 1bee9dbbcabbb77617fb257f964628b50ba2529c is related, but does
+not revert cleanly.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--3TX4iDTAe6OJlpVP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8k5iAAKCRAw5/Bqldv6
+8hy8AJ9/XGrPRpjd8hXHIeUftUS7E60+wACfcDFgRf0R2QqJm+7zGeKE4N1uh9A=
+=I1bi
+-----END PGP SIGNATURE-----
+
+--3TX4iDTAe6OJlpVP--
