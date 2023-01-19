@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0476D67459E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA426745C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjASWOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S229934AbjASWSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjASWNc (ORCPT
+        with ESMTP id S229820AbjASWR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:13:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA39A5CFF9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:53:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7797F61D5F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8B1C433D2;
-        Thu, 19 Jan 2023 21:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674165184;
-        bh=quKqZl9P3JBB+x7zw4zVLfYwXlZaDkIsDnE9rmueGOI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=o85FdrZCfrzYdR8Zw+w/UKwG7i2dFvTp2Nfkj9cL8zY2pNAG73aPt6O7bkJvbc/36
-         RD7Ng2NTAd8yVq5I5IESsJ4l+j226kFTKDx41PCV+GiV9JTTcvGqHWm+xwqrjpssp7
-         TWuYalYdA/zxmV8sgnV4xUp1dMYrm9xljK7JZoV02b8c66vqDqZZxxmMWbE1qmQPuk
-         9EHzu6y3eM2771/Xd4wKwiqDlNbtL/qpdK34THEWo1dDtHCk1+lD6BT1nsEqwcPUwe
-         Qq4o9LdGksy6eTjzl9TNicMPpXtwTPabXbIzgNy0uc4OctzKlSCB7AItVJkE88/djs
-         yIKtvu9h5+uzg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 789F45C1B07; Thu, 19 Jan 2023 13:53:04 -0800 (PST)
-Date:   Thu, 19 Jan 2023 13:53:04 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
+        Thu, 19 Jan 2023 17:17:28 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ACD80891
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:59:20 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id fd15so2738300qtb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EV/40Ti1p6uQrxSptqxGHz+KSFTZGf7X5IQ035Z+iAI=;
+        b=LnVd/1DrtbOe8GTxJzFDxRWyyAa/5JCkNoCt6gPGU7wbMjBNA4F8PFREiRfvxceeGN
+         JTGz1uKZoU3we6uTh/QCzsY/mrVKvL0Wew3ejYIMtQAPEPPPt/HTn/42LNwnRO2EVNE7
+         cBjB0vQEyMujAFTcsLrCdus2QU0OpS0p/Jae0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EV/40Ti1p6uQrxSptqxGHz+KSFTZGf7X5IQ035Z+iAI=;
+        b=7KB2X5kOijIoEjrTJvtwVtsTsNhCXyXrBF/OpfiDy7UobZnoYLLIKOFkEeoChpMEUc
+         VG7JdVvRgsLpW7EapgkrriBj370YKLQC398IqaMSrH5n3dXvbDw7wvh28RE2gxgfLEoN
+         2/et3YUK/pjeJg61mDkVqxQQRbxkTrUU8qNzxRZWkG/SWY5h74ntxVLYCQhbLI2G7M6B
+         azIcPuvhR5nEB2Dy5qRQQ7Tbb8seKeSURfKRk1spt7exReWPvOIYB4Zdl2dS4pUz+HDo
+         6ln2M65MSatVXJS37j6FWtVdCjPy3aqVtehk0s6/CeZr1S1xolMGzQg0sWa4j8F9WClN
+         JucQ==
+X-Gm-Message-State: AFqh2koJKwUupyG/zmyu2d7pmjoVyHP+sync5fS23a3FdzsMWsKF/fVF
+        AAIresPcQscJ7NXbRpR9bGYr4g==
+X-Google-Smtp-Source: AMrXdXtQ2KdUqaVXNbNXTktG2wL1uKAVDAGBejMPLK4ZkW00g42p5U9OFzfWgOpYButqotoDz3RNDQ==
+X-Received: by 2002:ac8:7511:0:b0:3ac:342:c686 with SMTP id u17-20020ac87511000000b003ac0342c686mr15919643qtq.46.1674165559761;
+        Thu, 19 Jan 2023 13:59:19 -0800 (PST)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
+        by smtp.gmail.com with ESMTPSA id u2-20020a05620a0c4200b006f9f3c0c63csm25153182qki.32.2023.01.19.13.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 13:59:19 -0800 (PST)
+Date:   Thu, 19 Jan 2023 16:59:18 -0500
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     sam@ravnborg.org, linux-kernel@vger.kernel.org,
+        users@linux.kernel.org
+Subject: Re: [PATCH 13/15] backlight: omap1: Use backlight helpers
+Message-ID: <20230119215918.3tv5e55a5sfcpf4v@meerkat.local>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-13-1bd9bafb351f@ravnborg.org>
+ <Y8m8CM35ku+Fuppc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y8m8CM35ku+Fuppc@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,177 +69,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
-> On Thu, Jan 19, 2023 at 10:41:07AM -0800, Paul E. McKenney wrote:
-> > In contrast, this actually needs srcu_down_read() and srcu_up_read():
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-srcu-nest-6
-> > 
-> > (*
-> >  * Result: Never
-> >  *
-> >  * Flag unbalanced-srcu-locking
-> >  * This would be valid for srcu_down_read() and srcu_up_read().
-> >  *)
-> > 
-> > {}
-> > 
-> > P0(int *x, int *y, struct srcu_struct *s1, int *idx)
-> > {
-> > 	int r2;
-> > 	int r3;
-> > 
-> > 	r3 = srcu_down_read(s1);
-> > 	WRITE_ONCE(*idx, r3);
-> > 	r2 = READ_ONCE(*y);
-> > }
-> > 
-> > P1(int *x, int *y, struct srcu_struct *s1, int *idx)
-> > {
-> > 	int r1;
-> > 	int r3;
-> > 
-> > 	r1 = READ_ONCE(*x);
-> > 	r3 = READ_ONCE(*idx);
-> > 	srcu_up_read(s1, r3);
-> > }
-> > 
-> > P2(int *x, int *y, struct srcu_struct *s1)
-> > {
-> > 	WRITE_ONCE(*y, 1);
-> > 	synchronize_srcu(s1);
-> > 	WRITE_ONCE(*x, 1);
-> > }
-> > 
-> > locations [0:r1]
-> > exists (1:r1=1 /\ 0:r2=0)
-> 
-> I modified this litmus test by adding a flag variable with an 
-> smp_store_release in P0, an smp_load_acquire in P1, and a filter clause 
-> to ensure that P1 reads the flag and idx from P1.
-> 
-> With the patch below, the results were as expected:
-> 
-> Test C-srcu-nest-6 Allowed
-> States 3
-> 0:r1=0; 0:r2=0; 1:r1=0;
-> 0:r1=0; 0:r2=1; 1:r1=0;
-> 0:r1=0; 0:r2=1; 1:r1=1;
-> No
-> Witnesses
-> Positive: 0 Negative: 3
-> Condition exists (1:r1=1 /\ 0:r2=0)
-> Observation C-srcu-nest-6 Never 0 3
-> Time C-srcu-nest-6 0.04
-> Hash=2b010cf3446879fb84752a6016ff88c5
+On Thu, Jan 19, 2023 at 09:54:16PM +0000, Lee Jones wrote:
+> My tools appear to dislike the line break in the Message-Id header.
+> This isn't something I've encountered before.  Is this a B4 thing?
 
-Fair point, and for example we already recommend emulating call_rcu()
-using similar release-acquire tricks.
+It's more like it's a Python thing. The upcoming version of b4 will avoid this
+(by not relying on Python to do message generation).
 
-> It turns out that the idea of removing rf edges from Srcu-unlock events 
-> doesn't work well.  The missing edges mess up herd's calculation of the 
-> fr relation and the coherence axiom.  So I've gone back to filtering 
-> those edges out of carry-dep.
-> 
-> Also, Boqun's suggestion for flagging ordinary accesses to SRCU 
-> structures no longer works, because the lock and unlock operations now 
-> _are_ normal accesses.  I removed that check too, but it shouldn't hurt 
-> much because I don't expect to encounter litmus tests that try to read 
-> or write srcu_structs directly.
+> Is this standard?  Should I adapt my tooling to scan over line breaks?
 
-Agreed.  I for one would definitely have something to say about an
-SRCU-usage patch that directly manipulated a srcu_struct structure!  ;-)
+This is RFC conformant, so if your tools are not able to deal with this
+situation, you should consider modifying them.
 
-> Alan
-> 
-> 
-> 
-> Index: usb-devel/tools/memory-model/linux-kernel.bell
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/linux-kernel.bell
-> +++ usb-devel/tools/memory-model/linux-kernel.bell
-> @@ -53,38 +53,30 @@ let rcu-rscs = let rec
->  	in matched
->  
->  (* Validate nesting *)
-> -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
-> -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
-> +flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-lock
-> +flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
-
-This renaming makes sense to me.
-
->  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> -let srcu-rscs = let rec
-> -	    unmatched-locks = Srcu-lock \ domain(matched)
-> -	and unmatched-unlocks = Srcu-unlock \ range(matched)
-> -	and unmatched = unmatched-locks | unmatched-unlocks
-> -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
-> -	and unmatched-locks-to-unlocks =
-> -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
-> -	and matched = matched | (unmatched-locks-to-unlocks \
-> -		(unmatched-po ; unmatched-po))
-> -	in matched
-> +let srcu-rscs = ([Srcu-lock] ; (data | rf)+ ; [Srcu-unlock]) & loc
-
-The point of the "+" instead of the "*" is to avoid LKMM being confused by
-an srcu_read_lock() immediately preceding an unrelated srcu_read_unlock(),
-right?  Or am I missing something more subtle?
-
->  (* Validate nesting *)
-> -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
-> -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
-> +flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
-> +flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-unlock
-> +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
->  
->  (* Check for use of synchronize_srcu() inside an RCU critical section *)
->  flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
->  
->  (* Validate SRCU dynamic match *)
-> -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
-> +flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
->  
->  (* Compute marked and plain memory accesses *)
->  let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
-> -		LKR | LKW | UL | LF | RL | RU
-> + 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
->  let Plain = M \ Marked
->  
->  (* Redefine dependencies to include those carried through plain accesses *)
-> -let carry-dep = (data ; rfi)*
-> +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
-
-The "[~ Srcu-unlock]" matches the store that bridges the data and rfi",
-correct?
-
->  let addr = carry-dep ; addr
->  let ctrl = carry-dep ; ctrl
->  let data = carry-dep ; data
-> Index: usb-devel/tools/memory-model/linux-kernel.def
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/linux-kernel.def
-> +++ usb-devel/tools/memory-model/linux-kernel.def
-> @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
->  synchronize_rcu_expedited() { __fence{sync-rcu}; }
->  
->  // SRCU
-> -srcu_read_lock(X)  __srcu{srcu-lock}(X)
-> -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-> +srcu_read_lock(X) __load{srcu-lock}(*X)
-> +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
-> +srcu_down_read(X) __load{srcu-lock}(*X)
-> +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
-
-And here srcu_down_read() and srcu_up_read() are synonyms for
-srcu_read_lock() and srcu_read_unlock(), respectively, which I believe
-should suffice.
-
->  synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
->  synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
-
-So this looks quite reasonable to me.
-
-							Thanx, Paul
+-K
