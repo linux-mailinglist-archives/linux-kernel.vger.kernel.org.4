@@ -2,141 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E73672EFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA57672F02
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjASCaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S229677AbjASCcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjASCaA (ORCPT
+        with ESMTP id S229446AbjASCcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:30:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E61FA24E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:30:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B59FF6171D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC3E4C433EF;
-        Thu, 19 Jan 2023 02:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674095399;
-        bh=pN9R2E0B/Qjp/Xb3oCFgvcSd081HoaaZOUInpZCqutQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NGO84BP5hZkNvaFRTC4KLfYy6k7olcxM5LGOP+7a/PD7r5OUtPrM6gd9YOZvg3nau
-         8zR5h5QsUESYw26U0m2qPJZvwgnTmj8zt4PyGaD+B0rm2dO3Rz2JJqkKWrzASaTSHG
-         O0zIsvbN3xqDeeClY4prpV9P06rhhu4Sc4Mb4RZFUN9+wK2ympV/hAlrQU7EXEO9pI
-         7hwYYr1Iy1KzrkB+L+Wb8/OfKNjoFTDBixREBllfJs3HDgsA+RaHJ1gys/99SWytPB
-         f/N51kNlIp8e+cqDogwsWlRWBOe7aHTBfF7gc0rmpYKPPzptDq61T+ARkFWFi308Mo
-         FALFQt7dqTqWA==
-Date:   Wed, 18 Jan 2023 18:29:57 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: export compress_percent and compress_watermark
- entries
-Message-ID: <Y8irJdc4vTCC9gKj@google.com>
-References: <20230117131740.76597-1-frank.li@vivo.com>
+        Wed, 18 Jan 2023 21:32:03 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3FAA24E;
+        Wed, 18 Jan 2023 18:32:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ALLkriTWE+SzQ0sqzMUjGDLtM+PH1VXpy/CU3zVeJ/E=; b=ENObJlCpA6C70A+samIfTPkGeo
+        5zl+m9fp7s4ZnPB0kuPmwyEkDZujgpYlmLu0t4X5ZAzAwUPxgOXOqRVRgMy8ATxPO72aTVyZ18Mg9
+        4JW3pJPVJFDK8G2VxY37mD3WdE+qOz6wLrsMbh6AG+4gTYdZua0jHS/MFtCOwzXv3TXjsKnsnUGqO
+        fq4aYMHb+HygThlbM6fSCQMmpt2glx+yY/+m2fOKCbET69IKJihm+fhkdChtyFwxPFOB6l3O3E/6F
+        HfLhAqZoEUnk3Y3AK5ufM9wTGFHm70MzOLZIFGgDvw9A8hhfBiMixFbq0mVTPpjqB9VcYUYksS3Dn
+        ch6T6PcQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIKib-002euc-2o;
+        Thu, 19 Jan 2023 02:31:57 +0000
+Date:   Thu, 19 Jan 2023 02:31:57 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 20/34] vfs: Make splice use iov_iter_extract_pages()
+Message-ID: <Y8irne7Dj6H6GIc8@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391062544.2311931.15195962488932892568.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117131740.76597-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <167391062544.2311931.15195962488932892568.stgit@warthog.procyon.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/17, Yangtao Li wrote:
-> This patch export below sysfs entries for better control cached
-> compress page count.
-> 
-> /sys/fs/f2fs/<disk>/compress_watermark
-> /sys/fs/f2fs/<disk>/compress_percent
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  Documentation/ABI/testing/sysfs-fs-f2fs | 17 +++++++++++++++++
->  fs/f2fs/sysfs.c                         | 18 ++++++++++++++++++
->  2 files changed, 35 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> index 75420c242cc4..920562742655 100644
-> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> @@ -717,3 +717,20 @@ Description:	Controls background discard granularity of inner discard thread
->  		is smaller than granularity. The unit size is one block(4KB), now only
->  		support configuring in range of [0, 512].
->  		Default: 512
-> +
-> +what:		/sys/fs/f2fs/<disk>/compress_watermark
-> +date:		january 2023
-> +contact:	"yangtao li" <frank.li@vivo.com>
-> +description:	when compress_cache is on, it controls free memory watermark
-> +		in order to limit caching compress page. If free memory is lower
-> +		than watermark, then deny caching compress page. The value should be in
-> +		range of [0, 100], by default it was initialized as 20(%).
-> +
-> +what:		/sys/fs/f2fs/<disk>/compress_percent
-> +date:		january 2023
-> +contact:	"yangtao li" <frank.li@vivo.com>
-> +description:	when compress_cache is on, it controls cached page
-> +		percent(compress pages / free_ram) in order to limit caching compress page.
-> +		If cached page percent exceed threshold, then deny caching compress page.
-> +		The value should be in range of [0, 100], by default it was initialized
-> +		as 20(%).
-> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> index e396851a6dd1..37c6ef080f7e 100644
-> --- a/fs/f2fs/sysfs.c
-> +++ b/fs/f2fs/sysfs.c
-> @@ -598,6 +598,20 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
->  		sbi->compr_new_inode = 0;
->  		return count;
->  	}
-> +
-> +	if (!strcmp(a->attr.name, "compress_percent")) {
-> +		if (t > 100)
+On Mon, Jan 16, 2023 at 11:10:25PM +0000, David Howells wrote:
 
-t=0 also doesn't make sense.
+> diff --git a/fs/splice.c b/fs/splice.c
+> index 19c5b5adc548..c3433266ba1b 100644
+> --- a/fs/splice.c
+> +++ b/fs/splice.c
+> @@ -1159,14 +1159,18 @@ static int iter_to_pipe(struct iov_iter *from,
+>  	size_t total = 0;
+>  	int ret = 0;
+>  
+> +	/* For the moment, all pages attached to a pipe must have refs, not pins. */
+> +	if (WARN_ON(iov_iter_extract_mode(from, FOLL_SOURCE_BUF) != FOLL_GET))
+> +		return -EIO;
 
-> +			return -EINVAL;
-> +		*ui = t;
-> +		return count;
-> +	}
-> +
-> +	if (!strcmp(a->attr.name, "compress_watermark")) {
-> +		if (t > 100)
-> +			return -EINVAL;
-> +		*ui = t;
-> +		return count;
-> +	}
->  #endif
->  
->  	if (!strcmp(a->attr.name, "atgc_candidate_ratio")) {
-> @@ -932,6 +946,8 @@ F2FS_FEATURE_RO_ATTR(compression);
->  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_written_block, compr_written_block);
->  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_saved_block, compr_saved_block);
->  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_new_inode, compr_new_inode);
-> +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_percent, compress_percent);
-> +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_watermark, compress_watermark);
->  #endif
->  F2FS_FEATURE_RO_ATTR(pin_file);
->  
-> @@ -1038,6 +1054,8 @@ static struct attribute *f2fs_attrs[] = {
->  	ATTR_LIST(compr_written_block),
->  	ATTR_LIST(compr_saved_block),
->  	ATTR_LIST(compr_new_inode),
-> +	ATTR_LIST(compress_percent),
-> +	ATTR_LIST(compress_watermark),
->  #endif
->  	/* For ATGC */
->  	ATTR_LIST(atgc_candidate_ratio),
-> -- 
-> 2.25.1
+Huh?  WTF does that have to do with pins?  Why would we be pinning the _source_
+pages anyway?  We do want them referenced, for obvious reasons (they might be
+stuck in the pipe), but that has nothing to do with get vs. pin.
+
+If anything, this is one place where we want the semantics of iov_iter_get_pages...
