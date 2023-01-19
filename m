@@ -2,476 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F4F673563
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27CB67356F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjASKVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S230061AbjASKZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjASKV0 (ORCPT
+        with ESMTP id S230004AbjASKZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:21:26 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992BD6469D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:21:24 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id r18so1107549pgr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ufispace-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzxculiynfgXpHNLfw83WQVl9BRzHCte92yfypt/lzE=;
-        b=iMez6eg6tLPXVJnCAHmcrknTi5rYVgZt1+dLFPJVkgshsgYTpw6SUSxaQESzJAx3z/
-         fMsiGGOBpLSfrlQjaMsyJK5/Uv7UYA3shLXgvB4HS9K3TdOT3GvWwvf0t4u6LZvXOSRm
-         UXjx95TbLOy+hzDy1sksBPjJNI5/Ms54GF3gp0it9IYwrimXvlCcMHRD6yD0mWj+LKcF
-         wEiYAn8jWnCjM6BZd9Jc2ScUDlpDuA2vigq62jVoQzKYfpUPObGVrxOfRvqU9uAMGLp2
-         Bhuu8Gqr6pwHX3/7YnO4CbXEfxyEdDP90WJKtjBJHiuB3NTctERKB6ZVPW6HXunzgxg3
-         9STw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzxculiynfgXpHNLfw83WQVl9BRzHCte92yfypt/lzE=;
-        b=dm7H9lZOhGHKDdwlbsILulueWB/kNW9uJhVILTJv/PMo8WW8IFrmY8yeoUfFozJGDT
-         nl9jBh7HQxXQPwU3SHDKzV+GfkbXNq75usHSXPFVVDlOApT/c7z3MyFFmnbXmtnG53Dn
-         I7EdnTZgcsh2ZDcX66LJ0tbgz83vBXdtNFFy6rZf6UrbaAQNdb7tpyVM1Uz8ZzoWTiMK
-         kypAigpkbLr3JtjIJuydmgfi5BJzEySZu4S5NvLpW8o2k8svwjQBKV1HMsYZjeBav3Gl
-         lzwjJXJZaBukXjOXo8gjtkLTLJNehbHoNI/l/XyNtw+3ZfAtpYuPQpZzdRR7UndGWNy0
-         Q5BQ==
-X-Gm-Message-State: AFqh2koRCMpHmWr9zGm02KszV6kr1hWx+stv1CilCwsE4lS0IiXWW9Sy
-        agNofT52w7wJ7mD+CwUJC2RF22KRpZzt9MxLLlvMWI/5UnGS+eWDTJCKxaW67JobJrZAeVRh4Mw
-        oRKA1glCzFt9G9esbQqbu0HOX7HO8
-X-Google-Smtp-Source: AMrXdXtD7cMvIdoqey2C0zAtrZY2BsSasx8SYNksTtc/M4gFgi7pNyudlmTGzK8XhBkPsrpAaS6DEQ==
-X-Received: by 2002:aa7:85c4:0:b0:58d:bb58:e928 with SMTP id z4-20020aa785c4000000b0058dbb58e928mr9998794pfn.32.1674123684077;
-        Thu, 19 Jan 2023 02:21:24 -0800 (PST)
-Received: from openbmc500G.LAB.ufispace (CH210-63-217-225.static.apol.com.tw. [210.63.217.225])
-        by smtp.gmail.com with ESMTPSA id p128-20020a625b86000000b00580d25a2bb2sm19152964pfb.108.2023.01.19.02.21.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 02:21:23 -0800 (PST)
-From:   Jordan Chang <jordan.chang@ufispace.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        robh+dt@kernel.org
-Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-Subject: [PATCH 3/3] ARM: dts: aspeed: Add device tree for Ufispace NCPLite BMC
-Date:   Thu, 19 Jan 2023 18:21:02 +0800
-Message-Id: <20230119102102.73414-4-jordan.chang@ufispace.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119102102.73414-1-jordan.chang@ufispace.com>
-References: <20230119102102.73414-1-jordan.chang@ufispace.com>
+        Thu, 19 Jan 2023 05:25:21 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD864DCC7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:25:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i1HFdN/4LbUzv5qKQbaipcNnKteokbtKZojTyQJJcrO2dkcIagsP/y33rJ3YBBmYcJyc0sW7tNNFvZr//sQn8SzlohtqcMtddjzHO7MiATPXwSIBtFIuiVUO7rvPzAIo3tLmb8hxRFW3y64BnsTLYXuhl4tgGgC2Qxkq7QpDZ0GzqL5ZReG/nvNpg0av2qNVxcgc/doIrtWDahThBtZKUY5OVrwugHW2Iu4IpMwF+06ll8bYQGUArZ5sWX7G3SoRE/N4BfCPYOjMHA9v1jibysoz2iutl0PeL3njbeLG238j90MCBxX9UYclnEpybBM+5WESwmY2rvc8I3tn8sBPEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L/zuqKVP/z0hZxrx5Fu7y6xItGF2yzGMp4fnWW1zw6I=;
+ b=ExTDw9LBK6vGvLr3pWutJmwDCVwpAJGWxz96uJ0/dPU0zgQbAco14CDqOmMr1uO3TKwKk7///oOkkd4MHxd1qvIsHwMfFfVGHY9fIhJE6qv61wlesn7oMrmLHzTogtRTnoTf9n3PDihDNyYaiG83j/JaVZvZ3F6rfxLAjhTTZOCBmbtFjG0c+INiJrCScXF9O1RdMsjFzqU1RzAZiarXEUND7azFAxxQj+iNAFpfAxWEhn4iGB957KpBX+VogY+grSVwMtA2X9CqdRBKgq+Z+i28ewxxamVj1R4+Us7rhQZkI0KNANdXgxsmg7s2PFrhwmO/pTwTrTNE3+HUP6VI/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L/zuqKVP/z0hZxrx5Fu7y6xItGF2yzGMp4fnWW1zw6I=;
+ b=KohlXV5ASh0k936ds+KxA2XzzUNtqOlXV/99RFpNuPQMrcrSA0OAfYa6qDsvIX32iDxJcZU23ONVtQHESNqyzqqS/I9kkD+Sa6arQm5ntnHSuz7TIJ6XcBBhw8yEXVmzE+8x27kTtb6Nd6zcg+ai4HlF3o+cMg/PVsniQImg4Yg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
+ by MW4PR12MB7466.namprd12.prod.outlook.com (2603:10b6:303:212::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.26; Thu, 19 Jan
+ 2023 10:25:12 +0000
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc]) by MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc%7]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
+ 10:25:11 +0000
+Message-ID: <acf37296-485d-0281-69fd-811e7ce011b9@amd.com>
+Date:   Thu, 19 Jan 2023 15:54:56 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [RFC PATCH V1 1/1] sched/numa: Enhance vma scanning logic
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        xu xin <cgel.zte@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Hugh Dickins <hughd@google.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Disha Talreja <dishaa.talreja@amd.com>
+References: <cover.1673610485.git.raghavendra.kt@amd.com>
+ <67bf778d592c39d02444825c416c2ed11d2ef4b2.1673610485.git.raghavendra.kt@amd.com>
+ <Y8kP2KbJqWDIgGRZ@kernel.org>
+From:   Raghavendra K T <raghavendra.kt@amd.com>
+In-Reply-To: <Y8kP2KbJqWDIgGRZ@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0148.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:c8::10) To MN2PR12MB3008.namprd12.prod.outlook.com
+ (2603:10b6:208:c8::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|MW4PR12MB7466:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72284c2f-be94-49df-c36a-08dafa0771f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iEJiatobY9FUuzl72EewqmmFF33IgZ9O39T24hlZJ11zu9ScVLl3hlXPPSBXeLkSc2uUF7FknscGVKtdIDODuDyKeb26tO7sJyTg1B/XQU6iXS8pUTMkSD3thooJ6Ti5Zssf0pR3pl+Wx0GC28GgJk+nrB6Cy4OjyoaGr2a9MWCDwp/gim0hog29vvrF3LkBCXWAwG+kb053SeYwk8ZfoSQzxYdHEujfcybBD1cSQ/gSMOXNcI7jr0xob/yLtVCTfhTZJGDJPQkKE1oxsBl0sEFMjafjKRBKAAT4iW3ZK0+Tde33mza8qFRoy48eQgUfFPqaw7NyFoZoBcFPTnATrHD0PZqQQRE3IzvsuPtnOgzJHqoqemIx6pJm6lLFL0lPzVnh6hb855/KE+YjVHrNihH/gCgRE4Krn/Y/7G5ZaCFP0vNUPQhW0yGNy9aS5TxQ7/QMYnbOW7DbYgHYuJiSYzn/o2OvLrfsUUJcc4TCr3yLYXy5YMU8CxTzrK9IbdrquKV2AnwLm+xteDmr3GyThsygjVfhQxNulgEcvvBZ3vjeP/iWR24VTVTydySdBH3qmCLLmTbRh7EpKycBxZ6q0SbiedZmPAhx+fooOote+QoCvO3nNb5CkVkkAzdTzBySXn5nW5v17NyTPlAx3W6P0cr8l+3EYctSThyqHsZ+Dck/PIT2uUS7FjGUzvqnhiLks1gL0EjG/607Rup8QDJ1X3XwvBXZ3yVeyXYk4xA8Z3A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199015)(6666004)(38100700002)(6486002)(6512007)(26005)(186003)(2906002)(36756003)(478600001)(31686004)(6506007)(53546011)(2616005)(31696002)(54906003)(316002)(66476007)(8676002)(6916009)(4326008)(66556008)(66946007)(41300700001)(5660300002)(7416002)(83380400001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVNPcHlYM1BHRkQzOVluVTJ0QzE1WFhyOVFTQXE3RjZaYlFQV2tRNlpyQ1Jx?=
+ =?utf-8?B?N0xUWkJ0a2RyMU5Xb2wzU1Q2UUZ5d2gxMFJicHUwMGtRZzNoWVZTRTNiQ0pU?=
+ =?utf-8?B?YzN4TEQrMDhqRWUwNTdvMnlIUncwR1JjNTFkNmtEbTBEMXpYbEJQejVTSUlu?=
+ =?utf-8?B?dTVvbmJSMEdYWGRxbC9IZmRUNU1SdW92c2xYOUtJamRsQm5tTkZsR2hGbTJp?=
+ =?utf-8?B?MzBDN0EvQ3JUYWZQMzBuTFEvU0hNVGlha0gyU1JvVG40Qk96SEcyYUxaTE5v?=
+ =?utf-8?B?TlMrdThWQmY4YUppNUY5Q0IybmdrRHpJT3VpdHgyQWdJQ1k2RFIwT1Z0Tkda?=
+ =?utf-8?B?ZFRTeGdXZzN0SjZzRHhzSHZKK3IvUC9qUE10a2NhVXZqYlJEaWVoSDlaaElN?=
+ =?utf-8?B?Y2JXTDJaMG1FZ1MyaUFWSGxNY2JDV1NEdk1uSkpEYXQ5SVR5ZTBiY1BtV0NO?=
+ =?utf-8?B?UjVWOVoxNW05TVl5UHpjVTVDUjA3dHU5UE53TmpmT01iaUMwWW8yTzRoUFor?=
+ =?utf-8?B?TlZFZ3FBZkJQTHdncGxmSTRDUS8vY0I3R1FRYXZvZVZsMzllUEw3cGxJREdr?=
+ =?utf-8?B?dE1sZ0VSSklFWVA0bU45SDlWOGx3NVd5T1E1S3BwRk1PTWo3K1N1elkrNXR3?=
+ =?utf-8?B?N0IwaXpuVVg3aW81aWgrK2JyaWgvVkxWWGdxWE5qb0VZQ1BIMU5oQzhkNmJ5?=
+ =?utf-8?B?UHpaTmJZT1ZKT1dVL1FWamJscjk4cmwrZXRWYnJkdWZwb0JFN29VMzdCb1Vl?=
+ =?utf-8?B?NjVMRUxoaCt3R2pRR3d0amNjdCt3U2ZmVkdwOGJCRUdNV1VUYnNmU1hrNERz?=
+ =?utf-8?B?Yk4yWHVMbFZkVWxNQkRGTGpmWWUzc3JGYU9IWVh3cndPK1QzTXptb3ZlTkJ3?=
+ =?utf-8?B?MUp5R3czY2U5TW90Q0V0aGRuZXB1eGIvSDNSMVFkL3NDTW1uK1hoRzU0OXN1?=
+ =?utf-8?B?TVVFS1BPeGJRcWZ2Z0lBM3dteDRaQ2syWnYxYk1rT2QzdnhsT0VCUUZoMnNY?=
+ =?utf-8?B?cHVKSHBpZEI2WlNGUEdYZzBBMk5JNk9vQ3dSdUR3MzIzdVUzN2x5WlBjS1g5?=
+ =?utf-8?B?aUt5VjhpQTZSUmZvSzdiNGRkcTBrNEQ4dDh2UDV5YWVaVzBFQkNJM051eHB0?=
+ =?utf-8?B?bUh2Q0JWcVFZNWN0K3dlZElkSEc5YTR3VFhHYUF0Y2MxV3FTT2E0ZUU3aHl3?=
+ =?utf-8?B?QmZDWTVFbkVnQktzblBnTlYxNStENG1kM0QxU0JXK2JvTXJIRGdVV0dBQ1l2?=
+ =?utf-8?B?UVpTREIzc2wxWG5hYlR5TlAvMHRaMWxKd3ZVWHVVNndhMnNOV1FwQXlyclFO?=
+ =?utf-8?B?Y1A1bkZsQnE0ZkdDcVFILy9QelV3ckY1T1lHZzBNVDNRVG51R2dUcnhCa1dP?=
+ =?utf-8?B?QjVsL3ZVczNuMXhRUUowY2hXNm15d2FTYTlyTkN3a1QybGFVU1B1bVFZTG9l?=
+ =?utf-8?B?bytyMnFUeUlOMnptYXpRZmN0TmZlR01tUDFjVXR1bjVXcHpINkxnR3hrQjd3?=
+ =?utf-8?B?SG9idnVnSmdmcmdyS3NhempwdmtlaFFUODlJZThtbERRTUErdm12TlVXdFNx?=
+ =?utf-8?B?S2lkV1lzRkQ5eUtHazNPVnZ4enEwelFYSTN2U1Jkd05LYTdtd3BZT2JHdmZs?=
+ =?utf-8?B?RDFHeksxQi92dkt5SkdsZURtR2tGUjh5OEY3ZUFDMkJLbU1uczQ4eEVBMGpU?=
+ =?utf-8?B?K2NGNnJIK0dhU3I4UStyS1BvRE1JdGtsQ0RiM2JrM3g2M2t0VU1nNWpFUnFh?=
+ =?utf-8?B?MHdXUzcyWW9oakZ5RGQrdDEzd3VKelk3SVp2SWwzbmg0d2R2bUNSQ25kVkVn?=
+ =?utf-8?B?dUtPb05HUFJEZmFBWE5qS01SYVNybTFLUWY3KzZiaDA1MzJWRTl2UHZtd3Nz?=
+ =?utf-8?B?RU43aC84ZjR2VncyMjducGRtNVBQNWlSNzdMYWc1d203TVg0MjVkOE1Ia1ZW?=
+ =?utf-8?B?SFpsYm9HRloycEtsNXNoamdLZkpqbFRxdGF2SGtrTWc4Q2R2RWNnZ3B5MzRu?=
+ =?utf-8?B?TXJJNHVCbEsyWXdBTHBFUFVrVFNETmpDT1o5Si9pbGpNRUh2eE9YV256MW93?=
+ =?utf-8?B?OEh6Q1ZSZW4zaHpSbVNzcFFrOG1JQStmeXhYY2ZoZFZQVUdUSTVuZ0dpYjNW?=
+ =?utf-8?Q?NKoamPhCJDodbqnp7GT1aGbEw?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72284c2f-be94-49df-c36a-08dafa0771f0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 10:25:11.3415
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aDCoPcz4+jQabLgalq5n5KD7/8UzyPIzIAtMhO5bVsdxyKnfmUY0sETx75FZNeKfRAgM9yAok1Wa4aZA/uuiLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7466
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial version of device tree for Ufispace NCPlite platform
-which is equipped with AST2600-based BMC.
+On 1/19/2023 3:09 PM, Mike Rapoport wrote:
+> Hi,
+> 
+> On Mon, Jan 16, 2023 at 07:05:34AM +0530, Raghavendra K T wrote:
+>>   During the Numa scanning make sure only relevant vmas of the
+>> tasks are scanned.
+> 
+> Please add more detailed description about what are the issues with the
+> current scanning this patch aims to solve.
 
-Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 360 ++++++++++++++++++
- 2 files changed, 361 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
+Thank you for the review Mike. Sure will add more detail in the patch
+  commit in V2
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2ee9c043218b..d26e0651e805 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1626,6 +1626,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-inventec-transformers.dtb \
- 	aspeed-bmc-tyan-s7106.dtb \
- 	aspeed-bmc-tyan-s8036.dtb \
-+	aspeed-bmc-ufispace-ncplite.dtb \
- 	aspeed-bmc-vegman-n110.dtb \
- 	aspeed-bmc-vegman-rx20.dtb \
- 	aspeed-bmc-vegman-sx20.dtb
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-new file mode 100644
-index 000000000000..7ab29129d1e4
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-@@ -0,0 +1,360 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2022 Ufispace Co., Ltd.
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "Ufispace NCPLite BMC";
-+	compatible = "ufispace,ncplite-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,115200n8 earlycon";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			      <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			      <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			      <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		fan-status-int-l {
-+			label = "fan-status-int-l";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(M, 2)>;
-+		};
-+
-+		allpwr-good {
-+			label = "allpwr-good";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 4) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(V, 4)>;
-+		};
-+
-+		psu0-alert-n {
-+			label = "psu0-alert-n";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 1)>;
-+		};
-+
-+		psu1-alert-n {
-+			label = "psu1-alert-n";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 2)>;
-+		};
-+
-+		int-thermal-alert {
-+			label = "int-thermal-alert";
-+			gpios = <&gpio0 ASPEED_GPIO(P, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(P, 2)>;
-+		};
-+
-+		cpu-caterr-l {
-+			label = "cpu-caterr-l";
-+			gpios = <&gpio0 ASPEED_GPIO(N, 3) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(N, 3)>;
-+		};
-+
-+		cpu-thermtrip-l {
-+			label = "cpu-thermtrip-l";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 5) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 5)>;
-+		};
-+
-+		psu0-presence-l {
-+			label = "psu0-presence-l";
-+			gpios = <&gpio0 ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(F, 6)>;
-+		};
-+
-+		psu1-presence-l {
-+			label = "psu1-presence-l";
-+			gpios = <&gpio0 ASPEED_GPIO(F, 7) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(F, 7)>;
-+		};
-+
-+		psu0-power-ok {
-+			label = "psu0-power-ok";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 4) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(M, 4)>;
-+		};
-+
-+		psu1-power-ok {
-+			label = "psu1-power-ok";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 5) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(M, 5)>;
-+		};
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		poll-interval = <1000>;
-+
-+		fan0-presence {
-+			label = "fan0-presence";
-+			gpios = <&fan_ioexp 2 GPIO_ACTIVE_LOW>;
-+			linux,code = <2>;
-+		};
-+
-+		fan1-presence {
-+			label = "fan1-presence";
-+			gpios = <&fan_ioexp 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <6>;
-+		};
-+
-+		fan2-presence {
-+			label = "fan2-presence";
-+			gpios = <&fan_ioexp 10 GPIO_ACTIVE_LOW>;
-+			linux,code = <10>;
-+		};
-+
-+		fan3-presence {
-+			label = "fan3-presence";
-+			gpios = <&fan_ioexp 14 GPIO_ACTIVE_LOW>;
-+			linux,code = <14>;
-+		};
-+	};
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	use-ncsi;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
-+		 <&syscon ASPEED_CLK_MAC3RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		spi-max-frequency = <50000000>;
-+#include "openbmc-flash-layout-64.dtsi"
-+	};
-+
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "alt-bmc";
-+		spi-max-frequency = <50000000>;
-+#include "openbmc-flash-layout-64-alt.dtsi"
-+	};
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+};
-+
-+&lpc_reset {
-+	status = "okay";
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+};
-+
-+&uart_routing {
-+	status = "okay";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+};
-+
-+&wdt2 {
-+	status = "okay";
-+};
-+
-+&peci0 {
-+	status = "okay";
-+};
-+
-+&udc {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	vref = <2500>;
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	vref = <2500>;
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default
-+		&pinctrl_adc14_default &pinctrl_adc15_default>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	lm75@48 {
-+		compatible = "national,lm75";
-+		reg = <0x48>;
-+	};
-+
-+	lm75@49 {
-+		compatible = "national,lm75";
-+		reg = <0x49>;
-+	};
-+
-+	lm86@4c {
-+		compatible = "national,lm86";
-+		reg = <0x4c>;
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	lm75@4f {
-+		cpmpatible = "national,lm75";
-+		reg = <0x4f>;
-+	};
-+
-+	fan_ioexp: pca9535@20 {
-+		compatible = "nxp,pca9535";
-+		reg = <0x20>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+		"","","presence-fan0","",
-+		"","","presence-fan1","",
-+		"","","presence-fan2","",
-+		"","","presence-fan3","";
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c128";
-+		reg = <0x50>;
-+		pagesize = <64>;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	psu@58 {
-+		compatible = "pmbus";
-+		reg = <0x58>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c02";
-+		reg = <0x50>;
-+		pagesize = <1>;
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	psu@58 {
-+		compatible = "pmbus";
-+		reg = <0x58>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c02";
-+		reg = <0x50>;
-+		pagesize = <1>;
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+
-+	lm75@4d {
-+		compatible = "national,lm75";
-+		reg = <0x4d>;
-+	};
-+};
-+
-+&gpio0 {
-+	status = "okay";
-+
-+	gpio-line-names =
-+	/*A0-A7*/	"","","","","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"","","","","","","","",
-+	/*D0-D7*/	"","","","","","","","",
-+	/*E0-E7*/	"","","","","","","","",
-+	/*F0-F7*/	"CPU_PWRGD","","","power-button","host0-ready","","presence-ps0","presence-ps1",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","reset-button","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"power-chassis-control0","power-chassis-control1","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","power-chassis-good","","","";
-+};
--- 
-2.39.0
+> 
+>> Logic:
+>> 1) For the first two time allow unconditional scanning of vmas
+>> 2) Store recent 4 unique tasks (last 8bits of PIDs) accessed the vma.
+>>    False negetives in case of collison should be fine here.
+> 
+>           ^ negatives
 
+will take care of this and one below
 
--- 
-******************************
-This e-mail is confidential. If you are not 
-the intended recipient, you must not disclose, distribute or use the 
-information in it as this could be a breach of confidentiality.If you have 
-received this message in error, please advise us immediately by return 
-e-mail and delete the document. The address from which this message has 
-been sent is strictly for business mail only and the company reserves the 
-right to monitor the contents of communications and take action where and 
-when it is deemed necessary.
-Thank you for your co-operation.
+>> 3) If more than 4 pids exist assume task indeed accessed vma to
+>>   to avoid false negetives
+>>
+>> Co-developed-by: Bharata B Rao <bharata@amd.com>
+>> (initial patch to store pid information)
+>>
+>> Suggested-by: Mel Gorman <mgorman@techsingularity.net>
+>> Signed-off-by: Bharata B Rao <bharata@amd.com>
+>> Signed-off-by: Raghavendra K T <raghavendra.kt@amd.com>
+>> ---
+[...]
