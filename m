@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40306743D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11E76743DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjASU7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S229716AbjASVAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjASU5F (ORCPT
+        with ESMTP id S230070AbjASU6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:57:05 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9009C50853
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:56:15 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id s76-20020a632c4f000000b0049ceb0f185eso1534782pgs.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:56:15 -0800 (PST)
+        Thu, 19 Jan 2023 15:58:40 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC469FDE7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:57:13 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id j10-20020a17090a7e8a00b00229f4c02a49so940216pjl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:57:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zk9KJnE1A7lhWU0C7MvYLc6jOxM08TZgOey6mX4Smzg=;
-        b=nZt9DAoZEySVyEixexvzeY38lvyxKBnwTFPIS6nWtSv/gDJqzuRcOmE1P6LbYrR0/9
-         sMZh2AlbnvjwttNVqKwF9rbB3NKdBaQdhK23rupYIW7FSZySRmFZxS70/YUb/5DLNuF6
-         pclF6GzJuOxf/ZtqzQ5TEnnwgFRf9qJpIa1S37DfeUrm4Jlx8FG6Wswz2JYhQrvuI0XF
-         eG7X0nbHKkdsnF89gUHe9qhW2IubGc9N4NsjicAmrOYlNoxpK29tffx3b2eLmHXSwxhy
-         j8MuAQ7O/CptGDGXmfX97i7V//eGI0LlAMBS6u1AuFGagyVa4s3wc403tmx2S5QBoVtO
-         DICw==
+        bh=bH13mQhRUU7b8EB6xov/auoX/BjFue416NjgtMgR1wo=;
+        b=hHQRoWMQf7qVGttNm21+m0vpXxahusZ33qOJQf7eyh496BhiN00fNvXpdowqTe/Cjj
+         i1mIKKjvIyKDyvKX3TWETFE6mMF4VeyNlUtIya8Rdvm1KQHlygU+wyJPQ1v5Px+BLptb
+         hLIoq93ERlDdsShqm6Md2dOCsTWEEfUFcT0hGJW8u4a4igVo1rCuuMA5EUVsOeDsWEH6
+         9kyVc1xUtwg8TPIT6ryJsHN3LOICneqAZ0Xr61sZZPM6I2PYYQprTtuSx2CMLVQJiCQc
+         FO1CqXMhIxymQ34Mp5tKQ0aVYzCm4OL6OS0IanwOYctkE/jaKwmCekHR+5om1A9BZP8J
+         q4FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zk9KJnE1A7lhWU0C7MvYLc6jOxM08TZgOey6mX4Smzg=;
-        b=7qsWrPlBDO8pKjTaNQciodK7YTE7LSeZXrhoqxGxyj9bgxPvikL4lBswZ/nyLYJVTL
-         jQ5rukqY/RY9czLZpBunFAgRBQhgCHmggSOJqVn+V6/yfCNnZg94nX1wCaLgK4iZf5aF
-         EnfvuPtDmXX1BojDRupcMoZfqZC0VDQt61tcj5YjgI5v/BNBFxtK57oq7WP9BEmyz2Vl
-         vmwJ66wGZPJY7PG2jJyMHW4n7i7ZCziLKc/53bnnICRqMXHptmqjZncfxTWQ1+weo17z
-         HHM1pv2tGs5g9zY2K89qHTdreck63itpRrGED95hlDkF2KZ3Z+xsEuXDdbFzkZuqobfh
-         mumg==
-X-Gm-Message-State: AFqh2kplDdIeK8PO52hWbkGE/4OdPqHNHvDOrvDbACE6eORpOyWHqR8k
-        9hP8mgOYkMInqQfB2+i9kyDyMH9+uwM=
-X-Google-Smtp-Source: AMrXdXundl4oH8jVJqUdu+8GLuF90NkPKHG4Z3K3JieInSAQW9dS7JqUMEwAjFcydOVRxQjP27p03rJ9uJY=
+        bh=bH13mQhRUU7b8EB6xov/auoX/BjFue416NjgtMgR1wo=;
+        b=sdBP4ClzwGHUSU+nWalOAEYiXDBDmKgl5hGp4fgnlohAwOE2ztztpi+POvMu65M/kI
+         Yn7UnW4EdX1HD+licmVOzr4T0yJG25OtVmEL0HlKopdcTVUZ4zwWcZ+J1X08/kywp3/V
+         Nzhi61iS+rJvAN6+J9aVBLWnut72NfUZ3Z8/zLHvqXEN2RfoC+FFaPG5yMyMo4yORlbc
+         1KV7Z6gb3Wf3RxAmTtbYJQGGiKyfFSKNb9EHbU60jBQSHlWoqHah5fvfyNC8UrLEPWgv
+         Lzo7S6Y+wJguWgsmBbl4ZTcvk+QqgDzqPTHPB7Fo1OJ4nfn/dxsZ1JGaRKUaGi+vPsuN
+         D+vw==
+X-Gm-Message-State: AFqh2koFMP2AKYco7ZExwZwX/jmMyzNeP4XI3HIGUbsaFdTpQw7lxmkg
+        IK/QSIvXqacLkMD+xUQE1pQ/dZ/zoY0=
+X-Google-Smtp-Source: AMrXdXsNcBRRH5SpMRRSQ+uzFtmcWKLZZTqJoUDlgp+y+n+qXW9t/DNW60KeRO1WV4TuJOym80ql7bdcJd0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:9dc4:0:b0:58d:b0fa:b063 with SMTP id
- g4-20020aa79dc4000000b0058db0fab063mr1102878pfq.73.1674161775011; Thu, 19 Jan
- 2023 12:56:15 -0800 (PST)
-Date:   Thu, 19 Jan 2023 20:54:06 +0000
-In-Reply-To: <20230105100204.6521-1-jiangshanlai@gmail.com>
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:cc:b0:58d:bb5c:5050 with SMTP id
+ e12-20020a056a0000cc00b0058dbb5c5050mr1157304pfj.44.1674161832598; Thu, 19
+ Jan 2023 12:57:12 -0800 (PST)
+Date:   Thu, 19 Jan 2023 20:54:08 +0000
+In-Reply-To: <20221128214709.224710-1-wei.liu@kernel.org>
 Mime-Version: 1.0
-References: <20230105100204.6521-1-jiangshanlai@gmail.com>
+References: <20221128214709.224710-1-wei.liu@kernel.org>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <167408804665.2363885.5468519542988858072.b4-ty@google.com>
-Subject: Re: [PATCH] kvm: x86/mmu: Rename SPTE_TDP_AD_ENABLED_MASK to SPTE_TDP_AD_ENABLED
+Message-ID: <167408866924.2366047.9012916781914614502.b4-ty@google.com>
+Subject: Re: [PATCH v2] KVM: x86/mmu: fix an incorrect comment in kvm_mmu_new_pgd()
 From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,18 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 Jan 2023 18:02:03 +0800, Lai Jiangshan wrote:
-> SPTE_TDP_AD_ENABLED_MASK, SPTE_TDP_AD_DISABLED_MASK and
-> SPTE_TDP_AD_WRPROT_ONLY_MASK are actual value, not mask.
+On Mon, 28 Nov 2022 21:47:09 +0000, Wei Liu wrote:
+> There is no function named kvm_mmu_ensure_valid_pgd().
 > 
-> Remove "MASK" from their names.
+> Fix the comment and remove the pair of braces to conform to Linux kernel
+> coding style.
 > 
 > 
 
 Applied to kvm-x86 mmu, thanks!
 
-[1/1] kvm: x86/mmu: Rename SPTE_TDP_AD_ENABLED_MASK to SPTE_TDP_AD_ENABLED
-      https://github.com/kvm-x86/linux/commit/6458637fa09a
+[1/1] KVM: x86/mmu: fix an incorrect comment in kvm_mmu_new_pgd()
+      https://github.com/kvm-x86/linux/commit/03e5fdfd708e
 
 --
 https://github.com/kvm-x86/linux/tree/next
