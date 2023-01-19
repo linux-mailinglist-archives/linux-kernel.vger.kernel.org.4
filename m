@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3305E674144
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7E2674148
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjASSuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S229709AbjASSwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjASSt6 (ORCPT
+        with ESMTP id S229564AbjASSwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:49:58 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A57295140
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:55 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 7so2285891pga.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNVXfWTFHPUTtkdhJd1rvFQYW6suzNo+IYrlxBerVjw=;
-        b=JCfzsF2f0L14x6DnDb97ikzDMd+kmDUm+hY4g0ikovS6VCInjBWJHaf/91emjlkbvv
-         7wIBq95BwSi0sYX+qpZD/SDvgq6Rh0mChGWHNsKn3x3hLmQ8FzFzJ8/ZbJBpvglwgQ4P
-         DCgQbf4DC/hZmnSwoV0J3qJIQ2CUCL3azLbW7iE8ZYMMJf7aB+WsETKfdqrzzfEJ6ojU
-         vsPAh6PoOnotNaQto+c0+ylg5pDTEUWQjzlqfqHA4n+xq9Aj/eYU3tjl8BclPsCxy96X
-         tvpdUK9qzbs7kasSXAsdoo6MSNp8cPe7grioN6SM05rjDR6+YxuYdpreH2mSGn1YnH2i
-         7GNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xNVXfWTFHPUTtkdhJd1rvFQYW6suzNo+IYrlxBerVjw=;
-        b=pXnkzZlAmkV/oUZjeSyqdXWa9zd02EYSuaCHeQaPQCTkcDAJ64fB9If4JBXWsyoWDJ
-         oSvyEHyJV8eiN2cx8Fq2PduFUYjON4ag2pvnchFqS6c5UqTo+oMAME3BqzqWXyNl/lT8
-         fEsl/yTKp+2o1+MHZjrDelkIG32/xeFIngPN1WRCON/VFXPU0e8Y6892dviOdcigwPEa
-         ksPfc0rjCzJm3EWsaO6QTUTEs5M3cIeW5sn7F4RVvwDamnRyGgmZZZdpTvJ9NYSiIcI7
-         V6A2MIlvlSEQtJtgLJplWjjYBadQcJyDQiabi/aA6QZo3ylaWmn2/6KTLBleXIqe+XGv
-         kQZg==
-X-Gm-Message-State: AFqh2kqLaDLUpK9ZaVrkLpRDKTo8xgO+ZUxY+/P2SAPxW2Ewbrhvw7ak
-        VIiPPsZNJOHT+79NUTXu2RyK4x6ySj1rpVyHKR+Saw==
-X-Google-Smtp-Source: AMrXdXs6HTI9i0wEtQHX5RB47auesuGHCq06fYXVQ7aeMwYLK4yjX/E0p+7CcZlE0F4L6rvrtuk8H7gqPyauTnlR1T4=
-X-Received: by 2002:a63:d455:0:b0:478:ae53:a299 with SMTP id
- i21-20020a63d455000000b00478ae53a299mr956491pgj.260.1674154194728; Thu, 19
- Jan 2023 10:49:54 -0800 (PST)
+        Thu, 19 Jan 2023 13:52:08 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E713A75A24
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674154327; x=1705690327;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=198neVMP8EywBCc7ZP7lxKw0QfugbhK+fU6rK1K3njk=;
+  b=hEy4i66ZzthbUES7/2aucndC0FiuE64Rq+WbvqBx7+eBD1Yhbx3MwB4M
+   BpugqVcRLo5qfDaYF41qJ/6VbckWsoA8mzk2v4Yol/nZ6qxIB7dxKEZfw
+   xQd0uVEWVt7F8VdDKpXhjux3P3Njzk5m1zjyHPkaL0O4akwLw4uCipIlr
+   wdDEuGD3D55KZVF8AWZndpD/m5sdO47gyDiiOwX6/u15ZoYRLlbFqKvpQ
+   oJ3IeecdCmCMdcpDZl5c6xQ5s/qDkm+R19hLzmHIwBBO+qB3yVr5+L97K
+   0Kv1G2o+q6e9gtgj/rf4mYHdUUjkExQCWdY+mGpmXgB4EH5IZuVKeNz2E
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="326662598"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="326662598"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 10:52:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905652116"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="905652116"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jan 2023 10:52:03 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH v1 1/6] virtio console: Harden multiport against invalid
+ host input
+In-Reply-To: <Y8lfHKz08EVeNa5o@kroah.com>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
+ <Y8lfHKz08EVeNa5o@kroah.com>
+Date:   Thu, 19 Jan 2023 20:52:02 +0200
+Message-ID: <87fsc6qrvx.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-63-michael.roth@amd.com>
-In-Reply-To: <20221214194056.161492-63-michael.roth@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 19 Jan 2023 10:49:43 -0800
-Message-ID: <CAAH4kHZVaeL57bGAzeDjJDTumsnb96iAYBdhm7cs_8TjBg+v3w@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +
-> +       /* Page-align the length */
-> +       length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
-> +
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-I believe Ashish wanted this to be PAGE_ALIGN(params.certs_len)
+> On Thu, Jan 19, 2023 at 03:57:16PM +0200, Alexander Shishkin wrote:
+>> From: Andi Kleen <ak@linux.intel.com>
+>> 
+>> --- a/drivers/char/virtio_console.c
+>> +++ b/drivers/char/virtio_console.c
+>> @@ -1843,6 +1843,9 @@ static int init_vqs(struct ports_device *portdev)
+>>  	int err;
+>>  
+>>  	nr_ports = portdev->max_nr_ports;
+>> +	if (use_multiport(portdev) && nr_ports < 1)
+>> +		return -EINVAL;
+>> +
+>>  	nr_queues = use_multiport(portdev) ? (nr_ports + 1) * 2 : 2;
+>>  
+>>  	vqs = kmalloc_array(nr_queues, sizeof(struct virtqueue *), GFP_KERNEL);
+>> -- 
+>> 2.39.0
+>> 
+>
+> Why did I only get a small subset of these patches?
 
--- 
--Dionna Glaze, PhD (she/her)
+I did what get_maintainer told me. Would you like to be CC'd on the
+whole thing?
+
+> And why is the whole thread not on lore.kernel.org?
+
+That is a mystery, some wires got crossed between my smtp and vger. I
+bounced the series to lkml just now and at least some of it seems to
+have landed on lore.
+
+> And the term "hardening" is marketing fluff.   Just say, "properly parse
+> input" or something like that, as what you are doing is fixing
+> assumptions about the data here, not causing anything to be more (or
+> less) secure.
+>
+> But, this still feels wrong.  Why is this happening here, in init_vqs()
+> and not in the calling function that already did a bunch of validation
+> of the ports and the like?  Are those checks not enough?  if not, fix it
+> there, don't spread it out all over the place...
+
+Good point! And there happens to already be 28962ec595d70 that takes
+care of exactly this case. I totally missed it.
+
+Regards,
+--
+Alex
