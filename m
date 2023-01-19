@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEA667359C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED03F67359E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjASKfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S230425AbjASKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjASKea (ORCPT
+        with ESMTP id S230347AbjASKeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:34:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364651C7F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:54 -0800 (PST)
+        Thu, 19 Jan 2023 05:34:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF006F32B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69073615A4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F227CC433EF;
-        Thu, 19 Jan 2023 10:33:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C707B61511
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD1CC433D2;
+        Thu, 19 Jan 2023 10:33:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674124433;
-        bh=lE8cxHa+majFz2bt4UMSv6xjfGunkNiy3qsn64CriFc=;
+        s=k20201202; t=1674124435;
+        bh=FSTb7ps69bklSNTl2tXp872NF4+kDIeeWJq6EUM+gQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EQkDGq4G0nT2lune2DeaPF7nwC0uKX4nOyFBHtyW+nVpkDNLiRDP2cU03qRUiqCWL
-         sgerjwEGgdBh2nQBZuU9VMGD1UZZVThC4SUmbbXA4SRQNeVczHu0B+13xLC63eJ1fP
-         Qr19qsnl6AccQ6mCQP9WHjZFCpMOB3klDblvRgfMGsk2L2oxPbIn1bYEQw3m1kuSgg
-         rgQpQWaXacWzFAKLsTTcNDZSfirQvqsnGrHLdpnlgr6WykBoKYRd7/XP6ZDjMuUoqh
-         09QQbZUiTGBw61mUE89M/yZU5jqXFXE9OM00Iqmwsq+8p975vmFhq5CfbQxPgGUypG
-         dI+0Tbw+Tv1hQ==
+        b=kqDqPevZQ4XSsi7+3j4KXbs/udOIaV72oY3M/upUjyTkZVRyb8Svnwr3nY1nRv5E2
+         DptSYerO5xOVbpK3gXlz+pkd9ItIywRQ8CRlyjNfIdn3Hn9dP5mbaMiiRmNB8rnxrr
+         YqBbDf2XjaKav81W1Us7rdYVdWc424fwSuTBBudRXIjlOmWcMccxm5ejjKsF9WNxyG
+         D3Sv12PzfflJENNniy5NwIZ0SEUEsi0+Rw9xooSUgezbku9n2iJ7mpLsZE563G7w5B
+         0wwLkKKO1fqLNbOceGikTfJkIkoXeqq8P17mOlu+jiyAWOqnoLn2Q/jlIzEw9U0Dw/
+         jq75wUiw7iURA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Moti Haimovski <mhaimovski@habana.ai>
-Subject: [PATCH 07/10] habanalabs: enhance info printed on FW load errors
-Date:   Thu, 19 Jan 2023 12:33:36 +0200
-Message-Id: <20230119103339.718430-7-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 08/10] habanalabs: run error handling if scrub_device_mem fails after reset
+Date:   Thu, 19 Jan 2023 12:33:37 +0200
+Message-Id: <20230119103339.718430-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230119103339.718430-1-ogabbay@kernel.org>
 References: <20230119103339.718430-1-ogabbay@kernel.org>
@@ -52,106 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moti Haimovski <mhaimovski@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-This commit enhances the following error messages to also provide the
-type of error occurred, this in order to ease debugging of errors
-detected during firmware-load.
+If device memory scrubbing from hl_device_reset() fails, we return with
+an error code but not perform error handling code.
 
-Signed-off-by: Moti Haimovski <mhaimovski@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/accel/habanalabs/common/firmware_if.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/accel/habanalabs/common/device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/accel/habanalabs/common/firmware_if.c b/drivers/accel/habanalabs/common/firmware_if.c
-index ef228087ef55..da892d8fb3d6 100644
---- a/drivers/accel/habanalabs/common/firmware_if.c
-+++ b/drivers/accel/habanalabs/common/firmware_if.c
-@@ -335,7 +335,7 @@ int hl_fw_send_cpu_message(struct hl_device *hdev, u32 hw_queue_id, u32 *msg,
- 			dev_dbg(hdev->dev, "Device CPU packet timeout (0x%x) due to FW reset\n",
- 					tmp);
- 		else
--			dev_err(hdev->dev, "Device CPU packet timeout (0x%x)\n", tmp);
-+			dev_err(hdev->dev, "Device CPU packet timeout (status = 0x%x)\n", tmp);
- 		hdev->device_cpu_disabled = true;
- 		goto out;
- 	}
-@@ -1346,8 +1346,7 @@ static void detect_cpu_boot_status(struct hl_device *hdev, u32 status)
- 		break;
- 	default:
- 		dev_err(hdev->dev,
--			"Device boot progress - Invalid status code %d\n",
--			status);
-+			"Device boot progress - Invalid or unexpected status code %d\n", status);
- 		break;
- 	}
- }
-@@ -1377,8 +1376,8 @@ int hl_fw_wait_preboot_ready(struct hl_device *hdev)
- 		pre_fw_load->wait_for_preboot_timeout);
- 
+diff --git a/drivers/accel/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
+index 9a9c494b08a4..edeec35fd9c6 100644
+--- a/drivers/accel/habanalabs/common/device.c
++++ b/drivers/accel/habanalabs/common/device.c
+@@ -1738,7 +1738,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 	rc = hdev->asic_funcs->scrub_device_mem(hdev);
  	if (rc) {
--		dev_err(hdev->dev, "CPU boot ready status timeout\n");
- 		detect_cpu_boot_status(hdev, status);
-+		dev_err(hdev->dev, "CPU boot ready timeout (status = %d)\n", status);
- 
- 		/* If we read all FF, then something is totally wrong, no point
- 		 * of reading specific errors
-@@ -2427,7 +2426,7 @@ static int hl_fw_dynamic_wait_for_boot_fit_active(struct hl_device *hdev,
- 		hdev->fw_poll_interval_usec,
- 		dyn_loader->wait_for_bl_timeout);
- 	if (rc) {
--		dev_err(hdev->dev, "failed to wait for boot\n");
-+		dev_err(hdev->dev, "failed to wait for boot (status = %d)\n", status);
- 		return rc;
+ 		dev_err(hdev->dev, "scrub mem failed from device reset (%d)\n", rc);
+-		return rc;
++		goto out_err;
  	}
  
-@@ -2454,7 +2453,7 @@ static int hl_fw_dynamic_wait_for_linux_active(struct hl_device *hdev,
- 		hdev->fw_poll_interval_usec,
- 		fw_loader->cpu_timeout);
- 	if (rc) {
--		dev_err(hdev->dev, "failed to wait for Linux\n");
-+		dev_err(hdev->dev, "failed to wait for Linux (status = %d)\n", status);
- 		return rc;
- 	}
- 
-@@ -2793,7 +2792,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
- 
- 	if (rc) {
- 		dev_dbg(hdev->dev,
--			"No boot fit request received, resuming boot\n");
-+			"No boot fit request received (status = %d), resuming boot\n", status);
- 	} else {
- 		rc = hdev->asic_funcs->load_boot_fit_to_device(hdev);
- 		if (rc)
-@@ -2816,7 +2815,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
- 
- 		if (rc) {
- 			dev_err(hdev->dev,
--				"Timeout waiting for boot fit load ack\n");
-+				"Timeout waiting for boot fit load ack (status = %d)\n", status);
- 			goto out;
- 		}
- 
-@@ -2894,7 +2893,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
- 
- 		if (rc) {
- 			dev_err(hdev->dev,
--				"Failed to get ACK on skipping BMC, %d\n",
-+				"Failed to get ACK on skipping BMC (status = %d)\n",
- 				status);
- 			WREG32(msg_to_cpu_reg, KMD_MSG_NA);
- 			rc = -EIO;
-@@ -2921,7 +2920,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
- 				"Device reports FIT image is corrupted\n");
- 		else
- 			dev_err(hdev->dev,
--				"Failed to load firmware to device, %d\n",
-+				"Failed to load firmware to device (status = %d)\n",
- 				status);
- 
- 		rc = -EIO;
+ 	spin_lock(&hdev->reset_info.lock);
 -- 
 2.25.1
 
