@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98B46746F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD10674709
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjASXN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S230173AbjASXOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjASXM7 (ORCPT
+        with ESMTP id S231187AbjASXNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:12:59 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212931BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:05 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso4672094wmc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mbI3crUnZHE33dCw4UMEiMuxL329KBkUWgeNaQcR87U=;
-        b=Ol0oPKVfH3C5OpKN4RdqGeOUFC0rkaPwfQOzVbtQ2rKlgtCahTIUAOjtqj5WYunROs
-         UnGrAvTCKMeUZXTYUx8agsQiwA77ULjFyT1hC93EZA67Mem44q6tWCxjSJjG4wRDPWAP
-         hO2BINkygCbPCF+NRVkvYnqJYMXLm3ua6VvTMhRKsEpf7ZWA+3lH7V9UCNmORqK7/koy
-         s+Bxqd5beN0vgluWliHX1A1FRm9Hc/M7gKajgIaYlL4Zn0+ziZ2av+Ytug75S0MfxJt8
-         HU2GNWjA3lb7XLd+/ngHLUCUO4QXEgHAW9PyZalLRA7BHsEpc3zIcsoge0N5ujELMzTh
-         ed2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mbI3crUnZHE33dCw4UMEiMuxL329KBkUWgeNaQcR87U=;
-        b=4BtmfNuypZQ31FfFcTzEtvhd6zgHjjhLY2+DS0EaYnZ5FPjosYwbD0hb3eDkNj3YYK
-         1skaS8HtcpPm3lI9qCkcs+SLhEsL57E00mvwKMQqtzdtkLtyrBKroLO0ru1oNEnHH0BB
-         nsvEnQKWqaDggYo6Tf5Xj9iEdMzCYLwvosTBFOy9Bzjt6MUUkoBTGk5nYCUdF6FvgyJc
-         yk2tFPTnZHhvKikTnVd9Uple8ruqv3mRJU/MPCX5vWXW557WJFbqOjZFGRzOD5oZnAtP
-         wedfAjQNliaZlH/gK8zwqrBpRtKKju3iC+m6ti3T4ZSErFPsMKMGMgaoXlAyagLNDIbs
-         MFFg==
-X-Gm-Message-State: AFqh2krCh9sQXwgCqxUnrrIcol/oUutA0B2B3Dxc8DinnhjUUxFMwPlw
-        FfXN3yE3M3UoYPjT2lLIhj2jed7xk8ZvmlT0165hvg==
-X-Google-Smtp-Source: AMrXdXt2/t2D3yu+VxSHvwvBrUb8EGhOVUMYirstDNc5cXLRFIG9XzXTn22/3s/wXvvT6pAXmmRP9zR96PCAsMgzAXo=
-X-Received: by 2002:a05:600c:3095:b0:3d9:7950:dc5f with SMTP id
- g21-20020a05600c309500b003d97950dc5fmr672841wmn.120.1674169623606; Thu, 19
- Jan 2023 15:07:03 -0800 (PST)
+        Thu, 19 Jan 2023 18:13:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A861BF1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674169627;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OzQ8d1jXdJYzLh2FRotyWLcD3ZyAJ/HLipvCJpGF0Y8=;
+        b=QYCwDsHxWA4Eo0YFw0CgWJusSXgxtZR3OpbYKfdFG86zaqD+mSglv+S+NuokWPUb3GcHmB
+        snQ8Y/Us9qhnQPOI5Uk9fEu9AIwxjDbHmh0zPDs35WcqzCiLNtkNaTr+cgRzCc5Xx0EO8I
+        TUDxR68ojTKhJjb8iPz0fd/jan3earw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-126-UKGCTogHM4yg4Ko8tyN4xQ-1; Thu, 19 Jan 2023 18:07:02 -0500
+X-MC-Unique: UKGCTogHM4yg4Ko8tyN4xQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 75A75830F4F;
+        Thu, 19 Jan 2023 23:07:01 +0000 (UTC)
+Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C1CB12166B2A;
+        Thu, 19 Jan 2023 23:06:54 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 4/4] KVM: Improve warning report in
+ mark_page_dirty_in_slot()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com,
+        oliver.upton@linux.dev, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, shan.gavin@gmail.com
+References: <20230116040405.260935-1-gshan@redhat.com>
+ <20230116040405.260935-5-gshan@redhat.com> <Y8bBzKF17IdZP9eF@google.com>
+ <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
+ <Y8lfdgcjLvtgII2a@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <4bc6857d-662c-cee4-01af-c441fb4ed623@redhat.com>
+Date:   Fri, 20 Jan 2023 10:06:52 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-36-jthoughton@google.com> <Y8nGK2N5E15cenr1@x1n>
-In-Reply-To: <Y8nGK2N5E15cenr1@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 19 Jan 2023 15:06:27 -0800
-Message-ID: <CADrL8HXHe85Jgiv9JatzMUhmqg0K5WGrGe_S+aZHobqzDYFLFQ@mail.gmail.com>
-Subject: Re: [PATCH 35/46] hugetlb: add MADV_COLLAPSE for hugetlb
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8lfdgcjLvtgII2a@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 2:37 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Jan 05, 2023 at 10:18:33AM +0000, James Houghton wrote:
-> > +     /*
-> > +      * Grab the VMA lock and mapping sem for writing. This will prevent
-> > +      * concurrent high-granularity page table walks, so that we can safely
-> > +      * collapse and free page tables.
-> > +      *
-> > +      * This is the same locking that huge_pmd_unshare requires.
-> > +      */
-> > +     hugetlb_vma_lock_write(vma);
-> > +     i_mmap_lock_write(vma->vm_file->f_mapping);
->
-> One thing I just noticed - do we need the mmap write lock here?  I don't
-> quickly see what stops another thread from having the mmap read and walking
-> upon the pgtables being collapsed.
+Hi Sean,
 
-Maybe. Does huge_pmd_unshare() have the same problem?
+On 1/20/23 2:19 AM, Sean Christopherson wrote:
+> On Thu, Jan 19, 2023, Gavin Shan wrote:
+>> On 1/18/23 2:42 AM, Sean Christopherson wrote:
+>>> On Mon, Jan 16, 2023, Gavin Shan wrote:
+>>>> There are two warning reports about the dirty ring in the function.
+>>>> We have the wrong assumption that the dirty ring is always enabled when
+>>>> CONFIG_HAVE_KVM_DIRTY_RING is selected.
+>>>
+>>> No, it's not a wrong assumption, becuase it's not an assumption.  The intent is
+>>> to warn irrespective of dirty ring/log enabling.  The orignal code actually warned
+>>> irrespective of dirty ring support[1], again intentionally.  The
+>>> CONFIG_HAVE_KVM_DIRTY_RING check was added because s390 can mark pages dirty from
+>>> an worker thread[2] and s390 has no plans to support the dirty ring.
+>>>
+>>> The reason for warning even if dirty ring isn't enabled is so that bots can catch
+>>> potential KVM bugs without having to set up a dirty ring or enable dirty logging.
+>>>
+>>> [1] 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
+>>> [2] e09fccb5435d ("KVM: avoid warning on s390 in mark_page_dirty")
+>>>
+>>
+>> Thanks for the linker. I was confused when looking at the code, but now it's clear to
+>> me. Thanks for your explanation. How about to add a comment there?
+>>
+>>    /*
+>>     * The warning is expected when the dirty ring is configured,
+>>     * but not enabled.
+>>     */
+> 
+> That's not correct either.  By design, the warning can also fire if the dirty ring
+> is enabled.  KVM's rule is that writes to guest memory always need to be done in
+> the context of a running vCPU, with the recently added exception of
+> kvm_arch_allow_write_without_running_vcpu().  That intent of the warning is to
+> enforce that rule regardless of the state of the VM.
+> 
+> Concretely, I think you can just drop patches 3 and 4, and just fix the arm64 issues.
+> 
+
+Right, the warning report is still expected when dirty ring is enabled. My attempt
+was to have comment for the confused case. Anyway, it's not a big deal. I will drop
+PATCH[3] and PATCH[4] in v2.
+
+Thanks,
+Gavin
+
