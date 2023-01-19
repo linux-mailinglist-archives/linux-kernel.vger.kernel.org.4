@@ -2,86 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A16732C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1B66732B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjASHnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S229947AbjASHms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjASHmr (ORCPT
+        with ESMTP id S230032AbjASHmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:42:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D8862D34;
-        Wed, 18 Jan 2023 23:42:33 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J5SQlU031409;
-        Thu, 19 Jan 2023 07:42:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=FLex8zjT9VRXnhsIj4ub4wUARNM1CTDIwV/nmvMUcPI=;
- b=ViTNFEAkwuLjLDkyJkjNIiwKAazu7uXgoFHvlSdDdrEZtxebtuiemlUoCQ/+ilUTZETr
- fAKlhmG2wbzg8WtVZxxfDNWJ5oN5GOj7hoMI6di83DrZqIqeRx3Gs5W2zv9px7937hZQ
- PBe6sPNwAPNy822D1QpaDiIH2gukFQef4H1yAAIpRNe2F6fIQowfShctOnoGWlI3B13H
- WlYB2rctVx7FgoTcUBmbjHtCfrpFX7ukfoNlDowl0uvJsh48tDogl3SpZGOpGVjOHcJV
- HERiTow/JSWmZQS3S8NyX2pzSMqb7XyrP9SAT1VzUb8qCAK+FrtPg7WNcfHSnjwa+iW6 sw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6ya2re1q-1
+        Thu, 19 Jan 2023 02:42:12 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF36B67963;
+        Wed, 18 Jan 2023 23:41:58 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J4AIkV025282;
+        Thu, 19 Jan 2023 08:41:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=jL/MbEBfkVAq5ZMy1e9+noLbvk1MZWNuOQ2c+Fz8nz0=;
+ b=BX5ioQOOwo8TiUALeHu96ZUvFqNIHMHC983BbAfFTiaXFGm04nFWgpxOs1Q7wy8bd1tT
+ iacyKZPEi3RiNxjrVN23olXkUMvfN1LPcgEkOJgqBS13VE4H31+IPZjKsZJYTAOAlkMT
+ wVL+gSSJR/+ua+zPPFyqR+rcwK/c8ePcyJhBfcKCqe7NVkmg0bsxcWYHrl5vTZSYL8jJ
+ tM9o3ECjI5clfhz0HeAB4Gu+1cmmSklmH4q2DKtaUl+ZfNNyWLjnc2/8bm5Gj8t00Toz
+ vt5LmHTqJz6oq9ZHq4VnRcItZY7fnlvBIqaAKdyh8+tU4QSDXG7WCok/Mg8ZAujzrnsd Aw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n5mc4y1dj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:42:12 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J7gBKH022007
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:42:11 GMT
-Received: from taozha-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 18 Jan 2023 23:42:05 -0800
-From:   Tao Zhang <quic_taozha@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Tao Zhang <taozha@qti.qualcomm.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>
-Subject: [PATCH v2 0/9] Add support to configure TPDM DSB subunit
-Date:   Thu, 19 Jan 2023 15:41:36 +0800
-Message-ID: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 19 Jan 2023 08:41:42 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 38C35100039;
+        Thu, 19 Jan 2023 08:41:39 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 22EC520F562;
+        Thu, 19 Jan 2023 08:41:39 +0100 (CET)
+Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 19 Jan
+ 2023 08:41:36 +0100
+Message-ID: <39af6fac-3e8e-4929-43b3-eb0b7af0ab30@foss.st.com>
+Date:   Thu, 19 Jan 2023 08:41:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OoHMFfpzOiFXu4GnXKkkxvINInSTKcpH
-X-Proofpoint-GUID: OoHMFfpzOiFXu4GnXKkkxvINInSTKcpH
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        =?UTF-8?Q?C=c3=a9dric_Le_Goat?= =?UTF-8?Q?er?= <clg@kaod.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Parshuram Thombare <pthombar@cadence.com>,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        Gabor Juhos <juhosg@openwrt.org>,
+        Bert Vermeulen <bert@biot.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Marek Vasut <marex@denx.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.26]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- mlxscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190062
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,100 +139,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Zhang <taozha@qti.qualcomm.com>
+Hi Krzysztof
 
-Introduction of TPDM DSB subunit
-DSB subunit is responsible for creating a dataset element, and is also
-optionally responsible for packing it to fit multiple elements on a
-single ATB transfer if possible in the configuration. The TPDM Core
-Datapath requests timestamps be stored by the TPDA and then delivering
-ATB sized data (depending on ATB width and element size, this could
-be smaller or larger than a dataset element) to the ATB Mast FSM.
+On 1/18/23 18:39, Krzysztof Kozlowski wrote:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-The DSB subunit must be configured prior to enablement. This series
-adds support for TPDM to configure the configure DSB subunit.
+[...]
 
-Once this series patches are applied properly, the new tpdm nodes for
-should be observed at the tpdm path /sys/bus/coresight/devices/tpdm*
-which supports DSB subunit.
-e.g.
-/sys/devices/platform/soc@0/69d0000.tpdm/tpdm0#ls -l | grep dsb
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_edge_ctrl
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_edge_ctrl_mask
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_mode
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_patt_mask
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_patt_ts
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_patt_type
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_patt_val
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_trig_patt_mask
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_trig_patt_val
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_trig_ts
--rw-r--r--    1 root     root      4096 Jan  1 00:01 dsb_trig_type
+> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+> index 1eb17f7a4d86..8bba965a9ae6 100644
+> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>    - Patrice Chotard <patrice.chotard@foss.st.com>
+>  
+>  allOf:
+> -  - $ref: "spi-controller.yaml#"
+> +  - $ref: spi-controller.yaml#
+>  
+>  properties:
+>    compatible:
 
-We can use the commands are similar to the below to configure the
-TPDMs which support DSB subunit. Enable coresight sink first.
-echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
-echo 1 > /sys/bus/coresight/devices/tpdm0/reset
-echo 0x3 0x3 0x1 > /sys/bus/coresight/devices/tpdm0/dsb_edge_ctrl_mask
-echo 0x6d 0x6d 0 > /sys/bus/coresight/devices/tpdm0/dsb_edge_ctrl
-echo 1 > /sys/bus/coresight/devices/tpdm0/dsb_patt_ts
-echo 1 > /sys/bus/coresight/devices/tpdm0/dsb_patt_type
-echo 0 > /sys/bus/coresight/devices/tpdm0/dsb_trig_ts
-echo 0 0xFFFFFFFF > /sys/bus/coresight/devices/tpdm0/dsb_patt_mask
-echo 0 0xFFFFFFFF > /sys/bus/coresight/devices/tpdm0/dsb_trig_patt_val
 
-This patch series depends on patch series "[v17,0/9] Coresight: Add
-support for TPDM and TPDA"
-https://patchwork.kernel.org/project/linux-arm-msm/cover/20230117145708.16739-1-quic_jinlmao@quicinc.com/
+For stm32-qspi 
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-TPDM_DSB commit tree:
-https://git.codelinaro.org/clo/linux-kernel/coresight/-/tree/tpdm-dsb-v2
-https://git.codelinaro.org/clo/linux-kernel/coresight/-/commits/tpdm-dsb-v2
-
-Changes in V2:
-1. Change the name of the property "qcom,dsb-elem-size" to
-"qcom,dsb-element-size" -- Suzuki K Poulose
-2. Update the TPDA yaml file for the item "qcom,dsb-elem-size".
--- Krzysztof Kozlowski
-3. Add the full name of DSB in the description of the item
-"qcom,dsb-elem-size". -- Rob Herring
-
-Changes in V1:
-1. Change the definition of the property "qcom,dsb-elem-size" from
-"uint32-array" to "uint32-matrix". -- Krzysztof Kozlowski
-2. Add the full name of DSB. -- Rob Herring
-3. Deal with 2 entries in an iteration in TPDA driver. -- Suzuki K Poulose
-4. Divide the function "tpdm_datasets_alloc" into two functions,
-"tpdm_datasets_setup" and "tpdm_datasets_alloc".
-5. Detecte the input string with the conventional semantics automatically,
-and constrain the size of the input value. -- Suzuki K Poulose
-6. Use the hook function "is_visible()" to hide the DSB related knobs if
-the data sets are missing. -- Suzuki K Poulose
-7. Use the macros "FIELD_GET" and "FIELD_PREP" to set the values.
--- Suzuki K Poulose
-8. Update the definition of the macros in TPDM driver.
-9. Update the comments of the values for the nodes which are for DSB
-element creation and onfigure pattern match output. -- Suzuki K Poulose
-10. Use API "sysfs_emit" to "replace scnprintf". -- Suzuki K Poulose
-
-Tao Zhang (9):
-  dt-bindings: arm: Add support for DSB element
-  coresight-tpda: Add DSB dataset support
-  coresight-tpdm: Initialize DSB subunit configuration
-  coresight-tpdm: Add reset node to TPDM node
-  coresight-tpdm: Add nodes to set trigger timestamp and type
-  coresight-tpdm: Add node to set dsb programming mode
-  coresight-tpdm: Add nodes for dsb element creation
-  coresight-tpdm: Add nodes to configure pattern match output
-  coresight-tpdm: Add nodes for timestamp request
-
- .../bindings/arm/qcom,coresight-tpda.yaml          |  22 +
- drivers/hwtracing/coresight/coresight-tpda.c       |  62 ++
- drivers/hwtracing/coresight/coresight-tpda.h       |   4 +
- drivers/hwtracing/coresight/coresight-tpdm.c       | 630 ++++++++++++++++++++-
- drivers/hwtracing/coresight/coresight-tpdm.h       |  65 +++
- 5 files changed, 778 insertions(+), 5 deletions(-)
-
--- 
-2.7.4
-
+Thanks
+Patrice
