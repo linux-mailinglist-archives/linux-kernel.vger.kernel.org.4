@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB916730DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090006730F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjASFAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S229852AbjASFFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjASE7u (ORCPT
+        with ESMTP id S229644AbjASFFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:59:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B696E809;
-        Wed, 18 Jan 2023 20:54:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 19 Jan 2023 00:05:01 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E9B366BA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:59:32 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.20.121])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Ny7L75G5wz1DsP
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:25:19 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4Ny7Hw4p3bzBRK7X
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:23:24 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4Ny7Fx01Plz9tyJY
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:21:41 +0800 (CST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Ny7B06HbQz8R040
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:18:16 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3024661B08;
-        Thu, 19 Jan 2023 04:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE8BC433F2;
-        Thu, 19 Jan 2023 04:54:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674104045;
-        bh=8STx2T8AJT0u5Zm/c1U9jriS211KAffMt8EbxIqBgBM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rxL85B7jBYlqD7zx9JK9i4b/MHm8n93LItWc32urivS+btvL/bkcFdb23u8uuJSo9
-         PRRDihA+oN3AfCvmgRZr/MoEL2N5ElAUTwYGzgFOktwQqypHBoRryAi5L0cpQbeMe3
-         tV96jsK2VwlR6rVKtOjeC4JD62SASG0GIAuXrbMaZMFpgGeKjYKqOcHmgKhCqQFrmv
-         uih3LhL1xSSQtTUjJRU2iV3754K/kd9PuVU4EdSK33HsFYDMCBZ5oOfAoTZw3cPenJ
-         GYcYHPZqdbPkOcBeYvTW1q5ta6scRWGDFTA8ltJXg3wgj4LwCfxbt2p/3JP1cRct6D
-         KMR3JkNOG7oZA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     shawn.guo@linaro.org, kw@linux.com, linux-pci@vger.kernel.org,
-        lpieralisi@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, robh@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Robert Marko <robimarko@gmail.com>,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        svarbanov@mm-sol.com, mani@kernel.org
-Subject: Re: (subset) [PATCH v2 1/9] arm64: dts: qcom: ipq8074: fix Gen2 PCIe QMP PHY
-Date:   Wed, 18 Jan 2023 22:54:00 -0600
-Message-Id: <167410403679.3048186.3473019994896236828.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230113164449.906002-1-robimarko@gmail.com>
-References: <20230113164449.906002-1-robimarko@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Ny77V0JPtz501RH;
+        Thu, 19 Jan 2023 11:16:06 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 30J3FwLe065875;
+        Thu, 19 Jan 2023 11:15:58 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 19 Jan 2023 11:15:59 +0800 (CST)
+Date:   Thu, 19 Jan 2023 11:15:59 +0800 (CST)
+X-Zmail-TransId: 2af963c8b5ef5f2f9319
+X-Mailer: Zmail v1.0
+Message-ID: <202301191115594503875@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <maarten.lankhorst@linux.intel.com>
+Cc:     <mripard@kernel.org>, <tzimmermann@suse.de>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBkcm0vYnJpZGdlOiBSZW1vdmUgY29tcGlsYXRpb24gZXJyb3I=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30J3FwLe065875
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 63C8B81E.001 by FangMail milter!
+X-FangMail-Envelope: 1674098719/4Ny7L75G5wz1DsP/63C8B81E.001/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C8B81E.001/4Ny7L75G5wz1DsP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 17:44:41 +0100, Robert Marko wrote:
-> Serdes register space sizes are incorrect, update them to match the
-> actual sizes from downstream QCA 5.4 kernel.
-> 
-> 
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Applied, thanks!
+drivers/gpu/drm/vc4/vc4_dsi.c :1822:13: error: 'struct drm_bridge' has
+ no member named 'of_node'.
 
-[1/9] arm64: dts: qcom: ipq8074: fix Gen2 PCIe QMP PHY
-      commit: 100d9c94ccf15b02742c326cd04f422ab729153b
-[2/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe QMP PHY
-      commit: 7ba33591b45f9d547a317e42f1c2acd19c925eb6
-[3/9] arm64: dts: qcom: ipq8074: correct Gen2 PCIe ranges
-      commit: 2055cb7dccea16bafa3adf9c5e3216949512c34a
-[4/9] arm64: dts: qcom: ipq8074: set Gen2 PCIe pcie max-link-speed
-      commit: b60590314828e3da670bed94129f4ebc02b87548
-[8/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe node
-      commit: 3e83a9c41ab0244a45a4a2800b9adb8de0d15f82
-[9/9] arm64: dts: qcom: ipq8074: correct PCIe QMP PHY output clock names
-      commit: 0e8b90c0256cf9c9589e2cee517dedc987a34355
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ include/drm/drm_bridge.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-Best regards,
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index 42f86327b40a..1f84a8d491c7 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -715,10 +715,8 @@ struct drm_bridge {
+ 	struct drm_encoder *encoder;
+ 	/** @chain_node: used to form a bridge chain */
+ 	struct list_head chain_node;
+-#ifdef CONFIG_OF
+ 	/** @of_node: device node pointer to the bridge */
+ 	struct device_node *of_node;
+-#endif
+ 	/** @list: to keep track of all added bridges */
+ 	struct list_head list;
+ 	/**
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.25.1
