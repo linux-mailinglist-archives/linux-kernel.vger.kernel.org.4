@@ -2,195 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FDB67403B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4980667403A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjASRpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S229991AbjASRoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjASRo5 (ORCPT
+        with ESMTP id S230053AbjASRoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:44:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F012728
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674150252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I65fhwzn/L9Fa22JkNDNnGV7+YerXbIr5UxK/3KRDk0=;
-        b=EuOfZaf1iik0GCFaRy28h1DZRbHI2IgM7lMj8QM7g8546DssCfApdxmz518riihW3uf9BI
-        TNZiC6c4tOMXQTotN43SODS5G9itYUM32BsQi+HWJRAOn21CbSNmCOhH+8HXrYrZeMby7P
-        c32iE7D+59AmmErCIqQHsvDpXOW6Yao=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-546-DUEB9hWWPOiYIaQ5TfeyOw-1; Thu, 19 Jan 2023 12:44:11 -0500
-X-MC-Unique: DUEB9hWWPOiYIaQ5TfeyOw-1
-Received: by mail-il1-f200.google.com with SMTP id n18-20020a056e02101200b0030f2b79c2ffso2074929ilj.20
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:44:11 -0800 (PST)
+        Thu, 19 Jan 2023 12:44:24 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBAF8F7EC
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:44:21 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id q15so2185406qtn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uagwk8oR7LPWqlzC3PvjsT4JfUYRAFGo9v4XuZ07zBk=;
+        b=nP6xVbCjpeodz/mRIOjm6xSBUhqllO6OARfOl2D2EQlboN3z2B5vLRQsNU3WO5+KRs
+         tLJaNLsd/zYPkP4RFkyzHni8pKIjEC9USvFJhlO9bycPtZx1ZpnWwqHbJNx6uX5Mo0s0
+         1+0fFmPjbbLzz3jadhXmiXTRy3NH/fmeHezoHyd3hx3XEW0/Xs7teWpqz+NAsk2lxE6t
+         fexg9FvsRCQPaKxl/uzl0FxeLIJGYIfb+NZM7eEA9QzVo+P+zZNTy1wtuAAIP216Dd9D
+         kIAtttuRV6EBEAict3s0OVFwJSxkzQGLZ7+Ubf/NS5R3xrtdp12BB0ROU7vKBAkHFlJW
+         LL8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I65fhwzn/L9Fa22JkNDNnGV7+YerXbIr5UxK/3KRDk0=;
-        b=MPYK5JUD8Vsvfg8kPb8uxE+a1kFSHZqdNOhRoVNLb3q5v54KqvXNAKAiU/nRvr7bLJ
-         /kAUnc6ox4y9dh+70O1rxnaFmRZyDwdi9VNqWiiznV5WYmprLpFuMB0qkdfiWpJj/ccx
-         5hNZgGJYsnAWQ/qTjozycO5eu44G4j7aIAzWuX92hcNx6IXvAY0ImaQp+RIW0wrK7IOp
-         CCnNsQxl7lkYnJ984TVQiLRIdPGpHN1qxvwHH3yo2UGDR2dGlSkyCfb3787t2gNeYmer
-         Jpro/wlRHFbT1p/LehLmcrwgsTobCDvSQkSwhVdOf0J0oqd0UyKFYcNrGkobMlcFa4h2
-         T6uw==
-X-Gm-Message-State: AFqh2kphxoYEXjhliCkZbE0uxBZ2u0qSq5cd3wGch4Kn2ClX4eC3dYZd
-        AEsgTaPVkm4csTWrAvma7g1ISNrrofKTDUKESkZsYYeUIzaFnXb8e/tD6XXMqOJD/KcdIQXj0Zx
-        vN5E1TYRSNBIXlgy8tPIkGxRg
-X-Received: by 2002:a5d:8190:0:b0:707:6e91:e866 with SMTP id u16-20020a5d8190000000b007076e91e866mr2665091ion.15.1674150250055;
-        Thu, 19 Jan 2023 09:44:10 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv1W5GZVuR826/SH+nw+lLMCvbhlb9cYqIkTu+onlo8zN5FdR8m3HX9tdl7EgaFE50l7p0hDw==
-X-Received: by 2002:a5d:8190:0:b0:707:6e91:e866 with SMTP id u16-20020a5d8190000000b007076e91e866mr2665074ion.15.1674150249760;
-        Thu, 19 Jan 2023 09:44:09 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id o9-20020a6b5a09000000b006c0cb1e1ea8sm12192765iob.12.2023.01.19.09.44.08
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uagwk8oR7LPWqlzC3PvjsT4JfUYRAFGo9v4XuZ07zBk=;
+        b=zFrhvOXTeEPmxqymPhjUksLAkc23+ngHx/zxIjVtkaQQ8a5lIjHCpF3X4MilwwTI7u
+         RToJeS54nTtQS0n8kO6e/zPiJZi4rIRL/5m4OVUeryDxXTun62ZW7FDlWiawyNP4qmlA
+         36Ynr2222clbt5xWZkTRHCxjOp+CUINdaRu9A5ecXscFqMXKmdET2Yyyp7H/ZfPKgwNw
+         JHYFDdr5Swx+tI3gpLTZaYVtp8MPIP0RC/JGYUdxI9Cm+R3AQcolPEKEdVHSHGnxCQ4k
+         W0rOOIz167c4TafQV5Cx7P0er8DnT7jNqjZ7PVZwlO4t/nu19JzSKriDL8skJfvUNUnl
+         zBZw==
+X-Gm-Message-State: AFqh2kpdDI4A9SBjnFJdhbFzNYyZaNVvciIchroLFg/1d1/bqpYO9HJL
+        fjkl5mcnzapCt8F0Eb3LIsFniw==
+X-Google-Smtp-Source: AMrXdXtdkw6bZG4rXeIxw0GPjaolavd09O8lSwYuZEkyHv6r9utsdO+I6RRn0E5l0+m/NuY/CoaIjQ==
+X-Received: by 2002:ac8:65cb:0:b0:3b6:2e8b:3363 with SMTP id t11-20020ac865cb000000b003b62e8b3363mr15120364qto.52.1674150260824;
+        Thu, 19 Jan 2023 09:44:20 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-167-59-176.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.59.176])
+        by smtp.gmail.com with ESMTPSA id g27-20020ac8775b000000b003ab1ee36ee7sm5325828qtu.51.2023.01.19.09.44.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:44:09 -0800 (PST)
-Date:   Thu, 19 Jan 2023 12:44:07 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Giuseppe Scrivano <gscrivan@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
-        bristot@redhat.com, ebiederm@xmission.com, brauner@kernel.org,
-        cyphar@cyphar.com, viro@zeniv.linux.org.uk, alexl@redhat.com,
-        peterz@infradead.org
-Subject: Re: [PATCH v2 2/2] selftests: add tests for prctl(SET_HIDE_SELF_EXE)
-Message-ID: <Y8mBZ5I8Yx4TARjb@x1>
-References: <20230119170718.3129938-1-gscrivan@redhat.com>
- <20230119170718.3129938-2-gscrivan@redhat.com>
+        Thu, 19 Jan 2023 09:44:19 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pIYxX-00EGs1-95;
+        Thu, 19 Jan 2023 13:44:19 -0400
+Date:   Thu, 19 Jan 2023 13:44:19 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        joro@8bytes.org, robin.murphy@arm.com, thomas.lendacky@amd.com,
+        vasant.hegde@amd.com, jon.grimm@amd.com
+Subject: Re: [PATCH 1/4] iommu/amd: Introduce Protection-domain flag VFIO
+Message-ID: <Y8mBczFH/Hw6xot0@ziepe.ca>
+References: <20230110143137.54517-1-suravee.suthikulpanit@amd.com>
+ <20230110143137.54517-2-suravee.suthikulpanit@amd.com>
+ <Y8F53dzdebKLTlOy@ziepe.ca>
+ <90762dee-1559-58ac-220d-a13635d5032e@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230119170718.3129938-2-gscrivan@redhat.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <90762dee-1559-58ac-220d-a13635d5032e@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 06:07:18PM +0100, Giuseppe Scrivano wrote:
-> Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
-> ---
->  tools/testing/selftests/prctl/Makefile        |   2 +-
->  tools/testing/selftests/prctl/hide-self-exe.c | 101 ++++++++++++++++++
->  2 files changed, 102 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/prctl/hide-self-exe.c
+On Thu, Jan 19, 2023 at 02:54:43AM -0600, Kalra, Ashish wrote:
+> Hello Jason,
 > 
-> diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
-> index c7923b205222..024e107b26ec 100644
-> --- a/tools/testing/selftests/prctl/Makefile
-> +++ b/tools/testing/selftests/prctl/Makefile
-> @@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->  
->  ifeq ($(ARCH),x86)
->  TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
-> -		disable-tsc-test
-> +		disable-tsc-test hide-self-exe
->  all: $(TEST_PROGS)
->  
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/prctl/hide-self-exe.c b/tools/testing/selftests/prctl/hide-self-exe.c
-> new file mode 100644
-> index 000000000000..f86cef8e061c
-> --- /dev/null
-> +++ b/tools/testing/selftests/prctl/hide-self-exe.c
-> @@ -0,0 +1,101 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Tests for prctl(PR_GET_HIDE_SELF_EXE, ...) / prctl(PR_SET_HIDE_SELF_EXE, ...)
-> + *
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <signal.h>
-> +#include <inttypes.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <sys/wait.h>
-> +
-> +#include <sys/prctl.h>
-> +#include <linux/prctl.h>
-> +
-> +#ifndef PR_SET_HIDE_SELF_EXE
-> +# define PR_SET_HIDE_SELF_EXE		65
-> +# define PR_GET_HIDE_SELF_EXE		66
-> +#endif
-> +
-> +int main(void)
-> +{
-> +	int status;
-> +	pid_t pid;
-> +	int ret;
-> +
-> +	ret = open("/proc/self/exe", O_RDONLY);
-> +	if (ret < 0) {
-> +		perror("open /proc/self/exe");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +	close(ret);
-> +
-> +	ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
-> +	if (ret != 0) {
-> +		perror("prctl(PR_GET_HIDE_SELF_EXE)");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	ret = prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0);
-> +	if (ret != 0) {
-> +		perror("prctl(PR_SET_HIDE_SELF_EXE)");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	/* check it doesn't fail a second time.  */
-> +	ret = prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0);
-> +	if (ret != 0) {
-> +		perror("prctl(PR_SET_HIDE_SELF_EXE)");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
-> +	if (ret != 1) {
-> +		perror("prctl(PR_GET_HIDE_SELF_EXE)");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	ret = open("/proc/self/exe", O_RDONLY);
-> +	if (ret >= 0 || errno != ENOENT) {
-> +		perror("open /proc/self/exe succeeded");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	pid = fork();
-> +	if (pid < 0) {
-> +		perror("fork");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +	if (pid == 0) {
-> +		/* Verify that it is still unreachable after fork().  */
-> +		ret = open("/proc/self/exe", O_RDONLY);
-> +		if (ret >= 0 || errno != ENOENT)
-> +			exit(EXIT_FAILURE);
-> +		close(ret);
-> +
-> +		/* And that it cannot be unset.  */
-> +		ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
+> On 1/13/2023 9:33 AM, Jason Gunthorpe wrote:
+> > On Tue, Jan 10, 2023 at 08:31:34AM -0600, Suravee Suthikulpanit wrote:
+> > > Currently, to detect if a domain is enabled with VFIO support, the driver
+> > > checks if the domain has devices attached and check if the domain type is
+> > > IOMMU_DOMAIN_UNMANAGED.
+> > 
+> > NAK
+> > 
+> > If you need weird HW specific stuff like this then please implement it
+> > properly in iommufd, not try and randomly guess what things need from
+> > the domain type.
+> > 
+> > All this confidential computing stuff needs a comprehensive solution,
+> > not some piecemeal mess. How can you even use a CC guest with VFIO in
+> > the upstream kernel? Hmm?
+> > 
+> 
+> Currently all guest devices are untrusted - whether they are emulated,
+> virtio or passthrough. In the current use case of VFIO device-passthrough to
+> an SNP guest, the pass-through device will perform DMA to un-encrypted or
+> shared guest memory, in the same way as virtio or emulated devices.
+> 
+> This fix is prompted by an issue reported by Nvidia, they are trying to do
+> PCIe device passthrough to SNP guest. The memory allocated for DMA is
+> through dma_alloc_coherent() in the SNP guest and during DMA I/O an
+> RMP_PAGE_FAULT is observed on the host.
+> 
+> These dma_alloc_coherent() calls map into page state change hypercalls into
+> the host to change guest page state from encrypted to shared in the RMP
+> table.
+> 
+> Following is a link to issue discussed above:
+> https://github.com/AMDESE/AMDSEV/issues/109
 
-Should this be PR_SET_HIDE_SELF_EXE?
+Wow you should really write all of this in the commmit message
 
-Brian
+> Now, to set individual 4K entries to different shared/private
+> mappings in NPT or host page tables for large page entries, the RMP
+> and NPT/host page table large page entries are split to 4K pte’s.
 
+Why are mappings to private pages even in the iommu in the first
+place - and how did they even get there?
+
+I thought the design for the private memory was walling it off in a
+memfd and making it un-gup'able?
+
+This seems to be your actual problem, somehow the iommu is being
+loaded with private memory PFNs instead of only being loaded with
+shared PFNs when shared mappings are created?
+
+If the IOMMU mappings actually only extend to the legitimate shared
+pages then you don't have a problem with large IOPTEs spanning a
+mixture of page types.
+
+> The fix is to force 4K page size for IOMMU page tables for SNP guests.
+
+But even if you want to persue this as the fix, it should not be done
+in this way.
+
+> This patch-set adds support to detect if a domain belongs to an SNP-enabled
+> guest. This way it can set default page size of a domain to 4K only for
+> SNP-enabled guest and allow non-SNP guest to use larger page size.
+
+As I said, the KVM has nothing to do with the iommu and I want to
+laregly keep it that way.
+
+If the VMM needs to request a 4k page size only iommu_domain because
+it is somehow mapping mixtures of private and public pages, then the
+VMM knows it is doing this crazy thing and it needs to ask iommufd
+directly for customized iommu_domain from the driver.
+
+No KVM interconnection.
+
+In fact, we already have a way to do this in iommufd generically, have
+the VMM set IOMMU_OPTION_HUGE_PAGES = 0.
+
+Jason
