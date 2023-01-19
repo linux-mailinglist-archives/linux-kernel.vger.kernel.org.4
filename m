@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18F267325E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8142467327D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjASHYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        id S229844AbjASHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjASHYE (ORCPT
+        with ESMTP id S229773AbjASHc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:24:04 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7A062D15
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674113036; x=1705649036;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vexI4bXkLQNgnzQp46b1BOfBvYLiQ1hk43f3ShONtl8=;
-  b=n1X18AGWpEHQbZiFJY7Pk2tC/V+7uNzf5kyLWPzH60Pjz4T+R6AklHT/
-   5CZNATNMYz+BoezcfhRzwp2iFA2ShPZnoJyelIflPmShXP1hU60bUKG/V
-   B/Y2LAjcFnT/4hlEy2ksgUhXpujP84gqLrNawpg3NNW4sBRWSmCZTGLLv
-   MuXGquzcchXe6fCJH7ooRuZYaQL5LYLgKL+AjcHG9Yb3TQe7DL2kukipJ
-   dyISKKdUzs04OujxZRHoRYCHqpE7DCQuJ7naK277OZAi/2x5k90Uz8rVk
-   UCqNX4ZBI5pvwxTGte20ZPzB9SKXJu1l6J+cm1Sni5UZIL2MTOHLmz6Uc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322902682"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="322902682"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 23:23:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="662028052"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="662028052"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 23:23:46 -0800
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 4/4] soundwire: cadence: further simplify low-level xfer_msg_defer() callback
-Date:   Thu, 19 Jan 2023 15:32:11 +0800
-Message-Id: <20230119073211.85979-5-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230119073211.85979-1-yung-chuan.liao@linux.intel.com>
-References: <20230119073211.85979-1-yung-chuan.liao@linux.intel.com>
+        Thu, 19 Jan 2023 02:32:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D158160499
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:32:26 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id bk16so913190wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yOAGtEwwl9ah5X14+fr3xyjQkxYKgtW7wTdmd7LaFEg=;
+        b=vRIRpio+Aom4lroZdxIv5dfYLWZdktfYVL3jHgETXcsxRJ2IKyD1BV36YuWKt8r1nQ
+         +07wunX4ZC3IPo0SiFKP/4cW4rCUCfgTlN/S3oDPCkSQ31hkzmGIEBxm3gnmd4L6UmKl
+         skGsnD6BenqldlGA2OrrmLySBX41OvAjMUQRJ8cUUO+fWk72verQOTsg+UiyW/fjh7X1
+         z5zfL1pWRMbdqXu+TUTUh+4KfrCuKlXZ/i2QJReFETSj/UWiGssDGb/4JCGsPml6Njtc
+         k+zsV+4nZoM+MsAECNOaZY1mX1Eygrw9Sjwbj8l1hy5tTux8/UmnXFK4RdG5XA8ZJ+a4
+         Jxlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yOAGtEwwl9ah5X14+fr3xyjQkxYKgtW7wTdmd7LaFEg=;
+        b=OLoksBKbQvLMt/rf3l7jaMAG1nStBIssGUf0WYEofYdav13HTC5aW/11CSIb6eBQMY
+         FmzN/VzSSLJrRvwIf0mGhaQqjUvoeurvQ6SqbJo5+jB23pRZI1+zh41WYnMLqQnW4QyL
+         i/i1cSnwviLu+Yt2gPtsnMkVchXHb7Qi6hmSPL8ZJip/Czw97A/FzCcpWoHaBjITUqYg
+         Wol+KSJn/9KH+fJqgpC0wV6TF7PJUQbRLG88ix07tPttjWu8AozeyuwCajQNnvpSYmoy
+         9+2VVJ5sM7xXXg4AZydQ+RleNtj1jc+cecBkCjyXJERpLHzMpFiC2V2+oymo6r8L5DRy
+         CTBA==
+X-Gm-Message-State: AFqh2ko/NnpJdN36RMnpXqs9Ztqn2DOV/VRhpZJdh9qg6+3Obt2JCcNr
+        4hvFaB7O0rPzvYAV5L0r7/aEaA==
+X-Google-Smtp-Source: AMrXdXsYozDSX5UXzU8eViFCPgDNSOimFqf7m+5mZ3D5VIeY9Dv8lV1BtejtIKH3WhVddwYIOFPnhQ==
+X-Received: by 2002:a5d:4dc9:0:b0:2be:21fc:ae3 with SMTP id f9-20020a5d4dc9000000b002be21fc0ae3mr7080130wru.11.1674113545389;
+        Wed, 18 Jan 2023 23:32:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w10-20020a5d404a000000b00275970a85f4sm32958865wrp.74.2023.01.18.23.32.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 23:32:24 -0800 (PST)
+Message-ID: <0662e292-91b4-0b1a-f012-83cb2f316353@linaro.org>
+Date:   Thu, 19 Jan 2023 08:32:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] dt-bindings: net: wireless: minor whitespace and name
+ cleanups
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        de Goede <hdegoede@redhat.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, ath11k@lists.infradead.org
+References: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
+ <87bkmv85tb.fsf@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <87bkmv85tb.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On 19/01/2023 06:13, Kalle Valo wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+> 
+>> Minor cleanups:
+>>  - Drop redundant blank lines,
+>>  - Correct indentaion in examples,
+>>  - Correct node names in examples to drop underscore and use generic
+>>    name.
+>>
+>> No functional impact except adjusting to preferred coding style.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../bindings/net/wireless/esp,esp8089.yaml    | 20 +++---
+>>  .../bindings/net/wireless/ieee80211.yaml      |  1 -
+>>  .../bindings/net/wireless/mediatek,mt76.yaml  |  1 -
+>>  .../bindings/net/wireless/qcom,ath11k.yaml    | 11 ++-
+>>  .../bindings/net/wireless/silabs,wfx.yaml     |  1 -
+>>  .../bindings/net/wireless/ti,wlcore.yaml      | 70 +++++++++----------
+>>  6 files changed, 50 insertions(+), 54 deletions(-)
+> 
+> Thanks for the cleanup. Would you like to me to take this to
+> wireless-next or do you have other plans?
 
-The message pointer is already stored in the bus->defer structure, not
-need to pass it as an argument.
+Go ahead and grab it for wireless-next, please. Thanks!
 
-Suggested-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
- drivers/soundwire/bus.c            | 2 +-
- drivers/soundwire/cadence_master.c | 5 +++--
- drivers/soundwire/cadence_master.h | 2 +-
- include/linux/soundwire/sdw.h      | 5 +++--
- 4 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index fc192d0c61e7..ed94c92bc575 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -237,7 +237,7 @@ static inline int do_transfer_defer(struct sdw_bus *bus,
- 	init_completion(&defer->complete);
- 
- 	for (i = 0; i <= retry; i++) {
--		resp = bus->ops->xfer_msg_defer(bus, msg);
-+		resp = bus->ops->xfer_msg_defer(bus);
- 		ret = find_response_code(resp);
- 		/* if cmd is ok or ignored return */
- 		if (ret == 0 || ret == -ENODATA)
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 2365395cb181..ece0ad89746f 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -749,10 +749,11 @@ cdns_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
- EXPORT_SYMBOL(cdns_xfer_msg);
- 
- enum sdw_command_response
--cdns_xfer_msg_defer(struct sdw_bus *bus,
--		    struct sdw_msg *msg)
-+cdns_xfer_msg_defer(struct sdw_bus *bus)
- {
- 	struct sdw_cdns *cdns = bus_to_cdns(bus);
-+	struct sdw_defer *defer = &bus->defer_msg;
-+	struct sdw_msg *msg = defer->msg;
- 	int cmd = 0, ret;
- 
- 	/* for defer only 1 message is supported */
-diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
-index 53029d22822d..63c58b9b1f59 100644
---- a/drivers/soundwire/cadence_master.h
-+++ b/drivers/soundwire/cadence_master.h
-@@ -187,7 +187,7 @@ enum sdw_command_response
- cdns_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg);
- 
- enum sdw_command_response
--cdns_xfer_msg_defer(struct sdw_bus *bus, struct sdw_msg *msg);
-+cdns_xfer_msg_defer(struct sdw_bus *bus);
- 
- u32 cdns_read_ping_status(struct sdw_bus *bus);
- 
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index fb2bd1524a26..86e320cf27b1 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -837,7 +837,8 @@ struct sdw_defer {
-  * @read_prop: Read Master properties
-  * @override_adr: Override value read from firmware (quirk for buggy firmware)
-  * @xfer_msg: Transfer message callback
-- * @xfer_msg_defer: Defer version of transfer message callback
-+ * @xfer_msg_defer: Defer version of transfer message callback. The message is handled with the
-+ * bus struct @sdw_defer
-  * @reset_page_addr: Reset the SCP page address registers
-  * @set_bus_conf: Set the bus configuration
-  * @pre_bank_switch: Callback for pre bank switch
-@@ -852,7 +853,7 @@ struct sdw_master_ops {
- 	enum sdw_command_response (*xfer_msg)
- 			(struct sdw_bus *bus, struct sdw_msg *msg);
- 	enum sdw_command_response (*xfer_msg_defer)
--			(struct sdw_bus *bus, struct sdw_msg *msg);
-+			(struct sdw_bus *bus);
- 	enum sdw_command_response (*reset_page_addr)
- 			(struct sdw_bus *bus, unsigned int dev_num);
- 	int (*set_bus_conf)(struct sdw_bus *bus,
--- 
-2.25.1
+Best regards,
+Krzysztof
 
