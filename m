@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F11367423F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD30674242
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjASTHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S231239AbjASTIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjASTG7 (ORCPT
+        with ESMTP id S230041AbjASTHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:06:59 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391C2951B0;
-        Thu, 19 Jan 2023 11:06:04 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1674155161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CBES6x1qNNbCC+Ve+6NYbTgTVKhUPguGspOpoYfBcQ0=;
-        b=RuN+aSXdcUZw8w6JBLZkF+kPH+rFfzUS50v402ybY1AgVxxXyghVk5gqtIlMhtyawy+vB/
-        tbyE3igYhcKioiYlCdDrI6tC3TwkDun8DOdQH/T6fqDpFueCKzHTHenLmkJWe6moGZHpH7
-        2OF0KIMAQ+FjN18M8SWjZA3c/Pf719E=
-From:   Rayyan Ansari <rayyan@ansari.sh>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Rayyan Ansari <rayyan@ansari.sh>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: qcom: msm8226: add clocks and clock-names to gcc node
-Date:   Thu, 19 Jan 2023 19:05:34 +0000
-Message-Id: <20230119190534.317041-3-rayyan@ansari.sh>
-In-Reply-To: <20230119190534.317041-1-rayyan@ansari.sh>
-References: <20230119190534.317041-1-rayyan@ansari.sh>
+        Thu, 19 Jan 2023 14:07:11 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183DA966FD;
+        Thu, 19 Jan 2023 11:06:19 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id a9-20020a17090a740900b0022a0e51fb17so135813pjg.3;
+        Thu, 19 Jan 2023 11:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xpxp7XO5sHsJ3lfzTlYxihhbIWhrIJucAXxN9hxl+dg=;
+        b=FREbxc9Qy3HiT086pEfzb3u7yMxdQQY6pmDTfhdTpr3nAcl+UV5k/sLGoOyF+m+zcd
+         la7GHQ9xZzBpLAPDtbarVXD10pdoeeaHqaEAEfksd2h2nhxaWRDxZW5aO3apUt3tRlsH
+         jsYYJkRjqpFI2FjAW4C8VUlDqHIUYmHRnZmGqMTk9E+a2N8IbHf943QI7Y/mMkKh7kia
+         qPauKgmYrXeLl5yXewYjwMcBMpS3HrtKu2qLs2YM4YUs2uAcdRdgkHc/lWgt7pntuPSj
+         x7lPqyiSXpasmSrhz8WjRNh6hmTYKrYBhX0PCZD7W5+eUWB/Xw4g5WMpMrsPGuOwVotr
+         cpiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xpxp7XO5sHsJ3lfzTlYxihhbIWhrIJucAXxN9hxl+dg=;
+        b=EIqPccG/aQ+GFfd+D4ebNBSQv7stBBx7+W5MTouHuLLO6kQYehbosjsE7BaAgoWYSw
+         4xHEQ1X7YVKFy2HEejJdjKRpzJNubgoQQjL+KqmKxMBKpeW7hjgbyxN1zrQbTZLX8NmS
+         3lAkbZCYQUiT/pcuXozyQScm5XeA12t3eC9Q63HA+i+DBpkeIXEkXs+nwLGt1Pmc9ZEv
+         QJtZeLLOaBEfscSwHnU9w3NL3W4EbksPbRFfZNHUwEf5x7rStGma+Rh+XILXsrEt+fbd
+         iXICm+DiFeLBps1778mMeVymWmARghr66aSYwvbz2KmDDD2Ec93ImAkht15C0cqDj0Ts
+         iFug==
+X-Gm-Message-State: AFqh2krxA6MIjfKDOS6UzADyaI4fk711ybVNf2YBkcOtNl7FxfnQB+a/
+        x5ig9nt9DEgpt2kUTzhV/BA=
+X-Google-Smtp-Source: AMrXdXvnQ3a0kXh2UwRDjq1SPGKPM5tMn2rlGLjHsP24ziyycXfEdP2gXJT7cg+xD4J9MmhtVCzCmA==
+X-Received: by 2002:a17:902:cad3:b0:194:7abf:742b with SMTP id y19-20020a170902cad300b001947abf742bmr10801145pld.47.1674155176064;
+        Thu, 19 Jan 2023 11:06:16 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u12-20020a17090341cc00b001888cadf8f6sm6794374ple.49.2023.01.19.11.06.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 11:06:15 -0800 (PST)
+Message-ID: <4d26bc29-5c85-1f30-388b-539bc6a3f09a@gmail.com>
+Date:   Thu, 19 Jan 2023 11:06:02 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/4] gpiolib: get rid of exessive
+ ->of_gpio_ranges_fallback()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+References: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the XO and Sleep Clock sources to the GCC node.
+On 1/13/23 13:53, Andy Shevchenko wrote:
+> The ->of_gpio_ranges_fallback() repeats the idea that lies behind
+> ->add_pin_ranges(), while the latter covers more cases that the former
+> hook. Drop the former one for good.
+> 
+> Changelog v3:
+> - moved check of the property presense to GPIO library
+> - split out the refcount fix in a separate patch
+> - added cover letter
 
-Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
----
- arch/arm/boot/dts/qcom-msm8226.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index c373081bc21b..42acb9ddb8cc 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-msm8974.h>
- #include <dt-bindings/clock/qcom,mmcc-msm8974.h>
-+#include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
- #include <dt-bindings/reset/qcom,gcc-msm8974.h>
-@@ -377,6 +378,11 @@ gcc: clock-controller@fc400000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+
-+			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-+				 <&sleep_clk>;
-+			clock-names = "xo",
-+				      "sleep_clk";
- 		};
- 
- 		mmcc: clock-controller@fd8c0000 {
+Thanks!
 -- 
-2.39.0
+Florian
 
