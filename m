@@ -2,251 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E597A6739A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F856739AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjASNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S230406AbjASNMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjASNLG (ORCPT
+        with ESMTP id S230338AbjASNM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:11:06 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AAC7F9A3;
-        Thu, 19 Jan 2023 05:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3MUFW1CfWqbN3yWzOzLyDN6ndFRfS8BtwjxRAMF39DU=; b=LWDSh2RF65bmmQFQT5tr3uLhRb
-        jNNBvSKwR3ffyKVZRdPfblu2B4UYAGNp2wPbJG30nHsw+MuqvmFaN2hDJ2PSd6Q42i0K6yHaMCxn1
-        AwGYab4uV7+ZcitFO3MbyrIuSo1Gju+XY+9Yd7eQgC99p3HJFfQkumHtXGdTreawImq5wb8WB2kd+
-        yIXSMRkvskllX4YTKvkyrX9SOdDELnTNgR6QSmcuucZZnFLPWFymc26UumavAH+5PcPJv8XeeXIhg
-        eIuL5E8Qh8Oao9w2kSlD7E4XxfxOqmQzEzJXTGFcNTXgbUL7Qbzr4WO2o2eQK0SZJZQgovX/od/Iq
-        FP7nJkpA==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1pIUff-000zLh-NW; Thu, 19 Jan 2023 15:09:35 +0200
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] gpu: host1x: External timeout/cancellation for fences
-Date:   Thu, 19 Jan 2023 15:09:21 +0200
-Message-Id: <20230119130921.1882602-4-cyndis@kapsi.fi>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119130921.1882602-1-cyndis@kapsi.fi>
-References: <20230119130921.1882602-1-cyndis@kapsi.fi>
+        Thu, 19 Jan 2023 08:12:29 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E57C85A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:10:55 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pIUgA-0005xy-F9; Thu, 19 Jan 2023 14:10:06 +0100
+Message-ID: <849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info>
+Date:   Thu, 19 Jan 2023 14:10:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: regression on aarch64? panic on boot
+Content-Language: en-US, de-DE
+To:     Klaus Jensen <its@irrelevant.dk>, Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <Y8XINx8fpGPKudW6@cormorant.local>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <Y8XINx8fpGPKudW6@cormorant.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674133855;0087d679;
+X-HE-SMSGID: 1pIUgA-0005xy-F9
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-Currently all fences have a 30 second timeout to ensure they are
-cleaned up if the fence never completes otherwise. However, this
-one size fits all solution doesn't actually fit in every case,
-such as syncpoint waiting where we want to be able to have timeouts
-longer than 30 seconds. As such, we want to be able to give control
-over fence cancellation to the caller (and maybe eventually get rid
-of the internal timeout altogether).
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-Here we add this cancellation mechanism by essentially adding a
-function for entering the timeout path by function call, and changing
-the syncpoint wait function to use it.
+On 16.01.23 22:57, Klaus Jensen wrote:
+> 
+> I'm getting panics when booting from a QEMU hw/nvme device on an aarch64
+> guest in roughly 20% of boots on v6.2-rc4. Example panic below.
+> 
+> I've bisected it to commit eac3ef262941 ("nvme-pci: split the initial
+> probe from the rest path").
+> 
+> I'm not seeing this on any other emulated platforms that I'm currently
+> testing (x86_64, riscv32/64, mips32/64 and sparc64).
+> [...]
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
- drivers/gpu/drm/tegra/submit.c     |  2 +-
- drivers/gpu/host1x/fence.c         | 40 ++++++++++++++++++++----------
- drivers/gpu/host1x/fence.h         |  1 +
- drivers/gpu/host1x/hw/channel_hw.c |  2 +-
- drivers/gpu/host1x/syncpt.c        |  4 ++-
- include/linux/host1x.h             |  4 ++-
- 6 files changed, 36 insertions(+), 17 deletions(-)
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
-index 066f88564169..f4688fcafe93 100644
---- a/drivers/gpu/drm/tegra/submit.c
-+++ b/drivers/gpu/drm/tegra/submit.c
-@@ -654,7 +654,7 @@ int tegra_drm_ioctl_channel_submit(struct drm_device *drm, void *data,
- 	args->syncpt.value = job->syncpt_end;
- 
- 	if (syncobj) {
--		struct dma_fence *fence = host1x_fence_create(job->syncpt, job->syncpt_end);
-+		struct dma_fence *fence = host1x_fence_create(job->syncpt, job->syncpt_end, true);
- 		if (IS_ERR(fence)) {
- 			err = PTR_ERR(fence);
- 			SUBMIT_ERR(context, "failed to create postfence: %d", err);
-diff --git a/drivers/gpu/host1x/fence.c b/drivers/gpu/host1x/fence.c
-index df5b56692d2c..139ad1afd935 100644
---- a/drivers/gpu/host1x/fence.c
-+++ b/drivers/gpu/host1x/fence.c
-@@ -37,8 +37,7 @@ static bool host1x_syncpt_fence_enable_signaling(struct dma_fence *f)
- 	if (host1x_syncpt_is_expired(sf->sp, sf->threshold))
- 		return false;
- 
--	/* One reference for interrupt path, one for timeout path. */
--	dma_fence_get(f);
-+	/* Reference for interrupt path. */
- 	dma_fence_get(f);
- 
- 	/*
-@@ -46,11 +45,15 @@ static bool host1x_syncpt_fence_enable_signaling(struct dma_fence *f)
- 	 * reference to any fences for which 'enable_signaling' has been
- 	 * called (and that have not been signalled).
- 	 *
--	 * We cannot (for now) normally guarantee that all fences get signalled.
--	 * As such, setup a timeout, so that long-lasting fences will get
--	 * reaped eventually.
-+	 * We cannot currently always guarantee that all fences get signalled
-+	 * or cancelled. As such, for such situations, set up a timeout, so
-+	 * that long-lasting fences will get reaped eventually.
- 	 */
--	schedule_delayed_work(&sf->timeout_work, msecs_to_jiffies(30000));
-+	if (sf->timeout) {
-+		/* Reference for timeout path. */
-+		dma_fence_get(f);
-+		schedule_delayed_work(&sf->timeout_work, msecs_to_jiffies(30000));
-+	}
- 
- 	host1x_intr_add_fence_locked(sf->sp->host, sf);
- 
-@@ -80,7 +83,7 @@ void host1x_fence_signal(struct host1x_syncpt_fence *f)
- 		return;
- 	}
- 
--	if (cancel_delayed_work(&f->timeout_work)) {
-+	if (f->timeout && cancel_delayed_work(&f->timeout_work)) {
- 		/*
- 		 * We know that the timeout path will not be entered.
- 		 * Safe to drop the timeout path's reference now.
-@@ -99,8 +102,9 @@ static void do_fence_timeout(struct work_struct *work)
- 		container_of(dwork, struct host1x_syncpt_fence, timeout_work);
- 
- 	if (atomic_xchg(&f->signaling, 1)) {
--		/* Already on interrupt path, drop timeout path reference. */
--		dma_fence_put(&f->base);
-+		/* Already on interrupt path, drop timeout path reference if any. */
-+		if (f->timeout)
-+			dma_fence_put(&f->base);
- 		return;
- 	}
- 
-@@ -114,12 +118,12 @@ static void do_fence_timeout(struct work_struct *work)
- 
- 	dma_fence_set_error(&f->base, -ETIMEDOUT);
- 	dma_fence_signal(&f->base);
--
--	/* Drop timeout path reference. */
--	dma_fence_put(&f->base);
-+	if (f->timeout)
-+		dma_fence_put(&f->base);
- }
- 
--struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold)
-+struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold,
-+				      bool timeout)
- {
- 	struct host1x_syncpt_fence *fence;
- 
-@@ -129,6 +133,7 @@ struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold)
- 
- 	fence->sp = sp;
- 	fence->threshold = threshold;
-+	fence->timeout = timeout;
- 
- 	dma_fence_init(&fence->base, &host1x_syncpt_fence_ops, &sp->fences.lock,
- 		       dma_fence_context_alloc(1), 0);
-@@ -138,3 +143,12 @@ struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold)
- 	return &fence->base;
- }
- EXPORT_SYMBOL(host1x_fence_create);
-+
-+void host1x_fence_cancel(struct dma_fence *f)
-+{
-+	struct host1x_syncpt_fence *sf = to_host1x_fence(f);
-+
-+	schedule_delayed_work(&sf->timeout_work, 0);
-+	flush_delayed_work(&sf->timeout_work);
-+}
-+EXPORT_SYMBOL(host1x_fence_cancel);
-diff --git a/drivers/gpu/host1x/fence.h b/drivers/gpu/host1x/fence.h
-index 4352d046f92c..f3c644c73cad 100644
---- a/drivers/gpu/host1x/fence.h
-+++ b/drivers/gpu/host1x/fence.h
-@@ -13,6 +13,7 @@ struct host1x_syncpt_fence {
- 
- 	struct host1x_syncpt *sp;
- 	u32 threshold;
-+	bool timeout;
- 
- 	struct delayed_work timeout_work;
- 
-diff --git a/drivers/gpu/host1x/hw/channel_hw.c b/drivers/gpu/host1x/hw/channel_hw.c
-index 8a3119fc5a77..0a528573a792 100644
---- a/drivers/gpu/host1x/hw/channel_hw.c
-+++ b/drivers/gpu/host1x/hw/channel_hw.c
-@@ -325,7 +325,7 @@ static int channel_submit(struct host1x_job *job)
- 	 * Create fence before submitting job to HW to avoid job completing
- 	 * before the fence is set up.
- 	 */
--	job->fence = host1x_fence_create(sp, syncval);
-+	job->fence = host1x_fence_create(sp, syncval, true);
- 	if (WARN(IS_ERR(job->fence), "Failed to create submit complete fence")) {
- 		job->fence = NULL;
- 	} else {
-diff --git a/drivers/gpu/host1x/syncpt.c b/drivers/gpu/host1x/syncpt.c
-index 75f58ec2ae23..2d2007760eac 100644
---- a/drivers/gpu/host1x/syncpt.c
-+++ b/drivers/gpu/host1x/syncpt.c
-@@ -236,11 +236,13 @@ int host1x_syncpt_wait(struct host1x_syncpt *sp, u32 thresh, long timeout,
- 	else if (timeout == 0)
- 		return -EAGAIN;
- 
--	fence = host1x_fence_create(sp, thresh);
-+	fence = host1x_fence_create(sp, thresh, false);
- 	if (IS_ERR(fence))
- 		return PTR_ERR(fence);
- 
- 	wait_err = dma_fence_wait_timeout(fence, true, timeout);
-+	if (wait_err == 0)
-+		host1x_fence_cancel(fence);
- 	dma_fence_put(fence);
- 
- 	if (value)
-diff --git a/include/linux/host1x.h b/include/linux/host1x.h
-index db6cf6f34361..9a9de4b97a25 100644
---- a/include/linux/host1x.h
-+++ b/include/linux/host1x.h
-@@ -222,7 +222,9 @@ u32 host1x_syncpt_base_id(struct host1x_syncpt_base *base);
- void host1x_syncpt_release_vblank_reservation(struct host1x_client *client,
- 					      u32 syncpt_id);
- 
--struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold);
-+struct dma_fence *host1x_fence_create(struct host1x_syncpt *sp, u32 threshold,
-+				      bool timeout);
-+void host1x_fence_cancel(struct dma_fence *fence);
- 
- /*
-  * host1x channel
--- 
-2.39.0
+#regzbot ^introduced eac3ef262941
+#regzbot title nvme: occasional boot problems due to the newly supported
+async driver probe
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
