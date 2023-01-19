@@ -2,244 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00E3673662
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D52673667
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjASLKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S230152AbjASLLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjASLJx (ORCPT
+        with ESMTP id S230136AbjASLKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:09:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFB1E3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:09:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674126546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b5dacYO3mZ+IUzxPOKLB2WoCiOEmnU76gMH3WmurRYc=;
-        b=Qm5+o5A6SYc2eHc6LqSq1KZS/67G1Ty+zkH+iiUvOzBpY21r38eQChylqRe41PYgVT3Y6P
-        8iJR4H3e2jBeLBEYIyPd7Et2audJmKjuTu2A9Uh/4gQi2ef31uT85kqHRNHJN1PpEsm5l5
-        ASSHIaL3B8qkUiSIXJWRzCU/zBk8U1Y=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-621-QnT1SNiKPu6qW2wSEIRZgw-1; Thu, 19 Jan 2023 06:09:04 -0500
-X-MC-Unique: QnT1SNiKPu6qW2wSEIRZgw-1
-Received: by mail-ed1-f71.google.com with SMTP id h18-20020a05640250d200b0049e0e9382c2so1406217edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:09:04 -0800 (PST)
+        Thu, 19 Jan 2023 06:10:53 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7156E7497A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:10:31 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id u19so4682858ejm.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:10:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jFEYKKgVFwVXs5cKTPaIK+MI9cmiPLzvQLxxZZJC6DI=;
+        b=Qr+vAkM6UGTyNaXghLE7XaUsVbveKd5dNgLYerCk0CJJfzevvUnYgkJ+QNZg4wvGUn
+         DSs31iOTTOUSXpbbN/oqzxDZhkrxQNSVC7ldXNpgLka5gx9kzzlZz5AK5OfgA717jpbe
+         nJLEAAP2nrtlpkuskVOlOFLoshkCz1pwXExLCjQ1WGa0/OgjdXThEDBKFhApfD3WjfUW
+         0Z3DBLhSQu7BycIKtJRMFKdi3J4pcuSu4/Gm6o1E347IVSlx0L1FnBz1+v2ucruD1XxO
+         S/BmHf5BMJsnufxYzQuclNUv4tFIkVwN8TbD+TPtnyyhw1nmD2FigYV6vLr8+yfEgoMF
+         xTSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:content-language:subject:cc:user-agent
-         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b5dacYO3mZ+IUzxPOKLB2WoCiOEmnU76gMH3WmurRYc=;
-        b=gWT3tqIz+lWobMw1DIyI+lvEuxTk9EmRVXzeYerxNsnxlmmUFerV4HCdd70DGqZNVp
-         OKH33EOfIhLZU2uSOv0j89qzwPK2reIBgCGIMj57/wfedc6Brhif4lf3GyyBNEKNWbMW
-         Ynt2vEeR9MHSA7yefrOJB8PxU+fvjs34yfCuxxOHwk2EW83JKg3SaVVwUbJQztrx/EaR
-         NDjIefUpnRacsxo6xf/0Ko2fVcCOsL4155ERC8bxN99K5ab8gltJjO80dcqAbpN9fLn8
-         eqgjK3i7WQU9aTp2cer5CFQXowXVAr41Xea8g94cmPWaWJf6nV29VAWR4yM/28M8mWnu
-         xldw==
-X-Gm-Message-State: AFqh2kpufB0VE59r2PRt0HDl2O9O3AV8GgC0nINfdureKsyHTcmeH+bg
-        AufVfCE6u1U6KUW/tg/GpIDCuxUwHHJRO0A0xss8E4TXgaETFs3VXCUsxPR3rzBowg8Wqzf6Iut
-        Em21UEoOxH2gu3cQGRudNsJgB
-X-Received: by 2002:a17:906:855:b0:86e:f88:c098 with SMTP id f21-20020a170906085500b0086e0f88c098mr11242939ejd.70.1674126543401;
-        Thu, 19 Jan 2023 03:09:03 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtbnHfYyGiwOrAeuPRTUID61Xrq5uRfFvaK2kWgnrDkLPDs8ZIDezNWcKJbX3L9nNggDd9XKQ==
-X-Received: by 2002:a17:906:855:b0:86e:f88:c098 with SMTP id f21-20020a170906085500b0086e0f88c098mr11242921ejd.70.1674126543111;
-        Thu, 19 Jan 2023 03:09:03 -0800 (PST)
-Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id o14-20020a17090637ce00b00871390a3b74sm5132112ejc.177.2023.01.19.03.09.01
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jFEYKKgVFwVXs5cKTPaIK+MI9cmiPLzvQLxxZZJC6DI=;
+        b=BeIs0VF5WkZYP0CeN7EPzv2odCznYHnqMSJo6Ya21e3ESRbHu9GnDgQdscBapGzM55
+         9U2oXMHrP9dDBttChWNA2rHAtQEiTWESNKXpcVjnqTyocK1HKh6e4opXz1CNbeamji1u
+         e6MOmr9gpOpd4w6SSYxBxs3+UiL0alf4QrwGsACqYQhti/hSCq8dnQfYOaGswR9WMGL0
+         7LDNWUZ11+uHbsrA10G3aeOUUmvNQpyhRNCOMA+f9RACtL/4W7DAf+D0mUeFICyYB+0x
+         kAKMTmqGaELoT8khhB8IS+2ijJMfCVInotE8xJa6/MkXEWQemFQnGvYqWzcOUjfeDNrP
+         cX4A==
+X-Gm-Message-State: AFqh2kqu0bJcckI11CLlMxHPcnOnxby9gssGk26Um0GhdM/G+uMaCmEj
+        icQD30kUkYZjqOsWxoGjSpWK3A==
+X-Google-Smtp-Source: AMrXdXtozZLbb+W8xF3Dp986+miOd8UiFeWHI+JPSTlQ7xSF4mnYc2ha+zsWUatMIGJsaozw4xj+0w==
+X-Received: by 2002:a17:906:ad82:b0:872:e6fd:1c79 with SMTP id la2-20020a170906ad8200b00872e6fd1c79mr10246833ejb.77.1674126629791;
+        Thu, 19 Jan 2023 03:10:29 -0800 (PST)
+Received: from [192.168.1.101] (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm16520246ejg.174.2023.01.19.03.10.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 03:09:02 -0800 (PST)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Content-Type: multipart/mixed; boundary="------------E0MBYAXpLI6FXJqC5vhpAEI7"
-Message-ID: <b29bd572-cd43-7d68-e4bb-4858551981f3@redhat.com>
-Date:   Thu, 19 Jan 2023 12:09:00 +0100
+        Thu, 19 Jan 2023 03:10:29 -0800 (PST)
+Message-ID: <8e357341-3cf1-3714-4f5d-f4be94f91438@linaro.org>
+Date:   Thu, 19 Jan 2023 12:10:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     brouer@redhat.com
-Subject: Re: [syzbot] kernel BUG in ip_frag_next
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/4] Minor cleanup in msm8916 dts files
 Content-Language: en-US
-To:     syzbot <syzbot+c8a2e66e37eee553c4fd@syzkaller.appspotmail.com>,
-        bpf@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, saeed@kernel.org,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-References: <000000000000d58eae05f28ca51f@google.com>
-In-Reply-To: <000000000000d58eae05f28ca51f@google.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Nikita Travkin <nikita@trvn.ru>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230116145053.1412501-1-nikita@trvn.ru>
+ <20230119033428.ga6sbu42jaueac5o@builder.lan>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230119033428.ga6sbu42jaueac5o@builder.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------E0MBYAXpLI6FXJqC5vhpAEI7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
 
-On 18/01/2023 17.52, syzbot wrote:
-> Hello,
+On 19.01.2023 04:34, Bjorn Andersson wrote:
+> On Mon, Jan 16, 2023 at 07:50:49PM +0500, Nikita Travkin wrote:
+>> This series performs some minor cleanup on msm8916/apq8016 files to
+>> bring them in line with the current standard and be closer to the new
+>> submissions.
+>>
+>> The series is separated into commits by each specific change made across
+>> all files and these commits should not cause any functional difference.
+>>
+>> Changes in v2:
+>> - Rebase on top of newly applied upstream patches
+>>
+> 
+> The first patch looks pretty reasonable, but without documenting the
+> guidelines and tools to help others maintain the ordering this
+> unfortunately just moves things around arbitrarily.
+> 
+> Forgive me, but I will ignore this series until this is finalized and
+> documented.
+Ack, the idea is good, but I rushed enforcing it.
 
-Hi Syzbot,
-
-Could you test this attached patch please, against:
-
-#syz test git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-master
-
-
-> syzbot found the following issue on:
+Konrad
 > 
-> HEAD commit:    0c68c8e5ec68 net: mdio: cavium: Remove unneeded simicolons
-> git tree:       net-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=147c7051480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4695869845c5f393
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c8a2e66e37eee553c4fd
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173fca39480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=107ba0a9480000
+> Thanks,
+> Bjorn
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/15c191498614/disk-0c68c8e5.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/7c4c9368d89c/vmlinux-0c68c8e5.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/083770efc7c4/bzImage-0c68c8e5.xz
-> 
-> The issue was bisected to:
-> 
-> commit eedade12f4cb7284555c4c0314485e9575c70ab7
-> Author: Jesper Dangaard Brouer <brouer@redhat.com>
-> Date:   Fri Jan 13 13:52:04 2023 +0000
-> 
->      net: kfree_skb_list use kmem_cache_free_bulk
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1136ec41480000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1336ec41480000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1536ec41480000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+c8a2e66e37eee553c4fd@syzkaller.appspotmail.com
-> Fixes: eedade12f4cb ("net: kfree_skb_list use kmem_cache_free_bulk")
-> 
-> raw_sendmsg: syz-executor409 forgot to set AF_INET. Fix it!
-> ------------[ cut here ]------------
-> kernel BUG at net/ipv4/ip_output.c:724!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 5073 Comm: syz-executor409 Not tainted 6.2.0-rc3-syzkaller-00457-g0c68c8e5ec68 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-> RIP: 0010:ip_frag_next+0xa03/0xa50 net/ipv4/ip_output.c:724
-> Code: e8 82 b1 86 f9 e9 95 fa ff ff 48 8b 3c 24 e8 74 b1 86 f9 e9 5b f8 ff ff 4c 89 ff e8 67 b1 86 f9 e9 1f f8 ff ff e8 3d ad 38 f9 <0f> 0b 48 89 54 24 20 4c 89 44 24 18 e8 4c b1 86 f9 48 8b 54 24 20
-> RSP: 0018:ffffc90003a6f6b8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: ffffc90003a6f818 RCX: 0000000000000000
-> RDX: ffff8880772c0000 RSI: ffffffff8848a583 RDI: 0000000000000005
-> RBP: 00000000000005c8 R08: 0000000000000005 R09: 0000000000000000
-> R10: 00000000fffffff2 R11: 0000000000000000 R12: ffff888026841dc0
-> R13: ffffc90003a6f81c R14: 00000000fffffff2 R15: ffffc90003a6f830
-> FS:  0000555555b08300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00005622b70166a8 CR3: 000000007780f000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   ip_do_fragment+0x873/0x17d0 net/ipv4/ip_output.c:902
->   ip_fragment.constprop.0+0x16b/0x240 net/ipv4/ip_output.c:581
->   __ip_finish_output net/ipv4/ip_output.c:304 [inline]
->   __ip_finish_output+0x2de/0x650 net/ipv4/ip_output.c:288
->   ip_finish_output+0x31/0x280 net/ipv4/ip_output.c:316
->   NF_HOOK_COND include/linux/netfilter.h:291 [inline]
->   ip_mc_output+0x21f/0x710 net/ipv4/ip_output.c:415
->   dst_output include/net/dst.h:444 [inline]
->   ip_local_out net/ipv4/ip_output.c:126 [inline]
->   ip_send_skb net/ipv4/ip_output.c:1586 [inline]
->   ip_push_pending_frames+0x129/0x2b0 net/ipv4/ip_output.c:1606
->   raw_sendmsg+0x1338/0x2df0 net/ipv4/raw.c:645
->   inet_sendmsg+0x9d/0xe0 net/ipv4/af_inet.c:827
->   sock_sendmsg_nosec net/socket.c:722 [inline]
->   sock_sendmsg+0xde/0x190 net/socket.c:745
->   __sys_sendto+0x23a/0x340 net/socket.c:2142
->   __do_sys_sendto net/socket.c:2154 [inline]
->   __se_sys_sendto net/socket.c:2150 [inline]
->   __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2150
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f8efa22c499
-> Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd43ed3198 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-> RAX: ffffffffffffffda RBX: 00007ffd43ed31b8 RCX: 00007f8efa22c499
-> RDX: 000000000000fcf2 RSI: 0000000020000380 RDI: 0000000000000003
-> RBP: 0000000000000003 R08: 0000000020001380 R09: 000000000000006e
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd43ed31c0
-> R13: 00007ffd43ed31e0 R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:ip_frag_next+0xa03/0xa50 net/ipv4/ip_output.c:724
-> Code: e8 82 b1 86 f9 e9 95 fa ff ff 48 8b 3c 24 e8 74 b1 86 f9 e9 5b f8 ff ff 4c 89 ff e8 67 b1 86 f9 e9 1f f8 ff ff e8 3d ad 38 f9 <0f> 0b 48 89 54 24 20 4c 89 44 24 18 e8 4c b1 86 f9 48 8b 54 24 20
-> RSP: 0018:ffffc90003a6f6b8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: ffffc90003a6f818 RCX: 0000000000000000
-> RDX: ffff8880772c0000 RSI: ffffffff8848a583 RDI: 0000000000000005
-> RBP: 00000000000005c8 R08: 0000000000000005 R09: 0000000000000000
-> R10: 00000000fffffff2 R11: 0000000000000000 R12: ffff888026841dc0
-> R13: ffffc90003a6f81c R14: 00000000fffffff2 R15: ffffc90003a6f830
-> FS:  0000555555b08300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000557162e92068 CR3: 000000007780f000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-> 
---------------E0MBYAXpLI6FXJqC5vhpAEI7
-Content-Type: text/plain; charset=UTF-8; name="18-syzbot-proper-fix-test3"
-Content-Disposition: attachment; filename="18-syzbot-proper-fix-test3"
-Content-Transfer-Encoding: base64
-
-bmV0OiBmaXgga2ZyZWVfc2tiX2xpc3QgdXNlIG9mIHNrYl9tYXJrX25vdF9vbl9saXN0CgpG
-cm9tOiBKZXNwZXIgRGFuZ2FhcmQgQnJvdWVyIDxicm91ZXJAcmVkaGF0LmNvbT4KCkEgYnVn
-IHdhcyBpbnRyb2R1Y2VkIGJ5IGNvbW1pdCBlZWRhZGUxMmY0Y2IgKCJuZXQ6IGtmcmVlX3Nr
-Yl9saXN0IHVzZQprbWVtX2NhY2hlX2ZyZWVfYnVsayIpLiBJdCB1bmNvbmRpdGlvbmFsbHkg
-dW5saW5rZWQgdGhlIFNLQiBsaXN0IHZpYQppbnZva2luZyBza2JfbWFya19ub3Rfb25fbGlz
-dCgpLgoKVGhlIHNrYl9tYXJrX25vdF9vbl9saXN0KCkgc2hvdWxkIG9ubHkgYmUgY2FsbGVk
-IGlmIF9fa2ZyZWVfc2tiX3JlYXNvbigpCnJldHVybnMgdHJ1ZSwgbWVhbmluZyB0aGUgU0tC
-IGlzIHJlYWR5IHRvIGJlIGZyZWUnZWQgKGFzIGl0IGNhbGxzL2NoZWNrCnNrYl91bnJlZigp
-KS4KClJlcG9ydGVkLWJ5OiBzeXpib3QrYzhhMmU2NmUzN2VlZTU1M2M0ZmRAc3l6a2FsbGVy
-LmFwcHNwb3RtYWlsLmNvbQpGaXhlczogZWVkYWRlMTJmNGNiICgibmV0OiBrZnJlZV9za2Jf
-bGlzdCB1c2Uga21lbV9jYWNoZV9mcmVlX2J1bGsiKQpTaWduZWQtb2ZmLWJ5OiBKZXNwZXIg
-RGFuZ2FhcmQgQnJvdWVyIDxicm91ZXJAcmVkaGF0LmNvbT4KLS0tCiBuZXQvY29yZS9za2J1
-ZmYuYyB8ICAgIDYgKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAz
-IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL25ldC9jb3JlL3NrYnVmZi5jIGIvbmV0L2Nv
-cmUvc2tidWZmLmMKaW5kZXggNGU3M2FiMzQ4MmI4Li4xYmZmYmNiZTYwODcgMTAwNjQ0Ci0t
-LSBhL25ldC9jb3JlL3NrYnVmZi5jCisrKyBiL25ldC9jb3JlL3NrYnVmZi5jCkBAIC05OTks
-MTAgKzk5OSwxMCBAQCBrZnJlZV9za2JfbGlzdF9yZWFzb24oc3RydWN0IHNrX2J1ZmYgKnNl
-Z3MsIGVudW0gc2tiX2Ryb3BfcmVhc29uIHJlYXNvbikKIAl3aGlsZSAoc2VncykgewogCQlz
-dHJ1Y3Qgc2tfYnVmZiAqbmV4dCA9IHNlZ3MtPm5leHQ7CiAKLQkJc2tiX21hcmtfbm90X29u
-X2xpc3Qoc2Vncyk7Ci0KLQkJaWYgKF9fa2ZyZWVfc2tiX3JlYXNvbihzZWdzLCByZWFzb24p
-KQorCQlpZiAoX19rZnJlZV9za2JfcmVhc29uKHNlZ3MsIHJlYXNvbikpIHsKKwkJCXNrYl9t
-YXJrX25vdF9vbl9saXN0KHNlZ3MpOwogCQkJa2ZyZWVfc2tiX2FkZF9idWxrKHNlZ3MsICZz
-YSwgcmVhc29uKTsKKwkJfQogCiAJCXNlZ3MgPSBuZXh0OwogCX0K
-
---------------E0MBYAXpLI6FXJqC5vhpAEI7--
-
+>> Nikita Travkin (4):
+>>   arm64: dts: qcom: msm/apq8x16-*: Move status property last
+>>   arm64: dts: qcom: msm/apq8x16-*: Reorder the pinctrl properties.
+>>   arm64: dts: qcom: msm/apq8x16-*: Drop empty lines in pinctrl states
+>>   arm64: dts: qcom: msm/apq8x16-*: Reorder some regulator properties
+>>
+>>  arch/arm64/boot/dts/qcom/apq8016-sbc.dts      | 78 +++++++--------
+>>  .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 15 ++-
+>>  .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 46 ++++-----
+>>  .../arm64/boot/dts/qcom/msm8916-asus-z00l.dts | 34 +++----
+>>  .../arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 52 ++++------
+>>  .../boot/dts/qcom/msm8916-longcheer-l8150.dts | 42 ++++----
+>>  .../boot/dts/qcom/msm8916-longcheer-l8910.dts | 30 +++---
+>>  arch/arm64/boot/dts/qcom/msm8916-pins.dtsi    | 96 +++++--------------
+>>  .../qcom/msm8916-samsung-a2015-common.dtsi    | 64 +++++--------
+>>  .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts | 11 +--
+>>  .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts |  5 +-
+>>  .../qcom/msm8916-samsung-e2015-common.dtsi    |  5 +-
+>>  .../dts/qcom/msm8916-samsung-grandmax.dts     |  3 +-
+>>  .../boot/dts/qcom/msm8916-samsung-j5.dts      | 21 ++--
+>>  .../dts/qcom/msm8916-samsung-serranove.dts    | 62 +++++-------
+>>  .../dts/qcom/msm8916-wingtech-wt88047.dts     | 35 +++----
+>>  arch/arm64/boot/dts/qcom/msm8916.dtsi         | 32 +++----
+>>  17 files changed, 245 insertions(+), 386 deletions(-)
+>>
+>> -- 
+>> 2.38.1
+>>
