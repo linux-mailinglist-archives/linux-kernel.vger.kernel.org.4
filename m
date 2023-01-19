@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271AE673E6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A3C673E74
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjASQSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S230137AbjASQTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjASQSC (ORCPT
+        with ESMTP id S230345AbjASQSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:18:02 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D9B87660;
-        Thu, 19 Jan 2023 08:17:59 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id r132so2070051oif.10;
-        Thu, 19 Jan 2023 08:17:59 -0800 (PST)
+        Thu, 19 Jan 2023 11:18:37 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415708B31D;
+        Thu, 19 Jan 2023 08:18:28 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3933250wmb.2;
+        Thu, 19 Jan 2023 08:18:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KhPMpyCMJ6HvS//S3CCRmvmmRPsh8wUIotQ8o5eWPTs=;
+        b=jQvSiB/9uA+iE5dsg7wfyWi+LLwGEDq/f6nxvkTMShJdbRvcFi24Meli3gQyT8mno9
+         1FtjziZRBWHgEjDq+mTvL22zo9h+6YWvPqsCzK+HA1EPLe2LLThLJdD/5lQ9lnK1Jush
+         MTyiLJv1MBy/JnJCix1LHtCij0CrMKYarK1Miixztllbm1UDdzg9r8eT3U7I7s6P2KbH
+         5XD9NRTrkhLojIt+/st6oK15m78nFKGUQ1ig+WgSqwxivBVX77HgZSQQewZ5DqUDCrQ6
+         k4BRe7Q+sUZcDYFmw0YYQiJWXgILlus7GyQk1tEdVPDceRnpHDbf1UajTBQGUboBuMD0
+         y7qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/53TQZW6r1zwjASQ4lZJdhbvckS1KV0aS6PofzSPkk=;
-        b=WQRQnN6dkGnQf0lTCOwP1LKfmpaUil2fJPl5uu6rvHoOPGaXKEodSvcb8lTYxJqit+
-         +MOfwo2e/rXinDey3Si7MdEBi9I8g+D0/e/Lz2cLX6oZ30quI5GKaBWhw6VXvPdV73XD
-         hiAnaLduLQB/A+N/JXTAR9bc+akK0OsO0JScKRGrJVWl2YgML/qAWRpKCa183PwR4CQ0
-         EVv/7+rRMG9zYLWc1MSMgXxbYWoMISGlkm8Eyw2Fws4ZCkoBA6eHS8eQ6Iv+OyAFohi2
-         dGLUr9YKJK2JGdOXaC6bs7DXW5xB6IdbINTQiHEIPm+PhvV5JGaX9DaPiE4yksCwtv3M
-         ideA==
-X-Gm-Message-State: AFqh2kqAHwmHFU+azHBa2Gf5T4V8njCPWKPhX8HgGykP5joxSFeJd3Um
-        KCOWDJslFFQVnFUPCqJwof0v/ocQYg==
-X-Google-Smtp-Source: AMrXdXt1/e8p21lDMD81LUtAdmC9sW2dgNdOlCMjCvqrbAlT/E0IC+wziF1ov3qWxFpRUOB6UMdX6g==
-X-Received: by 2002:aca:f2d7:0:b0:364:de8b:dddc with SMTP id q206-20020acaf2d7000000b00364de8bdddcmr3754167oih.29.1674145079100;
-        Thu, 19 Jan 2023 08:17:59 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a14-20020a9d3e0e000000b00670523bf1cfsm4203541otd.47.2023.01.19.08.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:17:58 -0800 (PST)
-Received: (nullmailer pid 1976357 invoked by uid 1000);
-        Thu, 19 Jan 2023 16:17:57 -0000
-Date:   Thu, 19 Jan 2023 10:17:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        kernel@axis.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] ASoC: dt-bindings: simple-card: create jack for
- aux_devs
-Message-ID: <20230119161757.GA1969308-robh@kernel.org>
-References: <20230118125226.333214-1-astrid.rost@axis.com>
- <20230118125226.333214-5-astrid.rost@axis.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KhPMpyCMJ6HvS//S3CCRmvmmRPsh8wUIotQ8o5eWPTs=;
+        b=tOyqFyYeQJoLSxQ2/aeIxM1rc6mBuGVi2rZmlLT+AFsUkDyVP9zbSV23YLkpfRrU0C
+         nW7thBLWNDVXuruI9uAQi11dWJoC2KytE79cxWsunnsvfyd71CrQ3FC2rGS/l3NgqFZN
+         fBF77Wj4FDIWdHAz2ozoVKR+4VTi567rjVGzT0vA4yUxzH9ZRaIyQNKiDTEB37xxbwiU
+         P5Nkjg2VW1eCXDM+gDTLvd6oyRKupP+8XyeJXhZ1COd4hGieGAePOIevQ8Rc84ksTdG+
+         2CQSzkvtIgbc0XjRdazKN+jPeOVMHReq53FQFT7WldZ29vs+TDSmild6fqVjGqvsm+1Z
+         pmIg==
+X-Gm-Message-State: AFqh2kpSiHsDIXcJOdxSXqyvylYqDvClcusHqqBxURldI3IKHJjxO8k/
+        Y/XaILalhygr0VIFQiGnAlD4kxLTziY=
+X-Google-Smtp-Source: AMrXdXtCGQp1kAxCJDbhPvGR36ilJzrNwfl2z1ISaXawuwRYgIvh1dVNxvHTArbGulOwqCZe1wxaJQ==
+X-Received: by 2002:a05:600c:3b29:b0:3da:f678:1322 with SMTP id m41-20020a05600c3b2900b003daf6781322mr11301935wms.38.1674145107419;
+        Thu, 19 Jan 2023 08:18:27 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05600c379000b003db15b1fb3csm4718879wmr.13.2023.01.19.08.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 08:18:27 -0800 (PST)
+Message-ID: <3c30c805-243b-5ca9-06a3-2807fd76e3b2@gmail.com>
+Date:   Thu, 19 Jan 2023 17:18:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118125226.333214-5-astrid.rost@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/2] Add power domain support for MT8188
+Content-Language: en-US
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+References: <20221223080553.9397-1-Garmin.Chang@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221223080553.9397-1-Garmin.Chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 01:52:26PM +0100, Astrid Rost wrote:
-> Add simple-card,aux-jack-types:
-> Array of snd_jack_type to create jack-input-event for jack devices in
-> aux-devs. If the setting is 0, the supported type of the device is used.
-> A device which has the functions set_jack and get_jack_supported_type
-> counts as jack device.
+Both applied, thanks!
+
+Matthias
+
+On 23/12/2022 09:05, Garmin.Chang wrote:
+> Base on tag: next-20221220, linux-next/master
 > 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->  .../bindings/sound/simple-card.yaml           | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
+> changes since v2:
+> - 	add MTK_SCPD_DOMAIN_SUPPLY cap to MFG1
+> - 	add MTK_SCPD_ALWAYS_ON cap to ADSP_INFRA
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
-> index ed19899bc94b..2635b1c04fc9 100644
-> --- a/Documentation/devicetree/bindings/sound/simple-card.yaml
-> +++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
-> @@ -199,6 +199,13 @@ properties:
->      maxItems: 1
->    simple-audio-card,mic-det-gpio:
->      maxItems: 1
-> +  simple-audio-card,aux-jack-types:
-
-Drop 'simple-audio-card,'. That way we can reuse this for the 
-not-simple cases.
-
-I'm pretty sure we have some vendor specific properties for this 
-already. Use those for inspiration and to create something which could 
-replace them.
-
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-> +    description: |
-> +      Array of snd_jack_type to create jack-input-event for jack
-> +      devices in aux-devs. If the setting is 0, the supported
-> +      type of the device is used. A device which has the functions
-> +      set_jack and get_jack_supported_type counts as jack device.
-
-Sounds like Linux details. How does BSD use this property?
-
-Rob
+> Garmin.Chang (2):
+>    dt-bindings: power: Add MT8188 power domains
+>    soc: mediatek: pm-domains: Add support for mt8188
+> 
+>   .../power/mediatek,power-controller.yaml      |   2 +
+>   drivers/soc/mediatek/mt8188-pm-domains.h      | 623 ++++++++++++++++++
+>   drivers/soc/mediatek/mtk-pm-domains.c         |   5 +
+>   .../dt-bindings/power/mediatek,mt8188-power.h |  44 ++
+>   include/linux/soc/mediatek/infracfg.h         | 121 ++++
+>   5 files changed, 795 insertions(+)
+>   create mode 100644 drivers/soc/mediatek/mt8188-pm-domains.h
+>   create mode 100644 include/dt-bindings/power/mediatek,mt8188-power.h
+> 
