@@ -2,124 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A499E673429
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD2767342C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjASJFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S229884AbjASJHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjASJFh (ORCPT
+        with ESMTP id S229766AbjASJH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:05:37 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01FC69209
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:05:25 -0800 (PST)
-Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
-        by 156.147.23.53 with ESMTP; 19 Jan 2023 18:05:24 +0900
-X-Original-SENDERIP: 156.147.1.121
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.121 with ESMTP; 19 Jan 2023 18:05:24 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
-        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
-        gwan-gyeong.mun@intel.com, max.byungchul.park@gmail.com,
-        boqun.feng@gmail.com, longman@redhat.com
-Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
-Date:   Thu, 19 Jan 2023 18:05:11 +0900
-Message-Id: <1674119111-12759-1-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <873588j92x.ffs@tglx>
-References: <873588j92x.ffs@tglx>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 19 Jan 2023 04:07:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AE4683C1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:07:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 099FB3F7BD;
+        Thu, 19 Jan 2023 09:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674119244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lx+G4gaGNhV68KQmveYTrDwihb7CIXIEx7gck3bp6IQ=;
+        b=q+LqR2yCOHNqpVWOIvbansbDL3VSCocmrsGHwL7zBVmSPFJMHmv8CSt4WqfzkBrD21Zbm9
+        KgSEbdbfq6BuL7AWtvVzsWaWy4x5wRctXKROBuNxL8YSxmD4u3sjUUSC+22Rwqzzx2tUNS
+        LJRo5m9YIUefiZhysTQqmKyZ7zWnKIY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD6B4134F5;
+        Thu, 19 Jan 2023 09:07:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id atXVM0sIyWNNbwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 19 Jan 2023 09:07:23 +0000
+Date:   Thu, 19 Jan 2023 10:07:23 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH 1/3] mm: return the number of pages successfully paged out
+Message-ID: <Y8kIS+nx2/nBfKei@dhcp22.suse.cz>
+References: <20230117231632.2734737-1-minchan@kernel.org>
+ <Y8e3lHsYoWjFWbRU@dhcp22.suse.cz>
+ <Y8gn0KQDWC/5CZ/w@google.com>
+ <Y8gt5Gb7DPaEI2uN@dhcp22.suse.cz>
+ <Y8g1VWkdSwt5SUVo@google.com>
+ <Y8hjNm+kB8WquUH6@dhcp22.suse.cz>
+ <Y8hyS3yVnxXTsFIz@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8hyS3yVnxXTsFIz@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas wrote:
-> On Tue, Jan 17 2023 at 10:18, Boqun Feng wrote:
-> > On Mon, Jan 16, 2023 at 10:00:52AM -0800, Linus Torvalds wrote:
-> > > I also recall this giving a fair amount of false positives, are they all fixed?
-> >
-> > From the following part in the cover letter, I guess the answer is no?
-> >	...
-> >       6. Multiple reports are allowed.
-> >       7. Deduplication control on multiple reports.
-> >       8. Withstand false positives thanks to 6.
-> >	...
-> >
-> > seems to me that the logic is since DEPT allows multiple reports so that
-> > false positives are fitlerable by users?
-> 
-> I really do not know what's so valuable about multiple reports. They
-> produce a flood of information which needs to be filtered, while a
-> single report ensures that the first detected issue is dumped, which
-> increases the probability that it can be recorded and acted upon.
+On Wed 18-01-23 14:27:23, Minchan Kim wrote:
+[...]
+> Let me know if you have other concern or suggestion.
 
-Assuming the following 2 assumptions, you are right.
-
-Assumption 1. There will be too many reports with the multi-report
-	      support, like all the combination of dependencies between
-	      e.g. in-irq and irq-enabled-context.
-
-Assumption 2. The detection is matured enough so that it barely happens
-	      to fix false onces to see true one which is not a big deal.
-
-However, DEPT doesn't generate all the combination of irq things as
-Lockdep does so we only see a few multi-reports even with the support,
-and I admit DEPT hasn't matured enough yet because fine classification
-is required anyway to suppress false alarms. That's why I introduced
-multi-report support at least for now. IMHO, it'd be still useful even
-if it's gonna report a few true ones at once w/o false ones some day.
-
-> Filtering out false positives is just the wrong approach. Decoding
-> dependency issues from any tracker is complex enough given the nature of
-> the problem, so adding the burden of filtering out issues from a stream
-> of dumps is not helpful at all. It's just a marketing gag.
-> 
-> > *	Instead of introducing a brand new detector/dependency tracker,
-> >	could we first improve the lockdep's dependency tracker? I think
-> >	Byungchul also agrees that DEPT and lockdep should share the
-> >	same dependency tracker and the benefit of improving the
-> >	existing one is that we can always use the self test to catch
-> >	any regression. Thoughts?
-> 
-> Ack. If the internal implementation of lockdep has shortcomings, then we
-> can expand and/or replace it instead of having yet another
-> infrastructure which is not even remotely as mature.
-
-Ultimately, yes. We should expand or replace it instead of having
-another ultimately.
-
-	Byungchul
-> 
-> Thanks,
-> 
->         tglx
+I would propose to use a tracepoint to track this on the madvise side.
+This way you can both track a per-process effectivity as well a madvise
+originator effectivity (if the policy is implemented by a global monitor
+then it won't get interfering activity by other users of this
+interface). Global counters cannot do neither of that.
+-- 
+Michal Hocko
+SUSE Labs
