@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A2F673161
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5A2673166
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjASFt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S229716AbjASFwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjASFtx (ORCPT
+        with ESMTP id S229593AbjASFwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:49:53 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE140BC;
-        Wed, 18 Jan 2023 21:49:51 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J4EeVe015389;
-        Thu, 19 Jan 2023 05:49:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TvLSxJKDlVSsYYhn2BY8VF0yC5B8to9hVsiCxE4epnk=;
- b=KwT8kheedk5k0XzYrO5mTUXzH7YXa1RCWfXdGhRMuO2QXS5Sdf6bSlZJoykSRLuti9zd
- PN5hMRR3bI0nxgnTSdjpWR9kikBClK+gGCXQIH4ZUSPrlKxeWdHcwbz4pY8qzmCwCr43
- KijkPAzjhz95jwjBmM+SWJFyXiGQhgCFJzKnDNvDMHHfPMVbGIgyhrEz1tB0cD59GCYc
- gLuDxOOcKXS7okX9bMOVxxoIKQg/SVvFtixeMUay4I1TxDGXkid02oeFmubBkPTETD3q
- 9YnGw9m4HVfABmlTTkz1ghG8cbOBY2P1gOhvmZgYU2qpU/6lWKzsuRVE6nXhe9p17301 ow== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6debt8a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 05:49:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J5nUjm027196
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 05:49:30 GMT
-Received: from [10.50.23.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
- 2023 21:49:28 -0800
-Message-ID: <a4f47e6e-637d-8eb8-6bc1-a2dfc8e3632a@quicinc.com>
-Date:   Thu, 19 Jan 2023 11:17:59 +0530
+        Thu, 19 Jan 2023 00:52:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F83BA;
+        Wed, 18 Jan 2023 21:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HV20o5DJoYejH4ZxhgolHlvJcr34R1PSBryHehLovgc=; b=OA+Vp86krsp9Bm3bY8YID9wbtz
+        l4r1JaKf6WSW/XCx1VilImlA4K2In6L3j7JmCCVGvg+qj1gx3MZK/WnznqYdCdsKLjdNi6CZWMN+9
+        q0KGasFax4jUaAIRwi2w9dJD1Y5JTab2CAxJBfjuNqZ/P+8332Fqou7UGYPI1sOsI+5/ne9a99vmI
+        r2tIXLg70iTdrz7UCbdrvAY8plHIWklrKAtfcd8F3u+tXq1sIRBdyd6vbTKo966UriXiRa4vCdVtb
+        7C8G/1chYtTsrdA9pvz1yWo+shpaKpcJbwVDMwDrBkfR+Dh0albhuyWyoF/evf6xafPeT9M6PUYTg
+        zFvO+imQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pINq9-003hee-Da; Thu, 19 Jan 2023 05:51:57 +0000
+Date:   Wed, 18 Jan 2023 21:51:57 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 18/34] dio: Pin pages rather than ref'ing if
+ appropriate
+Message-ID: <Y8jafackRu7t2Jf4@infradead.org>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391061117.2311931.16807283804788007499.stgit@warthog.procyon.org.uk>
+ <Y8jPVLewUaaiuplq@ZenIV>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] wifi: ath10k: update the channel list if change in
- channel flags.
-To:     Wen Gong <quic_wgong@quicinc.com>, <ath10k@lists.infradead.org>,
-        <johannes@sipsolutions.net>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>
-References: <20221222124221.30894-1-quic_youghand@quicinc.com>
- <20221222124221.30894-3-quic_youghand@quicinc.com>
- <17047ffb-9c68-8339-a339-c51a2e721083@quicinc.com>
-Content-Language: en-US
-From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
-In-Reply-To: <17047ffb-9c68-8339-a339-c51a2e721083@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XshOoqtEjauMBIV8xfz67Qos_iC8ft_x
-X-Proofpoint-ORIG-GUID: XshOoqtEjauMBIV8xfz67Qos_iC8ft_x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 mlxlogscore=906 adultscore=0 bulkscore=0 spamscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190044
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8jPVLewUaaiuplq@ZenIV>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 05:04:20AM +0000, Al Viro wrote:
+> 1) fs/direct-io.c is ancient, grotty and has few remaining users.
+> The case of block devices got split off first; these days it's in
+> block/fops.c.  Then iomap-using filesystems went to fs/iomap/direct-io.c,
+> leaving this sucker used only by affs, ext2, fat, exfat, hfs, hfsplus, jfs,
+> nilfs2, ntfs3, reiserfs, udf and ocfs2.  And frankly, the sooner it dies
+> the better off we are.  IOW, you've picked an uninteresting part and left
+> the important ones untouched.
 
-On 1/19/2023 7:56 AM, Wen Gong wrote:
-> On 12/22/2022 8:42 PM, Youghandhar Chintala wrote:
-> ...
->>   +static void ath10k_mac_beacon_notifier(struct wiphy *wiphy)
->> +{
->> +    struct ieee80211_hw *hw = wiphy_to_ieee80211_hw(wiphy);
->> +    struct ath10k *ar = hw->priv;
->> +
->> +    if (ath10k_update_channel_list(ar))
->> +        ath10k_warn(ar, "failed to update channel list\n");
->> +}
->> +
->
-> Will this called while scan is running?
-> On ath11k, if send channel list to firmware, then the running scan 
-> will be cancel and removed.
-> I guess this is same for ath10k.
->
->> ...
+Agreed.  That being said if we want file systems (including those not
+using this legacy version) to be able to rely on correct page dirtying
+eventually everything needs to pin pages it writes to.  So we need to
+either actually fix or remove this code in the forseeable future.  It's
+by far not the most interesting and highest priority, though.   And as
+I said this series is already too large too review anyway, I'd really
+prefer to get a core set done ASAP and then iterate on the callers and
+additional bits.
 
-Yes Wen. You are right.
+> Unless I misunderstand something fundamental about the whole thing,
+> this crap should become useless with that conversion.
 
-Regards,
+It should - mostly.  But we need to be very careful about that, so
+I'd prefer a separate small series for it to be honest.
 
-Youghandhar
+> BTW, where do we dirty the pages on IO_URING_OP_READ_FIXED with
+> O_DIRECT file?  AFAICS, bio_set_pages_dirty() won't be called
+> (ITER_BVEC iter) and neither will bio_release_pages() do anything
+> (BIO_NO_PAGE_REF set on the bio by bio_iov_bvec_set() called
+> due to the same ITER_BVEC iter).  Am I missing something trivial
+> here?  Jens?
 
+I don't think we do that all right now.
