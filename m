@@ -2,120 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E76673D51
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EBC673D59
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjASPT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S230349AbjASPUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjASPTZ (ORCPT
+        with ESMTP id S229941AbjASPUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:19:25 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4DC829AE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:19:23 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id e10so1752740pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=COC0cQf3RM+28HjrZuFfI8U9iEnmOUqpakV5+y8hXro=;
-        b=iYhnq31FqaCsdLQsRmrrrSLPknKuzg5EDi5FnG0XJsMCKleZzOOmIahMB3jDftuROY
-         H59Ix3pMjUGC32cz0psGxHXSEcTHd8pi8Qrq+kL8J6jfZ8xhUtDMh+Tzue4FsbiOkW3y
-         URS8YujQKNW9cPaYrDJPmzT15CUqXfqdqGhoCrQgkaPR9Ed8OGrN+9NyH3H7m/5QBEWV
-         hIkBu9SKzujHSZQFK9WfBMq0uvlOQq4I2fvhIczyLYxMGFewOAWWJfkfA27Q1PUGyPZi
-         3iQ2BSwglss6M0QPQ5mSnVR3fNPSvjfiFE54E9yOscLqQ2KH5BZGDbWYFbMsy5huTIVf
-         XMJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=COC0cQf3RM+28HjrZuFfI8U9iEnmOUqpakV5+y8hXro=;
-        b=ruvAmTe62SlC+emo1rqoDXnZexaN2YGEIlUQC07SDsHQ7/vfUxddVzrxNxo+7KzeSk
-         mz4FO7VGoV/WXWTx5GKqvcQg9Xu+zv5gSY2jvT4uY4qdIddeY8aEG3RoxpKOvHvTznsZ
-         AS7E8ljJ6BuUO58YhGjZuTwoc+lUKb/mdXchfH8HAhPQariz4te/hAN26bPXtyhq+U5A
-         APsom25XyatPUmkuGdHUWjLKIKRDZPjXYy7hQ00zK2oXZ2lp8h2WdGBlRViycaONt0ce
-         4FL/BNNooXNfhsdz/mogSwQ33nwl7AA67dUJnVZSuXhk71jgSjRiHIrQ4qRqIslmrIKi
-         qp9g==
-X-Gm-Message-State: AFqh2krfiJg9gxV8YIBrtv6ioTFZE7x2PItiSZBlGJjA/xLO1PBHcY7G
-        WKCosaGaxKnOtXaYK8gPNMn38g==
-X-Google-Smtp-Source: AMrXdXsUJCiHv+x8er4RQjqeSGm7p768nE4Z3fEvWZooodpyJRG2iLwFsWL/7iAU6pOKxpq0PgMGhQ==
-X-Received: by 2002:aa7:9041:0:b0:58b:cb1b:978f with SMTP id n1-20020aa79041000000b0058bcb1b978fmr1888929pfo.1.1674141562945;
-        Thu, 19 Jan 2023 07:19:22 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x2-20020aa79a42000000b0058d9730ede0sm8638923pfj.210.2023.01.19.07.19.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 07:19:22 -0800 (PST)
-Date:   Thu, 19 Jan 2023 15:19:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
-        james.morse@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH 4/4] KVM: Improve warning report in
- mark_page_dirty_in_slot()
-Message-ID: <Y8lfdgcjLvtgII2a@google.com>
-References: <20230116040405.260935-1-gshan@redhat.com>
- <20230116040405.260935-5-gshan@redhat.com>
- <Y8bBzKF17IdZP9eF@google.com>
- <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
+        Thu, 19 Jan 2023 10:20:46 -0500
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3501984570
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:20:37 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 09E3F200FB;
+        Thu, 19 Jan 2023 16:20:36 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id N25Q-_HdXcOS; Thu, 19 Jan 2023 16:20:35 +0100 (CET)
+Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 390602010A;
+        Thu, 19 Jan 2023 16:20:35 +0100 (CET)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pIWiQ-008cJU-30;
+        Thu, 19 Jan 2023 16:20:34 +0100
+Date:   Thu, 19 Jan 2023 16:20:34 +0100
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [patchv2 1/3] VT: Add height parameter to con_font_get/set consw
+ operations
+Message-ID: <20230119152034.ebx4eppde5ouwwbc@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org,
+        linux-kernel@vger.kernel.org
+References: <20221218003209.503539532@ens-lyon.org>
+ <20221218003237.350270019@ens-lyon.org>
+ <Y8ldFjz7d6/CMA0w@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8ldFjz7d6/CMA0w@kroah.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Gavin Shan wrote:
-> Hi Sean,
+Greg KH, le jeu. 19 janv. 2023 16:09:10 +0100, a ecrit:
+> On Sun, Dec 18, 2022 at 01:32:10AM +0100, Samuel Thibault wrote:
+> > Index: linux-6.0/drivers/tty/vt/vt.c
 > 
-> On 1/18/23 2:42 AM, Sean Christopherson wrote:
-> > On Mon, Jan 16, 2023, Gavin Shan wrote:
-> > > There are two warning reports about the dirty ring in the function.
-> > > We have the wrong assumption that the dirty ring is always enabled when
-> > > CONFIG_HAVE_KVM_DIRTY_RING is selected.
-> > 
-> > No, it's not a wrong assumption, becuase it's not an assumption.  The intent is
-> > to warn irrespective of dirty ring/log enabling.  The orignal code actually warned
-> > irrespective of dirty ring support[1], again intentionally.  The
-> > CONFIG_HAVE_KVM_DIRTY_RING check was added because s390 can mark pages dirty from
-> > an worker thread[2] and s390 has no plans to support the dirty ring.
-> > 
-> > The reason for warning even if dirty ring isn't enabled is so that bots can catch
-> > potential KVM bugs without having to set up a dirty ring or enable dirty logging.
-> > 
-> > [1] 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
-> > [2] e09fccb5435d ("KVM: avoid warning on s390 in mark_page_dirty")
-> > 
+> 6.0 was really old when you sent this, and because of that:
 > 
-> Thanks for the linker. I was confused when looking at the code, but now it's clear to
-> me. Thanks for your explanation. How about to add a comment there?
+> > Index: linux-6.0/drivers/usb/misc/sisusbvga/sisusb_con.c
+> > ===================================================================
 > 
->   /*
->    * The warning is expected when the dirty ring is configured,
->    * but not enabled.
->    */
+> This file is not even in the tree anymore.
+> 
+> Can you rebase this against 6.2-rc4 and resubmit it so that I can apply
+> it?  As-is, it will not apply at all :(
 
-That's not correct either.  By design, the warning can also fire if the dirty ring
-is enabled.  KVM's rule is that writes to guest memory always need to be done in
-the context of a running vCPU, with the recently added exception of
-kvm_arch_allow_write_without_running_vcpu().  That intent of the warning is to
-enforce that rule regardless of the state of the VM.
+Right, I have rebased on top of Linus' tree, v3 should now apply fine.
 
-Concretely, I think you can just drop patches 3 and 4, and just fix the arm64 issues.
+Thanks,
+Samuel
