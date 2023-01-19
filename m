@@ -2,142 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5156733AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831826733B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjASI3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S229960AbjASIar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 03:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjASI3e (ORCPT
+        with ESMTP id S229695AbjASIal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:29:34 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CB4B4A6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:29:24 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E29065C0046;
-        Thu, 19 Jan 2023 03:29:23 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 19 Jan 2023 03:29:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1674116963; x=1674203363; bh=J7
-        tU+IG41sGbrGJxFhVsXzXkGTETH/yClz9JTE7BPK0=; b=oP1uP1ofoKtrBhikJJ
-        H/iyFmRXBi790tp4NGKpMWeX4WucWyDGQTY8WSZv71gkX6O6l4riG1VokZ4A5goj
-        Cbk9CwXNTtk3aD7NV9rDsnAB6qbILYoL1RIUCeMuazg89dx0YOSxPr/LKLcmtKVt
-        f5ek9qtj5bkTbBxzrGFBgngLrgjR426CFtfE43tHDKeP4D5Rmy2F4imyOtpHGcxp
-        LTml3nvnE5qPMzp8VEnUrhoH97XEYyaKY0ZoHOoA8rlQQDwdXgnYR6I4OAmlKRYh
-        vv14njMrF+UkN8pN4Dt7d+rBkASzaElU0b7eRQ9OW+RLOU+mmvv1LhXg3fXcpVrT
-        4l+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674116963; x=1674203363; bh=J7tU+IG41sGbrGJxFhVsXzXkGTET
-        H/yClz9JTE7BPK0=; b=PZzX7Q1lQH3z0tCWemwbV6QNNvfU93en+QqkPPf+7qq+
-        0tCnE3J3B/gnpWJijqq9fKvCgkV2s52Dxhhej9z1VHGrkRZZ0Olt9FXkxVsQp8Rn
-        h4y55uzfhxE6alOu9e1CYLoWNJmrNDM+7aiFNrs3uVuRFHjHI/l8Zd5YM16xH+g1
-        /X2W/UoAJgqWU7N4DmbdZiBT1JkX2l6k7pcpKcBpuKvm3lkwQTSIhXmqnZ+jHi0j
-        9qrkMA5dcI2LEzGPzwbs1xwZFnpvnszS3JDwY/zmNF76b9FSp0E1aiuScBSOl9Yx
-        Dbg5pQlO0LOUvM4jH2vzcIiCkJUJ5h9ssIEQ4X4W2Q==
-X-ME-Sender: <xms:Y__IY2fMYE3RETmvP6T5ShCZfEQcvsZaB24rvu_iNO-bGyK-IeFFRg>
-    <xme:Y__IYwOuxfJ2dflGCcSEjge56QF_lkxGfZ6XcdA0hzmyavcPVtaFtqay8cZs33DBj
-    mku73u4rkOJkd1waqk>
-X-ME-Received: <xmr:Y__IY3ghpvSeSFikhvzlWs8qXvrXKX39g-AOI39uKsOQW-jgXzVFSogqtFu9Q0wGAcJkOaw224EB57lZBBAnMFOJMA265A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpefmlhgr
-    uhhsucflvghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrg
-    htthgvrhhnpeeggfdvgffgveetueeuffduueejtedvleektdffvdevleejtdejtdfhvdel
-    vdfgtdenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehithhssehirhhrvghlvghvrghnthdrughk
-X-ME-Proxy: <xmx:Y__IYz98UZwJ5WwHffjHulyz4lL1NeTkMChWgjrOZyQtzTXClzE2bg>
-    <xmx:Y__IYytFqiwYcRpezEWwGaO0ABoKxK9_XG9ye2yVbSpj0krMNtZ9Ow>
-    <xmx:Y__IY6GxLo0knAwCPtVXZx5lK3LBa_NHtPxBVTWMVNeC03g5Dfnzfg>
-    <xmx:Y__IYwBYgMx6U3a6_ow2E7YoOaV5TGvSoiHeL1fANc1b93B3kg8OCQ>
-Feedback-ID: idc91472f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Jan 2023 03:29:21 -0500 (EST)
-Date:   Thu, 19 Jan 2023 09:29:20 +0100
-From:   Klaus Jensen <its@irrelevant.dk>
-To:     Martin Wilck <mwilck@suse.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: regression on aarch64? panic on boot
-Message-ID: <Y8j/YLA9O7Q+haE/@cormorant.local>
-References: <Y8XINx8fpGPKudW6@cormorant.local>
- <20230117055819.GB13795@lst.de>
- <Y8ZA30EoAFaFPwVC@cormorant.local>
- <20230117063735.GA14468@lst.de>
- <59599137a9556355cb43563a4fbcc05b0fe769b4.camel@suse.com>
+        Thu, 19 Jan 2023 03:30:41 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA45AC;
+        Thu, 19 Jan 2023 00:30:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674117040; x=1705653040;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=LxcRD6HtB+g61OccydTNj4VaTJvaQZCVLDO3oTLNvDo=;
+  b=Yo8OWacdV5VyAA28nuKCWPqrUuKpurkwTynHun6DX4vRWBjbZm1WlhwU
+   UyBGtrprcdqBfzni5UI7OEaeIYEbaD/LctX4siQrJGih3EL8Ne6tRdGh0
+   jeo8sBkLXc65VGugEXzRvD7rik0S0eS0bLmIADye/Pl7yAtvVukoSQRi3
+   FQai+gOLJJZAVqpzmYbCXgA7ZewfWKnlPH336QWvmWOdD3nmMXzWwxxEg
+   0kWTYAXP554lhH5CtIcoTrU3aL2U4fFaQDPCDOoUVksn8/jCfPMEQPUg5
+   TdYpXi75mMfRKolPAxbOmevQuasPo5DUEyFr5jgzNmlvgLnRxAf7mHmHi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327303773"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="327303773"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 00:30:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="768119456"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="768119456"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 00:30:32 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, fvdl@google.com,
+        bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Yuanchu Xie <yuanchu@google.com>
+Subject: Re: Proactive reclaim/demote discussion (was Re: [PATCH] Revert
+ "mm: add nodes= arg to memory.reclaim")
+References: <20221202223533.1785418-1-almasrymina@google.com>
+        <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz> <Y5xASNe1x8cusiTx@dhcp22.suse.cz>
+        <20221216101820.3f4a370af2c93d3c2e78ed8a@linux-foundation.org>
+        <Y52Scge3ynvn/mB4@dhcp22.suse.cz>
+        <20221219144252.f3da256e75e176905346b4d1@linux-foundation.org>
+        <Y7PpYsbv1xC6m/Hu@dhcp22.suse.cz>
+        <87lemiitdd.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
+        <Y8gqkub3AM6c+Z5y@dhcp22.suse.cz>
+Date:   Thu, 19 Jan 2023 16:29:33 +0800
+In-Reply-To: <Y8gqkub3AM6c+Z5y@dhcp22.suse.cz> (Michal Hocko's message of
+        "Wed, 18 Jan 2023 18:21:22 +0100")
+Message-ID: <87a62fdj0y.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/wMxtvFL3yVWbTgo"
-Content-Disposition: inline
-In-Reply-To: <59599137a9556355cb43563a4fbcc05b0fe769b4.camel@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Michal Hocko <mhocko@suse.com> writes:
 
---/wMxtvFL3yVWbTgo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed 04-01-23 16:41:50, Huang, Ying wrote:
+>> Michal Hocko <mhocko@suse.com> writes:
+>> 
+>> [snip]
+>> 
+>> > This really requires more discussion.
+>> 
+>> Let's start the discussion with some summary.
+>> 
+>> Requirements:
+>> 
+>> - Proactive reclaim.  The counting of current per-memcg proactive
+>>   reclaim (memory.reclaim) isn't correct.  The demoted, but not
+>>   reclaimed pages will be counted as reclaimed.  So "echo XXM >
+>>   memory.reclaim" may exit prematurely before the specified number of
+>>   memory is reclaimed.
+>
+> This is reportedly a problem because memory.reclaim interface cannot be
+> used for proper memcg sizing IIRC.
+>
+>> - Proactive demote.  We need an interface to do per-memcg proactive
+>>   demote.
+>
+> For the further discussion it would be useful to reference the usecase
+> that is requiring this functionality. I believe this has been mentioned
+> somewhere but having it in this thread would help.
 
-On Jan 17 13:11, Martin Wilck wrote:
-> On Tue, 2023-01-17 at 07:37 +0100, Christoph Hellwig wrote:
-> > On Tue, Jan 17, 2023 at 07:31:59AM +0100, Klaus Jensen wrote:
-> > > Good morning Christoph,
-> > >=20
-> > > Yep, the above works.
-> >=20
-> > Context for the newly added: This is dropping the newly added
-> > PROBE_PREFER_ASYNCHRONOUS in nvme, which causes Klaus' arm64 (but not
-> > other boot tests) to fail.=C2=A0 Any idea what could be going wrong the=
-re
-> > probably in userspace?
->=20
-> If this is an aarch64 userspace issue, maybe related to
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D107678 ?
->=20
-> That bug causes segfaults of user space programs if for some reason the
-> unwind code is invoked. It happens only if libgcc_s.so is compiled with
-> gcc 13, and the pauth CPU feature is enabled in qemu.
->=20
-> Martin
->=20
+Sure.
 
-I just observed the same panic on qemu emulated ppc64 as well. It's
-pretty rare, maybe 1 in 20. 'rootwait' or removing the the prefer
-asynchronous probe fixes it as well.
+Google people in [1] and [2] request a per-cgroup interface to demote
+but not reclaim proactively.
 
---/wMxtvFL3yVWbTgo
-Content-Type: application/pgp-signature; name="signature.asc"
+"
+For jobs of some latency tiers, we would like to trigger proactive
+demotion (which incurs relatively low latency on the job), but not
+trigger proactive reclaim (which incurs a pagefault).
+"
 
------BEGIN PGP SIGNATURE-----
+Meta people (Johannes) in [3] say they used per-cgroup memory.reclaim
+for demote and reclaim proactively.
 
-iQEzBAEBCgAdFiEEUigzqnXi3OaiR2bATeGvMW1PDekFAmPI/18ACgkQTeGvMW1P
-DelXYAf9H5/rtUW2fNjGQYkeNQY3NOPT2QtRx6Ix2uuwGaM5ICTJCK97IE7ZMCZ9
-yAIgFKDJc9Cyho+FnlzmTWYWVxIXDoQQktj3fUrFSRajxRBzVTJynC8m9O0We6cm
-YBJvPxpfjOfst5SAq3PVjTX6r88xd4FPfbm0r11efWp0U0egEt6HpeUFA1hnPjoL
-jsH062D2VVDEAM5pi2tSeKbWi1CLt5pN+aC16Q64x3zQUcTjh1T/QHGPii0Gjjsh
-ds0d3lZA4WGUstS+ufRtZno+wQt/qW8lekGBidIaAmuUhVpupbaOzirNkNc8FGGR
-5/YSRyr/+v4A3Z7tNo5hp36wfB/yQw==
-=cc4b
------END PGP SIGNATURE-----
+ [1] https://lore.kernel.org/linux-mm/CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com/
+ [2] https://lore.kernel.org/linux-mm/CAJD7tkZNW=u1TD-Fd_3RuzRNtaFjxihbGm0836QHkdp0Nn-vyQ@mail.gmail.com/
+ [3] https://lore.kernel.org/linux-mm/Y35fw2JSAeAddONg@cmpxchg.org/
 
---/wMxtvFL3yVWbTgo--
+>> We may reuse memory.reclaim via extending the concept of
+>>   reclaiming to include demoting.  Or, we can add a new interface for
+>>   that (for example, memory.demote).  In addition to demote from fast
+>>   tier to slow tier, in theory, we may need to demote from a set of
+>>   nodes to another set of nodes for something like general node
+>>   balancing.
+>> 
+>> - Proactive promote.  In theory, this is possible, but there's no real
+>>   life requirements yet.  And it should use a separate interface, so I
+>>   don't think we need to discuss that here.
+>
+> Yes, proactive promotion is not backed by any real usecase at the
+> moment. We do not really have to focus on it but we should be aware of
+> the posibility and alow future extentions towards that functionality.
+
+OK.
+
+> There is one requirement missing here.
+>  - Per NUMA node control - this is what makes the distinction between
+>    demotion and charge reclaim really semantically challenging - e.g.
+>    should demotions constrained by the provided nodemask or they should
+>    be implicit?
+
+Yes.  We may need to specify the NUMA nodes for demotion/reclaiming
+source, target, or even path.  That is, to fine control the proactive
+demotion/reclaiming.
+
+>> Open questions:
+>> 
+>> - Use memory.reclaim or memory.demote for proactive demote.  In current
+>>   memcg context, reclaiming and demoting is quite different, because
+>>   reclaiming will uncharge, while demoting will not.  But if we will add
+>>   per-memory-tier charging finally, the difference disappears.  So the
+>>   question becomes whether will we add per-memory-tier charging.
+>
+> The question is not whether but when IMHO. We've had a similar situation
+> with the swap accounting. Originally we have considered swap as a shared
+> resource but cgroupv2 goes with per swap limits because contention for
+> the swap space is really something people do care about.
+
+So, when we design user space interface for proactive demotion, we
+should keep per-memory-tier charging in mind.
+
+>> - Whether should we demote from faster tier nodes to lower tier nodes
+>>   during the proactive reclaiming.
+>
+> I thought we are aligned on that. Demotion is a part of aging and that
+> is an integral part of the reclaim.
+
+As in the choice A/B of the below text, we should keep more fast memory
+size or slow memory size?  For original active/inactive LRU lists, we
+will balance the size of lists.  But we don't have similar stuff for the
+memory tiers.  What is the preferred balancing policy?  Choice A/B below
+are 2 extreme policies that are defined clearly.
+
+>>   Choice A is to keep as much fast
+>>   memory as possible.  That is, reclaim from the lowest tier nodes
+>>   firstly, then the secondary lowest tier nodes, and so on.  Choice B is
+>>   to demote at the same time of reclaiming.  In this way, if we
+>>   proactively reclaim XX MB memory, we may free XX MB memory on the
+>>   fastest memory nodes.
+>> 
+>> - When we proactively demote some memory from a fast memory tier, should
+>>   we trigger memory competition in the slower memory tiers?  That is,
+>>   whether to wake up kswapd of the slower memory tiers nodes?
+>
+> Johannes made some very strong arguments that there is no other choice
+> than involve kswapd (https://lore.kernel.org/all/Y5nEQeXj6HQBEHEY@cmpxchg.org/).
+
+I have no objection for that too.  The below is just another choice.  If
+people don't think it's useful.  I will not insist on it.
+
+>>   If we
+>>   want to make per-memcg proactive demoting to be per-memcg strictly, we
+>>   should avoid to trigger the global behavior such as triggering memory
+>>   competition in the slower memory tiers.  Instead, we can add a global
+>>   proactive demote interface for that (such as per-memory-tier or
+>>   per-node).
+>
+> I suspect we are left with a real usecase and then follow the path we
+> took for the swap accounting.
+
+Thanks for adding that.
+
+> Other open questions I do see are
+> - what to do when the memory.reclaim is constrained by a nodemask as
+>   mentioned above. Is the whole reclaim process (including aging) bound to
+>   the given nodemask or does demotion escape from it.
+
+Per my understanding, we can use multiple node masks if necessary.  For
+example, for "source=<mask1>", we may demote from <mask1> to other
+nodes; for "source=<mask1> destination=<mask2>", we will demote from
+<mask1> to <mask2>, but will not demote to other nodes.
+
+> - should the demotion be specific to multi-tier systems or the interface
+>   should be just NUMA based and users could use the scheme to shuffle
+>   memory around and allow numa balancing from userspace that way. That
+>   would imply that demotion is a dedicated interface of course.
+
+It appears that if we can force the demotion target nodes (even in the
+same tier).  We can implement numa balancing from user space?
+
+> - there are other usecases that would like to trigger aging from
+>   userspace (http://lkml.kernel.org/r/20221214225123.2770216-1-yuanchu@google.com).
+>   Isn't demotion just a special case of aging in general or should we
+>   end up with 3 different interfaces?
+
+Thanks for pointer!  If my understanding were correct, this appears a
+user of proactive reclaiming/demotion interface?  Cced the patch author
+for any further requirements for the interface.
+
+Best Regards,
+Huang, Ying
