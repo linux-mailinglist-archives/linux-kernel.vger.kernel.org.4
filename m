@@ -2,175 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF0F673F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAAB673F7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjASRDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S230461AbjASRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjASRDR (ORCPT
+        with ESMTP id S229885AbjASRFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:03:17 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D7AA5CB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:03:15 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1741744wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xoDg7X6k/SjUQcyWVxb++knJQou/HfRjq27D3pK1OL0=;
-        b=1hrdE6EhVZapN/amnndIOVoCyNf2PV5AUtAzDtKRv2WE7dv+4JYyd12hJtZZmEQfNg
-         3unnzAFt3Ei2XSXRQ/382g6ej48VXzNYBSocOMr2bvg3dUc9WGRZhEkCDD8OjAxdeFDS
-         j/hEXC0lom9dHs+G9YMstoUY1PzRiX4Gq9UniA38h1YFkA4N6cDzUHMgV/ta21+W7iqA
-         sYtJ5hc5jHIH69AI267vdjXQH8ttU24qNCX6UVpI5JojnLTa9HdfJoK1VbvfIHs4aHVA
-         1LUXsoBE/oGphFk0PGffJ/ThRyFprXILexDcb91ZNqkjorykOr6X1SKXSKRMuSuEvh8A
-         5AAg==
+        Thu, 19 Jan 2023 12:05:33 -0500
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7710B49429;
+        Thu, 19 Jan 2023 09:05:31 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id s3so3683280edd.4;
+        Thu, 19 Jan 2023 09:05:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xoDg7X6k/SjUQcyWVxb++knJQou/HfRjq27D3pK1OL0=;
-        b=13Qh9JJpsZEg8uKtHgP7NP2oLHxW+8Epp2OHtp7WPFp/LB5KeCVlOcnawQ1ex3sBEd
-         7Bj1B+hrgbTiWDkfcdqRvK95HY+PcgJy9mRjM2QgnD6BxhIcdpT+mbk04F+6Ww641dr8
-         UTu0/sYOF+IpMILQ5ARcTMGt8HYUOFM85+6FutEHdsKJBzbHXRZWUYMesMrLmngb5bUE
-         V25QwzIH5KcB+gNYJUzN5sy/WpXiqqHZHbxyfcm28DKL3C3uOOypPVCdaswSYvPHT/RV
-         CYgQiYgSv4C/otsMpUYQEc0wTVgviXxgBEN9lUhvnM7VKGU+OOkgjHb7IyBrvQVpgzzY
-         HhSw==
-X-Gm-Message-State: AFqh2kqEXcWf8q7UiyDXOVVfKzNWZ25Va20mDYTcsZVtCEh12ogXaOuE
-        yX3FMDGC+8Q/T/qz6py/5zNxsw==
-X-Google-Smtp-Source: AMrXdXvVqir7OAh4deRHUpeRJymXdvbDE5Wl8w9DSxpLlPsa1In7nF1ob0+NOI0SLMtg6L6CnI5eQg==
-X-Received: by 2002:a05:600c:1d8e:b0:3d9:f9ef:3d23 with SMTP id p14-20020a05600c1d8e00b003d9f9ef3d23mr11316499wms.23.1674147793846;
-        Thu, 19 Jan 2023 09:03:13 -0800 (PST)
-Received: from [10.8.2.10] ([195.200.221.42])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b003a3442f1229sm6193662wmq.29.2023.01.19.09.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 09:03:10 -0800 (PST)
-Message-ID: <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
-Date:   Thu, 19 Jan 2023 18:03:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bxFKReXhiNeHH0B2c67HXt8d1FtZifP9bV42iFW5m6I=;
+        b=OZW/MszGhie0Gi9tNjE6JKtCI/199sBkNPzuxvyA6E7SLK4yyE7znyJIH5+RfYJgQU
+         Bxfa7Q5waJQLoWzTYlYea/czAHD+nGzfUCuqokgO08WfTjS7xPvRuzFQV9Czf9SuP6NP
+         a2uA/FlxmirXk1ISE0x01FM9kGTjTqWglykSSDO3RmrZJs1tl7e4jnNN0OmQABETt3EW
+         j98MrbuWjJbXGG+sDR6TtJQI2xUdN1gsrmLTQjp0MBwr8CAjmyRBQr6/zfr64Qh12RTj
+         Dsi8g/8WavKVqUwuvRhiqw4WwlTo8310MQtEoQgMufJy494Wkw+ZVgat8IkwNmEI+c06
+         spUA==
+X-Gm-Message-State: AFqh2krgdielK0M/g8eOgfRVMI/jJUczF6tSK1BsCSYxdKtwgxlgsBOz
+        7KAMulhyLXdaon/UmX+9a9lKxRwjSaWLBKfYQBM=
+X-Google-Smtp-Source: AMrXdXv5o43NoNkKwvTnUN9Kk3VNAmPeK6KTSpnjk9Coz6Q/lh53IG7pGr6RhgJzO6E2FNe222OP0WaMVw4TigNtPIs=
+X-Received: by 2002:a05:6402:4498:b0:495:f184:3971 with SMTP id
+ er24-20020a056402449800b00495f1843971mr1645829edb.95.1674147930000; Thu, 19
+ Jan 2023 09:05:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
- <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
-Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+ <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org> <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+ <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
+ <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
+ <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org> <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+ <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org> <340f3ecdaddb2c422dcbe3df712a082f333eab0d.camel@linux.intel.com>
+ <d6f71181-1de4-7937-eda0-8805d9dfc3b4@linaro.org> <b51ecbb8ac774efc4fb4ac1349585b486303f86f.camel@linux.intel.com>
+ <CAJZ5v0hYMPkGuJnOBkr+nRX4yny2wa6toPVbhbipRRKyS4Ei4g@mail.gmail.com> <33bb6a2a6b473d74c73a730671e6bd12c764bcd6.camel@linux.intel.com>
+In-Reply-To: <33bb6a2a6b473d74c73a730671e6bd12c764bcd6.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 Jan 2023 18:05:18 +0100
+Message-ID: <CAJZ5v0i0AAw0xLDFMDEK_L9YrhX7zxmh7rDh08=61OjVq6ythQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-On 12/29/22 16:49, Daniel Lezcano wrote:
-> On 06/12/2022 10:18, Amjad Ouled-Ameur wrote:
->> Hi Daniel,
->> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
->>>
->>> Hi Amjad,
->>>
->>>
->>> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
->>>
->>> [ ... ]
->>>
->>>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>>>>             platform_set_drvdata(pdev, mt);
->>>>>>     -    tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>>>>> -                          &mtk_thermal_ops);
->>>>>> -    if (IS_ERR(tzdev)) {
->>>>>> -        ret = PTR_ERR(tzdev);
->>>>>> -        goto err_disable_clk_peri_therm;
->>>>>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>>>>> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>>>>> +        if (!tz)
->>>>>> +            return -ENOMEM;
->>>>>> +
->>>>>> +        tz->mt = mt;
->>>>>> +        tz->id = i;
->>>>>> +
->>>>>> +        tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>>>>> +                                 &mtk_thermal_ops :
->>>>>> + &mtk_thermal_sensor_ops);
->>>>>
->>>>> Here you use again the aggregation
->>>> I addressed this concern in V6, could you please take a look and let me
->>>> know what you think [0].
->>>>
->>>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
->>>
->>> May I misunderstanding but AFAICS, this patch is setting the
->>> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
->>> max temperature in this ops which is what we don't want to do.
->>
->> Correct, but I think that is out of scope of this patchset, as the current
->> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
->> is to add support for the other sensors.
->>
->> Besides, what do you suggest as a clean implementation if the current one
->> no longer meets thermal core requirements ?
+On Thu, Jan 19, 2023 at 5:58 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 Little, right ?
+> On Thu, 2023-01-19 at 13:17 +0100, Rafael J. Wysocki wrote:
+> > On Thu, Jan 19, 2023 at 12:04 AM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > On Wed, 2023-01-18 at 23:14 +0100, Daniel Lezcano wrote:
+> > > > On 18/01/2023 22:16, srinivas pandruvada wrote:
+> > > > > On Wed, 2023-01-18 at 22:01 +0100, Daniel Lezcano wrote:
+> > > > > > On 18/01/2023 21:53, srinivas pandruvada wrote:
+> > > > > > > On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
+> > > > > > > > On 18/01/2023 20:16, srinivas pandruvada wrote:
+> > > > > > > >
+> > > > > > > > [ ... ]
+> > > > > > > >
+> > > > > > > > > > > But we'd better wait for the thermald test result
+> > > > > > > > > > > from
+> > > > > > > > > > > Srinvias.
+> > > > > > > > > >
+> > > > > > > > > > A quick test show that things still work with
+> > > > > > > > > > thermald
+> > > > > > > > > > and
+> > > > > > > > > > these
+> > > > > > > > > > changes.
+> > > > > > > > >
+> > > > > > > > > But I have a question. In some devices trip point
+> > > > > > > > > temperature
+> > > > > > > > > is
+> > > > > > > > > not
+> > > > > > > > > static. When hardware changes, we get notification. For
+> > > > > > > > > example
+> > > > > > > > > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
+> > > > > > > > > Currently get_trip can get the latest changed value.
+> > > > > > > > > But if
+> > > > > > > > > we
+> > > > > > > > > preregister, we need some mechanism to update them.
+> > > > > > > >
+> > > > > > > > When the notification INT3403_PERF_TRIP_POINT_CHANGED
+> > > > > > > > happens, we
+> > > > > > > > call
+> > > > > > > > int340x_thermal_read_trips() which in turn updates the
+> > > > > > > > trip
+> > > > > > > > points.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Not sure how we handle concurrency here when driver can
+> > > > > > > freely
+> > > > > > > update
+> > > > > > > trips while thermal core is using trips.
+> > > > > >
+> > > > > > Don't we have the same race without this patch ? The thermal
+> > > > > > core
+> > > > > > can
+> > > > > > call get_trip_temp() while there is an update, no ?
+> > > > > Yes it is. But I can add a mutex locally here to solve.
+> > > > > But not any longer.
+> > > > >
+> > > > > I think you need some thermal_zone_read_lock/unlock() in core,
+> > > > > which
+> > > > > can use rcu. Even mutex is fine as there will be no contention
+> > > > > as
+> > > > > updates to trips will be rare.
+> > > >
+> > > > I was planning to provide a thermal_trips_update(tz, trips) and
+> > > > from
+> > > > there handle the locking.
+> > > >
+> > > > As the race was already existing, can we postpone this change
+> > > > after
+> > > > the
+> > > > generic trip points changes?
+> > > I think so.
+> >
+> > Well, what if this bug is reported by a user and a fix needs to be
+> > backported to "stable"?
+> >
+> > Are we going to backport the whole framework redesign along with it?
+> >
+> > Or is this extremely unlikely?
+> These trips are read at the start of DTT/Thermald and will be read once
+> after notification is received. So extremely unlikely.
+> But we can add the patch before this series to address this issue,
+> which can be marked stable. I can submit this.
 
-MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. Thermal zone 0 corresponds
-
-to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has nothing to do with CPUs. The cooling device type
-
-used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present in the SoC for debug-purpose only, they are not supposed
-
-to be used for production.
-
-
-Regards,
-
-Amjad
-
->
-> If it is the case, then a thermal zone per sensor with the trip points and a cooling device for each of them.
->
-> The two thermal zones for the big will share the same cooling device. The little thermal zone will have its own cooling device.
->
-> If there is the GPU, then its own cooling device also with devfreq.
->
->
->>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>>
->>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->>> <http://twitter.com/#!/linaroorg> Twitter |
->>> <http://www.linaro.org/linaro-blog/> Blog
->>
->
+Looks reasonable to me.
