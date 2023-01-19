@@ -2,184 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52837673336
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B22F67332B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjASIBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S230009AbjASH70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjASIBJ (ORCPT
+        with ESMTP id S230131AbjASH7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:01:09 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF34FAD9;
-        Thu, 19 Jan 2023 00:00:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B1FE05CA89;
-        Thu, 19 Jan 2023 08:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674115245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=59uOrifRDTYBCECf1fwQxGbqBJuSw77rED/xSDf+KMs=;
-        b=eFqR5Jtr66gr2NYeIe0qAL2Lizr3SoI3ekiORMkd9ECEDHUDNAaVzuRl84CvskPjG6F8Ee
-        wCJXz8px0IahIYedDmN0uKdIbDdJys3+qA6LWXDDr0bGneS5wK3w0Ww9MjPvRxuq5RxYIZ
-        Ose+3rudhU07EUGtCsmJPvqpekgdN+w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674115245;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=59uOrifRDTYBCECf1fwQxGbqBJuSw77rED/xSDf+KMs=;
-        b=FiuLNX39Fy7v8zT7K0EcEpRXsdZrAKb14y7XtE9Q7bBdMss/xzTttLCRGl92HW+SZM60mk
-        nUOrb3DXOjdG+KCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 881F6139ED;
-        Thu, 19 Jan 2023 08:00:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id C19gIK34yGNnSwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 19 Jan 2023 08:00:45 +0000
-Message-ID: <f57f29a6-1db3-ab0b-a1f7-77074d1c10e8@suse.de>
-Date:   Thu, 19 Jan 2023 09:00:44 +0100
+        Thu, 19 Jan 2023 02:59:09 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90795AA44;
+        Wed, 18 Jan 2023 23:59:03 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id j9so1046288qvt.0;
+        Wed, 18 Jan 2023 23:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LmxZN1YrGcXIl6BJ7TKPqUyMt3s9X7GC0r8mhCyLVo8=;
+        b=KGyQWSTYSZ34wKgDYbw+kGxfjC+rpxGiKRzBmXLO+hQx8UnwneML37sz4LLXkNu6UL
+         xALXkefIx1XI53QROsTnc8672Myaemq0lVzG4fAS2RJUU7+RlIkriHMVvsmy6HKyFzTO
+         YH8PwA11Y8GirnFCeDPj1B5ctmqQPG1xPFE77niZ4x9BdzJ/IjV1RBmGU0adQ0P5bh+3
+         xY6VYduSdLs4YQ4OwseQLNKXEMmTqfQ7nrP2jESI7Aefa1Zb/EHAH91QhSDDlEdkDv7R
+         +MxsBBnbRNucNF2QSuFqLIOyeLLSzjXfxMFdYxL0tTqK2YNPjLOr5OMvHI/Ye9AMURVB
+         Z5aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LmxZN1YrGcXIl6BJ7TKPqUyMt3s9X7GC0r8mhCyLVo8=;
+        b=QxKvFqjnfe+I+exdJjjupm4Cl8d0+ALYqWJA/u0ft3T0FzbBsZ0yTwYGwPRJyiHs4e
+         CUIVZ6DRox6ZXzmo9Qpb/XDU1zTHjOC7jdtuhj/SDzTAondxyDlByl0h9cNqYV8pcG6F
+         jLH4D7QErk6qOQivC4O1ltDhTJ6v+oZKP3/06AaCvBEdHjCkbvsCP3Rer7xntG1U2qFb
+         Nf/8tDnJezhMJ/wLEBSRiReFFWGYoMS6kAlI2WADCgvK2gJDtOqg2qbkRfHFEGdCeXkI
+         GO+hWjhgNih00WjTfGivedeA5zv/Q2fRo/wWog+KwSXyhgW27xFo6i5fM1H+NPG7IrBq
+         MVTA==
+X-Gm-Message-State: AFqh2koWRm70TKPLG5I8WW3lCGAVhwJBgAKLsYCeGwCOwWAkmca5VHxe
+        NJyvMgPyRliIwAGRbWGG0/w=
+X-Google-Smtp-Source: AMrXdXv+INBpJMonZE+SaI/fxARrwKp0VT1O9hj9jRu8mAkCgF8HYsqZYMOKWAoxLprXrbcGWvUKlQ==
+X-Received: by 2002:ad4:52e7:0:b0:531:cc33:19b0 with SMTP id p7-20020ad452e7000000b00531cc3319b0mr12905265qvu.24.1674115142525;
+        Wed, 18 Jan 2023 23:59:02 -0800 (PST)
+Received: from p200300f6ef015700e657423a1f156bec.dip0.t-ipconnect.de (p200300f6ef015700e657423a1f156bec.dip0.t-ipconnect.de. [2003:f6:ef01:5700:e657:423a:1f15:6bec])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05620a070300b00706b69d3414sm2426279qkc.94.2023.01.18.23.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 23:59:01 -0800 (PST)
+Message-ID: <bb2e8b7b4ca894ed53d70bf04e2d52bed2553105.camel@gmail.com>
+Subject: Re: [PATCH v1 1/2] iio: core: Replace
+ iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>
+Date:   Thu, 19 Jan 2023 09:00:45 +0100
+In-Reply-To: <64406c4f-c9da-b434-360b-1050ff685d2d@metafoo.de>
+References: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
+         <5f9b713b-9c71-7da6-e674-b6ebd28dc5d5@metafoo.de>
+         <Y8gVDs0UoiHqCRsM@smile.fi.intel.com>
+         <64406c4f-c9da-b434-360b-1050ff685d2d@metafoo.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] of: Make of framebuffer devices unique
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        "Erhard F." <erhard_f@mailbox.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <20230117165804.18036-1-msuchanek@suse.de>
- <20230118211305.42e50a4a@yea> <20230118214618.GM16547@kitsune.suse.cz>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230118214618.GM16547@kitsune.suse.cz>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------vYwQZLIzQewlERFQlMVyGl2T"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------vYwQZLIzQewlERFQlMVyGl2T
-Content-Type: multipart/mixed; boundary="------------SelpGfgpoFlxitarI50j1scj";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
- "Erhard F." <erhard_f@mailbox.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- linuxppc-dev@lists.ozlabs.org
-Message-ID: <f57f29a6-1db3-ab0b-a1f7-77074d1c10e8@suse.de>
-Subject: Re: [PATCH] of: Make of framebuffer devices unique
-References: <20230117165804.18036-1-msuchanek@suse.de>
- <20230118211305.42e50a4a@yea> <20230118214618.GM16547@kitsune.suse.cz>
-In-Reply-To: <20230118214618.GM16547@kitsune.suse.cz>
+On Wed, 2023-01-18 at 08:37 -0800, Lars-Peter Clausen wrote:
+> On 1/18/23 07:49, Andy Shevchenko wrote:
+> > On Wed, Jan 18, 2023 at 07:22:30AM -0800, Lars-Peter Clausen wrote:
+> > > On 1/17/23 23:48, Andy Shevchenko wrote:
+> > > > None of the current users is using gaps in the list of the
+> > > > items.
+> > > > No need to have a specific function for that, just replace it
+> > > > by
+> > > > library available __sysfs_match_string().
+> > > Hm, I specifically remember adding this for a driver where there
+> > > were gaps.
+> > > One of the DACs. But it might be that the driver itself never
+> > > made it
+> > > upstream.
+> > I have checked all modules that have struct iio_enum and/or ("or"
+> > probably may
+> > not happen) IIO_ENUM() in them.
+> >=20
+> > It might be that I missed something.
+> I checked too, I can't find it either. The driver probably never made
+> it=20
+> upstream.
 
---------------SelpGfgpoFlxitarI50j1scj
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yeah, I also did a quick check and I could find it in one adc (most
+likely we have more downstream users of this) that did not make it
+upstream. Eventually, we want to have it upstream but the ABI using the
+gaps can arguably be dropped...
 
-SGkgTWljaGFsLA0KDQp0aGFua3MgZm9yIGZpeGluZyB0aGlzIGlzc3VlLiBCdXQgdGhlIHJl
-dmlldyB0aW1lIHdhcyB3YXkgdG9vIHNob3J0LiANClBsZWFzZSBzZWUgbXkgY29tbWVudHMg
-YmVsb3cuDQoNCkFtIDE4LjAxLjIzIHVtIDIyOjQ2IHNjaHJpZWIgTWljaGFsIFN1Y2jDoW5l
-azoNCj4gT24gV2VkLCBKYW4gMTgsIDIwMjMgYXQgMDk6MTM6MDVQTSArMDEwMCwgRXJoYXJk
-IEYuIHdyb3RlOg0KPj4gT24gVHVlLCAxNyBKYW4gMjAyMyAxNzo1ODowNCArMDEwMA0KPj4g
-TWljaGFsIFN1Y2hhbmVrIDxtc3VjaGFuZWtAc3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4+IFNp
-bmNlIExpbnV4IDUuMTkgdGhpcyBlcnJvciBpcyBvYnNlcnZlZDoNCj4+Pg0KPj4+IHN5c2Zz
-OiBjYW5ub3QgY3JlYXRlIGR1cGxpY2F0ZSBmaWxlbmFtZSAnL2RldmljZXMvcGxhdGZvcm0v
-b2YtZGlzcGxheScNCj4+Pg0KPj4+IFRoaXMgaXMgYmVjYXVzZSBtdWx0aXBsZSBkZXZpY2Vz
-IHdpdGggdGhlIHNhbWUgbmFtZSAnb2YtZGlzcGxheScgYXJlDQo+Pj4gY3JlYXRlZCBvbiB0
-aGUgc2FtZSBidXMuDQo+Pj4NCj4+PiBVcGRhdGUgdGhlIGNvZGUgdG8gY3JlYXRlIG51bWJl
-cmVkIGRldmljZSBuYW1lcyBmb3IgdGhlIG5vbi1ib290DQo+Pj4gZGlzYXBsYXkuDQo+Pj4N
-Cj4+PiBjYzogbGludXhwcGMtZGV2QGxpc3RzLm96bGFicy5vcmcNCj4+PiBSZWZlcmVuY2Vz
-OiBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcvc2hvd19idWcuY2dpP2lkPTIxNjA5NQ0K
-Pj4+IEZpeGVzOiA1MmIxYjQ2YzM5YWUgKCJvZjogQ3JlYXRlIHBsYXRmb3JtIGRldmljZXMg
-Zm9yIE9GIGZyYW1lYnVmZmVycyIpDQo+Pj4gUmVwb3J0ZWQtYnk6IEVyaGFyZCBGLiA8ZXJo
-YXJkX2ZAbWFpbGJveC5vcmc+DQo+Pj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFu
-biA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWwgU3Vj
-aGFuZWsgPG1zdWNoYW5la0BzdXNlLmRlPg0KPj4+IC0tLQ0KPj4+ICAgZHJpdmVycy9vZi9w
-bGF0Zm9ybS5jIHwgOCArKysrKysrLQ0KPj4+ICAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-b2YvcGxhdGZvcm0uYyBiL2RyaXZlcnMvb2YvcGxhdGZvcm0uYw0KPj4+IGluZGV4IDgxYzhj
-MjI3YWI2Yi4uZjJhNWQ2NzlhMzI0IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvb2YvcGxh
-dGZvcm0uYw0KPj4+ICsrKyBiL2RyaXZlcnMvb2YvcGxhdGZvcm0uYw0KPj4+IEBAIC01MjUs
-NiArNTI1LDcgQEAgc3RhdGljIGludCBfX2luaXQgb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1
-bGF0ZV9pbml0KHZvaWQpDQo+Pj4gICAJaWYgKElTX0VOQUJMRUQoQ09ORklHX1BQQykpIHsN
-Cj4+PiAgIAkJc3RydWN0IGRldmljZV9ub2RlICpib290X2Rpc3BsYXkgPSBOVUxMOw0KPj4+
-ICAgCQlzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpkZXY7DQo+Pj4gKwkJaW50IGRpc3BsYXlf
-bnVtYmVyID0gMTsNCj4+PiAgIAkJaW50IHJldDsNCj4+PiAgIA0KPj4+ICAgCQkvKiBDaGVj
-ayBpZiB3ZSBoYXZlIGEgTWFjT1MgZGlzcGxheSB3aXRob3V0IGEgbm9kZSBzcGVjICovDQo+
-Pj4gQEAgLTU2MSwxMCArNTYyLDE1IEBAIHN0YXRpYyBpbnQgX19pbml0IG9mX3BsYXRmb3Jt
-X2RlZmF1bHRfcG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4+ICAgCQkJYm9vdF9kaXNwbGF5ID0g
-bm9kZTsNCj4+PiAgIAkJCWJyZWFrOw0KPj4+ICAgCQl9DQo+Pj4gKw0KPj4+ICAgCQlmb3Jf
-ZWFjaF9ub2RlX2J5X3R5cGUobm9kZSwgImRpc3BsYXkiKSB7DQo+Pj4gKwkJCWNoYXIgKmJ1
-ZlsxNF07DQo+Pj4gICAJCQlpZiAoIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsb3Bl
-bmVkIiwgTlVMTCkgfHwgbm9kZSA9PSBib290X2Rpc3BsYXkpDQo+Pj4gICAJCQkJY29udGlu
-dWU7DQo+Pj4gLQkJCW9mX3BsYXRmb3JtX2RldmljZV9jcmVhdGUobm9kZSwgIm9mLWRpc3Bs
-YXkiLCBOVUxMKTsNCj4+PiArCQkJcmV0ID0gc25wcmludGYoYnVmLCAib2YtZGlzcGxheS0l
-ZCIsIGRpc3BsYXlfbnVtYmVyKyspOw0KDQpQbGF0Zm9ybSBkZXZpY2VzIHVzZSBhIHNpbmds
-ZSBkb3QgKC4pIGFzIHNlcGFyYXRvciBiZWZvcmUgdGhlIGluZGV4LiANCkNvdW50aW5nIHN0
-YXJ0cyBhdCB6ZXJvLiBTZWUgL3N5cy9idXMvcGxhdGZvcm0vIGZvciBleGFtcGxlcy4gQ2Fu
-IHdlIA0KcGxlYXNlIHN0aWNrIHdpdGggdGhhdCBzY2hlbWU/IEdlbmVyYXRlZCBuYW1lcyB3
-b3VsZCB0aGVuIGJlIA0Kb2YtZGlzcGxheS4wLCBvZi1kaXNwbGF5LjEsIGV0Yy4NCg0KQmVz
-dCByZWdhcmRzDQpUaG9tYXMNCg0KDQoNCj4+PiArCQkJaWYgKHJldCA+PSBzaXplb2YoYnVm
-KSkNCj4+PiArCQkJCWNvbnRpbnVlOw0KPj4+ICsJCQlvZl9wbGF0Zm9ybV9kZXZpY2VfY3Jl
-YXRlKG5vZGUsIGJ1ZiwgTlVMTCk7DQo+Pj4gICAJCX0NCj4+PiAgIA0KPj4+ICAgCX0gZWxz
-ZSB7DQo+Pj4gLS0gDQo+Pj4gMi4zNS4zDQo+Pj4NCj4+DQo+PiBUaGFuayB5b3UgZm9yIHRo
-ZSBwYXRjaCBNaWNoYWwhDQo+Pg0KPj4gSXQgYXBwbGllcyBvbiA2LjItcmM0IGJ1dCBJIGdl
-dCB0aGlzIGJ1aWxkIGVycm9yIHdpdGggbXkgY29uZmlnOg0KPiANCj4gSW5kZWVkLCBpdCdz
-IGRvdWJseSBiYWQuDQo+IA0KPiBXaGVyZSBpcyB0aGUga2VybmVsIHRlc3Qgcm9ib3Qgd2hl
-biB5b3UgbmVlZCBpdD8NCj4gDQo+IEl0IHNob3VsZCBub3QgYmUgdGhhdCBlYXN5IHRvIG1p
-c3MgdGhpcyBmaWxlIGJ1dCBjbGVhcmx5IGl0IGNhbiBoYXBwZW4uDQo+IA0KPiBJIHdpbGwg
-c2VuZCBhIGZpeHVwLg0KPiANCj4gU29ycnkgYWJvdXQgdGhlIG1lc3MuDQo+IA0KPiBUaGFu
-a3MNCj4gDQo+IE1pY2hhbA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBE
-cml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgN
-Ck1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwg
-QUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+Anyways, from my side I'm fine with this change. We can revert it if we
+ever have a real user for this. I'll just have to be careful when
+updating ADI tree (but that is our problem :)).
 
---------------SelpGfgpoFlxitarI50j1scj--
-
---------------vYwQZLIzQewlERFQlMVyGl2T
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPI+KwFAwAAAAAACgkQlh/E3EQov+B1
-dQ/9HvwMsyehcNa73lV+1y+Y/Z9DriFzjFhqKQEyHWfr9+IjWNDc5MFVfm5+C4NedCMlnoQxzpZV
-+FyTZYEJiMpQZHEmTRIYsP/NI559FCcMTADWaQh0Hl+RVl7Fb4Y7HyuzQtqiCandy/55MWy9h07g
-RgMNuKW/wfnMYTOTPEbpFVhMBPsBPigdazF8w+WL3NBypnTCwfod1ye5xzGb+mbdysVH635NAy1t
-CVV5gpgGXgpL8JfsZNAKZiAyuQXr6LkusMhujKy+OiSr64g05BcAeprJ7cEcvw62OT39ZFYYFmqo
-+w+44p1IGN1Fr0TsgaRrnMt7RBSw9l5N7/p0baSWeqvnMy8OSosp2TQJDKz26Z2lFmcSN4yFOvhb
-hbzXXMZTXFA7N8zXaR03DBtckvGbFo0txMmDC9LkuR59OXhmsD5yR6lLBXeYvRR9uhYzg0bnbH3a
-CmvRsAB5iON1HSBWWLN2sHhlAy3Z6f543sgJ03wTjocpU3GLAOA16I+wv9PxQJUax4sim0/Gue+R
-vnfeRSe8zTozeTPEbEPE/XgkQBU45CDnOv7hi8TvrmPnDmEnEvXaMWuLIlGamghp2BuJi1T9orRh
-+xeIEv6va5Z1l92HtUI2iFOl/66W3i8RooszHc+tDrJq5pimDNORMqz6zOmdmjKzyvl6PqmvP165
-ZAE=
-=Ize5
------END PGP SIGNATURE-----
-
---------------vYwQZLIzQewlERFQlMVyGl2T--
+- Nuno S=C3=A1
