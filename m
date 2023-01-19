@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7236B673A92
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBDD673A9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjASNl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S231177AbjASNnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbjASNky (ORCPT
+        with ESMTP id S230462AbjASNnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:40:54 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9451278AB4;
-        Thu, 19 Jan 2023 05:40:50 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id b4so2971285edf.0;
-        Thu, 19 Jan 2023 05:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2sA9EhPclZO6+f6VLQzu+GI/zukGWQQoz8R1Dt12GsI=;
-        b=Ssrumq6PQhx2e/g4Bd6SuNl23SQH9Qv/nzp1Uy9v//x8kEfruuqhhMNDkoX0H6ubCI
-         MaR+SU/RqMNRmjwnNWDMEcpz5GjfoleC+3BNcTsopxhWnVzJ1nwvkgl4GUS7gqR9n1Fq
-         izOLXvz1I0ML3IDmv7IE1eUXRtk1Yci1fVgckWGdmoTrtO/ZlMVH35H0a2v/yyavFMTI
-         dgIH49auVy3dEz1m78McldLsu3o9041upq0t+vH0lbSnrUxZ+kOG4XyhlXJ82KOUrTZk
-         0WYx/93yCnKvBMWzXt48IicEnnzHqiPpFmQESj7PjC1dRCf2NXHPeU7yGmFs8AcDl6o1
-         hazw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2sA9EhPclZO6+f6VLQzu+GI/zukGWQQoz8R1Dt12GsI=;
-        b=1j2NJZidS+By0h6XrS1PaKz9g1mTACRpTRZsGCy43VMDrwigaxcvy4OFKlATijmUCU
-         zZrPu3uiijCxj9lQdBcuD+Q+eBDcPsqujX65ux27AhANawMuodujkCREoZvmWMi8Nnqa
-         5KKbEqtPi7WUV4nM/hlicpP+7NVIrIHTf/tpONaYcqEvFgPNAmjiwEYPzLMAnUxpidO6
-         QEfsZdZa8hdtWDT/lQMjG2qGngZSU4hl5LhXb93I8kQo5g7kk/nSJM4kXpr+A6Z3jk0R
-         RKMZKrijD30Qdi/u0PEVRKTc2fF1nFpkUamFgysPJOO2LjNvHPzWsHmuOCIQ1ZnkB7Ic
-         naOw==
-X-Gm-Message-State: AFqh2kqd8mXHy7ImjY30cZyxBsZWtSz1QID0fSlCZOq9g7qTquh/9ttF
-        5Al/Ct/AKrG0Bb1zXcij87s=
-X-Google-Smtp-Source: AMrXdXvXkuKoZFQFQT4KXsKjMumQ66Scy56M1tiUgcqYCQA/AY3QpuuZlRLh4qPLSeGgenAVe3KP+g==
-X-Received: by 2002:a05:6402:cba:b0:49d:25f3:6b4e with SMTP id cn26-20020a0564020cba00b0049d25f36b4emr10522051edb.28.1674135648960;
-        Thu, 19 Jan 2023 05:40:48 -0800 (PST)
-Received: from skbuf ([188.27.185.85])
-        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0084c6581c16fsm16304907ejc.64.2023.01.19.05.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:40:48 -0800 (PST)
-Date:   Thu, 19 Jan 2023 15:40:45 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [RFC PATCH net-next 1/5] net: bridge: add dynamic flag to
- switchdev notifier
-Message-ID: <20230119134045.fqdt6zrna5x3iavt@skbuf>
-References: <20230117185714.3058453-1-netdev@kapio-technology.com>
- <20230117185714.3058453-2-netdev@kapio-technology.com>
- <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
- <a3bba3eb856a00b5e5e0c1e2ffe8749a@kapio-technology.com>
- <20230119093358.gbyka2x4qbxxr43b@skbuf>
+        Thu, 19 Jan 2023 08:43:01 -0500
+Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55287E6A6;
+        Thu, 19 Jan 2023 05:42:56 -0800 (PST)
+Received: from MTA-13-3.privateemail.com (mta-13-1.privateemail.com [198.54.122.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by h5.fbrelay.privateemail.com (Postfix) with ESMTPS id 4BCC560540;
+        Thu, 19 Jan 2023 13:42:55 +0000 (UTC)
+Received: from mta-13.privateemail.com (localhost [127.0.0.1])
+        by mta-13.privateemail.com (Postfix) with ESMTP id 9A43B18000B2;
+        Thu, 19 Jan 2023 08:42:53 -0500 (EST)
+Received: from bpappas-XPS-13-9310.ucf.edu (050-088-208-136.res.spectrum.com [50.88.208.136])
+        by mta-13.privateemail.com (Postfix) with ESMTPA id 42E3B18000AE;
+        Thu, 19 Jan 2023 08:42:42 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1674135773;
+        bh=OqhTI0JnyhpAPSkx4ylvuoAQKclxNMjvVyiT/4YlsiU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H4A37OHivaNSB21JWpSLdSsyRSBe8WXbFevwV/zw+NQ2h3H+AkvcOlcS/n8q0r7xv
+         bf4fFWy3/SLk0qYkh82gwPLIdNTbGA/YRgT+9j2LEvCm56+Dc9pSEjFEmbPtqzpa7i
+         T6pO3o2nkmyK7fZROIaDbYuRvlfoN955POEKebMaxlO+5qPL00uy/WpdufVCHm2vr2
+         daYDx6pvxg6GHxoxpKIexLkdWrakKaVg8paxQHD7pwgU3L9KHziljC8NP78/c0auF/
+         Ih5kKBC5UWYP8VJThOY90sCRThE4fm/dAAYnHKQy7LATR/4CCvvi9+mxxVI5Ns++ny
+         ah6iaCfoblinw==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     hdegoede@redhat.com
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, andy@kernel.org,
+        colin.i.king@gmail.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brent Pappas <bpappas@pappasbrent.com>
+Subject: [PATCH] media: atomisp: pci: sh_css: Replace macro STATS_ENABLED() with function
+Date:   Thu, 19 Jan 2023 08:42:18 -0500
+Message-Id: <20230119134218.12280-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119093358.gbyka2x4qbxxr43b@skbuf>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:33:58AM +0200, Vladimir Oltean wrote:
-> On Wed, Jan 18, 2023 at 11:14:00PM +0100, netdev@kapio-technology.com wrote:
-> > > > +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
-> > > 
-> > > Why reverse logic? Why not just name this "is_static" and leave any
-> > > further interpretations up to the consumer?
-> > 
-> > My reasoning for this is that the common case is to have static entries,
-> > thus is_dyn=false, so whenever someone uses a switchdev_notifier_fdb_info
-> > struct the common case does not need to be entered.
-> > Otherwise it might also break something when someone uses this struct and if
-> > it was 'is_static' and they forget to code is_static=true they will get
-> > dynamic entries without wanting it and it can be hard to find such an error.
-> 
-> I'll leave it up to bridge maintainers if this is preferable to patching
-> all callers of SWITCHDEV_FDB_ADD_TO_BRIDGE such that they set is_static=true.
+Replace the macro STATS_ENABLED() with a static function to conform to
+Linux coding style standards.
 
-Actually, why would you assume that all users of SWITCHDEV_FDB_ADD_TO_BRIDGE
-want to add static FDB entries? You can't avoid inspecting the code and
-making sure that the is_dyn/is_static flag is set correctly either way.
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+ drivers/staging/media/atomisp/pci/sh_css.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index 726cb7aa4ecd..753b3e0fcb07 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -97,8 +97,12 @@
+  */
+ #define JPEG_BYTES (16 * 1024 * 1024)
+ 
+-#define STATS_ENABLED(stage) (stage && stage->binary && stage->binary->info && \
+-	(stage->binary->info->sp.enable.s3a || stage->binary->info->sp.enable.dis))
++static bool stats_enabled(struct ia_css_pipeline_stage *stage)
++{
++	return stage && stage->binary && stage->binary->info &&
++	       (stage->binary->info->sp.enable.s3a ||
++		stage->binary->info->sp.enable.dis);
++}
+ 
+ struct sh_css my_css;
+ 
+@@ -3743,7 +3747,7 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
+ 			 * The SP will read the params after it got
+ 			 * empty 3a and dis
+ 			 */
+-			if (STATS_ENABLED(stage)) {
++			if (stats_enabled(stage)) {
+ 				/* there is a stage that needs it */
+ 				return_err = ia_css_bufq_enqueue_buffer(thread_id,
+ 									queue_id,
+-- 
+2.34.1
+
