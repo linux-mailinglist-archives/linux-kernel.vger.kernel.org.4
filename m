@@ -2,704 +2,522 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC869674727
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ECE67472B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjASXYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S230146AbjASXY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjASXYZ (ORCPT
+        with ESMTP id S229686AbjASXY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:24:25 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392A37F04
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:24:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id q8so2787689wmo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:24:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mvP+cAd7hqfutgxVUlMnflOc7xzidb88YL6WgRrDqMg=;
-        b=ARP6+oi/eLFlqfNoETz+oPqKv2sA0/Xle6yb8zx6XXgKQT8wlul08+9XSxJXJwtlVq
-         wA13lEoZA9bUM9FZFgBJhdv4TaXoBu/a/XWXB1B35mxR7XjddFYufZQQMtjQirxPp22z
-         /ckqPdAWXFkqz6I3poEbiJ/JGPofHDptCQxcGgDXMSMoOz7zwdmR7mbU75lV8MEk1lEB
-         jm8r1KGn7VTZNh99jcYJMo+D5zpUMNYHAC/c/oZAIxfdRlzCj/eaDYzi15/WFu7W1I8c
-         SF6Wht9LWKV5nOMnlqmN/bfr2buhqGg5Zf1/Bx6Fhie0ucRVYd71FgPKVbbFk368CLNf
-         Rs5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvP+cAd7hqfutgxVUlMnflOc7xzidb88YL6WgRrDqMg=;
-        b=dUNGJ4qTsNFae6ow7tdolY+MdbHgSLmb0Vg/Hk9mCDI/M6UXU6BW7asd6iad28K7oS
-         HhZt2tx9Seedq7ADBNUueMbMatWJO4ywxyaHQs6I/MPzZoj6wuo3hP5Ayrc0YE1VNBhC
-         SGFcK/gwBS3+Rq7UIQ+Iw+P1wvJGhpPMU0hW2jrPZas4lBbjrt9DMokovANeubItNV8l
-         k5ZNkAsxauc5HWzjgaVh2D6lT0NPouRLLxW08CFkowb4gT/EKNX8jcsCcl4D7Quo8R5/
-         5nVczPKt72nASw8j5MbkN2ukXEhbyPl6MTL/Wtzc0jtg6mTmx6CPl/7LhnEs8Mk0yQ4A
-         NrtA==
-X-Gm-Message-State: AFqh2ko7dM2d8YRqXy7k+1ULQZjJ4LMFa5STLYb3SQs3xTqtK2k3KQxr
-        8ZEGSEJy/1AePPyM+k8dxUlALA==
-X-Google-Smtp-Source: AMrXdXuLbELwbnjxiNRumFgelDvnJ41KcIKBn8UJLczIupzLNP1N77LHkY4MzA/1pZoT39jTVZtaOg==
-X-Received: by 2002:a05:600c:4928:b0:3d3:4aa6:4fe6 with SMTP id f40-20020a05600c492800b003d34aa64fe6mr12107930wmp.3.1674170658631;
-        Thu, 19 Jan 2023 15:24:18 -0800 (PST)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c2cad00b003cfa622a18asm621282wmc.3.2023.01.19.15.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 15:24:18 -0800 (PST)
-Message-ID: <46acf2f4-3272-c33d-887f-05d4f4aad4d7@linaro.org>
-Date:   Thu, 19 Jan 2023 23:24:17 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFT PATCH v2 4/6] arm64: dts: qcom: sdm845: move audio to
- separate file
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thu, 19 Jan 2023 18:24:56 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88263392B6;
+        Thu, 19 Jan 2023 15:24:37 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9749514;
+        Fri, 20 Jan 2023 00:24:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674170675;
+        bh=D/CJsDjy/R+NMpXdK/50LjkKzRk6WC0ZdiaCrgXo/N8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gaPrWL7ih4F4w+K7+tRVbd9g60r7JVDLNnW3nNAmYLXauOB4QgZwGCc0zPX/bIMSg
+         rmkEX7/GV/qrL2Q85lnplb/kX1bXJ2yT4gB0ZvO6cud5s+J/bb0dRm09ERmURVL9YV
+         vuWPElWJb0Q0KLAsy2m4QprPUtvJEFgSaMXapNDc=
+Date:   Fri, 20 Jan 2023 01:24:32 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20230118103458.107434-1-krzysztof.kozlowski@linaro.org>
- <20230118103458.107434-4-krzysztof.kozlowski@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230118103458.107434-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v7 4/7] dt-bindings: media: add TI DS90UB960 FPD-Link III
+ Deserializer
+Message-ID: <Y8nRMK8GJ+vLCS+H@pendragon.ideasonboard.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-5-tomi.valkeinen@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230118124031.788940-5-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Tomi,
 
+Thank you for the patch.
 
-On 18/01/2023 10:34, Krzysztof Kozlowski wrote:
-> Re-organize SDM845 sound components into separate, audio DTSI which
-> should be included and customized by the SDM845 boards wanting audio.
-> The DTSI includes:
-> 1. WCD9340 codec node because it is not a property of the SoC, but board.
-> 2. Common sound DAI links, shared with all sound cards.
-
-Hi Krzysztof,
-
-I know I already reported this on IRC, I thought I'd duplicate the info
-here for completeness sake.
-
-Due to how the sound node is parsed the device numbers in alsa are
-derived from the index of the sound/mmX-dai-link child nodes.
-
-For boards which use more than 3 FE's this causes breaking changes in
-userspace, as the slim-dai-link and slimcap-dai-link nodes now come
-before the other mmX-dai-link nodes, for example with my OnePlus 6
-patches "aplay -l" shows:
-
-card 0: O6 [OnePlus 6], device 0: MultiMedia1 (*) []
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-card 0: O6 [OnePlus 6], device 1: MultiMedia2 (*) []
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-card 0: O6 [OnePlus 6], device 2: MultiMedia3 (*) []
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-card 0: O6 [OnePlus 6], device 5: MultiMedia4 (*) [] <-- 5 instead of 3
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-card 0: O6 [OnePlus 6], device 6: MultiMedia5 (*) []
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-card 0: O6 [OnePlus 6], device 7: MultiMedia6 (*) []
-  Subdevices: 1/1
-  Subdevice #0: subdevice #0
-
-This breaks the UCM configs shipped by postmarketOS and Mobian - though
-none of it is "upstream".
-
-Would it be reasonable to add all 6 FE DAI's and then disable the unused
-ones on a per-board basis?
-
+On Wed, Jan 18, 2023 at 02:40:28PM +0200, Tomi Valkeinen wrote:
+> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
 > 
-> The Xiaomi Polaris, although includes WCD9340 codec, it lacks sound
-> node, so it stays disabled.
-> 
-> On all others boards not using audio, keep the Slimbus node disabled as
-> it is empty.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
+>  .../bindings/media/i2c/ti,ds90ub960.yaml      | 425 ++++++++++++++++++
+>  1 file changed, 425 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 > 
-> Changes since v1:
-> 1. Move also sound node.
-> 2. Rewrite commit msg.
-> 
-> RFC - please kindly test the boards.
-> ---
->  .../boot/dts/qcom/sdm845-audio-wcd9340.dtsi   | 125 ++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |  55 +-------
->  .../qcom/sdm845-xiaomi-beryllium-common.dtsi  |  53 +-------
->  .../boot/dts/qcom/sdm845-xiaomi-polaris.dts   |   1 +
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          |  60 +--------
->  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts |  59 ++-------
->  .../boot/dts/qcom/sdm850-samsung-w737.dts     |  60 ++-------
->  7 files changed, 151 insertions(+), 262 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi b/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
 > new file mode 100644
-> index 000000000000..0a94fde6741d
+> index 000000000000..1ba22450cdba
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SDM845 SoC device tree source
-> + *
-> + * Copyright (c) 2018, The Linux Foundation. All rights reserved.
-> + */
+> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> @@ -0,0 +1,425 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +&slim {
-> +	status = "okay";
+> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
 > +
-> +	slim@1 {
-> +		reg = <1>;
-> +		#address-cells = <2>;
-> +		#size-cells = <0>;
+> +maintainers:
+> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 > +
-> +		wcd9340_ifd: ifd@0,0 {
-> +			compatible = "slim217,250";
-> +			reg = <0 0>;
-> +		};
+> +description:
+> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+> +  forwarding.
 > +
-> +		wcd9340: codec@1,0 {
-> +			compatible = "slim217,250";
-> +			reg = <1 0>;
-> +			slim-ifc-dev = <&wcd9340_ifd>;
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ds90ub960-q1
+> +      - ti,ds90ub9702-q1
 > +
-> +			#sound-dai-cells = <1>;
+> +  reg:
+> +    maxItems: 1
 > +
-> +			interrupts-extended = <&tlmm 54 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
+> +  clocks:
+> +    maxItems: 1
+> +    description:
+> +      Reference clock connected to the REFCLK pin.
 > +
-> +			#clock-cells = <0>;
-> +			clock-frequency = <9600000>;
-> +			clock-output-names = "mclk";
-> +			qcom,micbias1-microvolt = <1800000>;
-> +			qcom,micbias2-microvolt = <1800000>;
-> +			qcom,micbias3-microvolt = <1800000>;
-> +			qcom,micbias4-microvolt = <1800000>;
+> +  clock-names:
+> +    items:
+> +      - const: refclk
 > +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
+> +  powerdown-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Specifier for the GPIO connected to the PDB pin.
 > +
-> +			wcdgpio: gpio-controller@42 {
-> +				compatible = "qcom,wcd9340-gpio";
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +				reg = <0x42 0x2>;
-> +			};
+> +  i2c-alias-pool:
+> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+> +    description:
+> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
+> +      used to access the remote peripherals on the serializer's I2C bus. The
+> +      addresses must be available, not used by any other peripheral. Each
+> +      remote peripheral is assigned an alias from the pool, and transactions to
+> +      that address will be forwarded to the remote peripheral, with the address
+> +      translated to the remote peripheral's real address. This property is not
+> +      needed if there are no I2C addressable remote peripherals.
 > +
-> +			swm: swm@c85 {
-> +				compatible = "qcom,soundwire-v1.3.0";
-> +				reg = <0xc85 0x40>;
-> +				interrupts-extended = <&wcd9340 20>;
+> +  links:
+> +    type: object
+> +    additionalProperties: false
 > +
-> +				qcom,dout-ports = <6>;
-> +				qcom,din-ports = <2>;
-> +				qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1f 0x3f 0x7 0x1f 0x3f 0x0f 0x0f>;
-> +				qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0c 0x6 0x12 0x0d 0x07 0x0a>;
-> +				qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1f 0x00 0x00 0x1f 0x00 0x00>;
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
 > +
-> +				#sound-dai-cells = <1>;
-> +				clocks = <&wcd9340>;
-> +				clock-names = "iface";
-> +				#address-cells = <2>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +	};
-> +};
+> +      '#size-cells':
+> +        const: 0
 > +
-> +&sound {
-> +	compatible = "qcom,sdm845-sndcard";
-> +	status = "disabled";
+> +      ti,manual-strobe:
+> +        type: boolean
+> +        description:
+> +          Enable manual strobe position and EQ level
 > +
-> +	mm1-dai-link {
-> +		link-name = "MultiMedia1";
-> +		cpu {
-> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
-> +		};
-> +	};
+> +    patternProperties:
+> +      '^link@[0-3]$':
+> +        type: object
+> +        additionalProperties: false
+> +        properties:
+> +          reg:
+> +            description: The link number
+> +            maxItems: 1
 > +
-> +	mm2-dai-link {
-> +		link-name = "MultiMedia2";
-> +		cpu {
-> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
-> +		};
-> +	};
+> +          i2c-alias:
+> +            description:
+> +              The I2C address used for the serializer. Transactions to this
+> +              address on the I2C bus where the deserializer resides are
+> +              forwarded to the serializer.
 > +
-> +	mm3-dai-link {
-> +		link-name = "MultiMedia3";
-> +		cpu {
-> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
-> +		};
-> +	};
+> +          ti,rx-mode:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum:
+> +              - 0 # RAW10
+> +              - 1 # RAW12 HF
+> +              - 2 # RAW12 LF
+> +              - 3 # CSI2 SYNC
+> +              - 4 # CSI2 NON-SYNC
+> +            description:
+> +              FPD-Link Input Mode. This should reflect the hardware and the
+> +              default mode of the connected device.
 > +
-> +	sound_slim_dai_link: slim-dai-link {
-> +		link-name = "SLIM Playback";
-> +		cpu {
-> +			sound-dai = <&q6afedai SLIMBUS_0_RX>;
-> +		};
+> +          ti,cdr-mode:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum:
+> +              - 0 # FPD-Link III
+> +              - 1 # FPD-Link IV
+> +            description:
+> +              FPD-Link CDR Mode. This should reflect the hardware and the
+> +              default mode of the connected device.
 > +
-> +		platform {
-> +			sound-dai = <&q6routing>;
-> +		};
+> +          ti,strobe-pos:
+> +            $ref: /schemas/types.yaml#/definitions/int32
+> +            minimum: -13
+> +            maximum: 13
+> +            description: Manual strobe position
 > +
-> +		codec {
-> +			sound-dai = <&wcd9340 0>;
-> +		};
-> +	};
+> +          ti,eq-level:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            maximum: 14
+> +            description: Manual EQ level
 > +
-> +	slimcap-dai-link {
-> +		link-name = "SLIM Capture";
-> +		cpu {
-> +			sound-dai = <&q6afedai SLIMBUS_0_TX>;
-> +		};
+> +          serializer:
+> +            type: object
+> +            description: FPD-Link Serializer node
 > +
-> +		platform {
-> +			sound-dai = <&q6routing>;
-> +		};
+> +        required:
+> +          - reg
+> +          - i2c-alias
+> +          - ti,rx-mode
+> +          - serializer
 > +
-> +		codec {
-> +			sound-dai = <&wcd9340 1>;
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> index 4833e89affc2..11b0554a6aea 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> @@ -11,6 +11,7 @@
->  #include <dt-bindings/sound/qcom,q6afe.h>
->  #include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm845.dtsi"
-> +#include "sdm845-audio-wcd9340.dtsi"
->  #include "pm8998.dtsi"
->  #include "pmi8998.dtsi"
->  
-> @@ -726,27 +727,7 @@ &quat_mi2s_sd2_active
->  		"MM_DL2",  "MultiMedia2 Playback",
->  		"MM_DL4",  "MultiMedia4 Playback",
->  		"MultiMedia3 Capture", "MM_UL3";
-> -
-> -	mm1-dai-link {
-> -		link-name = "MultiMedia1";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
-> -		};
-> -	};
-> -
-> -	mm2-dai-link {
-> -		link-name = "MultiMedia2";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
-> -		};
-> -	};
-> -
-> -	mm3-dai-link {
-> -		link-name = "MultiMedia3";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
-> -		};
-> -	};
-> +	status = "okay";
->  
->  	mm4-dai-link {
->  		link-name = "MultiMedia4";
-> @@ -769,35 +750,11 @@ codec {
->  			sound-dai = <&lt9611_codec 0>;
->  		};
->  	};
-> +};
->  
-> -	slim-dai-link {
-> -		link-name = "SLIM Playback";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-> -		};
-> -	};
-> -
-> -	slimcap-dai-link {
-> -		link-name = "SLIM Capture";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&wcd9340 1>;
-> -		};
-> +&sound_slim_dai_link {
-> +	codec {
-> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
->  	};
->  };
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> index 5de8b4c372fc..54eabacdc031 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> @@ -7,6 +7,7 @@
->  #include <dt-bindings/sound/qcom,q6afe.h>
->  #include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm845.dtsi"
-> +#include "sdm845-audio-wcd9340.dtsi"
->  #include "pm8998.dtsi"
->  #include "pmi8998.dtsi"
->  
-> @@ -384,57 +385,7 @@ &sound {
->  		"AMIC1", "MIC BIAS1",
->  		"AMIC2", "MIC BIAS2",
->  		"AMIC3", "MIC BIAS3";
-> -
-> -	mm1-dai-link {
-> -		link-name = "MultiMedia1";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
-> -		};
-> -	};
-> -
-> -	mm2-dai-link {
-> -		link-name = "MultiMedia2";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
-> -		};
-> -	};
-> -
-> -	mm3-dai-link {
-> -		link-name = "MultiMedia3";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
-> -		};
-> -	};
-> -
-> -	slim-dai-link {
-> -		link-name = "SLIM Playback";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&wcd9340 0>;
-> -		};
-> -	};
-> -
-> -	slimcap-dai-link {
-> -		link-name = "SLIM Capture";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&wcd9340 1>;
-> -		};
-> -	};
-> +	status = "okay";
->  };
->  
->  &tlmm {
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> index a80c3dd9a2da..f81619c8a3ba 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> @@ -13,6 +13,7 @@
->  #include <dt-bindings/sound/qcom,q6afe.h>
->  #include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm845.dtsi"
-> +#include "sdm845-audio-wcd9340.dtsi"
->  #include "pm8998.dtsi"
->  #include "pmi8998.dtsi"
->  #include "pm8005.dtsi"
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 0f1cb2c8addd..27d1917f5358 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -3831,65 +3831,7 @@ slim: slim-ngd@171c0000 {
->  			iommus = <&apps_smmu 0x1806 0x0>;
->  			#address-cells = <1>;
->  			#size-cells = <0>;
-> -
-> -			slim@1 {
-> -				reg = <1>;
-> -				#address-cells = <2>;
-> -				#size-cells = <0>;
-> -
-> -				wcd9340_ifd: ifd@0,0 {
-> -					compatible = "slim217,250";
-> -					reg = <0 0>;
-> -				};
-> -
-> -				wcd9340: codec@1,0 {
-> -					compatible = "slim217,250";
-> -					reg = <1 0>;
-> -					slim-ifc-dev = <&wcd9340_ifd>;
-> -
-> -					#sound-dai-cells = <1>;
-> -
-> -					interrupts-extended = <&tlmm 54 IRQ_TYPE_LEVEL_HIGH>;
-> -					interrupt-controller;
-> -					#interrupt-cells = <1>;
-> -
-> -					#clock-cells = <0>;
-> -					clock-frequency = <9600000>;
-> -					clock-output-names = "mclk";
-> -					qcom,micbias1-microvolt = <1800000>;
-> -					qcom,micbias2-microvolt = <1800000>;
-> -					qcom,micbias3-microvolt = <1800000>;
-> -					qcom,micbias4-microvolt = <1800000>;
-> -
-> -					#address-cells = <1>;
-> -					#size-cells = <1>;
-> -
-> -					wcdgpio: gpio-controller@42 {
-> -						compatible = "qcom,wcd9340-gpio";
-> -						gpio-controller;
-> -						#gpio-cells = <2>;
-> -						reg = <0x42 0x2>;
-> -					};
-> -
-> -					swm: swm@c85 {
-> -						compatible = "qcom,soundwire-v1.3.0";
-> -						reg = <0xc85 0x40>;
-> -						interrupts-extended = <&wcd9340 20>;
-> -
-> -						qcom,dout-ports = <6>;
-> -						qcom,din-ports = <2>;
-> -						qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1f 0x3f 0x7 0x1f 0x3f 0x0f 0x0f>;
-> -						qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0c 0x6 0x12 0x0d 0x07 0x0a>;
-> -						qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1f 0x00 0x00 0x1f 0x00 0x00>;
-> -
-> -						#sound-dai-cells = <1>;
-> -						clocks = <&wcd9340>;
-> -						clock-names = "iface";
-> -						#address-cells = <2>;
-> -						#size-cells = <0>;
-> -					};
-> -				};
-> -			};
-> +			status = "disabled";
->  		};
->  
->  		lmh_cluster1: lmh@17d70800 {
-> diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> index d55ffd69155e..b979d8ae8698 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> @@ -13,6 +13,7 @@
->  #include <dt-bindings/sound/qcom,q6afe.h>
->  #include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm850.dtsi"
-> +#include "sdm845-audio-wcd9340.dtsi"
->  #include "pm8998.dtsi"
->  
->  /*
-> @@ -522,57 +523,7 @@ &sound {
->  		"MM_DL1",  "MultiMedia1 Playback",
->  		"MM_DL3",  "MultiMedia3 Playback",
->  		"MultiMedia2 Capture", "MM_UL2";
-> -
-> -	mm1-dai-link {
-> -		link-name = "MultiMedia1";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
-> -		};
-> -	};
-> -
-> -	mm2-dai-link {
-> -		link-name = "MultiMedia2";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
-> -		};
-> -	};
-> -
-> -	mm3-dai-link {
-> -		link-name = "MultiMedia3";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
-> -		};
-> -	};
-> -
-> -	slim-dai-link {
-> -		link-name = "SLIM Playback";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-> -		};
-> -	};
-> -
-> -	slimcap-dai-link {
-> -		link-name = "SLIM Capture";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&wcd9340 1>;
-> -		};
-> -	};
-> +	status = "okay";
->  
->  	slim-wcd-dai-link {
->  		link-name = "SLIM WCD Playback";
-> @@ -590,6 +541,12 @@ codec {
->  	};
->  };
->  
-> +&sound_slim_dai_link {
-> +	codec {
-> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-> +	};
-> +};
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
 > +
->  &tlmm {
->  	gpio-reserved-ranges = <0 4>, <81 4>;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-> index 6730804f4e3e..75773b06701b 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-> @@ -14,6 +14,7 @@
->  #include <dt-bindings/sound/qcom,q6afe.h>
->  #include <dt-bindings/sound/qcom,q6asm.h>
->  #include "sdm850.dtsi"
-> +#include "sdm845-audio-wcd9340.dtsi"
->  #include "pm8998.dtsi"
->  
->  /*
-> @@ -436,7 +437,6 @@ dai@2 {
->  };
->  
->  &sound {
-> -	compatible = "qcom,sdm845-sndcard";
->  	model = "Samsung-W737";
->  
->  	audio-routing =
-> @@ -447,57 +447,7 @@ &sound {
->  		"MM_DL1",  "MultiMedia1 Playback",
->  		"MM_DL3",  "MultiMedia3 Playback",
->  		"MultiMedia2 Capture", "MM_UL2";
-> -
-> -	mm1-dai-link {
-> -		link-name = "MultiMedia1";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
-> -		};
-> -	};
-> -
-> -	mm2-dai-link {
-> -		link-name = "MultiMedia2";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
-> -		};
-> -	};
-> -
-> -	mm3-dai-link {
-> -		link-name = "MultiMedia3";
-> -		cpu {
-> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
-> -		};
-> -	};
-> -
-> -	slim-dai-link {
-> -		link-name = "SLIM Playback";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-> -		};
-> -	};
-> -
-> -	slimcap-dai-link {
-> -		link-name = "SLIM Capture";
-> -		cpu {
-> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
-> -		};
-> -
-> -		platform {
-> -			sound-dai = <&q6routing>;
-> -		};
-> -
-> -		codec {
-> -			sound-dai = <&wcd9340 1>;
-> -		};
-> -	};
-> +	status = "okay";
->  
->  	slim-wcd-dai-link {
->  		link-name = "SLIM WCD Playback";
-> @@ -515,6 +465,12 @@ codec {
->  	};
->  };
->  
-> +&sound_slim_dai_link {
-> +	codec {
-> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
-> +	};
-> +};
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: FPD-Link input 0
 > +
->  &tlmm {
->  	gpio-reserved-ranges = <0 6>, <85 4>;
->  
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            description:
+> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> +              hsync-active and vsync-active must be defined.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: FPD-Link input 1
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            description:
+> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> +              hsync-active and vsync-active must be defined.
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: FPD-Link input 2
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            description:
+> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> +              hsync-active and vsync-active must be defined.
+> +
+> +      port@3:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: FPD-Link input 3
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            description:
+> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> +              hsync-active and vsync-active must be defined.
+> +
+> +      port@4:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: CSI-2 Output 0
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - data-lanes
+> +
+> +      port@5:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: CSI-2 Output 1
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - data-lanes
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +      - port@2
+> +      - port@3
+> +      - port@4
+> +      - port@5
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c {
+> +      clock-frequency = <400000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      deser@3d {
+> +        compatible = "ti,ds90ub960-q1";
+> +        reg = <0x3d>;
+> +
+> +        clock-names = "refclk";
+> +        clocks = <&fixed_clock>;
+> +
+> +        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
+> +
+> +        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
+> +
+> +        ports {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          /* Port 0, Camera 0 */
+> +          port@0 {
+> +            reg = <0>;
+> +
+> +            ub960_fpd3_1_in: endpoint {
+> +              remote-endpoint = <&ub953_1_out>;
+> +            };
+> +          };
+> +
+> +          /* Port 1, Camera 1 */
+> +          port@1 {
+> +            reg = <1>;
+> +
+> +            ub960_fpd3_2_in: endpoint {
+> +              remote-endpoint = <&ub913_2_out>;
+> +              hsync-active = <0>;
+> +              vsync-active = <1>;
+> +            };
+> +          };
+> +
+> +          /* Port 2, unused */
+
+Minor comment. I'd write "unconnected" instead of "unused" (same below).
+Either way,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +          port@2 {
+> +            reg = <2>;
+> +          };
+> +
+> +          /* Port 3, unused */
+> +          port@3 {
+> +            reg = <3>;
+> +          };
+> +
+> +          /* Port 4, CSI-2 TX */
+> +          port@4 {
+> +            reg = <4>;
+> +            ds90ub960_0_csi_out: endpoint {
+> +              data-lanes = <1 2 3 4>;
+> +              link-frequencies = /bits/ 64 <800000000>;
+> +              remote-endpoint = <&csi2_phy0>;
+> +            };
+> +          };
+> +
+> +          /* Port 5, unused */
+> +          port@5 {
+> +            reg = <5>;
+> +          };
+> +        };
+> +
+> +        links {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          /* Link 0 has DS90UB953 serializer and IMX274 sensor */
+> +
+> +          link@0 {
+> +            reg = <0>;
+> +            i2c-alias = <0x44>;
+> +
+> +            ti,rx-mode = <3>;
+> +
+> +            serializer1: serializer {
+> +              compatible = "ti,ds90ub953-q1";
+> +
+> +              gpio-controller;
+> +              #gpio-cells = <2>;
+> +
+> +              #clock-cells = <0>;
+> +
+> +              ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                  reg = <0>;
+> +                  ub953_1_in: endpoint {
+> +                    data-lanes = <1 2 3 4>;
+> +                    remote-endpoint = <&sensor_1_out>;
+> +                  };
+> +                };
+> +
+> +                port@1 {
+> +                  reg = <1>;
+> +
+> +                  ub953_1_out: endpoint {
+> +                    remote-endpoint = <&ub960_fpd3_1_in>;
+> +                  };
+> +                };
+> +              };
+> +
+> +              i2c {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                sensor@1a {
+> +                  compatible = "sony,imx274";
+> +                  reg = <0x1a>;
+> +
+> +                  reset-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
+> +
+> +                  port {
+> +                    sensor_1_out: endpoint {
+> +                      remote-endpoint = <&ub953_1_in>;
+> +                    };
+> +                  };
+> +                };
+> +              };
+> +            };
+> +          };  /* End of link@0 */
+> +
+> +          /* Link 1 has DS90UB913 serializer and MT9V111 sensor */
+> +
+> +          link@1 {
+> +            reg = <1>;
+> +            i2c-alias = <0x45>;
+> +
+> +            ti,rx-mode = <0>;
+> +
+> +            serializer2: serializer {
+> +              compatible = "ti,ds90ub913a-q1";
+> +
+> +              gpio-controller;
+> +              #gpio-cells = <2>;
+> +
+> +              clocks = <&clk_cam_48M>;
+> +              clock-names = "clkin";
+> +
+> +              #clock-cells = <0>;
+> +
+> +              ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                  reg = <0>;
+> +                  ub913_2_in: endpoint {
+> +                    remote-endpoint = <&sensor_2_out>;
+> +                    pclk-sample = <1>;
+> +                  };
+> +                };
+> +
+> +                port@1 {
+> +                  reg = <1>;
+> +
+> +                  ub913_2_out: endpoint {
+> +                    remote-endpoint = <&ub960_fpd3_2_in>;
+> +                  };
+> +                };
+> +              };
+> +
+> +              i2c {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                sensor@48 {
+> +                  compatible = "aptina,mt9v111";
+> +                  reg = <0x48>;
+> +
+> +                  clocks = <&serializer2>;
+> +
+> +                  port {
+> +                    sensor_2_out: endpoint {
+> +                      remote-endpoint = <&ub913_2_in>;
+> +                    };
+> +                  };
+> +                };
+> +              };
+> +            };
+> +          }; /* End of link@1 */
+> +        };
+> +      };
+> +    };
+> +...
 
 -- 
-Kind Regards,
-Caleb (they/them)
+Regards,
+
+Laurent Pinchart
