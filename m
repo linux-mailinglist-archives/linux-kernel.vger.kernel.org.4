@@ -2,478 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F05673EE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E087673EF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjASQcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S230063AbjASQeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjASQcN (ORCPT
+        with ESMTP id S230184AbjASQeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:32:13 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875406EA2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:32:10 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id 18so3530100edw.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:32:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ElGHLl1p07NWckigrAo4Z4Nh91TagT335zgulDzAc7s=;
-        b=YSWxBFBldsha8Wz6TAtG0mjkZ8gqt2PYkVMxad91exTjqAvblot8cNrz81JNT4kQfm
-         Sq98YG+SFnbhvIbZIIe+nzIZAedvAW2myzVX9Spa4lqQJmMQFAC6afIcPLBtBE8unJSe
-         G8dfBtqKfj7cPV4aUFW/3D9nA+hQmYv/OcGRHf5UbEcyxG/TKQ+VUe0abNo77x+znAOm
-         siMJlw6I40Bg/GBjwSmoR4+u9ulVpO7T3VMQ4HX5B1CVsix4s42DoOzj4VQZHWLZzqhS
-         aFmfSFPMxqZI8tWPuKOVSHIYuPrCUfYKz7PUnQd8hVGqXKhcvC/yMFpnbvUkXXctyWFp
-         5aBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ElGHLl1p07NWckigrAo4Z4Nh91TagT335zgulDzAc7s=;
-        b=zg06/5Z8A/gPSptt3zRPG6i982kXdTtiAmmNq+mFDgoYHoyHhZH5E+gW+yyJp+bRDj
-         UPf8uTkrUBlvZi4NPpJaRdcSNS0+YAPSjeh48GB0Mn9fAOCxfHsP81fT/a+JIOAH5qbb
-         SsBLgfZcnNHiQznLyVMdYnJIRKgRdoOJs894SYqxFgDtXU2U+SLKaZNhkfaPc1TJH9RL
-         zmohjXnRKN/VQoqE7crwkRr87z8iGlc4gNLZVD/k84Y3bd860g0T8cJfdVyqY2dF4WSx
-         hkyszXV+lkuVYPQsx+cPQeU/guWSAhBFSXgtIHkaHJrr5tF3k5u7l0EVTKuXQvx96tOu
-         QVew==
-X-Gm-Message-State: AFqh2koSCJw8wJBgguvSWq9HnsfoLdJ9spur5vx4gRAkMFuHxhbWLGAX
-        uoSpbtEmkNNvOHIbDHxTcK1cEA==
-X-Google-Smtp-Source: AMrXdXsXBLyytR8pP3BLJsKEszSpi1ICR2w52kIB7S8EBzZi6GvhEFWVzV2wSGlqnAjPJfTgInpN6Q==
-X-Received: by 2002:a05:6402:5306:b0:49b:b274:b815 with SMTP id eo6-20020a056402530600b0049bb274b815mr12246564edb.39.1674145928963;
-        Thu, 19 Jan 2023 08:32:08 -0800 (PST)
-Received: from localhost.localdomain (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
-        by smtp.gmail.com with ESMTPSA id fg11-20020a056402548b00b004873927780bsm15669466edb.20.2023.01.19.08.32.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:32:08 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Thu, 19 Jan 2023 11:34:31 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A60C4DBE3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:34:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674146066; x=1705682066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+pzVIm+NVVCm+tED07C3lguimSN2uvhe+hLPduJWTdc=;
+  b=nwgC6IVmMhV387h5HGFj/c/8TKWHf90aC82s4F7TugKSsgvWiB7MeOBm
+   V2tXwQLWwgCwg2xiUef3FkW8danihOZIGo+sksIVPC/ihfG2hthHl0/DX
+   bIHvasy8JBbXFcY3PcCinzKajxOyIFMbbxBRqfv6uOYfQU4HHt9/c3YYj
+   IMoOy04aTYacnztnbQ7FdbisZEKEs8vN2JlEwjOf12wobRYfKmHXfFVmd
+   IpeqpVSb/1kIzY/k84pFVibHGR6Jjjj9XlWShWOfEptM/8maO6CbXj5K0
+   xoSVRbD6hZCJ/sUl+QRsVARYUNIxWhH0Nh0eVRbgG/ArDt+dMBU1HXNhb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325377957"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="325377957"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 08:33:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784119242"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="784119242"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 08:33:00 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIXqV-0001dA-10;
+        Thu, 19 Jan 2023 16:32:59 +0000
+Date:   Fri, 20 Jan 2023 00:32:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-Date:   Thu, 19 Jan 2023 17:32:00 +0100
-Message-Id: <20230119163201.580858-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230119163201.580858-1-konrad.dybcio@linaro.org>
-References: <20230119163201.580858-1-konrad.dybcio@linaro.org>
+Subject: drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning: unused
+ variable 'ksz9477_dt_ids'
+Message-ID: <202301200026.knQAJz4B-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+Hi Arun,
 
-Add support for the Sony TD4353 JDI 2160x1080 display panel used in
-some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
-of smartphone manufacturing, it is impossible to retrieve a better name
-for this panel.
+First bad commit (maybe != root cause):
 
-This revision adds support for the default 60 Hz configuration, however
-there could possibly be some room for expansion, as the display panels
-used on Sony devices have historically been capable of >2x refresh rate
-overclocking.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7287904c8771b77b9504f53623bb477065c19a58
+commit: 07bca160469b4d19ca0a35bc83b26ed18fcbd96d net: dsa: microchip: common menuconfig for ksz series switch
+date:   7 months ago
+config: s390-buildonly-randconfig-r001-20230119 (https://download.01.org/0day-ci/archive/20230120/202301200026.knQAJz4B-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=07bca160469b4d19ca0a35bc83b26ed18fcbd96d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 07bca160469b4d19ca0a35bc83b26ed18fcbd96d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
-v3 -> v4:
-- De-magicize some numbers
-- Pick up rb
- drivers/gpu/drm/panel/Kconfig                 |  10 +
- drivers/gpu/drm/panel/Makefile                |   1 +
- drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
- 3 files changed, 340 insertions(+)
- create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index d03a64155d15..8da741f1c2ba 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -677,6 +677,16 @@ config DRM_PANEL_SONY_ACX565AKM
- 	  Say Y here if you want to enable support for the Sony ACX565AKM
- 	  800x600 3.5" panel (found on the Nokia N900).
- 
-+config DRM_PANEL_SONY_TD4353_JDI
-+	tristate "Sony TD4353 JDI panel"
-+	depends on GPIOLIB && OF
-+	depends on DRM_MIPI_DSI
-+	depends on BACKLIGHT_CLASS_DEVICE
-+	help
-+	  Say Y here if you want to enable support for the Sony Tama
-+	  TD4353 JDI command mode panel as found on some Sony Xperia
-+	  XZ2 and XZ2 Compact smartphones.
-+
- config DRM_PANEL_SONY_TULIP_TRULY_NT35521
- 	tristate "Sony Tulip Truly NT35521 panel"
- 	depends on GPIOLIB && OF
-diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index 1630dd0c69ae..22155d62bec0 100644
---- a/drivers/gpu/drm/panel/Makefile
-+++ b/drivers/gpu/drm/panel/Makefile
-@@ -68,6 +68,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
- obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
- obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
- obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-+obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
- obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
- obj-$(CONFIG_DRM_PANEL_SONY_SYNAPTICS_JDI) += panel-sony-synaptics-jdi.o
- obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
-diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-new file mode 100644
-index 000000000000..8d8813dbaa45
---- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-@@ -0,0 +1,329 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
-+ *
-+ * Generated with linux-mdss-dsi-panel-driver-generator with a
-+ * substantial amount of manual adjustments.
-+ *
-+ * SONY Downstream kernel calls this one:
-+ * - "JDI ID3" for Akari  (XZ2)
-+ * - "JDI ID4" for Apollo (XZ2 Compact)
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include <video/mipi_display.h>
-+
-+#include <drm/drm_mipi_dsi.h>
-+#include <drm/drm_modes.h>
-+#include <drm/drm_panel.h>
-+
-+enum {
-+	TYPE_TAMA_60HZ,
-+	/*
-+	 * Leaving room for expansion - SONY very often uses
-+	 * *truly reliably* overclockable panels on their flagships!
-+	 */
-+};
-+
-+struct sony_td4353_jdi {
-+	struct drm_panel panel;
-+	struct mipi_dsi_device *dsi;
-+	struct regulator_bulk_data supplies[3];
-+	struct gpio_desc *panel_reset_gpio;
-+	struct gpio_desc *touch_reset_gpio;
-+	bool prepared;
-+	int type;
-+};
-+
-+static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
-+{
-+	return container_of(panel, struct sony_td4353_jdi, panel);
-+}
-+
-+static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-+
-+	ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 1080 - 1);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set column address: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 2160 - 1);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set page address: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set tear scanline: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set tear on: %d\n", ret);
-+		return ret;
-+	}
-+
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
-+
-+	ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set pixel format: %d\n", ret);
-+		return ret;
-+	}
-+
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
-+			  0x00, 0x00, 0x08, 0x6f);
-+
-+	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-+		return ret;
-+	}
-+	msleep(70);
-+
-+	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
-+
-+	ret = mipi_dsi_dcs_set_display_on(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to turn display on: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
-+{
-+	struct mipi_dsi_device *dsi = ctx->dsi;
-+	struct device *dev = &dsi->dev;
-+	int ret;
-+
-+	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-+
-+	ret = mipi_dsi_dcs_set_display_off(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set display off: %d\n", ret);
-+		return ret;
-+	}
-+	msleep(22);
-+
-+	ret = mipi_dsi_dcs_set_tear_off(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to set tear off: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-+		return ret;
-+	}
-+	msleep(80);
-+
-+	return 0;
-+}
-+
-+static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
-+{
-+	gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
-+	gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
-+	usleep_range(5000, 5100);
-+}
-+
-+static int sony_td4353_jdi_prepare(struct drm_panel *panel)
-+{
-+	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-+	struct device *dev = &ctx->dsi->dev;
-+	int ret;
-+
-+	if (ctx->prepared)
-+		return 0;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to enable regulators: %d\n", ret);
-+		return ret;
-+	}
-+
-+	msleep(100);
-+
-+	sony_td4353_assert_reset_gpios(ctx, 1);
-+
-+	ret = sony_td4353_jdi_on(ctx);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to power on panel: %d\n", ret);
-+		sony_td4353_assert_reset_gpios(ctx, 0);
-+		regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+		return ret;
-+	}
-+
-+	ctx->prepared = true;
-+	return 0;
-+}
-+
-+static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
-+{
-+	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-+	struct device *dev = &ctx->dsi->dev;
-+	int ret;
-+
-+	if (!ctx->prepared)
-+		return 0;
-+
-+	ret = sony_td4353_jdi_off(ctx);
-+	if (ret < 0)
-+		dev_err(dev, "Failed to power off panel: %d\n", ret);
-+
-+	sony_td4353_assert_reset_gpios(ctx, 0);
-+	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+
-+	ctx->prepared = false;
-+	return 0;
-+}
-+
-+static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
-+	.clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
-+	.hdisplay = 1080,
-+	.hsync_start = 1080 + 4,
-+	.hsync_end = 1080 + 4 + 8,
-+	.htotal = 1080 + 4 + 8 + 8,
-+	.vdisplay = 2160,
-+	.vsync_start = 2160 + 259,
-+	.vsync_end = 2160 + 259 + 8,
-+	.vtotal = 2160 + 259 + 8 + 8,
-+	.width_mm = 64,
-+	.height_mm = 128,
-+};
-+
-+static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
-+				   struct drm_connector *connector)
-+{
-+	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-+	struct drm_display_mode *mode = NULL;
-+
-+	if (ctx->type == TYPE_TAMA_60HZ)
-+		mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
-+	else
-+		return -EINVAL;
-+
-+	if (!mode)
-+		return -ENOMEM;
-+
-+	drm_mode_set_name(mode);
-+
-+	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-+	connector->display_info.width_mm = mode->width_mm;
-+	connector->display_info.height_mm = mode->height_mm;
-+	drm_mode_probed_add(connector, mode);
-+
-+	return 1;
-+}
-+
-+static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
-+	.prepare = sony_td4353_jdi_prepare,
-+	.unprepare = sony_td4353_jdi_unprepare,
-+	.get_modes = sony_td4353_jdi_get_modes,
-+};
-+
-+static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
-+{
-+	struct device *dev = &dsi->dev;
-+	struct sony_td4353_jdi *ctx;
-+	int ret;
-+
-+	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->type = (uintptr_t)of_device_get_match_data(dev);
-+
-+	ctx->supplies[0].supply = "vddio";
-+	ctx->supplies[1].supply = "vsp";
-+	ctx->supplies[2].supply = "vsn";
-+	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-+				      ctx->supplies);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-+
-+	ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
-+	if (IS_ERR(ctx->panel_reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
-+				     "Failed to get panel-reset-gpios\n");
-+
-+	ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
-+	if (IS_ERR(ctx->touch_reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
-+				     "Failed to get touch-reset-gpios\n");
-+
-+	ctx->dsi = dsi;
-+	mipi_dsi_set_drvdata(dsi, ctx);
-+
-+	dsi->lanes = 4;
-+	dsi->format = MIPI_DSI_FMT_RGB888;
-+	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
-+
-+	drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
-+		       DRM_MODE_CONNECTOR_DSI);
-+
-+	ret = drm_panel_of_backlight(&ctx->panel);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get backlight\n");
-+
-+	drm_panel_add(&ctx->panel);
-+
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-+		drm_panel_remove(&ctx->panel);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
-+{
-+	struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
-+	int ret;
-+
-+	ret = mipi_dsi_detach(dsi);
-+	if (ret < 0)
-+		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-+
-+	drm_panel_remove(&ctx->panel);
-+}
-+
-+static const struct of_device_id sony_td4353_jdi_of_match[] = {
-+	{ .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
-+
-+static struct mipi_dsi_driver sony_td4353_jdi_driver = {
-+	.probe = sony_td4353_jdi_probe,
-+	.remove = sony_td4353_jdi_remove,
-+	.driver = {
-+		.name = "panel-sony-td4353-jdi",
-+		.of_match_table = sony_td4353_jdi_of_match,
-+	},
-+};
-+module_mipi_dsi_driver(sony_td4353_jdi_driver);
-+
-+MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
-+MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
-+MODULE_LICENSE("GPL");
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id ksz9477_dt_ids[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/ksz9477_dt_ids +89 drivers/net/dsa/microchip/ksz9477_i2c.c
+
+20e03777d70923 Tristram Ha   2019-09-10   88  
+20e03777d70923 Tristram Ha   2019-09-10  @89  static const struct of_device_id ksz9477_dt_ids[] = {
+eee16b147121ce Arun Ramadoss 2022-05-17   90  	{
+eee16b147121ce Arun Ramadoss 2022-05-17   91  		.compatible = "microchip,ksz9477",
+eee16b147121ce Arun Ramadoss 2022-05-17   92  		.data = &ksz_switch_chips[KSZ9477]
+eee16b147121ce Arun Ramadoss 2022-05-17   93  	},
+eee16b147121ce Arun Ramadoss 2022-05-17   94  	{
+eee16b147121ce Arun Ramadoss 2022-05-17   95  		.compatible = "microchip,ksz9897",
+eee16b147121ce Arun Ramadoss 2022-05-17   96  		.data = &ksz_switch_chips[KSZ9897]
+eee16b147121ce Arun Ramadoss 2022-05-17   97  	},
+eee16b147121ce Arun Ramadoss 2022-05-17   98  	{
+eee16b147121ce Arun Ramadoss 2022-05-17   99  		.compatible = "microchip,ksz9893",
+eee16b147121ce Arun Ramadoss 2022-05-17  100  		.data = &ksz_switch_chips[KSZ9893]
+eee16b147121ce Arun Ramadoss 2022-05-17  101  	},
+eee16b147121ce Arun Ramadoss 2022-05-17  102  	{
+eee16b147121ce Arun Ramadoss 2022-05-17  103  		.compatible = "microchip,ksz9563",
+eee16b147121ce Arun Ramadoss 2022-05-17  104  		.data = &ksz_switch_chips[KSZ9893]
+eee16b147121ce Arun Ramadoss 2022-05-17  105  	},
+eee16b147121ce Arun Ramadoss 2022-05-17  106  	{
+eee16b147121ce Arun Ramadoss 2022-05-17  107  		.compatible = "microchip,ksz8563",
+eee16b147121ce Arun Ramadoss 2022-05-17  108  		.data = &ksz_switch_chips[KSZ9893]
+eee16b147121ce Arun Ramadoss 2022-05-17  109  	},
+eee16b147121ce Arun Ramadoss 2022-05-17  110  	{
+eee16b147121ce Arun Ramadoss 2022-05-17  111  		.compatible = "microchip,ksz9567",
+eee16b147121ce Arun Ramadoss 2022-05-17  112  		.data = &ksz_switch_chips[KSZ9567]
+eee16b147121ce Arun Ramadoss 2022-05-17  113  	},
+20e03777d70923 Tristram Ha   2019-09-10  114  	{},
+20e03777d70923 Tristram Ha   2019-09-10  115  };
+20e03777d70923 Tristram Ha   2019-09-10  116  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
+20e03777d70923 Tristram Ha   2019-09-10  117  
+
+:::::: The code at line 89 was first introduced by commit
+:::::: 20e03777d70923fe7eae0d7f043ef9488393ab95 net: dsa: microchip: add KSZ9477 I2C driver
+
+:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
