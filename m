@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACA46734C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB326734CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjASJvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S230229AbjASJvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjASJvC (ORCPT
+        with ESMTP id S230227AbjASJvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:51:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4710D6C547;
-        Thu, 19 Jan 2023 01:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Qo2nFY/QtUWYOj3LnHvvQl8GalJSX+nAh9zmpPfJrCY=; b=hTafTCOqaVD2KVdpbe1q+4sYWd
-        ptKIzLgIOR74jA2zZXxnUUUA34HMH/u1EN5t1OzmPQvUYN+lo9xU3BLOOiKhA0JAzQLPMNfUFkC9y
-        B/Z72/2KCj/hIpkRgaL2LtkOb60g7BL0cgBwrLYiSWbr0nJCtvdzrqeQY/9vUbiSd9AfulrpkppW7
-        Eim6cVIY7VU8kh7acxj0e7JrplwA3Qv5VSGyyN0CrunPizCmflWCt3+SJUa3njTUMwbaW4RzeAtzt
-        owvAkNgcdY9yliZkmSwTLcxmcaztd/UZZ++t8V1Ez0C0b/0nricsmYCbW12A3fUDrFYv3FZzO9dOj
-        zQ2V/Tdg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIRZE-000qqx-Re; Thu, 19 Jan 2023 09:50:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CD51D30012F;
-        Thu, 19 Jan 2023 10:50:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BD9D720758E52; Thu, 19 Jan 2023 10:50:44 +0100 (CET)
-Date:   Thu, 19 Jan 2023 10:50:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 0/7] KVM: VMX: Handle NMI VM-Exits in noinstr section
-Message-ID: <Y8kSdKnlgAAvB1tK@hirez.programming.kicks-ass.net>
-References: <20221213060912.654668-1-seanjc@google.com>
+        Thu, 19 Jan 2023 04:51:35 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAC8676F2;
+        Thu, 19 Jan 2023 01:51:30 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pIRZh-001hVL-5O; Thu, 19 Jan 2023 17:51:14 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 19 Jan 2023 17:51:13 +0800
+Date:   Thu, 19 Jan 2023 17:51:13 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] crypto: Introduce crypto_pool
+Message-ID: <Y8kSkW4X4vQdFyOl@gondor.apana.org.au>
+References: <20230118214111.394416-1-dima@arista.com>
+ <20230118214111.394416-2-dima@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213060912.654668-1-seanjc@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118214111.394416-2-dima@arista.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 06:09:05AM +0000, Sean Christopherson wrote:
+On Wed, Jan 18, 2023 at 09:41:08PM +0000, Dmitry Safonov wrote:
+> Introduce a per-CPU pool of async crypto requests that can be used
+> in bh-disabled contexts (designed with net RX/TX softirqs as users in
+> mind). Allocation can sleep and is a slow-path.
+> Initial implementation has only ahash as a backend and a fix-sized array
+> of possible algorithms used in parallel.
+> 
+> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> ---
+>  crypto/Kconfig        |   3 +
+>  crypto/Makefile       |   1 +
+>  crypto/crypto_pool.c  | 333 ++++++++++++++++++++++++++++++++++++++++++
+>  include/crypto/pool.h |  46 ++++++
+>  4 files changed, 383 insertions(+)
+>  create mode 100644 crypto/crypto_pool.c
+>  create mode 100644 include/crypto/pool.h
 
-> Sean Christopherson (7):
->   KVM: x86: Make vmx_get_exit_qual() and vmx_get_intr_info()
->     noinstr-friendly
->   KVM: VMX: Allow VM-Fail path of VMREAD helper to be instrumented
->   KVM: VMX: Always inline eVMCS read/write helpers
->   KVM: VMX: Always inline to_vmx() and to_kvm_vmx()
->   x86/entry: KVM: Use dedicated VMX NMI entry for 32-bit kernels too
->   KVM: VMX: Provide separate subroutines for invoking NMI vs. IRQ
->     handlers
->   KVM: VMX: Handle NMI VM-Exits in noinstr region
+I'm still nacking this.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+I'm currently working on per-request keys which should render
+this unnecessary.  With per-request keys you can simply do an
+atomic kmalloc when you compute the hash.
+
+Modelling tcp_md5 is just propagating bad code.
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
