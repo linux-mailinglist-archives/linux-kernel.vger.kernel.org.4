@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4930F67302F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6694567305D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjASE1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S230047AbjASEab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjASEIq (ORCPT
+        with ESMTP id S231178AbjASE1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:08:46 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DA569B09;
-        Wed, 18 Jan 2023 20:03:28 -0800 (PST)
+        Wed, 18 Jan 2023 23:27:06 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2044.outbound.protection.outlook.com [40.107.100.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AB037B71;
+        Wed, 18 Jan 2023 20:25:18 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nr5dBrb6PM87SH0GSxfeai4SmGFS10Q8iHPdcmgEVm6tuOOjaoQpXJ1nLorU2iq87/isErJ1FnVqUwintTgQvmd7LAuMteEGT0o6nMr2ChbPocbco45zN12VuDuc8hu04eyxmBaY85CfAEvwWeAB3gdEWj8bR7ZJuN2oYKil8jPi6HMB7YrwRC9u6MdsNpE7DvTDARcSqnJP7s2eBXu1bx1gb8XPwBJhvEPbnnAhvW3EFdzx4FRbMLZX3N6bcKyFE4u8jnGjQF6W3JWp7ntCWhC19I7fXKQf7GHrm7dAAsBmp2b1G0GwCveLsfaQsXehVrwVuyjNr3ZVlRcJSXV5Zg==
+ b=MeQ1i+rh09jK7cw3K0oAnBe57x9QsCov0H/JZgNluEBkByfTXuZujpm/2Ox2l5r5H688DLZdjUZBlzi00MXgXLlA9BD/qFWY68xyXQWQWoHU6WICGm2Xt/ryIeEZli6ajaqpB1G7e0mKX4eE1wTXIaIgXdi+NauPt16ctUj3D6bx3v0/R2WC7+hfXfqehPnVSEC1Te3v2ljOwsy7exbZSin4RFAHVuHai5m7eIitxSOdzlgRgCNQO+AYaAaAIoKuUGR3Q9vmIlvQDtofVIm/rQIxkZPccMBcW4ojcmPUD7nj0/9yf1fboTV/iIZ2nxzVdcbIOIr0y5NVdSYgQ9GXDA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HoxgLjiKMEnBReX8y4HZGzgpLE7NIwrXXlAdWPhN3h8=;
- b=m40rkfcNwQK3o1zqI7WtktDzZS/fpymlX5+JBBGwW3BKu/6IsWUOFSBAqnwwD5WmYUgYGXa/Ppn+7AhN6zGtVk7eE993Wv4+nKWy6orX1Zi7Yc3Um0ndkGELNNPfiIH72+JMgM1WbvkJagTnMyseFdgfgbeEEE6knrnh3OIHkL4Oqf1btxMrcRqq+AOnssQpVEgnqmYl+eE+Cu1JNUcjAfihp8MdfsgGH4inARdfPyZTZD3UAr7CWhBUMrZAfmux72aFFQxykJTFjcoGfcymvNl9SJECip1lS52fqn6wdVKTw0WJDBim9szfkjkwETs+mhxtDCH/+4MauXBqRRuZhQ==
+ bh=ulh9dhCQ0Y1jVBFO0FQi7/v9JSmPpQrHfos2awuevGM=;
+ b=lFMpEuDLQBSaJ0wU5sSLGY3h16Zm9LyKZjutm3A+xX38WOq23Egg0KJ0M/TROrU8vt/gLbQgrjUxBkUz52WQnsxbFai0w8LhCdzIaAzvAyV10jUpGYTUGaGfQEqaqVNAoD7V4FIEvJpcv24IqXDZiOIyt26J07dK6zZuM1ehI4uPqaR6wGohZ1rxoCznNydLiD1xA383eJnRM/OxVeoOqU/d5GNL3CqLX1ge4YgqyDNXMZcSC4AMVFeEQMBrTllizc5Tgf9qvNPHk78c3rVGtPR+sfZdUpRSNQJMHPN1SaDsB/2gRONPytWQ5nly9mG+xVtdA0aUmtzun0NKuM5W8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HoxgLjiKMEnBReX8y4HZGzgpLE7NIwrXXlAdWPhN3h8=;
- b=lWBlTS7OAmJrINY4lbXJxXZrzItydlDvmBME0xsN+Jk9LIBS9z5KbBKs4yYw5EnqPY3fikOdA2mxppxAQaoX4oldAWiz5DJ93onJaD1stWKjOGgyp6kglqXcOjZomTy600uNJMM5KKoAYnb3y3QZOE89ebd+P+/NTn1JEweqItI=
-Received: from MW4PR04CA0321.namprd04.prod.outlook.com (2603:10b6:303:82::26)
- by SA1PR12MB6918.namprd12.prod.outlook.com (2603:10b6:806:24d::8) with
+ bh=ulh9dhCQ0Y1jVBFO0FQi7/v9JSmPpQrHfos2awuevGM=;
+ b=gw/+2TMnDMZP/gu+QSWvSOi7NzAwU++Q3MXN7iw9jaIh+TgghTlV2LhOqZBttSC9Z+d9IKQ4TJCbD9zsUeIniVYsPaOtG1Wnzz+iTp56U7GqpV8+ptKx04ad60zvEZ2klylNSz2qC5EAWOzdF+FZn1OedFkUx+XewYwJgH8CTXQ=
+Received: from MW4PR04CA0330.namprd04.prod.outlook.com (2603:10b6:303:82::35)
+ by PH8PR12MB6842.namprd12.prod.outlook.com (2603:10b6:510:1c9::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
- 2023 03:52:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
+ 2023 03:52:59 +0000
 Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::9e) by MW4PR04CA0321.outlook.office365.com
- (2603:10b6:303:82::26) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:303:82:cafe::e0) by MW4PR04CA0330.outlook.office365.com
+ (2603:10b6:303:82::35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Thu, 19 Jan 2023 03:52:56 +0000
+ Transport; Thu, 19 Jan 2023 03:52:59 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Thu, 19 Jan 2023 03:52:56 +0000
+ 15.20.6002.13 via Frontend Transport; Thu, 19 Jan 2023 03:52:58 +0000
 Received: from platform-dev1.pensando.io (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 18 Jan 2023 21:52:51 -0600
+ 15.1.2375.34; Wed, 18 Jan 2023 21:52:54 -0600
 From:   Brad Larson <blarson@amd.com>
 To:     <linux-arm-kernel@lists.infradead.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
@@ -73,9 +73,9 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
         <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
         <vaishnav.a@ti.com>, <will@kernel.org>,
         <devicetree@vger.kernel.org>
-Subject: [PATCH v9 11/15] spi: dw: Add support for AMD Pensando Elba SoC
-Date:   Wed, 18 Jan 2023 19:51:32 -0800
-Message-ID: <20230119035136.21603-12-blarson@amd.com>
+Subject: [PATCH v9 12/15] mmc: sdhci-cadence: Enable device specific override of writel()
+Date:   Wed, 18 Jan 2023 19:51:33 -0800
+Message-ID: <20230119035136.21603-13-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230119035136.21603-1-blarson@amd.com>
 References: <20230119035136.21603-1-blarson@amd.com>
@@ -86,23 +86,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT027:EE_|SA1PR12MB6918:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf8082cd-80d4-4fdc-2983-08daf9d0a639
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT027:EE_|PH8PR12MB6842:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ebe0c8a-02f8-4e04-35bf-08daf9d0a7d3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BdzrqELtXJ9EP2LCwBqVkjlXKlQeapygif4NgIiVtDC2LfOd3305nhYR97vLuWn2IZNodcI1qMbaX5ONmzfOXkMmwJd8R//izUKZ4ym+n2/2cbZpMVHzqnUsQK31zhkIxdqbQ0mzZDjpzvodsl62YD9nMzWyT3JEYsl6lJTqdQCfXuQT/VFSGY0CO6tuPpS8kgZhIGAmH8tpa0CUK5MsDbQlvFiqiLP5X8dCsdg+GVxj0InFtf+RxMC5RponzjnPCnYT1JcrRfD73H71w4JLhafxT0ypP5ZgkvikH0Mbdddhl4B27/FwfkLkxAirnEL7TBYWslcs9Tyj+0AxwF+hkQ7QCumrxD0oY0cDFU3iRVqhUjoSE0h67hgRh/N3hwpwtZy7rme0AYklOKZFU8AVaASsDwVZRNqtVpaWipZDFy0EBrMhl9CVMjgksnBiUsNH2vnfIctDGD+mjyyZvjtOzHbx79DPXnUwzfZO7vGqZEDfMSU/ZNE9+CQh901lNT+49O3b7zJ3t3WRDBtMxoBNChJkkAMjNcIssVEO/9CbFPM2HJUW6M+9mWCjBH254SXOLa1C48n9sSDVS/ykSG3E4+F9w9fzbEuYb0EXy1Y5Dl9Q5V8O13x56w4R2/m8ztkffrzz1T3MD0JYthpa3nhGWqpXzDC0K3KYJBPppZ+YP6aaDi0/IzG9H9771H9dTEH3eqS0bdW5jtZzDnFtEU1nvWB5dw4T5InzY0Vk+Bgl6Hs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(82310400005)(36756003)(4326008)(2616005)(426003)(47076005)(6916009)(41300700001)(16526019)(70206006)(70586007)(26005)(8676002)(186003)(83380400001)(7416002)(316002)(2906002)(6666004)(478600001)(7406005)(356005)(40480700001)(54906003)(40460700003)(81166007)(36860700001)(336012)(8936002)(1076003)(82740400003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pHl9X67DxJJ0MXsekCYDZA74T+aBlszOwQtua5fxPZhnaDZ2qaluiLndnGo8H+pxyjN74/wYYG8dfy1oIDP8N7gtHQ0HbD4bicjbOryUPNzOwiB0kSE5gdM4l4VgKMKFu20hAW0fN+U01VRUgviFG8tOrm+DQicPzEwjBj/8yIWSB0DiN2CZdUhZyrjsXvE1INBzc9G7ehDYFW16uW+GGsZ1LTTCPMx+zJfJ3iNCXH6drbhf4wh1lQeGC1r4MHs/67+kHWg2sDyoXDBovbJ7yhJDS+C6/Ylr4Bn3QiZSweVl2Ua6fQWDWl1wmrYZJYE4Ij+J4a6rwaMQUbnM9fbtuuys2jnZ3rreKm45QZLzQKszDoDyPOoKTQFPiWkeCa2/SdI6iYJJJUTUnFgySk76TCCTYJLBnvCqXqq1E8wseQu5xuR+kNFsWll7fuWY0epYoLV9pd+AWYrRrAO2K/lIUgOrJJ5rNlJfvfWRvyzg+Har6Fv6ylSSMYll0l3W5zWaKkO9m1ukxP0utdlx3fwi2eNIU1iWPDNN0bCCP+vbczvQ3iRxBOVGQfozQat7b9ClsSfGh84/Y1W5hWlM0RAeLq6sdF9gd871dxLNGRtT5f+8UgHGcUlK6NGF9TxbKI7hdTucdiFMBGZpab2TfT0euIWtw5vRyJNnZhrwuN77Go9kijOB3mnxLGt4Ga9g6qmhUf0V1A5DnE0R+kOvshQRkbmG052RQ5XeK7doAyh+2eg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(81166007)(82740400003)(36860700001)(70586007)(356005)(8936002)(5660300002)(7416002)(2906002)(70206006)(7406005)(4326008)(40480700001)(8676002)(6916009)(41300700001)(1076003)(26005)(2616005)(40460700003)(16526019)(82310400005)(186003)(336012)(83380400001)(47076005)(426003)(316002)(54906003)(6666004)(478600001)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 03:52:56.2218
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 03:52:58.9091
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf8082cd-80d4-4fdc-2983-08daf9d0a639
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ebe0c8a-02f8-4e04-35bf-08daf9d0a7d3
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6918
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6842
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -113,126 +113,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
-with device specific chip-select control.  The Elba SoC
-provides four chip-selects where the native DW IP supports
-two chip-selects.  The Elba DW_SPI instance has two native
-CS signals that are always overridden.
+SoCs with device specific Cadence implementation, such as setting
+byte-enables before the write, need to override writel().  Add a
+callback where the default is writel() for all existing chips.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 ---
 
 Changes since v6:
-- Add use of macros GENMASK() and BIT()
-- Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
+- No change to this patch but as some patches are deleted and this is
+  a respin the three successive patches to sdhci-cadence.c are
+  patches 12, 13, and 14 which do the following:
+
+  1. Add ability for Cadence specific design to have priv writel().
+  2. Add Elba SoC support that requires its own priv writel() for
+     byte-lane control .
+  3. Add support for mmc hardware reset.
 
 ---
- drivers/spi/spi-dw-mmio.c | 78 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+ drivers/mmc/host/sdhci-cadence.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 26c40ea6dd12..9b6f876227e8 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -53,6 +53,24 @@ struct dw_spi_mscc {
- 	void __iomem        *spi_mst; /* Not sparx5 */
+diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+index 6f2de54a5987..708d4297f241 100644
+--- a/drivers/mmc/host/sdhci-cadence.c
++++ b/drivers/mmc/host/sdhci-cadence.c
+@@ -67,6 +67,7 @@ struct sdhci_cdns_phy_param {
+ struct sdhci_cdns_priv {
+ 	void __iomem *hrs_addr;
+ 	bool enhanced_strobe;
++	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
+ 	unsigned int nr_phy_params;
+ 	struct sdhci_cdns_phy_param phy_params[];
+ };
+@@ -90,6 +91,12 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+ 	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
  };
  
-+struct dw_spi_elba {
-+	struct regmap *syscon;
-+};
++static inline void cdns_writel(struct sdhci_cdns_priv *priv, u32 val,
++			       void __iomem *reg)
++{
++	writel(val, reg);
++}
 +
-+/*
-+ * Elba SoC does not use ssi, pin override is used for cs 0,1 and
-+ * gpios for cs 2,3 as defined in the device tree.
-+ *
-+ * cs:  |       1               0
-+ * bit: |---3-------2-------1-------0
-+ *      |  cs1   cs1_ovr   cs0   cs0_ovr
-+ */
-+#define ELBA_SPICS_REG			0x2468
-+#define ELBA_SPICS_OFFSET(cs)		((cs) << 1)
-+#define ELBA_SPICS_MASK(cs)		(GENMASK(1, 0) << ELBA_SPICS_OFFSET(cs))
-+#define ELBA_SPICS_SET(cs, val)		\
-+		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
-+
- /*
-  * The Designware SPI controller (referred to as master in the documentation)
-  * automatically deasserts chip select when the tx fifo is empty. The chip
-@@ -237,6 +255,65 @@ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
- 	return 0;
+ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+ 				    u8 addr, u8 data)
+ {
+@@ -104,17 +111,17 @@ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+ 
+ 	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
+ 	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
+-	writel(tmp, reg);
++	priv->priv_writel(priv, tmp, reg);
+ 
+ 	tmp |= SDHCI_CDNS_HRS04_WR;
+-	writel(tmp, reg);
++	priv->priv_writel(priv, tmp, reg);
+ 
+ 	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
+ 	if (ret)
+ 		return ret;
+ 
+ 	tmp &= ~SDHCI_CDNS_HRS04_WR;
+-	writel(tmp, reg);
++	priv->priv_writel(priv, tmp, reg);
+ 
+ 	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+ 				 0, 10);
+@@ -191,7 +198,7 @@ static void sdhci_cdns_set_emmc_mode(struct sdhci_cdns_priv *priv, u32 mode)
+ 	tmp = readl(priv->hrs_addr + SDHCI_CDNS_HRS06);
+ 	tmp &= ~SDHCI_CDNS_HRS06_MODE;
+ 	tmp |= FIELD_PREP(SDHCI_CDNS_HRS06_MODE, mode);
+-	writel(tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
++	priv->priv_writel(priv, tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
  }
  
-+static void dw_spi_elba_override_cs(struct dw_spi_elba *dwselba, int cs, int enable)
-+{
-+	regmap_update_bits(dwselba->syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
-+			   ELBA_SPICS_SET(cs, enable));
-+
-+}
-+
-+static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
-+{
-+	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-+	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
-+	struct dw_spi_elba *dwselba = dwsmmio->priv;
-+	u8 cs;
-+
-+	cs = spi->chip_select;
-+	if (cs < 2)
-+		dw_spi_elba_override_cs(dwselba, spi->chip_select, enable);
-+
-+	/*
-+	 * The DW SPI controller needs a native CS bit selected to start
-+	 * the serial engine.
-+	 */
-+	spi->chip_select = 0;
-+	dw_spi_set_cs(spi, enable);
-+	spi->chip_select = cs;
-+}
-+
-+static int dw_spi_elba_init(struct platform_device *pdev,
-+			    struct dw_spi_mmio *dwsmmio)
-+{
-+	const char *syscon_name = "amd,pensando-elba-syscon";
-+	struct device_node *np = pdev->dev.of_node;
-+	struct dw_spi_elba *dwselba;
-+	struct device_node *node;
-+	struct regmap *regmap;
-+
-+	node = of_parse_phandle(np, syscon_name, 0);
-+	if (!node) {
-+		dev_err(&pdev->dev, "failed to find %s\n", syscon_name);
-+		return -ENODEV;
-+	}
-+
-+	regmap = syscon_node_to_regmap(node);
-+	if (IS_ERR(regmap)) {
-+		dev_err(&pdev->dev, "syscon regmap lookup failed\n");
-+		return PTR_ERR(regmap);
-+	}
-+
-+	dwselba = devm_kzalloc(&pdev->dev, sizeof(*dwselba), GFP_KERNEL);
-+	if (!dwselba)
-+		return -ENOMEM;
-+
-+	dwselba->syscon = regmap;
-+	dwsmmio->priv = dwselba;
-+	dwsmmio->dws.set_cs = dw_spi_elba_set_cs;
-+
-+	return 0;
-+}
-+
- static int dw_spi_mmio_probe(struct platform_device *pdev)
- {
- 	int (*init_func)(struct platform_device *pdev,
-@@ -352,6 +429,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
- 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
-+	{ .compatible = "amd,pensando-elba-spi", .data = dw_spi_elba_init},
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
+ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
+@@ -223,7 +230,7 @@ static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
+ 	 */
+ 	for (i = 0; i < 2; i++) {
+ 		tmp |= SDHCI_CDNS_HRS06_TUNE_UP;
+-		writel(tmp, reg);
++		priv->priv_writel(priv, tmp, reg);
+ 
+ 		ret = readl_poll_timeout(reg, tmp,
+ 					 !(tmp & SDHCI_CDNS_HRS06_TUNE_UP),
+@@ -386,6 +393,7 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+ 	priv->nr_phy_params = nr_phy_params;
+ 	priv->hrs_addr = host->ioaddr;
+ 	priv->enhanced_strobe = false;
++	priv->priv_writel = cdns_writel;
+ 	host->ioaddr += SDHCI_CDNS_SRS_BASE;
+ 	host->mmc_host_ops.hs400_enhanced_strobe =
+ 				sdhci_cdns_hs400_enhanced_strobe;
 -- 
 2.17.1
 
