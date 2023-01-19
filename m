@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DEB672E05
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D6B672E04
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjASBUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S230009AbjASBUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjASBSa (ORCPT
+        with ESMTP id S229776AbjASBS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:18:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72099689F8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674090931;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZZv107PEoZ7dUU2ogNbtUnijM5vb3Ufn5L+9+EzCAVI=;
-        b=P1TkrBeAk0yTjEc9N7HL3qmsdBJ/Yg3NRfT6uq4jdi0QulREWRyQBthMK81tBZtjiqznKR
-        JF+VdeWrSwvi1dZaBSFhJFuK+/vRAvVgJ/ZhOsiBKCjgdPnNM4k7WZ8AxwviIqH6rvJbcJ
-        Bb3Q+kSiICJCQvjaBpZvrmw72om3R3A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-576-sWqiQAGPNpGZJVwQZ2CABw-1; Wed, 18 Jan 2023 20:15:26 -0500
-X-MC-Unique: sWqiQAGPNpGZJVwQZ2CABw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BE1F8A0109;
-        Thu, 19 Jan 2023 01:15:25 +0000 (UTC)
-Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A89452026D4B;
-        Thu, 19 Jan 2023 01:15:18 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 4/4] KVM: Improve warning report in
- mark_page_dirty_in_slot()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
-        james.morse@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, shan.gavin@gmail.com
-References: <20230116040405.260935-1-gshan@redhat.com>
- <20230116040405.260935-5-gshan@redhat.com> <Y8bBzKF17IdZP9eF@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
-Date:   Thu, 19 Jan 2023 12:15:16 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <Y8bBzKF17IdZP9eF@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:18:57 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC076C562;
+        Wed, 18 Jan 2023 17:16:02 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id p24so830907plw.11;
+        Wed, 18 Jan 2023 17:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IbDZxGDp8FFFBhm3skdTuca0wCb1RqhnA6hZ3TKJit8=;
+        b=m91VX7/3DOiTpb7lvJW92AF59U5cpWwU6ggAKRCUGvVcfgSWDB9SQEa4+AuPlc/ug6
+         +XMf3JArGv1o8ktY842QajeWbV/9MtDIPqUVISTALLYEej2cRWueeCdyZqKIoeKaNj49
+         fLQKEfWJ7p9SyMwlRlIPGxLzozGjLQ5CLA52smpT2EQjxEXNKCqldz0hb+m+igeKsRF9
+         khQAWIW34B+51/9Y1W7A+zc66C0mOSmHQbeKN2wWM7vC+dy+v+eWp7nrHZMwvjufIgj5
+         xxtifri2RM3VciVmBbf7F6HY88isNfLKYnDQkgO30fqIq+qxPmJJJwjeaprz+nbKxuqh
+         xrtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IbDZxGDp8FFFBhm3skdTuca0wCb1RqhnA6hZ3TKJit8=;
+        b=J6E0hbGv0AYzO2tNpN6rEaK0BSyR4mqya6LRZcNtsmsikurxgNPXFp5nM/fIQ8lr2n
+         ncWMf9bZBoRBzkfvTgXTpRv83QsA1jatj9eR9RjcG6mOJ21hA8Bce1tOL2O9sGOfSyuh
+         OLasYOYMLmqO0h2ASL4xm+gxbAdDquVEjj/JsR+VxZu97YPBgPjG4pr6ck4HtegAv5lf
+         m9UmrU/bS6g17bGJ7nIF8UOSQ7DaY2lqW2/ndnvQ0RRn2/LVPIGQxzFC43Rfaa1G6Eop
+         qs31ySzJisJPqyJdggx8EJP4wVmG4F+yUskIbmJsNvEIgT4Zz+zu+9vhQ6J2BEC2yYYp
+         0PTw==
+X-Gm-Message-State: AFqh2kqNnlU3V+xSBZR29MvrSEu9ZElFOP5QKQEEDJs1hUjLkR8vS2ch
+        Oh2EKZSI/DYTuUOJn7470Jw=
+X-Google-Smtp-Source: AMrXdXt1QQNOAQpB1Kri+S7V27/Xl104ByL7t0pHQAj/LRNQdRDTMhaBvcDcOaq3Ci4N5vVEYOpbvA==
+X-Received: by 2002:a17:902:7209:b0:194:73c4:6bdd with SMTP id ba9-20020a170902720900b0019473c46bddmr9728122plb.17.1674090961806;
+        Wed, 18 Jan 2023 17:16:01 -0800 (PST)
+Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902694300b00194a53ab3e6sm4235447plt.286.2023.01.18.17.15.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 17:16:01 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 19 Jan 2023 11:15:54 +1000
+Message-Id: <CPVRPRLUQYA6.VGAMPDLW043V@bobo>
+Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
+        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
+        <gcwilson@linux.ibm.com>
+Subject: Re: [PATCH v3 13/24] powerpc/pseries: Fix handling of PLPKS object
+ flushing timeout
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.13.0
+References: <20230118061049.1006141-1-ajd@linux.ibm.com>
+ <20230118061049.1006141-14-ajd@linux.ibm.com>
+In-Reply-To: <20230118061049.1006141-14-ajd@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
+> plpks_confirm_object_flushed() uses the H_PKS_CONFIRM_OBJECT_FLUSHED hcal=
+l
+> to check whether changes to an object in the Platform KeyStore have been
+> flushed to non-volatile storage.
+>
+> The hcall returns two output values, the return code and the flush status=
+.
+> plpks_confirm_object_flushed() polls the hcall until either the flush
+> status has updated, the return code is an error, or a timeout has been
+> exceeded.
+>
+> While we're still polling, the hcall is returning H_SUCCESS (0) as the
+> return code. In the timeout case, this means that upon exiting the pollin=
+g
+> loop, rc is 0, and therefore 0 is returned to the user.
+>
+> Handle the timeout case separately and return ETIMEDOUT if triggered.
+>
+> Fixes: 2454a7af0f2a ("powerpc/pseries: define driver for Platform KeyStor=
+e")
 
-On 1/18/23 2:42 AM, Sean Christopherson wrote:
-> On Mon, Jan 16, 2023, Gavin Shan wrote:
->> There are two warning reports about the dirty ring in the function.
->> We have the wrong assumption that the dirty ring is always enabled when
->> CONFIG_HAVE_KVM_DIRTY_RING is selected.
-> 
-> No, it's not a wrong assumption, becuase it's not an assumption.  The intent is
-> to warn irrespective of dirty ring/log enabling.  The orignal code actually warned
-> irrespective of dirty ring support[1], again intentionally.  The
-> CONFIG_HAVE_KVM_DIRTY_RING check was added because s390 can mark pages dirty from
-> an worker thread[2] and s390 has no plans to support the dirty ring.
-> 
-> The reason for warning even if dirty ring isn't enabled is so that bots can catch
-> potential KVM bugs without having to set up a dirty ring or enable dirty logging.
-> 
-> [1] 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
-> [2] e09fccb5435d ("KVM: avoid warning on s390 in mark_page_dirty")
-> 
-
-Thanks for the linker. I was confused when looking at the code, but now it's clear to
-me. Thanks for your explanation. How about to add a comment there?
-
-   /*
-    * The warning is expected when the dirty ring is configured,
-    * but not enabled.
-    */
+Can fixes go to the start of the series?
 
 Thanks,
-Gavin
-
+Nick
