@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FD7673126
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519CF673129
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjASFYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        id S229845AbjASF0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjASFYk (ORCPT
+        with ESMTP id S229503AbjASF0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:24:40 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0751A2720;
-        Wed, 18 Jan 2023 21:24:38 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny9zl55CFz4xFv;
-        Thu, 19 Jan 2023 16:24:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674105876;
-        bh=6nBdNP12YTHnDhZVD+lqgd4S488WUtiIdc8rEpXgK5Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=l80paEW3Uliu6RmUo93MJxcfLWpv2VWMZA4Z/jnoxvx5FAMi9XDxOYfr0bV63m+lX
-         y+fkKYGbQB4HE0tq7GLP2rmKSFy3THCFFJksBB9HgFfHuILtp9U9TRQYF7i18zKc0n
-         wOuocxCISHL28ueub8Gqh6gZ7SVrKvCDtVinJ/2RxjkY03m6HKvXxhSsRZmuefsmEb
-         0Sw86yEf+gZz3plzwtrKv62256JbpMbJ9LeUo0PU6FqaGJHN7nwIl0XxJbEhZrf+jE
-         rnDgHLKLqszPjgW7hz/XmHmOVufqgnDXnv5BtC2tlSFatyl2Wl+wy/kEkO6qy9AK8U
-         QBjxcQJpV8F3Q==
-Date:   Thu, 19 Jan 2023 16:24:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless-next tree
-Message-ID: <20230119162434.227ff777@canb.auug.org.au>
+        Thu, 19 Jan 2023 00:26:47 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610D1A8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:45 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id d16so789175qtw.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XsB+ZAHP0UyJS+bDbLK2xtr95teDUp0qaZq/1qRa2dk=;
+        b=k8nvF0Wqyi+Gza6qaaqQmNjZC11DVCO+D8huJe7wIcHQip3kHeQTBh+/rpIJclS+qP
+         Pgkmgk4HEnAqqpD3GFG22fLpbxPWgT0+RPImCXM0XhRZNONSo8A7HplGRAJ7KePm0X3t
+         h7xcxYv+e1H5SWFcO7rH+/qEcpj59m8eGAIvjjapYOExptWEKvlF0C9E2DGRWBRhCVY8
+         zn77yhBdxCYTFYnQFuMYyZX8ZPEAwniL4nn1BXLh3jndqDy2tHe2VPWXPiqubZGKvK7o
+         VWkuf/mBaV1sG5gySWDnAONo/3j1qqJDAPP+rYdh3FII5av2ESMQ8Mg2Q6HAL/kkSri0
+         86tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XsB+ZAHP0UyJS+bDbLK2xtr95teDUp0qaZq/1qRa2dk=;
+        b=GGfN/mYYolURD0yRDuQvof54dHhM8+wTrU5ht1a8qGWxVfPQLf0aLZz5iRrXX3q5GO
+         jMS9V0Siuygl9Lugf0E8SC7tU4rpKZWzvdENhlvIWajbJra3avOqPwGeMq6lnCZJFpEI
+         LbGVxsAjuT1w58MAcIdXt6kqGhz907zqEKQf/mDltmqE7laZ0GcId3cEkk0c1gXSzSVB
+         EwlLMVpTwDUhiiQSijplTWOCT2B8jgHLrcwRMBHPcRd7bsMuhSwHsUTuKTvJ6e3h+ldP
+         ivZ/F1V8hK/VbGFl1i4dXpMSm0PX361AlqiuVBJyDAF3/PJAzosQhqfZpxOxnl+HT2t8
+         8iuQ==
+X-Gm-Message-State: AFqh2krIu+I7khpBo46zWb2A7FOV81WRgdKjvnagr9n2XBp2989M2HxT
+        iDhEQZHje5yS3exnUmBNw04=
+X-Google-Smtp-Source: AMrXdXt4YenaJqPXzMy5Lk1pmM9H273b2GNx/2gZB5XvTELWHefqkI7+CsRcyyl0aI8AOb/bDNd+AA==
+X-Received: by 2002:ac8:13c5:0:b0:3b6:3044:4cbf with SMTP id i5-20020ac813c5000000b003b630444cbfmr13849110qtj.23.1674106004284;
+        Wed, 18 Jan 2023 21:26:44 -0800 (PST)
+Received: from jesse-desktop.jtp-bos.lab (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
+        by smtp.gmail.com with ESMTPSA id v21-20020ac87295000000b003a5430ee366sm507330qto.60.2023.01.18.21.26.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 21:26:43 -0800 (PST)
+From:   Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Jesse Taube <Mr.Bossman075@gmail.com>,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH v1 0/2] Add RISC-V 32 NOMMU support
+Date:   Thu, 19 Jan 2023 00:26:40 -0500
+Message-Id: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Lc6cW.PKTdwX9SczYaDttPe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Lc6cW.PKTdwX9SczYaDttPe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patch-set aims to add NOMMU support to RV32.
+Many people want to build simple emulators or HDL
+models of RISC-V this patch makes it posible to
+run linux on them.
 
-Hi all,
+Yimin Gu is the original author of this set.
+Submitted here:
+https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
 
-After merging the wireless-next tree, today's linux-next build (htmldocs)
-produced this warning:
+Though Jesse T rewrote the Dconf.
 
-include/net/mac80211.h:1553: warning: Function parameter or member 'eht' no=
-t described in 'ieee80211_rx_status'
+The new set:
+https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
 
-Introduced by commit
 
-  f66c48af7a11 ("mac80211: support minimal EHT rate reporting on RX")
+Jesse Taube (1):
+  riscv: configs: Add nommu decfconfig for RV32
 
---=20
-Cheers,
-Stephen Rothwell
+Yimin Gu (1):
+  riscv: Kconfig: Allow RV32 to build with no MMU
 
---Sig_/Lc6cW.PKTdwX9SczYaDttPe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ arch/riscv/Kconfig                           |  5 ++---
+ arch/riscv/configs/rv32_nommu_virt_defconfig | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/configs/rv32_nommu_virt_defconfig
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPI1BIACgkQAVBC80lX
-0GzHYAgAlWGA+UKcUvXnKXfzwDlFUT/7L8E95YnBON/yt9N6oCKJWEUQafV/xL8+
-Y3B4yQajraXNWD7av3d1EGY2ViwltMl4kt6wZ86csZuIV9LezGSpa+cqHvHCPC32
-YcBFr1P23YM7B4fe4q2f1bWVilsSZN9G46spNqIP8TKgLBx0x2Y2NW5R11RkFOJn
-4WKGkG/mP/7YxvQDC80is/pr1Wv5uvXJVMfEie54yMdwhXRpxXKi1yLoaUe9QY1T
-cU6Mma8RlhYTvRQGomsYqOvNPyq+fiw8KTMbFTTcHIPaeadFtPPE/ko+9FoQiXPP
-AUcjLdp0yfB8CXzKfQendHi18aSZyQ==
-=WQvD
------END PGP SIGNATURE-----
-
---Sig_/Lc6cW.PKTdwX9SczYaDttPe--
+-- 
+2.39.0
