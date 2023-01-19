@@ -2,191 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBA9673DE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF504673DE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjASPsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S231522AbjASPs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjASPrz (ORCPT
+        with ESMTP id S231374AbjASPsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:47:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5428875A;
-        Thu, 19 Jan 2023 07:47:10 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A54C05CFD5;
-        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674143228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hHqpVN9DzGS4tivxMt2BcVTb/csx+XiOhf00+x8+hOQ=;
-        b=pVn6jVVMaKAA8cvLkiEttUC+gaYWNhHFk/VjjM8sry2zNYG7bwASTceiNcUgn+lGP5nVuu
-        4yGoDUB6axJxsGzBzfPOmOJ1f1Xay943KMsd3DPHdKJ5zh4oZWRmlSNal9sFlvqAk7fzrA
-        oT0Xnau8jEhtnQnqxYhsWkpcIwXIW6Q=
-Received: from suse.cz (unknown [10.100.201.202])
+        Thu, 19 Jan 2023 10:48:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562018456A;
+        Thu, 19 Jan 2023 07:47:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2C1D52C141;
-        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
-Date:   Thu, 19 Jan 2023 16:47:05 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8ll+eP+fb0TzFUh@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1634261C7A;
+        Thu, 19 Jan 2023 15:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C79C433EF;
+        Thu, 19 Jan 2023 15:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674143238;
+        bh=nf+TfbsdsLnbBMpPQU+Z3CHp7yhDIe+N4TFfsC327dE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mIDiP/LEUSddUG+KRv1yAHu1BUHOcJf5M45Lxdfh8NIAt/S6eM6oLGvGD64SiUpzz
+         BB8F1EHeU1B03bQq6YHQoGV9eSCZI9Kx5bSkitzyUP6bx0Wqu8E2OWjxQp4pUB+s2j
+         XNiXWjp4gZfZ0QUsZc0ZqQLxYi4571K4rxYR2KZu2YLvrjYYXHWUkdS12ua25fO6dT
+         y++3ODurgU4GCy4fMCG7KuAaVn1ryefJ4zyeqRFdE+axpZHhBgOnSH38xyxHNrs3QG
+         79aNESccMbt3pLIidpMCqMyVcb0ldk3xlLr4tpR/1nMpd05UPIP//QJ9OIwd3dwzEh
+         uvHrQSDkULlaw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pIX8G-0038Ks-1Y;
+        Thu, 19 Jan 2023 15:47:16 +0000
+Date:   Thu, 19 Jan 2023 15:47:15 +0000
+Message-ID: <86v8l2msqk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in no running vcpu context
+In-Reply-To: <0626e135-5d6b-8d09-ccd1-068e42a052f6@redhat.com>
+References: <20230116040405.260935-1-gshan@redhat.com>
+        <20230116040405.260935-2-gshan@redhat.com>
+        <Y8cKQRIbpLWVcdcw@google.com>
+        <0626e135-5d6b-8d09-ccd1-068e42a052f6@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gshan@redhat.com, oliver.upton@linux.dev, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com, eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com, ardb@kernel.org, peterx@redhat.com, seanjc@google.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-01-18 16:12:05, Petr Pavlu wrote:
-> On 1/18/23 01:04, Luis Chamberlain wrote:
-> > On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
-> >> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
-> >>> 3) *Fixing* a kernel regression by adding new expected API for testing
-> >>> against -EBUSY seems not ideal.
-> >>
-> >> IMHO, the right solution is to fix the subsystems so that they send
-> >> only one uevent.
-> > 
-> > Makes sense, but that can take time and some folks are stuck on old kernels
-> > and perhaps porting fixes for this on subsystems may take time to land
-> > to some enterprisy kernels. And then there is also systemd that issues
-> > the requests too, at least that was reflected in commit 6e6de3dee51a
-> > ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-> > that commit claims it was systemd issueing the requests which I mean to
-> > interpret finit_module(), not calling modprobe.
-> > 
-> > The rationale for making a regression fix with a new userspace return value
-> > is fair given the old fix made things even much worse the point some kernel
-> > boots would fail. So the rationale to suggest we *must* short-cut
-> > parallel loads as effectively as possible seems sensible *iff* that
-> > could not make things worse too but sadly I've found an isssue
-> > proactively with this fix, or at least that this issue is also not fixed:
-> > 
-> > ./tools/testing/selftests/kmod/kmod.sh -t 0006
-> > Tue Jan 17 23:18:13 UTC 2023
-> > Running test: kmod_test_0006 - run #0
-> > kmod_test_0006: OK! - loading kmod test
-> > kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
-> > ----------------------------------------------------
-> > Custom trigger configuration for: test_kmod0
-> > Number of threads:      50
-> > Test_case:      TEST_KMOD_FS_TYPE (2)
-> > driver: test_module
-> > fs:     xfs
-> > ----------------------------------------------------
-> > Test completed
-> > 
-> > When can multiple get_fs_type() calls be issued on a system? When
-> > mounting a large number of filesystems.
-
-This patch should not change the behavior that much. The parallel
-load still waits until the pending one finishes.
-
-The difference is that it does not try to load it once again.
-But when the first load fails then something is broken anyway.
-
-I could imagine that this could cause regression from the user POV
-when the first failure is not important from some reasons. But
-it means that the things work only by chance and the problem
-might hit the user later anyway.
-
-Another difference is that the parallel load finishes immediately
-also when it sees a going module. But it should not affect that
-much the multiple get_fs_type() calls. They are all trying
-to load the module.
-
-
-> Sadly though this issue seems
-> > to have gone unnoticed for a while now. Even reverting commit
-> > 6e6de3dee51a doesn't fix it, and I've run into issues with trying
-> > to bisect, first due to missing Kees' patch which fixes a compiler
-> > failure on older kernel [0] and now I'm seeing this while trying to
-> > build v5.1:
-> > 
-> > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
-> > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
-> > ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
-> > ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> > ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
-> > ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
-> > ld: warning: creating DT_TEXTREL in a PIE
-> > make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
-> > make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
-> > make: *** [arch/x86/Makefile:283: bzImage] Error 2
-> > 
-> > [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
-> > 
-> > But we should try to bisect to see what cauased the above kmod test 0006
-> > to start failing.
+On Thu, 19 Jan 2023 01:11:44 +0000,
+Gavin Shan <gshan@redhat.com> wrote:
 > 
-> It is not clear to me from your description if the observed failure of
-> kmod_test_0006 is related to the fix in this thread.
+> I will have vgic_write_guest_lock() in v2. Note that those 3 paths can't be
+> running in parallel since one switch is shared by them. Alternatively, we
+> extend struct vgic_dist::save_tables_in_progress from 'bool' to 'unsigned long'.
+> Several bit is defined for each site as below. In this way, the 3 paths can be
+> running in parallel:
 > 
-> The problem was not possible for me to reproduce on my system. My test was on
-> an 8-CPU x86_64 machine using v6.2-rc4 with "defconfig + kvm_guest.config +
-> tools/testing/selftests/kmod/config".
+>   unsigned long struct vgic_dist::save_tables_in_progress
+> 
+>   #define VGIC_DIST_SAVE_ITS_ITE		0	/* ITS Translation Entry */
+>   #define VGIC_DIST_SAVE_ITS_DTE		1	/* ITS Device Table Entry */
+>   #define VGIC_DIST_SAVE_ITS_CTE		2	/* ITS Collection Table Entry */
+>   #define VGIC_DIST_SAVE_ITS_CT			3	/* ITS Collection Table */
+>   #define VGIC_DIST_SAVE_VGIC3_LPI		4	/* VGIC3 LPI Pending Status */
+>   #define VGIC_DIST_SAVE_VGIC3_PENDING_TABLE	5	/* VGIC3 Pending Table */
+> 
+> The drawback is the calls are limited to 64. If those 3 paths can't be running
+> in parallel, we needn't the extension at all.
 
-I can't reproduce it either. I guess that it needs some "good" timing,
-probably more CPUs or so.
+It should all be completely sequential. KVM_DEV_ARM_ITS_SAVE_TABLES
+runs in a context where everything is locked, and so is
+VGIC_DIST_SAVE_VGIC3_PENDING_TABLE.
 
-I wonder if it races with module -r that removes the module before
-it tries to load it multiple times in parallel.
+	M.
 
-Does the test pass when you add sleep after the module -r, like this:
-
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 7189715d7960..8a020f90a3f6 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -322,6 +322,7 @@ kmod_defaults_fs()
- {
- 	config_reset
- 	modprobe -r $DEFAULT_KMOD_FS
-+	sleep 1
- 	config_set_fs $DEFAULT_KMOD_FS
- 	config_set_test_case_fs
- }
-
-
-
-> Could you perhaps trace the test to determine where the EINVAL value comes
-> from?
-
-Yes, the -EINVAL error is strange. It is returned also in
-kernel/module/main.c on few locations. But neither of them
-looks like a good candidate.
-
-My assumption is that it is more likely returned by the module_init()
-callback from the loaded module. But it is just a guess and I might be wrong.
-
-I wonder if it is cause by a delayed release of some resources,
-when the module is removed, e.g. sysfs or so. It might theoretically
-cause conflict when they still exist and the reloaded module
-tries to create them again.
-
-Best Regards,
-Petr
+-- 
+Without deviation from the norm, progress is not possible.
