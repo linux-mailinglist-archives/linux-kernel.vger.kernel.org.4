@@ -2,171 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC384673DA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3D6673DA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjASPf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S230271AbjASPgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjASPfn (ORCPT
+        with ESMTP id S229710AbjASPgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:35:43 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FE08455D;
-        Thu, 19 Jan 2023 07:35:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BE06F5CF34;
-        Thu, 19 Jan 2023 15:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674142533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgoU10Jpwp3Wcue7Yi3vYVywPMli7wY4wRcHZx3PSzk=;
-        b=G13FrqbK4qEtDHNCacmQIkOHhLPK+f7yD61hzIgnUVOPS+dyNlbt/eKbW8xUVMAznsTzUF
-        +zLOuho/JhCVr4aIZnx5Y4H/OSbzmS4+MCiNjv0RnAMtglAviNYjlJEG38gzy0sYP0dzdN
-        arKqFM4mG6/HntouaKxHRxYSrPumdoI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674142533;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgoU10Jpwp3Wcue7Yi3vYVywPMli7wY4wRcHZx3PSzk=;
-        b=fjURUhO6yVIpkK+w7jZZ1QZQ3Y8dSTDa/+tKq0j1cPHAKYaV/RgyytpUhKJFtcsmzuXJFH
-        KRzf2DHurwdAt3Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 952F0134F5;
-        Thu, 19 Jan 2023 15:35:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RyNJJEVjyWMnSwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 19 Jan 2023 15:35:33 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 28627A06B2; Thu, 19 Jan 2023 16:35:32 +0100 (CET)
-Date:   Thu, 19 Jan 2023 16:35:32 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH] ext4: init error handle resource before init group
- descriptors
-Message-ID: <20230119153532.ws3knxxjy6sjxnuz@quack3>
-References: <20230119013711.86680-1-yebin@huaweicloud.com>
+        Thu, 19 Jan 2023 10:36:35 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306423A85;
+        Thu, 19 Jan 2023 07:36:34 -0800 (PST)
+Date:   Thu, 19 Jan 2023 15:36:28 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1674142591;
+        bh=AtrJPt1hJwfWcnFIM6nDF3JL322v8i5h9vsF5NJEWZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sqi2Rxo2n+rCq0/VFskKdSqKVIAkpfBMVTh6q2UipjhMSSf1rSH2erZkkKD69l0ky
+         WdokZkf8TwXFLlvW85EWRBZlT36IUFX+NEglJiCR0ifl8rfp0mgTDQKBYa45DNMUTG
+         AXvD/VGDCcF0d5brwf3awH5wz7tkzq1rKvv8c3js=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Kevin Kuriakose <kevinmkuriakose@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86: gigabyte-wmi: add support for B450M DS3H
+ WIFI-CF
+Message-ID: <20230119153628.ydfk7cbfeitycnew@t-8ch.de>
+References: <20230119150925.31962-1-kevinmkuriakose@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230119013711.86680-1-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230119150925.31962-1-kevinmkuriakose@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-01-23 09:37:11, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
+On Thu, Jan 19, 2023 at 08:39:25PM +0530, Kevin Kuriakose wrote:
+> To the best of my knowledge this is the same board as the B450M DS3H-CF,
+> but with an added WiFi card. Name obtained using dmidecode, tested
+> with force_load on v6.1.6
 > 
-> Now, 's_err_report' timer is init after ext4_group_desc_init() when fill
-> super. Theoretically, ext4_group_desc_init() may access to error handle
-> as follows:
-> __ext4_fill_super
->   ext4_group_desc_init
->     ext4_check_descriptors
->       ext4_get_group_desc
->         ext4_error
->           ext4_handle_error
->             ext4_commit_super
->               ext4_update_super
->                 if (!es->s_error_count)
->                   mod_timer(&sbi->s_err_report, jiffies + 24*60*60*HZ);
-> 		  --> Accessing Uninitialized Variables
-> timer_setup(&sbi->s_err_report, print_daily_error_info, 0);
+> Signed-off-by: Kevin Kuriakose <kevinmkuriakose@gmail.com>
+
+Acked-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+
+> ---
+>  drivers/platform/x86/gigabyte-wmi.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Maybe above issue is just theoretical, as ext4_check_descriptors() didn't
-> judge 'gpd' which get from ext4_get_group_desc(), if access to error handle
-> ext4_get_group_desc() will return NULL, then will trigger null-ptr-deref in
-> ext4_check_descriptors().
-> However, from the perspective of pure code, it is better to initialize
-> resource that may need to be used first.
-
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
->  fs/ext4/super.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index b31db521d6bf..dc3907dff13a 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -4738,7 +4738,6 @@ static int ext4_group_desc_init(struct super_block *sb,
->  	struct ext4_sb_info *sbi = EXT4_SB(sb);
->  	unsigned int db_count;
->  	ext4_fsblk_t block;
-> -	int ret;
->  	int i;
+> diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+> index 5e7e6659a..322cfaeda 100644
+> --- a/drivers/platform/x86/gigabyte-wmi.c
+> +++ b/drivers/platform/x86/gigabyte-wmi.c
+> @@ -141,6 +141,7 @@ static u8 gigabyte_wmi_detect_sensor_usability(struct wmi_device *wdev)
 >  
->  	db_count = (sbi->s_groups_count + EXT4_DESC_PER_BLOCK(sb) - 1) /
-> @@ -4778,8 +4777,7 @@ static int ext4_group_desc_init(struct super_block *sb,
->  			ext4_msg(sb, KERN_ERR,
->  			       "can't read group descriptor %d", i);
->  			sbi->s_gdb_count = i;
-> -			ret = PTR_ERR(bh);
-> -			goto out;
-> +			return PTR_ERR(bh);
->  		}
->  		rcu_read_lock();
->  		rcu_dereference(sbi->s_group_desc)[i] = bh;
-> @@ -4788,13 +4786,10 @@ static int ext4_group_desc_init(struct super_block *sb,
->  	sbi->s_gdb_count = db_count;
->  	if (!ext4_check_descriptors(sb, logical_sb_block, first_not_zeroed)) {
->  		ext4_msg(sb, KERN_ERR, "group descriptors corrupted!");
-> -		ret = -EFSCORRUPTED;
-> -		goto out;
-> +		return -EFSCORRUPTED;
->  	}
-> +
->  	return 0;
-> -out:
-> -	ext4_group_desc_free(sbi);
-> -	return ret;
->  }
->  
->  static int ext4_load_and_init_journal(struct super_block *sb,
-> @@ -5220,14 +5215,14 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  	if (ext4_geometry_check(sb, es))
->  		goto failed_mount;
->  
-> -	err = ext4_group_desc_init(sb, es, logical_sb_block, &first_not_zeroed);
-> -	if (err)
-> -		goto failed_mount;
-> -
->  	timer_setup(&sbi->s_err_report, print_daily_error_info, 0);
->  	spin_lock_init(&sbi->s_error_lock);
->  	INIT_WORK(&sbi->s_error_work, flush_stashed_error_work);
->  
-> +	err = ext4_group_desc_init(sb, es, logical_sb_block, &first_not_zeroed);
-> +	if (err)
-> +		goto failed_mount3;
-> +
->  	/* Register extent status tree shrinker */
->  	if (ext4_es_register_shrinker(sbi))
->  		goto failed_mount3;
+>  static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
+>  	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M DS3H-CF"),
+> +	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M DS3H WIFI-CF"),
+>  	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M S2H V2"),
+>  	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE AX V2"),
+>  	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE"),
 > -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 2.39.0
+
+Note: Patches should also always go to linux-kernel@vger.kernel.org.
+
+Thanks!
