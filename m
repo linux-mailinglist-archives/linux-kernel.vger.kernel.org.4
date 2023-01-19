@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9DA674ADD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EED674B46
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjATEhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S230437AbjATEuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjATEhX (ORCPT
+        with ESMTP id S230466AbjATEt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:37:23 -0500
+        Thu, 19 Jan 2023 23:49:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E544BD15C;
-        Thu, 19 Jan 2023 20:34:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D15AD88C9;
+        Thu, 19 Jan 2023 20:43:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BE3BB8200C;
-        Thu, 19 Jan 2023 04:38:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687DBC433EF;
-        Thu, 19 Jan 2023 04:38:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9DA6B820E7;
+        Thu, 19 Jan 2023 05:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C09C433EF;
+        Thu, 19 Jan 2023 05:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674103131;
-        bh=nSxoYdjigztZycnvezceYi7+q11Ika9lX+K1p3DlcWk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AHu2lrF1ncE2tLq0F3+BGWcWAvfjH5q6L3XoKfM8LmOQuMoDQ6M6yIJSjHiAMMYxo
-         zZeoAepiIimC95u5ZmLuUguxCICnadkWhBxOF3Kv0DWlTCPNx0VM8C1sDZia0c9HZE
-         1pXOIWBW1z3CUBKJSOETIQsAP/eInR7Wbov9JvZxABuzBCI3OqMHaoYuDNZCmncww5
-         eRxnZRsuyl5RMyd/2IGFoc+XiakgG2v7rFXJuj3iENCz4UtgFhjnpkpWDqM2U6Qq+3
-         XFReZDhp3OFbrOTo1qyAyNhkbr7owOFQJDlDN5R5BKZi+jzHJEabqPAVwv8lKuVKLV
-         yAn8rJszFI5NA==
-Date:   Wed, 18 Jan 2023 20:38:49 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jon Maxwell <jmaxwell37@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, martin.lau@kernel.org,
-        joel@joelfernandes.org, paulmck@kernel.org, eyal.birger@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrea.mayer@uniroma2.it
-Subject: Re: [net-next v2] ipv6: Document that max_size sysctl is
- depreciated
-Message-ID: <20230118203849.7c00187a@kernel.org>
-In-Reply-To: <20230117221858.734596-1-jmaxwell37@gmail.com>
-References: <20230117221858.734596-1-jmaxwell37@gmail.com>
+        s=k20201202; t=1674105241;
+        bh=vOpQ4Ds9jWqyGxR9dJ6k9KZUW8KJ9ISfjtx7rMdu5Vo=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=tSrDNfwWpTpr7+utoIBt0yr9qOIlNUR6q3GVm7F6C3MXYpzwIcJhJkPd/xCgjkW1Q
+         KyUqqDC98bCI0JpuVjU3GxTGPFSUYqyD5ihoBoEJZMwUz4b3XNABP08FYhJyySJVzv
+         BYBUdkpWnh3Mf0oky2BSSNGH4p14qIW/nDr8lIzptM4+m2/At9i4kvFInVW9z8sbFV
+         q2ksRhOjtceeaBxdAeuV/CoNi83BELbyNE03TPPtoMgl+ZtPN7AJTEOVPJOUEJMn58
+         yt706ICqTTwZ6u+tWi3ddued5oW/hSHksddbDe/ZkiZEyNnCyztmwO/jdfALAaYoMN
+         iZY4ZR/+17kcQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        de Goede <hdegoede@redhat.com>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, ath11k@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: net: wireless: minor whitespace and name cleanups
+References: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
+Date:   Thu, 19 Jan 2023 07:13:52 +0200
+In-Reply-To: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
+        (Krzysztof Kozlowski's message of "Wed, 18 Jan 2023 18:54:13 +0100")
+Message-ID: <87bkmv85tb.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,37 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 09:18:58 +1100 Jon Maxwell wrote:
-> Subject: [net-next v2] ipv6: Document that max_size sysctl is depreciated
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+
+> Minor cleanups:
+>  - Drop redundant blank lines,
+>  - Correct indentaion in examples,
+>  - Correct node names in examples to drop underscore and use generic
+>    name.
 >
-> v2: use correct commit syntax.
-
-change log under the --- lines
-
-> Document that max_size is depreciated due to:
-> 
-> af6d10345ca7 ("ipv6: remove max_size check inline with ipv4")
-
- ^ commit
-
-the word "commit" should be there before the hash
-
-> Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
+> No functional impact except adjusting to preferred coding style.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  Documentation/networking/ip-sysctl.rst | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 7fbd060d6047..edf1fcd10c5c 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -156,6 +156,9 @@ route/max_size - INTEGER
->  	From linux kernel 3.6 onwards, this is deprecated for ipv4
->  	as route cache is no longer used.
->  
-> +	From linux kernel 6.2 onwards, this is deprecated for ipv6
+>  .../bindings/net/wireless/esp,esp8089.yaml    | 20 +++---
+>  .../bindings/net/wireless/ieee80211.yaml      |  1 -
+>  .../bindings/net/wireless/mediatek,mt76.yaml  |  1 -
+>  .../bindings/net/wireless/qcom,ath11k.yaml    | 11 ++-
+>  .../bindings/net/wireless/silabs,wfx.yaml     |  1 -
+>  .../bindings/net/wireless/ti,wlcore.yaml      | 70 +++++++++----------
+>  6 files changed, 50 insertions(+), 54 deletions(-)
 
-6.2 or 6.3? 6.2 is what's currently in Linus's tree, net-next 
-is 6.3 and the commit in the commit msg is in net-next only.
+Thanks for the cleanup. Would you like to me to take this to
+wireless-next or do you have other plans?
 
-> +	as garbage collection manages cached route entries.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
