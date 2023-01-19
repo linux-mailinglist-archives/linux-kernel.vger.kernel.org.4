@@ -2,189 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E558367326B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B55B673264
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjASHZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S229779AbjASHZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjASHZV (ORCPT
+        with ESMTP id S229919AbjASHYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:25:21 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DF266FBD;
-        Wed, 18 Jan 2023 23:24:53 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J67eJR030173;
-        Thu, 19 Jan 2023 07:23:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=FaOVjx07ztTIdT60txx0s0b5gk5cg+3GhJNm7FRrqxA=;
- b=gGqM15HYRcnG3WHsQqKbdungpZdZvmGzS2AtsdqaSW/xfjHO3tqDkZ25Hz8DIWEm2B7I
- CZIrfeE1k3waUKwBNVVhBd+wbT/dshUzvjnPyhnHQ0PNJuTxFOPsnO/p0R/Zs86BeGLW
- TNW/jXn2lZeMZOoJbFtLvH735N0X2+RIqgUB05N2MU4eDKCi2j7IxHPoFCaEA5Cs13gZ
- 2xvzCM1CDorHq0AVtMhIKRmiXHPq7hUFGf5MIxbu1sEP92FQgZkgLLUbJOMldpnILphX
- rc8jaP48Bu/BMhY4srYRuy7xajXYE1Lq4CXc2BrzuC5rah5fVX+eCre0o1NfExG5wx+Q QA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5f6mkq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:23:41 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30J7DI0V030240;
-        Thu, 19 Jan 2023 07:23:40 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5f6mk8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:23:40 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J73lel009766;
-        Thu, 19 Jan 2023 07:23:39 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n3m1837vq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:23:39 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30J7NbQw42271318
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 07:23:37 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 868EA58059;
-        Thu, 19 Jan 2023 07:23:37 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4FFC358043;
-        Thu, 19 Jan 2023 07:23:28 +0000 (GMT)
-Received: from [9.160.127.29] (unknown [9.160.127.29])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 07:23:28 +0000 (GMT)
-Message-ID: <f41e2872-a648-9c5d-88a3-23ad099dffa2@linux.ibm.com>
-Date:   Thu, 19 Jan 2023 09:23:26 +0200
+        Thu, 19 Jan 2023 02:24:43 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C97C677A0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:24:22 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q10so934857wrs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BuvvxU5SQjrPNh/tsenI3bDuTK1r+L/h3C2FusTkVJM=;
+        b=naPlxqGjiqVsWt05MsYVWdzKkcBus4Gbs4pbt/tn1HcDoe3V89aXmti61qphNonjLY
+         7xcsJSm+V2e1WNwIb52SN9OF/FOzQibPCPORVLt3So/RfhORVa/769EFquj2bA23dujL
+         fcyu3Q2k3Anr+CMEbYiReJa5vfqn/H1rrcHY1GwVNrsy9x3smdC9hntNrgDAxQkNAfba
+         0mxuG6Jv0Q9cFhrhwhkHKKsrc+AJzFFNi8VMxBvfmOTUDmlejKtaiwxCFpbKCRZZRUl4
+         AQt0wGDkiaYSvHkdNxB9lNvGFAYv9OlQH7nzkyqKfGUg+0Ic4bqF7dbZ7RHXGkg4QRAH
+         zlyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BuvvxU5SQjrPNh/tsenI3bDuTK1r+L/h3C2FusTkVJM=;
+        b=pAsXEWVsRWBH4/M0lMOBLupoUCH0aCkyYJOYXJiFzPtDmHYBoW2kKwq6Cd7QT9oAhL
+         AvhyWVIYo+oSBE+FOllo2a2LyKmrNgcsr9hbyFk/l0bpk4bdGumpuRFljNemZ4xHIuzu
+         o/HRyecjxlsXqKLG1/b2U1QhyR7i0wpVtMhrqLGxJnZ7FPJJPxtp/uqsHfKVa4v2c5ZF
+         VsEwwa+Iha63PboCkPhJ2WJYnEjb5X0uiiO9DWzu6QknycNAVWAXZ7llY2t0qTq+hDeS
+         SufnAXNp7qHuFPuMxOMw5mmIZa+xEiwHU2uwlM5b61NpIoYu30bU8Ssgg4ZSSgbwBfJ/
+         +pTA==
+X-Gm-Message-State: AFqh2kqjg8sxE3N7poR3cKkH8yPD6ZIN/Z2B1gZ3EsOuEvclYgpQgADj
+        wJd3XTleOPOrjVK9qylcvVsghA==
+X-Google-Smtp-Source: AMrXdXs2UyDs6MMmSx1HD83ql/F8H3MVkRcUOF5XNTPpk8+TtFKjPT9nGENMak1zYW6i+qrg+2qEKQ==
+X-Received: by 2002:adf:dd01:0:b0:289:773c:59ee with SMTP id a1-20020adfdd01000000b00289773c59eemr8341444wrm.6.1674113060803;
+        Wed, 18 Jan 2023 23:24:20 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id r11-20020adff70b000000b002bdf290efdasm10397537wrp.58.2023.01.18.23.24.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 23:24:20 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Richard Acayan <mailingradian@gmail.com>
+Cc:     Daniel Mentz <danielmentz@google.com>,
+        Caleb Connolly <caleb@connolly.tech>
+In-Reply-To: <20230116224909.23884-1-mailingradian@gmail.com>
+References: <20230116224909.23884-1-mailingradian@gmail.com>
+Subject: Re: [RFC PATCH v3 0/3] drm/mipi-dsi: 16-bit Brightness Endianness Fix
+Message-Id: <167411305980.243807.4478206402643640808.b4-ty@linaro.org>
+Date:   Thu, 19 Jan 2023 08:24:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH RFC v7 31/64] crypto: ccp: Add the
- SNP_{SET,GET}_EXT_CONFIG command
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-32-michael.roth@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <20221214194056.161492-32-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FI5em3frKKibChidKNc0sr30HSyxeZBK
-X-Proofpoint-ORIG-GUID: w6COoNNAPvn6WeEFWdLfRUXz5bx9bRjg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 phishscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301190056
+X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+Hi,
 
-On 14/12/2022 21:40, Michael Roth wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
+On Mon, 16 Jan 2023 17:49:06 -0500, Richard Acayan wrote:
+> Changes since v2 (20230114010006.50471-1-mailingradian@gmail.com):
+>  - patch vtdr6130 to use _large (3/3)
+>  - remove Change-Id again (1/3)
+>  - change patch subject (1-2/3)
+>  - correct function name in patch description (2/3)
+>  - add Tested-by tags (1-2/3)
 > 
-> The SEV-SNP firmware provides the SNP_CONFIG command used to set the
-> system-wide configuration value for SNP guests. The information includes
-> the TCB version string to be reported in guest attestation reports.
-> 
-> Version 2 of the GHCB specification adds an NAE (SNP extended guest
-> request) that a guest can use to query the reports that include additional
-> certificates.
-> 
-> In both cases, userspace provided additional data is included in the
-> attestation reports. The userspace will use the SNP_SET_EXT_CONFIG
-> command to give the certificate blob and the reported TCB version string
-> at once. Note that the specification defines certificate blob with a
-> specific GUID format; the userspace is responsible for building the
-> proper certificate blob. The ioctl treats it an opaque blob.
-> 
-> While it is not defined in the spec, but let's add SNP_GET_EXT_CONFIG
-> command that can be used to obtain the data programmed through the
-> SNP_SET_EXT_CONFIG.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  Documentation/virt/coco/sev-guest.rst |  27 ++++++
->  drivers/crypto/ccp/sev-dev.c          | 123 ++++++++++++++++++++++++++
->  drivers/crypto/ccp/sev-dev.h          |   4 +
->  include/uapi/linux/psp-sev.h          |  17 ++++
->  4 files changed, 171 insertions(+)
-> 
-> diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
-> index 11ea67c944df..fad1e5639dac 100644
-> --- a/Documentation/virt/coco/sev-guest.rst
-> +++ b/Documentation/virt/coco/sev-guest.rst
-> @@ -145,6 +145,33 @@ The SNP_PLATFORM_STATUS command is used to query the SNP platform status. The
->  status includes API major, minor version and more. See the SEV-SNP
->  specification for further details.
->  
-> +2.5 SNP_SET_EXT_CONFIG
-> +----------------------
-> +:Technology: sev-snp
-> +:Type: hypervisor ioctl cmd
-> +:Parameters (in): struct sev_data_snp_ext_config
-> +:Returns (out): 0 on success, -negative on error
-> +
-> +The SNP_SET_EXT_CONFIG is used to set the system-wide configuration such as
-> +reported TCB version in the attestation report. The command is similar to
-> +SNP_CONFIG command defined in the SEV-SNP spec. The main difference is the
-> +command also accepts an additional certificate blob defined in the GHCB
-> +specification.
-> +
-> +If the certs_address is zero, then the previous certificate blob will deleted.
-> +For more information on the certificate blob layout, see the GHCB spec
-> +(extended guest request message).
-> +
-> +2.6 SNP_GET_EXT_CONFIG
-> +----------------------
-> +:Technology: sev-snp
-> +:Type: hypervisor ioctl cmd
-> +:Parameters (in): struct sev_data_snp_ext_config
-> +:Returns (out): 0 on success, -negative on error
-> +
-> +The SNP_SET_EXT_CONFIG is used to query the system-wide configuration set
+> [...]
 
-       ^^^^^^^^^^^^^^^^^^
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-This should be SNP_GET_EXT_CONFIG.
+[1/3] drm/mipi-dsi: Fix byte order of 16-bit DCS set/get brightness
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c9d27c6be518b4ef2966d9564654ef99292ea1b3
+[2/3] drm/panel: sofef00: Use 16-bit brightness function
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=fd40749a4f62a03d0aebe6eb446ea84a9901795a
+[3/3] drm/panel: vtdr6130: Use 16-bit brightness function
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=9402cde9347eca050e14ea9e47270e84a6899162
 
-
--Dov
-
-> +through the SNP_SET_EXT_CONFIG.
-> +
->  3. SEV-SNP CPUID Enforcement
->  ============================
->  
+-- 
+Neil
