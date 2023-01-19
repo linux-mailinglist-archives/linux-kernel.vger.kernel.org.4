@@ -2,41 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462F4672F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 04:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C629672FDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjASDR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 22:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S230252AbjASEBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjASDPd (ORCPT
+        with ESMTP id S229853AbjASDpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 22:15:33 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F036166FA2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:13:04 -0800 (PST)
-Received: (qmail 234764 invoked by uid 1000); 18 Jan 2023 22:13:04 -0500
-Date:   Wed, 18 Jan 2023 22:13:04 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
+        Wed, 18 Jan 2023 22:45:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235254B4B4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674099663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YyFYcgF+DoIeKq7lb/Kzjd5+kevHUn58LqiJELqcxVU=;
+        b=GvH5AvzATFPMle6yEBV0ChBN6ICn3x8H8v2QxKn5Ifp1H+QTqW4FTR1epOU1iDtMRdLEOp
+        O8CwQ5uiNYdev6z/X1OT3v3MFD5y53Vn70eyHgQSD7EQMQlzMUsEZiWQkkjB5ZTLyABgF5
+        t3Zr6JfTxQ9XlmAAhEdDzWdaSiD92dE=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-589-37VcO_zoNp-LNWiL4C6u3Q-1; Wed, 18 Jan 2023 22:20:47 -0500
+X-MC-Unique: 37VcO_zoNp-LNWiL4C6u3Q-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-15f2d95f1easo487851fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:20:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YyFYcgF+DoIeKq7lb/Kzjd5+kevHUn58LqiJELqcxVU=;
+        b=cbK4mIQmEZAGRTnAK4AGELDKdNXitSBqvIQ4iOMHiimaAZ7XNBmk56DV5UnFLS1gv0
+         4UDylmum7JI4V5qsBO8Tu9hQgYNYYHVL95CMM82IPt8FFgDhf6nYcSj63YoADU92mzw6
+         302WQM3/Y4COx5pyjCDRg9W/9BLfOAxeNKoHldwafcSuhG50obFo5b0kVJF/6awogA/b
+         PLinacCZyCH1kj7MMmowBKCCXXHr63Hyl1IVMzd/SimHH3Zkvcvt9AZKn0kIQgcNsXnw
+         rfv23/Kd2W9sQ4pcIHgj5DDqO0THSJUKr4TRz9tmcimsG8AHjno1khVcMMwUSs2E0Jxy
+         6LLQ==
+X-Gm-Message-State: AFqh2kqdkZhKClYN212JROPWrNaGSYA6FgsQraeduGNnHRRxddLEHYCB
+        +ARYeSZL8GpnMAwPPRajd2pow/PQRy5FqTAwkoRqylu1GrLBui62KbPzz+NLX/sfiONDPHksEFz
+        OVzIEgMkhfdMjm2EaUUte3W0UgiIyOQju1RNDmGmz
+X-Received: by 2002:a05:6870:6a91:b0:144:a97b:1ae2 with SMTP id mv17-20020a0568706a9100b00144a97b1ae2mr593133oab.35.1674098447066;
+        Wed, 18 Jan 2023 19:20:47 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtfPFuvSb1t3TeMovFK0J7New906+HRjOCUmcjVVqeG2vnLs69/M1W/0HSaALtkgqmNSJQUc+ZcxfnZmvsy7G8=
+X-Received: by 2002:a05:6870:6a91:b0:144:a97b:1ae2 with SMTP id
+ mv17-20020a0568706a9100b00144a97b1ae2mr593124oab.35.1674098446850; Wed, 18
+ Jan 2023 19:20:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230118164359.1523760-1-eperezma@redhat.com> <20230118164359.1523760-3-eperezma@redhat.com>
+In-Reply-To: <20230118164359.1523760-3-eperezma@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 19 Jan 2023 11:20:35 +0800
+Message-ID: <CACGkMEtq_ZOoLaS=vGYPZUc45oP8ENa+5H1KVCF1NS=-SwuPQw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] vringh: fetch used_idx from vring at vringh_init_iotlb
+To:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
+Cc:     mst@redhat.com, leiyang@redhat.com,
+        Laurent Vivier <lvivier@redhat.com>, sgarzare@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
+        linux-kernel@vger.kernel.org, lulu@redhat.com,
+        Gautam Dawar <gdawar@xilinx.com>, alvaro.karsz@solid-run.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,165 +79,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/18/2023 8:52 PM, Alan Stern wrote:
-> > On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
-> > > -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> > > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
-> > > -		fencerel(After-unlock-lock) ; [M])
-> > > +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
-> > Shouldn't the po case of (co | po) remain intact here?
-> 
-> You can leave it here, but it is already covered by two other parts: the
-> ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
-> ppo, and the ordering given through pb is covered by its inclusion in
-> strong-order.
+On Thu, Jan 19, 2023 at 12:44 AM Eugenio P=C3=A9rez <eperezma@redhat.com> w=
+rote:
+>
+> Starting from an used_idx different than 0 is needed in use cases like
+> virtual machine migration.  Not doing so and letting the caller set an
+> avail idx different than 0 causes destination device to try to use old
+> buffers that source driver already recover and are not available
+> anymore.
+>
+> While callers like vdpa_sim set avail_idx directly it does not set
+> used_idx.  Instead of let the caller do the assignment, fetch it from
+> the guest at initialization like vhost-kernel do.
+>
+> To perform the same at vring_kernel_init and vring_user_init is left for
+> the future.
+>
+> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> ---
+>  drivers/vhost/vringh.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index 33eb941fcf15..0eed825197f2 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1301,6 +1301,17 @@ static inline int putused_iotlb(const struct vring=
+h *vrh,
+>         return 0;
+>  }
+>
+> +/**
+> + * vringh_update_used_idx - fetch used idx from driver's used split vrin=
+g
+> + * @vrh: The vring.
+> + *
+> + * Returns -errno or 0.
+> + */
+> +static inline int vringh_update_used_idx(struct vringh *vrh)
+> +{
+> +       return getu16_iotlb(vrh, &vrh->last_used_idx, &vrh->vring.used->i=
+dx);
+> +}
+> +
+>  /**
+>   * vringh_init_iotlb - initialize a vringh for a ring with IOTLB.
+>   * @vrh: the vringh to initialize.
+> @@ -1319,8 +1330,18 @@ int vringh_init_iotlb(struct vringh *vrh, u64 feat=
+ures,
+>                       struct vring_avail *avail,
+>                       struct vring_used *used)
+>  {
 
-What about the ordering given through 
-A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be 
-superseded by pb as well, but it seems odd not to have it in hb.
+While at this, I wonder if it's better to have a dedicated parameter
+for last_avail_idx?
 
-> Now whether it should be included in strong-order or not is a matter of
-> grouping: is it better to leave all cases ordered by the [After-unlock-lock]
-> fence together, or is it better to keep the <=po parts of the fences
-> together and the external parts together?
-> Right now I prefer to group things around the fences because that is more of
-> an isolated idea, rather than around whether they order internally or
-> externally.
+> -       return vringh_init_kern(vrh, features, num, weak_barriers,
+> -                               desc, avail, used);
+> +       int r =3D vringh_init_kern(vrh, features, num, weak_barriers, des=
+c,
+> +                                avail, used);
+> +
+> +       if (r !=3D 0)
+> +               return r;
+> +
+> +       /* Consider the ring not initialized */
+> +       if ((void *)desc =3D=3D used)
+> +               return 0;
 
-In general, the idea in the memory model is that hb ordering relies on 
-the non-strong properties of fences, whereas pb relies on the properties 
-of strong fences, and rb relies on the properties of the RCU fences.
+I don't understand when we can get this (actually it should be a bug
+of the caller).
 
-It's sort of a hierarchy.  In principle these relations should all be 
-merged together (like xb does), but it turns out to work okay in 
-practice because pb will absorb an hb on its right, and rb will absorb a 
-pb on its right.  Besides, merging them all together would involve an 
-uncomfortably large recursive definition.
+Thanks
 
-> > > @@ -91,8 +89,12 @@ acyclic hb as happens-before
-> > >   (* Write and fence propagation ordering *)
-> > >   (****************************************)
-> > > -(* Propagation: Each non-rf link needs a strong fence. *)
-> > > -let pb = prop ; strong-fence ; hb* ; [Marked]
-> > > +(* Strong ordering operations *)
-> > > +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
-> > > +		[After-unlock-lock] ; po ; [M])
-> > This is not the same as the definition removed above.  In particular,
-> > po-unlock-lock-po only allows one step along the locking chain -- it has
-> > rf where the definition above has co.
-> 
-> Indeed it is not, but the subsequent lock-unlock sequences are in hb*. For
-> this reason it can be simplified to just consider the directly following
-> unlock().
+> +
+> +       return vringh_update_used_idx(vrh);
+> +
+>  }
+>  EXPORT_SYMBOL(vringh_init_iotlb);
+>
+> --
+> 2.31.1
+>
 
-I'm not sure that argument is right.  The smp_mb__after_unlock_lock 
-needs to go after the _last_ lock in the sequence, not after the first.  
-So you don't have to worry about subsequent lock-unlock sequences; you 
-have to worry about preceding lock-unlock sequences.
-
-> > In fact, why don't we make a concerted effort to straighten out the
-> > terminology more fully?  Now seems like a good time to do it.
-> 
-> I agree; wrapping my head around this terminology-space is the whole reason
-> why I started looking into the formalization of rcu, and I'm beginning to
-> understand it a little bit.
-> 
-> > To begin with, let's be more careful about the difference between an
-> > order-inducing object (an event or pair of events) and the relation of
-> > being ordered by such an object.  For instance, given:
-> > 
-> > 	A: WRITE_ONCE(x, 1);
-> > 	B: smp_mb();
-> > 	C: r1 = READ_ONCE(y);
-> > 
-> > then B is an order-inducing object (a memory barrier), and (A,C) is a
-> > pair of events ordered by that object.  In general, an order is related
-> > to an order-inducing object by:
-> > 
-> > 	order = po ; [order-inducing object] ; po
-> 
-> Yes! That's what I was trying to say in the rcu-order/rcu-fence discussion.
-> (I would call it an operation rather than an object, since it may be
-> something involving steps of multiple threads, like rcu, but let's stick
-> with object for now).
-
-Like I said above, the object could be a pair of events.  But 
-"operation" is probably a better term.
-
-> > with suitable modifications for things like smp_store_release where
-> > one of the events being ordered _is_ the order-inducing event.
-> > 
-> > So for example, we could consistently refer to all order-inducing events
-> > as either barriers or fences, and all order-reflecting relations as orders.  This would require widespread changes to the .cat file, but I
-> > think it would be worthwhile.
-> 
-> I agree that having a uniform language for this is worthwhile.
-> However you just dropped the cases of order-inducing objects that are not
-> just a single event.
-
-Let's agree to talk about order-inducing operations instead, and take
-
-	{order-inducing operation}
-
-to be the relation linking the start event of the operation to the end 
-event.  So for operations that are a single object, such as a memory 
-barrier, it is the same as [order-inducing object].  Then we have
-
-	order = po ; {order-inducing operation} ; po
-
-> I am completely fine calling the individual *events* barriers.
-> (I don't like calling every barrier a fence though; Arm very explicitly
-> doesn't do this and internally we don't either. However for LKMM I don't
-> mind sticking to existing terminology here and calling them all fences; but
-> to me a fence is something that orders certain things po-before the fence
-> with certain things po-after).
-
-Maybe we should also agree to reserve "barrier" for compiler barriers, 
-and use "fence" for all memory barriers.  (Yes, I realize this isn't 
-totally consistent but it's the best I can think of.)  Then all fence 
-instructions would be barriers but not vice versa.
-
-> But I would like to have a name for order-inducing objects that link two
-> events.
-> 
-> I would call them an "ordering operation" where the first event is the event
-> that "starts the operation", and the second event is the event that
-> "completes that operation".
-> 
-> Then we can say things like "when CPU C starts an ordering operation of type
-> blah that is completed by CPU C', then any store that propagates to C before
-> C starts the operation must propagate to any CPU C'' before any store of C'
-> that is executed after C' completes the execution propagates to C''  ".
-> This would be a weak ordering operation, and would probably imply that
-> blah-order is a kind of happens-before order and would appear in
-> cumul-fence.
-> 
-> Or  "when CPU C starts an ordering operation of type blubb that is completed
-> by CPU C', then any store that propagates to C before C starts the operation
-> must propagate to any other CPU before any instruction of C' po-after C'
-> completes the execution is executed".
-> This would be a strong ordering operation which would imply that prop ;
-> blubb-order is a kind of happens-before order.
-
-Right.
-
-> > (Treating "barrier" and "fence" as synonyms seems to be too deeply
-> > entrenched to try and fight against.)
-> > 
-> > Once that is straightened out, we can distinguish between fences or
-> > orders that are weak vs. strong.  And then we can divide up strong
-> > fences/orders into single-CPU vs. cross-CPU, if we want to.
-> With the distinction above, barriers and fences are always single-CPU, while
-> ordering operations can be either cross-CPU or single-CPU. I'm not sure if
-> there's still a need to distinguish more carefully than that.
-
-We'll see.  But we need a shorter name than "ordering-operation" for use 
-in the memory model.  How about "xfence"?  Or maybe use "xfence" for 
-cross-CPU ordering operations, which are always strong -- I don't know 
-what we should call multi-instruction single-CPU ordering operations  
-(of which po-unlock-lock-po seems to be the only one).
-
-Alan
