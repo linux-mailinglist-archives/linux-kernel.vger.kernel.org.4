@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1B66732B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58686732BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjASHms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S230153AbjASHnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjASHmM (ORCPT
+        with ESMTP id S230059AbjASHmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:42:12 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF36B67963;
-        Wed, 18 Jan 2023 23:41:58 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J4AIkV025282;
-        Thu, 19 Jan 2023 08:41:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=jL/MbEBfkVAq5ZMy1e9+noLbvk1MZWNuOQ2c+Fz8nz0=;
- b=BX5ioQOOwo8TiUALeHu96ZUvFqNIHMHC983BbAfFTiaXFGm04nFWgpxOs1Q7wy8bd1tT
- iacyKZPEi3RiNxjrVN23olXkUMvfN1LPcgEkOJgqBS13VE4H31+IPZjKsZJYTAOAlkMT
- wVL+gSSJR/+ua+zPPFyqR+rcwK/c8ePcyJhBfcKCqe7NVkmg0bsxcWYHrl5vTZSYL8jJ
- tM9o3ECjI5clfhz0HeAB4Gu+1cmmSklmH4q2DKtaUl+ZfNNyWLjnc2/8bm5Gj8t00Toz
- vt5LmHTqJz6oq9ZHq4VnRcItZY7fnlvBIqaAKdyh8+tU4QSDXG7WCok/Mg8ZAujzrnsd Aw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n5mc4y1dj-1
+        Thu, 19 Jan 2023 02:42:47 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7881762D3C;
+        Wed, 18 Jan 2023 23:42:34 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J5umJh017565;
+        Thu, 19 Jan 2023 07:42:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=+ile8KrnCqycQDSvZSIwrvg2RXj1x3vU89K9f6ueCe4=;
+ b=V5Et1LAMmQx/qjK7sPXzymFggvusBXFsXJnzkVrf0Pu2XOVwIZXP5Vco9qHcA2gMHSfI
+ lhnnZ201R/u6qEIPA8N4QVJTwvhaTC4iQHqCmDQLK7kPuAOT6C4zoibPfto3gBG+IgCn
+ wzrDvlWGQHTpSynBYLtrRBcPUvO/uy2+VbNZbC3AzU3mTABL32x7pmRYnF1Up61nNcJR
+ h7K+P28dEhhJZz+EfNZYz7AMt2AI149ac9h+kygCP/s8fdFlANAFjZ0RTflBppgh5nxA
+ wCa6CpQQ75sdYfJ0A8DrtntiXbvpsUtzjz4TM9j4756y/czXO8aVK1HrpHqnbfeCKvVm Ng== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6yksgcj4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 08:41:42 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 38C35100039;
-        Thu, 19 Jan 2023 08:41:39 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 22EC520F562;
-        Thu, 19 Jan 2023 08:41:39 +0100 (CET)
-Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 19 Jan
- 2023 08:41:36 +0100
-Message-ID: <39af6fac-3e8e-4929-43b3-eb0b7af0ab30@foss.st.com>
-Date:   Thu, 19 Jan 2023 08:41:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        Thu, 19 Jan 2023 07:42:16 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J7gFZi025257
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 07:42:15 GMT
+Received: from taozha-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 23:42:10 -0800
+From:   Tao Zhang <quic_taozha@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        =?UTF-8?Q?C=c3=a9dric_Le_Goat?= =?UTF-8?Q?er?= <clg@kaod.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        Parshuram Thombare <pthombar@cadence.com>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Bert Vermeulen <bert@biot.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Marek Vasut <marex@denx.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Tao Zhang <quic_taozha@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.26]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        Tao Zhang <taozha@qti.qualcomm.com>
+Subject: [PATCH v2 1/9] dt-bindings: arm: Add support for DSB element
+Date:   Thu, 19 Jan 2023 15:41:37 +0800
+Message-ID: <1674114105-16651-2-git-send-email-quic_taozha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
+References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OvgUlOvRsaHqZ2w84ckYxUUB3CuSOl0f
+X-Proofpoint-ORIG-GUID: OvgUlOvRsaHqZ2w84ckYxUUB3CuSOl0f
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=911 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190062
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,34 +92,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
+Bit) element for TPDA. Specifies the DSB element size supported
+by each monitor connected to the aggregator on each port. Should
+be specified in pairs (port, dsb element size).
 
-On 1/18/23 18:39, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
+---
+ .../bindings/arm/qcom,coresight-tpda.yaml          | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-[...]
+diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+index 2ec9b5b..298db7f 100644
+--- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+@@ -58,6 +58,26 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  qcom,dsb-element-size:
++    description: |
++      Specifies the DSB(Discrete Single Bit) element size supported by
++      each monitor connected to the aggregator on each port. Should be
++      specified in pairs <port, dsb element size>.
++
++      Note: The maximum value of the port number depends on how many
++      input ports the current TPDA has. DSB element size currently only
++      supports 32-bit and 64-bit.
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    items:
++      items:
++        - description: |
++            "port" indicates TPDA input port number
++          minimum: 0
++        - description: |
++            "dsb element size" indicates dsb element size
++          minimum: 0
++          maximum: 64
++
+   clocks:
+     maxItems: 1
+ 
+@@ -100,6 +120,8 @@ examples:
+        compatible = "qcom,coresight-tpda", "arm,primecell";
+        reg = <0x6004000 0x1000>;
+ 
++       qcom,dsb-element-size = <0 32>;
++
+        clocks = <&aoss_qmp>;
+        clock-names = "apb_pclk";
+ 
+-- 
+2.7.4
 
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-> index 1eb17f7a4d86..8bba965a9ae6 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-> @@ -11,7 +11,7 @@ maintainers:
->    - Patrice Chotard <patrice.chotard@foss.st.com>
->  
->  allOf:
-> -  - $ref: "spi-controller.yaml#"
-> +  - $ref: spi-controller.yaml#
->  
->  properties:
->    compatible:
-
-
-For stm32-qspi 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-
-Thanks
-Patrice
