@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DDF6742C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAB26742C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjAST0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S230305AbjAST0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjASTZ5 (ORCPT
+        with ESMTP id S230070AbjAST0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:25:57 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BDC530ED;
-        Thu, 19 Jan 2023 11:25:45 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id s4so2378091qtx.6;
-        Thu, 19 Jan 2023 11:25:45 -0800 (PST)
+        Thu, 19 Jan 2023 14:26:17 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0BD966F2;
+        Thu, 19 Jan 2023 11:26:16 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id 187so3261951vsv.10;
+        Thu, 19 Jan 2023 11:26:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xamYJZSiEPy9Mjo2njH+JPn5/UHZCpsx0WYfjjoyGiY=;
-        b=MrwOCC5ehcze1hpMjcT+s1KhKEgcE4YPuq3yqI1Cm5uRCIw1PUevaLEC6XkTcNhbT9
-         Zw0OvgbmLEFdn1tUM2fjgufvEQCRxf9F5A/ADdKpwTfdOwWf/0FqKiy1RuuQeUDtT2r1
-         WOQNX4WCd5xldt11cYOVTcAYa8grKYNOtlZuJLBY7Hqr8xr25RNCaSO7DWHMR1iJ2wZ4
-         jILLDKWwZP8GiSLOga1KZkHZ1Quhj6gfAe4Q0cx1AezAz9Aw7s1aRjjoXenbgYqQO8nm
-         QgeiFuARK8oNcrVywEUZQ78eB39jl9apcTRWslHRMXoRBD4K3HuCxamntvSxOTPxK4uE
-         BODA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=31+1HnBidgAci8B3LJ+m4Np7ElNOJOKvMA21iUDPQvk=;
+        b=E6AdBjQa5zkq66qIx3XRbjsPhP0Kg+IacP/L2/lBeA/lsQnlQ5bZyrkZOisfI4XIIm
+         qqG/0DjfMVflpDwqUqt1leL19Kia7GMkGvZ7hdzxR1QwBUnEBe2ZPO+Aib5rRWDRzNMr
+         zyOq5OLHkEIIx+AFYc5UlKOCJmVXQwKByz8vdHx0CpYAQlAg2zIl3kwZD7h4EGm0cPKN
+         Z4xk5nNFc81mEVeoj45lAqnkpfsscoGw0N09aCZY6bGifB2xrr+EHsYtiRVhbqc1NoXz
+         atF54azjXEEopBtnFzvctOQPo180UIs10q6jom882mt5bn+mXXetA0aD7rGqRnUfeAym
+         y7DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xamYJZSiEPy9Mjo2njH+JPn5/UHZCpsx0WYfjjoyGiY=;
-        b=tq+trOZ8NniRqlPpQ7ZVgULWMFj+94r3w+jkwm10HiVyr9mcUrJ1zM7eWM1RuvhA+J
-         AyiD9Sa8Ldoz3wvlkRJkMH9300p0A/e0MFDMlnGHARDj/0+DlKPcagJ5bXYiWHSt+kzX
-         PzMqIrIfRaPSrIXqtFGORt3MQ0WHbSNtmF4LMbsuAJYlmZD9OwNT4f8fKb18oTh4XFjI
-         p87Dhz2pBuiTEuikcF4jj+o4nmt75pbcPai2AjYAgD/AVjjWH2aci8Nig3JnN4brCfTV
-         Q89Kvvr62SK2CBdPhcxuKwgF2m7EKkdczO1pXLHPt2HOiJiOQeJZ5LlARTOz29kyPn8A
-         SKJg==
-X-Gm-Message-State: AFqh2ko8vWAYA3M0ykHLj3EZ8kOcTjd2Gh/vh+wqy610HCTwbnbroTIh
-        9iKSTNRumdPDf0csLzDAu+SmksT/kbk=
-X-Google-Smtp-Source: AMrXdXv6/5PtZaK3QzptagCsxzBPPETPDBX9eIEhj7kPWY4WuBsc33JbZzxeaNRbDyw281mOZy4DMg==
-X-Received: by 2002:ac8:4446:0:b0:3b6:377b:e05c with SMTP id m6-20020ac84446000000b003b6377be05cmr12291034qtn.47.1674156344292;
-        Thu, 19 Jan 2023 11:25:44 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id ej4-20020a05622a4f8400b003b693fe4427sm727836qtb.90.2023.01.19.11.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 11:25:43 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 20B2C27C0054;
-        Thu, 19 Jan 2023 14:25:42 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 14:25:43 -0500
-X-ME-Sender: <xms:NZnJYwTxwYLfh8N7togMMPPYVeKdqLNSU6cBkqgYw1MVfb1Q7g283w>
-    <xme:NZnJY9xSw9qvXrrAIJEbpvx12Y2TyP_RnRTmtBw-y1f1OYtEkrBMU_4YXAozbQqOh
-    zbQZ0y4tj_ONrG2QQ>
-X-ME-Received: <xmr:NZnJY91HzMP2Iy60XcV_ZcT4yKf2IQY3ocx0fpLzHGwRF2CeF0X43zzN0DQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:NZnJY0CTKhGEBWy1veKc6w2hVzbwm1Rf2uZ1Xsyyk9_pC7SbEHDNOw>
-    <xmx:NZnJY5j2rwpIuu1Rn9fBKWIyoQvQrI42uB43xg7d0VHM2TJ04SwWGA>
-    <xmx:NZnJYworf0mYeiLAkASjr3os2e8ECpvW0MlaGgzHEya6_0aWJpdS2A>
-    <xmx:NpnJY464YDfl0tqd71pt0eI__JWNhiE-bQVw-oxLk6HFFui_uQOFPuiI1T8>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Jan 2023 14:25:40 -0500 (EST)
-Date:   Thu, 19 Jan 2023 11:25:16 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Byungchul Park <byungchul.park@lge.com>,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
-        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
-        sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
-        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
-        gwan-gyeong.mun@intel.com, max.byungchul.park@gmail.com,
-        longman@redhat.com
-Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
-Message-ID: <Y8mZHKJV4FH17vGn@boqun-archlinux>
-References: <Y8bmeffIQ3iXU3Ux@boqun-archlinux>
- <1674109388-6663-1-git-send-email-byungchul.park@lge.com>
- <Y8lGxkBrls6qQOdM@casper.infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=31+1HnBidgAci8B3LJ+m4Np7ElNOJOKvMA21iUDPQvk=;
+        b=Agn1rV7Nv8mM+PKnkIGN6OoLLtPkA7r7HlWjz3NcIQmYAxekTZFUm9L3m415nKnpMN
+         BTGQKdqYSIDgfPs0RL2rxTbMC9foVdeOBbIz3ONtv8ztMbDE+m6uFv5JTLoYP0OTQMNt
+         CX9oqLyj2ZyBZ/rk3eYKZll0VT9H0KueBAa45bTSqPIPug9dnWYf+w+X7XaXuNbDEkWY
+         tU4juygw4X0UZKQ2dIpvrTOfbNNdrVc/wmwj5aLrquY2f2WOBD3dolT+6aVHUa+a9lbC
+         8xcnNQSghFptVITKdEXff4n00hvsYZYGe84WG/C3xyD7ASK03vFwAEjkEAhfnVcjR+B0
+         bx1A==
+X-Gm-Message-State: AFqh2krst1ocHhDX1Bbn0QISjuEWLVVXzk2QWJLZYQJI81Z2nty/oaTJ
+        kDe9SlDQkiyJTizHuy+wfFxnJkDpEwo=
+X-Google-Smtp-Source: AMrXdXvLIsMfMqerDx7v4tabcY95A58JYXXfHfGS9OEGCV+yi0xYVGYFzAvW9JAl/EMRhOgpCoVECw==
+X-Received: by 2002:a67:ef1c:0:b0:3d3:c7d1:171e with SMTP id j28-20020a67ef1c000000b003d3c7d1171emr8564701vsr.28.1674156375426;
+        Thu, 19 Jan 2023 11:26:15 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o5-20020a05620a2a0500b006f9e103260dsm25128142qkp.91.2023.01.19.11.25.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 11:26:14 -0800 (PST)
+Message-ID: <6a02c93f-e854-bb8e-2172-2c2537f9d800@gmail.com>
+Date:   Thu, 19 Jan 2023 11:25:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8lGxkBrls6qQOdM@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v1 2/4] net: phy: micrel: add EEE configuration
+ support for KSZ9477 variants of PHYs
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Arun.Ramadoss@microchip.com
+References: <20230119131821.3832456-1-o.rempel@pengutronix.de>
+ <20230119131821.3832456-3-o.rempel@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230119131821.3832456-3-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -122,65 +85,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:33:58PM +0000, Matthew Wilcox wrote:
-> On Thu, Jan 19, 2023 at 03:23:08PM +0900, Byungchul Park wrote:
-> > Boqun wrote:
-> > > *	Looks like the DEPT dependency graph doesn't handle the
-> > > 	fair/unfair readers as lockdep current does. Which bring the
-> > > 	next question.
-> > 
-> > No. DEPT works better for unfair read. It works based on wait/event. So
-> > read_lock() is considered a potential wait waiting on write_unlock()
-> > while write_lock() is considered a potential wait waiting on either
-> > write_unlock() or read_unlock(). DEPT is working perfect for it.
-> > 
-> > For fair read (maybe you meant queued read lock), I think the case
-> > should be handled in the same way as normal lock. I might get it wrong.
-> > Please let me know if I miss something.
+On 1/19/23 05:18, Oleksij Rempel wrote:
+> KSZ9477 variants of PHYs are not completely compatible with generic
+> phy_ethtool_get/set_eee() handlers. For example MDIO_PCS_EEE_ABLE acts
+> like a mirror of MDIO_AN_EEE_ADV register. If MDIO_AN_EEE_ADV set to 0,
+> MDIO_PCS_EEE_ABLE will be 0 too. It means, if we do
+> "ethtool --set-eee lan2 eee off", we won't be able to enable it again.
 > 
-> From the lockdep/DEPT point of view, the question is whether:
-> 
-> 	read_lock(A)
-> 	read_lock(A)
-> 
-> can deadlock if a writer comes in between the two acquisitions and
-> sleeps waiting on A to be released.  A fair lock will block new
-> readers when a writer is waiting, while an unfair lock will allow
-> new readers even while a writer is waiting.
-> 
+> With this patch, instead of reading MDIO_PCS_EEE_ABLE register, the
+> driver will provide proper abilities.
 
-To be more accurate, a fair reader will wait if there is a writer
-waiting for other reader (fair or not) to unlock, and an unfair reader
-won't.
+We have hooks in place already for PHY drivers with the form of the 
+read_mmd and write_mmd callbacks, did this somehow not work for you?
 
-In kernel there are read/write locks that can have both fair and unfair
-readers (e.g. queued rwlock). Regarding deadlocks,
+Below is an example:
 
-	T0		T1		T2
-	--		--		--
-	fair_read_lock(A);
-			write_lock(B);
-					write_lock(A);
-	write_lock(B);
-			unfair_read_lock(A);
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d88fd1b546ff19c8040cfaea76bf16aed1c5a0bb
 
-the above is not a deadlock, since T1's unfair reader can "steal" the
-lock. However the following is a deadlock:
+(here the register location is non-standard but the bit definitions 
+within that register are following the standard).
+-- 
+Florian
 
-	T0		T1		T2
-	--		--		--
-	unfair_read_lock(A);
-			write_lock(B);
-					write_lock(A);
-	write_lock(B);
-			fair_read_lock(A);
-
-, since T'1 fair reader will wait.
-
-FWIW, lockdep is able to catch this (figuring out which is deadlock and
-which is not) since two years ago, plus other trivial deadlock detection
-for read/write locks. Needless to say, if lib/lock-selftests.c was given
-a try, one could find it out on one's own.
-
-Regards,
-Boqun
