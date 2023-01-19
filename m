@@ -2,171 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CDE673077
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A010967303A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjASElR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S229792AbjASE2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjASEkb (ORCPT
+        with ESMTP id S230405AbjASEP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:40:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20248457E2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:37:29 -0800 (PST)
+        Wed, 18 Jan 2023 23:15:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC476E821
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:05:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674102975;
+        s=mimecast20190719; t=1674101101;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Eek5YPddR+rdvDYmWL3WCwvTt/kh6fJNelSHfFXusYg=;
-        b=d89wGSWqvQEBrDDRsk0a5ELPYCM/db16cQznQOCU00ym9zDzPunXE9ToV9nPrT/CYsS+5W
-        LiVhrN1UhgF5YR7Xxrbb3cvks97GxQshleEpLLfrKaDh1fahVCIBauCp3MOD43Q3IK0QfC
-        UNK9uY9qDvGPPh0WC6Op5VSY6s/a1VU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-JseQALo8MkyN83fBd0phlQ-1; Wed, 18 Jan 2023 23:01:21 -0500
-X-MC-Unique: JseQALo8MkyN83fBd0phlQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 657E52A5956F;
-        Thu, 19 Jan 2023 04:01:21 +0000 (UTC)
-Received: from llong.com (unknown [10.22.8.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C65751E5;
-        Thu, 19 Jan 2023 04:01:21 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [RESEND PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
-Date:   Wed, 18 Jan 2023 23:01:11 -0500
-Message-Id: <20230119040111.350923-3-longman@redhat.com>
-In-Reply-To: <20230119040111.350923-1-longman@redhat.com>
-References: <20230119040111.350923-1-longman@redhat.com>
+        bh=H7OPYm/CyGG7JZ3N2EKK6aABpcM+R88iLwPOmNK8ra0=;
+        b=ILQCSIqc/l2PrwL9EtxmU0++QSnFH5w8UM4y21W7Cr+Q2k4KI1WW1fQMdxX8QBhhDGCq55
+        SWpzfMBi4/J5bmBfZLZxjIZKbb1ebOsupXKrjoodpgFV8qjEbslDxD5tS74KClneLrGXqL
+        nsyCzZHSMaokh/y/IVnnoDdlAz2VATU=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-ABt2kdIkPayaWu4UmXqWKw-1; Wed, 18 Jan 2023 23:04:43 -0500
+X-MC-Unique: ABt2kdIkPayaWu4UmXqWKw-1
+Received: by mail-ej1-f71.google.com with SMTP id nc27-20020a1709071c1b00b0086dae705676so648624ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:04:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H7OPYm/CyGG7JZ3N2EKK6aABpcM+R88iLwPOmNK8ra0=;
+        b=PGv3Jtuu9c7xaTqCbEbn+bE+9KuvhvS3fr45XiWVjRRbfqzkbrVJWtVSOSXnOiYUHt
+         Mjn+WANaASnn5xLkPITJcu9PzRFi9NJUbxUZ1Wn465O5BZYsyOk/6aOoOmW8iPgnkPlC
+         ox64aETf93RyTyYBCYiPeqiSQHVWLzkUYVrCsXtU9pTmrB4kjoWcW+y/ag74/cBwBXnH
+         dSpG6kAZF1RqjpIYt//YuDRTTVHO3Cj9IY9vgBoYAJgDwWLhLBjLy0Sy9J4Oq3fG+1nF
+         y/JPkXpqNk5HQIV07uTPgCHdo222OJL2Egq5Dyjs6QCAMzALAAU7OFtVlm03Nt0bGwaU
+         dWDg==
+X-Gm-Message-State: AFqh2kp0XIzQjr8qFVYfCPLNx/htkCPcyMErryHNn/N72GfGdA0mcT2G
+        laFeVPCeAn+4QE6uRPqhtBcr3/zf8GXxdtpNcQpxdcXjQupV4Uaien2jmsWyqwGYrEWzfAt6d9t
+        ZxyBabC0BEOZfouKPrMGB7NW3
+X-Received: by 2002:a05:6402:524f:b0:49e:910:5706 with SMTP id t15-20020a056402524f00b0049e09105706mr13489753edd.2.1674101074384;
+        Wed, 18 Jan 2023 20:04:34 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtsQ7JXA+AMUQUFgORRUO6Iabzzm99GnpRbsUa+PdAwtaX/BOrRFmUNvea0eeDfwBfpjgNzqA==
+X-Received: by 2002:a05:6402:524f:b0:49e:910:5706 with SMTP id t15-20020a056402524f00b0049e09105706mr13489742edd.2.1674101074107;
+        Wed, 18 Jan 2023 20:04:34 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id cf23-20020a170906b2d700b007aef930360asm11192409ejb.59.2023.01.18.20.04.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 20:04:33 -0800 (PST)
+Message-ID: <6566870d-6256-8eef-5879-cb13711e4bed@redhat.com>
+Date:   Thu, 19 Jan 2023 05:04:32 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH drm-next 00/14] [RFC] DRM GPUVA Manager & Nouveau VM_BIND
+ UAPI
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     tzimmermann@suse.de, corbet@lwn.net, nouveau@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bskeggs@redhat.com,
+        jason@jlekstrand.net, airlied@redhat.com
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <db4fa0fc-c9a6-9a48-c45f-1d655b30aff9@amd.com>
+ <02b0bcb8-f69f-93cf-1f56-ec883cb33965@redhat.com>
+ <3602500f-05f5-10b8-5ec6-0a6246e2bb6b@amd.com>
+ <bcbef353-f579-4e90-1c77-be36bbe61c0f@redhat.com>
+ <CADnq5_PGaXFW-z3gt+R+W+vBVdeuL4wMuMOQh4muxU13Bemy3A@mail.gmail.com>
+ <0f2d6e1a-a3b5-f323-a29d-caade427292c@redhat.com>
+ <CADnq5_Nh-1esiHzvTG+qFBCfMjy21efX-YN2jfGG=WC+-4LwLQ@mail.gmail.com>
+ <CAPM=9txMZO1uYj+kVdTfmCwV2Fq8uu_b3i4eq4xhqPEPKBW8Eg@mail.gmail.com>
+ <7839c47e-6692-b93b-69a8-9584193cb07d@amd.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <7839c47e-6692-b93b-69a8-9584193cb07d@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6edda04ccc7c ("mm/kmemleak: prevent soft lockup in first
-object iteration loop of kmemleak_scan()") fixes soft lockup problem
-in kmemleak_scan() by periodically doing a cond_resched(). It does
-take a reference of the current object before doing it. Unfortunately,
-if the object has been deleted from the object_list, the next object
-pointed to by its next pointer may no longer be valid after coming
-back from cond_resched(). This can result in use-after-free and other
-nasty problem.
+On 1/18/23 20:48, Christian König wrote:
+> Am 18.01.23 um 20:17 schrieb Dave Airlie:
+>> On Thu, 19 Jan 2023 at 02:54, Alex Deucher <alexdeucher@gmail.com> wrote:
+>>> On Wed, Jan 18, 2023 at 11:50 AM Danilo Krummrich <dakr@redhat.com> 
+>>> wrote:
+>>>>
+>>>>
+>>>> On 1/18/23 17:30, Alex Deucher wrote:
+>>>>> On Wed, Jan 18, 2023 at 11:19 AM Danilo Krummrich <dakr@redhat.com> 
+>>>>> wrote:
+>>>>>> On 1/18/23 16:37, Christian König wrote:
+>>>>>>> Am 18.01.23 um 16:34 schrieb Danilo Krummrich:
+>>>>>>>> Hi Christian,
+>>>>>>>>
+>>>>>>>> On 1/18/23 09:53, Christian König wrote:
+>>>>>>>>> Am 18.01.23 um 07:12 schrieb Danilo Krummrich:
+>>>>>>>>>> This patch series provides a new UAPI for the Nouveau driver in
+>>>>>>>>>> order to
+>>>>>>>>>> support Vulkan features, such as sparse bindings and sparse 
+>>>>>>>>>> residency.
+>>>>>>>>>>
+>>>>>>>>>> Furthermore, with the DRM GPUVA manager it provides a new DRM 
+>>>>>>>>>> core
+>>>>>>>>>> feature to
+>>>>>>>>>> keep track of GPU virtual address (VA) mappings in a more 
+>>>>>>>>>> generic way.
+>>>>>>>>>>
+>>>>>>>>>> The DRM GPUVA manager is indented to help drivers implement
+>>>>>>>>>> userspace-manageable
+>>>>>>>>>> GPU VA spaces in reference to the Vulkan API. In order to achieve
+>>>>>>>>>> this goal it
+>>>>>>>>>> serves the following purposes in this context.
+>>>>>>>>>>
+>>>>>>>>>>        1) Provide a dedicated range allocator to track GPU VA
+>>>>>>>>>> allocations and
+>>>>>>>>>>           mappings, making use of the drm_mm range allocator.
+>>>>>>>>> This means that the ranges are allocated by the kernel? If yes 
+>>>>>>>>> that's
+>>>>>>>>> a really really bad idea.
+>>>>>>>> No, it's just for keeping track of the ranges userspace has 
+>>>>>>>> allocated.
+>>>>>>> Ok, that makes more sense.
+>>>>>>>
+>>>>>>> So basically you have an IOCTL which asks kernel for a free 
+>>>>>>> range? Or
+>>>>>>> what exactly is the drm_mm used for here?
+>>>>>> Not even that, userspace provides both the base address and the 
+>>>>>> range,
+>>>>>> the kernel really just keeps track of things. Though, writing a 
+>>>>>> UAPI on
+>>>>>> top of the GPUVA manager asking for a free range instead would be
+>>>>>> possible by just adding the corresponding wrapper functions to get a
+>>>>>> free hole.
+>>>>>>
+>>>>>> Currently, and that's what I think I read out of your question, 
+>>>>>> the main
+>>>>>> benefit of using drm_mm over simply stuffing the entries into a 
+>>>>>> list or
+>>>>>> something boils down to easier collision detection and iterating
+>>>>>> sub-ranges of the whole VA space.
+>>>>> Why not just do this in userspace?  We have a range manager in
+>>>>> libdrm_amdgpu that you could lift out into libdrm or some other
+>>>>> helper.
+>>>> The kernel still needs to keep track of the mappings within the various
+>>>> VA spaces, e.g. it silently needs to unmap mappings that are backed by
+>>>> BOs that get evicted and remap them once they're validated (or swapped
+>>>> back in).
+>>> Ok, you are just using this for maintaining the GPU VM space in the 
+>>> kernel.
+>>>
+>> Yes the idea behind having common code wrapping drm_mm for this is to
+>> allow us to make the rules consistent across drivers.
+>>
+>> Userspace (generally Vulkan, some compute) has interfaces that pretty
+>> much dictate a lot of how VMA tracking works, esp around lifetimes,
+>> sparse mappings and splitting/merging underlying page tables, I'd
+>> really like this to be more consistent across drivers, because already
+>> I think we've seen with freedreno some divergence from amdgpu and we
+>> also have i915/xe to deal with. I'd like to at least have one place
+>> that we can say this is how it should work, since this is something
+>> that *should* be consistent across drivers mostly, as it is more about
+>> how the uapi is exposed.
+> 
+> That's a really good idea, but the implementation with drm_mm won't work 
+> like that.
+> 
+> We have Vulkan applications which use the sparse feature to create 
+> literally millions of mappings. That's why I have fine tuned the mapping 
+> structure in amdgpu down to ~80 bytes IIRC and save every CPU cycle 
+> possible in the handling of that.
 
-Fix this problem by adding a del_state flag into kmemleak_object
-structure to synchronize the object deletion process between
-kmemleak_cond_resched() and __remove_object() to make sure that the
-object remained in the object_list in the duration of the cond_resched()
-call.
+That's a valuable information. Can you recommend such an application for 
+testing / benchmarking?
 
-Fixes: 6edda04ccc7c ("mm/kmemleak: prevent soft lockup in first object iteration loop of kmemleak_scan()")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/kmemleak.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+Your optimization effort sounds great. May it be worth thinking about 
+generalizing your approach by itself and stacking the drm_gpuva_manager 
+on top of it?
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index e7cb521236bf..0ece170fc9ef 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -13,11 +13,12 @@
-  *
-  * The following locks and mutexes are used by kmemleak:
-  *
-- * - kmemleak_lock (raw_spinlock_t): protects the object_list modifications and
-- *   accesses to the object_tree_root (or object_phys_tree_root). The
-- *   object_list is the main list holding the metadata (struct kmemleak_object)
-- *   for the allocated memory blocks. The object_tree_root and object_phys_tree_root
-- *   are red black trees used to look-up metadata based on a pointer to the
-+ * - kmemleak_lock (raw_spinlock_t): protects the object_list as well as
-+ *   del_state modifications and accesses to the object_tree_root (or
-+ *   object_phys_tree_root). The object_list is the main list holding the
-+ *   metadata (struct kmemleak_object) for the allocated memory blocks.
-+ *   The object_tree_root and object_phys_tree_root are red
-+ *   black trees used to look-up metadata based on a pointer to the
-  *   corresponding memory block. The object_phys_tree_root is for objects
-  *   allocated with physical address. The kmemleak_object structures are
-  *   added to the object_list and object_tree_root (or object_phys_tree_root)
-@@ -147,6 +148,7 @@ struct kmemleak_object {
- 	struct rcu_head rcu;		/* object_list lockless traversal */
- 	/* object usage count; object freed when use_count == 0 */
- 	atomic_t use_count;
-+	unsigned int del_state;		/* deletion state */
- 	unsigned long pointer;
- 	size_t size;
- 	/* pass surplus references to this pointer */
-@@ -177,6 +179,11 @@ struct kmemleak_object {
- /* flag set for object allocated with physical address */
- #define OBJECT_PHYS		(1 << 4)
- 
-+/* set when __remove_object() called */
-+#define DELSTATE_REMOVED	(1 << 0)
-+/* set to temporarily prevent deletion from object_list */
-+#define DELSTATE_NO_DELETE	(1 << 1)
-+
- #define HEX_PREFIX		"    "
- /* number of bytes to print per line; must be 16 or 32 */
- #define HEX_ROW_SIZE		16
-@@ -567,7 +574,9 @@ static void __remove_object(struct kmemleak_object *object)
- 	rb_erase(&object->rb_node, object->flags & OBJECT_PHYS ?
- 				   &object_phys_tree_root :
- 				   &object_tree_root);
--	list_del_rcu(&object->object_list);
-+	if (!(object->del_state & DELSTATE_NO_DELETE))
-+		list_del_rcu(&object->object_list);
-+	object->del_state |= DELSTATE_REMOVED;
- }
- 
- /*
-@@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
- 	object->count = 0;			/* white color initially */
- 	object->jiffies = jiffies;
- 	object->checksum = 0;
-+	object->del_state = 0;
- 
- 	/* task information */
- 	if (in_hardirq()) {
-@@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
- 	if (!get_object(object))
- 		return;	/* Try next object */
- 
-+	raw_spin_lock_irq(&kmemleak_lock);
-+	if (object->del_state & DELSTATE_REMOVED)
-+		goto unlock_put;	/* Object removed */
-+	object->del_state |= DELSTATE_NO_DELETE;
-+	raw_spin_unlock_irq(&kmemleak_lock);
-+
- 	rcu_read_unlock();
- 	cond_resched();
- 	rcu_read_lock();
-+
-+	raw_spin_lock_irq(&kmemleak_lock);
-+	if (object->del_state & DELSTATE_REMOVED)
-+		list_del_rcu(&object->object_list);
-+	object->del_state &= ~DELSTATE_NO_DELETE;
-+unlock_put:
-+	raw_spin_unlock_irq(&kmemleak_lock);
- 	put_object(object);
- }
- 
--- 
-2.31.1
+> 
+> A drm_mm_node is more in the range of ~200 bytes and certainly not 
+> suitable for this kind of job.
+> 
+> I strongly suggest to rather use a good bunch of the amdgpu VM code as 
+> blueprint for the common infrastructure.
+
+I will definitely have look.
+
+> 
+> Regards,
+> Christian.
+> 
+>>
+>> Dave.
+> 
 
