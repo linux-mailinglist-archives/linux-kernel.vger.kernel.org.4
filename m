@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8073B673B8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5C673B8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjASOVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S231426AbjASOVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbjASOV2 (ORCPT
+        with ESMTP id S230328AbjASOV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:21:28 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9B3ABA;
-        Thu, 19 Jan 2023 06:21:26 -0800 (PST)
+        Thu, 19 Jan 2023 09:21:29 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF0402DC;
+        Thu, 19 Jan 2023 06:21:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1674138081; bh=Ny0LIyIy4GYeNxVRqsepIJrTH+brTIWy5Eqgj908uvM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=BQy6kjqtVPWffHeFMB7//sMS/abEsee7PWsSBv0cSuNS+s7CBcVSjTwOOjTrim4L1
-         EqDbbXxPYWKLxuyjkHeOdeQYI/isNk8fdvPZBH/EdCggRyXMbPYXeFZSkLczFWlkUn
-         653wVfO83COuLw/V1TLK3hKKEHHTniORt0HU5ODFl18+pbRC30Ra0cIc3bFV3D3+Bk
-         NmA7q4X9xQ8SdVqefbtN+4b0bXemc15fM9d1Z008VBcGvtGq/HBvD6SyuRjn51csLu
-         yKvBfFhQSHPs/G6XbAIqQdy4aEdu2IETdjGeb0jBK9ESqvREiTj/OIEC9+2Rlolk8U
-         cb9ZZ4VRBOyoQ==
+        t=1674138082; bh=z+fQzZKHzfUH7NF/TUveCeidpfldeQForUuhTzrvsYk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=CkjqS1nNHJjYaFwYSyXVLW+TPmEckCs8YKHS7oUwWpSzDNBtOikU76bAC+MvklKYD
+         xbjOp6SE2333DyQ+lFh1NqwvI9BOmn5HsZwuOf/SJOtzNd3/Q8givTZYvdo1liio1D
+         k5P6lwhLEc5rk4JmxektSrTR0852RL4EFIt3VevVOmPbs5s0/BK+uVyHtXfo/cuDIY
+         iQ3nSSLYMz2yrZyJXc6CVtm9rNeOgcjhcZDvXTIljUm+eGBFmUqeStdwrwfLw1ktnX
+         y6eBbnqjckR6bTaVLIXTRE4tytQb84ie4yJ9fUO8wjmpKtcFj8NI7q1BnXG6R+ixq2
+         HRZVSlJQnOS+w==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MgvrB-1omTEb3cCr-00hKKe; Thu, 19 Jan 2023 15:21:20 +0100
+ 1N0oBx-1oWzgN1RED-00wmb0; Thu, 19 Jan 2023 15:21:22 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     rafael@kernel.org, lenb@kernel.org
 Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] ACPI: battery: Fix various string handling issues
-Date:   Thu, 19 Jan 2023 15:21:13 +0100
-Message-Id: <20230119142115.38260-1-W_Armin@gmx.de>
+Subject: [PATCH v2 1/2] ACPI: battery: Fix buffer overread if not NUL-terminated
+Date:   Thu, 19 Jan 2023 15:21:14 +0100
+Message-Id: <20230119142115.38260-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230119142115.38260-1-W_Armin@gmx.de>
+References: <20230119142115.38260-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:J+xZQwCdYjduuupMiKWHSxhYonytUIVNgNt8jouF7YexN/V9PFe
- N2eDHLVOPkxnGmbLZPAMmAzqY1YHDsvE3s+phqMcjgqTY6EMnmUwn/zLKG8sDVt6T/G7zL3
- Sv1B9zjjEq7zAI8OgqjTVpC+287YXQfebG/ruiVtCWPTzUUzyJXxoZ8jFMHmegId12Dc0NL
- jhaLq5crKJl4ECBycTblg==
-UI-OutboundReport: notjunk:1;M01:P0:YX+0BR3tP+s=;TmUGic/D7nPR5cvCyCBpGyhBZZd
- 2Waqveq+Gn7bDybQD/6SHnTAN4y8JK7avKw5IJbGVX2r/k4YdmChbsqUDAj5OHtbiiwPH15kk
- EPwTQhmD+dsn0kaFtfcaktTPnKKL/jKvrfyFqFflsUvOftb6xNR+3WzrukIzaO/Y4s1HKPodm
- pr9Ey2TpFutdP5Uwdc44sSfoFAhZMf2V9yMHl8MXWyxOBwzRE6nKSY2vw+ICx5m3WVWCitx6i
- MnUJ5rTb/heobFTmSl1FOk/WPZObyUIEilwR78rzeL4mlaNiwZN48rk5XilN2IQyUE5ulB1yW
- lYNmfEJFEXOq3uDSKVgbtVclKEo+emaWglW6IbxhCbdtoUVevvwal5huR8FYlSRErPdjNDm+i
- mn/E91Ff0Y+THHBPtTwynlj4yYItPQNmpEnvCnF3z56bhv6uI6bvrFn19T/T7HcokFmXJcE9f
- iuujDBqpLON0c5umgElinZ8hTzmqKa7IqsVCgoeoUuVwMiplamnZ1kd2sRWpc4THllwqH0VoO
- /klRFQnTdOqXzxYPnspMGSdIkiSx55a9jv7aM2O6aZ58Eice3UGoOadvg35sA0PRh/yHA+7N0
- zuN8aJvFI+UWoNMavlQpoDiGF2q/Mu8R5FrDBqrwjpRqw22vhVJ8V93OhsN2o0t2UHEDwIs8G
- mNcKVPJZjDS5Zs0DYY+a0gsItmeXLs/rpUDZnmtnTlMlvep9BeSwsIUBut6wu2syaS8TC/wQs
- SQeIr+MJ8Cly0XhZ297bfuFP/PRvYgk1m3MG8bHn91XCYSmOc/+kbJeeZmMYmw4yRXXtAItUs
- vJiUoDZzt8K2/z9EAtUR9fIxCbX5KPgT+lV1ht5dEK9hn16fOvIbf3kCT9GD63wxcpPb7I3Al
- f5cgvBWgcejuJihdNJr2cni2mAoUsFvVYnr2+B6uGXnaXrTdzWdQvBFWU7FFoaPZUehcHKKYo
- 8ZzFau0gVsM2pXmxQAUQ+rraVRQ=
+X-Provags-ID: V03:K1:dVU26JDgfTRY3TOQ06V2r83qaP9yA8G+jIxMPfP/xcgPS8mluVb
+ LXOHmVWLGVDLEYeh4C76vXsl9e5uPRM3yQevfZ8EpzZeSa+VipnvIFR+vCmZo+ENZc/tCm+
+ Z4Nh4QH/gJSnvTqGTS7qGMukZ/4QMYzUGymeCkigC/CDW1CyNUvwc6vohZ4/UjXIHITbViD
+ OCSDthmX88J3lj6+ajYww==
+UI-OutboundReport: notjunk:1;M01:P0:MY/5IUDF2LA=;IdqnLHL+AaMS4mgs+AscZnqUEIk
+ hPMZQ9DamDtoQp6RJif8mimOOx56n+LhIUtgvNx5w/N2jvVKex8FLoIzjUsBIOowusLNwk6Fy
+ M3jA+wOTODfzvS9jUeFkZfekPdmZCvToflJnSF1AHlM4e1jSU0c0zooDdoUDkRjIvTSZYrw/a
+ PUS1fdEypxEfFWhYj/ggNI8ZT7gjbcg0zXa5sW0k0EdBZFd0qiSzag+DpzXJpOX7xeQWJczxn
+ OpTt3ASt/rqQbrlLwqnN+FV/GO1oo3e+fEPP4zoFe+qtnoP9BsnnDWV14NTijVATUNbSTOk2x
+ Yp+Zy826sxc06seXJd6ctUXmoEgyFSBmpzz3wNyckw70jdJPbohEx9P8Gx9+w6VIk920iuckH
+ BFQGPiHnGZ9mI8YMEeHOTTsdPd/v6cqhvxxxUzY6AduipyHn2o2obQ5XoniZUqsNMX6cqPdGT
+ 1YlD7DIqt3IuFiXWp5CPkJhsBSthR2Fui7y8lpdcQ6hm5ZjFgiW/py9kRFVV1HCgXkHwtbKOJ
+ clS8DRytzeRmU6hJNr/UjqgrDGo6VeWatirWszBxcCn8K1LAUmI7I/riFMYwHpX7LpTv0CeJt
+ cr9ZOh77MzbXF5rFGi3BJRz1C9WcuXC1drD8kbniW8Inj19Xo0qEMwLX4Cua4mZAbhlFgg4hE
+ pdK9SZCNPploDHsHuS7AJjEw0vFtuaMMXLu2ikWbbv/r0JHBceNIz0Po+/VZ7m5P2zI0kIlsb
+ nnnrIZ4/SXTusPclwPjgt/s24qt8rlRQet9QV6y37VlIgMy+fbM6kPEMaABq5KqmOkDtVeukr
+ O0gXvgo/sXXMwmB9dPFg8knJrQXlH4e7uFUjX7GKOmHXTsPQp73ADjavVvTlOIUF5kYlYn7JU
+ wZducAU6ALkyuL1TFbuI2J9Jp2XSwwFvHoxbf1uHm5qbX2gqbzfCM7Fhsml2yemb6Mw2mur0v
+ K5kMlPxbPP2hwMDjRHn7SyO3pZA=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -66,37 +68,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On my Dell Inspiron 3505, the battery model name was displayed
-differently than when running Windows. While i first suspected an
-ACPI issue, it turned out that the real reason was the ACPI battery
-driver failing to handle strings larger than 32 bytes.
+If a buffer containing ASCII characters is not NUL-terminated
+(which is perfectly legal according to the ACPI specification),
+the ACPI battery driver might not honor its length.
+Fix this by limiting the amount of data to be copied to
+the buffer length while also using strscpy() to make sure
+that the resulting string is always NUL-terminated.
+Also replace strncpy() vs strscpy().
 
-This caused the model name of the battery (35 bytes long, hex string)
-to miss proper NUL-termination, resulting in a buffer overread later.
-Luckily, a valid string was stored right after the now invalid string,
-appending only the battery serial number to the original model name.
-
-The first patch fixes a potential buffer overread then handling buffers,
-while the second patch finally increases the maximum string length to
-avoid truncating such larger strings.
-
-The patch series was tested on a Dell Inspiron 3505 and appears
-to work properly.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
-Changes in v2:
-- Drop first patch since it was already applied
-- combine the second and third patch
-- do not replace 0 with '\0'
-- spell ACPI in capitals
-- rework the buffer length hdanling
+ drivers/acpi/battery.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-Armin Wolf (2):
-  ACPI: battery: Fix buffer overread if not NUL-terminated
-  ACPI: battery: Increase maximum string length
+diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+index fb64bd217d82..0ec12a7dbcca 100644
+=2D-- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -437,16 +437,25 @@ static int extract_package(struct acpi_battery *batt=
+ery,
+ 		element =3D &package->package.elements[i];
+ 		if (offsets[i].mode) {
+ 			u8 *ptr =3D (u8 *)battery + offsets[i].offset;
++			u32 len =3D 32;
 
- drivers/acpi/battery.c | 35 +++++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 12 deletions(-)
-
+-			if (element->type =3D=3D ACPI_TYPE_STRING ||
+-			    element->type =3D=3D ACPI_TYPE_BUFFER)
+-				strscpy(ptr, element->string.pointer, 32);
+-			else if (element->type =3D=3D ACPI_TYPE_INTEGER) {
+-				strncpy(ptr, (u8 *)&element->integer.value,
+-					sizeof(u64));
+-				ptr[sizeof(u64)] =3D 0;
+-			} else
++			switch (element->type) {
++			case ACPI_TYPE_BUFFER:
++				if (len > element->buffer.length + 1)
++					len =3D element->buffer.length + 1;
++
++				fallthrough;
++			case ACPI_TYPE_STRING:
++				strscpy(ptr, element->string.pointer, len);
++
++				break;
++			case ACPI_TYPE_INTEGER:
++				strscpy(ptr, (u8 *)&element->integer.value, sizeof(u64) + 1);
++
++				break;
++			default:
+ 				*ptr =3D 0; /* don't have value */
++			}
+ 		} else {
+ 			int *x =3D (int *)((u8 *)battery + offsets[i].offset);
+ 			*x =3D (element->type =3D=3D ACPI_TYPE_INTEGER) ?
 =2D-
 2.30.2
 
