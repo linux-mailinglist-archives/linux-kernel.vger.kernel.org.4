@@ -2,138 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05EA67463E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3077B674640
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjASWgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S230391AbjASWgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjASWf5 (ORCPT
+        with ESMTP id S230382AbjASWgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:35:57 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618EB4B49D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:18:01 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B11463EAF1;
-        Thu, 19 Jan 2023 23:17:59 +0100 (CET)
-Date:   Thu, 19 Jan 2023 23:17:57 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 19 Jan 2023 17:36:05 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E533717CC1;
+        Thu, 19 Jan 2023 14:18:02 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1EEFAC0004;
+        Thu, 19 Jan 2023 22:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674166680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JpJEqzHQqnXucAEeBIdt9PMVNIHwQVKdpxkEc3sDRTQ=;
+        b=ifo7P9Q2GWBoPF5tUO78+PhK/XNNBOhUAizj+BSOfTqBJ8h1MTimuD6xsUC1LSL1A6piTy
+        Vucf+Q9pIPX+ZvEeL9htL0npRbN17Y+lw5PF9uZXH/ZawPtTpRBblIjpXxJ4x736xEppd7
+        gt5bOjd00shYFNBw7E0nRkvH85AZXRWiJi+LdcNgB833dZB2JG8ABV6W8luNM9rBczFPOT
+        5iwemfWZG02Bu5CHRso2QQp65o7R8AW61TLUmXUB6SVupKt0pq9ZpIUAVQ4rxI+DsBlSot
+        DSmrEx82ixacIqLc3V/Uksv0MTWgdhloocO9ql9fi00+HpQHMLboFkiXl8m1pQ==
+Date:   Thu, 19 Jan 2023 23:17:58 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: Use labels with generic node
- names for ADC channels
-Message-ID: <20230119221757.wltdog4owclidejl@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>, linux-iio@vger.kernel.org,
+        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
+        =?iso-8859-1?Q?Myl=E8ne?= Josserand 
+        <mylene.josserand@free-electrons.com>,
+        Gary Bisson <gary.bisson@boundarydevices.com>,
+        Javier Martinez Canillas <javier@osg.samsung.com>,
+        Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230119212632.185881-1-marijn.suijten@somainline.org>
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
+ from DT
+Message-ID: <Y8nBloQfBPK3t5ce@mail.local>
+References: <20230119213903.899756-1-dennis@sparkcharge.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212632.185881-1-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+cc linux-iio@vger.kernel.org
+On 19/01/2023 21:39:00+0000, Dennis Lambe Jr wrote:
+> Other than adding a sign-off to one of the changelogs, this is a RESEND.
+> 
+> Alexandre Belloni, what do you need for this before you'd want to apply
+> it? In case it's additional reviewers, I have CC'd some more
+> potentially-interested parties this time and updated Atsushi Nemoto's
+> email address to one that's hopefully more current.
+> 
 
-Apologies, I blindly copied Jonathans request [1] to send this to
-iio@vger.kernel.org, without checking for the common linux- prefix.
+I need to find time to think about it because while setting the analog
+trimming statically from the device tree solves your immediate problem,
+it will also remove the possibility to handle it from userspace later
+on. I would really prefer this uses the offset interface or a better
+interface that unfortunately doesn't exist yet.
 
-[1]: https://lore.kernel.org/linux-arm-msm/20221211141526.463f43e6@jic23-huawei/
+> I think the original author listed in the header for this driver,
+> Alexander Bigga, is inaccurate. It looks to me like his name got copied
+> over by Atsushi Nemoto when he created m41t82.c by deriving it from a
+> similar driver. At any rate, Alexander Bigga's listed email address
+> bounces, I didn't find a newer one for him, and he doesn't show up in
+> the kernel commit log after 2007. I don't think he can be considered the
+> maintainer for this driver anymore if he ever was.
+> 
+> Changes in v3:
+> * dt-bindings: added Krzysztof Kozlowski sign-off to changelog
+> 
+> Changes in v2:
+> * dt-bindings: remove accidental wakeup-sources line
+>     suggested by Krzysztof Kozlowski
+> * spelling fixes in changelogs
+> 
+> The m41t82 and m41t83 have an adjustable internal capacitance that
+> defaults to 25 pF per xtal pin. This patch series adds the ability to
+> configure it via the devicetree.
+> 
+> Patch 1 just changes `#ifdef CONFIG_OF` to `if (IS_ENABLED(CONFIG_OF))`
+> in m41t80_probe() so that I don't need to use __maybe_unused on my new
+> functions and variables.
+> 
+> Patch 2 is the dt-bindings.
+> 
+> Patch 3 is the actual feature implementation.
+> 
+> The desired capacitance comes from the quartz-load-femtofarads property,
+> following the example of two other RTC ICs that have adjustable internal
+> load capacitance, the NXP pcf85063 and pcf8523. The m41t82 and m41t83
+> support much finer-grained control over the capacitance than those
+> chips, and ST calls the feature "analog calibration", but it looks to me
+> like it's essentially the same kind of thing.
+> 
+> My use case for this is:
+> 
+> ST specifies not to add any additional external load capacitance[1], but
+> the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal
+> pin[3]. The resulting combined capacitance appears to be outside of the
+> operating range of the xtal, because when power is removed from the
+> boards I'm testing with, the RTC reports an Oscillator-Fail flag on the
+> next power on.
+> 
+> I found I could work around the problem by reducing the internal load
+> capacitance as low as it will go.
+> 
+> References:
+> [1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
+> [2] https://www.mikroe.com/rtc-9-click
+> [3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
+> 
+> Previous versions:
+> v1: https://lore.kernel.org/linux-rtc/20221219190915.3912384-1-dennis@sparkcharge.io/T/
+> 
+> Dennis Lambe Jr (3):
+>   rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+>   dt-bindings: m41t80: add xtal load capacitance
+>   rtc: m41t80: set xtal load capacitance from DT
+> 
+>  .../devicetree/bindings/rtc/st,m41t80.yaml    | 16 ++++
+>  drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
+>  2 files changed, 92 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-On 2023-01-19 22:26:30, Marijn Suijten wrote:
-> As discussed in [1] it is more convenient to use a generic adc-chan node
-> name for ADC channels while storing a friendly - board-specific instead
-> of PMIC-specific - name in the label, if/when desired to overwrite the
-> channel description already contained (but previously unused) in the
-> driver [2].
-> 
-> Replace the .* name pattern with the adc-chan literal, but leave the
-> label property optional for bindings to choose to fall back a channel
-> label hardcoded in the driver [2] instead.
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
-> [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
-> 
-> Changes since v1:
-> - Require adc-chan name in dt-bindings;
-> - Replace more node names with adc-chan and a descriptive label, that
->   were found by running dtbs_check on adjusted bindings;
-> - sm8250-mtp.dts: Fix accidental adc-chan2 node name with pa_therm
->   label, which should have been adc-chan with pa_therm2 label.
-> 
-> v1: https://lore.kernel.org/linux-arm-msm/20221209215308.1781047-1-marijn.suijten@somainline.org/
-> 
-> Marijn Suijten (2):
->   dt-bindings: iio: adc: Require generic adc-chan name for channel nodes
->   arm64: dts: qcom: Use labels with generic node names for ADC channels
-> 
->  .../bindings/iio/adc/qcom,spmi-vadc.yaml      | 16 ++++----
->  arch/arm64/boot/dts/qcom/pm6125.dtsi          | 18 ++++++---
->  arch/arm64/boot/dts/qcom/pm660.dtsi           | 33 ++++++++++------
->  arch/arm64/boot/dts/qcom/pm8150.dtsi          |  6 +--
->  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  8 ++--
->  arch/arm64/boot/dts/qcom/pm8150l.dtsi         |  6 +--
->  arch/arm64/boot/dts/qcom/pm8950.dtsi          | 39 ++++++++++++-------
->  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |  6 +--
->  arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi     |  6 +--
->  arch/arm64/boot/dts/qcom/pmp8074.dtsi         | 27 ++++++++-----
->  arch/arm64/boot/dts/qcom/pms405.dtsi          | 21 ++++++----
->  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      | 15 ++++---
->  .../dts/qcom/sc7180-trogdor-coachz-r1.dts     |  4 +-
->  .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  3 +-
->  .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  3 +-
->  .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |  2 +-
->  .../dts/qcom/sc7180-trogdor-pompom-r1.dts     |  2 +-
->  .../dts/qcom/sc7180-trogdor-pompom-r2.dts     |  2 +-
->  .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |  3 +-
->  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  3 +-
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  3 +-
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts       |  2 +-
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |  2 +-
->  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  4 +-
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 39 ++++++++++++-------
->  .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 15 ++++---
->  arch/arm64/boot/dts/qcom/sm8250-mtp.dts       | 21 ++++++----
->  27 files changed, 196 insertions(+), 113 deletions(-)
-> 
-> --
-> 2.39.1
-> 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
