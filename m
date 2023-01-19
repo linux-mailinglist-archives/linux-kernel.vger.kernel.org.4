@@ -2,136 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D52673667
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81431673672
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjASLLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S230176AbjASLNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjASLKx (ORCPT
+        with ESMTP id S229593AbjASLNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:10:53 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7156E7497A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:10:31 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id u19so4682858ejm.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:10:31 -0800 (PST)
+        Thu, 19 Jan 2023 06:13:12 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB7944BF5;
+        Thu, 19 Jan 2023 03:13:11 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so254814pjq.1;
+        Thu, 19 Jan 2023 03:13:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jFEYKKgVFwVXs5cKTPaIK+MI9cmiPLzvQLxxZZJC6DI=;
-        b=Qr+vAkM6UGTyNaXghLE7XaUsVbveKd5dNgLYerCk0CJJfzevvUnYgkJ+QNZg4wvGUn
-         DSs31iOTTOUSXpbbN/oqzxDZhkrxQNSVC7ldXNpgLka5gx9kzzlZz5AK5OfgA717jpbe
-         nJLEAAP2nrtlpkuskVOlOFLoshkCz1pwXExLCjQ1WGa0/OgjdXThEDBKFhApfD3WjfUW
-         0Z3DBLhSQu7BycIKtJRMFKdi3J4pcuSu4/Gm6o1E347IVSlx0L1FnBz1+v2ucruD1XxO
-         S/BmHf5BMJsnufxYzQuclNUv4tFIkVwN8TbD+TPtnyyhw1nmD2FigYV6vLr8+yfEgoMF
-         xTSQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WobviXpwWUZxD+2oQmL88+wYfR6mU0tdRKmjmFL+nas=;
+        b=f7L1TD8+BmvD+A9pFAjMprM7B0spRnkeduPMQvbgLHvYJpiHQnNW4NU1/YfORCUZQb
+         xaAorOgKYQmiKRAwik+pNTZYr9eT0raty08UEzrXavMtcLBX61EQYx+vZD2j0NdavbRC
+         gf42Gt0VLrwev9tri3s4QJ8s/wW15sCEWExzZjJxOc6DlYr2SBEqQnmG10REIoIr2x7u
+         xRy4XvEACzmTSzYCJ1ebtTfjCFCkLZHZY79OZCLCLg34Z7JITOr+iw6UlLUVH9Yq9b2o
+         CUC0rAHKgZYzWzRKZZhXOG8dkikcSAUrekSJE3ShE6L2WgvT5bMYEZSjZYPJ7WvpIEyk
+         UzDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jFEYKKgVFwVXs5cKTPaIK+MI9cmiPLzvQLxxZZJC6DI=;
-        b=BeIs0VF5WkZYP0CeN7EPzv2odCznYHnqMSJo6Ya21e3ESRbHu9GnDgQdscBapGzM55
-         9U2oXMHrP9dDBttChWNA2rHAtQEiTWESNKXpcVjnqTyocK1HKh6e4opXz1CNbeamji1u
-         e6MOmr9gpOpd4w6SSYxBxs3+UiL0alf4QrwGsACqYQhti/hSCq8dnQfYOaGswR9WMGL0
-         7LDNWUZ11+uHbsrA10G3aeOUUmvNQpyhRNCOMA+f9RACtL/4W7DAf+D0mUeFICyYB+0x
-         kAKMTmqGaELoT8khhB8IS+2ijJMfCVInotE8xJa6/MkXEWQemFQnGvYqWzcOUjfeDNrP
-         cX4A==
-X-Gm-Message-State: AFqh2kqu0bJcckI11CLlMxHPcnOnxby9gssGk26Um0GhdM/G+uMaCmEj
-        icQD30kUkYZjqOsWxoGjSpWK3A==
-X-Google-Smtp-Source: AMrXdXtozZLbb+W8xF3Dp986+miOd8UiFeWHI+JPSTlQ7xSF4mnYc2ha+zsWUatMIGJsaozw4xj+0w==
-X-Received: by 2002:a17:906:ad82:b0:872:e6fd:1c79 with SMTP id la2-20020a170906ad8200b00872e6fd1c79mr10246833ejb.77.1674126629791;
-        Thu, 19 Jan 2023 03:10:29 -0800 (PST)
-Received: from [192.168.1.101] (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm16520246ejg.174.2023.01.19.03.10.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 03:10:29 -0800 (PST)
-Message-ID: <8e357341-3cf1-3714-4f5d-f4be94f91438@linaro.org>
-Date:   Thu, 19 Jan 2023 12:10:27 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WobviXpwWUZxD+2oQmL88+wYfR6mU0tdRKmjmFL+nas=;
+        b=beHmFQ7ElNBT7GS8Lrwiry/C8q306qbubhERr0RnNWDeN8FhQf5VNSTgAHKuugQyBz
+         HC0vyv/t2dm16vkS/lbPC6L2wFaMxaWzDl73AgttFOow9Ei5918/P6eBkarlwz7MgRJ1
+         yss25GUY+BcBh4tbTG0eFnQNxiEnic3wBzK9nWtk2fQbpFheJPjQnruCTX35qI20Z0wp
+         N0zDvwFvoAggxLIXbhrJd11ROdUCqwqnKMf4IetRVWHHGZg0fadd1B1yeagXFT05NDgA
+         1T722vOV9UiALRpBy7AQcavIK7z/B9lQ+rHHwz4+uh+UWfu5xcRK6f/LzeLCZP3Aojh8
+         8J3g==
+X-Gm-Message-State: AFqh2kqNGHuCF4DAu7INNAX6gd29ISZbDqnyQGYlA/m/9vyNuPVZtAh9
+        96gbnyz37kf3xBFeeyDJ6+Q=
+X-Google-Smtp-Source: AMrXdXuFUYPr4gl2HBth8ATukfpSeD4X8dOtFLmJYA5beRkuYlrBNgWB27UfhgflYvUdjqzwEfWuFQ==
+X-Received: by 2002:a17:903:248f:b0:189:6ab3:9e64 with SMTP id p15-20020a170903248f00b001896ab39e64mr10324160plw.34.1674126790421;
+        Thu, 19 Jan 2023 03:13:10 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id k7-20020a170902ce0700b001885d15e3c1sm24860035plg.26.2023.01.19.03.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 03:13:09 -0800 (PST)
+Date:   Thu, 19 Jan 2023 03:13:08 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230119111308.GC2976263@ls.amr.corp.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/4] Minor cleanup in msm8916 dts files
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Nikita Travkin <nikita@trvn.ru>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230116145053.1412501-1-nikita@trvn.ru>
- <20230119033428.ga6sbu42jaueac5o@builder.lan>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230119033428.ga6sbu42jaueac5o@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8H5Z3e4hZkFxAVS@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jan 14, 2023 at 12:37:59AM +0000,
+Sean Christopherson <seanjc@google.com> wrote:
+
+> On Fri, Dec 02, 2022, Chao Peng wrote:
+> > This patch series implements KVM guest private memory for confidential
+> > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > TDX-protected guest memory, machine check can happen which can further
+> > crash the running host system, this is terrible for multi-tenant
+> > configurations. The host accesses include those from KVM userspace like
+> > QEMU. This series addresses KVM userspace induced crash by introducing
+> > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > via a fd-based approach, but it can never access the guest memory
+> > content.
+> > 
+> > The patch series touches both core mm and KVM code. I appreciate
+> > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > reviews are always welcome.
+> >   - 01: mm change, target for mm tree
+> >   - 02-09: KVM change, target for KVM tree
+> 
+> A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> is available here:
+> 
+>   git@github.com:sean-jc/linux.git x86/upm_base_support
+> 
+> It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> a WIP.
+> 
+> As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> I pushed and see if there's anything horrifically broken, and that it still works
+> for TDX?
+> 
+> Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
+> (and I mean that).
+> 
+> On my side, the two things on my mind are (a) tests and (b) downstream dependencies
+> (SEV and TDX).  For tests, I want to build a lists of tests that are required for
+> merging so that the criteria for merging are clear, and so that if the list is large
+> (haven't thought much yet), the work of writing and running tests can be distributed.
+> 
+> Regarding downstream dependencies, before this lands, I want to pull in all the
+> TDX and SNP series and see how everything fits together.  Specifically, I want to
+> make sure that we don't end up with a uAPI that necessitates ugly code, and that we
+> don't miss an opportunity to make things simpler.  The patches in the SNP series to
+> add "legacy" SEV support for UPM in particular made me slightly rethink some minor
+> details.  Nothing remotely major, but something that needs attention since it'll
+> be uAPI.
+
+Although I'm still debuging with TDX KVM, I needed the following.
+kvm_faultin_pfn() is called without mmu_lock held.  the race to change
+private/shared is handled by mmu_seq.  Maybe dedicated function only for
+kvm_faultin_pfn().
+
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 02be5e1cba1e..38699ca75ab8 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2322,7 +2322,7 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+ static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+ {
+-       lockdep_assert_held(&kvm->mmu_lock);
++       // lockdep_assert_held(&kvm->mmu_lock);
+ 
+        return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
+ }
 
 
-On 19.01.2023 04:34, Bjorn Andersson wrote:
-> On Mon, Jan 16, 2023 at 07:50:49PM +0500, Nikita Travkin wrote:
->> This series performs some minor cleanup on msm8916/apq8016 files to
->> bring them in line with the current standard and be closer to the new
->> submissions.
->>
->> The series is separated into commits by each specific change made across
->> all files and these commits should not cause any functional difference.
->>
->> Changes in v2:
->> - Rebase on top of newly applied upstream patches
->>
-> 
-> The first patch looks pretty reasonable, but without documenting the
-> guidelines and tools to help others maintain the ordering this
-> unfortunately just moves things around arbitrarily.
-> 
-> Forgive me, but I will ignore this series until this is finalized and
-> documented.
-Ack, the idea is good, but I rushed enforcing it.
-
-Konrad
-> 
-> Thanks,
-> Bjorn
-> 
->> Nikita Travkin (4):
->>   arm64: dts: qcom: msm/apq8x16-*: Move status property last
->>   arm64: dts: qcom: msm/apq8x16-*: Reorder the pinctrl properties.
->>   arm64: dts: qcom: msm/apq8x16-*: Drop empty lines in pinctrl states
->>   arm64: dts: qcom: msm/apq8x16-*: Reorder some regulator properties
->>
->>  arch/arm64/boot/dts/qcom/apq8016-sbc.dts      | 78 +++++++--------
->>  .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 15 ++-
->>  .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 46 ++++-----
->>  .../arm64/boot/dts/qcom/msm8916-asus-z00l.dts | 34 +++----
->>  .../arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 52 ++++------
->>  .../boot/dts/qcom/msm8916-longcheer-l8150.dts | 42 ++++----
->>  .../boot/dts/qcom/msm8916-longcheer-l8910.dts | 30 +++---
->>  arch/arm64/boot/dts/qcom/msm8916-pins.dtsi    | 96 +++++--------------
->>  .../qcom/msm8916-samsung-a2015-common.dtsi    | 64 +++++--------
->>  .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts | 11 +--
->>  .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts |  5 +-
->>  .../qcom/msm8916-samsung-e2015-common.dtsi    |  5 +-
->>  .../dts/qcom/msm8916-samsung-grandmax.dts     |  3 +-
->>  .../boot/dts/qcom/msm8916-samsung-j5.dts      | 21 ++--
->>  .../dts/qcom/msm8916-samsung-serranove.dts    | 62 +++++-------
->>  .../dts/qcom/msm8916-wingtech-wt88047.dts     | 35 +++----
->>  arch/arm64/boot/dts/qcom/msm8916.dtsi         | 32 +++----
->>  17 files changed, 245 insertions(+), 386 deletions(-)
->>
->> -- 
->> 2.38.1
->>
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
