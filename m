@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E1D673D56
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E76673D51
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjASPUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S229958AbjASPT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjASPT6 (ORCPT
+        with ESMTP id S230368AbjASPTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:19:58 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D960382D7A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:19:55 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 1506920105;
-        Thu, 19 Jan 2023 16:19:54 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hkaeCxei9PJZ; Thu, 19 Jan 2023 16:19:53 +0100 (CET)
-Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id D4DCE200F4;
-        Thu, 19 Jan 2023 16:19:53 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pIWhl-008cHx-1h;
-        Thu, 19 Jan 2023 16:19:53 +0100
-Message-ID: <20230119151935.112415738@ens-lyon.org>
-User-Agent: quilt/0.66
-Date:   Thu, 19 Jan 2023 16:19:17 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org
-Cc:     linux-kernel@vger.kernel.org,
-        "linux-kernel@vger.kernel.org, Samuel Thibault" 
-        <samuel.thibault@ens-lyon.org>
-Subject: [PATCHv3 3/3] VT: Bump font size limitation to 64x128 pixels
-References: <20230119151914.931619963@ens-lyon.org>
+        Thu, 19 Jan 2023 10:19:25 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4DC829AE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:19:23 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id e10so1752740pgc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:19:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=COC0cQf3RM+28HjrZuFfI8U9iEnmOUqpakV5+y8hXro=;
+        b=iYhnq31FqaCsdLQsRmrrrSLPknKuzg5EDi5FnG0XJsMCKleZzOOmIahMB3jDftuROY
+         H59Ix3pMjUGC32cz0psGxHXSEcTHd8pi8Qrq+kL8J6jfZ8xhUtDMh+Tzue4FsbiOkW3y
+         URS8YujQKNW9cPaYrDJPmzT15CUqXfqdqGhoCrQgkaPR9Ed8OGrN+9NyH3H7m/5QBEWV
+         hIkBu9SKzujHSZQFK9WfBMq0uvlOQq4I2fvhIczyLYxMGFewOAWWJfkfA27Q1PUGyPZi
+         3iQ2BSwglss6M0QPQ5mSnVR3fNPSvjfiFE54E9yOscLqQ2KH5BZGDbWYFbMsy5huTIVf
+         XMJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=COC0cQf3RM+28HjrZuFfI8U9iEnmOUqpakV5+y8hXro=;
+        b=ruvAmTe62SlC+emo1rqoDXnZexaN2YGEIlUQC07SDsHQ7/vfUxddVzrxNxo+7KzeSk
+         mz4FO7VGoV/WXWTx5GKqvcQg9Xu+zv5gSY2jvT4uY4qdIddeY8aEG3RoxpKOvHvTznsZ
+         AS7E8ljJ6BuUO58YhGjZuTwoc+lUKb/mdXchfH8HAhPQariz4te/hAN26bPXtyhq+U5A
+         APsom25XyatPUmkuGdHUWjLKIKRDZPjXYy7hQ00zK2oXZ2lp8h2WdGBlRViycaONt0ce
+         4FL/BNNooXNfhsdz/mogSwQ33nwl7AA67dUJnVZSuXhk71jgSjRiHIrQ4qRqIslmrIKi
+         qp9g==
+X-Gm-Message-State: AFqh2krfiJg9gxV8YIBrtv6ioTFZE7x2PItiSZBlGJjA/xLO1PBHcY7G
+        WKCosaGaxKnOtXaYK8gPNMn38g==
+X-Google-Smtp-Source: AMrXdXsUJCiHv+x8er4RQjqeSGm7p768nE4Z3fEvWZooodpyJRG2iLwFsWL/7iAU6pOKxpq0PgMGhQ==
+X-Received: by 2002:aa7:9041:0:b0:58b:cb1b:978f with SMTP id n1-20020aa79041000000b0058bcb1b978fmr1888929pfo.1.1674141562945;
+        Thu, 19 Jan 2023 07:19:22 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x2-20020aa79a42000000b0058d9730ede0sm8638923pfj.210.2023.01.19.07.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 07:19:22 -0800 (PST)
+Date:   Thu, 19 Jan 2023 15:19:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com,
+        oliver.upton@linux.dev, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH 4/4] KVM: Improve warning report in
+ mark_page_dirty_in_slot()
+Message-ID: <Y8lfdgcjLvtgII2a@google.com>
+References: <20230116040405.260935-1-gshan@redhat.com>
+ <20230116040405.260935-5-gshan@redhat.com>
+ <Y8bBzKF17IdZP9eF@google.com>
+ <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8e63ad9-e0e3-dbb1-b646-a1b5771d4c4b@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves 32x32 font size limitation checking down to drivers, so that
-fbcon can allow large fonts.
+On Thu, Jan 19, 2023, Gavin Shan wrote:
+> Hi Sean,
+> 
+> On 1/18/23 2:42 AM, Sean Christopherson wrote:
+> > On Mon, Jan 16, 2023, Gavin Shan wrote:
+> > > There are two warning reports about the dirty ring in the function.
+> > > We have the wrong assumption that the dirty ring is always enabled when
+> > > CONFIG_HAVE_KVM_DIRTY_RING is selected.
+> > 
+> > No, it's not a wrong assumption, becuase it's not an assumption.  The intent is
+> > to warn irrespective of dirty ring/log enabling.  The orignal code actually warned
+> > irrespective of dirty ring support[1], again intentionally.  The
+> > CONFIG_HAVE_KVM_DIRTY_RING check was added because s390 can mark pages dirty from
+> > an worker thread[2] and s390 has no plans to support the dirty ring.
+> > 
+> > The reason for warning even if dirty ring isn't enabled is so that bots can catch
+> > potential KVM bugs without having to set up a dirty ring or enable dirty logging.
+> > 
+> > [1] 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
+> > [2] e09fccb5435d ("KVM: avoid warning on s390 in mark_page_dirty")
+> > 
+> 
+> Thanks for the linker. I was confused when looking at the code, but now it's clear to
+> me. Thanks for your explanation. How about to add a comment there?
+> 
+>   /*
+>    * The warning is expected when the dirty ring is configured,
+>    * but not enabled.
+>    */
 
-We still keep a limitation to 64x128 pixels so as to have a simple bounded
-allocation for con_font_get and in the userland kbd tool. That glyph size
-will however be enough to have 128x36 characters on a "16/9 8K display".
+That's not correct either.  By design, the warning can also fire if the dirty ring
+is enabled.  KVM's rule is that writes to guest memory always need to be done in
+the context of a running vCPU, with the recently added exception of
+kvm_arch_allow_write_without_running_vcpu().  That intent of the warning is to
+enforce that rule regardless of the state of the VM.
 
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
-
----
-V1 -> V2: Switch con_font_get to kvmalloc/kvfree instead of kmalloc/kfree
-V1 -> V3: Drop sisusb_con.c change, it was phased out
-
-Index: linux-6.0/drivers/tty/vt/vt.c
-===================================================================
---- linux-6.0.orig/drivers/tty/vt/vt.c
-+++ linux-6.0/drivers/tty/vt/vt.c
-@@ -4575,17 +4575,20 @@ void reset_palette(struct vc_data *vc)
- /*
-  *  Font switching
-  *
-- *  Currently we only support fonts up to 32 pixels wide, at a maximum height
-- *  of 32 pixels. Userspace fontdata is stored with 32 bytes (shorts/ints, 
-- *  depending on width) reserved for each character which is kinda wasty, but 
-- *  this is done in order to maintain compatibility with the EGA/VGA fonts. It 
-- *  is up to the actual low-level console-driver convert data into its favorite
-- *  format (maybe we should add a `fontoffset' field to the `display'
-- *  structure so we won't have to convert the fontdata all the time.
-+ *  Currently we only support fonts up to 128 pixels wide, at a maximum height
-+ *  of 128 pixels. Userspace fontdata may have to be stored with 32 bytes
-+ *  (shorts/ints, depending on width) reserved for each character which is
-+ *  kinda wasty, but this is done in order to maintain compatibility with the
-+ *  EGA/VGA fonts. It is up to the actual low-level console-driver convert data
-+ *  into its favorite format (maybe we should add a `fontoffset' field to the
-+ *  `display' structure so we won't have to convert the fontdata all the time.
-  *  /Jes
-  */
- 
--#define max_font_size 65536
-+#define max_font_width	64
-+#define max_font_height	128
-+#define max_font_glyphs	512
-+#define max_font_size	(max_font_glyphs*max_font_width*max_font_height)
- 
- static int con_font_get(struct vc_data *vc, struct console_font_op *op)
- {
-@@ -4595,7 +4598,7 @@ static int con_font_get(struct vc_data *
- 	unsigned int vpitch = op->op == KD_FONT_OP_GET_TALL ? op->height : 32;
- 
- 	if (op->data) {
--		font.data = kmalloc(max_font_size, GFP_KERNEL);
-+		font.data = kvmalloc(max_font_size, GFP_KERNEL);
- 		if (!font.data)
- 			return -ENOMEM;
- 	} else
-@@ -4630,7 +4633,7 @@ static int con_font_get(struct vc_data *
- 		rc = -EFAULT;
- 
- out:
--	kfree(font.data);
-+	kvfree(font.data);
- 	return rc;
- }
- 
-@@ -4645,9 +4648,10 @@ static int con_font_set(struct vc_data *
- 		return -EINVAL;
- 	if (!op->data)
- 		return -EINVAL;
--	if (op->charcount > 512)
-+	if (op->charcount > max_font_glyphs)
- 		return -EINVAL;
--	if (op->width <= 0 || op->width > 32 || !op->height || op->height > 32)
-+	if (op->width <= 0 || op->width > max_font_width || !op->height ||
-+	    op->height > max_font_height)
- 		return -EINVAL;
- 	if (vpitch < op->height)
- 		return -EINVAL;
-Index: linux-6.0/drivers/video/console/vgacon.c
-===================================================================
---- linux-6.0.orig/drivers/video/console/vgacon.c
-+++ linux-6.0/drivers/video/console/vgacon.c
-@@ -1037,7 +1037,7 @@ static int vgacon_font_set(struct vc_dat
- 	if (vga_video_type < VIDEO_TYPE_EGAM)
- 		return -EINVAL;
- 
--	if (font->width != VGA_FONTWIDTH || vpitch != 32 ||
-+	if (font->width != VGA_FONTWIDTH || font->height > 32 || vpitch != 32 ||
- 	    (charcount != 256 && charcount != 512))
- 		return -EINVAL;
- 
-Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
-===================================================================
---- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
-+++ linux-6.0/drivers/video/fbdev/core/fbcon.c
-@@ -2279,6 +2279,8 @@ static int fbcon_get_font(struct vc_data
- 
- 	font->width = vc->vc_font.width;
- 	font->height = vc->vc_font.height;
-+	if (font->height > vpitch)
-+		return -ENOSPC;
- 	font->charcount = vc->vc_hi_font_mask ? 512 : 256;
- 	if (!font->data)
- 		return 0;
-
-
+Concretely, I think you can just drop patches 3 and 4, and just fix the arm64 issues.
