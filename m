@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4580A673DFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7A8673E03
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjASPzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S231449AbjASP4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjASPzO (ORCPT
+        with ESMTP id S230121AbjASP4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:55:14 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659051BDC
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:55:13 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id i4so1671504wrs.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:55:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zeec2R60OWMgkGfO5JTP1xgiZX4MfMPTyQOQc0wfkps=;
-        b=MgK5RYoIy6DVkBSO9USRsAn8HidfyLiuK8AKoq9b4/df9j8YHjPaIwKPS36eU3svNV
-         9X9r3wRP0YelFs2GVMGLepJphBO5fd0giJmk54wCal9aaURkEX+yC2byTjy0yfEbm7Hk
-         1ERuUMxpynlL6opq3MrYPgIQ0vmSZUShEH01J9UTbdy6n2rXTfv9TWBoRw6+TqFx7Mu1
-         ue8DJARGftWj/TnN4p+jDTCuBr6Idw4iV5V8XIl6Juu/Z71zoGHQU1TkOZ84ZTIU+DzW
-         mALHV5pwwJq518P4ZCw7tpsBCi1o3b7YI+D3bZYfos6gYh/ww9f8i+J6zn1y02KuBKcV
-         CYYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zeec2R60OWMgkGfO5JTP1xgiZX4MfMPTyQOQc0wfkps=;
-        b=ZQdlGCl3Ek9/+wy6cElgWXDzZGUgAgh4fT12WhXjr/jAMbxGMXQS/X+Bnp85YGa1rU
-         mwdssAD9HMOlwSVXEr70e78vMVyz/Vhj7rIP+549IXw0Nxsi3G5HmDu+veGw5OIZ/5Oo
-         RD59aSKGX3Z267KoSqs3vKRbvWo6p9SSt6CHi4Vzn5MqM1HO4QrXbBxia702A5wFVpWm
-         CGmLsSvU8MNrgSdAxCu2kS0F8fj7h3BXjwK8Q/Bj+3qo3uN55W65Ir+6WkZ33IExD99Y
-         DDR+xt7RK2kyLuWr4z2hIG7lvXbiQhtcGgLrt82WkHZFGfSdu16/DlH03a8OjeQmFn+5
-         hmkQ==
-X-Gm-Message-State: AFqh2kqocR4wOP1SEFixJv5w3sxwMTj7ocUPRplJKJsKVKtB3Ey4N3pV
-        Ql0RmzysR90v+at1YmV3OHiTFhdLvlfCZm+tH7clwg==
-X-Google-Smtp-Source: AMrXdXsUGafV67zCXToRx3KQrBKlLIWqO+ky+RTLC5WQTqRR4d4Fv0LKcAur7bnaWv5GVWDFTyMKsx/3VZFGX0Esk0o=
-X-Received: by 2002:adf:f241:0:b0:2bc:7ed4:cd50 with SMTP id
- b1-20020adff241000000b002bc7ed4cd50mr540341wrp.40.1674143711585; Thu, 19 Jan
- 2023 07:55:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20221221223420.2157113-1-irogers@google.com>
-In-Reply-To: <20221221223420.2157113-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 19 Jan 2023 07:54:59 -0800
-Message-ID: <CAP-5=fWN98+RnUw63YEbXj6ELEK1a9F+kNM73K9oOFTOUm2cgw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] jevents/pmu-events improvements
-To:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
+        Thu, 19 Jan 2023 10:56:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA983A9D;
+        Thu, 19 Jan 2023 07:56:14 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JFtQro004492;
+        Thu, 19 Jan 2023 15:56:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=SKoKjezuRUpE8QqitDy7L0+4qpiJpPKUTSPtiyu4Kgk=;
+ b=oBtf0sRwUx1VD7RFOxzrH6XKrWe+8XCEK9B8ExViTeNDkSokhEhdnibtpiNWP0+sY4UH
+ JAv2u/CJf4vCOnuBSd56ETgWewQOlj8nGrayUfZ5QFAnBCQW6EM3xTpkL850rd3W4xJP
+ pgSyROYswCgPLWZqi7SpP0EqjAz0phVXEGzLfU48o+I5taYZQRnLludW9CVs0cEWJ1a8
+ o2XCna+s1KkWgxpyKdIv7+/18BJR1c05vqbheNf0B88eIgnzqYCFkTiBPCcFJqrA7gfp
+ G4ps/n+19N7TrkPOh+OS4ECuwfZV6q+J1cFxGQupO4gjd9WTJzkdiv14k6sOLTA+UKIR dA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78qs8cth-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 15:56:01 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J5X3Ha023782;
+        Thu, 19 Jan 2023 15:55:58 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n3m16pvwv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 15:55:58 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JFttRu45023556
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 15:55:55 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CB9F20043;
+        Thu, 19 Jan 2023 15:55:55 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1468220040;
+        Thu, 19 Jan 2023 15:55:54 +0000 (GMT)
+Received: from [9.171.48.94] (unknown [9.171.48.94])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 15:55:53 +0000 (GMT)
+Message-ID: <5692d7fbc3d4bd2ac624c82a77f642c36a2cf04e.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 5/7] iommu/dma: Allow a single FQ in addition to
+ per-CPU FQs
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 16:55:53 +0100
+In-Reply-To: <20230104120543.308933-6-schnelle@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+         <20230104120543.308933-6-schnelle@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 32Y_g2cJL13woYx4FV75o6tdk8YdLotJ
+X-Proofpoint-ORIG-GUID: 32Y_g2cJL13woYx4FV75o6tdk8YdLotJ
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=658
+ priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,86 +96,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 2:34 PM Ian Rogers <irogers@google.com> wrote:
->
-> Add an optimization to jevents using the metric code, rewrite metrics
-> in terms of each other in order to minimize size and improve
-> readability. For example, on Power8
-> other_stall_cpi is rewritten from:
-> "PM_CMPLU_STALL / PM_RUN_INST_CMPL - PM_CMPLU_STALL_BRU_CRU / PM_RUN_INST=
-_CMPL - PM_CMPLU_STALL_FXU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_VSU / PM_RUN=
-_INST_CMPL - PM_CMPLU_STALL_LSU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NTCG_FL=
-USH / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NO_NTF / PM_RUN_INST_CMPL"
-> to:
-> "stall_cpi - bru_cru_stall_cpi - fxu_stall_cpi - vsu_stall_cpi - lsu_stal=
-l_cpi - ntcg_flush_cpi - no_ntf_stall_cpi"
-> Which more closely matches the definition on Power9.
->
-> A limitation of the substitutions are that they depend on strict
-> equality and the shape of the tree. This means that for "a + b + c"
-> then a substitution of "a + b" will succeed while "b + c" will fail
-> (the LHS for "+ c" is "a + b" not just "b").
->
-> Separate out the events and metrics in the pmu-events tables saving
-> 14.8% in the table size while making it that metrics no longer need to
-> iterate over all events and vice versa. These changes remove evsel's
-> direct metric support as the pmu_event no longer has a metric to
-> populate it. This is a minor issue as the code wasn't working
-> properly, metrics for this are rare and can still be properly ran
-> using '-M'.
->
-> Add an ability to just build certain models into the jevents generated
-> pmu-metrics.c code. This functionality is appropriate for operating
-> systems like ChromeOS, that aim to minimize binary size and know all
-> the target CPU models.
->
-> v2. Rebase. Modify the code that skips rewriting a metric with the
->     same name with itself, to make the name check case insensitive.
->
-> Ian Rogers (9):
->   perf jevents metric: Correct Function equality
->   perf jevents metric: Add ability to rewrite metrics in terms of others
->   perf jevents: Rewrite metrics in the same file with each other
->   perf pmu-events: Separate metric out of pmu_event
->   perf stat: Remove evsel metric_name/expr
->   perf jevents: Combine table prefix and suffix writing
->   perf pmu-events: Introduce pmu_metrics_table
->   perf jevents: Generate metrics and events as separate tables
->   perf jevents: Add model list option
+On Wed, 2023-01-04 at 13:05 +0100, Niklas Schnelle wrote:
+> In some virtualized environments, including s390 paged memory guests,
+> IOTLB flushes are used to update IOMMU shadow tables. Due to this, they
+> are much more expensive than in typical bare metal environments or
+> non-paged s390 guests. In addition they may parallelize more poorly in
+> virtualized environments. This changes the trade off for flushing IOVAs
+> such that minimizing the number of IOTLB flushes trumps any benefit of
+> cheaper queuing operations or increased paralellism.
+>=20
+> In this scenario per-CPU flush queues pose several problems. Firstly
+> per-CPU memory is often quite limited prohibiting larger queues.
+> Secondly collecting IOVAs per-CPU but flushing via a global timeout
+> reduces the number of IOVAs flushed for each timeout especially on s390
+> where PCI interrupts may not be bound to a specific CPU.
+>=20
+> Thus let's introduce a single flush queue mode IOMMU_DOMAIN_DMA_SQ that
+> reuses the same queue logic but only allocates a single global queue
+> allowing larger batches of IOVAs to be freed at once and with larger
+> timeouts. This is to allow the common IOVA flushing code to more closely
+> resemble the global flush behavior used on s390's previous internal DMA
+> API implementation.
+>=20
+> As we now support two different variants of flush queues rename the
+> existing __IOMMU_DOMAIN_DMA_FQ to __IOMMU_DOMAIN_DMA_LAZY to indicate
+> the general case of having a flush queue and introduce separate
+> __IOMMU_DOMAIN_DMA_PERCPU_Q and __IOMMU_DOMAIN_DMA_SINGLE_Q bits to
+> indicate the two queue variants.
+>=20
+> Link: https://lore.kernel.org/linux-iommu/3e402947-61f9-b7e8-1414-fde0062=
+57b6f@arm.com/
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> v2 -> v3:
+> - Rename __IOMMU_DOMAIN_DMA_FQ to __IOMMU_DOMAIN_DMA_LAZY to make it more=
+ clear
+>   that this bit indicates flush queue use independent of the exact queuing
+>   strategy
+>=20
+---8<---
+>=20=20
+>  /* sysfs updates are serialised by the mutex of the group owning @domain=
+ */
+>  int iommu_dma_init_fq(struct iommu_domain *domain)
+>  {
+>  	struct iommu_dma_cookie *cookie =3D domain->iova_cookie;
+> -	struct iova_fq __percpu *queue;
+> -	int i, cpu;
+> +	int rc;
+>=20=20
+>  	if (cookie->fq_domain)
+>  		return 0;
+> @@ -250,26 +336,16 @@ int iommu_dma_init_fq(struct iommu_domain *domain)
+>  	atomic64_set(&cookie->fq_flush_start_cnt,  0);
+>  	atomic64_set(&cookie->fq_flush_finish_cnt, 0);
+>=20=20
+>=20
+---8<---
+> +	if (domain->type =3D=3D IOMMU_DOMAIN_DMA_FQ)
+> +		rc =3D iommu_dma_init_fq_percpu(cookie);
+> +	else
+> +		rc =3D iommu_dma_init_fq_single(cookie);
 
-Ping. Looking for reviews.
+Found out in testing that the above doesn't work for the "echo XYZ >
+/sys/../iommu_group/type" interface as domain->type is not set before
+calling iommu_dma_init_fq() so it would always init for DMA-SQ which is
+of course the case that I used during earlier testing. I think the
+easiest fix is to add a type parameter to iommu_dma_init_fq().
 
-Thanks,
-Ian
+>=20=20
+> -		for (i =3D 0; i < IOVA_FQ_SIZE; i++)
+> -			INIT_LIST_HEAD(&fq->entries[i].freelist);
+> +	if (rc) {
+> +		pr_warn("iova flush queue initialization failed\n");
+> +		return rc;
+>  	}
+>=20
+---8<---=20
+>=20
+>  	mutex_unlock(&group->mutex);
+> @@ -2896,10 +2900,10 @@ static int iommu_change_dev_def_domain(struct iom=
+mu_group *group,
+>  	}
+>=20=20
+>  	/* We can bring up a flush queue without tearing down the domain */
+> -	if (type =3D=3D IOMMU_DOMAIN_DMA_FQ && prev_dom->type =3D=3D IOMMU_DOMA=
+IN_DMA) {
+> +	if (!!(type & __IOMMU_DOMAIN_DMA_LAZY) && prev_dom->type =3D=3D IOMMU_D=
+OMAIN_DMA) {
+>  		ret =3D iommu_dma_init_fq(prev_dom);
+>  		if (!ret)
+> -			prev_dom->type =3D IOMMU_DOMAIN_DMA_FQ;
+> +			prev_dom->type =3D type;
 
->  tools/perf/arch/arm64/util/pmu.c         |  23 +-
->  tools/perf/arch/powerpc/util/header.c    |   4 +-
->  tools/perf/builtin-list.c                |  20 +-
->  tools/perf/builtin-stat.c                |   1 -
->  tools/perf/pmu-events/Build              |   3 +-
->  tools/perf/pmu-events/empty-pmu-events.c | 111 ++++++-
->  tools/perf/pmu-events/jevents.py         | 353 ++++++++++++++++++-----
->  tools/perf/pmu-events/metric.py          |  79 ++++-
->  tools/perf/pmu-events/metric_test.py     |  10 +
->  tools/perf/pmu-events/pmu-events.h       |  26 +-
->  tools/perf/tests/expand-cgroup.c         |   4 +-
->  tools/perf/tests/parse-metric.c          |   4 +-
->  tools/perf/tests/pmu-events.c            |  68 ++---
->  tools/perf/util/cgroup.c                 |   1 -
->  tools/perf/util/evsel.c                  |   2 -
->  tools/perf/util/evsel.h                  |   2 -
->  tools/perf/util/metricgroup.c            | 203 +++++++------
->  tools/perf/util/metricgroup.h            |   4 +-
->  tools/perf/util/parse-events.c           |   2 -
->  tools/perf/util/pmu.c                    |  44 +--
->  tools/perf/util/pmu.h                    |  10 +-
->  tools/perf/util/print-events.c           |  32 +-
->  tools/perf/util/print-events.h           |   3 +-
->  tools/perf/util/python.c                 |   7 -
->  tools/perf/util/stat-shadow.c            | 112 -------
->  tools/perf/util/stat.h                   |   1 -
->  26 files changed, 666 insertions(+), 463 deletions(-)
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+Here domain->type is set only after calling iommu_dma_init_fq().
+
+>  		goto out;
+>  	}
+>=20=20
+
