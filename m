@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553DA67471E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA898674722
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjASXVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S229967AbjASXXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjASXVF (ORCPT
+        with ESMTP id S229575AbjASXXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:21:05 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063C392AC;
-        Thu, 19 Jan 2023 15:20:32 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id q9so2837732pgq.5;
-        Thu, 19 Jan 2023 15:20:32 -0800 (PST)
+        Thu, 19 Jan 2023 18:23:34 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249BCC2;
+        Thu, 19 Jan 2023 15:23:32 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id ud5so9853073ejc.4;
+        Thu, 19 Jan 2023 15:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8VFYGKVQDx9YS3Bf+JaHr5ao9ClGu3C5S4SGB4QR9A=;
-        b=SN+eVLi1DRWR6rpSY2PJV70czrUs98v9bI5D2abVAhBXs5JbxT/xeCGOi/5PrneIJv
-         z8ts8tKo4C2kelodjYn8/A81cUlm28upoURRlm+J3SwgKIC01dXP2G9mlfR21jEHagOt
-         AgdpBaAAlgbn1ztP2fKNvRA16SRAE6fd/KNyNSMEp3yG90WZUR6JdDwzIEuZ60GMMBIE
-         0XW8EH0lnzwVIF2gaOHYmtuS8/6EgJrt7pM2GPYjOpyq+cVDOixiF7Uz5YrybdLgs16/
-         FgdBrfm+RiuTgWcb7GVH3jUu5b05CKFys9IlL3fkrZvq7rmH07TFi4ZX/XR8GLWNyRjK
-         HeGg==
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8DGpgiYGDw6FkTW7tBePouJaM0hNgJ2GPhgSnYe3qzM=;
+        b=dxFittEFd7ZZTeIUxCkcyFFbtWAGVpLauvBjmr39x4O8whTZd5VinA1geQ7tFl0KIx
+         lsiSASLn+IkCZIIuSXcHfOXmgoOUDHGpFYgFsXtQngWlUyqJ15z0Yeh0y0YJEJIPvCCN
+         Xo/QYqrmgJT2sEe4eb4Ki2d1TW1hlJX4uaZ9GS40aVrbUlSwEcl+XEJuqOXFozH5FHlv
+         x/f5ZhFuxOacFWR1pAwlo6HhC6ZhFCfwlHvRVmD4CFOQXUe4k3tuAncWOVI4bF4UUrKY
+         7d58swG3RvDjM0sPw6k+r5MjP+X3WO0BCny0ze6+pN51C7FrL2tzpbdk+f5hzAzt2qEl
+         3ncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/8VFYGKVQDx9YS3Bf+JaHr5ao9ClGu3C5S4SGB4QR9A=;
-        b=YMKU7iR/pVkiKulxaDcL2fwiSdG3cwEHInqNGE+cT4ClDuQvGI0tHHJH0Z1sjDGRc1
-         85jGwZnGnlNdxqFCHMy/doSdnmurMZ1RApUkTVvqsAjgPoJs0iLL5ZcGp5N8NXpYShNb
-         t3TM80JJNofPQ+thbGMFfHlFKkJUVEQgRdRvk6QymUCXmgi4NB3rJhsgnFulobxv36QX
-         C22XZDdZ4ejuxfY8MfPEQ+0dzZkpwqFWXaLHaEwLGbA4hlR8/octloSEFAdCH6F7hSXO
-         ucxU5XPzT3hS8ZpWdaS14WNJTYxCgsncnl0ZOXub+Htr9jGBVjnEkubZMjUMkJBZL0tP
-         eB3A==
-X-Gm-Message-State: AFqh2kpFHEhJpqFVH9mtm2/XhsVMVWVXSZSNOd41ftNSi+aga6Zj1VsD
-        0pP/JsF6m6Ci1iqgeTFbGIM=
-X-Google-Smtp-Source: AMrXdXurMgRBKbvVa+DeeN1KDnY9oIpSJ0B1l7OtzdgBetQn9I69jfzDhB7UqBrcd/mZIzoZShPITQ==
-X-Received: by 2002:aa7:8506:0:b0:58d:966b:2f63 with SMTP id v6-20020aa78506000000b0058d966b2f63mr11421708pfn.20.1674170432247;
-        Thu, 19 Jan 2023 15:20:32 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id d8-20020aa797a8000000b0058837da69edsm21036005pfq.128.2023.01.19.15.20.31
+        bh=8DGpgiYGDw6FkTW7tBePouJaM0hNgJ2GPhgSnYe3qzM=;
+        b=duIKhr2D/mDgCwdNHbnEcwJyFHQZ+0BQ/VsSE5K13Z3y3MHDkaB9ABMQVX9nMoHo3O
+         yjRmAcFSoRVQnF8zgJlPR02IbNAfazJqLcuKHgwCRAkufyyOkwMmIK+AEYhJnaVoPoHS
+         YpFBT23ATGkAap58h4WrJ03ENlDlOn1enVFkwUhzGxlx5UpR1p8OqCNZBShQ041N4koC
+         WtJom8sjAfgUcT1spTZ0CVVNiL98HCNr33XJG/ErVAHushSoWwGV5Hu1PTiV5mwkbV4/
+         Cy+ty3bfEPKy1dmC10hZdA/L3WYSLkCbv9S5FARxifyyHZTE3nkcHKWj+4GZm+fUZrr4
+         uYOg==
+X-Gm-Message-State: AFqh2kqfnB6rlgTiIpPPtKpfDN1B04Cj+E+cZWOmPzpA9aYoEQkGPK2/
+        YsF9YWbce8dzJpl8C9Wp+clGkdb8PXXs6Q==
+X-Google-Smtp-Source: AMrXdXttdOs/ggl9oW7qjKrudW7xZqvfwUgElT+nvQ8eQGO5ZzoWD8ZmYz3V0yVDFSC7ZGgWOv0+hw==
+X-Received: by 2002:a17:906:5417:b0:877:5dbc:da84 with SMTP id q23-20020a170906541700b008775dbcda84mr7962484ejo.72.1674170610747;
+        Thu, 19 Jan 2023 15:23:30 -0800 (PST)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id u21-20020a1709064ad500b00855d6ed60desm13093390ejt.192.2023.01.19.15.23.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 15:20:31 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C,
-        S5P AND EXYNOS ARM ARCHITECTURES),
-        linux-samsung-soc@vger.kernel.org (open list:ARM/SAMSUNG S3C, S5P AND
-        EXYNOS ARM ARCHITECTURES),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/exynos: Drop unbalanced obj unref
-Date:   Thu, 19 Jan 2023 15:20:37 -0800
-Message-Id: <20230119232037.2885568-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 19 Jan 2023 15:23:30 -0800 (PST)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Fri, 20 Jan 2023 00:23:20 +0100
+Subject: [PATCH v2] docs/scripts/gdb: add necessary make scripts_gdb step
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230112-documentation-gdb-v2-1-292785c43dc9@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOjQyWMC/32NTQ7CIBBGr2JmLQamtkldeQ/TxQDTlkTAADaap
+ neX9gAu3/eTt0Lm5DjD7bRC4sVlF0MFPJ/AzBQmFs5WBpTYSKVQ2GjenkOhUpdislrQKKXFRqPu
+ JNSfpsxCJwpm3p+ecuG0F6/Eo/scssdQeXa5xPQ93Iva03+aRQklZE+6bTvuFV7vkyf3vJjoYdi
+ 27QeRjaPQywAAAA==
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674170610; l=1456;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=3W6+W19na9oCoUtm0oHRdq58UYpKhHaVRjP5Hz+vctc=;
+ b=wdTEA3IYp4TiRylTeGZWzhOPiS9maBfDgZagABMYNhDcNwA2fQ4xAM0NFEwou8IoM5BvRLrm7l1I
+ RAMWwMlPAxAkDPfXF3fuNQISCwMyESSZvUsdR4c8qREHJmVBitMB
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,47 +81,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+In order to debug the kernel successfully with gdb you need to run
+'make scripts_gdb' nowadays.
 
-In the error path, exynos_drm_gem_mmap() was dropping an obj reference
-that it doesn't own.
+This was changed with the following commit:
 
-Fixes: 832316c704fe ("drm/exynos: use drm generic mmap interface")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Commit 67274c083438340ad16c ("scripts/gdb: delay generation of gdb
+constants.py")
+
+In order to have a complete guide for beginners this remark
+should be added to the offial documentation.
+
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
 ---
- drivers/gpu/drm/exynos/exynos_drm_gem.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+Changes in v2:
+- Add correct Signed-off-by
+- Link to v1: https://lore.kernel.org/r/20230112-documentation-gdb-v1-1-09ab556e9124@gmail.com
+---
+ Documentation/dev-tools/gdb-kernel-debugging.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_gem.c b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-index 3e493f48e0d4..65bca61e63a3 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_gem.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_gem.c
-@@ -363,7 +363,6 @@ int exynos_drm_gem_dumb_create(struct drm_file *file_priv,
- static int exynos_drm_gem_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
- {
- 	struct exynos_drm_gem *exynos_gem = to_exynos_gem(obj);
--	int ret;
+diff --git a/Documentation/dev-tools/gdb-kernel-debugging.rst b/Documentation/dev-tools/gdb-kernel-debugging.rst
+index 8e0f1fe8d17a..895285c037c7 100644
+--- a/Documentation/dev-tools/gdb-kernel-debugging.rst
++++ b/Documentation/dev-tools/gdb-kernel-debugging.rst
+@@ -39,6 +39,10 @@ Setup
+   this mode. In this case, you should build the kernel with
+   CONFIG_RANDOMIZE_BASE disabled if the architecture supports KASLR.
  
- 	if (obj->import_attach)
- 		return dma_buf_mmap(obj->dma_buf, vma, 0);
-@@ -383,16 +382,7 @@ static int exynos_drm_gem_mmap(struct drm_gem_object *obj, struct vm_area_struct
- 		vma->vm_page_prot =
- 			pgprot_noncached(vm_get_page_prot(vma->vm_flags));
++- Build the gdb scripts (required on kernels v5.1 and above)::
++
++    make scripts_gdb
++
+ - Enable the gdb stub of QEMU/KVM, either
  
--	ret = exynos_drm_gem_mmap_buffer(exynos_gem, vma);
--	if (ret)
--		goto err_close_vm;
--
--	return ret;
--
--err_close_vm:
--	drm_gem_vm_close(vma);
--
--	return ret;
-+	return exynos_drm_gem_mmap_buffer(exynos_gem, vma);
- }
- 
- /* low-level interface prime helpers */
+     - at VM startup time by appending "-s" to the QEMU command line
+
+---
+base-commit: c757fc92a3f73734872c7793b97f06434773d65d
+change-id: 20230112-documentation-gdb-af00d23b2b60
+
+Best regards,
 -- 
-2.38.1
-
+Jakob Koschel <jkl820.git@gmail.com>
