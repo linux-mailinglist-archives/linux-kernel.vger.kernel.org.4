@@ -2,90 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5A2673166
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB80067316D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjASFwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S229963AbjASF4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjASFwH (ORCPT
+        with ESMTP id S229501AbjASF4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:52:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F83BA;
-        Wed, 18 Jan 2023 21:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HV20o5DJoYejH4ZxhgolHlvJcr34R1PSBryHehLovgc=; b=OA+Vp86krsp9Bm3bY8YID9wbtz
-        l4r1JaKf6WSW/XCx1VilImlA4K2In6L3j7JmCCVGvg+qj1gx3MZK/WnznqYdCdsKLjdNi6CZWMN+9
-        q0KGasFax4jUaAIRwi2w9dJD1Y5JTab2CAxJBfjuNqZ/P+8332Fqou7UGYPI1sOsI+5/ne9a99vmI
-        r2tIXLg70iTdrz7UCbdrvAY8plHIWklrKAtfcd8F3u+tXq1sIRBdyd6vbTKo966UriXiRa4vCdVtb
-        7C8G/1chYtTsrdA9pvz1yWo+shpaKpcJbwVDMwDrBkfR+Dh0albhuyWyoF/evf6xafPeT9M6PUYTg
-        zFvO+imQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pINq9-003hee-Da; Thu, 19 Jan 2023 05:51:57 +0000
-Date:   Wed, 18 Jan 2023 21:51:57 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 18/34] dio: Pin pages rather than ref'ing if
- appropriate
-Message-ID: <Y8jafackRu7t2Jf4@infradead.org>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
- <167391061117.2311931.16807283804788007499.stgit@warthog.procyon.org.uk>
- <Y8jPVLewUaaiuplq@ZenIV>
+        Thu, 19 Jan 2023 00:56:05 -0500
+Received: from out28-194.mail.aliyun.com (out28-194.mail.aliyun.com [115.124.28.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6049F10B;
+        Wed, 18 Jan 2023 21:56:00 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0744085|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0161519-0.00312963-0.980718;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.QwzW1nf_1674107754;
+Received: from 10.0.2.15(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.QwzW1nf_1674107754)
+          by smtp.aliyun-inc.com;
+          Thu, 19 Jan 2023 13:55:56 +0800
+Message-ID: <50e59ffd-aa52-4fde-c2b5-f5ce1dc64c95@motor-comm.com>
+Date:   Thu, 19 Jan 2023 13:56:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8jPVLewUaaiuplq@ZenIV>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v1 1/3] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy Driver bindings
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230105073024.8390-1-Frank.Sae@motor-comm.com>
+ <20230105073024.8390-2-Frank.Sae@motor-comm.com> <Y7bN4vJXMi66FF6v@lunn.ch>
+ <e762c7ac-63e7-a86e-3e3f-5c8a450b25b0@motor-comm.com>
+ <Y7goXXiRBE6XHuCc@lunn.ch>
+ <83fd7a69-7e6a-ab93-b05a-4eba8af4d245@motor-comm.com>
+ <Y8f254xNPdtR8gq1@lunn.ch>
+Content-Language: en-US
+From:   "Frank.Sae" <Frank.Sae@motor-comm.com>
+In-Reply-To: <Y8f254xNPdtR8gq1@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 05:04:20AM +0000, Al Viro wrote:
-> 1) fs/direct-io.c is ancient, grotty and has few remaining users.
-> The case of block devices got split off first; these days it's in
-> block/fops.c.  Then iomap-using filesystems went to fs/iomap/direct-io.c,
-> leaving this sucker used only by affs, ext2, fat, exfat, hfs, hfsplus, jfs,
-> nilfs2, ntfs3, reiserfs, udf and ocfs2.  And frankly, the sooner it dies
-> the better off we are.  IOW, you've picked an uninteresting part and left
-> the important ones untouched.
+Hi Andrew,
 
-Agreed.  That being said if we want file systems (including those not
-using this legacy version) to be able to rely on correct page dirtying
-eventually everything needs to pin pages it writes to.  So we need to
-either actually fix or remove this code in the forseeable future.  It's
-by far not the most interesting and highest priority, though.   And as
-I said this series is already too large too review anyway, I'd really
-prefer to get a core set done ASAP and then iterate on the callers and
-additional bits.
+On 2023/1/18 21:40, Andrew Lunn wrote:
+> On Wed, Jan 11, 2023 at 05:20:18PM +0800, Frank.Sae wrote:
+>> Hi Andrew,
+>>
+>> On 2023/1/6 21:55, Andrew Lunn wrote:
+>>>>> Why is this needed? When the MAC driver connects to the PHY, it passes
+>>>>> phy-mode. For RGMII, this is one of:
+>>>>
+>>>>> linux/phy.h:	PHY_INTERFACE_MODE_RGMII,
+>>>>> linux/phy.h:	PHY_INTERFACE_MODE_RGMII_ID,
+>>>>> linux/phy.h:	PHY_INTERFACE_MODE_RGMII_RXID,
+>>>>> linux/phy.h:	PHY_INTERFACE_MODE_RGMII_TXID,
+>>>>>
+>>>>> This tells you if you need to add a delay for the RX clock line, the
+>>>>> TX clock line, or both. That is all you need to know for basic RGMII
+>>>>> delays.
+>>>>>
+>>>>
+>>>> This basic delay can be controlled by hardware or the phy-mode which
+>>>> passes from MAC driver.
+>>>> Default value depends on power on strapping, according to the voltage
+>>>> of RXD0 pin (low = 0, turn off;   high = 1, turn on).
+>>>>
+>>>> Add this for the case that This basic delay is controlled by hardware,
+>>>> and software don't change this.
+>>>
+>>> You should always do what phy-mode contains. Always. We have had
+>>> problems in the past where a PHY driver ignored the phy-mode, and left
+>>> the PHY however it was strapped. Which worked. But developers put the
+>>> wrong phy-mode value in DT. Then somebody had a board which actually
+>>> required that the DT value really did work, because the strapping was
+>>> wrong. So the driver was fixed to respect the PHY mode, made that
+>>> board work, and broke all the other boards which had the wrong
+>>> phy-mode in DT.
+>>>
+>>> If the user want the driver to leave the mode alone, use the
+>>> strapping, they should use PHY_INTERFACE_MODE_NA. It is not well
+>>> documented, but it is used in a few places. However, i don't recommend
+>>> it.
+>>>
+>>
+>> RX delay = rx-delay-basic (0ns or 1.9ns) + x-delay-additional-ps
+>> (N*150ps, N = 0 ~ 15)
+>>  If rx-delay-basic is removed and controlled by phy-mode.
+>>  when phy-mode is  rgmii-id or rgmii-rxid, RX delay is 1.9ns + N*150ps.
+>>  But sometimes 1.9ns is still too big, we just need  0ns + N*150ps.
+>>
+>> For this case, can we do like following ?
+>> rx-internal-delay-ps:
+>>     enum: [ 0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500,
+>> 1650, 1800, 1900, 1950, 2050, 2100, 2200, 2250, 2350, 2500, 2650, 2800,
+>> 2950, 3100, 3250, 3400, 3550, 3700, 3850, 4000, 4150 ]
+>>     default: 0
+>>  rx-internal-delay-ps is 0ns + N*150ps and  1.9ns + N*150ps.
+>>  And check whether need rx-delay-basic (1.9ns) by the val of
+>> rx-internal-delay-ps?
+> 
+> Please take a look at phy_get_internal_delay() and the drivers which
+> use it.
+> 
+>     Andrew
 
-> Unless I misunderstand something fundamental about the whole thing,
-> this crap should become useless with that conversion.
+ Thanks. But it may be not suitable.
 
-It should - mostly.  But we need to be very careful about that, so
-I'd prefer a separate small series for it to be honest.
+rx-internal-delay-ps has two part:
+0ns + N*150ps =
+0,150,300,450,600,750,900,1050,1200,1350,1500,1650,1800,1950,2100,2250
 
-> BTW, where do we dirty the pages on IO_URING_OP_READ_FIXED with
-> O_DIRECT file?  AFAICS, bio_set_pages_dirty() won't be called
-> (ITER_BVEC iter) and neither will bio_release_pages() do anything
-> (BIO_NO_PAGE_REF set on the bio by bio_iov_bvec_set() called
-> due to the same ITER_BVEC iter).  Am I missing something trivial
-> here?  Jens?
+1.9ns + N*150ps =
+1900,2050,2200,2350,2500,2650,2800,2950,3100,3250,3400,3550,3700,3850,4000,4150
 
-I don't think we do that all right now.
+The problem is "1900,2050,2200" is less than "2250".
+
+If I take this two parts in one sorted table, there will be three
+tables, one for tx-internal-delay-ps, one for rx-internal-delay-ps and
+one for the rx index to reg(delay value and 1.9ns on or off) value.
+
+So we tend to use the following methods.
+
+#define YT8521_CCR_RXC_DLY_1_900_NS		1900
+
+#define YT8521_RC1R_RGMII_0_000_NS		0
+#define YT8521_RC1R_RGMII_0_150_NS		1
+...
+#define	YT8521_RC1R_RGMII_2_250_NS		15
+
+struct ytphy_cfg_reg_map {
+	u32 cfg;
+	u32 reg;
+};
+
+static const struct ytphy_cfg_reg_map ytphy_rgmii_delays[] = {
+	/* for tx delay / rx delay with YT8521_CCR_RXC_DLY_EN is not set. */
+	{ 0,	YT8521_RC1R_RGMII_0_000_NS },
+	{ 150,	YT8521_RC1R_RGMII_0_150_NS },
+	...
+	{ 2250,	YT8521_RC1R_RGMII_2_250_NS },
+
+	/* only for rx delay with YT8521_CCR_RXC_DLY_EN is set. */
+	{ 0    + YT8521_CCR_RXC_DLY_1_900_NS,YT8521_RC1R_RGMII_0_000_NS },
+	{ 150  + YT8521_CCR_RXC_DLY_1_900_NS,YT8521_RC1R_RGMII_0_150_NS },
+	...
+	{ 2250 + YT8521_CCR_RXC_DLY_1_900_NS,YT8521_RC1R_RGMII_2_250_NS }
+};
+
+
+static u32 ytphy_get_delay_reg_value(struct phy_device *phydev,
+				     const char *prop_name,
+				     const struct ytphy_cfg_reg_map *tbl,
+				     int tb_size,
+				     u16 *rxc_dly_en,
+				     u32 dflt)
+{
+	struct device_node *node = phydev->mdio.dev.of_node;
+	int tb_size_half = tb_size / 2;
+	u32 val;
+	int i;
+
+	if (of_property_read_u32(node, prop_name, &val))
+		return dflt;
+
+	/* when rxc_dly_en is NULL, it is get the delay for tx, only half of
+	 * tb_size is valid.
+	 */
+	if (!rxc_dly_en)
+		tb_size = tb_size_half;
+
+	for (i = 0; i < tb_size; i++) {
+		if (tbl[i].cfg == val) {
+			if (rxc_dly_en && i < tb_size_half)
+				*rxc_dly_en = 0;
+			return tbl[i].reg;
+		}
+	}
+
+	phydev_warn(phydev, "Unsupported value %d for %s using default (%u)\n",
+		    val, prop_name, dflt);
+	return dflt;
+}
+
+static int ytphy_rgmii_clk_delay_config(struct phy_device *phydev)
+{
+	int tb_size = ARRAY_SIZE(ytphy_rgmii_delays);
+	u16 rxc_dly_en = YT8521_CCR_RXC_DLY_EN;
+	u32 rx_reg, tx_reg;
+	u16 mask, val = 0;
+	int ret;
+
+	rx_reg = ytphy_get_delay_reg_value(phydev, "rx-internal-delay-ps",
+					   ytphy_rgmii_delays, tb_size,
+					   &rxc_dly_en,
+					   YT8521_RC1R_RGMII_0_000_NS);
+	tx_reg = ytphy_get_delay_reg_value(phydev, "tx-internal-delay-ps",
+					   ytphy_rgmii_delays, tb_size, NULL,
+					   YT8521_RC1R_RGMII_0_150_NS);
+
+	switch (phydev->interface) {
+	case PHY_INTERFACE_MODE_RGMII:
+		rxc_dly_en = 0;
+		break;
+	case PHY_INTERFACE_MODE_RGMII_RXID:
+		val |= FIELD_PREP(YT8521_RC1R_RX_DELAY_MASK, rx_reg);
+		break;
+	case PHY_INTERFACE_MODE_RGMII_TXID:
+		rxc_dly_en = 0;
+		val |= FIELD_PREP(YT8521_RC1R_GE_TX_DELAY_MASK, tx_reg);
+		break;
+	case PHY_INTERFACE_MODE_RGMII_ID:
+		val |= FIELD_PREP(YT8521_RC1R_RX_DELAY_MASK, rx_reg) |
+		       FIELD_PREP(YT8521_RC1R_GE_TX_DELAY_MASK, tx_reg);
+		break;
+	default: /* do not support other modes */
+		return -EOPNOTSUPP;
+	}
+
+	ret = ytphy_modify_ext(phydev, YT8521_CHIP_CONFIG_REG,
+			       YT8521_CCR_RXC_DLY_EN, rxc_dly_en);
+	if (ret < 0)
+		return ret;
+
+	/* Generally, it is not necessary to adjust YT8521_RC1R_FE_TX_DELAY */
+	mask = YT8521_RC1R_RX_DELAY_MASK | YT8521_RC1R_GE_TX_DELAY_MASK;
+	return ytphy_modify_ext(phydev, YT8521_RGMII_CONFIG1_REG, mask, val);
+}
