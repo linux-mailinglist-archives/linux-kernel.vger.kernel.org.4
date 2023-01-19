@@ -2,156 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2D5672E0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907B8672E15
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjASBYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S229665AbjASB3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjASBWC (ORCPT
+        with ESMTP id S230016AbjASB2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:22:02 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967566D36E;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g205so341032pfb.6;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qvSylj76pkjJK0liJzUPIoE16nX8cS6scNFJeg8uss=;
-        b=O5M4vcD4Xd6NlKslWlR4eDnUdGeq4ovEo0+vMwvb8XIHogfL5rfP//GQVWFgt0mgPc
-         XwQMTdggmDrbYWl8JeTk/1F6Mi6UqPGZnNI3rntnGaCNPozvnQtZ4HlkUiFERuAQuI63
-         Gb5gS6Wl2ASjTAG78Ihvrr68wo6jDgXUXcSsdvVQV1N7F3lXMOU05hhGJqBGGocXOeGj
-         5ohvftx7sulbxTkM7Mn3JYO5SqNFn828fTp1wgY9F4fin1E710xq6p1fPpgc3HvJQYv6
-         TZ7AQPl5H+nEV/KsWXOx3eeMDME++GtVAyJ0Ra/ns1LPxdxnxQvsFOnBW+Cvdbj5Fdve
-         1D+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4qvSylj76pkjJK0liJzUPIoE16nX8cS6scNFJeg8uss=;
-        b=Ha+JKSZjuCN/UbP/1WbY8FOa30B7fJGiWajOJUD05kqAVwPgkjIOn00gwwgndS9igq
-         jB597YToGGHgSa13SXX8aLGUkYYk7e08aVgfRc+5YDx1j7y777cVMxZibf7wRbXphBBo
-         Bfi+/0bN6vcy3hTa69IPJWhYiVPBdHn8PcjoU192+0Gz+4TBaxtNTmv5c8AJjJJ0bHZl
-         J/jGuiYyEcDTKW6ksSoNFnwAX4Mq6oGTmpM/757Xr84eeyk/iztoxe6EV5CxRpzQnIBk
-         bg7iFiCe5tAyeIF+BtGuWSKm4yYLCWtANvl/9EXrEy/zgTPFqqMvVFsOIlV2ORNGAIKg
-         A7ew==
-X-Gm-Message-State: AFqh2krsLcY6W90VL9IY1o7B0OApAnSquKOKfzMNmeakSkcV1nqiDudJ
-        2ApbQyxbyjca6/PRHbWwt2E=
-X-Google-Smtp-Source: AMrXdXvuftfAEVkHFKNo/wDV5xp7EjIbGUCEj2qZ0VaidNV7nooG4/Xwhn7ZX3U38U3XBhaAHwkioA==
-X-Received: by 2002:aa7:9399:0:b0:58d:272a:52a0 with SMTP id t25-20020aa79399000000b0058d272a52a0mr8120300pfe.32.1674091076111;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id f24-20020aa79698000000b0058bc60dd98dsm8788019pfk.23.2023.01.18.17.17.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 17:17:55 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 11:17:49 +1000
-Message-Id: <CPVRR82TD4YN.2330YD9C5FHMQ@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
-        <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 04/24] powerpc/secvar: Handle format string in the
- consumer
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-5-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-5-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:28:24 -0500
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B611B68431
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:22:56 -0800 (PST)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 30J1MpPB093127;
+        Thu, 19 Jan 2023 09:22:51 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 19 Jan 2023 09:22:49 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCHv4 1/2] mm: move KMEMLEAK's Kconfig items from lib to mm
+Date:   Thu, 19 Jan 2023 09:22:24 +0800
+Message-ID: <1674091345-14799-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 30J1MpPB093127
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
->
-> The code that handles the format string in secvar-sysfs.c is entirely
-> OPAL specific, so create a new "format" op in secvar_operations to make
-> the secvar code more generic.  No functional change.
->
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->
-> ---
->
-> v2: Use sysfs_emit() instead of sprintf() (gregkh)
->
-> v3: Enforce format string size limit (ruscur)
-> ---
->  arch/powerpc/include/asm/secvar.h            |  3 +++
->  arch/powerpc/kernel/secvar-sysfs.c           | 23 ++++--------------
->  arch/powerpc/platforms/powernv/opal-secvar.c | 25 ++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm=
-/secvar.h
-> index 07ba36f868a7..8b6475589120 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -11,12 +11,15 @@
->  #include <linux/types.h>
->  #include <linux/errno.h>
-> =20
-> +#define SECVAR_MAX_FORMAT_LEN	30 // max length of string returned by ->f=
-ormat()
-> +
->  extern const struct secvar_operations *secvar_ops;
-> =20
->  struct secvar_operations {
->  	int (*get)(const char *key, u64 key_len, u8 *data, u64 *data_size);
->  	int (*get_next)(const char *key, u64 *key_len, u64 keybufsize);
->  	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
-> +	ssize_t (*format)(char *buf);
->  };
-> =20
->  #ifdef CONFIG_PPC_SECURE_BOOT
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/sec=
-var-sysfs.c
-> index 462cacc0ca60..d3858eedd72c 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -21,26 +21,13 @@ static struct kset *secvar_kset;
->  static ssize_t format_show(struct kobject *kobj, struct kobj_attribute *=
-attr,
->  			   char *buf)
->  {
-> -	ssize_t rc =3D 0;
-> -	struct device_node *node;
-> -	const char *format;
-> -
-> -	node =3D of_find_compatible_node(NULL, NULL, "ibm,secvar-backend");
-> -	if (!of_device_is_available(node)) {
-> -		rc =3D -ENODEV;
-> -		goto out;
-> -	}
-> +	char tmp[SECVAR_MAX_FORMAT_LEN];
-> +	ssize_t len =3D secvar_ops->format(tmp);
-> =20
-> -	rc =3D of_property_read_string(node, "format", &format);
-> -	if (rc)
-> -		goto out;
-> +	if (len <=3D 0)
-> +		return -EIO;
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-AFAIKS this does have a functional change, it loses the return value.
-Why not return len if it is < 0, and -EIO if len =3D=3D 0?
+Have the kmemleak's source code and Kconfig items be in the same directory.
 
-Thanks,
-Nick
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ lib/Kconfig.debug | 70 -------------------------------------------------------
+ mm/Kconfig.debug  | 70 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 70 insertions(+), 70 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 401ad4b..62884ac 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -716,76 +716,6 @@ config SHRINKER_DEBUG
+ 	  visibility into the kernel memory shrinkers subsystem.
+ 	  Disable it to avoid an extra memory footprint.
+ 
+-config HAVE_DEBUG_KMEMLEAK
+-	bool
+-
+-config DEBUG_KMEMLEAK
+-	bool "Kernel memory leak detector"
+-	depends on DEBUG_KERNEL && HAVE_DEBUG_KMEMLEAK
+-	select DEBUG_FS
+-	select STACKTRACE if STACKTRACE_SUPPORT
+-	select KALLSYMS
+-	select CRC32
+-	select STACKDEPOT
+-	help
+-	  Say Y here if you want to enable the memory leak
+-	  detector. The memory allocation/freeing is traced in a way
+-	  similar to the Boehm's conservative garbage collector, the
+-	  difference being that the orphan objects are not freed but
+-	  only shown in /sys/kernel/debug/kmemleak. Enabling this
+-	  feature will introduce an overhead to memory
+-	  allocations. See Documentation/dev-tools/kmemleak.rst for more
+-	  details.
+-
+-	  Enabling DEBUG_SLAB or SLUB_DEBUG may increase the chances
+-	  of finding leaks due to the slab objects poisoning.
+-
+-	  In order to access the kmemleak file, debugfs needs to be
+-	  mounted (usually at /sys/kernel/debug).
+-
+-config DEBUG_KMEMLEAK_MEM_POOL_SIZE
+-	int "Kmemleak memory pool size"
+-	depends on DEBUG_KMEMLEAK
+-	range 200 1000000
+-	default 16000
+-	help
+-	  Kmemleak must track all the memory allocations to avoid
+-	  reporting false positives. Since memory may be allocated or
+-	  freed before kmemleak is fully initialised, use a static pool
+-	  of metadata objects to track such callbacks. After kmemleak is
+-	  fully initialised, this memory pool acts as an emergency one
+-	  if slab allocations fail.
+-
+-config DEBUG_KMEMLEAK_TEST
+-	tristate "Simple test for the kernel memory leak detector"
+-	depends on DEBUG_KMEMLEAK && m
+-	help
+-	  This option enables a module that explicitly leaks memory.
+-
+-	  If unsure, say N.
+-
+-config DEBUG_KMEMLEAK_DEFAULT_OFF
+-	bool "Default kmemleak to off"
+-	depends on DEBUG_KMEMLEAK
+-	help
+-	  Say Y here to disable kmemleak by default. It can then be enabled
+-	  on the command line via kmemleak=on.
+-
+-config DEBUG_KMEMLEAK_AUTO_SCAN
+-	bool "Enable kmemleak auto scan thread on boot up"
+-	default y
+-	depends on DEBUG_KMEMLEAK
+-	help
+-	  Depending on the cpu, kmemleak scan may be cpu intensive and can
+-	  stall user tasks at times. This option enables/disables automatic
+-	  kmemleak scan at boot up.
+-
+-	  Say N here to disable kmemleak auto scan thread to stop automatic
+-	  scanning. Disabling this option disables automatic reporting of
+-	  memory leaks.
+-
+-	  If unsure, say Y.
+-
+ config DEBUG_STACK_USAGE
+ 	bool "Stack utilization instrumentation"
+ 	depends on DEBUG_KERNEL && !IA64
+diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+index ce8dded..d1893ac 100644
+--- a/mm/Kconfig.debug
++++ b/mm/Kconfig.debug
+@@ -207,3 +207,73 @@ config PTDUMP_DEBUGFS
+ 	  kernel.
+ 
+ 	  If in doubt, say N.
++
++config HAVE_DEBUG_KMEMLEAK
++	bool
++
++config DEBUG_KMEMLEAK
++	bool "Kernel memory leak detector"
++	depends on DEBUG_KERNEL && HAVE_DEBUG_KMEMLEAK
++	select DEBUG_FS
++	select STACKTRACE if STACKTRACE_SUPPORT
++	select KALLSYMS
++	select CRC32
++	select STACKDEPOT
++	help
++	  Say Y here if you want to enable the memory leak
++	  detector. The memory allocation/freeing is traced in a way
++	  similar to the Boehm's conservative garbage collector, the
++	  difference being that the orphan objects are not freed but
++	  only shown in /sys/kernel/debug/kmemleak. Enabling this
++	  feature will introduce an overhead to memory
++	  allocations. See Documentation/dev-tools/kmemleak.rst for more
++	  details.
++
++	  Enabling DEBUG_SLAB or SLUB_DEBUG may increase the chances
++	  of finding leaks due to the slab objects poisoning.
++
++	  In order to access the kmemleak file, debugfs needs to be
++	  mounted (usually at /sys/kernel/debug).
++
++config DEBUG_KMEMLEAK_MEM_POOL_SIZE
++	int "Kmemleak memory pool size"
++	depends on DEBUG_KMEMLEAK
++	range 200 1000000
++	default 16000
++	help
++	  Kmemleak must track all the memory allocations to avoid
++	  reporting false positives. Since memory may be allocated or
++	  freed before kmemleak is fully initialised, use a static pool
++	  of metadata objects to track such callbacks. After kmemleak is
++	  fully initialised, this memory pool acts as an emergency one
++	  if slab allocations fail.
++
++config DEBUG_KMEMLEAK_TEST
++	tristate "Simple test for the kernel memory leak detector"
++	depends on DEBUG_KMEMLEAK && m
++	help
++	  This option enables a module that explicitly leaks memory.
++
++	  If unsure, say N.
++
++config DEBUG_KMEMLEAK_DEFAULT_OFF
++	bool "Default kmemleak to off"
++	depends on DEBUG_KMEMLEAK
++	help
++	  Say Y here to disable kmemleak by default. It can then be enabled
++	  on the command line via kmemleak=on.
++
++config DEBUG_KMEMLEAK_AUTO_SCAN
++	bool "Enable kmemleak auto scan thread on boot up"
++	default y
++	depends on DEBUG_KMEMLEAK
++	help
++	  Depending on the cpu, kmemleak scan may be cpu intensive and can
++	  stall user tasks at times. This option enables/disables automatic
++	  kmemleak scan at boot up.
++
++	  Say N here to disable kmemleak auto scan thread to stop automatic
++	  scanning. Disabling this option disables automatic reporting of
++	  memory leaks.
++
++	  If unsure, say Y.
+-- 
+1.9.1
+
