@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D633A674703
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98B46746F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjASXOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S230401AbjASXN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjASXNb (ORCPT
+        with ESMTP id S230453AbjASXM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:13:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F78CA959D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674169504;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOEJRVUCnaSTu3apvVVhayxrqQN65NFZYiVFw16tleY=;
-        b=eJ7o2qnAZkYoKCBXMs/7JNknYsDI2/mLkmGbzuPS0zGPJNl3R0dnRaeT4TIz7iTEF5dljQ
-        HwXCsfciIPGT+uvMKawZJkjMBnOxvQGdATg1psaBL4mmSYkH/9vDBrFi1PibkjIX4X/YI6
-        D81iYJBsi/dUaAvqrxaKp9tADoVWXmg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-507-QQjCKQRFPT6Xs2gyRAdLDA-1; Thu, 19 Jan 2023 18:05:01 -0500
-X-MC-Unique: QQjCKQRFPT6Xs2gyRAdLDA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69B7D1C05154;
-        Thu, 19 Jan 2023 23:05:00 +0000 (UTC)
-Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33EED40C6EC4;
-        Thu, 19 Jan 2023 23:04:52 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in
- no running vcpu context
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
-        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
-        shan.gavin@gmail.com
-References: <20230116040405.260935-1-gshan@redhat.com>
- <20230116040405.260935-2-gshan@redhat.com> <Y8cKQRIbpLWVcdcw@google.com>
- <0626e135-5d6b-8d09-ccd1-068e42a052f6@redhat.com>
- <86v8l2msqk.wl-maz@kernel.org>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <685ae61a-951f-e611-7491-948f19f1827e@redhat.com>
-Date:   Fri, 20 Jan 2023 10:04:50 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Thu, 19 Jan 2023 18:12:59 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212931BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:05 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso4672094wmc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbI3crUnZHE33dCw4UMEiMuxL329KBkUWgeNaQcR87U=;
+        b=Ol0oPKVfH3C5OpKN4RdqGeOUFC0rkaPwfQOzVbtQ2rKlgtCahTIUAOjtqj5WYunROs
+         UnGrAvTCKMeUZXTYUx8agsQiwA77ULjFyT1hC93EZA67Mem44q6tWCxjSJjG4wRDPWAP
+         hO2BINkygCbPCF+NRVkvYnqJYMXLm3ua6VvTMhRKsEpf7ZWA+3lH7V9UCNmORqK7/koy
+         s+Bxqd5beN0vgluWliHX1A1FRm9Hc/M7gKajgIaYlL4Zn0+ziZ2av+Ytug75S0MfxJt8
+         HU2GNWjA3lb7XLd+/ngHLUCUO4QXEgHAW9PyZalLRA7BHsEpc3zIcsoge0N5ujELMzTh
+         ed2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mbI3crUnZHE33dCw4UMEiMuxL329KBkUWgeNaQcR87U=;
+        b=4BtmfNuypZQ31FfFcTzEtvhd6zgHjjhLY2+DS0EaYnZ5FPjosYwbD0hb3eDkNj3YYK
+         1skaS8HtcpPm3lI9qCkcs+SLhEsL57E00mvwKMQqtzdtkLtyrBKroLO0ru1oNEnHH0BB
+         nsvEnQKWqaDggYo6Tf5Xj9iEdMzCYLwvosTBFOy9Bzjt6MUUkoBTGk5nYCUdF6FvgyJc
+         yk2tFPTnZHhvKikTnVd9Uple8ruqv3mRJU/MPCX5vWXW557WJFbqOjZFGRzOD5oZnAtP
+         wedfAjQNliaZlH/gK8zwqrBpRtKKju3iC+m6ti3T4ZSErFPsMKMGMgaoXlAyagLNDIbs
+         MFFg==
+X-Gm-Message-State: AFqh2krCh9sQXwgCqxUnrrIcol/oUutA0B2B3Dxc8DinnhjUUxFMwPlw
+        FfXN3yE3M3UoYPjT2lLIhj2jed7xk8ZvmlT0165hvg==
+X-Google-Smtp-Source: AMrXdXt2/t2D3yu+VxSHvwvBrUb8EGhOVUMYirstDNc5cXLRFIG9XzXTn22/3s/wXvvT6pAXmmRP9zR96PCAsMgzAXo=
+X-Received: by 2002:a05:600c:3095:b0:3d9:7950:dc5f with SMTP id
+ g21-20020a05600c309500b003d97950dc5fmr672841wmn.120.1674169623606; Thu, 19
+ Jan 2023 15:07:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <86v8l2msqk.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-36-jthoughton@google.com> <Y8nGK2N5E15cenr1@x1n>
+In-Reply-To: <Y8nGK2N5E15cenr1@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 19 Jan 2023 15:06:27 -0800
+Message-ID: <CADrL8HXHe85Jgiv9JatzMUhmqg0K5WGrGe_S+aZHobqzDYFLFQ@mail.gmail.com>
+Subject: Re: [PATCH 35/46] hugetlb: add MADV_COLLAPSE for hugetlb
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Thu, Jan 19, 2023 at 2:37 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Jan 05, 2023 at 10:18:33AM +0000, James Houghton wrote:
+> > +     /*
+> > +      * Grab the VMA lock and mapping sem for writing. This will prevent
+> > +      * concurrent high-granularity page table walks, so that we can safely
+> > +      * collapse and free page tables.
+> > +      *
+> > +      * This is the same locking that huge_pmd_unshare requires.
+> > +      */
+> > +     hugetlb_vma_lock_write(vma);
+> > +     i_mmap_lock_write(vma->vm_file->f_mapping);
+>
+> One thing I just noticed - do we need the mmap write lock here?  I don't
+> quickly see what stops another thread from having the mmap read and walking
+> upon the pgtables being collapsed.
 
-On 1/20/23 2:47 AM, Marc Zyngier wrote:
-> On Thu, 19 Jan 2023 01:11:44 +0000,
-> Gavin Shan <gshan@redhat.com> wrote:
->>
->> I will have vgic_write_guest_lock() in v2. Note that those 3 paths can't be
->> running in parallel since one switch is shared by them. Alternatively, we
->> extend struct vgic_dist::save_tables_in_progress from 'bool' to 'unsigned long'.
->> Several bit is defined for each site as below. In this way, the 3 paths can be
->> running in parallel:
->>
->>    unsigned long struct vgic_dist::save_tables_in_progress
->>
->>    #define VGIC_DIST_SAVE_ITS_ITE		0	/* ITS Translation Entry */
->>    #define VGIC_DIST_SAVE_ITS_DTE		1	/* ITS Device Table Entry */
->>    #define VGIC_DIST_SAVE_ITS_CTE		2	/* ITS Collection Table Entry */
->>    #define VGIC_DIST_SAVE_ITS_CT			3	/* ITS Collection Table */
->>    #define VGIC_DIST_SAVE_VGIC3_LPI		4	/* VGIC3 LPI Pending Status */
->>    #define VGIC_DIST_SAVE_VGIC3_PENDING_TABLE	5	/* VGIC3 Pending Table */
->>
->> The drawback is the calls are limited to 64. If those 3 paths can't be running
->> in parallel, we needn't the extension at all.
-> 
-> It should all be completely sequential. KVM_DEV_ARM_ITS_SAVE_TABLES
-> runs in a context where everything is locked, and so is
-> VGIC_DIST_SAVE_VGIC3_PENDING_TABLE.
-> 
-
-Thanks for your confirm. Yeah, it's sequential because 'kvm->lock' is
-hold on KVM_DEV_ARM_ITS_SAVE_TABLES and VGIC_DIST_SAVE_VGIC3_PENDING_TABLE.
-So all good to have one shared switch. v2 will be posted pretty soon.
-
-Thanks,
-Gavin
-
+Maybe. Does huge_pmd_unshare() have the same problem?
