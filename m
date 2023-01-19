@@ -2,148 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2E66732F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3F86732FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjASHvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S229659AbjASHy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjASHui (ORCPT
+        with ESMTP id S230116AbjASHxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:50:38 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B5D677AC;
-        Wed, 18 Jan 2023 23:49:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HzxGBxacEx0ldrD16wSq7g1PlJwCg5E1G1ya3vjA2vYD565lTnhnHueZzNv6+akWYKNOtG0NzX6pwKmBbDqbyO3Pi+Bw00NrRL8l19bd1vMeJPBJ0EQIBmOx/t4xbfUsN07kdMT9dUQiDH3pinTYNMFEGdlNdEEuoMWcVk1WzfBgfBMcdcjR1xpT07w9LE4RF/TND5XM/fCrx09OA51i72hTmhPRB7z5+k/VZCga6Kc6YCmvPo/u32F9j+0HSA/SrKIoZsB5zHNvL0jJzGg9AHq/yCZ00wxp5D/HSZB3cJ8vZy4vyWQb055pzm2UAtUZI9oKEEbfcIBDX5bofW7bnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1MYEprceYCi4GvHGqlKPZ6GP9rds92+w03QtbxEBwL4=;
- b=SKC1t21KlLWeK8r9fPNj/HjgbsoHf85pzK7/C0+0EPUyWutGynoBMFkLo1Dkjqkhk5t4h2k0BM0ptCwK36/SJa6wR4jKW+yniZbCr5QLxHe3ratax7f6tAAe/g08pfLCvgNTFznOv1Q2eGvdToRYUcv/rVp6dbPQmR8gWtHga6hepYddrNg0WuE2SYxejNlLGBarjes4NwrVpHebNbq0+33yeUKl/8d44++t3jHWygcAhvNND9LFlAE8YJuT0aZOb/o9CyN2GIjxouyTHsJNfL9CCaPUYt5secoI/VQK4ul5xz1im78Dg8hpAEN/31SLJzQ1nRgc6x3rHve5wR9X+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=zte.com.cn smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1MYEprceYCi4GvHGqlKPZ6GP9rds92+w03QtbxEBwL4=;
- b=Z9KYAmbkRDdFiapSfmq/Z3+yKRuzwaB3znU0rJtPo08RKCWmOAMPELK+e3j/sdO/Kgm2RQ+rgv2vggK8mPMewdLWz6G8TmFS0zJcuRvdSU3MAQ1EaeAXxNk6K+nJkQRVk0PMmCa4+cyCUTU5W1DqCxBB6xn7eW/ePIqLJsEK9uY=
-Received: from MW4PR03CA0299.namprd03.prod.outlook.com (2603:10b6:303:b5::34)
- by MW4PR12MB6949.namprd12.prod.outlook.com (2603:10b6:303:208::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
- 2023 07:49:13 +0000
-Received: from CO1NAM11FT106.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::98) by MW4PR03CA0299.outlook.office365.com
- (2603:10b6:303:b5::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25 via Frontend
- Transport; Thu, 19 Jan 2023 07:49:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT106.mail.protection.outlook.com (10.13.175.44) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6023.16 via Frontend Transport; Thu, 19 Jan 2023 07:49:12 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 19 Jan
- 2023 01:49:08 -0600
-Message-ID: <c42f1077-8049-8c59-ef66-6de477ef3516@amd.com>
-Date:   Thu, 19 Jan 2023 08:49:05 +0100
+        Thu, 19 Jan 2023 02:53:40 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF134676CB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:53:26 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so2990509wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I41afAp50ThfIZBbkmftL5UkvzCDEYxkYCUvpVfh/EM=;
+        b=HE8WdT3pWzxZ6gjlStGq13uSGBDOtohUxxSXEf6R7sNh938MnoR546yTqwnn+FzbcL
+         rQ4TEvDapnPgRTwRP1c9xOjEzCrRWtLPp4ADPtVVZbt6hpa5j/xznnfK13iqr1l8jYMc
+         5kQcw1GKxkGRGYMG9W4+Zbt+12QS/tuWea3jUs4eTeyMYaQ0JFgv0GSxeOngrAq3LswH
+         8pp97oniQYkcvpGTBBk4o5GL0cGT/0OBlATX7ao3UErCXWut2NBxzpWzVLaYAan3svsC
+         Y8zPIMVRGd+iWfmdthmLSzF4UYVNyg9Zz5QJ0PxZUZeHEOGqwXNn8Karu2NhegHbq/5N
+         bsvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I41afAp50ThfIZBbkmftL5UkvzCDEYxkYCUvpVfh/EM=;
+        b=mJK6JptsJJIMJNll8OEKRmjxpDFsidGp1C/Ecg0d49yizktLEVDU4/tQTrNlHFYHjy
+         o3MjQZLUC7XPYAFWpHxQn2lQRK/GYtjkIQWq6xnMt+BEm5Kxr9b3CRr69pJtKFcm4aXl
+         0xWcPKNVExk2Udml89Aujd3h2IfkL4HthfT0PCIN4s2nTm6guIIvhgdsYkcFnH95rYY+
+         xd8GujBvKQA272HcLns5Ywwp6KHEkj1GU0O64KledAydnKdf4GDWpqeWQ+KTiCY4Opxv
+         AiQdyjOr7Rp3rEpMlj82x5ahkfItu09dQqEAl+YKN4KlkDK1gINPSOisaYSXGK906WM8
+         yKhw==
+X-Gm-Message-State: AFqh2kqXXnDi+dEjGRko5EFMG7BS95GvamG3p+LBrH4QR2QkMzKSOnzI
+        8jdsN15yKiyCWN/WrRXV+KeQYg==
+X-Google-Smtp-Source: AMrXdXvpOBZpHXMS5RRtgrOG/uUbAYznTGpZmf6qxPe8vSG1zDNye5RlASDIPOiFN5i2hclX+ap5bg==
+X-Received: by 2002:a1c:4c04:0:b0:3d9:f0d8:708c with SMTP id z4-20020a1c4c04000000b003d9f0d8708cmr17941464wmf.26.1674114805332;
+        Wed, 18 Jan 2023 23:53:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b11-20020a05600018ab00b002be2279f100sm7116539wri.96.2023.01.18.23.53.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 23:53:24 -0800 (PST)
+Message-ID: <42be3c33-1055-a63e-d0ad-673d85c27d3e@linaro.org>
+Date:   Thu, 19 Jan 2023 08:53:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_linux-next=5d_fpga=3a_xilinx-pr-decoupler?=
- =?UTF-8?B?OiBVc2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v9 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
 Content-Language: en-US
-To:     <ye.xingchen@zte.com.cn>, <yilun.xu@intel.com>
-CC:     <mdf@kernel.org>, <hao.wu@intel.com>, <trix@redhat.com>,
-        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <202301191514074846351@zte.com.cn>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <202301191514074846351@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        brad@pensando.io, brendan.higgins@linux.dev,
+        briannorris@chromium.org, brijeshkumar.singh@amd.com,
+        catalin.marinas@arm.com, davidgow@google.com, gsomlo@gmail.com,
+        gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230119035136.21603-1-blarson@amd.com>
+ <20230119035136.21603-4-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230119035136.21603-4-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT106:EE_|MW4PR12MB6949:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc4c36c3-cec6-468b-e6ca-08daf9f1a7c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UCm8th4OMdyrGv0ZOhY+6SMpA25ZaIyFPZZv0Iw+hgbUCXJyCxKvEB4/bTo1SkyFJur1Xkk1uZi1zc0/3m8eMo/ECxKWOHC1+fjML5y5G7VWuWbEfuBUN/l7l/wlFZ/y31uYCMr+wgsixu2zoa/EvWJw8K/yYV7Dj3lt7wY5ACp1W7dc6m3ALCQS2YKHl+Q400O7nZViA1G+sZ0UeNYXoYlZFHBvYMxGj/4ydzWi4A0HDhZV+NlEjla6wlLr9zNPV6P9+pv6ps473PxRNgW7xT8dNkco6igm44CfHXg45yZcx1SQVhzk8wDgtGjKJNxRRGthqvQ+Lc7wh1lXu4JYdnVpbO1fMWI/C2xlaXVX3ByR/KMlhmh7R2sUHwcLbtThdIMTI8YGAQYjNihVOs+MvTKCosA6GGCGtaXb0i5V4dFj/D/WTWBdkisQyF45iSxo5JX7tzMjNNA3FIdnSQ7tqOdcTSM7C+sMp8vZtj1/U/rRiPqr2gMBfpO1qz/AuNYIDY82b5pk3BZ1bquy1ZVXFn2NEhZoowptL7/ZhOpr0BblySo/YsTK6prwzFZX9WkAVhkmVjtUSlmvc825D273aeQTLbndnThcoaOEllD1vlYrtADkhw6+L0DLmiOL6GAIzb5V+Yu2uOlUsyRxzzbMOeT+G1AcDFkXB6kIxcva2uSzn8k/foVSan3RGwBeIfFbeYuL2ydE905LYSGp9TCr+HUf6X3soBreaqXOXpvVdSoGunLOLGMca0g7rb+ucE81d2v52FdKAhWQgtA2l3mQqfHT3QcbwgeQGmX8ozB0RDo=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199015)(40470700004)(36840700001)(46966006)(82740400003)(40460700003)(81166007)(356005)(40480700001)(36756003)(82310400005)(16526019)(16576012)(86362001)(31696002)(70586007)(4326008)(336012)(478600001)(70206006)(186003)(26005)(31686004)(2616005)(110136005)(54906003)(36860700001)(53546011)(316002)(44832011)(426003)(47076005)(8936002)(41300700001)(2906002)(83380400001)(5660300002)(6666004)(43740500002)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 07:49:12.1827
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc4c36c3-cec6-468b-e6ca-08daf9f1a7c5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT106.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6949
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/19/23 08:14, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On 19/01/2023 04:51, Brad Larson wrote:
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+> Signed-off-by: Brad Larson <blarson@amd.com>
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 > ---
->   drivers/fpga/xilinx-pr-decoupler.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 2d9c491f7be9..0039cf11ddd5 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -108,7 +108,6 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->          struct xlnx_pr_decoupler_data *priv;
->          struct fpga_bridge *br;
->          int err;
-> -       struct resource *res;
+> Changes since v6:
+> - Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
 > 
->          priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->          if (!priv)
-> @@ -122,8 +121,7 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
->                          priv->ipconfig = match->data;
->          }
+> ---
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
 > 
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       priv->io_base = devm_ioremap_resource(&pdev->dev, res);
-> +       priv->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->          if (IS_ERR(priv->io_base))
->                  return PTR_ERR(priv->io_base);
-> 
-> --
-> 2.25.1
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> index 4707294d8f59..a6556854234f 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> @@ -20,11 +20,23 @@ allOf:
+>        required:
+>          - power-domains
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amd,pensando-elba-qspi
+> +    then:
+> +      properties:
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256, 1024 ]
+> +          default: 1024
 
-Reviewed-by: Michal Simek <michal.simek@amd.com>
+This won't work either... did you test it? Is 1024 really allowed?
 
-Thanks,
-Michal
+> +
+>  properties:
+>    compatible:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - amd,pensando-elba-qspi
+>                - ti,k2g-qspi
+>                - ti,am654-ospi
+>                - intel,lgm-qspi
+> @@ -48,7 +60,7 @@ properties:
+>      description:
+>        Size of the data FIFO in words.
+>      $ref: "/schemas/types.yaml#/definitions/uint32"
+> -    enum: [ 128, 256 ]
+> +    enum: [ 128, 256, 1024 ]
+
+The answer is here - your change is meaningless... I mean, really think
+about it, why do you allow 1024 only for your variant and then
+immediately allow for all variants? This does not make sense.
+
+If you tested with proper patch you would see:
+
+elba-asic.dtb: spi@2400: cdns,fifo-depth:0:0: 1024 is not one of [128, 256]
+
+
+>      default: 128
+>  
+>    cdns,fifo-width:
+
+Best regards,
+Krzysztof
+
