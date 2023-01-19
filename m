@@ -2,56 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A13673E04
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D088673E0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjASP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        id S231475AbjASP5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjASP5B (ORCPT
+        with ESMTP id S231326AbjASP5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:57:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EF323A9D;
-        Thu, 19 Jan 2023 07:57:00 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF4691758;
-        Thu, 19 Jan 2023 07:57:41 -0800 (PST)
-Received: from [10.57.75.229] (unknown [10.57.75.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D947E3F445;
-        Thu, 19 Jan 2023 07:56:56 -0800 (PST)
-Message-ID: <fb6564d3-c3a2-08c1-32c5-79ba22c69200@arm.com>
-Date:   Thu, 19 Jan 2023 15:56:55 +0000
+        Thu, 19 Jan 2023 10:57:39 -0500
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2105.outbound.protection.outlook.com [40.107.10.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9812C4B76A;
+        Thu, 19 Jan 2023 07:57:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YCpZimKjjzCJ882+ayOGXASWtzBiloouAFpzmdCkcGFcjV5luTcQVWExglqz3tnA1egN6FRomzW9cHhqls3w8lExlmbWKSyXNMHLDPSFV/wTPsGvq/TSqnoz+8S4udybTkc+2F0PPdMqdCw9BNv2nQucmAbdXYxrZ6fr3tgQ8Don8MkAsqTBgYoN8WvLT3o7WYVma0vqQfE8AjkY92sTIpgNhpvEboKWYZsgluGl/BWjDORpctd0KBdnqLpqC9g4VMiw0P1zbJ4TRR2WGpuzvZiriTWQxCWXV5SCRzyOisqT48/3YjFvjx2Ji4lyrRrXGE3oTSMjgSn4pgmRUJ5pSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vvdexPKqAlnDOQR64kzagGxbfyQqNF9vqgufLekoCnA=;
+ b=ZbzGNywgeUIM5pbBr4dppBB71JU/ErbGkDm6i48dN/Hdgq49xg+c9Dmv2KaFdMKaznfBe6Mfq37vRDMrGj718sOR5KQB4c7mE81bc+W/WU/a6obE0X0nJSqiPTzhH6bV+7N+IxvFvbzCjRzqejTtzZ/DVINGwhdSuvD560LDeVilosTxi5vl518ZYblcoJx0fnMX3rTzZlq7gpp80D0mH7shLtLDxTcoqXUcwUkc+zy2gqmXznj42VGLvdviOL+7T6QdwGEQMtSriVuwSFvO4JC3m0leTXL5lfym8sAFqeomaOFwzhCMVe5OGNlyhQw3Njof0ZjWfOTKNAgZr8gPrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vvdexPKqAlnDOQR64kzagGxbfyQqNF9vqgufLekoCnA=;
+ b=QSG5lTW65n83udJZuZRUi0/grQDJbn28CzJYc1Ra2q3HM+QNWhfmZZ2P5lDZkr6jqnVg9G9InUnOQjTvb6iW6S0eGSLgk2RajKZG+vtUaf01D6YWgYnwHwExTUrIiNxxK6eTwBsGpufnJwgApl+qOhZyVUFzDNYvpPI1v6JzCMI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO3P265MB2121.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:102::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 15:57:36 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.6002.025; Thu, 19 Jan 2023
+ 15:57:36 +0000
+Date:   Thu, 19 Jan 2023 15:57:09 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230119155709.20d87e35.gary@garyguo.net>
+In-Reply-To: <20230119151857.GQ16547@kitsune.suse.cz>
+References: <20230111161155.1349375-1-gary@garyguo.net>
+        <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+        <20230113181841.4d378a24.gary@garyguo.net>
+        <20230117175144.GI16547@kitsune.suse.cz>
+        <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+        <20230119150936.30811312.gary@garyguo.net>
+        <20230119151857.GQ16547@kitsune.suse.cz>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P123CA0263.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:194::16) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v4 6/8] perf cs_etm: Record ts_source in AUXTRACE_INFO for
- ETMv4 and ETE
-To:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, tanmay@marvell.com,
-        leo.yan@linaro.org, mike.leach@linaro.org
-Cc:     sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
-        bbhushan2@marvell.com, German Gomez <german.gomez@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230119154308.3815108-1-james.clark@arm.com>
- <20230119154308.3815108-7-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230119154308.3815108-7-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB2121:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32d0c7f1-88a5-4901-940e-08dafa35e21e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CDaMijWSZvXYx0c9vmbfZaLZBXzAPMPUx4AxjCWANUu5vy/rIIwgZoUekprvby8LPYDUjuYLkBytPxKsBzKf8+WiOI64EJ/p+vFddfMdogdDbz0rReDI0vgIbe7BTYKiBIyJQwAQW40H9ThokBg6dZ5DtsVK1Rafn2ssN83U3jCt5qE2oFdUEGLL/idPCdKOxm8USTRtAzo2gYKIC2YDf7zKiytZPRpS4ZgqAdqOrL3KrV68ss7AcNBaxAYxLQjBweskD55FmRqLudOAN8fxvgDHRUfJtIs0Nr+XgrtN/wO0vzWjyWr63QcXZHAtS+bB0FTiSgml32280Jg61jd1Dj6DSPbwKGVfHK0fysUAogYQivMRDRyhWsFskyU3QVxTYm0TSYqD4Shk+IUSurWSNTrSvtvI94mjaL9rU4PMprZmlkFiXNdBBphJP4swo+g0g+gP4ZENZ/PCZVe2SCRd+/mb/lpDKbUosHum6sy+jOcvRvKXvRTdVFIMSuKhZLv6dqJU/EyB3lohWGNg+hTMEHyWTQanuyaQmUGAhXGXkwC+RImGXhYdYWEEzmSOwuftpOT18lgRMpizjjxwUGsCBwCw8i0EOXJ+rjCmaQI4E6lLPIXNDn+9f1NWI0HKBpdbG0Wq9ofqIPzY9li6sXo9JA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(346002)(396003)(376002)(39830400003)(451199015)(316002)(6506007)(38100700002)(54906003)(2906002)(2616005)(6666004)(1076003)(66556008)(66476007)(66946007)(26005)(4326008)(6512007)(478600001)(6916009)(8676002)(8936002)(7416002)(186003)(5660300002)(36756003)(86362001)(41300700001)(4744005)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWZJQUs3NDdSMXoyMS9BbW5BK0xnQW1WWkNqRFU4NHA3dkR2NHJKOEhrRmNv?=
+ =?utf-8?B?Mm14bG5rTUtBN2VYbGpBQ25VT3k0bEtNV2NFanAzeFk3WDJzZU9EeWJ3V1Zw?=
+ =?utf-8?B?Q2x1eEdIQit4K2NMUGV3VlRndkRHZmpMOU55T0IvTmNwSUJ4eWZ4V09FT1RU?=
+ =?utf-8?B?bUhsbFdaWGp4aTQyY1Z2UWx2QWNnbFNjS1FiRWJCT1E4MXdkVTVjeUtmK3JW?=
+ =?utf-8?B?VDBXNTdzNHpRSWJUejN6K1U4b003RXB2UmJ4WmFmaE5CK0Rxa2g4QjMyQnpR?=
+ =?utf-8?B?NDluNVdseTFheHk3Q2dTdmdVKzZaMGJhZExjOGxmTmM4UWVTS3NrRURkRC9t?=
+ =?utf-8?B?dFdWSjBCTjlTbC9kYjNDUE91Rm9XS05oMEV2VGNnOC8vK2VnbFpqakFicUta?=
+ =?utf-8?B?VUxLWDlMVjBsdGVqSTIzZWRDQURMeTRLVHFVaytrbkNacEg4RUJRbWNxUURo?=
+ =?utf-8?B?NFB5Vy9zNGdXWXRGNnc0bmpsZit3dEduak4rUFlTa0p1OW5jK1VSWEZ6MXlB?=
+ =?utf-8?B?ZUFqV3VuOWtLejM0UEJqOHd6VU9XYU93c0tVUTFQanBPeklIR1FVeWFTay9s?=
+ =?utf-8?B?Y3V2SlBaWHBrNWVCVkdUSDJlVzVzeGdyU285b2w2aG81Z3lRdlJFaUF1cmhV?=
+ =?utf-8?B?cllsTk84MlQxLzNnOG5lSzlOSjN1TzJYK2gyRkZVeTdpTEhDcFlKTzN6ZHp2?=
+ =?utf-8?B?REZIWGZDMG1yek1mWEY4V3p2ZzFyQTJpQ29HZmd0YkRXWHhMdEdoWVozZ3J0?=
+ =?utf-8?B?NDJFd1BRSTdxVi9WL2RXTFlLOWF3MWxGWFRFRWJmUS9HWk9vQkxRRnI4TXdB?=
+ =?utf-8?B?TFpiQUVIaVZRRDl4WTM2VWdZdkpxaCszVE5YZmhERHNGdm9NR1R2WkdFekx3?=
+ =?utf-8?B?dnNQRmFJcGNJWW16SjI1bjd6dElhUXVzcjFXNVRkanBHNmk1TTdyTDVrSHc0?=
+ =?utf-8?B?OHE3V3lHYnliNWNoanAzYUttUkx0ZXJvYlI0SGd0clhDdlMvekM1cDZkdHY3?=
+ =?utf-8?B?cVEza056cktXbmQ2U2VLVXJ6MXM0L0RUd3Y2RXd4QUQrc0l0bHU2cnBUZFgr?=
+ =?utf-8?B?bWFwbTdhYmxNeC95ZWkwRmZXaElQOVBzaFUwQmdHakZlZmV0MzdSZE5GZUNO?=
+ =?utf-8?B?N0RzZ1d4WVpyMXVpZkdlZi8vd3cwMTY2WS9KVUlBZlo2TVY0TFR2bTczOGtH?=
+ =?utf-8?B?TWVaZUZ5Z201Z1ZtS2lubEpWVGVaSktZVWk3dFduL2tQd1Zxemc0a3BCUzcx?=
+ =?utf-8?B?Nmw0N0RXM0hVTzJmL2lkUkkzdUpNbVhFbWpaa1RtaUsxak5lUGlJM2txQ0xU?=
+ =?utf-8?B?a1JXeE9IUW9XM1pKVTRGQjFUeWgzNW9MYytlWk5MSDJld3BFTEhNQTJsOExC?=
+ =?utf-8?B?TTcwaGR3SG42NVdnODRGTExnUlVocUFOOUJhVFhjeVlQTEtMclNkT01BMXFJ?=
+ =?utf-8?B?Z0Y0YW1YSjBmMGtQL2M3NytZVlE5L1ZQNmZpb00xU2lPdTJiMGNqcmRYRGNW?=
+ =?utf-8?B?SlVRajdOZ2lsY1FQeGhHb3dvVXZ3a0ZEZkpEYlhWWTFHbElndXQ4amVYSmFo?=
+ =?utf-8?B?OEZ4Rmp6R29sSW5pVWJtdmdUQWhkdzhZWExUYkc3NE9lRXVsbGViakZTSXJi?=
+ =?utf-8?B?TlF1dFRZTEVnaFdDMUxWQUF2YTVYRnF0Mng4dFRyMStwMkxZSXQxSmlwcExn?=
+ =?utf-8?B?NURFdXFIWHBDdk41cnVuaVpmNFFyOURPaVBpYmFWMU4wL0hpM2ltaFM4VmZk?=
+ =?utf-8?B?T3dZNWgyQkszV1BwcmR5L2lOYW04Z0U0bElDZERxNzV2M3hxck92MWhySHdE?=
+ =?utf-8?B?aWsveUZFTTB5VkY0SGZRdi8zMFJyR2xTUEVnNVhKZnlWQmZFM012ZUhTS1Ro?=
+ =?utf-8?B?M1FFU1pTZUxBZ0lUTFJnbVZUK2kzTTJ4QkRiQStnZUFsZjJId0xiTUJZSU1h?=
+ =?utf-8?B?WjFMU3V4NEwvS3I1ZXlva3dmK0JsVmpCajk1djMwVDFzRDJMRXpiZFl0Q29W?=
+ =?utf-8?B?WThvV2VVcTBPS2xldUVwczRoK3V6M1R3aGFmUlRmdWtVdTVFRitwTHpiTGpM?=
+ =?utf-8?B?YkE1NklvcEpTNWhDZkFoeGpSd0xWdHpRQklmZWJKaEd2ZVY2UkFuektGRzlH?=
+ =?utf-8?Q?EgjNG4rjpcoYHCdE/87hFFofn?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32d0c7f1-88a5-4901-940e-08dafa35e21e
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 15:57:36.1930
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +ux8dbOhukzNnyC8FDBADwBe/1FYhDU2U8xXo/Ogjgxub8Yq6yFSnr49SfjWD1te7M4EdSyr2kqo9g9spEiH9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB2121
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,75 +145,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 15:43, James Clark wrote:
-> From: German Gomez <german.gomez@arm.com>
-> 
-> Read the value of ts_source exposed by the driver and store it in the
-> ETMv4 and ETE header. If the interface doesn't exist (such as in older
-> Kernels), defaults to a safe value of -1.
+On Thu, 19 Jan 2023 16:18:57 +0100
+Michal Such=C3=A1nek <msuchanek@suse.de> wrote:
 
-Super minor nits feel free to ignore.
+> On Thu, Jan 19, 2023 at 03:09:36PM +0000, Gary Guo wrote:
+> > On Tue, 17 Jan 2023 11:22:45 -0800
+> > Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> >  =20
+> > > And the additional 0's should compress well
+> > > so I'm not sure the additional size is that much relevant here. =20
+> >=20
+> > I am not sure why compression is mentioned here. I don't think section
+> > in .ko files are compressed. =20
+>=20
+> There is the option to compress the whole .ko files, and it's commonly
+> used.
 
-> 
-> Signed-off-by: German Gomez <german.gomez@arm.com>
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->   tools/perf/arch/arm/util/cs-etm.c | 48 +++++++++++++++++++++++++++++++
->   tools/perf/util/cs-etm-base.c     |  2 ++
->   tools/perf/util/cs-etm.h          |  2 ++
->   3 files changed, 52 insertions(+)
-> 
-> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-> index b526ffe550a5..481e170cd3f1 100644
-> --- a/tools/perf/arch/arm/util/cs-etm.c
-> +++ b/tools/perf/arch/arm/util/cs-etm.c
-> @@ -53,6 +53,7 @@ static const char * const metadata_etmv4_ro[] = {
->   	[CS_ETMV4_TRCIDR2]		= "trcidr/trcidr2",
->   	[CS_ETMV4_TRCIDR8]		= "trcidr/trcidr8",
->   	[CS_ETMV4_TRCAUTHSTATUS]	= "mgmt/trcauthstatus",
-> +	[CS_ETMV4_TS_SOURCE]		= "ts_source",
->   };
->   
->   static const char * const metadata_ete_ro[] = {
-> @@ -62,6 +63,7 @@ static const char * const metadata_ete_ro[] = {
->   	[CS_ETE_TRCIDR8]		= "trcidr/trcidr8",
->   	[CS_ETE_TRCAUTHSTATUS]		= "mgmt/trcauthstatus",
->   	[CS_ETE_TRCDEVARCH]		= "mgmt/trcdevarch",
-> +	[CS_ETE_TS_SOURCE]		= "ts_source",
->   };
->   
->   static bool cs_etm_is_etmv4(struct auxtrace_record *itr, int cpu);
-> @@ -613,6 +615,32 @@ static int cs_etm_get_ro(struct perf_pmu *pmu, int cpu, const char *path)
->   	return val;
->   }
->   
-> +static int cs_etm_get_ro_signed(struct perf_pmu *pmu, int cpu, const char *path)
+Hi Michal,
 
-minor nit: This doesn't necessarily care if it is RO ?
-Also, does it make sense to rename to include cpu relation :
+I am aware that there is an option but I am surprised to hear that it's
+commonly used. I don't think that's enabled by default, and certainly
+Debian/Ubuntu does not have it enabled.
 
-say,  cs_etm_pmu_cpu_get_signed() ?
-
-> +{
-> +	char pmu_path[PATH_MAX];
-> +	int scan;
-> +	int val = 0;
-> +
-> +	/* Get RO metadata from sysfs */
-> +	snprintf(pmu_path, PATH_MAX, "cpu%d/%s", cpu, path);
-> +
-> +	scan = perf_pmu__scan_file(pmu, pmu_path, "%d", &val);
-> +	if (scan != 1)
-> +		pr_err("%s: error reading: %s\n", __func__, pmu_path);
-> +
-> +	return val;
-> +}
-> +
-> +static bool cs_etm_pmu_path_exists(struct perf_pmu *pmu, int cpu, const char *path)
-
-nit: cs_etm_pmu_cpu_path_exists() ? To make the "cpu" relation explicit ?
-
-Otherwise looks good to me.
-
-Suzuki
-
+Best,
+Gary
