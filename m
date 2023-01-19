@@ -2,140 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624D767459C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476D67459E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjASWNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S229807AbjASWOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjASWM3 (ORCPT
+        with ESMTP id S230133AbjASWNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:12:29 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE31AA5CFF
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674165032; x=1705701032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HNIirhcJm/i2U/wvNniwD1sNwMfcd5wBrLe+4N5kx5E=;
-  b=Bsp4uRb731yPVqgYwHq6ZBQnxD54p4t6u0+qDgn3yY8dSldPAjOdj0X1
-   qUv6a8mjPfvfE5UR90wLYEiknB/4vC81cz3Cm510AQLAPms9AUW/LdaiR
-   aUuU8eSMpUYrLco1mYp3pABnUvuH2Pf/G+HBkqTroXjNLKINR6CZHEzb6
-   U0BRbrNg0wL7jCZIVFquD90CLvp1lmEEBOqpsoYSXN4F7BOdynOXuRqWT
-   IiZbb/iz6v9ZzioFDFLS1Aot8NHbMPmkNf9ChMk4VNvOP+NYP8+9+5XiH
-   wDAHoBfgTn3eb2VfuJXG3xxKcvDf6ReWctUTIe5ZKFyekqE9g2zDVxDP2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325474674"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="325474674"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:50:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="690792705"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="690792705"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2023 13:50:25 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIcng-0001tY-1u;
-        Thu, 19 Jan 2023 21:50:24 +0000
-Date:   Fri, 20 Jan 2023 05:49:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     oe-kbuild-all@lists.linux.dev, Rob Clark <robdclark@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
-Message-ID: <202301200511.h6Af907u-lkp@intel.com>
-References: <20230119181325.2834875-1-robdclark@gmail.com>
+        Thu, 19 Jan 2023 17:13:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA39A5CFF9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:53:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7797F61D5F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8B1C433D2;
+        Thu, 19 Jan 2023 21:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674165184;
+        bh=quKqZl9P3JBB+x7zw4zVLfYwXlZaDkIsDnE9rmueGOI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=o85FdrZCfrzYdR8Zw+w/UKwG7i2dFvTp2Nfkj9cL8zY2pNAG73aPt6O7bkJvbc/36
+         RD7Ng2NTAd8yVq5I5IESsJ4l+j226kFTKDx41PCV+GiV9JTTcvGqHWm+xwqrjpssp7
+         TWuYalYdA/zxmV8sgnV4xUp1dMYrm9xljK7JZoV02b8c66vqDqZZxxmMWbE1qmQPuk
+         9EHzu6y3eM2771/Xd4wKwiqDlNbtL/qpdK34THEWo1dDtHCk1+lD6BT1nsEqwcPUwe
+         Qq4o9LdGksy6eTjzl9TNicMPpXtwTPabXbIzgNy0uc4OctzKlSCB7AItVJkE88/djs
+         yIKtvu9h5+uzg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 789F45C1B07; Thu, 19 Jan 2023 13:53:04 -0800 (PST)
+Date:   Thu, 19 Jan 2023 13:53:04 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
+ <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230119181325.2834875-1-robdclark@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
+> On Thu, Jan 19, 2023 at 10:41:07AM -0800, Paul E. McKenney wrote:
+> > In contrast, this actually needs srcu_down_read() and srcu_up_read():
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > C C-srcu-nest-6
+> > 
+> > (*
+> >  * Result: Never
+> >  *
+> >  * Flag unbalanced-srcu-locking
+> >  * This would be valid for srcu_down_read() and srcu_up_read().
+> >  *)
+> > 
+> > {}
+> > 
+> > P0(int *x, int *y, struct srcu_struct *s1, int *idx)
+> > {
+> > 	int r2;
+> > 	int r3;
+> > 
+> > 	r3 = srcu_down_read(s1);
+> > 	WRITE_ONCE(*idx, r3);
+> > 	r2 = READ_ONCE(*y);
+> > }
+> > 
+> > P1(int *x, int *y, struct srcu_struct *s1, int *idx)
+> > {
+> > 	int r1;
+> > 	int r3;
+> > 
+> > 	r1 = READ_ONCE(*x);
+> > 	r3 = READ_ONCE(*idx);
+> > 	srcu_up_read(s1, r3);
+> > }
+> > 
+> > P2(int *x, int *y, struct srcu_struct *s1)
+> > {
+> > 	WRITE_ONCE(*y, 1);
+> > 	synchronize_srcu(s1);
+> > 	WRITE_ONCE(*x, 1);
+> > }
+> > 
+> > locations [0:r1]
+> > exists (1:r1=1 /\ 0:r2=0)
+> 
+> I modified this litmus test by adding a flag variable with an 
+> smp_store_release in P0, an smp_load_acquire in P1, and a filter clause 
+> to ensure that P1 reads the flag and idx from P1.
+> 
+> With the patch below, the results were as expected:
+> 
+> Test C-srcu-nest-6 Allowed
+> States 3
+> 0:r1=0; 0:r2=0; 1:r1=0;
+> 0:r1=0; 0:r2=1; 1:r1=0;
+> 0:r1=0; 0:r2=1; 1:r1=1;
+> No
+> Witnesses
+> Positive: 0 Negative: 3
+> Condition exists (1:r1=1 /\ 0:r2=0)
+> Observation C-srcu-nest-6 Never 0 3
+> Time C-srcu-nest-6 0.04
+> Hash=2b010cf3446879fb84752a6016ff88c5
 
-I love your patch! Perhaps something to improve:
+Fair point, and for example we already recommend emulating call_rcu()
+using similar release-acquire tricks.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.2-rc4 next-20230119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> It turns out that the idea of removing rf edges from Srcu-unlock events 
+> doesn't work well.  The missing edges mess up herd's calculation of the 
+> fr relation and the coherence axiom.  So I've gone back to filtering 
+> those edges out of carry-dep.
+> 
+> Also, Boqun's suggestion for flagging ordinary accesses to SRCU 
+> structures no longer works, because the lock and unlock operations now 
+> _are_ normal accesses.  I removed that check too, but it shouldn't hurt 
+> much because I don't expect to encounter litmus tests that try to read 
+> or write srcu_structs directly.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-shmem-Cleanup-drm_gem_shmem_create_with_handle/20230120-021440
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230119181325.2834875-1-robdclark%40gmail.com
-patch subject: [PATCH] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230120/202301200511.h6Af907u-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0de4f64a7edc0dcbf8ac711d79e203698fcd95a7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Clark/drm-shmem-Cleanup-drm_gem_shmem_create_with_handle/20230120-021440
-        git checkout 0de4f64a7edc0dcbf8ac711d79e203698fcd95a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/gpu/
+Agreed.  I for one would definitely have something to say about an
+SRCU-usage patch that directly manipulated a srcu_struct structure!  ;-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> Alan
+> 
+> 
+> 
+> Index: usb-devel/tools/memory-model/linux-kernel.bell
+> ===================================================================
+> --- usb-devel.orig/tools/memory-model/linux-kernel.bell
+> +++ usb-devel/tools/memory-model/linux-kernel.bell
+> @@ -53,38 +53,30 @@ let rcu-rscs = let rec
+>  	in matched
+>  
+>  (* Validate nesting *)
+> -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
+> -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
+> +flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-lock
+> +flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
 
-All warnings (new ones prefixed by >>):
+This renaming makes sense to me.
 
-   drivers/gpu/drm/drm_gem_shmem_helper.c: In function 'drm_gem_shmem_create_with_handle':
->> drivers/gpu/drm/drm_gem_shmem_helper.c:428:24: warning: returning 'struct drm_gem_shmem_object *' from a function with return type 'int' makes integer from pointer without a cast [-Wint-conversion]
-     428 |                 return shmem;
-         |                        ^~~~~
-   drivers/gpu/drm/drm_gem_shmem_helper.c: In function 'drm_gem_shmem_dumb_create':
-   drivers/gpu/drm/drm_gem_shmem_helper.c:521:38: warning: unused variable 'shmem' [-Wunused-variable]
-     521 |         struct drm_gem_shmem_object *shmem;
-         |                                      ^~~~~
+>  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+> -let srcu-rscs = let rec
+> -	    unmatched-locks = Srcu-lock \ domain(matched)
+> -	and unmatched-unlocks = Srcu-unlock \ range(matched)
+> -	and unmatched = unmatched-locks | unmatched-unlocks
+> -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
+> -	and unmatched-locks-to-unlocks =
+> -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
+> -	and matched = matched | (unmatched-locks-to-unlocks \
+> -		(unmatched-po ; unmatched-po))
+> -	in matched
+> +let srcu-rscs = ([Srcu-lock] ; (data | rf)+ ; [Srcu-unlock]) & loc
 
+The point of the "+" instead of the "*" is to avoid LKMM being confused by
+an srcu_read_lock() immediately preceding an unrelated srcu_read_unlock(),
+right?  Or am I missing something more subtle?
 
-vim +428 drivers/gpu/drm/drm_gem_shmem_helper.c
+>  (* Validate nesting *)
+> -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
+> -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
+> +flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
+> +flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-unlock
+> +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
+>  
+>  (* Check for use of synchronize_srcu() inside an RCU critical section *)
+>  flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+>  
+>  (* Validate SRCU dynamic match *)
+> -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+> +flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
+>  
+>  (* Compute marked and plain memory accesses *)
+>  let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+> -		LKR | LKW | UL | LF | RL | RU
+> + 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
+>  let Plain = M \ Marked
+>  
+>  (* Redefine dependencies to include those carried through plain accesses *)
+> -let carry-dep = (data ; rfi)*
+> +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
 
-2194a63a818db7 Noralf Trønnes 2019-03-12  417  
-0de4f64a7edc0d Rob Clark      2023-01-19  418  static int
-2194a63a818db7 Noralf Trønnes 2019-03-12  419  drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
-2194a63a818db7 Noralf Trønnes 2019-03-12  420  				 struct drm_device *dev, size_t size,
-2194a63a818db7 Noralf Trønnes 2019-03-12  421  				 uint32_t *handle)
-2194a63a818db7 Noralf Trønnes 2019-03-12  422  {
-2194a63a818db7 Noralf Trønnes 2019-03-12  423  	struct drm_gem_shmem_object *shmem;
-2194a63a818db7 Noralf Trønnes 2019-03-12  424  	int ret;
-2194a63a818db7 Noralf Trønnes 2019-03-12  425  
-cfe28f909ddd6c Daniel Vetter  2020-06-16  426  	shmem = drm_gem_shmem_create(dev, size);
-2194a63a818db7 Noralf Trønnes 2019-03-12  427  	if (IS_ERR(shmem))
-2194a63a818db7 Noralf Trønnes 2019-03-12 @428  		return shmem;
-2194a63a818db7 Noralf Trønnes 2019-03-12  429  
-2194a63a818db7 Noralf Trønnes 2019-03-12  430  	/*
-2194a63a818db7 Noralf Trønnes 2019-03-12  431  	 * Allocate an id of idr table where the obj is registered
-2194a63a818db7 Noralf Trønnes 2019-03-12  432  	 * and handle has the id what user can see.
-2194a63a818db7 Noralf Trønnes 2019-03-12  433  	 */
-2194a63a818db7 Noralf Trønnes 2019-03-12  434  	ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
-2194a63a818db7 Noralf Trønnes 2019-03-12  435  	/* drop reference from allocate - handle holds it now. */
-be6ee102341bc4 Emil Velikov   2020-05-15  436  	drm_gem_object_put(&shmem->base);
-2194a63a818db7 Noralf Trønnes 2019-03-12  437  
-0de4f64a7edc0d Rob Clark      2023-01-19  438  	return ret;
-2194a63a818db7 Noralf Trønnes 2019-03-12  439  }
-2194a63a818db7 Noralf Trønnes 2019-03-12  440  
+The "[~ Srcu-unlock]" matches the store that bridges the data and rfi",
+correct?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>  let addr = carry-dep ; addr
+>  let ctrl = carry-dep ; ctrl
+>  let data = carry-dep ; data
+> Index: usb-devel/tools/memory-model/linux-kernel.def
+> ===================================================================
+> --- usb-devel.orig/tools/memory-model/linux-kernel.def
+> +++ usb-devel/tools/memory-model/linux-kernel.def
+> @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
+>  synchronize_rcu_expedited() { __fence{sync-rcu}; }
+>  
+>  // SRCU
+> -srcu_read_lock(X)  __srcu{srcu-lock}(X)
+> -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
+> +srcu_read_lock(X) __load{srcu-lock}(*X)
+> +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
+> +srcu_down_read(X) __load{srcu-lock}(*X)
+> +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
+
+And here srcu_down_read() and srcu_up_read() are synonyms for
+srcu_read_lock() and srcu_read_unlock(), respectively, which I believe
+should suffice.
+
+>  synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
+>  synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
+
+So this looks quite reasonable to me.
+
+							Thanx, Paul
