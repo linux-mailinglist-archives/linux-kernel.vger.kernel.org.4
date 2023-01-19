@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843536740A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743B26740A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjASSNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S229561AbjASSOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjASSNX (ORCPT
+        with ESMTP id S230153AbjASSOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:13:23 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F11A43921
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:13:20 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id p24so3035802plw.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:13:20 -0800 (PST)
+        Thu, 19 Jan 2023 13:14:02 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CE09085D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:14:00 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id q10so2706070wrs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:14:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzlco0z7kyARFne6aPjn97rwGjIZC5wmHdoy935q5v8=;
-        b=Em6XPAjN56DTVWK7ltE7kWrUpgn4OjY5KNM0m0CZekF/Erh5W6I0BYol/sRWj7Iv8m
-         2y4DE4uEOTBLFrbViTWJwhiO698EWk1mFt4PHLKjI8nwgqj8QNmoz7AcfTIZuX2esnPc
-         I59H7o/kCo0x2wW6+2EGEiGcxYk4sFsUcqrWlLYrsW+fYwBIBr7tCIojm1QCpQ1xeIRq
-         DjYCudyK0HK4cdjR62ipxU1DiPs443dl3466m1BdtZ+9ah+h7R//mnLkKyihBgW9axoK
-         DD75W548dMoOGRN18vbHqB8ZZqDVWsJ2VP9ttM+GhsThtHAhtnfypWOiTVjmSzx4s58s
-         w9tA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CTjaq4NJj+o3gOe98XEHdekO9Q0PwCoOsoTblJCwYoc=;
+        b=grCb9Ts4cX4YOVle/uQPR+Fc2itoXnMocKb/H9CPEyeXTBZ2TDEGjAxObVMRadq3X0
+         Ek6950qpjUAGlafb/5ywHJvTRuBI/A6rli031niU+autoHZmBc62UeD65lWw6LTlZw3w
+         cI9J+ES9rTHUZ1Ug6JC6UpQFe9MJ0+FfI/5hlfsocYPy+/+mq/WJhoHhnlmzpUeQ1QIb
+         N6JeDp1zMjmRS/CwaWsNaL4qId86rYcsk1EF8Kv02lQdYwe2NyQt/d5cCgNHVB+0xnJZ
+         pM3NYuLPFf+hfFvXNHjv9N8vSdZXIwIyEmhOIDc6WzyIPcZvVIWU7rgSAcls0pEPr+HQ
+         aEwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gzlco0z7kyARFne6aPjn97rwGjIZC5wmHdoy935q5v8=;
-        b=zIkDkwAGheWMGVaW/xFWZ6LkEyeXyUTbTRmSJa3tv3h2nzZ9IgEadpeL0iy6gNbAlS
-         lFNx6Ms+VR1aos839O/J+5/b05pDIEyHZHls85HbpncLs9rSv26RqZDsG0jqVT5GnmDA
-         KaMY8oUGxgYbVO9de2NPhULXeT2mB48KOyxu+nJKhaHUMbEza+keoUErLoHMtGwNIEin
-         6rIoZEZKqxe4pA2gCU0/I4No41ztgboK6CBBFztFgFAAQoWgaPH9vuyUAT7YEUj2BByS
-         XW8ifxz7H4fL43qaZar2LJ6sDMDJGIxHUNuMoGZd0BDNsgcPDugct9bVPPDfCbVe6eRL
-         smKQ==
-X-Gm-Message-State: AFqh2kpWFB1ksCyVFeOozoXKv+BSQm5QAX7MXQFObVo5dDFbU1bXwUv4
-        f4w4HoFDDiT/EkbJy/5hrrc=
-X-Google-Smtp-Source: AMrXdXug0azKk/0n6wkJT+UoB4iTHWTRt5ztblvHe2juNwv12N7kECjxNTh6EWL7HBHOs6e56kcfQA==
-X-Received: by 2002:a17:903:11c7:b0:194:a531:4b39 with SMTP id q7-20020a17090311c700b00194a5314b39mr15913608plh.67.1674151999425;
-        Thu, 19 Jan 2023 10:13:19 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id y22-20020a17090264d600b001708c4ebbaesm12103841pli.309.2023.01.19.10.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 10:13:19 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
-Date:   Thu, 19 Jan 2023 10:13:25 -0800
-Message-Id: <20230119181325.2834875-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        bh=CTjaq4NJj+o3gOe98XEHdekO9Q0PwCoOsoTblJCwYoc=;
+        b=o0c3GTWCj5mMkKgSRYWH9FTwdkqa5jbq4E5eulhf9gTLi+8Zl6IPvTXldMkcVhvn4x
+         XuLOw7ncYk4NJtn88zBF5L0zKaX7v5HqFa/wOT7VBXCR+qLZmejY1N+UCUsEfsLrYJgR
+         Bj2yWUsjgcQRWZPeAxJegnYr4bDlQvOOFnjmtEZYCCMMOrc4d0ovkX8lT+v9ZIvomWax
+         Ici2RCHrWHdMHA2Mnjb5If578DIkYMuTOfqTybRbPssOBwvwCPVTeQvaeOdKpedhS3xg
+         mR9sXFemnAlRQFCiJXbTIqCYHXkvOV7absnzzvu9WVkRqWmD1wGDwGMV7h0z/TsBGP+W
+         kshg==
+X-Gm-Message-State: AFqh2kpCeJ4EuZ5sQVN7lTJFGeEVje5tv/lhBI+WiwWMuYZgFnV2MMq4
+        1MPTwPui4m/K1zLYP9GUzIaWb90q7FRNsVUGa5DraQ==
+X-Google-Smtp-Source: AMrXdXubzuRwFMdAKUWWKApxAavsA2MmoeCnhtYTwND98+IZTwX1MxXMkR95iIORdfwU8jxy4lD1xAGEGmn3zIybtVs=
+X-Received: by 2002:a05:6000:1d9b:b0:2bc:aa47:bf7a with SMTP id
+ bk27-20020a0560001d9b00b002bcaa47bf7amr340047wrb.343.1674152038872; Thu, 19
+ Jan 2023 10:13:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230116215751.633675-1-irogers@google.com> <20230116215751.633675-2-irogers@google.com>
+ <Y8lY6r0g6AvVwcQq@krava>
+In-Reply-To: <Y8lY6r0g6AvVwcQq@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 19 Jan 2023 10:13:46 -0800
+Message-ID: <CAP-5=fVoWZUAVne0q46Z6w89yyh8DL_u2L6ugs0d5yqF0Ngkig@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Connor OBrien <connoro@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,55 +80,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Thu, Jan 19, 2023 at 6:51 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Mon, Jan 16, 2023 at 01:57:51PM -0800, Ian Rogers wrote:
+> > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+> > after tools/scripts/Makefile.include is included, meaning flags are
+> > set assuming say CC is gcc, but then it can be later set to HOSTCC
+> > which may be clang. tools/scripts/Makefile.include is needed for host
+> > set up and common macros in objtool's Makefile. Rather than override
+> > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+> > builds and the linkage step. This means the Makefiles don't see things
+> > like CC changing and tool flag determination, and similar, work
+> > properly.
+> >
+> > Also, clear the passed subdir as otherwise an outer build may break by
+> > inadvertently passing an inappropriate value.
+>
+> I tested with cross builds for s390/ppc/arm64 and it was ok
+>
+> some comments below
+>
+> thanks,
+> jirka
+>
+>
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> >  1 file changed, 7 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> > index 76b737b2560d..515d87b32fb8 100644
+> > --- a/tools/bpf/resolve_btfids/Makefile
+> > +++ b/tools/bpf/resolve_btfids/Makefile
+> > @@ -18,14 +18,11 @@ else
+> >  endif
+> >
+> >  # always use the host compiler
+> > -AR       = $(HOSTAR)
+> > -CC       = $(HOSTCC)
+> > -LD       = $(HOSTLD)
+> > -ARCH     = $(HOSTARCH)
+>
+> I wonder all the tools should use HOSTCC in the first place?
+> seems more clear than forcing it from other makefiles
+>
+> subcmd even has:
+>
+> CC ?= $(CROSS_COMPILE)gcc
+> LD ?= $(CROSS_COMPILE)ld
+> AR ?= $(CROSS_COMPILE)ar
+>
+> which seems wrong unless I'm missing something.. should be always
+> the host compiler, right?
 
-Once we create the handle, the handle owns the reference.  Currently
-nothing was doing anything with the shmem ptr after the handle was
-created, but let's change drm_gem_shmem_create_with_handle() to not
-return the pointer, so-as to not encourage problematic use of this
-function in the future.  As a bonus, it makes the code a bit cleaner.
+Hmm.. it seems like a feature to be able to cross compile things like
+the perf tool.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+I agree the way this is all done is muddling and we should try to keep
+the way it is done consistent. The pattern of always early including
+Makefile.include, that sets flags based on CC, but then overriding CC
+was what I was after cleaning up here. Let's work on migrating to
+something better.
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index f21f47737817..19406f4907df 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -415,7 +415,7 @@ void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
- }
- EXPORT_SYMBOL(drm_gem_shmem_vunmap);
- 
--static struct drm_gem_shmem_object *
-+static int
- drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
- 				 struct drm_device *dev, size_t size,
- 				 uint32_t *handle)
-@@ -434,10 +434,8 @@ drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
- 	ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
- 	/* drop reference from allocate - handle holds it now. */
- 	drm_gem_object_put(&shmem->base);
--	if (ret)
--		return ERR_PTR(ret);
- 
--	return shmem;
-+	return ret;
- }
- 
- /* Update madvise status, returns true if not purged, else
-@@ -533,9 +531,7 @@ int drm_gem_shmem_dumb_create(struct drm_file *file, struct drm_device *dev,
- 			args->size = PAGE_ALIGN(args->pitch * args->height);
- 	}
- 
--	shmem = drm_gem_shmem_create_with_handle(file, dev, args->size, &args->handle);
--
--	return PTR_ERR_OR_ZERO(shmem);
-+	return drm_gem_shmem_create_with_handle(file, dev, args->size, &args->handle);
- }
- EXPORT_SYMBOL_GPL(drm_gem_shmem_dumb_create);
- 
--- 
-2.38.1
+> > +HOST_OVERRIDES := AR=$(HOSTAR) CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
+> > +               ARCH=$(HOSTARCH) EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+>
+> there's extra AR set and ARCH value is not in ""
 
+Ack. Will fix in v3.
+
+Thanks,
+Ian
+
+
+> > +
+> >  RM      ?= rm
+> >  CROSS_COMPILE =
+> > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
+> > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
+> >
+> >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> >
+> > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+> >
+> >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+> > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
+> > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> >                   $(abspath $@) install_headers
+> >
+> >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+> >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+> > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
+> > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> >                   $(abspath $@) install_headers
+> >
+> >  CFLAGS += -g \
+> > @@ -76,11 +73,11 @@ export srctree OUTPUT CFLAGS Q
+> >  include $(srctree)/tools/build/Makefile.include
+> >
+> >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > -     $(Q)$(MAKE) $(build)=resolve_btfids
+> > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
+> >
+> >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> >       $(call msg,LINK,$@)
+> > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> >
+> >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
+> >                              $(OUTPUT)/.*.o.cmd           \
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
