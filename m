@@ -2,111 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9B7673C6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E62673C94
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjASOlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S229862AbjASOm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjASOkI (ORCPT
+        with ESMTP id S230114AbjASOl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:40:08 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BAF86EDE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:39:20 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id e202so2696268ybh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:39:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kvfRouGYUkIYzfxHUcwrstqXmNVmW04bPhCFhKA1H7E=;
-        b=eVdYoWoitswFXn+eY4IJ9622Y4VAy0zNvxtFX7AYKsVBDHGIcDStTLOBIATzIGoTug
-         g7QSlf6Fzoh8Wzhc78eINRTDmo50PV+XWWvcr7109cTF5YPZLyK3cISGG2xdTIUSLDpX
-         tv63dXHMgE1+C+xYBZJFLF216fRihoXds+7zibZSLPETwFH9+jeVWi4TBdQD3Rv0rJPh
-         Scf1W6zVHBT9o+smV17TfBzoZINbljWqyeuM0L0pP1lXANSWOpzutycAybkP8DqqK8fS
-         3JxGAG9ijXd7nrKwRBZ7we/B4RDxCRzKl51xPMM9D20sw/9crcmt/NUMdnBnjQT+xz7b
-         bb9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kvfRouGYUkIYzfxHUcwrstqXmNVmW04bPhCFhKA1H7E=;
-        b=NmQprk0RVf2AtZiHwzncCnIM0beq2OXfGQJuuxlFUpkncr7VPQOpbFS1SHXnhVQwz6
-         HSRQisuk90ynu3uqTsXErXviheJZ0VKosCDAPbFzNgi41GBoejfymquVRReSmIBWIaDW
-         s6XOLlKgsuhxUHbNtzSOWh+crZUH5fEQapQC6OQ8PyBiCVLdKAze/TzcPYxE4TJxVUu8
-         pZYZ4RuWQQZHQ/aTDKbbzv6waQl6sHCU+Og8sMHvzO0FM3yy9voyT19RDEtsCsHCfsbF
-         iyTLpWBDEckiiHuM8jhGuOiVC31i2srPmNnd0trykt29PsiIvtWcty9mkymssLIUAqxp
-         kDFQ==
-X-Gm-Message-State: AFqh2komWcgRAuu29RqunQrkV/z+QjqThY3EQkThBWG3oSG5qB/nj2GH
-        3Eky4ezN48R+Z6VVBdXcVXozMdvOLwMzNfG6ji3Juw==
-X-Google-Smtp-Source: AMrXdXvkRdrXG4AIQQgFLkBJ0cBId619roqwYS2XeYk6pfuRMEaeJUWft/jaJIXYZmguMSTONGPdb/vE5+CBkhM/xio=
-X-Received: by 2002:a25:e0cb:0:b0:7fb:858a:b1b4 with SMTP id
- x194-20020a25e0cb000000b007fb858ab1b4mr325439ybg.488.1674139159741; Thu, 19
- Jan 2023 06:39:19 -0800 (PST)
+        Thu, 19 Jan 2023 09:41:29 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2066.outbound.protection.outlook.com [40.107.241.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6575F45F61;
+        Thu, 19 Jan 2023 06:39:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HH5TqMvcakH6MsIcZ0KN0hM+OwqmL5WPidXggE2Br4RuZL67pn5BmTcGxjB/PFsHou++30fZntUIiDKkrfsY6LVOFR8u22Le7tM9lCPzBB4kcOHH+ETAqFUQ0wqEtYfC/Bj123Uhgtz006zAb9Xlc6xNAW7+L9OTnLfL5YbND5l4TUhecW5G0Ah75EuZsZQLKpZrUNK1am8wi+Tw7Cf75K/mKstJlO0LpjzF8rPg7oOMB6I8fnKcizdjdFwSpoSLi2zDe2+oh/mEVKR986XKlo4tvWwnRQoH7/g6xNMAxdJscGT+l8zJ1uGeRucMH+7epfsr+fIQLrbXI59Iml9/iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eEYoPRCiCB8m/KrOhtmvJIRuuqANDjXR6bpxvNkok4g=;
+ b=RSgGiFSutrZHGKI/4o/0iBKZQ4T3K2EMhS4IYfv33msQuB+IBkHWp9+qrv6gXdHAGF2nmA54SNr2FB5oeDTbuvhvv3O0pH/3lRmYYTXDQW+fbfn+7cXf09DkWHFtbT10bD/XXibaGwED6bPytq2TAzswjEM2Kn1ItbUISZoXrLK3MAVNUcmOWVpbK5tgGjko0FUKZsd0TO8NA/SZ8JgwTRQ6Ax2sBqNzbbBECwdUYp/alq45KAbDOjZWcfxqGB27I+RAk6HK3fWr2JgFzhJg+u3FyN40TxlczHGad++bsS0MluarBNlCI0gat7m2yAlDCew2Pmt0jrFRSiZ3xw+ByQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eEYoPRCiCB8m/KrOhtmvJIRuuqANDjXR6bpxvNkok4g=;
+ b=0kWaI6JxeUoxLx/H0TuMOdLtDWKPxs2F5yMlbXi3DmZ2dhnxDq9JtG8pumtbHf3UfvVQYg28BW2RU8OUAYqZF3LjhNCdRY09iKhQ5fLcEn2cHUiBmC7SF+P2wiRhkuhrEmrGeyfcfUhPMaJGQlAbp950xVvbotdK0mvFgPiCMsI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by DB9PR08MB6556.eurprd08.prod.outlook.com (2603:10a6:10:261::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
+ 2023 14:39:33 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::4718:6092:e763:4219]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::4718:6092:e763:4219%2]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
+ 14:39:33 +0000
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sascha Hauer <sha@pengutronix.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: [PATCH v2 6/6] arm64: dts: rockchip: add pinctrls for 16-bit/18-bit rgb interface to rk356x
+Date:   Thu, 19 Jan 2023 15:39:11 +0100
+Message-Id: <20230119143911.3793654-7-michael.riesch@wolfvision.net>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
+References: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0152.eurprd07.prod.outlook.com
+ (2603:10a6:802:16::39) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 MIME-Version: 1.0
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com> <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
- <Y8lHqd9FlxiXTLuW@kroah.com> <CAMEGJJ1oZ9XFw0609PrEABAgDwvapbc3hG4hJ=vBekUOepdiWw@mail.gmail.com>
- <Y8lS5eBliYw5EHBb@kadam> <CAMEGJJ2b1KFQY1m1eTcvf8_kGBBTjzrBD2i_M2uR+6v4gEcbVQ@mail.gmail.com>
- <Y8lVvHMIYeSOLM5q@kadam>
-In-Reply-To: <Y8lVvHMIYeSOLM5q@kadam>
-From:   Phil Elwell <phil@raspberrypi.com>
-Date:   Thu, 19 Jan 2023 14:39:10 +0000
-Message-ID: <CAMEGJJ2grBH6NgA+0hwGwmkgRtk0GErULkH6XXbvaykRDzQnfA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|DB9PR08MB6556:EE_
+X-MS-Office365-Filtering-Correlation-Id: efcff33e-f4c6-4713-1849-08dafa2afb17
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RQy5FKOgLZHyqR8ZnIc1lb/ic1GvKWFf006Bvm9JC+y81HNi2HWnEQALTewxlP09MHGI91+pz4J02ZDGUJ3J0KJ1Qv5NaDOdfy76Lx3Le81+Nk07vCpAanehp8Ls6MnM+i3O1BpwgGxCaMQUnTEdmEL3uPCKTs7BMBVbjO51xn2aPjuKsxiZHw+ufkcvmjTcw0+QMkL+ywtnXRW5m+XrTux06UtyBzWGjjmihrwKvCHxS5ZnR+mLQYCFkYoef4+ZCOSZYoWeZO/v67Rzz4aa3dbqFqHkAyCSbObWLMFhp6yUZmlQ9gL0zkdu7lV2SR2coK4bWtJbyRzddChOi4G2z/uvNRuF8R85kLxDONbqS4ZFBe+ckJsTmD3CiTwyDQzI7u4WNXRdnL03vIyXbyMqOoNUiZsIRSOTuPmJT2+ou8wPBx7rcD2BFH4gWyoClsrIHefjRsgKCysjtEvzthjgx+Kezxjbk+wgmUiY3vXLAkgeUEBR2GwN0QW2m7bPsy6G0jWnygn/NvY7Fc+IT80W6NX5I7xRbMbhrs6pMLOnuiJkywmgl7xi7bqCiGUjODnvTob4zwD5cLC7tu2K21w+gGo7kr9CHuKi3wxIuhOYejiMk03hFqC+rd0Vqn9jGMUayFsjwyU+mCi3xARjrQr8vUAR+SU4SlDKLzEtvpGYREo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(136003)(39850400004)(396003)(451199015)(2616005)(52116002)(36756003)(966005)(478600001)(6512007)(8936002)(186003)(6486002)(5660300002)(83380400001)(41300700001)(7416002)(38100700002)(44832011)(316002)(1076003)(66556008)(66946007)(66476007)(86362001)(8676002)(107886003)(2906002)(4326008)(54906003)(6666004)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lqSwEHA7XuhkBFUMjHdnVaTWE5NFU6XLPRRQHpiaEeOIvmNaiWPJGqSTt8Ic?=
+ =?us-ascii?Q?gsP/nQy8S+92ZpjgiCc15qqBbskFwkrceJzZ+e9nXpi5VXkUBwmBHdv9Fexx?=
+ =?us-ascii?Q?+zsfxo/nXj9/0C6sxqnRI15bnN0M/SxgdX6eOUysxugFi4CHyiBUGiuJN7GW?=
+ =?us-ascii?Q?hrFCoEZumzNpC7CWHwa5L2RRFhg4ny2qcYBb2qOQzwFF/8EI6ifMOCblWEYQ?=
+ =?us-ascii?Q?O6C8uIxykyz95i8aK3J0yz6cBZAJd5aEYX+f7CX7zVHg4+57zLw1Mx1Bne9c?=
+ =?us-ascii?Q?2Roih7yIdd9ehOSNWXOeCj46JWo6EVTZi44NPrK9ZPPGdn2mp5FX35LvkzuO?=
+ =?us-ascii?Q?Y494P8zMIegAONbxb5yMeLwKRiXyOw6qPyM+vmY2jXxtYYZqq+uzEnlZTdxC?=
+ =?us-ascii?Q?oUV3IfNNHCsaXpHoKA1Dy13bfQ8uw282zX8wY9KzAenW0+/m7Mtfc/hk4wQB?=
+ =?us-ascii?Q?iMY1PzUnEf44WZGo9dW6XJnrku8FkTDwDAFoQxXaPEE7XBsgxT17wnS+GjAv?=
+ =?us-ascii?Q?tlFiZ75/i8PjvHZkNlGhDauHqKrnowt2ExMFZASCa1p6sQAHXssX2mc4mlyX?=
+ =?us-ascii?Q?AF+trHOw47gs73dhg9KlOO8ta2p55Lyeuh2vqOX7h8hmUBCG3GU+3Ylkycss?=
+ =?us-ascii?Q?QGtF9Kj9f8JhLennbjLs68SYPeguXx/IqrcVQCn8aQP/oh9QJMfqyScIslsA?=
+ =?us-ascii?Q?y3y9Sqhr/PdHIo/jxh7CWqoVevySmdAgvyMoEcdiU4fqD1y/mkY0zGW+ukC8?=
+ =?us-ascii?Q?dV36N9VG2habOAy/LKQuHs3bkR37s8iw4NSYhufvlh+iQWfDhXBXR40I5Rdl?=
+ =?us-ascii?Q?7k2qlN+PNZSHMiDTLfNtgPjtACqADu/khNVGLj67GRPMOJBJtSFf1gOFK7T0?=
+ =?us-ascii?Q?hRHy6EotIqNhd016EZdmmwXJVrXaQ1LpgjPUQEJtb06ZTRsD5oBTtvyCm6Pq?=
+ =?us-ascii?Q?PQUx9asQZuezpHzhvNJpYOIhVWqiUMRjDF93SxLVJHyoKBd8pA9ySeUUgOM3?=
+ =?us-ascii?Q?DkWpADTNpXflWly6Um/jI8jbplmsiwYZfPw1skImgAV3mCYHLtpzUwPl0+8P?=
+ =?us-ascii?Q?uFzNJLTP1lBE+I67IO/fd8P90+5EmU0VbXQL1m4kHt/aa8P4GwXDFmyDO1b0?=
+ =?us-ascii?Q?mkS/NjMl/QO7QuYRdFxEhrV+u+wJUy9SM2BqaJCI8OSwclZUgIPsclXIpvnc?=
+ =?us-ascii?Q?bX+6U9/JnimQHtmWoviZleCqfEQFrAO4jrS+rBwe5646QWjSEG/vaGWK91U9?=
+ =?us-ascii?Q?GnvDoTjxERsUkCnNRKYIjWWesDwsNJEynV8eZM5OYdr1G/o3mlTAbbtIBH1l?=
+ =?us-ascii?Q?o3xmI9CMNNvm0MGtm07UUlGGXLWoSGlqwRzYWjilKcqiQoawlLOWZ4dVKix+?=
+ =?us-ascii?Q?MafTiVF3AE+SOVglqD45qvO0UwIrwNzCqDg6xjCdwo0TBnSqGAMaj1Hs/i1c?=
+ =?us-ascii?Q?fpGXw11p8zG4MEdRJ/Y1MVZ3NfB/FFLshc7z3B6UdBNY1gXwwFKV48ha/AOx?=
+ =?us-ascii?Q?1YdsHFbFWs+0/cmPLsZCJ/WEfLThtVLlkZjzgxEqwECVj8onap9+gxNdIatW?=
+ =?us-ascii?Q?YNdbptkDdXuimSB8c2jl/zRmx6xilbRd/BR/bn+nTNFEupVMjYIuZk8YGQ7w?=
+ =?us-ascii?Q?Nw4foWRBiynJFXmXfPGYYkanuzVcyJPNqJS09zxDy7dO8M15ZlBdo0Yb/gwU?=
+ =?us-ascii?Q?ODatbxQE3BYL2uRXzPi7DdJJ95E=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: efcff33e-f4c6-4713-1849-08dafa2afb17
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 14:39:33.5605
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1bf+w3d9qsXuEx76v1XZcMz8bWcibC+Xl0dMVuDF6G8WVbPdU+9lW35aQP/CX/KPkhdDTDy3cH0eZOxN5b/IyV/2wo5dg7qQ3ccWFD34tVw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6556
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 at 14:37, Dan Carpenter <error27@gmail.com> wrote:
->
-> On Thu, Jan 19, 2023 at 02:31:50PM +0000, Phil Elwell wrote:
-> > On Thu, 19 Jan 2023 at 14:25, Dan Carpenter <error27@gmail.com> wrote:
-> > >
-> > > On Thu, Jan 19, 2023 at 01:47:44PM +0000, Phil Elwell wrote:
-> > > > > > I understand the desire to remove the custom logging. I don't welcome
-> > > > > > the loss of flexibility that comes with such a strategy
-> > > > >
-> > > > > What "loss of flexibility"?  You now have access to the full dynamic
-> > > > > debugging facilities that all of the rest of the kernel has.  What is
-> > > > > lacking?
-> > > >
-> > > > Perhaps I've missed something, either in this patch set or the kernel
-> > > > as a whole, but how is one supposed to set different logging levels on
-> > > > different facilities within a driver/module, or even for the module as
-> > > > a whole?
-> > >
-> > > Yeah.  You will be still able to do that and more besides after the
-> > > transition.  Cleaning this up makes the code better in every way.
-> > >
-> > > Documentation/admin-guide/dynamic-debug-howto.rst
-> >
-> > Are you saying this patch set gets us to that point?
->
-> Yes.  The patch has some issues, but yes.
+The rk3568-pinctrl.dtsi only defines the 24-bit RGB interface. Add separate
+nodes for the 16-bit and 18-bit version, respectively. While at it, split
+off the clock/sync signals from the data signals.
 
-OK, thanks. I'll be watching how this plays out with interest.
+The exact mapping of the data pins was discussed here:
+https://lore.kernel.org/linux-rockchip/f33a0488-528c-99de-3279-3c0346a03fd6@wolfvision.net/T/
 
-Phil
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+---
+v2:
+ - no changes
+
+ .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+index 8f90c66dd9e9..0a979bfb63d9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+@@ -3117,4 +3117,98 @@ tsadc_pin: tsadc-pin {
+ 				<0 RK_PA1 0 &pcfg_pull_none>;
+ 		};
+ 	};
++
++	lcdc {
++		/omit-if-no-ref/
++		lcdc_clock: lcdc-clock {
++			rockchip,pins =
++				/* lcdc_clk */
++				<3 RK_PA0 1 &pcfg_pull_none>,
++				/* lcdc_den */
++				<3 RK_PC3 1 &pcfg_pull_none>,
++				/* lcdc_hsync */
++				<3 RK_PC1 1 &pcfg_pull_none>,
++				/* lcdc_vsync */
++				<3 RK_PC2 1 &pcfg_pull_none>;
++		};
++
++		/omit-if-no-ref/
++		lcdc_data16: lcdc-data16 {
++			rockchip,pins =
++				/* lcdc_d3 */
++				<2 RK_PD3 1 &pcfg_pull_none>,
++				/* lcdc_d4 */
++				<2 RK_PD4 1 &pcfg_pull_none>,
++				/* lcdc_d5 */
++				<2 RK_PD5 1 &pcfg_pull_none>,
++				/* lcdc_d6 */
++				<2 RK_PD6 1 &pcfg_pull_none>,
++				/* lcdc_d7 */
++				<2 RK_PD7 1 &pcfg_pull_none>,
++				/* lcdc_d10 */
++				<3 RK_PA3 1 &pcfg_pull_none>,
++				/* lcdc_d11 */
++				<3 RK_PA4 1 &pcfg_pull_none>,
++				/* lcdc_d12 */
++				<3 RK_PA5 1 &pcfg_pull_none>,
++				/* lcdc_d13 */
++				<3 RK_PA6 1 &pcfg_pull_none>,
++				/* lcdc_d14 */
++				<3 RK_PA7 1 &pcfg_pull_none>,
++				/* lcdc_d15 */
++				<3 RK_PB0 1 &pcfg_pull_none>,
++				/* lcdc_d19 */
++				<3 RK_PB4 1 &pcfg_pull_none>,
++				/* lcdc_d20 */
++				<3 RK_PB5 1 &pcfg_pull_none>,
++				/* lcdc_d21 */
++				<3 RK_PB6 1 &pcfg_pull_none>,
++				/* lcdc_d22 */
++				<3 RK_PB7 1 &pcfg_pull_none>,
++				/* lcdc_d23 */
++				<3 RK_PC0 1 &pcfg_pull_none>;
++		};
++
++		/omit-if-no-ref/
++		lcdc_data18: lcdc-data18 {
++			rockchip,pins =
++				/* lcdc_d2 */
++				<2 RK_PD2 1 &pcfg_pull_none>,
++				/* lcdc_d3 */
++				<2 RK_PD3 1 &pcfg_pull_none>,
++				/* lcdc_d4 */
++				<2 RK_PD4 1 &pcfg_pull_none>,
++				/* lcdc_d5 */
++				<2 RK_PD5 1 &pcfg_pull_none>,
++				/* lcdc_d6 */
++				<2 RK_PD6 1 &pcfg_pull_none>,
++				/* lcdc_d7 */
++				<2 RK_PD7 1 &pcfg_pull_none>,
++				/* lcdc_d10 */
++				<3 RK_PA3 1 &pcfg_pull_none>,
++				/* lcdc_d11 */
++				<3 RK_PA4 1 &pcfg_pull_none>,
++				/* lcdc_d12 */
++				<3 RK_PA5 1 &pcfg_pull_none>,
++				/* lcdc_d13 */
++				<3 RK_PA6 1 &pcfg_pull_none>,
++				/* lcdc_d14 */
++				<3 RK_PA7 1 &pcfg_pull_none>,
++				/* lcdc_d15 */
++				<3 RK_PB0 1 &pcfg_pull_none>,
++				/* lcdc_d18 */
++				<3 RK_PB3 1 &pcfg_pull_none>,
++				/* lcdc_d19 */
++				<3 RK_PB4 1 &pcfg_pull_none>,
++				/* lcdc_d20 */
++				<3 RK_PB5 1 &pcfg_pull_none>,
++				/* lcdc_d21 */
++				<3 RK_PB6 1 &pcfg_pull_none>,
++				/* lcdc_d22 */
++				<3 RK_PB7 1 &pcfg_pull_none>,
++				/* lcdc_d23 */
++				<3 RK_PC0 1 &pcfg_pull_none>;
++		};
++	};
++
+ };
+-- 
+2.30.2
+
