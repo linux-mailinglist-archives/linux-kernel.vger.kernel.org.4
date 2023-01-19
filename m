@@ -2,108 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCC2674A92
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7FA674A8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjATE2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S229967AbjATE2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjATE21 (ORCPT
+        with ESMTP id S229911AbjATE21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 Jan 2023 23:28:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D08A95B8;
-        Thu, 19 Jan 2023 20:28:24 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EDEA95BC
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:28:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C759AB8258A;
-        Thu, 19 Jan 2023 15:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62A2EC433EF;
-        Thu, 19 Jan 2023 15:30:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEC3CB82544
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B669C433EF;
+        Thu, 19 Jan 2023 15:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674142218;
-        bh=FP4ru6E8Oo1JNr9DNk54UNNPsvn5fuH6fMcjfdBl9lY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bFB7tr99GI5Hq9EBVHmPrjqEzs9dqNrQDOhNaSTZhid/ub9KtLtAbp6OrBy+XmNZd
-         Ys9K9qWgQGZpyCFNH5lCqncShoKEdtrNFA266NAB6zpE/qD6ZzYuobsVgof6W0XFC3
-         smDWAszIxvhLusZnZm+S1wiJcv/xWWC4lmGNyooLA6sEPZtCMcTIueGF/qexVHMRL0
-         GSqDqp59ittarba+p35/hEqdy+bVRKTY6oyU5blSnT90PMfmI5yNaNsMw1XGzUl31k
-         gDr0yNHZtLCad1rWNA2lx7AZFozMamdVIkRPdHcdbqG9lVoP8sQvqoLVo+ySOAT4NR
-         Eh/O2sbpfBD4g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E094E54D27;
-        Thu, 19 Jan 2023 15:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/6] net: phy: Remove probe_capabilities
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167414221817.31934.14400606803161415762.git-patchwork-notify@kernel.org>
-Date:   Thu, 19 Jan 2023 15:30:18 +0000
-References: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
-In-Reply-To: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
-To:     Michael Walle <michael@walle.cc>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
-        Mark-MC.Lee@mediatek.com, lorenzo@kernel.org,
-        matthias.bgg@gmail.com, bryan.whitehead@microchip.com,
-        UNGLinuxDriver@microchip.com, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, joel@jms.id.au, andrew@aj.id.au,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-aspeed@lists.ozlabs.org, andrew@lunn.ch,
-        jesse.brandeburg@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1674142321;
+        bh=QoPNuODGj6XDT3N+WFle3ns42zhE4shUpt9pFCuQY1k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NQ8HJAyivLD3sashVo5rHIEaGLBxziNN83QC1IPNteCjyMHgPl6LraKL7968FL+7f
+         G/V0AmaSLfW2xFl1RyDPP2vCIjeUAAiiFJq0Q9ohabqrtKW9tizYysuEHtCO4wmUBY
+         Mr1r34PBkaBfOOqP7qG2xae4G4CK0k+/mtjkwXpD3aj7QoZVgvw/1GjHH1EZzRhBuc
+         Y93gEbVBLT5L1cQYo9V7R7PN9abHxKmM3I9WOIeMpziVUNZytILmSbA1F7AGMdERS+
+         h03DUk8pAo85rCOG5ZP351OXo5gY3RMerg0ek5xhhfc/qRAJs1pJQhmUfCUVI5woGp
+         aQYM/WJ7Smc7w==
+Date:   Fri, 20 Jan 2023 00:31:56 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as
+ non-kprobe-able
+Message-Id: <20230120003156.48ca16ea2a6f73398e568358@kernel.org>
+In-Reply-To: <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+        <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
+        <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+        <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
+        <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
+        <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
+        <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, 18 Jan 2023 15:17:00 +0800
+Huacai Chen <chenhuacai@kernel.org> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+> On Wed, Jan 18, 2023 at 2:24 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >
+> >
+> >
+> > On 01/18/2023 02:05 PM, Jinyang He wrote:
+> > >
+> > > On 2023-01-18 12:23, Tiezhu Yang wrote:
+> > >>
+> > >>
+> > >> On 01/18/2023 12:14 PM, Huacai Chen wrote:
+> > >>> If memcpy should be blacklisted, then what about memset and memmove?
+> > >>
+> > >> According to the test results, there are no problems to probe
+> > >> memset and memmove, so no need to blacklist them for now,
+> > >> blacklist memcpy is because it may cause recursive exceptions,
+> > >> there is a detailed discussion in the following link:
+> > >>
+> > >> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> > >>
+> > >
+> > > Hi, Tiezhu,
+> > >
+> > > I cannot reproduce the results when kprobe memcpy. Could you please give
+> > > some details. Emm, I just replace "kernel_clone" with "memcpy" in
+> > > kprobe_example.c.
+> >
+> > Please remove the related "_ASM_NOKPROBE(memcpy)" code in
+> > arch/loongarch/lib/memcpy.S, and then compile and update kernel,
+> > execute the following cmd after reboot, I can reproduce the hang
+> > problem easily (it will take a few minutes).
+> >
+> > modprobe kprobe_example symbol="memcpy"
+> Then, why is handle_syscall different from other exception handlers?
 
-On Wed, 18 Jan 2023 11:01:35 +0100 you wrote:
-> With all the drivers which used .probe_capabilities converted to the
-> new c45 MDIO access methods, we can now decide based upon these whether
-> a bus driver supports c45 and we can get rid of the not widely used
-> probe_capabilites.
+I need to check the loongarch implementation of handle_syscall() but
+I guess in that handler the register set is not completely set as
+kernel one. In that case, the software breakpoint handler may not
+possible to handle it correctly. So it is better to avoid probing such
+"border" function by kprobes.
+
+Thank you,
+
 > 
-> Unfortunately, due to a now broader support of c45 scans, this will
-> trigger a bug on some boards with a (c22-only) Micrel PHY. These PHYs
-> don't ignore c45 accesses correctly, thinking they are addressed
-> themselves and distrupt the MDIO access. To avoid this, a blacklist
-> for c45 scans is introduced.
-> 
-> [...]
+> Huacai
+> >
+> > >
+> > > And for your call trace,
+> > >
+> > >  handler_pre()
+> > >    pr_info()
+> > >      printk()
+> > >       _printk()
+> > >         vprintk()
+> > >           vprintk_store()
+> > >             memcpy()
+> > >
+> > > I think when we should skip this time kprobe which triggered in
+> > > handler_{pre, post}. That means this time kprobe will not call
+> > > handler_{pre, post} agian, and not cause recursion. I remember
+> > > your codes had done this skip action. So, that's so strange if
+> > > recursion in handler_{pre, post}.
+> > >
+> > >
+> > > Thanks,
+> > >
+> > > Jinyang
+> > >
+> > >
+> > >>
+> > >> Thanks,
+> > >> Tiezhu
+> > >>
+> > >>>
+> > >>> Huacai
+> > >>>
+> > >>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn>
+> > >>> wrote:
+> > >>>>
+> > >>>> Some assembler symbols are not kprobe safe, such as handle_syscall
+> > >>>> (used as syscall exception handler), *memcpy* (may cause recursive
+> > >>>> exceptions), they can not be instrumented, just blacklist them for
+> > >>>> kprobing.
+> > >>>>
+> > >>>> Here is a related problem and discussion:
+> > >>>> Link:
+> > >>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> > >>>>
+> > >>>>
+> > >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > >>>> ---
+> > >>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
+> > >>>>  arch/loongarch/kernel/entry.S    |  1 +
+> > >>>>  arch/loongarch/lib/memcpy.S      |  3 +++
+> > >>>>  3 files changed, 14 insertions(+)
+> > >>>>
+> > >>>> diff --git a/arch/loongarch/include/asm/asm.h
+> > >>>> b/arch/loongarch/include/asm/asm.h
+> > >>>> index 40eea6a..f591b32 100644
+> > >>>> --- a/arch/loongarch/include/asm/asm.h
+> > >>>> +++ b/arch/loongarch/include/asm/asm.h
+> > >>>> @@ -188,4 +188,14 @@
+> > >>>>  #define PTRLOG         3
+> > >>>>  #endif
+> > >>>>
+> > >>>> +/* Annotate a function as being unsuitable for kprobes. */
+> > >>>> +#ifdef CONFIG_KPROBES
+> > >>>> +#define _ASM_NOKPROBE(name)                            \
+> > >>>> +       .pushsection "_kprobe_blacklist", "aw";         \
+> > >>>> +       .quad   name;                                   \
+> > >>>> +       .popsection
+> > >>>> +#else
+> > >>>> +#define _ASM_NOKPROBE(name)
+> > >>>> +#endif
+> > >>>> +
+> > >>>>  #endif /* __ASM_ASM_H */
+> > >>>> diff --git a/arch/loongarch/kernel/entry.S
+> > >>>> b/arch/loongarch/kernel/entry.S
+> > >>>> index d53b631..55e23b1 100644
+> > >>>> --- a/arch/loongarch/kernel/entry.S
+> > >>>> +++ b/arch/loongarch/kernel/entry.S
+> > >>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
+> > >>>>
+> > >>>>         RESTORE_ALL_AND_RET
+> > >>>>  SYM_FUNC_END(handle_syscall)
+> > >>>> +_ASM_NOKPROBE(handle_syscall)
+> > >>>>
+> > >>>>  SYM_CODE_START(ret_from_fork)
+> > >>>>         bl      schedule_tail           # a0 = struct task_struct *prev
+> > >>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+> > >>>> index 7c07d59..3b7e1de 100644
+> > >>>> --- a/arch/loongarch/lib/memcpy.S
+> > >>>> +++ b/arch/loongarch/lib/memcpy.S
+> > >>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
+> > >>>>         ALTERNATIVE     "b __memcpy_generic", \
+> > >>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
+> > >>>>  SYM_FUNC_END(memcpy)
+> > >>>> +_ASM_NOKPROBE(memcpy)
+> > >>>>
+> > >>>>  EXPORT_SYMBOL(memcpy)
+> > >>>>
+> > >>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
+> > >>>>  2:     move    a0, a3
+> > >>>>         jr      ra
+> > >>>>  SYM_FUNC_END(__memcpy_generic)
+> > >>>> +_ASM_NOKPROBE(__memcpy_generic)
+> > >>>>
+> > >>>>  /*
+> > >>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
+> > >>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
+> > >>>>  3:     move    a0, a3
+> > >>>>         jr      ra
+> > >>>>  SYM_FUNC_END(__memcpy_fast)
+> > >>>> +_ASM_NOKPROBE(__memcpy_fast)
+> > >>>> --
+> > >>>> 2.1.0
+> > >>>>
+> > >>
+> >
+> >
 
-Here is the summary with links:
-  - [net-next,v2,1/6] net: mdio: Move mdiobus_scan() within file
-    https://git.kernel.org/netdev/net-next/c/81d874e7c84e
-  - [net-next,v2,2/6] net: mdio: Rework scanning of bus ready for quirks
-    https://git.kernel.org/netdev/net-next/c/d41e127757f3
-  - [net-next,v2,3/6] net: mdio: Add workaround for Micrel PHYs which are not C45 compatible
-    https://git.kernel.org/netdev/net-next/c/348659337485
-  - [net-next,v2,4/6] net: mdio: scan bus based on bus capabilities for C22 and C45
-    https://git.kernel.org/netdev/net-next/c/1a136ca2e089
-  - [net-next,v2,5/6] net: phy: Decide on C45 capabilities based on presence of method
-    https://git.kernel.org/netdev/net-next/c/fbfe97597c77
-  - [net-next,v2,6/6] net: phy: Remove probe_capabilities
-    https://git.kernel.org/netdev/net-next/c/da099a7fb13d
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
