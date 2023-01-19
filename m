@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEB467402D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA25667402E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjASRla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S230298AbjASRld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjASRlV (ORCPT
+        with ESMTP id S229609AbjASRlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:41:21 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACEC8BABC;
-        Thu, 19 Jan 2023 09:41:05 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id i5so2273429oih.11;
-        Thu, 19 Jan 2023 09:41:05 -0800 (PST)
+        Thu, 19 Jan 2023 12:41:22 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AE2798F9;
+        Thu, 19 Jan 2023 09:41:08 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id v17so2297841oie.5;
+        Thu, 19 Jan 2023 09:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wGMIqOBRVBwOZ5uyAthUJactG+QhEC2sAl1iIa6Sq0Y=;
-        b=Ri4BGOfnQOaAKbc9bsyJzNBXcozXCwdE3vwshewu1Uw/45388Y1AnLUr0W6yjWzeQy
-         r8Ja2PwxVoRtn3538cqmTsUfue1Q3PLgQbIQe1z9tNRbdie48JAf5V5rbeqUhk405IRz
-         K00/7flOo9EVO9c1Q38l+6BWXt1klpjeFTyBZqHVifxYHG4mpBa0Xipy41z++9UnGY7f
-         5JZ5gcVizyM5QJgeobaZpxlODIpA09ohumDP0eihN1QChtKrieux5kwhx3RSBRfrFxJh
-         iA/0Goj5GdtyhqBi+ctA03dkPXFvMDUsWbkn2rfV78L6QJQK6PAhoxp7SA9YvpSLkgrQ
-         dVDQ==
+        bh=NO/tLxVBmWB1dJAexFMTC87LMSP1V8gc/xUgEhy6fvI=;
+        b=YBF/bv8HlX6jUtB0z4bb1xtYgg4EdDkd80BPaxQb8LIoAa6fmzgul3M6qSS5yRI8Cy
+         fGIybIuQB5cT1uuCDHK3kr9/mIHcetjAftYjO88JzxaBX8e5VWpkkxPeu/gwtlmfwySs
+         VUy4NLBcyyxcgsWBDrf78+meibyXGyuM4zzRsXhSpU5LrIWbeXMSjwbopFHonDvUeJag
+         pYYIYKAD2jAqT2JzLQLfu5E1Iqk6teivVTyqrFiOhABiX1/yEc8lpFrYnFfj3TUGHiVK
+         m88jKaFFsb/qKwQ0K9mlhfcJlgzHvGqzU1zR+vl0tVUIbsbu5f7FqlHMeSgZQqyTghny
+         OCJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wGMIqOBRVBwOZ5uyAthUJactG+QhEC2sAl1iIa6Sq0Y=;
-        b=DkSVoaOaD/n2pM0dOirrQ/io8BT/peCjUioR9fq58pAcW/K+aMrmRFjnJbVkdKUjU0
-         gUclPGd19ZU08Jn8baH0ghN0caAWQkv+1yf36jwnwu8PK78en4/V/BimywRYiRj2i2ON
-         aanuLxC3Jv8aJe8IxJuZCAtTqHflroDm84NgZWyTDuIS2CPqjd29Y2i9UCzEjqdnaf5O
-         SyFnr2qOy4TKwMs8TxRkImRtg6sJsgxXSTljpBOeljkAlVUzXo+1XRsna84UfxaywfXv
-         PJOyDkhHmgJ8rcY0w/fsawPEtVtQSWA5o2GrmBZIi6TaEZscEEV9Ct3XM5mvkJga/7bR
-         mnsQ==
-X-Gm-Message-State: AFqh2kqK0lTY/NfmMXPO2AJFXyLc5YmNufkcWCsz7X1zIFYk5/QBmcyt
-        nSFXfa9tG2KCoU4q1ZoxFE4obdheNiaPVwfQ
-X-Google-Smtp-Source: AMrXdXtBy7x19i00rqANu3EnwrPCvgO2sfa1l0lEkr/eN55j/MkW7CxJ2Nw5/0uFJoeG8Jc/cFhq/g==
-X-Received: by 2002:aca:1c09:0:b0:367:18f4:dbef with SMTP id c9-20020aca1c09000000b0036718f4dbefmr5472968oic.0.1674150065168;
-        Thu, 19 Jan 2023 09:41:05 -0800 (PST)
+        bh=NO/tLxVBmWB1dJAexFMTC87LMSP1V8gc/xUgEhy6fvI=;
+        b=ZZ0MyAIDcewrtMHq9udoGHkTzPVtU9QbsqSRRaKXKC+ExaalGiOo6EH1H1CFcowBcz
+         0x0kf/268TS7b+w/DY6P3Q+7so51m4lH4FdbYlPOLAd88ZNMtZdxKvAlPm+YMJE/hnT+
+         F4XSFWJPskaLw7tqCPvvP+TZ9OdMVW2B92BQwIz+YBYfDlTdTIp7EmSRWEAzz2Dc4ncO
+         tFfh4/CgrRWWUBYHjAxXwt+vR8WKnURE5cZ/ElAXwPGXX/Md9hIyhngeJ2tW6NgE9g3x
+         ose5x9e000yQ2e9G8iMqTcM504nkGEYEsbsfy1BoGJlnGyjmSAtgpAUsTEf4xnR+s3qx
+         Cgzg==
+X-Gm-Message-State: AFqh2kq0s8BI8EsZ/DrzAH/0hC2vM+uQUUs1jKmEsYArmjiaxGx9rts5
+        FmBLlbdoPeOEyZyyAvtTlyVCXar7Lh729VYj
+X-Google-Smtp-Source: AMrXdXskw501h0ljeQ3C8gqSyvaricDgJIhUCASkVXIEtghgC/7d5sbGv2Ohb6k11uwc37KXy/RjWw==
+X-Received: by 2002:aca:1710:0:b0:36e:b552:1ec3 with SMTP id j16-20020aca1710000000b0036eb5521ec3mr576626oii.38.1674150068191;
+        Thu, 19 Jan 2023 09:41:08 -0800 (PST)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id i7-20020a056808054700b003631fe1810dsm10226906oig.47.2023.01.19.09.41.02
+        by smtp.googlemail.com with ESMTPSA id i7-20020a056808054700b003631fe1810dsm10226906oig.47.2023.01.19.09.41.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:41:04 -0800 (PST)
+        Thu, 19 Jan 2023 09:41:08 -0800 (PST)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
         Wedson Almeida Filho <wedsonaf@gmail.com>
-Subject: [PATCH 3/5] rust: types: implement `ForeignOwnable` for `Box<T>`
-Date:   Thu, 19 Jan 2023 14:40:34 -0300
-Message-Id: <20230119174036.64046-3-wedsonaf@gmail.com>
+Subject: [PATCH 4/5] rust: types: implement `ForeignOwnable` for the unit type
+Date:   Thu, 19 Jan 2023 14:40:35 -0300
+Message-Id: <20230119174036.64046-4-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230119174036.64046-1-wedsonaf@gmail.com>
 References: <20230119174036.64046-1-wedsonaf@gmail.com>
@@ -76,42 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows us to hand ownership of Rust dynamically allocated
-objects to the C side of the kernel.
+This allows us to use the unit type `()` when we have no object whose
+ownership must be managed but one implementing the `ForeignOwnable`
+trait is needed.
 
 Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 ---
- rust/kernel/types.rs | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ rust/kernel/types.rs | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 5475f6163002..e037c262f23e 100644
+index e037c262f23e..8f80cffbff59 100644
 --- a/rust/kernel/types.rs
 +++ b/rust/kernel/types.rs
-@@ -63,6 +63,28 @@ pub trait ForeignOwnable {
-     unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
+@@ -85,6 +85,19 @@ impl<T: 'static> ForeignOwnable for Box<T> {
+     }
  }
  
-+impl<T: 'static> ForeignOwnable for Box<T> {
-+    type Borrowed<'a> = &'a T;
++impl ForeignOwnable for () {
++    type Borrowed<'a> = ();
 +
 +    fn into_foreign(self) -> *const core::ffi::c_void {
-+        Box::into_raw(self) as _
++        // We use 1 to be different from a null pointer.
++        1usize as _
 +    }
 +
-+    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> &'a T {
-+        // SAFETY: The safety requirements for this function ensure that the object is still alive,
-+        // so it is safe to dereference the raw pointer.
-+        // The safety requirements of `from_foreign` also ensure that the object remains alive for
-+        // the lifetime of the returned value.
-+        unsafe { &*ptr.cast() }
-+    }
++    unsafe fn borrow<'a>(_: *const core::ffi::c_void) -> Self::Borrowed<'a> {}
 +
-+    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self {
-+        // SAFETY: The safety requirements of this function ensure that `ptr` comes from a previous
-+        // call to `Self::into_foreign`.
-+        unsafe { Box::from_raw(ptr as _) }
-+    }
++    unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
 +}
 +
  /// Runs a cleanup function/closure when dropped.
