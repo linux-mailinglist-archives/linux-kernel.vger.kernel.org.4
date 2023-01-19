@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3414D673FE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40971673FE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjASR1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S229773AbjASR2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjASR1T (ORCPT
+        with ESMTP id S229609AbjASR1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:27:19 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C8581028
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674149236; x=1705685236;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hvKnPzV818Q2MTrJsqR3kbZNsGKViKmjEv5oxYAd76U=;
-  b=iDlaGHmBGBl4x+WrSrZaLcpJizbAlqpIOvi8A26fbhJ68ByAUF5qrNam
-   IIR7yf/FyUf1isc67D95j3wtUCRp/F5vUXqrOzGXhvlJkyBGQJnsDfHFO
-   JmkNSyjfe5R8aHLdUuBRAXHgYDMEIwldi/p/fYfJyw66XhdBlpDHdh6Bm
-   hkV6n46ZXOa4neHwVUYtPwrAdhO7UvT7HukSFXrsJGdIjvpO6fBuj3Ls9
-   UuEEc4tUHAQ38KkKmHeTydQp90VdWlaEZsJbGWQ1qJAsKCGRuGImJS+wU
-   UL47yOeMSj6tVChV5TdVlp/q6KcB12M0k1CuLUpcxhozsIfw7l6wlO+QD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="313243574"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="313243574"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:27:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905621057"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="905621057"
-Received: from sahamad-mobl1.amr.corp.intel.com (HELO [10.213.187.97]) ([10.213.187.97])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:27:15 -0800
-Message-ID: <db571218-1adb-cb46-5b76-55eaf379f6ca@linux.intel.com>
-Date:   Thu, 19 Jan 2023 11:27:14 -0600
+        Thu, 19 Jan 2023 12:27:50 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658301BE9;
+        Thu, 19 Jan 2023 09:27:49 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id i4so1939265wrs.9;
+        Thu, 19 Jan 2023 09:27:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rep8VyTcjsWcrm+FThgLtYbfi7P7h/NdS4LzD6Gp4P8=;
+        b=WJgf21ry6TlFf5Y6YMfxpJne08KYwcuUhC32BlwUCcPAKWFXnVQ2z8yY7DmD8cF5eZ
+         DY+iw3liZhQrsffELrC36VGLh4ZdTehIRCXDh7K+ldCJkXYFl0UUv0rV85qqnK6FtJqL
+         dehY6Ty2Y5cHUtA0ovEIyBwTVVnKp25QIqQUVX6szGvgo9vjsycywrpHKs2b9yYtYEMo
+         fpW61YK6nTak8QXJMaiBlMUmty8juEl2sAMhmPsfLkiB31FmmHudG5t2HKCYPX9y/0XQ
+         CDry8mr73Sa+/Mm44k0EW/e+32Miq6ucY/OCR2cxUR7TMJ3HmG7sw4xz4PcAw6R3FlMJ
+         jr+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rep8VyTcjsWcrm+FThgLtYbfi7P7h/NdS4LzD6Gp4P8=;
+        b=yeg4vZZTM5LbFc2KjcqRwJEXyF9PoDiKH5PhQfxi86N/r42Oh4xBMcgr7vuT+aG5Py
+         fdSDdJ32B07KLD5ZVXDdcef/py95Z5aNd5zQPANEVsoc8pzZilwNEaNpvuBVwCEuDhT0
+         7wRQACWe3bYF3XkFueJskUf661U15dd83jGivGgJx8JukZVFSCg+XisFD4fo4iSeVAK/
+         7Bnv6omZv4sspo/N8ZFao5KHoERsbEgLR5A+l1elgtonJhBkGOkuTilX5bD+xEoxyZA2
+         ZFz8zv/YuLWZTKTCPhBllNZ1YwCHNfUMChdVygrfzU/DHRW7btqagbU8uM2dY9D9Y5iw
+         GVyQ==
+X-Gm-Message-State: AFqh2krd5It6H7phdFoexn74m2qNnUiIUm3Bh51GKsuxdeZFr0k4MEOx
+        mbKHNgY9XJcfka+JajVCCtY=
+X-Google-Smtp-Source: AMrXdXuChxw61VMVEQM/MTbeOkF17U8tlsZJK1Zg0jN2XZ5VWzfqvo0MONbPGa1zXHC449UlMcuwvA==
+X-Received: by 2002:adf:e109:0:b0:2bd:e547:943a with SMTP id t9-20020adfe109000000b002bde547943amr10047432wrz.14.1674149267942;
+        Thu, 19 Jan 2023 09:27:47 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id q11-20020a05600000cb00b002be53aa2260sm87773wrx.117.2023.01.19.09.27.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 09:27:47 -0800 (PST)
+Message-ID: <51b63da0-2aea-f351-d737-66e832a80a18@gmail.com>
+Date:   Thu, 19 Jan 2023 18:27:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] soundwire: bus: Don't filter slave alerts
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: i2c-mt65xx: add binding for
+ MT8365 SoC
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, sanyog.r.kale@intel.com,
-        yung-chuan.liao@linux.intel.com
-References: <20230119165104.3433290-1-ckeepax@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230119165104.3433290-1-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org
+References: <20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com>
+ <20221122-mt8365-i2c-support-v2-1-e4c7c514e781@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221122-mt8365-i2c-support-v2-1-e4c7c514e781@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,75 +87,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/19/23 10:51, Charles Keepax wrote:
-> Currently the SoundWire core will loop handling slave alerts but it will
-> only handle those present when the alert was first raised. This causes
-> some issues with the Cadence SoundWire IP, which only generates an IRQ
-> when alert changes state. This means that if a new alert arrives whilst
-> old alerts are being handled it will not be handled in the currently
-> loop and then no further alerts will be processed since alert never
-> changes state to trigger a new IRQ.
+On 19/01/2023 18:08, Alexandre Mergnat wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> Correct this issue by allowing the core to handle all pending alerts in
-> the IRQ handling loop. The code will still only loop up to
-> SDW_READ_INTR_CLEAR_RETRY times, so it shouldn't be possible for it get
-> completely stuck and if you are generating IRQs faster than you can
-> handle them you likely have bigger problems anyway.
+> Add binding documentation for the MT8365 I2C controllers.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-The change makes sense, but it's a bit odd to change the way the
-interrupts are handled because of a specific design. The bus should be
-able to deal with various designs, not force a one-size-fits-all policy
-that may not be quite right in all cases.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Could we have a new flag at the bus level that says that peripheral
-interrupts are not filtered, and set if for the Intel case?
-
-We could similarly make the SDW_READ_INTR_CLEAR_RETRY constant
-bus/platform specific. The SoundWire spec mandates that we re-read the
-status after clearing the interrupt, but it doesn't say how to deal with
-recurring interrupts.
-
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 > ---
->  drivers/soundwire/bus.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
+>   Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-> index 633d411b64f35..daee2cca94a4d 100644
-> --- a/drivers/soundwire/bus.c
-> +++ b/drivers/soundwire/bus.c
-> @@ -1560,7 +1560,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->  	unsigned long port;
->  	bool slave_notify;
->  	u8 sdca_cascade = 0;
-> -	u8 buf, buf2[2], _buf, _buf2[2];
-> +	u8 buf, buf2[2];
->  	bool parity_check;
->  	bool parity_quirk;
->  
-> @@ -1716,9 +1716,9 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->  				"SDW_SCP_INT1 recheck read failed:%d\n", ret);
->  			goto io_err;
->  		}
-> -		_buf = ret;
-> +		buf = ret;
->  
-> -		ret = sdw_nread_no_pm(slave, SDW_SCP_INTSTAT2, 2, _buf2);
-> +		ret = sdw_nread_no_pm(slave, SDW_SCP_INTSTAT2, 2, buf2);
->  		if (ret < 0) {
->  			dev_err(&slave->dev,
->  				"SDW_SCP_INT2/3 recheck read failed:%d\n", ret);
-> @@ -1736,12 +1736,8 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->  		}
->  
->  		/*
-> -		 * Make sure no interrupts are pending, but filter to limit loop
-> -		 * to interrupts identified in the first status read
-> +		 * Make sure no interrupts are pending
->  		 */
-> -		buf &= _buf;
-> -		buf2[0] &= _buf2[0];
-> -		buf2[1] &= _buf2[1];
->  		stat = buf || buf2[0] || buf2[1] || sdca_cascade;
->  
->  		/*
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> index 421563bf576c..72ae2e01cf22 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> @@ -41,6 +41,10 @@ properties:
+>                 - mediatek,mt6797-i2c
+>                 - mediatek,mt7623-i2c
+>             - const: mediatek,mt6577-i2c
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8365-i2c
+> +          - const: mediatek,mt8168-i2c
+>         - items:
+>             - enum:
+>                 - mediatek,mt8195-i2c
+> 
