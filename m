@@ -2,235 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B201673D21
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B27673D2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjASPJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S230171AbjASPKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjASPJq (ORCPT
+        with ESMTP id S230194AbjASPKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:09:46 -0500
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2123.outbound.protection.outlook.com [40.107.10.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B99D69239;
-        Thu, 19 Jan 2023 07:09:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IUGwiuhL7/ESn/i/WUDFkpMbBWIjTQ/XFHZWam/2VkgjpEw1OXo5XuM7jos1J+apU9r4gsbGlgLFxMV6qOdWhQny1WZpYwf72AkjnjMsCAAybqsVyR+g1k5wZzPz58Qoe1gZiMjs0sQcOUNh9M4ekZOctu1R3riohWHFEVbwtWiyJJb5vuSjVVq7t3A4AZnZ62HbetIiOAK8t+ARQlCkrZbNEzwQZRAg0SNaviXtZNBJNDpy0YiqhyQSRB9r/JSO7nL4q2vyktDCDkrv/bBoXP+nbvmiXlg4xiThqgXtA8qhy11xArvKrByF16sO3r7MC57xOgMFzQFMUOK6gun8Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3VOX2/R4y8I8BSBGEGaJUDozJAEVirCrmPNZL89BRJ4=;
- b=Vs2d4Uc4aPJ637BiSTNhbDXFLA4xgo7YcOql6OZxRCemVWYtFh4ou78TjwlSdVtMwyQt4VB4dzfSmNvrBQmmeU2gWWCb9j8mIk7lWk5cUKv/R28fjXHsKvWslLbacTNJ8lAuqO/cMHdo3b4g7NE5B0+s+O/KUdQMAzBe/RQkU1PQtv335SxkpIVXitZPUfKIdcV+FmMDBiGRqkGn8dt53PFZysXkXsyyQmjaHzAwlxtf4VVq5GC4Xy91CYPtxUvWf8gwUMXLoLxhtSnvl96ThO2i97uvC94ti7LlniaoXw7KvebPnnpaXn5mU6fB2WjkKsLigDyePYu+p0Tjwr0www==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3VOX2/R4y8I8BSBGEGaJUDozJAEVirCrmPNZL89BRJ4=;
- b=o+CX5sP+prnN/TQP5nd0xdAMRDswTGI0eGYhJdLLbjM9qx75TQXe4iLTq83UVDZoInxisegVpV9h5QzJJaMkaSyUXUFNpyqhUaI1c8zUV7upVFrWH4CmBjZbWx/x/hZVSgo2aeGOu+LvXUnjhnuHKY8rLjlGED45HCYwrVgernc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB6947.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2ec::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
- 2023 15:09:39 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.6002.025; Thu, 19 Jan 2023
- 15:09:39 +0000
-Date:   Thu, 19 Jan 2023 15:09:36 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        <linux-kbuild@vger.kernel.org>,
-        "Wedson Almeida Filho" <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        <rust-for-linux@vger.kernel.org>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <20230119150936.30811312.gary@garyguo.net>
-In-Reply-To: <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
-References: <20230111161155.1349375-1-gary@garyguo.net>
-        <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
-        <20230113181841.4d378a24.gary@garyguo.net>
-        <20230117175144.GI16547@kitsune.suse.cz>
-        <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: LO4P123CA0333.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18c::14) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Thu, 19 Jan 2023 10:10:18 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C706797F;
+        Thu, 19 Jan 2023 07:10:05 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.186.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B0B366003B1;
+        Thu, 19 Jan 2023 15:09:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674141004;
+        bh=+9EQfFr+ASzmxjKMcZmvBS5xXcamlLlj63358f2o14M=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lTKkANzKMqyu/IY9WO++UPpurbhOvsmjKsmVWgSVhXB6h6BE4eXhxKQllMdY+3yxV
+         AsOlK6t3Hb6nHnE3nztGj8rMHVSo4X4eAV7BVQ+XrNBxNuSyhH/N5q+x95OcniFjJH
+         p1Wyu0ECzWX988hviCiSVHe9/j76KDMsnSwVM74HZSTkI8Tb8e7APfF783P+B697Ge
+         BTQggwtNYD8L2zAiXh9XOOpSYEuc5GhYMwnz4Eo2Zf2vWUF741vPpHEOgICrZlqcxD
+         wpZWiaNyVGxi0WxGb2eUht85sBWOGMS9uLaGyk2wP1dU9xYYag7Xi8E+C317JdadBa
+         zsDc4tHjdooQw==
+Message-ID: <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com>
+Date:   Thu, 19 Jan 2023 20:09:52 +0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64797cba-7dbb-4055-ae9e-08dafa2f2f40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jiGj5b4+B+Wfii/chtfcoxAa+EZ5dHOz/Jn7tqqLsaUnYJXiiQBa1CowwanfOjt7XI7QmkYFUHYOtIFNEDRVYLvqkmE7CUONuxCl+cEkBkZ0GDbXzi4cMl7UAeiPJUDIqnq+L8lYWYyRWJO1BQ8a/vPdNToER/OUb7+2UoDhjg/P2yFXoshZwM37VVkOHDrpp5Kh1iHDULkVf1jmP2ay3GhcN+HqdkYEtU971ktE0OFNwL2SVereEsmqaOdw3VsrCL5CJyJmBEmhYo8pZ07g4WwOoU5nAgyYCKHWDUSb2cwIUzHYAV7XhCsylEk5MAbb3NvE6GQCRDP4mg/vKBH1jrBs33IGwKSQGoOtaIkbc1nyCTpHwYgoYVTPr9kW56qB/3LnLFz2EP1VEz5zhjCTuxhYvurTUj2U7vewz+17AKCVDsm7VAk8JVgS9FMO1RV3Xlf3Lb3P3wOhQZz+5D1E3bVs02GhkNB1hxhZjnPCUtuX6l8s7dU5v+iFS6zGu55RFRz1426pvlrGB4X8PkMDsskaLTy4Nudx67DHrEBHSH2utM/xFhDx1nUkUkMmGtMR7jInGizJ+BA20O7CvgduBwu9+jb93rgrpB4cEW8cHiXd9kRkGf5YJyV/COXGqMGkfnXm+QAl7onULBdzdW3J0w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(396003)(346002)(136003)(39830400003)(451199015)(6486002)(26005)(66556008)(478600001)(41300700001)(6512007)(66574015)(1076003)(186003)(86362001)(316002)(54906003)(2616005)(38100700002)(66946007)(66476007)(6506007)(36756003)(6666004)(2906002)(5660300002)(7416002)(4326008)(6916009)(83380400001)(8936002)(8676002)(66899015);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWo5d1A0Mk1xMkZtWlpXVEU4NnY2dDlZL2pDcEU4Z1BnRTJBVnp6UXdnRWMz?=
- =?utf-8?B?S0IyRllqMzlzQlk5WUNwQmtYUklKQktNYnR0THlIQTh3VWd5Tlp0dmVmZENR?=
- =?utf-8?B?V1dyVG5CL3h6c3JwWFhRbElLeVB4YldNVzAzS3dKd2lESmRZVmZZdUxxMlBs?=
- =?utf-8?B?bURXMU9pSHh6T0dNTmhrTmtkZUxRL2lRNXFhN2k5ck05Q0RCVkRESVZWRTlo?=
- =?utf-8?B?czE2dy95emtBZHd5U0N6T01VS0V2MGZvazhvTUsvc0wycEJxQ0NFM1pFMlJh?=
- =?utf-8?B?cjRwRzNZT0JWM2ZYSnQ4TDhkczRUazNjenhaRUNOWlNYTzdPUEx1cnlQM3Er?=
- =?utf-8?B?bGwwK0hKVU9xcGFvOVFJQkhFNkQ1VWlyOTZHMFBEeU0zY1M4ZUlGbWt4ejBX?=
- =?utf-8?B?bGZGdmZ6REJDd2sveXlaaE9wcnJ2azZtTHozT1R1V2lqVGg1M0x2Y1loTzE1?=
- =?utf-8?B?QmU4dTF3elNtZkNqYWZQeWs4a3FnTVhYaHUyZGd4L1RDdUNQWXpSd0tzVkFL?=
- =?utf-8?B?MkhxdDRKY1E4SThWMytwYkM1UWxiY2VsNmhpR1ErRzJVS25HVUp3Y2lHTkV1?=
- =?utf-8?B?ZXl0SzFHQVlsbGVLdzFhY3FxczVudWhBYUYzSFhnMDRpOS8va0xBM0FTU2k3?=
- =?utf-8?B?OGkrTkhpR3hhYjJ5aEpQT2xUZTZSSmJOU2t6NFVVSUNrWlNwdEZTR0dtL3I5?=
- =?utf-8?B?TUdqZ2xnZ0VCVkZYUzE0YXJaTzJYb0Z0MWRqVGVwTWtzckZYQnBUanN3aXEr?=
- =?utf-8?B?ODkxZE42Mkc4VkJDV2hMNzNXVlVvWm1HaTZuV3ozWXBkK1VlenQ2d2lyME1O?=
- =?utf-8?B?MW0vem5Bc0RxaEVoRHBLOUdmSmY0eElod2MzV1JxWElNaHh1U3h0QytwYkNP?=
- =?utf-8?B?VHdobEZoYzRidjUzQ0Q3NEt5MmdxYmhxYUtFSDZVVk9vNVlYRmFBVFZFa1c0?=
- =?utf-8?B?eFlPY3h6ZEtOVGVkU1VVMnhNVWV6Tmgvb2JFUXVjQnZYZGNIek1ac3JSSjly?=
- =?utf-8?B?NXVEVVl2ZDQ2TE9lRDBMeGhBa3dSR25WM1B6SnBJLzN5dGc0RHppYXcvcWQ2?=
- =?utf-8?B?N2s5R2ZibDlZZ2lUZGczaFoyR2pQaVNpV21ZUnBEbzdOVUx6MU0rQnB6ZU0r?=
- =?utf-8?B?UTN0U2lYdmY1a2poWS9qdVNzSGY4NHkrQWZpMVJ1UkJjRDFKSmlTZEhFNTZz?=
- =?utf-8?B?V2YyK21ybk80ZkRCaFFHZDBWQ0h3MjlBRHFkNCtIbGQ4NzhqcEYvRDZBQ1FB?=
- =?utf-8?B?MjdZZXcvdkZyaUk4QWNvaFVadDVZUTlJaHBuVW9JMVk2T0MzR1V2cHNra1Q0?=
- =?utf-8?B?cDlXUTMvelpzeDlOQitRcFNNNXp5UXUwSTUyY0dPbklMaUhpZGhoM0xWaGhu?=
- =?utf-8?B?REJlZWFRbDgvN2hZRXNZUGpsd2tnZ2JvTzJ1MHVTcUllSm9Ub2NMR3d5SW94?=
- =?utf-8?B?NGN5YnkyemU4aE9JeE0yM1Rld2M1V1JYRmU2WTRwcUhJY2tiMDdDWm80VUUv?=
- =?utf-8?B?SmNDUWpkUk1mOGNqVWtFZEtESW40UWdJd1ZyRGFKTkptM1NrRXV0aWF0dnFE?=
- =?utf-8?B?WkJZSzJTbzdRWnFGSngvbmdmc1hjY2VmWmtJR1JsWm5ETThEU1dFT2cvZEFM?=
- =?utf-8?B?cjR0dWxFdlZmckFibmhXMDJPRm9QbW9uSjBGWTVzbnVuK05XZXI0Vzl6LzRi?=
- =?utf-8?B?RTV4UGp3YTVGbTJFWnY5a2JxYkNVaGFxYnhtaXF0bU9kOXJrREJHb3lkTmlp?=
- =?utf-8?B?eWFGZ2Q4NkRqWWlFM3g4bkpWSWMwR2dVQk1MS1U4aGlTSG1sVERQWlVBUE5s?=
- =?utf-8?B?dnIvUENzRDc4WG5CTWdUamdubEFkSGNsK3lpMExTdDZrWDNjWjRsR2hRQ2or?=
- =?utf-8?B?Y0VxU3Y3UXU1a1JxRjRmNmM3bWZGdVQ2RXZOMS9EV2NyQm5uWFFGcXZOaGFr?=
- =?utf-8?B?TWZkczNlUUF0UWltYVlKWFZIT2ZvaHFwYU9CYjlwelRNNzE4SHgwQzhYVkNo?=
- =?utf-8?B?dG8vKzFDQ3NPcFJucVJndnBDMHc2UFJUNXhYZWVScHp0UURibnBhRFlaQWw5?=
- =?utf-8?B?YS8vaDJuSlNqOC9xOEJYeEdWUkhvZHhqRy9iekJyZ0F1NTBwMjI2R2xZdVZX?=
- =?utf-8?Q?jSGVxlfTYcJ+8PzhVeGFnIhG+?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64797cba-7dbb-4055-ae9e-08dafa2f2f40
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 15:09:39.1239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IIXzNLvZr7FsHnmF5247Yhn45RpY4VtkAdSpbW/NXgn5t4VgbLE93lGjsIPdYlVlzRP+SRcGgLXsJcBYkKXt/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6947
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230109064519.3555250-1-usama.anjum@collabora.com>
+ <20230109064519.3555250-2-usama.anjum@collabora.com> <Y8gkY8OlnOwvlkj4@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y8gkY8OlnOwvlkj4@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 11:22:45 -0800
-Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+Hi Peter,
 
-> On Tue, Jan 17, 2023 at 06:51:44PM +0100, Michal Such=C3=A1nek wrote:
-> >Hello,
-> >
-> >On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote: =20
-> >> On Thu, 12 Jan 2023 14:40:59 -0700
-> >> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> >> =20
-> >> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote: =20
-> >> > >
-> >> > > struct modversion_info {
-> >> > >-	unsigned long crc;
-> >> > >-	char name[MODULE_NAME_LEN];
-> >> > >+	/* Offset of the next modversion entry in relation to this one. *=
-/
-> >> > >+	u32 next;
-> >> > >+	u32 crc;
-> >> > >+	char name[0]; =20
-> >> >
-> >> > although not really exported as uapi, this will break userspace as t=
-his is
-> >> > used in the  elf file generated for the modules. I think
-> >> > this change must be made in a backward compatible way and kmod updat=
-ed
-> >> > to deal with the variable name length:
-> >> >
-> >> > kmod $ git grep "\[64"
-> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
-> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
-> >> >
-> >> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 3=
-2
-> >> > and 64 bit module, and vice versa.
-> >> > =20
-> >>
-> >> Hi Lucas,
-> >>
-> >> Thanks for the information.
-> >>
-> >> The change can't be "truly" backward compatible, in a sense that
-> >> regardless of the new format we choose, kmod would not be able to deco=
-de
-> >> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieve=
-s
-> >> is going to be incomplete, isn't it?
-> >>
-> >> What kind of backward compatibility should be expected? It could be:
-> >> * short symbols can still be found by old versions of kmod, but not
-> >>   long symbols; =20
-> >
-> >That sounds good. Not everyone is using rust, and with this option
-> >people who do will need to upgrade tooling, and people who don't care
-> >don't need to do anything. =20
->=20
-> that could be it indeed. My main worry here is:
->=20
-> "After the support is added in kmod, kmod needs to be able to output the
-> correct information regardless if the module is from before/after the
-> change in the kernel and also without relying on kernel version."
-> Just changing the struct modversion_info doesn't make that possible.
->=20
-> Maybe adding the long symbols in another section?
+Thank you so much for reviewing.
 
-Yeah, that's what I imagined how it could be implemented when I said
-"short symbols can still be found by old versions of kmod, but not long
-symbols".
+On 1/18/23 9:54 PM, Peter Xu wrote:
+> Hi, Muhammad,
+> 
+> On Mon, Jan 09, 2023 at 11:45:16AM +0500, Muhammad Usama Anjum wrote:
+>> Add new WP Async mode (UFFDIO_WRITEPROTECT_MODE_ASYNC_WP) which resolves
+>> the page faults on its own. It can be used to track that which pages have
+>> been written to from the time the pages were write protected. It is very
+>> efficient way to track the changes as uffd is by nature pte/pmd based.
+>>
+>> UFFD WP (UFFDIO_WRITEPROTECT_MODE_WP) sends the page faults to the
+>> userspace where the pages which have been written-to can be tracked. But
+>> it is not efficient. This is why this async version is being added.
+>> After setting the WP Async, the pages which have been written to can be
+>> found in the pagemap file or information can be obtained from the
+>> PAGEMAP_IOCTL (see next patches).
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  fs/userfaultfd.c                 | 150 +++++++++++++++++--------------
+>>  include/uapi/linux/userfaultfd.h |   6 ++
+>>  2 files changed, 90 insertions(+), 66 deletions(-)
+>>
+>> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+>> index 15a5bf765d43..be5e10d15058 100644
+>> --- a/fs/userfaultfd.c
+>> +++ b/fs/userfaultfd.c
+>> @@ -69,6 +69,7 @@ struct userfaultfd_ctx {
+>>  	unsigned int features;
+>>  	/* released */
+>>  	bool released;
+>> +	bool async;
+> 
+> Let's just make it a feature flag,
+> 
+>   UFFD_FEATURE_WP_ASYNC
+This would really make things easier. Thank you so much for suggesting it.
 
-> Or ble just increase to 512 and add the size to a
-> "__versions_hdr" section. If we then output a max size per module,
-> this would offset a little bit the additional size gained for the
-> modules using rust.
+> 
+>>  	/* memory mappings are changing because of non-cooperative event */
+>>  	atomic_t mmap_changing;
+>>  	/* mm with one ore more vmas attached to this userfaultfd_ctx */
+>> @@ -497,80 +498,93 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+>>  
+>>  	/* take the reference before dropping the mmap_lock */
+>>  	userfaultfd_ctx_get(ctx);
+>> +	if (ctx->async) {
+> 
+> Firstly, please consider not touching the existing code/indent as much as
+> what this patch did.  Hopefully we can keep the major part of sync uffd be
+> there with its git log, it also helps reviewing your code.  You can add the
+> async block before that, handle the fault and return just earlier.
+This is possible. Will do in next revision.
 
-That format isn't really elegant IMO. And symbol length can vary a lot,
-having all symbols dictated by the longest symbol doesn't sound a good
-approach.
+> 
+> And, I think this is a bit too late because we're going to return with
+> VM_FAULT_RETRY here, while maybe we don't need to retry at all here because
+> we're going to resolve the page fault immediately.
+> 
+> I assume you added this because you wanted userfaultfd_ctx_get() to make
+> sure the uffd context will not go away from under us, but it's not needed
+> if we're still holding the mmap read lock.  I'd expect for async mode we
+> don't really need to release it at all.
+I'll have to check the what should be returned here. We should return
+something which shows that the fault has been resolved.
 
-> And the additional 0's should compress well
-> so I'm not sure the additional size is that much relevant here.
+> 
+>> +		// Resolve page fault of this page
+> 
+> Please use "/* ... */" as that's the common pattern of commenting in the
+> Linux kernel, at least what I see in mm/.
+Will do.
 
-I am not sure why compression is mentioned here. I don't think section
-in .ko files are compressed.
+> 
+>> +		unsigned long addr = (ctx->features & UFFD_FEATURE_EXACT_ADDRESS) ?
+>> +				      vmf->real_address : vmf->address;
+>> +		struct vm_area_struct *dst_vma = find_vma(ctx->mm, addr);
+>> +		size_t s = PAGE_SIZE;
+> 
+> This is weird - if we want async uffd-wp, let's consider huge page from the
+> 1st day.
+> 
+>> +
+>> +		if (dst_vma->vm_flags & VM_HUGEPAGE) {
+> 
+> VM_HUGEPAGE is only a hint.  It doesn't mean this page is always a huge
+> page.  For anon, we can have thp wr-protected as a whole, not happening for
+> !anon because we'll split already.
+> 
+> For anon, if a write happens to a thp being uffd-wp-ed, we'll keep that pmd
+> wr-protected and report the uffd message.  The pmd split happens when the
+> user invokes UFFDIO_WRITEPROTECT on the small page.  I think it'll stop
+> working for async uffd-wp because we're going to resolve the page faults
+> right away.
+> 
+> So for async uffd-wp (note: this will be different from hugetlb), you may
+> want to consider having a pre-requisite patch to change wp_huge_pmd()
+> behavior: rather than calling handle_userfault(), IIUC you can also just
+> fallback to the split path right below (__split_huge_pmd) so the thp will
+> split now even before the uffd message is generated.
+I'll make the changes and make this. I wasn't aware that the thp is being
+broken in the UFFD WP. At this time, I'm not sure if thp will be handled by
+handle_userfault() in one go. Probably it will as the length is stored in
+the vmf.
 
-(sorry forget to reply-all, re-send email to the list)
+> 
+> I think it should be transparent to the user and it'll start working for
+> you with async uffd-wp here, because it means when reaching
+> handle_userfault, it should not be possible to have thp at all since they
+> should have all split up.
+> 
+>> +			s = HPAGE_SIZE;
+>> +			addr &= HPAGE_MASK;
+>> +		}
+>>  
+>> -	init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+>> -	uwq.wq.private = current;
+>> -	uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+>> -				reason, ctx->features);
+>> -	uwq.ctx = ctx;
+>> -	uwq.waken = false;
+>> -
+>> -	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+>> +		ret = mwriteprotect_range(ctx->mm, addr, s, false, &ctx->mmap_changing);
+> 
+> This is an overkill - we're pretty sure it's a single page, no need to call
+> a range function here.
+Probably change_pte_range() should be used here to directly remove the WP here?
 
-Best,
-Gary
+> 
+>> +	} else {
+>> +		init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+>> +		uwq.wq.private = current;
+>> +		uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+>> +					reason, ctx->features);
+>> +		uwq.ctx = ctx;
+>> +		uwq.waken = false;
+>>  
+>> -        /*
+>> -         * Take the vma lock now, in order to safely call
+>> -         * userfaultfd_huge_must_wait() later. Since acquiring the
+>> -         * (sleepable) vma lock can modify the current task state, that
+>> -         * must be before explicitly calling set_current_state().
+>> -         */
+>> -	if (is_vm_hugetlb_page(vma))
+>> -		hugetlb_vma_lock_read(vma);
+>> +		blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+>>  
+>> -	spin_lock_irq(&ctx->fault_pending_wqh.lock);
+>> -	/*
+>> -	 * After the __add_wait_queue the uwq is visible to userland
+>> -	 * through poll/read().
+>> -	 */
+>> -	__add_wait_queue(&ctx->fault_pending_wqh, &uwq.wq);
+>> -	/*
+>> -	 * The smp_mb() after __set_current_state prevents the reads
+>> -	 * following the spin_unlock to happen before the list_add in
+>> -	 * __add_wait_queue.
+>> -	 */
+>> -	set_current_state(blocking_state);
+>> -	spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+>> +		/*
+>> +		 * Take the vma lock now, in order to safely call
+>> +		 * userfaultfd_huge_must_wait() later. Since acquiring the
+>> +		 * (sleepable) vma lock can modify the current task state, that
+>> +		 * must be before explicitly calling set_current_state().
+>> +		 */
+>> +		if (is_vm_hugetlb_page(vma))
+>> +			hugetlb_vma_lock_read(vma);
+>>  
+>> -	if (!is_vm_hugetlb_page(vma))
+>> -		must_wait = userfaultfd_must_wait(ctx, vmf->address, vmf->flags,
+>> -						  reason);
+>> -	else
+>> -		must_wait = userfaultfd_huge_must_wait(ctx, vma,
+>> -						       vmf->address,
+>> -						       vmf->flags, reason);
+>> -	if (is_vm_hugetlb_page(vma))
+>> -		hugetlb_vma_unlock_read(vma);
+>> -	mmap_read_unlock(mm);
+>> +		spin_lock_irq(&ctx->fault_pending_wqh.lock);
+>> +		/*
+>> +		 * After the __add_wait_queue the uwq is visible to userland
+>> +		 * through poll/read().
+>> +		 */
+>> +		__add_wait_queue(&ctx->fault_pending_wqh, &uwq.wq);
+>> +		/*
+>> +		 * The smp_mb() after __set_current_state prevents the reads
+>> +		 * following the spin_unlock to happen before the list_add in
+>> +		 * __add_wait_queue.
+>> +		 */
+>> +		set_current_state(blocking_state);
+>> +		spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+>>  
+>> -	if (likely(must_wait && !READ_ONCE(ctx->released))) {
+>> -		wake_up_poll(&ctx->fd_wqh, EPOLLIN);
+>> -		schedule();
+>> -	}
+>> +		if (!is_vm_hugetlb_page(vma))
+>> +			must_wait = userfaultfd_must_wait(ctx, vmf->address, vmf->flags,
+>> +							  reason);
+>> +		else
+>> +			must_wait = userfaultfd_huge_must_wait(ctx, vma,
+>> +							       vmf->address,
+>> +							       vmf->flags, reason);
+>> +		if (is_vm_hugetlb_page(vma))
+>> +			hugetlb_vma_unlock_read(vma);
+>> +		mmap_read_unlock(mm);
+>> +
+>> +		if (likely(must_wait && !READ_ONCE(ctx->released))) {
+>> +			wake_up_poll(&ctx->fd_wqh, EPOLLIN);
+>> +			schedule();
+>> +		}
+>>  
+>> -	__set_current_state(TASK_RUNNING);
+>> +		__set_current_state(TASK_RUNNING);
+>>  
+>> -	/*
+>> -	 * Here we race with the list_del; list_add in
+>> -	 * userfaultfd_ctx_read(), however because we don't ever run
+>> -	 * list_del_init() to refile across the two lists, the prev
+>> -	 * and next pointers will never point to self. list_add also
+>> -	 * would never let any of the two pointers to point to
+>> -	 * self. So list_empty_careful won't risk to see both pointers
+>> -	 * pointing to self at any time during the list refile. The
+>> -	 * only case where list_del_init() is called is the full
+>> -	 * removal in the wake function and there we don't re-list_add
+>> -	 * and it's fine not to block on the spinlock. The uwq on this
+>> -	 * kernel stack can be released after the list_del_init.
+>> -	 */
+>> -	if (!list_empty_careful(&uwq.wq.entry)) {
+>> -		spin_lock_irq(&ctx->fault_pending_wqh.lock);
+>>  		/*
+>> -		 * No need of list_del_init(), the uwq on the stack
+>> -		 * will be freed shortly anyway.
+>> +		 * Here we race with the list_del; list_add in
+>> +		 * userfaultfd_ctx_read(), however because we don't ever run
+>> +		 * list_del_init() to refile across the two lists, the prev
+>> +		 * and next pointers will never point to self. list_add also
+>> +		 * would never let any of the two pointers to point to
+>> +		 * self. So list_empty_careful won't risk to see both pointers
+>> +		 * pointing to self at any time during the list refile. The
+>> +		 * only case where list_del_init() is called is the full
+>> +		 * removal in the wake function and there we don't re-list_add
+>> +		 * and it's fine not to block on the spinlock. The uwq on this
+>> +		 * kernel stack can be released after the list_del_init.
+>>  		 */
+>> -		list_del(&uwq.wq.entry);
+>> -		spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+>> +		if (!list_empty_careful(&uwq.wq.entry)) {
+>> +			spin_lock_irq(&ctx->fault_pending_wqh.lock);
+>> +			/*
+>> +			 * No need of list_del_init(), the uwq on the stack
+>> +			 * will be freed shortly anyway.
+>> +			 */
+>> +			list_del(&uwq.wq.entry);
+>> +			spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+>> +		}
+>>  	}
+>> -
+>>  	/*
+>>  	 * ctx may go away after this if the userfault pseudo fd is
+>>  	 * already released.
+>> @@ -1861,11 +1875,14 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
+>>  		return ret;
+>>  
+>>  	if (uffdio_wp.mode & ~(UFFDIO_WRITEPROTECT_MODE_DONTWAKE |
+>> -			       UFFDIO_WRITEPROTECT_MODE_WP))
+>> +			       UFFDIO_WRITEPROTECT_MODE_WP |
+>> +			       UFFDIO_WRITEPROTECT_MODE_ASYNC_WP))
+>>  		return -EINVAL;
+>>  
+>> -	mode_wp = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_WP;
+>> +	mode_wp = uffdio_wp.mode & (UFFDIO_WRITEPROTECT_MODE_WP |
+>> +				    UFFDIO_WRITEPROTECT_MODE_ASYNC_WP);
+>>  	mode_dontwake = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_DONTWAKE;
+>> +	ctx->async = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_ASYNC_WP;
+> 
+> Please no..  ctx attributes shouldn't be easily changed by a single ioctl.
+> 
+> I suggest we have a new feature bit as I mentioned above (say,
+> UFFD_FEATURE_WP_ASYNC), set it once with UFFDIO_API and it should apply to
+> the whole lifecycle of this uffd handle.  That flag should (something I can
+> quickly think of):
+> 
+>   - Have effect only if the uffd will be registered with WP mode (of
+>     course) or ignored in any other modes,
+> 
+>   - Should fail any attempts of UFFDIO_WRITEPROTECT with wp=false on this
+>     uffd handle because with async faults no page fault resolution needed
+>     from userspace,
+> 
+>   - Should apply to any region registered with this uffd ctx, so it's
+>     exclusively used with sync uffd-wp mode.
+All of these are necesary and must be done to consolidate the interface of
+UFFD. Agreed!
+
+> 
+> Then when the app wants to wr-protect in async mode, it simply goes ahead
+> with UFFDIO_WRITEPROTECT(wp=true), it'll happen exactly the same as when it
+> was sync mode.  It's only the pf handling procedure that's different (along
+> with how the fault is reported - rather than as a message but it'll be
+> consolidated into the soft-dirty bit).
+PF handling will resovle the fault after un-setting the _PAGE_*_UFFD_WP on
+the page. I'm not changing the soft-dirty bit. It is too delicate (if you
+get the joke).
+
+> 
+>>  
+>>  	if (mode_wp && mode_dontwake)
+>>  		return -EINVAL;
+>> @@ -2126,6 +2143,7 @@ static int new_userfaultfd(int flags)
+>>  	ctx->flags = flags;
+>>  	ctx->features = 0;
+>>  	ctx->released = false;
+>> +	ctx->async = false;
+>>  	atomic_set(&ctx->mmap_changing, 0);
+>>  	ctx->mm = current->mm;
+>>  	/* prevent the mm struct to be freed */
+>> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+>> index 005e5e306266..b89665653861 100644
+>> --- a/include/uapi/linux/userfaultfd.h
+>> +++ b/include/uapi/linux/userfaultfd.h
+>> @@ -284,6 +284,11 @@ struct uffdio_writeprotect {
+>>   * UFFDIO_WRITEPROTECT_MODE_DONTWAKE: set the flag to avoid waking up
+>>   * any wait thread after the operation succeeds.
+>>   *
+>> + * UFFDIO_WRITEPROTECT_MODE_ASYNC_WP: set the flag to write protect a
+>> + * range, the flag is unset automatically when the page is written.
+>> + * This is used to track which pages have been written to from the
+>> + * time the memory was write protected.
+>> + *
+>>   * NOTE: Write protecting a region (WP=1) is unrelated to page faults,
+>>   * therefore DONTWAKE flag is meaningless with WP=1.  Removing write
+>>   * protection (WP=0) in response to a page fault wakes the faulting
+>> @@ -291,6 +296,7 @@ struct uffdio_writeprotect {
+>>   */
+>>  #define UFFDIO_WRITEPROTECT_MODE_WP		((__u64)1<<0)
+>>  #define UFFDIO_WRITEPROTECT_MODE_DONTWAKE	((__u64)1<<1)
+>> +#define UFFDIO_WRITEPROTECT_MODE_ASYNC_WP	((__u64)1<<2)
+>>  	__u64 mode;
+>>  };
+>>  
+>> -- 
+>> 2.30.2
+>>
+> 
+
+I should have added Suggested-by: Peter Xy <peterx@redhat.com> to this
+patch. I'll add in the next revision if you don't object.
+
+I've started working on next revision. I'll reply to other highly valuable
+review emails a bit later.
+
+-- 
+BR,
+Muhammad Usama Anjum
