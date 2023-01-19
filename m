@@ -2,187 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57B26746ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D633A674703
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjASXLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S229807AbjASXOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjASXL0 (ORCPT
+        with ESMTP id S230516AbjASXNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:11:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BCBA838A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:03:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 Jan 2023 18:13:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F78CA959D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:05:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674169504;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zOEJRVUCnaSTu3apvVVhayxrqQN65NFZYiVFw16tleY=;
+        b=eJ7o2qnAZkYoKCBXMs/7JNknYsDI2/mLkmGbzuPS0zGPJNl3R0dnRaeT4TIz7iTEF5dljQ
+        HwXCsfciIPGT+uvMKawZJkjMBnOxvQGdATg1psaBL4mmSYkH/9vDBrFi1PibkjIX4X/YI6
+        D81iYJBsi/dUaAvqrxaKp9tADoVWXmg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-QQjCKQRFPT6Xs2gyRAdLDA-1; Thu, 19 Jan 2023 18:05:01 -0500
+X-MC-Unique: QQjCKQRFPT6Xs2gyRAdLDA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4872CE25BD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:03:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE15C433D2;
-        Thu, 19 Jan 2023 23:03:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674169401;
-        bh=PnW6JmMe4/FWLfJmhEnYnN46VQgwGO5FtbcMab52fRM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=no4JGYGJzpL1XvlpHM0yZj6OlixeBlL0rx/jCLfGINm+BpkUqUz86PdfrW6Nhbe0r
-         Z83y//2mFElk/Ax8ZBie0Vq/lb3xUhmaMN3ViN2lfbCjXE+RY+0dS74okH/mKRdKy1
-         V49TH8lrneEyw/dhFMn2qjbY5yP+dpKZzpRGTnaKXmZ+VARqarVC7C7RpcMds+Zjta
-         YZExZx4c2E41UES32NGsel9mwgerqKVUDed+mcXeTx2wv/t/HsOCufbYKadUP+0XNf
-         Hie+7sCf2Fa4tSeC3y8b7f5TncBBLFKMWCAZ7BpY/el+LdLmO699xZGd31PrQDsSrL
-         /NBd0LjEPd0nw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A32C85C1B07; Thu, 19 Jan 2023 15:03:20 -0800 (PST)
-Date:   Thu, 19 Jan 2023 15:03:20 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230119230320.GB2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
- <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8m+gRMMpiTuLPj2@rowland.harvard.edu>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69B7D1C05154;
+        Thu, 19 Jan 2023 23:05:00 +0000 (UTC)
+Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33EED40C6EC4;
+        Thu, 19 Jan 2023 23:04:52 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in
+ no running vcpu context
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
+        shan.gavin@gmail.com
+References: <20230116040405.260935-1-gshan@redhat.com>
+ <20230116040405.260935-2-gshan@redhat.com> <Y8cKQRIbpLWVcdcw@google.com>
+ <0626e135-5d6b-8d09-ccd1-068e42a052f6@redhat.com>
+ <86v8l2msqk.wl-maz@kernel.org>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <685ae61a-951f-e611-7491-948f19f1827e@redhat.com>
+Date:   Fri, 20 Jan 2023 10:04:50 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8m+gRMMpiTuLPj2@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <86v8l2msqk.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 05:04:49PM -0500, Alan Stern wrote:
-> On Thu, Jan 19, 2023 at 01:53:04PM -0800, Paul E. McKenney wrote:
-> > On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
-> > > Index: usb-devel/tools/memory-model/linux-kernel.bell
-> > > ===================================================================
-> > > --- usb-devel.orig/tools/memory-model/linux-kernel.bell
-> > > +++ usb-devel/tools/memory-model/linux-kernel.bell
-> > > @@ -53,38 +53,30 @@ let rcu-rscs = let rec
-> > >  	in matched
-> > >  
-> > >  (* Validate nesting *)
-> > > -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
-> > > -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
-> > > +flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-lock
-> > > +flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
-> > 
-> > This renaming makes sense to me.
+Hi Marc,
+
+On 1/20/23 2:47 AM, Marc Zyngier wrote:
+> On Thu, 19 Jan 2023 01:11:44 +0000,
+> Gavin Shan <gshan@redhat.com> wrote:
+>>
+>> I will have vgic_write_guest_lock() in v2. Note that those 3 paths can't be
+>> running in parallel since one switch is shared by them. Alternatively, we
+>> extend struct vgic_dist::save_tables_in_progress from 'bool' to 'unsigned long'.
+>> Several bit is defined for each site as below. In this way, the 3 paths can be
+>> running in parallel:
+>>
+>>    unsigned long struct vgic_dist::save_tables_in_progress
+>>
+>>    #define VGIC_DIST_SAVE_ITS_ITE		0	/* ITS Translation Entry */
+>>    #define VGIC_DIST_SAVE_ITS_DTE		1	/* ITS Device Table Entry */
+>>    #define VGIC_DIST_SAVE_ITS_CTE		2	/* ITS Collection Table Entry */
+>>    #define VGIC_DIST_SAVE_ITS_CT			3	/* ITS Collection Table */
+>>    #define VGIC_DIST_SAVE_VGIC3_LPI		4	/* VGIC3 LPI Pending Status */
+>>    #define VGIC_DIST_SAVE_VGIC3_PENDING_TABLE	5	/* VGIC3 Pending Table */
+>>
+>> The drawback is the calls are limited to 64. If those 3 paths can't be running
+>> in parallel, we needn't the extension at all.
 > 
-> But I'll put it in a separate patch, since it's not related to the main 
-> purpose of this change.
-
-Even better!
-
-> > >  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> > > -let srcu-rscs = let rec
-> > > -	    unmatched-locks = Srcu-lock \ domain(matched)
-> > > -	and unmatched-unlocks = Srcu-unlock \ range(matched)
-> > > -	and unmatched = unmatched-locks | unmatched-unlocks
-> > > -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
-> > > -	and unmatched-locks-to-unlocks =
-> > > -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
-> > > -	and matched = matched | (unmatched-locks-to-unlocks \
-> > > -		(unmatched-po ; unmatched-po))
-> > > -	in matched
-> > > +let srcu-rscs = ([Srcu-lock] ; (data | rf)+ ; [Srcu-unlock]) & loc
-> > 
-> > The point of the "+" instead of the "*" is to avoid LKMM being confused by
-> > an srcu_read_lock() immediately preceding an unrelated srcu_read_unlock(),
-> > right?  Or am I missing something more subtle?
+> It should all be completely sequential. KVM_DEV_ARM_ITS_SAVE_TABLES
+> runs in a context where everything is locked, and so is
+> VGIC_DIST_SAVE_VGIC3_PENDING_TABLE.
 > 
-> No, and it's not to avoid confusion.  It merely indicates that there has 
-> to be at least one instance of data or rf here; we will never have a 
-> case where the lock and the unlock are the same event.
 
-Got it, thank you!
+Thanks for your confirm. Yeah, it's sequential because 'kvm->lock' is
+hold on KVM_DEV_ARM_ITS_SAVE_TABLES and VGIC_DIST_SAVE_VGIC3_PENDING_TABLE.
+So all good to have one shared switch. v2 will be posted pretty soon.
 
-> > >  (* Validate nesting *)
-> > > -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
-> > > -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
-> > > +flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
-> > > +flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-unlock
-> > > +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
-> > >  
-> > >  (* Check for use of synchronize_srcu() inside an RCU critical section *)
-> > >  flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
-> > >  
-> > >  (* Validate SRCU dynamic match *)
-> > > -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
-> > > +flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
-> > >  
-> > >  (* Compute marked and plain memory accesses *)
-> > >  let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
-> > > -		LKR | LKW | UL | LF | RL | RU
-> > > + 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
-> > >  let Plain = M \ Marked
-> > >  
-> > >  (* Redefine dependencies to include those carried through plain accesses *)
-> > > -let carry-dep = (data ; rfi)*
-> > > +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
-> > 
-> > The "[~ Srcu-unlock]" matches the store that bridges the data and rfi",
-> > correct?
-> 
-> Right.
-> 
-> > >  let addr = carry-dep ; addr
-> > >  let ctrl = carry-dep ; ctrl
-> > >  let data = carry-dep ; data
-> > > Index: usb-devel/tools/memory-model/linux-kernel.def
-> > > ===================================================================
-> > > --- usb-devel.orig/tools/memory-model/linux-kernel.def
-> > > +++ usb-devel/tools/memory-model/linux-kernel.def
-> > > @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
-> > >  synchronize_rcu_expedited() { __fence{sync-rcu}; }
-> > >  
-> > >  // SRCU
-> > > -srcu_read_lock(X)  __srcu{srcu-lock}(X)
-> > > -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-> > > +srcu_read_lock(X) __load{srcu-lock}(*X)
-> > > +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
-> > > +srcu_down_read(X) __load{srcu-lock}(*X)
-> > > +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
-> > 
-> > And here srcu_down_read() and srcu_up_read() are synonyms for
-> > srcu_read_lock() and srcu_read_unlock(), respectively, which I believe
-> > should suffice.
-> > 
-> > >  synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
-> > >  synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
-> > 
-> > So this looks quite reasonable to me.
-> 
-> Okay, good.  In theory we could check for read_lock and read_unlock on 
-> different CPUs, but I don't think it's worth the trouble.
+Thanks,
+Gavin
 
-Given that lockdep already complains about that sort of thing in the
-Linux kernel, agreed, it is not worth much trouble at all.
-
-							Thanx, Paul
