@@ -2,188 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA4C674B7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBAC674ACE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjATE5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S230025AbjATEg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjATE5A (ORCPT
+        with ESMTP id S229973AbjATEgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:57:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB3DBCE03;
-        Thu, 19 Jan 2023 20:46:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674190019; x=1705726019;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SyM8caywEFAqKwm6rH70roccYrUPdIquF3xvmc4tvFE=;
-  b=TUrPkpXkwJZM3Ga3wC7J1WPjSEdBybqGqLnqMZwT8Kh52tiIHO4+7iS/
-   N8bPwqBMQk185UZzMD9h2+C0XrfLH1FjnjlHohPgrIfaKftYujZfL3zaK
-   I53TW0UMim0NG0jh8XPJ1KgP6yWQPmhePUalyJaitnBaVnyvL+59PUyiR
-   INNRhhYBdAdWbXSKHyjtAIGxnTLtNWA3h/opbz2IY38DaT5Vzz8OjzTkb
-   sVxHYbxZn2JZvstNS7+taf6uXUKXHXz4FThiJkWhV3I1JS5jeepYuPySp
-   JWngKCFpE4732JOAaQLOR1dnUEqjhymXjIkkoMVPdJAiNnYG7Zfc4Q+TB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="308869078"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="308869078"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:19:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="660201404"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="660201404"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2023 06:19:35 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pIVlN-00BhcV-0Q;
-        Thu, 19 Jan 2023 16:19:33 +0200
-Date:   Thu, 19 Jan 2023 16:19:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Gireesh.Hiremath@in.bosch.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmitry.torokhov@gmail.com, Jonathan.Cameron@huawei.com,
-        lis8215@gmail.com, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH] driver: input: matric-keypad: switch to gpiod API
-Message-ID: <Y8lRdC/B2VlDU5zB@smile.fi.intel.com>
-References: <20230113062538.1537-1-Gireesh.Hiremath@in.bosch.com>
- <20230119114736.30257-1-Gireesh.Hiremath@in.bosch.com>
+        Thu, 19 Jan 2023 23:36:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E3BCE00;
+        Thu, 19 Jan 2023 20:34:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42380B82485;
+        Thu, 19 Jan 2023 14:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C97C433D2;
+        Thu, 19 Jan 2023 14:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674138317;
+        bh=DOwhtS4jE7pYqDk0EUsW0L6K6Omzw1zbVbFWpn/2xH0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DYHW/AHnm5CgG8wG0DFV9sxNV63AtfcEDCq2VQcjXyzfVLfC2GBQ2Co+oV/bwa4BS
+         RjkR7vSk1NsDek0YKGlUaQusQFpsxv4XtrX2pmHqtTK2GVgCMUSpU06vlAOW/In8MC
+         X0cFueOfUdA8CYH8Cxgi3BQHdG/6LIdnwU3KTECmgHGcAlYmywiUppGVQD2qYnPDm1
+         yHkKWR75sKDaKUWU4uZZw5zavEa/m/IOBLihr5jiyy+Kj4eBNiUGwOzlwgjTbkt+T8
+         42c+W2p8W4TvgV/d5oRmD2ac2BJCuHnpVQjz79n/k4IkJXjiofs3NzealJhVWEfnZC
+         UzKnCX+IiQ7qg==
+Date:   Thu, 19 Jan 2023 14:25:12 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/5] ARM: Add GXP I2C Support
+Message-ID: <Y8lSyJWm+JAQw3AW@google.com>
+References: <20230117204439.76841-1-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230119114736.30257-1-Gireesh.Hiremath@in.bosch.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117204439.76841-1-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:47:36AM +0000, Gireesh.Hiremath@in.bosch.com wrote:
+On Tue, 17 Jan 2023, nick.hawkins@hpe.com wrote:
 
-> I will correct it as
-> >Thank you for the patch, my comments below.
-> >
-> >> switch to new gpio descriptor based API
-> Switch to GPIO descriptor based API.
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> The GXP SoC supports 10 I2C engines. Each I2C engine is completely
+> independent and can function both as an I2C master and I2C slave. The
+> I2C master can operate in a multi master environment. The engines support
+> a scalable speed from 8kHZ to 1.5 Mhz.
+> 
+> ---
+> 
+> Changes since v1:
+>  *Removed yaml documentation of hpe,gxp-sysreg as it has been
+>   applied to syscon.yaml
+>  *Made i2cX a generic node name i2c in dts file
+>  *Added status field to the dtsi and the dts for i2c bus
+>  *Removed unnecessary size-cells and address-cells from yaml
+>  *Removed phandle from hpe,sysreg-phandle
+>  *Changed hpe,i2c-max-bus-freq to clock-frequency
+>  *Removed rogue tab in structure definition
+>  *Removed use of __iomem *base local variables as it was
+>   unnecessary
+>  *Switched #if IS_ENABLED() -> if (IS_ENABLED()) inside
+>   functions
+>  *Removed use of pr_* functions
+>  *Removed informational prints in register and unregister
+>   functions
+>  *Removed print from interrupt handler
+>  *Removed informational prints from probe function
+>  *Switched dev_err -> dev_err_probe in probe function
+>  *Used the respective helper for mapping the resource to
+>   __iomem
+> 
+> Nick Hawkins (5):
+>   i2c: hpe: Add GXP SoC I2C Controller
+>   dt-bindings: i2c: Add hpe,gxp-i2c
+>   ARM: dts: hpe: Add I2C Topology
+>   ARM: multi_v7_defconfig: add gxp i2c module
+>   MAINTAINERS: Add HPE GXP I2C Support
+> 
+>  .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml  |  54 ++
+>  MAINTAINERS                                   |   2 +
+>  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      | 109 ++++
+>  arch/arm/boot/dts/hpe-gxp.dtsi                | 125 ++++
+>  arch/arm/configs/multi_v7_defconfig           |   1 +
+>  drivers/i2c/busses/Kconfig                    |   7 +
+>  drivers/i2c/busses/Makefile                   |   1 +
+>  drivers/i2c/busses/i2c-gxp.c                  | 609 ++++++++++++++++++
+>  8 files changed, 908 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+>  create mode 100644 drivers/i2c/busses/i2c-gxp.c
 
-...to the GPIO...
-
-> >Please, respect English grammar and punctuation.
-> >
-> >Also, you have a typo in the Subject besides the fact that the template for
-> >Input subsystem is different. So prefix has to be changed as well.
-> and template as
-> Input: matrix_keypad - switch to gpiod API
-
-OK!
-
-...
-
-> >>  	bool level_on = !pdata->active_low;
-> >>  
-> >>  	if (on) {
-> >> -		gpio_direction_output(pdata->col_gpios[col], level_on);
-> >> +		gpiod_direction_output(pdata->col_gpios[col], level_on);
-> >>  	} else {
-> >> -		gpio_set_value_cansleep(pdata->col_gpios[col], !level_on);
-> >> +		gpiod_set_value_cansleep(pdata->col_gpios[col], !level_on);
-> >>  	}
-> >
-> >I believe it's not so trivial. The GPIO descriptor already has encoded the
-> >level information and above one as below are not clear now.
-> >
-> >> -	return gpio_get_value_cansleep(pdata->row_gpios[row]) ?
-> >> +	return gpiod_get_value_cansleep(pdata->row_gpios[row]) ?
-> >>  			!pdata->active_low : pdata->active_low;
-> >
-> if GPIO from I2C or SPI IO expander, which may sleep, 
-> so it is safer to use the gpiod_set_value_cansleep() and
-> gpiod_get_value_cansleep().
-
-No, my point is about active level (LOW or HIGH). It's encoded into
-the descriptor in opposite to the plain GPIO number.
-
-This change needs very careful understanding of the active level.
-
-...
-
-> >> -		err = gpio_request(pdata->col_gpios[i], "matrix_kbd_col");
-> >> +		err = gpiod_direction_output(pdata->col_gpios[i], !pdata->active_low);
-> >
-> >>  	while (--i >= 0)
-> >> -		gpio_free(pdata->row_gpios[i]);
-> >> +		gpiod_put(pdata->row_gpios[i]);
-> >
-> >This looks like an incorrect change.
-> >
-> >>  	while (--i >= 0)
-> >> -		gpio_free(pdata->col_gpios[i]);
-> >> +		gpiod_put(pdata->col_gpios[i]);
-> >
-> >So does this.
-> >
-> >Since you dropped gpio_request() you need to drop gpio_free() as well,
-> >and not replace it.
-> gpio_request() equalent api gpiod_request() is alredy called inside gpiod_get_index(...).
-> gpiod_put() is required to free GPIO.
-
-Yes, but you removed request call, so should remove the free.
-The gpiod_put() should be at the same function as gpiod_get().
-
-...
-
-> >>  	for (i = 0; i < nrow; i++) {
-> >> -		ret = of_get_named_gpio(np, "row-gpios", i);
-> >> -		if (ret < 0)
-> >
-> >> -			return ERR_PTR(ret);
-> >
-> >(1)
-> >
-> >> -		gpios[i] = ret;
-> >> +		desc = gpiod_get_index(dev, "row", i, GPIOD_IN);
-> >> +		if (IS_ERR(desc))
-> >
-> >> +			return ERR_PTR(-EINVAL);
-> >
-> >Why?! How will it handle deferred probe, for example?
-> shall I update it as 
-> 				return ERR_CAST(desc);
-
-For example...
-
-> >> +		gpios[i] = desc;
-> >>  	}
-
-...
-
-> >>  	for (i = 0; i < ncol; i++) {
-> >> -		ret = of_get_named_gpio(np, "col-gpios", i);
-> >> -		if (ret < 0)
-> >> -			return ERR_PTR(ret);
-> >> -		gpios[nrow + i] = ret;
-> >> +		desc = gpiod_get_index(dev, "col", i, GPIOD_IN);
-> >> +		if (IS_ERR(desc))
-> >> +			return ERR_PTR(-EINVAL);
-
-Ditto.
-
-> >> +		gpios[nrow + i] = desc;
-> >>  	}
+Not trying to be rude, but why have you sent this to me?
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
