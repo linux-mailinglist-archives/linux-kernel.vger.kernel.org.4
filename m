@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CD36735E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640CA6735EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjASKnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S229954AbjASKoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjASKnf (ORCPT
+        with ESMTP id S230053AbjASKo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:43:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4808648A1C;
-        Thu, 19 Jan 2023 02:43:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 Jan 2023 05:44:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33A747413;
+        Thu, 19 Jan 2023 02:44:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D56616150D;
-        Thu, 19 Jan 2023 10:43:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD982C433EF;
-        Thu, 19 Jan 2023 10:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674124995;
-        bh=hVXk4PQzJXHjiSdopH+2OghTjDGf7VvJQOEU6Fba2io=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lAdb16x80YCdsLvSQpqbzEjsvHo1EHVEk8XYui+S10AR1tlkr0k8ZeIsY+iUmslvb
-         5ON9fGO4AEHgrLk8VLEADRBwTGfl6kF0L8gOQp2h1lLpwfFuKT8Bn+PcUo1A21ou1x
-         BBv+yjl1ql05XVFvwq5oqewROtwRK9UF0Lc4I0E4=
-Date:   Thu, 19 Jan 2023 11:43:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: Re: [PATCH V2 1/2] usb: gadget: u_ether: Improve print in
- gether_setup_name_default()
-Message-ID: <Y8kewDt2WbsfciMX@kroah.com>
-References: <20230116155545.101391-1-jonathanh@nvidia.com>
- <Y8a45WrjLUdCEHH+@kroah.com>
- <344ab84a-ab31-33cb-0222-9b75fbd981b2@nvidia.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A7785CC56;
+        Thu, 19 Jan 2023 10:44:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674125047; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DE6DjIh2+OCWnSX4O1vkl7/cVDbUnoAIzLVcw5LlXvA=;
+        b=wiDnWHLAMnoNymfoRWBT9OXwLRkzvJ7kTLvCFaVVHyjjHxAq2XOSInTLEJtQQUThPzYb1b
+        31CRytLbYNkTRvMdV50iwdnSC4jiGTJJu+wOp/xWXHh2yFaO5zAkb6+gOWS9n08dwOmztu
+        X5mHTHPvDuzeF6lWDLpyyWJDq1ZTUAE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674125047;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DE6DjIh2+OCWnSX4O1vkl7/cVDbUnoAIzLVcw5LlXvA=;
+        b=tmQPo9Y3CxQMhh4vVICn8UsgrI6YpUMn3I4pGkM0qSOqrm8vKvWawa4AnOVs9a7VIvhGH0
+        /LD0OHsKVArLjdBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 646C9139ED;
+        Thu, 19 Jan 2023 10:44:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BFVVF/ceyWNMJgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 19 Jan 2023 10:44:07 +0000
+Message-ID: <9acf95f1-0bce-62c7-b524-4eac408b4207@suse.de>
+Date:   Thu, 19 Jan 2023 11:44:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <344ab84a-ab31-33cb-0222-9b75fbd981b2@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH] drm/simpledrm: Allow physical width and height
+ configuration via DT
+Content-Language: en-US
+To:     Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>, asahi@lists.linux.dev
+References: <20230118184817.608551-1-rayyan@ansari.sh>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230118184817.608551-1-rayyan@ansari.sh>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------7CJxnm1qoxQINzwr000tyfEV"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,56 +75,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:14:59AM +0000, Jon Hunter wrote:
-> 
-> On 17/01/2023 15:04, Greg Kroah-Hartman wrote:
-> > On Mon, Jan 16, 2023 at 03:55:44PM +0000, Jon Hunter wrote:
-> > > The print in in gether_setup_name_default() does not provide any useful
-> > > information because a random MAC address will always be generated when
-> > > calling this function. Rather than removing the print, update the print
-> > > to show MAC address that is generated which is similar to other ethernet
-> > > drivers.
-> > > 
-> > > Finally, given that the strings 'self' and 'host' are static we do not
-> > > need to pass these strings as an arguments.
-> > > 
-> > > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > > ---
-> > > V1 -> V2: Added this patch
-> > > 
-> > >   drivers/usb/gadget/function/u_ether.c | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> > > index 8f12f3f8f6ee..be8e7b448933 100644
-> > > --- a/drivers/usb/gadget/function/u_ether.c
-> > > +++ b/drivers/usb/gadget/function/u_ether.c
-> > > @@ -845,13 +845,13 @@ struct net_device *gether_setup_name_default(const char *netname)
-> > >   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
-> > >   	eth_random_addr(dev->dev_mac);
-> > > -	pr_warn("using random %s ethernet address\n", "self");
-> > > +	pr_warn("using random self ethernet address %pM\n", dev->dev_mac);
-> > 
-> > If you are going to fix these up, please use dev_warn() and friends,
-> > don't use "raw" pr_* calls in a driver.
-> 
-> 
-> I had a look at that, but I don't think we can in this case. The 'dev'
-> structure you see above is of type 'struct eth_dev' and not 'struct device'.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------7CJxnm1qoxQINzwr000tyfEV
+Content-Type: multipart/mixed; boundary="------------E80qTy40WGnctAhqUwyuEWVV";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
+Cc: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE"
+ <devicetree@vger.kernel.org>, asahi@lists.linux.dev
+Message-ID: <9acf95f1-0bce-62c7-b524-4eac408b4207@suse.de>
+Subject: Re: [RFC PATCH] drm/simpledrm: Allow physical width and height
+ configuration via DT
+References: <20230118184817.608551-1-rayyan@ansari.sh>
+In-Reply-To: <20230118184817.608551-1-rayyan@ansari.sh>
 
-Then use the networking macro for this.  And underneath it all is a real
-struct device anyway, so it should be possible.
+--------------E80qTy40WGnctAhqUwyuEWVV
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> In other places in the driver where dev_warn is used the device structure
-> comes from the 'struct usb_gadget' but FWICT this is not initialised in the
-> above function.
+KGNjOiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZywgYXNhaGlAbGlzdHMubGludXguZGV2
+KQ0KDQpIaSwNCg0KdGhhbmtzIGZvciB0aGUgcGF0Y2guIEkgYWxyZWFkeSB3b25kZXJlZCBp
+ZiB0aGUgRFBJIHZhbHVlIHNob3VsZCBiZSANCmNvbmZpZ3VyYWJsZSBpbiBzb21lIHdheS4N
+Cg0KQW0gMTguMDEuMjMgdW0gMTk6NDggc2NocmllYiBSYXl5YW4gQW5zYXJpOg0KPiBIZWxs
+bywNCj4gVGhlIGZvbGxvd2luZyBkcmFmdCBwYXRjaCBhZGRzIHN1cHBvcnQgZm9yIGNvbmZp
+Z3VyaW5nIHRoZQ0KPiBoZWlnaHQtbW0gYW5kIHdpZHRoLW1tIERSTSBwcm9wZXJ0aWVzIGlu
+IHRoZSBzaW1wbGVkcm0gZHJpdmVyDQo+IHZpYSBkZXZpY2V0cmVlLg0KPiBUaGlzIGlzIHVz
+ZWZ1bCB0byBnZXQgcHJvcGVyIHNjYWxpbmcgaW4gVUlzIHN1Y2ggYXMgUGhvc2guDQo+IEFu
+IGV4YW1wbGUgb2YgdXNpbmcgdGhpcyBwcm9wZXJ0eSBpcyB0aGlzLCB0YWtlbiBmcm9tIG15
+IGxvY2FsIHRyZWU6DQo+IA0KPiAJCWZyYW1lYnVmZmVyMDogZnJhbWVidWZmZXJAMzIwMDAw
+MCB7DQo+IAkJCWNvbXBhdGlibGUgPSAic2ltcGxlLWZyYW1lYnVmZmVyIjsNCj4gCQkJcmVn
+ID0gPDB4MzIwMDAwMCAweDgwMDAwMD47DQo+IAkJCWZvcm1hdCA9ICJhOHI4ZzhiOCI7DQo+
+IAkJCXdpZHRoID0gPDcyMD47DQo+IAkJCWhlaWdodCA9IDwxMjgwPjsNCj4gCQkJc3RyaWRl
+ID0gPCg3MjAgKiA0KT47DQo+IAkJCXdpZHRoLW1tID0gL2JpdHMvIDE2IDw1OD47DQo+IAkJ
+CWhlaWdodC1tbSA9IC9iaXRzLyAxNiA8MTAzPjsNCj4gDQo+IAkJCWNsb2NrcyA9IDwmbW1j
+YyBNRFNTX0FIQl9DTEs+LA0KPiAJCQkJIDwmbW1jYyBNRFNTX0FYSV9DTEs+LA0KPiAJCQkJ
+IDwmbW1jYyBNRFNTX0JZVEUwX0NMSz4sDQo+IAkJCQkgPCZtbWNjIE1EU1NfTURQX0NMSz4s
+DQo+IAkJCQkgPCZtbWNjIE1EU1NfUENMSzBfQ0xLPiwNCj4gCQkJCSA8Jm1tY2MgTURTU19W
+U1lOQ19DTEs+Ow0KPiAJCQlwb3dlci1kb21haW5zID0gPCZtbWNjIE1EU1NfR0RTQz47DQo+
+IAkJfTsNCj4gDQo+IEkgaGF2ZSB0ZXN0ZWQgdGhpcyBvbiBteSBMdW1pYSA3MzUsIGFuZCBp
+dCBkb2VzIGluZGVlZA0KPiBhbGxvdyBQaG9zaCB0byBzY2FsZSBjb3JyZWN0bHkgb24gdGhl
+IHNjcmVlbi4NCg0KSXMgdGhpcyBzb21ldGhpbmcgdGhhdCBpcyBhbHJlYWR5IHN1cHBvcnRl
+ZCBieSBzb21lIGRldmljZSwgb3IganVzdCBhIA0KcGV0IHByb2plY3Qgb2YgeW91cnM/DQoN
+Cj4gDQo+IEhvd2V2ZXIsIEkgd291bGQgbGlrZSB0byBnZXQgc29tZSBmZWVkYmFjayBiZWZv
+cmUgSSB3cml0ZSB0aGUNCj4gZG9jdW1lbnRhdGlvbi4NCj4gLSBXaGF0IGRhdGEgdHlwZSBz
+aG91bGQgYmUgdXNlZD8NCj4gCVRoZSB3aWR0aF9tbSBhbmQgaGVpZ2h0X21tIHByb3BlcnRp
+ZXMgb2YgdGhlIGRybV9kaXNwbGF5X21vZGUNCj4gCXN0cnVjdCBhcmUgZGVmaW5lZCBhcyB1
+MTYuIEkgaGF2ZSBhbHNvIG1hZGUgdGhlIGRldmljZXRyZWUNCj4gCXByb3BlcnRpZXMgYXMg
+dGhlIHUxNiB0eXBlLCBidXQgdGhpcyByZXF1aXJlcyBzcGVjaWZ5aW5nDQo+IAkiL2JpdHMv
+IDE2IiBiZWZvcmUgdGhlIHZhbHVlLiBTaG91bGQgdTMyIGJlIHVzZWQgaW5zdGVhZCB0byBn
+ZXQNCj4gCXJpZCBvZiB0aGlzPyBJZiBzbywgaG93IGNvdWxkIHRoZSBjb252ZXJzaW9uIGZy
+b20gdTMyLT51MTYgYmUNCj4gCWhhbmRsZWQ/DQoNCkknZCB1c2UgMzIgYml0cyBpbiB0aGUg
+RFQsIGp1c3QgbGlrZSB0aGUgb3RoZXIgcHJvcGVydGllcy4NCg0KPiAtIFN0eWxlPw0KPiAJ
+SSBoYXZlIHNwbGl0IHRoZSBhcmd1bWVudHMgdG8gdGhlIERSTV9NT0RFX0lOSVQgbWFjcm8g
+YWNyb3NzDQo+IAltdWx0aXBsZSBsaW5lcyB0byBpbmNyZWFzZSByZWFkYWJpbGl0eS4gSSdt
+IG5vdCBzdXJlIGlmIHRoaXMNCj4gCWlzIHRoZSBjb3JyZWN0IHN0eWxlIHRob3VnaC4NCj4g
+LSBBbnl0aGluZyBlbHNlPw0KPiAJVGhpcyBpcyBteSBmaXJzdCB0aW1lIHdyaXRpbmcgY29k
+ZSBmb3IgYSBMaW51eCBkcml2ZXIsIHNvIEkNCj4gCXdvdWxkIGJlIGdyYXRlZnVsIGlmIHlv
+dSBoYXZlIGFueSBzdWdnZXN0aW9ucyBmb3IgaW1wcm92ZW1lbnRzLg0KPiAgIA0KPiBUaGFu
+a3MsDQo+IFJheXlhbi4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxl
+ZHJtLmMgfCA0OSArKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiAgIDEgZmls
+ZSBjaGFuZ2VkLCA0MiBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jIGIvZHJpdmVycy9n
+cHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4gaW5kZXggMTYyZWI0NGRjYmE4Li45MjEwOWY4
+NzBiMzUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5j
+DQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jDQo+IEBAIC0xMTYs
+NiArMTE2LDE1IEBAIHNpbXBsZWZiX2dldF9mb3JtYXRfcGQoc3RydWN0IGRybV9kZXZpY2Ug
+KmRldiwNCj4gICAJcmV0dXJuIHNpbXBsZWZiX2dldF92YWxpZGF0ZWRfZm9ybWF0KGRldiwg
+cGQtPmZvcm1hdCk7DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIHZvaWQNCj4gK3NpbXBsZWZi
+X3JlYWRfdTE2X29mX29wdGlvbmFsKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIHN0cnVjdCBk
+ZXZpY2Vfbm9kZSAqb2Zfbm9kZSwNCg0KTWF5YmUgY2FsbCBpdCBzaW1wbGVmYl9yZWFkX3Ux
+Nl9vZl9vcHQoKQ0KDQo+ICsJCSAgICAgY29uc3QgY2hhciAqbmFtZSwgdTE2ICp2YWx1ZSkN
+Cg0KVGhlIGFsaWdubWVudCBsb29rcyBvZmYuDQoNCj4gK3sNCj4gKwlpbnQgcmV0ID0gb2Zf
+cHJvcGVydHlfcmVhZF91MTYob2Zfbm9kZSwgbmFtZSwgdmFsdWUpOw0KPiArCWlmIChyZXQp
+DQo+ICsJCXZhbHVlID0gMDsNCg0KWW91IG1lYW4gKnZhbHVlID0gMCA/DQoNCkkgdGhpbmsg
+d2Ugc2hvdWxkIGJlIHN0cmljdGVyIGhlcmUuIExvb2sgYXQgdGhlIGRvY3MgYXQgWzFdLiBB
+IHJlc3VsdCBvZiANCjAgbWVhbnMgc3VjY2VzcyBhbmQgLUVJTlZBTCBtZWFucyB0aGF0IHRo
+ZSBwcm9wZXJ0eSBkb2VzIG5vdCBleGlzdC4gV2UgDQpzaG91bGQgc3RpbGwgcmVwb3J0IGVy
+cm9ycyBmb3IgdGhlIG90aGVyIGVycm5vIGNvZGVzLg0KDQpTb21ldGhpbmcgbGlrZQ0KDQog
+ICByZXQgPSBvZl9wcm9wZXJ0eV9yZWFkX3UxNigpDQoNCiAgIGlmIChyZXQpIHsNCiAgICAg
+aWYocmV0ID09IC1FSU5WQUwpIHsNCiAgICAgICAgICp2YWx1ZSA9IDA7DQoJcmV0PSAwOw0K
+ICAgICB9IGVsc2Ugew0KCQlkcm1fZXJyKGRldiwgInNpbXBsZWZiOiBjYW5ub3QgcGFyc2Ug
+ZnJhbWVidWZmZXIgJXM6DQoJCQkiZXJyb3IgJWRcbiIsIG5hbWUsIHJldCk7DQogICAgIH0N
+CiAgIH0NCg0KICAgcmV0dXJuIHJldDsNCg0KWzFdIGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4u
+Y29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvaW5jbHVkZS9saW51eC9vZi5oI0wxMjAyDQoNCj4g
+K30NCj4gKw0KPiAgIHN0YXRpYyBpbnQNCj4gICBzaW1wbGVmYl9yZWFkX3UzMl9vZihzdHJ1
+Y3QgZHJtX2RldmljZSAqZGV2LCBzdHJ1Y3QgZGV2aWNlX25vZGUgKm9mX25vZGUsDQo+ICAg
+CQkgICAgIGNvbnN0IGNoYXIgKm5hbWUsIHUzMiAqdmFsdWUpDQo+IEBAIC0xODQsNiArMTkz
+LDIxIEBAIHNpbXBsZWZiX2dldF9mb3JtYXRfb2Yoc3RydWN0IGRybV9kZXZpY2UgKmRldiwg
+c3RydWN0IGRldmljZV9ub2RlICpvZl9ub2RlKQ0KPiAgIAlyZXR1cm4gc2ltcGxlZmJfZ2V0
+X3ZhbGlkYXRlZF9mb3JtYXQoZGV2LCBmb3JtYXQpOw0KPiAgIH0NCj4gICANCj4gK3N0YXRp
+YyB1MTYNCj4gK3NpbXBsZWZiX2dldF93aWR0aF9tbV9vZihzdHJ1Y3QgZHJtX2RldmljZSAq
+ZGV2LCBzdHJ1Y3QgZGV2aWNlX25vZGUgKm9mX25vZGUpDQo+ICt7DQo+ICsJdTE2IHdpZHRo
+X21tOw0KPiArCXNpbXBsZWZiX3JlYWRfdTE2X29mX29wdGlvbmFsKGRldiwgb2Zfbm9kZSwg
+IndpZHRoLW1tIiwgJndpZHRoX21tKTsNCj4gKwlyZXR1cm4gd2lkdGhfbW07DQo+ICt9DQo+
+ICsNCj4gK3N0YXRpYyB1MTYNCj4gK3NpbXBsZWZiX2dldF9oZWlnaHRfbW1fb2Yoc3RydWN0
+IGRybV9kZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9ub2RlICpvZl9ub2RlKQ0KPiArew0K
+PiArCXUxNiBoZWlnaHRfbW07DQo+ICsJc2ltcGxlZmJfcmVhZF91MTZfb2Zfb3B0aW9uYWwo
+ZGV2LCBvZl9ub2RlLCAiaGVpZ2h0LW1tIiwgJmhlaWdodF9tbSk7DQo+ICsJcmV0dXJuIGhl
+aWdodF9tbTsNCj4gK30NCj4gICAvKg0KPiAgICAqIFNpbXBsZSBGcmFtZWJ1ZmZlciBkZXZp
+Y2UNCj4gICAgKi8NCj4gQEAgLTU5OSwxNiArNjIzLDI0IEBAIHN0YXRpYyBjb25zdCBzdHJ1
+Y3QgZHJtX21vZGVfY29uZmlnX2Z1bmNzIHNpbXBsZWRybV9tb2RlX2NvbmZpZ19mdW5jcyA9
+IHsNCj4gICAgKi8NCj4gICANCj4gICBzdGF0aWMgc3RydWN0IGRybV9kaXNwbGF5X21vZGUg
+c2ltcGxlZHJtX21vZGUodW5zaWduZWQgaW50IHdpZHRoLA0KPiAtCQkJCQkgICAgICB1bnNp
+Z25lZCBpbnQgaGVpZ2h0KQ0KPiArCQkJCQkgICAgICB1bnNpZ25lZCBpbnQgaGVpZ2h0LA0K
+PiArCQkJCQkgICAgICB1MTYgd2lkdGhfbW0sDQo+ICsJCQkJCSAgICAgIHUxNiBoZWlnaHRf
+bW0pDQo+ICAgew0KPiAgIAkvKg0KPiAtCSAqIEFzc3VtZSBhIG1vbml0b3IgcmVzb2x1dGlv
+biBvZiA5NiBkcGkgdG8NCj4gLQkgKiBnZXQgYSBzb21ld2hhdCByZWFzb25hYmxlIHNjcmVl
+biBzaXplLg0KPiArCSAqIEFzc3VtZSBhIG1vbml0b3IgcmVzb2x1dGlvbiBvZiA5NiBkcGkg
+aWYgcGh5c2ljYWwNCj4gKwkgKiBkaW1lbnNpb25zIGFyZSBub3Qgc3BlY2lmaWVkIHRvIGdl
+dCBhIHNvbWV3aGF0IHJlYXNvbmFibGUNCg0KUGxlYXNlIG1vdmUgJ2RpbWVuc2lvbnMnIHRv
+IHRoZSBwcmV2aW91cyBsaW5lIHRvIG1ha2UgaXQgbW9yZSBwbGVhc2FudCANCnRvIHRoZSBl
+eWVzLg0KDQo+ICsJICogc2NyZWVuIHNpemUuDQo+ICAgCSAqLw0KPiArDQo+ICAgCWNvbnN0
+IHN0cnVjdCBkcm1fZGlzcGxheV9tb2RlIG1vZGUgPSB7DQo+IC0JCURSTV9NT0RFX0lOSVQo
+NjAsIHdpZHRoLCBoZWlnaHQsDQo+IC0JCQkgICAgICBEUk1fTU9ERV9SRVNfTU0od2lkdGgs
+IDk2dWwpLA0KPiAtCQkJICAgICAgRFJNX01PREVfUkVTX01NKGhlaWdodCwgOTZ1bCkpDQo+
+ICsJCURSTV9NT0RFX0lOSVQoDQo+ICsJCQk2MCwNCj4gKwkJCXdpZHRoLA0KPiArCQkJaGVp
+Z2h0LA0KPiArCQkJKHdpZHRoX21tID8gd2lkdGhfbW0gOiBEUk1fTU9ERV9SRVNfTU0od2lk
+dGgsIDk2dWwpKSwNCj4gKwkJCShoZWlnaHRfbW0gPyBoZWlnaHRfbW0gOiBEUk1fTU9ERV9S
+RVNfTU0oaGVpZ2h0LCA5NnVsKSkNCj4gKwkJCSkNCg0KVGhlIGNvZGluZyBzdHlsZSBpcyBh
+d2t3YXJkIGFuZCB0aGUgPzogZG9lc24ndCBiZWxvbmcgaGVyZS4gUGxlYXNlIHNlZSANCmZ1
+cnRoZXIgYmVsb3cuDQoNCj4gICAJfTsNCj4gICANCj4gICAJcmV0dXJuIG1vZGU7DQo+IEBA
+IC02MjIsNiArNjU0LDcgQEAgc3RhdGljIHN0cnVjdCBzaW1wbGVkcm1fZGV2aWNlICpzaW1w
+bGVkcm1fZGV2aWNlX2NyZWF0ZShzdHJ1Y3QgZHJtX2RyaXZlciAqZHJ2LA0KPiAgIAlzdHJ1
+Y3Qgc2ltcGxlZHJtX2RldmljZSAqc2RldjsNCj4gICAJc3RydWN0IGRybV9kZXZpY2UgKmRl
+djsNCj4gICAJaW50IHdpZHRoLCBoZWlnaHQsIHN0cmlkZTsNCj4gKwl1MTYgd2lkdGhfbW0s
+IGhlaWdodF9tbTsNCg0KSW5pdCB0aG9zZSB0d28gdmFyaWFibGVzIHRvIHplcm8uDQoNCj4g
+ICAJY29uc3Qgc3RydWN0IGRybV9mb3JtYXRfaW5mbyAqZm9ybWF0Ow0KPiAgIAlzdHJ1Y3Qg
+cmVzb3VyY2UgKnJlcywgKm1lbTsNCj4gICAJdm9pZCBfX2lvbWVtICpzY3JlZW5fYmFzZTsN
+Cj4gQEAgLTY3Niw2ICs3MDksOCBAQCBzdGF0aWMgc3RydWN0IHNpbXBsZWRybV9kZXZpY2Ug
+KnNpbXBsZWRybV9kZXZpY2VfY3JlYXRlKHN0cnVjdCBkcm1fZHJpdmVyICpkcnYsDQo+ICAg
+CQlmb3JtYXQgPSBzaW1wbGVmYl9nZXRfZm9ybWF0X29mKGRldiwgb2Zfbm9kZSk7DQo+ICAg
+CQlpZiAoSVNfRVJSKGZvcm1hdCkpDQo+ICAgCQkJcmV0dXJuIEVSUl9DQVNUKGZvcm1hdCk7
+DQo+ICsJCXdpZHRoX21tID0gc2ltcGxlZmJfZ2V0X3dpZHRoX21tX29mKGRldiwgb2Zfbm9k
+ZSk7DQo+ICsJCWhlaWdodF9tbSA9IHNpbXBsZWZiX2dldF9oZWlnaHRfbW1fb2YoZGV2LCBv
+Zl9ub2RlKTsNCj4gICAJfSBlbHNlIHsNCj4gICAJCWRybV9lcnIoZGV2LCAibm8gc2ltcGxl
+ZmIgY29uZmlndXJhdGlvbiBmb3VuZFxuIik7DQo+ICAgCQlyZXR1cm4gRVJSX1BUUigtRU5P
+REVWKTsNCj4gQEAgLTY4Niw3ICs3MjEsNyBAQCBzdGF0aWMgc3RydWN0IHNpbXBsZWRybV9k
+ZXZpY2UgKnNpbXBsZWRybV9kZXZpY2VfY3JlYXRlKHN0cnVjdCBkcm1fZHJpdmVyICpkcnYs
+DQo+ICAgCQkJcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7DQo+ICAgCX0NCg0KSnVzdCBsaWtl
+IHdpdGggdGhlIGZyYW1lYnVmZmVyIHN0cmlkZSwgaGVyZSdzIHRoZSBwbGFjZSB0byBkZXRl
+Y3QgDQpkZWZhdWx0IHZhbHVlcy4gU28gYXQgdGhpcyBwb2ludCwgZG8gc29tZXRoaW5nIGxp
+a2UNCg0KICAJaWYgKCF3aWR0aF9tbSkNCgkJd2lkdGhfbW0gPSBEUk1fTU9ERV9SRVNfTU0o
+d2lkdGgsIDk2dWwpOw0KICAJaWYgKCFoZWlnaHRfbW0pDQoJCWhlaWdodF9tbSA9IERSTV9N
+T0RFX1JFU19NTShoZWlnaHQsIDk2dWwpOw0KDQpBbmQgcGFzcyB0aGUgaW5pdGlhbGl6ZWQg
+cGh5c2ljYWwgZGltZW5zaW9ucyB0byBzaW1wbGRybV9tb2RlKCkuIFlvdSBjYW4gDQptb3Zl
+IHRoZSBjb21tZW50IGluIHNpbXBsZWRybV9tb2RlKCkgYmVmb3JlIHRoZSBicmFuY2hlcy4N
+Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiAgIA0KPiAtCXNkZXYtPm1vZGUgPSBzaW1w
+bGVkcm1fbW9kZSh3aWR0aCwgaGVpZ2h0KTsNCj4gKwlzZGV2LT5tb2RlID0gc2ltcGxlZHJt
+X21vZGUod2lkdGgsIGhlaWdodCwgd2lkdGhfbW0sIGhlaWdodF9tbSk7DQo+ICAgCXNkZXYt
+PmZvcm1hdCA9IGZvcm1hdDsNCj4gICAJc2Rldi0+cGl0Y2ggPSBzdHJpZGU7DQo+ICAgDQoN
+Ci0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNV
+U0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0
+MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNj
+aMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-There's a structure somewhere in here, NEVER use raw pr_* calls in a
-driver, especially for a message like this.  It needs to point to the
-correct device that is making the message, otherwise it's impossible to
-know what is going on (and is why we created those macros decades
-ago...)
+--------------E80qTy40WGnctAhqUwyuEWVV--
 
-thanks,
+--------------7CJxnm1qoxQINzwr000tyfEV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPJHvYFAwAAAAAACgkQlh/E3EQov+CT
+bw//Y/ca/6rctvzBsu86GjN9OITgO5E0JyeRWnHZuk0n+DVq4nLeAJFLjP7rfbIvzpgrx229fFc4
+Z6dr3ALCVsLIgzz4RiP9cYM68p4t0YTIcn4dVKoZHPhS+hCV5W/CQjqqjy5cW/YQFX6KYYbQBwws
+JFnaIT00e+YuT3Hcnk/LpTZaRXMYlJEWvKU+p4bpnswmLI1zxl1RkaGPkt+DfZc0r4YnsNYO+L6d
+Sr/Ra/jovMErUfmHPH/qrwFDllycSmvhdOXYVWStvzDlutzB7XVc6OKV1ugVzoWMSYMx0SXNvB4c
+MDxUL9dQ/6hEMhtXpmToyKxZWQHwoFys2/Dm0PVrQCvBCxgtT3fsmEJsqaLNLSVfQ17mGw6VTUwn
+AE7n6++n48EBHRdzkh/RIPIsDdKl08kFNnQgtsqQYE43CHb5wnBN/cIsAmrf+0Ynu2YkJrQvaHe1
+ziD/0vGrNjSWKx0C+iZUD8/VFaafQ5omkbVvIaCyIqpfrCCEz+1fz3GfIG76lMAyG+JqfgxiIm0J
+8Hnv86XJdKhT0cxuUOjZyZdubDbK5I6lSUnMt12/7tXiVnjCNX/b2eI+tNbY/nGUzAjw3uY3xCRv
+Gyj7q+jropFqDYH4udndIwxVGFNMfNX6DJNA3vSh6VotoLCK2yvgRfd8UmUuqpdSt1w9Sa6oFu9I
+eLw=
+=ZK19
+-----END PGP SIGNATURE-----
+
+--------------7CJxnm1qoxQINzwr000tyfEV--
