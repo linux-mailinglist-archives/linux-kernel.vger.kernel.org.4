@@ -2,225 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1E3673A33
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0020673A32
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjASNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S231131AbjASN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjASN3q (ORCPT
+        with ESMTP id S229593AbjASN3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:29:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DEA78ABC
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674134938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jQ7TZ/uWcR3rMx72VYX8JKupiK67GA9GFvn8roRQmyo=;
-        b=hR7QNCBKeORNPD47WFXp8R5x4u4Sy1EFH3UvwPGeFqoKGvPQCAKkrzH2NQMfpj/WAjQxkF
-        aNJjU2uC88O3XxYvsx+V3/6uLug/bSfiJKqaO65SldvYfysyKNOSIiG7eh6TGucnJYisi2
-        pK4rhgvSlfUTTs5dO822Dgw2H81tCX4=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-643-LLWaDRb6MTCITZjGWvQKyA-1; Thu, 19 Jan 2023 08:28:57 -0500
-X-MC-Unique: LLWaDRb6MTCITZjGWvQKyA-1
-Received: by mail-ua1-f72.google.com with SMTP id n14-20020a9f314e000000b004114b0c125fso510695uab.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:28:57 -0800 (PST)
+        Thu, 19 Jan 2023 08:29:45 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9698C7929C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:29:43 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so1272170wmc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:29:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C3dW0pBIAKxEtxU2RORikWEFqQVlFjW5pcOn+Qp2gyM=;
+        b=VNpjeXq3OZVrzKoFwoENfxprV0c/LHQ/ja2SbF6Ueo9L9iG5dfVKrDwgsBaGLiP0NX
+         htavdbNyI3VCb3Fc4cJNZB9kOP9FUqb/WznH7/oRBN8dQktYvjC0gCRALkv4fm1j+42a
+         SGzS53uwoHPZ0AzTPwdVXHvt5tCtoOx2OHlRkDCwsye+4WaGN0jkjXTA8T4q164+duOq
+         xWDirg55Ok5y2QwhoSSYJJNU47Gmy/v9QSA+FAgshFd2qwKAz+g3xruyi3IBxqSkZy16
+         AxZA6+bN6ZE/WjSPIMk9cd7VjTMYwX9AsZfLkk0KATIQz/qKlwpt3vLBRltnnuevNPFT
+         fJ7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jQ7TZ/uWcR3rMx72VYX8JKupiK67GA9GFvn8roRQmyo=;
-        b=QmaJQ1S3s6anM0kth+RET7hw50kfeJ/tx9QtYNkcNfhILHTSdnAU5kRwSIQOJKl1/I
-         FUZMhkk/ty1J+c7N3VC69Ep8dqHLyPnjJL9jV/v2nd70V9LlsC5ytAhEQJkyh8Q2yNfo
-         YCVKDmxGMB+htDan7Fq2nN8+bnT7D5m2P9ZCNd+/nS3PKCFz7u6xJ0ocCusWo9SO6Lje
-         Z7icJdNz8lFwiYoZJrKyKlBcRd9UV8yMkvKz0+pQ0Oc8jd0FIKCWw96WBKJEMOyCkbfN
-         waYYFdmVRmtIMWPzXjqEfjBOBVC8y55ZfQC/WcJ/gLMG/PbcNRIT9/OvTeLNDJyrQQDT
-         rptA==
-X-Gm-Message-State: AFqh2kp0SfM2zRiheeBJgM4sBTM+o9mMhcoTfqC/QXOctAdNZbiDwz/M
-        z9Cab+z8PuMETgJ4US4/cnYAhWXC7IhzcsectvzZvqDlfK52sDUk4IJFJcrJZGDgX9zeJIpz2Wc
-        IOicpDnF6PY2p3+JlOvZWMuh7
-X-Received: by 2002:a67:e0cb:0:b0:3d3:d872:c821 with SMTP id m11-20020a67e0cb000000b003d3d872c821mr6701199vsl.27.1674134935659;
-        Thu, 19 Jan 2023 05:28:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsW2d4f3aJCvFi7ZPx3NN62wzdS1amESGFPao53yYXylhQRkBmdMXNQCs3VYkD3aCbWzy7zUg==
-X-Received: by 2002:a67:e0cb:0:b0:3d3:d872:c821 with SMTP id m11-20020a67e0cb000000b003d3d872c821mr6701165vsl.27.1674134935144;
-        Thu, 19 Jan 2023 05:28:55 -0800 (PST)
-Received: from localhost.localdomain ([176.206.23.228])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05620a290800b006fb8239db65sm24355107qkp.43.2023.01.19.05.28.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:28:54 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:28:49 +0100
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>
-Subject: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux Kernel
- V edition (OSPM-summit 2023)
-Message-ID: <Y8lFkbJ6nluNdVYO@localhost.localdomain>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3dW0pBIAKxEtxU2RORikWEFqQVlFjW5pcOn+Qp2gyM=;
+        b=f+gdKtfnRML9s8rWsB8HOaikK1W3pRRl6520aJLXLiWgN8w1XBgGFKhYCSVHip3H3D
+         jR2F3j4IQXiQR2IwI5W/RecncRehZC7qZIY5KXPn/P289+vOULmx2LJgud1m/r06RTuP
+         Mndt7G02pm07H82Ons3CeJDmgSaWjNjhG5vuJeOcbik2bmbYmD9CBfb2u5tAbD2i6LYn
+         XxEVfAtdfrjwOnO8WrcKHHfZofLfJ6xm530oUv/nzQEaGyPPv1p12UTrLrzvdUmhyG3w
+         hWtX9Oa4UC/BsZclKBjZaqKPTyniCtJIM9WQYd3k2c1oyKuAmVPAyoon1/tkCE6E28Kj
+         NBcQ==
+X-Gm-Message-State: AFqh2koVeyq6qjckvlBIaNL8gw27KOif3E9oLUS/nGCyx8PQepCRqHKJ
+        7LTntozc0CIxsFWq/f0dnaR2iQ==
+X-Google-Smtp-Source: AMrXdXutMqkmGbFSaII+0b3BWhZKLvebXXTCpEBdUITKyeT6dH7yiekgvhHNEYUi/sJ6hmCQbPDkfg==
+X-Received: by 2002:a05:600c:5114:b0:3db:254e:59a9 with SMTP id o20-20020a05600c511400b003db254e59a9mr1687123wms.15.1674134982119;
+        Thu, 19 Jan 2023 05:29:42 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1cf404000000b003da2932bde0sm5538891wma.23.2023.01.19.05.29.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 05:29:41 -0800 (PST)
+Message-ID: <a3da518d-0247-e36c-1161-f82fddd76476@linaro.org>
+Date:   Thu, 19 Jan 2023 14:29:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 3/7] arm64: dts: qcom: sc7280: Add LPASS PIL node
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org
+References: <1674131227-26456-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674131227-26456-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1674131227-26456-4-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Power Management and Scheduling in the Linux Kernel (OSPM-summit) V edition
+On 19/01/2023 13:27, Srinivasa Rao Mandadapu wrote:
+> Add LPASS PIL node for sc7280 based audioreach platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
+>  .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  |  4 +
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 95 ++++++++++++++++++++++
+>  2 files changed, 99 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> index 7b3f7ee..81e0f3a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> @@ -107,3 +107,7 @@
+>  		};
+>  	};
+>  };
+> +
+> +&remoteproc_adsp {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 6908bca..08142047 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -8,6 +8,7 @@
+>  #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,gcc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
+> +#include <dt-bindings/clock/qcom,lpass-sc7280.h>
+>  #include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,rpmh.h>
+> @@ -21,6 +22,7 @@
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+>  #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+> +#include <dt-bindings/soc/qcom,gpr.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>  #include <dt-bindings/sound/qcom,lpass.h>
+>  #include <dt-bindings/thermal/thermal.h>
+> @@ -3439,6 +3441,99 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		remoteproc_adsp: remoteproc@3000000 {
+> +			compatible = "qcom,sc7280-adsp-pil";
+> +			reg = <0 0x03000000 0 0x5000>, <0 0x0355b000 0 0x10>;
+> +			reg-names = "qdsp6ss_base", "lpass_efuse";
+> +
+> +			status = "disabled";
 
-April 17-19, 2023
-Universita Politecnica delle Marche, Facolta di Economia
-Ancona, Italy
+Status is always the last property.
 
----
 
-.:: FOCUS
-
-After a couple of years break, OSPM is back! In a different venue.
-
-The V edition of the Power Management and Scheduling in the Linux Kernel
-(OSPM) summit aims at fostering discussions on power management and
-(real-time) scheduling techniques. Summit will be held in Ancona (Italy)
-on April 17-19, 2023.
-
-We welcome anybody interested in having discussions on the broad scope
-of scheduler techniques for reducing energy consumption while meeting
-performance and latency requirements, real-time systems, real-time and
-non-real-time scheduling, tooling, debugging and tracing.
-
-Feel free to take a look at what happened previous years:
-
- I   edition - https://lwn.net/Articles/721573/
- II  edition - https://lwn.net/Articles/754923/
- III edition - https://lwn.net/Articles/793281/
- IV  edition - https://lwn.net/Articles/820337/ (online)
-
-.:: FORMAT
-
-The summit is organized to cover three days of discussions and talks.
-
-The list of topics of interest includes (but it is not limited to):
-
- * Power management techniques
- * Real-time and non real-time scheduling techniques
- * Energy consumption and CPU capacity aware scheduling
- * Real-time virtualization
- * Mobile/Server power management real-world use cases (successes and
-   failures)
- * Power management and scheduling tooling (configuration, integration,
-   testing, etc.)
- * Tracing
- * Recap/lightning talks
-
-Presentations can cover recently developed technologies, ongoing work
-and new ideas. Please understand that this workshop is not intended for
-presenting sales and marketing pitches.
-
-.:: ATTENDING
-
-Attending the OSPM-summit is free of charge, but registration to the
-event is mandatory. The event can allow a maximum of 50 people (so, be
-sure to register early!).
-
-Registrations open on February 17th, 2020.
-To register fill in the registration form available at
-https://forms.gle/QbRhGS3HWXinKBZq7
-
-While it is not strictly required to submit a topic/presentation (see
-below), registrations with a topic/presentation proposal will take
-precedence.
-
-.:: SUBMIT A TOPIC/PRESENTATION
-
-To submit a topic/presentation add its details to this list:
-https://docs.google.com/spreadsheets/d/10AJFQporrCPH9Gn6-MaRotdfO4Hm4LG6dVAoDrQdj5A/edit?usp=sharing
-
-Or, if you prefer, simply reply (only to me, please :) to this email
-specifying:
-
-- name/surname
-- affiliation
-- short bio
-- email address
-- title
-- abstract
-- 30min or 50min slot
-
-Deadline for submitting topics/presentations is 10th of February 2023.
-Notifications for accepted topics/presentations will be sent out 17th of
-February 2023.
-
-.:: VENUE
-
-The workshop will take place at Univpm [1], Universita Politecnica delle
-Marche, Facolta di Economia, Ancona, Italy.
-
-The workshop venue is within walking distance [2] from the city center
-[3] and in general from the hotels/accommodation suggested below.  You
-can reach Facolta di Economia by public transportation, via Conero Bus
-[4] (approx one every 10 minutes in rush hours)  from the station (15
-minutes to the venue).  A map of the city center with the venue,
-transportation and food/drinks places is provided here [5].  A smaller
-map locating the Facolta di Economia is also available: How to reach
-Facolta di Economia [6].
-
-For flights to Ancona, there are multiple options:
-
-- Flying directly to Ancona airport (direct flights from London Stansted
-  and Munich among others) Ancona Airport AOI [7]
-  Bus to Ancona city center from the airport Ancona airport shuttle [8]
-  Taxi service from Airport AOI to Ancona taxi [9]
-
-- Flight to Bologna airport Bologna airport [10]. From Bologna Ancona is
-  reachable by train, tickets purchasable from Trenitalia [11] (destination
-  “Ancona Centrale”). Bologna Centrale railway station is connected to
-  the airport by Marconi Express [12].
-
-A list of hotels within walking distance from the workshop venue:
-
-https://www.grandhotelpassetto.com/
-https://www.grandhotelpalaceancona.com/en/
-https://www.seeporthotel.com/
-https://www.thecityancona.it/en
-https://www.nh-hotels.it/hotel/nh-ancona
-https://www.hoteldellavittoria.it/it/
-
-1  - https://www.econ.univpm.it/?language=en
-2  - https://goo.gl/maps/9GRDxYPnUYuBSh5h9
-3  - https://goo.gl/maps/VGHaTsNi4GTgHGSj7
-4  - https://www.conerobus.it/
-5  - https://www.google.com/maps/d/u/0/edit?mid=135LJkfG6wq9rO2MoWPV2ofv1I2DfHvc&usp=sharing
-6  - https://www.econ.univpm.it/content/how-reach-us?language=en
-7  - https://www.ancona-airport.com/en/
-8  - https://www.ancona-airport.com/en/passengers/transportation/bus/
-9  - https://www.ctftaxi.it/?lang=en
-10 - https://www.bologna-airport.it/en/welcome-to-bologna-airport/?idC=62175
-11 - https://www.trenitalia.com/en.html
-12 - https://www.marconiexpress.it/
-
-.:: ORGANIZERS
-
-Juri Lelli (Red Hat)
-Daniel Bristot de Oliveira (Red Hat)
-Lorenzo Pieralisi (Linaro)
-Tommaso Cucinotta (SSSA)
-Adriano Mancini (UnivPM)
-Luca Spalazzi (UnivPM)
-Stefano Squartini (UnivPM)
-Emanuele Storti (UnivPM)
+Best regards,
+Krzysztof
 
