@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADBE6736E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198EE6736E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjASLcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S230296AbjASLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjASLbp (ORCPT
+        with ESMTP id S230272AbjASLbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:31:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99A274EA2;
-        Thu, 19 Jan 2023 03:31:44 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JBKPcT029702;
-        Thu, 19 Jan 2023 11:31:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=gW7Njcx6fhBoaFfE4jFbb8gaSEz5NLLBXcLB3pwFzbM=;
- b=RbhdUmwG4iDRhS0E/rePywC6ZBlDIAVtm+2fsfJVSRsGLqaRcjhpvfiVVNG9d90QjRg3
- wl5VkbyYJ7/zAZZiJd1OLQxRSaY2McGEyyR2KfE06RO+74eR1asIYac5e1sbCRdSNnNQ
- mu1NX/1uMYFPRv+gxsuFadDAk5rG00qn+XkQOUUo6cj4vhzktx6QTF1oqIZzwJ5sjXlf
- +e0ETJpLzLASb/KUZfbXiSCL2RVg8X1RM6Agbh/AZnmI8Va5qJBJvFk02q3bUYMvaHWA
- IqqJW7WO4YzvPoO7XNSiADVcV9Li4yCiIa6xURqkCSYWkcWmo9mslSXoQPHdfc/Ppkvi 1A== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n74wdr6cr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 11:31:22 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J9PNbs007302;
-        Thu, 19 Jan 2023 11:31:20 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n3m16mt7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 11:31:20 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JBVGXZ37552460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 11:31:16 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA50C2004E;
-        Thu, 19 Jan 2023 11:31:16 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6840120040;
-        Thu, 19 Jan 2023 11:31:15 +0000 (GMT)
-Received: from [9.171.48.94] (unknown [9.171.48.94])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 11:31:15 +0000 (GMT)
-Message-ID: <93d3397b1d0ec4e2ed24dfaccf4cafb0a9206907.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 2/7] iommu: Allow .iotlb_sync_map to fail and handle
- s390's -ENOMEM return
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Date:   Thu, 19 Jan 2023 12:31:15 +0100
-In-Reply-To: <20230104120543.308933-3-schnelle@linux.ibm.com>
-References: <20230104120543.308933-1-schnelle@linux.ibm.com>
-         <20230104120543.308933-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 19 Jan 2023 06:31:22 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4101F71F1C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:31:21 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso1020070wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h3ZTBN7fSAUMaz82Hi5VrNDhCAvZbbtMflPWHkxeOik=;
+        b=I5NVKVgNc/iUIM7MlSLIA10YiTh38S3mcLJZhJgNyV9cwuvOhWeOZ6byochkq0BsRQ
+         Ojt5GbMuTei6PzdYImxqg5P/zrCEBthS9cJTsYEBNJq30cj6XiBYL+1waaTYopUgxjsV
+         4JscuBdazeTxyZRPwFUKuHdl6pVWl1iabaFi00t7Pzpnz2UxVsissYoispNbQIokY7cp
+         GBWl+AQ/hE6vD//8uqGPyKFfEaHiG/k2vMhb4Fsaz3v2KyrKP/nINlAOGKfnkylTX5TI
+         CQAh/Vh+uHXwX1Ogf7+PWNYTVC6jEJdFFUg3Ul3leW/RX++dH1dvuqGzywnr5fLdGbF/
+         6DTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h3ZTBN7fSAUMaz82Hi5VrNDhCAvZbbtMflPWHkxeOik=;
+        b=Jk6iUTq8Tcxt5Sb2wzkfplg2oqn6KQj8b83dTylO89xBe/beNlfncL3CC0BS3RFrYd
+         3YjC68JB/9pHkrHyF/kStPzgaeTOP1uBM1MP86WCPfke1bL3bHl5uHUpnpuqmj4V7Ubc
+         jmQFpBsBY9Xft7pgWh+tdhylsnmKcLuTH497xc9RLofdI0sFVfWhwZNs3FAGEikAayv/
+         uct/D81AcEl9ISpPtpIVuUG+iEm798cANKeYpjHgR/7ApAyIB82X160REoFofDHbmVHZ
+         n3gWQsT9jMpVyGh3bjTLDaaT1OCwDV0yxawfMOWjbe7oeKOGVE3MHfGnatkklXneTMBH
+         KFwA==
+X-Gm-Message-State: AFqh2kqdU/A/YBEcIG7o8pTZsvWO7qf9wTaDcsApQKloNeW5RNdXuiES
+        KKAVCg0vU29WIJ3cBSpzPLz11Q==
+X-Google-Smtp-Source: AMrXdXtHDyJv+UOpa8CElUCnrximtQLkqWyP13CQ/drVDl83UuE5R5zbbFV2+zH4/wZuH5Us1si6pg==
+X-Received: by 2002:a05:600c:1e1f:b0:3db:2063:425d with SMTP id ay31-20020a05600c1e1f00b003db2063425dmr1802624wmb.2.1674127879761;
+        Thu, 19 Jan 2023 03:31:19 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o14-20020a5d58ce000000b002879c013b8asm33350308wrf.42.2023.01.19.03.31.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 03:31:19 -0800 (PST)
+Message-ID: <0f3f231f-feb2-74b1-c3c4-35e481ca2af9@linaro.org>
+Date:   Thu, 19 Jan 2023 12:31:17 +0100
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nPReWujzTmOiExwTbtTzClco5PZpjCZg
-X-Proofpoint-ORIG-GUID: nPReWujzTmOiExwTbtTzClco5PZpjCZg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 phishscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 spamscore=0 priorityscore=1501 mlxlogscore=690
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v7 1/3] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP313a variant
+Content-Language: en-US
+To:     Martin Botka <martin.botka@somainline.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Martin Botka <martin.botka1@gmail.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230118210319.464371-1-martin.botka@somainline.org>
+ <20230118210319.464371-2-martin.botka@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230118210319.464371-2-martin.botka@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-04 at 13:05 +0100, Niklas Schnelle wrote:
-> On s390 when using a paging hypervisor, .iotlb_sync_map is used to sync
-> mappings by letting the hypervisor inspect the synced IOVA range and
-> updating a shadow table. This however means that .iotlb_sync_map can
-> fail as the hypervisor may run out of resources while doing the sync.
-> This can be due to the hypervisor being unable to pin guest pages, due
-> to a limit on mapped addresses such as vfio_iommu_type1.dma_entry_limit
-> or lack of other resources. Either way such a failure to sync a mapping
-> should result in a DMA_MAPPING_ERROR.
->=20
-> Now especially when running with batched IOTLB flushes for unmap it may
-> be that some IOVAs have already been invalidated but not yet synced via
-> .iotlb_sync_map. Thus if the hypervisor indicates running out of
-> resources, first do a global flush allowing the hypervisor to free
-> resources associated with these mappings as well a retry creating the
-> new mappings and only if that also fails report this error to callers.
->=20
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> v3 -> v4:
-> - Adapted signature of .iommu_tlb_sync mapo for sun50i IOMMU driver added=
- in
->   v6.2-rc1 (kernel test robot)
->=20
->=20
+On 18/01/2023 22:03, Martin Botka wrote:
+> The X-Powers AXP313a is a PMIC used on some devices with the Allwinner
+> H616 or H313 SoC.
+> 
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-@Joerg, this patch, while being a prerequisite to the DMA API
-conversion, is independent and in fact would also be needed for IOMMU
-use in a nested KVM guest. With Baolu's and Matt's R-b's I think it
-would make sense to pick this up for v6.3 even if the DMA API
-conversion takes longer while we figure out details and the flush queue
-changes. What do you think?
 
-Thanks,
-Niklas
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
