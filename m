@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B40673233
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8623E673274
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjASHOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S229740AbjASHaO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 Jan 2023 02:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjASHOR (ORCPT
+        with ESMTP id S229798AbjASH2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:14:17 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7791604A0;
-        Wed, 18 Jan 2023 23:14:14 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NyDQD5dC0z501Ss;
-        Thu, 19 Jan 2023 15:14:12 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl2.zte.com.cn with SMTP id 30J7E58d018922;
-        Thu, 19 Jan 2023 15:14:05 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 19 Jan 2023 15:14:07 +0800 (CST)
-Date:   Thu, 19 Jan 2023 15:14:07 +0800 (CST)
-X-Zmail-TransId: 2af963c8edbfffffffffcfd598c6
-X-Mailer: Zmail v1.0
-Message-ID: <202301191514074846351@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <yilun.xu@intel.com>
-Cc:     <mdf@kernel.org>, <hao.wu@intel.com>, <trix@redhat.com>,
-        <michal.simek@xilinx.com>, <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGZwZ2E6IHhpbGlueC1wci1kZWNvdXBsZXI6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+        Thu, 19 Jan 2023 02:28:13 -0500
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 23:28:12 PST
+Received: from mail.redfish-solutions.com (mail.redfish-solutions.com [24.116.100.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893D1604B0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:28:11 -0800 (PST)
+Received: from smtpclient.apple (macbook3-2.redfish-solutions.com [192.168.8.12])
+        (authenticated bits=0)
+        by mail.redfish-solutions.com (8.17.1/8.16.1) with ESMTPSA id 30J7Hsf3769655
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 00:17:54 -0700
 Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 30J7E58d018922
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C8EDC4.000/4NyDQD5dC0z501Ss
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH v4 0/2] Expand APU2 driver to 3/4/5/6 models
+From:   Philip Prindeville <philipp@redfish-solutions.com>
+In-Reply-To: <44e0ef20-d6d3-4c87-1828-f88dbc08e942@redhat.com>
+Date:   Thu, 19 Jan 2023 00:17:21 -0700
+Cc:     platform-driver-x86@vger.kernel.org, linux-x86_64@vger.kernel.org,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Ed Wildgoose <lists@wildgooses.com>,
+        Andres Salomon <dilinger@queued.net>,
+        Andreas Eberlein <foodeas@aeberlein.de>,
+        Paul Spooren <paul@spooren.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <343F820D-69E1-4120-89DA-980FC78E3656@redfish-solutions.com>
+References: <20230113231139.436943-1-philipp@redfish-solutions.com>
+ <44e0ef20-d6d3-4c87-1828-f88dbc08e942@redhat.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Scanned-By: MIMEDefang 3.2 on 192.168.8.3
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/fpga/xilinx-pr-decoupler.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> On Jan 17, 2023, at 3:25 AM, Hans de Goede <hdegoede@redhat.com> wrote:
+> 
+> Hi Philip,
+> 
+> On 1/14/23 00:11, Philip Prindeville wrote:
+>> From: Philip Prindeville <philipp@redfish-solutions.com>
+>> 
+>> Extend PCEngines APU2 driver to derivative models APU3, 4, 5
+>> and 6.
+>> 
+>> Of the five, the APU5 is the most dissimilar.  The APU2 is not
+>> derivative of the APU1, and we call that out in the leds-apu
+>> driver.  We also clarify the expanded compatibility of the
+>> pcengines-apuv2 driver in the Kconfig menu.
+>> 
+>> We correct some line labeling for GPIO lines 4-6, and we add
+>> appropriate definitions to the GPIO lines for the APU5 which
+>> is mapped out differently.
+>> 
+>> The majority of the work was done by Ed Wildgoose.  Philip
+>> Prindeville took over the effort to upstream the fixes and
+>> made some minor cleanup.
+> 
+> Thank you both for your work on this.
+> 
+> In would really like to hear back from Enrico what he thinks
+> about these patches. FWIW I'm fine with merging these as is.
+> 
+> Also note that Enrico is listed as maintainer for the 
+> pcengines-apuv2.c file in MAINTAINERS, so you really should
+> have Cc-ed him on this.
+> 
+> Enrico, can you take a look at this series please? You can find
+> the 2 actual patches here:
+> 
+> https://lore.kernel.org/platform-driver-x86/20230113231139.436956-1-philipp@redfish-solutions.com/
+> https://lore.kernel.org/platform-driver-x86/20230113231140.437040-1-philipp@redfish-solutions.com/
+> 
+> Regards,
+> 
+> Hans
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 2d9c491f7be9..0039cf11ddd5 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -108,7 +108,6 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
- 	struct xlnx_pr_decoupler_data *priv;
- 	struct fpga_bridge *br;
- 	int err;
--	struct resource *res;
 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -122,8 +121,7 @@ static int xlnx_pr_decoupler_probe(struct platform_device *pdev)
- 			priv->ipconfig = match->data;
- 	}
+I tried to copy Enrico on earlier revisions of this patch but they bounced so I stopped including him.
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->io_base = devm_ioremap_resource(&pdev->dev, res);
-+	priv->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(priv->io_base))
- 		return PTR_ERR(priv->io_base);
+-Philip
 
--- 
-2.25.1
+
+> 
+> 
+>> 
+>> Philip Prindeville (2):
+>>  x86: Support APU5 & APU6 in PCEngines platform driver
+>>  x86: Further PCEngines APU4/5/6 cleanup
+>> 
+>> drivers/leds/leds-apu.c                |   2 +-
+>> drivers/platform/x86/Kconfig           |   4 +-
+>> drivers/platform/x86/pcengines-apuv2.c | 118 ++++++++++++++++++++++---
+>> 3 files changed, 107 insertions(+), 17 deletions(-)
+>> 
+> 
+
