@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86E667405C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FFE67405F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjASR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S230297AbjASR5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjASR4I (ORCPT
+        with ESMTP id S229576AbjASR5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:56:08 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DD65421A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:56:06 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id c26so2083409pfp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:56:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dK/MT5cZpGNEq2q0NNicN2x6KFwkRzxJpZw6zyull3w=;
-        b=BrMfzB7ispzCRtIlt/nFnOZVt7ANeog8D5LRpfCI6FvNEBGj+u3JxcRJ6sU6vy/kW8
-         wdwsp0KgU2DD5y75LcDe7N4VEIWJcdHbXccDWHOJz8QTioAGT5PNIjBSSpKmwlUewCJB
-         Bef/m0WMqoTEb//gZcko2V4rfWHYU1xCRkaMI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dK/MT5cZpGNEq2q0NNicN2x6KFwkRzxJpZw6zyull3w=;
-        b=MQwFy5G+Divgbc7Ddd0vFIBHHZx6vKarNHbF+LKNgpbl2JFa83fz9MI+rJlJo4NrK7
-         birxGM/PwEDdmnaAS4DQ8V0u4MuVt/YCP9BMdCuymUB4BwmZ81wi1QbtWYq8l1V1wHJO
-         jlMEQdCEqZLO8a+LViehH0g62T93g5ND9zgBC7qF3gLhLDYnPBJT7VT7IdBjNR7Zk/An
-         YyYfHkJ5a8FoNVw9kwpS7N7x0id73CExhRFSNu3P9qQm6s/mB0es1I2IXaJb22mV0V1z
-         iaAlDAK8vP/LvxIt5QwJkkIYjYkl7N1onn2eOU6JCxMCm77kZ7ogUYG/9sZ9RZSlvsJd
-         p/nw==
-X-Gm-Message-State: AFqh2kq1N6THA3x7q0B6mxUiPJm8tCmAFKybGsXMIwi6l27JBKcp+KNt
-        PLTA7QT/GvU+6tvQyJQE1QBygQ==
-X-Google-Smtp-Source: AMrXdXtJi+q7YE7QtV7XTUW8K5K4naPvUNENli8B1bjnFwnoeHD7Ll2Egp7mWJfsjf8nj2EZ25zMIA==
-X-Received: by 2002:aa7:9467:0:b0:58b:aaaa:82a9 with SMTP id t7-20020aa79467000000b0058baaaa82a9mr11526431pfq.25.1674150965427;
-        Thu, 19 Jan 2023 09:56:05 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:588c:c3ec:d9b:dca0])
-        by smtp.gmail.com with ESMTPSA id 2-20020a620502000000b00580cf1be16csm24277542pff.137.2023.01.19.09.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:56:04 -0800 (PST)
-Date:   Thu, 19 Jan 2023 09:56:02 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     dianders@chromium.org, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, rfoss@kernel.org,
-        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        ville.syrjala@linux.intel.com, sam@ravnborg.org,
-        linmq006@gmail.com, maxime@cerno.tech,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: bridge: Use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y8mEMgKlmBvtdwBO@google.com>
-References: <202301191559014087173@zte.com.cn>
+        Thu, 19 Jan 2023 12:57:18 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEF77EE7D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674151037; x=1705687037;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=edJ4pPulO/hiZmIEBnwaOh+9iVoSxF8F7xkVf7rEopU=;
+  b=Vz0Ds95JmZ9qAI+FsaOTLIYl7SR4T48QeuenC2LBHp9CBpWkB41x2oOp
+   lypNifpBFSOzZ3QuiCR7VMhSYhd1EcIPA30wB6rrFKndWDsPlYjbuNBw/
+   ycRtugCEIiOp1eP7DpKxNKp3ymXg+5g6Bh3npijeVEth9BRnB3eArVpHD
+   ST19ieh1IuZWSLJRaP7NRWQPRrX4DkPnXkB3Pcr3WDlucar2Lt6mGpOqg
+   pC2cPzUqrLWw1WRRRmnuzoS/6fSVmj6RU1CEEW2eP4AdXmvbdrejkIxw/
+   VCxcPhV/+aCK+Wqlmxa2Dlb1cxRTf4sbPQJZzqanN/DtPPwE2K04qWA9/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324051462"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="324051462"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:57:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802723188"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="802723188"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 09:57:15 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A53AE36D; Thu, 19 Jan 2023 19:57:50 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] eeprom: at25: Convert to use fwnode_device_is_compatible()
+Date:   Thu, 19 Jan 2023 19:57:42 +0200
+Message-Id: <20230119175742.77723-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301191559014087173@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:59:01PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> index df9370e0ff23..50f092b316d0 100644
-> --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> @@ -1686,7 +1686,6 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
->  {
->  	struct platform_device *pdev = to_platform_device(dev);
->  	struct analogix_dp_device *dp;
-> -	struct resource *res;
->  	unsigned int irq_flags;
->  	int ret;
-> 
-> @@ -1740,9 +1739,7 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
-> 
->  	clk_prepare_enable(dp->clock);
-> 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -
-> -	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
-> +	dp->reg_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+Replace open coded fwnode_device_is_compatible() in the driver.
 
-Rather than a NULL 3rd argument, couldn't you just use
-devm_platform_ioremap_resource()? With that:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/misc/eeprom/at25.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
+diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+index bdffc6543f6f..65d49a6de1a7 100644
+--- a/drivers/misc/eeprom/at25.c
++++ b/drivers/misc/eeprom/at25.c
+@@ -437,12 +437,6 @@ static int at25_probe(struct spi_device *spi)
+ 	struct spi_eeprom *pdata;
+ 	bool is_fram;
+ 
+-	err = device_property_match_string(&spi->dev, "compatible", "cypress,fm25");
+-	if (err >= 0)
+-		is_fram = true;
+-	else
+-		is_fram = false;
+-
+ 	/*
+ 	 * Ping the chip ... the status register is pretty portable,
+ 	 * unlike probing manufacturer IDs. We do expect that system
+@@ -462,6 +456,8 @@ static int at25_probe(struct spi_device *spi)
+ 	at25->spi = spi;
+ 	spi_set_drvdata(spi, at25);
+ 
++	is_fram = fwnode_device_is_compatible(dev_fwnode(&spi->dev), "cypress,fm25");
++
+ 	/* Chip description */
+ 	pdata = dev_get_platdata(&spi->dev);
+ 	if (pdata) {
+-- 
+2.39.0
 
-
->  	if (IS_ERR(dp->reg_base)) {
->  		ret = PTR_ERR(dp->reg_base);
->  		goto err_disable_clk;
-> -- 
-> 2.25.1
