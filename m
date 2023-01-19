@@ -2,216 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CBC672DB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 01:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184A8672DB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 01:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjASAvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 19:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S229853AbjASAxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 19:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjASAvn (ORCPT
+        with ESMTP id S229606AbjASAxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 19:51:43 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B370613C8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:51:42 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id o16-20020a17090ac71000b00229ba85bc63so265967pjt.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:51:42 -0800 (PST)
+        Wed, 18 Jan 2023 19:53:20 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7159B61
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:53:18 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d2so322511wrp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SILF59q15LnVQh8plXcv+E/BH5WNM7aTOCdlXngaCY0=;
-        b=StxTGeFH9g3spsNheciX6sSviGPedGFhgWqUlo5a7VSNR2BNRGAsgi2FMiHvAsvfkd
-         hcDQveWxTy3Qk1P2GHTf+mkfdUx/OOfHtJuoe01Lb0iAKLUOhTVkSR/mpPxJV+sWPZY4
-         mPhoPzrWKQclAIHDLtSaEcN3ctZ7t1Zbcrj81e/kPjVKxyfgtebUYjJPNjFsaeMN1aAJ
-         BlPOGIput9CnBYA6Z+z1lsK/k1mtA+2PvhnoVi0i9KGPCIw2Z8DxOacTpUBrjxJFVpNQ
-         YKu0Uv8eNiy8ym2jBkz1CLYNAmJRbKrRe/+Wx/SP1lA5tDK6ndzHp4N53wyaQAUoKTL8
-         FIlg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k58ZEL+S8mz78vT8PV4PXV/cIlLiFQgwX+q5YFLao6c=;
+        b=Gi9DeB8D1NTkVmLS6CUmmAhcKRK4xt8wL5HtMGrop9IUICW1WswWMhIHYuR3pg09bA
+         DYE6EJ71H+yXvtfGmNE1+H5+AIiGBu/vuJW964cOkOurCisULZVQ9NyaGfG49q6Neoqi
+         aKOm4pTEcWY0JKufUrd6z5ekgGmfo5X1pM2GHwv7Rfsj+vnEmWcXpn8HGHJX1jMytHWK
+         Didv+eMi8gwF2N3lq45nXjdt1A3fkA5Ae6g1Z+JaeFmenTTL/PMoYTp8jfk9hfo2UTeE
+         7gJcLRWjTdzT3je2nwFZA+/qmz6WWKaQbVbxcCQkX69rGGmE3Qaa+JkPAUYboiHFvEaH
+         HNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SILF59q15LnVQh8plXcv+E/BH5WNM7aTOCdlXngaCY0=;
-        b=cZWxl7I6lf2QMvfyEUuzJBBFbPo9DInSPDaiGdeFDTLuUIYgWbqZop/K7rDfIBTc90
-         phsu2LSe8jeBLd+UwOw63HMMplkLCqZUbmZDRdv5hn9c4UXUZ6NqXFpsVMlbvsTmYAbL
-         f83NLimllc54gu59Sgb0A4QyO/VT1Am/p9Xp+7DqzaNhsXXPF2Aq61jNQ07hQD6GV+mO
-         Dy6TPamHJDwXRZhvxo1StNIoe4F2d9Tg7e1rTZJHbc/D/prxzlQC3bsJ9ByzctCTB2zN
-         rbpp+Kq1e2ktynAtgUiqDL0SxyttHGKKooJT9l7ZtCR19sfRBAynjYz2aTySs2A0FQxi
-         qOvg==
-X-Gm-Message-State: AFqh2kqoxaDSshwn1lzPJxfgNbp5As+tV+Sgc6igtYiIMTK7Ci3qsoiC
-        +M+Vx4Yq5Pq0iY3qc5RdmJ+/ATN7mF0/2HVjG/JQ7jvQQNuSIMEYhKs3B6MxTm3X3TDJWkN9Gyk
-        ilt3N/KQFzoGxTBm9FKabmW6aepIbsD3Dalm7G1cBFNrvLZtS1TeAcfLHFcU1GRoWEt4w5ro=
-X-Google-Smtp-Source: AMrXdXtXiHCaWCI+/F+BpL76DvVXpN6dVV5TefJfKxkgoq2CEaesChCXwsloq2uOK1eEKrhKz13ODPYGnYMd
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:90b:1d05:b0:227:1217:9f1d with SMTP id
- on5-20020a17090b1d0500b0022712179f1dmr999573pjb.196.1674089502005; Wed, 18
- Jan 2023 16:51:42 -0800 (PST)
-Date:   Thu, 19 Jan 2023 00:51:38 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230119005138.759086-1-jstultz@google.com>
-Subject: [PATCH v3] trace: Add trace points for tasklet entry/exit
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Connor O'Brien" <connoro@google.com>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k58ZEL+S8mz78vT8PV4PXV/cIlLiFQgwX+q5YFLao6c=;
+        b=xd2EMb9as06qF268ByAdOWILsCUjXUB26gUHz0dn2MPJ7AfHT0+8K6dzhx/Lkh29tq
+         5tjRUs1C4mWHUIEAd1GUrJQOEBxkYnYnQCQr0OHqaADe8YgRDgiu2RkvvFWWVoXMjWdp
+         lTtoTYPS87a3OpZdtkh8K5GAyJXLYhogOVlznMjeKQbViR7eV6pl+ewAnViKfKDdseiK
+         u64CS30uaVK+Sf9nb4audCfGHyAIbhUQM6PfX2fzm+nkV4D1BdKU1R72EkFOwfOFzFx8
+         uDuG2MB9GBTn4cr4srqy65jReEQtuuzz2Q/IUMqGHjRkhzQNiUGfuSG4YttZMGYYI6mr
+         AZCg==
+X-Gm-Message-State: AFqh2koyo4Nu8YWATYBjjisLXy8/w11Z3eX6gu0Fknz6A2Bw/g6F9YvQ
+        z7e4Z17W9ACGhkZeJmwlZw9IRQ==
+X-Google-Smtp-Source: AMrXdXsfhDaPpt4kqlv3m42o+mZhmAofDABZ/oUBHgStEKkopFsJ4T2kTT5x31Vv0Wo5sblqebWWDw==
+X-Received: by 2002:a5d:4582:0:b0:2bc:5c5f:cdd0 with SMTP id p2-20020a5d4582000000b002bc5c5fcdd0mr14898640wrq.3.1674089596776;
+        Wed, 18 Jan 2023 16:53:16 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l5-20020adfe9c5000000b002238ea5750csm17609360wrn.72.2023.01.18.16.53.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 16:53:16 -0800 (PST)
+Message-ID: <6fc8a8e4-2ba4-94b9-b456-09bc8c6be76a@linaro.org>
+Date:   Thu, 19 Jan 2023 00:53:15 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+ <Y8fC/GCHfENQmBNC@gerhold.net>
+ <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
+ <Y8gtdpDnMLIwfj+3@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y8gtdpDnMLIwfj+3@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+On 18/01/2023 17:33, Stephan Gerhold wrote:
+> On Wed, Jan 18, 2023 at 11:50:20AM +0000, Bryan O'Donoghue wrote:
+>> On 18/01/2023 09:59, Stephan Gerhold wrote:
+>>> On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
+>> [...]
+>>>> +		mdss: display-subsystem@1a00000 {
+>>>> +			compatible = "qcom,mdss";
+>>>> +			reg = <0x01a00000 0x1000>,
+>>>> +			      <0x01ac8000 0x3000>;
+>>>> +			reg-names = "mdss_phys", "vbif_phys";
+>>>> +
+>>>> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>>>> +			interrupt-controller;
+>>>> +
+>>>> +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>>>> +				 <&gcc GCC_MDSS_AXI_CLK>,
+>>>> +				 <&gcc GCC_MDSS_VSYNC_CLK>;
+>>>> +			clock-names = "iface",
+>>>> +				      "bus",
+>>>> +				      "vsync";
+>>>> +
+>>>> +			power-domains = <&gcc MDSS_GDSC>;
+>>>> +
+>>>> +			#address-cells = <1>;
+>>>> +			#size-cells = <1>;
+>>>> +			#interrupt-cells = <1>;
+>>>> +			ranges;
+>>>> +
+>>>> +			mdp: display-controller@1a01000 {
+>>>> +				compatible = "qcom,mdp5";
+>>>> +				reg = <0x01a01000 0x89000>;
+>>>> +				reg-names = "mdp_phys";
+>>>> +
+>>>> +				interrupt-parent = <&mdss>;
+>>>> +				interrupts = <0>;
+>>>> +
+>>>> +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>>>> +					 <&gcc GCC_MDSS_AXI_CLK>,
+>>>> +					 <&gcc GCC_MDSS_MDP_CLK>,
+>>>> +					 <&gcc GCC_MDSS_VSYNC_CLK>,
+>>>> +					 <&gcc GCC_MDP_TBU_CLK>,
+>>>> +					 <&gcc GCC_MDP_RT_TBU_CLK>;
+>>>> +				clock-names = "iface",
+>>>> +					      "bus",
+>>>> +					      "core",
+>>>> +					      "vsync",
+>>>> +					      "tbu",
+>>>> +					      "tbu_rt";
+>>>> +
+>>>> +				iommus = <&apps_iommu 4>;
+>>>> +
+>>>> +				interconnects = <&snoc_mm MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>,
+>>>> +						<&snoc_mm MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
+>>>> +						<&pcnoc MASTER_SPDM &snoc SLAVE_IMEM>;
+>>>> +				interconnect-names = "mdp0-mem", "mdp1-mem", "register-mem";
+>>>
+>>> As I mentioned a already in a direct email at some point, AFAIU adding
+>>> interconnects should be an [almost-] all or nothing step. If you only
+>>> add interconnects for MDP then everything else that needs bandwidth will
+>>> either break or only continue working as a mere side effect of MDP
+>>> voting for permanent high bandwidth.
+>>
+>> We did discuss that. You'll also recall we concluded we would have to revert
+>> this patch to make that happen.
+>>
+>> commit 76a748e2c1aa976d0c7fef872fa6ff93ce334a8a
+>> Author: Leo Yan <leo.yan@linaro.org>
+>> Date:   Sat Apr 16 09:26:34 2022 +0800
+>>
+>>      interconnect: qcom: msm8939: Use icc_sync_state
+>>
+>> but then why not revert for all of these SoCs too ?
+>>
+>> drivers/interconnect/qcom/msm8939.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/msm8974.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/msm8996.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/osm-l3.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sc7180.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sc7280.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sc8180x.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sc8280xp.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sdm845.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sdx55.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sdx65.c:		.sync_state = icc_sync_state,
+>> drivers/interconnect/qcom/sm6350.c:		.sync_state = icc_sync_state,
+>>
+>> until such time as we have an all or nothing interconnect setup for each of
+>> those SoCs ?
+>>
+>> Yes I take your point "some peripherals will appear to work only as a result
+>> of the AHB vote the MDP casts here" but, that is a bug in the definition of
+>> that hypothetical peripheral.
+>>
+>> The MDP/display won't run without the interconnect here and the only way to
+>> pull it is to remove sync_state which begs the question why not pull
+>> sync_state for all SoCs without a perfect interconnect description ?
+>>
+>> I think that would be a retrograde step.
+>>
+> 
+> Most of the SoCs you list do have "interconnects" defined for most
+> components, which means the situation for them is quite a different
+> level. 
 
-Tasklets are supposed to finish their work quickly and
-should not block the current running process, but it is not
-guaranteed that. Currently softirq_entry/exit can be used to
-know total tasklets execution time, but not helpful to track
-individual tasklet's execution time. With that we can't find
-any culprit tasklet function, which is taking more time.
+8974 defines two interconnects one for the mdp, one of the gpu. So a 
+headless setup as you describe would encounter the same situation 
+potentially.
 
-Add tasklet_entry/exit trace point support to track
-individual tasklet execution.
+> I simulated this on the BQ Aquaris M5 (MSM8939) that has most
+> functionality set up already in postmarketOS. First the results without
+> any changes (interconnects enabled like in your patch here):
 
-Trivial usage example:
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
-   # cat /sys/kernel/debug/tracing/trace
- # tracer: nop
- #
- # entries-in-buffer/entries-written: 4/4   #P:4
- #
- #                                _-----=> irqs-off/BH-disabled
- #                               / _----=> need-resched
- #                              | / _---=> hardirq/softirq
- #                              || / _--=> preempt-depth
- #                              ||| / _-=> migrate-disable
- #                              |||| /     delay
- #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
- #              | |         |   |||||     |         |
-           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+To me, that is indicative of more work being required to vote 
+appropriately for required bandwidth - AHB clocks basically in our 
+hypothetical setup.
 
-This patch has been carried in the Android tree for awhile
-so I wanted to submit it for review upstream. Feedback would
-be appreciated!
+The display certainly won't work without voting for bandwidth it needs. 
+If there's work to be done to _enable_ headless mode - and there is, we 
+can do the work to figure out who isn't voting for bandwidth.
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: kernel-team@android.com
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-[elavila: Port to android-mainline]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebased to upstream, cut unused trace points, added
- comments for the tracepoints, reworded commit]
-Signed-off-by: John Stultz <jstultz@google.com>
+Probably the CPU - absent cpufreq, CPR, the operating points. A good - 
+probably correct guess is we aren't ramping cpufreq, aren't ramping CCI 
+and aren't voting for the inter-chip CCI "front side" so when the system 
+boots headless and "does stuff" the cpufrequency stays low, the votes 
+aren't cast and everything seems to crawl.
+
+I still think its a contrived example though. CPR will come right after 
+the core dtsi and we can put the theory to the test.
+
+;)
+
 ---
-v2:
-* Added tasklet pointer to the trace event as suggested by Steven
-v3:
-* Minor tweak to commit to show usage and output example
----
- include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
- kernel/softirq.c           |  9 ++++++--
- 2 files changed, 54 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafaaea4c..a07b4607b663 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
- 
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	tasklet)
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->tasklet = t;
-+		__entry->func = func;
-+	),
-+
-+	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
- 
- /* This part must be outside protection */
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..1b725510dd0f 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t, t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t, t->callback);
-+					} else {
-+						trace_tasklet_entry(t, t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t, t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
--- 
-2.39.0.246.g2a6d74b583-goog
+bod
 
