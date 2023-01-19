@@ -2,246 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E62673C94
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBB6673C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjASOm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S231397AbjASOn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjASOl3 (ORCPT
+        with ESMTP id S231482AbjASOmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:41:29 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2066.outbound.protection.outlook.com [40.107.241.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6575F45F61;
-        Thu, 19 Jan 2023 06:39:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HH5TqMvcakH6MsIcZ0KN0hM+OwqmL5WPidXggE2Br4RuZL67pn5BmTcGxjB/PFsHou++30fZntUIiDKkrfsY6LVOFR8u22Le7tM9lCPzBB4kcOHH+ETAqFUQ0wqEtYfC/Bj123Uhgtz006zAb9Xlc6xNAW7+L9OTnLfL5YbND5l4TUhecW5G0Ah75EuZsZQLKpZrUNK1am8wi+Tw7Cf75K/mKstJlO0LpjzF8rPg7oOMB6I8fnKcizdjdFwSpoSLi2zDe2+oh/mEVKR986XKlo4tvWwnRQoH7/g6xNMAxdJscGT+l8zJ1uGeRucMH+7epfsr+fIQLrbXI59Iml9/iA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eEYoPRCiCB8m/KrOhtmvJIRuuqANDjXR6bpxvNkok4g=;
- b=RSgGiFSutrZHGKI/4o/0iBKZQ4T3K2EMhS4IYfv33msQuB+IBkHWp9+qrv6gXdHAGF2nmA54SNr2FB5oeDTbuvhvv3O0pH/3lRmYYTXDQW+fbfn+7cXf09DkWHFtbT10bD/XXibaGwED6bPytq2TAzswjEM2Kn1ItbUISZoXrLK3MAVNUcmOWVpbK5tgGjko0FUKZsd0TO8NA/SZ8JgwTRQ6Ax2sBqNzbbBECwdUYp/alq45KAbDOjZWcfxqGB27I+RAk6HK3fWr2JgFzhJg+u3FyN40TxlczHGad++bsS0MluarBNlCI0gat7m2yAlDCew2Pmt0jrFRSiZ3xw+ByQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eEYoPRCiCB8m/KrOhtmvJIRuuqANDjXR6bpxvNkok4g=;
- b=0kWaI6JxeUoxLx/H0TuMOdLtDWKPxs2F5yMlbXi3DmZ2dhnxDq9JtG8pumtbHf3UfvVQYg28BW2RU8OUAYqZF3LjhNCdRY09iKhQ5fLcEn2cHUiBmC7SF+P2wiRhkuhrEmrGeyfcfUhPMaJGQlAbp950xVvbotdK0mvFgPiCMsI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by DB9PR08MB6556.eurprd08.prod.outlook.com (2603:10a6:10:261::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
- 2023 14:39:33 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4718:6092:e763:4219]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4718:6092:e763:4219%2]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 14:39:33 +0000
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sascha Hauer <sha@pengutronix.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: [PATCH v2 6/6] arm64: dts: rockchip: add pinctrls for 16-bit/18-bit rgb interface to rk356x
-Date:   Thu, 19 Jan 2023 15:39:11 +0100
-Message-Id: <20230119143911.3793654-7-michael.riesch@wolfvision.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
-References: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR07CA0152.eurprd07.prod.outlook.com
- (2603:10a6:802:16::39) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        Thu, 19 Jan 2023 09:42:35 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1C875BA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:40:37 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id az20so6263612ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YA4pZyF7V/PvrW6YJCArLXIcNJ4ekuR5YzULeYjw5uw=;
+        b=nA8KSlwwS3q3WcSsSIr363cX8fWLTe3nXhczH592sOgcVlsHTSUzGlgcC7YFGOZamN
+         xCTCtpMfpir9EfZr9HkmS5Nh3OR4EwBeAS0r8A9dadgP3JuSvmcKX5WpI7BMvqJ3JKlU
+         yg9/9t+42YsMFDz/LA6f5lQBRACzpepsnVRQXZthhD6Ufk/SBeMbB+UO/WP5wW91VCQM
+         UqgGDoW4Qwhk++mmBKMJak3VXKOaIrBEWe3hYHOSQOkSMKNFHK7/UscGywznKuZYk/0y
+         MhtvFwdzA98if1kvCmq7KP15Q1DYlUsEB4T2UuZwOxlTXX9u2WKp3IWbY2vS+WJefV1i
+         EF/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YA4pZyF7V/PvrW6YJCArLXIcNJ4ekuR5YzULeYjw5uw=;
+        b=u4qHY6m4jHJM03QYLuD4g7M2WUcZcatKcH68eJNV6SM4p2gJxgZBge1vCJEyH+m7Ku
+         qtCnaYylI1AqrowF4JpIg35Ifo8o+xRyk+Wt6+dxuMKDhRFZkMQHEzY9Mbewtl4+n+aM
+         yA4cv1fwatO/ZEVYfQMSztDZOl2yRWzeI2reByR1WQyV4EbM1c9d2i/Xqj6nmonKONlY
+         mxuFYt58EW+H7IQscFdgGV+TnXMWURWH//dJve+gue8p6njGBUfkO+eU4/fngkHSeL5o
+         5VYHy0rSY7PEYsnK6lrpdS02wbjCF37KN89aTnzFiPD/K+PF4UKk+LzjKCt7v3M9O5c6
+         M/Kg==
+X-Gm-Message-State: AFqh2kpFkrBLtv67R41pn2N+cO1Kcx2cChtzd4rB6rSCeWurbX3vtOvn
+        KUfTax7F+awFXxzObBvsJGCLMw==
+X-Google-Smtp-Source: AMrXdXt+NJICZX+Mrucdw/D7Ei1CdvvOHslUw1VwxG1ensMJZbWrlIcCwB0DB92smedOcB+hm0tfPA==
+X-Received: by 2002:a17:907:6e2a:b0:871:e9a0:eba7 with SMTP id sd42-20020a1709076e2a00b00871e9a0eba7mr15097175ejc.57.1674139235940;
+        Thu, 19 Jan 2023 06:40:35 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id lb19-20020a170907785300b0084d1efe9af6sm16277962ejc.58.2023.01.19.06.40.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 06:40:35 -0800 (PST)
+Message-ID: <3827d6e3-d9cb-7001-eb3d-c7fb2466263f@linaro.org>
+Date:   Thu, 19 Jan 2023 16:40:34 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|DB9PR08MB6556:EE_
-X-MS-Office365-Filtering-Correlation-Id: efcff33e-f4c6-4713-1849-08dafa2afb17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RQy5FKOgLZHyqR8ZnIc1lb/ic1GvKWFf006Bvm9JC+y81HNi2HWnEQALTewxlP09MHGI91+pz4J02ZDGUJ3J0KJ1Qv5NaDOdfy76Lx3Le81+Nk07vCpAanehp8Ls6MnM+i3O1BpwgGxCaMQUnTEdmEL3uPCKTs7BMBVbjO51xn2aPjuKsxiZHw+ufkcvmjTcw0+QMkL+ywtnXRW5m+XrTux06UtyBzWGjjmihrwKvCHxS5ZnR+mLQYCFkYoef4+ZCOSZYoWeZO/v67Rzz4aa3dbqFqHkAyCSbObWLMFhp6yUZmlQ9gL0zkdu7lV2SR2coK4bWtJbyRzddChOi4G2z/uvNRuF8R85kLxDONbqS4ZFBe+ckJsTmD3CiTwyDQzI7u4WNXRdnL03vIyXbyMqOoNUiZsIRSOTuPmJT2+ou8wPBx7rcD2BFH4gWyoClsrIHefjRsgKCysjtEvzthjgx+Kezxjbk+wgmUiY3vXLAkgeUEBR2GwN0QW2m7bPsy6G0jWnygn/NvY7Fc+IT80W6NX5I7xRbMbhrs6pMLOnuiJkywmgl7xi7bqCiGUjODnvTob4zwD5cLC7tu2K21w+gGo7kr9CHuKi3wxIuhOYejiMk03hFqC+rd0Vqn9jGMUayFsjwyU+mCi3xARjrQr8vUAR+SU4SlDKLzEtvpGYREo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(136003)(39850400004)(396003)(451199015)(2616005)(52116002)(36756003)(966005)(478600001)(6512007)(8936002)(186003)(6486002)(5660300002)(83380400001)(41300700001)(7416002)(38100700002)(44832011)(316002)(1076003)(66556008)(66946007)(66476007)(86362001)(8676002)(107886003)(2906002)(4326008)(54906003)(6666004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lqSwEHA7XuhkBFUMjHdnVaTWE5NFU6XLPRRQHpiaEeOIvmNaiWPJGqSTt8Ic?=
- =?us-ascii?Q?gsP/nQy8S+92ZpjgiCc15qqBbskFwkrceJzZ+e9nXpi5VXkUBwmBHdv9Fexx?=
- =?us-ascii?Q?+zsfxo/nXj9/0C6sxqnRI15bnN0M/SxgdX6eOUysxugFi4CHyiBUGiuJN7GW?=
- =?us-ascii?Q?hrFCoEZumzNpC7CWHwa5L2RRFhg4ny2qcYBb2qOQzwFF/8EI6ifMOCblWEYQ?=
- =?us-ascii?Q?O6C8uIxykyz95i8aK3J0yz6cBZAJd5aEYX+f7CX7zVHg4+57zLw1Mx1Bne9c?=
- =?us-ascii?Q?2Roih7yIdd9ehOSNWXOeCj46JWo6EVTZi44NPrK9ZPPGdn2mp5FX35LvkzuO?=
- =?us-ascii?Q?Y494P8zMIegAONbxb5yMeLwKRiXyOw6qPyM+vmY2jXxtYYZqq+uzEnlZTdxC?=
- =?us-ascii?Q?oUV3IfNNHCsaXpHoKA1Dy13bfQ8uw282zX8wY9KzAenW0+/m7Mtfc/hk4wQB?=
- =?us-ascii?Q?iMY1PzUnEf44WZGo9dW6XJnrku8FkTDwDAFoQxXaPEE7XBsgxT17wnS+GjAv?=
- =?us-ascii?Q?tlFiZ75/i8PjvHZkNlGhDauHqKrnowt2ExMFZASCa1p6sQAHXssX2mc4mlyX?=
- =?us-ascii?Q?AF+trHOw47gs73dhg9KlOO8ta2p55Lyeuh2vqOX7h8hmUBCG3GU+3Ylkycss?=
- =?us-ascii?Q?QGtF9Kj9f8JhLennbjLs68SYPeguXx/IqrcVQCn8aQP/oh9QJMfqyScIslsA?=
- =?us-ascii?Q?y3y9Sqhr/PdHIo/jxh7CWqoVevySmdAgvyMoEcdiU4fqD1y/mkY0zGW+ukC8?=
- =?us-ascii?Q?dV36N9VG2habOAy/LKQuHs3bkR37s8iw4NSYhufvlh+iQWfDhXBXR40I5Rdl?=
- =?us-ascii?Q?7k2qlN+PNZSHMiDTLfNtgPjtACqADu/khNVGLj67GRPMOJBJtSFf1gOFK7T0?=
- =?us-ascii?Q?hRHy6EotIqNhd016EZdmmwXJVrXaQ1LpgjPUQEJtb06ZTRsD5oBTtvyCm6Pq?=
- =?us-ascii?Q?PQUx9asQZuezpHzhvNJpYOIhVWqiUMRjDF93SxLVJHyoKBd8pA9ySeUUgOM3?=
- =?us-ascii?Q?DkWpADTNpXflWly6Um/jI8jbplmsiwYZfPw1skImgAV3mCYHLtpzUwPl0+8P?=
- =?us-ascii?Q?uFzNJLTP1lBE+I67IO/fd8P90+5EmU0VbXQL1m4kHt/aa8P4GwXDFmyDO1b0?=
- =?us-ascii?Q?mkS/NjMl/QO7QuYRdFxEhrV+u+wJUy9SM2BqaJCI8OSwclZUgIPsclXIpvnc?=
- =?us-ascii?Q?bX+6U9/JnimQHtmWoviZleCqfEQFrAO4jrS+rBwe5646QWjSEG/vaGWK91U9?=
- =?us-ascii?Q?GnvDoTjxERsUkCnNRKYIjWWesDwsNJEynV8eZM5OYdr1G/o3mlTAbbtIBH1l?=
- =?us-ascii?Q?o3xmI9CMNNvm0MGtm07UUlGGXLWoSGlqwRzYWjilKcqiQoawlLOWZ4dVKix+?=
- =?us-ascii?Q?MafTiVF3AE+SOVglqD45qvO0UwIrwNzCqDg6xjCdwo0TBnSqGAMaj1Hs/i1c?=
- =?us-ascii?Q?fpGXw11p8zG4MEdRJ/Y1MVZ3NfB/FFLshc7z3B6UdBNY1gXwwFKV48ha/AOx?=
- =?us-ascii?Q?1YdsHFbFWs+0/cmPLsZCJ/WEfLThtVLlkZjzgxEqwECVj8onap9+gxNdIatW?=
- =?us-ascii?Q?YNdbptkDdXuimSB8c2jl/zRmx6xilbRd/BR/bn+nTNFEupVMjYIuZk8YGQ7w?=
- =?us-ascii?Q?Nw4foWRBiynJFXmXfPGYYkanuzVcyJPNqJS09zxDy7dO8M15ZlBdo0Yb/gwU?=
- =?us-ascii?Q?ODatbxQE3BYL2uRXzPi7DdJJ95E=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: efcff33e-f4c6-4713-1849-08dafa2afb17
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 14:39:33.5605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1bf+w3d9qsXuEx76v1XZcMz8bWcibC+Xl0dMVuDF6G8WVbPdU+9lW35aQP/CX/KPkhdDTDy3cH0eZOxN5b/IyV/2wo5dg7qQ3ccWFD34tVw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6556
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/2] qcom: add basic interconnect support to UFS
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Brian Masney <bmasney@redhat.com>, andersson@kernel.org
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20221117104957.254648-1-bmasney@redhat.com>
+ <ebd7e9f1-da9b-253d-0053-2327fd86e7f1@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <ebd7e9f1-da9b-253d-0053-2327fd86e7f1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rk3568-pinctrl.dtsi only defines the 24-bit RGB interface. Add separate
-nodes for the 16-bit and 18-bit version, respectively. While at it, split
-off the clock/sync signals from the data signals.
+On 17/11/2022 13:12, Krzysztof Kozlowski wrote:
+> On 17/11/2022 11:49, Brian Masney wrote:
+>> This patch set adds very basic support for the interconnect framework
+>> to the Qualcomm portion of the UFS framework since the firmware on
+>> these platforms expects the interconnect votes to be present. The
+>> maximum throughput is requested to match what's already done in a few
+>> other drivers.
+>>
+>> Here's the relevant entries from the interconnect_summary file in
+>> debugfs that shows the two ICC paths are setup for the first UFS
+>> host controller on the SA8540p automotive board (sc8280xp).
+> 
+> I wonder whether this is solving the same or orthogonal problem as my
+> old patchset here:
+> 
+> https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
 
-The exact mapping of the data pins was discussed here:
-https://lore.kernel.org/linux-rockchip/f33a0488-528c-99de-3279-3c0346a03fd6@wolfvision.net/T/
+More or less it does. Vendor kernel scales both paths according to the 
+gear selected. I was surprised to see just two entries there. sdm845 has 
+22 entries in its msm-bus scaling table. What was the reason for just 
+two entries in your case?
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
----
-v2:
- - no changes
+What was the net result for that patchset? Is it going to be merged 
+anytime?
 
- .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
+I think we can start with just a version of this patchset that enables 
+static ICC config and then upgrade that with proper OPP tables, WDYT?
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
-index 8f90c66dd9e9..0a979bfb63d9 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
-@@ -3117,4 +3117,98 @@ tsadc_pin: tsadc-pin {
- 				<0 RK_PA1 0 &pcfg_pull_none>;
- 		};
- 	};
-+
-+	lcdc {
-+		/omit-if-no-ref/
-+		lcdc_clock: lcdc-clock {
-+			rockchip,pins =
-+				/* lcdc_clk */
-+				<3 RK_PA0 1 &pcfg_pull_none>,
-+				/* lcdc_den */
-+				<3 RK_PC3 1 &pcfg_pull_none>,
-+				/* lcdc_hsync */
-+				<3 RK_PC1 1 &pcfg_pull_none>,
-+				/* lcdc_vsync */
-+				<3 RK_PC2 1 &pcfg_pull_none>;
-+		};
-+
-+		/omit-if-no-ref/
-+		lcdc_data16: lcdc-data16 {
-+			rockchip,pins =
-+				/* lcdc_d3 */
-+				<2 RK_PD3 1 &pcfg_pull_none>,
-+				/* lcdc_d4 */
-+				<2 RK_PD4 1 &pcfg_pull_none>,
-+				/* lcdc_d5 */
-+				<2 RK_PD5 1 &pcfg_pull_none>,
-+				/* lcdc_d6 */
-+				<2 RK_PD6 1 &pcfg_pull_none>,
-+				/* lcdc_d7 */
-+				<2 RK_PD7 1 &pcfg_pull_none>,
-+				/* lcdc_d10 */
-+				<3 RK_PA3 1 &pcfg_pull_none>,
-+				/* lcdc_d11 */
-+				<3 RK_PA4 1 &pcfg_pull_none>,
-+				/* lcdc_d12 */
-+				<3 RK_PA5 1 &pcfg_pull_none>,
-+				/* lcdc_d13 */
-+				<3 RK_PA6 1 &pcfg_pull_none>,
-+				/* lcdc_d14 */
-+				<3 RK_PA7 1 &pcfg_pull_none>,
-+				/* lcdc_d15 */
-+				<3 RK_PB0 1 &pcfg_pull_none>,
-+				/* lcdc_d19 */
-+				<3 RK_PB4 1 &pcfg_pull_none>,
-+				/* lcdc_d20 */
-+				<3 RK_PB5 1 &pcfg_pull_none>,
-+				/* lcdc_d21 */
-+				<3 RK_PB6 1 &pcfg_pull_none>,
-+				/* lcdc_d22 */
-+				<3 RK_PB7 1 &pcfg_pull_none>,
-+				/* lcdc_d23 */
-+				<3 RK_PC0 1 &pcfg_pull_none>;
-+		};
-+
-+		/omit-if-no-ref/
-+		lcdc_data18: lcdc-data18 {
-+			rockchip,pins =
-+				/* lcdc_d2 */
-+				<2 RK_PD2 1 &pcfg_pull_none>,
-+				/* lcdc_d3 */
-+				<2 RK_PD3 1 &pcfg_pull_none>,
-+				/* lcdc_d4 */
-+				<2 RK_PD4 1 &pcfg_pull_none>,
-+				/* lcdc_d5 */
-+				<2 RK_PD5 1 &pcfg_pull_none>,
-+				/* lcdc_d6 */
-+				<2 RK_PD6 1 &pcfg_pull_none>,
-+				/* lcdc_d7 */
-+				<2 RK_PD7 1 &pcfg_pull_none>,
-+				/* lcdc_d10 */
-+				<3 RK_PA3 1 &pcfg_pull_none>,
-+				/* lcdc_d11 */
-+				<3 RK_PA4 1 &pcfg_pull_none>,
-+				/* lcdc_d12 */
-+				<3 RK_PA5 1 &pcfg_pull_none>,
-+				/* lcdc_d13 */
-+				<3 RK_PA6 1 &pcfg_pull_none>,
-+				/* lcdc_d14 */
-+				<3 RK_PA7 1 &pcfg_pull_none>,
-+				/* lcdc_d15 */
-+				<3 RK_PB0 1 &pcfg_pull_none>,
-+				/* lcdc_d18 */
-+				<3 RK_PB3 1 &pcfg_pull_none>,
-+				/* lcdc_d19 */
-+				<3 RK_PB4 1 &pcfg_pull_none>,
-+				/* lcdc_d20 */
-+				<3 RK_PB5 1 &pcfg_pull_none>,
-+				/* lcdc_d21 */
-+				<3 RK_PB6 1 &pcfg_pull_none>,
-+				/* lcdc_d22 */
-+				<3 RK_PB7 1 &pcfg_pull_none>,
-+				/* lcdc_d23 */
-+				<3 RK_PC0 1 &pcfg_pull_none>;
-+		};
-+	};
-+
- };
+(I wrote 'a version' since I had to modify the patch to set avg_bw 
+instead of setting the peak_bw and to pass different values instead of 
+UINT_MAX, I'll send it).
+
 -- 
-2.30.2
+With best wishes
+Dmitry
 
