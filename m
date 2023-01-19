@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52892674B53
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FB4674B89
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjATEve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S231266AbjATE7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjATEut (ORCPT
+        with ESMTP id S230156AbjATE7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:50:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0F5DA11D;
-        Thu, 19 Jan 2023 20:43:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9088AB8270C;
-        Thu, 19 Jan 2023 19:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E06EC43392;
-        Thu, 19 Jan 2023 19:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674155368;
-        bh=iqElF+5KvmM//jBrqlLXQndx5m+4yQtolDOFBeaA/wk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jh3PlJZ2XOmkkoQ3OVuoYo3JF6T0PRCK+Fk4Obs3I7zpaHJLpXznnDuDin/T9IJix
-         Sc+7K3ZG6nU/6XDpoCZxfxsZH9tZkLmtOb5RT85uUnGjpBh/wHjwPGT1N/phVyzuIC
-         ROaM+o6JqoMcAaoVgwsnmlW4iHATXxGDvpJBOhcAZ8FTNG4xSzyH3Rslno6+MvGq8u
-         NHf+hYe93tgZVPIs0FDdAZqf7DIzRIEd9e2Q++qTmhnjLoWsB2dIuRJntvumGOej5v
-         /afTUvIK5WOfMWi+FJwsEJrm8W3oihsiTV/G6WW/JpxMG2GxhghPV+Q5Fp+3T6blwf
-         bzblWWGT6fMZw==
-From:   Will Deacon <will@kernel.org>
-To:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>, kvmarm@lists.linux.dev,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v4 0/8] perf: Arm SPEv1.2 support
-Date:   Thu, 19 Jan 2023 19:08:42 +0000
-Message-Id: <167415232681.3429847.16616826041230061721.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
-References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
+        Thu, 19 Jan 2023 23:59:36 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53BED05EE;
+        Thu, 19 Jan 2023 20:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674190079; x=1705726079;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=E98QGbc8dlCtreJMfmIlTfn2lZ42kDRmuNfuyIyYYMg=;
+  b=jjyFhL55I2x8bWRNfQ3IImS98aao5Khj9QMvYOuVf3SLe57yyCJRhoYI
+   +rRilMz0XGGkdCjMKVEwI4O/FNZhyAcoh2D9JIx/ZSGOkyotHrb1TJXmH
+   gEUZAfP5kudBd66ye6pOTdSrt/hdOtJHbZnVhjf+sA7cHFLN4celEEGWx
+   rHoSOR0du3kcz27xKqI1E8SWqGmmgv6QsFe5W5j6EGEXIOWt02nO8IuAK
+   8Y0WHq7X07Zlb1w4L63VwBZvPjoK8CzzBOuXUMKbx8saBEvF8R4kEo+J4
+   9bSRxGUDFuabAHOSc9Th1omcoGeMPJ4VvAA9ADdB8W9RXHRo698Bu2NeZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="308970218"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="308970218"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 11:10:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="728816425"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="728816425"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jan 2023 11:10:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 529D292; Thu, 19 Jan 2023 21:11:03 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: [PATCH net-next v2 2/2] net: hns: Switch to use acpi_evaluate_dsm_typed()
+Date:   Thu, 19 Jan 2023 21:11:01 +0200
+Message-Id: <20230119191101.80131-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230119191101.80131-1-andriy.shevchenko@linux.intel.com>
+References: <20230119191101.80131-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023 13:26:17 -0600, Rob Herring wrote:
-> Peter, this series is blocked on an ack from you on patch 7. There was
-> some discussion on validation of the 'config3' attr. The options where
-> laid out by Mark here[0]. Please chime in on your preference.
-> 
-> Will, can you pick up patches 1-6 at least if there's no progress on
-> 'config3'.
-> 
-> [...]
+The acpi_evaluate_dsm_typed() provides a way to check the type of the
+object evaluated by _DSM call. Use it instead of open coded variant.
 
-Applied first six driver changes to will (for-next/perf), thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+v2: added tag (Tony), fixed compilation errors (LKP)
+ .../ethernet/hisilicon/hns/hns_dsaf_misc.c    | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-[1/8] perf: arm_spe: Use feature numbering for PMSEVFR_EL1 defines
-      https://git.kernel.org/will/c/e080477a050c
-[2/8] arm64: Drop SYS_ from SPE register defines
-      https://git.kernel.org/will/c/c759ec850df8
-[3/8] arm64/sysreg: Convert SPE registers to automatic generation
-      https://git.kernel.org/will/c/956936041a56
-[4/8] perf: arm_spe: Drop BIT() and use FIELD_GET/PREP accessors
-      https://git.kernel.org/will/c/2d347ac23362
-[5/8] perf: arm_spe: Use new PMSIDR_EL1 register enums
-      https://git.kernel.org/will/c/05e4c88e2b5c
-[6/8] perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
-      https://git.kernel.org/will/c/4998897b1e96
-
-UAPI change needs feedback from perf core maintainers.
-
-Cheers,
+diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+index 740850b64aff..5df19c604d09 100644
+--- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
++++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+@@ -554,11 +554,11 @@ static phy_interface_t hns_mac_get_phy_if_acpi(struct hns_mac_cb *mac_cb)
+ 	argv4.package.count = 1;
+ 	argv4.package.elements = &obj_args;
+ 
+-	obj = acpi_evaluate_dsm(ACPI_HANDLE(mac_cb->dev),
+-				&hns_dsaf_acpi_dsm_guid, 0,
+-				HNS_OP_GET_PORT_TYPE_FUNC, &argv4);
+-
+-	if (!obj || obj->type != ACPI_TYPE_INTEGER)
++	obj = acpi_evaluate_dsm_typed(ACPI_HANDLE(mac_cb->dev),
++				      &hns_dsaf_acpi_dsm_guid, 0,
++				      HNS_OP_GET_PORT_TYPE_FUNC, &argv4,
++				      ACPI_TYPE_INTEGER);
++	if (!obj)
+ 		return phy_if;
+ 
+ 	phy_if = obj->integer.value ?
+@@ -601,11 +601,11 @@ static int hns_mac_get_sfp_prsnt_acpi(struct hns_mac_cb *mac_cb, int *sfp_prsnt)
+ 	argv4.package.count = 1;
+ 	argv4.package.elements = &obj_args;
+ 
+-	obj = acpi_evaluate_dsm(ACPI_HANDLE(mac_cb->dev),
+-				&hns_dsaf_acpi_dsm_guid, 0,
+-				HNS_OP_GET_SFP_STAT_FUNC, &argv4);
+-
+-	if (!obj || obj->type != ACPI_TYPE_INTEGER)
++	obj = acpi_evaluate_dsm_typed(ACPI_HANDLE(mac_cb->dev),
++				      &hns_dsaf_acpi_dsm_guid, 0,
++				      HNS_OP_GET_SFP_STAT_FUNC, &argv4,
++				      ACPI_TYPE_INTEGER);
++	if (!obj)
+ 		return -ENODEV;
+ 
+ 	*sfp_prsnt = obj->integer.value;
 -- 
-Will
+2.39.0
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
