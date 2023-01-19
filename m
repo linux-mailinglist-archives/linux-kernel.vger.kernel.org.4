@@ -2,209 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D937673608
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBB2673610
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjASKuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S230322AbjASKvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjASKuC (ORCPT
+        with ESMTP id S230306AbjASKvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:50:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A494A20C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:49:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674125352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tgsg+jKubTh3yv7ZSKQzF4Qxnk67C2646FcSbn/LaRg=;
-        b=deqVDl3O5RY7y/7dCvc3fa2E684cOn/Nt87fSYJx/NekiQVWj+U4aLziAqFj1Z08EG5nVl
-        xOgS+9v72VGFL8Qnogzm4wmONep+Ki2+LjVO9NJXFP1fFdwXMr3+afVrNnZP8zCkmbYTmZ
-        XRrXhWF6EJYL1IzQaWqrv4asRytM9bY=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-441-MCdl15b6NQ-TpnTjGWKM-w-1; Thu, 19 Jan 2023 05:49:11 -0500
-X-MC-Unique: MCdl15b6NQ-TpnTjGWKM-w-1
-Received: by mail-qt1-f197.google.com with SMTP id o16-20020ac841d0000000b003b689580725so731598qtm.22
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:49:11 -0800 (PST)
+        Thu, 19 Jan 2023 05:51:03 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE88717BE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:50:31 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id e3so1410474wru.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:50:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cf7yICQO9NaAanq9Gf/a43Gbk/UV6UR1wALLIkbHGrw=;
+        b=cR4nbnwlqsEA/NcHSP1YnS80mXVK+nQgb3VrQuZcccEcQxPZEyKt7ZtLkv0UDGGojh
+         cYYDC0HPnWbE8gvK2QZjxb2rn4UF3xrDs1r1C/uSjDNSanRD6V0BU+wXolKci2iGJlbm
+         C8jVyAf1YZi/oNNMHTnMbD/7j4L/2YS63F0XIT7HeMky0o43mX4CdUcB5FVC23Y+vd7G
+         BTRaqZ6awjew/6HY5Zyrkdi1oNL7A+Oj4rAIVafQqrMI/z8JPTnUd1DhQr9IyQRXrWmm
+         /u+9ADfL/rfd/Lm/47g+lj67XSaan8/8ACc/IxXy0s0oxsB11OLQhZdVdZXACoHHq76G
+         Sbew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tgsg+jKubTh3yv7ZSKQzF4Qxnk67C2646FcSbn/LaRg=;
-        b=uQAgjcrLwV13urLt8dCyGIEZ0HUn5X0ffN6w9WiM34MpOtCjhxZb/4OUzp0LQ4ZIkG
-         8x7Rgi04/WWMDfBxsEJ5wBOs4Aqv1yDneLWWowu+O+zx27lGf1eEbaC1n6lcI1P2si4L
-         bfcBZC2heXLPBrGYdhC8D2UmhjtJ6HzTiR66X9HyinP0g1/MOTQ6hgVk+zk+a85ul1CW
-         wqxfWIivdn0kVwZeIkmevEZU04KNa4lvBRT2YygGs/79fIhSTN11zRQcR8F6lDc9Fwoh
-         PDeivNYn7nPplnEHZhlkO+tjcfaV2dN3S83LK5iUh8SoVROSAK/eNleQe65Ha7bIdBtV
-         3oxw==
-X-Gm-Message-State: AFqh2krHYKGgHBsbqZjeEBVBsB3UZY4oKBpoNU7xdFtKXr74suJqNFmk
-        dw8Sr7ssXcaLzz0fvJtSIr9XM368en6msW0Q3+3ntoEisL86a0nGfmKjNyg9scQLmeWqY6Lx0o8
-        bza8RSl/PP03Eg+OIJsDMVgES
-X-Received: by 2002:a05:622a:1e09:b0:3a7:f424:3ef9 with SMTP id br9-20020a05622a1e0900b003a7f4243ef9mr15448765qtb.13.1674125350348;
-        Thu, 19 Jan 2023 02:49:10 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsJI/f+MaH+UXrw024umAES6RkR56bZGB0+a4DzacCjXf+fQdTonSXjzep3SUU/ku7BhybcWw==
-X-Received: by 2002:a05:622a:1e09:b0:3a7:f424:3ef9 with SMTP id br9-20020a05622a1e0900b003a7f4243ef9mr15448743qtb.13.1674125350057;
-        Thu, 19 Jan 2023 02:49:10 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-245.retail.telecomitalia.it. [82.57.51.245])
-        by smtp.gmail.com with ESMTPSA id q3-20020ac87343000000b003b6464eda40sm2568175qtp.25.2023.01.19.02.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 02:49:09 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:49:02 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC 0/3] vsock: add support for sockmap
-Message-ID: <20230119104902.jxst4eblcuyjvums@sgarzare-redhat>
-References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cf7yICQO9NaAanq9Gf/a43Gbk/UV6UR1wALLIkbHGrw=;
+        b=DyfkAr6Z8GnAioG6aBg7QjT3NfZtyvEMuJSQTlvwVt71Mv7hFOt7UHJIEjUOYjfM+6
+         ZKmVZxq6G6v3ZbYd6ivzAvGQCE7+uoHuznKv7vhCvCmpDie8uxU2PXn5QVuIROgWkL1i
+         gA7kHTRcV1Gd6cdf3BJJuqz13Pnx4PwONu8lkvCV//+c3NZ5T3IgXQD368LCwH8NxRJN
+         K4ImpiZ8Kpw+UBGEk7XWrsjIkaND9m6KcLy+WApsLzZrD3xW1uRROzsgH3Zk5PZMDonJ
+         F9hiCs1cXEpjsxB7WWLfCWZzGdcGTEpaRTVV/uqDem6uOeyNRJq2+qnd57XbOV22lI7B
+         /DtA==
+X-Gm-Message-State: AFqh2kpZ0CnP+2F0r+Zv5K2NPEj2RmGEEFIEnxufgDWI/kQMM408Tk4I
+        cEDy9v1lGJYDv512zhE3QaFe2Q==
+X-Google-Smtp-Source: AMrXdXs26D5JmZyw8QpqvpCU4DEz1mdnfomAHI/Qw37hNyTda9/pEjzWEsXixDvMSOMkrJV+gcBZRQ==
+X-Received: by 2002:a5d:4588:0:b0:2bb:f255:6bb4 with SMTP id p8-20020a5d4588000000b002bbf2556bb4mr4607855wrq.25.1674125430385;
+        Thu, 19 Jan 2023 02:50:30 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b00268aae5fb5bsm34065801wre.3.2023.01.19.02.50.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 02:50:30 -0800 (PST)
+Message-ID: <41b0c0cc-3ef5-362c-a09e-97a2ffca8e1f@linaro.org>
+Date:   Thu, 19 Jan 2023 11:50:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v1] arm64: dts: qcom: sm8350: Use 2 interconnect cells
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>, agross@kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
+        rfoss@kernel.org
+Cc:     robert.foss@linaro.org
+References: <20230117115712.1054613-1-rfoss@kernel.org>
+ <167408614052.2989059.12874514471754492819.b4-ty@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167408614052.2989059.12874514471754492819.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bobby,
+On 19/01/2023 00:55, Bjorn Andersson wrote:
+> On Tue, 17 Jan 2023 12:57:11 +0100, rfoss@kernel.org wrote:
+>> From: Robert Foss <robert.foss@linaro.org>
+>>
+>> Use two interconnect cells in order to optionally
+>> support a path tag.
+>>
+>>
+> 
+> Applied, thanks!
+> 
+> [1/1] arm64: dts: qcom: sm8350: Use 2 interconnect cells
+>       commit: 4f287e31ff5f464526651ee3cb3fd3e96b2e5746
 
-On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
->Add support for sockmap to vsock.
->
->We're testing usage of vsock as a way to redirect guest-local UDS requests to
->the host and this patch series greatly improves the performance of such a
->setup.
->
->Compared to copying packets via userspace, this improves throughput by 221% in
->basic testing.
 
-Cool, nice series!
+I don't think this is correct patch. We talked that this must be rebased
+on my interconnect cells change and I think it wasn't :(
 
->
->Tested as follows.
->
->Setup: guest unix dgram sender -> guest vsock redirector -> host vsock server
->Threads: 1
->Payload: 64k
->No sockmap:
->- 76.3 MB/s
->- The guest vsock redirector was
->  "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
->Using sockmap (this patch):
->- 168.8 MB/s (+221%)
-
-Assuming the absolute value is correct, there is a typo here, it would 
-be +121% right?
-
->- The guest redirector was a simple sockmap echo server,
->  redirecting unix ingress to vsock 2:1234 egress.
->- Same sender and server programs
->
->Only the virtio transport has been tested.
-
-I think is fine for now.
-
->The loopback transport was used in
->writing bpf/selftests, but not thoroughly tested otherwise.
-
-I did a quick review mainly for vsock stuff.
-Hoping others can take a better look at net/vmw_vsock/vsock_bpf.c, since 
-I'm not very familiar with that subsystem.
-
-FYI I will be off the next two weeks (till Feb 7) with limited internet 
-access.
-
-Thanks,
-Stefano
-
->
->This series requires the skb patch.
->
->To: Stefan Hajnoczi <stefanha@redhat.com>
->To: Stefano Garzarella <sgarzare@redhat.com>
->To: "Michael S. Tsirkin" <mst@redhat.com>
->To: Jason Wang <jasowang@redhat.com>
->To: "David S. Miller" <davem@davemloft.net>
->To: Eric Dumazet <edumazet@google.com>
->To: Jakub Kicinski <kuba@kernel.org>
->To: Paolo Abeni <pabeni@redhat.com>
->To: Andrii Nakryiko <andrii@kernel.org>
->To: Mykola Lysenko <mykolal@fb.com>
->To: Alexei Starovoitov <ast@kernel.org>
->To: Daniel Borkmann <daniel@iogearbox.net>
->To: Martin KaFai Lau <martin.lau@linux.dev>
->To: Song Liu <song@kernel.org>
->To: Yonghong Song <yhs@fb.com>
->To: John Fastabend <john.fastabend@gmail.com>
->To: KP Singh <kpsingh@kernel.org>
->To: Stanislav Fomichev <sdf@google.com>
->To: Hao Luo <haoluo@google.com>
->To: Jiri Olsa <jolsa@kernel.org>
->To: Shuah Khan <shuah@kernel.org>
->Cc: linux-kernel@vger.kernel.org
->Cc: kvm@vger.kernel.org
->Cc: virtualization@lists.linux-foundation.org
->Cc: netdev@vger.kernel.org
->Cc: bpf@vger.kernel.org
->Cc: linux-kselftest@vger.kernel.org
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->
->---
->Bobby Eshleman (3):
->      vsock: support sockmap
->      selftests/bpf: add vsock to vmtest.sh
->      selftests/bpf: Add a test case for vsock sockmap
->
-> drivers/vhost/vsock.c                              |   1 +
-> include/linux/virtio_vsock.h                       |   1 +
-> include/net/af_vsock.h                             |  17 ++
-> net/vmw_vsock/Makefile                             |   1 +
-> net/vmw_vsock/af_vsock.c                           |  59 ++++++-
-> net/vmw_vsock/virtio_transport.c                   |   2 +
-> net/vmw_vsock/virtio_transport_common.c            |  22 +++
-> net/vmw_vsock/vsock_bpf.c                          | 180 +++++++++++++++++++++
-> net/vmw_vsock/vsock_loopback.c                     |   2 +
-> tools/testing/selftests/bpf/config.x86_64          |   4 +
-> .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
-> tools/testing/selftests/bpf/vmtest.sh              |   1 +
-> 12 files changed, 447 insertions(+), 6 deletions(-)
->---
->base-commit: f12f4326c6a75a74e908714be6d2f0e2f0fd0d76
->change-id: 20230118-support-vsock-sockmap-connectible-2e1297d2111a
->
->Best regards,
->-- 
->Bobby Eshleman <bobby.eshleman@bytedance.com>
->
+Best regards,
+Krzysztof
 
