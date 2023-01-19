@@ -2,176 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E01674643
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3648674645
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjASWhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S230388AbjASWiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjASWge (ORCPT
+        with ESMTP id S230384AbjASWhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:36:34 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB24A5CE5;
-        Thu, 19 Jan 2023 14:18:26 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JMEgIV023694;
-        Thu, 19 Jan 2023 22:18:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AxkyY/06uGUrmuwDgIjlBDb5C2vYmq8tk8MxpWGbAkY=;
- b=TchB5w/RTzPV+HNyAyJ72jLoaLB9P7XTT7MXTEP8WOPDJMIGPnrjkYBDD3p2q/du6Kc4
- CmNP7GKIEJYomyl44dBAJpx8p8lhURQgQU8vTeRhv1jrRMRmGp/th7iLkgDYFjGRhrRy
- 92z5TeNkkxg0GZ2J63eCRhm98I5iqBGZ8XgSHxHz3XgPl00mUIRPl4KgZS8B20u2mcRM
- G8f9/VoJSRjnlS9n1/1GJ6ahJ1NQa7KieAhU246uF9Ux/1IKhrP2M/DAP51BYGus7MKv
- rDZslcggIc0CiVFdqM1V1del6gfZdXmcLks3BGBK6fDlZ2gy146Hl1CZwTyiwWinR32M 8A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6r59b46d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 22:18:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30JMIMUb012325
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 22:18:22 GMT
-Received: from [10.46.163.175] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
- 2023 14:18:21 -0800
-Message-ID: <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
-Date:   Thu, 19 Jan 2023 14:18:12 -0800
+        Thu, 19 Jan 2023 17:37:00 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D645B1EF5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:18:37 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id k13so3715691plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YsEdBrnw8zv1WxOe57aMagHA1fKjs6sNS2NjosWdfFQ=;
+        b=B2NdqkujJqlDIO723PRvDabnr6cpc1OZ/iqkknchwf5q3JQpQDddqf3qQX2vcWgV8Q
+         7Xf7jSOk2vnIbHl1NBVXNen8dJDdM/Ks7gurYZYSniofoeC8RI+dv5LqZbXIaqR5avMs
+         /TPL63LyCGHUFNhDMpYB2CBdO1Fpk/Kr91O1Kn94u3lZTim/1gdCEItaaTHVJrWZaxsv
+         A57bR+Oum3I5RHNGBkKhncfgHfbWrST/Es4JiJlVSsTJgoW/XUcjVZi/AshEkXRLQFNw
+         bq07VkTMqpYwaRHzkdUbc6NWkOZi0U1DnbfT5H8B6Mcxwhxa6oxp8Ca95SzawwiUctEp
+         ggjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YsEdBrnw8zv1WxOe57aMagHA1fKjs6sNS2NjosWdfFQ=;
+        b=ZZNC9Y3bGOU+NgQ4g5VGgoCvCApcGIQBNfZ+k0p2Lnb0xoOSTczNIPIuv6ZcwWSCa5
+         pOJWQbpBI3/svmwnj7Z0/iKcCQ9Nmxyt9LmcA0DwsJRoGQi+FjzdkCH/cG6SX+3nEFQd
+         T6FXHLnQS2gWa0tKRUNOHKyn4X9kjv7p5UNeH6dZP6WIE6K70nJDmlIfj+bWtwSEO0CN
+         qOkFRzgkVPChzYurxr1EmdkOJfQlQb10UuLRTj937d63FSDU0myeQOe7sEJ7I1g06bJm
+         PjdYtmDTUFZZAquZy7WZvQLEhpPTQo9qSjHTndF4j9l8auaaqC/eGVgkl9pVc7q1cAKh
+         TCXw==
+X-Gm-Message-State: AFqh2krJ68pdZY32AHY/8Vs8JtUZ8RfutBI8dKgMNOQAKxpq53uLHT7Q
+        +oqAmi2Fixe/nJZx04zMIK60ew==
+X-Google-Smtp-Source: AMrXdXtC8J4Wgo0OEX0QMSLV9liCSNVuXn9aZJsWFGfOfKOcGFMmRJrnH2SQ6dfQ90jSfb8oBinU2g==
+X-Received: by 2002:a05:6a20:8ba5:b0:b8:93b8:ee2f with SMTP id m37-20020a056a208ba500b000b893b8ee2fmr11692479pzh.45.1674166716555;
+        Thu, 19 Jan 2023 14:18:36 -0800 (PST)
+Received: from vineet-framework.ba.rivosinc.com ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id w29-20020a63af1d000000b00477bfac06b7sm2850502pge.34.2023.01.19.14.18.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 14:18:36 -0800 (PST)
+From:   Vineet Gupta <vineetg@rivosinc.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Vineet Gupta <vineetg@rivosinc.com>
+Subject: [PATCH v4] riscv: elf: add .riscv.attributes parsing
+Date:   Thu, 19 Jan 2023 14:18:33 -0800
+Message-Id: <20230119221833.3629409-1-vineetg@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <67c50e8d-ae78-076d-cf25-b7781f2209d7@rivosinc.com>
+References: <67c50e8d-ae78-076d-cf25-b7781f2209d7@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, <djakov@kernel.org>
-CC:     <quic_mdtipton@quicinc.com>, <quic_okukatla@quicinc.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
- <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
-From:   Vivek Aknurwar <quic_viveka@quicinc.com>
-In-Reply-To: <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: EZTNWv0qyfHa0plkKzRRco13XcNlfvMr
-X-Proofpoint-GUID: EZTNWv0qyfHa0plkKzRRco13XcNlfvMr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_14,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- mlxscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- suspectscore=0 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301190188
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bryan,
-Thanks for taking time to review the patch.
+This implements the elf loader hook to parse RV specific
+.riscv.attributes section. This section is inserted by compilers
+(gcc/llvm) with build related information such as -march organized as
+tag/value attribute pairs.
 
-On 1/13/2023 5:40 PM, Bryan O'Donoghue wrote:
-> On 14/01/2023 01:24, Bryan O'Donoghue wrote:
->> On 13/01/2023 22:07, Vivek Aknurwar wrote:
->>> Currently framework sets bw even when init bw requirements are zero 
->>> during
->>> provider registration, thus resulting bulk of set bw to hw.
->>> Avoid this behaviour by skipping provider set bw calls if init bw is 
->>> zero.
->>>
->>> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
->>> ---
->>>   drivers/interconnect/core.c | 17 ++++++++++-------
->>>   1 file changed, 10 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->>> index 25debde..43ed595 100644
->>> --- a/drivers/interconnect/core.c
->>> +++ b/drivers/interconnect/core.c
->>> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct 
->>> icc_provider *provider)
->>>       node->avg_bw = node->init_avg;
->>>       node->peak_bw = node->init_peak;
->>> -    if (provider->pre_aggregate)
->>> -        provider->pre_aggregate(node);
->>> -
->>> -    if (provider->aggregate)
->>> -        provider->aggregate(node, 0, node->init_avg, node->init_peak,
->>> -                    &node->avg_bw, &node->peak_bw);
->>> +    if (node->avg_bw || node->peak_bw) {
->>> +        if (provider->pre_aggregate)
->>> +            provider->pre_aggregate(node);
->>> +
->>> +        if (provider->aggregate)
->>> +            provider->aggregate(node, 0, node->init_avg, 
->>> node->init_peak,
->>> +                        &node->avg_bw, &node->peak_bw);
->>> +        if (provider->set)
->>> +            provider->set(node, node);
->>> +    }
->>> -    provider->set(node, node);
->>>       node->avg_bw = 0;
->>>       node->peak_bw = 0;
->>
->> I have the same comment/question for this patch that I had for the 
->> qcom arch specific version of it. This patch seems to be doing at a 
->> higher level what the patch below was doing at a lower level.
->>
->> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
->>
->> what happens to earlier silicon - qcom silicon which previously made 
->> explicit zero requests ?
+It identifies the various attribute tags (and corresponding values) as
+currently specified in the psABI specification.
 
-This patch is to optimize and avoid all those bw 0 requests on each node 
-addition during probe (which results in rpmh remote calls) for upcoming 
-targets.
+This patch only implements the elf parsing mechanics, leaving out the
+recording/usage of the attributes to subsequent patches.
 
->>
->> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
->>
->> https://lkml.org/lkml/2023/1/3/1232
->>
->> Isn't it a better idea to let lower layer drivers differentiate what 
->> they do ?
+Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
+---
+Changes since v3 [3]
+  - Address more review comments from Jessica.
+    Specifically handle unknown tags better knowing they can only be
+    int/string.
 
-AFAIU lower layer driver can/should not differentiate between normal 
-flow calls vs made as a result from probe/initialization of driver. 
-Hence even bw 0 request is honored as like client in general wish to 
-vote 0 as in an normal use case.
+Changes since v2 [2]
+  - Address Jessica's review comments.
+    Mostly robustify code some more, checking for end of buffer etc.
 
->>
->> For example on pre 5.4 qcom kernel silicon we might choose to set the 
->> value to zero "because that's what the reference code did" but on 
->> newer silicon we might opt to skip the zero configuration ?
->>
->> I'm happy to be shown the error of my ways but, absent testing to 
->> *show* it doesn't impact existing legacy silicon, I think we should be 
->> wary of this change.
->>
->> ---
->> bod
-> 
-> Oh, and what is the effect on Samsung and i.MX silicon interconnect 
-> providers of skipping the zero set ?
+Changes since v1 [1]
+  - Handling potential oob accesses against malformed elf contents.
+  - Handling of multiple sub-subsections
 
-If interconnect providers are trying to clear bw votes coming from 
-boot-loader then best place to clear those is in sync-state call back.
+[1]https://lore.kernel.org/linux-riscv/20230110201841.2069353-1-vineetg@rivosinc.com
+[2]https://lore.kernel.org/linux-riscv/20230112210622.2337254-1-vineetg@rivosinc.com
+[3]https://lore.kernel.org/linux-riscv/20230119174357.3550008-1-vineetg@rivosinc.com
 
-> 
-> ---
-> bod
+Given the current state of discussions, the intended Vector extension
+support would likely not need it, still posting the reworked code for
+logical conclusion and for posterity in case need comes up in future
+for something like CFI elf annotation.
+Maintainers/reviewers can decide whether to merge it.
+---
+ arch/riscv/Kconfig           |   1 +
+ arch/riscv/include/asm/elf.h |  11 ++
+ arch/riscv/kernel/Makefile   |   1 +
+ arch/riscv/kernel/elf-attr.c | 225 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 238 insertions(+)
+ create mode 100644 arch/riscv/kernel/elf-attr.c
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e2b656043abf..f7e0ab05a2d2 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -12,6 +12,7 @@ config 32BIT
+ 
+ config RISCV
+ 	def_bool y
++	select ARCH_BINFMT_ELF_STATE
+ 	select ARCH_CLOCKSOURCE_INIT
+ 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
+ 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index e7acffdf21d2..7ab8bd0ec330 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -116,6 +116,17 @@ do {							\
+ 		*(struct user_regs_struct *)regs;	\
+ } while (0);
+ 
++struct arch_elf_state {
++};
++
++#define INIT_ARCH_ELF_STATE {}
++
++extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
++			    bool is_interp, struct arch_elf_state *state);
++
++extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp_ehdr,
++			  struct arch_elf_state *state);
++
+ #ifdef CONFIG_COMPAT
+ 
+ #define SET_PERSONALITY(ex)					\
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 4cf303a779ab..eff6d845ac9d 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
+ obj-y	+= stacktrace.o
+ obj-y	+= cacheinfo.o
+ obj-y	+= patch.o
++obj-y	+= elf-attr.o
+ obj-y	+= probes/
+ obj-$(CONFIG_MMU) += vdso.o vdso/
+ 
+diff --git a/arch/riscv/kernel/elf-attr.c b/arch/riscv/kernel/elf-attr.c
+new file mode 100644
+index 000000000000..ac5df800516e
+--- /dev/null
++++ b/arch/riscv/kernel/elf-attr.c
+@@ -0,0 +1,225 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Rivos Inc.
++ */
++
++#include <linux/binfmts.h>
++#include <linux/elf.h>
++#include <asm/unaligned.h>
++
++#undef pr_fmt
++#define pr_fmt(fmt) "rv-elf-attr: " fmt
++
++#define PT_RISCV_ATTRIBUTES		0x70000003
++
++#define RV_ATTR_TAG_file		1
++
++#define RV_ATTR_TAG_stack_align		4
++#define RV_ATTR_TAG_arch		5
++#define RV_ATTR_TAG_unaligned_access	6
++
++#define RV_ATTR_VENDOR_RISCV		"riscv"
++
++#define RV_ATTR_SEC_SZ			SZ_1K
++
++static void rv_elf_attr_int(u64 tag, u64 val)
++{
++	if (tag == RV_ATTR_TAG_stack_align ||
++	    tag == RV_ATTR_TAG_unaligned_access)
++		pr_debug("Tag %llx=%llx\n", tag, val);
++	else
++		pr_debug("Unrecognized int Tag [%llx]=%llx\n", tag, val);
++}
++
++static void rv_elf_attr_str(u64 tag, const unsigned char *str)
++{
++	if (tag == RV_ATTR_TAG_arch)
++		pr_debug("Tag %llx=[%s]\n", tag, str);
++	else
++		pr_debug("Unrecognized string Tag [%llx]=[%s]\n", tag, str);
++}
++
++/*
++ * Decode a ule128 encoded value.
++ */
++static int
++decode_uleb128_safe(unsigned char **dpp, u64 *val, const unsigned char *p_end)
++{
++	unsigned char *bp = *dpp;
++	unsigned char byte;
++	unsigned int shift = 0;
++	u64 result = 0;
++
++	while (bp < p_end) {
++		byte = *bp++;
++		result |= (byte & 0x7f) << shift;
++		if ((byte & 0x80) == 0) {
++			*dpp = bp;
++			*val = result;
++			return 0;
++		}
++		shift += 7;
++	}
++
++	return -1;
++}
++
++/*
++ * Parse a single elf attribute.
++ */
++static int rv_parse_elf_attr_safe(unsigned char **dpp, unsigned char *p_end)
++{
++	unsigned char *p = *dpp;
++	unsigned char *str;
++	u64 tag, val;
++
++	if (decode_uleb128_safe(&p, &tag, p_end))
++		goto bad_attr;
++
++	if (tag % 2) {
++		u32 s_len;
++
++		str = p;
++		s_len = strnlen(p, p_end - p) + 1;
++		if ((p + s_len) > p_end)
++			goto bad_attr;
++		p += s_len;
++		rv_elf_attr_str(tag, str);
++	} else {
++		if (decode_uleb128_safe(&p, &val, p_end))
++			goto bad_attr;
++		rv_elf_attr_int(tag, val);
++	}
++
++	*dpp = p;
++	return 0;
++bad_attr:
++	return -ENOEXEC;
++}
++
++/*
++ * Parse .riscv.attributes elf section.
++ */
++static int rv_parse_elf_attributes(struct file *f, const struct elf_phdr *phdr,
++				   struct arch_elf_state *state)
++{
++	unsigned char buf[RV_ATTR_SEC_SZ];
++	unsigned char *p, *p_end;
++	ssize_t n;
++	int ret = 0;
++	loff_t pos;
++
++	pr_debug("Section .riscv.attributes found\n");
++
++	/* Assume a reasonable size for now */
++	if (phdr->p_filesz > sizeof(buf))
++		goto bad_elf;
++
++	memset(buf, 0, RV_ATTR_SEC_SZ);
++	pos = phdr->p_offset;
++	n = kernel_read(f, &buf, phdr->p_filesz, &pos);
++
++	if (n < 0)
++		return n;
++	else if (n == 0)
++		return -ENOEXEC;
++
++	p = buf;
++	p_end = p + n;
++
++	/* sanity check format-version */
++	if (*p++ != 'A')
++		goto bad_elf;
++
++	/*
++	 * elf attribute section organized as Vendor sub-sections(s)
++	 *   {sub-section length, vendor name, vendor data}
++	 * Vendor data organized as sub-subsection(s)
++	 *   {tag, sub-subsection length, attributes contents}
++	 * Attribute contents organized as
++	 *   {tag, value} pair(s).
++	 */
++	while ((p_end - p) >= 4) {
++		u32 sub_len, vname_len;
++
++		sub_len = get_unaligned_le32(p);
++		if (sub_len <= 4 || sub_len > (p_end - p))
++			goto bad_elf;
++
++		p += 4;
++		sub_len -= 4;
++
++		/* Vendor name string */
++		vname_len = strnlen(p, sub_len) + 1;
++		if (vname_len > sub_len)
++			goto bad_elf;
++
++		/* skip non-mandatory sub-section for now */
++		if (strncmp(p, RV_ATTR_VENDOR_RISCV, sub_len)) {
++			p += sub_len;
++			continue;
++		}
++
++		p += vname_len;
++		sub_len -= vname_len;
++
++		/* Vendor data: sub-subsections(s) */
++		while (sub_len > 0) {
++			unsigned char *p_ss_end, *p_ss_start = p;
++			u32 ss_len;
++			u64 tag;
++
++			if (decode_uleb128_safe(&p, &tag, p_end))
++				goto bad_elf;
++
++			if ((p_end - p) < 4)
++				goto bad_elf;
++
++			ss_len = get_unaligned_le32(p);
++			if (ss_len > sub_len)
++				goto bad_elf;
++
++			p += 4;
++			sub_len -= ss_len;
++			p_ss_end = p_ss_start + ss_len;
++
++			/* For now handle attributes relating to whole file */
++			if (tag != RV_ATTR_TAG_file) {
++				p = p_ss_end;
++				continue;
++			}
++
++			/* Attribute(s): tag:value pairs */
++			while (p < p_ss_end) {
++				ret = rv_parse_elf_attr_safe(&p, p_end);
++				if (ret)
++					goto bad_elf;
++			}
++		}
++	}
++
++	return ret;
++bad_elf:
++	return -ENOEXEC;
++}
++
++/*
++ * Hook invoked by generic elf loader to parse riscv specific elf segments.
++ */
++int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
++		     bool is_interp, struct arch_elf_state *state)
++{
++	struct elf_phdr *phdr = _phdr;
++	int ret = 0;
++
++	if (phdr->p_type == PT_RISCV_ATTRIBUTES)
++		ret = rv_parse_elf_attributes(elf, phdr, state);
++
++	return ret;
++}
++
++int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
++		   struct arch_elf_state *state)
++{
++	return 0;
++}
+-- 
+2.34.1
+
