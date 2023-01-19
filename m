@@ -2,117 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235B3674070
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62015674077
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjASSB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S230024AbjASSCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjASSB4 (ORCPT
+        with ESMTP id S229914AbjASSCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:01:56 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E90287289
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:01:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ch3G+TVl0zLt31mvi7p9Ehua4+39FF3iqi5hnpOXoh4=; b=e/K35kytzIPX47JGNKYJnUPu8X
-        dIBnlvdGseBHIt9Fv6ze/kQbv6iaNjp6tBTxk0zO8QoyI9pEXfROAZ31YCGJd/bJ9pG6COUDxjskj
-        HAGKUlpXJUMCR2QHmn/8xZR7fClFfuCAx/zAl6LYUuk4cf6X+l4PGaoJQLQqKDscRl4Xp+PYzJapY
-        MdaANQQh5QQotDQvYOpIr5TisI+gdgqrcSUNbrUmcvICI6Sjc508eVvbzLZd7hpZYnLinD+9yfuPL
-        7/U8cdtf5jzDpDeZKzzVRXahmkq99JS8IhrtixgEJiAZJ9nXBF4PAiZTxV8rtcD0cZC0Sa1JlHdI4
-        b7SVEOLg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36216)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pIZEW-0004pK-7c; Thu, 19 Jan 2023 18:01:51 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pIZEU-0000fk-Vu; Thu, 19 Jan 2023 18:01:50 +0000
-Date:   Thu, 19 Jan 2023 18:01:50 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     ye.xingchen@zte.com.cn
-Cc:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: mvebu: potential dereference of null pointer
-Message-ID: <Y8mFjt/K1VSt5d03@shell.armlinux.org.uk>
-References: <202301191051184033370@zte.com.cn>
+        Thu, 19 Jan 2023 13:02:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC6A9084C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674151326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vaqYKA9gKcloEabUgO9UTR0QJlMjgtJTu1Mbgj1HV78=;
+        b=SMhErcbea0DxHe/NuyZkcUTLkF7Akj8htj3g8ZMCWudPQKGHhDYiTZN+qwNrslkJ52P6Jx
+        GXsoOgmYxPjFrHFM19OXk59coihd4LpuULYelqCq+NuzEoudoaUCG0NF7+MFRM8SgpSWxM
+        tKPMf+/Hv0vK3zMPrG8XdeJzSAsdANQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-T3l97QkgOwK8iK2ynsYMNg-1; Thu, 19 Jan 2023 13:02:03 -0500
+X-MC-Unique: T3l97QkgOwK8iK2ynsYMNg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF7CA3803911;
+        Thu, 19 Jan 2023 18:02:02 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 78BDA492B02;
+        Thu, 19 Jan 2023 18:02:02 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
+        bristot@redhat.com, ebiederm@xmission.com, brauner@kernel.org,
+        cyphar@cyphar.com, viro@zeniv.linux.org.uk, alexl@redhat.com,
+        peterz@infradead.org
+Subject: Re: [PATCH v2 1/2] exec: add PR_HIDE_SELF_EXE prctl
+References: <20230119170718.3129938-1-gscrivan@redhat.com>
+        <Y8mCqn3fIaqk9N0Q@x1>
+Date:   Thu, 19 Jan 2023 19:02:00 +0100
+In-Reply-To: <Y8mCqn3fIaqk9N0Q@x1> (Brian Masney's message of "Thu, 19 Jan
+        2023 12:49:30 -0500")
+Message-ID: <87tu0mflnr.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301191051184033370@zte.com.cn>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:51:18AM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> The return value of kzalloc() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  arch/arm/mach-mvebu/board-v7.c  | 4 ++++
->  arch/arm/mach-mvebu/coherency.c | 4 ++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm/mach-mvebu/board-v7.c b/arch/arm/mach-mvebu/board-v7.c
-> index fd5d0c8ff695..3c031b2efe16 100644
-> --- a/arch/arm/mach-mvebu/board-v7.c
-> +++ b/arch/arm/mach-mvebu/board-v7.c
-> @@ -125,11 +125,15 @@ static void __init i2c_quirk(void)
->  		struct property *new_compat;
-> 
->  		new_compat = kzalloc(sizeof(*new_compat), GFP_KERNEL);
-> +		if (!new_compat)
-> +			return;
-> 
->  		new_compat->name = kstrdup("compatible", GFP_KERNEL);
->  		new_compat->length = sizeof("marvell,mv78230-a0-i2c");
->  		new_compat->value = kstrdup("marvell,mv78230-a0-i2c",
->  						GFP_KERNEL);
-> +		if (!new_compat->name || !new_compat->value)
-> +			return;
+Brian Masney <bmasney@redhat.com> writes:
 
-... and then someone else comes along and spots that "new_compat"
-gets leaked, so we get another patch to add a kfree() for new_compat.
+> On Thu, Jan 19, 2023 at 06:07:17PM +0100, Giuseppe Scrivano wrote:
+>> This patch adds a new prctl called PR_HIDE_SELF_EXE which allows
+>> processes to hide their own /proc/*/exe file. When this prctl is
+>> used, every access to /proc/*/exe for the calling process will
+>> fail with ENOENT.
+>> 
+>> This is useful for preventing issues like CVE-2019-5736, where an
+>> attacker can gain host root access by overwriting the binary
+>> in OCI runtimes through file-descriptor mishandling in containers.
+>> 
+>> The current fix for CVE-2019-5736 is to create a read-only copy or
+>> a bind-mount of the current executable, and then re-exec the current
+>> process.  With the new prctl, the read-only copy or bind-mount copy is
+>> not needed anymore.
+>> 
+>> While map_files/ also might contain symlinks to files in host,
+>> proc_map_files_get_link() permissions checks are already sufficient.
+>> 
+>> Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
+>> ---
+>>  fs/exec.c                        | 1 +
+>>  fs/proc/base.c                   | 8 +++++---
+>>  include/linux/sched.h            | 5 +++++
+>>  include/uapi/linux/prctl.h       | 3 +++
+>>  kernel/sys.c                     | 9 +++++++++
+>>  tools/include/uapi/linux/prctl.h | 3 +++
+>>  6 files changed, 26 insertions(+), 3 deletions(-)
+>> 
+>> v1: https://lkml.org/lkml/2023/1/4/334
+>> 
+>> Differences from v1:
+>> 
+>> - amended more information in the commit message wrt map_files not
+>>   requiring the same protection.
+>> - changed the test to verify PR_HIDE_SELF_EXE cannot be unset after
+>>   a fork.
+>> 
+>> diff --git a/fs/exec.c b/fs/exec.c
+>> index ab913243a367..5a5dd964c3a3 100644
+>> --- a/fs/exec.c
+>> +++ b/fs/exec.c
+>> @@ -1855,6 +1855,7 @@ static int bprm_execve(struct linux_binprm *bprm,
+>>  	/* execve succeeded */
+>>  	current->fs->in_exec = 0;
+>>  	current->in_execve = 0;
+>> +	task_clear_hide_self_exe(current);
+>
+> [snip]
+>
+>>  	rseq_execve(current);
+>>  	acct_update_integrals(current);
+>>  	task_numa_free(current, false);
+>> diff --git a/fs/proc/base.c b/fs/proc/base.c
+>> index 9e479d7d202b..959968e2da0d 100644
+>> --- a/fs/proc/base.c
+>> +++ b/fs/proc/base.c
+>> @@ -1723,19 +1723,21 @@ static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
+>>  {
+>>  	struct task_struct *task;
+>>  	struct file *exe_file;
+>> +	long hide_self_exe;
+>>  
+>>  	task = get_proc_task(d_inode(dentry));
+>>  	if (!task)
+>>  		return -ENOENT;
+>>  	exe_file = get_task_exe_file(task);
+>> +	hide_self_exe = task_hide_self_exe(task);
+>
+> Perhaps I am missing something, but where is task_clear_hide_self_exe()
+> and task_hide_self_exe() defined?
 
-Why not do the job properly first time around?
+they are defined with:
 
->  		of_update_property(np, new_compat);
->  	}
-> diff --git a/arch/arm/mach-mvebu/coherency.c b/arch/arm/mach-mvebu/coherency.c
-> index a6b621ff0b87..8291185c52cc 100644
-> --- a/arch/arm/mach-mvebu/coherency.c
-> +++ b/arch/arm/mach-mvebu/coherency.c
-> @@ -191,7 +191,11 @@ static void __init armada_375_380_coherency_init(struct device_node *np)
->  		struct property *p;
-> 
->  		p = kzalloc(sizeof(*p), GFP_KERNEL);
-> +		if (!p)
-> +			return;
->  		p->name = kstrdup("arm,io-coherent", GFP_KERNEL);
-> +		if (!p->name)
-> +			return;
+TASK_PFA_TEST(HIDE_SELF_EXE, hide_self_exe)
+TASK_PFA_SET(HIDE_SELF_EXE, hide_self_exe)
+TASK_PFA_CLEAR(HIDE_SELF_EXE, hide_self_exe)
 
-Same problem here.
+Regards,
+Giuseppe
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
