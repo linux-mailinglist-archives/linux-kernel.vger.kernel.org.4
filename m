@@ -2,222 +2,591 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499666734BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B436C6734BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjASJrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S229954AbjASJsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjASJrI (ORCPT
+        with ESMTP id S229576AbjASJr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:47:08 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5C56841C;
-        Thu, 19 Jan 2023 01:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674121627; x=1705657627;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=f97y+IVJPZZs1siZhpsi+lKl60ALvByHRpSHu/nh5QA=;
-  b=ZUZJfZZJZkGMVyFYnQ/S6CzSuYd+yKcTrmxlo1In59SyzEDu6F1OKi4R
-   jmljhl/hq4yk2+TKrukjK+2CO+FrSGU9Tn0uh6sC0WouuH1mRnP/5ktum
-   EsRIfOFITxxhNljXkoEfxNp9+WhtcZP8VBy2op14e62s6rDuJuYDwaV4b
-   q25s6wvc8xmjMolzOli6IqfshSyQpxtl/RUgQ5tvSQDYhmCkztXqhRDHN
-   viV39B76Lp36psbJ6YXDnzfesl3cBJ5jipiJk+dsoyFQV9G28P6hvuWPo
-   zUXkvI3zYe1FtOi3a4rH7vycOg4GlRZS52cqbD8I+aViG9pj0XqwJwjS8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322929076"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="322929076"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 01:46:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="988924183"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="988924183"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jan 2023 01:46:52 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 01:46:52 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 01:46:51 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 01:46:51 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 19 Jan 2023 01:46:51 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bXJ1h9ruSxW3VMVlwzw9EU5beoWiAJ/UJuWYr9h5iZuYHAyNPZs6r/GCNSoqlxMO5waRSLAVCb+v9GVb9lB9M2O0xiuW2D9daAw8GLXpUyRVYp7bX6LV9I5HVK3iod7r5uBK5OhYeZqYcUisyWUoolEXsx3VDdnsjy7j4U1Wvd5py+gZATxTTkVCYh5ofDI/PpnnycCcUWwDUVXLyhK3Gl/MCi60liZPlvkBlX9SBvCSYtCLZpLvXHGpsHVTgO87Z+tGKF6tBkZqfT8m4H+BNgcUfsvZVCY8Li4mKMHL6aNclLya7d5vQubXMr+iiLs3BCKejcACGdRl/KPoBO4YAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VgTz0RXl8qVDkVQMT17m3uiLefirQjjyfzY//46clh0=;
- b=C3HqUbyZ0Us9lH1Mx4nusMF0ae3yj7VCa158p7IRh3FaFTL1/dQwxuOsZcPx6oyL9TEnVwDwzYHBFGjF/XPGFSOFtndBaZ4qAUd1SoVHSsu4cyNRgbHXHbIIofeXEAtWhIKBOjjJ7nQsIOG7U1nMEX2tD7XCz2NsTgLGm1CtJRzpdFBUj/wnSOPphe+pFL9OpIOztAuA2Y5m8Vx2WeWpYUXg+5KpXhSLLUefNm4oOKoA9u57YZB8VZ5THZgBVlnWW4AJHMTZROedtp6Dej4GjN6Kjd+0cFzdnrIneApBNtqbmjxf+B+umrfPkOU7GvaHrkCV7hUPbt5VAdmlfB33Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by DM4PR11MB5358.namprd11.prod.outlook.com (2603:10b6:5:395::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
- 2023 09:46:50 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::86b7:ffac:438a:5f44]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::86b7:ffac:438a:5f44%4]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
- 09:46:50 +0000
-From:   "G, GurucharanX" <gurucharanx.g@intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>
-CC:     "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: RE: [Intel-wired-lan] [PATCH] net/i40e: Replace 0-length array with
- flexible array
-Thread-Topic: [Intel-wired-lan] [PATCH] net/i40e: Replace 0-length array with
- flexible array
-Thread-Index: AQHZIWAIji9rRMWQlU65jvJpwLjShq6lkwQw
-Date:   Thu, 19 Jan 2023 09:46:50 +0000
-Message-ID: <BYAPR11MB336737A10C11036A183EC1EEFCC49@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <20230105234557.never.799-kees@kernel.org>
-In-Reply-To: <20230105234557.never.799-kees@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB3367:EE_|DM4PR11MB5358:EE_
-x-ms-office365-filtering-correlation-id: 69ba8c44-c51e-4026-f938-08dafa02168f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Jo65nH9rfEFG1LQAhH/Gp0cUXZbKu4JdkYEHow8HDygpW+/L5ZYgjAJWOytMHBZPGTqRSmCWM+Fo+IaXZzZkd/LCpFqBwU1QtY5GgTihGs1YqsXldjg2GhMrNdA71wD9Qo/VrlfbX83+cmOUkqLvPfIcX0YexfnKr+ymDEhj2TCgrnQHeOb9NVqfpYzx7/8acqUL3dvLrBMD9wJ0paj9K0FgdriBwdL9qyOglyt1It+NON9EEsUJR4gyUwJ8H46s5Ldsy+xPlLporTKS6ywc5dgNvKni2OElbA/B46+G3ykjhHukAv0oFuJ0jFNTKKFWh3N/nKadcax3FCZQZA3FFxfdSIJSNubzPDmCD6qw7gNXGxQ9YZjhGa5lADC4KtC1a+DwsqTP1kAfLKgSGluxjJkuHv9usb2UQZjYdGdnqj4nKO3jgct3X/iPmJn6GRJHrMwjinxIxli6YKeGT6RwUafuotC70hZlfP0avZUrgB4XqTlGODsgNUo4yagzHi7bClsJSimy+kah7MOeiFi/VznoTxGpaFUCkF0abQE75EJnyjRvb+eTdBI9GWvNCu9bQQdhCaMQ3M2AqlL6rETAT+GJ2iJS5YOjDD35/EpPP4vDRCFZ+uwIA5usw492TU90kXpOvSXaPkzBr5bcKA2OGqOrzGrbtCMn0zpoelMTalnI4/6VHxmKeoM7sxLUl4JL1TTls2W8cAu333eggQ7MS+0yUa+q3punHaq196AN6hI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199015)(38070700005)(86362001)(7416002)(41300700001)(5660300002)(8936002)(52536014)(38100700002)(82960400001)(122000001)(33656002)(966005)(7696005)(478600001)(110136005)(71200400001)(6636002)(54906003)(83380400001)(6506007)(53546011)(26005)(186003)(9686003)(8676002)(316002)(64756008)(4326008)(66556008)(66946007)(66446008)(76116006)(66476007)(2906002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7tN5GWqDT1fJamXUMHA2J1eZeQqXTrQrzbZc+Iz9qdYoDayAhCX+evhd33vt?=
- =?us-ascii?Q?1nsSvj3oSb/oncebdyYPZ49lTxlUj/8vikLtYrPv1Y1x5mcOspW07E8samdh?=
- =?us-ascii?Q?pMfiFKSSGI9xS6/2FKXJAO9btnGn68MHvx5dnI/lWPg5CiVj8STcgtaWCwYt?=
- =?us-ascii?Q?zR+Uk+oj1kRT7k9MKYojgUIJ+I7mL8a0iGLXbVfAe7R8JwKCfPTk54U8c9cO?=
- =?us-ascii?Q?xuPneEk3NuqSm5mMN7g063erjTTV4S1GTHeuzvg47DhpO+pokyRB+UGyMbs+?=
- =?us-ascii?Q?noQbUY8tSVxDzUj5H7ZHOAUHVLsVk3rT9XlRGLOgSSSalG0/XlB8DwsVMaeW?=
- =?us-ascii?Q?xGnQQUhxxh+XeYk/xvI0ylPZxXZYZHCZIIjQmnjbQuUJ643ByHwXq0+cUuLt?=
- =?us-ascii?Q?OZGfap6TXLjU8xAZ5/J4Q9b95GxNemBYEv5Wi25klmBor2cARoync7ektIQn?=
- =?us-ascii?Q?vb2ohMCdNGSmYI5ZdQdydqbDIGnt5XGYKmG9047995MGdDdMRLk6msNCh5zi?=
- =?us-ascii?Q?FDGSIZ/aocK1Z9zQYgP1KieNmLJQ0ToZDB9f84wRgQnTejPKjjEBmeERWPCS?=
- =?us-ascii?Q?0RchMlL5KsY02VkAmlffgzXFQgmbAPy4R4BPfatKTlR8G/GiQbmDGBLVbu1O?=
- =?us-ascii?Q?2CX4CGhnMkd10eL4WmyPKvazkEU4iyLVQkBIJTKpwyKKw7O1HJIT+K9s2NiS?=
- =?us-ascii?Q?H24rYRxnoh94zNEGa2OAj2mX3/YCtdQd7mPiI9u36YwHCgHCMTBcPO6diFfZ?=
- =?us-ascii?Q?s+6GO5g8vvvNE8uUv804HHnb/7sIQFX+EqfgrbqKJN3rrKJX4AzSZraeZ02B?=
- =?us-ascii?Q?nHOBsvdqJztfZB/iKRq/ar8OtiNMvvXdrkSeyIK5mh0IlhkucQ7YfMC6eclc?=
- =?us-ascii?Q?HbKAbwQEmhrk0VK+XJwNnGRIAbtkiVdotljYdzauoShECVnEF74ZDURA45QO?=
- =?us-ascii?Q?KmrDECbam6lWUmUput/pbJFDLUEbTh3Ql4cST592ZhCKYF4oJyf/rMg5bthC?=
- =?us-ascii?Q?A+YgIMIohgBMJ0lTjFk5BaKW0/UhpjkUjVf9ZwQP6JnYKlDC7CgAXjJy4rjT?=
- =?us-ascii?Q?xsqnHSrbCD7AZy5D/mbY/JaeuFfIDkpeVnKQEhWp49ct0PDF9V0x+jg6YvxY?=
- =?us-ascii?Q?H4GVGT+IzU6jKBEDtZu6l1xjXFx1Q2thcWByaL0kYYWYsgWoIrku3T6p/i5m?=
- =?us-ascii?Q?HrK4F1A3xFYsB29zutRAAeW8GmC7XaiKJJYppfid7yXYNQVJ3ozd960OPlYk?=
- =?us-ascii?Q?Wlkxz+W9lD0GStDFPzA9FY/3eraEddFT2XHB+oiz3xYC3LYLIj5/5MAmIvrY?=
- =?us-ascii?Q?xPxYAtb9eiRMoMBAxuYgtD/bRkYMsmzh0zvkMmXza0BfB1g3HWiZOJp5FOvx?=
- =?us-ascii?Q?KpwbDlZtplj+T6rs3sOusukQq6AtKk6/mSVgrL3O0nShYmkjkZ2IFpjkBNI3?=
- =?us-ascii?Q?+DHrK7r1R9Z08gawSulX1BO/vESEsYOsOM7uyLJqvU9KCp5NfhQM+TzMsH9P?=
- =?us-ascii?Q?Y5guhhme7qBZfVDtzzsT3Ufc9zGidseW/09f/CoUNRXDkl9LRLi4zE0GtfP+?=
- =?us-ascii?Q?7NMRsrBxJ8MrsRzwQ3PUImQRWNFMu8FRX3Ht1EZl?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 19 Jan 2023 04:47:58 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C87676F2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:47:43 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AC7B61EC0674;
+        Thu, 19 Jan 2023 10:47:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674121661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=pSUMAYyX4KNcWYfWQgxrz7Ggu0rhqzevib+31onaLJg=;
+        b=lLKI+rizLSJFzwhgeOnpq8p+ZNr184PlcqpCVeYOrLa5L0/vZAkSauc5BWN0VV3xzlWPmi
+        7IKTrBTP5dFj2UhTeCjpwG6sUtNjaY7LZnivZBae6dZ7kHMJmP37w3IapXWXspac+vfbfB
+        4E6kwO2QcbTNw06WdQqmG8/ulQ7vqQk=
+Date:   Thu, 19 Jan 2023 10:47:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/cpu: Start documenting what the X86_FEATURE_ flag
+ testing macros do
+Message-ID: <Y8kRuUwsKxYsk1AX@zn.tnic>
+References: <20221107211505.8572-1-bp@alien8.de>
+ <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
+ <Y2okdzF60XHLCK2v@zn.tnic>
+ <Y22IzA9DN/xYWgWN@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69ba8c44-c51e-4026-f938-08dafa02168f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 09:46:50.1446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pCSx7/pdgqeZjeJknbuNkYfAfpN8hOB8GkGCR70uWtQZQsA+k0ymo0W0ll8BxinBx0LvdO7qW+nswWOAFb/WlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5358
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y22IzA9DN/xYWgWN@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Another belated reply... ;-\
+
+On Thu, Nov 10, 2022 at 11:27:08PM +0000, Sean Christopherson wrote:
+> What about doing the opposite and folding cpu_feature_enabled()'s build-time
+> functionality into static_cpu_has() _and_ boot_cpu_has(), and then dropping
+> cpu_feature_enabled()?  That way the tradeoffs of using the static variant are
+> still captured in code (cpu_feature_enabled() sounds too innocuous to my ears),
+> and as an added bonus even slow paths benefit from build-time disabling of features.
+> 
+> Hiding the use of alternatives in cpu_feature_enabled() seems like it will lead to
+> unnecessary code patching.
+
+Actually, tglx and I have a sekrit plan - a small preview below. I don't have
+answers to replacing all functionality we have yet but it is a good start and
+the goal is to eventually get rid of all the gunk that has grown over the years.
+
+It is a long-term project and only if the day had more than 24 hours ...
+
+commit d4b89111c8bec1c9fbc9a3d5290b3231e9a61c9f
+Author: Borislav Petkov <bp@suse.de>
+Date:   Fri Nov 25 20:55:57 2022 +0100
+
+    Leaf 1
+    
+    TODO:
+    - Compare cpu_feature_enabled() resulting code after patching with those
+      simpler tests.
+    
+    - Read on the BSP and compare on the APs. Warn if mismatch. When you do
+    that, take into consideration the bits cleared by setup_clear_cpu_cap()
+    and mask them out from the AP's CPUID word before comparing.
+    
+    That should happen in apply_forced_caps(), where the settings for each
+    AP are consolidated.
+    
+    Eventually, we'll remove cpu_caps_cleared and cpu_caps_set arrays.
+    
+    - make __ro_after_init.
+    
+    Not-really-signed-off-by: Borislav Petkov <bp@suse.de>
+
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index 1a85e1fb0922..8eaf08025c16 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -3,6 +3,7 @@
+ #define _ASM_X86_CPUFEATURE_H
+ 
+ #include <asm/processor.h>
++#include <asm/cpuid.h>
+ 
+ #if defined(__KERNEL__) && !defined(__ASSEMBLY__)
+ 
+@@ -10,30 +11,6 @@
+ #include <linux/bitops.h>
+ #include <asm/alternative.h>
+ 
+-enum cpuid_leafs
+-{
+-	CPUID_1_EDX		= 0,
+-	CPUID_8000_0001_EDX,
+-	CPUID_8086_0001_EDX,
+-	CPUID_LNX_1,
+-	CPUID_1_ECX,
+-	CPUID_C000_0001_EDX,
+-	CPUID_8000_0001_ECX,
+-	CPUID_LNX_2,
+-	CPUID_LNX_3,
+-	CPUID_7_0_EBX,
+-	CPUID_D_1_EAX,
+-	CPUID_LNX_4,
+-	CPUID_7_1_EAX,
+-	CPUID_8000_0008_EBX,
+-	CPUID_6_EAX,
+-	CPUID_8000_000A_EDX,
+-	CPUID_7_ECX,
+-	CPUID_8000_0007_EBX,
+-	CPUID_7_EDX,
+-	CPUID_8000_001F_EAX,
+-};
+-
+ #define X86_CAP_FMT_NUM "%d:%d"
+ #define x86_cap_flag_num(flag) ((flag) >> 5), ((flag) & 31)
+ 
+@@ -143,7 +120,7 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+ 
+ #define boot_cpu_has(bit)	cpu_has(&boot_cpu_data, bit)
+ 
+-#define set_cpu_cap(c, bit)	set_bit(bit, (unsigned long *)((c)->x86_capability))
++#define set_cpu_cap(c, bit)	set_bit(bit & 0x1f, (unsigned long *)get_ap_cap_word(c, bit))
+ 
+ extern void setup_clear_cpu_cap(unsigned int bit);
+ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
+@@ -174,13 +151,13 @@ static __always_inline bool _static_cpu_has(u16 bit)
+ 		ALTERNATIVE_TERNARY("jmp 6f", %P[feature], "", "jmp %l[t_no]")
+ 		".pushsection .altinstr_aux,\"ax\"\n"
+ 		"6:\n"
+-		" testb %[bitnum]," _ASM_RIP(%P[cap_byte]) "\n"
++		" test %[bitnum], %[cap_word]\n"
+ 		" jnz %l[t_yes]\n"
+ 		" jmp %l[t_no]\n"
+ 		".popsection\n"
+ 		 : : [feature]  "i" (bit),
+-		     [bitnum]   "i" (1 << (bit & 7)),
+-		     [cap_byte] "i" (&((const char *)boot_cpu_data.x86_capability)[bit >> 3])
++		     [bitnum]   "i" (1 << (bit & 31)),
++		     [cap_word] "g" (get_boot_cpu_cap_word(bit))
+ 		 : : t_yes, t_no);
+ t_yes:
+ 	return true;
+diff --git a/arch/x86/include/asm/cpuid.h b/arch/x86/include/asm/cpuid.h
+index 9bee3e7bf973..c2a7d5a2d4e1 100644
+--- a/arch/x86/include/asm/cpuid.h
++++ b/arch/x86/include/asm/cpuid.h
+@@ -8,6 +8,8 @@
+ 
+ #include <asm/string.h>
+ 
++struct cpuinfo_x86;
++
+ struct cpuid_regs {
+ 	u32 eax, ebx, ecx, edx;
+ };
+@@ -19,6 +21,61 @@ enum cpuid_regs_idx {
+ 	CPUID_EDX,
+ };
+ 
++enum cpuid_leafs
++{
++	CPUID_1_EDX		= 0,
++	CPUID_8000_0001_EDX,
++	CPUID_8086_0001_EDX,
++	CPUID_LNX_1,
++	CPUID_1_ECX,
++	CPUID_C000_0001_EDX,
++	CPUID_8000_0001_ECX,
++	CPUID_LNX_2,
++	CPUID_LNX_3,
++	CPUID_7_0_EBX,
++	CPUID_D_1_EAX,
++	CPUID_LNX_4,
++	CPUID_7_1_EAX,
++	CPUID_8000_0008_EBX,
++	CPUID_6_EAX,
++	CPUID_8000_000A_EDX,
++	CPUID_7_ECX,
++	CPUID_8000_0007_EBX,
++	CPUID_7_EDX,
++	CPUID_8000_001F_EAX,
++};
++
++/*
++ * All CPUID functions
++ */
++struct func_1 {
++	/* EDX */
++	union {
++		struct {
++		u32	fpu	  : 1, vme	 : 1, de	  : 1, pse	: 1,
++			tsc	  : 1, msr	 : 1, pae	  : 1, mce	: 1,
++
++			cx8	  : 1, apic	 : 1, __rsv2	  : 1, sep	: 1,
++			mtrr	  : 1, pge	 : 1, mca	  : 1, cmov	: 1,
++
++			pat	  : 1, pse36	 : 1, psn	  : 1, clfsh	: 1,
++			__rsv3	  : 1, ds	 : 1, acpi	  : 1, mmx	: 1,
++
++			fxsr	  : 1, sse	 : 1, sse2	  : 1, ss	: 1,
++			htt	  : 1, tm	 : 1, __rsv4	  : 1, pbe	: 1;
++		};
++		u32 edx;
++	} __packed;
++};
++
++struct cpuid_info {
++	struct func_1 f1;
++};
++
++extern struct cpuid_info cpuid_info;
++u32 *get_boot_cpu_cap_word(u16 bit);
++u32 *get_ap_cap_word(struct cpuinfo_x86 *c, u16 bit);
++
+ #ifdef CONFIG_X86_32
+ extern int have_cpuid_p(void);
+ #else
+@@ -168,4 +225,6 @@ static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
+ 	return 0;
+ }
+ 
++void cpuid_read_leafs(void);
++
+ #endif /* _ASM_X86_CPUID_H */
+diff --git a/arch/x86/include/asm/fpu/sched.h b/arch/x86/include/asm/fpu/sched.h
+index b2486b2cbc6e..c903e46f28c9 100644
+--- a/arch/x86/include/asm/fpu/sched.h
++++ b/arch/x86/include/asm/fpu/sched.h
+@@ -38,8 +38,7 @@ extern void fpu_flush_thread(void);
+  */
+ static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
+ {
+-	if (cpu_feature_enabled(X86_FEATURE_FPU) &&
+-	    !(current->flags & PF_KTHREAD)) {
++	if (cpuid_info.f1.fpu && !(current->flags & PF_KTHREAD)) {
+ 		save_fpregs_to_fpstate(old_fpu);
+ 		/*
+ 		 * The save operation preserved register state, so the
+@@ -61,7 +60,7 @@ static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
+  */
+ static inline void switch_fpu_finish(void)
+ {
+-	if (cpu_feature_enabled(X86_FEATURE_FPU))
++	if (cpuid_info.f1.fpu)
+ 		set_thread_flag(TIF_NEED_FPU_LOAD);
+ }
+ 
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 6836c64b9819..d9502c9e3de4 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -16,7 +16,6 @@ struct vm86;
+ #include <uapi/asm/sigcontext.h>
+ #include <asm/current.h>
+ #include <asm/cpufeatures.h>
+-#include <asm/cpuid.h>
+ #include <asm/page.h>
+ #include <asm/pgtable_types.h>
+ #include <asm/percpu.h>
+diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
+index f10a921ee756..2a68cec3a240 100644
+--- a/arch/x86/kernel/cpu/Makefile
++++ b/arch/x86/kernel/cpu/Makefile
+@@ -26,7 +26,7 @@ obj-y			+= rdrand.o
+ obj-y			+= match.o
+ obj-y			+= bugs.o
+ obj-y			+= aperfmperf.o
+-obj-y			+= cpuid-deps.o
++obj-y			+= cpuid-deps.o cpuid.o
+ obj-y			+= umwait.o
+ 
+ obj-$(CONFIG_PROC_FS)	+= proc.o
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3e508f239098..7d816d1e7333 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1541,6 +1541,9 @@ static void __init early_identify_cpu(struct cpuinfo_x86 *c)
+ 
+ 	/* cyrix could have cpuid enabled via c_identify()*/
+ 	if (have_cpuid_p()) {
++
++		cpuid_read_leafs();
++
+ 		cpu_detect(c);
+ 		get_cpu_vendor(c);
+ 		get_cpu_cap(c);
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index c881bcafba7d..6b3c81bea902 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -92,7 +92,9 @@ static inline void clear_feature(struct cpuinfo_x86 *c, unsigned int feature)
+ 		clear_cpu_cap(&boot_cpu_data, feature);
+ 		set_bit(feature, (unsigned long *)cpu_caps_cleared);
+ 	} else {
+-		clear_bit(feature, (unsigned long *)c->x86_capability);
++		u32 *cap_word = get_ap_cap_word(c, feature);
++
++		clear_bit(feature & 0x1f, (unsigned long *)cap_word);
+ 	}
+ }
+ 
+diff --git a/arch/x86/kernel/cpu/cpuid.c b/arch/x86/kernel/cpu/cpuid.c
+new file mode 100644
+index 000000000000..b1ad8f0c7430
+--- /dev/null
++++ b/arch/x86/kernel/cpu/cpuid.c
+@@ -0,0 +1,43 @@
++#include <asm/cpuid.h>
++#include <asm/percpu.h>
++#include <asm/processor.h>
++
++struct cpuid_info cpuid_info;
++EXPORT_SYMBOL_GPL(cpuid_info);
++
++/* Return a pointer to the capability word containing the feature bit. */
++static u32 * __get_cap_word(struct cpuinfo_x86 *c, u16 bit)
++{
++	int cap_word = bit >> 5;
++
++	if (WARN_ON_ONCE(cap_word > NCAPINTS))
++		return 0;
++
++	switch (cap_word) {
++	case CPUID_1_EDX:
++		return &cpuid_info.f1.edx;
++		break;
++	default:
++		return &c->x86_capability[cap_word];
++		break;
++	}
++
++	return 0;
++}
++
++u32 * noinstr get_boot_cpu_cap_word(u16 bit)
++{
++	return __get_cap_word(&boot_cpu_data, bit);
++}
++EXPORT_SYMBOL_GPL(get_boot_cpu_cap_word);
++
++u32 * noinstr get_ap_cap_word(struct cpuinfo_x86 *c, u16 bit)
++{
++	return __get_cap_word(c, bit);
++}
++EXPORT_SYMBOL_GPL(get_ap_cap_word);
++
++void cpuid_read_leafs(void)
++{
++	cpuid_info.f1.edx = cpuid_edx(1);
++}
+diff --git a/arch/x86/kernel/cpu/cyrix.c b/arch/x86/kernel/cpu/cyrix.c
+index 9651275aecd1..b9782b6290bd 100644
+--- a/arch/x86/kernel/cpu/cyrix.c
++++ b/arch/x86/kernel/cpu/cyrix.c
+@@ -338,7 +338,7 @@ static void init_cyrix(struct cpuinfo_x86 *c)
+ 		switch (dir0_lsn) {
+ 		case 0xd:  /* either a 486SLC or DLC w/o DEVID */
+ 			dir0_msn = 0;
+-			p = Cx486_name[!!boot_cpu_has(X86_FEATURE_FPU)];
++			p = Cx486_name[cpuid_info.f1.fpu];
+ 			break;
+ 
+ 		case 0xe:  /* a 486S A step */
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index 099b6f0d96bd..cebe8931aec4 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -42,8 +42,8 @@ static void show_cpuinfo_misc(struct seq_file *m, struct cpuinfo_x86 *c)
+ 		   boot_cpu_has_bug(X86_BUG_FDIV) ? "yes" : "no",
+ 		   boot_cpu_has_bug(X86_BUG_F00F) ? "yes" : "no",
+ 		   boot_cpu_has_bug(X86_BUG_COMA) ? "yes" : "no",
+-		   boot_cpu_has(X86_FEATURE_FPU) ? "yes" : "no",
+-		   boot_cpu_has(X86_FEATURE_FPU) ? "yes" : "no",
++		   cpuid_info.f1.fpu ? "yes" : "no",
++		   cpuid_info.f1.fpu ? "yes" : "no",
+ 		   c->cpuid_level);
+ }
+ #else
+diff --git a/arch/x86/kernel/fpu/bugs.c b/arch/x86/kernel/fpu/bugs.c
+index 794e70151203..647a7c214703 100644
+--- a/arch/x86/kernel/fpu/bugs.c
++++ b/arch/x86/kernel/fpu/bugs.c
+@@ -27,7 +27,7 @@ void __init fpu__init_check_bugs(void)
+ 	s32 fdiv_bug;
+ 
+ 	/* kernel_fpu_begin/end() relies on patched alternative instructions. */
+-	if (!boot_cpu_has(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		return;
+ 
+ 	kernel_fpu_begin();
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index d00db56a8868..90a3f3a74f7b 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -440,7 +440,7 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
+ 	if (likely(kfpu_mask & KFPU_MXCSR) && boot_cpu_has(X86_FEATURE_XMM))
+ 		ldmxcsr(MXCSR_DEFAULT);
+ 
+-	if (unlikely(kfpu_mask & KFPU_387) && boot_cpu_has(X86_FEATURE_FPU))
++	if (unlikely(kfpu_mask & KFPU_387) && cpuid_info.f1.fpu)
+ 		asm volatile ("fninit");
+ }
+ EXPORT_SYMBOL_GPL(kernel_fpu_begin_mask);
+@@ -505,7 +505,7 @@ static inline void fpstate_init_fstate(struct fpstate *fpstate)
+  */
+ void fpstate_init_user(struct fpstate *fpstate)
+ {
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		fpstate_init_soft(&fpstate->regs.soft);
+ 		return;
+ 	}
+@@ -566,7 +566,7 @@ int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
+ 
+ 	fpstate_reset(dst_fpu);
+ 
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		return 0;
+ 
+ 	/*
+@@ -711,7 +711,7 @@ void fpu__clear_user_states(struct fpu *fpu)
+ 	WARN_ON_FPU(fpu != &current->thread.fpu);
+ 
+ 	fpregs_lock();
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		fpu_reset_fpregs();
+ 		fpregs_unlock();
+ 		return;
+@@ -749,7 +749,7 @@ void fpu_flush_thread(void)
+  */
+ void switch_fpu_return(void)
+ {
+-	if (!static_cpu_has(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		return;
+ 
+ 	fpregs_restore_userregs();
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 8946f89761cc..3f4dbb5ef9ee 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -31,13 +31,13 @@ static void fpu__init_cpu_generic(void)
+ 
+ 	cr0 = read_cr0();
+ 	cr0 &= ~(X86_CR0_TS|X86_CR0_EM); /* clear TS and EM */
+-	if (!boot_cpu_has(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		cr0 |= X86_CR0_EM;
+ 	write_cr0(cr0);
+ 
+ 	/* Flush out any pending x87 state: */
+ #ifdef CONFIG_MATH_EMULATION
+-	if (!boot_cpu_has(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		fpstate_init_soft(&current->thread.fpu.fpstate->regs.soft);
+ 	else
+ #endif
+@@ -82,7 +82,7 @@ static void fpu__init_system_early_generic(struct cpuinfo_x86 *c)
+ 	}
+ 
+ #ifndef CONFIG_MATH_EMULATION
+-	if (!test_cpu_cap(&boot_cpu_data, X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		pr_emerg("x86/fpu: Giving up, no FPU found and no math emulation present\n");
+ 		for (;;)
+ 			asm volatile("hlt");
+@@ -193,7 +193,7 @@ static void __init fpu__init_system_xstate_size_legacy(void)
+ 	 * Note that the size configuration might be overwritten later
+ 	 * during fpu__init_system_xstate().
+ 	 */
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		size = sizeof(struct swregs_state);
+ 	} else if (cpu_feature_enabled(X86_FEATURE_FXSR)) {
+ 		size = sizeof(struct fxregs_state);
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 75ffaef8c299..e07e837bfbe6 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -325,7 +325,7 @@ int fpregs_get(struct task_struct *target, const struct user_regset *regset,
+ 
+ 	sync_fpstate(fpu);
+ 
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		return fpregs_soft_get(target, regset, to);
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_FXSR)) {
+@@ -359,7 +359,7 @@ int fpregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	if (pos != 0 || count != sizeof(struct user_i387_ia32_struct))
+ 		return -EINVAL;
+ 
+-	if (!cpu_feature_enabled(X86_FEATURE_FPU))
++	if (!cpuid_info.f1.fpu)
+ 		return fpregs_soft_set(target, regset, pos, count, kbuf, ubuf);
+ 
+ 	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &env, 0, -1);
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 91d4b6de58ab..3c6feb69a62a 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -195,7 +195,7 @@ bool copy_fpstate_to_sigframe(void __user *buf, void __user *buf_fx, int size)
+ 	ia32_fxstate &= (IS_ENABLED(CONFIG_X86_32) ||
+ 			 IS_ENABLED(CONFIG_IA32_EMULATION));
+ 
+-	if (!static_cpu_has(X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		struct user_i387_ia32_struct fp;
+ 
+ 		fpregs_soft_get(current, NULL, (struct membuf){.p = &fp,
+@@ -488,7 +488,7 @@ bool fpu__restore_sig(void __user *buf, int ia32_frame)
+ 	if (!access_ok(buf, size))
+ 		goto out;
+ 
+-	if (!IS_ENABLED(CONFIG_X86_64) && !cpu_feature_enabled(X86_FEATURE_FPU)) {
++	if (!IS_ENABLED(CONFIG_X86_64) && !cpuid_info.f1.fpu) {
+ 		success = !fpregs_soft_set(current, NULL, 0,
+ 					   sizeof(struct user_i387_ia32_struct),
+ 					   NULL, buf);
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 59e543b95a3c..76eef683e9c1 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -752,7 +752,7 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
+ 	int err;
+ 	int i;
+ 
+-	if (!boot_cpu_has(X86_FEATURE_FPU)) {
++	if (!cpuid_info.f1.fpu) {
+ 		pr_info("x86/fpu: No FPU detected\n");
+ 		return;
+ 	}
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index d3fdec706f1d..faa90a0d8dc6 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -1326,7 +1326,7 @@ DEFINE_IDTENTRY(exc_device_not_available)
+ 		return;
+ 
+ #ifdef CONFIG_MATH_EMULATION
+-	if (!boot_cpu_has(X86_FEATURE_FPU) && (cr0 & X86_CR0_EM)) {
++	if (!cpuid_info.f1.fpu && (cr0 & X86_CR0_EM)) {
+ 		struct math_emu_info info = { };
+ 
+ 		cond_local_irq_enable(regs);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 490ec23c8450..5dc382c3fc20 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9349,7 +9349,7 @@ int kvm_arch_init(void *opaque)
+ 	 * FXSAVE/FXRSTOR. For example, the KVM_GET_FPU explicitly casts the
+ 	 * vCPU's FPU state as a fxregs_state struct.
+ 	 */
+-	if (!boot_cpu_has(X86_FEATURE_FPU) || !boot_cpu_has(X86_FEATURE_FXSR)) {
++	if (!cpuid_info.f1.fpu || !boot_cpu_has(X86_FEATURE_FXSR)) {
+ 		printk(KERN_ERR "kvm: inadequate fpu\n");
+ 		return -EOPNOTSUPP;
+ 	}
 
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Kees Cook
-> Sent: Friday, January 6, 2023 5:16 AM
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>; intel-wired-lan@lists.osuosl.org;
-> Gustavo A. R. Silva <gustavoars@kernel.org>; linux-kernel@vger.kernel.org=
-;
-> Eric Dumazet <edumazet@google.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; linux-hardening@vger.kernel.org;
-> netdev@vger.kernel.org; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
-> <pabeni@redhat.com>; David S. Miller <davem@davemloft.net>
-> Subject: [Intel-wired-lan] [PATCH] net/i40e: Replace 0-length array with
-> flexible array
->=20
-> Zero-length arrays are deprecated[1]. Replace struct i40e_lump_tracking's
-> "list" 0-length array with a flexible array. Detected with GCC 13, using =
--fstrict-
-> flex-arrays=3D3:
->=20
-> In function 'i40e_put_lump',
->     inlined from 'i40e_clear_interrupt_scheme' at
-> drivers/net/ethernet/intel/i40e/i40e_main.c:5145:2:
-> drivers/net/ethernet/intel/i40e/i40e_main.c:278:27: warning: array subscr=
-ipt
-> <unknown> is outside array bounds of 'u16[0]' {aka 'short unsigned int[]'=
-} [-
-> Warray-bounds=3D]
->   278 |                 pile->list[i] =3D 0;
->       |                 ~~~~~~~~~~^~~
-> drivers/net/ethernet/intel/i40e/i40e.h: In function
-> 'i40e_clear_interrupt_scheme':
-> drivers/net/ethernet/intel/i40e/i40e.h:179:13: note: while referencing 'l=
-ist'
->   179 |         u16 list[0];
->       |             ^~~~
->=20
-> [1]
-> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-
-> length-and-one-element-arrays
->=20
-> Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: intel-wired-lan@lists.osuosl.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/net/ethernet/intel/i40e/i40e.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
+-- 
+Regards/Gruss,
+    Boris.
 
-Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at I=
-ntel)
+https://people.kernel.org/tglx/notes-about-netiquette
