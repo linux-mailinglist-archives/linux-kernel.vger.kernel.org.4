@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F51E674B17
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAC6674B1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjATEoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S230373AbjATEof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjATEnf (ORCPT
+        with ESMTP id S230340AbjATEoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:43:35 -0500
+        Thu, 19 Jan 2023 23:44:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF1CE890;
-        Thu, 19 Jan 2023 20:39:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00344C41EB;
+        Thu, 19 Jan 2023 20:39:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EDB2B82592;
-        Thu, 19 Jan 2023 15:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9AFC433EF;
-        Thu, 19 Jan 2023 15:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674142399;
-        bh=H771fSfWeWB3a/8kw3DPz5R4e39zQUSOubvNIKtjKX4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=B6h7r9Sxi4wnsa4Ax46HpkHlw4IIIf68GlWNrLMp/2RQqeCOQzmUzcaoXSgOpT0/6
-         R4UCZJaClvRt5uKNh988KwdDhf176o2hoHU06zbrr8fQ/Lfjv8ukY+BsacoD2iEVZi
-         KTEg+3gRD37fDSKXL5uwERrATcHuxjZvGxCyPtDJ9fkxnEzY30rq39l+1qBzi4od1u
-         szO/1qdEto4avW2HFYjTjrVvgvN0pBiMOe3Xl9195cvSSOWWuekwBxPCBcL4S5G16l
-         eY9qsO2hc9l9eZO59uH6ViYwtJd4MC9OSSnZ6J3N3iH8pwQQfaIFJZwOCKKf9F+ojf
-         TaidLFyl9nzOw==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        Trevor Wu <trevor.wu@mediatek.com>
-Cc:     angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230116034131.23943-1-trevor.wu@mediatek.com>
-References: <20230116034131.23943-1-trevor.wu@mediatek.com>
-Subject: Re: [RESEND,v5 00/13] ASoC: mediatek: Add support for MT8188 SoC
-Message-Id: <167414239535.1082520.4972233422127115256.b4-ty@kernel.org>
-Date:   Thu, 19 Jan 2023 15:33:15 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CCFB825CD;
+        Thu, 19 Jan 2023 16:13:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2300FC433EF;
+        Thu, 19 Jan 2023 16:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674144782;
+        bh=18e5lp84Zk7SqTfdeOyVaqyHOLN3jaGqpXDYk8bKFAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xDqz0xJdJpZuaM0NDJe4/QsaIx77l972UgqDtJCMiY/as4fdFBHnBIUmn/9ebE6+1
+         RUr7I/dUGRhhINc4Q0sydGeV6Uzfdu/amUJEMAuhbRIVK+Q31Abm8x9JNqzYeVSo2H
+         lVerdipM/i49DaI2TGRZOBev9YzOmCiZSMwiWnOk=
+Date:   Thu, 19 Jan 2023 17:12:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Igor Seletskiy <i@cloudlinux.com>,
+        Pavel Boldin <boldin.pavel@gmail.com>,
+        Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+Message-ID: <Y8lsCzWJv73sBeyj@kroah.com>
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
+ <Y7bT0OL8RAWkCu0Z@kroah.com>
+ <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
+ <Y7bg5sxEZDIaGoXK@kroah.com>
+ <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
+ <Y7kqx5cBCVojq6QJ@kroah.com>
+ <Y7vEg/VHWsp86B6r@ziqianlu-desk2>
+ <Y8eCA7hdde07a4gz@ziqianlu-desk2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-77e06
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8eCA7hdde07a4gz@ziqianlu-desk2>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,65 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 11:41:18 +0800, Trevor Wu wrote:
-> This series of patches adds support for Mediatek AFE of MT8188 SoC.
-> Patches are based on broonie tree "for-next" branch.
+On Wed, Jan 18, 2023 at 01:22:11PM +0800, Aaron Lu wrote:
+> Hi Greg,
 > 
-> Changes since v4:
->   - refine etdm dai driver based on reviewer's suggestions
->   - refine dt-binding files based on reviewer's suggestions
+> On Mon, Jan 09, 2023 at 03:38:43PM +0800, Aaron Lu wrote:
+> > On Sat, Jan 07, 2023 at 09:18:15AM +0100, Greg KH wrote:
+> > > On Fri, Jan 06, 2023 at 09:00:21AM +0800, Aaron Lu wrote:
+> > > > If you do not trust what I've done is what I've claimed, now the
+> > > > original author Pavel Boldin has given the patch a "LGTM" tag, does that
+> > > > address your concern?
+> > > 
+> > > I don't see that anywhere on lore.kernel.org, have a link to it?
+> > 
+> > It appears Pavel Boldin's last reply didn't make it to lore for some
+> > reason but I saw him kindly replying again and I suppose you should
+> > have received it.
+> > 
+> > But just in case, the link for Pavel's new reply is here:
+> > https://lore.kernel.org/lkml/CABohvEPWBHmrRpZcQejTkZ+CYtYCyu6rFMd4doNn_CMk35um+g@mail.gmail.com/
 > 
-> [...]
+> Now with the original author Pavel Boldin's "LGTM", do you think this
+> patch is OK to you or you still insist something else? Please kindly
+> let me know, thanks.
 
-Applied to
+I do not see any sort of tag sent by Pavel (hint, you can NOT make one
+up yourself) to indicate that they agree with this.
 
-   broonie/sound.git for-next
+Also, the amount of gyrations you all went through just to keep an
+Intel lawyer's name out of the changelog is insane and means that I was
+right to push for this.  I still want it now, just because :)
 
-Thanks!
+thanks,
 
-[01/13] ASoC: mediatek: common: add SMC ops and SMC CMD
-        commit: 7d40cc8eedbad7cce77226c5d01d891a40373eeb
-[02/13] ASoC: mediatek: mt8188: add common header
-        commit: f90f0dd809e6600cf20ab74f07237241925f5cf8
-[03/13] ASoC: mediatek: mt8188: support audsys clock
-        commit: fdd4e1a28d69648c35bea020c0df3735ddc74889
-[04/13] ASoC: mediatek: mt8188: support adda in platform driver
-        commit: 5d1c8e881ae0e6e931396952534d422facbebdbe
-[05/13] ASoC: mediatek: mt8188: support etdm in platform driver
-        commit: 2babb47774891bc8e68ae229d42ee7df90db9fd9
-[06/13] ASoC: mediatek: mt8188: support pcmif in platform driver
-        commit: 5d43bdd71200e1b08b7c4b7f3d3c86fdd23c4a3d
-[07/13] ASoC: mediatek: mt8188: support audio clock control
-        commit: f6b026479b1392b4b2aa51ed1edbfa99f6d49b59
-[08/13] ASoC: mediatek: mt8188: add platform driver
-        commit: bf106bf09376608e4992f9806c21842a4223f18b
-[09/13] ASoC: mediatek: mt8188: add control for timing select
-        commit: da387d3223aea9505fcd740105b7494df5bb44ad
-[10/13] ASoC: dt-bindings: mediatek,mt8188-afe: add audio afe document
-        commit: 692d25b67e1089a7683978d1860e511f2ca86e7b
-[11/13] ASoC: mediatek: common: add soundcard driver common code
-        commit: 4302187d955f166c03b4fa7c993b89ffbabfca4e
-[12/13] ASoC: mediatek: mt8188: add machine driver with mt6359
-        commit: 96035d46d4b45274208327826608b873ec6d7f06
-[13/13] ASoC: dt-bindings: mediatek,mt8188-mt6359: add mt8188-mt6359 document
-        commit: ce0382384e88c75d2506d4e49929ab8c22527dc7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+greg k-h
