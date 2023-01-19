@@ -2,170 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63206673EAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FBA673EAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjASQZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S230161AbjASQZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjASQYj (ORCPT
+        with ESMTP id S230259AbjASQYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 Jan 2023 11:24:39 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A638A729;
-        Thu, 19 Jan 2023 08:24:37 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so3939883lfb.13;
-        Thu, 19 Jan 2023 08:24:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8lVOvMoIQ2x2Wf6zy8frHnpB0eXV9ve1xBd2DqHKd8Y=;
-        b=a/g9O4xy606aS7gTGUOYByXG9qF6KTMWOZA30DBpya3y/ma8wWSWbZ0GhEnw/5Dd56
-         SwWKUvve09j1o3F73iD1XSqxXcz9bXivs5oPpAd58vaExY7Ut/gg8J5SySYtOKeJp85Y
-         xmSrmvNHPLNYd+qGYEno2szmpyk9kL3REN4AGFML0pKUuvB9xnBoYaDYyqhUn2RKO/PI
-         lFHQZLGbsqrirm06txrQIW/ebbIiz59ba6eAsRY5KjrWXIZ73jywqljunaP/ghJHB5A9
-         uKyEtu3Zvgig66EC5x+MjGQiTGePO5AKzyatccaZUr2ktzAcgc0H0B/UBMut22jZ1DsG
-         EBCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8lVOvMoIQ2x2Wf6zy8frHnpB0eXV9ve1xBd2DqHKd8Y=;
-        b=5V6obgO2jc0eIN9rJsmtqdu4phwQsKe/iDHF9Mazya6uJWauR8HTOW1Ok0++9K8fYq
-         wGmlKWLi7+sL5pG4ZK62J0XRG9VrZd8LCjpleTdySTDSBJfjcfkZa0zhpTkee4WWgCRO
-         iRPdE8E0L5hG3/zrb4ySTgfVa5aXmnwnCjUZvMMxKvpy+jQ+xobU+8pG8kR3awxwHFQR
-         WBpAuMz/hR2KdAcAOzJOt8o8kzc/2TzU8+wNU0IhhKlMq9RXW2cPR7YJUC1LLZjNZSkG
-         rIjYaIV6taUGQtxX1L0/kGtNMYFp0gLrY23Q6LNYcz82maXnwlCQumxmUQR318c2s8H6
-         LRgw==
-X-Gm-Message-State: AFqh2krW8pwh30gfvUaTDEnsFDcoB85n0RFf9b1DNooYeJ0bz2u9qBew
-        262qKfTLaNYkXn5FqtRBnxw=
-X-Google-Smtp-Source: AMrXdXv7/blNpjVnMJiMaPKfEdqpiTFTh3jtjnRI+SUuGsVsK9TsgKmt9RRC03LAK7v7xiQAHH0RHA==
-X-Received: by 2002:a05:6512:25a5:b0:4b5:7338:e2c7 with SMTP id bf37-20020a05651225a500b004b57338e2c7mr3358360lfb.53.1674145476128;
-        Thu, 19 Jan 2023 08:24:36 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s9-20020ac24649000000b004cb41b43c25sm5884147lfo.197.2023.01.19.08.24.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:24:35 -0800 (PST)
-Date:   Thu, 19 Jan 2023 19:24:31 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        Parshuram Thombare <pthombar@cadence.com>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Bert Vermeulen <bert@biot.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Marek Vasut <marex@denx.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
-Message-ID: <20230119162431.mepdze3xibqjgwsi@mobilestation>
-References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706F48A0F4;
+        Thu, 19 Jan 2023 08:24:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D43961CAF;
+        Thu, 19 Jan 2023 16:24:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06A1C433EF;
+        Thu, 19 Jan 2023 16:24:36 +0000 (UTC)
+Date:   Thu, 19 Jan 2023 11:24:33 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kernel test robot <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [tip:sched/core] [tracing, hardirq]  9aedeaed6f:
+ WARNING:suspicious_RCU_usage
+Message-ID: <20230119112433.611fa273@gandalf.local.home>
+In-Reply-To: <Y8llrdNT6RD/0dbq@hirez.programming.kicks-ass.net>
+References: <202301192148.58ece903-oliver.sang@intel.com>
+        <Y8llrdNT6RD/0dbq@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 06:39:31PM +0100, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+On Thu, 19 Jan 2023 16:45:49 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-[nip]
+> Steve, what's the easiest way to figure out what triggers this? Put a
+> printk() in prepare_ftrace_return() or so?
 
->  .../bindings/spi/snps,dw-apb-ssi.yaml          |  2 +-
+Does it only trigger if all functions are enabled when running function
+graph tracer?
 
-[nip]
+That is, if you just trace one function, say "schedule" does it
+have an issue?
 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index d33b72fabc5d..a132b5fc56e0 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -10,7 +10,7 @@ maintainers:
->    - Mark Brown <broonie@kernel.org>
->  
->  allOf:
-> -  - $ref: "spi-controller.yaml#"
-> +  - $ref: spi-controller.yaml#
->    - if:
->        properties:
->          compatible:
+ trace-cmd start -p function_graph -l schedule
 
-For the Synopsys DW SSI bindings:
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+And then run your code, and it doesn't trigger, but:
 
-Thanks
--Serge(y)
 
+ trace-cmd reset # make sure schedule is no longer filtered
+ trace-cmd start -p function_graph
+
+does trigger the issue, you can then bisect the functions with the script:
+
+  scripts/tracing/ftrace-bisect.sh
+
+in the kernel tree.
+
+I need to update this script, because I've optimized it with the "number"
+trick. That is, instead echoing in the names of functions, you echo in the
+location of were they exist in the available_filter_functions file.
+
+That is: echo 5 > set_ftrace_filter
+
+Will enable the fifth function in available_filter_functions. The reason
+for this is because this is an O(1) operation. And echoing in thousands of
+these numbers is an O(n) operation where n is the number of functions you
+echo in. But by doing it via names, its an O(n*m) operation, where m is the
+number of *all* functions, and this can take several minutes to complete,
+were as the "number" version usually takes less than a second.
+
+Here's what you can do (ignore the instructions in the script, as that
+needs to be updated):
+
+ # cd /sys/kernel/tracing
+ # seq `wc -l available_filter_functions | cut -d' ' -f1` > ~/full-file
+ # /path/to/ftrace-bisect ~/full-file ~/test-file ~/non-test-file
+ # cat ~/test-file > set_ftrace_filter
+
+run your tests. If they don't fail (bisect good), then, you can assume that
+the bad function is in ~/non-test-file
+
+ # /path/to/ftrace-bisect ~/non-test-file ~/test-file.1 ~/non-test-file.1
+
+And repeat:
+
+ # cat ~/test-file.1 > set_ftrace_filter
+
+I suggest appending the ".1", ".2", etc, in case something goes wrong and
+you want to go back (basically a bisect log).
+
+If the test fails, then you use the first file:
+
+ # /path/to/ftrace-bisect ~/test-file.1 ~/test-file.2 ~/non-test-file.2
+
+Keep going until you find a single function that causes the issue.
+
+Always cat the "test-file*" into the set_ftrace_filter.
+
+If it works use the "non-test-file*" for the next iteration. If it fails,
+use the "test-file*" for the next iteration.
+
+-- Steve
