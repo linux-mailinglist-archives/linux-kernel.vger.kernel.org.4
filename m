@@ -2,159 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE3F673411
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7330C673356
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjASI6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S229750AbjASIIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 03:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjASI6K (ORCPT
+        with ESMTP id S229483AbjASIIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:58:10 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BE468404;
-        Thu, 19 Jan 2023 00:57:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1674118640; bh=QKC55KRrwm4FmCMM7ZjpR2Ch+0TKB6P79wpjtTYJZxE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=OzqSMzUCT5JyPWtkuKmIkk4PH7yLBon1Qq+SMAKkwIriFhy9fddqerzE/zmjxGgl1
-         9njbL775p4qBVjUs7vpaiPMOTbee6O4EMGBcN68YlX9KW14aySeYyIvPrP0RfMFAaV
-         AOBEsXgArmxBSq/BlapPSo0UUpxgM+NVRq4Y31qTLiJGKK8XkCe40tTuWKvaP0pozK
-         r3UfxqEcwK5ShEJAFqtTXtoDUFT5TggcVWgmVNNbu0R08TEySAkRtES1JxWWt1Jjim
-         E23owomXuYSbZLw+Y3sSLeZ6NLPyFtrifTuTuq/fJTG4VFcNLH5hdHmITlzRHpKIBf
-         zMrVfqu0l35bg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from tibus.st ([37.221.194.93]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8hV5-1pMZTC3kpN-004nUd; Thu, 19
- Jan 2023 09:57:19 +0100
-Date:   Thu, 19 Jan 2023 09:05:32 +0100
-From:   Stefan Tibus <stefan.tibus@gmx.de>
-To:     Andreas Dilger <adilger@dilger.ca>
-Cc:     Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net,
-        Harald Arnesen <harald@skogtun.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Jfs-discussion] Should we orphan JFS?
-Message-ID: <20230119080532.crn7wzo4jz5x5ng3@tibus.st>
-Mail-Followup-To: Andreas Dilger <adilger@dilger.ca>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
-        Harald Arnesen <harald@skogtun.org>, linux-kernel@vger.kernel.org
-References: <f99e5221-4493-dba3-3e80-e85ada6b3545@oracle.com>
- <393B8E4A-8C9A-4941-9AFF-FAC9C0D0B2DA@dilger.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <393B8E4A-8C9A-4941-9AFF-FAC9C0D0B2DA@dilger.ca>
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Provags-ID: V03:K1:iXEXS01C5YVpvNHOOvEKmVW0Vigu74L9c2nVpUt3/xkrm+raGy0
- zziGLiU9JcGdPueJK14m8goVogo1o6uAzMRqBtQPacp0PGd9npot6YMZYq1Totp0KsVFeZx
- K1k0h/uTjAK/uBIG2ZNA90KQBLbLEZIRI6x4huO35+xSmSCBZDunSNSRdxrlQgGbhj4Yl39
- TRQ2ULrGVAPLkDNjYau3g==
-UI-OutboundReport: notjunk:1;M01:P0:7Kk14hf0FvI=;umrs9NNFVJ/HMONmf0Ix4XSWy3L
- Jhk6zpuUJe+gIeDWV/CPRtixr0CAmGdjGTGo7PXCHsed17J7ZPCn3JM6Af2qUl4tAhENg/HEW
- qpWgVjiRL6Jq75SiZMEMNOattbmE1UBRkvZCUPaEdMRT7NZ68/eiFhGJCuWPVPSjkv/DRx2bP
- ZTR0XU8M1l/U2TifawSmFQPA42rGIhjp4cM73RRTS+Wn/M/9zA17wla0e6jIrAkdKx1JiYziN
- 7mRkr66GB+TTLnxtsD7LbLGoijydHKgDqSzcKiov9ZUNiWVhYyWqFbbmWmxN7kINDDzKnIkZA
- ebn4stPvU9Swc4wCaC/LE1Fzb+fgZLCOAvKe3eWzijN5esGBoROGQHwuy+HQ1aK/BSyA1LbF0
- s4Q+uQ1hYr08AQpmYdU1rTmj6RmFdX39K1xFdQm4ck/Pfc1GTaQ6M+6VAYcYqD7OPNEWG14FM
- /RYW5AIdglBQpUt7+xWfiW6/5Y0Xe9KCfM5H6TRoEQX2nTPIU2XCoW2xalGAPTIK/cQ6z9M+E
- zWIlGONU1x1+gnUm8NAKp7FF4Gv96TrBbXeiZT93znnIwet5iJDgUV/0oJHdo7VHXGobs4UUu
- fRAfQgPG2afZ8rWbUdDYMlwQICp//Cg6EQfoyRLXUvx7Ls2/LKrfcRK1Z1qWetBOwZ2XZYtFF
- J32yEREqyVpqbbbqGmgmbrgoOLzWLUZxO8tSP6s83VWuELB0lyqyu3QnE6Hbc5HvLZ/Iw6Qqo
- qKuxCKBVbCKPwz5AXv5ExjO8VJSSxGFzwMH5Lohp44zjItDg+a3UjXTK6wL97H0EzFW49s9qh
- /EcJmQC60FysBrAtLQHwvBbIqgkLDmhNvIITeb4hZTjodwc1homNzTgAKx7Z/ReiAurHC7zaF
- SuwBV0Y8lntek2jYPnGC6YL/9T86OdRDNAuCMh9yRfeczCfiZJe4+/eF8XD5yFC3i1H1rpMUX
- Me7eoLzkCDtX4Fj8lt3w3UMK8L8=
+        Thu, 19 Jan 2023 03:08:01 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BD84EF2;
+        Thu, 19 Jan 2023 00:08:00 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C418E5C0129;
+        Thu, 19 Jan 2023 03:07:59 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 19 Jan 2023 03:07:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674115679; x=1674202079; bh=W8zQgh8vqQ
+        Cm8jzCK6Tq+eiSYVU4ajK1uvhhd4aKcwc=; b=YEjxi/aE7MK6oWjRntedsnZRh4
+        aden0Qq1GEVlrED84KL2Wg+7foHOuUkIZFkyV9dV7OM6ghUNz7DyLTWIQAy3tWke
+        SqbZsVu62JlF1lOfI9NFWh21jujGmmr5S3dtvUh/lVgFEXCABG+gRF7d6rBx2jeg
+        FeCTkfgrnAS2nqWjyVEmtJkAep4evx4i6dqwARDR/rvsUEC5IWLnxOrhgl2qM8nH
+        BICj+81Wzh4PfufWy2E9V4Kd5Gd3MJTAu35bwo5wdY3knbFgda/Cg+ZklwFVBkHc
+        N+5EqcfgZq5CFs7skYnUcxR0GRQ9PqKtGaOvCz4uH/cMjFtRFj3UWfqhlf/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674115679; x=1674202079; bh=W8zQgh8vqQCm8jzCK6Tq+eiSYVU4
+        ajK1uvhhd4aKcwc=; b=K6p3IVUBM9nHO31Boe5yg2Kp/fyXTrPJIfud75t9YMEP
+        73y4MeeoVSdxO5ITLaCHKpg8DqkLRfTBYLoSasJaujqQZpP6h62YnQa87gi+TQK8
+        Tl93JDAeCPycOiv2muwrpc/6udm5YpEwN+nzQlgy3VB/kwU9eV6/yhBiTlQ7oHDA
+        ySlqylizlDB3XZg4/PkkUWB1B/7o52HztJNvv97QgWHQOAxv/A4LgSat9kNJLs8j
+        DH2rpD3YOR8DId7C4bTB5/0cO9+Nkghd5tp74IX4zHFECy3w4ysoXl4KGs6e/VoT
+        4OHAvQfBaqOvWooEQhW3ar7l3xnaq9G1RkB0BM5qKw==
+X-ME-Sender: <xms:XvrIY87FMpnFcNAhDFXCeMSQcKEifGdpY3oYoCzMgFohg3M4vElYwQ>
+    <xme:XvrIY95oMx77XCjXysiFFcYIp_eqYrlhGPHRFuhDnKftfwnYAf5L1ADstlK6HM_kV
+    _YC4mCO8-njU2R6QVg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgudduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:XvrIY7dyIzRI8NQhwu8wwcHanniRadq2n3YTYffOGI_W-Un5YvnTcA>
+    <xmx:XvrIYxKuv8OWelHXfo549ohYuvNKAhDfF6dKY7TA04rKfvXDUgJgPw>
+    <xmx:XvrIYwIO3d_-kZMfvBXZ6VeoGc_NgwmLn-mU6o152J1yKn31McaGMg>
+    <xmx:X_rIY_92gFa8UrMbHZwbtCnDCzSaDzmSLdMdurdygIW6H0NgOOvSvA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7CA8EB60086; Thu, 19 Jan 2023 03:07:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <b1f98c2a-3087-464e-b9fb-97e7c78cfdab@app.fastmail.com>
+In-Reply-To: <67efe55d-e5cd-46c1-97e4-c9f3a5884a07@app.fastmail.com>
+References: <20221215164140.821796-1-arnd@kernel.org>
+ <Y5tPyOqSNud7LumS@sirena.org.uk>
+ <67efe55d-e5cd-46c1-97e4-c9f3a5884a07@app.fastmail.com>
+Date:   Thu, 19 Jan 2023 09:07:38 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mark Brown" <broonie@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Tony Lindgren" <tony@atomide.com>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Jerome Neanne" <jneanne@baylibre.com>,
+        "Axel Lin" <axel.lin@ingics.com>,
+        "Yang Li" <yang.lee@linux.alibaba.com>,
+        "Yang Yingliang" <yangyingliang@huawei.com>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Randy Dunlap" <rdunlap@infradead.org>
+Subject: Re: [PATCH] regulator: tps65219: fix Wextra warning
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-While I am mostly an ordinary user running Linux on my own machines at
-home, I must say that I have been a happy user of JFS from quite early
-on on all my Linux installations, for which I use the Debian distro. I
-am also using it on external HDDs and SSDs. In the past I have also been
-administrator for a few workgroup servers at my university for about 10
-years and there we have transitioned from EXT2 and EXT3 to JFS on LVM at
-some point. Only recently I have started using BTRFS because of its
-additional features on my newest PC. However, I would not make that
-transition on older PCs with less resources. And it is some hassle to
-convert all existing filesystems to something else.
-
-I cannot provide hard facts like performance or so for the decision to
-use JFS. My first contact with journaling file systems had been on a few
-AIX (3.x/4.x) machines and later on with JFS on OS/2. So having started
-off based on the code of JFS for OS/2 certainly contributed to the
-initial level of trust when giving JFS on Linux a try versus EXT4 and it
-didn't let me down.
-
-=46rom my perspective it would be sad seeing it removed while other much
-older filesystems (or other features) are retained. But I also know that
-in the end it depends on the capability, availability and willingness of
-developers to maintain it. And, frankly speaking, I really do not know
-how much effort it is to keep the code compatible to new kernel
-versions.
-
-So this is my vote against orphaning JFS. I still think it is a good
-filesystem and certainly useful on systems with less resources where one
-would probably not use BTRFS, ZFS or so. But whatever the final decision
-will be, I would like to thank you all for contributing to JFS and
-keeping it running over the past >20 years.
-
-Best regards
-Stefan
-
-
-On Sat, Jan 14, 2023 at 05:09:10AM -0700, Andreas Dilger wrote:
-> On Jan 13, 2023, at 08:15, Dave Kleikamp <dave.kleikamp@oracle.com> wrot=
-e:
-> >
-> > =EF=BB=BFOn 1/13/23 7:08AM, Harald Arnesen wrote:
-> >> Christoph Hellwig [13/01/2023 06.42]:
-> >>> Hi all,
-> >>>
-> >>> A while ago we've deprecated reiserfs and scheduled it for removal.
-> >>> Looking into the hairy metapage code in JFS I wonder if we should do
-> >>> the same.  While JFS isn't anywhere as complicated as reiserfs, it's
-> >>> also way less used and never made it to be the default file system
-> >>> in any major distribution.  It's also looking pretty horrible in
-> >>> xfstests, and with all the ongoing folio work and hopeful eventual
-> >>> phaseout of buffer head based I/O path it's going to be a bit of a d=
-rag.
-> >>> (Which also can be said for many other file system, most of them bei=
-ng
-> >>> a bit simpler, though).
-> >> The Norwegian ISP/TV provider used to have IPTV-boxes which had JFS o=
-n the hard disk that was used to record TV programmes.
-> >> However, I don't think these boxes are used anymore.
-> >
-> > I know at one time it was one of the recommended filesystems for MythT=
-V. I don't know of any other major users of JFS. I don't know if there is =
-anyone familiar with the MythTV community that could weigh in.
-> >
-> > Obviously, I haven't put much effort into JFS in a long time and I wou=
-ld not miss it if it were to be removed.
+On Fri, Dec 16, 2022, at 11:18, Arnd Bergmann wrote:
+> On Thu, Dec 15, 2022, at 17:48, Mark Brown wrote:
+>> On Thu, Dec 15, 2022 at 05:41:28PM +0100, Arnd Bergmann wrote:
+>>
+>>> -		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
+>>> -		if (rdev < 0) {
+>>> +		error = tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
+>>> +		if (error) {
+>>>  			dev_err(tps->dev, "Failed to get rdev for %s\n",
+>>>  				irq_type->regulator_name);
+>>> -			return -EINVAL;
+>>> +			return error;
+>>
+>> This will shut up the warning but is leaving the use of the
+>> uninitialised rdev (which I'm kind of disappointed the static checkers
+>> didn't pick up on).  rdev needs to be passed by reference into the
+>> function, or set from the return value.
 >
-> I've used MythTV for many years but haven't seen any particular recommen=
-dations for JFS there. Mainly ext4 and XFS are the common filesystems to f=
-ollow the main distros (Ubuntu in particular).
+> Right, I didn't look far enough to see what the function is
+> actually trying to do here, and that it completely fails to
+> do that.
 >
-> Cheers, Andreas
+> I see that the bug was introduced between the first [1] and
+> second []2] version of the driver, but don't see why. I'll
+> leave it up to Jerome to address the problem, he's still
+> in the middle of posting the rest of the series that has
+> not yet been merged, so it makes sense for him to test it
+> all together.
 >
-> _______________________________________________
-> Jfs-discussion mailing list
-> Jfs-discussion@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/jfs-discussion
+>     Arnd
+>
+> [1] https://lore.kernel.org/lkml/20220719091742.3221-9-jneanne@baylibre.com/
+> [2] https://lore.kernel.org/lkml/20220726103355.17684-10-jneanne@baylibre.com/
+
+It looks like you merged another workaround from Randy Dunlap now as
+commit 2bbba115c3c9 ("regulator: tps65219: use IS_ERR() to detect an error
+pointer"), but I think that one is just as wrong as the one I submitted:
+the 'rdev' variable still remains uninitialized, and checking its value
+after it has already been used is not helpful.
+
+      Arnd
