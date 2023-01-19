@@ -2,134 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1371E673D7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B282F673D82
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjASP3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S230421AbjASPa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjASP3v (ORCPT
+        with ESMTP id S230467AbjASPaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:29:51 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1B18298E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:29:48 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id b17so2616246pld.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:29:48 -0800 (PST)
+        Thu, 19 Jan 2023 10:30:15 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0C981014
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:30:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JoeZWpRNsWJhyrWOKICRT+p+hJ0pH/jVJe5L8tZzDKE=;
-        b=gyEc+zZbgF6XMT7Sm4wHZQXewdDcMta7P6XtP/yslScovv1aoQENuCi1pph/8CZlIq
-         9l6PU11qUpOvB6egZTZQHtBe9hMezPpMfF0wXwlfI+A1MEXpFOYwl+wum9n8Fsy8dyFO
-         RvZLcIHOA+8xoHjgzx4yicPnekaCFBSM9PDPoVGGlc7roOYIFz1BtCptWO/wsrEZE+pK
-         NfxkaX263bnefQ6+baeDeHmLDnZB0KxAfCmuN8DqmUVIrExCUhN/5dh16t0b4CQZy94x
-         89HJwkZFOTh0lxO/B8/EfI3h+QPyVgNokSVxxNRwvsagvj1+CuW+TEnC4mB2/eRfE7H/
-         vNPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JoeZWpRNsWJhyrWOKICRT+p+hJ0pH/jVJe5L8tZzDKE=;
-        b=1jBmZm5MU5QqRipye2+1xSQOZaJITyiGdLx8ci+yG/ZNlk4Kw1XvoRKzgufmR+L59h
-         7T6PheeHqqriH5wwnsbrGOP+xiHlFTjpbMDQr6m3D0L35SXO2uwr6wTP7xdNYtQsfKEl
-         xPi0H70QVF3f4iMVumAeOZekQFFD5dF7QaldySECLXfVXT2Mfn86CMSZewUHC1Vn2Nj+
-         m9YJPd2EhTwCE2hAu+1HWJq1JRhN21x0uXUFwDAY63Np/GiyoGg0oWXZ/emxRNubwn3U
-         CxDjV1Aq3gYdOWpbyBGNZiGoLMjw7mtwQlajdv6FI0QVto69H6AoZD18cKqo8VUz3IAk
-         FQpQ==
-X-Gm-Message-State: AFqh2krwJlfTOcpj8GwFprRXdmcUciiPZXFBNVHcLYlMQLpZ54x7zG+k
-        DcVZBezWqey02ZK5Wp0PLA9fqw==
-X-Google-Smtp-Source: AMrXdXuvS8AZJX42bXwmLQ8QfqUcY4PwFKh/puu96hqRK42cg/DuvMprn5jaOq/Bqv+IZX2KJRBMAQ==
-X-Received: by 2002:a17:903:2614:b0:193:256d:8afe with SMTP id jd20-20020a170903261400b00193256d8afemr3075957plb.2.1674142187661;
-        Thu, 19 Jan 2023 07:29:47 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b00186c3afb49esm25186385ple.209.2023.01.19.07.29.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 07:29:47 -0800 (PST)
-Date:   Thu, 19 Jan 2023 15:29:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Message-ID: <Y8lh59ZYZkq4fsOX@google.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
- <080e0a246e927545718b6f427dfdcdde505a8859.camel@intel.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1674142210; x=1705678210;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WvYH3MTuKYqurrQFQNXI1UfCmiwN+JTKO+Dsstj91hU=;
+  b=YxTa/jRnhKmg3faelmP4gfW2No2eg4lAjXjowD7OY3Jkv3Vy+o3yChv5
+   YXFGsa+RX3KYN9jrNJLHLXk8/VNlJLdkkQSEpjJYx9FAk6IFqe7qOrGyL
+   yA2FohW7q9a6wKA8Cjv3Rx8rg+Vpgw6sEqia/XS2GA/tbd3kNSeAQNgcZ
+   g=;
+X-IronPort-AV: E=Sophos;i="5.97,229,1669075200"; 
+   d="scan'208";a="1094187691"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:30:08 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com (Postfix) with ESMTPS id D9ACB161AFB;
+        Thu, 19 Jan 2023 15:30:06 +0000 (UTC)
+Received: from EX19D003UWC001.ant.amazon.com (10.13.138.144) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Thu, 19 Jan 2023 15:30:04 +0000
+Received: from freeip.amazon.com (10.43.161.198) by
+ EX19D003UWC001.ant.amazon.com (10.13.138.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Thu, 19 Jan 2023 15:30:03 +0000
+Date:   Thu, 19 Jan 2023 09:30:00 -0600
+From:   Geoff Blake <blakgeof@amazon.com>
+To:     <Robin.Murphy@arm.com>
+CC:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf/arm-cmn: Add shutdown routine
+In-Reply-To: <ab93909a-2c81-302f-9f85-33cf1a745e74@amazon.com>
+Message-ID: <adce33d7-4995-3aa6-51bb-1d23600d7abb@amazon.com>
+References: <2bb86e97-6cef-700e-70ed-4f303da10fd9@amazon.com> <20221215180039.18035-1-blakgeof@amazon.com> <ab93909a-2c81-302f-9f85-33cf1a745e74@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <080e0a246e927545718b6f427dfdcdde505a8859.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13D31UWA002.ant.amazon.com (10.43.160.82) To
+ EX19D003UWC001.ant.amazon.com (10.13.138.144)
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Huang, Kai wrote:
-> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
-> > +static void tdx_clear_page(unsigned long page_pa)
-> > +{
-> > +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> > +	void *page = __va(page_pa);
-> > +	unsigned long i;
-> > +
-> > +	if (!static_cpu_has(X86_FEATURE_MOVDIR64B)) {
-> > +		clear_page(page);
-> > +		return;
-> > +	}
-> 
-> There might be below issues here:
-> 
-> 1) The kernel says static_cpu_has() should only be used in fast patch where each
-> cycle is counted, otherwise use boot_cpu_has().  I don't know whether here you
-> should use static_cpu_has().
+Robin, Will,
 
-That documentation is stale[*], go ahead and use cpu_feature_enabled().
+Still looking for a follow-up on this patch, would appreciate another 
+review cycle. 
 
-https://lore.kernel.org/all/20221107211505.8572-1-bp@alien8.de
+-Geoff
 
-> 2) IIUC a CPU feature bit can be cleared by 'clearcpuid=xxx' kernel command
-
-As you note below, using clearcpuid taints the kernel, i.e. any breakage due to
-clearcpuid is user error.
-
-> line, so looks you should use CPUID directly otherwise the MOVDIR64B below can
-> be unintentionally skipped.  In practice w/o doing MOVDIR64B is fine since KeyID
-> 0 doesn't have integrity enabled, but for the purpose you want to achieve
-> checking real CPUID should be better.
-> 
-> But maybe you don't want to do CPUID check here each time when reclaiming a
-> page.  In that case you can do CPUID during module initialization and cache
-> whether MOVDIR64B is truly present.  static_key is a good fit for this purpose
-> too I think.
-> 
-> But I am also seeing below in the kernel documentation:
-> 
->         clearcpuid=X[,X...] [X86]
-> 			......
->                         Note that using this option will taint your kernel.
->                         Also note that user programs calling CPUID directly
->                         or using the feature without checking anything
->                         will still see it. This just prevents it from
->                         being used by the kernel or shown in /proc/cpuinfo.
->                         Also note the kernel might malfunction if you disable
->                         some critical bits.
-> 
-> So the kernel is claiming using this will taint the kernel and it can even
-> malfunction.  So maybe it's OK to use static_cpu_has()/boot_cpu_has().
