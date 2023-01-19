@@ -2,175 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113AC67357E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEC5673583
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjASK1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S230087AbjASK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjASK1C (ORCPT
+        with ESMTP id S229929AbjASK3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:27:02 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF96D687
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:26:39 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v30so2262096edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=39SgUHKju2DkTVJDuCLF0GlqoNQjOGP2rscjucek0WY=;
-        b=OYYE6KjfLMIIu6kvxFyNsRIlxJPTCtMRs2MqUjKnitJyJaghBNlaulIHD/vXm2dLLH
-         0TRLTUE0apvKLCTbRagDBl8mUy+45M2YH1Ld4NRepymOa+3FmoL00iIYcPoL3hQYiQpG
-         yTKA0HK9doDcpbWaUTu4iWL6WBOXjyByo7gXc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=39SgUHKju2DkTVJDuCLF0GlqoNQjOGP2rscjucek0WY=;
-        b=Lvy8hEr3H3iJ/CRt/JbsixEyDBuomlBaut8cmSeb+vsIeIWOMZwVmnAfmtEk44b8rT
-         SVJWdD4i7+8RAdJIbNqlQbPJZbol49VMhUJ0XzrEicFSZxXJZkZCF+L7Yk3+YKHj733O
-         3NU6f1lKj1tlfMQlhS6fOC2XWaAsYlAUehNu2qWU9UE2pd+kQzrl/dIZKFuidu3SIvLA
-         GORxUL6zLPnM880hR12C9wEM8Dl1t2o1ATIF1o6Bvs0RXfU3e4ePQn1BukiPcEuka/zh
-         8yS2KWj4DRUaCGT6dMY6M5d3EOdB2bVzGxSWRSgbxH8moFDQmkb+41b++olJ4LfyCjnX
-         ai7g==
-X-Gm-Message-State: AFqh2krqQMcmXCrhV9jeuuFPAPFW5QJ5BvHEaStiOEGJntb7RkBlUxZ+
-        hPEtRFGFYArdWGj2YP1DJ3f4Rw==
-X-Google-Smtp-Source: AMrXdXtSf8VW8Q/vL39YHAO5amRe9Z3IC59IA2VRhTytO9iyk7Mb4JVWli/JMWVsTPfw2LxTJyJ+LQ==
-X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr9808530edt.33.1674123997712;
-        Thu, 19 Jan 2023 02:26:37 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id eo9-20020a056402530900b00463bc1ddc76sm7648926edb.28.2023.01.19.02.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 02:26:37 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:26:34 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Dragos-Marian Panait <dragos.panait@windriver.com>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kent Russell <kent.russell@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.10 1/1] drm/amdkfd: Check for null pointer after
- calling kmemdup
-Message-ID: <Y8ka2khSlK6E/XbF@phenom.ffwll.local>
-Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
-        Dragos-Marian Panait <dragos.panait@windriver.com>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kent Russell <kent.russell@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230104175633.1420151-1-dragos.panait@windriver.com>
- <20230104175633.1420151-2-dragos.panait@windriver.com>
- <Y8ABeXQLzWdoaGAY@kroah.com>
- <CAKMK7uEgzJU8ukgR3sQtSUB5+wrD9VyMwCHOA-SReFWd0tKzzw@mail.gmail.com>
- <Y8A5NgtGLDJv4sON@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8A5NgtGLDJv4sON@kroah.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 19 Jan 2023 05:29:47 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3B73ABA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:29:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 597FC5CC2F;
+        Thu, 19 Jan 2023 10:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674124183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8KlZvB/UZYoksWT8hu741iFNZtBsBPjxTGyRD6uI2Ko=;
+        b=k0ic+1V+fKvyIIFs/LqlGPRvOUUHZVkeHkWDW004aaWTKsGZ3EXfpIXL/X5TutMdq0RS6/
+        Zps69tLDQf13QMeOgU9VSzVljwAtVYoRbvEDH+FB7LM+GGfPb4ftN+JIQjDlf1631uk5km
+        QlOrHXOB/T98YRidodHAULA3xQCUKjg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674124183;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8KlZvB/UZYoksWT8hu741iFNZtBsBPjxTGyRD6uI2Ko=;
+        b=IPhbZ9EjkvqmGUIZ4C2Y+sFXn75Ef5eDpMFoum3Woe46eGFKF3Rrh3sCajGcCn/nS43V4w
+        AX6jqcqyb1M9CUAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 374A3139ED;
+        Thu, 19 Jan 2023 10:29:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jk/VDJcbyWO2HgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 19 Jan 2023 10:29:43 +0000
+Date:   Thu, 19 Jan 2023 11:29:42 +0100
+Message-ID: <87wn5irf55.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Artemii Karasev <karasev@ispras.ru>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] ALSA: hda/via: Avoid potential array out-of-bound in add_secret_dac_path()
+In-Reply-To: <20230119082259.3634-1-karasev@ispras.ru>
+References: <20230119082259.3634-1-karasev@ispras.ru>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 05:45:42PM +0100, Greg KH wrote:
-> On Thu, Jan 12, 2023 at 04:26:45PM +0100, Daniel Vetter wrote:
-> > On Thu, 12 Jan 2023 at 13:47, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > On Wed, Jan 04, 2023 at 07:56:33PM +0200, Dragos-Marian Panait wrote:
-> > > > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > > >
-> > > > [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
-> > > >
-> > > > As the possible failure of the allocation, kmemdup() may return NULL
-> > > > pointer.
-> > > > Therefore, it should be better to check the 'props2' in order to prevent
-> > > > the dereference of NULL pointer.
-> > > >
-> > > > Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
-> > > > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > > > Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > > > Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > > > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> > > > Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
-> > > > ---
-> > > >  drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > > index 86b4dadf772e..02e3c650ed1c 100644
-> > > > --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > > @@ -408,6 +408,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
-> > > >                       return -ENODEV;
-> > > >               /* same everything but the other direction */
-> > > >               props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
-> > > > +             if (!props2)
-> > > > +                     return -ENOMEM;
-> > >
-> > > Not going to queue this up as this is a bogus CVE.
-> > 
-> > Are we at the point where CVE presence actually contraindicates
-> > backporting?
+On Thu, 19 Jan 2023 09:22:59 +0100,
+Artemii Karasev wrote:
 > 
-> Some would say that that point passed a long time ago :)
+> snd_hda_get_connections() can return a negative error code.
+> It may lead to accessing 'conn' array at a negative index.
 > 
-> > At least I'm getting a bit the feeling there's a surge of
-> > automated (security) fixes that just don't hold up to any scrutiny.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> That has been happening a lot more in the past 6-8 months than in years
-> past with the introduction of more automated tools being present.
+> Signed-off-by: Artemii Karasev <karasev@ispras.ru>
+> Fixes: 30b4503378c9 ("ALSA: hda - Expose secret DAC-AA connection of some VIA codecs")
 
-Ok, gut feeling confirmed, I'll try and keep more a lookout for these.
+Thanks, applied.
 
-I guess next step is that people will use chatgpt to write the patches for
-these bugs.
 
-> > Last week I had to toss out an fbdev locking patch due to static
-> > checker that has no clue at all how refcounting works, and so
-> > complained that things need more locking ... (that was -fixes, but
-> > would probably have gone to stable too if I didn't catch it).
-> > 
-> > Simple bugfixes from random people was nice when it was checkpatch
-> > stuff and I was fairly happy to take these aggressively in drm. But my
-> > gut feeling says things seem to be shifting towards more advanced
-> > tooling, but without more advanced understanding by submitters. Does
-> > that holder in other areas too?
-> 
-> Again, yes, I have seen that a lot recently, especially with regards to
-> patches that purport to fix bugs yet obviously were never tested.
-> 
-> That being said, there are a few developers who are doing great things
-> with fault-injection testing and providing good patches for that.  So we
-> can't just say that everyone using these tools has no clue.
-
-Oh yes there's definitely awesome stuff happening, which is why I do not
-want to throw them all out. And waiting until the name is recognizeable
-for individual maintainers like me that don't see the entire fixes flood
-is also not really an approach.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Takashi
