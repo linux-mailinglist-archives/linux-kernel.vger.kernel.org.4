@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60911673DD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EEC673DE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjASPq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S231466AbjASPsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjASPqO (ORCPT
+        with ESMTP id S231504AbjASPrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:46:14 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F0486ED2;
-        Thu, 19 Jan 2023 07:46:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jhvtngKBeAgm0UEGoU0G2NmyFhttBS3hhRWFEdNmOPE=; b=rbPSIr6h2eeFKrbPmtUCev05v1
-        njPF7zxdL7Y8WQWKrTNEIWwJV+7j5abZ1RhVfIFF4hhGFVSWunsAUGl1oX6JInadEbtHktJCMtzyE
-        KeaSQtL8Z1v0lMMe+dO+Cwbd6GTA3SLfhManQxk7INRkf5rtPkWvvP+c5zwtXlQjE8FYDfBR2jyAv
-        AyEMbhPCvDXJgGIvpoRaTxY59b1vt59hpFx0Ifwbf84js48TGws6hdvrsCzw2Cr5f3DC9Xh8t/HUL
-        4eXSjjfGfwEZEHNp8vBfU3aOOMIY/I9prXp0sgfF2Vs+eZvEdopl2CQ/KSNL6czH1IAMzgmEwlGg+
-        uYl83/qw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIX6s-0016EM-SW; Thu, 19 Jan 2023 15:45:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85FC0300348;
-        Thu, 19 Jan 2023 16:45:49 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D564D20DC0EA0; Thu, 19 Jan 2023 16:45:49 +0100 (CET)
-Date:   Thu, 19 Jan 2023 16:45:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [tip:sched/core] [tracing, hardirq]  9aedeaed6f:
- WARNING:suspicious_RCU_usage
-Message-ID: <Y8llrdNT6RD/0dbq@hirez.programming.kicks-ass.net>
-References: <202301192148.58ece903-oliver.sang@intel.com>
+        Thu, 19 Jan 2023 10:47:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB1887670;
+        Thu, 19 Jan 2023 07:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674143232; x=1705679232;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WDq3PaWr838vW+P+WF80t5tJts1I6f8G8mSMYofwq0U=;
+  b=fql269gJKuvCV83T1iGlOYh+r4lEBH4gFD8TggWaQqK9UmEUvYPr8mFc
+   TUw4JIyYrLtH23rHPT4LQnxwTeSS4h0nPBXXt95hvALBaMTA2zCD7ieSg
+   geK15+nQtoxwrZyLz4p5ZM6ZNy3/y+zel1cw1WEs1dkNoNAPB6FyTMdJv
+   41gI44WYLJgSl55/G4W3d2tihWkWm7/P+Rbq4dHIsTM6plCaaE6glNmGQ
+   hhU2gUuidibjOigXRyod2F6Wwogderw7fQntHQMFfph9ZC/kUX9x3Gsb7
+   8icybQGTtPvnNiBCFIJtkkoalA7BZI4+7AJHAiGzl1HA1aMbA2kr+OBpz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="326599993"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="326599993"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 07:47:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="692461970"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="692461970"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2023 07:47:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pIX7z-00Bjgz-24;
+        Thu, 19 Jan 2023 17:46:59 +0200
+Date:   Thu, 19 Jan 2023 17:46:59 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v4 1/4] device property: Get rid of
+ __PROPERTY_ENTRY_ARRAY_EL*SIZE*()
+Message-ID: <Y8ll89pF8MJhI1WA@smile.fi.intel.com>
+References: <20221122133600.49897-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0gewC7z5XY+r8=2bkOAO2y8q7VVbrazj0z+4xGRR2Bkew@mail.gmail.com>
+ <Y8lkhedIFY8UOPf+@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202301192148.58ece903-oliver.sang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8lkhedIFY8UOPf+@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:06:21PM +0800, kernel test robot wrote:
+On Thu, Jan 19, 2023 at 04:40:53PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 07:55:44PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Nov 22, 2022 at 2:35 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > First of all, _ELEMENT_SIZE() repeats existing sizeof_field() macro.
+> > > Second, usage of _ARRAY_ELSIZE_LEN() adds unnecessary indirection
+> > > to the data layout. It's more understandable when the data structure
+> > > is placed explicitly. That said, get rid of those macros by replacing
+> > > them with the existing helper and explicit data structure layout.
+> > >
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > 
+> > The series in which this patch is included does not apply cleanly for me.
+> > 
+> > I guess it depends on the earlier material already in Greg's tree, so
+> > I'm leaving it to Greg.
 > 
-> Greeting,
-> 
-> FYI, we noticed WARNING:suspicious_RCU_usage due to commit (built with gcc-11):
-> 
-> commit: 9aedeaed6fc6fe8452b9b8225e95cc2b8631ff91 ("tracing, hardirq: No moar _rcuidle() tracing")
-> https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git sched/core
-> 
-> [test failed on linux-next/master f3381a7baf5ccbd091eb2c4fd2afd84266fcef24]
-> 
-> in testcase: kernel-selftests
-> version: kernel-selftests-x86_64-d4cf28ee-1_20230110
-> with following parameters:
-> 
-> 	group: ftrace
+> Andy, did I miss this?
 
-Moo, so I've had these patches in my git tree for months :/
+Nope, thanks!
+40eb28dc17f8 ("device property: Get rid of __PROPERTY_ENTRY_ARRAY_EL*SIZE*()")
 
-The thing that seems to shut it up is the below, but I'm not entirely
-sure how we get there, all the code should be cpuidle/noinstr, which
-implies notrace.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Steve, what's the easiest way to figure out what triggers this? Put a
-printk() in prepare_ftrace_return() or so?
-
----
-
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index 3183aeb7f5b4..fecdf0bb3bc4 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -15,6 +15,7 @@
- #include <linux/list.h>
- #include <linux/hrtimer.h>
- #include <linux/context_tracking.h>
-+#include <linux/ftrace.h>
- 
- #define CPUIDLE_STATE_MAX	10
- #define CPUIDLE_NAME_LEN	16
-@@ -119,6 +120,7 @@ DECLARE_PER_CPU(struct cpuidle_device, cpuidle_dev);
- static __always_inline void ct_cpuidle_enter(void)
- {
- 	lockdep_assert_irqs_disabled();
-+	pause_graph_tracing();
- 	/*
- 	 * Idle is allowed to (temporary) enable IRQs. It
- 	 * will return with IRQs disabled.
-@@ -143,6 +145,7 @@ static __always_inline void ct_cpuidle_exit(void)
- 	lockdep_hardirqs_off(_RET_IP_);
- 	ct_idle_exit();
- 	instrumentation_begin();
-+	unpause_graph_tracing();
- }
- 
- /****************************
 
