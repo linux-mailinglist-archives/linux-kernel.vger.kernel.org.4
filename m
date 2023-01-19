@@ -2,131 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54842674048
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CE6674049
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjASRsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S230093AbjASRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjASRsl (ORCPT
+        with ESMTP id S229488AbjASRtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:48:41 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8607C44AE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674150520; x=1705686520;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=FPQjkSgyOLoSk8C0J4CNAhrSv/EGmeASIHkuMk8fK1E=;
-  b=M/T4Hw73Sq+IQLQn4BjCF4uKqddKIkCi6HF5xPid5o96SZoJb5zvF6fU
-   xAPLTNm6qjhK+ffxsrSBR9PY+4QDuqAiPQ/rVlacKPAXKRt72Gm6GGi6z
-   v76bdIhevBzK0fUruHPbjzMBxnyQd3WPmCOUFJlzjfnZvr2u0IlWFEf78
-   nI5w7OWCfAw7sidwbGN2u3OwPyXJJ09EzneNBQH+UnGCD2ZuvBLaM4fhV
-   BB/XTru+LeC4/26o5oPc19HA43cuOA9ozJisMbTczWbRIxXl0iuEtP9qf
-   8UyV0pAqlX8IiFPou8/As1V1jidDW9F87QcE+lRSHe6+OmXvctQvu/jMv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324049324"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="324049324"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:48:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802719995"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="802719995"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 09:48:36 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-In-Reply-To: <Y8lfz8C5uvx2w4fC@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
- <Y8lfz8C5uvx2w4fC@kroah.com>
-Date:   Thu, 19 Jan 2023 19:48:35 +0200
-Message-ID: <87ilh2quto.fsf@ubik.fi.intel.com>
+        Thu, 19 Jan 2023 12:49:05 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FDB9005
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:49:02 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JG7Cps017532;
+        Thu, 19 Jan 2023 17:48:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Tb9OixybtBCyFPCDnz9x7s2Bqq8Qp0KlkN3FH+tXIPE=;
+ b=VLzXNZ9ypYnZctWCEcadCsobXs6JagtWwWon1dNCFGwGfrtX4/GKc/TzXuDE8xVeNd9z
+ 4mEW6/0g77rcK3F11LXMAJMC7DxjhTTjJSKyTaKt1t3Ne8etGA0EfYWtRG45fYfIq1Y4
+ xymIq8tUZ27nYga47n+66dHhCkrvn30pcfk3IhcBbX6JTG4G3+BCSORzr/PkxhWgGKKd
+ Kyzx3VDIax4k12hT0p1nLnEIolJlFbtk+8n7FNgmOTINb7mj/mzsukrumAas3pKdmPS1
+ sCZpit3urna1G5kCaN25y3uWdGTt9mftDqmnLHozmeyXXJJwUpM5S2llKJtLA7R136I0 6w== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78qsbnkv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 17:48:52 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JFOkiT027632;
+        Thu, 19 Jan 2023 17:48:51 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n3m185k9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 17:48:51 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JHmoSu53871042
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 17:48:50 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11C665803F;
+        Thu, 19 Jan 2023 17:48:50 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E045558054;
+        Thu, 19 Jan 2023 17:48:48 +0000 (GMT)
+Received: from [9.160.43.39] (unknown [9.160.43.39])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 17:48:48 +0000 (GMT)
+Message-ID: <ca233daf-1bcd-3b2e-68bc-2b9d48f4c7ee@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 11:48:48 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/5] fsi: Add regmap and refactor sbefifo
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, jk@ozlabs.org,
+        joel@jms.id.au, alistair@popple.id.au
+References: <20221102205148.1334459-1-eajames@linux.ibm.com>
+Content-Language: en-US
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20221102205148.1334459-1-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nirlGIyyvAQCqQqNFU6MBDqjE4QnkRbn
+X-Proofpoint-ORIG-GUID: nirlGIyyvAQCqQqNFU6MBDqjE4QnkRbn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_11,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=518
+ priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190144
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-> On Thu, Jan 19, 2023 at 03:57:17PM +0200, Alexander Shishkin wrote:
->> From: Andi Kleen <ak@linux.intel.com>
->> 
->> The ADD_PORT operation reads and sanity checks the port id multiple
->> times from the untrusted host. This is not safe because a malicious
->> host could change it between reads.
->> 
->> Read the port id only once and cache it for subsequent uses.
->> 
->> Signed-off-by: Andi Kleen <ak@linux.intel.com>
->> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
->> Cc: Amit Shah <amit@kernel.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> ---
->>  drivers/char/virtio_console.c | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
->> 
->> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
->> index f4fd5fe7cd3a..6599c2956ba4 100644
->> --- a/drivers/char/virtio_console.c
->> +++ b/drivers/char/virtio_console.c
->> @@ -1563,10 +1563,13 @@ static void handle_control_message(struct virtio_device *vdev,
->>  	struct port *port;
->>  	size_t name_size;
->>  	int err;
->> +	unsigned id;
->>  
->>  	cpkt = (struct virtio_console_control *)(buf->buf + buf->offset);
->>  
->> -	port = find_port_by_id(portdev, virtio32_to_cpu(vdev, cpkt->id));
->> +	/* Make sure the host cannot change id under us */
->> +	id = virtio32_to_cpu(vdev, READ_ONCE(cpkt->id));
->
-> Why READ_ONCE()?
->
-> And how can it change under us?  Is the message still under control of
-> the "host"?  If so, that feels wrong as this is all in kernel memory,
-> not userspace memory right?
->
-> If you are dealing with memory from a different process that you do not
-> trust, then you need to copy EVERYTHING at once.  Don't piece-meal copy
-> bits and bobs in all different places please.  Do it once and then parse
-> the local structure properly.
+On 11/2/22 15:51, Eddie James wrote:
+> The SBEFIFO hardware can now be attached over a new I2C endpoint interface
+> called the I2C Responder (I2CR). In order to use the existing SBEFIFO
+> driver, add a regmap driver for the FSI bus and an endpoint driver for the
+> I2CR. Then, refactor the SBEFIFO and OCC drivers to clean up and use the
+> new regmap driver or the I2CR interface.
 
-This is the device memory or the VM host memory, not userspace or
-another process. And it can change under us willy-nilly.
 
-The thing is, we only need to cache two things to correctly process the
-request. Copying everything, on the other hand, would involve the entire
-buffer, not just the *cpkt, but also stuff that follows, which also
-differs between different event types. And we also don't care if the
-rest of it changes under us.
-
-> Otherwise this is going to be impossible to actually maintain over
-> time...
-
-An 'id' can't possibly be worse to maintain than multiple instances of
-'virtio32_to_cpu(vdev, cpkt->id)' sprinkled around the code.
+I'm abandoning the rest of this series in favor of an FSI master driver 
+through the I2C responder. It makes a lot more sense to implement a 
+master driver here because then we get all the engine drivers for free, 
+rather than rework them to talk over i2c.
 
 Thanks,
---
-Alex
+
+Eddie
+
+
+>
+> Changes since v1:
+>   - Instead of a regmap driver for the I2CR, just have a private interface
+>     driver for FSI, since SBEFIFO is likely the only user.
+>
+> Eddie James (5):
+>    regmap: Add FSI bus support
+>    drivers: fsi: Add I2C Responder driver
+>    drivers: fsi: Rename sbefifo and occ sources
+>    drivers: fsi: separate char device code for occ and sbefifo
+>    drivers: fsi: occ and sbefifo refactor
+>
+>   drivers/base/regmap/Kconfig      |    6 +-
+>   drivers/base/regmap/Makefile     |    1 +
+>   drivers/base/regmap/regmap-fsi.c |  231 ++++++
+>   drivers/fsi/Kconfig              |   32 +-
+>   drivers/fsi/Makefile             |    9 +-
+>   drivers/fsi/fsi-occ.c            |  766 --------------------
+>   drivers/fsi/fsi-sbefifo.c        | 1144 ------------------------------
+>   drivers/fsi/i2cr.c               |  116 +++
+>   drivers/fsi/i2cr.h               |   19 +
+>   drivers/fsi/occ-cdev.c           |  157 ++++
+>   drivers/fsi/occ.c                |  536 ++++++++++++++
+>   drivers/fsi/occ.h                |   57 ++
+>   drivers/fsi/sbefifo-cdev.c       |  218 ++++++
+>   drivers/fsi/sbefifo-fsi.c        |   68 ++
+>   drivers/fsi/sbefifo-i2c.c        |   73 ++
+>   drivers/fsi/sbefifo.c            |  797 +++++++++++++++++++++
+>   drivers/fsi/sbefifo.h            |   50 ++
+>   include/linux/regmap.h           |   37 +
+>   18 files changed, 2398 insertions(+), 1919 deletions(-)
+>   create mode 100644 drivers/base/regmap/regmap-fsi.c
+>   delete mode 100644 drivers/fsi/fsi-occ.c
+>   delete mode 100644 drivers/fsi/fsi-sbefifo.c
+>   create mode 100644 drivers/fsi/i2cr.c
+>   create mode 100644 drivers/fsi/i2cr.h
+>   create mode 100644 drivers/fsi/occ-cdev.c
+>   create mode 100644 drivers/fsi/occ.c
+>   create mode 100644 drivers/fsi/occ.h
+>   create mode 100644 drivers/fsi/sbefifo-cdev.c
+>   create mode 100644 drivers/fsi/sbefifo-fsi.c
+>   create mode 100644 drivers/fsi/sbefifo-i2c.c
+>   create mode 100644 drivers/fsi/sbefifo.c
+>   create mode 100644 drivers/fsi/sbefifo.h
+>
