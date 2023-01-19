@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC2267407E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2330674093
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjASSEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S230123AbjASSIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjASSEZ (ORCPT
+        with ESMTP id S229606AbjASSIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:04:25 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64789917F3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:04:20 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id x24-20020a17090ab01800b00229f43b506fso1586575pjq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:04:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6y9K0iW1kRsBC/mddZwl+2pKXT9gEpvdM6yfT0kkWgs=;
-        b=r9fJZq/zeW/QLHylZ/qOklEA+M/ydr2B8xBZjXEwFkHpy0aCVYSMNNy1tD1WfkDOOC
-         y6YFPFcgEWjYuansLBaXKQwY4WySvpn56ULo9OdrimOyLnUiv8Gs694/scyejPJUTRTk
-         g4SVDYZS4U0FAX3Gulz4JP5os+5PZj1vOpkCwsVYlycEFICQiK/K/HhuCTARMRE5hTUk
-         RuqkGhamAm2xNHrb7y3RqpGdPyvj65feiY89D9/ENaMwayIraulyNx8lZgnMWguTB8PO
-         U6pI2Pzx+FafGPNz7o3MgeSNR76GTkqm91A/RUXvKUTp07raLGJ2FSYgB4H07tZnc/qs
-         sv0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6y9K0iW1kRsBC/mddZwl+2pKXT9gEpvdM6yfT0kkWgs=;
-        b=BuxYqdce6GmgrfVSJJ5l17MNMykxGJAduX7N945SFFnicTQ2BT0fIK6txqkww/pkl0
-         fF60VPLb7gqLCl1ZE38bVQNHfLrO0bP7YFUZ4OWEG/ebpFr52ZmN2d1+l0gljecXlFKB
-         PT1O37KrlkxM1KFkufgb69Bf5Tk0ILetihvgyQHlb8MPBOP4ejDZ5u8/qpxzYK2QxYMy
-         CbhLo4EUaIf8YOz81tkp46/COlOF5dNPsy8QngOD8HASKGz3Luvrxos8Vq2PPV9xJ0Gg
-         kJAFkSN+7nLgKWzuUnsKI5QbuFICFxH+TPFiFZYgtJZps2eU1V0wvcKc9QYi94JARPmt
-         v0cg==
-X-Gm-Message-State: AFqh2krAI9ZS7aHHtrKAfjL8xAQ+44PaWXBuPurZ/r5VhMgkchXynkDQ
-        N6nSqwEw2DRkJp0RElSJetPSpg==
-X-Google-Smtp-Source: AMrXdXvGfKSI5zWv++JoNn9fRL7W+6evxSd9BszfHZjsBxMUxXJrxIvsF/j70lLejwfrW/gJiiCmTw==
-X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr3136248plr.0.1674151459345;
-        Thu, 19 Jan 2023 10:04:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b0018bde2250fcsm23931663pln.203.2023.01.19.10.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 10:04:18 -0800 (PST)
-Date:   Thu, 19 Jan 2023 18:04:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Michal Luczaj <mhal@rbox.co>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [PATCH] KVM: x86: fix deadlock for KVM_XEN_EVTCHN_RESET
-Message-ID: <Y8mGHyg6DjkSyN5A@google.com>
-References: <20221228110410.1682852-1-pbonzini@redhat.com>
- <20230119155800.fiypvvzoalnfavse@linux.intel.com>
- <Y8mEmSESlcdgtVg4@google.com>
- <CABgObfb6Z2MkG8yYtbObK4bhAD_1s8Q_M=PnP5pF-sk3=w8XDg@mail.gmail.com>
+        Thu, 19 Jan 2023 13:08:42 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D252D6923B;
+        Thu, 19 Jan 2023 10:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674151720; x=1705687720;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2HAQeZRGLc90JRhljo6mi9VHqdlbvFwzbqo8cX32v/0=;
+  b=AHYOqvsKPjG3X/qVVmvmxzjnOJvIxqOHBoiRNiZzk4FWpdXUa/k04AVh
+   dnRg1FKy73QgFQH618pzfVIfgRiHJH7Tyseu6jTVVAXfGQHDUFB0+RteF
+   G0cBkuwHKlCfQOhD3QUbNAKzFi5XS15UisOLa3DSzGNb9h/x5+0zSv+YG
+   /T4GJP9JAVtyU7UwQ5PIUFgfJg7/67JURujhR+T2GQwbdaKCQzPkynO8l
+   viIV4pQ5Ly1eh8gu/YDmdWRnVmuSfbS9RjgMfrn8OwYkIe2LZcnYProMa
+   6P3mNAO0bW0sqM5a6REQ98QG5bsoCm4wrgrM1i4wl7vAKZiodMd4vggrn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324056716"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="324056716"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 10:08:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802733896"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="802733896"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 10:08:30 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A144C36D; Thu, 19 Jan 2023 20:09:05 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shravan Sudhakar <s.shravan@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v2 1/1] platform/x86: int1092: Switch to use acpi_evaluate_dsm_typed()
+Date:   Thu, 19 Jan 2023 20:09:04 +0200
+Message-Id: <20230119180904.78446-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABgObfb6Z2MkG8yYtbObK4bhAD_1s8Q_M=PnP5pF-sk3=w8XDg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Paolo Bonzini wrote:
-> On Thu, Jan 19, 2023 at 6:57 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > This change generates a build failure with error message:
-> > > "error: a label can only be part of a statement and a declaration is not a statement".
-> >
-> > And other flavors too, e.g.
-> >
-> > x86_64/xen_shinfo_test.c:965:2: error: expected expression
-> >         struct kvm_xen_hvm_attr evt_reset = {
-> >         ^
-> > x86_64/xen_shinfo_test.c:969:38: error: use of undeclared identifier 'evt_reset'
-> >         vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &evt_reset);
-> >                                             ^
-> > x86_64/xen_shinfo_test.c:969:38: error: use of undeclared identifier 'evt_reset'
-> > 3 errors generated.
-> > make: *** [../lib.mk:145: tools/testing/selftests/kvm/x86_64/xen_shinfo_test] Error 1
-> > make: *** Waiting for unfinished jobs....
-> >
-> > I'm surprised bots haven't complained about this, haven't seen any reports.
-> 
-> It's clang only; GCC only warns with -Wpedantic. Plus, bots probably
-> don't compile tools/ that much.
+The acpi_evaluate_dsm_typed() provides a way to check the type of the
+object evaluated by _DSM call. Use it instead of open coded variant.
 
-/wave
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: removed unused variable (LKP)
+ drivers/platform/x86/intel/int1092/intel_sar.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-Want to queue Yu's fix directly Paolo?  I was assuming you'd be offline until
-sometime tomorrow.
+diff --git a/drivers/platform/x86/intel/int1092/intel_sar.c b/drivers/platform/x86/intel/int1092/intel_sar.c
+index e03943e6380a..352fc4596494 100644
+--- a/drivers/platform/x86/intel/int1092/intel_sar.c
++++ b/drivers/platform/x86/intel/int1092/intel_sar.c
+@@ -131,16 +131,15 @@ static acpi_status sar_get_device_mode(struct platform_device *device)
+ 	acpi_status status = AE_OK;
+ 	union acpi_object *out;
+ 	u32 rev = 0;
+-	int value;
+ 
+-	out = acpi_evaluate_dsm(context->handle, &context->guid, rev,
+-				COMMAND_ID_DEV_MODE, NULL);
+-	if (get_int_value(out, &value)) {
++	out = acpi_evaluate_dsm_typed(context->handle, &context->guid, rev,
++				      COMMAND_ID_DEV_MODE, NULL, ACPI_TYPE_INTEGER);
++	if (!out) {
+ 		dev_err(&device->dev, "DSM cmd:%d Failed to retrieve value\n", COMMAND_ID_DEV_MODE);
+ 		status = AE_ERROR;
+ 		goto dev_mode_error;
+ 	}
+-	context->sar_data.device_mode = value;
++	context->sar_data.device_mode = out->integer.value;
+ 	update_sar_data(context);
+ 	sysfs_notify(&device->dev.kobj, NULL, SYSFS_DATANAME);
+ 
+@@ -221,11 +220,11 @@ static void sar_get_data(int reg, struct wwan_sar_context *context)
+ 
+ 	req.type = ACPI_TYPE_INTEGER;
+ 	req.integer.value = reg;
+-	out = acpi_evaluate_dsm(context->handle, &context->guid, rev,
+-				COMMAND_ID_CONFIG_TABLE, &req);
++	out = acpi_evaluate_dsm_typed(context->handle, &context->guid, rev,
++				      COMMAND_ID_CONFIG_TABLE, &req, ACPI_TYPE_PACKAGE);
+ 	if (!out)
+ 		return;
+-	if (out->type == ACPI_TYPE_PACKAGE && out->package.count >= 3 &&
++	if (out->package.count >= 3 &&
+ 	    out->package.elements[0].type == ACPI_TYPE_INTEGER &&
+ 	    out->package.elements[1].type == ACPI_TYPE_INTEGER &&
+ 	    out->package.elements[2].type == ACPI_TYPE_PACKAGE &&
+-- 
+2.39.0
+
