@@ -2,140 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BF8673060
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABAA673066
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjASEa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S229685AbjASEe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjASE1k (ORCPT
+        with ESMTP id S230179AbjASEeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:27:40 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A966CCF2;
-        Wed, 18 Jan 2023 20:26:50 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30J4QONW015261;
-        Wed, 18 Jan 2023 22:26:24 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674102384;
-        bh=ynrV2oGHwYXAQlAvAQmhMZx3OijLheuKW61DC7TDWcI=;
-        h=From:To:CC:Subject:Date;
-        b=q1FqUDX4MqOWbwOm7kuWit7GQATWV2LvJzfDaaDC7rGnvOBh/h+JMm9IQOoQVms9P
-         /ucpdkSws+BOX2XHq29de5f/m61/LROG4gcZWvtMjhcYN8H39y3JluxFoin50MtmWv
-         0lpgmbyoaSlzgd7bX3+0UesztHAttH8qBa4cXJ24=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30J4QOZb059417
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Jan 2023 22:26:24 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 18
- Jan 2023 22:26:23 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 18 Jan 2023 22:26:23 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30J4QM5B119592;
-        Wed, 18 Jan 2023 22:26:23 -0600
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <vigneshr@ti.com>, <nm@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <praneeth@ti.com>, <vaishnav.a@ti.com>, <j-keerthy@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j7200: Fix wakeup pinmux range
-Date:   Thu, 19 Jan 2023 09:56:22 +0530
-Message-ID: <20230119042622.22310-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 18 Jan 2023 23:34:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FC46CCEA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:30:07 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so4688482pjm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:30:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c1y/5KDHgKHirXTUDecr+02A1cm5hXFyau/VonkRgpE=;
+        b=Qwwu3mjMk12mb8arDhmeBCvpdrQtaWykCv52bQMcfaQnPlZn+g4S4pyHWK9g5gJq/E
+         bO7IKgK54I54tGt/S05MX6Bugw6bPxNfhg+ah1MT6QRzC2BodAU7Nxc3jTYm0+gOfRju
+         rQK0Xne7+kdHXBVjGreIcWWobpNO5IybesRxyfrNKwIxvNJ4yschR/MT3M0xuU4V9iLQ
+         o9Q6K/DEzCiH29zW01Y9cg6rR9MmG3HVgncg8V1EWXGBj2G8UTMnjfYdHZEb5fExOvTX
+         fa3wF8EGcngCDygVAXXSYTLa32Z2WL/Lw84vQis+TJezj9R9KJ13ggeoKElki9XZ9BB1
+         8FZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c1y/5KDHgKHirXTUDecr+02A1cm5hXFyau/VonkRgpE=;
+        b=FT4DDnM69Gfu8Nafe2AmvkygDzYvYQ1Z1BnAdZpxUooEuYpoM68nukZ3hGan/d9HUX
+         amNTpQ8sI1Z+UGeAIVX0V3+hP0VKzEeY+OWqahooN55Il71qBjlogo02MygyPJulRHLG
+         UqBjsqFeJi/cHwXJvEbeu304A7QQ2PvqnHxEDfyt3xtJBUwsiCcGU17IqTkP3UQlthaH
+         ylCFW/rpZoRtCz1tIAXblrij86/NjML550Maw8Z56OY4d7B+OSvRrfxOZAP5c5KOQ2cD
+         QvE3iZ4UH8hWUTrK/FPmcZtYzk4Fgy5UPdZm4iHCvvkLgqq8LI+nMn/8+a7jP0FErcMO
+         yknA==
+X-Gm-Message-State: AFqh2krLsTWlkYp0kWMvlOD7vRa1AQEPH4MsUlblrK0AMUsUaQWVkX8X
+        8EQ22JuxtkXRP9cZ5SROWMI9mA==
+X-Google-Smtp-Source: AMrXdXsL1ggmaWVhUlXD0gW9Nplw6seQdpkL31Roa0A2ZWPa6AvCI+80NJvuCsPquPnD0v53gX9ycw==
+X-Received: by 2002:a05:6a20:9b86:b0:b8:648f:f414 with SMTP id mr6-20020a056a209b8600b000b8648ff414mr9493806pzb.29.1674102565791;
+        Wed, 18 Jan 2023 20:29:25 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id bg7-20020a056a02010700b004785c24ffb4sm10760212pgb.26.2023.01.18.20.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 20:29:24 -0800 (PST)
+Date:   Thu, 19 Jan 2023 09:59:22 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Olivier Dautricourt <olivierdautricourt@gmail.com>,
+        Stefan Roese <sr@denx.de>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Green Wan <green.wan@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?utf-8?B?77+9ZXI=?= <povik+lin@cutebit.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        - <chuanhua.lei@intel.com>, Long Cheng <long.cheng@mediatek.com>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Palmer Debbelt <palmer@sifive.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: dma: drop unneeded quotes
+Message-ID: <20230119042922.aiggjqvnirk6sgdo@vireshk-i7>
+References: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The WKUP_PADCONFIG register region in J7200 has multiple non-addressable
-regions, split the existing wkup_pmx region as follows to avoid the
-non-addressable regions and include all valid WKUP_PADCONFIG registers.
-Also update references to old nodes with new ones.
+On 18-01-23, 19:01, Krzysztof Kozlowski wrote:
+> diff --git a/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml b/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+> index c13649bf7f19..5da8291a7de0 100644
+> --- a/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+> +++ b/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>    - Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>  
+>  allOf:
+> -  - $ref: "dma-controller.yaml#"
+> +  - $ref: dma-controller.yaml#
+>  
+>  properties:
+>    compatible:
 
-wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
-wkup_pmx1 -> 2 pins (WKUP_PADCONFIG 14 - 15)
-wkup_pmx2 -> 59 pins (WKUP_PADCONFIG 26 - 84)
-wkup_pmx3 -> 8 pins (WKUP_PADCONFIG 93 - 100)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-J7200 Datasheet (Table 6-106, Section 6.4 Pin Multiplexing) :
-	https://www.ti.com/lit/ds/symlink/dra821u.pdf
-
-Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
-
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- .../dts/ti/k3-j7200-common-proc-board.dts     |  2 +-
- .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 29 ++++++++++++++++++-
- 2 files changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-index 6240856e4863..0d39d6b8cc0c 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-@@ -80,7 +80,7 @@
- 	};
- };
- 
--&wkup_pmx0 {
-+&wkup_pmx2 {
- 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
- 		pinctrl-single,pins = <
- 			J721E_WKUP_IOPAD(0x0068, PIN_OUTPUT, 0) /* MCU_RGMII1_TX_CTL */
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-index fe669deba489..de56a0165bd0 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-@@ -56,7 +56,34 @@
- 	wkup_pmx0: pinctrl@4301c000 {
- 		compatible = "pinctrl-single";
- 		/* Proxy 0 addressing */
--		reg = <0x00 0x4301c000 0x00 0x178>;
-+		reg = <0x00 0x4301c000 0x00 0x34>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
-+
-+	wkup_pmx1: pinctrl@0x4301c038 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c038 0x00 0x8>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
-+
-+	wkup_pmx2: pinctrl@0x4301c068 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c068 0x00 0xec>;
-+		#pinctrl-cells = <1>;
-+		pinctrl-single,register-width = <32>;
-+		pinctrl-single,function-mask = <0xffffffff>;
-+	};
-+
-+	wkup_pmx3: pinctrl@0x4301c174 {
-+		compatible = "pinctrl-single";
-+		/* Proxy 0 addressing */
-+		reg = <0x00 0x4301c174 0x00 0x20>;
- 		#pinctrl-cells = <1>;
- 		pinctrl-single,register-width = <32>;
- 		pinctrl-single,function-mask = <0xffffffff>;
 -- 
-2.17.1
-
+viresh
