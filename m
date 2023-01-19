@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB55673480
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F881673485
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjASJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S230147AbjASJfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjASJeE (ORCPT
+        with ESMTP id S230093AbjASJfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:34:04 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EB15B84;
-        Thu, 19 Jan 2023 01:34:03 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id s21so2070203edi.12;
-        Thu, 19 Jan 2023 01:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s5Ge8uyMAXwH1kNbVoLVJMz5md/YXC3qDG0uqYv7JLg=;
-        b=pY+ceUT5z37uTU7Y1gqA8WAVoJkOmuKK/1C6ouoZ6getUO4DtNM6wxQRLx5HwaCGMt
-         acn3C1Co/vL2ciJLZY5ai84WZ4tmqecAFLJ1NBFpeDPE7MKbG129/AA+YIwvFAJAyDhU
-         RdCAKmEb1uZvhlsDXlDbaDESg9tc0nTWVNi+ab5tYEITZrWBpqXAK6aP58qNNuWDYD+t
-         OXeZalhSPmSHmVQSiRt2lLOoIRyvnlKMyGHl3NE0wF8O0EEPsMCp4vipxaHaFMxW78fz
-         fdsOQ/t9jZ5sjLj881ECBUdsuF3BuGoU71VZOvxst6tRH0wSRVCbbukt9r/PGqLna/KP
-         xXgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s5Ge8uyMAXwH1kNbVoLVJMz5md/YXC3qDG0uqYv7JLg=;
-        b=U+24cGaDPw4V+PIfihkgF4tb4gaoyGTXV7vK2W0VbXHyegN6m7da39VGXmrfqr9uM0
-         WRtafYALphpX9pqYT32mDwNJ8/+c9aGsV7x1Vz8rmJtDOJwl8+6Wgp/TS+ZzWh43hqro
-         paTJjOKfeWiEHG7bUBp2PTR1WOwWjVmFhZabgt5mOBWCOw8dSU+9ltFKplK4fF2WtrqD
-         OE1xIBE8zuDyhdc/AumkzJHbZ4mr+kVkZk16duVs5Gpm3CD/YnOf9g6+ZZzJDMZ35yhd
-         zb0Kk8S7yaTNRr21Q9bdxCniPFpSNFy8lskM7iFmhOm4YKSYfcXal//TvlNTERiVYMD+
-         +erA==
-X-Gm-Message-State: AFqh2kpXDghKAjwIVIJVVSFQhItM7n3hhKekgZOGqLGhEZ8Ai+o5cTzx
-        lAFTP1+izgrCApkXPEZ41uQ=
-X-Google-Smtp-Source: AMrXdXv/p9J+0LyxznivegZqBjv5p2sBwAfu5EYNt9IzkrSAyvVgO9ZtOW6iKd8IcEA7ooqkwi9I1w==
-X-Received: by 2002:a50:fa8f:0:b0:49e:31d5:6769 with SMTP id w15-20020a50fa8f000000b0049e31d56769mr9558722edr.41.1674120841563;
-        Thu, 19 Jan 2023 01:34:01 -0800 (PST)
-Received: from skbuf ([188.27.185.85])
-        by smtp.gmail.com with ESMTPSA id fd7-20020a056402388700b00483dd234ac6sm15055718edb.96.2023.01.19.01.33.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 01:34:01 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:33:58 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [RFC PATCH net-next 1/5] net: bridge: add dynamic flag to
- switchdev notifier
-Message-ID: <20230119093358.gbyka2x4qbxxr43b@skbuf>
-References: <20230117185714.3058453-1-netdev@kapio-technology.com>
- <20230117185714.3058453-2-netdev@kapio-technology.com>
- <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
- <a3bba3eb856a00b5e5e0c1e2ffe8749a@kapio-technology.com>
+        Thu, 19 Jan 2023 04:35:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024115D913
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:35:36 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1pIRJv-0004DY-3L; Thu, 19 Jan 2023 10:34:55 +0100
+Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1pIRJq-00049f-Qx; Thu, 19 Jan 2023 10:34:50 +0100
+Date:   Thu, 19 Jan 2023 10:34:50 +0100
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 14/15] mmc: sdhci-cadence: Support mmc hardware reset
+Message-ID: <20230119093450.GA14049@pengutronix.de>
+References: <20230119035136.21603-1-blarson@amd.com>
+ <20230119035136.21603-15-blarson@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3bba3eb856a00b5e5e0c1e2ffe8749a@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230119035136.21603-15-blarson@amd.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: pza@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:14:00PM +0100, netdev@kapio-technology.com wrote:
-> > > +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
-> > 
-> > Why reverse logic? Why not just name this "is_static" and leave any
-> > further interpretations up to the consumer?
-> 
-> My reasoning for this is that the common case is to have static entries,
-> thus is_dyn=false, so whenever someone uses a switchdev_notifier_fdb_info
-> struct the common case does not need to be entered.
-> Otherwise it might also break something when someone uses this struct and if
-> it was 'is_static' and they forget to code is_static=true they will get
-> dynamic entries without wanting it and it can be hard to find such an error.
+Hi Brad,
 
-I'll leave it up to bridge maintainers if this is preferable to patching
-all callers of SWITCHDEV_FDB_ADD_TO_BRIDGE such that they set is_static=true.
+On Wed, Jan 18, 2023 at 07:51:35PM -0800, Brad Larson wrote:
+> Add support for mmc hardware reset using a reset-controller
+> that would need to be enabled in the device tree with
+> a supporting driver.  The default is disabled for all
+> existing designs.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> Changes since v6:
+> - Previously patch 17/17
+> - Changed delay after reset_control_assert() from 9 to 3 usec
+> - Renamed sdhci_mmc_hw_reset() to sdhci_cdns_mmc_hw_reset()
+> 
+> ---
+>  drivers/mmc/host/sdhci-cadence.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+> index e92aa79a8be2..62321cef41db 100644
+> --- a/drivers/mmc/host/sdhci-cadence.c
+> +++ b/drivers/mmc/host/sdhci-cadence.c
+> @@ -12,6 +12,7 @@
+[...]
+>  static int sdhci_cdns_probe(struct platform_device *pdev)
+>  {
+>  	struct sdhci_host *host;
+> @@ -521,6 +541,17 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto free;
+>  
+> +	if (host->mmc->caps & MMC_CAP_HW_RESET) {
+> +		priv->rst_hw = devm_reset_control_get_optional_exclusive(dev, "hw");
+> +		if (IS_ERR(priv->rst_hw)) {
+> +			ret = PTR_ERR(priv->rst_hw);
+> +			if (ret == -ENOENT)
+> +				priv->rst_hw = NULL;
+
+The optional reset_control_get variants return NULL instead of -ENOENT
+if no reset is specified.
+
+This should return on any error instead.
+
+> +		} else {
+> +			host->mmc_host_ops.card_hw_reset = sdhci_cdns_mmc_hw_reset;
+
+This probably shouldn't be set if reset_control_get_optional returned NULL.
+
+> +		}
+> +	}
+> +
+>  	ret = sdhci_add_host(host);
+
+regards
+Philipp
