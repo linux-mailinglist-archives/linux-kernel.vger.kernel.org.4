@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0244E673EFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0978C673F04
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjASQhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S230187AbjASQi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjASQhK (ORCPT
+        with ESMTP id S229765AbjASQi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:37:10 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28576792B5;
-        Thu, 19 Jan 2023 08:37:06 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id g13so4046402lfv.7;
-        Thu, 19 Jan 2023 08:37:06 -0800 (PST)
+        Thu, 19 Jan 2023 11:38:26 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1D34E518;
+        Thu, 19 Jan 2023 08:38:24 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r9so2433110wrw.4;
+        Thu, 19 Jan 2023 08:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JxOM0SJDbMq/E2lMPr2rz9jcbXZTrUs3W/H1oRDOJqU=;
-        b=M5sK1iS6RP6Lgmn/t4+bnczYflVb4Bc7XGV6pFhDAGf6maIYd+ECAUzEfu9IH1DPaM
-         1UL3iWbUAF+29ea5vTE1qduy/A5T8WATSm7PZSyCTIjBZQhv6wUKYVw4nlnlP7e9u0rE
-         D7azd/hO4b0ZQrBkMBzcWiAorhzHGBj/f97o97tHvz7MGynif1qwrbNigAJMXVFgV0Zk
-         c5s+5nndj4fcu9TSAqGiPO6nylXDl5iNyzUhq8TB2ePcQpBZYOYeYRIFFPfWOQFmXEh7
-         ketYQZULfmer69j8PmYt79j9+0klV425LxtJUjzGR3PWabcdnhZslvZqH8hQ2rqCd9TW
-         hADw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zQl7qUGxsdoKFrCBv66aUl3ctKwMQI8qh2LAJ26Qshs=;
+        b=XSLEULwtL1hfc0ehGCkOo/d8/WdNcR/Ld/stT0tCp64bOhVWhM2UelHbCVpKCI+Pke
+         5ADmmJB+wxQEtBkGa0n9l4yHXw3+POItWwRLe/ctscm15xN3fIczmH5Xm/CWQ6r6Wm+Q
+         tbLxMd+Xvwd75WTdxb6mKorM4fVKjA30BrjMPyCl0WM7410KQ6aP6RKAkzRr2n3V2O/Y
+         /yOE2+G+Nh1Kc/jYSd3ZUhsuf1oFFTLQ/D/QrpLOIQO20Ig6a3ZqnPz3SmxP2ixaDPTU
+         g+gq52AnXwnO7JcGGSLoxj+R4CBc1MOqJ1FWwltb7C0HlR17u4gFcwVNRo4wMDXe/uyf
+         YQIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JxOM0SJDbMq/E2lMPr2rz9jcbXZTrUs3W/H1oRDOJqU=;
-        b=wsReJUkqQoOWSgdDYfcd4jXIHHo9dHNuQFWxTwSShfW1YqVY4JAwOSgGcwNCwT1sFN
-         4ruh+Xo27COxIdE/CAJAmujoapReWLQa0Ki2dW50HKDtpAZDOFEAUYCG1CYvoPk3ZlXv
-         rY/bc0+kj4AI9DwRo0MRWlKE73hI2/VRgzRCIBfTmbIH+aUsEM3qusGkKJnrNLrU8v6a
-         MvUiRLjFVJJI6OqhrZqUsOb4CbZ+Veepzs/pGRIFQFL1LNQZgnxLt7a5max0yB5KrnCu
-         Hx11GmalKdJBI9rj0603jy6WEtG3U5we3i6ONBiDrIQ2hwF8K282w5/DJ8egIrZE7M/V
-         dIcA==
-X-Gm-Message-State: AFqh2krbyw1xpcehs7less2k3NO2FkByG9d9zcXcQZn9jXmlOQz011HF
-        Et1MFv10rHUki8FNmA2CXas=
-X-Google-Smtp-Source: AMrXdXscH/Iwsv/mR2G4A45F9IX6RTFBG9ghByeaede0LbTWwhyyRsWwI5Pdr+VF6zVI/DsnoAIO/g==
-X-Received: by 2002:a05:6512:1108:b0:4d1:7923:3b92 with SMTP id l8-20020a056512110800b004d179233b92mr4083310lfg.50.1674146224464;
-        Thu, 19 Jan 2023 08:37:04 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id d4-20020a05651233c400b004947a12232bsm5898873lfg.275.2023.01.19.08.37.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:37:03 -0800 (PST)
-Date:   Thu, 19 Jan 2023 19:37:01 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
-        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/15] Add support for enhanced SPI for Designware SPI
- controllers
-Message-ID: <20230119163701.3g7g74zfzmbgvqfh@mobilestation>
-References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221218174523.cke7ubh6nycd247c@mobilestation>
- <20230104222036.h4ke6maxkdvuqtqc@mobilestation>
- <20230109162505.o3clvmwu3eremlyd@mobilestation>
- <CAHyZL-foBcwQrMy1xAJ7LqnoB8B9DSxwtp6LtvLFBgVwC00avg@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zQl7qUGxsdoKFrCBv66aUl3ctKwMQI8qh2LAJ26Qshs=;
+        b=as1woUysNqmIOelWymsPsbQ67ocCQh5jsFtD0PWcR2jeL5HT6vnU2jbfaRNGwP79qx
+         EsQEUoi6meNqawFl2F51SXBi+6ZJId3WH0yzDjO3dZnn52+3//QnzrqBrHFV+CxOCsx1
+         zoRc1cLR67DiPxGa5XkIhy21gIehe/LuAoCjCSRAklzUp/PytPJga2+fcOmA/wE/H4pX
+         dO5YvO1sCgndFXMGUVjiD1BE9ubvTkS4xEHUaXfR4rcjCOg7xKt5NGpLRZCdIDFbTnJR
+         mQyc/vR3nsZRQ5eBvNjHjHjfooO6JZAO0yl6tEe5UMBNZFtkBLw3nqPHxY0ObanKOeoT
+         RT4w==
+X-Gm-Message-State: AFqh2kqEEOKtYhvJGXhQVZ50/5QDndy+aTxwIWCnAOO0EC9z5ORnscFJ
+        ZDJaADwULicSM/bDDY4o+aw=
+X-Google-Smtp-Source: AMrXdXt8fakZIEKWCsTm2c2xaq1MMWkP19AbenzPjcXfucpcdAoh9oJ2/Tedi7D7HHxw+dMNzUWA6w==
+X-Received: by 2002:a5d:6b42:0:b0:2bc:7e6c:7cd8 with SMTP id x2-20020a5d6b42000000b002bc7e6c7cd8mr10363922wrw.26.1674146303319;
+        Thu, 19 Jan 2023 08:38:23 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id g2-20020a5d64e2000000b002be063f6820sm14948613wri.81.2023.01.19.08.38.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 08:38:22 -0800 (PST)
+Message-ID: <344b14cf-7b87-34ac-5588-58388399357c@gmail.com>
+Date:   Thu, 19 Jan 2023 17:38:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHyZL-foBcwQrMy1xAJ7LqnoB8B9DSxwtp6LtvLFBgVwC00avg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/9] arm64: dts: mediatek: mt8186: Add ADSP mailbox
+ nodes
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        hsinyi@chromium.org
+References: <20230118091829.755-1-allen-kh.cheng@mediatek.com>
+ <20230118091829.755-5-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230118091829.755-5-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,61 +89,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 04:26:58PM +0000, Sudip Mukherjee wrote:
-> On Mon, Jan 9, 2023 at 4:25 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > Hello Sudip
-> >
-> > On Thu, Jan 05, 2023 at 01:20:39AM +0300, Serge Semin wrote:
-> > > Hi Sudip
-> > >
-> > > On Sun, Dec 18, 2022 at 08:45:26PM +0300, Serge Semin wrote:
-> > > > Hi Sudip
-> > > >
-> > > > On Mon, Dec 12, 2022 at 06:07:17PM +0000, Sudip Mukherjee wrote:
-> > > > > The is v2 of the patch series adding enhanced SPI support. Some Synopsys SSI
-> > > > > controllers support enhanced SPI which includes Dual mode, Quad mode and
-> > > > > Octal mode. DWC_ssi includes clock stretching feature in enhanced SPI modes
-> > > > > which can be used to prevent FIFO underflow and overflow conditions while
-> > > > > transmitting or receiving the data respectively.
-> > > > >
-> > > > > This is almost a complete rework based on the review from Serge.
-> > > >
-> > > > Thank you very much for the series. I'll have a look at it on the next
-> > > > week.
-> > >
-> > > Just so you know. I haven't forgot about the series. There are some
-> > > problematic parts which I need to give more thinking than I originally
-> > > expected. I'll submit my comments very soon. Sorry for the delay.
-> > >
-> > > Good news is that I've got the HW-manual for the DW SSI v1.01a
-> > > IP-core. So I'll no longer need to ask of you about that device
-> > > implementation specifics.
-> >
-> > Finally I managed to consolidate my thoughts regarding your patchset.
-> > Here is the summary. Some specific comments will be sent in-reply to
-> > the corresponding patches.
-> >
-> > First of all there is a crucial difference between eSPI capability
-> > available on DW APB SSI and DW AHB SSI controllers:
-> > DW APB SSI 4.x:
-> > + Tx until FIFO is empty
-> > + No clock stretching at all
+
+
+On 18/01/2023 10:18, Allen-KH Cheng wrote:
+> Add ADSP mailbox node for MT8186 SoC.
 > 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-> Thanks for your detailed review and all the additional details about
-> DW APB SSI. I did not have this datasheet to check.
-> So, that will mean I can remove the APB versiom detection from my next series.
-> But unfortunately, I don't have access to the hardware currently to
-> prepare and test the v3 series. It will be delayed a bit and I am
-> hoping I will be able to work on this by early March.
+Applied, thanks!
 
-Ok. Thanks for the update. Whenever you're ready I'll be here for review.
-
--Serge(y)
-
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
 > 
-> 
-> -- 
-> Regards
-> Sudip
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> index a8ff984f1192..a0b7dacc10cd 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -640,6 +640,20 @@
+>   			interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH 0>;
+>   		};
+>   
+> +		adsp_mailbox0: mailbox@10686000 {
+> +			compatible = "mediatek,mt8186-adsp-mbox";
+> +			#mbox-cells = <0>;
+> +			reg = <0 0x10686100 0 0x1000>;
+> +			interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		};
+> +
+> +		adsp_mailbox1: mailbox@10687000 {
+> +			compatible = "mediatek,mt8186-adsp-mbox";
+> +			#mbox-cells = <0>;
+> +			reg = <0 0x10687100 0 0x1000>;
+> +			interrupts = <GIC_SPI 362 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		};
+> +
+>   		nor_flash: spi@11000000 {
+>   			compatible = "mediatek,mt8186-nor";
+>   			reg = <0 0x11000000 0 0x1000>;
