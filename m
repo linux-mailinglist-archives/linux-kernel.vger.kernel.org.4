@@ -2,169 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA890674606
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFC8674609
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjASWay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
+        id S230281AbjASWbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjASW3e (ORCPT
+        with ESMTP id S230265AbjASW3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:29:34 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6337CC3816;
-        Thu, 19 Jan 2023 14:13:41 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30JMDVVK103031;
-        Thu, 19 Jan 2023 16:13:31 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674166411;
-        bh=psud6/3Zex7Bnj45jRaOEP9aFmHjkTfzCmLnvxu6vqs=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=rQ8Fw6aEX2w/ybHwjAcNJMDLTfTvI/6FD/59qLfDZvc6dj4U/SpmgL2+l/mjv8VoW
-         g+JVVYOzaBbSknK2zxy1TAuWYAfaJpEcgwTfNj+E2n1/gY5Jih+N2LmcpSwWiFnLsi
-         SI61B0YpdZBzAp14p750Jc1iu4OEe+CEj+uZX2JM=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30JMDVdw122571
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Jan 2023 16:13:31 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 19
- Jan 2023 16:13:30 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 19 Jan 2023 16:13:30 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30JMDUnw006937;
-        Thu, 19 Jan 2023 16:13:30 -0600
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 6/6] arm64: dts: ti: k3-am62a-wakeup: add VTM node
-Date:   Thu, 19 Jan 2023 16:13:22 -0600
-Message-ID: <20230119221322.12563-7-bb@ti.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119221322.12563-1-bb@ti.com>
-References: <20230119221322.12563-1-bb@ti.com>
+        Thu, 19 Jan 2023 17:29:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24A8A731E;
+        Thu, 19 Jan 2023 14:13:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9AB061D98;
+        Thu, 19 Jan 2023 22:13:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A94C433D2;
+        Thu, 19 Jan 2023 22:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674166425;
+        bh=0TfIfsT7UPQtXb3sT22jU7uGw99A7souxhvdf2e+V9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UXJOQ07ln3xNI1VGM2Ekd+dqU7VasYlqn85+drkmHpU8ZmhSLftCzVTUNeMqDjOyu
+         dsh6nk7CJ4/CyDlbu+r5pov2snB5LFE3j9fETGo7u68xTcvbNFpRJz3JckN/MjJ3Hn
+         Ux/h6yeaTTRxic34et2/mHCxnKDYXBfeCKgdeJm+2ribsgpFeNq/zFNTilDFpPkybn
+         kfzNcDxR8G2apTwQk103syCxkrc72QR2KJyEP++x5QPxtpABIV2/EG+wwiz5WBkbZI
+         kk3XvZccPbyeAVdd6BnD3ScThEr8xdC9P5p67lZ55ngcDVceqFIG5HXWb3S4JB6MB5
+         3S5f4GHdgiakA==
+Date:   Thu, 19 Jan 2023 22:13:39 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>, kernel@esmil.dk,
+        bjorn@kernel.org
+Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>
+Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
+ riscv_cpufeature_patch_func to all ISA extensions
+Message-ID: <Y8nAk8c/acWf6++5@spud>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-6-jszhang@kernel.org>
+ <2398293.3Lj2Plt8kZ@diego>
+ <20230112092136.f2g43hrhmrqouy4y@orel>
+ <Y8F2YxMHUt+djhX4@wendy>
+ <Y8MRZQENua+wi34T@spud>
+ <Y8hqptFcUgjhns4F@spud>
+ <20230119082903.yk3uslfrjtxzassi@orel>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3073; i=bb@ti.com; h=from:subject; bh=+8oOI2FkMbYpUXhfzeFebAQn++Ewvzjr9qxmkxY3bBs=; b=owNCWmg5MUFZJlNZU+tJIAAAYP////f5/zm9rMe5Nuxam07ffFt+/Xdm//vff7l8v/nq13+wARsw GJAA0GmjQDCNANGjIAaAaNMQ0NAGgDQaAGjQAAGg00aMmE000xMT1MaZIcgAaA0Bo00GRo0aNG1NDQ aA0ZAyDBAeiBkA0eoABoyaGJ6h6Q9Q9IGmQ0ZA0HJp6mgyaMhhNGgGIGjINGTTQNAZGmgAZMJkwTQM mCBoZNBkAGQAaMgGgyAAYHiHsguMcAkQ4mjmwP79rzIvTDQ8oWJBY6npBqjlIhh7o7nUFY8j1UF78e 8T6D6XNOB8zkr9NYpedxRVIyLcnQ3utv4AIIAlysKUVqKDq9j1fztMiNL6NU8FcnrYLaYhGQi1DGdL XwAODe7RuwgsRaSED+YUL1YLW+2rsBNizGVqeF4ZdTzpYnDJD02ojklIYRkmnPWu+3hhnmq5Vy9s6C vdzbSMC+yEqZGGnRrvxCDKIRihrtNEXi4k/tlfLyzo+vkdZiheqyoE2HpFPgUEu7U+pvLICNwErWYN EhSyChNjmDs9hKDjOlAbEfQ5GPXkINPinA6RuxCAScSYctTGOD2QOW0eDkDQWYqxxT163+S4/PUU07 ICeBYFdjI0SsiZKvjLw6GiyVGEIacu54VaSBmSYigLTNPnwgp3VgXyYfRf4u5IpwoSCn1pJAA=
-X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t/O9pox46sePZAp3"
+Content-Disposition: inline
+In-Reply-To: <20230119082903.yk3uslfrjtxzassi@orel>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The am62ax supports a single Voltage and Thermal Management (VTM) device
-located in the wakeup domain with three associated temperature monitors
-located in various hot spots of the die.
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi | 47 ++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi  |  8 ++++
- arch/arm64/boot/dts/ti/k3-am62a.dtsi         |  2 +
- 3 files changed, 57 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
+--t/O9pox46sePZAp3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
-new file mode 100644
-index 0000000000000..02c2bae300c49
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <dt-bindings/thermal/thermal.h>
-+
-+thermal_zones: thermal-zones {
-+	main0_thermal: main0-thermal {
-+		polling-delay-passive = <250>;	/* milliSeconds */
-+		polling-delay = <500>;		/* milliSeconds */
-+		thermal-sensors = <&wkup_vtm0 0>;
-+
-+		trips {
-+			main0_crit: main0-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+
-+	main1_thermal: main1-thermal {
-+		polling-delay-passive = <250>;	/* milliSeconds */
-+		polling-delay = <500>;		/* milliSeconds */
-+		thermal-sensors = <&wkup_vtm0 0>;
-+
-+		trips {
-+			main1_crit: main1-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+
-+	main2_thermal: main2-thermal {
-+	       polling-delay-passive = <250>;	/* milliSeconds */
-+	       polling-delay = <500>;		/* milliSeconds */
-+	       thermal-sensors = <&wkup_vtm0 0>;
-+
-+		trips {
-+			main2_crit: main2-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-index 81d984414fd4a..9bdafead7199a 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-@@ -51,4 +51,12 @@ wkup_rtc0: rtc@2b1f0000 {
- 		wakeup-source;
- 		status = "disabled";
- 	};
-+
-+	wkup_vtm0: temperature-sensor@b00000 {
-+		compatible = "ti,j7200-vtm";
-+		reg = <0x00 0xb00000 0x00 0x400>,
-+		      <0x00 0xb01000 0x00 0x400>;
-+		power-domains = <&k3_pds 95 TI_SCI_PD_EXCLUSIVE>;
-+		#thermal-sensor-cells = <1>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a.dtsi b/arch/arm64/boot/dts/ti/k3-am62a.dtsi
-index 6eb87c3f9f3ce..84e8adeeebb61 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a.dtsi
-@@ -114,6 +114,8 @@ cbass_wakeup: bus@b00000 {
- 				 <0x00 0x78100000 0x00 0x78100000 0x00 0x00008000>; /* DM R5 BTCM*/
- 		};
- 	};
-+
-+	#include "k3-am62a-thermal.dtsi"
- };
- 
- /* Now include the peripherals for each bus segments */
--- 
-2.39.0
+Me again!
 
+On Thu, Jan 19, 2023 at 09:29:03AM +0100, Andrew Jones wrote:
+> On Wed, Jan 18, 2023 at 09:54:46PM +0000, Conor Dooley wrote:
+> > Hey!
+> >=20
+> > I guess here is the right place to follow up on all of this stuff...
+> >=20
+> > On Sat, Jan 14, 2023 at 08:32:37PM +0000, Conor Dooley wrote:
+
+> > Today at [1] we talked a bit about the various bits going on here.
+> > I'll attempt to summarise what I remember, but I meant to do this
+> > several hours ago and am likely to make a hames of it.
+> >=20
+> > For Zbb/unaligned stuff, the sentiment was along the lines of there
+> > needing to be a performance benefit to justify the inclusion.
+> > Some of us have HW that is (allegedly) capable of Zbb, and, if that's t=
+he
+
+I did some very very basic testing today. Ethernet is still a no-go on
+my visionfive 2 board, but the sd card works at least, so I can run w/
+Zbb code people want & we can see how it goes!
+
+At the very least, it is capable of executing the instructions that were
+used in Appendix A. I didn't try to do anything else, because I am lazy
+and if there were some pre-existing test programs I didn't want to go
+and write out a bunch of asm myself!
+
+impid appears to be 0x4210427, if that means anything to anyone!
+
+> > case, will give it a go.
+> > I think it was similar for unaligned, since there is nothing yet that
+> > supports this behaviour, we should wait until a benefit is demonstrable.
+> >=20
+> > On the subject of grouping extension/non-extension capabilities into a
+> > single cpufeature, Palmer mentioned that GCC does something similar,
+> > for the likes of the Ventana vendor extensions, that are unlikely to be
+> > present in isolation.
+
+Jess pointed out on IRC that GCC doesn't support XVentanaCondOps
+so maybe there was a mixup there. I don't think that really matters
+though, as the point stands regardless of whether it was in GCC or not.
+
+> > Those are (or were?) probed as a group of extensions rather than
+> > individually.
+> > I think it was said it'd make sense for us to unify extensions that will
+> > only ever appear together single psuedo cpufeature too.
+> >=20
+> > For the bitfield approach versus creating pseudo cpufeatures discussion
+> > & how to deal with that in alternatives etc, I'm a bit less sure what t=
+he
+> > outcome was.
+> > IIRC, nothing concrete was said about either approach, but maybe it was
+> > implied that we should do as GCC does, only grouping things that won't
+> > ever been seen apart.
+> > Figuring that out seems to have been punted down the road, as the
+> > inclusion of our only current example of this (Zbb + unaligned) is
+> > dependant on hardware showing up that actually benefits from it.
+> >=20
+> > The plan then seemed to be press ahead with this series & test the
+> > benefits of the Zbb str* functions in Zbb capable hardware before making
+> > a decision there.
+> >=20
+> > Hopefully I wasn't too far off with that summary...
+>=20
+> This matches my recollection. Thanks for the summary, Conor.
+
+Cool, thanks.
+
+--t/O9pox46sePZAp3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8nAkwAKCRB4tDGHoIJi
+0jpZAP976+x+ZkRVzdavgP77bKd1eLS8QZmSr/7+1xVouP4CvgEAtgyo6s7+n/qA
+oANTfCfXncWnh8YtZaGwZlbAOakaKgc=
+=C0SZ
+-----END PGP SIGNATURE-----
+
+--t/O9pox46sePZAp3--
