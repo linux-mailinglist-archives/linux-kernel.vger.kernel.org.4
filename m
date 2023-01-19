@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EAD67398D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B4B673977
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjASNJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S230053AbjASNIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjASNIF (ORCPT
+        with ESMTP id S229918AbjASNHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:08:05 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A39366ECF;
-        Thu, 19 Jan 2023 05:08:02 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 95AB41A20;
-        Thu, 19 Jan 2023 14:08:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1674133680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mcR19n1jDxBUupnqYv6z29UpOBYVbpXsCvGX6v7zcG0=;
-        b=NDLWWYBkTVutRYnfjXhxKtQozJCPobbGKm41FWp+lv8xA3rDIuiWCWKrv9GVJp96TIMats
-        YGVT1PCNvNvAIQpAdLGx1udVKsm/uaFfQrMU/5uVfVmvD3+ysuMEyqVFm3RHlurOjDsJ8g
-        6DrjmliJLYEjoFZ/xuPUk1XOT5nPSnI6HQT5wYO2ZMgmp9YMp1xXc1ievjfY6aBoenlMG4
-        RFIcC+hEwPLqaFh2rM6rWXHcUZrCon7GsHMb7GGg2DDO+m7QkAg64xnEED8KniBp6RUcoU
-        Echz3WDK71FeMKCMeY2fhmEn9LtTglFMY14GzppjgyQVDldVqeq3X4v5Ln+Njg==
-From:   Michael Walle <michael@walle.cc>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wells Lu <wellslutw@gmail.com>,
-        Jiawen Wu <jiawenwu@trustnetic.com>,
-        Mengyuan Lou <mengyuanlou@net-swift.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH RESEND net-next 4/4] net: mdio: Remove support for building C45 muxed addresses
-Date:   Thu, 19 Jan 2023 14:07:00 +0100
-Message-Id: <20230119130700.440601-5-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230119130700.440601-1-michael@walle.cc>
-References: <20230119130700.440601-1-michael@walle.cc>
+        Thu, 19 Jan 2023 08:07:43 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7B64D82
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:07:04 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id w14so2785112edi.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EXODrPsAw+WxnGMS9ryh6u+wd5DwP7P3JwcF8GuVJm0=;
+        b=L807A/l2Noy+D3jGMrMFebZrU4oXQEMFtkrog97/fPeOcgCba7MrctXgvN0uLveygF
+         3HWFy4CqHQB9JA5o8/pwpEpckUwUQj9CoUFCl0PW/qRcFw4p3SSM5kXJ5ezeI2SRgGj5
+         R28LH/thHBCYtmQKfSvEOxpx72jkU/qRvOnWLylUgGEFOmSNn6d1RoHxNWqO5hSk2dEq
+         zjHrbsVLthzarGnZHcG3kwQ+UIXgwJolTA91+2vnRm1//alHK1RM2rqwXE4zkGARDuiL
+         rQkRySKAeF8DKirTwNBZXiwS95eRurYoKHu9oXMPuudwXbiX1IpkAogcAGeQ5VY46t+w
+         8DUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EXODrPsAw+WxnGMS9ryh6u+wd5DwP7P3JwcF8GuVJm0=;
+        b=1zib9jC+2gQr79rfzrU4m7Ti6N0Yhn/VwDnmNHmdQgDHkqBddeURrR+BJ5JYt0P0Uo
+         quqGpz6rOq08ziMt+cuGlJ9zTLyfz3BihGAstuQ5uHfZdN44/grD+aAC3lYa0P7aCXcX
+         B0rbwxgm41Gs/CVb7dldGf+aWmNc8GRPnZrEKncDtbmyHLA85P8J7JZZCln/O97fwYen
+         3AH/Vx7BVJIfOEiU2SvezemQ5RdHGC5sOa2Ogq/TmIcOgy4WGTkg6c8/H+j88fKnxITu
+         3fwEDK7F/9aOmvtZv1LlYlk7GOkEuiEv1DTd1O8NoGvYRAnMo+2Dru053dcDjOgjzEoa
+         hnBQ==
+X-Gm-Message-State: AFqh2ko5bz8vBIR3p5l7DmLDpzJ9V2bOsQqOf7MeHg0z97bczGhsQZO6
+        QPI/Y8kkioCdMbhW+GdtwhInrA==
+X-Google-Smtp-Source: AMrXdXuCspeStoCPA/c7cDkJ87Z65zeI5mX53jM6IpeoCJAMXRN9bIUD9BN5sBY7JZ12Rnm7f309QA==
+X-Received: by 2002:aa7:cac2:0:b0:497:948b:e8 with SMTP id l2-20020aa7cac2000000b00497948b00e8mr9756962edt.6.1674133623023;
+        Thu, 19 Jan 2023 05:07:03 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x22-20020aa7dad6000000b0048789661fa2sm15554559eds.66.2023.01.19.05.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 05:07:02 -0800 (PST)
+Message-ID: <5c4c6ee7-e202-716b-a3ac-04d7620b8c58@linaro.org>
+Date:   Thu, 19 Jan 2023 15:07:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 8/8] phy: qcom-qmp-pcie: Add support for SM8550 g3x2
+ and g4x2 PCIEs
+Content-Language: en-GB
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20230118005328.2378792-1-abel.vesa@linaro.org>
+ <20230118005328.2378792-9-abel.vesa@linaro.org>
+ <7fe0c49e-a628-8e76-8294-ab8faadb3a70@linaro.org>
+ <Y8iCAPOyrYXd7e/3@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y8iCAPOyrYXd7e/3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+On 19/01/2023 01:34, Abel Vesa wrote:
+> On 23-01-18 06:34:41, Dmitry Baryshkov wrote:
+>> On 18/01/2023 02:53, Abel Vesa wrote:
+>>> Add the SM8550 both g4 and g3 configurations. In addition, there is a
+>>> new "lane shared" table that needs to be configured for g4, along with
+>>> the No-CSR list of resets.
+>>>
+>>> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>> ---
+>>>    drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 369 +++++++++++++++++++++++
+>>>    1 file changed, 369 insertions(+)
+>>>
+>>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+>>> index bffb9e138715..6f82604bd430 100644
+>>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+>>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+>>> @@ -1506,6 +1506,234 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_ep_pcs_misc_tbl[] =
+>>>    	QMP_PHY_INIT_CFG(QPHY_V5_20_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x08),
+>>>    };
+>>
+>> I see that the last two patches still use 'shrd' a lot. Does this correspond
+>> to hw register names or is it just a vendor kernel code convention?
+> 
+> It corresponds to the hw register names..
 
-The old way of performing a C45 bus transfer created a special
-register value and passed it to the MDIO bus driver, in the hope it
-would see the MII_ADDR_C45 bit set, and perform a C45 transfer. Now
-that there is a clear separation of C22 and C45, this scheme is no
-longer used. Remove all the #defines and helpers, to prevent any code
-being added which tries to use it.
+Ack, then:
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- include/linux/mdio.h | 18 ------------------
- 1 file changed, 18 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/include/linux/mdio.h b/include/linux/mdio.h
-index 220f3ca8702d..c0da30d63b1d 100644
---- a/include/linux/mdio.h
-+++ b/include/linux/mdio.h
-@@ -10,14 +10,6 @@
- #include <linux/bitfield.h>
- #include <linux/mod_devicetable.h>
- 
--/* Or MII_ADDR_C45 into regnum for read/write on mii_bus to enable the 21 bit
-- * IEEE 802.3ae clause 45 addressing mode used by 10GIGE phy chips.
-- */
--#define MII_ADDR_C45		(1<<30)
--#define MII_DEVADDR_C45_SHIFT	16
--#define MII_DEVADDR_C45_MASK	GENMASK(20, 16)
--#define MII_REGADDR_C45_MASK	GENMASK(15, 0)
--
- struct gpio_desc;
- struct mii_bus;
- struct reset_control;
-@@ -463,16 +455,6 @@ static inline int mdiodev_modify_changed(struct mdio_device *mdiodev,
- 				      mask, set);
- }
- 
--static inline u16 mdiobus_c45_regad(u32 regnum)
--{
--	return FIELD_GET(MII_REGADDR_C45_MASK, regnum);
--}
--
--static inline u16 mdiobus_c45_devad(u32 regnum)
--{
--	return FIELD_GET(MII_DEVADDR_C45_MASK, regnum);
--}
--
- static inline int mdiodev_c45_modify(struct mdio_device *mdiodev, int devad,
- 				     u32 regnum, u16 mask, u16 set)
- {
+> 
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+>>
+
 -- 
-2.30.2
+With best wishes
+Dmitry
 
