@@ -2,174 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81431673672
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5F3673678
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjASLNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        id S230209AbjASLO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjASLNM (ORCPT
+        with ESMTP id S230316AbjASLOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:13:12 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB7944BF5;
-        Thu, 19 Jan 2023 03:13:11 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so254814pjq.1;
-        Thu, 19 Jan 2023 03:13:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WobviXpwWUZxD+2oQmL88+wYfR6mU0tdRKmjmFL+nas=;
-        b=f7L1TD8+BmvD+A9pFAjMprM7B0spRnkeduPMQvbgLHvYJpiHQnNW4NU1/YfORCUZQb
-         xaAorOgKYQmiKRAwik+pNTZYr9eT0raty08UEzrXavMtcLBX61EQYx+vZD2j0NdavbRC
-         gf42Gt0VLrwev9tri3s4QJ8s/wW15sCEWExzZjJxOc6DlYr2SBEqQnmG10REIoIr2x7u
-         xRy4XvEACzmTSzYCJ1ebtTfjCFCkLZHZY79OZCLCLg34Z7JITOr+iw6UlLUVH9Yq9b2o
-         CUC0rAHKgZYzWzRKZZhXOG8dkikcSAUrekSJE3ShE6L2WgvT5bMYEZSjZYPJ7WvpIEyk
-         UzDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WobviXpwWUZxD+2oQmL88+wYfR6mU0tdRKmjmFL+nas=;
-        b=beHmFQ7ElNBT7GS8Lrwiry/C8q306qbubhERr0RnNWDeN8FhQf5VNSTgAHKuugQyBz
-         HC0vyv/t2dm16vkS/lbPC6L2wFaMxaWzDl73AgttFOow9Ei5918/P6eBkarlwz7MgRJ1
-         yss25GUY+BcBh4tbTG0eFnQNxiEnic3wBzK9nWtk2fQbpFheJPjQnruCTX35qI20Z0wp
-         N0zDvwFvoAggxLIXbhrJd11ROdUCqwqnKMf4IetRVWHHGZg0fadd1B1yeagXFT05NDgA
-         1T722vOV9UiALRpBy7AQcavIK7z/B9lQ+rHHwz4+uh+UWfu5xcRK6f/LzeLCZP3Aojh8
-         8J3g==
-X-Gm-Message-State: AFqh2kqNGHuCF4DAu7INNAX6gd29ISZbDqnyQGYlA/m/9vyNuPVZtAh9
-        96gbnyz37kf3xBFeeyDJ6+Q=
-X-Google-Smtp-Source: AMrXdXuFUYPr4gl2HBth8ATukfpSeD4X8dOtFLmJYA5beRkuYlrBNgWB27UfhgflYvUdjqzwEfWuFQ==
-X-Received: by 2002:a17:903:248f:b0:189:6ab3:9e64 with SMTP id p15-20020a170903248f00b001896ab39e64mr10324160plw.34.1674126790421;
-        Thu, 19 Jan 2023 03:13:10 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170902ce0700b001885d15e3c1sm24860035plg.26.2023.01.19.03.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 03:13:09 -0800 (PST)
-Date:   Thu, 19 Jan 2023 03:13:08 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <20230119111308.GC2976263@ls.amr.corp.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com>
+        Thu, 19 Jan 2023 06:14:10 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A42B7494D;
+        Thu, 19 Jan 2023 03:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674126831; x=1705662831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O9Ppel+iepCFWa6otaPpGVfa9DVKCGM/plTA65MWvdg=;
+  b=fr+UZ78W0BxpRGn55hsZauF9EisInUU9bGVB+z/LVmV/yWy0SNXT+UqB
+   F42ce4VWf+2uHWG494QoISJuTE8P3fgfXH72fqbSLUIJXfjl3bLFjK5Xl
+   YoDLe3MsS+4jwd1muENb8KMydJu7lQLsRaG9L9OmQ+XSejT0hyDP9HLJa
+   BFoI8f5Io/eOCcjh5l0lCtzbbe/cnRzRtBr5S3vGM/ZBDZdTq69XSWnI/
+   OrjLZOH+AnK1eK16reS5OCy0fGEe7OnHZHE1wvQGRMF+9wNQFl0nWD1vL
+   8edcTfAmhg3baZ9/NTCnh1X6/xa5gGXalVGFGITVhgE1UV9cf11d2vPT8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="326518923"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="326518923"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 03:13:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="768183528"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="768183528"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 03:13:47 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pISrb-0001P2-00;
+        Thu, 19 Jan 2023 11:13:47 +0000
+Date:   Thu, 19 Jan 2023 19:13:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH 2/2] clk: loongson1: Refactor to add devicetree support
+Message-ID: <202301191914.Rs7JrOPY-lkp@intel.com>
+References: <20230113110738.1505973-3-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8H5Z3e4hZkFxAVS@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230113110738.1505973-3-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 12:37:59AM +0000,
-Sean Christopherson <seanjc@google.com> wrote:
+Hi Keguang,
 
-> On Fri, Dec 02, 2022, Chao Peng wrote:
-> > This patch series implements KVM guest private memory for confidential
-> > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > TDX-protected guest memory, machine check can happen which can further
-> > crash the running host system, this is terrible for multi-tenant
-> > configurations. The host accesses include those from KVM userspace like
-> > QEMU. This series addresses KVM userspace induced crash by introducing
-> > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > via a fd-based approach, but it can never access the guest memory
-> > content.
-> > 
-> > The patch series touches both core mm and KVM code. I appreciate
-> > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > reviews are always welcome.
-> >   - 01: mm change, target for mm tree
-> >   - 02-09: KVM change, target for KVM tree
-> 
-> A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> is available here:
-> 
->   git@github.com:sean-jc/linux.git x86/upm_base_support
-> 
-> It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> a WIP.
-> 
-> As for next steps, can you (handwaving all of the TDX folks) take a look at what
-> I pushed and see if there's anything horrifically broken, and that it still works
-> for TDX?
-> 
-> Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-> (and I mean that).
-> 
-> On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-> (SEV and TDX).  For tests, I want to build a lists of tests that are required for
-> merging so that the criteria for merging are clear, and so that if the list is large
-> (haven't thought much yet), the work of writing and running tests can be distributed.
-> 
-> Regarding downstream dependencies, before this lands, I want to pull in all the
-> TDX and SNP series and see how everything fits together.  Specifically, I want to
-> make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-> don't miss an opportunity to make things simpler.  The patches in the SNP series to
-> add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-> details.  Nothing remotely major, but something that needs attention since it'll
-> be uAPI.
+I love your patch! Yet something to improve:
 
-Although I'm still debuging with TDX KVM, I needed the following.
-kvm_faultin_pfn() is called without mmu_lock held.  the race to change
-private/shared is handled by mmu_seq.  Maybe dedicated function only for
-kvm_faultin_pfn().
+[auto build test ERROR on 1b929c02afd37871d5afb9d498426f83432e71c2]
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 02be5e1cba1e..38699ca75ab8 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2322,7 +2322,7 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
- #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
- static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
- {
--       lockdep_assert_held(&kvm->mmu_lock);
-+       // lockdep_assert_held(&kvm->mmu_lock);
- 
-        return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-clock-Add-binding-for-Loongson-1-clock-driver/20230113-192017
+base:   1b929c02afd37871d5afb9d498426f83432e71c2
+patch link:    https://lore.kernel.org/r/20230113110738.1505973-3-keguang.zhang%40gmail.com
+patch subject: [PATCH 2/2] clk: loongson1: Refactor to add devicetree support
+config: mips-loongson1b_defconfig (https://download.01.org/0day-ci/archive/20230119/202301191914.Rs7JrOPY-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b753dca857d9c85e25ba410fe013b78c7c73ca40
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-clock-Add-binding-for-Loongson-1-clock-driver/20230113-192017
+        git checkout b753dca857d9c85e25ba410fe013b78c7c73ca40
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/clk/clk-loongson1.c:115:23: warning: no previous prototype for 'ls1x_clk_hw_register_pll' [-Wmissing-prototypes]
+     115 | struct clk_hw *__init ls1x_clk_hw_register_pll(struct device *dev,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-loongson1.c: In function 'ls1x_divider_set_rate':
+>> drivers/clk/clk-loongson1.c:186:13: warning: the comparison will always evaluate as 'true' for the address of 'lock' will never be NULL [-Waddress]
+     186 |         if (&divider->lock)
+         |             ^
+   drivers/clk/clk-loongson1.c:28:20: note: 'lock' declared here
+      28 |         spinlock_t lock;        /* protect access to DIV registers */
+         |                    ^~~~
+   drivers/clk/clk-loongson1.c:212:13: warning: the comparison will always evaluate as 'true' for the address of 'lock' will never be NULL [-Waddress]
+     212 |         if (&divider->lock)
+         |             ^
+   drivers/clk/clk-loongson1.c:28:20: note: 'lock' declared here
+      28 |         spinlock_t lock;        /* protect access to DIV registers */
+         |                    ^~~~
+   drivers/clk/clk-loongson1.c: At top level:
+>> drivers/clk/clk-loongson1.c:226:23: warning: no previous prototype for 'ls1x_clk_hw_register_divider' [-Wmissing-prototypes]
+     226 | struct clk_hw *__init ls1x_clk_hw_register_divider(struct device *dev,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-loongson1.c:310:34: warning: 'ls1x_divider_match' defined but not used [-Wunused-const-variable=]
+     310 | static const struct of_device_id ls1x_divider_match[] __initconst = {
+         |                                  ^~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-loongson1.c:275:34: warning: 'ls1x_pll_match' defined but not used [-Wunused-const-variable=]
+     275 | static const struct of_device_id ls1x_pll_match[] __initconst = {
+         |                                  ^~~~~~~~~~~~~~
+--
+   mipsel-linux-ld: arch/mips/loongson32/common/time.o: in function `plat_time_init':
+>> time.c:(.init.text+0x8): undefined reference to `ls1x_clk_init'
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
