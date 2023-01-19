@@ -2,162 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADD6673D9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09036673D9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjASPfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:35:32 -0500
+        id S231130AbjASPff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:35:35 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjASPfN (ORCPT
+        with ESMTP id S231178AbjASPfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:35:13 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9B484541
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:35:12 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l8so1838016wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nZL+EvzEvrAfF5w1mqqATHNa4cpLOo+MW+TpXyhWCHM=;
-        b=fHNkuVltpvcapP0msNuKmLRanamZBxuyYOCRyGewd+VVXRtvCT05Y0ai/WF9vSz6tY
-         TRuA/6COyvo+EKDIiGLuUJgzKH9Da54RNY2XhWFp2zzifPR5lPQY60bXYGtOAlaYj2v1
-         1veATYgBXA+Ef+YmS6+HrYl8Z4VpAvFwaCMx8llsjf+ONQDIaYANiA1G29ghHxM7Xqjw
-         ZqEuz5FLtSNtH+N8mPcMaIp+Ovqni62lJnuOjkOkD+ymGZg6lYlKYSOpcNhbeoQIqcCO
-         b/qClz1B42F/M7/TS0B1R9NTOWpPwFLD+aLhuvRR8X9LdAtufdcLvTv5mzrjeYYpaBH8
-         91Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZL+EvzEvrAfF5w1mqqATHNa4cpLOo+MW+TpXyhWCHM=;
-        b=2pei5XqgDVyYG+4Amypkri8ALRjk7LvEo4RMcGSffRE/YUmJQEmO6hD6ukh5InGDYQ
-         8Puu/Agj50Slcyey0ldDB52thsyVHaOGRqnNZpR55vl7LMx0GvGATWtzlQLvGzVpiQo7
-         4X1V4WHyfc8sGN+uuhrarlxg4E0I5YrwbAebwvEB9fS7bfo3xt+O0GbZrC9NHl9p5lfC
-         R1QcH4BRWKSaqnFhzj+WU+/+8vcZy9zu3Z3Dq6UhiB9JkOqqhpXUvolx5QUzpknN20EB
-         VFqW+/ypolLMp/5bNju4UISm3FnYzkUALiSzG8CSEz/cfI5yvYDiyk1mswv+k0HoJavZ
-         35Tg==
-X-Gm-Message-State: AFqh2kqEomIjRYtR8BiSAQaCYujpcxEtmK2v6P3qF9Fc3Ej0ySB4XNBE
-        /gx0+OYDCZYtRuoOn1UZ7siWNQ==
-X-Google-Smtp-Source: AMrXdXsQgjNOKgyBhRiFhNp7IpHqVoVUV1i9ePpAWGBcvM/SHjIii/CsB63IjRkyDA7IeZ0KuvPI0w==
-X-Received: by 2002:a1c:7414:0:b0:3d9:779e:9788 with SMTP id p20-20020a1c7414000000b003d9779e9788mr6884710wmc.37.1674142510780;
-        Thu, 19 Jan 2023 07:35:10 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id j15-20020a05600c190f00b003d9aa76dc6asm7608427wmq.0.2023.01.19.07.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 07:35:09 -0800 (PST)
-Date:   Thu, 19 Jan 2023 17:35:08 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/12] PCI: qcom: Add SM8550 PCIe support
-Message-ID: <Y8ljLJ8vsqxdQtW8@linaro.org>
-References: <20230119140453.3942340-1-abel.vesa@linaro.org>
- <20230119140453.3942340-11-abel.vesa@linaro.org>
- <20230119142155.GA101896@thinkpad>
+        Thu, 19 Jan 2023 10:35:31 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC2A83E8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:35:25 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J6b7Kt026436;
+        Thu, 19 Jan 2023 09:35:16 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=/iRvVYWK5rL4I2zuHLJ2GkHIvEHY6z28u+BP65XjZJ0=;
+ b=bpeweQ8ZEJoVXwjW1g+9cPduqlcwZvf8j18vXom1QAnTprUo5PkdG/sVbYSaP1BncxJR
+ 3oyeWf3pSEa2p2W5jZU41XPCJI6b60ZVXoggHQUfL/jeM4IEXVpQNfWDEnZmuq0AgHuz
+ d1yqTaM1mwoZVUPMp72eeOUS3MhxRAqnwL2wa9iytgQ6wo24QGmEmITQuEmkc1C6ne76
+ TwRwke9vUKIyyiZsuEcaOiNsz3bLhGmaX2YIkm8D0tboPtkWXhI1j3K6/6uOPCUOKaFR
+ Za8rKopLvZm6BY4C1W0wN2Pdk1WyY7TirRRD9t3E/WZaljxfd7KqYtInAkzbxnspYAa7 ow== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3n3tp6g5d2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 09:35:16 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Thu, 19 Jan
+ 2023 09:35:14 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.7 via Frontend Transport; Thu, 19 Jan 2023 09:35:14 -0600
+Received: from [198.61.64.248] (EDIN4L06LR3.ad.cirrus.com [198.61.64.248])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5781611CA;
+        Thu, 19 Jan 2023 15:35:14 +0000 (UTC)
+Message-ID: <32fd1755-0128-8f32-9a88-a92f1647f903@opensource.cirrus.com>
+Date:   Thu, 19 Jan 2023 15:35:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
+ <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
+ <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
+ <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
+ <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230119142155.GA101896@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: j_CL7edq6RPNITkhRLOAVsaTXzHjWJyc
+X-Proofpoint-GUID: j_CL7edq6RPNITkhRLOAVsaTXzHjWJyc
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-19 19:51:55, Manivannan Sadhasivam wrote:
-> On Thu, Jan 19, 2023 at 04:04:51PM +0200, Abel Vesa wrote:
-> > Add compatible for both PCIe found on SM8550.
-> > Also add the cnoc_pcie_sf_axi clock needed by the SM8550.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+On 19/1/23 14:48, Pierre-Louis Bossart wrote:
 > 
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+>>>> +static int cs42l42_sdw_dai_startup(struct snd_pcm_substream *substream,
+>>>> +                   struct snd_soc_dai *dai)
+>>>> +{
+>>>> +    struct cs42l42_private *cs42l42 =
+>>>> snd_soc_component_get_drvdata(dai->component);
+>>>> +
+>>>> +    if (!cs42l42->init_done)
+>>>> +        return -ENODEV;
+>>>
+>>> Can this happen? IIRC the ASoC framework would use
+>>> pm_runtime_resume_and_get() before .startup, which would guarantee that
+>>> the device is initialized, no?
+>>>
+>>
+>> Yes, this can happen. Because of the way that the SoundWire enumeration
+>> was implemented in the core code, it isn't a probe event so we cannot
+>> call snd_soc_register_component() on enumeration because -EPROBE_DEFER
+>> wouldn't be handled. So the snd_soc_register_component() must be called
+>> from probe(). This leaves a limbo situation where we've registered the
+>> driver but in fact don't yet have any hardware. ALSA/ASoC doesn't know
+>> that we've registered before we are functional so they are happy to
+>> go ahead and try to use the soundcard. If for some reason the hardware
+>> failed to enumerate we can get here without having enumerated.
 > 
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-> > 
-> > The v3 of this patchset is:
-> > https://lore.kernel.org/all/20230119112453.3393911-1-abel.vesa@linaro.org/
-> > 
-> > Changes since v3:
-> >  * renamed cnoc_pcie_sf_axi to cnoc_sf_axi
-> > 
-> > Changes since v2:
-> >  * none
-> >  
-> > Changes since v1:
-> >  * changed the subject line prefix for the patch to match the history,
-> >    like Bjorn Helgaas suggested.
-> >  * added Konrad's R-b tag
-> > 
-> > 
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 77e5dc7b88ad..30f74bc51dbf 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -182,7 +182,7 @@ struct qcom_pcie_resources_2_3_3 {
-> >  
-> >  /* 6 clocks typically, 7 for sm8250 */
-> 
-> Now this comment is outdated ;)
+> Humm, yes, but you've also made the regmap cache-only, so is there
+> really a problem?
 > 
 
-Fair point. I'll wait for some more comments before
-I'll send a new version.
+It's true that normally we go past these stages in cache-only, but that
+is because normally (non-Soundwire) we already initialized the hardware
+to good state during probe().
+If we just carry on when it hasn't enumerated and we haven't initialized
+it yet, who knows what will happen if it enumerates some time later.
 
-> Thanks,
-> Mani
+We could just ignore it and see if anyone has a problem but for the sake
+of a couple of lines of code I feel like I'd rather check for it.
+
+> FWIW I don't see a startup callback in any other codec driver. It may be
+> wrong but it's also a sign that this isn't a problem we've seen so far
+> on existing Intel-based platforms.
+>
+
+It's nicer to do the check in startup() because then the application
+open() will fail cleanly. We could delay until prepare - which is the
+point we really need the hardware to be accessible - and hope the
+hardware enumerated and initialized by that time. But that's not so
+nice from the app point of view.
+
+>>
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int cs42l42_sdw_dai_hw_params(struct snd_pcm_substream
+>>>> *substream,
+>>>> +                     struct snd_pcm_hw_params *params,
+>>>> +                     struct snd_soc_dai *dai)
+>>>> +{
+>>>> +    struct cs42l42_private *cs42l42 =
+>>>> snd_soc_component_get_drvdata(dai->component);
+>>>> +    struct sdw_stream_runtime *sdw_stream =
+>>>> snd_soc_dai_get_dma_data(dai, substream);
+>>>> +    struct sdw_stream_config stream_config = {0};
+>>>> +    struct sdw_port_config port_config = {0};
+>>>> +    int ret;
+>>>> +
+>>>> +    if (!sdw_stream)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    /* Needed for PLL configuration when we are notified of new bus
+>>>> config */
+>>>> +    cs42l42->sample_rate = params_rate(params);
+>>>
+>>> wouldn't it be better to check if the sample_rate is supported by the
+>>> PLL here, instead of in the .prepare step ...
+>>>
+>> It depends on the soundwire bus clock. We need to know both to determine
+>> whether they are valid. IFF we can assume that the call to
+>> sdw_stream_add_slave() will always invoke the bus_config() callback we
+>> can call cs42l42_pll_config() from cs42l42_sdw_bus_config() and return
+>> an error from cs42l42_sdw_bus_config() if the {swire_clk, sample_rate}
+>> pair isn't valid.
 > 
-> >  struct qcom_pcie_resources_2_7_0 {
-> > -	struct clk_bulk_data clks[12];
-> > +	struct clk_bulk_data clks[13];
-> >  	int num_clks;
-> >  	struct regulator_bulk_data supplies[2];
-> >  	struct reset_control *pci_reset;
-> > @@ -1208,6 +1208,7 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
-> >  	res->clks[idx++].id = "noc_aggr_4";
-> >  	res->clks[idx++].id = "noc_aggr_south_sf";
-> >  	res->clks[idx++].id = "cnoc_qx";
-> > +	res->clks[idx++].id = "cnoc_sf_axi";
-> >  
-> >  	num_opt_clks = idx - num_clks;
-> >  	res->num_clks = idx;
-> > @@ -1828,6 +1829,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> >  	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
-> >  	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
-> >  	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
-> > +	{ .compatible = "qcom,pcie-sm8550", .data = &cfg_1_9_0 },
-> >  	{ }
-> >  };
-> >  
-> > -- 
-> > 2.34.1
-> > 
+> You lost me here. Are you saying the soundwire bus clock is only known
+> in the prepare stage?
+>
+
+hw_params() doesn't know the Soundwire bus clock so it can't do the
+check. We need to wait until we have both the sample rate and the
+chosen SWIRE_CLK.
+
+I delayed it until prepare() because by that time the SWIRE_CLK must
+have been chosen. and it avoids making an assumption about whether 
+bus_config() will be called if the SWIRE_CLK hasn't changed.
+If we move the cs42l42_pll_config() to the bus_config we must be sure
+that
+1) the bus_config() callback will be called from sdw_stream_add_slave().
+(If bus_config() is only called when the machine driver prepares then
+the check won't happen during hw_params phase.)
+
+2) the bus_config must be called even if the SWIRE_CLK does not change,
+so that we can reconsider our PLL config if the sample rate has changed.
+
+If (1) and (2) are not guaranteed then moving the cs42l42_pll_config()
+call to the bus_config() callback would be worse.
+
+Putting it in prepare() means that hw_params() must have run and the
+bus_config() callback has been called. And we don't care if bus_config()
+was triggered by our hw_params or the machine driver. Also we don't
+care if bus_config() wasn't called because the config hasn't changed.
+
+In the end I'm not sure that it matters. Returning an error from
+hw_params() won't re-run the ALSA constraint refinement. It's too late
+by then because the params have already been accepted. The ACPI should
+be configuring the Soundwire manager to only output valid SWIRE_CLK
+frequencies for CS42L42, so we should never hit this error. But if we
+come across a broken ACPI we have an error logged in dmesg to tell us
+what went wrong, instead of a mysterious user complaint that their
+audio is strange.
+
 > 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+>>>> +static int cs42l42_sdw_dai_set_sdw_stream(struct snd_soc_dai *dai,
+>>>> void *sdw_stream,
+>>>> +                      int direction)
+>>>> +{
+>>>> +    if (!sdw_stream)
+>>>> +        return 0;
+>>>> +
+>>>> +    if (direction == SNDRV_PCM_STREAM_PLAYBACK)
+>>>> +        dai->playback_dma_data = sdw_stream;
+>>>> +    else
+>>>> +        dai->capture_dma_data = sdw_stream;
+>>>> +
+>>>> +    return 0;
+>>>
+>>> Humm, this is interesting, you are not using the sdw_stream_data that
+>>> all other codecs use, but in hindsight I have no idea why we allocate
+>>> something to only store a pointer.
+>>>
+>>
+>> Indeed. I can see no reason to wrap this pointer in another struct when
+>> we can store the pointer direct so I dropped the wrapper struct.
+> 
+> I'll see if we can simplify the other codec drivers.
+> 
+>>>> +static int cs42l42_sdw_update_status(struct sdw_slave *peripheral,
+>>>> +                     enum sdw_slave_status status);s
+>>>> +{
+>>>> +    struct cs42l42_private *cs42l42 =
+>>>> dev_get_drvdata(&peripheral->dev);
+>>>> +
+>>>> +    switch (status) {
+>>>> +    case SDW_SLAVE_ATTACHED:
+>>>> +        dev_dbg(cs42l42->dev, "ATTACHED\n");
+>>>> +        if (!cs42l42->init_done)
+>>>> +            cs42l42_sdw_init(peripheral);
+>>>
+>>> unclear to me what happens is the bus suspends, how would you redo the
+>>> init?
+>>>
+>>
+>> We don't need to re-run the init(). A regcache_sync() will restore
+>> settings.
+> 
+> ah, interesting. Other codec drivers play with specific registers that
+> aren't in regmap. There's also headset calibration that's done
+> differently in the first init or later.
