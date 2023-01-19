@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AF1673ED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1D8673EDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjASQal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S229590AbjASQbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjASQaP (ORCPT
+        with ESMTP id S230219AbjASQbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:30:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2E5355D;
-        Thu, 19 Jan 2023 08:29:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6200D61C7A;
-        Thu, 19 Jan 2023 16:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816F2C433D2;
-        Thu, 19 Jan 2023 16:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674145778;
-        bh=qnK5fOZqNaA/MJZ/Em1KkcrYeLUD8RGGNKsa6OvSH5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a8yg032/nprwA4WPUlBdpE1qsc9BM29FcIYFuoHDdjgiHd5COx/GSCx3twBou4nV1
-         V3K8PgF1qUs0o65FX5ongaHF8Vj0z+WSMsevr6k2Q9maHZI8c159Ig8hB+/nUPK+Co
-         HuC26nZA6jKZgQ6M/+zorct8jdgFQPafaQggGXKvbHwTdQHV1svEmdrN/1IJ7B6I+V
-         njf9eAOoEAZ7FlIXAR4pUSg644r/CDjAE8KUAjnK73Q5gqauZx8n6Hg4aBTOdnh8n3
-         tRvoi5mosWPtyn0ckJewys6bZzTxsNhb/jfYvnMhk0VKzciGeX+a86IZ01JAKN03Gf
-         X0zKezWFVZjPQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 16C7E405BE; Thu, 19 Jan 2023 13:29:30 -0300 (-03)
-Date:   Thu, 19 Jan 2023 13:29:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf buildid: Avoid copy of uninitialized memory
-Message-ID: <Y8lv6oclCytPk7hN@kernel.org>
-References: <20230113185732.134861-1-irogers@google.com>
- <CAP-5=fXg28wcW93tfiN6mdFHj0+eSRE3dL3LTv53bRYuezjZDg@mail.gmail.com>
+        Thu, 19 Jan 2023 11:31:24 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD504E518
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:31:22 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so1922747ilb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:31:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dmhp+2IAI3g3qDOv15A77xhg9oc5VA7p9d1CqGLWy2s=;
+        b=fqoTK5ecpmr53Iu/NzngRJbu4/9cGCJpiYCABKhINjU3Ltk1BUDG6abR+8fqOCuv4B
+         9MEPgRu98Z9Ekf6hYW139TEDnDzy8sBBiQYLiuDd6ckoZKIXpnGxk67vf9QI6ySKwOnA
+         vUhD95zSZD11FkvFCQatyiQCpKYAt95gtx25GuByYZLe5TfmoAWqJw2ND2XNBXP/ELk1
+         cml89nXvXVsQ15+rlYJIT5MKeFAozBGgT/x0McDrTdqn0uIFiPMM8S+pmatwtAshZ9Ac
+         5gl7dLfIVFlSvvMQ0MyynxSKwRJzMNI1h5O3KOd/ysfs0gct7t05c4s+Uc4tLXryXafz
+         Lo9w==
+X-Gm-Message-State: AFqh2kqE29D7UPCxmFiE6cIoCxy6/tpuGO+vXOvsiEG3Df5jWf1jQA+Z
+        oUsNC1d3raOKzVN7rlmouqYK5PQ7DomHYML2ypvdgLwb9isL
+X-Google-Smtp-Source: AMrXdXtVr57YNgl1eBdlM3krd9MaBpgSpj/K+zbJkq3fy2mnWv0s6siuxSohmU7qeB9JTHKab9JcXFmoy/4bPOO9VyZta6YyMWhI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXg28wcW93tfiN6mdFHj0+eSRE3dL3LTv53bRYuezjZDg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:2807:0:b0:30e:d439:eccc with SMTP id
+ l7-20020a922807000000b0030ed439ecccmr1260604ilf.76.1674145882239; Thu, 19 Jan
+ 2023 08:31:22 -0800 (PST)
+Date:   Thu, 19 Jan 2023 08:31:22 -0800
+In-Reply-To: <0000000000003198a505f0076823@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009cfc1705f2a07641@google.com>
+Subject: Re: [syzbot] [udf?] BUG: unable to handle kernel NULL pointer
+ dereference in __writepage
+From:   syzbot <syzbot+c27475eb921c46bbdc62@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hch@lst.de, jack@suse.com, jack@suse.cz,
+        linkinjeon@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jan 19, 2023 at 08:08:13AM -0800, Ian Rogers escreveu:
-> On Fri, Jan 13, 2023 at 10:57 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > build_id__init only copies the buildid data up to size leaving the
-> > rest of the data array uninitialized. Copying the full array during
-> > synthesis means the written event contains uninitialized memory.  This
-> > was detected by the Clang/LLVM memory sanitizer.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/synthetic-events.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> > index 3ab6a92b1a6d..348d05e4ec03 100644
-> > --- a/tools/perf/util/synthetic-events.c
-> > +++ b/tools/perf/util/synthetic-events.c
-> > @@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
-> >
-> >         len = pos->long_name_len + 1;
-> >         len = PERF_ALIGN(len, NAME_ALIGN);
-> > -       memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
-> > +       memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
-> 
-> Ping. Should be an uncontroversial change to fix a copy of
-> uninitialized memory into the perf.data file during synthesis.
+syzbot has bisected this issue to:
 
-Indeed, applied.
+commit 36273e5b4e3a934c6d346c8f0b16b97e018094af
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Sun Nov 13 16:29:02 2022 +0000
 
-- Arnaldo
+    udf: remove ->writepage
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15176e66480000
+start commit:   77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17176e66480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13176e66480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=55043d38f21f0e0f
+dashboard link: https://syzkaller.appspot.com/bug?extid=c27475eb921c46bbdc62
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141da6e7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d81b8b880000
+
+Reported-by: syzbot+c27475eb921c46bbdc62@syzkaller.appspotmail.com
+Fixes: 36273e5b4e3a ("udf: remove ->writepage")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
