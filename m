@@ -2,238 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CA467420B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58507674222
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjASTFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        id S231285AbjASTGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjASTEv (ORCPT
+        with ESMTP id S230333AbjASTGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:04:51 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671E895760;
-        Thu, 19 Jan 2023 11:04:03 -0800 (PST)
+        Thu, 19 Jan 2023 14:06:00 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9146F9575C;
+        Thu, 19 Jan 2023 11:05:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674155043; x=1705691043;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=YNxTqOLR8q/Uf0UIXFuf4J95hhqAsF9n4GTZ8Ulqwgo=;
-  b=Kre2kR8l/KCWZ3PaNpNAoGk0B0rib/TOOhpLSwtEpUeRd74gFFoZREnO
-   Lj3OhTBZtbV+RZ/aCix3D/PdyP3209OMtvMyRBfmqv9LWde33vsfnaT5r
-   nqK7sX+gdST6ZD6dQf3aQ/rvKJqAKGVaMS2Ar2kzR6zWCNVu85owhWYG6
-   FzR5UyLvVB0ymE1d8rmP7/Mk9HtrMAWm/iZw5qPt2dXthAjE8afyUiLL5
-   gRY+4HYf3axqJfGefkp7PKH+PlfXhaMODcogynKXUBny6WAUASLuMfsm3
-   J9L+d6LZBynLC6xWyos7PthZkxWjchBQOA+0wmk8dXBxuYHzWX6xrhlt4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="389903447"
+  t=1674155103; x=1705691103;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=C26pL/ZR9hqK0q6ANisPaBdS6dlI9bdVaB0c9ITdz+o=;
+  b=SK/l+ZX/C6CbITbr9ecOr6ZAlMp17Ah2OMr1ypXwoBsiEW2sL3DYmoxK
+   axqV9gL8PZZe3318OyDcRXuiy3YOtANyu4ogmyZT8KGMTzgfNN68BJL+d
+   +/YLX0HI+qkUXoVTp3mzhQJRjMzQQNIs0Ef/0bPurGFqzzYviAuu/wkJY
+   aoI0uvE8AJhEdiCFM/eGWEiS11AU0Lcr+3wk31gQp2MZZQcmXmq12j2DR
+   9H0XuqTfZ6pzRIcVznZim2kBXDzjVDYMygsJW1IoNXG2OvIsUe/cPYCr3
+   mIqkhA8UCmF56azEJ/YCkZSA3Es9AtdOT8ZaHckbs9+LR7wq3UP9/a2MA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305059329"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="389903447"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 11:01:56 -0800
+   d="scan'208";a="305059329"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 11:02:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610172924"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="637813410"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="610172924"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 11:01:55 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="637813410"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2023 11:02:18 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 11:01:51 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ 15.1.2507.16; Thu, 19 Jan 2023 11:02:18 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 11:01:50 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ 15.1.2507.16; Thu, 19 Jan 2023 11:02:17 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 11:01:50 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 11:02:17 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.46) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 19 Jan 2023 11:01:48 -0800
+ 15.1.2507.16; Thu, 19 Jan 2023 11:02:17 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eJ19hHKHABCTC/gMQzEuDerlTDjnrSgu7Vq2sohYsL+W++OqRpKrLGAVJBvr6ywjVrH84NhS2Ii3/tgoFJ0zwp1qE659fu6BSQZIKptnR8XWCssBqwaoGlhKkbgcF9LP5vjgXSu/0nGoNT1n31azvBmiP9E6L3eZFUKGlD5SmLs8/6gYma82o8M1nScYyZbDPOkFLVvcb6PHRnHFHn94bRcrdX2/DAd5d4wIr1tuSVWN3ZPCN5yDox234SDqtsbE0DhsKgXSEtWiUU2vHvj8J6M247cX03QXbgi3B/qu/Qwc7vwkuE2MeMA9EphAEGIsHKXbGNbvcNBTZnTba+6I4g==
+ b=ENoZ8E+85kJVVlkLIyxA/zArwN8JtyrS91ns3vvx1FPrULS9AvJQXxAEX4HIVBS3Lw6jkhiXiq34C8BU6V0HXnt0WR1ruLok8G1Zkj+/ww7WBdu0NJPfAyyj7g+7RdNmdaJkbdSQvkTYrxzYbMWnq61a+8G73B4+1gWOCO15dHebVCWFJXHvF/IAogLHGs2ZTZNCHKmHwJjdSkcWDNLStzJdENwHfkGKwkMN91JxzUjnOTORkXcghn6bnJ4SZmmVWVgqKzMIv1mBjm1hg8vTFIaJL6KGudr4YeodpiU7IsNES6fwZsYZ7xn9sGRpySAjDzy/vu9GfmaOdgO2NSOOkw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5lnGJ6X7AnGPBVCAYVa9rqh9Gx/n9DOggKwZEDGi/2w=;
- b=TOY9ra1lxFdhdk303KU1CG67tz2/qIJEP+4f635cCQcF3jPHtncysn0qMxpQNfps2n+LqXwOcolVkMHCumDJCRgyyqCKwRIcTqJjMn6wYVdR+9UwJq52RgM8jwl+vWj7i1spdVyZOIx+wEAeH8DFlCzFiC/5pBDdjRuK1cIZ99bmAh74DHti0vK7w6pifUxAFaF15xfvQ+yQEw7vG3cAZcpTeoVM6X/xreOZbvtlzXw/Sp/XcELk5+9YbVYRg25oPPwuLhlCb592xei6188bxIBxsETekgvnPDyWwmKEbdgzIsp2CW96SfKrM6aWhJADQXKiSBNt7ruKDl05yy2Gbg==
+ bh=A6FARfSChUXVQzj2jMYxUL0WHQs6mTaveKcdHEC3dDU=;
+ b=D2WLo3OMI9vDhY965P2YQkqlAZ7rPq/CqlrGAJ7J8/G2JTJ6edGB3dOJ8Mh16xEIKeKxiDVa8WRbxl+YWndDkUTHPaWZ8OjMJjR/vQySANv52B2E5mcNpR8NKIP7m+RaNysT5ztvpqrRcrGihAfJJR5z3kZy/PhS48Vno54kdkjqUQiGzFzYeNW/pu4GJMfutmT7j1RSV/V4RhCNtmbSZTy5M0e2etzX36V0tgXeTqGztqIqYQs17kLcmBm7VesP3GevHNdkd+0DAcxkCrNqa9ti0ZWVUME+Ka9num0ycJJzobN6sp+5ISwuraWt1gpFdrUiFcGDN/KhjArhduGfKA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by SN7PR11MB6797.namprd11.prod.outlook.com (2603:10b6:806:263::6) with
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by PH8PR11MB7046.namprd11.prod.outlook.com (2603:10b6:510:216::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
- 2023 19:01:46 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::8836:6aeb:e872:30c3]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::8836:6aeb:e872:30c3%4]) with mapi id 15.20.6002.026; Thu, 19 Jan 2023
- 19:01:46 +0000
-Message-ID: <3da4a67c-75e7-5100-dd8b-eee6a442a8c8@intel.com>
-Date:   Thu, 19 Jan 2023 20:01:37 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V1] PCI/ASPM: Skip L1SS save/restore if not already
- enabled
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Vidya Sagar <vidyas@nvidia.com>
-CC:     <bhelgaas@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <enriquezmark36@gmail.com>, <tasev.stefanoska@skynet.be>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>, <kthota@nvidia.com>,
-        <mmaddireddy@nvidia.com>, <sagar.tv@gmail.com>
-References: <20230119094913.20536-1-vidyas@nvidia.com>
- <CAAd53p5R9BHoYpHq6WNgwtUAXmvNQnk6gA=C27JTfqeozRKCzQ@mail.gmail.com>
-Content-Language: en-US
-From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-In-Reply-To: <CAAd53p5R9BHoYpHq6WNgwtUAXmvNQnk6gA=C27JTfqeozRKCzQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0117.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a8::15) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
+ 2023 19:02:15 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::593:877e:dd33:5b7a%5]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
+ 19:02:15 +0000
+Date:   Thu, 19 Jan 2023 11:02:08 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+CC:     Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
+        Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
+        <linux-kbuild@vger.kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        <rust-for-linux@vger.kernel.org>,
+        "Guo Zhengkui" <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230119190208.2towhelvz7s6dn3u@ldmartin-desk2.lan>
+X-Patchwork-Hint: comment
+References: <20230111161155.1349375-1-gary@garyguo.net>
+ <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+ <20230113181841.4d378a24.gary@garyguo.net>
+ <20230117175144.GI16547@kitsune.suse.cz>
+ <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+ <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+Content-Type: text/plain; charset="iso-8859-1"; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+X-ClientProxiedBy: BYAPR05CA0058.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::35) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|SN7PR11MB6797:EE_
-X-MS-Office365-Filtering-Correlation-Id: c99d4e99-ea50-4856-5948-08dafa4f9c79
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|PH8PR11MB7046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 550501be-1ab2-4e69-5619-08dafa4fad7c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sVCJtRaPleVRiZumzmx1E1+/93m0TWQz8yUbv4jIAGqKJS6CHDdYjGyQAfDgkMibD6VF0Ltc42rbfmD0EpYY1ccYVyQO/qkXhcyDDDjmOb8ItXOUoQI4dzGdibvKtRP6J+yTsZjc9QFag050vjjAcKFkdFGNkymimI8KCjk407GCfwRl7vD+daldskfWT4gsOFmk2pdfNDQns/sM78My98+N2PuzmmnKySzJCX9iCVJgq7wgdagjhk9aIinmBixcOH35KhQxO8RISdccr9AILUpQPPk4J9h463Mv16IZ93qvwlpn3Zm9UKKhKCxKA/geY3g+tJFiSzZgauRypqOXEPMkthTtDxb6y9JZiqw9rLk2ZTXbp0fAFMyCExH9GAY5L+t0Qucuy8GZZ8/YpxxgZwYsflTh5U9xs3OUo6XczuC0BY9f60A99l7M3f4Wfr/viRfsoHSr0+mVZJlsZHEYsiHvjapxD4gzNiFauqOt1txtcU4i7g/pQZ7csudWfDBFCFpBaGOzP+Bj3+97ji0b96Pdv+JJAkqDuchRN3YN6IaR0bQv93P7zx5aEgumK3pkWXjNxllNQFSNPzcN1kdLpwYH/sSJz/enGMCmxnDKOMMkOuxykJJoAXAIksVu+aR0cUgIgXjZZHR/K0JRkyCo2w6XEF2+X0MVeDBIHXOS0mk9mTXErQTemAUWLOFiTfDDokF5FZDtwcQJA3X6FMayZm1ZMr8s1Qvs2V8BjDSAJpmHLGj5vyO0iyl6oThzIF8fGVaH28SljLaLvnM2KjF+tfROO3NIfZUtjihXM3oYYdg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(366004)(396003)(136003)(451199015)(31686004)(4326008)(41300700001)(2616005)(66476007)(66946007)(26005)(66556008)(186003)(8676002)(6512007)(53546011)(31696002)(36756003)(5660300002)(83380400001)(82960400001)(478600001)(86362001)(8936002)(110136005)(316002)(38100700002)(6486002)(2906002)(6506007)(7416002)(966005)(6666004)(32563001)(45980500001)(43740500002)(473944003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: Qyvq8N4MQs7Tjp/WZwQ4xMnEo28qnSWhdLdStD69h7O9oVjzNm97dcf3adgwiER99kbqexLSCF+v8hMCG7NY9A/kjC7IVEMvMVJ19Oyga5P9RCpO7zgtZASy6j6X9Ayt5NjYixI9mf/1FX/bvW8Hqsa2HXxAatrD6+Uhxr9DJG6hr8CF6TKguyamAI7RrrtzyD+iCORLPGyNIapUQ066x6s1MZRREJUOdgHBNP3v/Bunmfx7XbABTzuIJPrG25JLU5Gh2SkGm+aWUPF+Ofh4LkV+nF4khhNdJKY3PS1K3GgwgOWU/aUDDvosoa5oWRCMZr8vcIpjy1/JvN7SuWuwR6JcJlqEadMvdnZcb6+BB4i3m3IWo7q2qDaGmQIE0Gas1qzfaYGxRryOUfj4dE8Aibz+zxRMCeyzsNVb0hA3nFNuQktUyL22eJFqa2Dym0TBYo+AwzL+UWG9Q+yJ/6daIgxtpTBv6gIm1LGS15NKjIGS5fRXn5rcoPu1TyLkcmgI7RxL1/OvUsaSpF7mhqdvlelHGSa1sy680TvkfzZTCik9Hrj++CsYqTTX6kPytiyau9yibRsobS9pD08dd8gM2Mq4rAHmbQXtYPUePq3vUN0yfdJfrAPeLM0t+Htf5Glm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39860400002)(136003)(366004)(376002)(451199015)(38100700002)(36756003)(82960400001)(86362001)(6666004)(478600001)(186003)(26005)(6512007)(9686003)(6486002)(6506007)(8936002)(1076003)(2906002)(7416002)(5660300002)(4326008)(8676002)(66946007)(6916009)(66556008)(66476007)(66899015)(54906003)(66574015)(316002)(83380400001)(41300700001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWN5dkhIMWwyRlpXaXpkWXh6K01XNWRwbnducWFMakl5OXdzU2dQK0FZajE0?=
- =?utf-8?B?SjlrOEdiZVlwU2VsOFk0RlM1cEMxQ255aytUVEJBNnJZZmpramZKSHBid2lH?=
- =?utf-8?B?TzI5MzFOS0dLOVRDVktXNFplMW1IaUlYa21hU3FLS2lQamRqdENDNmNaTmhi?=
- =?utf-8?B?ODljNUpqOFVBUVoyeFJyalc5QzRyNUFoV1NMVkExSkNnb1Z3SXlWWi8rTlFE?=
- =?utf-8?B?YW5aaitrUVV2RDFYZGRDWGwrZFBaVkhvQjZvMDhKQVZKVCtTNFRYMkNJODZy?=
- =?utf-8?B?elE5SlpuWGNMYmtoR3ozcmxIUWk3SSt4UHd0ZVVsVE5STFpmSllISG0yR01m?=
- =?utf-8?B?bHJkN0VmbGVlczZTa0VkQU55WjNwWjdxQmRmSVlETEFBNWh0UzZHMGs1VDZw?=
- =?utf-8?B?UTRJVzJQcFpVZEtobGNybkt2TitWViswMmhWbWh0QUFxWWZvMDl6aC82VDlF?=
- =?utf-8?B?T3dVdjBibDdvUXpwUHA5MDlkRGxTQWhNK2ppMTEwcHZ5eXU0Q1ZYd1E1dTVL?=
- =?utf-8?B?TStDM1VQS2I1MW5rSjBXWWFMdjg1bEVkVmFYRnRVMFFLVXUzcVJJWVZZVjRo?=
- =?utf-8?B?WnZ5V1FZM1ZBcmpDUktFd3I1Zlo1SDBjUUUybTJLd1owaHMzRklQdWxPRGRo?=
- =?utf-8?B?bXo1cXRtZjNhU2FKQ0NWVUliN3VMOU5uNjZ6cXk4Q2hsdDZoM1cwU29jbkkz?=
- =?utf-8?B?a01Bb2E2aktXWTR1VFFsckFSM2hVU01GRklNWjcxRk1RVnFGUjFVSDRPQk5r?=
- =?utf-8?B?LzgzSHdsYUNSTm5SYU1zWC81dXVDRXluOGs0V2toYVNHTStTUFd0MFhJOVI1?=
- =?utf-8?B?emhHcU9odHJ3Ylk0UWdwSlJOTzI2SllLdFBrSWdqMDlIQjNCVno5V1QwQVJs?=
- =?utf-8?B?bzZMVTUzcWlWUEZlU0ZhMjFCejFXckJuUGhyNDB1MUZNcDlEeS9WOGdKYWp6?=
- =?utf-8?B?bDhaUVNRM1hmeUVNUks5VHc4eWRMSTZTQmxzcmoxbE14bWdUNW83UWpmcE5C?=
- =?utf-8?B?NytTMmNqZ2kwcGJSRUt4eW9hVy84QlVuek43UWVmZnNCQ2FMM2MxMnpjeGg1?=
- =?utf-8?B?b1c0ODk3dEFsZlgzNEdmbGwyblo3UWZjMDd6RTNUZXYzdDFlMStRemRsWTh3?=
- =?utf-8?B?Z24vakE0WGVDRzkwQkdiQm40a0l5UEVKeHVwYjVFOGQrL3Jkb1RNeTRZZldS?=
- =?utf-8?B?SXhnREhUR001T1dsUHF3NTBMUUwrc3ZMVmRaVytKb28zeTl0WDJHRlFVLzN6?=
- =?utf-8?B?bmZ0Tzd0RDR0a1JzdGJEdnVhcWpsNGdHMlIyeU1TNHhJU0hLOUhLaHhtVzB3?=
- =?utf-8?B?UEpPOCtwODhxbWFHTnFPQTI0OWt3VER6VDBET3F5RjBvSWNpUFV1YTA2VlNt?=
- =?utf-8?B?cGtBQi9HaTNTTXNSMGUvVTdiSmREMkk3dWtQS1U4bkpFL0dkNkcxY0ZTWXF2?=
- =?utf-8?B?UkhXdkhvUGZVbGRhRkY1Sng5eUI5RDlFRi9ZK0w3Ui9INHkvdGFTWlkvNlg1?=
- =?utf-8?B?bFZxdlVURXIwY2pjMVVkOGVCbndPT1B4dkxQRGV4UjJNazc0bEQzbGl3VnlM?=
- =?utf-8?B?Y0JXdEtmZkJlbVU0N25hOHJuc2t6eUdGOTNzV2ZaQ0o0TFJmd2VHZEZPVWs4?=
- =?utf-8?B?Q2txRW9adnY1eTMvWEREZGY1T0dOeHlqeHN0cDQ4WWVmUFNvN0ZoNnExWFN5?=
- =?utf-8?B?M2wycWw1cmo2dG5uRENRU3Y1ZUtmd1BHQVpqK0d2YXNmVW9EZ0NCSENDQTho?=
- =?utf-8?B?L0x4TmdKTnYyTVIvNHA2ZkRpZGlrK2xBSHBMVHNra2NuVHZDczkvM1dYR3dG?=
- =?utf-8?B?a0NVMzFSTnczZ1FiZGlOTG4vclMxRUovY0JITWlIV1BaZmJUR3RpcmxVcFlW?=
- =?utf-8?B?ZWpBSWVNa1RiZFhjbnNpU25zZXBUbHMrOUc5a3VvTmhZSW5vMWtRc3IrVjNt?=
- =?utf-8?B?SDA5emJLMDQ2cU5VZFhVZ2xTL2ZjL0FIa3d4aC8yVFdZbUFmQ0FBcnpod2M5?=
- =?utf-8?B?cFVBK1UxTHBpYjNNMmhtRUVYWmNyaG9DVTUralJoaDBLdTR2T2t1YklqY2Vz?=
- =?utf-8?B?dXdFeEhEaGVDTFp1cVMwaE9DeUxzamFkNzVZYkk0bDl0clBGdWlDV3RQelVu?=
- =?utf-8?B?YndKRmVHbTRIQiswQTBaUWw1U25VenJIQ2x3NmY0aFhWK2h3TVgvVnVvampK?=
- =?utf-8?B?SVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c99d4e99-ea50-4856-5948-08dafa4f9c79
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?5DcbA2zD+Ki7TrJ0QzW4uwxi/46SSYaU388igBOlWJChy6A7Ug8xs/AA1d?=
+ =?iso-8859-1?Q?zYUIFpuNf+xe94Zc4Ol8YSZG8DOT4HuIGgWvw8wZ7r+qZ0oqyELtXV3l5b?=
+ =?iso-8859-1?Q?PZEH04+t8tjYsvUJV7tisuepDT79crz0JxmTqU8liZjAV7FcYOqxuM6mpR?=
+ =?iso-8859-1?Q?3kEX/BRNgVkvIbU5b11F+v8tzoqDtSs6WuD78Enj0OPZ/c56WZ5SdhqSN5?=
+ =?iso-8859-1?Q?ZYl9KHTUr+665FjKXIpSbyCVYBtJF1RSf3llyCoqgC+NIIn2jT/j2b/gnO?=
+ =?iso-8859-1?Q?oPCUrA61iWrbzXEQSLC3i2ov8ZHsWg45pGurSyP6AXTD3euhkcgKHJxKH7?=
+ =?iso-8859-1?Q?x36uHxmKPfdQ/bTle3FJrfr7otG55o+RP4cNLzej9QF8hs1pI1AhO2Q32z?=
+ =?iso-8859-1?Q?SaaNE3fQqUDFsaMMKLCLgwg0VQj36fS+n37HKOcUE0lbtmye3pYztoiNr4?=
+ =?iso-8859-1?Q?/g4eSiMCWdKUAaEq/N4E3HYEdAvWbNWwiZFVHfiCER/idw6S2VojfCBmf8?=
+ =?iso-8859-1?Q?pLSffVH9NMWG/jKc7NKqjFrUAObQdtwKWbDux9pIiytSzPw7jWcccTG7Rj?=
+ =?iso-8859-1?Q?1Z1625r6MycWHI0QKN741K2BbnzuulUOIxG8iU941SelvEBtfU/PMNw167?=
+ =?iso-8859-1?Q?BLw4TqIgmoduDJgVCqcn0ux1MARb0PTyXRv3zek2EOahjVcgiJTMMQ6fs5?=
+ =?iso-8859-1?Q?TI4jFoTnb0q3rPu9tSmUsB0IIm2FK1lIIaYDQVz1mBBmoCqB8GCxbhGnT3?=
+ =?iso-8859-1?Q?oXsxxLEW0iXxW1Zkxyk+RSd6k+y074JDB4ZNFl/FFAM8MjHyektpjnblp8?=
+ =?iso-8859-1?Q?+hYanVoUnJMlXK/6ucyUIVB6xL3PFww31nL6DnnL1arpo11q9sfiqLSG6L?=
+ =?iso-8859-1?Q?DQRZys2Skl4JrFRpJ6LVsKMPs24bnRoQ2tkwkdexAiejyppkVGzCqsdGDV?=
+ =?iso-8859-1?Q?i8AWiTwhYl+97tkXcuheTgvR9OTtNx0JQQu7xp7zINrmJJHjgeL7iYMjqJ?=
+ =?iso-8859-1?Q?XX5AX4G2wuhIiemCLAZId4/nhNnCrvqpkA4dhepcPVBH3oxaiI7rUQL6YY?=
+ =?iso-8859-1?Q?kwK4CZb0Cclw+H0NMUPhTn6R0aUVMHYpLlKiooyULjMY6FNyiOCGLOQs6V?=
+ =?iso-8859-1?Q?gfz1bRplmYLeftbfPdyRfedlsQ0paGpba5S4acSoDXnNnxcqNW4MI2obGV?=
+ =?iso-8859-1?Q?KRqUqtzCmwXyite/weK5nsdfaeA0Wf68LQMSUBrrxmGmDKVFleR9mTrbCD?=
+ =?iso-8859-1?Q?sBoMZDDnRgqb9XMxQUCXsbEJ0TF7IZdm92wucOVrsGHPKKxEzePvJBKKYD?=
+ =?iso-8859-1?Q?6C6d7jABJB7hwmIeV0rhMbqCgncvPC5e5Xs5INeFLQXPuKIhLJEEJ7iQKa?=
+ =?iso-8859-1?Q?aRblmhnUCo3Yk3XagD8KHGtfzoJgit0TG6zbQGzhvmvDlfokM581j1AdkM?=
+ =?iso-8859-1?Q?3MbF3BYtHDl6R/4U1XYVPUikctjqf6M/nS+IWtitkIDVKnhwh4xJl/E83d?=
+ =?iso-8859-1?Q?uX0/X9vlA0EUcypdBnbbDHi/jW8Z+tGwdkKAUDmlKFYipPDw/9YZBsL/6O?=
+ =?iso-8859-1?Q?jBHW6A+if6anHr4COQcDq6vGZD4sMvYHE1ReQH6sWnLhoJ8Ja94F8bdCcj?=
+ =?iso-8859-1?Q?FNnj/vy4qogR7AHJo0g2lHYJWiApXXuGul8jYXnEulGLEKjO/SyU4qiQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 550501be-1ab2-4e69-5619-08dafa4fad7c
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 19:01:46.5292
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 19:02:15.3677
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V/hmKqFbmSkmsKtRRt0PN/XVtsbmHfcPyn+AiPnwP1Qv9iOYADeF95t47kBMpixlPtjjZDBOitk1X/4NxNmDRD0njoZj2LzHwGE26yXXgwE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6797
+X-MS-Exchange-CrossTenant-UserPrincipalName: mgyhFSRTrzNcJJB7KZTSlPVoS88vIaBUbmW08wtCo3yLvR9Zp/CH0naIoFOpEq6ZZ0yCG4QJZ+XGS9ZRRyDO/7xSB0i9AaeToFFI1PDnis4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7046
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/19/2023 3:21 PM, Kai-Heng Feng wrote:
-> Hi Vidya,
+On Wed, Jan 18, 2023 at 04:01:29PM +0900, Masahiro Yamada wrote:
+>On Wed, Jan 18, 2023 at 4:23 AM Lucas De Marchi
+><lucas.demarchi@intel.com> wrote:
+>>
+>> On Tue, Jan 17, 2023 at 06:51:44PM +0100, Michal Suchánek wrote:
+>> >Hello,
+>> >
+>> >On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote:
+>> >> On Thu, 12 Jan 2023 14:40:59 -0700
+>> >> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+>> >>
+>> >> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
+>> >> > >
+>> >> > > struct modversion_info {
+>> >> > >- unsigned long crc;
+>> >> > >- char name[MODULE_NAME_LEN];
+>> >> > >+ /* Offset of the next modversion entry in relation to this one. */
+>> >> > >+ u32 next;
+>> >> > >+ u32 crc;
+>> >> > >+ char name[0];
+>> >> >
+>> >> > although not really exported as uapi, this will break userspace as this is
+>> >> > used in the  elf file generated for the modules. I think
+>> >> > this change must be made in a backward compatible way and kmod updated
+>> >> > to deal with the variable name length:
+>> >> >
+>> >> > kmod $ git grep "\[64"
+>> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
+>> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
+>> >> >
+>> >> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
+>> >> > and 64 bit module, and vice versa.
+>> >> >
+>> >>
+>> >> Hi Lucas,
+>> >>
+>> >> Thanks for the information.
+>> >>
+>> >> The change can't be "truly" backward compatible, in a sense that
+>> >> regardless of the new format we choose, kmod would not be able to decode
+>> >> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieves
+>> >> is going to be incomplete, isn't it?
+>> >>
+>> >> What kind of backward compatibility should be expected? It could be:
+>> >> * short symbols can still be found by old versions of kmod, but not
+>> >>   long symbols;
+>> >
+>> >That sounds good. Not everyone is using rust, and with this option
+>> >people who do will need to upgrade tooling, and people who don't care
+>> >don't need to do anything.
+>>
+>> that could be it indeed. My main worry here is:
+>>
+>> "After the support is added in kmod, kmod needs to be able to output the
+>> correct information regardless if the module is from before/after the
+>> change in the kernel and also without relying on kernel version."
+>> Just changing the struct modversion_info doesn't make that possible.
+>>
+>> Maybe adding the long symbols in another section? Or ble
+>> just increase to 512 and add the size to a
+>> "__versions_hdr" section. If we then output a max size per module,
+>> this would offset a little bit the additional size gained for the
+>> modules using rust. And the additional 0's should compress well
+>> so I'm not sure the additional size is that much relevant here.
 >
-> On Thu, Jan 19, 2023 at 5:49 PM Vidya Sagar <vidyas@nvidia.com> wrote:
->> Skip save and restore of ASPM L1 Sub-States specific registers if they
->> are not already enabled in the system. This is to avoid issues observed
->> on certain platforms during restoration process, particularly when
->> restoring the L1SS registers contents.
->>
->> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216782
->> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
->> ---
->>   drivers/pci/pcie/aspm.c | 19 ++++++++++++++++++-
->>   1 file changed, 18 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
->> index 53a1fa306e1e..5d3f09b0a6a9 100644
->> --- a/drivers/pci/pcie/aspm.c
->> +++ b/drivers/pci/pcie/aspm.c
->> @@ -757,15 +757,29 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
->>                                  PCI_L1SS_CTL1_L1SS_MASK, val);
->>   }
->>
->> +static bool skip_l1ss_restore;
-> Maybe move it inside "struct pci_dev"?
+>
+>
+>
+>
+>I also thought of new section(s) for long symbols.
+>
+>
+>
+>One idea is to have separate sections for CRCs and symbol names.
+>
+>
+>
+>
+>section __version_crc:
+>   0x12345678
+>   0x23456789
+>   0x34567890
+>
+>
+>section __version_sym:
+>  "very_very_very_very_long_symbol"
+>  "another_very_very_very_very_very_long_symbol"
+>  "yet_another_very_very_very_very_very_long_symbol"
+>
+>
+>
+>
+>You can iterate in each section with this:
+>
+>   crc += sizeof(u32);
+>   name += strlen(name) + 1;
+>
+>
+>Benefits:
+>  - No next pointer
+>  - No padding
+>    - *.mod.c is kept human readable.
 
-Yes, it can be different for different devices, so it cannot be static IMV.
+I like this option. It would be better than the current one.
 
+Lucas De Marchi
 
->> +
->>   void pci_save_aspm_l1ss_state(struct pci_dev *dev)
->>   {
->>          struct pci_cap_saved_state *save_state;
->>          u16 l1ss = dev->l1ss;
->> -       u32 *cap;
->> +       u32 *cap, val;
->>
->>          if (!l1ss)
->>                  return;
->>
->> +       /*
->> +        * Skip save and restore of L1 Sub-States registers if they are not
->> +        * already enabled in the system
->> +        */
->> +       pci_read_config_dword(dev, l1ss + PCI_L1SS_CTL1, &val);
->> +       if (!(val & PCI_L1SS_CTL1_L1SS_MASK)) {
->> +               skip_l1ss_restore = 1;
->> +               return;
->> +       }
->> +
->> +       skip_l1ss_restore = 0;
->> +
->>          save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
->>          if (!save_state)
->>                  return;
->> @@ -784,6 +798,9 @@ void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
->>          if (!l1ss)
->>                  return;
->>
->> +       if (skip_l1ss_restore)
->> +               return;
->> +
->>          save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
->>          if (!save_state)
->>                  return;
->> --
->> 2.17.1
->>
+>
+>
+>
+>
+>
+>BTW, the following is impossible
+>because the pointer reference to .rodata
+>is not available at this point?
+>
+>struct modversion_info {
+>     u32 crc;
+>     const char *name:
+>};
+>
+>
+>
+>-- 
+>Best Regards
+>Masahiro Yamada
