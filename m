@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145E5673599
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3044267359A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjASKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S230492AbjASKe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjASKeN (ORCPT
+        with ESMTP id S230296AbjASKeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:34:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4946F316
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:50 -0800 (PST)
+        Thu, 19 Jan 2023 05:34:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F2B676C6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BA5F6150E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9ABCC433EF;
-        Thu, 19 Jan 2023 10:33:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FA3161510
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35464C433D2;
+        Thu, 19 Jan 2023 10:33:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674124429;
-        bh=+X0kPgmVo1UmmvH/S0Wj1Uhi8UF00ALskJuTsOflvdU=;
+        s=k20201202; t=1674124431;
+        bh=L8rZG8Abv4/0u4UKyqrEt+o9G0yPEGVbe8tLin4R8q8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XfR64zQNNZTtf6tz1uTrJQMArNTxCENgio7qzQzOWOuScLskOaggpgybGexqep78H
-         yvIbus7N2BQOntKXvAauS/iKDvDHNejg00/gQAQdqR/0vw9IY9NjPIaDpjmNXVNxEB
-         JTjAKV93fAuxs7tRYcgJaTKY9wBrM7hQiLgDgC/ZoqDvo7Zhb4bEzN6CioX7PjXZmd
-         xZgmWkTPBIfTOBlAHA807I6+oAX+l16TQ+FE+lsIa3t3wr1uXLtAr/jgcataYh/qa/
-         h7AOOvZbBaFZ3I4L/MxYtCJkb3FK7X5jj7IT+gp0O9gTY3Po7vMuwo6FLWygQfXL1z
-         DPFdHJ6IrMpCw==
+        b=VL5edJ2bj4lOGlm12KhhDKhfXmeIon0shD/povk/Zu/MaSV79lcORskCI+ltk7c1E
+         0ayxnDp1nnMcrCrpb3PYTphUP9PTo/kgfmWrsq987gfQ4WMJzDGlAX2gWtI9PiHPOb
+         BnWNHOwOJXudEQvw+AwPAYL1Uj7oEz1grIJu0WCWeNvWOvEpuKpea+iIMmpAvo+wvZ
+         0FUfaEtQZBv9VzQAdh2CuZHvAXsOSSUEfIbnh7oLydpp45fnhMQrrO/MMQ70bljboG
+         bpHDZ9YDh07FNv0xeSSx1t0uj9Eaeoy4o6VI4XljeTDRfnDYN9p8F6Kfx40hcS2KYY
+         l0vy9IJxRgUgQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Dani Liberman <dliberman@habana.ai>
-Subject: [PATCH 04/10] habanalabs/gaudi2: fix emda range registers razwi handling
-Date:   Thu, 19 Jan 2023 12:33:33 +0200
-Message-Id: <20230119103339.718430-4-ogabbay@kernel.org>
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 05/10] habanalabs: refactor user interrupt type
+Date:   Thu, 19 Jan 2023 12:33:34 +0200
+Message-Id: <20230119103339.718430-5-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230119103339.718430-1-ogabbay@kernel.org>
 References: <20230119103339.718430-1-ogabbay@kernel.org>
@@ -52,190 +52,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dani Liberman <dliberman@habana.ai>
+From: Ofir Bitton <obitton@habana.ai>
 
-Handling edma razwi is different than all other engines since edma
-uses sft routers. For hbw transactions sft router contain separate
-interface for each edma and for lbw there is common interface for
-both edma engines of the same dcore.
+In order to support more user interrupt types in the future, we
+enumerate the user interrupt type instead of using a boolean.
 
-To handle the razwi correctly we need to:
-1. Simplify the calculation of the sft router address.
-2. Add razwi handling for edma qm errors, since edma qman doesn't
-   reports axi error response.
-
-Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/accel/habanalabs/gaudi2/gaudi2.c | 69 ++++++++++++------------
- 1 file changed, 33 insertions(+), 36 deletions(-)
+ drivers/accel/habanalabs/common/habanalabs.h | 21 ++++++++++++--------
+ drivers/accel/habanalabs/common/irq.c        | 19 +++++++++++++-----
+ drivers/accel/habanalabs/gaudi2/gaudi2.c     |  9 +++++----
+ 3 files changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/accel/habanalabs/gaudi2/gaudi2.c b/drivers/accel/habanalabs/gaudi2/gaudi2.c
-index 72e08c1eae22..80cd4413b87d 100644
---- a/drivers/accel/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/accel/habanalabs/gaudi2/gaudi2.c
-@@ -1604,13 +1604,15 @@ static const u32 gaudi2_nic_initiator_lbw_rtr_id[NIC_NUMBER_OF_MACROS] = {
- 	DCORE2_RTR0, DCORE2_RTR0, DCORE2_RTR0, DCORE3_RTR7, DCORE3_RTR7, DCORE3_RTR7
+diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
+index 0b7fe4afd92d..a0dfbf4f6cbb 100644
+--- a/drivers/accel/habanalabs/common/habanalabs.h
++++ b/drivers/accel/habanalabs/common/habanalabs.h
+@@ -1083,20 +1083,25 @@ struct hl_cq {
+ 	atomic_t		free_slots_cnt;
  };
  
--struct sft_info {
--	u8 interface_id;
--	u8 dcore_id;
--};
--
--static const struct sft_info gaudi2_edma_initiator_sft_id[NUM_OF_EDMA_PER_DCORE * NUM_OF_DCORES] = {
--	{0, 0},	{1, 0}, {0, 1}, {1, 1}, {1, 2}, {1, 3},	{0, 2},	{0, 3},
-+static const u32 gaudi2_edma_initiator_hbw_sft[NUM_OF_EDMA_PER_DCORE * NUM_OF_DCORES] = {
-+	mmSFT0_HBW_RTR_IF1_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT0_HBW_RTR_IF0_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT1_HBW_RTR_IF1_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT1_HBW_RTR_IF0_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT2_HBW_RTR_IF0_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT2_HBW_RTR_IF1_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT3_HBW_RTR_IF0_MSTR_IF_RR_SHRD_HBW_BASE,
-+	mmSFT3_HBW_RTR_IF1_MSTR_IF_RR_SHRD_HBW_BASE
++enum hl_user_interrupt_type {
++	HL_USR_INTERRUPT_CQ = 0,
++	HL_USR_INTERRUPT_DECODER,
++};
++
+ /**
+  * struct hl_user_interrupt - holds user interrupt information
+  * @hdev: pointer to the device structure
++ * @type: user interrupt type
+  * @wait_list_head: head to the list of user threads pending on this interrupt
+  * @wait_list_lock: protects wait_list_head
+  * @interrupt_id: msix interrupt id
+- * @is_decoder: whether this entry represents a decoder interrupt
+  */
+ struct hl_user_interrupt {
+-	struct hl_device	*hdev;
+-	struct list_head	wait_list_head;
+-	spinlock_t		wait_list_lock;
+-	u32			interrupt_id;
+-	bool			is_decoder;
++	struct hl_device		*hdev;
++	enum hl_user_interrupt_type	type;
++	struct list_head		wait_list_head;
++	spinlock_t			wait_list_lock;
++	u32				interrupt_id;
  };
  
- static const u32 gaudi2_pdma_initiator_hbw_rtr_id[NUM_OF_PDMA] = {
-@@ -7212,7 +7214,7 @@ static void gaudi2_ack_module_razwi_event_handler(struct hl_device *hdev,
- 				u8 module_sub_idx, u64 *event_mask)
- {
- 	bool via_sft = false;
--	u32 hbw_rtr_id, lbw_rtr_id, dcore_id, dcore_rtr_id, sft_id, eng_id;
-+	u32 hbw_rtr_id, lbw_rtr_id, dcore_id, dcore_rtr_id, eng_id;
- 	u64 hbw_rtr_mstr_if_base_addr, lbw_rtr_mstr_if_base_addr;
- 	u32 hbw_shrd_aw = 0, hbw_shrd_ar = 0;
- 	u32 lbw_shrd_aw = 0, lbw_shrd_ar = 0;
-@@ -7268,8 +7270,13 @@ static void gaudi2_ack_module_razwi_event_handler(struct hl_device *hdev,
- 		lbw_rtr_id = hbw_rtr_id;
- 		break;
- 	case RAZWI_EDMA:
--		sft_id = gaudi2_edma_initiator_sft_id[module_idx].interface_id;
--		dcore_id = gaudi2_edma_initiator_sft_id[module_idx].dcore_id;
-+		hbw_rtr_mstr_if_base_addr = gaudi2_edma_initiator_hbw_sft[module_idx];
-+		dcore_id = module_idx / NUM_OF_EDMA_PER_DCORE;
-+		/* SFT has separate MSTR_IF for LBW, only there we can
-+		 * read the LBW razwi related registers
-+		 */
-+		lbw_rtr_mstr_if_base_addr = mmSFT0_LBW_RTR_IF_MSTR_IF_RR_SHRD_HBW_BASE +
-+								dcore_id * SFT_DCORE_OFFSET;
- 		via_sft = true;
- 		sprintf(initiator_name, "EDMA_%u", module_idx);
- 		break;
-@@ -7298,13 +7305,7 @@ static void gaudi2_ack_module_razwi_event_handler(struct hl_device *hdev,
- 	}
+ /**
+@@ -2691,11 +2696,11 @@ void hl_wreg(struct hl_device *hdev, u32 reg, u32 val);
+ 	p->size = sz; \
+ })
  
- 	/* Find router mstr_if register base */
--	if (via_sft) {
--		hbw_rtr_mstr_if_base_addr = mmSFT0_HBW_RTR_IF0_RTR_CTRL_BASE +
--				dcore_id * SFT_DCORE_OFFSET +
--				sft_id * SFT_IF_OFFSET +
--				RTR_MSTR_IF_OFFSET;
--		lbw_rtr_mstr_if_base_addr = hbw_rtr_mstr_if_base_addr;
--	} else {
-+	if (!via_sft) {
- 		dcore_id = hbw_rtr_id / NUM_OF_RTR_PER_DCORE;
- 		dcore_rtr_id = hbw_rtr_id % NUM_OF_RTR_PER_DCORE;
- 		hbw_rtr_mstr_if_base_addr = mmDCORE0_RTR0_CTRL_BASE +
-@@ -7318,22 +7319,8 @@ static void gaudi2_ack_module_razwi_event_handler(struct hl_device *hdev,
- 	/* Find out event cause by reading "RAZWI_HAPPENED" registers */
- 	hbw_shrd_aw = RREG32(hbw_rtr_mstr_if_base_addr + RR_SHRD_HBW_AW_RAZWI_HAPPENED);
- 	hbw_shrd_ar = RREG32(hbw_rtr_mstr_if_base_addr + RR_SHRD_HBW_AR_RAZWI_HAPPENED);
--
--	if (via_sft) {
--		/* SFT has separate MSTR_IF for LBW, only there we can
--		 * read the LBW razwi related registers
--		 */
--		u64 base;
--
--		base = mmSFT0_HBW_RTR_IF0_RTR_CTRL_BASE + dcore_id * SFT_DCORE_OFFSET +
--				RTR_LBW_MSTR_IF_OFFSET;
--
--		lbw_shrd_aw = RREG32(base + RR_SHRD_LBW_AW_RAZWI_HAPPENED);
--		lbw_shrd_ar = RREG32(base + RR_SHRD_LBW_AR_RAZWI_HAPPENED);
--	} else {
--		lbw_shrd_aw = RREG32(lbw_rtr_mstr_if_base_addr + RR_SHRD_LBW_AW_RAZWI_HAPPENED);
--		lbw_shrd_ar = RREG32(lbw_rtr_mstr_if_base_addr + RR_SHRD_LBW_AR_RAZWI_HAPPENED);
--	}
-+	lbw_shrd_aw = RREG32(lbw_rtr_mstr_if_base_addr + RR_SHRD_LBW_AW_RAZWI_HAPPENED);
-+	lbw_shrd_ar = RREG32(lbw_rtr_mstr_if_base_addr + RR_SHRD_LBW_AR_RAZWI_HAPPENED);
+-#define HL_USR_INTR_STRUCT_INIT(usr_intr, hdev, intr_id, decoder) \
++#define HL_USR_INTR_STRUCT_INIT(usr_intr, hdev, intr_id, intr_type) \
+ ({ \
+ 	usr_intr.hdev = hdev; \
+ 	usr_intr.interrupt_id = intr_id; \
+-	usr_intr.is_decoder = decoder; \
++	usr_intr.type = intr_type; \
+ 	INIT_LIST_HEAD(&usr_intr.wait_list_head); \
+ 	spin_lock_init(&usr_intr.wait_list_lock); \
+ })
+diff --git a/drivers/accel/habanalabs/common/irq.c b/drivers/accel/habanalabs/common/irq.c
+index 8bbcc223df91..a986d7dea453 100644
+--- a/drivers/accel/habanalabs/common/irq.c
++++ b/drivers/accel/habanalabs/common/irq.c
+@@ -333,13 +333,22 @@ irqreturn_t hl_irq_handler_user_interrupt(int irq, void *arg)
+ 	struct hl_user_interrupt *user_int = arg;
+ 	struct hl_device *hdev = user_int->hdev;
  
- 	eng_id = gaudi2_razwi_calc_engine_id(hdev, module, module_idx);
- 	if (hbw_shrd_aw) {
-@@ -7855,7 +7842,7 @@ static int gaudi2_handle_qm_sei_err(struct hl_device *hdev, u16 event_type,
- 	return error_count;
- }
+-	if (user_int->is_decoder)
+-		handle_user_interrupt(hdev, &hdev->common_decoder_interrupt);
+-	else
++	switch (user_int->type) {
++	case HL_USR_INTERRUPT_CQ:
+ 		handle_user_interrupt(hdev, &hdev->common_user_cq_interrupt);
  
--static int gaudi2_handle_qman_err(struct hl_device *hdev, u16 event_type)
-+static int gaudi2_handle_qman_err(struct hl_device *hdev, u16 event_type, u64 *event_mask)
- {
- 	u32 qid_base, error_count = 0;
- 	u64 qman_base;
-@@ -7903,34 +7890,42 @@ static int gaudi2_handle_qman_err(struct hl_device *hdev, u16 event_type)
- 		qman_base = mmDCORE3_MME_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA0_QM:
-+		index = 0;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE0_EDMA_0_0;
- 		qman_base = mmDCORE0_EDMA0_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA1_QM:
-+		index = 1;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE0_EDMA_1_0;
- 		qman_base = mmDCORE0_EDMA1_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA2_QM:
-+		index = 2;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE1_EDMA_0_0;
- 		qman_base = mmDCORE1_EDMA0_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA3_QM:
-+		index = 3;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE1_EDMA_1_0;
- 		qman_base = mmDCORE1_EDMA1_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA4_QM:
-+		index = 4;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE2_EDMA_0_0;
- 		qman_base = mmDCORE2_EDMA0_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA5_QM:
-+		index = 5;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE2_EDMA_1_0;
- 		qman_base = mmDCORE2_EDMA1_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA6_QM:
-+		index = 6;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE3_EDMA_0_0;
- 		qman_base = mmDCORE3_EDMA0_QM_BASE;
- 		break;
- 	case GAUDI2_EVENT_HDMA7_QM:
-+		index = 7;
- 		qid_base = GAUDI2_QUEUE_ID_DCORE3_EDMA_1_0;
- 		qman_base = mmDCORE3_EDMA1_QM_BASE;
- 		break;
-@@ -7957,8 +7952,10 @@ static int gaudi2_handle_qman_err(struct hl_device *hdev, u16 event_type)
- 	error_count = gaudi2_handle_qman_err_generic(hdev, event_type, qman_base, qid_base);
- 
- 	/* Handle EDMA QM SEI here because there is no AXI error response event for EDMA */
--	if (event_type >= GAUDI2_EVENT_HDMA2_QM && event_type <= GAUDI2_EVENT_HDMA5_QM)
-+	if (event_type >= GAUDI2_EVENT_HDMA2_QM && event_type <= GAUDI2_EVENT_HDMA5_QM) {
- 		error_count += _gaudi2_handle_qm_sei_err(hdev, qman_base, event_type);
-+		gaudi2_ack_module_razwi_event_handler(hdev, RAZWI_EDMA, index, 0, event_mask);
+-	/* Handle user cq or decoder interrupts registered on this specific irq */
+-	handle_user_interrupt(hdev, user_int);
++		/* Handle user cq interrupt registered on this specific irq */
++		handle_user_interrupt(hdev, user_int);
++		break;
++	case HL_USR_INTERRUPT_DECODER:
++		handle_user_interrupt(hdev, &hdev->common_decoder_interrupt);
++
++		/* Handle decoder interrupt registered on this specific irq */
++		handle_user_interrupt(hdev, user_int);
++		break;
++	default:
++		break;
 +	}
  
- 	return error_count;
+ 	return IRQ_HANDLED;
  }
-@@ -8868,7 +8865,7 @@ static void gaudi2_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_ent
- 	case GAUDI2_EVENT_ROTATOR0_ROT0_QM ... GAUDI2_EVENT_ROTATOR1_ROT1_QM:
- 		fallthrough;
- 	case GAUDI2_EVENT_NIC0_QM0 ... GAUDI2_EVENT_NIC11_QM1:
--		error_count = gaudi2_handle_qman_err(hdev, event_type);
-+		error_count = gaudi2_handle_qman_err(hdev, event_type, &event_mask);
- 		event_mask |= HL_NOTIFIER_EVENT_USER_ENGINE_ERR;
- 		break;
+diff --git a/drivers/accel/habanalabs/gaudi2/gaudi2.c b/drivers/accel/habanalabs/gaudi2/gaudi2.c
+index 80cd4413b87d..65c720a0c64c 100644
+--- a/drivers/accel/habanalabs/gaudi2/gaudi2.c
++++ b/drivers/accel/habanalabs/gaudi2/gaudi2.c
+@@ -2966,11 +2966,11 @@ static void gaudi2_user_interrupt_setup(struct hl_device *hdev)
  
+ 	/* Initialize common user CQ interrupt */
+ 	HL_USR_INTR_STRUCT_INIT(hdev->common_user_cq_interrupt, hdev,
+-				HL_COMMON_USER_CQ_INTERRUPT_ID, false);
++				HL_COMMON_USER_CQ_INTERRUPT_ID, HL_USR_INTERRUPT_CQ);
+ 
+ 	/* Initialize common decoder interrupt */
+ 	HL_USR_INTR_STRUCT_INIT(hdev->common_decoder_interrupt, hdev,
+-				HL_COMMON_DEC_INTERRUPT_ID, true);
++				HL_COMMON_DEC_INTERRUPT_ID, HL_USR_INTERRUPT_DECODER);
+ 
+ 	/* User interrupts structure holds both decoder and user interrupts from various engines.
+ 	 * We first initialize the decoder interrupts and then we add the user interrupts.
+@@ -2983,10 +2983,11 @@ static void gaudi2_user_interrupt_setup(struct hl_device *hdev)
+ 	 */
+ 	for (i = GAUDI2_IRQ_NUM_DCORE0_DEC0_NRM, j = 0 ; i <= GAUDI2_IRQ_NUM_SHARED_DEC1_NRM;
+ 										i += 2, j++)
+-		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, true);
++		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i,
++						HL_USR_INTERRUPT_DECODER);
+ 
+ 	for (i = GAUDI2_IRQ_NUM_USER_FIRST, k = 0 ; k < prop->user_interrupt_count; i++, j++, k++)
+-		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, false);
++		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, HL_USR_INTERRUPT_CQ);
+ }
+ 
+ static inline int gaudi2_get_non_zero_random_int(void)
 -- 
 2.25.1
 
