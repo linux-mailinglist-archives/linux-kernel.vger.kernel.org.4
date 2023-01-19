@@ -2,172 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18C3673844
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D31A673851
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjASMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S229918AbjASMZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjASMWm (ORCPT
+        with ESMTP id S229488AbjASMZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:22:42 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1558078A81;
-        Thu, 19 Jan 2023 04:22:32 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8BCB501;
-        Thu, 19 Jan 2023 13:22:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674130949;
-        bh=HKd24MpJPUA2cBn9+Zxn633AqY8BeWf29Z3k0lXodMQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Gns5S8qh8jwvaj99tc5g1AfeyxIAkIZjBq/9Tf4k7lIvj53bCAPsZzS7pmRhgSV/K
-         Kd29mhjrhapWvLrf+ZBu5OqoPbOGZiDbottCGG0ijhc4lJ5D6cdU2WXbKaac7PfUkw
-         ars7HGmzXuEqzQakKo+WnqS61YcZJLewaaQELaI4=
-Message-ID: <79331f60-0849-9d5a-822a-987df01a4b96@ideasonboard.com>
-Date:   Thu, 19 Jan 2023 14:22:26 +0200
+        Thu, 19 Jan 2023 07:25:37 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046AEE4;
+        Thu, 19 Jan 2023 04:25:35 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id vw16so5155672ejc.12;
+        Thu, 19 Jan 2023 04:25:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1oc8l+BHDKcgf6k8zuEHIAyT/aMaPjFn9/oqd2FuEoc=;
+        b=jaFBJSCxIGBi9pvNatLCS8+zLvDMcNUR/KQbQAuOgKi6qHUf9APBGlBy1HCcsAatwm
+         tD8YNh8QRcuF6c50DMkPCrlRSU8huyTZxENypDYMC6Tuo1roxIikBv99KGwhZ6NuFAX7
+         aymwFwNfAghrPdrp3NJgkKJTV/J3xL7Ls2ZuqoKXA3YUpB4d1PFgk3NmgxW9zHIrQHGb
+         U8kMsmKn57QvifFFhBrfXuaXug5H9oVjcmLCEpLnPG8zJYbo9Y6nsKdxItmZUXOSRyux
+         w71ypzHqrTNk7HFkK6Nj3lN3/AwtclKpYN9xOpEqLLDAqzRXgBsXooS3M67Md0wN9VI0
+         5hMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1oc8l+BHDKcgf6k8zuEHIAyT/aMaPjFn9/oqd2FuEoc=;
+        b=yFVC/My/VWxwEJyMA0j3XnJC+stEc4tlDBXalvJzm5EhcRvNOMJ07vbvRxwU+8/AHT
+         +1DXua7zeqwaZ8ntTmKcYNtqWkqdhZ+W1+bZdrKPlC59uLTH92HvMo0YWcYfI/KArA63
+         /Ci/qUbO6UHmQMxzkvNH3qCMIY+4u7Dgw6ygcIqFEj1RdVxQXUP9RoZW21aJEoCzC/Ag
+         8YwSC3EPKRDkVZUzK3XwQ9oDsLjyAFk0iwwx/zU+DJXZ7KnXX0FDGBcwHO5c+ELeksLs
+         8gg8FN3ezjv6e12ykE3lxzs9HsNrLezt9vIn+QpEGCLL+rFpvyZFx8LQWWAuYXNJDwhk
+         APlw==
+X-Gm-Message-State: AFqh2kry6JQiNpqPfo7h1ZTQbGzLbLeqrPEXkLRWDj6dQB16sfEf7mQT
+        BAzwZCQ91XIVZVQjOeoRLQUcP6dyXI1QzYs9mOpGpgtO
+X-Google-Smtp-Source: AMrXdXtzPbVGTIQC0PlMXoXYe7KuptYBqRSQRvTSNNsTo5Pp5zLqkXuNSZT9XbIbEM1cIXr1KY0Z5/TaU9K5siI37Yk=
+X-Received: by 2002:a17:906:a28a:b0:7c0:ff76:7866 with SMTP id
+ i10-20020a170906a28a00b007c0ff767866mr737568ejz.272.1674131133411; Thu, 19
+ Jan 2023 04:25:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
- <Y8gA+cz9m7PaEhfP@smile.fi.intel.com> <20230118181753.7a325953@booty>
- <Y8gu4mlXUlyiFKZD@smile.fi.intel.com> <20230119092115.02cbbab3@booty>
- <db2e7386-e625-5bad-0c99-bae633e96d80@ideasonboard.com>
- <20230119123520.7f1aa680@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230119123520.7f1aa680@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106095143.3158998-3-chenhuacai@loongson.cn>
+ <20230106153840.GA1226257@bhelgaas> <CAAhV-H6agjbbkhHL4GT4rv_hVJ0y2D93Atp2veP-c8vbv45gVA@mail.gmail.com>
+In-Reply-To: <CAAhV-H6agjbbkhHL4GT4rv_hVJ0y2D93Atp2veP-c8vbv45gVA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 19 Jan 2023 20:25:20 +0800
+Message-ID: <CAAhV-H5PTMSWNF36MAkZv+xk=dqhF8Et5YynYZPAqyAxMQRcaw@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 13:35, Luca Ceresoli wrote:
-> Hi Tomi, Andy,
-> 
-> On Thu, 19 Jan 2023 12:09:57 +0200
-> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
-> 
->> On 19/01/2023 10:21, Luca Ceresoli wrote:
->>
->> <snip>
->>
->>>>>>> +void i2c_atr_set_driver_data(struct i2c_atr *atr, void *data)
->>>>>>> +{
->>>>>>> +	atr->priv = data;
->>>>>>> +}
->>>>>>> +EXPORT_SYMBOL_NS_GPL(i2c_atr_set_driver_data, I2C_ATR);
->>>>>>> +
->>>>>>> +void *i2c_atr_get_driver_data(struct i2c_atr *atr)
->>>>>>> +{
->>>>>>> +	return atr->priv;
->>>>>>> +}
->>>>>>> +EXPORT_SYMBOL_NS_GPL(i2c_atr_get_driver_data, I2C_ATR);
->>>>>>
->>>>>> Just to be sure: Is it really _driver_ data and not _device instance_ data?
->>>>>
->>>>> It is device instance data indeed. I don't remember why this got
->>>>> changed, but in v3 it was i2c_atr_set_clientdata().
->>>>
->>>> It's me who was and is against calling it clientdata due to possible
->>>> confusion with i2c_set/get_clientdata() that is about *driver data*.
->>>> I missed that time the fact that this is about device instance data.
->>>> I dunno which name would be better in this case, i2c_atr_set/get_client_priv() ?
->>>
->>> Not sure I'm following you here. The i2c_atr_set_clientdata() name was
->>> given for similarity with i2c_set_clientdata(). The latter wraps
->>> dev_set_drvdata(), which sets `struct device`->driver_data. There is
->>> one driver_data per each `struct device` instance, not per each driver.
->>> The same goes for i2c_atr_set_driver_data(): there is one priv pointer
->>> per each `struct i2c_atr` instance.
->>
->> I'm a bit confused. What is "driver data" and what is "device instance
->> data"?
->>
->> This deals with the driver's private data, where the "driver" is the
->> owner/creator of the i2c-atr. The i2c-atr itself doesn't have a device
->> (it's kind of part of the owner's device), and there's no driver in
->> i2c-atr.c
->>
->> I don't like "client" here, as it reminds me of i2c_client (especially
->> as we're in i2c context).
->>
->> What about i2c_atr_set_user_data()? Or "owner_data"?
-> 
-> Ah, only now I got the point Andy made initially about "client" not
-> being an appropriate word.
-> 
-> In i2c we have:
-> 
->    i2c_set_clientdata(struct i2c_client *client, void *data)
->            ^^^^^^~~~~            ^^^^^^                ~~~~
-> 
-> so "client" clearly makes sense there, now here.
+Ping?
 
-Isn't that also used by the i2c_client? A driver which handles an i2c 
-device is the "i2c client", in a sense?
 
-> The same logic applied here would lead to:
-> 
->    i2c_atr_set_atrdata(struct i2c_atr *atr, void *data)
->                ^^^~~~~            ^^^             ~~~~
-> 
-> which makes sense but it is a ugly IMO.
-
-Here, I think, there's a bit of a difference to the i2c_client case, as 
-we have a separate component for the i2c-atr. Although I guess one can 
-argue that the top level driver is the ATR driver, as it handles the HW, 
-and i2c-atr.c is just a set of helpers, so... I don't know =).
-
-> So I think i2c_atr_get_driver_data() in this v7 makes sense, it's to
-> set the data that the ATR driver instance needs.
-> 
-> This is coherent with logic in spi/spi.h:
-> 
->    spi_set_drvdata(struct spi_device *spi, void *data)
-> 
-> except for the abbreviation ("_drvdata" vs "_driver_data").
-> 
-> Andy, Tomi, would i2c_atr_set_drvdata() be OK for you, just like SPI
-> does?
-
-Well, I'm good with the current i2c_atr_set_driver_data(). If all agrees 
-that it's "driver data", I'd rather keep it like that. I find this 
-"drvdata" style very odd. Why no underscore between drv and data? Why 
-abbreviate drv, it doesn't really help anything here?
-
-That said, I'm also fine with i2c_atr_set_drvdata if that's the popular 
-opinion (between the three of us, so far ;).
-
-  Tomi
-
+On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+>
+> On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > [+cc Rafael, linux-pm, linux-kernel in case you have comments on
+> > whether devices should still be usable after .remove()/.shutdown()]
+> >
+> > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe services during
+> > > shutdown") we observe poweroff/reboot failures on systems with LS7A
+> > > chipset.
+> > >
+> > > We found that if we remove "pci_command &= ~PCI_COMMAND_MASTER" in
+> > > do_pci_disable_device(), it can work well. The hardware engineer says
+> > > that the root cause is that CPU is still accessing PCIe devices while
+> > > poweroff/reboot, and if we disable the Bus Master Bit at this time, the
+> > > PCIe controller doesn't forward requests to downstream devices, and also
+> > > does not send TIMEOUT to CPU, which causes CPU wait forever (hardware
+> > > deadlock).
+> > >
+> > > To be clear, the sequence is like this:
+> > >
+> > >   - CPU issues MMIO read to device below Root Port
+> > >
+> > >   - LS7A Root Port fails to forward transaction to secondary bus
+> > >     because of LS7A Bus Master defect
+> > >
+> > >   - CPU hangs waiting for response to MMIO read
+> > >
+> > > Then how is userspace able to use a device after the device is removed?
+> > >
+> > > To give more details, let's take the graphics driver (e.g. amdgpu) as
+> > > an example. The userspace programs call printf() to display "shutting
+> > > down xxx service" during shutdown/reboot, or the kernel calls printk()
+> > > to display something during shutdown/reboot. These can happen at any
+> > > time, even after we call pcie_port_device_remove() to disable the pcie
+> > > port on the graphic card.
+> > >
+> > > The call stack is: printk() --> call_console_drivers() --> con->write()
+> > > --> vt_console_print() --> fbcon_putcs()
+> > >
+> > > This scenario happens because userspace programs (or the kernel itself)
+> > > don't know whether a device is 'usable', they just use it, at any time.
+> >
+> > Thanks for this background.  So basically we want to call .remove() on
+> > a console device (or a bridge leading to it), but we expect it to keep
+> > working as usual afterwards?
+> >
+> > That seems a little weird.  Is that the design we want?  Maybe we
+> > should have a way to mark devices so we don't remove them during
+> > shutdown or reboot?
+> Sounds reasonable, but it seems no existing way can mark this.
+>
+> Huacai
+> >
+> > > This hardware behavior is a PCIe protocol violation (Bus Master should
+> > > not be involved in CPU MMIO transactions), and it will be fixed in new
+> > > revisions of hardware (add timeout mechanism for CPU read request,
+> > > whether or not Bus Master bit is cleared).
+> > >
+> > > On some x86 platforms, radeon/amdgpu devices can cause similar problems
+> > > [1][2]. Once before I wanted to make a single patch to solve "all of
+> > > these problems" together, but it seems unreasonable because maybe they
+> > > are not exactly the same problem. So, this patch add a new function
+> > > pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
+> > > dedicated for the shutdown path, and then add a quirk just for LS7A to
+> > > avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
+> > > platforms behave as before.
+> > >
+> > > [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
+> > > [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
+> > >
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
+> > >  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
+> > >  include/linux/pci.h                   |  1 +
+> > >  3 files changed, 37 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> > > index 759ec211c17b..641308ba4126 100644
+> > > --- a/drivers/pci/controller/pci-loongson.c
+> > > +++ b/drivers/pci/controller/pci-loongson.c
+> > > @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > >                       DEV_PCIE_PORT_2, loongson_mrrs_quirk);
+> > >
+> > > +static void loongson_bmaster_quirk(struct pci_dev *pdev)
+> > > +{
+> > > +     /*
+> > > +      * Some Loongson PCIe ports will cause CPU deadlock if there is
+> > > +      * MMIO access to a downstream device when the root port disable
+> > > +      * the Bus Master bit during poweroff/reboot.
+> > > +      */
+> > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
+> > > +
+> > > +     bridge->no_dis_bmaster = 1;
+> > > +}
+> > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > +                     DEV_PCIE_PORT_0, loongson_bmaster_quirk);
+> > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > +                     DEV_PCIE_PORT_1, loongson_bmaster_quirk);
+> > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > +                     DEV_PCIE_PORT_2, loongson_bmaster_quirk);
+> > > +
+> > >  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
+> > >  {
+> > >       pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
+> > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> > > index 2cc2e60bcb39..96f45c444422 100644
+> > > --- a/drivers/pci/pcie/portdrv.c
+> > > +++ b/drivers/pci/pcie/portdrv.c
+> > > @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
+> > >  {
+> > >       device_for_each_child(&dev->dev, NULL, remove_iter);
+> > >       pci_free_irq_vectors(dev);
+> > > -     pci_disable_device(dev);
+> > >  }
+> > >
+> > >  /**
+> > > @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
+> > >       }
+> > >
+> > >       pcie_port_device_remove(dev);
+> > > +
+> > > +     pci_disable_device(dev);
+> > > +}
+> > > +
+> > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> > > +{
+> > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> > > +
+> > > +     if (pci_bridge_d3_possible(dev)) {
+> > > +             pm_runtime_forbid(&dev->dev);
+> > > +             pm_runtime_get_noresume(&dev->dev);
+> > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
+> > > +     }
+> > > +
+> > > +     pcie_port_device_remove(dev);
+> > > +
+> > > +     if (!bridge->no_dis_bmaster)
+> > > +             pci_disable_device(dev);
+> > >  }
+> > >
+> > >  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
+> > > @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
+> > >
+> > >       .probe          = pcie_portdrv_probe,
+> > >       .remove         = pcie_portdrv_remove,
+> > > -     .shutdown       = pcie_portdrv_remove,
+> > > +     .shutdown       = pcie_portdrv_shutdown,
+> > >
+> > >       .err_handler    = &pcie_portdrv_err_handler,
+> > >
+> > > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > > index 3df2049ec4a8..a64dbcb89231 100644
+> > > --- a/include/linux/pci.h
+> > > +++ b/include/linux/pci.h
+> > > @@ -573,6 +573,7 @@ struct pci_host_bridge {
+> > >       unsigned int    ignore_reset_delay:1;   /* For entire hierarchy */
+> > >       unsigned int    no_ext_tags:1;          /* No Extended Tags */
+> > >       unsigned int    no_inc_mrrs:1;          /* No Increase MRRS */
+> > > +     unsigned int    no_dis_bmaster:1;       /* No Disable Bus Master */
+> > >       unsigned int    native_aer:1;           /* OS may use PCIe AER */
+> > >       unsigned int    native_pcie_hotplug:1;  /* OS may use PCIe hotplug */
+> > >       unsigned int    native_shpc_hotplug:1;  /* OS may use SHPC hotplug */
+> > > --
+> > > 2.31.1
+> > >
