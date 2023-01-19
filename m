@@ -2,117 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBB6673C9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270D9673C9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjASOn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S231148AbjASOpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbjASOmf (ORCPT
+        with ESMTP id S230239AbjASOoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:42:35 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1C875BA
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:40:37 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id az20so6263612ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YA4pZyF7V/PvrW6YJCArLXIcNJ4ekuR5YzULeYjw5uw=;
-        b=nA8KSlwwS3q3WcSsSIr363cX8fWLTe3nXhczH592sOgcVlsHTSUzGlgcC7YFGOZamN
-         xCTCtpMfpir9EfZr9HkmS5Nh3OR4EwBeAS0r8A9dadgP3JuSvmcKX5WpI7BMvqJ3JKlU
-         yg9/9t+42YsMFDz/LA6f5lQBRACzpepsnVRQXZthhD6Ufk/SBeMbB+UO/WP5wW91VCQM
-         UqgGDoW4Qwhk++mmBKMJak3VXKOaIrBEWe3hYHOSQOkSMKNFHK7/UscGywznKuZYk/0y
-         MhtvFwdzA98if1kvCmq7KP15Q1DYlUsEB4T2UuZwOxlTXX9u2WKp3IWbY2vS+WJefV1i
-         EF/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YA4pZyF7V/PvrW6YJCArLXIcNJ4ekuR5YzULeYjw5uw=;
-        b=u4qHY6m4jHJM03QYLuD4g7M2WUcZcatKcH68eJNV6SM4p2gJxgZBge1vCJEyH+m7Ku
-         qtCnaYylI1AqrowF4JpIg35Ifo8o+xRyk+Wt6+dxuMKDhRFZkMQHEzY9Mbewtl4+n+aM
-         yA4cv1fwatO/ZEVYfQMSztDZOl2yRWzeI2reByR1WQyV4EbM1c9d2i/Xqj6nmonKONlY
-         mxuFYt58EW+H7IQscFdgGV+TnXMWURWH//dJve+gue8p6njGBUfkO+eU4/fngkHSeL5o
-         5VYHy0rSY7PEYsnK6lrpdS02wbjCF37KN89aTnzFiPD/K+PF4UKk+LzjKCt7v3M9O5c6
-         M/Kg==
-X-Gm-Message-State: AFqh2kpFkrBLtv67R41pn2N+cO1Kcx2cChtzd4rB6rSCeWurbX3vtOvn
-        KUfTax7F+awFXxzObBvsJGCLMw==
-X-Google-Smtp-Source: AMrXdXt+NJICZX+Mrucdw/D7Ei1CdvvOHslUw1VwxG1ensMJZbWrlIcCwB0DB92smedOcB+hm0tfPA==
-X-Received: by 2002:a17:907:6e2a:b0:871:e9a0:eba7 with SMTP id sd42-20020a1709076e2a00b00871e9a0eba7mr15097175ejc.57.1674139235940;
-        Thu, 19 Jan 2023 06:40:35 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id lb19-20020a170907785300b0084d1efe9af6sm16277962ejc.58.2023.01.19.06.40.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 06:40:35 -0800 (PST)
-Message-ID: <3827d6e3-d9cb-7001-eb3d-c7fb2466263f@linaro.org>
-Date:   Thu, 19 Jan 2023 16:40:34 +0200
+        Thu, 19 Jan 2023 09:44:39 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8624B8A0FF;
+        Thu, 19 Jan 2023 06:41:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 94E575CEFC;
+        Thu, 19 Jan 2023 14:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674139298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OsQDd/QTZ7pOb/Ngb/kjbWLwcZRwcKeJIG/CoHqe140=;
+        b=PGhIpOGeoaqZpz6yDkYkeohpdb1wT+VH2fFe7tZjPYNjOo/Es7eDEP8gg+XhvACKSKpOF5
+        TViROxM/3DgfQVsCFFdsPa5oViqdmizBFJ5DBcWTXj2ypckWYgIenvPIqRzmkc3qL/6pgE
+        n1JcOCP8xLkforiwPnZ60hssW7AV3TA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674139298;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OsQDd/QTZ7pOb/Ngb/kjbWLwcZRwcKeJIG/CoHqe140=;
+        b=QDJShTR1tmXA1AgaTHj/onIhy2pTDAOTHBp/GcktSDLjUS2St5EMaN9lHGPMSkNs4SvhAk
+        PfmuryFOezXdB8Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 843F4139ED;
+        Thu, 19 Jan 2023 14:41:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id R45DIKJWyWPRLQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 19 Jan 2023 14:41:38 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8FBBCA06B2; Thu, 19 Jan 2023 15:41:37 +0100 (CET)
+Date:   Thu, 19 Jan 2023 15:41:37 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
+        syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: fix WARNING in ext4_update_inline_data
+Message-ID: <20230119144137.4jaespdaj3s6biov@quack3>
+References: <20230105091526.799343-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/2] qcom: add basic interconnect support to UFS
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Brian Masney <bmasney@redhat.com>, andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20221117104957.254648-1-bmasney@redhat.com>
- <ebd7e9f1-da9b-253d-0053-2327fd86e7f1@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <ebd7e9f1-da9b-253d-0053-2327fd86e7f1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105091526.799343-1-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/11/2022 13:12, Krzysztof Kozlowski wrote:
-> On 17/11/2022 11:49, Brian Masney wrote:
->> This patch set adds very basic support for the interconnect framework
->> to the Qualcomm portion of the UFS framework since the firmware on
->> these platforms expects the interconnect votes to be present. The
->> maximum throughput is requested to match what's already done in a few
->> other drivers.
->>
->> Here's the relevant entries from the interconnect_summary file in
->> debugfs that shows the two ICC paths are setup for the first UFS
->> host controller on the SA8540p automotive board (sc8280xp).
+On Thu 05-01-23 17:15:26, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-> I wonder whether this is solving the same or orthogonal problem as my
-> old patchset here:
+> Syzbot found the following issue:
+> EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
+> fscrypt: AES-256-CTS-CBC using implementation "cts-cbc-aes-aesni"
+> fscrypt: AES-256-XTS using implementation "xts-aes-aesni"
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 5071 at mm/page_alloc.c:5525 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
+> Modules linked in:
+> CPU: 1 PID: 5071 Comm: syz-executor263 Not tainted 6.2.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
+> RSP: 0018:ffffc90003c2f1c0 EFLAGS: 00010246
+> RAX: ffffc90003c2f220 RBX: 0000000000000014 RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003c2f248
+> RBP: ffffc90003c2f2d8 R08: dffffc0000000000 R09: ffffc90003c2f220
+> R10: fffff52000785e49 R11: 1ffff92000785e44 R12: 0000000000040d40
+> R13: 1ffff92000785e40 R14: dffffc0000000000 R15: 1ffff92000785e3c
+> FS:  0000555556c0d300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f95d5e04138 CR3: 00000000793aa000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __alloc_pages_node include/linux/gfp.h:237 [inline]
+>  alloc_pages_node include/linux/gfp.h:260 [inline]
+>  __kmalloc_large_node+0x95/0x1e0 mm/slab_common.c:1113
+>  __do_kmalloc_node mm/slab_common.c:956 [inline]
+>  __kmalloc+0xfe/0x190 mm/slab_common.c:981
+>  kmalloc include/linux/slab.h:584 [inline]
+>  kzalloc include/linux/slab.h:720 [inline]
+>  ext4_update_inline_data+0x236/0x6b0 fs/ext4/inline.c:346
+>  ext4_update_inline_dir fs/ext4/inline.c:1115 [inline]
+>  ext4_try_add_inline_entry+0x328/0x990 fs/ext4/inline.c:1307
+>  ext4_add_entry+0x5a4/0xeb0 fs/ext4/namei.c:2385
+>  ext4_add_nondir+0x96/0x260 fs/ext4/namei.c:2772
+>  ext4_create+0x36c/0x560 fs/ext4/namei.c:2817
+>  lookup_open fs/namei.c:3413 [inline]
+>  open_last_lookups fs/namei.c:3481 [inline]
+>  path_openat+0x12ac/0x2dd0 fs/namei.c:3711
+>  do_filp_open+0x264/0x4f0 fs/namei.c:3741
+>  do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+>  do_sys_open fs/open.c:1326 [inline]
+>  __do_sys_openat fs/open.c:1342 [inline]
+>  __se_sys_openat fs/open.c:1337 [inline]
+>  __x64_sys_openat+0x243/0x290 fs/open.c:1337
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+> Above issue happens as follows:
+> ext4_iget
+>    ext4_find_inline_data_nolock ->i_inline_off=164 i_inline_size=60
+> ext4_try_add_inline_entry
+>    __ext4_mark_inode_dirty
+>       ext4_expand_extra_isize_ea ->i_extra_isize=32 s_want_extra_isize=44
+>          ext4_xattr_shift_entries
+> 	 ->after shift i_inline_off is incorrect, actually is change to 176
+> ext4_try_add_inline_entry
+>   ext4_update_inline_dir
+>     get_max_inline_xattr_value_size
+>       if (EXT4_I(inode)->i_inline_off)
+> 	entry = (struct ext4_xattr_entry *)((void *)raw_inode +
+> 			EXT4_I(inode)->i_inline_off);
+>         free += EXT4_XATTR_SIZE(le32_to_cpu(entry->e_value_size));
+> 	->As entry is incorrect, then 'free' may be negative
+>    ext4_update_inline_data
+>       value = kzalloc(len, GFP_NOFS);
+>       -> len is unsigned int, maybe very large, then trigger warning when
+>          'kzalloc()'
+> To resolve above issue there's need to update 'i_inline_off' after
+> 'ext4_xattr_shift_entries()'.
+> 
+> Reported-by: syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-More or less it does. Vendor kernel scales both paths according to the 
-gear selected. I was surprised to see just two entries there. sdm845 has 
-22 entries in its msm-bus scaling table. What was the reason for just 
-two entries in your case?
+...
 
-What was the net result for that patchset? Is it going to be merged 
-anytime?
+> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+> index 7decaaf27e82..4cb9fd5bb622 100644
+> --- a/fs/ext4/xattr.c
+> +++ b/fs/ext4/xattr.c
+> @@ -2778,6 +2778,9 @@ int ext4_expand_extra_isize_ea(struct inode *inode, int new_extra_isize,
+>  			(void *)header, total_ino);
+>  	EXT4_I(inode)->i_extra_isize = new_extra_isize;
+>  
+> +	if (ext4_has_inline_data(inode))
+> +		error = ext4_find_inline_data_nolock(inode);
+> +
 
-I think we can start with just a version of this patchset that enables 
-static ICC config and then upgrade that with proper OPP tables, WDYT?
+So this would be fine except that ext4_expand_extra_isize_ea() may be
+racing e.g. with pending ext4_do_writepages() call trying to remove inline
+data and thus cause an assertion failure there because
+ext4_expand_extra_isize_ea() sets EXT4_STATE_MAY_INLINE_DATA. So I think
+you need to move setting of EXT4_STATE_MAY_INLINE_DATA out from
+ext4_find_inline_data_nolock() into the callers.
 
-(I wrote 'a version' since I had to modify the patch to set avg_bw 
-instead of setting the peak_bw and to pass different values instead of 
-UINT_MAX, I'll send it).
-
+								Honza
 -- 
-With best wishes
-Dmitry
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
