@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AED674B13
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34903674B19
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjATEoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S230322AbjATEoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjATEnd (ORCPT
+        with ESMTP id S229712AbjATEoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:43:33 -0500
+        Thu, 19 Jan 2023 23:44:01 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6CBCE895
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:39:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD15C1320
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:39:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5548BB82059
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3714AC433EF;
-        Thu, 19 Jan 2023 10:33:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97263B82065
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C116C433F1;
+        Thu, 19 Jan 2023 10:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674124425;
-        bh=gxlphDU9pbZkh6ENeWN11bIpyYGrYXAEwSZoAItiC94=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UEGZqjQNEcBuyIaKPRsIZUo5dUFC/XFwRT1uskgBljSLcnEiVFHhyEeJDEg3gll0F
-         q1T3kEpObx8QkakPtsJG7RVDjWgyR4A8ssASK0a7aePHOl6qsZiT5ifdH3CDaBx3Hx
-         EF3MMyiwzQpnMAn/wKlNTNP4mU6AC7BXP7tKminrGHqhMijusOHyQGw140VqQ130vd
-         XYkvYopVG+KgDH9mrZU4WG8EqVEH7mM2KmiY8dsbUYPNGl6ebeXAAy4AixGTtuYcUN
-         9GdWdL+F1iywS6YaHzl9bSWSSRdaSnvqqsPD3X8SGiZSiiR9PHWWEmPsuvqCmgAmV6
-         Z/zRH5RovaCwA==
+        s=k20201202; t=1674124428;
+        bh=y54ewbml1I4iFRDzazMX+Ve/HbnFguugCrugXNOrHeQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ifGCLFuPCxkREqmkyJPhT6JVtvFnq8wI7JKLv2sTXHA7la7b5rn2wOBkBhEbuauSA
+         fDEFlIEyqaR9+IL1qEMdNBytfQNfllvB/LhXPf2JM4WqzaRjGjGF17HUCbt64gp5O1
+         SAQaQbl8iLcAqM6cLVkM7DnOH+S+e5FCw7HD8kKDhKdbx0cjpLqilrGMHOl0l6t0Oj
+         2tlxWTF+Kx5TkgaJKg0t3vNcIt/vlgJMloL+bZR5WP1t0muf4s9yy3kxWLly1htGgW
+         +2ZKD6I+ncu8R+KpDV41q89LxZ6gyDuqiuWjuIwAjU02o1Gg+TXS1FL4TenibKn5ke
+         akV9aTWaJM4tw==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 01/10] habanalabs: update device status sysfs documentation
-Date:   Thu, 19 Jan 2023 12:33:30 +0200
-Message-Id: <20230119103339.718430-1-ogabbay@kernel.org>
+Cc:     Koby Elbaz <kelbaz@habana.ai>
+Subject: [PATCH 03/10] habanalabs: block soft-reset on an unusable device
+Date:   Thu, 19 Jan 2023 12:33:32 +0200
+Message-Id: <20230119103339.718430-3-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230119103339.718430-1-ogabbay@kernel.org>
+References: <20230119103339.718430-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,42 +52,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Koby Elbaz <kelbaz@habana.ai>
 
-As device status was changed recently, we must update the
-documentation as well.
+A device with status malfunction indicates that it can't be used.
+In such a case we do not support certain reset types, e.g.,
+all kinds of soft-resets (compute reset, inference soft-reset),
+and reset upon device release.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+A hard-reset is the only way that an unusable device can change its
+status. All other reset procedures can't put the device in a reset
+procedure, which might ultimately cause the device to change its
+status, unintentionally, to become operational again.
+
+Such a scenario has recently occurred, when a user requested
+a hard-reset while another heavy user workload was ongoing (reset
+request is queued).
+Since the workload couldn't finish within reset's timeout limits, the
+reset has failed and set a device status malfunction.
+Eventually, when the user released the FD, an unsuccessful soft-reset
+occurred, hence followed by an additional hard-reset that changed the
+ASICs status back to be operational.
+
+Signed-off-by: Koby Elbaz <kelbaz@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-driver-habanalabs | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/accel/habanalabs/common/device.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-habanalabs b/Documentation/ABI/testing/sysfs-driver-habanalabs
-index 13b5b2ec3be7..df2ca1a401b5 100644
---- a/Documentation/ABI/testing/sysfs-driver-habanalabs
-+++ b/Documentation/ABI/testing/sysfs-driver-habanalabs
-@@ -201,7 +201,18 @@ What:           /sys/class/habanalabs/hl<n>/status
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
--Description:    Status of the card: "Operational", "Malfunction", "In reset".
-+Description:    Status of the card:
-+                "operational" - Device is available for work.
-+                "in reset" - Device is going through reset, will be available
-+                        shortly.
-+                "disabled" - Device is not usable.
-+                "needs reset" - Device is not usable until a hard reset will
-+                        be initiated.
-+                "in device creation" - Device is not available yet, as it is
-+                        still initializing.
-+                "in reset after device release" - Device is going through
-+                        a compute-reset which is executed after a device release
-+                        (relevant for Gaudi2 only).
+diff --git a/drivers/accel/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
+index 2b6971463f12..9a9c494b08a4 100644
+--- a/drivers/accel/habanalabs/common/device.c
++++ b/drivers/accel/habanalabs/common/device.c
+@@ -1425,8 +1425,8 @@ static void handle_reset_trigger(struct hl_device *hdev, u32 flags)
+ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ {
+ 	bool hard_reset, from_hard_reset_thread, fw_reset, hard_instead_soft = false,
+-			reset_upon_device_release = false, schedule_hard_reset = false, delay_reset,
+-			from_dev_release, from_watchdog_thread;
++			reset_upon_device_release = false, schedule_hard_reset = false,
++			delay_reset, from_dev_release, from_watchdog_thread;
+ 	u64 idle_mask[HL_BUSY_ENGINES_MASK_EXT_SIZE] = {0};
+ 	struct hl_ctx *ctx;
+ 	int i, rc;
+@@ -1443,12 +1443,17 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 	delay_reset = !!(flags & HL_DRV_RESET_DELAY);
+ 	from_watchdog_thread = !!(flags & HL_DRV_RESET_FROM_WD_THR);
  
- What:           /sys/class/habanalabs/hl<n>/thermal_ver
- Date:           Jan 2019
++	if (!hard_reset && (hl_device_status(hdev) == HL_DEVICE_STATUS_MALFUNCTION)) {
++		dev_dbg(hdev->dev, "soft-reset isn't supported on a malfunctioning device\n");
++		return 0;
++	}
++
+ 	if (!hard_reset && !hdev->asic_prop.supports_compute_reset) {
+ 		hard_instead_soft = true;
+ 		hard_reset = true;
+ 	}
+ 
+-	if (hdev->reset_upon_device_release && (flags & HL_DRV_RESET_DEV_RELEASE)) {
++	if (hdev->reset_upon_device_release && from_dev_release) {
+ 		if (hard_reset) {
+ 			dev_crit(hdev->dev,
+ 				"Aborting reset because hard-reset is mutually exclusive with reset-on-device-release\n");
 -- 
 2.25.1
 
