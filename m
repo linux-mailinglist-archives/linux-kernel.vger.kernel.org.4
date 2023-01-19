@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8842D673656
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7E3673658
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjASLGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S229895AbjASLHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjASLGx (ORCPT
+        with ESMTP id S229542AbjASLHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:06:53 -0500
-Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BEB2DE3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:06:51 -0800 (PST)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 1C818B008082F;
-        Thu, 19 Jan 2023 19:06:49 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 19 Jan 2023 19:06:48 +0800
-Date:   Thu, 19 Jan 2023 19:06:42 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   Tio Zhang <tiozhang@didiglobal.com>
-To:     <pmladek@suse.com>, <yu.c.chen@intel.com>
-CC:     <juri.lelli@redhat.com>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <tiozhang@didiglobal.com>,
-        <zyhtheonly@gmail.com>, <zwp10758@gmail.com>, <zyhtheonly@yeah.net>
-Subject: [PATCH v2] sched: print parent comm in sched_show_task()
-Message-ID: <20230119110642.GA6463@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: pmladek@suse.com, yu.c.chen@intel.com,
-        juri.lelli@redhat.com, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        zyhtheonly@gmail.com, zwp10758@gmail.com, zyhtheonly@yeah.net
+        Thu, 19 Jan 2023 06:07:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BD8717A8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674126418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O0iBRCuE35ufrccluuz5wzolK9I4l2Ow06A6e8hFso8=;
+        b=ajPVHWR8szkpcN2wN5SnWSOVJRqVTmxKktzrGEkIxCIrNW8RxVwHGUvXRq/kwWbR1x9INd
+        c0VhjljDzDlk/TChMy+72faFKWaAb9iq/RVutue2XjHtkF8Orr2yeCnWPrlFfkHLjv9Y0r
+        k5MEMf5TofQjCL4GgXcVFmxiLkAjlZY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-hCORopCjOFu2yZVg-MnL3Q-1; Thu, 19 Jan 2023 06:06:55 -0500
+X-MC-Unique: hCORopCjOFu2yZVg-MnL3Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA3E18A010B;
+        Thu, 19 Jan 2023 11:06:54 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 58764492B01;
+        Thu, 19 Jan 2023 11:06:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y8htMvG33I73oG9z@ZenIV>
+References: <Y8htMvG33I73oG9z@ZenIV> <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk> <167391048988.2311931.1567396746365286847.stgit@warthog.procyon.org.uk>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     dhowells@redhat.com, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 01/34] vfs: Unconditionally set IOCB_WRITE in call_write_iter()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-ID: <2728921.1674126412.1@warthog.procyon.org.uk>
+Date:   Thu, 19 Jan 2023 11:06:52 +0000
+Message-ID: <2728922.1674126412@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Knowing who the parent is might be useful for debugging.
-For example, we can sometimes resolve kernel hung tasks by stopping
-the person who begins those hung tasks.
-With the parent's name printed in sched_show_task(),
-it might be helpful to let people know which "service" should be operated.
-Also, we move the parent info to a following new line while keeping the
-original line the same.
-And we would print "parent:unknown         ppid:<NULL>"
-when the task is not alive.
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
----
- kernel/sched/core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+> ->write_iter() <- nvmet_file_submit_bvec()
+> ->write_iter() <- call_write_iter() <- lo_rw_aio()
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index cb2aa2b54c7a..5690a5700f9e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8854,6 +8854,7 @@ void sched_show_task(struct task_struct *p)
- {
- 	unsigned long free = 0;
- 	int ppid;
-+	char *pcomm = NULL;
- 
- 	if (!try_get_task_stack(p))
- 		return;
-@@ -8867,13 +8868,22 @@ void sched_show_task(struct task_struct *p)
- #endif
- 	ppid = 0;
- 	rcu_read_lock();
--	if (pid_alive(p))
--		ppid = task_pid_nr(rcu_dereference(p->real_parent));
-+	if (pid_alive(p)) {
-+		struct task_struct *parent = rcu_dereference(p->real_parent);
-+
-+		ppid = task_pid_nr(parent);
-+		pcomm = parent->comm;
-+	}
- 	rcu_read_unlock();
- 	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
- 		free, task_pid_nr(p), ppid,
- 		read_task_thread_flags(p));
- 
-+	if (!ppid)
-+		pr_info("parent:unknown         ppid:<NULL>\n");
-+	else
-+		pr_info("parent:%-15.15s ppid:%-6d\n", pcomm, ppid);
-+
- 	print_worker_info(KERN_INFO, p);
- 	print_stop_info(KERN_INFO, p);
- 	show_stack(p, NULL, KERN_INFO);
--- 
-2.17.1
+Could call init_kiocb() in lo_rw_aio() and then just overwrite ki_ioprio.
+
+> ->write_iter() <- call_write_iter() <- fd_execute_rw_aio()
+
+fd_execute_rw_aio() perhaps should call init_kiocb() since the struct is
+allocated with kmalloc() and not fully initialised.
+
+> ->write_iter() <- call_write_iter() <- vfs_iocb_iter_write()
+>
+> The last 4 neither set KIOCB_WRITE nor call init_sync_kiocb().
+
+vfs_iocb_iter_write() is given an initialised kiocb.  It should not be calling
+init_sync_kiocb() itself.
+
+It's called from two places: cachefiles, which initialises the kiocb itself
+and sets IOCB_WRITE, and overlayfs, which gets the kiocb from the VFS via its
+->write_iter hook the caller of which should have already set IOCB_WRITE.
+
+cachefiles should be using init_kiocb() - though since it used kzalloc,
+init_kiocb() clearing the struct is redundant.
+
+> What's more, there are places that call instances (or their guts - look at
+> btrfs_do_write_iter() callers) directly...
+
+At least in the case of btrfs_ioctl_encoded_write(), that can call
+init_kiocb().  But as you say, there are more to be found.
+
+David
+
