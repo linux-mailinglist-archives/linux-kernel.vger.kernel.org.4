@@ -2,152 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0C9673173
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44DB673180
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 07:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjASF6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S230041AbjASGD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 01:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjASF6N (ORCPT
+        with ESMTP id S229863AbjASGDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:58:13 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4B85CE5C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:58:10 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 20so1375931plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:58:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NqoJEjKcl3UOYqd7SPQRjzEP7ckIMaJAKD1OzGpEQKw=;
-        b=hzqrmcOWUVXCz5l2YZEAhL2A7qelvCmWkLTe/GpehR2IISgGvRw4CcXkt11epZaZjM
-         HafMdnpe3P6+JZK+Tzp/817fzzFvgFEEvEdmIw4vSnO5zwAnSqCIsvOK9uAevfnYRn2r
-         vW+RX6F1mHr4dvllfGArzC4Pta6oOf6A0XIRQjAdu+cFbs0b5Uts0JWckJhu+f0xeO1H
-         3GnES/v2G6SEtPgoMIjxqZxxzYjUIhCICb66I+eoK3Trwe9pD6UOyxC+8d8pxylk0QcZ
-         iE2kXCkKWx1YdhLxwiOY2EWVP5qMLthknpVSe1tRj2Rn/akGdxc6rJs7nOIRJZFEAISj
-         Xv9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NqoJEjKcl3UOYqd7SPQRjzEP7ckIMaJAKD1OzGpEQKw=;
-        b=a/9LbQatgfx5F+0/U1LgZgvixEXU1LcLk8CdMD420p5f8bN8F+urGAV0VDydM4A3bl
-         TtIBGd+ad4idx0JYEyeSkVlqVp/TwtxbRNaNZkW4Tb2DXu87tkcuqN+5tq47Khidhshw
-         1HqAPt87dwy1JcrSllrjzx3S83UwFZCfTe3/CFyTyFcehJvKgOkgPwZG6AchmtEBpIM4
-         KKLj7sF+NANBb9Ix2MwFG4clKdBSFEE5r1Sleid5TsYrS551MrxQnwQ/PC5UE6WdncJQ
-         hdNP4mVV7pNLxxS5nzAf1pIh7BHLvj/LIyiB4m4dBsxYjmgbK+rqpZcY17u+TCHGB1q8
-         M5yA==
-X-Gm-Message-State: AFqh2krncwosKYUQYcfZSHT0sapKmlpGYg/bh3nvA+dIvsvrze8K5Q4K
-        DeavSiGGyd4nr3ndCRoXaBwScg==
-X-Google-Smtp-Source: AMrXdXssNyzCzGULvihUFdc0LouhxBz/1PBL4DSn/DIblNtvXTi0WFwPkCvDNqLvH1BSIbWe7wlrGw==
-X-Received: by 2002:a17:902:a514:b0:194:476b:1af0 with SMTP id s20-20020a170902a51400b00194476b1af0mr9729302plq.65.1674107889637;
-        Wed, 18 Jan 2023 21:58:09 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c60:63d3:2d69:9f71:187e:f085? ([2401:4900:1c60:63d3:2d69:9f71:187e:f085])
-        by smtp.gmail.com with ESMTPSA id k6-20020a170902c40600b0017f8094a52asm7109120plk.29.2023.01.18.21.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 21:58:08 -0800 (PST)
-Message-ID: <ee2dea71-771b-a574-1016-14c357a215d3@linaro.org>
-Date:   Thu, 19 Jan 2023 11:28:04 +0530
+        Thu, 19 Jan 2023 01:03:22 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F23D654DB;
+        Wed, 18 Jan 2023 22:03:21 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J4uixX031817;
+        Thu, 19 Jan 2023 06:03:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Zx3+u7KVTEPOomdLGNzu3Yfrw+y7cJzEGjCDC8iStvE=;
+ b=kp5hxlBWvSQ/XHtN8gZM2dxVD/d+rOycj0N/x0XmYisSkav1zMH9TALNcvDamMe3AazQ
+ gtTnrrAtSX6v2Uxj8d5ZRzHY6n7yja5UgXiSwjspplrvkJk0vGq7K+/T9FeDQyOIT4Rj
+ 8gLaCfpvCfVa6rcvsLBX66xaCS2aRAJtJBw/lmYOlaS02xDLOkiDYjFLPf+T1qTbQUNU
+ jjyJuBAaMtY3+alt3drJqa+I6dyDSMCZOEPyL7kEjAOLlOLvD6meVh2S1glKW/Mnzn9j
+ QbKueHKs3KddJX1yNvPm8IPyrpqWhRsx8P46H/C0TcIdLKIqFPeayQAdF+OMFZrztgQM Og== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n69uytn3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 06:03:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J63C5F006659
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 06:03:12 GMT
+Received: from [10.216.43.228] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 18 Jan
+ 2023 22:03:07 -0800
+Message-ID: <96a20619-6253-3380-9a25-5f8d8b6a47cf@quicinc.com>
+Date:   Thu, 19 Jan 2023 11:32:39 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
- '#size-cells' related dt-binding error
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
- <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
- <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
- <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
- <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
- <20230119032332.w5in5zmoyavi2s45@builder.lan>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: Re: [RESEND v3 4/4] clk: qcom: lpasscc-sc7280: Add resets for
+ audioreach
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <robh+dt@kernel.org>
+References: <1672849297-3116-1-git-send-email-quic_srivasam@quicinc.com>
+ <1672849297-3116-5-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n51AZCa9K_uY=ikTLqV-g_MsSA6Lv=Zq1LMrF-wVhR8_pg@mail.gmail.com>
+ <6cea0a3f-08de-47d5-99d1-74b0d8c7b732@quicinc.com>
+ <CAE-0n52ahKMzk0ho5jG1wxebm3ZE+Wfu_BunCaTR1WhN+J5jpw@mail.gmail.com>
 Content-Language: en-US
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20230119032332.w5in5zmoyavi2s45@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Organization: Qualcomm
+In-Reply-To: <CAE-0n52ahKMzk0ho5jG1wxebm3ZE+Wfu_BunCaTR1WhN+J5jpw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8t5aiBsn8df7YEHofZN4oLrX8htXWwCL
+X-Proofpoint-GUID: 8t5aiBsn8df7YEHofZN4oLrX8htXWwCL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190046
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
 
-On 1/19/23 8:53 AM, Bjorn Andersson wrote:
-> On Mon, Jan 16, 2023 at 09:13:12PM +0530, Bhupesh Sharma wrote:
->> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
->>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
->>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>
->>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
->>>>>> Fix the following '#address-cells' & '#size-cells' related
->>>>>> dt-binding error:
->>>>>>
->>>>>>     $ make dtbs_check
->>>>>>
->>>>>>     From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>>>          arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
->>>>>>                #address-cells:0:0: 2 was expected
->>>>>>        From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>>
->>>>> Don't we want rather to unify the soc address range?
+On 1/13/2023 1:05 AM, Stephen Boyd wrote:
+> Quoting Srinivasa Rao Mandadapu (2023-01-11 23:53:23)
+>> On 1/12/2023 2:54 AM, Stephen Boyd wrote:
+>> Thanks for your time Stephen!!!
+>>> Quoting Srinivasa Rao Mandadapu (2023-01-04 08:21:37)
+>>>> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> index 85dd5b9..1efb72d 100644
+>>>> --- a/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> @@ -102,6 +104,18 @@ static const struct qcom_cc_desc lpass_qdsp6ss_sc7280_desc = {
+>>>>           .num_clks = ARRAY_SIZE(lpass_qdsp6ss_sc7280_clocks),
+>>>>    };
 >>>>
->>>> Well, the assumption in the original dt-bindings was that every reg
->>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
->>>> #size-cells to <2>). However, that is not the case for all of the
->>>> SoCs.
->>>
->>> Hm, which device of that SoC cannot be used with address/size cells 2?
+>>>> +static const struct qcom_reset_map lpass_cc_sc7280_resets[] = {
+>>>> +       [LPASS_AUDIO_SWR_RX_CGCR] =  { 0xa0, 1 },
+>>>> +       [LPASS_AUDIO_SWR_TX_CGCR] =  { 0xa8, 1 },
+>>>> +       [LPASS_AUDIO_SWR_WSA_CGCR] = { 0xb0, 1 },
+>>> Why are we adding these resets again? These are already exposed in
+>>> lpassaudiocc-sc7280.c
+>> As explained in previous versions, legacy path nodes are not being used
+>> in ADSP based platforms, due to conflicts.
+> What is legacy path nodes?
+Legacy path nodes are for ADSP bypass use case such as nodes 
+lpass_audiocc, lpass_core, etc.
+>
+>> Hence lpasscc node alone being used exclusively in ADSP based solution,
+>> resets are added.
+> I think I understand..
+>
+>> In probe also, these reset controls are enabled based on
+>> "qcom,adsp-pil-mode" property.
 >>
->> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
->> be used with address/size cells 2 (See:
->> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
->>
-> 
-> I'm not able to find the reasoning you're referring to. We do have cells
-> of 2 for these nodes on all other platforms.  If there is a specific
-> problem, that can be documented and you can probably use ranges to
-> reduce keep the cells of 1 in the geni wrappers.
-> 
-> 
-> The reason why we have cells = 2 on most platforms is because the SMMU
-> reports that it's capable of more address bits than the buses will
-> handle. So without cells = 2, we can't describe dma-ranges appropriately
-> and you get page faults due to truncated addresses on the bus when the
-> iommu iova has been picking addresses for you.
+> but now I'm super confused! Please help me! We shouldn't have two
+> different device nodes for the same physical hardware registers.
+> Instead, we should have one node. The "qcom,adsp-pil-mode" property was
+> supposed to indicate the different mode of operation.
+>
+> Maybe the audio clk and reset drivers on sc7280 are duplicating each
+> other and one of them can be removed?
 
-Consolidating the replies to your, Krzysztof's and Rob's observations / 
-suggestions here..
+Yes agreed, that for controlling same registers from two different 
+drivers is not good solution.
 
-Yes, the original background to the problem was that I observed that for
-the sm6115 based Qualcomm board with me, if I was using 36-bit DMA 
-configuration with a few IP blocks (like SDHC), I was seeing some issues.
+But, when we are validating ADSP solution, we have seen issues like ADSP 
+is not coming out of reset with the existing bypass mode
 
-But, Konrad observed in [1] that it works fine for me on the sm6115 
-based Lenovo tab, so I agree to his suggestions and may be he can help
-send the '2-cell-ification' patch he has working, in which case I think
-we can drop this patch.
+clock drivers(lpassaudiocc_sc7280.c and lpasscoreecc_sc7280.c) enabled.
 
-@Konrad, please feel free to share the patch you were mentioning and I 
-can help test it as well.
+As per your suggestion, will try to address that  issues with 
+"qcom,adsp-pil-mode" property and avoid duplicating reset control code
 
-[1]. 
-https://lore.kernel.org/linux-arm-msm/09fe3e93-328b-13a3-540b-4ca47224b176@linaro.org/
+in lpasscc driver(lpasscc_sc7280.c).
 
-Thanks,
-Bhupesh
