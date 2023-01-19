@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BEF673BED
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD76673C06
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjASO2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S231187AbjASOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjASO16 (ORCPT
+        with ESMTP id S231716AbjASOaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:27:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DD47F9B3;
-        Thu, 19 Jan 2023 06:27:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 Jan 2023 09:30:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED587299;
+        Thu, 19 Jan 2023 06:29:28 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90AD461ACC;
-        Thu, 19 Jan 2023 14:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CA3C433F2;
-        Thu, 19 Jan 2023 14:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674138457;
-        bh=ATdPVmaH8/3z52/j6Bq9k4EsCVBhII5f9ZpQi4jovsY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mZ7mHOSyQOvnMZ5T/OGegzZQV1VoKeZ/4Tiur8pim8Vr8z03tHC7kwHgyN7zymyac
-         D9O4+pgqg4LtdH+ZDohBLAs8HezUvg6igvyVqOWygIo/8U1qsQCMQa7U5aSVhGaFaq
-         ctIHC7lA9IRTq5oy7gYFaoOZXxwM269cnAf+mJSGe8+xxF+KojIzCYt0t+6P5Zlpa9
-         AOP9wKIe0Gt0y5iRAogZ1B2BLC6em6aOb1DTmc3edCaISbNMQRwOGyh+NTFea8L1vX
-         iwfCHDyN4ln4e6WlOXxrCLJ5RxbydaQD/eE7VEbHOcdtQ4D2yNzETKiGCR2ol9KEXe
-         4nYfa6uSX16rw==
-Date:   Thu, 19 Jan 2023 14:27:29 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Okan Sahin <okan.sahin@analog.com>,
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 47BEB6600874;
+        Thu, 19 Jan 2023 14:29:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674138566;
+        bh=p/A/jWIk2sK78OlSgWI3fy+vpqk60q5IY/hSeAcs6AY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AksgbLzNeb2yo5Q6rWlWYXCGSsU4Pw/YGPRQEW1/m2X3nIhXkAmzKvRiJFLQkhCgb
+         ukyskjoKouGS2gXuEQJINq9XuoH6OYZsUt9oO28COwpJ7T22eLdTZ7AmsIo2dphiBp
+         TyPFWJflc5dKPM7QADxTaqIOOoG12xtf2fJnqz/M2MwZp7vt5ww2+qtDmThvAsL1+A
+         aZ73cLGHN43OnZ3/21dRCEk1nfVUNkbY4RfPNxK56KRa3vWDqPI9MPhx4ahriTCyKH
+         8kVvCc1YbmOzwji4Zyr2Y1dyP3ZqS5tWPxRZnA4bjXC549UvdB/jdpvLWLEHtfYVdE
+         j/yIeZyytE8Sg==
+Message-ID: <b8fafc86-40fe-c0ef-1310-b4e284e14609@collabora.com>
+Date:   Thu, 19 Jan 2023 15:29:22 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] clk: mediatek: add MT7981 clock support
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] drivers: mfd: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <Y8lTUegNjFZrXh1o@google.com>
-References: <20230118063822.14521-1-okan.sahin@analog.com>
- <20230118063822.14521-2-okan.sahin@analog.com>
- <Y8eq0GtVZfVdNKYn@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y8eq0GtVZfVdNKYn@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+References: <cover.1674137304.git.daniel@makrotopia.org>
+ <d1718b4f9887664e56b56019b8d21470407c4aaf.1674137304.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <d1718b4f9887664e56b56019b8d21470407c4aaf.1674137304.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023, Andy Shevchenko wrote:
-
-> On Wed, Jan 18, 2023 at 09:38:08AM +0300, Okan Sahin wrote:
-> > MFD driver for MAX77541/MAX77540 to enable its sub
-> > devices.
-> > 
-> > The MAX77541 is a multi-function devices. It includes
-> > buck converter and ADC.
-> > 
-> > The MAX77540 is a high-efficiency buck converter
-> > with two 3A switching phases.
-> > 
-> > They have same regmap except for ADC part of MAX77541.
+Il 19/01/23 15:12, Daniel Golle ha scritto:
+> Add MT7986 clock support, include topckgen, apmixedsys, infracfg and
+> ethernet subsystem clocks.
 > 
-> ...
+> The drivers are based on clk-mt7981.c which can be found in MediaTek's
+> SDK sources. To be fit for upstream inclusion the driver has been split
+> into clock domains and the infracfg part has been significantly
+> de-bloated by removing all the 1:1 factors (aliases).
 > 
-> > +/*
-> > + * Copyright (c) 2022 Analog Devices, Inc.
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>   drivers/clk/mediatek/Kconfig               |  17 +
+>   drivers/clk/mediatek/Makefile              |   4 +
+>   drivers/clk/mediatek/clk-mt7981-apmixed.c  | 103 +++++
+>   drivers/clk/mediatek/clk-mt7981-eth.c      | 138 +++++++
+>   drivers/clk/mediatek/clk-mt7981-infracfg.c | 236 +++++++++++
+>   drivers/clk/mediatek/clk-mt7981-topckgen.c | 431 +++++++++++++++++++++
+>   include/dt-bindings/clock/mt7981-clk.h     | 215 ++++++++++
+
+dt-bindings go in a different commit; also, please follow binding rules for
+filenames... mt7981-clk.h -> mediatek,mt7981-clk.h
+
+>   7 files changed, 1144 insertions(+)
+>   create mode 100644 drivers/clk/mediatek/clk-mt7981-apmixed.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt7981-eth.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt7981-infracfg.c
+>   create mode 100644 drivers/clk/mediatek/clk-mt7981-topckgen.c
+>   create mode 100644 include/dt-bindings/clock/mt7981-clk.h
 > 
-> Happy New Year!
 
-If the code hasn't changed greatly since the Copyright, there is no
-requirement to update the date.
+Moreover, I have pushed a pretty big cleanup series, which would reduce a bit
+the size of the drivers that you're trying to introduce, and which is well
+tested and reviewed: can you please rebase this on top of [1]?
 
-> > + * Mfd core driver for the MAX77540 and MAX77541
-> 
-> MFD
+Thanks!
 
-Please remove all mention of MFD - it's not a thing - we made it up!
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711734
 
--- 
-Lee Jones [李琼斯]
+Regards,
+Angelo
