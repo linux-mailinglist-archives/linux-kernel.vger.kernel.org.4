@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5240674000
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F948674006
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjASRdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S229929AbjASReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjASRdW (ORCPT
+        with ESMTP id S229788AbjASReD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:33:22 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE01B48A05
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:33:20 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso2473433pjf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LPLlNSnzLIud/SdIjCx832sULylUvnbc8QUJ7Ss0K9I=;
-        b=k1cvGWKFMNGBv17/1p6v1IzvK0wT7IqiQaY0qVkC9tFtXwvnQeVPQI2Ave2sLVk2e0
-         MfuORfn+YssgcdOkxHddBrrGWaafBL5IURnRtFlvY+e5+W4Og+ghhiUHLxN4jjdybZKd
-         FTeoilFVWhfnfVDBFSUBRG0PTbJLHyco19q4i/XPJ48+lVMv3yAtRMr/YaPoKBbjGOhr
-         5r5sfXajaygIY7QmIfKP9AM0yOgw+qMvcpeb6kxlZbXJ7cxkoupDp3VMRiLePsuT87AT
-         IVokInBr9wvB6h6eApokTwZZ5nH2Br01Jrkn5i6jgjOiJE0U4l0EnAWYj1t5TRUonDU0
-         l/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LPLlNSnzLIud/SdIjCx832sULylUvnbc8QUJ7Ss0K9I=;
-        b=epdlO0afnMiFy00g3JAu/tYKds1mvb6ZhsoPd4Cfzz2p0C9/imUU/pDUMyjYV/eUfi
-         2OvUe19X88kxnyoLztgATycVjZ8TG9wYC0aMQZ1n8I9LQ/PlU5hmGU7UdMdl5DrcGGtj
-         PR+Uc4fbSOEgPHkoiBeTSl7ztNJEIEsU7Nnxs5MxWmjFFijxqKtzS0+LsYuMR7cakjzw
-         1demIv8FNGwRrl+HrBh5/djO22zTNngpj0n0pTDZR8YvUy0RJ38lOJGTBxNhS99I28Lw
-         Mvqf48QCMb1PlxkYHau5ZIZ19I4+ud1b23W5fHivh3S9puuOAOq5CcMhosKqqZ5FMdck
-         q87A==
-X-Gm-Message-State: AFqh2koPct4hr9PfHGtYJHTZ+39OFzb278KEjWcSbyyeKYYRUFeDCIQS
-        DdgO99eXTrs9/AoNOPk3V1c=
-X-Google-Smtp-Source: AMrXdXv2qS952OsbhGL/YPtOfwGxEviqVp97NLihSuTFSqNi0Ri2Pdr4RxBMsphukL35cOs0qRhcEA==
-X-Received: by 2002:a05:6a20:d045:b0:ac:3f3f:9fbd with SMTP id hv5-20020a056a20d04500b000ac3f3f9fbdmr13438174pzb.48.1674149600323;
-        Thu, 19 Jan 2023 09:33:20 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id k36-20020a635a64000000b0048988ed9e4bsm20523336pgm.19.2023.01.19.09.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:33:19 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        katrinzhou <katrinzhou@tencent.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/i915: Avoid potential vm use-after-free
-Date:   Thu, 19 Jan 2023 09:32:58 -0800
-Message-Id: <20230119173321.2825472-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 19 Jan 2023 12:34:03 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3F42137
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:34:02 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30JHXW4n018458
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 12:33:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1674149616; bh=jX0t83R7p7p0HQWetaSXC63gp0f3+PSHgcNUT/Jsbtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=DGk5acJ2+G3WnlsmvTXbQlRa0dwU1xHO14zUkCg6Gqlgs8seCPnGw2+oFv/E9fDAb
+         NlvdOaZy6BzERVwnAj1shmNS0ULxmH5OvbX99TsBXmaPY9vfbCu35Osz/pwRZRavFR
+         xnvOTwCMo5JsnKwDfOelz1lCTxR0dvR6SpSTS1qCBLxeHHCId4WuSrf0IzUwdwh/c8
+         J/iKEC526tnr6ArK/RLJwG7cptVHpPXIBPM9fEGhRvjRq5j0+w91x0JDKJzQ18HTt0
+         leZNMbMgVaFOjwXF8mQAbjKC1JW0f/Srdq1QWC239rvCqjLo+i6Q4SydOMUg0la7cD
+         dh6L4gYiQYi5Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 4130215C469B; Thu, 19 Jan 2023 12:33:32 -0500 (EST)
+Date:   Thu, 19 Jan 2023 12:33:32 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Greg KH <greg@kroah.com>, Vinod Koul <vkoul@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the phy-next tree
+Message-ID: <Y8l+7KfRdPweMGWd@mit.edu>
+References: <20230119153145.598885cf@canb.auug.org.au>
+ <Y8jfW2TTnHd3J7R1@matsya>
+ <Y8jpFw5mfvyRLX/C@kroah.com>
+ <Y8lJiJHHcUO7MXQY@orome>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8lJiJHHcUO7MXQY@orome>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,48 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Thu, Jan 19, 2023 at 02:45:44PM +0100, Thierry Reding wrote:
+> 
+> This has been a recurring theme, so I'm trying to get a better
+> understanding of what people expect here. Some maintainers want to see
+> a whole series for a single feature (in this case it was Tegra234 USB
+> support) even if it crosses multiple subsystems/trees. This has the
+> advantage that patches can be arranged such that all dependencies are
+> resolved. Other maintainers like things to be split up so that patches
+> are easier to pick up.
 
-Adding the vm to the vm_xa table makes it visible to userspace, which
-could try to race with us to close the vm.  So we need to take our extra
-reference before putting it in the table.
+Yeah, that's a problem I've seen work both ways.  For example, there
+was the "Convert del_timer*() to timer_shutdown*()" series, which was
+sent out both as a treewide patch as well as piecewise for each
+subsystem.  The patches haven't been applied yet, and it's been on my
+todo list to figure out (a) whether I should wait and for it to go in
+via some other tree, and (b) whether it's safe to apply it standalone
+for ext4, and that's what the patch author was intending.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-Note, you could list commit e1a7ab4fca0c ("drm/i915: Remove the vm open
-count") as the "fixed" commit, but really the issue seems to go back
-much further (with the fix needing some backporting in the process).
+Personally, I'm happy to do it both ways, especially for fairly
+trivial treewide changes.  If it's complex enough that it's going to
+cause merge conflict headaches, that would be different, but very
+often, it's just 1 or 2 line changes in a very large number of
+subsystems.
 
- drivers/gpu/drm/i915/gem/i915_gem_context.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Cheers,
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-index 6250de9b9196..e4b78ab4773b 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-@@ -1861,11 +1861,19 @@ static int get_ppgtt(struct drm_i915_file_private *file_priv,
- 	vm = ctx->vm;
- 	GEM_BUG_ON(!vm);
- 
-+	/*
-+	 * Get a reference for the allocated handle.  Once the handle is
-+	 * visible in the vm_xa table, userspace could try to close it
-+	 * from under our feet, so we need to hold the extra reference
-+	 * first.
-+	 */
-+	i915_vm_get(vm);
-+
- 	err = xa_alloc(&file_priv->vm_xa, &id, vm, xa_limit_32b, GFP_KERNEL);
--	if (err)
-+	if (err) {
-+		i915_vm_put(vm);
- 		return err;
--
--	i915_vm_get(vm);
-+	}
- 
- 	GEM_BUG_ON(id == 0); /* reserved for invalid/unassigned ppgtt */
- 	args->value = id;
--- 
-2.38.1
-
+						- Ted
