@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A7E673F38
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372C2673F26
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjASQqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S230364AbjASQnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjASQpv (ORCPT
+        with ESMTP id S229923AbjASQnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:45:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E72458975;
-        Thu, 19 Jan 2023 08:45:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A64761CDC;
-        Thu, 19 Jan 2023 16:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EB5C433F1;
-        Thu, 19 Jan 2023 16:45:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674146748;
-        bh=XeXJuV70b8QQ89031T2UsnyGwGhNXA27WLTobdUHe78=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QvBnUIlJA0r4hT8+uu0mSag3a39SFxvH1ekgdar6RSpWa9Cqdh0t9UVAMzwVdJ66t
-         Tnujp0eswYce5xvH99u9CXa+OocodvEkvGLDQ5+w9e8R7kx3mTkMHg+BBlJTZ8Onwj
-         wEhodzItoVhF/usjpg7axTNYqWXBx8EtcycfZnSUH8I208NKyRBTRU24o4T+6gcw5M
-         Ny8dQ5LS0NpHnCF9yvh3DzP9ay09XeF+4AtiiQFK1lIiNOYzOd1hj1K5i+0hKUEnS8
-         f/wMFhIk0q7m5ualI0qSNQA93/egjP+FTwooyePpgHQIZNFpKtKct0UkvaksxSimyr
-         1vWwdU2DyIofg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pIY3M-0007Mx-AT; Thu, 19 Jan 2023 17:46:16 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jeremy Kerr <jk@ozlabs.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4/4] efi: efivars: prevent double registration
-Date:   Thu, 19 Jan 2023 17:42:55 +0100
-Message-Id: <20230119164255.28091-5-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20230119164255.28091-1-johan+linaro@kernel.org>
-References: <20230119164255.28091-1-johan+linaro@kernel.org>
+        Thu, 19 Jan 2023 11:43:10 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BB3E7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:43:08 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pIY0I-0004b9-TV; Thu, 19 Jan 2023 17:43:06 +0100
+Message-ID: <33cdaf9b-49ce-a98b-350e-5885343d10b4@leemhuis.info>
+Date:   Thu, 19 Jan 2023 17:43:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (#update)" 
+        <regressions@leemhuis.info>
+To:     bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     Chris Clayton <chris2553@googlemail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+In-Reply-To: <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674146588;0e8aa4f1;
+X-HE-SMSGID: 1pIY0I-0004b9-TV
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing sanity check to efivars_register() so that it is no
-longer possible to override an already registered set of efivar ops
-(without first deregistering them).
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-This can help debug initialisation ordering issues where drivers have so
-far unknowingly been relying on overriding the generic ops.
+On 19.01.23 15:33, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> On 18.01.23 21:59, Chris Clayton wrote:
+>>
+>> 	# first bad commit: [0e44c21708761977dcbea9b846b51a6fb684907a] drm/nouveau/flcn: new code to load+boot simple HS FWs
+>> (VPR scrubber)
+>
+> #regzbot ^introduced e44c2170876197
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/firmware/efi/vars.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+/me wonders if he failed to spot or cut'n'paste the leading 0
+/me wonders if he needs glasses
+#sigh
 
-diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-index f34e7741e0c3..bd75b87f5fc1 100644
---- a/drivers/firmware/efi/vars.c
-+++ b/drivers/firmware/efi/vars.c
-@@ -62,18 +62,27 @@ EXPORT_SYMBOL_GPL(efivar_is_available);
- int efivars_register(struct efivars *efivars,
- 		     const struct efivar_operations *ops)
- {
-+	int rv;
-+
- 	if (down_interruptible(&efivars_lock))
- 		return -EINTR;
- 
-+	if (__efivars) {
-+		pr_warn("efivars already registered\n");
-+		rv = -EBUSY;
-+		goto out;
-+	}
-+
- 	efivars->ops = ops;
- 
- 	__efivars = efivars;
- 
- 	pr_info("Registered efivars operations\n");
--
-+	rv = 0;
-+out:
- 	up(&efivars_lock);
- 
--	return 0;
-+	return rv;
- }
- EXPORT_SYMBOL_GPL(efivars_register);
- 
--- 
-2.38.2
+Sorry for the noise!
 
+#regzbot 0e44c21708761977dc
+
+> #regzbot title drm: nouveau: hangs on poweroff/reboot
+> #regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+#regzbot ignore-activity
