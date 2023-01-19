@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1955067312B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD90D67312A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjASF1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S229895AbjASF1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjASF0r (ORCPT
+        with ESMTP id S229816AbjASF0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:26:47 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C020CE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:46 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id g9so818100qtu.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:46 -0800 (PST)
+        Thu, 19 Jan 2023 00:26:48 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6E1AE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:47 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id g9so818132qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:26:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tC4jG2P7TxWk2xJp/iiDtds8NtE5bfDPvvXdGd6AAck=;
-        b=NAGaDdwxyXQU9vq7ltkCPRl1iGhpgYu/A2RgiYg6jwn1rEsUpWIb+1C7cEqotNB2dH
-         3kC8jzOXysoav7zP3YE+69BlP0NgLv69Ow30Q+l7FRS9H0JFopH80KG7yEsMmkLITON7
-         Y+av8jnv+G3M/d4rtXltAvKRf3LFLxiuTupvkvziaZOtddRCie0OdfyAdB0NEVdqNvkc
-         B4svO4SegF0tP6xvxalxDC36jb8wGnEZMWfdoh7p1vGi0Fz5ArhGhu3OlkMBx3DfVbPA
-         SxClmoaOnUNIkPS225ElDLrxWGLxfvvO89R39rK3hUtMTLno7NgOTRuAK5UH726aT6zv
-         R6nA==
+        bh=CvWquSrWDihZ0acdWJU0hmpgtyP5vfxrh4ZjBtKv7GY=;
+        b=oVvCL60ecUhBG09j4Y1NsZFRHxe3MVE2V7Cmffled1FjHBdZnUskAjCtHgy3YWfu9c
+         mPMCAS/8DS8ty4ksFnckwt9R5MQbofpmZKC9r3eABUzFFt5TyTBYFx7uZ+P/Zdbioale
+         bl4TS6vHA+e5Qv3zYovsIblT1K7LkfBVCKo1JXwn3Ahsi6t/LHVKw1ACCe11Q4X67zxd
+         c+gyi8m2S6r71GEvmT7nJnEdhSw8VfVIi16DuQO5iIdupZGa5/jbKLaa4OHl5k6nvItT
+         oD405HVs8KDChN261QLu685xaE7UIWO/4Av1yps2ekHeYo9F8YEcszeHdaPZemxAMPcD
+         gVzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tC4jG2P7TxWk2xJp/iiDtds8NtE5bfDPvvXdGd6AAck=;
-        b=jk1xOs/vbf1u6u0n6qT4zTm3CTAl2z+cbO/QsId/j2Ml4P+i+y4r6JonXVQlimPKBy
-         nH16VXSyQN0SPrMMQtfW4o0cFhIN58359u187OdSCJ2qLs2beAkRb/9ziqzAgBTdAmYF
-         3KJjOzXSsIu2AWeilYbGPwN5qD9sdgYcjSRoh9iUG7meAlajaW4kNIMK7Y4X6rwQBTQu
-         eaGAc5y/hrkDzJfFvMDOu02N5sUN3jECNHu9eeg6UCvDIYMNp/MMmUvCFYbpgN4pTpAy
-         CdTo9hUVBWUQabhmvwnA/mzlR6ERIoGZTwAAM18TRLBZm7Hu0zjSk/aCNBGjvlu7LCoZ
-         9CHw==
-X-Gm-Message-State: AFqh2kreSJRMJ+HKpmWAuOVDa1ouuCapO2ekfuA9tF8mYmpZQggPMEvi
-        49m8T8kWFnHprIZQWghAIfo=
-X-Google-Smtp-Source: AMrXdXtbA85An2UlTdL2XzbhfLYOvcD87z0EDVwbQ4RYCtnVmmT6y5CqsNyrZiS3va0/p+EQApDNig==
-X-Received: by 2002:ac8:5ed2:0:b0:3b6:313a:f461 with SMTP id s18-20020ac85ed2000000b003b6313af461mr12124149qtx.65.1674106005334;
-        Wed, 18 Jan 2023 21:26:45 -0800 (PST)
+        bh=CvWquSrWDihZ0acdWJU0hmpgtyP5vfxrh4ZjBtKv7GY=;
+        b=3WUeobzBVvxgJA4lDD9ENQRSF+oKz774mCIVoZ2Ia/blQft3gJFoSxljogHidh39XN
+         j+wNJCwJfK3vhvyjI9/HO+Uho51G6TFlIvHG0+GE66+C2f02T6+S+cDbwKZx1FhqZJKT
+         rCM2IdO5AsfhPl4/vWa8kCFzmsq0+FMi4w/J+G18bGXD3EqZfBgOi+EleyYBknB0r/+F
+         IswuGZ2mx8yBiVi+Skujk2w/p7WZSsZhivTkjCA66tRj4d6oRWKRycNLzUxHcm4/8LYL
+         tVFpotTRScZDGsaTX0LElTVbV+WzzoNTnBhQ4rfeNR69dPVk8S9wsYM6u6JuBMwn6Iol
+         Zf6A==
+X-Gm-Message-State: AFqh2kpUSyl3lujLBJ9M2qbwNVXGzyAcaeWRQNd+Dhdeo3jRtnwjjicS
+        ZtRfQ+gMhiRBb8YcUQfxQes=
+X-Google-Smtp-Source: AMrXdXsjJu8KZfUuO0V9UN0rraw3kxggjI/UB7RLpcZFW/B0GdZEoVmL4URNPATKL/WkMQXZDTfqrA==
+X-Received: by 2002:a05:622a:598b:b0:3a9:8f6c:2d7c with SMTP id gb11-20020a05622a598b00b003a98f6c2d7cmr14850392qtb.52.1674106006392;
+        Wed, 18 Jan 2023 21:26:46 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id v21-20020ac87295000000b003a5430ee366sm507330qto.60.2023.01.18.21.26.44
+        by smtp.gmail.com with ESMTPSA id v21-20020ac87295000000b003a5430ee366sm507330qto.60.2023.01.18.21.26.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 21:26:45 -0800 (PST)
+        Wed, 18 Jan 2023 21:26:46 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-riscv@lists.infradead.org
@@ -60,9 +60,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Albert Ou <aou@eecs.berkeley.edu>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
-Subject: [PATCH v1 1/2] riscv: Kconfig: Allow RV32 to build with no MMU
-Date:   Thu, 19 Jan 2023 00:26:41 -0500
-Message-Id: <20230119052642.1112171-2-Mr.Bossman075@gmail.com>
+Subject: [PATCH v1 2/2] riscv: configs: Add nommu decfconfig for RV32
+Date:   Thu, 19 Jan 2023 00:26:42 -0500
+Message-Id: <20230119052642.1112171-3-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
 References: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
@@ -78,43 +78,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yimin Gu <ustcymgu@gmail.com>
+32bit risc-v can be configured to run without MMU. This patch adds
+an example configuration for RV32 nommu virtual machine.
 
-Some RISC-V 32bit ores do not have an MMU, and the kernel should be
-able to build for them. This patch enables the RV32 to be built with
-no MMU support.
-
-Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
-CC: Jesse Taube <Mr.Bossman075@gmail.com>
-Tested-By: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Cc: Yimin Gu <ustcymgu@gmail.com>
 ---
- arch/riscv/Kconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/riscv/configs/rv32_nommu_virt_defconfig | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 arch/riscv/configs/rv32_nommu_virt_defconfig
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 59d18881f35b..49759dbe6a8f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -163,8 +163,8 @@ config MMU
- 
- config PAGE_OFFSET
- 	hex
--	default 0xC0000000 if 32BIT
--	default 0x80000000 if 64BIT && !MMU
-+	default 0xC0000000 if 32BIT && MMU
-+	default 0x80000000 if !MMU
- 	default 0xff60000000000000 if 64BIT
- 
- config KASAN_SHADOW_OFFSET
-@@ -262,7 +262,6 @@ config ARCH_RV32I
- 	select GENERIC_LIB_ASHRDI3
- 	select GENERIC_LIB_LSHRDI3
- 	select GENERIC_LIB_UCMPDI2
--	select MMU
- 
- config ARCH_RV64I
- 	bool "RV64I"
+diff --git a/arch/riscv/configs/rv32_nommu_virt_defconfig b/arch/riscv/configs/rv32_nommu_virt_defconfig
+new file mode 100644
+index 000000000000..460907253a80
+--- /dev/null
++++ b/arch/riscv/configs/rv32_nommu_virt_defconfig
+@@ -0,0 +1,16 @@
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_MMU is not set
++CONFIG_COMPAT_32BIT_TIME=y
++CONFIG_SOC_VIRT=y
++CONFIG_NONPORTABLE=y
++CONFIG_ARCH_RV32I=y
++CONFIG_BINFMT_FLAT=y
++CONFIG_SLOB=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_EXT2_FS=y
++CONFIG_PRINTK_TIME=y
 -- 
 2.39.0
 
