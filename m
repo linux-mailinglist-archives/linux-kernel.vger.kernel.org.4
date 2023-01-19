@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E646567420F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38C1674215
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjASTFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S231238AbjASTFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjASTFR (ORCPT
+        with ESMTP id S231217AbjASTFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 Jan 2023 14:05:17 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6448951A0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:25 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id 12so422052plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:25 -0800 (PST)
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAD9966D9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:26 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id w2so2216502pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lK1NIKrkWSVJySo5ySVaU+O2VgoLfd/S7FGV0rSbQ74=;
-        b=QTn+X4kDogFDm06PTrlrVc2vNfFhO2XlOJ0qiZo24LxGEM/89sltLSXVJzttDD/cGk
-         3ukNWOmfhe/7vdx/GMmJB1g61Nhhjyjos5lKhPMPKRrnv9RLNclDtHFSUbcxNdM0nFvE
-         xDxJabbKiVPzKOnx37qj+i3cHJaDQwNVsALkIHCrY1yttQxxc9Hh/Z0uvgy7E0GTHsau
-         7rCwmHJCgp9cPQbyX5wi6Ix9uXT6TL61jopXBLtm/Gfb4EexW9GREra0c8lYwRblnS24
-         3O4jfs0GRWqYTOZ9wpswS2DBS2wFSHHjFeaHgq8Jwz4+iSKRslqQOHp6LNMN/WPaAOK2
-         CPZQ==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lkx9shy389bjUkUVzL/gjZ86apFk2k0QZbOelmBX0OE=;
+        b=hEi/swBl1Fh3ND7edZ4bfH7ioIGNyfFDq9Zch1F2tgPvtnB6NqNSfAY2HOH/tjhxGF
+         +oK4kanqIJcG0AYDANkrwJ9aUj79XsF4qvOJPWumOWKMIM68af+cxpMS9Hy/BNjI4Lox
+         Jbv8XxsoiP55z0m8StJGkbYxKCIPxi5ATiqg4BbmM//zSxcv4/4Bs4mOm8bO4Lc1iYtt
+         0RwK1eLSRqG173GhtF3eEXTUpHGSEhdYSKEPWUtPKZpA3VTSBP3p6mFl49+bW/oiRc2Y
+         cwEC1RTBNPOgtzipXgHstePEvT4+W/tDaDfgCZqav8PRmk97pgVs6NLxoqYchp0Yw0fy
+         zZLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lK1NIKrkWSVJySo5ySVaU+O2VgoLfd/S7FGV0rSbQ74=;
-        b=nb67/6ghPeLqvRHzGp8pVjSinDsieLn3EKrwvhki44fvAKultuP6Huoz8lpAO2nKgn
-         BZdxkahMAcg6k9WEU2+6A3TRQeyqMw34RDoZ/skt3qjbJWXWSTJNH4z0H1xv2+TQ78K0
-         +C9S6UFPPBydHRjfoyarUvhgMDSZkp13hmAUMqByTJjHa5ffqfMW9BjiqdaCTaqSfIal
-         8BYbIKmWo2bQyPTOoI3nsiyIs2Kr/ZGQnE8ZxMgdpTmJNKa2E9F2C0YvHIWIwkHFZAPp
-         P8Bn5gPIGikD+iPOGQwQ8wtnrUCdyUMPEgNE+1d0/qoP4Y8Km7iDSjxURkzQIhafsc49
-         bJBw==
-X-Gm-Message-State: AFqh2kprPDToCtpk/P8NictJLGRwzRj1HIX06CK2S5cPQM5sDke2B0TY
-        v6gUD5LcPOVsvdHibH64eJs=
-X-Google-Smtp-Source: AMrXdXslOK1iyghyiIbtzl9nS5k1IBppvDOwu8D8IdCN6zSPqWlgTe/WgBiH37ZjOqCXoTZjyMz40A==
-X-Received: by 2002:a17:90a:3cc4:b0:225:d450:2ccc with SMTP id k4-20020a17090a3cc400b00225d4502cccmr11638474pjd.30.1674155026269;
-        Thu, 19 Jan 2023 11:03:46 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id q99-20020a17090a1b6c00b0021952b5e9bcsm3364479pjq.53.2023.01.19.11.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 11:03:45 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 Jan 2023 09:03:44 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Li Lingfeng <lilingfeng3@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        jack@suse.cz, bingjingc@synology.com, ebiggers@google.com,
-        james.smart@broadcom.com, houtao1@huawei.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH-next RESEND v2] lib: parser: optimize match_NUMER apis to
- use local array
-Message-ID: <Y8mUEL3VrizxFika@slm.duckdns.org>
-References: <20230111042215.4120156-1-lilingfeng3@huawei.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkx9shy389bjUkUVzL/gjZ86apFk2k0QZbOelmBX0OE=;
+        b=Mg3Oar34YWDhCoGYBiLXzLlT43AbDLn8nG5uyAcFVHdWeY7sxGAKjdsm7reEl/amCR
+         oVq9bfhAq6ULQx1zlW8HpY2dgpkeCiV6RCvfPBdG0WyhirUJ8bgYSfFM04TVLwV5o6Lg
+         z85zZNLssKuGN4olePgx3pL8JvDta31W2xEw/InNkkj9aQiMof+CHLmxWYOJOHxR6HZB
+         vQw7wTPkdt6E1vF4VAz86sn9JYdIxq1cjSfPcssPdY56m8hsIG7KbdGM0irBkT3FeulC
+         G28WJdNVg31grqv2lNkDoIMqWAhdN3GI6kg8RrDrs5RhxB/KrCCtUC10D6HS/j+68Mw1
+         UsOg==
+X-Gm-Message-State: AFqh2kpu7NRoZzLoVYYv71dzOJ+N+M7TE0CheKpGocu+8EAJU9z+oTw3
+        9ZCBBlONSD4V0LT5tmLDTzOYGcGLuaaQucg3FFU=
+X-Google-Smtp-Source: AMrXdXvdl8DsAmzXsKUW7UqfWXnlTDDEEJ6zgTl74tgHsmC8OmXNL2tDgFRQJOS982pLTZJ54jdyTsSs+m/THYs/eUE=
+X-Received: by 2002:a63:2153:0:b0:479:45df:425e with SMTP id
+ s19-20020a632153000000b0047945df425emr1006483pgm.116.1674155028337; Thu, 19
+ Jan 2023 11:03:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111042215.4120156-1-lilingfeng3@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:915:b0:5b0:e592:ea6e with HTTP; Thu, 19 Jan 2023
+ 11:03:47 -0800 (PST)
+Reply-To: zjianxin700@gmail.com
+From:   Zong Jianxin <mondayaneji@gmail.com>
+Date:   Thu, 19 Jan 2023 11:03:47 -0800
+Message-ID: <CAKxzvUxHAHt+LPbjA99iHjyeL_X8cm3q9P7ujhoypmvJr5RQaQ@mail.gmail.com>
+Subject: Hello!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 12:22:15PM +0800, Li Lingfeng wrote:
-> Memory will be allocated to store substring_t in match_strdup(), which means
-> the caller of match_strdup() may need to be scheduled out to wait for reclaiming
-> memory.
-> 
-> Using local array to store substring_t to remove the restriction.
-> 
-> Link: https://lore.kernel.org/all/20221104023938.2346986-5-yukuai1@huaweicloud.com/
-> Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
-> Acked-by: Tejun Heo <tj@kernel.org>
-
-This will fix a sleep-in-atomic in #linus, so it'd be great if we can get it
-merged. Can you please apply the suggested changes and repost? I think we
-can route this through block too as the current breakage is there. So,
-please cc Jens too.
-
-Thanks.
-
 -- 
-tejun
+Did you receive my previous email? I have a Profitable deal for you.
+
+Thanks
+Zong Jianxin
