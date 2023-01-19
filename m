@@ -2,117 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5ECE6738D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1BB6738D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjASMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S230337AbjASMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjASMkq (ORCPT
+        with ESMTP id S230045AbjASMlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:40:46 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CA151C77;
-        Thu, 19 Jan 2023 04:37:30 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 956321C09F6; Thu, 19 Jan 2023 13:37:28 +0100 (CET)
-Date:   Thu, 19 Jan 2023 13:37:28 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-Message-ID: <Y8k5iGfwGJRQRi1Q@duo.ucw.cz>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
- <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com>
- <Y8krsVFguwWLy+zT@duo.ucw.cz>
+        Thu, 19 Jan 2023 07:41:49 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEBA7ED50;
+        Thu, 19 Jan 2023 04:39:15 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5BB09501;
+        Thu, 19 Jan 2023 13:39:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674131953;
+        bh=2lco+Qsukw0ceEpuYI7PTg9Sfe2fOQKgi2R/lhYHdgw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P91nYFU9Cm5iINXxvJ1Rk14xRc4nHhpTxabESN4Fn4EgJFfBSbilUCd/8vmW//InW
+         pyN7RDmaPeP5qxirGYqkXaIpcglmdsZ2uhiJfO3EQ5jNhdS0vID45qgtOVMKbSHN1D
+         JI0iOJLOcPkXcuJl43PIPe1oxwxblJpyLen7Pep4=
+Message-ID: <ddbf82d0-155f-9189-44df-1f796c028b53@ideasonboard.com>
+Date:   Thu, 19 Jan 2023 14:39:09 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="3TX4iDTAe6OJlpVP"
-Content-Disposition: inline
-In-Reply-To: <Y8krsVFguwWLy+zT@duo.ucw.cz>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
+ <Y8gA+cz9m7PaEhfP@smile.fi.intel.com> <20230118181753.7a325953@booty>
+ <Y8gu4mlXUlyiFKZD@smile.fi.intel.com> <20230119092115.02cbbab3@booty>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230119092115.02cbbab3@booty>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/01/2023 10:21, Luca Ceresoli wrote:
+> Hi Andy,
+> 
+> On Wed, 18 Jan 2023 19:39:46 +0200
+> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+> 
+>> On Wed, Jan 18, 2023 at 06:17:53PM +0100, Luca Ceresoli wrote:
+>>> On Wed, 18 Jan 2023 16:23:53 +0200
+>>> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+>>
+>> ...
+>>
+>>>>> +A typical example follows.
+>>>>> +
+>>>>> +Topology::
+>>>>> +
+>>>>> +                      Slave X @ 0x10
+>>>>> +              .-----.   |
+>>>>> +  .-----.     |     |---+---- B
+>>>>> +  | CPU |--A--| ATR |
+>>>>> +  `-----'     |     |---+---- C
+>>>>> +              `-----'   |
+>>>>> +                      Slave Y @ 0x10
+>>>>> +
+>>>>> +Alias table:
+>>>>> +
+>>>>> +.. table::
+>>>>> +
+>>>>> +   ======   =====
+>>>>> +   Client   Alias
+>>>>> +   ======   =====
+>>>>> +   X        0x20
+>>>>> +   Y        0x30
+>>>>> +   ======   =====
+>>>>> +
+>>>>> +Transaction:
+>>>>> +
+>>>>> + - Slave X driver sends a transaction (on adapter B), slave address 0x10
+>>>>> + - ATR driver rewrites messages with address 0x20, forwards to adapter A
+>>>>> + - Physical I2C transaction on bus A, slave address 0x20
+>>>>> + - ATR chip propagates transaction on bus B with address translated to 0x10
+>>>>> + - Slave X chip replies on bus B
+>>>>> + - ATR chip forwards reply on bus A
+>>>>> + - ATR driver rewrites messages with address 0x10
+>>>>> + - Slave X driver gets back the msgs[], with reply and address 0x10
+>>>>
+>>>> I'm not sure I got the real / virtual status of the adapters. Are the B and C
+>>>> virtual ones, while A is the real?
+>>>
+>>> Let me reply, as I wrote these docs back at the times and thus I feel
+>>> guilty in case that's unclear. :)
+>>>
+>>> I don't like the word "virtual" in this situation. A, B and C are all
+>>> physical busses, made of copper and run by electrons on PCBs. B and C
+>>> are the "remote" or "downstream" busses (w.r.t. the CPU), where the i2c
+>>> devices are and where transactions happen using the address that the
+>>> chip responds to. A is the "local" or "upstream" bus that is driven
+>>> directly by the CPU (*) and where address aliases are used. Using
+>>> aliases there is necessary because using address 0x10 would be
+>>> ambiguous as there are two 0x10 chips out there.
+>>>
+>>> (*) There could be more layers of course, but still A is "closer to the
+>>> CPU than B and C", for the sake of completeness.
+>>
+>> Can the diagram and/or text be updated to elaborate this?
+> 
+> Let's see whether the text below is better. I haven't changed the
+> image, I don't think we can do much more in ASCII, but maybe we can
+> replace it with an SVG [0]?
+> 
+> [0]
+> https://github.com/lucaceresoli/docs/blob/master/video-serdes-linux/images/i2c-ti.svg
+> 
+> A typical example follows.
+> 
+> Topology::
+> 
+>                        Slave X @ 0x10
+>                .-----.   |
+>    .-----.     |     |---+---- B
+>    | CPU |--A--| ATR |
+>    `-----'     |     |---+---- C
+>                `-----'   |
+>                        Slave Y @ 0x10
 
---3TX4iDTAe6OJlpVP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Slightly beside the point of this discussion, but one thing (I think) I 
+tried to highlight in some older cover letter was that we don't really 
+have the above structure. We have something like this (a quick edit, sorry):
 
-Hi!
+                             .------.  Slave X @ 0x10
+                 .------.    | FPDS |   |
+     .-----.     | FPDD |-F1-`------'---+---- B
+     | CPU |--A--| ATR  |
+     `-----'     |      |-F2-.------.---+---- C
+                 `------'    | FPDS |   |
+                             `------'  Slave Y @ 0x10
 
-> > > I'm pleased to announce the 5.10.162-rt78 stable release.
-> > >=20
-> > > You can get this release via the git tree at:
-> > >=20
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-> > >=20
-> > >   branch: v5.10-rt
-> > >   Head SHA1: 143ef105f40a65f3ddd57121d4b4bc36eb10cc06
-> > >=20
-> > > Or to build 5.10.162-rt78 directly, the following patches should be a=
-pplied:
->=20
-> > I see that vanilla 5.10.162-rt78 fails to build with arm64 defconfig. [=
-0] Full log [1]
-> > Any pointers on what maybe wrong?
->=20
-> We see the same failure.=20
->=20
-> >   AS      arch/arm64/kernel/entry.o
-> > arch/arm64/kernel/entry.S: Assembler messages:
-> > arch/arm64/kernel/entry.S:763: Error: immediate out of range at operand=
- 3 -- `and x2,x19,#((1<<1)|(1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<5)|(1<<6)|(1<<13=
-)|(1<<7))'
-> > make[2]: *** [scripts/Makefile.build:367: arch/arm64/kernel/entry.o] Er=
-ror 1
-> > make[1]: *** [scripts/Makefile.build:503: arch/arm64/kernel] Error 2
-> > make: *** [Makefile:1837: arch/arm64] Error 2
->=20
-> The line is:
->=20
-> >        and     x2, x19, #_TIF_WORK_MASK
->=20
-> And I believe there were some cleanups in stable in that area. Let me
-> search for them.
+Where FPDD = Deserializer, FPDS = Serializer, F1/F2 = FPD-Link bus 1/2.
 
-Commit 1bee9dbbcabbb77617fb257f964628b50ba2529c is related, but does
-not revert cleanly.
+So the ATR functionality is in the deserializer, but the actual remote 
+i2c bus is on the serializer.
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+The current code manages this so that the deserializer driver owns the 
+ATR and programs the HW (as the ATR is part of the deserializer), but 
+it's the serializer driver that adds the remote adapter to the ATR 
+(using i2c_atr pointer given by the deserializer driver).
 
---3TX4iDTAe6OJlpVP
-Content-Type: application/pgp-signature; name="signature.asc"
+  Tomi
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8k5iAAKCRAw5/Bqldv6
-8hy8AJ9/XGrPRpjd8hXHIeUftUS7E60+wACfcDFgRf0R2QqJm+7zGeKE4N1uh9A=
-=I1bi
------END PGP SIGNATURE-----
-
---3TX4iDTAe6OJlpVP--
