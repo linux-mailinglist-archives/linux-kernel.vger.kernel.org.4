@@ -2,197 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3502B67357B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113AC67357E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjASK0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S230169AbjASK1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjASK00 (ORCPT
+        with ESMTP id S229933AbjASK1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:26:26 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777E2521DE;
-        Thu, 19 Jan 2023 02:26:24 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id rl14so1083462ejb.2;
-        Thu, 19 Jan 2023 02:26:24 -0800 (PST)
+        Thu, 19 Jan 2023 05:27:02 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF96D687
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:26:39 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v30so2262096edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:26:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=clRCjHfA7rKJ2oTt1B+97caDociqEL0Rl6BA3x8VTP0=;
-        b=hS975poE2XDyTtRXqaSp3RNPHLKWlnWoBUnMSaE+kUZiL3hg4no7WvjdggldCJ3H8Z
-         7GY4set0sB24oy2yCIPP+ywNqXfoejuJFzZAJ0lZny/yYuiHzwUXJ19RhwvgsLxd/CbI
-         le0vQvjW0byRPCLW/9vLZj7/K0/beC3jzIPdPOafEt0B6QraEuBIU+8aDJ7iW9Q9MR2g
-         wvCzm8406/+hILoyADBZgUh9YwIKrL/iEHilNOt0exSb3lr6Gdgz9seiPDOOfjVJwidz
-         NgyGLIkGkshORF0yWKDOyd2jk9UtmoTomzt1iKL4zT96WmikSjKGkpwXQUjCy7QTqCC3
-         xVqg==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=39SgUHKju2DkTVJDuCLF0GlqoNQjOGP2rscjucek0WY=;
+        b=OYYE6KjfLMIIu6kvxFyNsRIlxJPTCtMRs2MqUjKnitJyJaghBNlaulIHD/vXm2dLLH
+         0TRLTUE0apvKLCTbRagDBl8mUy+45M2YH1Ld4NRepymOa+3FmoL00iIYcPoL3hQYiQpG
+         yTKA0HK9doDcpbWaUTu4iWL6WBOXjyByo7gXc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=clRCjHfA7rKJ2oTt1B+97caDociqEL0Rl6BA3x8VTP0=;
-        b=699DYf3fRRATauzi2Ge5KyzX/9DTzqYAdfLpTGBngmvJtHWWECbWNPmvtdfIy2iAss
-         ZEpxMLqQ1gFRVG+Q3MLp2YQrXjoILrbD8Nz5crpUacY/HX1l+LZfN6D9lkYerFHXASyO
-         VARLzaiZrb5MMzqxrS/e9bLbtA8rzyubnEikTOSU/+gk6GpQg0TKIBvLPjVTRW0dq4C5
-         fGc+dKHSV9AiecNfWHBIJiZXNt3LG/vQIKrzSHzfmNeFcytr6vDIBIJqJcfNED6K6OsG
-         f1qz4gLAx8Np97bzzCH1U5X2YM8TGx0pBNWvy/UW/SYovL5A7IukqQ9lT3E796fYDdja
-         RKxg==
-X-Gm-Message-State: AFqh2kqTZM4vXui/+l++C610IhFkgJkRj8kswCPZ/w3xMN5OdYxESlJC
-        r5L4Tx6p7skEIKhrdaucKkLir/kmV8o=
-X-Google-Smtp-Source: AMrXdXtqcH/8Sf/CngK7xv/mWLSKmba4Glnzkg/+gCZisxT3aEJJ6tNONigLWslMq7fmyrz1h41VNg==
-X-Received: by 2002:a17:906:5906:b0:870:2f70:c624 with SMTP id h6-20020a170906590600b008702f70c624mr10657240ejq.3.1674123982603;
-        Thu, 19 Jan 2023 02:26:22 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id b1-20020a1709063ca100b007af0f0d2249sm16057107ejh.52.2023.01.19.02.26.21
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=39SgUHKju2DkTVJDuCLF0GlqoNQjOGP2rscjucek0WY=;
+        b=Lvy8hEr3H3iJ/CRt/JbsixEyDBuomlBaut8cmSeb+vsIeIWOMZwVmnAfmtEk44b8rT
+         SVJWdD4i7+8RAdJIbNqlQbPJZbol49VMhUJ0XzrEicFSZxXJZkZCF+L7Yk3+YKHj733O
+         3NU6f1lKj1tlfMQlhS6fOC2XWaAsYlAUehNu2qWU9UE2pd+kQzrl/dIZKFuidu3SIvLA
+         GORxUL6zLPnM880hR12C9wEM8Dl1t2o1ATIF1o6Bvs0RXfU3e4ePQn1BukiPcEuka/zh
+         8yS2KWj4DRUaCGT6dMY6M5d3EOdB2bVzGxSWRSgbxH8moFDQmkb+41b++olJ4LfyCjnX
+         ai7g==
+X-Gm-Message-State: AFqh2krqQMcmXCrhV9jeuuFPAPFW5QJ5BvHEaStiOEGJntb7RkBlUxZ+
+        hPEtRFGFYArdWGj2YP1DJ3f4Rw==
+X-Google-Smtp-Source: AMrXdXtSf8VW8Q/vL39YHAO5amRe9Z3IC59IA2VRhTytO9iyk7Mb4JVWli/JMWVsTPfw2LxTJyJ+LQ==
+X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr9808530edt.33.1674123997712;
+        Thu, 19 Jan 2023 02:26:37 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id eo9-20020a056402530900b00463bc1ddc76sm7648926edb.28.2023.01.19.02.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 02:26:21 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:26:19 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Sumit Gupta <sumitg@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com, Rajkumar Kasirajan <rkasirajan@nvidia.com>
-Subject: Re: [Patch v1 08/10] cpufreq: tegra194: add OPP support and set
- bandwidth
-Message-ID: <Y8kay0/AmjqhU2jO@orome>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-9-sumitg@nvidia.com>
- <4e3e4485-ba22-eb47-fb95-e8d626160bc6@gmail.com>
- <8e6d7dd3-1bdc-ee4b-0c1e-1ae9cd8e4f29@nvidia.com>
- <8bd5cf36-e1fb-305c-08c5-3bbc80204866@collabora.com>
+        Thu, 19 Jan 2023 02:26:37 -0800 (PST)
+Date:   Thu, 19 Jan 2023 11:26:34 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Dragos-Marian Panait <dragos.panait@windriver.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Kent Russell <kent.russell@amd.com>,
+        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 1/1] drm/amdkfd: Check for null pointer after
+ calling kmemdup
+Message-ID: <Y8ka2khSlK6E/XbF@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
+        Dragos-Marian Panait <dragos.panait@windriver.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Kent Russell <kent.russell@amd.com>,
+        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230104175633.1420151-1-dragos.panait@windriver.com>
+ <20230104175633.1420151-2-dragos.panait@windriver.com>
+ <Y8ABeXQLzWdoaGAY@kroah.com>
+ <CAKMK7uEgzJU8ukgR3sQtSUB5+wrD9VyMwCHOA-SReFWd0tKzzw@mail.gmail.com>
+ <Y8A5NgtGLDJv4sON@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wXgEOUGcow8GwYyA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8bd5cf36-e1fb-305c-08c5-3bbc80204866@collabora.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+In-Reply-To: <Y8A5NgtGLDJv4sON@kroah.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 05:45:42PM +0100, Greg KH wrote:
+> On Thu, Jan 12, 2023 at 04:26:45PM +0100, Daniel Vetter wrote:
+> > On Thu, 12 Jan 2023 at 13:47, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > On Wed, Jan 04, 2023 at 07:56:33PM +0200, Dragos-Marian Panait wrote:
+> > > > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> > > >
+> > > > [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
+> > > >
+> > > > As the possible failure of the allocation, kmemdup() may return NULL
+> > > > pointer.
+> > > > Therefore, it should be better to check the 'props2' in order to prevent
+> > > > the dereference of NULL pointer.
+> > > >
+> > > > Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+> > > > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> > > > Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> > > > Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> > > > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> > > > Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+> > > > ---
+> > > >  drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> > > > index 86b4dadf772e..02e3c650ed1c 100644
+> > > > --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> > > > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> > > > @@ -408,6 +408,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
+> > > >                       return -ENODEV;
+> > > >               /* same everything but the other direction */
+> > > >               props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
+> > > > +             if (!props2)
+> > > > +                     return -ENOMEM;
+> > >
+> > > Not going to queue this up as this is a bogus CVE.
+> > 
+> > Are we at the point where CVE presence actually contraindicates
+> > backporting?
+> 
+> Some would say that that point passed a long time ago :)
+> 
+> > At least I'm getting a bit the feeling there's a surge of
+> > automated (security) fixes that just don't hold up to any scrutiny.
+> 
+> That has been happening a lot more in the past 6-8 months than in years
+> past with the introduction of more automated tools being present.
 
---wXgEOUGcow8GwYyA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, gut feeling confirmed, I'll try and keep more a lookout for these.
 
-On Mon, Jan 16, 2023 at 03:16:48PM +0300, Dmitry Osipenko wrote:
-> On 1/13/23 16:50, Sumit Gupta wrote:
-> >=20
-> >=20
-> > On 22/12/22 21:16, Dmitry Osipenko wrote:
-> >> External email: Use caution opening links or attachments
-> >>
-> >>
-> >> 20.12.2022 19:02, Sumit Gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> Add support to use OPP table from DT in Tegra194 cpufreq driver.
-> >>> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
-> >>> Cross check the OPP's present in DT against the LUT from BPMP-FW
-> >>> and enable only those DT OPP's which are present in LUT also.
-> >>>
-> >>> The OPP table in DT has CPU Frequency to bandwidth mapping where
-> >>> the bandwidth value is per MC channel. DRAM bandwidth depends on the
-> >>> number of MC channels which can vary as per the boot configuration.
-> >>> This per channel bandwidth from OPP table will be later converted by
-> >>> MC driver to final bandwidth value by multiplying with number of
-> >>> channels before sending the request to BPMP-FW.
-> >>>
-> >>> If OPP table is not present in DT, then use the LUT from BPMP-FW dire=
-cty
-> >>> as the frequency table and not do the DRAM frequency scaling which is
-> >>> same as the current behavior.
-> >>>
-> >>> Now, as the CPU Frequency table is being controlling through OPP table
-> >>> in DT. Keeping fewer entries in the table will create less frequency
-> >>> steps and scale fast to high frequencies if required.
-> >>
-> >> It's not exactly clear what you're doing here. Are you going to scale
-> >> memory BW based on CPU freq? If yes, then this is wrong because CPU fr=
-eq
-> >> is independent from the memory subsystem.
-> >>
-> >> All Tegra30+ SoCs have ACTMON hardware unit that monitors CPU memory
-> >> activity and CPU memory BW should be scaled based on CPU memory events
-> >> counter. We have ACTMON devfreq driver for older SoCs. I have no clue
-> >> how ACTMON can be accessed on T186+, perhaps there should be a BPMP FW
-> >> API for that.
-> >>
-> >=20
-> > Yes, scaling the memory BW based on CPU freq.
-> > Referred below patch set for previous generation of Tegra Soc's which
-> > you mentioned and tried to trace the history.
-> >=20
-> > https://patchwork.ozlabs.org/project/linux-tegra/patch/1418719298-25314=
--3-git-send-email-tomeu.vizoso@collabora.com/
-> >=20
-> > In new Tegra Soc's, actmon counter control and usage has been moved to
-> > BPMP-FW where only 'MCALL' counter is used and 'MCCPU is not being used.
-> > Using the actmon counter was a reactive way to scale the frequency which
-> > is less effective due to averaging over a time period.
-> > We are now using the proactive way where clients tell their bandwidth
-> > needs to help achieve better performance.
->=20
-> You don't know what bandwidth CPU needs, you trying to guess it.
->=20
-> It should be a bad decision to use cpufreq for memory bandwidth scaling.
-> You'll be wasting memory power 90% of time because cpufreq doesn't have
-> relation to the DRAM, your heuristics will be wrong and won't do
-> anything good compared to using ACTMON. The L2 CPU cache + memory
-> prefetching hides memory from CPU. And cpufreq should be less reactive
-> than ACTMON in general.
->=20
-> Scaling memory freq based on cpufreq is what downstream NV kernel did
-> 10+ years ago for the oldest Tegra generations. Today upstream has all
-> the necessary infrastructure for doing memory bandwidth scaling properly
-> and we even using h/w memory counters on T20. It's strange that you want
-> to bring the downstream archaity to the modern upstream for the latest
-> Tegra generations.
->=20
-> If you can skip the BPMP-FW and use ACTMON directly from kernel, then
-> that's what I suggest to do.
+I guess next step is that people will use chatgpt to write the patches for
+these bugs.
 
-After talking to a few people, it turns out that BPMP is already using
-ACTMON internally to do the actual scaling of the EMC frequency (or the
-CPUs contribution to that). So BPMP will use ACTMON counters to monitor
-the effective memory load of the CPU and adjust the EMC frequency. The
-bandwidth request that we generate from the cpufreq driver is more of a
-guideline for the maximum bandwidth we might consume.
+> > Last week I had to toss out an fbdev locking patch due to static
+> > checker that has no clue at all how refcounting works, and so
+> > complained that things need more locking ... (that was -fixes, but
+> > would probably have gone to stable too if I didn't catch it).
+> > 
+> > Simple bugfixes from random people was nice when it was checkpatch
+> > stuff and I was fairly happy to take these aggressively in drm. But my
+> > gut feeling says things seem to be shifting towards more advanced
+> > tooling, but without more advanced understanding by submitters. Does
+> > that holder in other areas too?
+> 
+> Again, yes, I have seen that a lot recently, especially with regards to
+> patches that purport to fix bugs yet obviously were never tested.
+> 
+> That being said, there are a few developers who are doing great things
+> with fault-injection testing and providing good patches for that.  So we
+> can't just say that everyone using these tools has no clue.
 
-Thierry
-
---wXgEOUGcow8GwYyA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPJGssACgkQ3SOs138+
-s6FLcQ//SDuIXbEmFWNwO/6zyR0Uu1oyte3hbT72Pg/1mj0FdHlo44tkuI2iGsJo
-XslkLfJSE8FQ4kygY2mqyKBsZP0Eqlmh2hwWfofm4n1+EX6NE1u1zOOw8YbVrG+2
-PYiFHf2JxQUTvEg1GgaU58OXm6aLT9jKS6zFl6R7OLnsSUKtJzzJUIgwdGfnH6qV
-yvyo7mG30Nk+7s7Yn7LA85CaD18/agj+DHvFQ8UD7Ysn3+SvyVbcq2u4+JdOlSeN
-oYGIJ8S3OMSXSt3M35p4Q+5+9xEPzPN5sZ9Xov9A5xS0jdVHoFzTGj4FhMRKAJq9
-VQYmR97bYQlIAwZYiI1Lh6n/YMNtfBtqfKA7qvVSTK7Z7QnbVD4JuIBq3AbatPuK
-DWykzPs/8xOf0fbLS7e9KwdahWaYdjbsfDvKV81JbA8xRaEO47+x7lBsa5RT/mHg
-ala4a4Ia0TLEjQ6eHmg16qxrP9HRvGqezInLHO/2/RgJOaxps1kcljyotMkZspnb
-fHK7VFMvtDI0vLlDya2NJu1XWQnPlP1j3virK8zBTlRbQmwXbp4OfXumP8hHa9et
-CeccsM+oIXovEm4Zkc23V5aRDnKG9o6iQ6YIbj0Kl/VMo+boffDb+sltcgJDAcZT
-OSx6CdbmLW2OoZhC6x926chQZXo1APxTdYdUegNrUQsJRjyHnY4=
-=tF8B
------END PGP SIGNATURE-----
-
---wXgEOUGcow8GwYyA--
+Oh yes there's definitely awesome stuff happening, which is why I do not
+want to throw them all out. And waiting until the name is recognizeable
+for individual maintainers like me that don't see the entire fixes flood
+is also not really an approach.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
