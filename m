@@ -2,187 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C49E674757
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53CE674766
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjASXpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S229934AbjASXsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjASXpW (ORCPT
+        with ESMTP id S229630AbjASXs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:45:22 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570A29F3A3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:45:21 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JNEAd3016384;
-        Thu, 19 Jan 2023 23:44:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=SaF5NiBPivLMilPHMfSaRJxZtzsVgYOL4ri58OHRKLA=;
- b=S+Aqu2fT0mT9AvpY57ICnry3uiOt5KKEBDp8SPHo6DmfK8PMMBap3HlVmyIV6DPJOupq
- K3WCTWJRUwiccH0UYHRy6BBe8NPD1ZVf4W1C65thChj1cW1N1fNpvy9bu8/3BpeLw4bW
- SAj3TJ2no/XmzYAk0a3mirqTvFqQfjcDkmvpui/MeQRIKbHb5oOKx6aFK9nqQBwgX9NO
- g5uMTvS0ra6bC73/A4Znp9NUFBl/qjX2baw/IKW6YdOFdRUxZLGoQ7h7ACBbZlyucepX
- jKTLhVd/pON4klPVHdkf5fQZVZGk1Vi0jUkmvNSOwL2ZyGf9VzufPJZm3H7npBzyIANd Xw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3k013jq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 23:44:33 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30JLSumn000781;
-        Thu, 19 Jan 2023 23:44:33 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n74d1w1vt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 23:44:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SNP9PvO0dq7iMMCF5AMTGzmsfPoRhqMf63iMKBFTPyic4GpQtXM34I+WiMVCSNjAmD4liC5k4SYS0RrMtL4QjGmoa1MzLXBZwPpx4k49EPzxqw5l4IjcghCUA6XsXW/0N5W5MDL3wKgaDA2P8tO8eZ9l0YA8zz7c4YLAhfWlJ+6Wikgr+03zdMNMRfK215F6dA0pP/RGIHu/ILB0sIBMu4PMpFqr3HNQrOARAMM86wmG9SBFn4d/a20iKtE4bw1uE6GV/Hu79xyVupc6j/oJlTFHfxUJ7Fd68yjk7hWCIC0PZGKGtFiye5fOp1WcT3yxd0T1JzM+wNi7+8i2Actxlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SaF5NiBPivLMilPHMfSaRJxZtzsVgYOL4ri58OHRKLA=;
- b=h1DKbQotCEkkIpE+JBsSsvIR2jMC6ceus+/81itbdmfTjLlGO5U5gPeF1lOcObbKdZEi+OiyU6MYJI/uFoxh5pAaZ3Mmvcwje4AoRFfV4jzajEnGFco1pdLc0y676l1TLV3LP+y2M79DebG+LBfY7eO6G6rjNJGZBK7/2K/2Xl4M2T8z0rEtVBe2ISpIxji98p9d65E5rxipFdmcCP2LLIPRXeShqEnzCFmCWxnJaXbHWL0Bs7qkbU0+suKVhpQj3I1WH6fxLtomp/9a4KSo+whBJJkfS/bhQYXdNXesrOSPofJvd18qyu4N/QZXz502CCMQOhtB0s4AaIuQ7vBI3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 19 Jan 2023 18:48:29 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD119F394
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:48:27 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ud5so9966370ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:48:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SaF5NiBPivLMilPHMfSaRJxZtzsVgYOL4ri58OHRKLA=;
- b=ktLzfcEFK6Sgv2fyQLwZbjOb0vzhAhMwtux/BGujFwEr0kPp7lbAQ8rcf3ZD3txjBF6pnd2fLU09wqByspMdqUWBegHRokcS5PAY5QU6eudERd+VhJWtcEsHYJTraurpNxmmtbWBIlQOeyN/SxJdnL3WfyzpvxAuaoqo+nlTWAU=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by PH8PR10MB6621.namprd10.prod.outlook.com (2603:10b6:510:223::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.6; Thu, 19 Jan
- 2023 23:44:28 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14%9]) with mapi id 15.20.6043.005; Thu, 19 Jan 2023
- 23:44:28 +0000
-Date:   Thu, 19 Jan 2023 15:44:25 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
- walk_hugetlb_range
-Message-ID: <Y8nV2TvMK12yTPzE@monkey>
-References: <Y8gRpEonhXgqfb41@x1n>
- <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
- <Y8hITxr/BBMuO6WX@monkey>
- <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
- <Y8l+f2wNp2gAjvYg@monkey>
- <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
- <Y8m9gJX4PNoIrpjE@monkey>
- <Y8nCyqLF71g88Idv@x1n>
- <CADrL8HXkdxDdixWRKNw6RFdbiBX-Cb1Lk7qxg6LdeNywbMOaOA@mail.gmail.com>
- <Y8nNHKW0sTnrq8hw@x1n>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8nNHKW0sTnrq8hw@x1n>
-X-ClientProxiedBy: MW4PR04CA0261.namprd04.prod.outlook.com
- (2603:10b6:303:88::26) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ax52PxQcUB86ZZa5cNbU1WVgqIMXtwZG4WanvmA1AQo=;
+        b=Vb/OkEE/qNrRPF8cKiSioV8riOPYqhZK/+DEPv+npXGYJWCfQVhh4j2qlnZxet7oA1
+         H8tYHFUe+mbp4Of1ZX0bBbdWJmTIddghvIRQyh79x8prJKtGvoiRsaS52wfJhEdv1PTB
+         LfyRDFy6jSK43ir7TgotFgorXG/h4ZEftH1Z51up8wmoCXAzKZje+Lpf4ijHk9Y6ZmwJ
+         7niIuM1sjoDXr4NcCskw0344c+44Xv2IpVM4/8h/4b4KzJBwmQqjsczzbzo+sGBi9Dxb
+         IkxTJc/H9O3n6CqrJE3wT5PhdY2osyV2De1oZ7rrofi6O6gGgD6ZBGJLUHFX0U5jLUzV
+         mYTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ax52PxQcUB86ZZa5cNbU1WVgqIMXtwZG4WanvmA1AQo=;
+        b=yMilH8OUGpdgpRjjMyGW5xtjXVJ4EGETHsgmb0tKJWJyg+AuyJ+YIabkDOoY4XI7m+
+         AOJr/ThabLcb48Zx6ik2dn+3Z9T+AMWiQwba7roF9PRWHVle9Wvi5wRbPBNylWFMgoSX
+         p6BKPuknmkfCBCGvFGQmzBIsqc7BLmPwihySxuxk6TxLpknAgG7UEJcYcjNiHPj+sILT
+         XsKeMjWDcvB0+5Zti2e4N07fGYFnR4snJVcp6LvjsgrsavHaBmgTK8Sya1ORje192hZa
+         A1J8HcNTD9XF8YiMifSDKffQu2vBZcsmneLvBYbb3aIIkJ+OO7jf3qfolxmeyd2+m7Sz
+         usNg==
+X-Gm-Message-State: AFqh2kphZWDyriMdl25ZLKzTsJcV6GwwchLw1Y5YhVwlhpTilnCjHH2H
+        4G/5nbQxEkVHbW7VcVT7QMOniAPU5fMBFcSZkPjCzA==
+X-Google-Smtp-Source: AMrXdXuaNg3dS6YFkLOiuBolhweteL+t4YAHUHXynplY7DWeR1NVhegfDevq5PrXLZ8MZmSlafhwKphZZ8M+Wg2zSyo=
+X-Received: by 2002:a17:906:3f91:b0:870:4648:e8a9 with SMTP id
+ b17-20020a1709063f9100b008704648e8a9mr1131264ejj.433.1674172106131; Thu, 19
+ Jan 2023 15:48:26 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH8PR10MB6621:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3139502-bdd5-4fa7-f2b6-08dafa771acb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KspWniqIBSXIicyigX3YCC3Dm4/BbwKgZXT/rZoZacZq0YWnmMJB4oNBJdQZcSVNXmDyKGAcqZE/oCMY8+3ZNWcq2HaTbM5DgNrZtUXXwHkJXe9lea7N731IjoBSmu5ZDfSObTOBVYLXWxT89/DHkiZ+zvXfd7MwjWGApZvnI4wxjDqKjAAn9ZW/2uUHX2VfFvEFLLTvSsYxIKs+kaytatdHOVIoskBuU8xb0UjVjDNL9klZbwiTGL+IKATEON9uesZz05UPZVinNxHOM0EVDDEe9tFJ1oZL7ohvjLxYXcFIGD3N80oK9qguUUijY2gc/d35AWEtIR1tpR/sQHgsfDoJmDEQHUimCYgVxYX2om26LLQN2L47+jsEwKawTJEaqDdpKGP4EqLJKlrZeE+Qfi0Qvo6sR9xVAeeF1vWwsXfiNZnSCmCfLmxTaBhEaDoXvKy1/qB4F+J4pvu6FtnWx3AslXDhdfbhxrUyciQeqynFiQmeIRnPqxMWNHpsVw0mBe5Yq8mIM0LSwzUF1Wno6qfewUrdZ3ZmhVM/Y+CZxpgrf9PvSbTGHTKE5HDohEMvDSoa6zbdE/x47ZqMtGQ4qkg2LauxifOdD74qaChmAX18k65ZqTCaOvxQh/bsr5/pBp58SldNkEGaCUIPLBw3GQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(376002)(366004)(396003)(346002)(136003)(451199015)(44832011)(478600001)(33716001)(186003)(6486002)(6512007)(5660300002)(7416002)(9686003)(4744005)(83380400001)(316002)(66556008)(6506007)(2906002)(26005)(53546011)(66946007)(6916009)(66476007)(4326008)(6666004)(86362001)(54906003)(8676002)(38100700002)(8936002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9nlHK+sIAAYUsdEh/GfBZ3oM/oMnpLW9AMjj+OZ3Gl3sqS5eO79t1tZQMwf7?=
- =?us-ascii?Q?5d1YAZ0cwp49U95sYee1nJ2hPT7+BNOZ7ApkLwF8pOR4rd9TK+XAsvakv4i1?=
- =?us-ascii?Q?Vbk+CSyw7rn4pTjlozONQazwy2P4vVhpLdSwtHBrokwlDmHpJAypiM2sDSQ7?=
- =?us-ascii?Q?0yYS4L9tCUM5hqlCCKGcSM5uuKGL73R5+O/0PwFpx+aoNLSHj/15m7QfhTPA?=
- =?us-ascii?Q?nvS4YVILo58ctaZ9xRfLOwVzgE3LZCWMUgvJ1MJNQOGOJ7gtD7lt7bHZaxxC?=
- =?us-ascii?Q?NpxxvRPYbDDbIXMLhemC9Ibca5fEVNkImbeddOEPvnRsYeMJU8XfF2yPCc3q?=
- =?us-ascii?Q?UUtxMIuLhCRZepb/0BzySw4fDhqweVhVc4O8SXYjRWUr6WD9I8jvTQq41X3b?=
- =?us-ascii?Q?P/XXDwp/K62KUJK8DhUNY9mOmAu1Y2njO9k4CrHeBBUOL2Xwekof31MN2FOp?=
- =?us-ascii?Q?B2ugRTXvA5z6W33MxqaogecpIgbZ+GdDR0L3cshXxehywxUbJfnEMNIiGzzh?=
- =?us-ascii?Q?xUS0io6t+2OepOcOmKwyD4F7KbTucYZ6bBpu1YjE5pCcmPA9U2T8CZJ+GhWP?=
- =?us-ascii?Q?SPwjUmwhLzOEeYVYoiaQ14tQfLWPzwAMcZGMZVc+52Kz+a3pO6CWLllW//Zh?=
- =?us-ascii?Q?SQlmufnEty9PjL2SOwQ7XW7Ci/cJxC0f2xxKX7/fQweMghvEaFa/NnHtMvkW?=
- =?us-ascii?Q?hz2FzM4yKTq0EKVCCyQd//I9mrCcTSFG6viRFd5u2WbceOYr/Ic+G/it3nwB?=
- =?us-ascii?Q?yibtNSf7H8+5UUFRR1H80hm9+JEiBlfcjB9r3wxNyS9kkP1IClad74xXT5+T?=
- =?us-ascii?Q?9Qb50q7Sko995yT/+wKRYOWHE5W3W8u8JCGCYLDpkpRXjZ6SUNcZTlFucAp2?=
- =?us-ascii?Q?VCLqTOHYhA8Fcbs3UjRu63WYIi58HfH4TH/RmU3omkq1Fpnlhvevm8ZeV4YN?=
- =?us-ascii?Q?zqMB3rWTe3V/qDqsBdpN31buD7w2VPPOhj63BMqjkbz0pntda2tFBNEEWOy3?=
- =?us-ascii?Q?nnd+/7NygtW7Tzv/ZGdTq6uRfB7ckkHJESaQUbIYTftpm7l6YrGQeB2pkQ9T?=
- =?us-ascii?Q?bzP2nYOc9bvj75XkP42YA5Xn8sfOOQcyj7FCR4Tq34LOkU5whtIrmBm+G/4q?=
- =?us-ascii?Q?+5VwP3x5WXs0gKewSUU3BnRYj4lYmHL1hwgXMhTa6ZDHvqQHrE4NwwiNveyJ?=
- =?us-ascii?Q?N/0o5okvU/QVM/wEBE5DH1EpWxTkg5SpOwnAe6TvhmDySU5C14ybMrdwhdR4?=
- =?us-ascii?Q?r9E5GcGx1Zq08044Agw9Lze7z+5bk1RIBiU7D/HOvzL7FqHD6Hm4ti5L8nVU?=
- =?us-ascii?Q?h0ekrS9VV4XyVaimKafSUUJSvrpsEnxrzCXHCejRG6DAxb7wxqContGkw8u3?=
- =?us-ascii?Q?KshiVEVw9PRh6NiDWFCSOITSdcmmstRWNJJxVejln65cICmZRrs6Wpkqr32F?=
- =?us-ascii?Q?ozujWrDEouoKRayL/kJ4I0oo+u2NnYLG1sbcjMHiMZ/WofqdVpM5xrdrNLZI?=
- =?us-ascii?Q?qEN/ebf7F6V33Cm+3vrQiYCo01U2RtUgSaIRg/rkwJj00rwrVqCYAWxkPadp?=
- =?us-ascii?Q?KHzrvGyKZC2M/YAzhBnLnOwCiYMSteWZn8uere+4T+ldfWwiuZ3qROlEZ/MC?=
- =?us-ascii?Q?pg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ldrJbPruBFwjegwmhTrNRPBzKAp3x9bC/yTRlBGmyOsPy1ebNCjScK72bN7H?=
- =?us-ascii?Q?07B+fIIm8nBiRmxgXGXzwim0BAnttjlHE5ya2LOu94rJEyr/sVIS3FxUjT3z?=
- =?us-ascii?Q?kqCvWmaWOuCKuwKy1BuTKYcoAqpjFaeWI0yPcVzPkN+mtUA/rNzAuA/4S3tF?=
- =?us-ascii?Q?vL5aGt056yCl7+1rpgVDp0llX5Z0Ff3Eam1FXYAZL2fuZ7yObu/y+dhGHbQv?=
- =?us-ascii?Q?l0KM9wi/g0NJO+O15F860nMPVyBz0u2InWJmpn8IzmY1+ISC7OKDFK8pJIZ9?=
- =?us-ascii?Q?MatVIfb0g3yRmJA1xsGOismA3MJ6OZpfn+Wui5GB2LRs6Hndzi6Wdml2G8iG?=
- =?us-ascii?Q?mHiXREcYlDwUHiPhHboqRVKlcM4rmnAeU2SNiTnovoGv4K/VfIeLqSmZQ2ov?=
- =?us-ascii?Q?cnkf9GukiiN7HEjEq3UMo4E8BK7MpD02bvkS5gRrdjS6yuydSPa2qWdKSV/z?=
- =?us-ascii?Q?3iYoVfTzg6w/05f8It23QRAM3OYKtyUO64W/pcpRWg2C0zd7n1oLS8CwxGPI?=
- =?us-ascii?Q?UOerrzQIDnhTdv7vwsRV7XLQsuIOj6hxztIaW/jCqAsz6cMhk1M4bF1uxhTK?=
- =?us-ascii?Q?LG1ib0ktiz3maZ53M2lF9DWih+oxtFZPU0zeokG/pD6kzEnndnVh0caFhGVp?=
- =?us-ascii?Q?NLRPYxXg8dfOtDNdSpMI17ErQlchIhBvlV3vu+GjSTFe8WZ2qWMRNUVp187e?=
- =?us-ascii?Q?OMVreOs2u2qqSR9GnZgHq2N4+l+YsW5krcpJAzvYEbuxlUlCMGbjmXx+XrRH?=
- =?us-ascii?Q?uR8fza8aB9yQ3F47riXDJB5B3jihHO/patsgbBqSUgXgJ/B6TpTPKKdz3fGr?=
- =?us-ascii?Q?agmBAiyjH46uRuXsAKytUNuQa43MTAwyp6iBpcjwxHUU8xdL/4BVl6YDwg93?=
- =?us-ascii?Q?SciNWAkcm9q+aUJAV7IShCWjlmNWf5eyGbDvO5NPgejZi5zyqUtJet7wU1iq?=
- =?us-ascii?Q?/mYJ9xEyPQpcPm9iJlnb70wmwVuJbZ8tZUvKuoAFGwqBenIy7x8U55DtYhqe?=
- =?us-ascii?Q?yZYhcDqDYK0mRQ5Ppc0qNQYRA0AUPYSQ0dZSbTp1DRp9aYb0Pt6unXRmaIcp?=
- =?us-ascii?Q?7YmszVbb5g71j3eAUN+bRGqVFC4TMu9Sn9vBAdmHHu6R1DcZBFhtQIzusVYc?=
- =?us-ascii?Q?CTjcpQoXnYOwbmOMkP1CFKPqiqMXCxIECg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3139502-bdd5-4fa7-f2b6-08dafa771acb
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 23:44:28.5690
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: envkgo1KYFn1di+imuB80ZOBJOt1IXocMcRH7XQezVmVMJjSdexmL9ElJBOVdvz9hreBlnMBUnhUxO2E3fD8JA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6621
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_15,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
- mlxlogscore=762 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301190202
-X-Proofpoint-GUID: xwve10mHDy_abZqlrIssgzqxSs0npH2W
-X-Proofpoint-ORIG-GUID: xwve10mHDy_abZqlrIssgzqxSs0npH2W
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230119212510.3938454-1-bgardon@google.com> <20230119212510.3938454-3-bgardon@google.com>
+ <Y8nKerX9tDRHkFq+@google.com>
+In-Reply-To: <Y8nKerX9tDRHkFq+@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 19 Jan 2023 15:48:14 -0800
+Message-ID: <CANgfPd8B_0w39d7V+c4GnUxdqrc8qN78r8Pq0Con3Mx9WO0hkQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: KVM: Add page splitting test
+To:     David Matlack <dmatlack@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -190,19 +73,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/19/23 18:07, Peter Xu wrote:
-> 
-> Actually when revisiting the locks I'm getting a bit confused on whether
-> the vma lock is needed if pmd sharing is anyway forbidden for HGM.  I
-> raised a question in the other patch of MADV_COLLAPSE, maybe they're
-> related questions so we can keep it there.
+On Thu, Jan 19, 2023 at 2:56 PM David Matlack <dmatlack@google.com> wrote:
+...
+> > +static int NR_VCPUS = 2;
+> > +static int NR_SLOTS = 2;
+> > +static int NR_ITERATIONS = 2;
+>
+> These should be macros or at least const?
 
-I can quickly answer that.  Yes.  The vma lock is also being used for
-fault/truncation synchronization.  Commit e700898fa075 make sure it is
-even used on architectures that do not support PMD sharing.
+Yikes, woops, that was a basic mistake.
 
-I had come up with a rather ugly method of using the fault mutex for
-fault/truncation synchronization, but using the vma lock was more
-elegant.
--- 
-Mike Kravetz
+>
+> > +static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
+> > +
+> > +/* Host variables */
+>
+> What does "Host variables" mean? (And why is guest_percpu_mem_size not a
+> "Host variable"?)
+>
+> I imagine this is copy-pasta from a test that has some global variables
+> that are used by guest code? If that's correct, it's probably best to
+> just drop this comment.
+
+Yeah, shameful copypasta. I'll drop it.
+
+>
+> > +static u64 dirty_log_manual_caps;
+...
+
+> > +             /*
+> > +              * Incrementing the iteration number will start the vCPUs
+> > +              * dirtying memory again.
+> > +              */
+> > +             iteration++;
+> > +
+> > +             for (i = 0; i < NR_VCPUS; i++) {
+> > +                     while (READ_ONCE(vcpu_last_completed_iteration[i])
+> > +                            != iteration)
+> > +                             ;
+> > +             }
+> > +
+> > +             pr_debug("\nGetting stats after dirtying memory on pass %d:\n", iteration);
+> > +             get_page_stats(vm, &stats_dirty_pass[iteration - 1]);
+>
+> Incrementing iteration, waiting for vCPUs, and grabbing stats is
+> repeated below. Throw it in a helper function?
+
+Good call.
+
+>
+> > +
+> > +             memstress_get_dirty_log(vm, bitmaps, NR_SLOTS);
+> > +
+> > +             if (dirty_log_manual_caps) {
+> > +                     memstress_clear_dirty_log(vm, bitmaps, NR_SLOTS, pages_per_slot);
+> > +
+> > +                     pr_debug("\nGetting stats after clearing dirty log pass %d:\n", iteration);
+> > +                     get_page_stats(vm, &stats_clear_pass[iteration - 1]);
+> > +             }
+> > +     }
+> > +
+> > +     /* Disable dirty logging */
+> > +     memstress_disable_dirty_logging(vm, NR_SLOTS);
+> > +
+> > +     pr_debug("\nGetting stats after disabling dirty logging:\n");
+> > +     get_page_stats(vm, &stats_dirty_logging_disabled);
+> > +
+> > +     /* Run vCPUs again to fault pages back in. */
+> > +     iteration++;
+> > +     for (i = 0; i < NR_VCPUS; i++) {
+> > +             while (READ_ONCE(vcpu_last_completed_iteration[i]) != iteration)
+> > +                     ;
+> > +     }
+> > +
+> > +     pr_debug("\nGetting stats after repopulating memory:\n");
+> > +     get_page_stats(vm, &stats_repopulated);
+> > +
+> > +     /*
+> > +      * Tell the vCPU threads to quit.  No need to manually check that vCPUs
+> > +      * have stopped running after disabling dirty logging, the join will
+> > +      * wait for them to exit.
+> > +      */
+> > +     host_quit = true;
+> > +     memstress_join_vcpu_threads(NR_VCPUS);
+> > +
+> > +     memstress_free_bitmaps(bitmaps, NR_SLOTS);
+> > +     memstress_destroy_vm(vm);
+> > +
+> > +     /* Make assertions about the page counts. */
+> > +     total_4k_pages = stats_populated.pages_4k;
+> > +     total_4k_pages += stats_populated.pages_2m * 512;
+> > +     total_4k_pages += stats_populated.pages_1g * 512 * 512;
+> > +
+> > +     /*
+> > +      * Check that all huge pages were split. Since large pages can only
+> > +      * exist in the data slot, and the vCPUs should have dirtied all pages
+> > +      * in the data slot, there should be no huge pages left after splitting.
+> > +      * Splitting happens at dirty log enable time without
+> > +      * KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 and after the first clear pass
+> > +      * with that capability.
+> > +      */
+> > +     if (dirty_log_manual_caps) {
+> > +             TEST_ASSERT(stats_clear_pass[0].hugepages == 0,
+>
+> Consider using ASSERT_EQ() to simplify these checks. It will
+> automatically print out the values for you, but you'll lose the
+> contextual error message ("Unexpected huge page count after
+> splitting..."). But maybe we could add support for a custom extra error
+> string?
+>
+> __ASSERT_EQ(stats_clear_pass[0].hugepages, 0,
+>             "Expected 0 hugepages after splitting");
+>
+> Or use a comment to document the context for the assertion. Whoever is
+> debugging a failure is going to come look at the selftest code no matter
+> what.
+>
+> I think I prefer ASSERT_EQ() + comment, especially since the comment
+> pretty much already exists above.
+
+That's fair. I prefer the way it is because the resulting error
+message is a lot easier to read and I don't need to look at the test
+code to decrypt it. If I'm developing a feature and just running all
+tests, it's nice to not have to track down the test source code.
+
+>
+> > +                         "Unexpected huge page count after splitting. Expected 0, got %ld",
+> > +                         stats_clear_pass[0].hugepages);
+> > +             TEST_ASSERT(stats_clear_pass[0].pages_4k == total_4k_pages,
+> > +                         "All memory should be mapped at 4k. Expected %ld 4k pages, got %ld",
+> > +                         total_4k_pages, stats_clear_pass[0].pages_4k);
+>
+> Also assert that huge pages are *not* split when dirty logging is first
+> enabled.
+
+Ah great idea. I felt like I was a little light on the assertions.
+That'll be a good addition.
+
+>
+> > +     } else {
+...
+> > +
+> > +     dirty_log_manual_caps =
+> > +             kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
+> > +     dirty_log_manual_caps &= (KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE |
+> > +                               KVM_DIRTY_LOG_INITIALLY_SET);
+>
+> Since this is a correctness test I think the test should, by default,
+> test both KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE and 0, to ensure we get
+> test coverage of both.
+>
+> And with that in place, there's probably no need for the -g flag.
+
+Good idea.
+
+>
+> > +
+> > +     guest_modes_append_default();
+...
+> > +
+> > +     if (!is_backing_src_hugetlb(p.backing_src)) {
+> > +             pr_info("This test will only work reliably with HugeTLB memory. "
+> > +                     "It can work with THP, but that is best effort.");
+> > +             return KSFT_SKIP;
+> > +     }
+>
+> backing_src only controls the memstress data slots. The rest of guest
+> memory could be a source of noise for this test.
+
+That's true, but we compensate for that noise by taking a measurement
+after the population pass. At that point the guest has executed all
+it's code (or at least from all it's code pages) and touched every
+page in the data slot. Since the other slots aren't backed with huge
+pages, NX hugepages shouldn't be an issue. As a result, I would be
+surprised if noise from the other memory became a problem.
+
+>
+> > +
+> > +     run_test(&p);
+>
+> Use for_each_guest_mode() to run against all supported guest modes.
+
+I'm not sure that would actually improve coverage. None of the page
+splitting behavior depends on the mode AFAICT.
+
+>
+> > +
+> > +     return 0;
+> > +}
+> > --
+> > 2.39.1.405.gd4c25cc71f-goog
+> >
