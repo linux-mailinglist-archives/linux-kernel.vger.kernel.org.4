@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC6673CA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5343F673CB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjASOqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S231530AbjASOrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjASOpk (ORCPT
+        with ESMTP id S231420AbjASOrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:45:40 -0500
-Received: from MTA-10-4.privateemail.com (mta-10-4.privateemail.com [198.54.122.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EA287580;
-        Thu, 19 Jan 2023 06:42:49 -0800 (PST)
-Received: from mta-10.privateemail.com (localhost [127.0.0.1])
-        by mta-10.privateemail.com (Postfix) with ESMTP id 5914618000A8;
-        Thu, 19 Jan 2023 09:42:29 -0500 (EST)
-Received: from bpappas-XPS-13-9310.ucf.edu (050-088-208-136.res.spectrum.com [50.88.208.136])
-        by mta-10.privateemail.com (Postfix) with ESMTPA id 42B2218000A6;
-        Thu, 19 Jan 2023 09:42:17 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
-        s=default; t=1674139349;
-        bh=OvjuU8Er9NffYgNl0xuyyr+JSQYsrtMIdTAEnQq5WTo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nOXLzkyosRaBdcMN0ZtH9/fbx+5YhAyqwHHv5q6hJa62Uz3nqSUeMi5h/tCyIRMyK
-         4vHtnIVbhL5ijYpmiIk1adATGuASKjFzwenkc1dejLQdaFvQ3LtLvkHUTejSknAHDY
-         RIoQmrHhhEwWG1c47UaYT4r2q7KW4TxnoL85j+Yv2ROaWHz1yzCHJkj69k0UKiiAgQ
-         gvlXQINieg7EN7utJaTLzAllIGXjeUqz6vDFKnoa9FEUz4/UOQw7aQ/Q2js2zUCuPs
-         61Brz1d7i3QnXi4ctGq66B7xRRa3KmDTurjw2QZrcHDx+yXaLKvxWbXBIAl4Ep7++T
-         4QGtk6eRF9IdQ==
-From:   Brent Pappas <bpappas@pappasbrent.com>
-To:     andy.shevchenko@gmail.com
-Cc:     andy@kernel.org, bpappas@pappasbrent.com, colin.i.king@gmail.com,
-        gregkh@linuxfoundation.org, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com
-Subject: [PATCH v2] media: atomisp: pci: sh_css: Inline single invocation of macro STATS_ENABLED()
-Date:   Thu, 19 Jan 2023 09:42:03 -0500
-Message-Id: <20230119144203.17084-1-bpappas@pappasbrent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHp75Vc4QS=Gr-DSvf7pzCKktqGPfno4TBDmicj5CKgyHGjSsw@mail.gmail.com>
-References: <CAHp75Vc4QS=Gr-DSvf7pzCKktqGPfno4TBDmicj5CKgyHGjSsw@mail.gmail.com>
+        Thu, 19 Jan 2023 09:47:05 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BD275A25
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:44:28 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pIW9D-0004rQ-Rv; Thu, 19 Jan 2023 15:44:11 +0100
+Message-ID: <27bd67f4-8b08-6c5b-137c-e9ef543e6d56@leemhuis.info>
+Date:   Thu, 19 Jan 2023 15:44:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at "Loading
+ Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
+Content-Language: en-US, de-DE
+To:     "Erhard F." <erhard_f@mailbox.org>, sandipan.das@amd.com
+Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20230119022303.177052e4@yea>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230119022303.177052e4@yea>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674139468;e4b0ccca;
+X-HE-SMSGID: 1pIW9D-0004rQ-Rv
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inline the single invocation of the macro STATS_ENABLED().
-The macro abstraction is not necessary because the logic behind it is only
-used once.
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
----
- drivers/staging/media/atomisp/pci/sh_css.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 726cb7aa4ecd..93789500416f 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -97,9 +97,6 @@
-  */
- #define JPEG_BYTES (16 * 1024 * 1024)
- 
--#define STATS_ENABLED(stage) (stage && stage->binary && stage->binary->info && \
--	(stage->binary->info->sp.enable.s3a || stage->binary->info->sp.enable.dis))
--
- struct sh_css my_css;
- 
- int  __printf(1, 0) (*sh_css_printf)(const char *fmt, va_list args) = NULL;
-@@ -3743,7 +3740,9 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
- 			 * The SP will read the params after it got
- 			 * empty 3a and dis
- 			 */
--			if (STATS_ENABLED(stage)) {
-+			if (stage && stage->binary && stage->binary->info &&
-+			    (stage->binary->info->sp.enable.s3a ||
-+			     stage->binary->info->sp.enable.dis)) {
- 				/* there is a stage that needs it */
- 				return_err = ia_css_bufq_enqueue_buffer(thread_id,
- 									queue_id,
--- 
-2.34.1
+On 19.01.23 02:23, Erhard F. wrote:
+> Hi!
+> 
+> I did a kernel bisect for an issue I originally posted on https://github.com/ClangBuiltLinux/linux/issues/1774
+> 
+> It is about kernel 6.1.x not booting on my machines when built with clang. A gcc built kernel with the same config just works fine. Turns out kernel v6.2-rc4 and earlier v6.2-rc are still affected.
+> 
+> I did a kernel bisect which revealed this commit:
+> 
+>  # git bisect bad
+> 706460a96fc654e80b6bed1f562b00d2ce9f2f4d is the first bad commit
+> commit 706460a96fc654e80b6bed1f562b00d2ce9f2f4d
+> Author: Sandipan Das <sandipan.das@amd.com>
+> Date:   Thu Aug 11 17:59:51 2022 +0530
+> 
+>     perf/x86/amd/core: Add generic branch record interfaces
+>     
+>     AMD processors that are capable of recording branches support either Branch
+>     Sampling (BRS) or Last Branch Record (LBR). In preparation for adding Last
+>     Branch Record Extension Version 2 (LbrExtV2) support, introduce new static
+>     calls which act as gateways to call into the feature-dependent functions
+>     based on what is available on the processor.
+>     
+>     Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+>     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>     Link: https://lore.kernel.org/r/b75dbc32663cb395f0d701167e952c6a6b0445a3.1660211399.git.sandipan.das@amd.com
+> 
+>  arch/x86/events/amd/core.c | 34 ++++++++++++++++++++++------------
+>  1 file changed, 22 insertions(+), 12 deletions(-)
+> 
+> 
+> For more details please have a look at https://github.com/ClangBuiltLinux/linux/issues/1774
 
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot introduced 706460a96fc654e80b6be ^
+https://github.com/ClangBuiltLinux/linux/issues/1774
+#regzbot title perf/x86/amd/core: clang 15 built kernel fails to boot
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
