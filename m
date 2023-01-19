@@ -2,106 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63476746F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D286746F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjASXNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S231164AbjASXNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjASXNA (ORCPT
+        with ESMTP id S230459AbjASXNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 Jan 2023 18:13:00 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685D61BDB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:07:06 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DBF795C00A5;
-        Thu, 19 Jan 2023 18:07:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 18:07:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1674169623; x=1674256023; bh=r+
-        +m5npef9Z2Dvz6d7fU0ciFE3OnTgWcXxCyHr666VU=; b=wmotPjFAJWqkqA21x0
-        cAZp2OnMhLCCfxuYtNZwsqqRJnqVp8tLaSFJ5lHIKb9lX5NmFVjdna+XwwLPiSCS
-        JKHpVvKfkDb6mWvwt8btGty/zakCbGGFPBVVA1LG2qRyV18GYs9a4AtuU/kj9lVl
-        RNZQC2fNX36wZWuvNHDUd4KZsp+AEti9oVV0fipolvcOUxsvI8Z1Vqjw1BU+QBs6
-        zgt4sA8IYEbaSTopbvNqf1p34NXD4WI1S7BzZ9xwAZB0t5uXmuwFMR9AFLDOXfq4
-        2gnbIcRDfL011FrGhwMHdQt/WzXtPV/GcBWGSEpOooDQ1ZAP8EE0wSvXQ7zark0x
-        fqvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674169623; x=1674256023; bh=r++m5npef9Z2Dvz6d7fU0ciFE3On
-        TgWcXxCyHr666VU=; b=Sz4qXjKs3PmsXl4+Px/iD/KqEPtr7XnnAQTl0mypVQ9H
-        zC7/3hNR7zcP+k68FtpMsIy8xnok/4tB6zyBINRkgiTSZ1gTN1Mi0Q4/ZHK/pLZv
-        y2ZwZINGZtfDu1dZXK+PeH+v/YXB9a9vwebs1zsl0OTtZhG/TgUOkLuQ5RODs5+y
-        KTJRcDFCbS9lemnnabSRUNqU1GoX390gBrQOhNAqRC8/PtmdTM2PNh+ngkTemImB
-        JJC/OJPAs2HPtXPYM2IBwlbrtDj5cXcqbLWIw7JCef5oUG1dkvIcsVx8b+pvc3B8
-        Sjy1de+EDj/5IfK+nRkZBr+y1Dtm/SwTqMRvc6E4ag==
-X-ME-Sender: <xms:F83JYxdc7ohf4RofjV72paaCMwZOrvLqV87zAg0qO4uSB6TSFZSAlQ>
-    <xme:F83JY_P7Y5OGAu_MxnDC2aNkjLX0NJZjazvUMYnHU6nzCyfMop-dZqzG5nHWAIvkV
-    WcUfuFS1ES91yw6owU>
-X-ME-Received: <xmr:F83JY6jwUovHaeY0-_SNiKU0kKRRszwjT6_H8dr-ia5i6-b966SZydeqZ_RdbBJB2SVAtQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:F83JY6_TSqY98ciRwEndzQa2TdKmVly1ur5UcQV-TZ9HThFC83Ozhw>
-    <xmx:F83JY9sfoytmw3fbQseqGUDBA1s1bX6ELPAEoW-d6fAYUrRueXn_1A>
-    <xmx:F83JY5Hu3evh9kxKf2eQ8mcUsiuzIa3WAmgumH4_c0Glzp34ktnrNg>
-    <xmx:F83JY9dNjpIKIY9riHmHxzynvso_3NZe_VhQQlC9Mda9NlRWFrXKtg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Jan 2023 18:07:02 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id AE4F0104925; Fri, 20 Jan 2023 02:06:59 +0300 (+03)
-Date:   Fri, 20 Jan 2023 02:06:59 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        ndesaulniers@google.com, joao@overdrivepizza.com,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCHv14 08/17] x86/mm: Reduce untagged_addr() overhead until
- the first LAM user
-Message-ID: <20230119230659.pda5jigd5qxpnpq4@box.shutemov.name>
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-9-kirill.shutemov@linux.intel.com>
- <Y8adEg2CYUSVpwtk@hirez.programming.kicks-ass.net>
- <20230117135703.voaumisreld7crfb@box>
- <Y8a4bmCU9wsenvvF@hirez.programming.kicks-ass.net>
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18171BDA;
+        Thu, 19 Jan 2023 15:07:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NydYg5Y5Pz4xyB;
+        Fri, 20 Jan 2023 10:07:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674169624;
+        bh=AUNkEbOWS6yryE3zKFWOtGrLQV0LUL9PLQAx+MWRktw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LZsC1RlsVMz2rVsQM6pn/Iyns396gjQBynzMYaovl1mh7ydQut8uKnLaQLLfZ7+qa
+         dhbvlHtsAv+X6kM3c6fS4rJVckLBIcLWUO7/Sgs5QARtxb0Eg9Azh81ZHGed43Qyfs
+         YW7FHC7NCKoTwGuZrehX3rgwSbbt5P6f3rq2mXFqk/DZ75NZ9lJKNW6T3Nkb4d2Kyc
+         l4HdB5ikNXxhwbhf2tGRpn/sLvyye3b6MY1moHHQhohLH4emtoZPPpewf8z5BLvhHQ
+         BXpE9rXgs8HXZ4MM6ptwYXwtq3izlRyxCdHbw9N4vqlYaICdbYWQLnNp6T9qWRrW/P
+         nmLi2HzZpKTAg==
+Date:   Fri, 20 Jan 2023 10:07:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20230120100702.3d50dbb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8a4bmCU9wsenvvF@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/XU/02PuEmecstByf5LvN/aR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,180 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 04:02:06PM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 17, 2023 at 04:57:03PM +0300, Kirill A. Shutemov wrote:
-> > On Tue, Jan 17, 2023 at 02:05:22PM +0100, Peter Zijlstra wrote:
-> > > On Wed, Jan 11, 2023 at 03:37:27PM +0300, Kirill A. Shutemov wrote:
-> > > 
-> > > >  #define __untagged_addr(untag_mask, addr)
-> > > >  	u64 __addr = (__force u64)(addr);				\
-> > > > -	s64 sign = (s64)__addr >> 63;					\
-> > > > -	__addr &= untag_mask | sign;					\
-> > > > +	if (static_branch_likely(&tagged_addr_key)) {			\
-> > > > +		s64 sign = (s64)__addr >> 63;				\
-> > > > +		__addr &= untag_mask | sign;				\
-> > > > +	}								\
-> > > >  	(__force __typeof__(addr))__addr;				\
-> > > >  })
-> > > >  
-> > > > #define untagged_addr(addr) __untagged_addr(current_untag_mask(), addr)
-> > > 
-> > > Is the compiler clever enough to put the memop inside the branch?
-> > 
-> > Hm. You mean current_untag_mask() inside static_branch_likely()?
-> > 
-> > But it is preprocessor who does this, not compiler. So, yes, the memop is
-> > inside the branch.
-> > 
-> > Or I didn't understand your question.
-> 
-> Nah, call it a pre-lunch dip, I overlooked the whole CPP angle -- d'0h.
-> 
-> That said, I did just put it through a compiler to see wth it did and it
-> is pretty gross:
+--Sig_/XU/02PuEmecstByf5LvN/aR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I tried to replace static branch with alternative. It kinda works, but
-required few hack. Thanks to Andrew Cooper for helping to untangle them.
+Hi all,
 
-I am not sure if it worth the effort. I don't have any evidence that it
-helps. untagged_addr() overhead is rather small and hides in noise of
-syscall cost.
+After merging the block tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-I only made alternative for untagged_addr(), but not for
-untagged_addr_remote(). _remote() case has very few users.
+drivers/block/ublk_drv.c: In function 'ublk_char_dev_permission':
+drivers/block/ublk_drv.c:2032:32: error: passing argument 1 of 'inode_permi=
+ssion' from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
+ 2032 |         err =3D inode_permission(&init_user_ns,
+      |                                ^~~~~~~~~~~~~
+      |                                |
+      |                                struct user_namespace *
+In file included from drivers/block/ublk_drv.c:15:
+include/linux/fs.h:2474:22: note: expected 'struct mnt_idmap *' but argumen=
+t is of type 'struct user_namespace *'
+ 2474 | int inode_permission(struct mnt_idmap *, struct inode *, int);
+      |                      ^~~~~~~~~~~~~~~~~~
 
-BTW, it would be nice to be able to apply alternative later, delaying it
-until the first user of LAM, like I did with static_branch.
-We don't have a way to do this right?
+Caused by commit
 
-Any opinions? I am okay dropping the patch altogether.
+  56f5160bc1b8 ("ublk_drv: add mechanism for supporting unprivileged ublk d=
+evice")
 
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index c44b56f7ffba..3f0c31044f02 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -75,6 +75,12 @@
- # define DISABLE_CALL_DEPTH_TRACKING	(1 << (X86_FEATURE_CALL_DEPTH & 31))
- #endif
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+# define DISABLE_LAM		0
-+#else
-+# define DISABLE_LAM		(1 << (X86_FEATURE_LAM & 31))
-+#endif
-+
- #ifdef CONFIG_INTEL_IOMMU_SVM
- # define DISABLE_ENQCMD		0
- #else
-@@ -115,7 +121,7 @@
- #define DISABLED_MASK10	0
- #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
- 			 DISABLE_CALL_DEPTH_TRACKING)
--#define DISABLED_MASK12	0
-+#define DISABLED_MASK12	(DISABLE_LAM)
- #define DISABLED_MASK13	0
- #define DISABLED_MASK14	0
- #define DISABLED_MASK15	0
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index f9f85d596581..57ccb91fcccf 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -9,6 +9,7 @@
- #include <linux/kasan-checks.h>
- #include <linux/mm_types.h>
- #include <linux/string.h>
-+#include <linux/mmap_lock.h>
- #include <asm/asm.h>
- #include <asm/page.h>
- #include <asm/smap.h>
-@@ -24,28 +25,48 @@ static inline bool pagefault_disabled(void);
- #endif
- 
- #ifdef CONFIG_ADDRESS_MASKING
--DECLARE_STATIC_KEY_FALSE(tagged_addr_key);
-+static inline unsigned long __untagged_addr(unsigned long addr)
-+{
-+	/*
-+	 * Magic with the 'sign' allows to untag userspace pointer without
-+	 * any branches while leaving kernel addresses intact.
-+	 */
-+	long sign;
-+
-+	/*
-+	 * Refer tlbstate_untag_mask directly to avoid RIP-relative relocation
-+	 * in alternative instructions. The relocation gets wrong when gets
-+	 * copied to the target place.
-+	 */
-+	asm (ALTERNATIVE("",
-+			 "sar $63, %[sign]\n\t" /* user_ptr ? 0 : -1UL */
-+			 "or %%gs:tlbstate_untag_mask, %[sign]\n\t"
-+			 "and %[sign], %[addr]\n\t", X86_FEATURE_LAM)
-+	     : [addr] "+r" (addr), [sign] "=r" (sign)
-+	     : "m" (tlbstate_untag_mask), "[sign]" (addr));
-+
-+	return addr;
-+}
- 
--/*
-- * Mask out tag bits from the address.
-- *
-- * Magic with the 'sign' allows to untag userspace pointer without any branches
-- * while leaving kernel addresses intact.
-- */
--#define __untagged_addr(untag_mask, addr)	({			\
--	u64 __addr = (__force u64)(addr);				\
--	if (static_branch_likely(&tagged_addr_key)) {			\
--		s64 sign = (s64)__addr >> 63;				\
--		__addr &= untag_mask | sign;				\
--	}								\
--	(__force __typeof__(addr))__addr;				\
-+#define untagged_addr(addr)	({					\
-+	unsigned long __addr = (__force unsigned long)(addr);		\
-+	(__force __typeof__(addr))__untagged_addr(__addr);		\
- })
- 
--#define untagged_addr(addr) __untagged_addr(current_untag_mask(), addr)
-+static inline unsigned long __untagged_addr_remote(struct mm_struct *mm,
-+						   unsigned long addr)
-+{
-+	long sign = addr >> 63;
-+
-+	mmap_assert_locked(mm);
-+	addr &= (mm)->context.untag_mask | sign;
-+
-+	return addr;
-+}
- 
- #define untagged_addr_remote(mm, addr)	({				\
--	mmap_assert_locked(mm);						\
--	__untagged_addr((mm)->context.untag_mask, addr);		\
-+	unsigned long __addr = (__force unsigned long)(addr);		\
-+	(__force __typeof__(addr))__untagged_addr_remote(mm, __addr);	\
- })
- 
- #else
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 0831d2be190f..e006725afdf1 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -745,9 +745,6 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
- 
- #ifdef CONFIG_ADDRESS_MASKING
- 
--DEFINE_STATIC_KEY_FALSE(tagged_addr_key);
--EXPORT_SYMBOL_GPL(tagged_addr_key);
--
- #define LAM_U57_BITS 6
- 
- static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
-@@ -787,8 +784,6 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	set_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags);
- 
- 	mmap_write_unlock(mm);
--
--	static_branch_enable(&tagged_addr_key);
- 	return 0;
- }
- #endif
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+interacting with commit
+
+  4609e1f18e19 ("fs: port ->permission() to pass mnt_idmap")
+
+from the vfs-idmapping tree.
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 20 Jan 2023 09:58:46 +1100
+Subject: [PATCH] fixup for "ublk_drv: add mechanism for supporting unprivil=
+eged ublk device"
+
+interacting with "fs: port ->permission() to pass mnt_idmap"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/block/ublk_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 9f32553cb938..d47d87be098f 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -2029,7 +2029,7 @@ static int ublk_char_dev_permission(struct ublk_devic=
+e *ub,
+ 	if (stat.rdev !=3D ub->cdev_dev.devt || !S_ISCHR(stat.mode))
+ 		goto exit;
+=20
+-	err =3D inode_permission(&init_user_ns,
++	err =3D inode_permission(&nop_mnt_idmap,
+ 			d_backing_inode(path.dentry), mask);
+ exit:
+ 	path_put(&path);
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XU/02PuEmecstByf5LvN/aR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJzRYACgkQAVBC80lX
+0GxWFwgAnfHhaol7tcVGBA2EHWoRw+YqWK8SwDX9Kyd9oZe3aJFsM2mrrCFC+x2z
+g7qB9yFNh4HmHNcAdGjC4mPQpGgJgoo/XKYM3ui5Rt+tFt6KyQWXk0N7GwtySzeA
+a7HIRv900oE5b7JlqwBEU7zhrGF5G588COj6vn5RrWaLTy4WHk0wSpXbzvF3h9zT
+o5flxK0QZvHXRlbK8Wx6uGjbfFe8xB2gOo290szdaBqruGKX7SR5CqXSGxVF2SKB
+lQQ0ARQgWFEmgg2sayZ/ugvGYN2YFP93MVyzixp+kSW24tMvKWdl0y0dinkzf51p
+sP1xMpmxPShYP3jA33eCURiGW91r9A==
+=yC4Q
+-----END PGP SIGNATURE-----
+
+--Sig_/XU/02PuEmecstByf5LvN/aR--
