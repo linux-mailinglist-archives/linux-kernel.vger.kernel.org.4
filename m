@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7771067407C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F267F67407B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjASSEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
+        id S230110AbjASSDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjASSD5 (ORCPT
+        with ESMTP id S229914AbjASSDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:03:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0C8CE79
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:03:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674151389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YbUkbqMkEBPKSmJ1vfZa2Mg+yeA76P/YKFbZPM+Flqg=;
-        b=D38UUg1gh/O6LMzfVIP7ESj9gikBFzQeWRmHpSN5eBNI5x2nQJ+h4jXyeu600ZIdnXav6j
-        V0Gas3KApK72AxWUGkvleSzUyqeJpP5PmusJWEaEU8hnnsDr9IN0nL80j8+eRgC4q9+BbI
-        dcVflj+xC7Q78pmZf6kD/Bv9n5DP5Ik=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-42-b8H_ri3SN7awEO4Pl2aasw-1; Thu, 19 Jan 2023 13:03:08 -0500
-X-MC-Unique: b8H_ri3SN7awEO4Pl2aasw-1
-Received: by mail-qt1-f198.google.com with SMTP id a13-20020ac8610d000000b003a8151cadebso1288587qtm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:03:07 -0800 (PST)
+        Thu, 19 Jan 2023 13:03:52 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30163B740
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:03:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m15so2189940wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4bF12/qep1PDbFnO6gUHntH+OCUapHjuYPjeXCbRLq0=;
+        b=Odx7DxEIHZg8hwb036lS+h52uP+N0Tzhudi68CBDrmtYNk4vhRChvSAU4G/Ef3QKpl
+         DDu4aZrVvOK4k461M5Uaz9yoV7yPZn1lsqiO1sYqS+WH3hmQxk6dPGS6FLJqVz6USbQa
+         IDja8SUPgnIMu53xDiEj/bdsop6E+QJjuAiHNKCmBVG9Vx+vJINg1qzFC/eFsixJrOaj
+         GonQkyr8FlkomBOO6y6mcn4xemD5LY+hDcbWo8KJnXlN/ypB1aqUr9hI4tqjmaybnppx
+         ynSjLVJRnrJNij25tUESpT0bEWbyeOBmtPwKlpx2ew5WD3q728fhYgYFc1pL69J8RdY/
+         y37w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YbUkbqMkEBPKSmJ1vfZa2Mg+yeA76P/YKFbZPM+Flqg=;
-        b=pWEPAUtzBVICiODohvfRUIJhDUzWV2ex6EnD2HBwDafsqDZRUoYlN8HEEemj1Yzhk6
-         ZH6c6nkAt/hxWuHwRf3PCNNZdnKYpfoV36yHRZKzOfhpUHSNe4Mo4tgA7929iTGIe1cK
-         f1vsw9d8rftdUnxB2AItAYlMF6odbmi6n2Z/m4nazjLy9yuLIV/zpiNuXz2QWjakUfRD
-         ysmCUh3+w6sqCd3G+fxWSxGefbnwxFpTZcuU6Y1AgE0ftNwYOHaBe8CJpRvkGPdLwphb
-         cU4TM/EyF3YIDfEuoHmPwg9ISBCFX9CCvHubBHBqwjxSGsFWP7DRPNIIqAa/G+cL4svj
-         aBgA==
-X-Gm-Message-State: AFqh2kogxSUY+sGLj2dq8CuXCuwYGa3ZCat0C78I+mFdpOhd5mNwGNDM
-        sm+nXBIrVpqFis2QR1CqnwTbHS6d5YqujOOV2PO2IR4LYhwv1Nfd4uFCqR8smrzQpOxN+wv+WZ7
-        adBB38OSOkxzP7H9fs3Nkd0Gl
-X-Received: by 2002:ac8:5189:0:b0:3b6:3ab8:6394 with SMTP id c9-20020ac85189000000b003b63ab86394mr15475539qtn.50.1674151386762;
-        Thu, 19 Jan 2023 10:03:06 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXse34mSeOx/iNRz/1YnaGHBIPAqAPtflOY6Z/YoxOlClLzH7H6Y/EuQ1Og2os7DxIz4BRtDPw==
-X-Received: by 2002:ac8:5189:0:b0:3b6:3ab8:6394 with SMTP id c9-20020ac85189000000b003b63ab86394mr15475517qtn.50.1674151386458;
-        Thu, 19 Jan 2023 10:03:06 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id ew3-20020a05622a514300b003b440ab16fasm6785934qtb.61.2023.01.19.10.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 10:03:05 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] sched/deadline: fix inactive_task_timer splat with
- CONFIG_PREEMPT_RT
-In-Reply-To: <20230104181701.43224-1-wander@redhat.com>
-References: <20230104181701.43224-1-wander@redhat.com>
-Date:   Thu, 19 Jan 2023 18:03:02 +0000
-Message-ID: <xhsmh4jsmieqx.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4bF12/qep1PDbFnO6gUHntH+OCUapHjuYPjeXCbRLq0=;
+        b=T0rtlXS5ionzaGJkpmQDbLvRWXvPcgeXzLGj9Ca7e6Hwo0oIEjj3GJ8hUgGlTDuPCb
+         jW9/QR8ku4F3dXQzwMsIckDW9XXbVkOjrTqOhXV4ONgb8tVQMA5/efhGZT+PQfHpF6Hq
+         wxE8XnuPyuDs9QIECX4qGKeiBLtiurqr1UDYY5QnlbDinQtgpBX2OiGXDASuUBnrsIvr
+         +1weCQUmClgXqibgLuThpW3/gtT9qyg6VbKogjcdH/Tlo78FUU+Uc6AZFjGb+QGC7LYH
+         ogMtkm5owmVFxoF6mzmXgEeQd8ARNVH1UEtc8wBfWtaAoNiWCerfTkzFEFE8QhDrPPvU
+         97jQ==
+X-Gm-Message-State: AFqh2koY+RGPNlJISrXAHGwF1ip+5NXDP1E6LS5JJqazTZC+mH8zTX9X
+        fvRWlErN+cYkaKiqwbgMk55s+g==
+X-Google-Smtp-Source: AMrXdXszga0ovrLNYBNRra1xJWbMqemjj5lTl/z+wA8QSmzAs91cZM/qUtPy8gH84Fx22A2yFJ+LzQ==
+X-Received: by 2002:a05:600c:1f0a:b0:3db:1200:996e with SMTP id bd10-20020a05600c1f0a00b003db1200996emr6839875wmb.16.1674151427540;
+        Thu, 19 Jan 2023 10:03:47 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id m9-20020a7bca49000000b003d98f92692fsm5382293wml.17.2023.01.19.10.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 10:03:47 -0800 (PST)
+Message-ID: <7c4138b4-e7dd-c9c5-11ac-68be90563cad@arista.com>
+Date:   Thu, 19 Jan 2023 18:03:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/4] crypto: Introduce crypto_pool
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230118214111.394416-1-dima@arista.com>
+ <20230118214111.394416-2-dima@arista.com>
+ <Y8kSkW4X4vQdFyOl@gondor.apana.org.au>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y8kSkW4X4vQdFyOl@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,74 +87,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/23 15:17, Wander Lairson Costa wrote:
-> inactive_task_timer() executes in interrupt (atomic) context. It calls
-> put_task_struct(), which indirectly acquires sleeping locks under
-> PREEMPT_RT.
->
-> Below is an example of a splat that happened in a test environment:
->
->  CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
->  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
->  Call Trace:
->  dump_stack_lvl+0x57/0x7d
->  mark_lock_irq.cold+0x33/0xba
->  ? stack_trace_save+0x4b/0x70
->  ? save_trace+0x55/0x150
->  mark_lock+0x1e7/0x400
->  mark_usage+0x11d/0x140
->  __lock_acquire+0x30d/0x930
->  lock_acquire.part.0+0x9c/0x210
->  ? refill_obj_stock+0x3d/0x3a0
->  ? rcu_read_lock_sched_held+0x3f/0x70
->  ? trace_lock_acquire+0x38/0x140
->  ? lock_acquire+0x30/0x80
->  ? refill_obj_stock+0x3d/0x3a0
->  rt_spin_lock+0x27/0xe0
->  ? refill_obj_stock+0x3d/0x3a0
->  refill_obj_stock+0x3d/0x3a0
->  ? inactive_task_timer+0x1ad/0x340
->  kmem_cache_free+0x357/0x560
->  inactive_task_timer+0x1ad/0x340
->  ? switched_from_dl+0x2d0/0x2d0
->  __run_hrtimer+0x8a/0x1a0
->  __hrtimer_run_queues+0x91/0x130
->  hrtimer_interrupt+0x10f/0x220
->  __sysvec_apic_timer_interrupt+0x7b/0xd0
->  sysvec_apic_timer_interrupt+0x4f/0xd0
->  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
->  asm_sysvec_apic_timer_interrupt+0x12/0x20
->  RIP: 0033:0x7fff196bf6f5
->
-> Instead of calling put_task_struct() directly, we defer it using
-> call_rcu(). A more natural approach would use a workqueue, but since
-> in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-> the code would become more complex because we would need to put the
-> work_struct instance in the task_struct and initialize it when we
-> allocate a new task_struct.
->
+Hi Herbert,
 
-Sorry to come back on this; Juri reminded me offline that put_task_struct()
-is invoked in other non-sleepable contexts, not just inactive_task_timer().
+On 1/19/23 09:51, Herbert Xu wrote:
+> On Wed, Jan 18, 2023 at 09:41:08PM +0000, Dmitry Safonov wrote:
+>> Introduce a per-CPU pool of async crypto requests that can be used
+>> in bh-disabled contexts (designed with net RX/TX softirqs as users in
+>> mind). Allocation can sleep and is a slow-path.
+>> Initial implementation has only ahash as a backend and a fix-sized array
+>> of possible algorithms used in parallel.
+>>
+>> Signed-off-by: Dmitry Safonov <dima@arista.com>
+>> ---
+>>  crypto/Kconfig        |   3 +
+>>  crypto/Makefile       |   1 +
+>>  crypto/crypto_pool.c  | 333 ++++++++++++++++++++++++++++++++++++++++++
+>>  include/crypto/pool.h |  46 ++++++
+>>  4 files changed, 383 insertions(+)
+>>  create mode 100644 crypto/crypto_pool.c
+>>  create mode 100644 include/crypto/pool.h
+> 
+> I'm still nacking this.
+> 
+> I'm currently working on per-request keys which should render
+> this unnecessary.  With per-request keys you can simply do an
+> atomic kmalloc when you compute the hash.
 
-e.g.
+Adding per-request keys sounds like a real improvement to me.
+But that is not the same issue I'm addressing here. I'm maybe bad at
+describing or maybe I just don't see how per-request keys would help.
+Let me describe the problem I'm solving again and please feel free to
+correct inline or suggest alternatives.
 
-  rto_push_irq_work_func() // hard irq work so hardirq context
-  `\
-    push_rt_task()
-    `\
-       put_task_struct()
+The initial need for crypto_pool comes from TCP-AO implementation that
+I'm pusing upstream, see RFC5925 that describes the option and the
+latest version of patch set is in [1]. In that patch set hashing is used
+in a similar way to TCP-MD5: crypto_alloc_ahash() is a slow-path in
+setsockopt() and the use of pre-allocated requests in fast path, TX/RX
+softirqs.
 
-Or
+For TCP-AO 2 algorithms are "must have" in any compliant implementation,
+according to RFC5926: HMAC-SHA-1-96 and AES-128-CMAC-96, other
+algorithms are optional. But having in mind that sha1, as you know, is
+not secure to collision attacks, some customers prefer to have/use
+stronger hashes. In other words, TCP-AO implementation needs 2+ hashing
+algorithms to be used in a similar manner as TCP-MD5 uses MD5 hashing.
 
-  cpu_stopper_thread() // stopper callbacks must not sleep
-  `\
-    push_cpu_stop()
-    `\
-      put_task_struct()
+And than, I look around and I see that the same pattern (slow allocation
+of crypto request and usage on a fast-path with bh disabled) is used in
+other places over kernel:
+- here I convert to crypto_pool seg6_hmac & tcp-md5
+- net/ipv4/ah4.c could benefit from it: currently it allocates
+crypto_alloc_ahash() per every connection, allocating user-specified
+hash algorithm with ahash = crypto_alloc_ahash(x->aalg->alg_name, 0, 0),
+which are not shared between each other and it doesn't provide
+pre-allocated temporary/scratch buffer to calculate hash, so it uses
+GFP_ATOMIC in ah_alloc_tmp()
+- net/ipv6/ah6.c is copy'n'paste of the above
+- net/ipv4/esp4.c and net/ipv6/esp6.c are more-or-less also copy'n'paste
+with crypto_alloc_aead() instead of crypto_alloc_ahash()
+- net/mac80211/ - another example of the same pattern, see even the
+comment in ieee80211_key_alloc() where the keys are allocated and the
+usage in net/mac80211/{rx,tx}.c with bh-disabled
+- net/xfrm/xfrm_ipcomp.c has its own manager for different compression
+algorithms that are used in quite the same fashion. The significant
+exception is scratch area: it's IPCOMP_SCRATCH_SIZE=65400. So, if it
+could be shared with other crypto users that do the same pattern
+(bh-disabled usage), it would save some memory.
 
-... But then again I'm not aware of any splats happening in these paths. Is
-there something special about inactive_task_timer(), or could it be the
-issue is there for those other paths but we just haven't had them reported
-yet?
+And those are just fast-grep examples from net/, looking closer it may
+be possible to find more potential users.
+So, in crypto_pool.c it's 333 lines where is a manager that let a user
+share pre-allocated ahash requests [comp, aead, may be added on top]
+inside bh-disabled section as well as share a temporary/scratch buffer.
+It will make it possible to remove some if not all custom managers of
+the very same code pattern, some of which don't even try to share
+pre-allocated tfms.
 
+That's why I see some value in this crypto-pool thing.
+If you NACK it, the alternative for TCP-AO patches would be to add just
+another pool into net/ipv4/tcp.c that either copies TCP-MD5 code or
+re-uses it.
+
+I fail to see how your per-request keys patches would provide an API
+alternative to this patch set. Still, users will have to manage
+pre-allocated tfms and buffers.
+I can actually see how your per-request keys would benefit *from* this
+patch set: it will be much easier to wire per-req keys up to crypto_pool
+to avoid per-CPU tfm allocation for algorithms you'll add support for.
+In that case you won't have to patch crypto-pool users.
+
+[1]:
+https://lore.kernel.org/all/20221027204347.529913-1-dima@arista.com/T/#u
+
+Thanks, waiting for your input,
+          Dmitry
