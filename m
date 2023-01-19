@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E31B67331F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7EC673325
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjASH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S229682AbjASH7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjASH6J (ORCPT
+        with ESMTP id S230041AbjASH6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:58:09 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA8A2202C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:58:06 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id l8so823881wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:58:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ij8SMr+vXbA/AZuiMltivscr4/Z1+1DiXSChaaWBJLA=;
-        b=jNvClj4Hgs3XtM8osi2wmiQMtbXX9Pmtcv550+503yOGAXBRa9d6VoF6cZTm2h6Gjv
-         vqqmXwxeBDQDNJFNBGX319WcRnTcclvjKfxqDfdIS30rx6KVsgnwyMEWlTKXRyc0Sm1S
-         mT6WXhFENhT0S469DnFce32rQRt/pYYaIYOUIfZhQsd/6CIV99iyCTx6nLFqzlNgInrS
-         cCvHfjWbI+6EBPHsRh6f0fBLcwDK9wLvu5FAYXYqrEVrL2EqadlKhKiQGZ+7HNMzwxLc
-         oPDSOBQB00PBTJJ3qmuUvqX3Bv44IPfj9wYpGqyMB8IaWS9L0X8YL8/ELk/0dd9wpVwy
-         2cYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ij8SMr+vXbA/AZuiMltivscr4/Z1+1DiXSChaaWBJLA=;
-        b=qUrC7micNm3+iQ8wNuMfTUNwPy9M/4u9lqv9Qv6YUb4/V9QwxtiSfWqUUjqYjyGkpD
-         tQU4ZB6qCUU2eRGPI4QnLwFXg0oVKmDnz+M2Qwmfg2SE4XrxlOUebzYmuro2q32CZq+l
-         vevS51JUf3AIWNJknMMO+ncBjARzJlXDZmcaOuOLHl7J/yWgcmwaoF0ioeVakA9UJVQm
-         E7Noe5olYdz1LZ9zg+dPf8BijJzkGH1WGfRHbpxfCZC6PZjL5DmamCc40iSWFPhsJ/Hg
-         mdK30cu4O2g1D0K5xnhKuoK3N//wp7k7zcR2Wz/UU/GDhR5PhLmnPE72AHAf8SwqiM0Q
-         NH6g==
-X-Gm-Message-State: AFqh2kqXe2K9sf58+6K4JO6ZTilh83YXePlJ6sF6dYHlFRDMJlXI1Nd8
-        zHq1uehntKjikEPX6zobAVgWrdE0B0CWd8yywiw=
-X-Google-Smtp-Source: AMrXdXvJcNubzirilufX37J3RKkYIRh76X2L8Sjqd3Dsl7pC4Q5esy4zyFFYuUszjgUWfmEGPa2dtA==
-X-Received: by 2002:a1c:4c0a:0:b0:3db:210:6a24 with SMTP id z10-20020a1c4c0a000000b003db02106a24mr9024938wmf.8.1674115084639;
-        Wed, 18 Jan 2023 23:58:04 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c468f00b003d9b87296a9sm4115776wmo.25.2023.01.18.23.58.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 23:58:04 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230114233455.2005047-1-martin.blumenstingl@googlemail.com>
-References: <20230114233455.2005047-1-martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v1 0/2] ARM: dts: meson: Add more L2 (PL310) cache properties
-Message-Id: <167411508395.294260.17502522944795124544.b4-ty@linaro.org>
-Date:   Thu, 19 Jan 2023 08:58:03 +0100
+        Thu, 19 Jan 2023 02:58:44 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B54858C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:58:38 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DDA3B41DF4;
+        Thu, 19 Jan 2023 07:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1674115116; bh=qyTTsAPiys3la5XkUpFouJxNDSn76IufAXYFiFAQBnk=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References;
+        b=mitHd9GYk/SoARidHVomS7q8ZfQ2d1ULcTBxBJmXayM9ZzLstLc2FZIJdBjMnckQR
+         gDYp8dfFqoI03GxQ4eEo0Fr6u9YykYkH6fZXzyRjJEYB0xVC5y8q7kWuEHlxrcvEgr
+         p5Y1hIDnXP9fduqf2FlNsRb0GabgREmyR+s2Uf+XNA3BA0Pf4XU7HPmljZm7HPSAiu
+         UTgPMiaPun4+/avrBqNXEL+lsi7U5vTbDHCDuSKx7GWUBaHRH1VhSoBvw42Z6shEr0
+         b8/fLI7yf6fQJ2aEVzoWcD2LjAxZFkb1dczmckFmBZ+y0h2kaQMbEcoGFdORCTXhcR
+         IwSx9uZRI0Cgg==
+Date:   Thu, 19 Jan 2023 16:58:29 +0900
+From:   "Hector Martin \"marcan\"" <marcan@marcan.st>
+To:     Christoph Hellwig <hch@lst.de>, Janne Grunau <j@jannau.net>
+CC:     Sven Peter <sven@svenpeter.dev>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Eric Curtin <ecurtin@redhat.com>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] nvme-apple: Reset controller during shutdown
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230119061452.GA17695@lst.de>
+References: <20230114-apple-nvme-suspend-fixes-v6.2-v2-0-9157bf633dba@jannau.net> <20230114-apple-nvme-suspend-fixes-v6.2-v2-1-9157bf633dba@jannau.net> <20230118052450.GA24742@lst.de> <20230119061452.GA17695@lst.de>
+Message-ID: <60A924B7-9F29-4AF1-9DF8-EA90DBA48B3E@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.1
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+(Replying from mobile, please excuse formatting)
 
-On Sun, 15 Jan 2023 00:34:53 +0100, Martin Blumenstingl wrote:
-> I had these patches in my testing tree for a while now. The vendor
-> kernel uses the same configuration, so it probably makes sense to
-> use them upstream as well.
-> 
-> 
-> Martin Blumenstingl (2):
->   ARM: dts: meson8: Add more L2 (PL310) cache properties
->   ARM: dts: meson8b: Add more L2 (PL310) cache properties
-> 
-> [...]
+I'm actually not sure exactly how this works any more=2E The previous seri=
+es I sent (which had slightly different logic) worked for me on a t8103 Mac=
+ Mini in smoke tests and I'd assumed fixed the issue, but it turned out to =
+fail (in a different way) on other machines/circumstances=2E This one seems=
+ to work everywhere, but I can't explain exactly why=2E Maybe we do in fact=
+ need to issue an NVMe disable before shutting down the firmware to reliabl=
+y come up properly on firmware restart=2E
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (for-next)
+Maybe something like this?
 
-[1/2] ARM: dts: meson8: Add more L2 (PL310) cache properties
-      https://git.kernel.org/amlogic/c/12cdc236cf83eb55560f52dd378f05d5798452ba
-[2/2] ARM: dts: meson8b: Add more L2 (PL310) cache properties
-      https://git.kernel.org/amlogic/c/46f73c1c037eed8e5fd61cc39c77b0988148b50b
+/*
+ * Always disable the NVMe controller after shutdown=2E
+ * We need to do this to bring it back up later anyway,
+ * and we can't do it while the firmware is not running
+ * (e=2Eg=2E in the resume reset path before RTKit is
+ * initialized), so for Apple controllers it makes sense to
+ * unconditionally do it here=2E Additionally, this sequence
+ * of events is reliable, while others (like disabling after
+ * bringing back the firmware on resume) seem to run
+ * into trouble under some circumstances=2E
+ *
+ * Both U-Boot and m1n1 also use this convention
+ * (i=2Ee=2E an ANS NVMe controller is handed off with
+ * firmware shut down, in an NVMe disabled state,
+ * after a clean shutdown)=2E
+ */
 
-These changes has been applied on the intermediate git tree [1].
+On 2023=E5=B9=B41=E6=9C=8819=E6=97=A5 15:14:52 JST, Christoph Hellwig <hch=
+@lst=2Ede> wrote:
+>Folks, can you chime in if this comment makes sense?  I'd really
+>like to send the patches off to Jens before rc5=2E
+>
+>On Wed, Jan 18, 2023 at 06:24:50AM +0100, Christoph Hellwig wrote:
+>> On Tue, Jan 17, 2023 at 07:25:00PM +0100, Janne Grunau wrote:
+>> > +		/*
+>> > +		 * Always reset the NVMe controller on shutdown=2E The reset is
+>> > +		 * required to shutdown the co-processor cleanly=2E
+>> > +		 */
+>>=20
+>> Hmm=2E  This comment doesn't seem to match the discussion we had last
+>> week=2E  Which would be:
+>>=20
+>> 		/*
+>> 		 * NVMe requires a reset before setting up a controller to
+>> 		 * ensure it is in a clean state=2E  For NVMe PCIe this is
+>> 		 * done in the setup path to be able to deal with controllers
+>> 		 * in any kind of state=2E  For for Apple devices, the firmware
+>> 		 * will not be available at that time and the reset will
+>> 		 * time out=2E  Thus reset after shutting the NVMe controller
+>> 		 * down and before shutting the firmware down=2E
+>> 		 */
+>---end quoted text---
+>
 
-The for-next branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
+--=20
+Hector Martin "marcan" (marcan@marcan=2Est)
+Public key: https://mrcn=2Est/pub
