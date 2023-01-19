@@ -2,192 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A92673108
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BD76730ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjASFNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S229905AbjASFDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjASFMe (ORCPT
+        with ESMTP id S229749AbjASFC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:12:34 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4796D24128;
-        Wed, 18 Jan 2023 21:11:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ny7HX4Tmnz4f3xcK;
-        Thu, 19 Jan 2023 11:23:04 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+Zt8hj+1ZBBw--.54593S3;
-        Thu, 19 Jan 2023 11:23:06 +0800 (CST)
-Subject: Re: [PATCH -next v2 3/3] blk-cgroup: synchronize pd_free_fn() from
- blkg_free_workfn() and blkcg_deactivate_policy()
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230118123152.1926314-1-yukuai1@huaweicloud.com>
- <20230118123152.1926314-4-yukuai1@huaweicloud.com>
- <Y8gm0BVh5d83lVXN@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <9a9b6f38-9d1b-b007-96d7-2cda433763f4@huaweicloud.com>
-Date:   Thu, 19 Jan 2023 11:23:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 19 Jan 2023 00:02:56 -0500
+X-Greylist: delayed 1810 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 20:56:52 PST
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18FFEDB;
+        Wed, 18 Jan 2023 20:56:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+        Content-Type; bh=ZQ//IA0NhKdNE+rYfKAyp7+VVDgWEzVXpQLE2095Tpg=;
+        b=f5bVgdyhOtYwDtdjvRtO78ken69rCoTHl+ndTtW+Kki+il066LR1BgJoPsvZqL
+        QqRf+r9qzbp976qfwSri6WkJ8/ufyENSUBcd+QrTtxYJwW/yHw/0VkCchUSyPdcB
+        K8/3SU5D+xSc0s6VCZ97ZA8udMXxCl8xRTDhVL+uppokM=
+Received: from localhost.localdomain (unknown [202.112.238.191])
+        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wA3B2qWxchjSVC7AA--.61981S4;
+        Thu, 19 Jan 2023 12:22:48 +0800 (CST)
+From:   Yi He <clangllvm@126.com>
+To:     tixxdz@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        clangllvm@126.com, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev,
+        mhiramat@kernel.org, rostedt@goodmis.org, sdf@google.com,
+        song@kernel.org, yhs@fb.com, yhs@meta.com
+Subject: [PATCH V2] bpf: security enhancement by limiting the offensive eBPF helpers
+Date:   Thu, 19 Jan 2023 12:22:44 +0800
+Message-Id: <20230119042244.763779-1-clangllvm@126.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAEiveUd_N8qHy54AS0q90FuUSQ=7mePm8FL88Aw-sY7fT7NqFQ@mail.gmail.com>
+References: <CAEiveUd_N8qHy54AS0q90FuUSQ=7mePm8FL88Aw-sY7fT7NqFQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Y8gm0BVh5d83lVXN@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn4R+Zt8hj+1ZBBw--.54593S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFWkCF4xAFWkJrWfGryUJrb_yoW5tw1rpr
-        ZxGas8trZ5tr4Ik3Wjvr13Wr9agw4rtrWUG3yrGa4Ykr4Y9rsYqFnrCrWvkFWxAFs5GF4f
-        Zr4DKFnxGw48GrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wA3B2qWxchjSVC7AA--.61981S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gw1DZr4DZF13Cr48Aw4rGrg_yoW7ur45pF
+        WDKry3Ar4kJr4Ik347J3yxWF4Fy3y5WrW7Gan5K3y8ZanxJr40gr1fKF4a9Fn5ZrZ8G3ya
+        q39FvrZ8Aa1Dua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRb_-PUUUUU=
+X-Originating-IP: [202.112.238.191]
+X-CM-SenderInfo: xfod0wpooyzqqrswhudrp/1tbiYBn7y1pEKC6rqwAAsR
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The bpf_send_singal, bpf_send_singal_thread and bpf_override_return
+is similar to bpf_write_user and can affect userspace processes.
+Thus, these three helpers should also be restricted by security lockdown.
 
-ÔÚ 2023/01/19 1:05, Tejun Heo Ð´µÀ:
-> Hello,
-> 
-> On Wed, Jan 18, 2023 at 08:31:52PM +0800, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Currently parent pd can be freed before child pd:
->>
->> t1: remove cgroup C1
->> blkcg_destroy_blkgs
->>   blkg_destroy
->>    list_del_init(&blkg->q_node)
->>    // remove blkg from queue list
->>    percpu_ref_kill(&blkg->refcnt)
->>     blkg_release
->>      call_rcu
->>
->> t2: from t1
->> __blkg_release
->>   blkg_free
->>    schedule_work
->> 			t4: deactivate policy
->> 			blkcg_deactivate_policy
->> 			 pd_free_fn
->> 			 // parent of C1 is freed first
->> t3: from t2
->>   blkg_free_workfn
->>    pd_free_fn
->>
->> If policy(for example, ioc_timer_fn() from iocost) access parent pd from
->> child pd after pd_offline_fn(), then UAF can be triggered.
->>
->> Fix the problem by delaying 'list_del_init(&blkg->q_node)' from
->> blkg_destroy() to blkg_free_workfn(), and use a new disk level mutex to
->                                              ^
->                                              using
-> 
->> protect blkg_free_workfn() and blkcg_deactivate_policy).
->    ^                                                     ^
->    synchronize?                                          ()
-> 
->> @@ -118,16 +118,26 @@ static void blkg_free_workfn(struct work_struct *work)
->>   {
->>   	struct blkcg_gq *blkg = container_of(work, struct blkcg_gq,
->>   					     free_work);
->> +	struct request_queue *q = blkg->q;
->>   	int i;
->>   
->> +	if (q)
->> +		mutex_lock(&q->blkcg_mutex);
-> 
-> A comment explaining what the above is synchronizing would be useful.
-> 
->> +
->>   	for (i = 0; i < BLKCG_MAX_POLS; i++)
->>   		if (blkg->pd[i])
->>   			blkcg_policy[i]->pd_free_fn(blkg->pd[i]);
->>   
->>   	if (blkg->parent)
->>   		blkg_put(blkg->parent);
->> -	if (blkg->q)
->> -		blk_put_queue(blkg->q);
->> +
->> +	if (q) {
->> +		if (!list_empty(&blkg->q_node))
-> 
-> We can drop the above if.
-> 
->> +			list_del_init(&blkg->q_node);
->> +		mutex_unlock(&q->blkcg_mutex);
->> +		blk_put_queue(q);
->> +	}
->> +
->>   	free_percpu(blkg->iostat_cpu);
->>   	percpu_ref_exit(&blkg->refcnt);
->>   	kfree(blkg);
->> @@ -462,9 +472,14 @@ static void blkg_destroy(struct blkcg_gq *blkg)
->>   	lockdep_assert_held(&blkg->q->queue_lock);
->>   	lockdep_assert_held(&blkcg->lock);
->>   
->> -	/* Something wrong if we are trying to remove same group twice */
->> -	WARN_ON_ONCE(list_empty(&blkg->q_node));
->> -	WARN_ON_ONCE(hlist_unhashed(&blkg->blkcg_node));
->> +	/*
->> +	 * blkg is removed from queue list in blkg_free_workfn(), hence this
->> +	 * function can be called from blkcg_destroy_blkgs() first, and then
->> +	 * before blkg_free_workfn(), this function can be called again in
->> +	 * blkg_destroy_all().
-> 
-> How about?
-> 
-> 	 * blkg stays on the queue list until blkg_free_workfn(), hence this
-> 	 * function can be called from blkcg_destroy_blkgs() first and again
-> 	 * from blkg_destroy_all() before blkg_free_workfn().
-> 
->> +	 */
->> +	if (hlist_unhashed(&blkg->blkcg_node))
->> +		return;
->>   
->>   	for (i = 0; i < BLKCG_MAX_POLS; i++) {
->>   		struct blkcg_policy *pol = blkcg_policy[i];
->> @@ -478,8 +493,11 @@ static void blkg_destroy(struct blkcg_gq *blkg)
->>   
->>   	blkg->online = false;
->>   
->> +	/*
->> +	 * Delay deleting list blkg->q_node to blkg_free_workfn() to synchronize
->> +	 * pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy().
->> +	 */
-> 
-> So, it'd be better to add a more comprehensive comment in blkg_free_workfn()
-> explaining why we need this synchronization and how it works and then point
-> to it from here.
-> 
-> Other than comments, it looks great to me. Thanks a lot for your patience
-> and seeing it through.
-Thanks for the suggestions, I'll send a new patch based on your
-suggestions.
+Signed-off-by: Yi He <clangllvm@126.com>
+---
 
-Kuai
-> 
+Thanks for you reply.
+
+I have studied this problem for months. I would like to give more details to
+ clarify why these two helpers can break the INTEGRITY and should be lockdown.
+
+First, this helpers are only for eBPF tracing programs. LSM-bpf and seccomp do 
+not need them. The documents say the two functions are experimental. 
+Now the eBPF products (e.g., Cillium, Falco) seldom use them but the evil eBPF 
+can abuse them.
+
+Second, override_return is similar to bpf_write_user can defintely break the 
+INTEGRITY by altering other processes' system call or kernel functions 
+(KProbe)'s return code.
+
+> Then solution should be toward restricting eBPF in container, there is already
+> sysctl, per process seccomp, LSM + bpf LSM for that.
+Yes, the solution is for restricting eBPF in container. But a fine-gained access 
+control is required, such as assigning different eBPF privilege to various containers, 
+rather than just disable eBPF in a container. 
+ 
+The mechanisms you mententioned do not properly sovle the problem.
+sysctl can only disable the unprivielge
+users to access eBPF via the kernel.unprivileged_bpf_disabled flag. The untrusted eBPF
+are installed by privielge users inside a container but can harm the whole system and 
+other shared-kernel containers.
+seccomp also can only disable the bpf system call to totally disable eBPF while we may 
+need to selectively enable the benign features of eBPF and disallow the offensive features
+which may be abused.
+LSM + bpf LSM can implement this functionality. However, it is difficult to identify 
+a process from a container [1] as at many LSM hooks, we can only get a process's pid and
+ name which can be forged by the mailicous program. A correct way is to use the inode number
+ to set policy for benign processes. Moreover, the LSM bpf's overhead is unacceptable.
+
+[1]. https://blog.doyensec.com/2022/10/11/ebpf-bypass-security-monitoring.html
+
+> Those are more or less same as bpf sending signal. Supervisors are using
+> seccomp to ret kill process and/or sending signals. Where will you draw the
+> line? should we go restrict those too? IMHO this does not relate to lockdown.
+> I don't see that much difference between a seccomp kill and ebpf signal.
+
+The bpf_send_singal is different to any other signal sending functions as it 
+enables a eBPF tracing program from a container to kill any processes 
+(even the privielge proceess) of the host or other containers. 
+Supervisors and seccomp can only kill its child process. Other signal sending 
+do not need to be restricted as they can not be used inside a container to kill 
+any processes outside of a container. 
+
+> This reasoning will kill any effort to improve sandbox mechanisms that are
+> moving some functionality from seccomp ret kill to a more flexible and
+> transparent bpf-LSM model where privileged installs the sandbox. Actually,
+> we are already doing this and beside eBPF flexibility and transparency
+> (change policy at runtime without restart) from a _user perspective_
+We will try to implement alternative mechanisms for constrained eBPF 
+features only since the LSM-bpf have shortages in both flexibility and
+ performance. 
+
+This patch is only for blocking the offensive features of eBPF and avoiding themÂ 
+affecting the INTEGRITY of the container, given that the evil eBPF can abuse these
+helpers to affect any processes running in inside or outside of the container, 
+sharing the same kernel.
+
+[1]. https://github.com/Gui774ume/krie/blob/master/ebpf/krie/hooks/lsm.h
+
+ include/linux/security.h | 2 ++
+ kernel/trace/bpf_trace.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 5b67f208f..42420e620 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -123,6 +123,8 @@ enum lockdown_reason {
+ 	LOCKDOWN_DEBUGFS,
+ 	LOCKDOWN_XMON_WR,
+ 	LOCKDOWN_BPF_WRITE_USER,
++	LOCKDOWN_BPF_SEND_SIGNAL,
++	LOCKDOWN_BPF_OVERRIDE_RETURN,
+ 	LOCKDOWN_DBG_WRITE_KERNEL,
+ 	LOCKDOWN_RTAS_ERROR_INJECTION,
+ 	LOCKDOWN_INTEGRITY_MAX,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 3bbd3f0c8..fdb94868d 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1463,9 +1463,11 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_cgrp_storage_delete_proto;
+ #endif
+ 	case BPF_FUNC_send_signal:
+-		return &bpf_send_signal_proto;
++		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
++		       NULL : &bpf_send_signal_proto;
+ 	case BPF_FUNC_send_signal_thread:
+-		return &bpf_send_signal_thread_proto;
++		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
++		       NULL : &bpf_send_signal_thread_proto;
+ 	case BPF_FUNC_perf_event_read_value:
+ 		return &bpf_perf_event_read_value_proto;
+ 	case BPF_FUNC_get_ns_current_pid_tgid:
+@@ -1531,7 +1533,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_stack_proto;
+ #ifdef CONFIG_BPF_KPROBE_OVERRIDE
+ 	case BPF_FUNC_override_return:
+-		return &bpf_override_return_proto;
++		return security_locked_down(LOCKDOWN_BPF_OVERRIDE_RETURN) < 0 ?
++		       NULL : &bpf_override_return_proto;
+ #endif
+ 	case BPF_FUNC_get_func_ip:
+ 		return prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ?
+-- 
+2.25.1
 
