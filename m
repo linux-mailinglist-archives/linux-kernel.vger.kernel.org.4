@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6173B673D48
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB85673D4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjASPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S230347AbjASPS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjASPR6 (ORCPT
+        with ESMTP id S230379AbjASPSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:17:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE882996
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:17:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3A261B53
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:17:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAA2C433F0;
-        Thu, 19 Jan 2023 15:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674141476;
-        bh=d+RJax+gn4iXgWIKUImZxLaGkCJ5L1Iboau8yyzzzoo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RstmJ0otBERnHgKaLfZmAkGg1CCZYd56wwtN40ndpz9lrPOBCMIOFK0CJYHfOmfso
-         jc3mcT/BcLQShASUz3WUg/Z3vIokxDEnAY70iKfutYE4SC/aE7ClvHFkairLaXiNX8
-         pB3vIyr8m2N79vEUrntQW9d/xfLWYhM83obdtkZg=
-Date:   Thu, 19 Jan 2023 16:17:48 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 1/6] virtio console: Harden multiport against invalid
- host input
-Message-ID: <Y8lfHKz08EVeNa5o@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
+        Thu, 19 Jan 2023 10:18:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EF18298E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=26Vzdfk8IdehtEF8twTCYdwKeIkT3v/NB65Q8/opuvU=; b=wKnaZKGv244sKaa5/MbOQalVW2
+        +GNCgmvInCTBakotr37QLjo2O17nERiNMWouC04X0XvwzhQeQ2HRBa7Ky/ZxAe113ULLv+Cv6837Z
+        e1dBTnnlf1nFWPcD5lB2UBtS1LcRKFSukIJl470uUNgWbbFbx0aAxpzf5CsHykGzFNcM7Xl1aiqAM
+        SxM3rRtS9MJ3w7eF8P0G2jPScLimVe6bLDg2N3s47NBDsuBkpqOH/2djIM61pojKRKLFCiAX+TSYP
+        o4Eagk+2oqsLMmCznNVhTx53iOScKpvk4OvLG3eU6X2XSQziFg4gSg9NrbgPMnvnIkc4nALyjBn+s
+        L1o/ho/Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIWgV-00158f-Pv; Thu, 19 Jan 2023 15:18:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F9AA30008D;
+        Thu, 19 Jan 2023 16:18:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 243BF20DC30B7; Thu, 19 Jan 2023 16:18:34 +0100 (CET)
+Date:   Thu, 19 Jan 2023 16:18:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Erhard F." <erhard_f@mailbox.org>
+Cc:     sandipan.das@amd.com, linux-kernel@vger.kernel.org
+Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at
+ "Loading Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
+Message-ID: <Y8lfStnaUFNRxgYu@hirez.programming.kicks-ass.net>
+References: <20230119022303.177052e4@yea>
+ <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:57:16PM +0200, Alexander Shishkin wrote:
-> From: Andi Kleen <ak@linux.intel.com>
+On Thu, Jan 19, 2023 at 02:56:08PM +0100, Peter Zijlstra wrote:
+> On Thu, Jan 19, 2023 at 02:23:03AM +0100, Erhard F. wrote:
+> > Hi!
+> > 
+> > I did a kernel bisect for an issue I originally posted on https://github.com/ClangBuiltLinux/linux/issues/1774
+> > 
+> > It is about kernel 6.1.x not booting on my machines when built with clang. A gcc built kernel with the same config just works fine. Turns out kernel v6.2-rc4 and earlier v6.2-rc are still affected.
+> > 
+> > I did a kernel bisect which revealed this commit:
+> > 
+> >  # git bisect bad
+> > 706460a96fc654e80b6bed1f562b00d2ce9f2f4d is the first bad commit
+> > commit 706460a96fc654e80b6bed1f562b00d2ce9f2f4d
+> > Author: Sandipan Das <sandipan.das@amd.com>
+> > Date:   Thu Aug 11 17:59:51 2022 +0530
+> > 
+> >     perf/x86/amd/core: Add generic branch record interfaces
+> >     
+> >     AMD processors that are capable of recording branches support either Branch
+> >     Sampling (BRS) or Last Branch Record (LBR). In preparation for adding Last
+> >     Branch Record Extension Version 2 (LbrExtV2) support, introduce new static
+> >     calls which act as gateways to call into the feature-dependent functions
+> >     based on what is available on the processor.
+> >     
+> >     Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> >     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >     Link: https://lore.kernel.org/r/b75dbc32663cb395f0d701167e952c6a6b0445a3.1660211399.git.sandipan.das@amd.com
+> > 
+> >  arch/x86/events/amd/core.c | 34 ++++++++++++++++++++++------------
+> >  1 file changed, 22 insertions(+), 12 deletions(-)
 > 
-> It's possible for the host to set the multiport flag, but pass in
-> 0 multiports, which results in:
+> Using: v6.2-rc4-67-g7287904c8771
 > 
-> BUG: KASAN: slab-out-of-bounds in init_vqs+0x244/0x6c0 drivers/char/virtio_console.c:1878
-> Write of size 8 at addr ffff888001cc24a0 by task swapper/1
+> I have an AMD Interlagos and after bringing it back to live/up-to-date I
+> can't seem to even boot your .config in qemu/kvm irrespective of
+> GCC/Clang.
 > 
-> CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.0-rc1-140273-gaab0bb9fbaa1-dirty #588
-> Call Trace:
->  init_vqs+0x244/0x6c0 drivers/char/virtio_console.c:1878
->  virtcons_probe+0x1a3/0x5b0 drivers/char/virtio_console.c:2042
->  virtio_dev_probe+0x2b9/0x500 drivers/virtio/virtio.c:263
->  call_driver_probe drivers/base/dd.c:515
->  really_probe+0x1c9/0x5b0 drivers/base/dd.c:601
->  really_probe_debug drivers/base/dd.c:694
->  __driver_probe_device+0x10d/0x1f0 drivers/base/dd.c:754
->  driver_probe_device+0x68/0x150 drivers/base/dd.c:786
->  __driver_attach+0xca/0x200 drivers/base/dd.c:1145
->  bus_for_each_dev+0x108/0x190 drivers/base/bus.c:301
->  driver_attach+0x30/0x40 drivers/base/dd.c:1162
->  bus_add_driver+0x325/0x3c0 drivers/base/bus.c:618
->  driver_register+0xf3/0x1d0 drivers/base/driver.c:171
-> ...
-> 
-> Add a suitable sanity check.
-> 
-> Signed-off-by: Andi Kleen <ak@linux.intel.com>
-> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Amit Shah <amit@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/char/virtio_console.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
-> index 6a821118d553..f4fd5fe7cd3a 100644
-> --- a/drivers/char/virtio_console.c
-> +++ b/drivers/char/virtio_console.c
-> @@ -1843,6 +1843,9 @@ static int init_vqs(struct ports_device *portdev)
->  	int err;
->  
->  	nr_ports = portdev->max_nr_ports;
-> +	if (use_multiport(portdev) && nr_ports < 1)
-> +		return -EINVAL;
-> +
->  	nr_queues = use_multiport(portdev) ? (nr_ports + 1) * 2 : 2;
->  
->  	vqs = kmalloc_array(nr_queues, sizeof(struct virtqueue *), GFP_KERNEL);
-> -- 
-> 2.39.0
-> 
+> When I build defconfig+kvm_guest.config both GCC-12 and clang-15 boot
+> just fine in qemu/kvm.
 
-Why did I only get a small subset of these patches?
+Furthermore, testing localyesconfig based off Debian's
+config-6.1.0-1-amd64 boots fine using both GCC-12 and clang-15 as host
+kernels on that machine.
 
-And why is the whole thread not on lore.kernel.org?
-
-And the term "hardening" is marketing fluff.   Just say, "properly parse
-input" or something like that, as what you are doing is fixing
-assumptions about the data here, not causing anything to be more (or
-less) secure.
-
-But, this still feels wrong.  Why is this happening here, in init_vqs()
-and not in the calling function that already did a bunch of validation
-of the ports and the like?  Are those checks not enough?  if not, fix it
-there, don't spread it out all over the place...
-
-thanks,
-
-greg k-h
