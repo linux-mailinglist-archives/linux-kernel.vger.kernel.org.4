@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDD5673979
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4804E673974
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjASNIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S229862AbjASNHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjASNH6 (ORCPT
+        with ESMTP id S230484AbjASNHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:07:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F7A656EA
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:06:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674133593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NllK0azs34zQlNRKoqTNyUNwLOsJ8tnB4tNC7+7ktic=;
-        b=S3nOzNTJNAcodigvZEXCaUJaQGVy5857qjZpV82RaI1zaupYkDRKt1z7HamE7Gua3xw0oY
-        mUhdVG7zbicCvBJSz+3azmSeb+deENcxQAZYVzW5HwxU9h9W7VyGC1HqsucbxaUPnRyIAh
-        Ab0cbyQ4ws/vV45ylc5ae76Rw0MYXaw=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-557-UB2_L7mpOlW8YE9G3QI5pQ-1; Thu, 19 Jan 2023 08:06:31 -0500
-X-MC-Unique: UB2_L7mpOlW8YE9G3QI5pQ-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-4d4b54d0731so18248547b3.18
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:06:31 -0800 (PST)
+        Thu, 19 Jan 2023 08:07:12 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0797C84B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:06:30 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y11so2684732edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:06:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1gPTT8pbx6iE/epEHJkHt7/bEhvcngYyFc03+y1Cxk4=;
+        b=UOedtTtuqugeKVm2m6LJeaG3jrdknha6dCHm+x9B6ll8yvcShFUn/RjhmIrVM5Rs3u
+         8iClmvOLPN/OndVQG+dVnvpmfz/5Jd4eJiumEa0vzs1DVKqNIw+v7rB1wUSCCAP8y8pR
+         K2eBjD0CLQWxdthY06rYB9nOMhqRpvAVuyiT4l1y2i8Djzpiv5mTsYWI8LGjpOydguxp
+         Lj3Qf0hgsH+i849vqtbdbWSrn0hfmDKLx4xW9wH806Bint86r74FqR8vle5J/0Ws/Qa9
+         q98xRLJicvygDHh4lu+MY5XeVSM77P4pFX557Gyrxrb8bHMjN977YMPeeWQV3itvm//f
+         e1lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NllK0azs34zQlNRKoqTNyUNwLOsJ8tnB4tNC7+7ktic=;
-        b=n/Be8p+Xq2fuJCYA2GOzsnVEPQUP9DSKvZ3bIdBJ0WBedcCHeNE/YLrggSDyeW61JF
-         B0knIbIQVU74EaJPxdo+86igrjL7Hn0ll0cA6bXV5U2hAJO+jdCMRD4FLgJP1RmmosQn
-         2VELENEyG4HVFvqngyRuGKBvfJU8e2pgO4t6V1NcLXWQLl0BnRBEmpNMQOjyEq1XGHQL
-         bdBqXA/yBe1KgUbonEs1Uq7JtV+WuTozAVxz+gPTae8b+RRKwnhgJssmAF4HBApklsbA
-         vRSqW2yppeiqZhs6ocQ7OhpovzUqtG47eaCxn/elFDf28stgYbrF9a5WSlgXivIF3noa
-         Qrcg==
-X-Gm-Message-State: AFqh2kqZJWBA5BsfvpNqjnwxXqEeJopN0V3qxx4InFqzQHhZudChwUdQ
-        CBmNFXGEKMOEQ8L3O1WZ/TzMkgWqK5bZqofLDY2YYTTX1K15zzjv+nPzTpcKhPob0c99UJg27KM
-        9T4/dzh8YAeg3gaPabVqWXJxX
-X-Received: by 2002:a05:7500:631c:b0:f1:e53f:ed8f with SMTP id ib28-20020a057500631c00b000f1e53fed8fmr942654gab.6.1674133591289;
-        Thu, 19 Jan 2023 05:06:31 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtqVdyMFGGKllOmHx/VXgChvv179iGQmaX6P7Z+RaxG6XipFX0sosGMobhJcbX7oss70Pr0IA==
-X-Received: by 2002:a05:7500:631c:b0:f1:e53f:ed8f with SMTP id ib28-20020a057500631c00b000f1e53fed8fmr942613gab.6.1674133590893;
-        Thu, 19 Jan 2023 05:06:30 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-124-97.dyn.eolo.it. [146.241.124.97])
-        by smtp.gmail.com with ESMTPSA id m3-20020a05620a24c300b007055dce4cecsm265017qkn.97.2023.01.19.05.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:06:30 -0800 (PST)
-Message-ID: <54ebe3efac89c68db30658e82b1ba1a7355d4456.camel@redhat.com>
-Subject: Re: [PATCH net-next v3 2/2] net: ethernet: ti: am65-cpsw/cpts: Fix
- CPTS release action
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux@armlinux.org.uk,
-        rogerq@kernel.org, leon@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
-Date:   Thu, 19 Jan 2023 14:06:26 +0100
-In-Reply-To: <20230118095439.114222-3-s-vadapalli@ti.com>
-References: <20230118095439.114222-1-s-vadapalli@ti.com>
-         <20230118095439.114222-3-s-vadapalli@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gPTT8pbx6iE/epEHJkHt7/bEhvcngYyFc03+y1Cxk4=;
+        b=Mm3UArtmfiskz9z/B6MWEfXznfSjPB6PiUjYNgsx3TNWLhuaXe/A6fd7gzrjazXdLG
+         pmmeA792KDUvtUGjd2jrsIl6yQ2s8KzmuUjyvGSCcczaPVxtQkKpI9nhRhWT2jpKUuw4
+         eagjylJjazh+9veilCspp6WO/nnmT1Vc+pauFL55D+oH0P6QvC29BXDFm8L3fm6Me78/
+         LePFBOGC66Dgfy6OM9J68YbsIwOus69o0+HC+Ntfb/ked9vDlcF2V1f6degIDlFyidL5
+         LBw2ZQcUjMiTxoc0wabDUpM7xPL4pNONbb/z6BHTGrUK2l3aznqwSXxYDZpvgjTeplRX
+         86Hg==
+X-Gm-Message-State: AFqh2krAN00wu5IvFSaysRW2/RrH/6iPy/FxmE2H3azeapvGhXSgPIq/
+        nSXsiu8z4NSjvO4sxIqC8v4n0g==
+X-Google-Smtp-Source: AMrXdXsRXs2vwIf3bke14eSVJkGfxbho6m8PLUIx1vhOYyZ+uCnw2rzb6JZEA+BgQ38jvhlnv2XVEQ==
+X-Received: by 2002:a05:6402:159:b0:49d:a87f:ba7b with SMTP id s25-20020a056402015900b0049da87fba7bmr10572271edu.39.1674133589027;
+        Thu, 19 Jan 2023 05:06:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id d3-20020aa7d5c3000000b004835bd8dfe5sm15787673eds.35.2023.01.19.05.06.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 05:06:28 -0800 (PST)
+Message-ID: <0497ba61-7646-91bb-291c-0b437c18434f@linaro.org>
+Date:   Thu, 19 Jan 2023 15:06:27 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add interconnect nodes
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        konrad.dybcio@linaro.org, a39.skl@gmail.com, andersson@kernel.org
+References: <20221130104519.2266918-1-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221130104519.2266918-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 30/11/2022 12:45, Bhupesh Sharma wrote:
+> Add the interconnect nodes inside SM6115 dtsi.
+> 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+> - Based on linux-next/master
+> - Depends on the SM6115 dt-binding and driver patchset, which can be
+>    seen here: https://lore.kernel.org/linux-arm-msm/20221130103841.2266464-1-bhupesh.sharma@linaro.org/
+> 
+>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
+>   1 file changed, 51 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index e4a2440ce544..dad5ab3edf0e 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -485,6 +485,57 @@ usb_1_hsphy: phy@1613000 {
+>   			status = "disabled";
+>   		};
+>   
+> +		snoc: interconnect@1880000 {
+> +			compatible = "qcom,sm6115-snoc";
+> +			reg = <0x01880000 0x60200>;
+> +			#interconnect-cells = <1>;
 
-On Wed, 2023-01-18 at 15:24 +0530, Siddharth Vadapalli wrote:
-> @@ -1014,18 +1013,12 @@ struct am65_cpts *am65_cpts_create(struct device =
-*dev, void __iomem *regs,
->  	}
->  	cpts->phc_index =3D ptp_clock_index(cpts->ptp_clock);
-> =20
-> -	ret =3D devm_add_action_or_reset(dev, am65_cpts_release, cpts);
-> -	if (ret) {
-> -		dev_err(dev, "failed to add ptpclk reset action %d", ret);
-> -		return ERR_PTR(ret);
-> -	}
-> -
->  	ret =3D devm_request_threaded_irq(dev, cpts->irq, NULL,
->  					am65_cpts_interrupt,
->  					IRQF_ONESHOT, dev_name(dev), cpts);
->  	if (ret < 0) {
->  		dev_err(cpts->dev, "error attaching irq %d\n", ret);
-> -		return ERR_PTR(ret);
-> +		goto reset_ptpclk;
->  	}
-> =20
->  	dev_info(dev, "CPTS ver 0x%08x, freq:%u, add_val:%u\n",
+Should we use 2 here as we do now for most of interconnect drivers?
 
-This chunk does not apply cleanly to current net-next (context is
-changed). Please rebase and re-spin (you can preserve/keep the already
-acquire reviewed-by tags)
+> +			clock-names = "bus", "bus_a";
+> +			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+> +				 <&rpmcc RPM_SMD_SNOC_A_CLK>;
 
-Thanks!
-
-Paolo
+-- 
+With best wishes
+Dmitry
 
