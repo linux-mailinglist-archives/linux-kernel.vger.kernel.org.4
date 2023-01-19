@@ -2,290 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82298674B54
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547DD674B93
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjATEvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S230255AbjATFCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjATEvB (ORCPT
+        with ESMTP id S230230AbjATFBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:51:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6188BC41E6;
-        Thu, 19 Jan 2023 20:43:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3F6EB82788;
-        Thu, 19 Jan 2023 23:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB038C433F0;
-        Thu, 19 Jan 2023 23:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674170975;
-        bh=AkQjhv/9E+a3g4MIfYsWg70aW7x912pmZp1HYv5UPNo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=G7Bsw2Ox2oACO7ZA/PHqhS3jiENr9sO8VC13+3ZuzRG9prHD9w7qZCc0ptteTOrBH
-         06LKz35uUNDv2OSTQUrwEmGbOMvZXAx1SEocQ+7FB6pSIhjAFkQ8ocfvMhnL++ouSW
-         84hyKzV6unF0gnZRQXx8zE7Ad4ICdX6hX80oUs0ytFPYDUa1A4G/DebwOlERZGXCRx
-         7d+LWVCpI74w6soagGkt8LFSLy2Xh79SezX3NOTW0NcsxVWk4fPyxg9doWJbqidBAX
-         +yg9vJApPRrVG77yb+8AjhnhfAoBd/41LcYrzTgU6UNC3XdmL8cM+3u6an1YECZYXF
-         A9lbEgPxhFhLg==
-Message-ID: <1b3e0ea7d6e2fe78fe7a6b97b45897b46723e221.camel@kernel.org>
-Subject: Re: [PATCH] nfsd: don't free files unconditionally in
- __nfsd_file_cache_purge
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Ruben Vestergaard <rubenv@drcmr.dk>,
-        Torkil Svensgaard <torkil@drcmr.dk>,
-        Shachar Kagan <skagan@nvidia.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 19 Jan 2023 18:29:33 -0500
-In-Reply-To: <12CBA475-0901-41E9-90F2-9F0266ABAB74@oracle.com>
-References: <20230119192021.83578-1-jlayton@kernel.org>
-         <12CBA475-0901-41E9-90F2-9F0266ABAB74@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 00:01:54 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EB2CC5D7;
+        Thu, 19 Jan 2023 20:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674190166; x=1705726166;
+  h=from:to:cc:subject:date:message-id;
+  bh=MRaoQHl13vbKfYUOZLICSPqZK23aH07qLJtCBzzV2wo=;
+  b=C0C1I5xriEW++3c7rTYfu8PvTco+aE9ZIw4uRGOpK7Po0JoCUq2CygcZ
+   naW3meiQVIvchc+aH4ndt8TQTnJZ2gN6eGfSuZ1gwue4uboW3m6LJy/o2
+   u6V2SVUTA70slAS3yQsvniuJJHm/zzOcba9PXZTmLBo9G/ydv33JqoLTp
+   Emw1x5xbECOEiFZce95DBT8BsZqZHn7iMRC4eiFepDZ5Ll0OB36pax5M2
+   MdUWuQYC3TCK2JvFAlEcrSqpNZIG2nBD19QOkkRj8wqquKwuMNIowZycS
+   gsQmwJ9EOY5On/j+gOe+r6ZCOVbzyJb7E4v4uc1wk7Pno3o0qmrTM6VMe
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="309042726"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="309042726"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:52:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="662317599"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="662317599"
+Received: from hossain3-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.252.128.187])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:52:12 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3] x86/hibernate: Use fixmap for saving unmapped pages
+Date:   Thu, 19 Jan 2023 15:51:45 -0800
+Message-Id: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-19 at 22:59 +0000, Chuck Lever III wrote:
->=20
-> > On Jan 19, 2023, at 2:20 PM, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > nfsd_file_cache_purge is called when the server is shutting down, in
-> > which case, tearing things down is generally fine, but it also gets
-> > called when the exports cache is flushed.
-> >=20
-> > Instead of walking the cache and freeing everything unconditionally,
-> > attempt to unhash each entry and get a reference to it, and then put
-> > that reference. Only queue it to the dispose list if the refcount goes
-> > to 0.
-> >=20
-> > Fixes: ac3a2585f018 ("nfsd: rework refcounting in filecache")
-> > Reported-by: Ruben Vestergaard <rubenv@drcmr.dk>
-> > Reported-by: Torkil Svensgaard <torkil@drcmr.dk>
-> > Reported-by: Shachar Kagan <skagan@nvidia.com>
-> > Signed-off-by: Jeffrey Layton <jlayton@kernel.org>
->=20
-> FYI, checkpatch complained that the Signed-off-by does not
-> exactly match the From: address. I haven't see "Jeffrey"
-> before, but the DKIM check passed, so....
->=20
-> .... I've applied this to nfsd-fixes (formerly for-rc).
->=20
+Hibernate uses the direct map to read memory it saves to disk. Since
+sometimes pages are not accessible on the direct map ("not present" on
+x86), it has special case logic to temporarily make a page present. On x86
+these direct map addresses can be mapped at various page sizes, but the
+logic works ok as long as the not present pages are always mapped as
+PAGE_SIZE such that they don't require a split to map the region as
+present. If the address was mapped not present by a larger page size, the
+split may fail and hibernate would then try to read an address mapped not
+present.
 
-Whoops! I originally did this in a different tree and had to fix up the
-Sob line. Let's change it to "Jeff" if it makes checkpatch happy. Thanks
-for pulling it in quickly!
+Today on x86 there are no known cases of this (huge not present pages on
+the direct map), but it has come up from time to time when developing
+things that operate on the direct map. It blocked making
+VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+has been a complication for various direct map protection efforts.
 
->=20
-> > ---
-> > fs/nfsd/filecache.c | 21 ++++++++++++++++++---
-> > 1 file changed, 18 insertions(+), 3 deletions(-)
-> >=20
-> > I was able to reproduce this today by running pynfs against the server
-> > while running "exportfs -ra" in a loop. This one is a bit different in
-> > that it happened in the open codepath, but that's probably just because
-> > delegations are more likely to be long-lived. With this patch, the
-> > server survives the run:
-> >=20
-> > [  337.962027] ------------[ cut here ]------------
-> > [  337.963823] refcount_t: underflow; use-after-free.
-> > [  337.965502] WARNING: CPU: 6 PID: 3401 at lib/refcount.c:28 refcount_=
-warn_saturate+0xba/0x110
-> > [  337.967999] Modules linked in: nfsd(E) auth_rpcgss(E) nfs_acl(E) loc=
-kd(E) grace(E) sunrpc(E) nls_iso8859_1(E) nls_cp437(E) vfat(E) fat(E) ext4(=
-E) crc16(E) cirrus(E) kvm_intel(E) 9p(E) mbcache(E) joydev(E) virtio_net(E)=
- drm_shmem_helper(E) net_failover(E) kvm(E) jbd2(E) netfs(E) psmouse(E) evd=
-ev(E) pcspkr(E) failover(E) irqbypass(E) virtio_balloon(E) drm_kms_helper(E=
-) 9pnet_virtio(E) button(E) drm(E) configfs(E) zram(E) zsmalloc(E) crct10di=
-f_pclmul(E) crc32_pclmul(E) nvme(E) ghash_clmulni_intel(E) virtio_blk(E) sh=
-a512_ssse3(E) sha512_generic(E) nvme_core(E) t10_pi(E) virtio_pci(E) virtio=
-(E) crc64_rocksoft_generic(E) aesni_intel(E) crypto_simd(E) crc64_rocksoft(=
-E) virtio_pci_legacy_dev(E) i6300esb(E) cryptd(E) serio_raw(E) crc64(E) vir=
-tio_pci_modern_dev(E) virtio_ring(E) btrfs(E) blake2b_generic(E) xor(E) rai=
-d6_pq(E) libcrc32c(E) crc32c_generic(E) crc32c_intel(E) autofs4(E)
-> > [  337.992040] CPU: 6 PID: 3401 Comm: nfsd Tainted: G            E     =
- 6.2.0-rc3+ #11
-> > [  337.994701] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- 1.16.1-2.fc37 04/01/2014
-> > [  337.998046] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> > [  337.999852] Code: 01 01 e8 83 e5 4f 00 0f 0b c3 cc cc cc cc 80 3d 60=
- f4 05 01 00 75 85 48 c7 c7 30 b5 e1 9d c6 05 50 f4 05 01 01 e8 60 e5 4f 00=
- <0f> 0b c3 cc cc cc cc 80 3d 3b f4 05 01 00 0f 85 5e ff ff ff 48 c7
-> > [  338.005245] RSP: 0018:ffffa36802e4bd50 EFLAGS: 00010282
-> > [  338.006621] RAX: 0000000000000000 RBX: 0000000000000008 RCX: 0000000=
-000000000
-> > [  338.008273] RDX: 0000000000000001 RSI: ffffffff9de03ef5 RDI: 0000000=
-0ffffffff
-> > [  338.009804] RBP: 0000000000000003 R08: 0000000000000000 R09: ffffa36=
-802e4bc00
-> > [  338.011719] R10: 0000000000000003 R11: ffffffff9e0bfdc8 R12: ffff957=
-8da461b80
-> > [  338.013533] R13: 0000000000000001 R14: ffff9578da422280 R15: ffff957=
-8da461b80
-> > [  338.015238] FS:  0000000000000000(0000) GS:ffff957a37d00000(0000) kn=
-lGS:0000000000000000
-> > [  338.017179] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  338.018680] CR2: 00007f324c1e1c08 CR3: 000000020360a004 CR4: 0000000=
-000060ee0
-> > [  338.020377] Call Trace:
-> > [  338.021190]  <TASK>
-> > [  338.021956]  release_all_access+0x96/0x120 [nfsd]
-> > [  338.023192]  ? _raw_spin_unlock+0x15/0x30
-> > [  338.024192]  nfsd4_close+0x275/0x3d0 [nfsd]
-> > [  338.025468]  ? fh_verify+0x45e/0x780 [nfsd]
-> > [  338.027535]  ? __pfx_nfsd4_encode_noop+0x10/0x10 [nfsd]
-> > [  338.028775]  ? nfsd4_encode_operation+0xae/0x280 [nfsd]
-> > [  338.030593]  nfsd4_proc_compound+0x3ae/0x6f0 [nfsd]
-> > [  338.032341]  nfsd_dispatch+0x16a/0x270 [nfsd]
-> > [  338.034667]  svc_process_common+0x2eb/0x660 [sunrpc]
-> > [  338.036614]  ? __pfx_nfsd_dispatch+0x10/0x10 [nfsd]
-> > [  338.038827]  ? __pfx_nfsd+0x10/0x10 [nfsd]
-> > [  338.040267]  svc_process+0xad/0x100 [sunrpc]
-> > [  338.041981]  nfsd+0xd5/0x190 [nfsd]
-> > [  338.043362]  kthread+0xe9/0x110
-> > [  338.044680]  ? __pfx_kthread+0x10/0x10
-> > [  338.046376]  ret_from_fork+0x2c/0x50
-> > [  338.047892]  </TASK>
-> > [  338.049067] ---[ end trace 0000000000000000 ]---
-> > [  760.792789] BUG: kernel NULL pointer dereference, address: 000000000=
-0000078
-> > [  760.795933] #PF: supervisor read access in kernel mode
-> > [  760.797477] #PF: error_code(0x0000) - not-present page
-> > [  760.799120] PGD 0 P4D 0
-> > [  760.800140] Oops: 0000 [#1] PREEMPT SMP PTI
-> > [  760.801383] CPU: 2 PID: 3401 Comm: nfsd Tainted: G        W   E     =
- 6.2.0-rc3+ #11
-> > [  760.803120] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- 1.16.1-2.fc37 04/01/2014
-> > [  760.805018] RIP: 0010:filp_close+0x23/0x70
-> > [  760.806099] Code: 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 55 53 48=
- 8b 47 38 48 85 c0 0f 84 41 e1 6d 00 48 8b 47 28 48 89 fb 48 89 f5 45 31 e4=
- <48> 8b 40 78 48 85 c0 74 08 e8 6f 70 72 00 41 89 c4 f6 43 45 40 75
-> > [  760.809737] RSP: 0018:ffffa36802e4bc78 EFLAGS: 00010246
-> > [  760.811084] RAX: 0000000000000000 RBX: ffff9578c7d4d600 RCX: 0000000=
-000000000
-> > [  760.812540] RDX: 000000000000098d RSI: 0000000000000000 RDI: ffff957=
-8c7d4d600
-> > [  760.814433] RBP: 0000000000000000 R08: 0000011335048e60 R09: ffff957=
-8f82f1540
-> > [  760.816089] R10: ffffa36802e4bcd0 R11: ffffa36802e4bcd8 R12: 0000000=
-000000000
-> > [  760.817529] R13: 0000000000000001 R14: dead000000000100 R15: ffff957=
-8f82f1558
-> > [  760.818982] FS:  0000000000000000(0000) GS:ffff957a37c80000(0000) kn=
-lGS:0000000000000000
-> > [  760.820544] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  760.821734] CR2: 0000000000000078 CR3: 00000001565ce002 CR4: 0000000=
-000060ee0
-> > [  760.823141] Call Trace:
-> > [  760.823808]  <TASK>
-> > [  760.824419]  nfsd_file_free+0xe9/0x210 [nfsd]
-> > [  760.825610]  release_all_access+0x96/0x120 [nfsd]
-> > [  760.826680]  nfs4_free_ol_stateid+0x22/0x60 [nfsd]
-> > [  760.827747]  free_ol_stateid_reaplist+0x61/0x90 [nfsd]
-> > [  760.828858]  release_openowner+0x258/0x2a0 [nfsd]
-> > [  760.829792]  __destroy_client+0x183/0x290 [nfsd]
-> > [  760.830694]  nfsd4_setclientid_confirm+0x1a3/0x4f0 [nfsd]
-> > [  760.831763]  nfsd4_proc_compound+0x3ae/0x6f0 [nfsd]
-> > [  760.832717]  nfsd_dispatch+0x16a/0x270 [nfsd]
-> > [  760.833576]  svc_process_common+0x2eb/0x660 [sunrpc]
-> > [  760.834587]  ? __pfx_nfsd_dispatch+0x10/0x10 [nfsd]
-> > [  760.835576]  ? __pfx_nfsd+0x10/0x10 [nfsd]
-> > [  760.836462]  svc_process+0xad/0x100 [sunrpc]
-> > [  760.837317]  nfsd+0xd5/0x190 [nfsd]
-> > [  760.838133]  kthread+0xe9/0x110
-> > [  760.838862]  ? __pfx_kthread+0x10/0x10
-> > [  760.839755]  ret_from_fork+0x2c/0x50
-> > [  760.840534]  </TASK>
-> > [  760.841167] Modules linked in: nfsd(E) auth_rpcgss(E) nfs_acl(E) loc=
-kd(E) grace(E) sunrpc(E) nls_iso8859_1(E) nls_cp437(E) vfat(E) fat(E) ext4(=
-E) crc16(E) cirrus(E) kvm_intel(E) 9p(E) mbcache(E) joydev(E) virtio_net(E)=
- drm_shmem_helper(E) net_failover(E) kvm(E) jbd2(E) netfs(E) psmouse(E) evd=
-ev(E) pcspkr(E) failover(E) irqbypass(E) virtio_balloon(E) drm_kms_helper(E=
-) 9pnet_virtio(E) button(E) drm(E) configfs(E) zram(E) zsmalloc(E) crct10di=
-f_pclmul(E) crc32_pclmul(E) nvme(E) ghash_clmulni_intel(E) virtio_blk(E) sh=
-a512_ssse3(E) sha512_generic(E) nvme_core(E) t10_pi(E) virtio_pci(E) virtio=
-(E) crc64_rocksoft_generic(E) aesni_intel(E) crypto_simd(E) crc64_rocksoft(=
-E) virtio_pci_legacy_dev(E) i6300esb(E) cryptd(E) serio_raw(E) crc64(E) vir=
-tio_pci_modern_dev(E) virtio_ring(E) btrfs(E) blake2b_generic(E) xor(E) rai=
-d6_pq(E) libcrc32c(E) crc32c_generic(E) crc32c_intel(E) autofs4(E)
-> > [  760.853527] CR2: 0000000000000078
-> > [  760.854340] ---[ end trace 0000000000000000 ]---
-> > [  760.855261] RIP: 0010:filp_close+0x23/0x70
-> > [  760.856185] Code: 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 55 53 48=
- 8b 47 38 48 85 c0 0f 84 41 e1 6d 00 48 8b 47 28 48 89 fb 48 89 f5 45 31 e4=
- <48> 8b 40 78 48 85 c0 74 08 e8 6f 70 72 00 41 89 c4 f6 43 45 40 75
-> > [  760.859350] RSP: 0018:ffffa36802e4bc78 EFLAGS: 00010246
-> > [  760.860356] RAX: 0000000000000000 RBX: ffff9578c7d4d600 RCX: 0000000=
-000000000
-> > [  760.861628] RDX: 000000000000098d RSI: 0000000000000000 RDI: ffff957=
-8c7d4d600
-> > [  760.862898] RBP: 0000000000000000 R08: 0000011335048e60 R09: ffff957=
-8f82f1540
-> > [  760.864172] R10: ffffa36802e4bcd0 R11: ffffa36802e4bcd8 R12: 0000000=
-000000000
-> > [  760.865438] R13: 0000000000000001 R14: dead000000000100 R15: ffff957=
-8f82f1558
-> > [  760.866692] FS:  0000000000000000(0000) GS:ffff957a37c80000(0000) kn=
-lGS:0000000000000000
-> > [  760.868053] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  760.869102] CR2: 0000000000000078 CR3: 00000001565ce002 CR4: 0000000=
-000060ee0
-> >=20
-> > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
-> > index 66449c41b19c..b9100707d347 100644
-> > --- a/fs/nfsd/filecache.c
-> > +++ b/fs/nfsd/filecache.c
-> > @@ -908,9 +908,24 @@ __nfsd_file_cache_purge(struct net *net)
-> > 		nf =3D rhashtable_walk_next(&iter);
-> > 		while (!IS_ERR_OR_NULL(nf)) {
-> > 			if (!net || nf->nf_net =3D=3D net) {
-> > -				nfsd_file_unhash(nf);
-> > -				nfsd_file_lru_remove(nf);
-> > -				list_add(&nf->nf_lru, &dispose);
-> > +				/* Ignore it if it's no longer hashed */
-> > +				if (!nfsd_file_unhash(nf))
-> > +					continue;
-> > +
-> > +				/*
-> > +				 * Try to claim the LRU ref (if any). If it's
-> > +				 * not on the LRU, then try to take a ref. If that
-> > +				 * fails, then we'll ignore it.
-> > +				 */
-> > +				if (!nfsd_file_lru_remove(nf))
-> > +					nf =3D nfsd_file_get(nf);
-> > +
-> > +				/*
-> > +				 * Now try to put the ref we hold. If that works
-> > +				 * and it goes to zero, queue it to be freed.
-> > +				 */
-> > +				if (nf && refcount_dec_and_test(&nf->nf_ref))
-> > +					list_add(&nf->nf_lru, &dispose);
-> > 			}
-> > 			nf =3D rhashtable_walk_next(&iter);
-> > 		}
-> > --=20
-> > 2.39.0
-> >=20
->=20
-> --
-> Chuck Lever
->=20
->=20
->=20
+This dependency is also pretty hidden and easily missed by people poking at
+the direct map. For this reason, there are warnings in place to complain
+but not handle this scenario.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+One way to make this more robust would be to create some new CPA
+functionality that can know to map and reset the whole huge page in the
+case of trying to map a subpage. But for simplicity and smaller code, just
+make x86 hibernate have its own fixmap PTE that it can use to point
+to 4k pages when it encounters an unmapped direct map page.
+
+So create arch breakouts for hibernate_map_page() and
+hibernate_unmap_page() so that the mapping of unmapped pages can be
+off the direct map. Change hibernate_map_page() to return an address,
+and implement an arch breakout on x86 on that uses the fixmap.
+
+Since now hibernate_map_page() can return a value, have it return NULL
+when the page fails to map, and have safe_copy_page() skip copying the
+page if it fails to map. The existing behavior should crash in this case,
+so this way there is a chance the system would be recoverable.
+
+Use __weak for the arch breakout because there is not a suitable arch
+specific header to use the #define method.
+
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+
+v3:
+ - Switch from hib_copy_page() breakout to hibernate_un/map_page()
+   breakouts.
+ - Since there is an error to use now, skip copying for unmappable pages
+
+v2:
+ - Rebase
+
+ arch/x86/include/asm/fixmap.h |  3 +++
+ arch/x86/power/hibernate.c    | 12 ++++++++++++
+ include/linux/suspend.h       |  2 ++
+ kernel/power/snapshot.c       | 22 ++++++++++++++--------
+ 4 files changed, 31 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..0fceed9a4152 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -108,6 +108,9 @@ enum fixed_addresses {
+ #ifdef CONFIG_PARAVIRT_XXL
+ 	FIX_PARAVIRT_BOOTMAP,
+ #endif
++#ifdef CONFIG_HIBERNATION
++	FIX_HIBERNATE,
++#endif
+ 
+ #ifdef CONFIG_ACPI_APEI_GHES
+ 	/* Used for GHES mapping from assorted contexts */
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index 6f955eb1e163..e7cde7cd529d 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -147,6 +147,18 @@ int arch_hibernation_header_restore(void *addr)
+ 	return 0;
+ }
+ 
++long *hibernate_map_page(struct page *page)
++{
++	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
++	__flush_tlb_all();
++	return (long *)fix_to_virt(FIX_HIBERNATE);
++}
++
++void hibernate_unmap_page(struct page *page)
++{
++	clear_fixmap(FIX_HIBERNATE);
++}
++
+ int relocate_restore_code(void)
+ {
+ 	pgd_t *pgd;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cfe19a028918..a6c3f7dac9e1 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -447,6 +447,8 @@ extern bool hibernation_available(void);
+ asmlinkage int swsusp_save(void);
+ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
++long *hibernate_map_page(struct page *page);
++void hibernate_unmap_page(struct page *page);
+ 
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..8cc16114da75 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -83,19 +83,18 @@ static inline void hibernate_restore_unprotect_page(void *page_address) {}
+  * It is still worth to have a warning here if something changes and this
+  * will no longer be the case.
+  */
+-static inline void hibernate_map_page(struct page *page)
++long * __weak hibernate_map_page(struct page *page)
+ {
+ 	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+-		int ret = set_direct_map_default_noflush(page);
+-
+-		if (ret)
+-			pr_warn_once("Failed to remap page\n");
++		if (set_direct_map_default_noflush(page))
++			return NULL;
+ 	} else {
+ 		debug_pagealloc_map_pages(page, 1);
+ 	}
++	return page_address(page);
+ }
+ 
+-static inline void hibernate_unmap_page(struct page *page)
++void __weak hibernate_unmap_page(struct page *page)
+ {
+ 	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+ 		unsigned long addr = (unsigned long)page_address(page);
+@@ -1394,8 +1393,15 @@ static void safe_copy_page(void *dst, struct page *s_page)
+ 	if (kernel_page_present(s_page)) {
+ 		do_copy_page(dst, page_address(s_page));
+ 	} else {
+-		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
++		long *src = hibernate_map_page(s_page);
++
++		if (!src) {
++			pr_warn_once("Failed to remap page\n");
++			return;
++		}
++
++		do_copy_page(dst, src);
++
+ 		hibernate_unmap_page(s_page);
+ 	}
+ }
+-- 
+2.17.1
+
