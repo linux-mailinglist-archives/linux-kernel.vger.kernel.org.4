@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9EB67311A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B466730FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjASFU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S229943AbjASFJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjASFUy (ORCPT
+        with ESMTP id S229776AbjASFIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:20:54 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 21:20:52 PST
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE5E0;
-        Wed, 18 Jan 2023 21:20:52 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id 2AA562B06398;
-        Thu, 19 Jan 2023 00:02:25 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 00:02:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674104544; x=1674111744; bh=fu40e8RKK3
-        4NvCHYIuaClUtcfG1TOlQku9GsJJ+aQa4=; b=niveqFVmdI3XG32zed5l1bc0mp
-        IKA0Jkdx/+fZ2tNQSyG/tFd38tRV7BasA/ERh+NOMPUsP2kf5ZiWDLWnjJlwLE23
-        YFTuWglgESWTBuXB2YTeA9Au50fqRvK4OR90ZhFpjHV7IpKcHav5H+YN8hZMKxYE
-        5AfD5As7/h43RNVj0fJ1GHsIqLnD5DozNgi2ozIBvOUEn+QeYwaSELbY2+M/qcgR
-        KM02+HADixF9qP8WJ7JLcNjMIw5WUOapy3z+8fB3Jc5xjF51J7fJBmAAIJ+6E7u7
-        +Vkp7+0PbYKml1UdNARoqtSF2NokrTcBLqM8i7eWJO6yq9ZHW/cx8fWLzPbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674104544; x=1674111744; bh=fu40e8RKK34NvCHYIuaClUtcfG1T
-        OlQku9GsJJ+aQa4=; b=jlNWVJu99w72/n2Tkp2UbpJxJ371tfwWtRCurZnYOXqw
-        o9a0OksINXmlcCUDRouTiPVN1WsKEDTXZ71s7o/RhREvPOkj8eCQYJd68MmcIoU7
-        dUVEAa0s8jpFfA47OG1ivTZhbgEpERo968T32XxbNiSbd6uCioM2dAN/dhp+4A6j
-        MZYMbJRM6XojTZNauRJBzikZAC8h46SjzzQ0bGYO3NBhS0SQxb5EMaqPXlwXuPhf
-        YsSGitWjoYVXbsWqd+RwnauXdQ4R6K541WNzUmY7WLsVVnC3KfUG5ze6chnX8dgc
-        HHYxjojS8h7BC1e2V1NWE2p3JJzNnr6cWT8V+M1kng==
-X-ME-Sender: <xms:3s7IY-xqKErPH6RiKYJ9XefoO3TYAKUWFG4clxebOvCxjLC78UhHtw>
-    <xme:3s7IY6Sqy2S4zobDhaFTIw2Gplc65pRkmx1CIClopeFHRFltC_COHtgxDXfhL8biB
-    3EEnFJtHs2mvewXTA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedmnecujfgurhepofgfggfkjghffffhvfevufgtsehttdertder
-    redtnecuhfhrohhmpedftehnughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrg
-    hjrdhiugdrrghuqeenucggtffrrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeet
-    teduvedtffdtledutdfhheevfeetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:3s7IYwVYl2S1Sksqg2sBvwuWvkzknIaNaHdy3IacePoOFH91nLOreg>
-    <xmx:3s7IY0hkBI2Hffxm4Rc0Xh2JJ757mV0V8yrJiruvGxdcAFXFFOxvvQ>
-    <xmx:3s7IYwAnmxtzUf2Y6vBc-oyaBG3HKjIz9OV9Qa2ezN7ZymSUcSTquw>
-    <xmx:4M7IYzauEzxGa9jG18p-HgSTD6yji4XoXQLiuVFmrUoqLKOm-lhvkc83hUs>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C367E1700089; Thu, 19 Jan 2023 00:02:22 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <61140466-6195-4309-8f46-3edf084731c2@app.fastmail.com>
-In-Reply-To: <20230116-net-next-remove-probe-capabilities-v2-6-15513b05e1f4@walle.cc>
-References: <20230116-net-next-remove-probe-capabilities-v2-0-15513b05e1f4@walle.cc>
- <20230116-net-next-remove-probe-capabilities-v2-6-15513b05e1f4@walle.cc>
-Date:   Thu, 19 Jan 2023 15:32:02 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Michael Walle" <michael@walle.cc>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "David Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, "Felix Fietkau" <nbd@nbd.name>,
-        "John Crispin" <john@phrozen.org>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        "Mark Lee" <Mark-MC.Lee@mediatek.com>,
-        "Lorenzo Bianconi" <lorenzo@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "Bryan Whitehead" <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
-        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
-        "Jose Abreu" <joabreu@synopsys.com>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        "Joel Stanley" <joel@jms.id.au>
-Cc:     netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-aspeed@lists.ozlabs.org, "Andrew Lunn" <andrew@lunn.ch>,
-        "Jesse Brandeburg" <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH net-next v2 6/6] net: phy: Remove probe_capabilities
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 Jan 2023 00:08:50 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E4C38E87;
+        Wed, 18 Jan 2023 21:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NAMvashxzYH+spBRFwlJgqXsMFHLHxqFKBzzhdwgkjk=; b=rYU+ISrMtx552gxyvUYbfwOBGl
+        w0lWoJMHEipIW61re+ulGiG9id0ySKJZB53iPHOOu92CR1fi95zZ9A6Hvz9aORCxevWXuGg0R+EV2
+        Ivq3j7DMDuiAHbbhr0XP4gPKp6rbsGJ7zX0jGGMBiGh5OZFqdGcD0Lm9+0v4mgN4/6JJ63pC7/kuT
+        20ZWQr1p7rWIDnKqsoOD2XaUw7yKtUip6tSgPG58lGD/ZjPaEayFNcVX4qHvITvqDd9Zd6GB3dTRO
+        niI0iBk2H6b3mJzNJ1K/Ir0iVhQL5gIkXfWs7q9os+BfY9p+arQ7gZu2lCYGxqBR3dNOQqz0NbTEs
+        E5gMTcbQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIN64-002g9x-2g;
+        Thu, 19 Jan 2023 05:04:21 +0000
+Date:   Thu, 19 Jan 2023 05:04:20 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 18/34] dio: Pin pages rather than ref'ing if
+ appropriate
+Message-ID: <Y8jPVLewUaaiuplq@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391061117.2311931.16807283804788007499.stgit@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167391061117.2311931.16807283804788007499.stgit@warthog.procyon.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 11:10:11PM +0000, David Howells wrote:
+> Convert the generic direct-I/O code to use iov_iter_extract_pages() instead
+> of iov_iter_get_pages().  This will pin pages or leave them unaltered
+> rather than getting a ref on them as appropriate to the iterator.
+> 
+> The pages need to be pinned for DIO-read rather than having refs taken on
+> them to prevent VM copy-on-write from malfunctioning during a concurrent
+> fork() (the result of the I/O would otherwise end up only visible to the
+> child process and not the parent).
 
+Several observations:
 
-On Wed, 18 Jan 2023, at 20:31, Michael Walle wrote:
-> From: Andrew Lunn <andrew@lunn.ch>
->
-> Deciding if to probe of PHYs using C45 is now determine by if the bus
-> provides the C45 read method. This makes probe_capabilities redundant
-> so remove it.
->
-> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> ---
->  drivers/net/ethernet/adi/adin1110.c               | 1 -
->  drivers/net/ethernet/freescale/xgmac_mdio.c       | 1 -
->  drivers/net/ethernet/mediatek/mtk_eth_soc.c       | 1 -
->  drivers/net/ethernet/microchip/lan743x_main.c     | 2 --
->  drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 3 ---
->  drivers/net/mdio/mdio-aspeed.c                    | 1 -
+1) fs/direct-io.c is ancient, grotty and has few remaining users.
+The case of block devices got split off first; these days it's in
+block/fops.c.  Then iomap-using filesystems went to fs/iomap/direct-io.c,
+leaving this sucker used only by affs, ext2, fat, exfat, hfs, hfsplus, jfs,
+nilfs2, ntfs3, reiserfs, udf and ocfs2.  And frankly, the sooner it dies
+the better off we are.  IOW, you've picked an uninteresting part and left
+the important ones untouched.
 
-For the Aspeed change:
+2) if you look at the "should_dirty" logics in either of those (including
+fs/direct-io.c itself) you'll see a funny thing.  First of all,
+dio->should_dirty (or its counterparts) gets set iff we have a user-backed
+iter and operation is a read.  I.e. precisely the case when you get bio
+marked with BIO_PAGE_PINNED.  And that's not an accident - look at the
+places where we check that predicate: dio_bio_submit() calls
+bio_set_pages_dirty() if that predicate is true before submitting the
+sucker and dio_bio_complete() uses it to choose between bio_check_pages_dirty()
+and bio_release_pages() + bio_put().
 
-Acked-by: Andrew Jeffery <andrew@aj.id.au>
+Look at bio_check_pages_dirty() - it checks if any of the pages we were
+reading into had managed to lose the dirty bit; if none had it does
+bio_release_pages(bio, false) + bio_put(bio) and returns.  If some had,
+it shoves bio into bio_dirty_list and arranges for bio_release_pages(bio, true)
++ bio_put(bio) called from upper half (via schedule_work()).  The effect
+of the second argument of bio_release_pages() is to (re)dirty the pages;
+it can't be done from interrupt, so we have to defer it to process context.
+
+Now, do we need to redirty anything there?  Recall that page pinning had
+been introduced precisely to prevent writeback while the page is getting
+DMA into it.  Who is going to mark it clean before we unpin it?
+
+Unless I misunderstand something fundamental about the whole thing,
+this crap should become useless with that conversion.  And it's not just
+the ->should_dirty and its equivalents - bio_check_pages_dirty() and
+the stuff around it should also be gone once block/fops.c and
+fs/iomap/direct-io.c are switched to your iov_iter_extract_pages.
+Moreover, that way the only places legitimately passing true to
+bio_release_pages() are blk_rq_unmap_user() (on completion of
+bypass read request mapping a user page) and __blkdev_direct_IO_simple()
+(on completion of short sync O_DIRECT read from block device).
+Both could just as well call bio_set_pages_dirty(bio) +
+bio_release_pages(bio, false), killing the "dirty on release" logics
+and losing the 'mark_dirty' argument.
+
+BTW, where do we dirty the pages on IO_URING_OP_READ_FIXED with
+O_DIRECT file?  AFAICS, bio_set_pages_dirty() won't be called
+(ITER_BVEC iter) and neither will bio_release_pages() do anything
+(BIO_NO_PAGE_REF set on the bio by bio_iov_bvec_set() called
+due to the same ITER_BVEC iter).  Am I missing something trivial
+here?  Jens?
