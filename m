@@ -2,120 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA7E6737E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66376737EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjASMHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S230287AbjASMJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjASMHf (ORCPT
+        with ESMTP id S230241AbjASMIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:07:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495204B4B9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:06:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674130001;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MA+Tu3X5uLRzP6doE5KbzSpkyhzhncA6EFOFEasfI5U=;
-        b=DK7pcS2u+aFZoC+wTDfap5awHqTSHIbqNhhHrINIuS6BreHRqcLfsDauJ420HGDARTc8d4
-        ecQvl1+FN9h1gOU+3zMfuSuSdFS0WlkcabbbgKmtDy97NfdbG5OzaVj1HG6Oqi+fb+F/m0
-        uKxepmwbvBuOlc5CkHBpy8mdORFo8Dw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-664-olRnRInfPiCGT1cEhzyy1w-1; Thu, 19 Jan 2023 07:06:40 -0500
-X-MC-Unique: olRnRInfPiCGT1cEhzyy1w-1
-Received: by mail-qk1-f197.google.com with SMTP id x12-20020a05620a258c00b007051ae500a2so1228233qko.15
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:06:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MA+Tu3X5uLRzP6doE5KbzSpkyhzhncA6EFOFEasfI5U=;
-        b=cGnStUHgWi2+9sG/r+RWnF+ZkR3Eejtka/lakDD4V6KmV44dE3JPcpu9rFWioYCL7t
-         or6Bj7rsNbAOri/fIgMVe62iBsHhz65Qplt/WwpX+8ejyDXSZKoSO3fegOX7lIw8Y0Es
-         +oUlILuDAwFyaolGr8pQt93Z3Z6znz40fWSEf43zqvVFFhStLeoCEPnxQaDxiQ8RrPyk
-         E8RCnT/G2fjhiwxvy4LBtbKW9feH16w0vupvYPn8Ci6qDseYmpgAlO1nqZhycT+T1Gwi
-         WYa7G6gWOsEQIPzvL2Kr2ZQl/T8sGwww0yIl34JwXW9tgcW0+WxtGOVQ1OBq+75t4dY6
-         z0kA==
-X-Gm-Message-State: AFqh2kryp1eoePT817Dik4cvCDzAFmQfWp5eQdBDX6p3CHSEqFSlZ0Ci
-        1w3GT9o3nOLj3Wn6gbEpvdxgidyWCjnrd98Zp+BhJUfYplmbSAytHwM8vtDGqbBufGtmGx9dIYM
-        O3uCCL2eV/nft+6I/HArpiLth2vgyKpVxTFr5tBOR
-X-Received: by 2002:a05:620a:2fb:b0:6fe:c73e:2579 with SMTP id a27-20020a05620a02fb00b006fec73e2579mr337815qko.756.1674129999581;
-        Thu, 19 Jan 2023 04:06:39 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuB1xj8g49yNQDrZJdDlcymlZZ5MyruwIBZLgJ7+yb54wy/t1FK2bjN0BKkeFhzZVgJHoeEtvL+bWpF1BxEgVY=
-X-Received: by 2002:a05:620a:2fb:b0:6fe:c73e:2579 with SMTP id
- a27-20020a05620a02fb00b006fec73e2579mr337811qko.756.1674129999344; Thu, 19
- Jan 2023 04:06:39 -0800 (PST)
+        Thu, 19 Jan 2023 07:08:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E2B2BEC3;
+        Thu, 19 Jan 2023 04:08:53 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J5Fmes017643;
+        Thu, 19 Jan 2023 12:08:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gfTqnOTWGqZDemDVHdu2Cs2qANt8WoEK/JLQa6iXSAY=;
+ b=HdylZ1tpR0zZFAkhsT3OUoR9qt6HANDa6jZ7EKe/eeiQuLxae/VxQXVpplG85yhK/cgb
+ V0M80CaoAOzszRKVFFtEZiBNvfN5G0bOXnKqHJlmw54P0D1NqIQL8YfS/pNvFqU6t5rV
+ lWzw1DFhbv2OcIynrpW3jkaBuweJSe0PfYmwhEC9q5sIces1qPk/nOyLQb04v6+BHWv2
+ yxYdnIM9k4mDiFH3iZdYR3FQZxsnxE9TxS7sLKHdbeu4miq/zINTUQfvNjoJ647QVDPT
+ VpvMtNORygCkrYQqCorh0TIZpus5vzxlbF2FNXhnMpaCEZq3Jyb/qMmpnnZRqilZSe8R pA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6wbs9asr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 12:08:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30JC8k49017768
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 12:08:46 GMT
+Received: from [10.216.43.228] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 04:08:41 -0800
+Message-ID: <77d4cb35-aff1-e35d-f1bf-957d17970714@quicinc.com>
+Date:   Thu, 19 Jan 2023 17:38:38 +0530
 MIME-Version: 1.0
-References: <20230119080508.24235-1-meadhbh.fitzpatrick@intel.com>
-In-Reply-To: <20230119080508.24235-1-meadhbh.fitzpatrick@intel.com>
-From:   Vladis Dronov <vdronov@redhat.com>
-Date:   Thu, 19 Jan 2023 13:06:28 +0100
-Message-ID: <CAMusb+RPz8PHe3ab6n=TYQG761Rn0uA7OHY7WVQ68onA0wXJMg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: qat: change kernel version
-To:     Meadhbh <meadhbh.fitzpatrick@intel.com>
-Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        qat-linux@intel.com, wojciech.ziemba@intel.com,
-        tomaszx.kowalik@intel.com, bagasdotme@gmail.com,
-        linux-kernel@vger.kernel.org,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/8] arm64: dts: qcom: sc7280: Extract audio nodes from
+ common idp dtsi file
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
+        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <konrad.dybcio@linaro.org>, <mka@chromium.org>
+References: <1672925875-2107-1-git-send-email-quic_srivasam@quicinc.com>
+ <1672925875-2107-2-git-send-email-quic_srivasam@quicinc.com>
+ <6a0b4fff-e012-92df-c2fb-82184eba8aef@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <6a0b4fff-e012-92df-c2fb-82184eba8aef@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5KXhCBnl6Dtc7vRx4_i7VbR8a8QUvyBC
+X-Proofpoint-GUID: 5KXhCBnl6Dtc7vRx4_i7VbR8a8QUvyBC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 malwarescore=0 impostorscore=0 priorityscore=1501
+ bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190096
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Jan 19, 2023 at 9:15 AM Meadhbh <meadhbh.fitzpatrick@intel.com> wrote:
+On 1/10/2023 4:27 PM, Krzysztof Kozlowski wrote:
+Thanks for your time Krzysztof!!!
+> On 05/01/2023 14:37, Srinivasa Rao Mandadapu wrote:
+>> Split common idp dtsi file into audio specific dtsi and common
+>> idp dtsi file.
+>>
+>> It is required to isolate idp and crd-rev3 platform device tree nodes
+>> and convert crd-rev3 platform device tree nodes into audioreach specific
+>> device tree nodes.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>> ---
+> Please include a changelog - either per patch or in cover letter.
+Okay. Will include and re post it.
 >
-> Change kernel version from 5.20 to 6.0, as 5.20 is not a release.
+>>   arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi | 135 +++++++++++++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts     |   1 +
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 126 -----------------------
+>>   3 files changed, 136 insertions(+), 126 deletions(-)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi
+>> new file mode 100644
+>> index 0000000..d1aea28
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi
+>> @@ -0,0 +1,135 @@
+>> +// SPDX-License-Identifier: BSD-3-Clause
+>> +/*
+>> + * sc7280 Audio IDP board device tree source (common between SKU1 and SKU2)
+>> + *
+>> + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +/{
+>> +   /* BOARD-SPECIFIC TOP LEVEL NODES */
+> Still wrong indentation.
+Okay. Will fix it.
 >
-> Signed-off-by: Meadhbh Fitzpatrick <meadhbh.fitzpatrick@intel.com>
-> Reviewed-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-> ---
->  Documentation/ABI/testing/sysfs-driver-qat | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>> +	sound: sound {
+>> +		compatible = "google,sc7280-herobrine";
+>> +		model = "sc7280-wcd938x-max98360a-1mic";
+>> +
 >
-> diff --git a/Documentation/ABI/testing/sysfs-driver-qat b/Documentation/ABI/testing/sysfs-driver-qat
-> index 185f81a2aab3..087842b1969e 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-qat
-> +++ b/Documentation/ABI/testing/sysfs-driver-qat
-> @@ -1,6 +1,6 @@
->  What:          /sys/bus/pci/devices/<BDF>/qat/state
->  Date:          June 2022
-> -KernelVersion: 5.20
-> +KernelVersion: 6.0
->  Contact:       qat-linux@intel.com
->  Description:   (RW) Reports the current state of the QAT device. Write to
->                 the file to start or stop the device.
-> @@ -18,7 +18,7 @@ Description:  (RW) Reports the current state of the QAT device. Write to
 >
->  What:          /sys/bus/pci/devices/<BDF>/qat/cfg_services
->  Date:          June 2022
-> -KernelVersion: 5.20
-> +KernelVersion: 6.0
->  Contact:       qat-linux@intel.com
->  Description:   (RW) Reports the current configuration of the QAT device.
->                 Write to the file to change the configured services.
-> --
-> 2.37.3
-
-Indeed,
-
-Reviewed-by: Vladis Dronov <vdronov@redhat.com>
-
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
-
+>
+> Best regards,
+> Krzysztof
+>
