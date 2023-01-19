@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA81674CA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39487674C05
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjATFhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S229771AbjATFT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjATFgu (ORCPT
+        with ESMTP id S229597AbjATFTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:36:50 -0500
+        Fri, 20 Jan 2023 00:19:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC52110276;
-        Thu, 19 Jan 2023 21:33:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AFA7DFAB;
+        Thu, 19 Jan 2023 21:09:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65B3CB82268;
-        Thu, 19 Jan 2023 13:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D6EC433EF;
-        Thu, 19 Jan 2023 13:37:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B087BB823C8;
+        Thu, 19 Jan 2023 13:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC78C433D2;
+        Thu, 19 Jan 2023 13:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674135468;
-        bh=sO75cV7afKYaRCZB2EF0QM3uKzcgi0tN7kGZsXY3dqk=;
+        s=korg; t=1674136364;
+        bh=o+MRE6eQh3jzlCO0huiyyivHqXsZNKLN474B0e3rGRE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k7zzqJLN4b0SJLtEuq0d+WrSWejXA73Nx/iuuFKS9ftvinCN4cbyMwNDjn04POiGz
-         zLDPaZqPrNvur38ttXU3yj2gZZqjkNyi0xO9b6Ugo/r+GfeONiVhG4yPmyL8G/lbrs
-         mkg+aoki1ZSrnvaMwxx9ehbXgyIhady/thHEu6yc=
-Date:   Thu, 19 Jan 2023 14:37:45 +0100
+        b=L4nGtipd7FU1P1/x5hzKoWzI5HH1TKPIRz3pHdvW05AXZVhuGmgxNnaiOq8bPgEGp
+         tzd08EWg6bodxd/jMNDAtktV/Pc5rmfLKFrOe1yOltDXgrtze0tnReystUyT8H8u//
+         JLkQv3BbqAC8KBXElvwjapOzMa5JvSdrGRsEnzlc=
+Date:   Thu, 19 Jan 2023 14:52:36 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-Message-ID: <Y8lHqd9FlxiXTLuW@kroah.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com>
- <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH v2] tty: serial: zs: convert atomic_* to refcount_* APIs
+ for irq_guard
+Message-ID: <Y8lLJK3RH+oX8RgE@kroah.com>
+References: <Y6cvHgOlkcG90j1J@qemulion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
+In-Reply-To: <Y6cvHgOlkcG90j1J@qemulion>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,82 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:31:12PM +0000, Phil Elwell wrote:
-> Hi all,
+On Sat, Dec 24, 2022 at 10:25:58PM +0530, Deepak R Varma wrote:
+> The refcount_* APIs are designed to address known issues with the
+> atomic_t APIs for reference counting. They provide following distinct
+> advantages:
+>    - protect the reference counters from overflow/underflow
+>    - avoid use-after-free errors
+>    - provide improved memory ordering guarantee schemes
+>    - neater and safer.
+> Hence, replace the atomic_* APIs by their equivalent refcount_t
+> API functions.
 > 
+> This patch proposal address the following warnings generated by
+> the atomic_as_refcounter.cocci coccinelle script
+> atomic_add_return(-1, ...)
 > 
-> On Wed, 18 Jan 2023 at 17:55, Stefan Wahren <stefan.wahren@i2se.com> wrote:
-> >
-> > Hi Umang,
-> >
-> > [add Phil]
-> >
-> > Am 18.01.23 um 12:58 schrieb Umang Jain:
-> > > Drop custom logging from the vchiq interface.
-> > > Mostly of them are replaced with dev_dbg and friends
-> > > and/or pr_info and friends.
-> > >
-> > > The debugfs log levels (in 4/4) are mapped to kernel
-> > > logs levels (coming from include/linux/kern_levels.h)
-> > > Would like some thoughts on it as I am not sure (hence
-> > > marking this is RFC)
-> > >
-> > >  From drivers/staging/vc04_services/interface/TODO:
-> > >
-> > > """
-> > > * Cleanup logging mechanism
-> > >
-> > > The driver should probably be using the standard kernel logging mechanisms
-> > > such as dev_info, dev_dbg, and friends.
-> >
-> > i don't have any experience with vchiq logging/debug. So i'm not sure if
-> > it's acceptable to lose the second log level dimension (like
-> > vchiq_arm_log_level) completely. Complex drivers like brcmfmac have a
-> > debug mask to avoid log spamming [1]. Maybe this is a compromise.
-> >
-> > Btw some loglevel locations has already been messed up during
-> > refactoring :-(
-> >
-> > [1] - drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h
-> >
-> > > """
-> > >
-> > > Umang Jain (4):
-> > >    staging: vc04_services: vchiq_core: Drop custom logging
-> > >    staging: vc04_services: vchiq_arm: Drop custom logging
-> > >    staging: vc04_services: Drop custom logging
-> > >    staging: vc04_services: Drop remnants of custom logging
-> > >
-> > >   .../interface/vchiq_arm/vchiq_arm.c           | 151 +++---
-> > >   .../interface/vchiq_arm/vchiq_connected.c     |   5 +-
-> > >   .../interface/vchiq_arm/vchiq_core.c          | 479 ++++++++----------
-> > >   .../interface/vchiq_arm/vchiq_core.h          |  39 --
-> > >   .../interface/vchiq_arm/vchiq_debugfs.c       |  26 +-
-> > >   .../interface/vchiq_arm/vchiq_dev.c           |  78 ++-
-> > >   6 files changed, 329 insertions(+), 449 deletions(-)
-> > >
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
 > 
-> Thanks for the nudge - this patch set hasn't yet made its way through
-> the sluggish rpi-kernel moderation.
+> Changes in v2:
+>    1. Separate the combined change into one variable per patch as
+>       suggested by gregkh@linuxfoundation.org
+>    2. There was additional feedback on validating the change as it appeared to
+>       modify the existing logic. However, I found that the logic does not
+>       change with the proposed refcount_* APIs used in this change. Hence that
+>       feedback is not applied in this version.
 > 
-> I understand the desire to remove the custom logging. I don't welcome
-> the loss of flexibility that comes with such a strategy
+> Please Note:
+>    The patch is compile tested using dec_station.defconfig for MIPS architecture.
+> 
+>  drivers/tty/serial/zs.c | 14 +++++---------
+>  drivers/tty/serial/zs.h |  2 +-
+>  2 files changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/zs.c b/drivers/tty/serial/zs.c
+> index 730c648e32ff..6be9933eff5c 100644
+> --- a/drivers/tty/serial/zs.c
+> +++ b/drivers/tty/serial/zs.c
+> @@ -753,17 +753,15 @@ static int zs_startup(struct uart_port *uport)
+>  	struct zs_port *zport = to_zport(uport);
+>  	struct zs_scc *scc = zport->scc;
+>  	unsigned long flags;
+> -	int irq_guard;
+>  	int ret;
+> 
+> -	irq_guard = atomic_add_return(1, &scc->irq_guard);
+> -	if (irq_guard == 1) {
+> +	refcount_inc(&scc->irq_guard);
+> +	if (refcount_read(&scc->irq_guard) == 1) {
 
-What "loss of flexibility"?  You now have access to the full dynamic
-debugging facilities that all of the rest of the kernel has.  What is
-lacking?
+This conversion is wrong :(
 
-> , but I'm not
-> going to argue about it. What's harder to understand is the state that
-> this patchset leaves VCHIQ logging in. From what I can see, the
-> per-service logging control has gone, but the code still contains
-> macros that hint at something useful. Similarly, the debugfs support
-> is completely vestigial, giving the appearance of control while
-> actually achieving nothing.
-
-The debugfs files should also be removed if they don't do anything
-anymore.
-
-thanks,
-
-greg k-h
