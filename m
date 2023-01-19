@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E878673458
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D1A67345D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjASJ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S229832AbjASJ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjASJ05 (ORCPT
+        with ESMTP id S229459AbjASJ1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:26:57 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ACC7AB2;
-        Thu, 19 Jan 2023 01:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674120417; x=1705656417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CMAMmGZK9oCKcRxIz8Vz48WNhapUwOODnM/5yPjQvFg=;
-  b=LGRxVIvlQ51q29EuSv+p3wKfXuc3TwFMvoO2mVIQ2wftsVvcBkl1/Wtc
-   yiZSovoG2270IQStuhZSvgIvyYWiiXkAakXIuxh88CzCoQ7g2pNjCuCIe
-   myI7ErIyamaP+09SUwXZbIFwWamFG1fqRaz5wkrT1NkWmazJ4FUq+xQOY
-   q5LlUp4/rWTeCRLZibnK7bZ2LEdBfEQBQh1DRKPkOXPLJSbIDgVlBU83P
-   HwvqpxDBElC8eXZTCWMtI0ZC217s+aTHpVbFGgIwwXy2r5Y3GHVBxyGUv
-   LqtObML53xGp+r8D79pw9c0GNUlJDlbr9VrraJgPchA0PnVeOp1pOkall
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322925103"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="322925103"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 01:26:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="802565006"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="802565006"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 19 Jan 2023 01:26:54 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 19 Jan 2023 11:26:53 +0200
-Date:   Thu, 19 Jan 2023 11:26:53 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] device property: Make
- fwnode_graph_for_each_endpoint() consistent
-Message-ID: <Y8kM3bzIBF3dbuZh@kuha.fi.intel.com>
-References: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
+        Thu, 19 Jan 2023 04:27:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF055A817;
+        Thu, 19 Jan 2023 01:27:53 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J7q61D024885;
+        Thu, 19 Jan 2023 09:27:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=mNUhj6u7UGE9ZUDhd2dOiqYOGqWaj/ut8JDso0pz/AQ=;
+ b=P7zSsK7bjCt0BqyMZRkiA2eQTEn7Vu3RADM/dniRedpFZEkDZVCNMp5IKlelHrop0miN
+ RuTz7OXtkkAIrlWf0ujhOtQIXHWqwz6cCD7jLHF1rWfdMY/h1B52vi7VEzD6CETrmiE1
+ 8s8Gqbxz9H9AosZLIIvK587em+FcE11lVFLDOxqKv9C3WQTNV2ligbIEfFKhM4D9OgTF
+ v6er5yFFeBme67L9JohoUle9P/JP6c8cMIw6qs69GHXlEgzRKJm2ZcgiRaJgGMU0sbtf
+ bfUAkWtFRCGKhkGrx3iFKrYi0hb2USlpY1YUJ83Ex7of5JCFQ9cuHXJnHSOy5atDcg3q Bw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6wbs8wuw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 09:27:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J9Ri22016089
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 09:27:44 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 19 Jan 2023 01:27:39 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v4 0/6] Add resets for ADSP based audio clock controller driver
+Date:   Thu, 19 Jan 2023 14:57:18 +0530
+Message-ID: <1674120444-23706-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7QzgjqAHO_ddjL8OKJMI8pi6hOF7iBO5
+X-Proofpoint-GUID: 7QzgjqAHO_ddjL8OKJMI8pi6hOF7iBO5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_07,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=814 malwarescore=0 impostorscore=0 priorityscore=1501
+ bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ clxscore=1011 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190076
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:21:20PM +0200, Andy Shevchenko wrote:
-> Make fwnode_graph_for_each_endpoint() consistent with the rest of
-> for_each_*() definitions in the file, i.e. use the form of
-> 
-> 	for (iter = func(NULL); iter; \
-> 	     iter = func(iter))
-> 
-> as it's done in all the rest of the similar macro definitions.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
 
-FWIW:
+Changes since v3:
+    -- Remove duplicate clock resets patch.
+    -- Add binding headers for q6 clocks.
+    -- Create new patch for merging lpasscc q6 clocks into lpass_aon.
+    -- Create new patches for handling conflicts of ADSP and bypass solution.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Changes since v2:
+    -- Revert removing qdsp6ss clock control.
+    -- Add Conditional check for qdsp6ss clock registration.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
 
-> ---
->  include/linux/property.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 37179e3abad5..f090419818a2 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -436,9 +436,9 @@ fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
->  unsigned int fwnode_graph_get_endpoint_count(struct fwnode_handle *fwnode,
->  					     unsigned long flags);
->  
-> -#define fwnode_graph_for_each_endpoint(fwnode, child)			\
-> -	for (child = NULL;						\
-> -	     (child = fwnode_graph_get_next_endpoint(fwnode, child)); )
-> +#define fwnode_graph_for_each_endpoint(fwnode, child)				\
-> +	for (child = fwnode_graph_get_next_endpoint(fwnode, NULL); child;	\
-> +	     child = fwnode_graph_get_next_endpoint(fwnode, child))
->  
->  int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
->  				struct fwnode_endpoint *endpoint);
-> -- 
-> 2.39.0
+Srinivasa Rao Mandadapu (6):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: lpassaudiocc-sc7280: Add binding headers for
+    lpasscc
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpasscorecc-sc7280: Skip lpasscorecc registration
+  clk: qcom: lpassaudiocc-sc7280: Merge lpasscc into lpass_aon
+  clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
+
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        |  7 +++++++
+ drivers/clk/qcom/lpassaudiocc-sc7280.c             | 23 ++++------------------
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 12 ++++++-----
+ drivers/clk/qcom/lpasscorecc-sc7280.c              |  3 +++
+ .../dt-bindings/clock/qcom,lpassaudiocc-sc7280.h   |  2 ++
+ 5 files changed, 23 insertions(+), 24 deletions(-)
 
 -- 
-heikki
+2.7.4
+
