@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13345673F33
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478CC673F31
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjASQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S230302AbjASQpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjASQpn (ORCPT
+        with ESMTP id S230043AbjASQpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:45:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D1A86BB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:44:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674146698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=guUDzcYcYwMFnknqXHCyHjuKgr1G1lOnW/X0/GRq4JQ=;
-        b=M6Ztzg6pMW4hzx0QrPRjUWFpbSlsPcxlaUJFM4YRg+k7d5eJeT3cEkX97cTHCfvQy3yrq6
-        065YeU2UuoEZpzzNro4brz07nBZ1hbX934pGOORGOSDU5LzAdyJDd7pfBZ+sRzA+qcul6V
-        QWbez0Z4Ji+ZAGKolTzJkalSW7vV+sA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-275-_H9fMNALMY6LF6QrvrotQw-1; Thu, 19 Jan 2023 11:44:53 -0500
-X-MC-Unique: _H9fMNALMY6LF6QrvrotQw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FC323C16E94;
-        Thu, 19 Jan 2023 16:44:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BF33112131E;
-        Thu, 19 Jan 2023 16:44:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y8iwXJ2gMcCyXzm4@ZenIV>
-References: <Y8iwXJ2gMcCyXzm4@ZenIV> <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk> <167391063242.2311931.3275290816918213423.stgit@warthog.procyon.org.uk>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     dhowells@redhat.com, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs-developer@lists.sourceforge.net,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 21/34] 9p: Pin pages rather than ref'ing if appropriate
+        Thu, 19 Jan 2023 11:45:14 -0500
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1011705;
+        Thu, 19 Jan 2023 08:45:11 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id hw16so7168067ejc.10;
+        Thu, 19 Jan 2023 08:45:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S3XFiwA48FVt7ooeBVg2ln1Mbp9zE3lmEQIQYj9HHGE=;
+        b=gfozHTCqwtg2sKLvzAxYI4/9u63yxUyEXT4+kupCTpk27PuXdsN9vEw5xXHQQSg8bD
+         yvmvPWfCn4RMu22IeJyjmghhgpXGwxNDAr8/7jqJlpWqGjY9zUjAPPZfrry/p47gWEYN
+         TnONmrEBACAOGK4fEh0pfba1sq7lo5RR1WbSPuleihGjhCTMZu830/4J0nBt7TupS/3z
+         K8EWjNmuoi4DifWZA9iD0YLElHxkFzTciEMMYALuZUlDs/LE0yaxcfLSi35dXru8Tx0S
+         V97OB9wPk4x/zDTP3x9NIs7nuvjWYvczuxvfoFywQpY+CKg7jyfT9sZheuIIof8Pfvpm
+         75Ew==
+X-Gm-Message-State: AFqh2kqrCCFGH5uyhFPrKSab8uxYP55Fa3GMHL3J8Gptlo+qWquoG9pV
+        TzWg17hGYs1R7HxuaTuEVyTYhdQcyBXJOA==
+X-Google-Smtp-Source: AMrXdXvd+IHs+PU8UvPU11tLVdvAhnTwo1VieUGhGtuhjWt8bxjrq2O9JJDVHVuzbiDOOetsXdX1dw==
+X-Received: by 2002:a17:906:95d5:b0:872:5c57:4a32 with SMTP id n21-20020a17090695d500b008725c574a32mr11609764ejy.51.1674146710280;
+        Thu, 19 Jan 2023 08:45:10 -0800 (PST)
+Received: from localhost (fwdproxy-cln-002.fbsv.net. [2a03:2880:31ff:2::face:b00c])
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm15478643ejb.68.2023.01.19.08.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 08:45:09 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     leitao@debian.org, kuba@kernel.org, netdev@vger.kernel.org
+Cc:     leit@fb.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, sa+renesas@sang-engineering.com,
+        linux-kernel@vger.kernel.org,
+        Michael van der Westhuizen <rmikey@meta.com>
+Subject: [PATCH] netpoll: Remove 4s sleep during carrier detection
+Date:   Thu, 19 Jan 2023 08:44:48 -0800
+Message-Id: <20230119164448.1348272-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3030211.1674146654.1@warthog.procyon.org.uk>
-Date:   Thu, 19 Jan 2023 16:44:14 +0000
-Message-ID: <3030212.1674146654@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Al Viro <viro@zeniv.linux.org.uk> wrote:
+This patch proposes to remove the msleep(4s) during netpoll_setup() if
+the carrier appears instantly.
 
-> Wait a sec; just how would that work for ITER_KVEC?  AFAICS, in your
-> tree that would blow with -EFAULT...
+Modern NICs do not seem to have this bouncing problem anymore, and this
+sleep slows down the machine boot unnecessarily
 
-You're right.  I wonder if I should handle ITER_KVEC in
-iov_iter_extract_pages(), though I'm sure I've been told that a kvec might
-point to data that doesn't have a matching page struct.  Or maybe it's that
-the refcount shouldn't be changed on it.
+Reported-by: Michael van der Westhuizen <rmikey@meta.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ net/core/netpoll.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-A question for the 9p devs:
-
-Looking more into p9_virtio_zc_request(), it might be better to use
-netfs_extract_iter_to_sg(), since the page list is going to get turned into
-one, instead of calling p9_get_mapped_pages() and pack_sg_list().
-
-This would, however, require that chan->sg[] be populated outside of the
-spinlock'd section - is there any reason that this can't be the case?  There's
-nothing inside the locked section that makes sure the chan can be used before
-it launches into loading up the scatterlist.  There is a wait afterwards, but
-it has to drop the lock first, so wouldn't stop a parallel op from clobbering
-chan->sg[] anyway.
-
-Further, if virtqueue_add_sgs() fails with -ENOSPC and we go round again to
-req_retry_pinned, do we actually need to reload chan->sg[]?
-
-David
+diff --git a/net/core/netpoll.c b/net/core/netpoll.c
+index 9be762e1d042..6f45aeaf3da0 100644
+--- a/net/core/netpoll.c
++++ b/net/core/netpoll.c
+@@ -704,15 +704,6 @@ int netpoll_setup(struct netpoll *np)
+ 			msleep(1);
+ 		}
+ 
+-		/* If carrier appears to come up instantly, we don't
+-		 * trust it and pause so that we don't pump all our
+-		 * queued console messages into the bitbucket.
+-		 */
+-
+-		if (time_before(jiffies, atleast)) {
+-			np_notice(np, "carrier detect appears untrustworthy, waiting 4 seconds\n");
+-			msleep(4000);
+-		}
+ 		rtnl_lock();
+ 	}
+ 
+-- 
+2.30.2
 
