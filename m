@@ -2,194 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3129067344D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ED5673451
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 10:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjASJXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 04:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S229812AbjASJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 04:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjASJXM (ORCPT
+        with ESMTP id S230118AbjASJXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 04:23:12 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B43067796;
-        Thu, 19 Jan 2023 01:22:58 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id ACDF25C00B3;
-        Thu, 19 Jan 2023 04:22:57 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 04:22:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674120177; x=1674206577; bh=/JsNdAytCy
-        nPTqBsyGElSPfW98eiVw7apSDHVMC4ZLc=; b=bHL+8hi3f1w7c68W16su2/woIi
-        p3/hVfC0K0wniFdYKdaMYxmZBqgZ6L9hgDIZLBacXerW+4niLyHPSv2XQb2P3CPu
-        ABfSHsCUUh9c1lDJP4oqeSWj377RaH0Jaa5c93nYJfshUOU9AyIs5m/VRwMpfEZf
-        nr9z1FkBNaIObcEkmOGZCksrSXwteN+chJNA95sTtDZfEk9wMv2HFyWWQzQkpPh+
-        +myZFKNmh1YsvjMXzldZ6KzmM0d4II/DbO1tU2/WyOg2POSDhI6mZ6HkMlPc5vL1
-        sZP0dEMSVGO1SeuhlMVXSu4jYdxlcu2Ky+jWpj5MM02PY/oLVHPZ1il0fmIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674120177; x=1674206577; bh=/JsNdAytCynPTqBsyGElSPfW98ei
-        Vw7apSDHVMC4ZLc=; b=mcL8mzFLatm+U4TcbmKxB1Yygc7VY05chw0BSKnN4Yaw
-        lfwDO3QLiOvQOaboPIdOKe9TkkyHMz063oSSFaKKKHTveMp6DE0qzW4Yr75t1QfE
-        7zL+fKKqz6Vj4Q8jo4+KpRi9LPdY8iyx0X8AB5Isw6g1cMNhicG4NSVNhWERPwCJ
-        AHzMXPsL2fnyvRCFvxVW9TZOPw6d+wtSRpPU2ah/668Pvghf7nechsRlOKYw1W96
-        9j1dSzFeojb/LHRcdda0SS8PVs5MENWHmBm2amOQsngZbOuyMy629pVMBGoB1sDB
-        unIvQEWZJTN4EkWOsk4BCa7F1o4I6uu/kWXHfABqGw==
-X-ME-Sender: <xms:8QvJYxTegyit2P0J_Kyg1iz_5SfcC9tEY38DB9u4xGOm1dS_NEO3nw>
-    <xme:8QvJY6yiERTAKVvn0jGkSrRp-ErHsqKt19df2t9jkttmMHwk1lfdyU7dQy0M2U8rq
-    HVKP-61jZjTCW88dvU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:8QvJY20jmXmROYht_sErXSbsvrYIshdu7bQIcCJqe7UMQMF1_R0lBw>
-    <xmx:8QvJY5BvZ8-kb5SWq0Mxb_LTxg3nsVhxicrVtUOQMkvir_CsjUIVQA>
-    <xmx:8QvJY6ikSTKCoPjE8A3ov4fq3HUdQ5SHB2DHnyyW-LdZRF-h0TbG4g>
-    <xmx:8QvJYzA-2c5jILpcioQfhmfRzjj4KM2TStf_8tssIdvs-SmdjG4uiA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 056E3B60086; Thu, 19 Jan 2023 04:22:57 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <e7180562-dddf-47ff-8e6d-34265521b10d@app.fastmail.com>
-In-Reply-To: <20230119033918.44117-16-blarson@amd.com>
-References: <20230119033918.44117-1-blarson@amd.com>
- <20230119033918.44117-16-blarson@amd.com>
-Date:   Thu, 19 Jan 2023 10:22:37 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Brad Larson" <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, "Andy Shevchenko" <andy.shevchenko@gmail.com>,
-        blarson@amd.com, brendan.higgins@linux.dev,
-        "Brian Norris" <briannorris@chromium.org>,
-        brijeshkumar.singh@amd.com,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "David Gow" <davidgow@google.com>, gsomlo@gmail.com,
-        gerg@linux-m68k.org, "Krzysztof Kozlowski" <krzk@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
-        "Lee Jones" <lee.jones@linaro.org>,
-        "Mark Brown" <broonie@kernel.org>, yamada.masahiro@socionext.com,
-        "Philipp Zabel" <p.zabel@pengutronix.de>, piotrs@cadence.com,
-        p.yadav@ti.com, "Randy Dunlap" <rdunlap@infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Samuel Holland" <samuel@sholland.org>,
-        "Serge Semin" <fancer.lancer@gmail.com>, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        "Tony Huang" <tonyhuang.sunplus@gmail.com>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>, vaishnav.a@ti.com,
-        "Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 15/15] spi: pensando-sr: Add AMD Pensando SoC System Resource
+        Thu, 19 Jan 2023 04:23:50 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F064615A;
+        Thu, 19 Jan 2023 01:23:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fEi5keb+k1/B53ND7dWWDYH0TXZ4F7h6wU+Nz05X9K7mcAEeMPKXs5D24Nk02IN/hZS2NZA3BAnDI6CpYTZk3E2XXH//SHJrpTfuaVPypYEZqAPWP3YpCm3oESQh59TaAE/oOSrhaIPvVTQim8G9+kUz1yuwHcvKuqxHYe2ybRoO1aOrutwGxqB6yLOsJpYa0fiWRPR0RUR7wnXHIa5EcvGFDFjLA4XHeK6PELpPyl3aV2E0VJeDXVNpZsYjlwdV48Ks4g8hqjRRbkX2cp7h6Dsyrs1HDeqTARSuyIoY0tNh0DJbxZ/BocSoaeVQdYhUE1m+MqoiNWp2zl8IT0sMRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2QG6gAjYIpKPON4AYUavwFJPsAXRGWvr3EkFd5LMXdc=;
+ b=fhkAuKrZfPA28zIBrLSxfIHPJtttA2Jm40xNhFGiFmdRD+AqT4IRg80slhAnrtA8joeQStvoxXku1pp6KEdoJDYYVn+Opun6FRvEJNAPnQrEiRJ0wB5KhtklrDrRPMRzvpUjPCKbN0cgixVf0v1ETMOL457s4xrGh5fXqkU5lwZVsFdYS0jA4s8XzNBaetOWbQYm2Ts5PNLq+3Krfvgm0G1zv0hWLpap2Fi46tK2WRUeid4SaOkUFaBOtGh/u1zV0jpfnuwvU5yObwGVgkiEDsX1SQz0F2fF64WLpDxyr3nzpcLQ6dumCoVT0yL/S6nNh43Lg2PGzw45KRirkmqaIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2QG6gAjYIpKPON4AYUavwFJPsAXRGWvr3EkFd5LMXdc=;
+ b=IBI9MOUYpvrM2Cai2IFJv3ibYzsQwVnrYin/2wCfvNh5Wd8Ro8NnrZZQiZDorDmHEOyQua2ybLKaU39efiUSQma3YyRnAV1kIg7LKvBcLMvzlO4QjwLoUgbIDueqAe4k2/q4BMd4p3L4Cytcmns/QVg8pEaOZ8vwFaDwq0bgoQqwAycvvTI+LsKEw6Pq0REbj7aE1IoUdLpkuPPWtxlcLhR24+BAG0oqHkIzC6qQfGOn/53T5YdwqlI1rK+5WvZ6n1kWEAsHsFCE2Z8SchVQjVhqRkVBufzoD+wEvMyeRoE+9jYtk9ptwYSCXh0JKkhAjGTvL2ZVgGz1NXe4Muv59A==
+Received: from BN8PR16CA0034.namprd16.prod.outlook.com (2603:10b6:408:4c::47)
+ by DS0PR12MB7780.namprd12.prod.outlook.com (2603:10b6:8:152::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
+ 2023 09:23:28 +0000
+Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:4c:cafe::ad) by BN8PR16CA0034.outlook.office365.com
+ (2603:10b6:408:4c::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.26 via Frontend
+ Transport; Thu, 19 Jan 2023 09:23:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.24 via Frontend Transport; Thu, 19 Jan 2023 09:23:27 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 01:23:17 -0800
+Received: from yaviefel (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 01:23:11 -0800
+References: <20230118210830.2287069-1-daniel.machon@microchip.com>
+ <20230118210830.2287069-5-daniel.machon@microchip.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Daniel Machon <daniel.machon@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <error27@gmail.com>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <petrm@nvidia.com>,
+        <vladimir.oltean@nxp.com>, <maxime.chevallier@bootlin.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 4/6] net: dcb: add helper functions to
+ retrieve PCP and DSCP rewrite maps
+Date:   Thu, 19 Jan 2023 10:23:04 +0100
+In-Reply-To: <20230118210830.2287069-5-daniel.machon@microchip.com>
+Message-ID: <871qnq98ub.fsf@nvidia.com>
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT017:EE_|DS0PR12MB7780:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7fb0162-860f-40b4-470a-08daf9fed2e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v/4jIa0ZJj8FU2Yqstgu9Mi9pS4/7+0rVUo/HzIZjuzPrK3zKBVCM2Yd+QSJMHJrGMiOEhPRunpeU/+lsGBHZwdYxbD4xRGUCQvbOiyKnVU2z1203jMi3Ni83mifS35L/B1oUwndIPr5152AuofvCy3S3SqkriBqHChOARIebb6CshGxX7AXACE2RQn5AmziKdzf+IiHpBmi8eBgEMGvwNtW1wWZiZUoBGjVRBTCLPFctPoQ+XJpmOi0+tff6BAxLjuBkhda6kdk1Bxq+KMSHLf8jW+xbboP8Pxn9jZ/dbDhQ9GinHNNBhTi1znaCgUVol2N1z4bLQY2ZOASm1mubomkWirE0mmDS94PYEw/zEHoS70+53DyG/+wcnAk5y0oR/e2NXU58vSlzGs9NWJ1esSI8ps7j3EsGChkBRZ9vyPfUL2i46saG/kV3nCE1UHcAktvNUWOrBQr6sQabkh/0WE58iQKA84OgRorwHJR9W/jm+LxAgrTUzurkjBqCr6pn/31Pb+llCnESWovtF3JYYZ+Jp21lf+VjvoC1OmzaiWwEZ9YBU2jYEJhRI/my1h57UWkzB6iNSW/+FR6y6DcJ9t483oo0aWuDP03kab/ltfkRXC8A4VXi6z8iVLBrqRvoPbgEAmovaWTchNa4WuF1E6b+5bYdbAl4Z3bO2Kaug3lnWQzg2kaud+sBT7tO7xyJZ3TbTtgmQO61h/nonWHCA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(36756003)(356005)(86362001)(82740400003)(7416002)(2906002)(70206006)(4744005)(8936002)(5660300002)(70586007)(36860700001)(7636003)(316002)(426003)(54906003)(6666004)(47076005)(478600001)(82310400005)(40480700001)(8676002)(6916009)(4326008)(41300700001)(186003)(26005)(16526019)(40460700003)(336012)(2616005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 09:23:27.9828
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7fb0162-860f-40b4-470a-08daf9fed2e9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7780
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, at 04:39, Brad Larson wrote:
 
-> drivers/spi/spi-pensando-sr.c
+Daniel Machon <daniel.machon@microchip.com> writes:
 
-I don't think that is the right place for this driver: it's not a spi
-controller implementation but rather a user interface driver that should
-be in another subsystem depending on its purpose. drivers/misc/ might
-be an option, but ideally I think there should be a higher-level
-interface.
+> Add two new helper functions to retrieve a mapping of priority to PCP
+> and DSCP bitmasks, where each bitmap contains ones in positions that
+> match a rewrite entry.
+>
+> dcb_ieee_getrewr_prio_dscp_mask_map() reuses the dcb_ieee_app_prio_map,
+> as this struct is already used for a similar mapping in the app table.
+>
+> Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 
-I'm still confused about what this driver actually does, and how
-the corresponding user space side is meant to be used.
-
-> +config SPI_PENSANDO_SR
-> +	bool "AMD Pensando SoC System Resource chip"
-> +	depends on SPI_MASTER=y
-
-Why can this not be a loadable module, i.e. a 'tristate' option?
-
-> +
-> +#define PENSR_MAX_REG		0xff
-> +#define PENSR_CTRL0_REG		0x10
-> +#define PENSR_SPI_CMD_REGRD	0x0b
-> +#define PENSR_SPI_CMD_REGWR	0x02
-> +#define SPI_IOC_MAGIC		'k'
-> +
-> +#define SPI_MSGSIZE(N) \
-> +	((((N)*(sizeof(struct spi_ioc_transfer))) < (1 << _IOC_SIZEBITS)) \
-> +		? ((N)*(sizeof(struct spi_ioc_transfer))) : 0)
-> +#define SPI_IOC_MESSAGE(N)	_IOW(SPI_IOC_MAGIC, 0, char[SPI_MSGSIZE(N)])
-> +
-> +struct spi_ioc_transfer {
-> +	__u64 tx_buf;
-> +	__u64 rx_buf;
-> +	__u32 len;
-> +	__u32 speed_hz;
-> +	__u16 delay_usecs;
-> +	__u8 bits_per_word;
-> +	__u8 cs_change;
-> +	__u8 tx_nbits;
-> +	__u8 rx_nbits;
-> +	__u8 word_delay_usecs;
-> +	__u8 pad;
-> +};
-
-When you create a new user interface, the interface definition should
-be in include/uapi/linux/*.h. The structure name and command name should
-indicate what driver they are used for, these names look overly
-generic.
-
-> +struct pensr_device {
-> +	struct spi_device *spi_dev;
-> +	struct reset_controller_dev rcdev;
-> +	struct mutex buf_lock;
-> +	spinlock_t spi_lock;
-> +	u8 *tx_buffer;
-> +	u8 *rx_buffer;
-> +};
-> +
-> +static dev_t pensr_devt;
-> +static struct pensr_device *pensr;
-> +static struct class *pensr_class;
-> +static unsigned int bufsiz = 4096;
-
-Even if there is only ever a single instance of the device known to the
-kernel, it is better style to avoid static variables but instead make
-everything passed around as part of the device structure.
-
-
-> +
-> +	t[0].tx_buf = tx_buf;
-> +	t[0].len = u_xfer->len;
-> +	if (copy_from_user(tx_buf, (const u8 __user *) (uintptr_t) 
-> u_xfer->tx_buf, u_xfer->len)) {
-> +		ret = -EFAULT;
-> +		goto done;
-> +	}
-
-Use u64_to_user_ptr() instead of open-coding the type cast.
-
-> +static const struct file_operations pensr_spi_fops = {
-> +	.owner =	THIS_MODULE,
-> +	.unlocked_ioctl = pensr_spi_ioctl,
-
-There should be a '.compat_ioctl = compat_ptr_ioctl,' line here to
-allow the ioctl to work in 32-bit processes.
-
-      Arnd
+Reviewed-by: Petr Machata <petrm@nvidia.com>
