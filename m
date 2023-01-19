@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05C9673145
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ACD67314E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjASFkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S229933AbjASFlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjASFj5 (ORCPT
+        with ESMTP id S229677AbjASFlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:39:57 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAE4B8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:39:55 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so4812732pjm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGDn0N8Ms6feoyrcP9CT4zVtB2Eed1lBejF9LTMQpMU=;
-        b=dZnwg0Ly1yeOJNsCb4QCQdYVOEJUCq6Si1pae/K3zD7A3EzzkXrUPQes3tfoy6diw7
-         sztMsuos6SjPcczzcpcYab+62BXRSopALKqN+ZLYmRNbELW0nen7PR+qAp0pdNM2B5Ea
-         O3U2An5c7kJs1U9P1Q02Ca+oAKSG61LhEqN5SFql1/R9IQ3ZhUBLKG2BQQVBuzqKpA/Z
-         J3iHK4KnwD/ET1o7oLNcycRoo82cEwG1YpFOK6rqkwG35sldnfznkJtmgnGt3bRSszsV
-         LU9jI8i8YMz+3bx+qu6b65F1KTzGAmhwY8qbZVQ+biivzwytyw86r2W1wojfqp4lrjvh
-         YK0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zGDn0N8Ms6feoyrcP9CT4zVtB2Eed1lBejF9LTMQpMU=;
-        b=hrBeyC8lRFRtWyOh91bfyjpZqZsrRyXiRJiVgNNqP/+REqduw5KTK0Rc0lSRKi4M/i
-         T05FkQSGwosLTKPWTGQ3w0strroaMY1EXukpJGrDXEW5LQHQkr3Cj1qkyTmhpEIDfIMy
-         rwtW5jrOAnWj1N7NraZfCObYxrTsTITnVTipG/4dO9Yk5EtCg6lfcrR8PnDkjLVanMlK
-         k1ILzTD00f5qO6Bj2wKKadnQxYUl5M7tnDRrMPb+TAmjlJ6S/jPEEns1m04aHYUYP2aY
-         Qes8slYlenGcs/I4dpapUf3QGjhY2Ha7JGl0tPy6hc+HzJjSbHv2gwGP8wYg3sm80/RR
-         NoRg==
-X-Gm-Message-State: AFqh2kr5f71ibJbJuG7TWQxM0/8XIN/Qvfl5vtSrkxZ1/6ZcDgB7b5vQ
-        9bW5vP/oWUvbWN2lPiXguZ/VtA==
-X-Google-Smtp-Source: AMrXdXtkQCK+4BLvooEaySdhdPo9CXsc3cxW/QcHx53H3kXI7eJt/RwNqVl6YIPbtIWKH75QPRZfIQ==
-X-Received: by 2002:a17:90b:3d0c:b0:219:5fc5:7790 with SMTP id pt12-20020a17090b3d0c00b002195fc57790mr9993838pjb.16.1674106795185;
-        Wed, 18 Jan 2023 21:39:55 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090a558200b00229661c5650sm2180168pji.37.2023.01.18.21.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 21:39:54 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:09:52 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Vincent Wang <bhuwz@163.com>,
-        Vincent Wang <vincentwang3@lenovo.com>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
-Message-ID: <20230119053952.qwh2yrmhddzocnju@vireshk-i7>
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
- <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
+        Thu, 19 Jan 2023 00:41:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB55C2;
+        Wed, 18 Jan 2023 21:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=y5Xh8bYwZMY5HwN/M4TXkwN4g2K6OlG75bQso9HEXNw=; b=o30pbyX48tfAIROLtLS+b0a6i2
+        KjJXgkQq9natV56aPqro1wnQIz/NgCFWgh94PHYTPZrqLH9KrBNKj9mWGcv8/77Tsvqd+V2kBLD/1
+        OpA1EJEoKFjLG4y4++CHxasA7BEcohxGyqNnJngGeXUk1SVXArpf6x5qcNiEHer5UiaQin6t2FlFW
+        tJyebRFJm7UjOCebh46G/KWSWocuzJ+Y9WHZy2M9i4WVkKXEz82wBB0+892hdZP4ZteqpjwdF8e36
+        4Pb5N4O8rG8CENA3HtLf+/Aq+o5w7guTGiUqCuM6IaFoYEJaiLTZO1gfp9WMGK3i/JnRlGiGNR0DZ
+        EvCEF31w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pINg8-003gwp-Bm; Thu, 19 Jan 2023 05:41:36 +0000
+Date:   Wed, 18 Jan 2023 21:41:36 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 01/34] vfs: Unconditionally set IOCB_WRITE in
+ call_write_iter()
+Message-ID: <Y8jYEGtp796H1Zro@infradead.org>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391048988.2311931.1567396746365286847.stgit@warthog.procyon.org.uk>
+ <Y8htMvG33I73oG9z@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8htMvG33I73oG9z@ZenIV>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-01-23, 09:24, Lukasz Luba wrote:
-> Viresh, If that's an issue for other governors, than maybe
-> we should address that.
+On Wed, Jan 18, 2023 at 10:05:38PM +0000, Al Viro wrote:
+> __kernel_write_iter() is one such; for less obvious specimen see
+> drivers/nvme/target/io-cmd-file.c:nvmet_file_submit_bvec() - there
+> we have iocb coming from the caller and *not* fed to init_sync_kiocb(),
+> so Christoph's suggestion doesn't work either.  Sure, we could take
+> care of that by adding ki_flags |= IOCB_WRITE in there, but...
 
-As you said in the other email, it isn't a mainline issue, I will
-ignore it then :)
-
--- 
-viresh
+None of the asyc users of iocbs currently uses init_sync_kiocb.  My
+suggestion is to use it everywhere - we have less than a dozen of
+these that I all listed.
