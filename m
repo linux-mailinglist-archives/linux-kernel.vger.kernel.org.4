@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836A66737DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CFC6737E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjASMGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S230286AbjASMGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjASMGH (ORCPT
+        with ESMTP id S230214AbjASMGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:06:07 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75289114;
-        Thu, 19 Jan 2023 04:06:02 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0B4905C0068;
-        Thu, 19 Jan 2023 07:06:00 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 19 Jan 2023 07:06:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674129960; x=1674216360; bh=G79ZgDoEhs
-        aOdA4/jWWEPcYdJ3ASPN551GkohQhqETg=; b=K6fp0wD67afq94tpgRf7r9QtIE
-        fI1DUx3wp2BTV3VMX7xef6Aw3WnurOIIE2J328FJKtUlvwrjN2577w24H4aJnAN8
-        DLWRAgw3mV1U58Ef/cKRGCRLsKCKcDXVfmzlSyaEQqmVS8MDr3qg1F5SfTuvEWPN
-        3vejKIMBdurXagnEs0fJqo8l/KUXoYNUnrNSMpgcK5ACSKelWhSk/8nLe4k9SjaC
-        ljgUcTVdVabquwiCxeT9H5DshjgWA/eH9ShkeQyncG/3AKFx/9x19q3lIa0I6QVg
-        I2rbequH2W1jETykerCrhXz3c6L0WzgkI2O0Hnd1ZAXU2o0rrS0S60i/axMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674129960; x=1674216360; bh=G79ZgDoEhsaOdA4/jWWEPcYdJ3AS
-        PN551GkohQhqETg=; b=qzFebiLY8baHfXBBGyi/W+qdSc6RbLYRCS0W0oIWmGNz
-        mIkUtLiks1XL3OZtHgnORGz+okgt6hZYFLcYrnXqF9noT4T/yKshkHBCkJY7l+x5
-        gaHmCHPGp6bd3N/9qpPwoBch+TkAIPVQH+5nIum0C+kDSyGBR9sAaYIBN1Z8XUtr
-        XIMFzUPUmDuSblp91UKiGw3ifDgan7szNK6sQLJaZCT5pwqO94/y9nFIpsigoTJX
-        Zumk8KRaLP/aLkZQuXikQkfaEv5cWF1PLbJHvz+teLM1pAtB4zoxc/h7dYC91Peb
-        r3EBVCpSUx4Pn06QbwNSXlfE8xkU2awNdaT8DAqkIQ==
-X-ME-Sender: <xms:JzLJY2ogricfNebkRTtk3SrsGqTGh3YGx1NeC9N3QFVINbCJDz3BRQ>
-    <xme:JzLJY0ol8WtIEWdMBGLndheRyyDENMKW1Wb9WvNtGUuaMi-rYh-k7OKFLf_0reIYm
-    QxTVu028PZv2Q>
-X-ME-Received: <xmr:JzLJY7O0xSBMDGmTYa1tLDEx7h0unDMEm-ZGmDB1nqFRZ4g-S31nFBnjYMh9NoXkrgxubR-OryCpFd8WmTTTD3l2QXL62o5FJh1JMQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:JzLJY14ubqi5eDqP-41-BnSS1m9GjRYLDdSxAJUW15rDMfrnX_mqVg>
-    <xmx:JzLJY172fTOk0qF1b6fbVdBJtWHIQF2V__V2uGnCF12L4e5npS6Siw>
-    <xmx:JzLJY1j2iDv7M2efLAwF5uZy56PGe1ra0FC0JPSh4dNBsHfxddWAFw>
-    <xmx:KDLJY0SWy3EfmlMmjGmTjo-OFhLDKJr_HJnhR2AsJPSmqNOGteBsJg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Jan 2023 07:05:58 -0500 (EST)
-Date:   Thu, 19 Jan 2023 13:05:57 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the usb tree
-Message-ID: <Y8kyJcSYW0IOMuzU@kroah.com>
-References: <20230119152605.03588e9b@canb.auug.org.au>
+        Thu, 19 Jan 2023 07:06:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8E51737
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:06:31 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1pITgU-0001is-CQ; Thu, 19 Jan 2023 13:06:22 +0100
+Message-ID: <729c4be6-00f7-4b88-235e-0e9bdeed3e5f@pengutronix.de>
+Date:   Thu, 19 Jan 2023 13:06:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119152605.03588e9b@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [Linux-stm32] [PATCH v6 1/3] ARM: dts: stm32mp13: fix compatible
+ for BSEC
+Content-Language: en-US
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Etienne CARRIERE <etienne.carriere@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20230118172940.841094-1-patrick.delaunay@foss.st.com>
+ <20230118182856.v6.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20230118182856.v6.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:26:05PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 18.01.23 18:29, Patrick Delaunay wrote:
+> Use the correct compatible for stm32mp13 support.
 > 
-> The following commit is also in the tegra tree as a different commit
-> (but the same patch):
+> The BSEC driver for STM32MP15x is not compatible with STM32MP13x. For
+> example the proprietary's smc STM32_SMC_BSEC is not supported in
+> STM32MP13x OP-TEE, it is replaced by SM32MP BSEC Pseudo Trusted
+> Application in OP-TEE to access to the secured IP BSEC on STM32MP13X SoC.
 > 
->   2648f68bd0ac ("dt-bindings: usb: Add NVIDIA Tegra234 XUSB host controller binding")
+> The correct compatible is already used in U-Boot and in upstream is in
+> progress for OP-TEE device tree.
 > 
-> this is commit
+> As the SoC STM32MP13X is not yet official and it is not available
+> outside STMicroelectronics, it is the good time to break the DTS
+> compatibility and to correct the error done in the introduction of
+> STM32MP131.
 > 
->   20cdc1607ea0 ("dt-bindings: usb: Add NVIDIA Tegra234 XUSB host controller binding")
-> 
-> in the tegra tree.
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
 
-Is that going to be a problem?  Git should handle merging that just
-fine, right?
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-thanks,
+> ---
+> This patch is already sent separately in:
+> https://lore.kernel.org/all/20221017134437.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid/
+> https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=685815
+> 
+> I create a serie for more efficient review.
+> 
+> Patrick.
+> 
+> (no changes since v1)
+> 
+> Changes in v1:
+> - update commit message to indicate DTS break reason.
+> 
+>  arch/arm/boot/dts/stm32mp131.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+> index accc3824f7e9..0b79380cc627 100644
+> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+> @@ -520,7 +520,7 @@ rtc: rtc@5c004000 {
+>  		};
+>  
+>  		bsec: efuse@5c005000 {
+> -			compatible = "st,stm32mp15-bsec";
+> +			compatible = "st,stm32mp13-bsec";
+>  			reg = <0x5c005000 0x400>;
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
 
-greg k-h
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
