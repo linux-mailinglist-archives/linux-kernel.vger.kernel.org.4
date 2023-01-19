@@ -2,180 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A11672DE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8AD672DFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjASBNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S229906AbjASBTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjASBNZ (ORCPT
+        with ESMTP id S229901AbjASBQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:13:25 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E278539BA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:13:18 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so594588ild.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:13:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=THrHwLIFJZ1jbjLr9MCxv7p7qYgPa3kxyIZJ3N6KufU=;
-        b=bfLmf+xaUj1HzZrmHX4FKl09pGUs4V9XzSaA0YRKzZoYtFMcK8U8voSOMS8qUHeFRv
-         XpxcPYzoliQTHtlpOt6ARxDJKiYz1rDq0O6qJGOqKJ7ateH43AsnlMqff66H3LmMM5PL
-         wL6utnD5JjzsxqZH+wO9V6m2p13B3T6FUU0o4cHGBqw5j3lkjudBAtY/wQ4fS1+eAhEZ
-         nFI69jtzmqKXleds8RI3qOo9b6PTigviFkhJbjQ3wMOEakGPLi3okjBQsXiUi+zskFY2
-         Z7acoFfa2cH0/oheqkJSPiO/im9TJ/BxScddGvAPThfofk+i7gA5FVMBqGhuXLo4fBJU
-         izTg==
-X-Gm-Message-State: AFqh2kqfFckAeaPrz10E3uadDItFBI/OofXj5FrFI0ZMr1t3Q87cLrfI
-        fuZ3BKdV8xmWosaW3H5aJMhEx8UYpW4Rvx94A6/KLAXthCwD
-X-Google-Smtp-Source: AMrXdXuNklgoCcMVRjEfweiE4mYBE+SH5wy/9Omec+JTRNHW/emeCLD3yKTqliXZdJahDMOiz4SZKmAwW/Jj5rNM1rj9YBdGqusA
+        Wed, 18 Jan 2023 20:16:56 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DC26B9AE;
+        Wed, 18 Jan 2023 17:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674090914; x=1705626914;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=F3j4WYUKtjwAusS3UzBuLRWoUhMz7lT7SpNon4azC+s=;
+  b=BgVz6+x1RzUBD70VQWFRTnSPWpm4PzV3bq5LJmOu6qQnFdUiNoYErcDN
+   02Wifxe5MFPq2Adk4yZ4ljoS6r3PK6jfO4OmOeHEbaBuZYNZ/3r19ELFf
+   CAtFYq6Li6XMh2mUklt3O83+6JJAYcbcO6uUxorIbIvnIIpADh47wx31j
+   Iceac8zYXnA9qrXyTYkEQho8I5xlwLeR501f/wOq6/zhuICXRRD2jJKDz
+   ecxpGoFWrR7q8Q8b9uckeLmdgyfMwLHKAyH9yAf1Ja160mU5fWh5jVE3e
+   ltWrgYpqREJ3xZhVo5wAuM/uvSn1UClwEbCR0LvYdYXaV5K9Wh0v3C9j9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322845615"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="322845615"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 17:15:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="767992839"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="767992839"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2023 17:15:11 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 18 Jan 2023 17:15:10 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 17:15:10 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 18 Jan 2023 17:15:10 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q/ut/yAw0v4SdK2TNc7ycQd0YsceWpg4RKMKsjwq67isCB0ANA81yJOdbuBnYzfYRavXPwj2bvDIR8lddrqot78qwIC49hiT4DKEve9LZyNPVoYIs8MRuAarVcFZrunQnDx5DaAIpJcfKaLXnzrayzlb8YzJSwc2xFCPCZDfodRR6Q9RgJVDKxF4IQvkP96HWnO8N6QZndVcjklvA/Am0daEJPzWV7kHBj3gnHs4VRogzMwe6VpHDHaSYM9AJ/Z7SkmJQMy84BfDzlZ5lVXY2CyWyYYNUEtbFjjPi2E+w+f6pbL3cUpQLdmVn0qEPOHPWv/ckGd/z8ohiDT2uuMWWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UHtAoOg2JOPjEm2Q+baBVSetLZrz/Vd8SDfZNy88ilA=;
+ b=Vr32sHYO/Rvi97FO5OqeTSqHe0jTQBAZbLrMPpOQ9imwT6Qjfo0YMMrrTz3PbvIYPpuZHDTSHnsOcrXg3ASIXv8QsslmqRzA6y0O3bKipUDiKoM3KH1CKk636WPYBhehlXaDDtzYpyxXEDwvbl0aGCAaTVRpujt7KTItodkrqKQh4c53HWE80Us6QCqc61QPZ6zU3NAlkXkOFUOvX7d6LG9pdCEr8QHblTbOR1UAxQpZFWyHuMh1AV1Ynjd6VuuaZeLZhFm/m9vqFJUcvY5fzEVB3Yrvu2jGEIwe1PSsd5UHhpiV9XIM4Gio+FMBWOYPc5lQnaZd6LgAbJhEEWW7mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by BL1PR11MB6025.namprd11.prod.outlook.com (2603:10b6:208:390::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
+ 2023 01:15:08 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::593:877e:dd33:5b7a%5]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
+ 01:15:07 +0000
+Date:   Wed, 18 Jan 2023 17:15:04 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Petr Mladek <pmladek@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, <david@redhat.com>,
+        <mwilck@suse.com>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <20230119011504.q23askbtbwzwmica@ldmartin-desk2.lan>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+X-ClientProxiedBy: BYAPR08CA0024.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::37) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 MIME-Version: 1.0
-X-Received: by 2002:a02:caac:0:b0:3a3:1d2f:1a23 with SMTP id
- e12-20020a02caac000000b003a31d2f1a23mr857114jap.85.1674090797683; Wed, 18 Jan
- 2023 17:13:17 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:13:17 -0800
-In-Reply-To: <20230118222858.3127-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000051626305f293a395@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
-From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|BL1PR11MB6025:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a00358b-7543-4f39-3f44-08daf9ba99ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0WSnBq3bMKIYlq0H8inbTGNZByBcOrQeDQ4Pp4fzeQ2cqTr+VhRvAhmcaRqi2u08koqVmyGnv9LFjUkpFWJsawkXRJBlxkOMQG/+SJZCPcbewosmiY5+R5OhYWECHtHnDA826Sjd0T/kbNRTNW3K+hNZiN9ivlOURclD/1GXdnQiIZ2fYeYpzculWjc2mUcOJ09yJ2iBNu3i6tdxeSmgTgQMU0vOTf9m3R10hXQ3EnJfy+8x0gCX/VtSxAiev4s84YArXfNKhG8s46q1YGgRcB9V33JKAYJ5gwtiR2eJvsD1PtA6gXaS4jbn2g4zqiqmrHBN6tqvxNpdhOfwokfHYyz9WNLJuPkDlrtkA2VHT1Kjp+fI0H9697Q6mi/o0Q8GHumoCba+Xp3YM2o3neOPaRxlwXylnIHQwbyk8d7cADn++rFTygajVw39KamKuVlpMwvJO0Q1T0zyG/3drqfkEf3Qaypf+GUTTAX/WMXMCnm2/kekKnH4vXtMUtiEjdYE6uDy7IYAnuGIcDqANbuUkhH704Wm5vyOf+uVE74n4MBZgp3jGmiMh3osDB31MnErV4z+YpF68V/zzbOvo9L0Af+KPkxdiu4pMmnIquDwjKrBxH52RuAXXVf3ysWriA5IjAVTN0YRF/Vo7GxcjYek8A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199015)(26005)(82960400001)(66556008)(6486002)(41300700001)(478600001)(6512007)(186003)(1076003)(86362001)(316002)(54906003)(38100700002)(66476007)(66946007)(66899015)(36756003)(6506007)(2906002)(4001150100001)(5660300002)(6666004)(7416002)(4326008)(9686003)(6916009)(83380400001)(8936002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cTjgFOULhw7Z8n1RDfLNFS/74ZPYAgctGqRkD9YYEFoNbeFyLhOhPHF48/gD?=
+ =?us-ascii?Q?ZTp9La5UYwa2U+hWlmXwApA5Ue/NLB0+IApjD4XumYr5od3xzl7/Yksd7fyv?=
+ =?us-ascii?Q?WrShtB9GooDKDOavMplUg+ihszW59vf0SS+uz/Y+vYhv+l5XIOkWizeFu2F4?=
+ =?us-ascii?Q?yjM5mHGncLBBENMftU4zBEnyRIrs1dfAPTHzlKlNSjkgxf29c93lDiqlZIYZ?=
+ =?us-ascii?Q?l6I/owHUbBMGFVOIrirdfCG+ibz7kiLNVdTpuvY1YyWC5SSpJxWNnvSYe+qC?=
+ =?us-ascii?Q?9y/phzG8XL9C6vxEu95RjutuLnd2QKXCPdheCbeXXTpLLdTVCYTQilckZ0mB?=
+ =?us-ascii?Q?bJzOwdZcU+qwyQNNPezPxmHlfnGMqbR+o7s7UG7K5C5EQFAM3U+og8hRSTIP?=
+ =?us-ascii?Q?ptDNWG0E59Akr/2uJjbCtqvYe7LHHLx/ibmEoH9LDVLvdnbm9qGY84JR5W1o?=
+ =?us-ascii?Q?1qsABZ+s5hDfdeR4kq+YxG3bhii48irF7ST6hLCSkrlt05q77X1fov0MTbDI?=
+ =?us-ascii?Q?MWJrLK7cl2XevtptRfkhe+iRPT7qwHTBI50DVl9XkkIzzfdYfaAGSAepFaQ9?=
+ =?us-ascii?Q?kfSkZ6iqSzUQbBQTj0gdD5aSyLcD2jhttXTmS8APcBrwNqK1Wz4QFONNzDzF?=
+ =?us-ascii?Q?h8Hhd3CQAkeDwCF+vGv25rIRxabvtDv+k6LL8DKzH65WbCTOgt8AV/x+/+k/?=
+ =?us-ascii?Q?43bUfXgvZU9+/9WtFqQ2ec3WEPv1pYFtVEgaa3I43uyexoOTiEfPBweoANNw?=
+ =?us-ascii?Q?Vn34SvKAHyuwDvX/UVqIBndvO3M6lSH1MH+Vny0Cwsu7i9yZ3aAxP6zkHSxL?=
+ =?us-ascii?Q?8dQDmMp9IfKtrL8JGvE9SePhSAxZRIP154MOP8ryVy5CbLx3qjNlGnPCaFXD?=
+ =?us-ascii?Q?ofDAxQ7OI1HfjefkdHAwbSIUkBIfyWjwGn2/5Fy0pJ61EP1Mt8iXzydjIoHY?=
+ =?us-ascii?Q?GHXuVoW6k6VuwRd5fh+xCcXPDQh+m0jCSy+jBWcICRwmuVn/R9C82NkURPqY?=
+ =?us-ascii?Q?NUGJn6pniSjVi3e2lkGIdb2+u3EQSam/il39NK7imiJ4nyAYX3L5W1p/NLhe?=
+ =?us-ascii?Q?sPxGhqALVSDB3E3nI/sRtD4ArXw6vu3iOQ3NxK6RNgFKc2by6yf1jq4r0/Bf?=
+ =?us-ascii?Q?oSUeY6zmcKVTCFXr1+LVHJrMvkLQlVK6+wi0k7o6JggwLxJEOcaSANNThRix?=
+ =?us-ascii?Q?xj7I2jnry5eHUXeG8i4VNExgk3Hi7RzrOgJ/AoW3Luum2KMNEsdReITgB0Oj?=
+ =?us-ascii?Q?Y2oC7krydx69dIz/0ABi6UUo0lEdM3xu7e/lY8Q+csqL/akdX2jfCjJz5OSc?=
+ =?us-ascii?Q?VLdyTcJWoaOT8/GGIJ53rlOxnxxcVTklk7wx2ijoFGbCxkB0PRcDjxeln20C?=
+ =?us-ascii?Q?/3kl42HG4cWcqMD/r+4/FRMiYB6xUBCAytBE7BEeLjc6lAlV89bd6Y+neQvq?=
+ =?us-ascii?Q?DmQX2dSwMxaWflUG3yZZtGnHsckEk1HOIPTjqlic7E6jqAiu5jaBu3M1T8k6?=
+ =?us-ascii?Q?N6uPZgWQfF98aqBAoWuQLCNoho93lX1jWkvvHn25/7lH+GS9pe26WWqRa0Gf?=
+ =?us-ascii?Q?v7GV01TGr+27vc/AzvpnjKfo5ExoCzN+IgpBnF1eOZFbpMgph5LHVrXWEZai?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a00358b-7543-4f39-3f44-08daf9ba99ed
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 01:15:07.4336
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YdKpcwpBks35TDa+lQ5lZ+ewTFsXC6ypS9k280CBr49Ov4USWX6d6FJf0tWFI0q3XOoQ3hkX9ZC0/TruOzB44CbDaviydJuN5T1CLlRqD5c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6025
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 17, 2023 at 04:04:22PM -0800, Luis Chamberlain wrote:
+>On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
+>> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
+>> > On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
+>> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> > > index d02d39c7174e..7a627345d4fd 100644
+>> > > --- a/kernel/module/main.c
+>> > > +++ b/kernel/module/main.c
+>> > > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+>> > >  	sched_annotate_sleep();
+>> > >  	mutex_lock(&module_mutex);
+>> > >  	mod = find_module_all(name, strlen(name), true);
+>> > > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+>> > > +	ret = !mod || mod->state == MODULE_STATE_LIVE
+>> > > +		|| mod->state == MODULE_STATE_GOING;
+>> > >  	mutex_unlock(&module_mutex);
+>> > >
+>> > >  	return ret;
+>> > > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
+>> > >
+>> > >  	mod->state = MODULE_STATE_UNFORMED;
+>> > >
+>> > > -again:
+>> >
+>> > So this is part of my biggest concern for regression, the removal of
+>> > this tag and its use.
+>> >
+>> > Before this we always looped back to trying again and again.
+>>
+>> Just to be sure that we are on the same page.
+>>
+>> The loop was _not_ infinite. It serialized all attempts to load
+>> the same module. In our case, it serialized all failures and
+>> prolonged the pain.
+>
+>That's fair yes. The loop happens so long as an already existing module is
+>present with the same name.
+>
+>> > >  	mutex_lock(&module_mutex);
+>> > >  	old = find_module_all(mod->name, strlen(mod->name), true);
+>> > >  	if (old != NULL) {
+>> > > -		if (old->state != MODULE_STATE_LIVE) {
+>> > > +		if (old->state == MODULE_STATE_COMING
+>> > > +		    || old->state == MODULE_STATE_UNFORMED) {
+>> > >  			/* Wait in case it fails to load. */
+>> > >  			mutex_unlock(&module_mutex);
+>> > >  			err = wait_event_interruptible(module_wq,
+>> > >  					       finished_loading(mod->name));
+>> > >  			if (err)
+>> > >  				goto out_unlocked;
+>> > > -			goto again;
+>> >
+>> > We essentially bound this now, and before we didn't.
+>> >
+>> > Yes we we wait for finished_loading() of the module -- but if udev is
+>> > hammering tons of same requests, well, we *will* surely hit this, as
+>> > many requests managed to get in before userspace saw the module present.
+>> >
+>> > While this typically can be useful, it means *quite a bit* of conditions which
+>> > definitely *did* happen before will now *bail out* fast, to the extent
+>> > that I'm not even sure why we just re-try once now.
+>>
+>> I do not understand this. We do _not_ re-try the load in the new
+>> version. We just wait for the result of the parallel attempt to
+>> load the module.
+>>
+>> Maybe, you are confused that we repeat find_module_all(). But it is
+>> the way how to find the result of the parallel load.
+>
+>My point is that prior to the buggy commit 6e6de3dee51a ("kernel/module.c: Only
+>return -EEXIST for modules that have finished loading") and even after that
+>commit it we 'goto again' if an old request is found. We now simply bound this
+>right away. Yes, the loop was not infinite, but in theory at least a few
+>iterations were possible before whereas now immediately return -EBUSY
+>and I don't think all use cases may be ready yet.
+>
+>> > If we're going to
+>> > just re-check *once* why not do something graceful like *at least*
+>> > cond_resched() to let the system breathe for a *tiny bit*.
+>>
+>> We must check the result under module_mutex. We have to take this
+>> sleeping lock. There is actually a rescheduling. I do not think that
+>> cond_resched() would do any difference.
+>
+>Makes sense.
+>
+>> > > +
+>> > > +			/* The module might have gone in the meantime. */
+>> > > +			mutex_lock(&module_mutex);
+>> > > +			old = find_module_all(mod->name, strlen(mod->name),
+>> > > +					      true);
+>> > >  		}
+>> > > -		err = -EEXIST;
+>> > > +
+>> > > +		/*
+>> > > +		 * We are here only when the same module was being loaded. Do
+>> > > +		 * not try to load it again right now. It prevents long delays
+>> > > +		 * caused by serialized module load failures. It might happen
+>> > > +		 * when more devices of the same type trigger load of
+>> > > +		 * a particular module.
+>> > > +		 */
+>> > > +		if (old && old->state == MODULE_STATE_LIVE)
+>> > > +			err = -EEXIST;
+>> > > +		else
+>> > > +			err = -EBUSY;
+>> >
+>> > And for all those use cases we end up here now, with -EBUSY. So udev
+>> > before was not bounded, and kept busy-looping on the retry in-kernel,
+>> > and we now immediately bound its condition to just 2 tries to see if the
+>> > old module existed and now *return* a new value to userspace.
+>> >
+>> > My main concerns are:
+>> >
+>> > 0) Why not use cond_resched() if we're just going to check twice?
+>>
+>> We take module_mutex. It should cause even bigger delay than cond_resched().
+>
+>ACK.
+>
+>> > 1) How are we sure we are not regressing userspace by removing the boundless
+>> > loop there? (even if the endless loop was stupid)
+>>
+>> We could not be sure. On the other hand, if more attempts help to load
+>> the module then it is racy and not reliable. The new approach would
+>> make it better reproducible and fix the race.
+>
+>Yes, but the short cut it is a userspace visible change.
+>
+>> > 2) How is it we expect that we won't resgress userspace now by bounding
+>> > that check and pretty much returning -EBUSY right away? This last part
+>> > seems dangerous, in that if userspace did not expect -EBUSY and if an
+>> > error before caused a module to fail and fail boot, why wouldn't we fail
+>> > boot now by bailing out faster??
+>>
+>> Same answer as for 1)
+>>
+>>
+>> > 3) *Fixing* a kernel regression by adding new expected API for testing
+>> > against -EBUSY seems not ideal.
+>>
+>> IMHO, the right solution is to fix the subsystems so that they send
+>> only one uevent.
+>
+>Makes sense, but that can take time and some folks are stuck on old kernels
+>and perhaps porting fixes for this on subsystems may take time to land
+>to some enterprisy kernels. And then there is also systemd that issues
+>the requests too, at least that was reflected in commit 6e6de3dee51a
+>("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+>that commit claims it was systemd issueing the requests which I mean to
+>interpret finit_module(), not calling modprobe.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Read in io_fallback_req_func
+just a comment on this, if it helps anything: commit 6e6de3dee51a says
+systemd, but it would be more accurate to say udev or systemd-udev to
+disambiguate with pid 1.
 
-==================================================================
-BUG: KASAN: use-after-free in io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
-Read of size 8 at addr ffff888070652948 by task kworker/0:4/5090
+udev uses libkmod to load modules so it's pretty much the same logic as
+modprobe.
 
-CPU: 0 PID: 5090 Comm: kworker/0:4 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: events io_fallback_req_func
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 5603:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2414
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3436
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 9:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2744
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2974
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-The buggy address belongs to the object at ffff8880706528c0
- which belongs to the cache io_kiocb of size 224
-The buggy address is located 136 bytes inside of
- 224-byte region [ffff8880706528c0, ffff8880706529a0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001c19480 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70652
-memcg:ffff888026aa6301
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888146499780 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff888026aa6301
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5603, tgid 5602 (syz-executor.0), ts 88591275349, free_ts 64543666654
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2414
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3436
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- __free_pages_ok+0x6ac/0xdc0 mm/page_alloc.c:1707
- kvfree+0x46/0x50 mm/util.c:649
- wg_destruct+0x2f4/0x400 drivers/net/wireguard/device.c:265
- netdev_run_todo+0x6bf/0x1100 net/core/dev.c:10352
- default_device_exit_batch+0x456/0x590 net/core/dev.c:11349
- ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:606
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Memory state around the buggy address:
- ffff888070652800: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff888070652880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff888070652900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                              ^
- ffff888070652980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888070652a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
-Tested on:
-
-commit:         0a093b28 Add linux-next specific files for 20230112
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=151c52a9480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14f99661480000
-
+Lucas De Marchi
