@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEE467361D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D548673628
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjASKyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S230136AbjASKzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjASKyl (ORCPT
+        with ESMTP id S230251AbjASKzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:54:41 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB14A1D7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:54:39 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t5so1468351wrq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:54:39 -0800 (PST)
+        Thu, 19 Jan 2023 05:55:42 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7556FF93
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:55:25 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id n7so1456790wrx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:55:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6mWRy/X+5d44L2jjuHtGqoVOAooJ3c8AYBgnBRZI4M=;
-        b=RXdUdWWPGi08Rhuqzg5AnZ1ist8LNWjuhRnYGrJogI7hmAbmtdrOB7oVsnDuP2Uneg
-         1Lm0xwlP7lfPErRx0+jnBff5WNFBY2MpewpHBRGNNqyDF1T6vWrXUuqmKLmLYL1AwBWg
-         OYA68TeiN5IUhRt5vWQVe10+EdEbgHhhx2Y6TEax8gzZ1xZPmikxGAEVg2r8pSORtcMh
-         2FQCGRwqCptCBkRmhnapNk+g2ImvX+wzgyBT4JALLBaki9E+7FpwFP1IYbWKNaX3U312
-         S8PCp2rxgDesnOMg97nzxxZo5Wb8HLHe0MuKOA8i3dkolVEtA1j8w0ptzRkdDtPKP/Hs
-         lgKA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OL2qiG7BG+Y+okCVrqqLfEmaKTmCEe5urCOIZof2oQE=;
+        b=lOp6CIgS4j1y8EXIlKoDydedjb1vk/G3W6gYBR6PTpV98lS1Fujx4XSQCf+9DqnqQa
+         yTaKCkIVurYLBzPptQoJ1oZj7N+T7FgMmb0t72kc14Ms3gDSyvrTv3S5f2x133kwCSvt
+         2COTYk2RZmVEJhkP/OncpXzTt0gFpXB5T2qk/ivWGA0+aAdOeDkicvhJbrwJxmYPyR0h
+         sZ73b8AOHKZpGkp8GsZfDXGTW4EJdrWBDFgh8LAvGLWjaGKy6UV2bAXq+HINQSp2Y2IL
+         7mtnOkDiDfi3SUQ2CR594CCHvsibHh+F4TcoAW7NX0dLjqZ/n5mM2jwJaOdZclW/XPW5
+         6BJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z6mWRy/X+5d44L2jjuHtGqoVOAooJ3c8AYBgnBRZI4M=;
-        b=VzK0BqtPkhkJUTn8KD465MascyjFJ7C+9d0ZJb76BLEWuVHubNBMDBl3SYFuShHZ5z
-         sruMyV+QdMob47rK9lDTQIhImlg1ukRvDOMUP7V6a4crhm91J3vB5m3Pf8uzU0Sos6Kf
-         K7nOPwJz6as/5TROd9JwE5imtDYnqN9mgeU4O1Sst7sz3vBZKevrW8eom0t/diHOUJyO
-         ZI6ILcctJghs0LCaFf59WZ/3U9IbtauQEKNrBTvkyOB8E6sTUFMX8APIdqeje4XPrbDE
-         ZBXpfTAfEXsWudFCRjFZbrmgEFJ27bwjcUlpk2cXrCcmMliS5iyF1Pf2PzszUUU+N+DG
-         U7xA==
-X-Gm-Message-State: AFqh2koJryz/AaAEDqJ4vROx+3n2Xxknv/kgqP3juJMtSUrGXlBBs2uH
-        W32R4G67nvza1XNKh2NMHBlJhQ==
-X-Google-Smtp-Source: AMrXdXs5GPtEDagqd4KcUlDhKvGfdd5HxZBY9alt0a3icRYZOcsAmD4tVEqBQ26ypLKhlxuKUgXfwA==
-X-Received: by 2002:a5d:6a0d:0:b0:2bd:f7ec:bd3a with SMTP id m13-20020a5d6a0d000000b002bdf7ecbd3amr7718650wru.7.1674125677793;
-        Thu, 19 Jan 2023 02:54:37 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b10-20020adfe64a000000b00287da7ee033sm33910525wrn.46.2023.01.19.02.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 02:54:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sm8350: fixup SDHCI interconnect arguments
-Date:   Thu, 19 Jan 2023 11:54:34 +0100
-Message-Id: <20230119105434.51635-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OL2qiG7BG+Y+okCVrqqLfEmaKTmCEe5urCOIZof2oQE=;
+        b=T+jhp/xy6GR8x3AeT+mitc08gkVJsFJrUBbG1UtqNfB49Pnq/1Fs/MWxd4SWzQICCS
+         7U3Aq4DZ6o7y40n6eVpVq5L+wxqsI+XRtx56qfASvjdWVtI8wDSO/7fFPO5khVkipphY
+         8v0+IXhGEwRzJczhQSfo/mzyPLSvsuFNKEPssAM31oGHpYWLxLXZ7eoTuZI7B2UJiXpy
+         QuStcP8CJdkogctUCJQncuwGSPRWHpAttJuCQPpLFt7zLPSM5y83OS9DSCs0wcktyxOf
+         NstgWWqp3xIut9RyEnzZLyYnjUVCACCbVnG82bMg1Vs4HfAf6Zv5+npVmQB4f5G0973j
+         ll3Q==
+X-Gm-Message-State: AFqh2kq7v+79M9FgQPKcgvqZRAyspMozUgs0JBnEnU5s3vKnD87T2eoQ
+        CiDKPNvzUDjkPYf9VoRzy6Cm8A==
+X-Google-Smtp-Source: AMrXdXvanJMcHcsDudlV8RtY28WsWbNyRocTulOu3jhWmWVFsMoA1vY4nDbWX6yvACGpVYknd97Ivg==
+X-Received: by 2002:adf:f60b:0:b0:2be:528:e348 with SMTP id t11-20020adff60b000000b002be0528e348mr8761264wrp.45.1674125724368;
+        Thu, 19 Jan 2023 02:55:24 -0800 (PST)
+Received: from [192.168.0.159] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f7-20020a5d6647000000b002bbeb700c38sm28341704wrw.91.2023.01.19.02.55.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 02:55:23 -0800 (PST)
+Message-ID: <776b67b2-2405-36f5-f072-78f33ae59fcc@linaro.org>
+Date:   Thu, 19 Jan 2023 10:55:30 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: clock: qcom,a53pll: drop operating-points-v2
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fabien.parent@linaro.org
+References: <20230113145859.82868-1-krzysztof.kozlowski@linaro.org>
+ <e73ad320fafa1365e3506bbd4cc77d8d.sboyd@kernel.org>
+ <063c5516-417d-7c21-b58f-a6552779a621@linaro.org>
+ <705c78c1d0da18089419b064832d5fed.sboyd@kernel.org>
+ <20230119031136.27vson2awemt3nkt@builder.lan>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230119031136.27vson2awemt3nkt@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After switching interconnects to 2 cells, the SDHCI interconnects need
-to get one more argument.
+On 19/01/2023 03:11, Bjorn Andersson wrote:
+> On Wed, Jan 18, 2023 at 11:11:00AM -0800, Stephen Boyd wrote:
+>> Quoting Krzysztof Kozlowski (2023-01-15 06:35:23)
+>>> On 13/01/2023 21:28, Stephen Boyd wrote:
+>>>> Quoting Krzysztof Kozlowski (2023-01-13 06:58:59)
+>>>>> The CPU PLL clock node does not use OPP tables (neither driver).
+>>>>
+>>>> What device is qcom_a53pll_get_freq_tbl() operating on?
+>>>
+>>> On its own, internal table. While of course driver could be converted to
+>>> operating-points-v2, no one did it within last 5 years, so why it should
+>>> happen now?
+>>>
+>>
+>> The property was added mid 2021 by Shawn[1], that's not 5 years ago. I
+>> guess there were plans to add an OPP table that never happened[2]? Is
+>> Shawn still working on this? If not, we should revert the OPP code out
+>> of the driver.
+>>
+> 
+> @Bryan, what do you think about this?
 
-Fixes: 4f287e31ff5f ("arm64: dts: qcom: sm8350: Use 2 interconnect cells")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I'd be in favour of starting the CPR patchset instead, which depends on 
+the opps.
+
+I think @Fabien has been waiting on the core 8939 dtsi, I also think the 
+dtsi is close enough to merge that we could reasonably initiate the CPR 
+stuff.
+
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index e466dd839065..4efe79985186 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -2549,8 +2549,8 @@ sdhc_2: mmc@8804000 {
- 				 <&rpmhcc RPMH_CXO_CLK>;
- 			clock-names = "iface", "core", "xo";
- 			resets = <&gcc GCC_SDCC2_BCR>;
--			interconnects = <&aggre2_noc MASTER_SDCC_2 &mc_virt SLAVE_EBI1>,
--					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_SDCC_2>;
-+			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &mc_virt SLAVE_EBI1 0>,
-+					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_SDCC_2 0>;
- 			interconnect-names = "sdhc-ddr","cpu-sdhc";
- 			iommus = <&apps_smmu 0x4a0 0x0>;
- 			power-domains = <&rpmhpd SM8350_CX>;
--- 
-2.34.1
-
+bod
