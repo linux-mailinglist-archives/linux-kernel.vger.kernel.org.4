@@ -2,155 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0036167441D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFDB67441A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjASVNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S230218AbjASVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjASVMm (ORCPT
+        with ESMTP id S230059AbjASVMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:12:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C8A83E8;
-        Thu, 19 Jan 2023 13:07:35 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JJxKIU011215;
-        Thu, 19 Jan 2023 21:06:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=L+X3DXDCuhVM9Vcsx9GYVQBzF5Z+vgs3gSmPdnHr2hw=;
- b=p3ieh/FaVtY+yP8csbVHBjzEcOy+8MUCW0+AOCbq5+i+RezI7/HqBUho6f65la+joePE
- RZnmU3gEfPSWbnK/Br4zjjDKKrgFM9p18OV7nKqhU0Q9eJSx0Zr/ijAqjA5/L1QKd8bB
- jyK8EiLxAFckz2d0GE7P2Kxr+HtN5qjJMl/GeVzC4b/HCHDKOUVE2WAVJVXbHW1VtyQQ
- ztcEHgjl7V57MXf0Zx1rNh//8YUKjnvjUfldLbt2n+3AO0IIqT8Va8ccNJO2ni15MnPT
- MJ4nLEmfy+kpvWJoXeRkI8eIw96Rilkp6E8PmfM0e4AyjE10TOHkzoHLULxMjJT5n/gx +g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7cgm1ey9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 21:06:41 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30JKtsN1011348;
-        Thu, 19 Jan 2023 21:06:41 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7cgm1exh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 21:06:40 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JItQhe024166;
-        Thu, 19 Jan 2023 21:06:39 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17xf3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 21:06:39 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JL6bxp38208052
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 21:06:37 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A42C55805D;
-        Thu, 19 Jan 2023 21:06:37 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44BCC58043;
-        Thu, 19 Jan 2023 21:06:28 +0000 (GMT)
-Received: from [9.160.127.29] (unknown [9.160.127.29])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 21:06:28 +0000 (GMT)
-Message-ID: <52e31e39-e384-3c5e-307c-652926275099@linux.ibm.com>
-Date:   Thu, 19 Jan 2023 23:06:25 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH RFC v7 52/64] KVM: SVM: Provide support for
- SNP_GUEST_REQUEST NAE event
-Content-Language: en-US
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-53-michael.roth@amd.com>
- <CAAH4kHYoWtM=Xe0kgmtKw01-45DefEikdLz0qUJRRMLdZHzkwA@mail.gmail.com>
- <e75569a8-6b15-780c-a7fa-945f1cce576c@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <e75569a8-6b15-780c-a7fa-945f1cce576c@amd.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VbAr4XuiHnxpbti04kJMcSjCudXmouKI
-X-Proofpoint-GUID: 4DLi_8nYQcJkqJ4G3xq-1WEWs9LXQnQG
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 19 Jan 2023 16:12:39 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC3437F12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:06:38 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so1948669otf.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
+        b=oJOlW+iIdsgztiJbGIFj+Ooe2Z71Eij/ZHcbu3TSXSg6mQDzOU+7alzWESWWIVbDyU
+         xBJJ1tKToXA6l/al5COqFvmU3ZDh0ByU0i+gMdNbmfWyzaBvqpViLjVEx/ulV4kXFvkl
+         sM0ck5402dz7IhpBEbzh1Jts8GGfTpjZiCI6+MbbgbOHQC5PeTuPY1ht9Sv29qsP2V1j
+         ICY6lU93Y57QpcI5t1zi2A4lDpnjcSheF82Jq/sugTFJMlSUq4ms7Z60d6rSCQMCRl17
+         ysPD0FUAmHEfhFNbvpTg8NOUp1ndlXhe+LbTqvJXLUKkbwDZXWWYM14jxH1t0r7A1Nz5
+         vKcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
+        b=Wc14DTXBVmCxAMIV1LuQZfKEohbQ3povYNEf1FdpNUyNY6OWVP03JIZOnMJVqI9Ygm
+         INphaPbSUo2a5UBx/PBqtXyOilTwvwP+CAsmXCfPx5xPENdZTQUxaazNSJ0SAG8rylD3
+         hkWkWWG5UfgUrPGcuFGeIBgRIbn914jadVQYOuBZHNXMAIiE0vsOmtsSaXZFxjcPH0kT
+         Jzged8MKB0IwRmm0K73NgOeed7sRIlQ3cwwnBOyE+GQInWGyscnVWvm0GmEJckXd6XKD
+         RjEOe5ypwHLOh6AvibuhTeN58XsrZl/NdXIdVIbaoSnzpNY7jhzpXxcWn7nd1ttQ8Af9
+         r++A==
+X-Gm-Message-State: AFqh2kqaiDH+2+bSPiZYNzoNHaP2YMQxhe9NZiKOuSIs/KTHjDyPFB1t
+        ZjE8M0/5XqHprrB854y/xfEuXuYZfWleOiH8kvM=
+X-Google-Smtp-Source: AMrXdXvtQGM1RFZ5r34V3iH/NxtjsptBGyiUFXMhttSYYiPyjC01TVh6K9xCjDvKfOMl1ZDm6S6+fg63HRHNemCpw/o=
+X-Received: by 2002:a05:6830:54f:b0:677:2287:3c79 with SMTP id
+ l15-20020a056830054f00b0067722873c79mr543874otb.104.1674162398194; Thu, 19
+ Jan 2023 13:06:38 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_13,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=892 spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190176
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ac9:6f8e:0:b0:49a:4a8c:dbca with HTTP; Thu, 19 Jan 2023
+ 13:06:37 -0800 (PST)
+Reply-To: ab8111977@gmail.com
+From:   MS NADAGE LASSOU <nadagalassou3@gmail.com>
+Date:   Thu, 19 Jan 2023 22:06:37 +0100
+Message-ID: <CAAPPVT03RBU7FK7dyVL-0xSd_5rUAUo7NsLbSw1A8XTtGbvbng@mail.gmail.com>
+Subject: LETS JOIN HANDS FOR THIS ACHIEVEMENT.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:331 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4996]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nadagalassou3[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ab8111977[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nadagalassou3[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings.
 
-
-On 19/01/2023 22:54, Kalra, Ashish wrote:
-> 
-> On 1/19/2023 2:35 PM, Dionna Amalie Glaze wrote:
->>> +
->>> +static void snp_handle_guest_request(struct vcpu_svm *svm, gpa_t
->>> req_gpa, gpa_t resp_gpa)
->>> +{
->>
->> Both regular,
->>
->>> +
->>> +static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t
->>> req_gpa, gpa_t resp_gpa)
->>> +{
->>
->> and extended guest requests should be subject to rate limiting, since
->> they take a lock on the shared resource that is the AMD-SP (psp?). I
->> proposed a mechanism with empirically chosen defaults in
->>
->> [PATCH v2 0/2] kvm: sev: Add SNP guest request throttling
->> [PATCH v2 1/2] kvm: sev: Add SEV-SNP guest request throttling
->> [PATCH v2 2/2] kvm: sev: If ccp is busy, report throttled to guest
->>
->> http://129.79.113.48/hypermail/linux/kernel/2211.2/03107.html
->> http://129.79.113.48/hypermail/linux/kernel/2211.2/03110.html
->> http://129.79.113.48/hypermail/linux/kernel/2211.2/03111.html
->>
->> But I don't see these on lore. Would you like me to repost these?
->>
-> 
-> Yes, please.
-> 
-
-I think it's this series:
-
-https://lore.kernel.org/all/20221117181127.1859634-1-dionnaglaze@google.com/
-
--Dov
+I am Ms Nadage lassou,I have a business for our benefit.
+Thanks, i will send you the details once i hear from you.
+Regards.
+Ms Nadage Lassou
