@@ -2,144 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6660B67330E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B43673315
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjASH4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S229772AbjASH5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjASH4u (ORCPT
+        with ESMTP id S229683AbjASH5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:56:50 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A11910F;
-        Wed, 18 Jan 2023 23:56:48 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 600285C012B;
-        Thu, 19 Jan 2023 02:56:45 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 02:56:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674115005; x=1674201405; bh=zM/k9tWl4A
-        ZrWACJdmXZKTCMgs2DStBICdw4oFEh4H4=; b=nug90yANL1BU+oerGfsfC3JWCp
-        px5nq10ZWCYRxRqjuR7cr0E1dZfNERA1YS4xgs24Uu8QSy1UqWyk48hgQ5/BJqtH
-        svftZg4LRcVVZpRwYwObtIs5ZbUlRJGfon7agIi0xBDsQO7/0jqSFD/3dgBYDf/p
-        qPQ99mVRoDklIyGf271Vhf5Lusz/Jhm5M9o3p2g9jCHMn4LarI5wwlv6qRLmhRjX
-        sG440ytAjY61X6m1loZwPEK0rFlks+cH6liuttQj9EdxPT3Fv0Z4mST8ZDXOJdsm
-        4DiNB1r2tnHce6cBNQ+2s9S7Et6G/gBy95kyQXpI29wy9bxo6TVuuzbicPbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674115005; x=1674201405; bh=zM/k9tWl4AZrWACJdmXZKTCMgs2D
-        StBICdw4oFEh4H4=; b=LAhVEuFatwN4IqZ62mEz3Hnr2TNcpjs+OpJaS/SSH/vc
-        2meRhx/01xhC72sMQZLpp2u4IwcGe90j7Qr24dL4X2JBmw6wzNQ23KZG8JKiPWKK
-        8byfhu3YQE8qkOpd5PbSo5df5E/wAb5q8BbGzTOOm1AfcU7Ys7WMN/xDtjRcRYFY
-        Z+wvvfTnQyMxjD3GnuU6ll2APFcUeiX1BiJdazHEblINDqjq1M0n6O4GI709zCRc
-        bMqZkt2mTOK+SiLYy6Bne98gZ5UGR7pOf08Er6/gcSteneHET57cY+ZwjuhbY6uX
-        FMn5qT3tCJ8cgKgOtM8J/C8LLS3IT1CL2JeQuztDGw==
-X-ME-Sender: <xms:vPfIY-kHc6idtBmJEJMnOM5f19hT15nponz-QEK6H0BnDTBqJSnJrA>
-    <xme:vPfIY13Q17Ji2RPFJKB7L5_-r5yXGBk1c70DGtfb8E7rFj-2Jf6j4_8I-4ucSS4Pc
-    lXtNl9JTSkFBowjodo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:vPfIY8qdM75Mgw2blVly3rYojUfqbZ9aYEPi5l5Yxrl00y_uCB-bSQ>
-    <xmx:vPfIYykX2ULdg1eb8H6rSSzuE1rRP2CX8O0s4tGtj5m0Lcgb1jqm0g>
-    <xmx:vPfIY812TaWcznlN9lBuCvcyHQnmNoTU5wJiKi3WSfv1BYddvvaaDw>
-    <xmx:vffIY2Mk-8K9tt6Igf6XVogGHUGah65qpykOb6DwH8aVP7XENUOMcQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8233AB60086; Thu, 19 Jan 2023 02:56:44 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <66ef9643-b47e-428d-892d-7c1cbd358a5d@app.fastmail.com>
-In-Reply-To: <Y8jzsmC3azFgbZLP@enigma.ccjz.io>
-References: <20230110042533.12894-1-clayc@hpe.com>
- <20230110042533.12894-3-clayc@hpe.com>
- <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
- <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
- <48cd3e28-f1db-487d-8971-473dc8c12c09@app.fastmail.com>
- <Y8VUOENIhe72sqMO@enigma.ccjz.io>
- <55f09599-b553-4429-aa79-ca99ccf95cda@app.fastmail.com>
- <Y8jzsmC3azFgbZLP@enigma.ccjz.io>
-Date:   Thu, 19 Jan 2023 08:56:25 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Clay Chang" <clayc@hpe.com>
-Cc:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Olof Johansson" <olof@lixom.net>, "Joel Stanley" <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, "Tomer Maimon" <tmaimon77@gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: soc: hpe: hpe,gxp-srom.yaml
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 Jan 2023 02:57:19 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D8C46BF;
+        Wed, 18 Jan 2023 23:57:18 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id br9so2055603lfb.4;
+        Wed, 18 Jan 2023 23:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8TgKWEjbZbhQRuOfWl79+7R0LGUimYBR1yeNE3XKpH0=;
+        b=O5OOcGHT8mbVgqz+xU8R3u/0Dej6PlOqg70mCK2wGAreZDuLODizWG9JUSVbLzLBdD
+         bOe5UluncIcrAXMjUaninWEDL9nTVCF9DC/WFFSZ9SIY9h0A6Y9AXDxdWnYGmFuPZYUa
+         MMeI5ecP+nmOp1ndKjxSuO+tTLkLqs7GKR696ORhKSN4cvssXHlsh1VuuVvXjJusjQDd
+         FqvNonW4uNW9K71T6rN6hQf8rSY3w9ybFmAu0dQeA0Pp7ulyLGEsOJ4KRoMnpjf2V091
+         /IZ2ZeVxELMI276y7LE/C7abpkjAEHTVhAjD1mgd6uxhl9hoxoXbCGx5iMLrUAu2sEeU
+         C0wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8TgKWEjbZbhQRuOfWl79+7R0LGUimYBR1yeNE3XKpH0=;
+        b=Bp2xVYF7ylzGpdxaKvg7QYjCJwgophUgqolNwzPmaWEyhBcOnRjbF+HdMzSAzH43We
+         8wpp574RhgXDkr9VGYj8GivSlM+CMo0IVpEcWSo+fsg5AyKzhHCFVD1Q5aheMnxpyOj0
+         6iqX5rSzO5kX0GBOopZLGlTxNL7omThyM23SPVLfy5YuEuxMwuGe0G8l7pfiY6BBLEu0
+         +UHuR4AJrRH1mJaEfPSB7TKFu/W9QrXoOf7KgI1/ZCfieXQfwIE1eKRCE/eRfh0gwh6T
+         JzB6e13q1vTEOnY0weaBc5tmR3Xjc4g6IgeiIuDo4NCpjVwFK8ndTuspeLNQ9ZdlxqjQ
+         AACw==
+X-Gm-Message-State: AFqh2krVne09Q4IvunA1bMid/nvtP3mT9kxaFNrJAJKkTDxWYE2z2aNu
+        /3/Il5WISRhHkrQyFDQzgXV/lxk2MuLF5BF2ZwdrRM8HHilpJw==
+X-Google-Smtp-Source: AMrXdXvfyxm+Khz7t9NWJHmc8O3DRyVENAto+8LT2ZweE4+J3Euiwtliwzv+23vzh82ABNkLwm9BgiIcFUumNfvGZMQ=
+X-Received: by 2002:a05:6512:159:b0:4b5:2958:bd06 with SMTP id
+ m25-20020a056512015900b004b52958bd06mr577515lfo.26.1674115036290; Wed, 18 Jan
+ 2023 23:57:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20230119071215.23042-1-masahiroy@kernel.org>
+In-Reply-To: <20230119071215.23042-1-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 19 Jan 2023 08:56:38 +0100
+Message-ID: <CA+icZUUKHi5h_QsoSfXLLW7cygsCub7EvtPdoWoG6WXAmoKLeQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts: remove bin2c
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, at 08:39, Clay Chang wrote:
-> On Mon, Jan 16, 2023 at 04:18:59PM +0100, Arnd Bergmann wrote:
+On Thu, Jan 19, 2023 at 8:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Sorry for not saying it clearly. I meant to put those HPE BMC related
-> drivers that are "not specific" to a particular subsystem in
-> drivers/soc/hpe. For those fit into some existing subsystems go to their
-> designated places.
-
-Ok, that makes sense. I'm just trying to reduce the number
-of drivers that fit into this category.
-
->> >> Again, it's hard for me to tell why this even needs to be runtime
->> >> configurable, please try to describe what type of application
->> >> would access the sysfs interface here, and why this can't just
->> >> be set to a fixed value by bootloader or kernel without user
->> >> interaction.
->> >
->> > The register is used for communication and synchronization between the
->> > BMC and the host. During runtime, user-space daemons configures the
->> > value of the register for interactions.
->> 
->> That does not sound very specific. What is the subsystem on the
->> host that this communicates with? Can you put the driver into the
->> same subsystem?
+> Commit 80f8be7af03f ("tomoyo: Omit use of bin2c") removed the last
+> use of bin2c.
 >
-> This is a control register in the BMC chip that partially controls host
-> boot behaviors. When writing to the register, privileged mode is
-> required. That's why we rely on a kernel driver for writing to the
-> control register. And, there is no corresponding subsystem in the host
-> OS. For this case, is it acceptable to put this driver under
-> drivers/soc/hpe?
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I see. So this sounds like it might be generic BMC feature, which would
-be nice to handle consistently for all BMC families. We had some
-discussions about other BMC features in the past, but don't remember
-what the overall consensus was, so I'm adding the openbmc list and
-as well as aspeed and npcm maintainers to Cc.
+With yesterday's build including latest tomoyo changes in Linus Git I see:
 
-The part I'm still missing is what type of userspace makes this
-decision on the BMC side, and whether that might already have a
-generalized interface. If there is, maybe part of that interface
-can be abstracted in the kernel.
+$ scripts/diffconfig /boot/config-6.2.0-rc4-1-amd64-clang15-kcfi
+/boot/config-6.2.0-rc4-2-amd64-clang15-kcfi
+-BUILD_BIN2C y
+BUILD_SALT "6.2.0-rc4-1-amd64-clang15-kcfi" -> "6.2.0-rc4-2-amd64-clang15-kcfi"
 
-    Arnd
+So, yes bin2c can go.
+
+Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+
+-Sedat-
