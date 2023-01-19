@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545DE673190
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 07:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA4967319E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 07:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjASGMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 01:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S230104AbjASGNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 01:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjASGL7 (ORCPT
+        with ESMTP id S229796AbjASGNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 01:11:59 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6505470A9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 22:11:57 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 141so744734pgc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 22:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yOu1nZ7Vb+XrPTzOIOsWj6MjBG+iutvcyGQ0UjoYk08=;
-        b=jZAX2T7HzZq42/E+WVQXTx3gKT02vV8VQueUmJwm0LQlcMi5B5FDWTBHCygATKO14J
-         7jtHt3l4eTYb1gHB5M+t7l4BzYi/DZiuhi1voR61nt/eCFQr0AdyZgRaE9fXuHlqlbMD
-         jUmWv1Y8qaeK9iCC43AfkUc+83hqDebVD1956XW37moCgV6+E+CLdH61+4Admp83I/Zi
-         qgll4nEGcmhE0Si0EPXTEJu2j1kr6FKC33daZ/dOylLtaJEcAxdkOXDkNCQG+iSi5VQm
-         oL1V0CRVRppHoc1EuhKk7HRfOvm+37eDcsnSfQGGx7yTm+g4NXlU8tW9H5AQpihcruKQ
-         APIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yOu1nZ7Vb+XrPTzOIOsWj6MjBG+iutvcyGQ0UjoYk08=;
-        b=ZKrTTFtgvp7D5U+NxeYV5CuqcrGgF8udNnuwRvObTCkEVkYBHSdgORcDNvvhNu0C+P
-         +T3MQf08JYAdr2meRbWuiNjkYw2ALnPudP6ut2IeT0nTpLK7olz7y9Yd75zeuj5WWyxa
-         u3Fz1zr4lwgne3Q6+smEgCN1g3dsE8gPRBEfqQ5NxF5HS6zbWPwE17Mzz8cFNrvizDBQ
-         AK+bvVS6OV1VvJ+hidhGEwbzPQhyEiPbm9GyiiiLUi65vSwT4NUOXoWl47T1RZSCsHsN
-         B9d5agoOFPnWfP8bcWD4MYlE+GsYT6NwowQiD7CM7rQMPjqxNW8yN/xF00gkrkfF56Mg
-         Mi2g==
-X-Gm-Message-State: AFqh2kp/AIv1Xq+v5gYvqpZj4pTddYyWnAc3rjEt0sKWBCtVRFkxxABU
-        XkJ4B4r9yFOY3Gs6rmxtOoVZDQ==
-X-Google-Smtp-Source: AMrXdXvrAp+SUB9kwNMFXcmw3oswczov7KB+PbZ9/GtKAubV3KNv6O5ASJ1g20NlSSAhpB6e+QJmWg==
-X-Received: by 2002:aa7:8c09:0:b0:58d:b8f1:62df with SMTP id c9-20020aa78c09000000b0058db8f162dfmr9396214pfd.16.1674108717076;
-        Wed, 18 Jan 2023 22:11:57 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c60:63d3:2d69:9f71:187e:f085? ([2401:4900:1c60:63d3:2d69:9f71:187e:f085])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa793d1000000b0058da56167b7sm6977943pff.127.2023.01.18.22.11.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 22:11:56 -0800 (PST)
-Message-ID: <75c9bb87-92df-79c8-bcf9-e1077fef0a86@linaro.org>
-Date:   Thu, 19 Jan 2023 11:41:49 +0530
+        Thu, 19 Jan 2023 01:13:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6696066EDB;
+        Wed, 18 Jan 2023 22:12:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3B3361B16;
+        Thu, 19 Jan 2023 06:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BC9C433EF;
+        Thu, 19 Jan 2023 06:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674108767;
+        bh=A2PghEoRmSghnztcEE/zkcVqIUrtIJzjVmsfGTfu3gA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gzCXat3CmTS2VlmvwFUkJU8fmRn+GFxQqT3mThdFv03YrJ5uBPeySqF/RrEmsxhOr
+         hQ9HkmeXcx0ynX7iJUSfBB3rV9pjzD4tzDMyhJeLDvLW/svcgu4On2wHNS/UGs8Q5H
+         Wk4tTIQHBagoIkWZ+bw+924rIK3XKh8lwYgBbAl81nSm1Obw1JEGx5+TwMAY3L6WwC
+         3/g4TmqoAeyYcSLV1bDm83sL4Lvv302LDd3JW07hJpghdsNSJKMIXrDORunbra90BS
+         7hiyMLVbNeCafYE2MkiU7EHNyVL+i4v5zSvOYFRG+NL+LyBm/GOzaUM8DQRo4qjXUv
+         d1aAYBiEOzvsA==
+Date:   Thu, 19 Jan 2023 11:42:43 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>, Greg KH <greg@kroah.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the phy-next tree
+Message-ID: <Y8jfW2TTnHd3J7R1@matsya>
+References: <20230119153145.598885cf@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add interconnect nodes
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
-        a39.skl@gmail.com
-References: <20221130104519.2266918-1-bhupesh.sharma@linaro.org>
- <20230118234042.ds4hqdgqjrt7ukpg@builder.lan>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20230118234042.ds4hqdgqjrt7ukpg@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119153145.598885cf@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,95 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/19/23 5:10 AM, Bjorn Andersson wrote:
-> On Wed, Nov 30, 2022 at 04:15:19PM +0530, Bhupesh Sharma wrote:
->> Add the interconnect nodes inside SM6115 dtsi.
->>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On 19-01-23, 15:31, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Seems the driver series is waiting for a v2.
+> The following commits are also in the usb tree as different commits
+> (but the same patches):
 > 
-> I'll drop this from my queue for now, please resubmit once the DT
-> binding has landed.
+>   5c7f94f8bad8 ("phy: tegra: xusb: Add Tegra234 support")
+>   e5f9124404d0 ("phy: tegra: xusb: Disable trk clk when not in use")
+> 
+> they are commits
+> 
+>   d8163a32ca95 ("phy: tegra: xusb: Add Tegra234 support")
+>   71d9e899584e ("phy: tegra: xusb: Disable trk clk when not in use")
 
-Sure Bjorn. I will send a v2 shortly.
+Ah, ideally these should go thru phy tree!
 
-Thanks,
-Bhupesh
+> 
+> in the usb tree.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
->> ---
->> - Based on linux-next/master
->> - Depends on the SM6115 dt-binding and driver patchset, which can be
->>    seen here: https://lore.kernel.org/linux-arm-msm/20221130103841.2266464-1-bhupesh.sharma@linaro.org/
->>
->>   arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
->>   1 file changed, 51 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> index e4a2440ce544..dad5ab3edf0e 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> @@ -485,6 +485,57 @@ usb_1_hsphy: phy@1613000 {
->>   			status = "disabled";
->>   		};
->>   
->> +		snoc: interconnect@1880000 {
->> +			compatible = "qcom,sm6115-snoc";
->> +			reg = <0x01880000 0x60200>;
->> +			#interconnect-cells = <1>;
->> +			clock-names = "bus", "bus_a";
->> +			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
->> +				 <&rpmcc RPM_SMD_SNOC_A_CLK>;
->> +
->> +			clk_virt: interconnect-clk {
->> +				compatible = "qcom,sm6115-clk-virt";
->> +				#interconnect-cells = <1>;
->> +				clock-names = "bus", "bus_a";
->> +				clocks = <&rpmcc RPM_SMD_QUP_CLK>,
->> +					 <&rpmcc RPM_SMD_QUP_A_CLK>;
->> +			};
->> +
->> +			mmnrt_virt: interconnect-mmnrt {
->> +				compatible = "qcom,sm6115-mmnrt-virt";
->> +				#interconnect-cells = <1>;
->> +				clock-names = "bus", "bus_a";
->> +				clocks = <&rpmcc RPM_SMD_MMNRT_CLK>,
->> +					 <&rpmcc RPM_SMD_MMNRT_A_CLK>;
->> +			};
->> +
->> +			mmrt_virt: interconnect-mmrt {
->> +				compatible = "qcom,sm6115-mmrt-virt";
->> +				#interconnect-cells = <1>;
->> +				clock-names = "bus", "bus_a";
->> +				clocks = <&rpmcc RPM_SMD_MMRT_CLK>,
->> +					 <&rpmcc RPM_SMD_MMRT_A_CLK>;
->> +			};
->> +		};
->> +
->> +		cnoc: interconnect@1900000 {
->> +			compatible = "qcom,sm6115-cnoc";
->> +			reg = <0x01900000 0x8200>;
->> +			#interconnect-cells = <1>;
->> +			clock-names = "bus", "bus_a";
->> +			clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
->> +				 <&rpmcc RPM_SMD_CNOC_A_CLK>;
->> +		};
->> +
->> +		bimc: interconnect@4480000 {
->> +			compatible = "qcom,sm6115-bimc";
->> +			reg = <0x04480000 0x80000>;
->> +			#interconnect-cells = <1>;
->> +			clock-names = "bus", "bus_a";
->> +			clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
->> +				 <&rpmcc RPM_SMD_BIMC_A_CLK>;
->> +		};
->> +
->>   		qfprom@1b40000 {
->>   			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->>   			reg = <0x01b40000 0x7000>;
->> -- 
->> 2.38.1
->>
+
+
+-- 
+~Vinod
