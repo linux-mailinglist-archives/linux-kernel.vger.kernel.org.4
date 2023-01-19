@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACC6673A18
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE9C673A1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjASN0u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 Jan 2023 08:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S230495AbjASN07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjASN0r (ORCPT
+        with ESMTP id S230459AbjASN04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:26:47 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C3D5B5A3;
-        Thu, 19 Jan 2023 05:26:44 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id hw16so5588970ejc.10;
-        Thu, 19 Jan 2023 05:26:44 -0800 (PST)
+        Thu, 19 Jan 2023 08:26:56 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9847CCFE;
+        Thu, 19 Jan 2023 05:26:53 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id az20so5694428ejc.1;
+        Thu, 19 Jan 2023 05:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xiP5ZFmcx2OTxwniI4xGJcUy27bYGjwuacvtD3uvzoo=;
+        b=mt9IcV/vMTGGvHWq9P6UGhzbi0Mug9GHKVdHYBWvQsDk+26hcosJSBqyKNEblO2BZL
+         zLJdTQSY2udGSIz1ETomuv46u8Wi4PtJCYsQ4Xj9/z2kXAB0Rfd4oLrTLqOH0BENXlsi
+         rZC0Mod5xd0nzzB0MhISdww+I6Jw7Z/xAwUi25nxMpj7QUMmo+IDRmenUo6hgdbQU85u
+         9+yPsIttPEq36HKynSYz2MS9cSd8hVYEP7y8xZmh5s5hmYtQGJm9LnlWczt0oJymoKwg
+         byHhhl8JQiDvNgTXSH1AzpCmrXWfEOHtm5Zcy329hWMXEgPRwFUMeOPp+Uk5cGYdCosR
+         5mXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zyp5De4cHcBXvdULOul9tCa4NQvA2Rq/+KqdIOnZ/0M=;
-        b=Mydn/C9NQLc+IB7ugKREUgF65SfUsDS4nB9EDZfJbQ2HDc553vhj63Fs0g98Cms18n
-         5rT9f31CJXeBozuYaMP0n81Pr4nUAn8V34UG/rCKuPBifzdMkbNw8OXl4pygN/ZwX80J
-         5VSmUyv1SbmoAEQtO2QL/nsujQzq2EiKWBlyNCeMKzyqovrh0fivdXHGWcfis3Q7rpTr
-         6FR32syQmgOt74nYDzmhvaCHsMbzGOg4qDHN+iK+ppoRehvUfOtiAubozIVssieC0jx8
-         pFb1nsosoS0cgnkbptmtcVw0f7UlY3RuJo5W+S6suj2w6Dlvpw70/G+ZqkrzBVOgzttK
-         yV3A==
-X-Gm-Message-State: AFqh2koWb5VENSJv3pjYc1uVaCHqtyscTZK02zoBtEU9l/O7CBxpxx+s
-        24EB+8ubEw8yxyRy97etdLRbnTId7VTF69pw3sY=
-X-Google-Smtp-Source: AMrXdXv0ZL29O/r6eyFCjpDmlAnuazdLpedDJJpIuEiGZZeHmuab+0AYv9GsT3hZeVScA9/Sj0TKLphAY8DuB/uKLxQ=
-X-Received: by 2002:a17:906:d971:b0:84d:381c:bdaa with SMTP id
- rp17-20020a170906d97100b0084d381cbdaamr1180828ejb.79.1674134803323; Thu, 19
- Jan 2023 05:26:43 -0800 (PST)
+        bh=xiP5ZFmcx2OTxwniI4xGJcUy27bYGjwuacvtD3uvzoo=;
+        b=Gy7pLypn/C4jOUTlZSMViEfYfS87Bv585LmDOK3d3sMBGAvVRfnDJCQh5yG8ZzR5l2
+         JQT4lD/mc0vbsl04jgiou+Tjka8dTnR71sAJeV9RpXx2fJFaDvxc5XvUYXfqeyjWKlgt
+         1cMnfFWRn0rdR7g4VgXgHM1Pr6fas543IL/P7TQtyNkAF7hAhNEbJy4lJ00gqBsyG8yU
+         RdkfrHErPjgcPDwkJtkoONbvPI+CHS59Iggq3WLvn1NPPebFbyWvHC2MQLmGJcuCmtC+
+         RZWihYXlLdKgWDxehyN5LuYRTSbEMC3ZjET9LX++gTtlRYwfVUUtIIFGMptw6RPqz6Xz
+         aiUw==
+X-Gm-Message-State: AFqh2kreFPWMQP9ruBUXUXUOKYgRWGw3bgI/lTmCUUPEPKFevWTsLxR4
+        yDnQUhowpXtvE29tNJvrs9c=
+X-Google-Smtp-Source: AMrXdXtWIZ4JxXIpsDXzap7PvNCNEPYbqxn1J29DN1suGYMZTmmgem5E50DYhH552q9vQ4fSlII+Tw==
+X-Received: by 2002:a17:907:d10:b0:86e:df17:df94 with SMTP id gn16-20020a1709070d1000b0086edf17df94mr15311091ejc.14.1674134811629;
+        Thu, 19 Jan 2023 05:26:51 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u21-20020a1709064ad500b00855d6ed60desm12395156ejt.192.2023.01.19.05.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 05:26:51 -0800 (PST)
+Date:   Thu, 19 Jan 2023 14:26:49 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Colin Cross <ccross@android.com>,
+        Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the phy-next tree
+Message-ID: <Y8lFGQj7w2kJG9t0@orome>
+References: <20230119153623.339d6739@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230119070205.90047-1-noltari@gmail.com>
-In-Reply-To: <20230119070205.90047-1-noltari@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 14:26:32 +0100
-Message-ID: <CAJZ5v0jSbR9VPK1Srht2aDB+zphjjFC_=pb_Y3nc++5v9tr2-w@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Add RaptorLake support
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc:     jacob.jun.pan@linux.intel.com, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Is4uXp/M2mAHcRsX"
+Content-Disposition: inline
+In-Reply-To: <20230119153623.339d6739@canb.auug.org.au>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 8:02 AM Álvaro Fernández Rojas
-<noltari@gmail.com> wrote:
->
-> This patch adds RaptorLake support to the intel_idle driver.
->
-> Since RaptorLake and AlderLake C-state are characteristics the same, we use
-> AlderLake C-states tables for RaptorLake as well.
->
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Rui, Artem, what do you think?
+--Is4uXp/M2mAHcRsX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/idle/intel_idle.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index cfeb24d40d37..1a35b98d9bae 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1429,6 +1429,9 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &idle_cpu_adl),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &idle_cpu_adl_l),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &idle_cpu_adl_n),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &idle_cpu_adl),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &idle_cpu_adl_n),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &idle_cpu_adl),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
->         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &idle_cpu_knl),
->         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &idle_cpu_knl),
-> @@ -1867,6 +1870,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
->         case INTEL_FAM6_ALDERLAKE:
->         case INTEL_FAM6_ALDERLAKE_L:
->         case INTEL_FAM6_ALDERLAKE_N:
-> +       case INTEL_FAM6_RAPTORLAKE:
-> +       case INTEL_FAM6_RAPTORLAKE_P:
-> +       case INTEL_FAM6_RAPTORLAKE_S:
->                 adl_idle_state_table_update();
->                 break;
->         }
-> --
-> 2.34.1
->
+On Thu, Jan 19, 2023 at 03:36:23PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> The following commit is also in the tegra tree as a different commit
+> (but the same patch):
+>=20
+>   fb1ff01307ee ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
+>=20
+> this is commit
+>=20
+>   56052eee689a ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
+
+I'll drop this from the Tegra tree.
+
+Thierry
+
+--Is4uXp/M2mAHcRsX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPJRRkACgkQ3SOs138+
+s6HUcBAAnYwWjsyhqIuoawzyIuu9nHAn5GwrawxqkymarDv0kqmvX7lQy8+ZU1Mn
+uchXadz7P2W37G8sRgMxKLfdZkWBAS7rcwcuoomoYf/HqBijlqVYBNXN5TLApWxc
+CxwZeTdjQqCJRQn+Jk3V1KDw6PkhTzqqL/OkfERHu9I+8isCUaINQ1nmv/N7raUi
+UJ+/khikqly62sCN4iYq33DkOKKo/fYT55+Y6HZBG+dgmWLG4ukQcI3dLl6yiJlE
+7u5rBLDHGztW9PZbs/8No8+PgG2SYEBpQDGlvzVtY/y319/CU97wKUeGQLzs4f+8
+E7oSkkMX9mZ3GWDQFhF10vKuyrCYESORQ5F2MAo2iP06pb859xUybLIvVzYDckSB
+40E+pCDjP4sBDYnuHhGB1iRLCxClAwbJTr1FmyML5X1wPNq4MCEIEttyoEIyDWLo
+S5+yAQAppXYeRa6WG36HgTd+dAl5sS5YoCVXVbyNmmf8iZXE1fEem7gEJLkG9CTc
+7wJfQokhtDN6ht7djeV00YqVPL8QeYIlTFqYYvBv8RPez/aCLky5gSCcMYDAjvNO
+NcrC1Ud/T5Aho9/kHLVpXOAjKhy0xSHJA15SDNMxPczeXTSFzQXvOe8824Y13aT4
+58ldmhELcDzHQdnLR464UD75ta//CW1vTb24r8aEzvfCKyu+BDw=
+=8+CZ
+-----END PGP SIGNATURE-----
+
+--Is4uXp/M2mAHcRsX--
