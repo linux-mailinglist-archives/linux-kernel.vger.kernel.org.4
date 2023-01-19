@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82477673A09
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA7E673A0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjASNYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S229906AbjASNZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjASNY3 (ORCPT
+        with ESMTP id S230165AbjASNYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:24:29 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B583;
-        Thu, 19 Jan 2023 05:24:27 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id mp20so5608673ejc.7;
-        Thu, 19 Jan 2023 05:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v1SIQxm46KagVF7RVfUwWLVwz0S5gteWcqhBkL3jKnU=;
-        b=jQdy4WcIm2Zm44gysBR+Ry4H1VRDTaeLU9vupT4JRbPVDZb2Vqh2GTA5gzHiCFO6Gg
-         9+6T+W//ayPpHoGR+DeH/BzxWb3cN1WATt0wuzQuhDkUmKrop+iGStYppWHewc5jr4YZ
-         03WjVE0OHzz/Q6OB9BSFfZIGch/M4IOnjAmcCsLeoBzQaIkz6y0pmVmOi4e1BH1SdjKr
-         TVcqRhRaBoZLxWu+gXOAy7m1YNiTHUZvCD59cxZiTtlwfkKTCs8Y5kXzEAA3IHxzVxsp
-         HgXcJHJoCx6ItHMa+WsDIGeh4p4PwbPcsSPRSqtKvh3LpqwR0zC9rPUx03NWQRn08bqr
-         +h2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v1SIQxm46KagVF7RVfUwWLVwz0S5gteWcqhBkL3jKnU=;
-        b=3YP6Q5JsrCbi3ZfRxOx7obue265a4rXNFIYJ95H0Y+vi7Hq7krEUvg/rBPmh/5Fvuq
-         4r8d02plnrmDSe9YpSjaMe0qAmGioOmuh73V5edAH/nhVvnqUs/4JNexzPUtN4xP+ySB
-         SvrF6VzQY08RH3xrGJpKg7/OBBr0GHtuhhyGsAYgMldNXxUgVMBcMf08t+JgW8Wcm3a8
-         P5Nl4R2M5uTv+G5ZnwbaoVIhafVOAobPGHaKOfDkgwKDYvSVsGQMqIRYhzeu6OEzY+4F
-         VzkpeFlu/afwerRVxzA1d5Ow8xKNY4EnFlVJWqb96BAtF3ApHqAL6Zh+AuOm0Z6AW0Qn
-         Nqew==
-X-Gm-Message-State: AFqh2krqrmNxCsVGTLpjbhf+/jr0ddeyGt9KWQqwuQCKZUFCuuUcfjCj
-        ArB0zR3FSRnQWmEgAUw+Ptk=
-X-Google-Smtp-Source: AMrXdXt0v4iAGFbvfkQuvhAgwcN04ztIANV+XuCD57IPbrZyDqZV5EdgB9b+kbUxKGuN9UeRKk6gSw==
-X-Received: by 2002:a17:906:2288:b0:872:23b8:d6ed with SMTP id p8-20020a170906228800b0087223b8d6edmr11341894eja.20.1674134665739;
-        Thu, 19 Jan 2023 05:24:25 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id la19-20020a170907781300b007aee7ca1199sm16454883ejc.10.2023.01.19.05.24.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:24:25 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:24:23 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Colin Cross <ccross@android.com>,
-        Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the usb tree
-Message-ID: <Y8lEhwT3VWEn9w+R@orome>
-References: <20230119152605.03588e9b@canb.auug.org.au>
- <Y8kyJcSYW0IOMuzU@kroah.com>
+        Thu, 19 Jan 2023 08:24:51 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEF25B5A3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674134684; x=1705670684;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=0rqq/hTud1TpM3IRmZ08IsKip23yN4USGI5J2nOh+I4=;
+  b=KpD4TZwvc7RqrIj75/wpDXFtsRJLPWp6oQWWLkd9WrxTnl61z3Rd3nEi
+   P8oYK7NlGcg09L4xhdPzcBXFZxjU8U4AOQR/YoKNEdWZ80Uh+t7zipwID
+   SKU8wEDtBid5FVdpRTXTDss0TzI7lhYN+Cbzaw1NUcfw1rXSdU/L5ra4+
+   1sduP7xirEr9Mq1alGbftkhd5gn/D+ONMLYKQ62V4Qp1AqolP7FYdxUPN
+   wHrsEJETwbXoiBALaKsBGe7fUD3/XLmACjSEL8MX+jKP+B37/FRj4Ddbr
+   5WaYmj0TfyDuC3Yy24UaqUMjLOWKIHXHXcHgs295fiESBe1VGMy4iFYDe
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327359467"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="327359467"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 05:24:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="728663472"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="728663472"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jan 2023 05:24:43 -0800
+Received: from [10.212.175.76] (kliang2-mobl1.ccr.corp.intel.com [10.212.175.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 2CC53580AE0;
+        Thu, 19 Jan 2023 05:24:32 -0800 (PST)
+Message-ID: <b9619bee-7f5c-81db-710d-20550ea01517@linux.intel.com>
+Date:   Thu, 19 Jan 2023 08:24:25 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KC+8cmX4u8WytxQE"
-Content-Disposition: inline
-In-Reply-To: <Y8kyJcSYW0IOMuzU@kroah.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V2 3/7] iommu/vt-d: Support Enhanced Command Interface
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org, dwmw2@infradead.org, robin.murphy@arm.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230118205006.3182907-1-kan.liang@linux.intel.com>
+ <20230118205006.3182907-4-kan.liang@linux.intel.com>
+ <379823f4-d1c3-8943-4afe-e33f4d21785c@linux.intel.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <379823f4-d1c3-8943-4afe-e33f4d21785c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,70 +73,80 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---KC+8cmX4u8WytxQE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 19, 2023 at 01:05:57PM +0100, Greg KH wrote:
-> On Thu, Jan 19, 2023 at 03:26:05PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > The following commit is also in the tegra tree as a different commit
-> > (but the same patch):
-> >=20
-> >   2648f68bd0ac ("dt-bindings: usb: Add NVIDIA Tegra234 XUSB host contro=
-ller binding")
-> >=20
-> > this is commit
-> >=20
-> >   20cdc1607ea0 ("dt-bindings: usb: Add NVIDIA Tegra234 XUSB host contro=
-ller binding")
-> >=20
-> > in the tegra tree.
->=20
-> Is that going to be a problem?  Git should handle merging that just
-> fine, right?
+On 2023-01-19 3:55 a.m., Baolu Lu wrote:
+> On 2023/1/19 4:50, kan.liang@linux.intel.com wrote:
+>> +#ifdef CONFIG_INTEL_IOMMU
+>> +#define ecmd_get_status_code(res)    ((res & 0xff) >> 1)
+>> +
+>> +/*
+>> + * Function to submit a command to the enhanced command interface. The
+>> + * valid enhanced command descriptions are defined in Table 47 of the
+>> + * VT-d spec. The VT-d hardware implementation may support some but not
+>> + * all commands, which can be determined by checking the Enhanced
+>> + * Command Capability Register.
+>> + *
+>> + * Return values:
+>> + *  - 0: Command successful without any error;
+>> + *  - Negative: software error value;
+>> + *  - Nonzero positive: failure status code defined in Table 48.
+>> + */
+>> +int ecmd_submit_sync(struct intel_iommu *iommu, u8 ecmd, u64 oa, u64 ob)
+>> +{
+>> +    unsigned long flags;
+>> +    u64 res;
+>> +    int ret;
+>> +
+>> +    if (!cap_ecmds(iommu->cap))
+>> +        return -ENODEV;
+>> +
+>> +    raw_spin_lock_irqsave(&iommu->register_lock, flags);
+>> +
+>> +    res = dmar_readq(iommu->reg + DMAR_ECRSP_REG);
+>> +    if (res & DMA_ECMD_ECRSP_IP) {
+>> +        ret = -EBUSY;
+>> +        goto err;
+>> +    }
+>> +
+>> +    /*
+>> +     * Unconditionally write the operand B, because
+>> +     * - There is no side effect if an ecmd doesn't require an
+>> +     *   operand B, but we set the register to some value.
+>> +     * - It's not invoked in any critical path. The extra MMIO
+>> +     *   write doesn't bring any performance concerns.
+>> +     */
+>> +    dmar_writeq(iommu->reg + DMAR_ECEO_REG, ob);
+>> +    dmar_writeq(iommu->reg + DMAR_ECMD_REG, ecmd | (oa <<
+>> DMA_ECMD_OA_SHIFT));
+>> +
+>> +    IOMMU_WAIT_OP(iommu, DMAR_ECRSP_REG, dmar_readq,
+>> +              !(res & DMA_ECMD_ECRSP_IP), res);
+>> +
+>> +    if (res & DMA_ECMD_ECRSP_IP) {
+>> +        ret = -ETIMEDOUT;
+>> +        goto err;
+>> +    }
+>> +
+>> +    ret = ecmd_get_status_code(res);
+>> +err:
+>> +    raw_spin_unlock_irqrestore(&iommu->register_lock, flags);
+>> +
+>> +    return ret;
+>> +}
+>> +#endif /* CONFIG_INTEL_IOMMU */
+> 
+> Can we remove the "#ifdef CONFIG_INTEL_IOMMU"? 
 
-This one shouldn't be a problem. I can also back this out of the Tegra
-tree. However, I also carry
+In dmar.c, no, there will be a compiler warning when the
+CONFIG_INTEL_IOMMU is not set.
 
-	6e505dd6804f ("arm64: tegra: Enable XUSB host function on Jetson AGX Orin")
+> Or if this is currently
+> only intel-iommu specific, how about moving it to drivers/iommu/intel
+> /iommu.c?
+> 
 
-which you picked up as
+Yes, it should OK to move it to iommu.c to avoid the "#ifdef
+CONFIG_INTEL_IOMMU". Now, it's intel-iommu specific.
 
-	1b17df99730a ("arm64: tegra: Enable XUSB host function on Jetson AGX Orin")
-
-That one is a bit problematic because I had to manually apply it on top
-of the Tegra tree because of some rework of the DTS files. I think this
-managed to thoroughly confuse everyone and the version in linux-next is
-now not what it should be.
-
-Is there any chance you could drop it? If not I could back out the DTS
-rework and schedule that for the next release. I'd rather not since I've
-been trying to get that in for a while now, but it's not worth a revert
-in your tree.
-
-Thierry
-
---KC+8cmX4u8WytxQE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPJRIUACgkQ3SOs138+
-s6GB+w/+Lm945NsZdQZhiJ6VuwmjzjYdBgC4qViOO5ybPmsQ4J5z7gXqSVDvuOtu
-sI8R3O9xmQoPBbw5OyWgJ1o6phSHjInacElkUz5BrBzYYkRFs57RjYTKcLOEXMdQ
-Ei+6srh3Ec3SfxxSaKPoPtt/oNgel9coZaNm2oz4+EdzUoDmSoKTxr8g8eDVQf4P
-lRT4BcXjdR3UA2//HZ8YZRvZYAm9L4RtIp5A/QUJm/arkulk23ErFrsIBkfLPsGM
-YKe6K+9LOkq9+tkuDy7oky1RMVAr4gcnHdGfNkqYF05DO3M89klHUMQ/VE8G7w58
-7izC1SH7f4lA60XSpzUJUKKqvP1gEhmSARtTRazvVxtazsJfWB0W6xG45hT/Wboz
-+e9QDQrmXLK5nTHXOZeDu9lxy118YOOkXygTHtVVlKUxaT8F5PDtsVl7PVffbZ3e
-5A3ABhyyyBy4HqkaFCJnrSh8BfXd7n8vxQRA9JMYWZ86IJ9SlmIvE3EsC97rL620
-94bESD5Fy1OolPeVMBFB6UDhZX/R/lW97ecT3guzwLwNZfNaoRdFUbORJR0vUONZ
-3jsoThhyNvT3j5T89HdC0Z5bPtAmN1Vc8+FyAs0x6qdl7FLTlKdjCi+6U7dTh9yc
-hZxanORZoj3nOtBkAjLZD8+md/M7eQc32cEBjCURmeCbK2gahRI=
-=ackf
------END PGP SIGNATURE-----
-
---KC+8cmX4u8WytxQE--
+Thanks,
+Kan
