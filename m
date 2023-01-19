@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B09674564
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67B6674569
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjASWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S230042AbjASWCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjASWBP (ORCPT
+        with ESMTP id S229969AbjASWBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:01:15 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7066FF89
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:37 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id h10so2463881qvq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:37 -0800 (PST)
+        Thu, 19 Jan 2023 17:01:16 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EA658660
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:39 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id s4so2701411qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sparkcharge.io; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LV9OZ3zFtkDLpf/Q73kAo3k3wQt+efvU2HfxDW5J4xU=;
-        b=kz0ICmRjeaxis1CYzfaXRho4F72emDWp9/L3clEhmPqjdhbGbB5XIeMKlYo9btykB3
-         zGzlOVNVou7LgZyhrrgR0ZHyr9lVCkwtFbqGxa6kKdDdTWPYdpnFT2YhpsG2LiW/FOAq
-         WZd5mS8N2eaC+pQ4qcUiWy9CMd6Jq5apRPRSr81Mzasf138XZil/KWNqR592FiNr40iM
-         nsIgSVI1CLl6sEXJk+XnOvX+MsiSGDYouaR1WwAj5U5xNYzTeK0dOt1mzQgMv3jT5KCM
-         MJKGSLu5j1Fo1FsGUP2KK6PODs+RdS6Fmmi205mXcwZTx2JwcQhHM8iu5SbenaD/BduX
-         UO9A==
+        bh=EvnEAnqblTBDjO4L9lAoJAikuecyCt30DJ9Jy9ahvAM=;
+        b=XPjTivTM93RwFnsS/ljsxPX3656SstcIyCWz/ntXj5hdmpSndYugg7yxUcU6rdzkNk
+         EwuLDbRZkZ8qW2KzsNRlPdkxWupoC7hlWR1jJNklPpyjVD42alTaXQI+g3JiTP9VtTUD
+         fDpcf45LF78MkYjJCV/IE4LaUG58VDlzdifWa89+9+iHxv9carzoBVyCSj5k8fWTp2Pp
+         YcgS/vM2TqoWHXRZS68OFmmwTntMELqVb1QETDAD6yFP6wtqeU2DP8CJC9Dqb4B3DV3C
+         6vLzxj4QRTUw2YTn8aBHMXlx3u2qLPyc+Zrp5YAloicoDCr3DfxWw7yXpoWNGrbVDkhQ
+         6GEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LV9OZ3zFtkDLpf/Q73kAo3k3wQt+efvU2HfxDW5J4xU=;
-        b=a1kmv991khoKaZZbiLe9uLDt7j/3gQ5HpoemiSDFwAtW64EtWEdb6oiPsMdgzQTqBc
-         vDJkcT5Isw7uh2yVtekbClvFDw/hLQKQfiifI4/hSyPXzoxl8gmHdnpSkbjqRVKGh51G
-         1XLSUMtvsARL5bOBKRboHrSP19kKJe2+zyeP6+uCkyjNAF3QsE/LSPxqS/KTOpzcROB7
-         5s75jdFDj0NJvzI6RtsVJDaJT4ApM5hdnuIGPrxjyo1hEfVOC2OrfJKVbUfJaaJJvSTf
-         +YIktj0YWZNTUOh4nSskPBfZlFJ1mdtGGybhyd0wdt3JiouBHArpFTnqpy8KdslfWmAn
-         vMrw==
-X-Gm-Message-State: AFqh2kpD137EgPxiP6Szsh5pFJHI3uKGFQGSxZtJbvJTu1ffY0Xw3uT1
-        LRV4FyAfaG5wwG/biICbQc7wpQ==
-X-Google-Smtp-Source: AMrXdXtb5Ys7U4vEwZn2MJGVTLV/Z41jZFry7umz0eWRnZoQ4kwzNYiVTdYkHv2tq+ujtfAqvxVwLw==
-X-Received: by 2002:a05:6214:5d8d:b0:531:e636:e236 with SMTP id mf13-20020a0562145d8d00b00531e636e236mr16867754qvb.28.1674164371726;
-        Thu, 19 Jan 2023 13:39:31 -0800 (PST)
+        bh=EvnEAnqblTBDjO4L9lAoJAikuecyCt30DJ9Jy9ahvAM=;
+        b=LvfE67oh00SohG/GUoI33NHFK40NK3rJXInWgsFC++Eduzpke0xMDN5T2t5dm9v9H0
+         o0+fBvfjY1LoNEiJAcPgVot9DE870/RRwo50VUadFSRAqqBjQi8IK+b0isym5ozQ00b8
+         YaBEndttv4C2MgGp9Q2fLd2pmCRTmJx1cbroDRx6eKblb41FIva5dMeVeBiPAHBTS3wX
+         28KP45IEi7b7K+pbADR77XBEsyKB/EQBGh2XTNpMEfDc4MBCg7QSCgopqGPbdhLh9ziS
+         KtzJeMEn5RL6FDoSaVkTY2UDkstei7B7D9O6bhiREv1O0RhxMTUsZhzvb4qmyqfy0spH
+         f1eA==
+X-Gm-Message-State: AFqh2kpfYHQvF2tpgV+95hnnkCtCnwlcd1pwENiN4VYAPZlihKG30yIC
+        KyjYk7Td84IoBWsEZgyoOELAMg==
+X-Google-Smtp-Source: AMrXdXvH05SRTIswgL/NPk4wgC7B25swx7vGDsNwIubApjxY3JniaRycLxhz6UZ1VXgRljC9SldxGQ==
+X-Received: by 2002:ac8:71c1:0:b0:3b6:3abd:fcc2 with SMTP id i1-20020ac871c1000000b003b63abdfcc2mr16964684qtp.46.1674164374360;
+        Thu, 19 Jan 2023 13:39:34 -0800 (PST)
 Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.30
+        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:39:31 -0800 (PST)
+        Thu, 19 Jan 2023 13:39:33 -0800 (PST)
 From:   Dennis Lambe Jr <dennis@sparkcharge.io>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -62,10 +62,11 @@ Cc:     =?UTF-8?q?Myl=C3=A8ne=20Josserand?=
         Javier Martinez Canillas <javier@osg.samsung.com>,
         Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>
-Subject: [PATCH v3 1/3] rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
-Date:   Thu, 19 Jan 2023 21:39:01 +0000
-Message-Id: <20230119213903.899756-2-dennis@sparkcharge.io>
+        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 2/3] dt-bindings: m41t80: add xtal load capacitance
+Date:   Thu, 19 Jan 2023 21:39:02 +0000
+Message-Id: <20230119213903.899756-3-dennis@sparkcharge.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
 References: <20230119213903.899756-1-dennis@sparkcharge.io>
@@ -80,43 +81,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The style guide recommends IS_ENABLED rather than ifdef for wrapping
-conditional code wherever possible.
+The ST m41t82 and m41t83 support programmable load capacitance from 3.5
+pF to 17.4 pF. The hardware defaults to 12.5 pF.
 
-Functions that are only called on DeviceTree platforms would otherwise
-need to be cluttered up with __maybe_unused, which is especially
-undesirable if there's nothing inherently DT-specific about those
-functions.
+The accuracy of the xtal can be calibrated precisely by adjusting the
+load capacitance.
+
+Add default, minimum, and maximum for the standard rtc property
+quartz-load-femtofarads on compatible devices.
 
 Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
 Notes:
-    v1 -> v2: spelling fix in changelog
+    v2 -> v3:
+    	added "Reviewed-by: Krzysztof Kozlowski" to changelog
+    
+    v1 -> v2:
+    	remove accidental wakeup-sources line
+    		suggested by Krzysztof Kozlowski
+    	spelling fix in changelog
 
- drivers/rtc/rtc-m41t80.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ .../devicetree/bindings/rtc/st,m41t80.yaml       | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index 494052dbd39f..f963b76e5fc0 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -909,10 +909,11 @@ static int m41t80_probe(struct i2c_client *client)
- 	if (IS_ERR(m41t80_data->rtc))
- 		return PTR_ERR(m41t80_data->rtc);
+diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+index fc9c6da6483f..6673adf6e99b 100644
+--- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
++++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+@@ -33,6 +33,11 @@ properties:
+   "#clock-cells":
+     const: 1
  
--#ifdef CONFIG_OF
--	wakeup_source = of_property_read_bool(client->dev.of_node,
--					      "wakeup-source");
--#endif
-+	if (IS_ENABLED(CONFIG_OF)) {
-+		wakeup_source = of_property_read_bool(client->dev.of_node,
-+						      "wakeup-source");
-+	}
++  quartz-load-femtofarads:
++    default: 12500
++    minimum: 3500
++    maximum: 17375
 +
- 	if (client->irq > 0) {
- 		rc = devm_request_threaded_irq(&client->dev, client->irq,
- 					       NULL, m41t80_handle_irq,
+   clock-output-names:
+     maxItems: 1
+     description: From common clock binding to override the default output clock name.
+@@ -46,6 +51,17 @@ properties:
+ 
+ allOf:
+   - $ref: rtc.yaml
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - st,m41t82
++                - st,m41t83
++    then:
++      properties:
++        quartz-load-femtofarads: false
+ 
+ unevaluatedProperties: false
+ 
 -- 
 2.25.1
 
