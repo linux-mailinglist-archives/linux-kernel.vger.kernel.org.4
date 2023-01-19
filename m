@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB31E673D63
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E288A673D46
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjASPWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S230271AbjASPR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjASPWI (ORCPT
+        with ESMTP id S229683AbjASPRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:22:08 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE68A8298E;
-        Thu, 19 Jan 2023 07:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674141728; x=1705677728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BZ6dDBlxfYjG2mjgktlle084t9dNgfWEgUeF8ouwFD0=;
-  b=E9ORJmYJ3RkH8V+Qx9dl/kc+intFzBg+QcQBR+I7MLw5d/DkSvozxne0
-   DGnXUMIjdaB+zvt6zN/vuCurqy/KrslqA/Mws5ZsdHcOjgGHO2+3GfxDh
-   s2mb5OQCQW20oC53yMhOShAQtxLwGB3Z3S/9c2HrJChLAgjtXuqM+Vi6P
-   xGyvoINdPV/Byx1Roh1+E2uOncAd9Bb5AELXIa5eh5F8aL+0kWVYZ+y6p
-   sazFRZ5vmG1s5SsSsZXllB3y33EDYkO/O7io2zBy1+oUtxpGCYUKNwAdm
-   1t+SnSWTsxYS3zDcRdMChYy8oGRr8BTl7ZQoc9KykHIjvDtAhJmv9Iutc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="313203978"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="313203978"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 07:17:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="748959531"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="748959531"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Jan 2023 07:17:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pIWf3-00Bj14-1N;
-        Thu, 19 Jan 2023 17:17:05 +0200
-Date:   Thu, 19 Jan 2023 17:17:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: acpi: Switch to use acpi_evaluate_dsm_typed()
-Message-ID: <Y8le8bEpwlVHenDb@smile.fi.intel.com>
-References: <20230118080419.20880-1-andriy.shevchenko@linux.intel.com>
- <Y8lBczJAXR4Hjl93@kroah.com>
- <Y8lVmOL5T2EUVkgr@smile.fi.intel.com>
- <Y8leT6LXyy20eyyh@kroah.com>
+        Thu, 19 Jan 2023 10:17:54 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F0181033
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:17:52 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pIWfe-0000BA-C4; Thu, 19 Jan 2023 16:17:42 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pIWfW-0001oM-RK; Thu, 19 Jan 2023 16:17:34 +0100
+Date:   Thu, 19 Jan 2023 16:17:34 +0100
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v2 5/6] drm/rockchip: vop2: add support for the rgb
+ output block
+Message-ID: <20230119151734.GH24755@pengutronix.de>
+References: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
+ <20230119143911.3793654-6-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8leT6LXyy20eyyh@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119143911.3793654-6-michael.riesch@wolfvision.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 04:14:23PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Jan 19, 2023 at 04:37:12PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jan 19, 2023 at 02:11:15PM +0100, Greg Kroah-Hartman wrote:
-> > > On Wed, Jan 18, 2023 at 10:04:19AM +0200, Andy Shevchenko wrote:
+Hi Michael,
 
-...
-
-> > > Fails to apply to my tree :(
-> > 
-> > It seems it's against usb-linus as Mathias' original patch is there.
+On Thu, Jan 19, 2023 at 03:39:10PM +0100, Michael Riesch wrote:
+> The Rockchip VOP2 features an internal RGB output block, which can be
+> attached to the video port 2 of the VOP2. Add support for this output
+> block.
 > 
-> Ah, then that can wait until it merges into my usb-next branch.  Can you
-> resend it in a week or so when that happens?
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+> v2:
+>  - move away from wrong assumption that the RGB block is always
+>    connected to video port 2 -> check devicetree to find RGB block
 
-Sure, thanks!
+Traces of that assumption are still in the commmit message.
+
+> 
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 44 ++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+> 
+> +static int vop2_find_rgb_encoder(struct vop2 *vop2)
+> +{
+> +	struct device_node *node = vop2->dev->of_node;
+> +	struct device_node *endpoint;
+> +	int i;
+> +
+> +	for (i = 0; i < vop2->data->nr_vps; i++) {
+> +		endpoint = of_graph_get_endpoint_by_regs(node, i,
+> +							 ROCKCHIP_VOP2_EP_RGB0);
+> +		if (!endpoint)
+> +			continue;
+> +
+> +		of_node_put(endpoint);
+> +		return i;
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+> +
+>  static struct reg_field vop2_cluster_regs[VOP2_WIN_MAX_REG] = {
+>  	[VOP2_WIN_ENABLE] = REG_FIELD(RK3568_CLUSTER_WIN_CTRL0, 0, 0),
+>  	[VOP2_WIN_FORMAT] = REG_FIELD(RK3568_CLUSTER_WIN_CTRL0, 1, 5),
+> @@ -2698,11 +2721,29 @@ static int vop2_bind(struct device *dev, struct device *master, void *data)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = vop2_find_rgb_encoder(vop2);
+> +	if (ret > 0) {
+
+'0' seems to be a valid vp as well. Shouldn't this be ret >= 0?
+
+> +		vop2->rgb = rockchip_rgb_init(dev, &vop2->vps[ret].crtc,
+> +					      vop2->drm, ret);
+> +		if (IS_ERR(vop2->rgb)) {
+> +			if (PTR_ERR(vop2->rgb) == -EPROBE_DEFER) {
+> +				ret = PTR_ERR(vop2->rgb);
+> +				goto err_crtcs;
+> +			}
+> +			vop2->rgb = NULL;
+> +		}
+> +	}
+> +
+
+Sascha
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
