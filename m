@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6472D6745E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485806745E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjASWYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S230327AbjASWYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjASWWK (ORCPT
+        with ESMTP id S230084AbjASWWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:22:10 -0500
+        Thu, 19 Jan 2023 17:22:12 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331194487;
-        Thu, 19 Jan 2023 14:07:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2014A1016;
+        Thu, 19 Jan 2023 14:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674166065; x=1705702065;
+  t=1674166069; x=1705702069;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hHhNbRG3Nuf6F0jbwVBuHl19eomKQYU3HkcKFB6CJNs=;
-  b=c37gDPyccL1ioi0sTpgvlWx7ZRnd7CqHDUpMkWCSIeuBbr0NKml7zA3w
-   sPmwwQ8IJHFx8vdn5NL+Zv/fssvjtT5fAhI5SXq7xMU18S2acg0ZpkCDU
-   Hbs3wL5fLgwdLapp2Gq7FtrptCBXVoggJ0PNaCQemTbDqkl4f15H3+wUV
-   8J0QAn9GBVU9kMG32nUN7xwlOeAzZqLvSyqctqP0SLM+6BzyfwKLHTD2P
-   djB4uWVs4z8DK2yF3Ja/YqXJJe6t1yWKCnc6TKy96H5M+cc1rloSWiEOq
-   WAe8WQtMfT8FDtNC5pkhUsc2wGqiFBhUmBFcHj0c/GI8CYYfqix/P/6B4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323130651"
+  bh=D0afb+O5KOonQ7n+AOXMGSDsyQMMe2+F9rSUtTnjekg=;
+  b=TVjUOfdXegaCTR6i+ol95XE8QnvBvsZ7ZG174/kku+DH8LESTZc/MT4i
+   Xfpy4WMKxLUXsYOgXDqhmy4OvVgchpAE+kr0ytLmXlIPAgba+K+an4fRC
+   XzjgOtEKACQolppXehVZ70DyNXn4q+UOoxxS05vypMfYr+nOvn8HG74NF
+   T+9aKw8ZE/nCVRH+xoVGhxebMvT69i6FNzamJk7cZ2qEB97lTezo2G3Fg
+   bN+EB3V0y6kSAh6mkWx/bz7rv8MDp5xMlNxTzrugYa302vtfANArUkqkg
+   O3he3nwNlaT4GlkjP4qp8UJe2eBm0uNgOwTToxczzS2faD8n+X/zWlk4c
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323130667"
 X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="323130651"
+   d="scan'208";a="323130667"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 14:07:42 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 14:07:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784226639"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784226650"
 X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="784226639"
+   d="scan'208";a="784226650"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 14:07:40 -0800
+  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 14:07:43 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5BB87373; Fri, 20 Jan 2023 00:08:15 +0200 (EET)
+        id 64F813DF; Fri, 20 Jan 2023 00:08:15 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 5/9] pktcdvd: Drop redundant castings for sector_t
-Date:   Fri, 20 Jan 2023 00:08:05 +0200
-Message-Id: <20230119220809.5518-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 6/9] pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
+Date:   Fri, 20 Jan 2023 00:08:06 +0200
+Message-Id: <20230119220809.5518-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230119220809.5518-1-andriy.shevchenko@linux.intel.com>
 References: <20230119220809.5518-1-andriy.shevchenko@linux.intel.com>
@@ -63,111 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the commit 72deb455b5ec ("block: remove CONFIG_LBDAF")
-the sector_t is always 64-bit type, no need to cast anymore.
+Use DEFINE_SHOW_ATTRIBUTE() helper macro to simplify the code.
+No functional change.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/block/pktcdvd.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+ drivers/block/pktcdvd.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
-index 96db6e348e1e..a53d21dbf2ab 100644
+index a53d21dbf2ab..2c5441303e55 100644
 --- a/drivers/block/pktcdvd.c
 +++ b/drivers/block/pktcdvd.c
-@@ -493,7 +493,7 @@ static int pkt_seq_show(struct seq_file *m, void *p)
- 	seq_printf(m, "\nQueue state:\n");
- 	seq_printf(m, "\tbios queued:\t\t%d\n", pd->bio_queue_size);
- 	seq_printf(m, "\tbios pending:\t\t%d\n", atomic_read(&pd->cdrw.pending_bios));
--	seq_printf(m, "\tcurrent sector:\t\t0x%llx\n", (unsigned long long)pd->current_sector);
-+	seq_printf(m, "\tcurrent sector:\t\t0x%llx\n", pd->current_sector);
- 
- 	pkt_count_states(pd, states);
- 	seq_printf(m, "\tstate:\t\t\ti:%d ow:%d rw:%d ww:%d rec:%d fin:%d\n",
-@@ -1003,8 +1003,7 @@ static void pkt_end_io_read(struct bio *bio)
- 	BUG_ON(!pd);
- 
- 	dev_dbg(disk_to_dev(pd->disk), "bio=%p sec0=%llx sec=%llx err=%d\n",
--		bio, (unsigned long long)pkt->sector,
--		(unsigned long long)bio->bi_iter.bi_sector, bio->bi_status);
-+		bio, pkt->sector, bio->bi_iter.bi_sector, bio->bi_status);
- 
- 	if (bio->bi_status)
- 		atomic_inc(&pkt->io_errors);
-@@ -1067,7 +1066,7 @@ static void pkt_gather_data(struct pktcdvd_device *pd, struct packet_data *pkt)
- 	spin_unlock(&pkt->lock);
- 
- 	if (pkt->cache_valid) {
--		dev_dbg(ddev, "zone %llx cached\n", (unsigned long long)pkt->sector);
-+		dev_dbg(ddev, "zone %llx cached\n", pkt->sector);
- 		goto out_account;
- 	}
- 
-@@ -1099,8 +1098,7 @@ static void pkt_gather_data(struct pktcdvd_device *pd, struct packet_data *pkt)
- 	}
- 
- out_account:
--	dev_dbg(ddev, "need %d frames for zone %llx\n", frames_read,
--		(unsigned long long)pkt->sector);
-+	dev_dbg(ddev, "need %d frames for zone %llx\n", frames_read, pkt->sector);
- 	pd->stats.pkt_started++;
- 	pd->stats.secs_rg += frames_read * (CD_FRAMESIZE >> 9);
+@@ -504,24 +504,7 @@ static int pkt_seq_show(struct seq_file *m, void *p)
+ 			pd->write_congestion_on);
+ 	return 0;
  }
-@@ -1143,8 +1141,7 @@ static inline void pkt_set_state(struct device *ddev, struct packet_data *pkt,
- 	enum packet_data_state old_state = pkt->state;
+-
+-static int pkt_debugfs_seq_show(struct seq_file *m, void *p)
+-{
+-	return pkt_seq_show(m, p);
+-}
+-
+-static int pkt_debugfs_fops_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, pkt_debugfs_seq_show, inode->i_private);
+-}
+-
+-static const struct file_operations debug_fops = {
+-	.open		= pkt_debugfs_fops_open,
+-	.read		= seq_read,
+-	.llseek		= seq_lseek,
+-	.release	= single_release,
+-	.owner		= THIS_MODULE,
+-};
++DEFINE_SHOW_ATTRIBUTE(pkt_seq);
  
- 	dev_dbg(ddev, "pkt %2d : s=%6llx %s -> %s\n",
--		pkt->id, (unsigned long long)pkt->sector,
--		state_name[old_state], state_name[state]);
-+		pkt->id, pkt->sector, state_name[old_state], state_name[state]);
- 
- 	pkt->state = state;
- }
-@@ -1218,12 +1215,12 @@ static int pkt_handle_queue(struct pktcdvd_device *pd)
- 	 * to this packet.
- 	 */
- 	spin_lock(&pd->lock);
--	dev_dbg(ddev, "looking for zone %llx\n", (unsigned long long)zone);
-+	dev_dbg(ddev, "looking for zone %llx\n", zone);
- 	while ((node = pkt_rbtree_find(pd, zone)) != NULL) {
- 		sector_t tmp = get_zone(node->bio->bi_iter.bi_sector, pd);
- 
- 		bio = node->bio;
--		dev_dbg(ddev, "found zone=%llx\n", (unsigned long long)tmp);
-+		dev_dbg(ddev, "found zone=%llx\n", tmp);
- 		if (tmp != zone)
- 			break;
- 		pkt_rbtree_erase(pd, node);
-@@ -1323,8 +1320,7 @@ static void pkt_start_write(struct pktcdvd_device *pd, struct packet_data *pkt)
- 	pkt_set_state(ddev, pkt, PACKET_WRITE_WAIT_STATE);
- 	spin_unlock(&pkt->lock);
- 
--	dev_dbg(ddev, "Writing %d frames for zone %llx\n", pkt->write_size,
--		(unsigned long long)pkt->sector);
-+	dev_dbg(ddev, "Writing %d frames for zone %llx\n", pkt->write_size, pkt->sector);
- 
- 	if (test_bit(PACKET_MERGE_SEGS, &pd->flags) || (pkt->write_size < pkt->frames))
- 		pkt->cache_valid = 1;
-@@ -2472,8 +2468,7 @@ static void pkt_submit_bio(struct bio *bio)
+ static void pkt_debugfs_dev_new(struct pktcdvd_device *pd)
+ {
+@@ -531,8 +514,8 @@ static void pkt_debugfs_dev_new(struct pktcdvd_device *pd)
+ 	if (!pd->dfs_d_root)
  		return;
  
- 	dev_dbg(ddev, "start = %6llx stop = %6llx\n",
--		(unsigned long long)bio->bi_iter.bi_sector,
--		(unsigned long long)bio_end_sector(bio));
-+		bio->bi_iter.bi_sector, bio_end_sector(bio));
+-	pd->dfs_f_info = debugfs_create_file("info", 0444,
+-					     pd->dfs_d_root, pd, &debug_fops);
++	pd->dfs_f_info = debugfs_create_file("info", 0444, pd->dfs_d_root,
++					     pd, &pkt_seq_fops);
+ }
  
- 	/*
- 	 * Clone READ bios so we can have our own bi_end_io callback.
-@@ -2484,8 +2479,7 @@ static void pkt_submit_bio(struct bio *bio)
- 	}
- 
- 	if (!test_bit(PACKET_WRITABLE, &pd->flags)) {
--		dev_notice(ddev, "WRITE for ro device (%llu)\n",
--			   (unsigned long long)bio->bi_iter.bi_sector);
-+		dev_notice(ddev, "WRITE for ro device (%llu)\n", bio->bi_iter.bi_sector);
- 		goto end_io;
- 	}
- 
+ static void pkt_debugfs_dev_remove(struct pktcdvd_device *pd)
 -- 
 2.39.0
 
