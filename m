@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3C3672DE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C50672DE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjASBNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S229887AbjASBN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjASBNJ (ORCPT
+        with ESMTP id S229935AbjASBNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:13:09 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5856843B;
-        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id v23so879843plo.1;
-        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=trQ8wPDdZRnOhR09mO+bG/KeF7fjbj/nqEQErtarT5c=;
-        b=iedPpwf5nA+2keWvD77tT1QHT2acngdr0fxuAbMcmef4fExDwXZU8yzdvJCxhpT2ym
-         mq2SWTKZN8VkEL1mCgymWRb/aODT6vdXJ2OhQNWKI1eQMQeVnu3gz0WFxHYMFwydsOjx
-         2/W05BJEfDQjIy3JZXoaQCcJhjrfYpJmuh5iFYvhHXr3Z6jgbchYnFCzBsxcCdNTZdeF
-         uB7Dnjl5+7QtYFW8tfqC74mpu8BS5VZCJNZ7LytWzt3Rim3m0WZ1iAd21BhwhZQX3KDt
-         ouzBsmDpWRIvzUVq3beb+KIenmmnAf6jNHWJNN+pMiHLw6aKFM2vJbFS5VRKj2iaFoNL
-         WXSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=trQ8wPDdZRnOhR09mO+bG/KeF7fjbj/nqEQErtarT5c=;
-        b=gdmXwXWstN0t63Q9Mz7k3kO+ki3oBLAirw9GF86uQwdEU+nyR6LcYDyuJxJCtp+w29
-         t4CYQmV/I4YA8WLzH9zLwKPip6BeQ2q0S6ViBaPUbX3wOhzFAUNfe9HCUIIzAW6Mw+Je
-         izqc2VQE0Vgc18GeSFkE9qH4zD9ULdmYDuDiv0dYScQLXw3G+F2qBw7sxGCxcr9QKhgH
-         BwHX+/dSUB07W7HVQdOMmF/3kf0O62W7Odmf4fP0FFyOtVrR7vHMDSTBR5As8fQfun2+
-         N41WPDW0fupp0z2I4Gk6Inv67j9YQU3hDBb4ycZCEieuVHHLtTuR9LF6/CC3K1nkULuC
-         Il7g==
-X-Gm-Message-State: AFqh2kpRwaz82eh9X5mpHyD8qvQ25rBKJ3c508Vkjk2pUFoObx/ooY0+
-        9kGwjtmEHU6XoFF5mWCwexM=
-X-Google-Smtp-Source: AMrXdXsFGIbounHZJ2Dj4H4446MRSLS+KlWWG8txSiLuHDvKJ/U3YrT2y5kFsBYYfzOil7tpMtE/pg==
-X-Received: by 2002:a17:902:a9c5:b0:194:60c3:482f with SMTP id b5-20020a170902a9c500b0019460c3482fmr23642700plr.26.1674090787240;
-        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
-Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b00186f0f59c85sm2511649plg.235.2023.01.18.17.13.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 17:13:06 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 11:12:57 +1000
-Message-Id: <CPVRNHVV9L6U.34DQEC4B6NB51@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
-        <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 16/24] powerpc/pseries: Implement signed update for
- PLPKS objects
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-17-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-17-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:13:17 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F68D689F8;
+        Wed, 18 Jan 2023 17:13:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny4Pc5V6hz4xN4;
+        Thu, 19 Jan 2023 12:13:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674090789;
+        bh=38gPF9WCNIwlhkWACirRWDyLEnGY8N9VoQR90tcBLPk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O41Z/jl7V5AgTg3n9R89wwqYHhQ9FBmo8jn4bbdq+gNvn9l8LLXZtDBUuK/qEDKm0
+         fEu/SDHgizpb6gt7U+H5uL/bqEjlV/5OtR/ru/gFZV8vJ+9BgZGrdfClFJzp9tBzK0
+         K2dylru46iFKsrsLaRZIljFdFLAKyk2Hu80pag74XGEydZjo8ssmHaySWGNCkKzxRc
+         7bzNiUapvHuBqbZCZH8blOSqpawUw871sW/U1m4gYpbuOCkufbrNZbBXBxwSaBYAw6
+         rRhVPec2HTD4E7VkptANc5f1VzfczIUuX6WoBrkMQdG6lKZkEqnn7ne0QBW1FbJgmT
+         x0kvLn+5rwxSw==
+Date:   Thu, 19 Jan 2023 12:13:07 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zack Rusin <zackr@vmware.com>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20230119121307.4366ac4e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/0hwf36qt=q.5jX13Fkq2FrR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
-> From: Nayna Jain <nayna@linux.ibm.com>
->
-> The Platform Keystore provides a signed update interface which can be use=
-d
-> to create, replace or append to certain variables in the PKS in a secure
-> fashion, with the hypervisor requiring that the update be signed using th=
-e
-> Platform Key.
->
-> Implement an interface to the H_PKS_SIGNED_UPDATE hcall in the plpks
-> driver to allow signed updates to PKS objects.
->
-> (The plpks driver doesn't need to do any cryptography or otherwise handle
-> the actual signed variable contents - that will be handled by userspace
-> tooling.)
->
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> [ajd: split patch, add timeout handling and misc cleanups]
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
->
-> ---
->
-> v3: Merge plpks fixes and signed update series with secvar series
->
->     Fix error code handling in plpks_confirm_object_flushed() (ruscur)
->
->     Pass plpks_var struct to plpks_signed_update_var() by reference (mpe)
->
->     Consistent constant naming scheme (ruscur)
-> ---
->  arch/powerpc/include/asm/hvcall.h      |  3 +-
->  arch/powerpc/include/asm/plpks.h       |  5 ++
->  arch/powerpc/platforms/pseries/plpks.c | 71 ++++++++++++++++++++++++--
->  3 files changed, 73 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm=
-/hvcall.h
-> index 95fd7f9485d5..33b26c0cb69b 100644
-> --- a/arch/powerpc/include/asm/hvcall.h
-> +++ b/arch/powerpc/include/asm/hvcall.h
-> @@ -336,7 +336,8 @@
->  #define H_SCM_FLUSH		0x44C
->  #define H_GET_ENERGY_SCALE_INFO	0x450
->  #define H_WATCHDOG		0x45C
-> -#define MAX_HCALL_OPCODE	H_WATCHDOG
-> +#define H_PKS_SIGNED_UPDATE	0x454
-> +#define MAX_HCALL_OPCODE	H_PKS_SIGNED_UPDATE
+--Sig_/0hwf36qt=q.5jX13Fkq2FrR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-^ Bad rebase.
+Hi all,
 
-Thanks,
-Nick
+Today's linux-next merge of the drm-misc tree got a conflict in:
+
+  drivers/gpu/drm/vmwgfx/ttm_object.h
+
+between commit:
+
+  a309c7194e8a ("drm/vmwgfx: Remove rcu locks from user resources")
+
+from Linus' tree and commit:
+
+  13acb368bf02 ("drm/ttm/vmwgfx: move ttm_bo_wait into VMWGFX")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/vmwgfx/ttm_object.h
+index 8098a3846bae,95a9679f9d39..000000000000
+--- a/drivers/gpu/drm/vmwgfx/ttm_object.h
++++ b/drivers/gpu/drm/vmwgfx/ttm_object.h
+@@@ -307,4 -309,27 +309,12 @@@ extern int ttm_prime_handle_to_fd(struc
+  #define ttm_prime_object_kfree(__obj, __prime)		\
+  	kfree_rcu(__obj, __prime.base.rhead)
+ =20
+ -struct ttm_base_object *
+ -ttm_base_object_noref_lookup(struct ttm_object_file *tfile, uint64_t key);
+ -
+ -/**
+ - * ttm_base_object_noref_release - release a base object pointer looked up
+ - * without reference
+ - *
+ - * Releases a base object pointer looked up with ttm_base_object_noref_lo=
+okup().
+ - */
+ -static inline void ttm_base_object_noref_release(void)
+ -{
+ -	__acquire(RCU);
+ -	rcu_read_unlock();
+ -}
+ -
++ static inline int ttm_bo_wait(struct ttm_buffer_object *bo, bool intr,
++ 			      bool no_wait)
++ {
++ 	struct ttm_operation_ctx ctx =3D { intr, no_wait };
++=20
++ 	return ttm_bo_wait_ctx(bo, &ctx);
++ }
++=20
+  #endif
+
+--Sig_/0hwf36qt=q.5jX13Fkq2FrR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPImSMACgkQAVBC80lX
+0GzCQAf/fIL3znz6gmPHSw9S8jB8gAKcOvfDx0QLArZSqxKxRDe+Oj0DkYOA7e2L
+mBvET7giBmk9c2WcmTWv5vrHqSN3hNaXWySj0f3EzJd7PTkfigxKd4EOJEJOHnOz
+tB8P0T/gykg2kJoGPQ10/FHd9d19Wx7r1rB5Wd7Lw3r8YHmudkKiDii89EH7aYX+
+RZ8gD919W10NfaeKFjU7Ea6vkL+bIezQB28GOZFqXNSXupsI12BI+C1ivr17HSQD
+fqgH49OfuOR7xkWUiT+YVJnWaXq+oYSACTxFJtYTIFfmEDYJUGnxhiMHP1uy99sD
+xk19NQbhmoshnAiLvBexpnMB+yGS/g==
+=IJWR
+-----END PGP SIGNATURE-----
+
+--Sig_/0hwf36qt=q.5jX13Fkq2FrR--
