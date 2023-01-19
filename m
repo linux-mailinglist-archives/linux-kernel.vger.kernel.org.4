@@ -2,132 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466DD673E8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C466C673E92
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjASQVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S230131AbjASQVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjASQUt (ORCPT
+        with ESMTP id S230159AbjASQVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:20:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C9B8B310
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:20:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3888D61C7A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E406C433EF;
-        Thu, 19 Jan 2023 16:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674145240;
-        bh=sdmA22LowoabqFgg/n5kNnyh/+sK4rIh16rQ7LzY/qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B7MeP0ZSKk8WMgyOcebkPQVspyaLlA6veo3pWWczOhW+pwRm3LaBx8JpiZjCYXEih
-         wyCUDq/4mnIGMx3uB8k40OHoWhXHRU/qRVus3Bz3hZpJmtteFNTE0fIiZ6+trzyaop
-         34PJDLrMj11CVhr+Y58UeFmz+aMwu9qnecywoGzs=
-Date:   Thu, 19 Jan 2023 17:20:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Usyskin, Alexander" <alexander.usyskin@intel.com>
-Cc:     "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
-Message-ID: <Y8lt1gmo9smOMXD7@kroah.com>
-References: <20221222220214.3688774-1-tomas.winkler@intel.com>
- <Y6VV5d/V4MKDz2Te@kroah.com>
- <CY5PR11MB6366515D2A965EEDEC77AF63EDF29@CY5PR11MB6366.namprd11.prod.outlook.com>
+        Thu, 19 Jan 2023 11:21:11 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3BF8A0E9;
+        Thu, 19 Jan 2023 08:21:01 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j17so1990615wms.0;
+        Thu, 19 Jan 2023 08:21:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4NpyI3zb9wVlCKCJ/xuTMFB4MtidWKieRg7FBUYu1E=;
+        b=i9i6egUnPreoSDeZhrSkJk1l31ER8it2irbo/InNoPp1A5Ad8t17LOzTXakbQzpUvh
+         bjbWvJfMSPVC6qpBknfsDjgaMWe4exdOFF+L6NVl4a0v8vk14Db6zRuOor3TMXn1rhu6
+         xZ1nQnEYlJYNnOfacdfe/zJWbjNGiTpvfO6eQuvaM+hbuRMvgY6B0E3ulTlmU/aslqJt
+         NcabjA0Wc0ZTinwBjRD44MHXdkw4FicvWAeec0jr5VhX+blwkDfZ/oxpim+uSlDNXoZy
+         oyYESXwFHhD3koN7iKErvcyB8dba9pk6B6lxg/VU1dHFf+1dQ0DwaVbsm2B5SzEM5HkS
+         0x4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k4NpyI3zb9wVlCKCJ/xuTMFB4MtidWKieRg7FBUYu1E=;
+        b=nL3VToIP/GPJ4GBYPLk98yd0q0qjGnOQWrjQEirtqlqeG3h9BoPcAeDQRoJEognaVf
+         CGWeNp1jPy0Di6uTB31cjH4SG3bi9n0an59oyXi2SMD1reRo6ytqRPb6m/TMMNnAkTjE
+         zrt8WhX1hLOCuGlkUSm864KlX4TbCLrPE297XpFYm+5w/fGq30eKpD5PceDzigzKe04w
+         jSYedJtcIZGPAzpu2QGmX0KnHvNa36UWuuyxpcD3B79e6rfYwKQexEkc3Bh/cP+7JDl4
+         3WokfJhBV8wyaPPSRzbCjkU6Xax0pZqsxvwVlPcLGple5bNmqN7CUoxdCxObBwVy7Cqr
+         q/ag==
+X-Gm-Message-State: AFqh2kqtCZKR6wO9SpSkvemgpi/ml0QJjLqOWfEALGDU/u1Jn5iA36jb
+        skgqjkduOcDo+ee57vlyo/c=
+X-Google-Smtp-Source: AMrXdXs0kqYJMGFRODHqs8DLy+1IZiZQPfrUfu0qa8een+OdLggHsKOiJ0qUueN87M+Hw5XjAquFrQ==
+X-Received: by 2002:a7b:cbd6:0:b0:3db:622:4962 with SMTP id n22-20020a7bcbd6000000b003db06224962mr10811984wmi.21.1674145259615;
+        Thu, 19 Jan 2023 08:20:59 -0800 (PST)
+Received: from localhost.localdomain (host-82-55-106-56.retail.telecomitalia.it. [82.55.106.56])
+        by smtp.gmail.com with ESMTPSA id ay22-20020a05600c1e1600b003dafbd859a6sm5385919wmb.43.2023.01.19.08.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 08:20:58 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jeff Moyer <jmoyer@redhat.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [PATCH v3] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Thu, 19 Jan 2023 17:20:55 +0100
+Message-Id: <20230119162055.20944-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY5PR11MB6366515D2A965EEDEC77AF63EDF29@CY5PR11MB6366.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 11:46:36AM +0000, Usyskin, Alexander wrote:
-> > 
-> > Why a whole new subdirectory for a tiny 200 line file?
-> > 
-> All drivers for devices on mei bus have private subdirectory.
-> This one just modelled on the existing examples.
-> If you say that this is not a good thing - can put it in the main mei directory.
+The use of kmap() and kmap_atomic() are being deprecated in favor of
+kmap_local_page().
 
-Put it in the main mei directory, no need to split things up for no good
-reason.
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-> > > +static int mei_gsc_proxy_component_match(struct device *dev, int
-> > subcomponent, void *data)
-> > > +{
-> > > +	struct device *base = data;
-> > > +
-> > > +	if (!dev || !dev->driver ||
-> > > +	    strcmp(dev->driver->name, "i915") ||
-> > 
-> > I thought I had objected to this "let's poke around in a driver name for
-> > a magic value" logic in the past.  How do you know this is always going
-> > to work?
-> 
-> All components that serve Intel graphics integrated into PCH should check
-> in their match that calling device is graphic card sitting on the same PCH.
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-And by looking at the driver name?  That does not work, sorry.  Get
-access to the driver pointer please, that's the only way you know for
-sure, right?  And even then you shouldn't be messing with things in a
-device you have no control over (i.e. a driver pointer or name.)
+The use of kmap_local_page() in fs/aio.c is "safe" in the sense that the
+code don't hands the returned kernel virtual addresses to other threads
+and there are no nestings which should be handled with the stack based
+(LIFO) mappings/un-mappings order. Furthermore, the code between the old
+kmap_atomic()/kunmap_atomic() did not depend on disabling page-faults
+and/or preemption, so that there is no need to call pagefault_disable()
+and/or preempt_disable() before the mappings.
 
-> The code below checks that i915 pci device and mei pci device (grandparent of our device on mei bus)
-> are children of the same parent, but there is no way to know if caller
-> is, indeed, graphic device. Easiest way is to check well-known device river name.
+Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+fs/aio.c.
 
-Again, that's a big abuse of the driver model, please do not do that.
+Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
+with HIGHMEM64GB enabled.
 
-You need to rely on the fact that you will NOT be called unless your
-parent is of the correct type.  That's all, no fancy layering violations
-please.
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
+I've tested with "./check -g aio". The tests in this group fail 3/26
+times, with and without my patch. Therefore, these changes don't introduce
+further errors. I'm not aware of any other tests which I may run, so that
+any suggestions would be precious and much appreciated :-)
 
-> All i915 components doing this comparison.
-> This is a simplified scheme of relations between devices here:
->            /--- MEI PCI --- MEI --- GSC_PROXY
-> PCH ---
->            \--- GRAPHIC PCI --- I915
-> > 
-> > > +	    subcomponent != I915_COMPONENT_GSC_PROXY)
-> > > +		return 0;
-> > > +
-> > > +	base = base->parent;
-> > > +	if (!base) /* mei device */
-> > > +		return 0;
-> > 
-> > How can a device not have a parent?
-> 
-> This one should be proxy device on mei bus, so parent should be there always, can drop this check.
-> 
-> > 
-> > > +
-> > > +	base = base->parent; /* pci device */
-> > 
-> > You don't know this is a pci device :(
-> 
-> This is more, like, note to explain on what level in above scheme we are now.
-> It should be mei pci device for match to succeed.
+I'm resending this patch because some recipients were missing in the
+previous submissions. In the meantime I'm also adding some more information
+in the commit message. There are no changes in the code.
 
-Again, you can't know this and you should never poke around like this.
-You don't control the parent of anything (hint, you just saved a
-reference counted pointer without grabbing a reference count...)
+Changes from v1:
+        Add further information in the commit message, and the
+        "Reviewed-by" tags from Ira and Jeff (thanks!).
 
-Please don't abuse the driver model like this, it will cause long-term
-problems for keeping this code alive and working properly.
+Changes from v2:
+	Rewrite a block of code between mapping/un-mapping to improve
+	readability in aio_setup_ring() and add a missing call to
+	flush_dcache_page() in ioctx_add_table() (thanks to Al Viro);
+	Add a "Reviewed-by" tag from Kent Overstreet (thanks).
+ 
+ fs/aio.c | 46 +++++++++++++++++++++-------------------------
+ 1 file changed, 21 insertions(+), 25 deletions(-)
 
-thanks,
+diff --git a/fs/aio.c b/fs/aio.c
+index 562916d85cba..9b39063dc7ac 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -486,7 +486,6 @@ static const struct address_space_operations aio_ctx_aops = {
+ 
+ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+ {
+-	struct aio_ring *ring;
+ 	struct mm_struct *mm = current->mm;
+ 	unsigned long size, unused;
+ 	int nr_pages;
+@@ -567,16 +566,12 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+ 	ctx->user_id = ctx->mmap_base;
+ 	ctx->nr_events = nr_events; /* trusted copy */
+ 
+-	ring = kmap_atomic(ctx->ring_pages[0]);
+-	ring->nr = nr_events;	/* user copy */
+-	ring->id = ~0U;
+-	ring->head = ring->tail = 0;
+-	ring->magic = AIO_RING_MAGIC;
+-	ring->compat_features = AIO_RING_COMPAT_FEATURES;
+-	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
+-	ring->header_length = sizeof(struct aio_ring);
+-	kunmap_atomic(ring);
+-	flush_dcache_page(ctx->ring_pages[0]);
++	memcpy_to_page(ctx->ring_pages[0], 0, (const char *)&(struct aio_ring) {
++		       .nr = nr_events, .id = ~0U, .magic = AIO_RING_MAGIC,
++		       .compat_features = AIO_RING_COMPAT_FEATURES,
++		       .incompat_features = AIO_RING_INCOMPAT_FEATURES,
++		       .header_length = sizeof(struct aio_ring) },
++		       sizeof(struct aio_ring));
+ 
+ 	return 0;
+ }
+@@ -678,9 +673,10 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
+ 					 * we are protected from page migration
+ 					 * changes ring_pages by ->ring_lock.
+ 					 */
+-					ring = kmap_atomic(ctx->ring_pages[0]);
++					ring = kmap_local_page(ctx->ring_pages[0]);
+ 					ring->id = ctx->id;
+-					kunmap_atomic(ring);
++					kunmap_local(ring);
++					flush_dcache_page(ctx->ring_pages[0]);
+ 					return 0;
+ 				}
+ 
+@@ -1021,9 +1017,9 @@ static void user_refill_reqs_available(struct kioctx *ctx)
+ 		 * against ctx->completed_events below will make sure we do the
+ 		 * safe/right thing.
+ 		 */
+-		ring = kmap_atomic(ctx->ring_pages[0]);
++		ring = kmap_local_page(ctx->ring_pages[0]);
+ 		head = ring->head;
+-		kunmap_atomic(ring);
++		kunmap_local(ring);
+ 
+ 		refill_reqs_available(ctx, head, ctx->tail);
+ 	}
+@@ -1129,12 +1125,12 @@ static void aio_complete(struct aio_kiocb *iocb)
+ 	if (++tail >= ctx->nr_events)
+ 		tail = 0;
+ 
+-	ev_page = kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
++	ev_page = kmap_local_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
+ 	event = ev_page + pos % AIO_EVENTS_PER_PAGE;
+ 
+ 	*event = iocb->ki_res;
+ 
+-	kunmap_atomic(ev_page);
++	kunmap_local(ev_page);
+ 	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
+ 
+ 	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
+@@ -1148,10 +1144,10 @@ static void aio_complete(struct aio_kiocb *iocb)
+ 
+ 	ctx->tail = tail;
+ 
+-	ring = kmap_atomic(ctx->ring_pages[0]);
++	ring = kmap_local_page(ctx->ring_pages[0]);
+ 	head = ring->head;
+ 	ring->tail = tail;
+-	kunmap_atomic(ring);
++	kunmap_local(ring);
+ 	flush_dcache_page(ctx->ring_pages[0]);
+ 
+ 	ctx->completed_events++;
+@@ -1211,10 +1207,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
+ 	mutex_lock(&ctx->ring_lock);
+ 
+ 	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
+-	ring = kmap_atomic(ctx->ring_pages[0]);
++	ring = kmap_local_page(ctx->ring_pages[0]);
+ 	head = ring->head;
+ 	tail = ring->tail;
+-	kunmap_atomic(ring);
++	kunmap_local(ring);
+ 
+ 	/*
+ 	 * Ensure that once we've read the current tail pointer, that
+@@ -1246,10 +1242,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
+ 		avail = min(avail, nr - ret);
+ 		avail = min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
+ 
+-		ev = kmap(page);
++		ev = kmap_local_page(page);
+ 		copy_ret = copy_to_user(event + ret, ev + pos,
+ 					sizeof(*ev) * avail);
+-		kunmap(page);
++		kunmap_local(ev);
+ 
+ 		if (unlikely(copy_ret)) {
+ 			ret = -EFAULT;
+@@ -1261,9 +1257,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
+ 		head %= ctx->nr_events;
+ 	}
+ 
+-	ring = kmap_atomic(ctx->ring_pages[0]);
++	ring = kmap_local_page(ctx->ring_pages[0]);
+ 	ring->head = head;
+-	kunmap_atomic(ring);
++	kunmap_local(ring);
+ 	flush_dcache_page(ctx->ring_pages[0]);
+ 
+ 	pr_debug("%li  h%u t%u\n", ret, head, tail);
+-- 
+2.39.0
 
-greg k-h
