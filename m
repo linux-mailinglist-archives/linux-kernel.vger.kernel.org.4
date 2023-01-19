@@ -2,203 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E087673EF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BD9673EE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjASQeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S230265AbjASQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjASQeb (ORCPT
+        with ESMTP id S230221AbjASQca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:34:31 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A60C4DBE3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:34:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674146066; x=1705682066;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+pzVIm+NVVCm+tED07C3lguimSN2uvhe+hLPduJWTdc=;
-  b=nwgC6IVmMhV387h5HGFj/c/8TKWHf90aC82s4F7TugKSsgvWiB7MeOBm
-   V2tXwQLWwgCwg2xiUef3FkW8danihOZIGo+sksIVPC/ihfG2hthHl0/DX
-   bIHvasy8JBbXFcY3PcCinzKajxOyIFMbbxBRqfv6uOYfQU4HHt9/c3YYj
-   IMoOy04aTYacnztnbQ7FdbisZEKEs8vN2JlEwjOf12wobRYfKmHXfFVmd
-   IpeqpVSb/1kIzY/k84pFVibHGR6Jjjj9XlWShWOfEptM/8maO6CbXj5K0
-   xoSVRbD6hZCJ/sUl+QRsVARYUNIxWhH0Nh0eVRbgG/ArDt+dMBU1HXNhb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325377957"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="325377957"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 08:33:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784119242"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="784119242"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 08:33:00 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIXqV-0001dA-10;
-        Thu, 19 Jan 2023 16:32:59 +0000
-Date:   Fri, 20 Jan 2023 00:32:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning: unused
- variable 'ksz9477_dt_ids'
-Message-ID: <202301200026.knQAJz4B-lkp@intel.com>
+        Thu, 19 Jan 2023 11:32:30 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA114DE3C;
+        Thu, 19 Jan 2023 08:32:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DDQL74nA0SFhr6vFq5Z7ubZXBN2Y1jMgO8aDoitMQzxIQg10EEURkBb9wTAG3ldbcxxeAzzgG4ggaonmLtmX4riy80HDKGXLCNSwrJ0XlQ49S78QLq/L5qNELKNLhdn8LD93oLRUAh0giLnVQN8ZTUvjejjyADS4nbZ9VPvmrTyCMgkTWk2q+Iw6pxlExaST0BFLOWPeHYC6GrmLONmL6Lz3VVKsJ7mIGVy/wZq0ItZ2qWy9WwgywxSEMP7AMSdEJZQdm8bJoWIpbqHteTd3hcMPVV9XW1/N25I6FgBw4IR5GB4R4iY7ctJmLKLptMUsphKV+FPddORT8t2WRnOf/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fVcS8yOsl9+79HlK0tItjBXALELYGd1Ebsn4u/JP7uI=;
+ b=IbxdFZNDm5UBFQ9QePhaeutBIOBmr/3lb0pxVEDOTccAyuDJ+0YdKzTLpurAeSw0r4PX/cukF2e/FwXzXgy4GdrtNCXYjd6KoA3TM2sklJ6FLTgH9bHZA5wLYPyoYM8wrrzPYClMpQJYpKyGCAn5T65akNui+TOTAAbylsTv8xq0jR9aEzaSZhali2EnEhQ04ebh9rV8mSf92ZyQ2zH90+XKNx5O8/rX8pIuk7gJLWBPYvgKhmRlJyKzDVW5CqA132F76BQSDcP0M3xAEbZYdkJZSoCGRPWrToFOurMmTz3T/Ifua0zJ66OClRsX1JzqY2iN2bQ0VqcnUNR6jBfWLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fVcS8yOsl9+79HlK0tItjBXALELYGd1Ebsn4u/JP7uI=;
+ b=jqPQU0p6xatDbkFG4uXHJiTFHX4s2gKgFuZQhauPiFy4THRt1bVgRkcyKcCLtrqs5qsx+xyPaAWrswIWpJJrPJT+G9D0o0unaWxTsKo3ETGPwICgu/a2AiDLLJ3zFKWPtOjToTaBIah0Y+N791rc6Hr1ApkFF6+bUFvJPf3xx/s=
+Received: from BN9PR03CA0951.namprd03.prod.outlook.com (2603:10b6:408:108::26)
+ by PH7PR12MB7377.namprd12.prod.outlook.com (2603:10b6:510:20c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
+ 2023 16:32:21 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::e5) by BN9PR03CA0951.outlook.office365.com
+ (2603:10b6:408:108::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25 via Frontend
+ Transport; Thu, 19 Jan 2023 16:32:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6023.16 via Frontend Transport; Thu, 19 Jan 2023 16:32:20 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 19 Jan
+ 2023 10:32:20 -0600
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 19 Jan 2023 10:32:19 -0600
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <tumic@gpxsee.org>
+Subject: [PATCH V12 XDMA 0/2] xilinx XDMA driver
+Date:   Thu, 19 Jan 2023 08:32:04 -0800
+Message-ID: <1674145926-29449-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|PH7PR12MB7377:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34699e29-e7f0-48cb-1976-08dafa3abcd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: McietNT95xfiKpOKXC6l/4HL7W4ZZ4b4wd2Zndwq7A7bSnNXJ6xnHvpiWlIjmettWCrfbSOLwSKpxrU+NrX49+r4oGLoha/uj77svZ4+q+U8me+ANqSd98ClCorP+YTi6ceD4C743jwx8qPUlmap4FPX5yqwrhQihfHPAjOhN6k2iQA/0jL3wYycbeIiau+Zn4rFADWdFFHsKcVbWvVZbA4DVHjWiY2gekqBeyzDqG6oi6mHCt4NZIIbAw+YMv8yvHZ2WlxgFbBw782ktk5p722hhXsDYqCzhazWmwa83Bhp3ipUcJWfVrH753tCY3JOd2yWvte2BqUQqobgUX/NBGkySBBp/edfz9lOORP/57RXuemx3GF5M04DW5nDeRmerMDmFEgoIwOfgMhVR7H49N9+mdq5rPGTU91DZtT1I2EAEViqXtdqgT8/TIVKZtLsv2OR7/HMgIreOmKVQrKYyq7nibDWq2EM4kDt7n6NBZUVrobeowSCc5oNZk5AmyWqV/JHeorJ+9kJVsGbcjt2tKaZCElsfc5VvRMdd5ZYuE4MuysbzDyk3qIWAp+n2oNXT1xrHYq8qaaodDIVyA+aaTjEMdmadJURYZ86MGfcLBWJ+5zMIr4h0q3zbBkVzseiJ4TSyrYcUjxa0qNRMZmi0tUxxhRxczAPZ0tWWnqhIP45zZvSX8bAUsiCoWuTk5UD/9ZYwyXxHGr8Ak9fbWHMbgVvQjTNEoaMl2oQPrJRdu6UDT/B2nmJm0H8Gn5e9TG2zMz0WSShCyNMz0ILsUh9bt6SP1v0HFjgDTh4aAg58lEJQ9Qfy5WfXPnxaVR8W5Ox
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(36860700001)(82740400003)(83380400001)(81166007)(5660300002)(356005)(2906002)(86362001)(8676002)(8936002)(4326008)(70206006)(70586007)(44832011)(82310400005)(40480700001)(426003)(478600001)(2616005)(47076005)(26005)(186003)(336012)(316002)(54906003)(110136005)(40460700003)(41300700001)(966005)(6666004)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 16:32:20.8679
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34699e29-e7f0-48cb-1976-08dafa3abcd0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7377
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
+Hello,
 
-First bad commit (maybe != root cause):
+This V12 of patch series is to provide the platform driver to support the
+Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
+PCI Express IP block to provide high performance data transfer between host
+memory and the card's DMA subsystem. It also provides up to 16 user
+interrupt wires to user logic that generate interrupts to the host.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7287904c8771b77b9504f53623bb477065c19a58
-commit: 07bca160469b4d19ca0a35bc83b26ed18fcbd96d net: dsa: microchip: common menuconfig for ksz series switch
-date:   7 months ago
-config: s390-buildonly-randconfig-r001-20230119 (https://download.01.org/0day-ci/archive/20230120/202301200026.knQAJz4B-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=07bca160469b4d19ca0a35bc83b26ed18fcbd96d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 07bca160469b4d19ca0a35bc83b26ed18fcbd96d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
+            +-------+       +-------+       +-----------+
+   PCIe     |       |       |       |       |           |
+   Tx/Rx    |       |       |       |  AXI  |           |
+ <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+            |       |       |       |       |           |
+            +-------+       +-------+       +-----------+
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+The XDMA has been used for Xilinx Alveo PCIe devices.
+And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+    https://www.xilinx.com/products/boards-and-kits/alveo.html
+    https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
 
-All warnings (new ones prefixed by >>):
+The device driver for any FPGA based PCIe device which leverages XDMA can
+call the standard dmaengine APIs to discover and use the XDMA subsystem
+without duplicating the XDMA driver code in its own driver.
 
-   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/dsa/microchip/ksz9477_i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning: unused variable 'ksz9477_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id ksz9477_dt_ids[] = {
-                                    ^
-   13 warnings generated.
+Changes since v11:
+- minor fixes based on review comments.
 
+Changes since v10:
+- Added Tested-by Martin Tuma tumic@gpxsee.org
 
-vim +/ksz9477_dt_ids +89 drivers/net/dsa/microchip/ksz9477_i2c.c
+Changes since v9:
+- Cleanup code based on review comments.
 
-20e03777d70923 Tristram Ha   2019-09-10   88  
-20e03777d70923 Tristram Ha   2019-09-10  @89  static const struct of_device_id ksz9477_dt_ids[] = {
-eee16b147121ce Arun Ramadoss 2022-05-17   90  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   91  		.compatible = "microchip,ksz9477",
-eee16b147121ce Arun Ramadoss 2022-05-17   92  		.data = &ksz_switch_chips[KSZ9477]
-eee16b147121ce Arun Ramadoss 2022-05-17   93  	},
-eee16b147121ce Arun Ramadoss 2022-05-17   94  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   95  		.compatible = "microchip,ksz9897",
-eee16b147121ce Arun Ramadoss 2022-05-17   96  		.data = &ksz_switch_chips[KSZ9897]
-eee16b147121ce Arun Ramadoss 2022-05-17   97  	},
-eee16b147121ce Arun Ramadoss 2022-05-17   98  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   99  		.compatible = "microchip,ksz9893",
-eee16b147121ce Arun Ramadoss 2022-05-17  100  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  101  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  102  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  103  		.compatible = "microchip,ksz9563",
-eee16b147121ce Arun Ramadoss 2022-05-17  104  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  105  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  106  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  107  		.compatible = "microchip,ksz8563",
-eee16b147121ce Arun Ramadoss 2022-05-17  108  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  109  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  110  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  111  		.compatible = "microchip,ksz9567",
-eee16b147121ce Arun Ramadoss 2022-05-17  112  		.data = &ksz_switch_chips[KSZ9567]
-eee16b147121ce Arun Ramadoss 2022-05-17  113  	},
-20e03777d70923 Tristram Ha   2019-09-10  114  	{},
-20e03777d70923 Tristram Ha   2019-09-10  115  };
-20e03777d70923 Tristram Ha   2019-09-10  116  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
-20e03777d70923 Tristram Ha   2019-09-10  117  
+Changes since v8:
+- Fixed test robot failure on s390.
 
-:::::: The code at line 89 was first introduced by commit
-:::::: 20e03777d70923fe7eae0d7f043ef9488393ab95 net: dsa: microchip: add KSZ9477 I2C driver
+Changes since v7:
+- Used pci device pointer for dma_pool_create().
 
-:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+Changes since v6:
+- Fixed descriptor filling bug.
+
+Changes since v5:
+- Modified user logic interrupt APIs to handle user logic IP which does not
+  have its own register to enable/disable interrupt.
+- Clean up code based on review comments.
+
+Changes since v4:
+- Modified user logic interrupt APIs.
+
+Changes since v3:
+- Added one patch to support user logic interrupt.
+
+Changes since v2:
+- Removed tasklet.
+- Fixed regression bug introduced to V2.
+- Test Robot warning.
+
+Changes since v1:
+- Moved filling hardware descriptor to xdma_prep_device_sg().
+- Changed hardware descriptor enum to "struct xdma_hw_desc".
+- Minor changes from code review comments.
+
+Lizhi Hou (2):
+  dmaengine: xilinx: xdma: Add xilinx xdma driver
+  dmaengine: xilinx: xdma: Add user logic interrupt support
+
+ MAINTAINERS                            |  11 +
+ drivers/dma/Kconfig                    |  14 +
+ drivers/dma/xilinx/Makefile            |   1 +
+ drivers/dma/xilinx/xdma-regs.h         | 166 +++++
+ drivers/dma/xilinx/xdma.c              | 974 +++++++++++++++++++++++++
+ include/linux/dma/amd_xdma.h           |  16 +
+ include/linux/platform_data/amd_xdma.h |  34 +
+ 7 files changed, 1216 insertions(+)
+ create mode 100644 drivers/dma/xilinx/xdma-regs.h
+ create mode 100644 drivers/dma/xilinx/xdma.c
+ create mode 100644 include/linux/dma/amd_xdma.h
+ create mode 100644 include/linux/platform_data/amd_xdma.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
