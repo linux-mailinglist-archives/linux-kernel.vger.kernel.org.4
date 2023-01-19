@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAAB673F7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B02673F80
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjASRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S230469AbjASRGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjASRFd (ORCPT
+        with ESMTP id S229488AbjASRGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:05:33 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7710B49429;
-        Thu, 19 Jan 2023 09:05:31 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id s3so3683280edd.4;
-        Thu, 19 Jan 2023 09:05:31 -0800 (PST)
+        Thu, 19 Jan 2023 12:06:14 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390C4DBFD
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:06:12 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id o17-20020a05600c511100b003db021ef437so1749376wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:06:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F9F2+kem/Aol8OKIhzJOZk9K6JUDOkZxO5i8jszSiM4=;
+        b=MCNAfQYZB2wEVUkb4hbkSQJZXhJE0XmeFncjH4Q8H8cDml2FrE1cPod/xuOreWCzVs
+         NuCPNihpGhbncqMC/k4lHK/hvow54BDqkAQtRtdQOhqTC7CiQMF86ULShGzMHSmyQv4r
+         COt181ZayO4TGS1cYNtqZEoJF3ljBYPhE3zMi8GrgvQyGmb+dhFqHeGR/7iYDL8u0y7i
+         0UdWbA7sG+IPh76UlOVT0VBJU4N9PL6wUV85hzVe+L3zyunQcksgLO3+7dKQEKPYinQh
+         90lSudIfv2SAQtVPYaPkVdgyd/WpKYl6MivR+bvjz1VD9eFUIE8qPWhlaOVMz+sfVa0V
+         uMQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bxFKReXhiNeHH0B2c67HXt8d1FtZifP9bV42iFW5m6I=;
-        b=OZW/MszGhie0Gi9tNjE6JKtCI/199sBkNPzuxvyA6E7SLK4yyE7znyJIH5+RfYJgQU
-         Bxfa7Q5waJQLoWzTYlYea/czAHD+nGzfUCuqokgO08WfTjS7xPvRuzFQV9Czf9SuP6NP
-         a2uA/FlxmirXk1ISE0x01FM9kGTjTqWglykSSDO3RmrZJs1tl7e4jnNN0OmQABETt3EW
-         j98MrbuWjJbXGG+sDR6TtJQI2xUdN1gsrmLTQjp0MBwr8CAjmyRBQr6/zfr64Qh12RTj
-         Dsi8g/8WavKVqUwuvRhiqw4WwlTo8310MQtEoQgMufJy494Wkw+ZVgat8IkwNmEI+c06
-         spUA==
-X-Gm-Message-State: AFqh2krgdielK0M/g8eOgfRVMI/jJUczF6tSK1BsCSYxdKtwgxlgsBOz
-        7KAMulhyLXdaon/UmX+9a9lKxRwjSaWLBKfYQBM=
-X-Google-Smtp-Source: AMrXdXv5o43NoNkKwvTnUN9Kk3VNAmPeK6KTSpnjk9Coz6Q/lh53IG7pGr6RhgJzO6E2FNe222OP0WaMVw4TigNtPIs=
-X-Received: by 2002:a05:6402:4498:b0:495:f184:3971 with SMTP id
- er24-20020a056402449800b00495f1843971mr1645829edb.95.1674147930000; Thu, 19
- Jan 2023 09:05:30 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F9F2+kem/Aol8OKIhzJOZk9K6JUDOkZxO5i8jszSiM4=;
+        b=WetImjUjaYfvQyODsfXL573/ByuG3xUR3b4lNNiSWFRiMfHB1hLMfbxXw01OKUrB6z
+         EHGQgMNxenrABPU+X2WPU1c6nN80cRmaTO2sQ4x3uAFdxWcVqcGQsvrT1d3GcmvjKF+W
+         RqRgKWifvxq9SxvZo5rREr3XNT9aLsYUEY0G/8ZcEjzxvNZSge0gOeIPvS0lDupTEuFD
+         EC45W7/14whKjoP7jyHg3Yth82AbpWBh9mGE9TktFxcUdLd4nW3XD47IjMaiYIBaVhOO
+         CdFI3DV8ZD+7Mz93F6WROC2LtgUktJhAn75dv0q56rdw6QQan7m+OF6eheikI6c+NTqQ
+         hEDg==
+X-Gm-Message-State: AFqh2kpys2p5q2qM4snmRp6Km9oSc9ITCp8qkDoWAhB1pkHuOanQM73f
+        yoq6dJMh/OXkDNd5gAvATkuG/A==
+X-Google-Smtp-Source: AMrXdXtXRI6A4TNlWSdtGXMNKtXaOx+xvopqc946bLCtJouV8zIk+8cpXiW2moR5mnYS/MffCis/gA==
+X-Received: by 2002:a05:600c:4f82:b0:3db:25a0:ca5b with SMTP id n2-20020a05600c4f8200b003db25a0ca5bmr2317662wmq.37.1674147971210;
+        Thu, 19 Jan 2023 09:06:11 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f24-20020a05600c491800b003d9e74dd9b2sm5110372wmp.9.2023.01.19.09.06.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 09:06:10 -0800 (PST)
+Message-ID: <5d3059e5-168d-a039-5ea1-a7b787dadc97@linaro.org>
+Date:   Thu, 19 Jan 2023 18:06:08 +0100
 MIME-Version: 1.0
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
- <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org> <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
- <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
- <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
- <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org> <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
- <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org> <340f3ecdaddb2c422dcbe3df712a082f333eab0d.camel@linux.intel.com>
- <d6f71181-1de4-7937-eda0-8805d9dfc3b4@linaro.org> <b51ecbb8ac774efc4fb4ac1349585b486303f86f.camel@linux.intel.com>
- <CAJZ5v0hYMPkGuJnOBkr+nRX4yny2wa6toPVbhbipRRKyS4Ei4g@mail.gmail.com> <33bb6a2a6b473d74c73a730671e6bd12c764bcd6.camel@linux.intel.com>
-In-Reply-To: <33bb6a2a6b473d74c73a730671e6bd12c764bcd6.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 18:05:18 +0100
-Message-ID: <CAJZ5v0i0AAw0xLDFMDEK_L9YrhX7zxmh7rDh08=61OjVq6ythQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 2/5] cpuidle: psci: Mark as PREEMPT_RT safe
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
+ <20221219151503.385816-3-krzysztof.kozlowski@linaro.org>
+ <CAPDyKFr=-Mts4QtdizW5-D5qO3aP=9ODMhgST4Nx74n5xXxi5A@mail.gmail.com>
+ <26e431a5-9666-0c72-7b0b-1a6c1bfaec22@linaro.org>
+In-Reply-To: <26e431a5-9666-0c72-7b0b-1a6c1bfaec22@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 5:58 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Thu, 2023-01-19 at 13:17 +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 19, 2023 at 12:04 AM srinivas pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > On Wed, 2023-01-18 at 23:14 +0100, Daniel Lezcano wrote:
-> > > > On 18/01/2023 22:16, srinivas pandruvada wrote:
-> > > > > On Wed, 2023-01-18 at 22:01 +0100, Daniel Lezcano wrote:
-> > > > > > On 18/01/2023 21:53, srinivas pandruvada wrote:
-> > > > > > > On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
-> > > > > > > > On 18/01/2023 20:16, srinivas pandruvada wrote:
-> > > > > > > >
-> > > > > > > > [ ... ]
-> > > > > > > >
-> > > > > > > > > > > But we'd better wait for the thermald test result
-> > > > > > > > > > > from
-> > > > > > > > > > > Srinvias.
-> > > > > > > > > >
-> > > > > > > > > > A quick test show that things still work with
-> > > > > > > > > > thermald
-> > > > > > > > > > and
-> > > > > > > > > > these
-> > > > > > > > > > changes.
-> > > > > > > > >
-> > > > > > > > > But I have a question. In some devices trip point
-> > > > > > > > > temperature
-> > > > > > > > > is
-> > > > > > > > > not
-> > > > > > > > > static. When hardware changes, we get notification. For
-> > > > > > > > > example
-> > > > > > > > > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
-> > > > > > > > > Currently get_trip can get the latest changed value.
-> > > > > > > > > But if
-> > > > > > > > > we
-> > > > > > > > > preregister, we need some mechanism to update them.
-> > > > > > > >
-> > > > > > > > When the notification INT3403_PERF_TRIP_POINT_CHANGED
-> > > > > > > > happens, we
-> > > > > > > > call
-> > > > > > > > int340x_thermal_read_trips() which in turn updates the
-> > > > > > > > trip
-> > > > > > > > points.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Not sure how we handle concurrency here when driver can
-> > > > > > > freely
-> > > > > > > update
-> > > > > > > trips while thermal core is using trips.
-> > > > > >
-> > > > > > Don't we have the same race without this patch ? The thermal
-> > > > > > core
-> > > > > > can
-> > > > > > call get_trip_temp() while there is an update, no ?
-> > > > > Yes it is. But I can add a mutex locally here to solve.
-> > > > > But not any longer.
-> > > > >
-> > > > > I think you need some thermal_zone_read_lock/unlock() in core,
-> > > > > which
-> > > > > can use rcu. Even mutex is fine as there will be no contention
-> > > > > as
-> > > > > updates to trips will be rare.
-> > > >
-> > > > I was planning to provide a thermal_trips_update(tz, trips) and
-> > > > from
-> > > > there handle the locking.
-> > > >
-> > > > As the race was already existing, can we postpone this change
-> > > > after
-> > > > the
-> > > > generic trip points changes?
-> > > I think so.
-> >
-> > Well, what if this bug is reported by a user and a fix needs to be
-> > backported to "stable"?
-> >
-> > Are we going to backport the whole framework redesign along with it?
-> >
-> > Or is this extremely unlikely?
-> These trips are read at the start of DTT/Thermald and will be read once
-> after notification is received. So extremely unlikely.
-> But we can add the patch before this series to address this issue,
-> which can be marked stable. I can submit this.
+On 19/01/2023 16:40, Krzysztof Kozlowski wrote:
+> On 17/01/2023 16:27, Ulf Hansson wrote:
+>> On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> The PSCI cpuidle power domain in power_off callback uses
+>>> __this_cpu_write() so it is PREEMPT_RT safe.  This allows to use it in
+>>> Realtime kernels and solves errors like:
+>>>
+>>>   BUG: scheduling while atomic: swapper/2/0/0x00000002
+>>>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>>>   Call trace:
+>>>    dump_backtrace.part.0+0xe0/0xf0
+>>>    show_stack+0x18/0x40
+>>>    dump_stack_lvl+0x68/0x84
+>>>    dump_stack+0x18/0x34
+>>>    __schedule_bug+0x60/0x80
+>>>    __schedule+0x628/0x800
+>>>    schedule_rtlock+0x28/0x5c
+>>>    rtlock_slowlock_locked+0x360/0xd30
+>>>    rt_spin_lock+0x88/0xb0
+>>>    genpd_lock_nested_spin+0x1c/0x30
+>>>    genpd_power_off.part.0.isra.0+0x20c/0x2a0
+>>>    genpd_runtime_suspend+0x150/0x2bc
+>>>    __rpm_callback+0x48/0x170
+>>>    rpm_callback+0x6c/0x7c
+>>>    rpm_suspend+0x108/0x660
+>>>    __pm_runtime_suspend+0x4c/0x8c
+>>>    __psci_enter_domain_idle_state.constprop.0+0x54/0xe0
+>>>    psci_enter_domain_idle_state+0x18/0x2c
+>>>    cpuidle_enter_state+0x8c/0x4e0
+>>>    cpuidle_enter+0x38/0x50
+>>>    do_idle+0x248/0x2f0
+>>>    cpu_startup_entry+0x24/0x30
+>>>    secondary_start_kernel+0x130/0x154
+>>>    __secondary_switched+0xb0/0xb4
+>>>
+>>> Cc: Adrien Thierry <athierry@redhat.com>
+>>> Cc: Brian Masney <bmasney@redhat.com>
+>>> Cc: linux-rt-users@vger.kernel.org
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+>>> index c80cf9ddabd8..d15a91fb7048 100644
+>>> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+>>> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+>>> @@ -62,7 +62,8 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+>>>         if (!pd_provider)
+>>>                 goto free_pd;
+>>>
+>>> -       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
+>>> +       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_RT_SAFE | \
+>>> +                    GENPD_FLAG_CPU_DOMAIN;
+>>
+>> My main concern with this, is that it will affect the parent domains
+>> too. Whether those would be able to use the GENPD_FLAG_RT_SAFE or not,
+>> is a different story.
+>>
+>> In one way or the other, I think it would be better to limit the
+>> GENPD_FLAG_RT_SAFE to be used only for PREEMPT_RT kernels.
+> 
+> I can do it... or maybe we should just drop the flags (RT and IRQ safe)
+> when parent domain does not have it?
 
-Looks reasonable to me.
+Actually, with next patch, I can skip this one entirely. This is needed
+if PSCI cpuidle driver invokes runtime PM functions which eventually
+puts PSCI cpuidle power domain into suspend/resume. If the former does
+not happen, the domain driver won't be even called so my problem disappears.
+
+Since I need patch 3/5 - effectively disabling PSCI cpuidle runtime PM -
+we can drop this one, till we find a real user needing it.
+
+Best regards,
+Krzysztof
+
