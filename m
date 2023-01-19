@@ -2,79 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CE1673DBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E66673DD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjASPlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S231305AbjASPp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjASPlE (ORCPT
+        with ESMTP id S231304AbjASPpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:41:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF14C82999;
-        Thu, 19 Jan 2023 07:41:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB67A61C99;
-        Thu, 19 Jan 2023 15:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9880C433D2;
-        Thu, 19 Jan 2023 15:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674142861;
-        bh=kcg9B/jMLpN2IxpZNMi5++G/x9aD5/3+tJIqR3+NnQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yeAgtS+HaZm1Gqx8OEv7DQMiyCl4hLC2VUulYyQ4eFcUx+X3a31HBaIqn4M9kggs/
-         3k3tN9+SOVrRFJpoiYqW92bro8LGkbXV+59w3xLOuPZcZkVzc/qJmTaX5G6ckyPFq0
-         u9OJHq3C/rn1wCdLnR1p5u3uikFp/kSdyHW1mk54=
-Date:   Thu, 19 Jan 2023 16:40:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v4 1/4] device property: Get rid of
- __PROPERTY_ENTRY_ARRAY_EL*SIZE*()
-Message-ID: <Y8lkhedIFY8UOPf+@kroah.com>
-References: <20221122133600.49897-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gewC7z5XY+r8=2bkOAO2y8q7VVbrazj0z+4xGRR2Bkew@mail.gmail.com>
+        Thu, 19 Jan 2023 10:45:55 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB1688386B;
+        Thu, 19 Jan 2023 07:45:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B72CE1FB;
+        Thu, 19 Jan 2023 07:46:31 -0800 (PST)
+Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 340B93F445;
+        Thu, 19 Jan 2023 07:45:47 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        leo.yan@linaro.org, mike.leach@linaro.org
+Cc:     sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com, James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/8] perf cs_etm: Basic support for virtual/kernel timestamps
+Date:   Thu, 19 Jan 2023 15:42:59 +0000
+Message-Id: <20230119154308.3815108-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gewC7z5XY+r8=2bkOAO2y8q7VVbrazj0z+4xGRR2Bkew@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 07:55:44PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 22, 2022 at 2:35 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > First of all, _ELEMENT_SIZE() repeats existing sizeof_field() macro.
-> > Second, usage of _ARRAY_ELSIZE_LEN() adds unnecessary indirection
-> > to the data layout. It's more understandable when the data structure
-> > is placed explicitly. That said, get rid of those macros by replacing
-> > them with the existing helper and explicit data structure layout.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> 
-> The series in which this patch is included does not apply cleanly for me.
-> 
-> I guess it depends on the earlier material already in Greg's tree, so
-> I'm leaving it to Greg.
+Changes since v3:
 
-Andy, did I miss this?
+  * Scale time estimates by INSTR_PER_NS, rather than assuming 1
+    instruction = 1ns
+  * Add a new commit that fixes some issues around timestamps going
+    backwards
+  * Use nanoseconds inside cs-etm-decoder.c, rather than storing the
+    raw time values and converting when a sample is synthesized. This
+    simplifies some of the code like estimating the first timestamp.
+  
+===========================
+Changes since v2:
 
-confused,
+  * Remove const to non-const change and copy strings where needed
+    instead.
+  * Use sizeof() instead of PATH_MAX
+  * Append "will not be set accurately." to new error message
+  * Remove unneeded stat() call
+  * Rebase on perf/core
+  
+==========================
 
-greg k-h
+Changes since v1:
+
+  * Add 3 refactor commits for sysfs reading around pmu.c as suggested
+    by Arnaldo here [1]
+  * The dependency on [2] has now reached mainline so is no longer
+    blocking
+  * Rebase on perf/core
+  
+[1]: https://lore.kernel.org/all/YnqVqq5QW%2Fb14oPZ@kernel.org/
+[2]: https://lore.kernel.org/all/20220503123537.1003035-1-german.gomez@arm.com/
+
+German Gomez (4):
+  perf pmu: Add function to check if a pmu file exists
+  perf cs_etm: Keep separate symbols for ETMv4 and ETE parameters
+  perf cs_etm: Record ts_source in AUXTRACE_INFO for ETMv4 and ETE
+  perf cs_etm: Set the time field in the synthetic samples
+
+James Clark (4):
+  perf: Remove duplication around EVENT_SOURCE_DEVICE_PATH
+  perf: Use perf_pmu__open_file() and perf_pmu__scan_file()
+  perf: Remove remaining duplication of bus/event_source/devices/...
+  perf: cs-etm: Ensure that Coresight timestamps don't go backwards
+
+ tools/perf/arch/arm/util/auxtrace.c           |   5 +-
+ tools/perf/arch/arm/util/cs-etm.c             |  91 ++++++++-
+ tools/perf/arch/x86/util/pmu.c                |  12 +-
+ tools/perf/util/cputopo.c                     |   9 +-
+ tools/perf/util/cs-etm-base.c                 |  34 +++-
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  68 +++++--
+ tools/perf/util/cs-etm.c                      |  95 +++++++++-
+ tools/perf/util/cs-etm.h                      |  16 +-
+ tools/perf/util/pmu-hybrid.c                  |  27 +--
+ tools/perf/util/pmu.c                         | 177 +++++++-----------
+ tools/perf/util/pmu.h                         |  10 +-
+ 11 files changed, 349 insertions(+), 195 deletions(-)
+
+
+base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
+prerequisite-patch-id: 9722bf86e3e6d16d177ff9a1411992a795a7dcbd
+prerequisite-patch-id: b05dbef439c2ea8465f3321532257b0ca29f21f9
+prerequisite-patch-id: 92680a4781cbcf010fcb007e6ea030f59e9eaefc
+prerequisite-patch-id: 8e3a73a04e4b89b503377b5fac1d89d551159393
+prerequisite-patch-id: 09980d8fedcdaa70b220a7802428109f48448a58
+prerequisite-patch-id: 711843c93d5d6bdf4d73e024949950f4e4de9e1a
+-- 
+2.25.1
+
