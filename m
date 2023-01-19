@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E187672EA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084D1672EA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjASCLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S229798AbjASCL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjASCLe (ORCPT
+        with ESMTP id S229820AbjASCLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:11:34 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2515C67948;
-        Wed, 18 Jan 2023 18:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZR+GRLBgNh/Ng8xqc/RxuaVbFzLK3bT534eeqsxAPwE=; b=Te3nlsRa4q9MEVwWN+jf5HtCkz
-        uA0J/KznGpk0eYKKdhda+JQAS5IHvdwZW0C1w5bJUgCBa+TKQdbRY+nC/T7BEdVGH6d8pexRvOdRm
-        LB7+pcqMrF9c2A5tmyuHEXlcIo1E8AcnMl6PXQrZ6KKS3kdIxSeS0BK4uRNCTUoKRtodkwgMInd80
-        Raa8/kNSmOcakF0hrp7Brz4ZfYl9jd59gfzOqckzOEBDKrL9imnm5DigRqSMNsMmDShoKoBajpSwL
-        9dVkyE8wTRlu+8Yg+mymqp0ycCbU7hGqXILm6ksQutliA/1yCuGv4IMAD2ExVjxyUPynk+6Gz7jTG
-        0H1BhMcA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pIKOd-002enL-2a;
-        Thu, 19 Jan 2023 02:11:19 +0000
-Date:   Thu, 19 Jan 2023 02:11:19 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v6 03/34] iov_iter: Pass I/O direction into
- iov_iter_get_pages*()
-Message-ID: <Y8imx/UQB/W/yONu@ZenIV>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
- <167391050409.2311931.7103784292954267373.stgit@warthog.procyon.org.uk>
- <Y8ZU1Jjx5VSetvOn@infradead.org>
- <Y8h62KsnI8g/xaRz@ZenIV>
- <Y8iLsPlSLy5YVffX@ZenIV>
+        Wed, 18 Jan 2023 21:11:50 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156DF45BE4;
+        Wed, 18 Jan 2023 18:11:49 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b17so955335pld.7;
+        Wed, 18 Jan 2023 18:11:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tC+0mywWHqI+sqrHp46ZxP0mQaBVjvXQSSGY/6s8JQI=;
+        b=MwKKJUvraeoEuIpY8/qTuM8EE6zymSdxg2cXYkSXtQtv+dVheaXG823DqtewR9Vi2E
+         PbvwTseNXIWG0Qnv8XheYIGUNJLMj/TG8943/piHYSG8k4Kl0PNfusYhKqm+XY3tN7rT
+         +ScYZKF6F6agPescxeX1cO8sLvyiwsZb4gS3RJVeQk8SPVB6uttqcOZK823VNjgNGBat
+         cBXGcaa25L3yU7G1Hdb5/+E1gUR0UZl7qJgSvIOtcSzdURjU26SjKZeKZ+jiqiZjLXp1
+         NRvjyeRd2PYg5QclbSYVczkSjuzJvi/NooF6auxx90uVPnpfUm39nc34xjdByQzfcBdn
+         YVKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tC+0mywWHqI+sqrHp46ZxP0mQaBVjvXQSSGY/6s8JQI=;
+        b=AD9XV1FckODeesLL8wIHVEiLJZLNc09zA+aogGXQ31o7tZatBFSYS2Ey2YJJmLD8PX
+         +OIld1g1lboqROQnzLNyK7L/5lHAUjF2FEVc5GcfxPYb/UzS2s/YLILpgaR1jayAU3U8
+         S1VpMOik7nT2tkc2vqKOX3u+2XYzxQwPi2DrGOMmYi8QI06XWKAlbKYBtwp3ctveHmbU
+         xlxqQtx3xT4py9C4RWJO4K3ofZEhj64T4aESrAPLdflNIabpX80ztF7triRjQ54mhZJO
+         OumfiB/guQ6Br4gmuTLQCyVv87A48SpaEXDpkyzc5BnmyJt2SlMz+3nYz7h6/jPwZNSQ
+         27+Q==
+X-Gm-Message-State: AFqh2koX0yR3r46VE6U7H3vNwbZtqAq62BDp72KEo82kQST8W6+k8auo
+        r9jFar4YrI0hUK3GInE9fbk=
+X-Google-Smtp-Source: AMrXdXucTgx+jrYtDbLD/rzJHvHDUU3/BlPM0+iL/RjO/9Y603roCW1nW/5XiNSuuPrdN0RSXJE5UA==
+X-Received: by 2002:a17:902:8c90:b0:191:2b76:612c with SMTP id t16-20020a1709028c9000b001912b76612cmr8077470plo.62.1674094309142;
+        Wed, 18 Jan 2023 18:11:49 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-70.three.co.id. [180.214.232.70])
+        by smtp.gmail.com with ESMTPSA id u10-20020a17090341ca00b00192f4fbdeb5sm10360889ple.102.2023.01.18.18.11.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 18:11:48 -0800 (PST)
+Message-ID: <51023b0e-897a-4aac-8654-63c52de9eeb4@gmail.com>
+Date:   Thu, 19 Jan 2023 09:11:45 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8iLsPlSLy5YVffX@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIXSBtbS9oaWdobWVtOiBmaXggc3BlbGxp?=
+ =?UTF-8?Q?ng_mistakeo?=
+Content-Language: en-US
+To:     =?UTF-8?B?dG9tb3Jyb3cgV2FuZyAo546L5b635piOKQ==?= 
+        <wangdeming@inspur.com>, "corbet@lwn.net" <corbet@lwn.net>,
+        "fmdefrancesco@gmail.com" <fmdefrancesco@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>
+Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <63c9e0aaf682ab012d27dced94d127b818-1-23gmail.com@g.corp-email.com>
+ <Y8dXpe5CCo5Kl3Zg@debian.me> <67e5d78c78824176847cc5bb5798e12f@inspur.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <67e5d78c78824176847cc5bb5798e12f@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 12:15:44AM +0000, Al Viro wrote:
-> On Wed, Jan 18, 2023 at 11:03:52PM +0000, Al Viro wrote:
-> > On Mon, Jan 16, 2023 at 11:57:08PM -0800, Christoph Hellwig wrote:
-> > > On Mon, Jan 16, 2023 at 11:08:24PM +0000, David Howells wrote:
-> > > > Define FOLL_SOURCE_BUF and FOLL_DEST_BUF to indicate to get_user_pages*()
-> > > > and iov_iter_get_pages*() how the buffer is intended to be used in an I/O
-> > > > operation.  Don't use READ and WRITE as a read I/O writes to memory and
-> > > > vice versa - which causes confusion.
-> > > > 
-> > > > The direction is checked against the iterator's data_source.
-> > > 
-> > > Why can't we use the existing FOLL_WRITE?
-> > 
-> > 	I'm really not fond of passing FOLL_... stuff into iov_iter
-> > primitives.  That space contains things like FOLL_PIN, which makes
-> > no sense whatsoever for non-user-backed iterators; having the
-> > callers pass it in makes them automatically dependent upon the
-> > iov_iter flavour.
+On 1/18/23 09:55, tomorrow Wang (王德明) wrote:
+> Hi,
 > 
-> Actually, looking at that thing...  Currently we use it only for
-> FOLL_PCI_P2PDMA.  It alters behaviour of get_user_pages_fast(), but...
-> it is completely ignored for ITER_BVEC or ITER_PIPE.  So how the
-> hell is it supposed to work?
+>  I find only one typo about higmem. And I have modified the subject.
 > 
-> And ITER_BVEC *can* get there.  blkdev_direct_IO() can get anything
-> ->write_iter() can get, and io_uring will feed stuff to it.  For
-> that matter, ->read_iter() can lead to it as well, so
-> generic_file_splice_read() can end up passing ITER_PIPE to that
-> sucker.
-> 
-> Could somebody give a braindump on that thing?  It looks like we
-> have pages that should not be DMA'd to/from unless driver takes
-> some precautions and we want to make sure they won't be fed to
-> drivers that don't take such.  With checks done in a very odd
-> place...
 
-PS: Documentation/driver-api/pci/p2pdma.rst seems to imply that those
-pages should not be possible to mmap, so either that needs to be
-updated, or... how the hell could we run into those in g-u-p,
-anyway?  Really confused...
+You send your patch as attachment, please send it inline instead
+with git-send-email(1).
+
+Also, please don't top-post; reply inline with appropriate context
+instead.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
