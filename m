@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556AF673FC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61686673FCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjASRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S229845AbjASRWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjASRVi (ORCPT
+        with ESMTP id S229711AbjASRWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:21:38 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDAD903A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:21:35 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pIYbR-0005F1-HO; Thu, 19 Jan 2023 18:21:29 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH] riscv: alternative: proceed one more instruction for auipc/jalr
- pair
-Date:   Thu, 19 Jan 2023 18:21:28 +0100
-Message-ID: <1748643.VLH7GnMWUR@diego>
-In-Reply-To: <20230115162811.3146-1-jszhang@kernel.org>
-References: <20230115162811.3146-1-jszhang@kernel.org>
+        Thu, 19 Jan 2023 12:22:04 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9865593D9;
+        Thu, 19 Jan 2023 09:22:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=cqG1MRAXLPrHaT+eAcJye0uuBLqSJFewuZYbSXYEZvo=; b=Tz5pVxX1z7Y3PKklioNj4Bdv+a
+        lKq0NRHt9xkawqp2p35oH+WxcKLOX4kbAKNFCeCazSgl8RH4codmTFH5O50dWAtK6ml20dbiw7FDY
+        wNqYUBRBj2I0LBJt2Hb8WNMo4SRjg3C4K3y5QnAhPWuHlOfEWNX169BgrAghaR6dd8Ic=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pIYbs-002c3x-Pa; Thu, 19 Jan 2023 18:21:56 +0100
+Date:   Thu, 19 Jan 2023 18:21:56 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] net: mdio: add amlogic gxl mdio mux support
+Message-ID: <Y8l8NJdulOTX4GpI@lunn.ch>
+References: <20230116091637.272923-1-jbrunet@baylibre.com>
+ <Y8dimCI7ybeL09j0@lunn.ch>
+ <1jr0vqyet1.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1jr0vqyet1.fsf@starbuckisacylon.baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 15. Januar 2023, 17:28:11 CET schrieb Jisheng Zhang:
-> If we patched auipc + jalr pair, we'd better proceed one more
-> instruction. Andrew pointed out "There's not a problem now, since
-> we're only adding a fixup for jal, not jalr, but we should
-> future-proof this and there's no reason to revisit an already fixed-up
-> instruction anyway."
+> I usually avoid doing this since the DT part is intended for another
+> maintainer. The idea is make life easy for them and let them pick the
+> entire series (or not). I don't mind sending the DT update along if it
+> is the perferred way with netdev.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> FYI, the DT update would look like this :
+> https://gitlab.com/jbrunet/linux/-/commit/1d38ccf1b9f264111b1c56f18cfb4804227d3894.patch
+> 
+> >
+> >> This has been tested on the aml-s905x-cc (LePotato) for the internal path
+> >> and the aml-s912-pc (Tartiflette) for the external path.
+> >
+> > So these exist in mainline, which is enough for me.
+> 
+> Yes the boards exists in mainline, there are still using the mdio-mux-mmioreg driver
+> ATM
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+The point of posting the actual users is sometimes we get vendor crap
+with no actual in tree users. We want to avoid that. It can be enough
+to mention in the cover letter than a future patchset will change the
+DT files X, Y and Z, making it clear there are in tree users.
 
-
+   Andrew
