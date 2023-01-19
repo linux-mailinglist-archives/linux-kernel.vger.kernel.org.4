@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B43673315
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E31B67331F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjASH5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
+        id S229971AbjASH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjASH5T (ORCPT
+        with ESMTP id S229765AbjASH6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:57:19 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D8C46BF;
-        Wed, 18 Jan 2023 23:57:18 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id br9so2055603lfb.4;
-        Wed, 18 Jan 2023 23:57:17 -0800 (PST)
+        Thu, 19 Jan 2023 02:58:09 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA8A2202C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:58:06 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l8so823881wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:58:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8TgKWEjbZbhQRuOfWl79+7R0LGUimYBR1yeNE3XKpH0=;
-        b=O5OOcGHT8mbVgqz+xU8R3u/0Dej6PlOqg70mCK2wGAreZDuLODizWG9JUSVbLzLBdD
-         bOe5UluncIcrAXMjUaninWEDL9nTVCF9DC/WFFSZ9SIY9h0A6Y9AXDxdWnYGmFuPZYUa
-         MMeI5ecP+nmOp1ndKjxSuO+tTLkLqs7GKR696ORhKSN4cvssXHlsh1VuuVvXjJusjQDd
-         FqvNonW4uNW9K71T6rN6hQf8rSY3w9ybFmAu0dQeA0Pp7ulyLGEsOJ4KRoMnpjf2V091
-         /IZ2ZeVxELMI276y7LE/C7abpkjAEHTVhAjD1mgd6uxhl9hoxoXbCGx5iMLrUAu2sEeU
-         C0wA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ij8SMr+vXbA/AZuiMltivscr4/Z1+1DiXSChaaWBJLA=;
+        b=jNvClj4Hgs3XtM8osi2wmiQMtbXX9Pmtcv550+503yOGAXBRa9d6VoF6cZTm2h6Gjv
+         vqqmXwxeBDQDNJFNBGX319WcRnTcclvjKfxqDfdIS30rx6KVsgnwyMEWlTKXRyc0Sm1S
+         mT6WXhFENhT0S469DnFce32rQRt/pYYaIYOUIfZhQsd/6CIV99iyCTx6nLFqzlNgInrS
+         cCvHfjWbI+6EBPHsRh6f0fBLcwDK9wLvu5FAYXYqrEVrL2EqadlKhKiQGZ+7HNMzwxLc
+         oPDSOBQB00PBTJJ3qmuUvqX3Bv44IPfj9wYpGqyMB8IaWS9L0X8YL8/ELk/0dd9wpVwy
+         2cYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8TgKWEjbZbhQRuOfWl79+7R0LGUimYBR1yeNE3XKpH0=;
-        b=Bp2xVYF7ylzGpdxaKvg7QYjCJwgophUgqolNwzPmaWEyhBcOnRjbF+HdMzSAzH43We
-         8wpp574RhgXDkr9VGYj8GivSlM+CMo0IVpEcWSo+fsg5AyKzhHCFVD1Q5aheMnxpyOj0
-         6iqX5rSzO5kX0GBOopZLGlTxNL7omThyM23SPVLfy5YuEuxMwuGe0G8l7pfiY6BBLEu0
-         +UHuR4AJrRH1mJaEfPSB7TKFu/W9QrXoOf7KgI1/ZCfieXQfwIE1eKRCE/eRfh0gwh6T
-         JzB6e13q1vTEOnY0weaBc5tmR3Xjc4g6IgeiIuDo4NCpjVwFK8ndTuspeLNQ9ZdlxqjQ
-         AACw==
-X-Gm-Message-State: AFqh2krVne09Q4IvunA1bMid/nvtP3mT9kxaFNrJAJKkTDxWYE2z2aNu
-        /3/Il5WISRhHkrQyFDQzgXV/lxk2MuLF5BF2ZwdrRM8HHilpJw==
-X-Google-Smtp-Source: AMrXdXvfyxm+Khz7t9NWJHmc8O3DRyVENAto+8LT2ZweE4+J3Euiwtliwzv+23vzh82ABNkLwm9BgiIcFUumNfvGZMQ=
-X-Received: by 2002:a05:6512:159:b0:4b5:2958:bd06 with SMTP id
- m25-20020a056512015900b004b52958bd06mr577515lfo.26.1674115036290; Wed, 18 Jan
- 2023 23:57:16 -0800 (PST)
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ij8SMr+vXbA/AZuiMltivscr4/Z1+1DiXSChaaWBJLA=;
+        b=qUrC7micNm3+iQ8wNuMfTUNwPy9M/4u9lqv9Qv6YUb4/V9QwxtiSfWqUUjqYjyGkpD
+         tQU4ZB6qCUU2eRGPI4QnLwFXg0oVKmDnz+M2Qwmfg2SE4XrxlOUebzYmuro2q32CZq+l
+         vevS51JUf3AIWNJknMMO+ncBjARzJlXDZmcaOuOLHl7J/yWgcmwaoF0ioeVakA9UJVQm
+         E7Noe5olYdz1LZ9zg+dPf8BijJzkGH1WGfRHbpxfCZC6PZjL5DmamCc40iSWFPhsJ/Hg
+         mdK30cu4O2g1D0K5xnhKuoK3N//wp7k7zcR2Wz/UU/GDhR5PhLmnPE72AHAf8SwqiM0Q
+         NH6g==
+X-Gm-Message-State: AFqh2kqXe2K9sf58+6K4JO6ZTilh83YXePlJ6sF6dYHlFRDMJlXI1Nd8
+        zHq1uehntKjikEPX6zobAVgWrdE0B0CWd8yywiw=
+X-Google-Smtp-Source: AMrXdXvJcNubzirilufX37J3RKkYIRh76X2L8Sjqd3Dsl7pC4Q5esy4zyFFYuUszjgUWfmEGPa2dtA==
+X-Received: by 2002:a1c:4c0a:0:b0:3db:210:6a24 with SMTP id z10-20020a1c4c0a000000b003db02106a24mr9024938wmf.8.1674115084639;
+        Wed, 18 Jan 2023 23:58:04 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id p15-20020a05600c468f00b003d9b87296a9sm4115776wmo.25.2023.01.18.23.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 23:58:04 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     linux-amlogic@lists.infradead.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20230114233455.2005047-1-martin.blumenstingl@googlemail.com>
+References: <20230114233455.2005047-1-martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v1 0/2] ARM: dts: meson: Add more L2 (PL310) cache properties
+Message-Id: <167411508395.294260.17502522944795124544.b4-ty@linaro.org>
+Date:   Thu, 19 Jan 2023 08:58:03 +0100
 MIME-Version: 1.0
-References: <20230119071215.23042-1-masahiroy@kernel.org>
-In-Reply-To: <20230119071215.23042-1-masahiroy@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 19 Jan 2023 08:56:38 +0100
-Message-ID: <CA+icZUUKHi5h_QsoSfXLLW7cygsCub7EvtPdoWoG6WXAmoKLeQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: remove bin2c
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 8:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Commit 80f8be7af03f ("tomoyo: Omit use of bin2c") removed the last
-> use of bin2c.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi,
 
-With yesterday's build including latest tomoyo changes in Linus Git I see:
+On Sun, 15 Jan 2023 00:34:53 +0100, Martin Blumenstingl wrote:
+> I had these patches in my testing tree for a while now. The vendor
+> kernel uses the same configuration, so it probably makes sense to
+> use them upstream as well.
+> 
+> 
+> Martin Blumenstingl (2):
+>   ARM: dts: meson8: Add more L2 (PL310) cache properties
+>   ARM: dts: meson8b: Add more L2 (PL310) cache properties
+> 
+> [...]
 
-$ scripts/diffconfig /boot/config-6.2.0-rc4-1-amd64-clang15-kcfi
-/boot/config-6.2.0-rc4-2-amd64-clang15-kcfi
--BUILD_BIN2C y
-BUILD_SALT "6.2.0-rc4-1-amd64-clang15-kcfi" -> "6.2.0-rc4-2-amd64-clang15-kcfi"
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (for-next)
 
-So, yes bin2c can go.
+[1/2] ARM: dts: meson8: Add more L2 (PL310) cache properties
+      https://git.kernel.org/amlogic/c/12cdc236cf83eb55560f52dd378f05d5798452ba
+[2/2] ARM: dts: meson8b: Add more L2 (PL310) cache properties
+      https://git.kernel.org/amlogic/c/46f73c1c037eed8e5fd61cc39c77b0988148b50b
 
-Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+These changes has been applied on the intermediate git tree [1].
 
--Sedat-
+The for-next branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
