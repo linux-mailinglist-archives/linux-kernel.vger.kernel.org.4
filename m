@@ -2,91 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5105F673F87
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7B8673F8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjASRHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S229901AbjASRJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjASRHS (ORCPT
+        with ESMTP id S229590AbjASRJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:07:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E3A5CB;
-        Thu, 19 Jan 2023 09:07:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B47D61CE5;
-        Thu, 19 Jan 2023 17:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9DBC433EF;
-        Thu, 19 Jan 2023 17:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674148036;
-        bh=dy2HQg065wkbvQBN59EGg0efxbySx94VB4zoBym3aX0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zxtfm8knK25V+i2iygIrl/LwqGZyjnBVSBksqPA50uy4OWFR5P/2dqp+Sfs4MilYe
-         pR+O7YuyeVmFthVaaEJqC4jop9hTD02o05b2se0dz8m9+RQvQ0GoCbJOwwHtyRGiuo
-         mAy4hciaTThgiKBR/A/eABgesUv7O9n8YUzs4erzarF06qdhIghFE8/ZlyQ2fsfUlo
-         L/8h2Eq6Y84V0yi/oyN/bvHKIaGh54oWc0/nFSdAnToO9zTkiBfadL6q8eWv65Ivc2
-         1GIL0JvPeGcwnN4nAjksocfooE4S64tBHN9l1hSlGif48JjB/g6SHmtyZdZdQmBXgt
-         Si6q35rjn1QKg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pIYO3-0007wJ-59; Thu, 19 Jan 2023 18:07:39 +0100
-Date:   Thu, 19 Jan 2023 18:07:39 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 6.2-rc5
-Message-ID: <Y8l42/yYoPZNiJa4@hovoldconsulting.com>
+        Thu, 19 Jan 2023 12:09:15 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C7B78565
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:09:13 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d2so2507727wrp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:09:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=QYT16gcL1o7KfqICaZiM4MdP56vwEo0O5K+aSDVlgX0=;
+        b=q0jxZIeMEuYrl332d1BulzETciq0OpwH+Re4+yehp2MyiQVJ6a5c+he/CByURVJ8Db
+         ZEtRHFljUx/4/UKiVbzpFkP35ksXntqcmjMX5TgeTc3l/q4FQCAgboewOObGmV1aVxve
+         vNYfVrwifiIluSJcp/BiPp3AZRC2+bRbKixA/R1yghM1+VADeKmzSk5TQGoQ3tC03oCH
+         demGi1QoCyFQ+4palGdUhvaGyDkT2oNP4B7WyEcZRTCes+cW3bU8zcdpVhStFPI/ysY6
+         TSBj7Qtd8zOgRAg9+A3ZlhEl4rMOXcdcGFwwG3pJVg0hHWF8xzPaD9arwelQGPWfxCZd
+         c/Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QYT16gcL1o7KfqICaZiM4MdP56vwEo0O5K+aSDVlgX0=;
+        b=eWGmTj2pB4HbYbtyPipn8GveVpMSZBqSVRnpCI++DR+rCtCq5MYEcjbEpOxTX5epI5
+         SYkxA3ydvC3vzHcfDOL+wuiLniestsMZajnsCXHD6Vh4zrNLXXAWbgCtTZpZ/LjO/Z+P
+         I2z8629ziZK9n1i13a4gxjLqGwWr2TIDlQP3Mr6754IvF2OZRiklVZzkuR9FWPh+0YIM
+         JiGFMFtk2+FQgAXR6CRBLU1MXmgjuKXXiDUVfPZnBEPsBK6UHIpyVX+qZSrsv8Ezo3Jn
+         qH6pOx6yqcUa41MogUWIJ4kyuRQC7socKiQ+AW+h1vMOGLzzd75ZMPiXIn6vCkCIxtDU
+         2V/w==
+X-Gm-Message-State: AFqh2kqvOsqphm6YEvBlmlYUKoCIt6hmzpMkGQT/b2Xi8fzMiDk4aByQ
+        yjtMezf5E1uZYfh30vZO1laXYw==
+X-Google-Smtp-Source: AMrXdXtmxB/DZgDBvvy0PG75kWe13EWUcihaGybiFw5w7rS6iLxglHnbI5UcR+qv4uVzp1j3cL4LNQ==
+X-Received: by 2002:a5d:66c9:0:b0:2b9:d6ba:21ef with SMTP id k9-20020a5d66c9000000b002b9d6ba21efmr10148494wrw.65.1674148151949;
+        Thu, 19 Jan 2023 09:09:11 -0800 (PST)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id bu9-20020a056000078900b002be1dcb6efbsm8738701wrb.9.2023.01.19.09.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 09:09:11 -0800 (PST)
+Subject: [PATCH v2 0/3] Add MediaTek MT8365 I2C support
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIACN5yWMC/32NTQqDMBCFryKz7hQz9Y+ueo/SxSRO64Amkqgg4t0beoCuHt+D770DkkSVBPfigC
+ ibJg0+A10KcAP7j6D2mYFKImOIcFq6W1OjksO0znOIC75dWXU9U2OEIYuWk6CN7N2QVb+OYy4HTUuI
+ ++9oMzmefzc3gyVWLLZ1deWa1j4s76PaKFcXJnid5/kFSlZg9LwAAAA=
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Thu, 19 Jan 2023 18:08:51 +0100
+Message-Id: <20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com>
+To:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2020; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=iGMc/QCAlaYMz2Z3bGLpxd7Zyz4K9F42xqqJHO2BQ3Q=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjyXk2/8y5TnbVYFX/xMqYnIJmbxIuKJug4yVZiqwY
+ lTmE88OJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8l5NgAKCRArRkmdfjHURZflD/
+ 4+PCkdQHVP2guN6+Ux+98Nm2OddpqGxd5Atb7h81kYrlitQ1Y5BL0yrIP/Yf1AGFzYvdfXPI+t5xhT
+ rGIXH0/R1vjh93k45tm+YXeJPKHxPv9Rx9INs18CF4UVmdGmhi6P2sFbC7GFv6wkzfEwhH8gDjveI/
+ OPUJfjdVhezJe6/yq77+2jJX/Ogk5z0PTeOZwhCyl/sx0qZNprz1Zk8TMktQs59iJEvsPvX9t1mGol
+ sFLfI0wcjyTishtc0dkV/WC5ltirHnP0L2unm3aVmUUtil7vhTB89uEgG1IaqhPEtOKI0asrc5ayoY
+ kLTsXzvKzloqUWj4jWhbREppev14Y2LgFKuLUvEnYdo20upsYSl3TGMGyOBe7almFlLnNrvJ+x2saa
+ TT+1t1BOeVSUjGfz7bj7lSEM9W6famgNiKmyS3s+vJ5YT7R2pKvMr9088n1gATyAQZeOeFMq/ADNXN
+ CQCWroEX3dNfAZg0mhZINS31AcmQ+QQ30O6rlTTrIeKxJqbnp8KnNN04yA2gzJF7og6WIO4TgCQzcp
+ Uz9FfCgHW34PkHk5YG6YQhGxPJXRjDxZNAsSVOOIzhz48IxjZ5Kp04XgCh4tqtgltNadE4SL04GGt7
+ 4ZEd6/fE5V/q+NrnVL7UYIWT6nFOmzZb+kw7KwfqTWCz0TjoQQ+4sPWuXXug==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+Hi,
+This patch series adds I2C support for MT8365-EVK board.
+The I2C-0 is enabled, it can be used through the board pin header,
+as described directly on the PCB.
 
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+This series depends to another one which add support for
+MT8365 SoC and EVK board. Link [1]
 
-are available in the Git repository at:
+One patch has been cherry-picked from [2], so I've addressed the comment
+and kept the trailer.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.2-rc5
+Regards,
+Alex
 
-for you to fetch changes up to 71dfd381a7c051f16a61f82fbd38a4cca563bdca:
+[1]: https://lore.kernel.org/linux-mediatek/20230101220149.3035048-1-bero@baylibre.com/
+[2]: https://lore.kernel.org/all/20220531135026.238475-2-fparent@baylibre.com/
 
-  USB: serial: option: add Quectel EM05CN modem (2023-01-16 08:47:47 +0100)
+To: Qii Wang <qii.wang@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Fabien Parent <fparent@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Changes in v2:
+- Drop the patch which do useless change in i2c-mt65xx.c driver.
+- Change 2 lines compatible/reg in oneline.
+- Link to v1: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com
 
-----------------------------------------------------------------
-USB-serial fixes for 6.2-rc5
+---
+Alexandre Mergnat (2):
+      arm64: dts: mediatek: add i2c support for mt8365 SoC
+      arm64: dts: mediatek: enable i2c0 for mt8365-evk board
 
-Here are some new device ids, mostly for Quectel modems.
+Fabien Parent (1):
+      dt-bindings: i2c: i2c-mt65xx: add binding for MT8365 SoC
 
-All have been in linux-next with no reported issues.
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |  4 ++
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts        | 19 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 52 ++++++++++++++++++++++
+ 3 files changed, 75 insertions(+)
+---
+base-commit: 8b6cfcce3ce939db11166680a57253c39110f07e
+change-id: 20221122-mt8365-i2c-support-fc048da261ea
 
-----------------------------------------------------------------
-Ali Mirghasemi (1):
-      USB: serial: option: add Quectel EC200U modem
-
-Duke Xin(辛安文) (5):
-      USB: serial: option: add Quectel EM05-G (CS) modem
-      USB: serial: option: add Quectel EM05-G (GR) modem
-      USB: serial: option: add Quectel EM05-G (RS) modem
-      USB: serial: option: add Quectel EM05CN (SG) modem
-      USB: serial: option: add Quectel EM05CN modem
-
-Michael Adler (1):
-      USB: serial: cp210x: add SCALANCE LPE-9000 device id
-
- drivers/usb/serial/cp210x.c |  1 +
- drivers/usb/serial/option.c | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+)
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
