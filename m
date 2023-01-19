@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203FF6732C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997C86732A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjASHny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S229769AbjASHlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjASHmr (ORCPT
+        with ESMTP id S229942AbjASHk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:42:47 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAA45654DB;
-        Wed, 18 Jan 2023 23:42:35 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 30J7gG4k9008303, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 30J7gG4k9008303
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 19 Jan 2023 15:42:16 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 19 Jan 2023 15:42:17 +0800
-Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 19 Jan
- 2023 15:42:16 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next 2/2] r8152: reduce the control transfer of rtl8152_get_version()
-Date:   Thu, 19 Jan 2023 15:40:43 +0800
-Message-ID: <20230119074043.10021-399-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230119074043.10021-397-nic_swsd@realtek.com>
-References: <20230119074043.10021-397-nic_swsd@realtek.com>
+        Thu, 19 Jan 2023 02:40:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CA567788;
+        Wed, 18 Jan 2023 23:40:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 04177CE1FC5;
+        Thu, 19 Jan 2023 07:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE71DC433EF;
+        Thu, 19 Jan 2023 07:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674114033;
+        bh=HBcgxXlu9/ZACXw7g8KqVJy5ZYWiB2l1H7RYFxeC6fQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aikj+Tm0mxQSXuCWYiKIXLRj14UnB+nMSQhIyK8mH6yJLzfHKQc/rtTRBMy9Ln1CL
+         /ujxFOzacdbq8flTz7jBikUzUlx544jn/cTroWsxyZP7ksClAwTQOqyEG41doEER2j
+         JpOTbf4cl7dWwfUuyykuKegKtmz6nKKhsAOhBWrnqhCYkLMgoY3JEVnxAJ7Ku5ailD
+         IqTU+V+vR5s8YmnxQ/rTfNZh89o3XXv6vK4eFwzuSjiUGR4k05X2NpathNGO3xXhH3
+         FMumtZ3Xe8sATx8oksRCgca7KvmKLiDgRY2OE4dCzoD5ZyfgMu+JjEmuQDUzkFA1rK
+         aNHOe80fu4ImQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pIPXf-00055C-B3; Thu, 19 Jan 2023 08:41:00 +0100
+Date:   Thu, 19 Jan 2023 08:40:59 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/8] dt-bindings: phy: Add QMP PCIe PHY comptible for
+ SM8550
+Message-ID: <Y8j0C+rnUOMG6hLi@hovoldconsulting.com>
+References: <20230118005328.2378792-1-abel.vesa@linaro.org>
+ <20230118005328.2378792-2-abel.vesa@linaro.org>
+ <Y8giHJMtPu4wTlmA@hovoldconsulting.com>
+ <Y8hjy8WRpPh8DVvG@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 01/19/2023 07:27:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzEvMTkgpFekyCAwNjowMDowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8hjy8WRpPh8DVvG@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce the control transfer by moving calling rtl8152_get_version() in
-rtl8152_probe(). This could prevent from calling rtl8152_get_version()
-for unnecessary situations. For example, after setting config #2 for the
-device, there are two interfaces and rtl8152_probe() may be called
-twice. However, we don't need to call rtl8152_get_version() for this
-situation.
+On Wed, Jan 18, 2023 at 11:25:31PM +0200, Abel Vesa wrote:
+> On 23-01-18 17:45:16, Johan Hovold wrote:
+> > On Wed, Jan 18, 2023 at 02:53:21AM +0200, Abel Vesa wrote:
+> > > Document the QMP PCIe PHY compatible for SM8550.
+> > > 
+> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > ---
+> > >  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml     | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> > > index 8a85318d9c92..65f26cfff3fb 100644
+> > > --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> > > @@ -20,6 +20,8 @@ properties:
+> > >        - qcom,sc8280xp-qmp-gen3x2-pcie-phy
+> > >        - qcom,sc8280xp-qmp-gen3x4-pcie-phy
+> > >        - qcom,sm8350-qmp-gen3x1-pcie-phy
+> > > +      - qcom,sm8550-qmp-gen3x2-pcie-phy
+> > > +      - qcom,sm8550-qmp-gen4x2-pcie-phy
+> > >  
+> > >    reg:
+> > >      minItems: 1
+> > 
+> > I don't think I'll have time to look at this week, but I did notice that
+> > you fail do describe the clocks, regulators, and resets (as you also
+> > did for the UFS PHY binding) which are currently different from
+> > sc8280xp.
+> 
+> Hmm, sorry about that. I will double check against the pcie phy nodes I
+> have for sm8550.
+> 
+> As for the UFS, if your are referring to the following patchset [1], the phy
+> node looks exactly the same as on sc8280xp, therefore no other binding
+> update, other than compatible, was needed.
+> 
+> [1] https://lore.kernel.org/all/20230117224148.1914627-2-abel.vesa@linaro.org/
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Yes, but I was referring to your original submission which added
+different names for the clocks without updating the binding. In that
+case, those clocks were really the same ones as the ones on sc8280xp so
+it was only the driver and dts changes that were wrong:
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6e5e12d90d47..decb5ba56a25 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9581,20 +9581,21 @@ static int rtl8152_probe(struct usb_interface *intf,
- 			 const struct usb_device_id *id)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
--	u8 version = rtl8152_get_version(intf);
- 	struct r8152 *tp;
- 	struct net_device *netdev;
-+	u8 version;
- 	int ret;
- 
--	if (version == RTL_VER_UNKNOWN)
--		return -ENODEV;
--
- 	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
- 		return -ENODEV;
- 
- 	if (!rtl_check_vendor_ok(intf))
- 		return -ENODEV;
- 
-+	version = rtl8152_get_version(intf);
-+	if (version == RTL_VER_UNKNOWN)
-+		return -ENODEV;
-+
- 	usb_reset_device(udev);
- 	netdev = alloc_etherdev(sizeof(struct r8152));
- 	if (!netdev) {
--- 
-2.38.1
+	https://lore.kernel.org/all/Y8And9VVvpnSInlj@hovoldconsulting.com/
 
+> > Please be more careful when adding compatible strings so we get this
+> > right. You should also double check that the differences are really
+> > warranted and not just due the vendor using different names for the same
+> > resource.
+
+Johan
