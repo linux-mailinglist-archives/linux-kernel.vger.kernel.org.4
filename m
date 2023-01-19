@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD30674242
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720D067424B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjASTIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S231241AbjASTJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjASTHL (ORCPT
+        with ESMTP id S230106AbjASTIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:07:11 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183DA966FD;
-        Thu, 19 Jan 2023 11:06:19 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id a9-20020a17090a740900b0022a0e51fb17so135813pjg.3;
-        Thu, 19 Jan 2023 11:06:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xpxp7XO5sHsJ3lfzTlYxihhbIWhrIJucAXxN9hxl+dg=;
-        b=FREbxc9Qy3HiT086pEfzb3u7yMxdQQY6pmDTfhdTpr3nAcl+UV5k/sLGoOyF+m+zcd
-         la7GHQ9xZzBpLAPDtbarVXD10pdoeeaHqaEAEfksd2h2nhxaWRDxZW5aO3apUt3tRlsH
-         jsYYJkRjqpFI2FjAW4C8VUlDqHIUYmHRnZmGqMTk9E+a2N8IbHf943QI7Y/mMkKh7kia
-         qPauKgmYrXeLl5yXewYjwMcBMpS3HrtKu2qLs2YM4YUs2uAcdRdgkHc/lWgt7pntuPSj
-         x7lPqyiSXpasmSrhz8WjRNh6hmTYKrYBhX0PCZD7W5+eUWB/Xw4g5WMpMrsPGuOwVotr
-         cpiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xpxp7XO5sHsJ3lfzTlYxihhbIWhrIJucAXxN9hxl+dg=;
-        b=EIqPccG/aQ+GFfd+D4ebNBSQv7stBBx7+W5MTouHuLLO6kQYehbosjsE7BaAgoWYSw
-         4xHEQ1X7YVKFy2HEejJdjKRpzJNubgoQQjL+KqmKxMBKpeW7hjgbyxN1zrQbTZLX8NmS
-         3lAkbZCYQUiT/pcuXozyQScm5XeA12t3eC9Q63HA+i+DBpkeIXEkXs+nwLGt1Pmc9ZEv
-         QJtZeLLOaBEfscSwHnU9w3NL3W4EbksPbRFfZNHUwEf5x7rStGma+Rh+XILXsrEt+fbd
-         iXICm+DiFeLBps1778mMeVymWmARghr66aSYwvbz2KmDDD2Ec93ImAkht15C0cqDj0Ts
-         iFug==
-X-Gm-Message-State: AFqh2krxA6MIjfKDOS6UzADyaI4fk711ybVNf2YBkcOtNl7FxfnQB+a/
-        x5ig9nt9DEgpt2kUTzhV/BA=
-X-Google-Smtp-Source: AMrXdXvnQ3a0kXh2UwRDjq1SPGKPM5tMn2rlGLjHsP24ziyycXfEdP2gXJT7cg+xD4J9MmhtVCzCmA==
-X-Received: by 2002:a17:902:cad3:b0:194:7abf:742b with SMTP id y19-20020a170902cad300b001947abf742bmr10801145pld.47.1674155176064;
-        Thu, 19 Jan 2023 11:06:16 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u12-20020a17090341cc00b001888cadf8f6sm6794374ple.49.2023.01.19.11.06.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 11:06:15 -0800 (PST)
-Message-ID: <4d26bc29-5c85-1f30-388b-539bc6a3f09a@gmail.com>
-Date:   Thu, 19 Jan 2023 11:06:02 -0800
+        Thu, 19 Jan 2023 14:08:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163EF9B113;
+        Thu, 19 Jan 2023 11:07:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F9661D55;
+        Thu, 19 Jan 2023 19:06:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1C7C433D2;
+        Thu, 19 Jan 2023 19:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674155210;
+        bh=84wFksc5y+vkdlmosNddXFXLVddcPsdJwTu1PkhnkU8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rGc04UbpBVmqi4/ZK3APXtn4XV5D6LVQvU5RmTz2mq3BvwJJ2wfIck5SiJlkcj8i9
+         gRwZswiTyCJH9xIjrW5ribwgXDEa2YOm41YsWsuXwUuVDw6ArG0raUEAEf8NtydewE
+         ELcISv52HkMP7nJrPcEboD5Zzn9Na84AiJEOyPWa7DMsB4z5aCSO3ndGfOMersTGR0
+         wS7DKxawLsq1ae1i5hm6FZOrGYWV0ls1R0VaKZ91ReiTKDFgXpGo96g6G8oKXFme/o
+         dFUVq2JjpBG+cd/wQBIyZXRTNKtwOdsA5iDDEo4pmYtj3sddeBg2IJfk78O2a4Uumx
+         MK+KhVRryRK9w==
+Received: by mail-lf1-f44.google.com with SMTP id br9so4643809lfb.4;
+        Thu, 19 Jan 2023 11:06:50 -0800 (PST)
+X-Gm-Message-State: AFqh2kqtqdgOWTaA+m1wB3Cz3AMlZWAlJHQfJFn6rpGYflI6n46M0KzD
+        B2tfKuI6ZgP7re5DWa++0hZCRYjTrIBB7SOpkKY=
+X-Google-Smtp-Source: AMrXdXt64nUndEGLEDNBdyLij2TTHj/NBNidtKszrhl2R18XJNVEtWClhk8lZ2xXjFti1dqNiqV01TaLB8p/5CE/i34=
+X-Received: by 2002:ac2:48b7:0:b0:4b6:e71d:94a6 with SMTP id
+ u23-20020ac248b7000000b004b6e71d94a6mr901375lfg.476.1674155208380; Thu, 19
+ Jan 2023 11:06:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/4] gpiolib: get rid of exessive
- ->of_gpio_ranges_fallback()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-References: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230118204728.1876249-1-song@kernel.org> <20230118220812.dvztwhlmliypefha@treble>
+In-Reply-To: <20230118220812.dvztwhlmliypefha@treble>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 19 Jan 2023 11:06:35 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+Message-ID: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module removal
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 13:53, Andy Shevchenko wrote:
-> The ->of_gpio_ranges_fallback() repeats the idea that lies behind
-> ->add_pin_ranges(), while the latter covers more cases that the former
-> hook. Drop the former one for good.
-> 
-> Changelog v3:
-> - moved check of the property presense to GPIO library
-> - split out the refcount fix in a separate patch
-> - added cover letter
+On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+> > From: Miroslav Benes <mbenes@suse.cz>
+> >
+> > Josh reported a bug:
+> >
+> >   When the object to be patched is a module, and that module is
+> >   rmmod'ed and reloaded, it fails to load with:
+> >
+> >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> >
+> >   The livepatch module has a relocation which references a symbol
+> >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> >   tries to replace the old relocation with a new one, it sees that
+> >   the previous one is nonzero and it errors out.
+> >
+> >   On ppc64le, we have a similar issue:
+> >
+> >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>
+> Shouldn't there also be a fix for this powerpc issue?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+There was a working version, but it was not very clean. We couldn't agree
+on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
+s390?) first [1].
 
-Thanks!
--- 
-Florian
+Thanks,
+Song
 
+[1] https://lore.kernel.org/live-patching/Y7hLvpHqgY0oJ4GY@alley/#t
