@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DED67436C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1B9674376
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjASUTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S230197AbjASUVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjASUTh (ORCPT
+        with ESMTP id S229971AbjASUVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:19:37 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFD99B136
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:19:34 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id 18so4332257edw.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:19:34 -0800 (PST)
+        Thu, 19 Jan 2023 15:21:21 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08F99B125;
+        Thu, 19 Jan 2023 12:21:18 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id az20so8782397ejc.1;
+        Thu, 19 Jan 2023 12:21:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DwALFcrEiKMJKQDtzjjSGBC+/S37AZnAdeZoHTjv71c=;
-        b=Njq65P8qY5m18g3GH2t0w3dsUdB8sQH/p0VvLnd1DZqbHJBKfxVxoVI5v1paDuzb/G
-         KPqS2O0x9KOHyCCYmGES4RgQONH23PeN4N3vTs4kZeT0sTKmNfouCv58lm8NTI0dhUnO
-         7oMO9lXt/jgJQH1QYvtMUAbvFu3FxNRZrkJSUI9JRS5cRCoMin+wqnXYMkEGV0o2egn9
-         7iw92WXeIX8e8jFT6Ap+GGe+6kDuTDN2eUMWHX6YqslL6cQ0QBGCSw7Dwca6JlG+4+eP
-         FMpa2cP0EFWSr4vkrIgbwJgaeLENpsCrblmfhBcJNzq51ZZc6hbw2fPuF2yIgcCgx+6f
-         DB/g==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eAfTheDsldomxpbKQZ8yWFgF6bHzEWGRuW3vjcWnsNM=;
+        b=JJCXOq1C+hmjwU4fORTcgiCmsy+ngUNCFQJFV9RR3gCr6eAaQojwJmDpJoi+LDViHG
+         FhajC2KB2N/Abkw54H33t7xi1IyWmdFyae9MWHUvgLgyk4eQlCEGBVED5J4iFm7QOO7g
+         gMQMd4Q9h8ciwQNbqOCB/xxoOoBN6LrM1X8ecVmxyEJPq6m4Py33vEUVlRRNBSjImkfv
+         NqqGG0LSRbaGnGmY8ybIKc2XZ8/S/8ayA91MU+/dA2AssgYGr1imxcqcAdMNTAi5OnMU
+         +bh21bpcBSY4Dl4uyaFNRj+SdpjnsiwHu0fyhvzKte9odVf+hai4ijSrUsM8anCPQQGa
+         VfWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DwALFcrEiKMJKQDtzjjSGBC+/S37AZnAdeZoHTjv71c=;
-        b=RCyotiHmg8GZiBGY7lDhYVNFjMAOOE+pBSszpdKkc6ysxWko4B1OrWojwa+Kv/uPFQ
-         oBUBC+O49BEvs9nuR9BZAlgEqgEQtsaWOaLLo1RMPra3GgcupMWOGoMF4vomfPlHyt/4
-         VxaCEPkV41QSXybWDE8z1nnolaL05f43eRgeVuHGg/YXPiDrHIJ67q4U0IIJbrbGgl+P
-         CQNS1HzPHchHpClrXeRx7zIGWV8QJ8fsRImVm2RuggiC3KHl1nwTRKa5HZSmmHCJ7HQw
-         RA1b1DOjkD31BjTEwxpWfdXK8p6xTD3eriHuGp0VByJRuoIskMaeDeoRuOu8OfQO+Hee
-         QuEQ==
-X-Gm-Message-State: AFqh2kqTAXiiH+WPk5LVh343OHKz/iUZoSKRB+ZvsGIFee1QiJe8xJ10
-        kwsEboLVv2y6UhxwhOY0Y7JnpR2xfrruRIpWFRx4jg==
-X-Google-Smtp-Source: AMrXdXvmH0GRGbwaV7u5oSOSaoK0g9rea6G6setaQjtfKdKGn4KEEffOqbcap4UQW7bxQuTToTvUKrVZdkyR5Uxyv3s=
-X-Received: by 2002:a05:6402:221a:b0:49d:836e:21f9 with SMTP id
- cq26-20020a056402221a00b0049d836e21f9mr1588134edb.36.1674159572334; Thu, 19
- Jan 2023 12:19:32 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eAfTheDsldomxpbKQZ8yWFgF6bHzEWGRuW3vjcWnsNM=;
+        b=rKaJUYLk/F/h5FuXf1K36BKbELg04Ouol8ZTjDL+KTmZzgxm8eWA86YrosOfNt73L8
+         4/Gjzc9ciMW1anOKo6+u6NbgJFDNogweMxLAh5uxxpE2U3FRNjv7fooLrPjPRPkRi6Rq
+         jOFDck2XJKQimvaTwfXuVaRKAQpQqAcKEuBWP2K2uXEc1pW0iLcB37ECg0X4x2mLwEHl
+         Ed+ekPJOba+fyvD6daBHOM2Yv9wVq82u+57++9xPhPS6IKbqx42o7Zkf2wWz4UVWRKmc
+         ic6z5qZIdAFhF2dzuEQAOQ+ImX1Po7y7fqLd+tED1N/PcuKgOrFcvWkj4tTO5Z7L3vT0
+         6daQ==
+X-Gm-Message-State: AFqh2kolVjRtMLCptYTAjOs+wOJ75YxGQO/gEUhL9z0xhYjjh6hhVyWN
+        EuBA2seGZ/wmI4pV/NHGjCI=
+X-Google-Smtp-Source: AMrXdXuSzXeG0cdCgOgjlXU1Z8dWIkeXhCadD+6AZLkyNyriCTGYq6qQEw60qTSp2BLPjhDm5jkiYg==
+X-Received: by 2002:a17:907:8c17:b0:871:38cc:7b3a with SMTP id ta23-20020a1709078c1700b0087138cc7b3amr3009149ejc.75.1674159677371;
+        Thu, 19 Jan 2023 12:21:17 -0800 (PST)
+Received: from skbuf ([188.27.185.85])
+        by smtp.gmail.com with ESMTPSA id e20-20020a170906249400b0084d4cb00f0csm14025115ejb.99.2023.01.19.12.21.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 12:21:16 -0800 (PST)
+Date:   Thu, 19 Jan 2023 22:21:13 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20230119202113.lwya43hjvosjk77a@skbuf>
+References: <455e31be-dc87-39b3-c7fe-22384959c556@linaro.org>
+ <Yz2mSOXf68S16Xg/@colin-ia-desktop>
+ <28b4d9f9-f41a-deca-aa61-26fb65dcc873@linaro.org>
+ <20221008000014.vs2m3vei5la2r2nd@skbuf>
+ <c9ce1d83-d1ca-4640-bba2-724e18e6e56b@linaro.org>
+ <20221010130707.6z63hsl43ipd5run@skbuf>
+ <d27d7740-bf35-b8d4-d68c-bb133513fa19@linaro.org>
+ <20221010174856.nd3n4soxk7zbmcm7@skbuf>
+ <Y8hylFFOw4n5RH83@MSI.localdomain>
+ <Y8hylFFOw4n5RH83@MSI.localdomain>
 MIME-Version: 1.0
-References: <20221117234328.594699-2-keescook@chromium.org> <20230119201023.4003-1-sj@kernel.org>
-In-Reply-To: <20230119201023.4003-1-sj@kernel.org>
-From:   Seth Jenkins <sethjenkins@google.com>
-Date:   Thu, 19 Jan 2023 15:19:21 -0500
-Message-ID: <CALxfFW76Ey=QNu--Vp59u2wukr6dzvOE25PkOHVw0b13YoCSiA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] exit: Put an upper limit on how often we can oops
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        tangmeng <tangmeng@uniontech.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        David Gow <davidgow@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8hylFFOw4n5RH83@MSI.localdomain>
+ <Y8hylFFOw4n5RH83@MSI.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,78 +98,303 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Do you have a plan to backport this into upstream LTS kernels?
+Hi Colin,
 
-As I understand, the answer is "hopefully yes" with the big
-presumption that all stakeholders are on board for the change. There
-is *definitely* a plan to *submit* backports to the stable trees, but
-ofc it will require some approvals.
+On Wed, Jan 18, 2023 at 12:28:36PM -1000, Colin Foster wrote:
+> Resurrecting this conversation for a quick question / feedback, now that
+> steps 1-7 are essentially done with everyone's help.
+> 
+> I don't want to send out a full RFC / Patch, since I can't currently
+> test on hardware this week. But I'd really like feedback on the
+> documentation change that is coming up. And I also don't want to
+> necessarily do a separate RFC for just this patch.
+> 
+> What happens here is interrupts and interrupt-names work as expected.
+> They're required for the 7514, and optional for the 7512. Fantastic.
+> 
+> I'm not sure if the "$ref: ethernet-switch.yaml" and
+> "$ref: /schemas/net/dsa/dsa.yaml#" have an effect, since removing that
+> line outright doesn't seem to have an effect on dt_bindings_check.
+> 
+> The "fdma" doesn't make sense for the 7512, and seems to be handled
+> correctly by way of maxItems for the two scenarios.
+> 
+> 
+> The big miss in this patch is ethernet-switch-port vs dsa-port in the
+> two scenarios. It isn't working as I'd hoped, where the 7514 pulls in
+> ethernet-switch-port.yaml and the 7512 pulls in dsa-port.yaml. To squash
+> errors about the incorrect "ethernet" property I switched this line:
+> 
+> -        $ref: ethernet-switch-port.yaml#
+> +        $ref: /schemas/net/dsa/dsa-port.yaml#
+> 
+> ... knowing full well that the correct solution should be along the
+> lines of "remove this, and only reference them in the conditional". That
+> doesn't seem to work though...
+> 
+> Is what I'm trying to do possible? I utilized
+> Documentation/devicetree/bindings/net/dsa/*.yaml and
+> Documentation/devicetree/bindings/net/*.yaml and found examples to get
+> to my current state.
+> 
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+> index 5ffe831e59e4..f012c64a0da3 100644
+> --- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+> +++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+> @@ -18,13 +18,50 @@ description: |
+>    packets using CPU. Additionally, PTP is supported as well as FDMA for faster
+>    packet extraction/injection.
+>  
+> -$ref: ethernet-switch.yaml#
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: mscc,vsc7514-switch
+> +    then:
+> +      $ref: ethernet-switch.yaml#
+> +      required:
+> +        - interrupts
+> +        - interrupt-names
+> +      properties:
+> +        reg:
+> +          minItems: 21
+> +        reg-names:
+> +          minItems: 21
+> +        ethernet-ports:
+> +          patternProperties:
+> +            "^port@[0-9a-f]+$":
+> +              $ref: ethernet-switch-port.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: mscc,vsc7512-switch
+> +    then:
+> +      $ref: /schemas/net/dsa/dsa.yaml#
+> +      properties:
+> +        reg:
+> +          maxItems: 20
+> +        reg-names:
+> +          maxItems: 20
+> +        ethernet-ports:
+> +          patternProperties:
+> +            "^port@[0-9a-f]+$":
+> +              $ref: /schemas/net/dsa/dsa-port.yaml#
+>  
+>  properties:
+>    compatible:
+> -    const: mscc,vsc7514-switch
+> +    enum:
+> +      - mscc,vsc7512-switch
+> +      - mscc,vsc7514-switch
+>  
+>    reg:
+> +    minItems: 20
+>      items:
+>        - description: system target
+>        - description: rewriter target
+> @@ -49,6 +86,7 @@ properties:
+>        - description: fdma target
+>  
+>    reg-names:
+> +    minItems: 20
+>      items:
+>        - const: sys
+>        - const: rew
+> @@ -100,7 +138,7 @@ properties:
+>      patternProperties:
+>        "^port@[0-9a-f]+$":
+>  
+> -        $ref: ethernet-switch-port.yaml#
+> +        $ref: /schemas/net/dsa/dsa-port.yaml#
+>  
+>          unevaluatedProperties: false
 
+I'm not sure at all why this chunk (is sub-schema the right word) even
+exists, considering you have the other one?!
 
-On Thu, Jan 19, 2023 at 3:10 PM SeongJae Park <sj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, 17 Nov 2022 15:43:22 -0800 Kees Cook <keescook@chromium.org> wrote:
->
-> > From: Jann Horn <jannh@google.com>
-> >
-> > Many Linux systems are configured to not panic on oops; but allowing an
-> > attacker to oops the system **really** often can make even bugs that look
-> > completely unexploitable exploitable (like NULL dereferences and such) if
-> > each crash elevates a refcount by one or a lock is taken in read mode, and
-> > this causes a counter to eventually overflow.
-> >
-> > The most interesting counters for this are 32 bits wide (like open-coded
-> > refcounts that don't use refcount_t). (The ldsem reader count on 32-bit
-> > platforms is just 16 bits, but probably nobody cares about 32-bit platforms
-> > that much nowadays.)
-> >
-> > So let's panic the system if the kernel is constantly oopsing.
-> >
-> > The speed of oopsing 2^32 times probably depends on several factors, like
-> > how long the stack trace is and which unwinder you're using; an empirically
-> > important one is whether your console is showing a graphical environment or
-> > a text console that oopses will be printed to.
-> > In a quick single-threaded benchmark, it looks like oopsing in a vfork()
-> > child with a very short stack trace only takes ~510 microseconds per run
-> > when a graphical console is active; but switching to a text console that
-> > oopses are printed to slows it down around 87x, to ~45 milliseconds per
-> > run.
-> > (Adding more threads makes this faster, but the actual oops printing
-> > happens under &die_lock on x86, so you can maybe speed this up by a factor
-> > of around 2 and then any further improvement gets eaten up by lock
-> > contention.)
-> >
-> > It looks like it would take around 8-12 days to overflow a 32-bit counter
-> > with repeated oopsing on a multi-core X86 system running a graphical
-> > environment; both me (in an X86 VM) and Seth (with a distro kernel on
-> > normal hardware in a standard configuration) got numbers in that ballpark.
-> >
-> > 12 days aren't *that* short on a desktop system, and you'd likely need much
-> > longer on a typical server system (assuming that people don't run graphical
-> > desktop environments on their servers), and this is a *very* noisy and
-> > violent approach to exploiting the kernel; and it also seems to take orders
-> > of magnitude longer on some machines, probably because stuff like EFI
-> > pstore will slow it down a ton if that's active.
->
-> I found a blog article[1] recommending LTS kernels to backport this as below.
->
->     While this patch is already upstream, it is important that distributed
->     kernels also inherit this oops limit and backport it to LTS releases if we
->     want to avoid treating such null-dereference bugs as full-fledged security
->     issues in the future.
->
-> Do you have a plan to backport this into upstream LTS kernels?
->
-> [1] https://googleprojectzero.blogspot.com/2023/01/exploiting-null-dereferences-in-linux.html
->
->
-> Thanks,
-> SJ
->
-> >
-> > Signed-off-by: Jann Horn <jannh@google.com>
-> > Link: https://lore.kernel.org/r/20221107201317.324457-1-jannh@google.com
-> > Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+>  
+> @@ -108,13 +146,12 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - ethernet-ports
+>  
+>  additionalProperties: false
+
+This should be "unevaluatedProperties: false" I guess? Maybe this is why
+deleting the ethernet-switch.yaml or dsa.yaml schema appears to do nothing?
+
+The following delta compared to net-next works for me, I think:
+
+diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+index 5ffe831e59e4..dc3319ea40b9 100644
+--- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
++++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+@@ -18,13 +18,52 @@ description: |
+   packets using CPU. Additionally, PTP is supported as well as FDMA for faster
+   packet extraction/injection.
+ 
+-$ref: ethernet-switch.yaml#
++allOf:
++  - if:
++      properties:
++        compatible:
++          const: mscc,vsc7514-switch
++    then:
++      $ref: ethernet-switch.yaml#
++      required:
++        - interrupts
++        - interrupt-names
++      properties:
++        reg:
++          minItems: 21
++        reg-names:
++          minItems: 21
++        ethernet-ports:
++          patternProperties:
++            "^port@[0-9a-f]+$":
++              $ref: ethernet-switch-port.yaml#
++              unevaluatedProperties: false
++
++  - if:
++      properties:
++        compatible:
++          const: mscc,vsc7512-switch
++    then:
++      $ref: /schemas/net/dsa/dsa.yaml#
++      properties:
++        reg:
++          maxItems: 20
++        reg-names:
++          maxItems: 20
++        ethernet-ports:
++          patternProperties:
++            "^port@[0-9a-f]+$":
++              $ref: /schemas/net/dsa/dsa-port.yaml#
++              unevaluatedProperties: false
+ 
+ properties:
+   compatible:
+-    const: mscc,vsc7514-switch
++    enum:
++      - mscc,vsc7512-switch
++      - mscc,vsc7514-switch
+ 
+   reg:
++    minItems: 20
+     items:
+       - description: system target
+       - description: rewriter target
+@@ -49,6 +88,7 @@ properties:
+       - description: fdma target
+ 
+   reg-names:
++    minItems: 20
+     items:
+       - const: sys
+       - const: rew
+@@ -86,35 +126,16 @@ properties:
+       - const: xtr
+       - const: fdma
+ 
+-  ethernet-ports:
+-    type: object
+-
+-    properties:
+-      '#address-cells':
+-        const: 1
+-      '#size-cells':
+-        const: 0
+-
+-    additionalProperties: false
+-
+-    patternProperties:
+-      "^port@[0-9a-f]+$":
+-
+-        $ref: ethernet-switch-port.yaml#
+-
+-        unevaluatedProperties: false
+-
+ required:
+   - compatible
+   - reg
+   - reg-names
+-  - interrupts
+-  - interrupt-names
+   - ethernet-ports
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
++  # VSC7514 (Switchdev)
+   - |
+     switch@1010000 {
+       compatible = "mscc,vsc7514-switch";
+@@ -154,6 +175,7 @@ examples:
+           reg = <0>;
+           phy-handle = <&phy0>;
+           phy-mode = "internal";
++          ethernet = <&mac_sw>; # fails validation as expected
+         };
+         port1: port@1 {
+           reg = <1>;
+@@ -162,5 +184,51 @@ examples:
+         };
+       };
+     };
++  # VSC7512 (DSA)
++  - |
++    ethernet-switch@1{
++      compatible = "mscc,vsc7512-switch";
++      reg = <0x71010000 0x10000>,
++            <0x71030000 0x10000>,
++            <0x71080000 0x100>,
++            <0x710e0000 0x10000>,
++            <0x711e0000 0x100>,
++            <0x711f0000 0x100>,
++            <0x71200000 0x100>,
++            <0x71210000 0x100>,
++            <0x71220000 0x100>,
++            <0x71230000 0x100>,
++            <0x71240000 0x100>,
++            <0x71250000 0x100>,
++            <0x71260000 0x100>,
++            <0x71270000 0x100>,
++            <0x71280000 0x100>,
++            <0x71800000 0x80000>,
++            <0x71880000 0x10000>,
++            <0x71040000 0x10000>,
++            <0x71050000 0x10000>,
++            <0x71060000 0x10000>;
++            reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
++            "port2", "port3", "port4", "port5", "port6",
++            "port7", "port8", "port9", "port10", "qsys",
++            "ana", "s0", "s1", "s2";
++
++            ethernet-ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++          port@0 {
++            reg = <0>;
++            ethernet = <&mac_sw>;
++            phy-handle = <&phy0>;
++            phy-mode = "internal";
++          };
++          port@1 {
++            reg = <1>;
++            phy-handle = <&phy1>;
++            phy-mode = "internal";
++          };
++        };
++      };
+ 
+ ...
+
+Of course this is a completely uneducated attempt on my part.
