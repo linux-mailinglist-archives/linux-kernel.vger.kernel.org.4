@@ -2,167 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CA5674701
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E518D674708
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjASXOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S229762AbjASXOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjASXN3 (ORCPT
+        with ESMTP id S231184AbjASXNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:13:29 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA4C8A707
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:09:47 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so94504pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:09:47 -0800 (PST)
+        Thu, 19 Jan 2023 18:13:37 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB62212F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:11:34 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d3so3756782plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:11:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EZ+aefaBRb6Q46DF1JPfX563rL64aYsp6riA6+GUZ18=;
-        b=DxJRbKewKWbHMLYof4DKgM2lJNkwIfDTWbfLBqT12tHpZ531R2WUhhGdxyX/JeOD1/
-         o6QJTA1ruywqFgCzrpdDFRlbhdswPtvx3G44btRRmWNfUycQCO2FLhPNN1MXY2bvMcez
-         uYDcX1kG4gYyxqx0vcLKofVyv1uuiivvXmTzfjsSJvhh/iH31WTTJckq0lDwyhxATJpZ
-         iHr3Je/JaNBuNzop9mSOD2Zv/5ZNLVVzxxM1pENXAhQDZNdyQqRwYe1RcJybQsjrsrBH
-         cUYAGz84SskHIvMPLPVPx3iw7mGJb6PPtBl6K3MOBEUi7ngeQ/zr2V0dWaH277amnZyt
-         3g4w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HeBX4hWuJsaHps7UYjGH1TLVfHHQaTbbfoKxw9Fb+mk=;
+        b=OzyQ7BOijAJL49Qa36dbhVv6eDsyXYSJbiPEeGykSdviurgBNnPy1lh9Z1cSkdN3GB
+         ohFFD4yRz/wNITkF4KCvnuk+OpQ72jgmquCsDnsE0mJTm/ClkmVB3FgeI1pWicBRjQCY
+         0ZnR3mT5AAfHNPydbkRqFIQdFgSbJOosa+hEaeywKuQs8h5TDSut5looUG85PQw+v8Fb
+         4B/L7qJbD5eXmq+xx49TOZo2Z0dmJq4VwEVgYSvGu59c7m8ZBWD2JCoIcrhZjslDZZZd
+         YXuLnu2kIVOjncMEJlJZlHgjlutcCkM5dDRWKfWCzRomr9OY2brVpqr1VawGLmwKOxsq
+         oh3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZ+aefaBRb6Q46DF1JPfX563rL64aYsp6riA6+GUZ18=;
-        b=jQZM7FmOCYqMYIvxgTsDcbHdo5+cER+jHBxAvkJDhm0NnUt201BRE8xz6ISqlhQrsR
-         1+lIkYg2LRz5cTLbHldpBXPNqJKRCM3srxPR9yWWz6ws/n197o8YsulF/ABQvk/YlJvB
-         Elk/Fyzy5npGP4dknUW/Jz9KyfhoVORJtPWvXSbEDsJCXLueuHCg/wk2pnawPd023PiX
-         GlwHZhtNLe+JLfKusIcoK2eq0EJEPC7gxvB41twSMb0KQ9IJ8sG+5QvpUXbPQc8t2khF
-         zzLhbm9+ksOkz1gjPo4hqF2eoZkdJfhA80xeYRV3uCkgz8eRDJ0AoC/ZkHL4afJ0FTRy
-         OOKA==
-X-Gm-Message-State: AFqh2krkwZI4AK+KTKluYm0cvPzgM8t+bqBjhsfqAP2jp3ultY59cp3b
-        xCakU+ddW2ZrFG4nvVy5kvE9dw==
-X-Google-Smtp-Source: AMrXdXsx2nwQhGawNQ2nONo1ETqHOUZjRLTu/2aLPtp0u8Y6H9tpiJve2Py4qWJENOxwBW+UzqSMLw==
-X-Received: by 2002:a17:902:ead2:b0:194:4785:5e9 with SMTP id p18-20020a170902ead200b00194478505e9mr3015839pld.4.1674169786672;
-        Thu, 19 Jan 2023 15:09:46 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170902f54600b00176b84eb29asm1072571plf.301.2023.01.19.15.09.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 15:09:46 -0800 (PST)
-Message-ID: <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk>
-Date:   Thu, 19 Jan 2023 16:09:44 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HeBX4hWuJsaHps7UYjGH1TLVfHHQaTbbfoKxw9Fb+mk=;
+        b=fMf6wVrnG1e+srcsNvNNbu5QN22cjB2LrdhHIZGdIRps9su5FL//2KjHZbHX1OxWYQ
+         JhSlaSYLPhs2CUX4NqF59w8VEz0owtO5eAOyDtwBe3ReDnSdADJFl8v3w4bfV8nq03mB
+         BMCR45pp13Ym1vRRbPIf3i/Y9tP9Xc7M8U1Q6w/2hqnZDUzlEe+zAUu0abyimzOwXAKW
+         gLWHSrsXrJ60ApW2AOFtOJoaOYEKPqFZ0WokojBhVdrEQv5ncY60f5Y16glENZRXIqvl
+         z26YgdfJihOUYeXDS+D3dh2lryIjkRRku4tesVwBX+MyIOlmMIOG8N7iSWuckbFaTncN
+         EOEw==
+X-Gm-Message-State: AFqh2koTPT+H5fOgmFuUyXyCHqgrpfBLaJWVwWhhhKxTJnBdRcRCabsm
+        FBqhj4egDdHgb/HMe1gMeH0hRA==
+X-Google-Smtp-Source: AMrXdXufbHO0WUsXs3R5noeo8Wk9F9L4vR8i9iFK9wPdVllQ8vFaN9HlHKx2/e44IIYuEjKEqE1Phg==
+X-Received: by 2002:a17:902:c947:b0:191:1543:6b2f with SMTP id i7-20020a170902c94700b0019115436b2fmr18994pla.3.1674169893768;
+        Thu, 19 Jan 2023 15:11:33 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170903124900b00174c1855cd9sm25575902plh.267.2023.01.19.15.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 15:11:33 -0800 (PST)
+Date:   Thu, 19 Jan 2023 23:11:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "dmatlack@google.com" <dmatlack@google.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8nOIjkskcXAi00V@google.com>
+References: <20230114111621.00001840@gmail.com>
+ <Y8bFCb+rs25dKcMY@google.com>
+ <20230117214414.00003229@gmail.com>
+ <Y8cLcY12zDWqO8nd@google.com>
+ <Y8cMnjHFNIFaoX27@google.com>
+ <eadc4a4e37ea0b04b8348395244b792bd34a762d.camel@intel.com>
+ <Y8ljwsrrBBdh1aYw@google.com>
+ <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
+ <Y8m34OEVBfL7Q4Ns@google.com>
+ <38f506575caacd5488f73315b231c3282f893d46.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-Content-Language: en-US
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Cc:     Pavel Machek <pavel@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
- <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com> <Y8krsVFguwWLy+zT@duo.ucw.cz>
- <Y8lCspFtQ0wg6uCy@uudg.org> <Y8mwF0m+M1+e/fz/@eldamar.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y8mwF0m+M1+e/fz/@eldamar.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38f506575caacd5488f73315b231c3282f893d46.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 2:03?PM, Salvatore Bonaccorso wrote:
-> Hi Luis, all,
+On Thu, Jan 19, 2023, Huang, Kai wrote:
+> On Thu, 2023-01-19 at 21:36 +0000, Sean Christopherson wrote:
+> > On Thu, Jan 19, 2023, Huang, Kai wrote:
+> > > On Thu, 2023-01-19 at 15:37 +0000, Sean Christopherson wrote:
+> > > > On Thu, Jan 19, 2023, Huang, Kai wrote:
+> > > > > On Tue, 2023-01-17 at 21:01 +0000, Sean Christopherson wrote:
+> > > > > > On Tue, Jan 17, 2023, Sean Christopherson wrote:
+> > > > > > > On Tue, Jan 17, 2023, Zhi Wang wrote:
+> > > > > > Oh, the other important piece I forgot to mention is that dropping mmu_lock deep
+> > > > > > in KVM's MMU in order to wait isn't always an option.  Most flows would play nice
+> > > > > > with dropping mmu_lock and sleeping, but some paths, e.g. from the mmu_notifier,
+> > > > > > (conditionally) disallow sleeping.
+> > > > > 
+> > > > > Could we do something similar to tdp_mmu_iter_cond_resched() but not simple busy
+> > > > > retrying "X times",  at least at those paths that can release mmu_lock()?
+> > > > 
+> > > > That's effectively what happens by unwinding up the stak with an error code.
+> > > > Eventually the page fault handler will get the error and retry the guest.
+> > > > 
+> > > > > Basically we treat TDX_OPERAND_BUSY as seamcall_needbreak(), similar to
+> > > > > rwlock_needbreak().  I haven't thought about details though.
+> > > > 
+> > > > I am strongly opposed to that approach.  I do not want to pollute KVM's MMU code
+> > > > with a bunch of retry logic and error handling just because the TDX module is
+> > > > ultra paranoid and hostile to hypervisors.
+> > > 
+> > > Right.  But IIUC there's legal cases that SEPT SEAMCALL can return BUSY due to
+> > > multiple threads trying to read/modify SEPT simultaneously in case of TDP MMU. 
+> > > For instance, parallel page faults on different vcpus on private pages.  I
+> > > believe this is the main reason to retry.
+> > 
+> > Um, crud.  I think there's a bigger issue.  KVM always operates on its copy of the
+> > S-EPT tables and assumes the the real S-EPT tables will always be synchronized with
+> > KVM's mirror.  That assumption doesn't hold true without serializing SEAMCALLs in
+> > some way.  E.g. if a SPTE is zapped and mapped at the same time, we can end up with:
+> > 
+> >   vCPU0                      vCPU1
+> >   =====                      =====
+> >   mirror[x] = xyz
+> >                              old_spte = mirror[x]
+> >                              mirror[x] = REMOVED_SPTE
+> >                              sept[x] = REMOVED_SPTE
+> >   sept[x] = xyz
 > 
-> On Thu, Jan 19, 2023 at 10:16:34AM -0300, Luis Claudio R. Goncalves wrote:
->> On Thu, Jan 19, 2023 at 12:38:25PM +0100, Pavel Machek wrote:
->>> Hi!
->>>
->>>>> I'm pleased to announce the 5.10.162-rt78 stable release.
->>>>>
->>>>> You can get this release via the git tree at:
->>>>>
->>>>>   git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
->>>>>
->>>>>   branch: v5.10-rt
->>>>>   Head SHA1: 143ef105f40a65f3ddd57121d4b4bc36eb10cc06
->>>>>
->>>>> Or to build 5.10.162-rt78 directly, the following patches should be applied:
->>>
->>>> I see that vanilla 5.10.162-rt78 fails to build with arm64 defconfig. [0] Full log [1]
->>>> Any pointers on what maybe wrong?
->>>
->>> We see the same failure. 
->>>
->>>>   AS      arch/arm64/kernel/entry.o
->>>> arch/arm64/kernel/entry.S: Assembler messages:
->>>> arch/arm64/kernel/entry.S:763: Error: immediate out of range at operand 3 -- `and x2,x19,#((1<<1)|(1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<5)|(1<<6)|(1<<13)|(1<<7))'
->>>> make[2]: *** [scripts/Makefile.build:367: arch/arm64/kernel/entry.o] Error 1
->>>> make[1]: *** [scripts/Makefile.build:503: arch/arm64/kernel] Error 2
->>>> make: *** [Makefile:1837: arch/arm64] Error 2
->>>
->>> The line is:
->>>
->>>>        and     x2, x19, #_TIF_WORK_MASK
->>
->> I believe this is related to the arch/arm64/include/asm/thread_info.h
->> changes in 5.10.162-rt78, specifically:
->>
->>     79a9991e87fe arm64: add support for TIF_NOTIFY_SIGNAL
->>     1ba44dcf789d Merge tag 'v5.10.162' into v5.10-rt
->>
->> The first one is the original change, coming from stable v5.10.162 and the
->> second one has the merge conflict I fixed in that file due to the existence
->> of TIF_NEED_RESCHED_LAZY in PREEMPT_RT.
->>
->> It escaped me that having TIF_NEED_RESCHED_LAZY set to 13 breaks the AND
->> statement reported above. Looking at
->>
->>     b5a5a01d8e9a arm64: uaccess: remove addr_limit_user_check()
->>
->> specially this note
->>
->>     To ensure that _TIF_WORK_MASK can be used as an immediate value in an
->>     AND instruction (as it is in `ret_to_user`), TIF_MTE_ASYNC_FAULT is
->>     renumbered to keep the constituent bits of _TIF_WORK_MASK contiguous.
->>
->> I understand that I need to either have to renumber TIF_NEED_RESCHED_LAZY
->> to 8, with the risk of breaking something else, or backport commit
->> b5a5a01d8e9a in order to remove TIF_FSCHECK and then safely renumber
->> TIF_NEED_RESCHED_LAZY.
->>
->> Guidance is welcome here :)
-> 
-> Should we loop in here Jens, as having some overview of the needed
-> changes for io_uring rebase in the 5.10.y version? (doing so in the
-> mail).
+> IIUC this case cannot happen, as the two steps in the vcpu0 are within read
+> lock, which prevents from vcpu1, which holds the write lock during zapping SPTE.
 
-Huh that's funky, I built and (runtime) tested this on arm64
-specifically. But I do remember some details about the first 8 bits on
-arm, but not arm64.
-
-I guess we need to twiddle that asm to deal with eg 16 bits, rather than
-attempt to backport any TIF removal patches.
-
--- 
-Jens Axboe
-
+Zapping SPTEs can happen while holding mmu_lock for read, e.g. see the bug fixed
+by commit 21a36ac6b6c7 ("KVM: x86/mmu: Re-check under lock that TDP MMU SP hugepage
+is disallowed").
