@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3965E672F23
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C923672F2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjASCm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S229949AbjASCnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjASCm6 (ORCPT
+        with ESMTP id S229832AbjASCm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 21:42:58 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF5C3C2E;
-        Wed, 18 Jan 2023 18:42:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38637B47E;
+        Wed, 18 Jan 2023 18:42:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB893B81FBF;
-        Thu, 19 Jan 2023 02:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3523C433D2;
-        Thu, 19 Jan 2023 02:42:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE44EB80A29;
+        Thu, 19 Jan 2023 02:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68C5C433F0;
+        Thu, 19 Jan 2023 02:42:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674096174;
-        bh=i3sWWhoC0g9ZVavGgCh88OUpF8rPvHup1Nkg1c+o8Z4=;
+        s=k20201202; t=1674096175;
+        bh=ynDeNozJvjU7+2OdaF3xoRj/R1KFU7FIil+EFkOuDRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H+/bkAkcsTNo4xvSfPQX1FKWEGaHt2gswxJVZlZEo1Qjy/0PVJ4baIrwId8vrK0H2
-         fy2adkmQu7+VHanB8uK+1IAszXShB3+oAC49Wa2jFXKu9k3tu8BXo6otN3zgLaqVDv
-         6kXWN7IAdkoCZsOFmC0f8Wcf+Xf7FXR+HWrOwDCI92JESEVC49Ic+EQTzn1+FSSKdu
-         o8SbKa5g0b2HyVgLD2FmkVFvUtmP4VqMb8HlvjimWQoyrGAOVEZuDev6McUZyxvKc7
-         T/9APPGsYdb8TGN508GC2vvSfWAWu352y7RfLhNe+7xIzorHZKKxFlJ1krAAYCgREG
-         Tpi4dVCqKyaQA==
+        b=rnXICSpVfBfXZci7nc2q8kkT7++j7vPT5f8MJjKsdvQ1H41xzmuXgGvjMYGhdUK4F
+         wSwAX3+iFQWay5xUcDusoa38bDHqbhUylPnY2dc5ybACrK/wRf8tphdHD7gf3ebHbE
+         SaE8GSo9y36ZyrYt7dcJFhdvBlK/pjOOT0b6gYQfHpUM9RKbqgJUCZSVbbK/UEP8kU
+         2+AZgFTw7R5F2+0cH1G6RMdz44GbWNliVB/6gx//xcUMvbJOf6Umyd/8rvf1WNSkHU
+         MeoWsZFpW3G2IBFa6BLTzsY/YTogGC48D9Fi1ttzYvlv14JUW4ajom5TPt6UfqRWTl
+         7Ha3vnxP2YjeA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     robh+dt@kernel.org, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abel.vesa@linaro.org,
+To:     Manivannan Sadhasivam <mani@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, lpieralisi@kernel.org,
+        devicetree@vger.kernel.org, bhelgaas@google.com, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         konrad.dybcio@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: sm8550: Add USB HC and PHY support
-Date:   Wed, 18 Jan 2023 20:42:49 -0600
-Message-Id: <167409616953.3024582.9700819381720035018.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: PCI: qcom: Allow both GIC-ITS and internal MSI controller
+Date:   Wed, 18 Jan 2023 20:42:50 -0600
+Message-Id: <167409616954.3024582.9628170500602623153.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230119004533.1869870-1-abel.vesa@linaro.org>
-References: <20230119004533.1869870-1-abel.vesa@linaro.org>
+In-Reply-To: <20230111123004.21048-1-manivannan.sadhasivam@linaro.org>
+References: <20230111123004.21048-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,30 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 02:45:31 +0200, Abel Vesa wrote:
-> This patchset adds USB controller and PHYs support to SM8550 platform
-> and enables them on the MTP board.
+On Wed, 11 Jan 2023 18:00:03 +0530, Manivannan Sadhasivam wrote:
+> The binding should specify both MSI implementations and the OS/driver
+> should choose the one based on the platform requirements.
 > 
-> The v1 was here:
-> https://lore.kernel.org/all/20221116132212.2842655-1-abel.vesa@linaro.org/
 > 
-> Changes since v1:
->  * fixed the clocks and clock-names of qmpphy to be aligned with sc8280xp
->  * dropped the child node from the phy nodes, like Johan suggested,
->    and updated to use the sc8280xp binding scheme
->  * moved status property last everywhere needed
->  * dropped the newline for phy-names, like Konrad suggested
->  * decided to move #address-cells, #size-cells and ranges properties
->    in such a way to be aligned with sc8280xp
-> 
-> [...]
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes
-      commit: 7f7e5c1b037fc38dfc4f9530fcdb6fa8bd9fd01c
-[2/2] arm64: dts: qcom: sm8550-mtp: Add USB PHYs and HC nodes
-      commit: 772e6bc4a0a9c426385115d720743bae7804d499
+[2/2] arm64: dts: qcom: sm8450: Allow both GIC-ITS and internal MSI controller
+      commit: 0da2eff44e78ded247fe35d8a3f73508263d0948
 
 Best regards,
 -- 
