@@ -2,183 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2A067444A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0676667443D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjASVY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        id S229682AbjASVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjASVWl (ORCPT
+        with ESMTP id S229814AbjASVV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:22:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A8C9F3AE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674162931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kMg8gNQDfp59Z8c/Laiz+GjWJb2Q7J01BdsOGckaZ2o=;
-        b=UpC/KpUDpEMYCS5+V9Fr8jl0r/Xo7A/XnUk+plLkz8t+bk1JRgj6RuI42vM5E0zdTw3ATt
-        3Qjw3/vNjdCukcjHR0mf7gnoDgAq6wsXOcgzGK++8Fda0ZNm/FGW6FMbfO/2bLInAAsnHw
-        OuEmCshJZvfDpyCD1FWhLhx6ueQX4ZQ=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-508-kv9d8IbAOKS5z4NiyJvJDQ-1; Thu, 19 Jan 2023 16:15:30 -0500
-X-MC-Unique: kv9d8IbAOKS5z4NiyJvJDQ-1
-Received: by mail-qt1-f198.google.com with SMTP id o16-20020ac841d0000000b003b689580725so1525796qtm.22
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:15:30 -0800 (PST)
+        Thu, 19 Jan 2023 16:21:58 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB307573A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:15:39 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 7so2617826pga.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:15:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dn0RxgJYP1pitjWvcBOPBfKv5qYbiPXZSo6iw3wnry0=;
+        b=Al9hymxXhxF7ur0o9zHC14v0xsnNor6d5ON4fVWgTZLVzNEtoxRSShdRLBC3FKTOce
+         HH0NgP5wRufWSrV3BOXwT3yt0hWiSLHUa6qfWpPzBKjtMR5L/6IqP56KvnTME/DqZsny
+         R1YMRlfP6OPHytgUr9vkhK/4z68D30VpVjn/lwXFSm4565vGF7STbBi2K2hZiMH+MCqc
+         qniJkF+npnPnjO9GuBDlejCeCSk7S5gtt4nhrv/Wy2RyXcOabkTKYJ7B41qSHtg+L+Fg
+         7PMCv9PJxkzDOM4o+0HfOsLgCmc/aNzTxIBSqdU0ty6o8xTbm8GGUuRglcYR8RuhmhfQ
+         T+Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kMg8gNQDfp59Z8c/Laiz+GjWJb2Q7J01BdsOGckaZ2o=;
-        b=G0qBtmJI/ixVVsQmV2sv9dj1Ag3x0VY72XQKvaFgMx8hqXrnqifSSb1b30eQc41LPs
-         N2VTj18Gcgq6MkA6NS3kiEMVGYX/KMrBeXPRfxDromPuvS0Ojg2JW2/pXFlDjJX6pFV4
-         kQgNmnkYZdM/6OWGKzkT+d3DZ0n2CvHqXkqNO50BcZ/n494Z65Y4ob7uoPtZnIXZJLuO
-         0u4nPfHkesGbtLPPKwZDzq4WtRWB9uJwkGL4uhsD41beSZsWK1GeFkhcLTmGUIDPectE
-         1D5IkozLgorZg+d8TlTHY69pDS8PIP5IG8l3O+/zTuwHSHMvC2fbLbDNM1/DcJ4E17Zz
-         5F4Q==
-X-Gm-Message-State: AFqh2krCHjiGjn+r22eoLmhNGhRnVw2R+8DljUPY6HopHc6R9MipjFAv
-        rpA9TSJiVOMOMPk39VjzX2WHRSQDzKyEJSonUYoo3RGT91yctP5IrEUH5fSPrBGH4U2UZCmMMkT
-        pDMvLFzUsEpJ3F47Jhfpgvl9u
-X-Received: by 2002:ac8:45ce:0:b0:3b6:2e75:c9bd with SMTP id e14-20020ac845ce000000b003b62e75c9bdmr14633632qto.1.1674162929638;
-        Thu, 19 Jan 2023 13:15:29 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvg7Cqm+RqOllnoGepwIah3wOQ0QFEfc8gtV8SZaGb8UPTC0/BLnk7Faj89h/7LOb3Hkn2f0w==
-X-Received: by 2002:ac8:45ce:0:b0:3b6:2e75:c9bd with SMTP id e14-20020ac845ce000000b003b62e75c9bdmr14633616qto.1.1674162929441;
-        Thu, 19 Jan 2023 13:15:29 -0800 (PST)
-Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
-        by smtp.gmail.com with ESMTPSA id b24-20020ac86798000000b0039cc944ebdasm19443699qtp.54.2023.01.19.13.15.29
+        bh=dn0RxgJYP1pitjWvcBOPBfKv5qYbiPXZSo6iw3wnry0=;
+        b=30WKxbuqbX+j8kwHBjBZTBeXanJi6c6Nvlgw29/y9DDRoUx2FZItPaypjjZwryBybn
+         tl5P7jUPL5zGR4DZNe/n5aejNoh8X9D22ixq0YwbwZd59uB2z7W+9Qllf5kxXxllcACQ
+         3crTdlCBI12PvB2vlq2fiAKtKrK2BTz7G9rTX1h9WHkSsEI7xVmXgaUE7POdIvVUc6ea
+         qpul48LK1zD18L06l26qzKenUXnR3w2ShqB5KwkMmOhL31Nnd2gFIOuccjw8YiVa2Yim
+         0P9QEex/yh+fkF1dT7xDV8DXqHGhd0eAhtPlQMQT57vp5434pj7eBFrtfWxAb2dQwlnn
+         gDZg==
+X-Gm-Message-State: AFqh2ko5P87I6BAyYrWigu7WuGpxGKcCuqC1bfpfA0krgaFH4E7R26Ct
+        C+Gw02hR21ISodwz2Fcq2NM=
+X-Google-Smtp-Source: AMrXdXt4aSGxahYuSSuEq0wJQiJOWsmN0KqhITVx1Srh/6G99K5C5pnC5Mn7h6YWcXiC2nY1LQnNUQ==
+X-Received: by 2002:aa7:8084:0:b0:58d:e0ee:ede7 with SMTP id v4-20020aa78084000000b0058de0eeede7mr8269731pff.14.1674162939326;
+        Thu, 19 Jan 2023 13:15:39 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:3bcd:b3d1:c859:f6e2])
+        by smtp.gmail.com with ESMTPSA id f127-20020a623885000000b00588cb819473sm20129473pfa.39.2023.01.19.13.15.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:15:29 -0800 (PST)
-From:   Eric Chanudet <echanude@redhat.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org,
-        Alexander Larsson <alexl@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Eric Chanudet <echanude@redhat.com>
-Subject: [RFC PATCH RESEND 1/1] fs/namespace: defer free_mount from namespace_unlock
-Date:   Thu, 19 Jan 2023 16:14:55 -0500
-Message-Id: <20230119211455.498968-2-echanude@redhat.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119211455.498968-1-echanude@redhat.com>
-References: <20230119211455.498968-1-echanude@redhat.com>
+        Thu, 19 Jan 2023 13:15:38 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 19 Jan 2023 13:15:36 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH 1/3] mm: return the number of pages successfully paged out
+Message-ID: <Y8my+BOtiD7w16My@google.com>
+References: <20230117231632.2734737-1-minchan@kernel.org>
+ <Y8e3lHsYoWjFWbRU@dhcp22.suse.cz>
+ <Y8gn0KQDWC/5CZ/w@google.com>
+ <Y8gt5Gb7DPaEI2uN@dhcp22.suse.cz>
+ <Y8g1VWkdSwt5SUVo@google.com>
+ <Y8hjNm+kB8WquUH6@dhcp22.suse.cz>
+ <Y8hyS3yVnxXTsFIz@google.com>
+ <Y8kIS+nx2/nBfKei@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8kIS+nx2/nBfKei@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Larsson <alexl@redhat.com>
+On Thu, Jan 19, 2023 at 10:07:23AM +0100, Michal Hocko wrote:
+> On Wed 18-01-23 14:27:23, Minchan Kim wrote:
+> [...]
+> > Let me know if you have other concern or suggestion.
+> 
+> I would propose to use a tracepoint to track this on the madvise side.
+> This way you can both track a per-process effectivity as well a madvise
+> originator effectivity (if the policy is implemented by a global monitor
+> then it won't get interfering activity by other users of this
+> interface). Global counters cannot do neither of that.
 
-Use call_rcu to defer releasing the umount'ed or detached filesystem
-when calling namepsace_unlock().
+I don't think the tracepoint is right approach for the purpose.
 
-Calling synchronize_rcu_expedited() has a significant cost on RT kernel
-that default to rcupdate.rcu_normal_after_boot=1.
+I understand we could get the same result using tracepoint using bpf or
+something so whenever event happens, a daemon get the result and
+accumlate the number so totally same result with global stat. Yeah,
+technically it's doable. With the claim, there is nothing we can do
+with tracpoint. Checks existing vmstat fields, why do we have them
+into vmstat instead of tracepoint? TP is much easiler/fleixible but
+with vmstat, we can get the ballpark under fleet easier to sense
+what's going on simply, and once we found something weird, we could
+turn on the trace to know the detail and TP would work for it.
 
-For example, on a 6.2-rt1 kernel:
-perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
-           0.07464 +- 0.00396 seconds time elapsed  ( +-  5.31% )
-
-With this change applied:
-perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
-        0.00162604 +- 0.00000637 seconds time elapsed  ( +-  0.39% )
-
-Waiting for the grace period before completing the syscall does not seem
-mandatory. The struct mount umount'ed are queued up for release in a
-separate list and no longer accessible to following syscalls.
-
-Signed-off-by: Alexander Larsson <alexl@redhat.com>
-Signed-off-by: Eric Chanudet <echanude@redhat.com>
----
- fs/namespace.c | 42 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 35 insertions(+), 7 deletions(-)
-
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ab467ee58341..11d219a6e83c 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -44,6 +44,11 @@ static unsigned int m_hash_shift __read_mostly;
- static unsigned int mp_hash_mask __read_mostly;
- static unsigned int mp_hash_shift __read_mostly;
- 
-+struct mount_delayed_release {
-+	struct rcu_head rcu;
-+	struct hlist_head release_list;
-+};
-+
- static __initdata unsigned long mhash_entries;
- static int __init set_mhash_entries(char *str)
- {
-@@ -1582,11 +1587,31 @@ int may_umount(struct vfsmount *mnt)
- 
- EXPORT_SYMBOL(may_umount);
- 
--static void namespace_unlock(void)
-+static void free_mounts(struct hlist_head *mount_list)
- {
--	struct hlist_head head;
- 	struct hlist_node *p;
- 	struct mount *m;
-+
-+	hlist_for_each_entry_safe(m, p, mount_list, mnt_umount) {
-+		hlist_del(&m->mnt_umount);
-+		mntput(&m->mnt);
-+	}
-+}
-+
-+static void delayed_mount_release(struct rcu_head *head)
-+{
-+	struct mount_delayed_release *drelease =
-+		container_of(head, struct mount_delayed_release, rcu);
-+
-+	free_mounts(&drelease->release_list);
-+	kfree(drelease);
-+}
-+
-+static void namespace_unlock(void)
-+{
-+	struct hlist_head head;
-+	struct mount_delayed_release *drelease;
-+
- 	LIST_HEAD(list);
- 
- 	hlist_move_list(&unmounted, &head);
-@@ -1599,12 +1624,15 @@ static void namespace_unlock(void)
- 	if (likely(hlist_empty(&head)))
- 		return;
- 
--	synchronize_rcu_expedited();
--
--	hlist_for_each_entry_safe(m, p, &head, mnt_umount) {
--		hlist_del(&m->mnt_umount);
--		mntput(&m->mnt);
-+	drelease = kmalloc(sizeof(*drelease), GFP_KERNEL);
-+	if (unlikely(!drelease)) {
-+		synchronize_rcu_expedited();
-+		free_mounts(&head);
-+		return;
- 	}
-+
-+	hlist_move_list(&head, &drelease->release_list);
-+	call_rcu(&drelease->rcu, delayed_mount_release);
- }
- 
- static inline void namespace_lock(void)
--- 
-2.39.0
-
+With process control using process_madvise in centralized controlled
+system, I think those two stats are really worth along with other
+memory reclaim statistics to be captured for memory health. If we
+have needs per-process level tracking(Actually, not for our case),
+we could add the tracepoint later.
