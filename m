@@ -2,192 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6C867439B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD6767439E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjASUlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S229760AbjASUmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjASUkw (ORCPT
+        with ESMTP id S229520AbjASUmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:40:52 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AF180178;
-        Thu, 19 Jan 2023 12:40:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674160844; x=1705696844;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=A7K1L/7Icc7pcOCzBfiLvj9IVrPgzUAitS2YoK2kyy0=;
-  b=lvIkZ10T6aMaBAVVivNN063nS9BnbRSYpewNhFsZrOl0Kgi7fIHERiFu
-   tarUv7ta4dJa+mi7EeNno9vsDHMVRLOKZUdUAThbYydMvmEu7UnJ9cIcv
-   Z7Q1whKazlD4AespO6CH3biCmf3JqvDuLEJ42KTaif1A243YY3O/HOz2n
-   0rpiM16j/1RT3Vdux0KGdaK9YkOPTJENzhgIxg96xP+rwDoQS5PvIyJRJ
-   YDLQIT8Wjn/rAHqAkQMxzk4tybdjOeNuAmIT2qtMZwO9cYcIjTrT8cyJ3
-   agYUraE4VlqwVD5XwtoJ2WnmyF6KrPsdu4LtiGu3KDrUlYCkcMQ9TtlGz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305089967"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="305089967"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 12:40:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="768374535"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="768374535"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 12:40:44 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 12:40:43 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 12:40:43 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 19 Jan 2023 12:40:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dhqCdXMu6dhxeNvZlCNIBpda2L7fjU2WwFJHAPfsWzP2r714E8ayVeEEUv8TdlKLccXfCUdpVfuJJxdLi8usJp5FKMYISGtEMrd5i3hISuEgKK2pMQekPHNvLWgHGdSAMZrWw0ikJ95/MSgTFGwEraDBmEfIYCBT1Fx9jiWUQwInbe7N3bL3LyGCrcXdcofV4rmSavehceE2QzTBNoGStMMG6jvznEoHjA2FHVCc7gLLKi3n66d6mT++qhmPrHAUaS0+UBF2FBI4ZEz4J7YTuq4Z8rbBM9d3/+Tk87wY+qtOlhbwNG9LrJjOuSqqNaozJa0EnpucphHL8kdmDHcHiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7K1L/7Icc7pcOCzBfiLvj9IVrPgzUAitS2YoK2kyy0=;
- b=W6rYUiicsNFHaGRgg0UIpl17SgOFZjQbTzL8ABqErE8a4Pwk5Xo0NDWzcsn74fP8xqZ/RAWJgp1zAs1U169d+tZCDKusv7MaWD7G+1Dc/SSC0QzPrmPEH8dstt5O2JPyjfDbmTri+jv3kU1rGbTg3b17tzyD5CFzYBP8ezFcBcW4wfw8yO00dBCNRfznTNGuNcXlrlrqEJTtB74ce4H++vpSZO3K6OwDw58gZkvoJEn3uY9ZCDdO0zXjTb7muskOL9UJl0Oecyz+/ZF67hnOGCI6Qndx02i1owMCYLgHzUKdvuMYIXbnZPbi//MNKYi90ECSJoJcrzDvGUiAHj8fwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by MN2PR11MB4584.namprd11.prod.outlook.com (2603:10b6:208:264::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
- 2023 20:40:40 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a%8]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 20:40:40 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "dmatlack@google.com" <dmatlack@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Thread-Topic: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Thread-Index: AQHZJqOgR/AYJ+DUHUGfsmh5dZfuuq6lHxiAgADJVYCAAFbdgA==
-Date:   Thu, 19 Jan 2023 20:40:40 +0000
-Message-ID: <c7c73964f56a8dcc2ee7fff3ac128b9ef9f62e35.camel@intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
-         <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
-         <080e0a246e927545718b6f427dfdcdde505a8859.camel@intel.com>
-         <Y8lh59ZYZkq4fsOX@google.com>
-In-Reply-To: <Y8lh59ZYZkq4fsOX@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|MN2PR11MB4584:EE_
-x-ms-office365-filtering-correlation-id: b03a8262-1e0d-49b4-8d93-08dafa5d6d7c
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tqoFKyJbnyQVzQIZuDmIFbgW31/D3wnP48z+VNpcd59bCJCwDlwKVrVhkKs382Q7EBL4nKqg8Azedn4KyXuMXxGj9IUPuuBluyJONls9WIuhQ/NxWdvYMZO9Q29YyflWBTU+u0WVSDIm8ZubfUD+f5g36CB3KJvgPO47qYor/MXOOtMVNW+AInxY/VDn5y7fAm4ZvpHDCjVuJyxfIMEr116WyoWutjzn33BitayARL95jzEf7iLNJKp583RhI3/QcS7RluliXtB27+HVHMnY+THZO1fpso00Zh+OdVovmKNh4wQWHgvPYtDgeL/SRgMfni5D+ewX1yeykrwssz3Vyd5cJKKRsVX//hDUvCfmMdWqDUmHtULfaclOmm5GXNiMIdGNoH5KzVBYuyIlDhzt+DYFOG5rIfSa6XCOVG4p5WcoZwVIXFVMKvZS0BO/yu4BU3503WwUJ09uhG1uF7gM7lcP9/43vgeGpZNbnMti39xIWXD/pxAIgYffu3vsddfo57fW3tLT2mRmi/TWxZgYIUS/AEDNjfamJRxrBD2nHADhuMomzn5Er74HulvPnvub7H7AX8eJZQQkixvXxaLAYs01DhilXgbcA8mnRA8FS0ao2xWtIPDFgcmyXtoYu/RTqtAXo2N3U1Z1NRpnVhN6NLLjimbn6882RQ4Pk+oC4I4ZYyF7OYjWCPA9w1+yDPx0/0mz7+7Yoo+I3L3dlZsrccRuE5aHB3bTJgJxMdSovMI5VfwU3pbpjJ+5FxIKaQlr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199015)(6506007)(26005)(6512007)(186003)(71200400001)(107886003)(966005)(6486002)(122000001)(478600001)(54906003)(316002)(64756008)(66446008)(6916009)(66946007)(4326008)(66476007)(76116006)(66556008)(8676002)(91956017)(36756003)(38100700002)(2616005)(41300700001)(8936002)(2906002)(5660300002)(38070700005)(82960400001)(86362001)(21314003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXRvMmF3T1ZCb2lreFVoWldJZzQyVk5uUFVnRDBEUnFJV2VwK3JqNEtCci9U?=
- =?utf-8?B?WTdtZVBzKzF0NGFSL2Y3NEdjSU5oK0FLYkpWLzV3ZGNoSUtQaCtrMmMzVXhL?=
- =?utf-8?B?b0JKd2pFbHpSK0R6cnFVQm9rSmhwYlorVmRkTWlBanptaFNhOHRiNUduQk1U?=
- =?utf-8?B?ZjJQTzlGSlRRM2tpbi9yMFYrUWx5NVNhQ1pIWERGbVJRLzh6NFNIMEZxTkU5?=
- =?utf-8?B?aFBERUp0cElyd2NMN3lJV3JMOFFuWmE0USs1OFRQY01yMHRjVGhMSHRZdktn?=
- =?utf-8?B?SytkYlNsL1p1OVAxblMwaTBNcGU1ajEyS2pibnEvVWN4OEN2eC94SjVua0Uy?=
- =?utf-8?B?NXhEdmZMZWRva0ZQd3J6aUdMWFlvRFhoMW1OQXhiVzE0cytWK25UTWNlcHow?=
- =?utf-8?B?RkNRcEpobm9HcTIvL0NjVE40Syt0NUdyR1BOb1pZUHk2TEptNDJQZVQ4eVQ5?=
- =?utf-8?B?VTBMVXpsa1V6ck8rRTUwSG9OWkJWN01Xa2YzQVhYTmVnQmhPelBVOFdUcEJV?=
- =?utf-8?B?UnBlWFBsalN4YkpzNDA1THF5UnFUVUpUQmhGL2kzWXpJclZ0ZWUvcTBWYTM1?=
- =?utf-8?B?ejVpWVB5c2tSZG9lVllPVXB1eFpKaEQwUStpNjZjZUl2T0pFSnlJY2F6L3Zy?=
- =?utf-8?B?dmJHYXA1a21CZFVsTkxycmJsSzR3N21PMzloMFZKU3A0bnNGSVpVRExwdGg5?=
- =?utf-8?B?LzUyc0NBMTFISnNuVENmZHhqNDU0WkRMVk8rb3Q5V01YeDhoK3VNbzRla3J6?=
- =?utf-8?B?NVlYeXlDOVpXQUJkQTVuZGRXTHkyallVOU1SQXZOUkdReGx3NlJhM0c2N2Zn?=
- =?utf-8?B?WW5XU09TZEo1K2NOWkpoMnhyckV5K0NXK2NHV2hycUxYZHdyV2xYM2VhQ01R?=
- =?utf-8?B?b0J5QnNoLzJEUU5oTEh6b29JZ1FRekJFKzJWNVhKUmZHam9GbUgwNCtIeDRF?=
- =?utf-8?B?M3Y3YVNwdEpvNVVGaCs1R1BCRHFybDFTS21XcnBTQ3Fjcko3TVY1cEkrT2xx?=
- =?utf-8?B?aEFTR2QyUC9FeTdNa1c0NDBKTEF2VEFhMi9UYktFdU01UEZWTmw3a1YvK21X?=
- =?utf-8?B?cVJwVmVDaFRyR2txanBsUy8wNDk5eTNTL1owV2NISUdMTHltVUthK0t2aW9L?=
- =?utf-8?B?QXR6RmlPM0xqMHFyUlJPeCtaT3dQSXk2M2Fia0xBNEcyenUwWDcrRUo3SlND?=
- =?utf-8?B?aFlDRHJlem0yYS9sQnVCSkJXcW1DUk40YkQrR29WYjNocE1vb2piZVVPUGtm?=
- =?utf-8?B?Vnh4NUJVZnc1TVA2eDFJUXU0cW95cTNzM2s5Q1hEWk1jMjV6UXBzd0tiLzd2?=
- =?utf-8?B?L1FtUk9WZXluOTBJNEMrZ0ZmdXJFc0E2WktzTldhT2FUYnRXTmFjWnVQQTRN?=
- =?utf-8?B?V0RGTWo1YlVLU25iMWlQT1hORXNLSGVVb3ZHbGFqYlJHdkdqRTI5ci9vb01q?=
- =?utf-8?B?YnZqelIyUndVSVd6VnJhdmlIcjV3SStOckJyOWcvcmRSSmd3ZWNPd2RLZ0lS?=
- =?utf-8?B?RkNSMWJwZi83NFZHcG1yc3FtTGMzbDVzVTUxWEhBdzlBWFBYa0s2ODNkczJG?=
- =?utf-8?B?UjNLaGFHTXgvbkFEa2N3ME40Q1BGR3pvWnlaaWF3eFVia294V3hMSVNMeWlQ?=
- =?utf-8?B?SWRYODB4ODZpaXRIU05PbWF1aUliYU9TOEJBL2hPUTc2MkNYSnEwdXZDNFpi?=
- =?utf-8?B?L1UvWVNuR2ticnpESkdIeUpGWm1mc1EvWDdneEJWTndLSjBEaGxoUkh2RFhO?=
- =?utf-8?B?ZjN3UnkrVmFjbzg2Zmt2VHl1aTJhdjJJeEt1ajU1K2JiNzNzUVU1cVNRRUtW?=
- =?utf-8?B?bldFRXJBdjlRVEp4S2p6cjlnZWh1Z09pNkNJMWtSdTVEOXFBOTZPVFB1bnY1?=
- =?utf-8?B?aUNYbldldis0M1J0MmlqNlNsZ1VaMmM1eXBESzFUR1lEU0dwdXNZRDI2aTFh?=
- =?utf-8?B?L0xnRHZMTWgrTkNwenQ3cXp4RTNqMUVtaHJ4QkVsNjROd3FaMFhBbjMwMEpt?=
- =?utf-8?B?THcxa0hUUXltY3R2R0ZaVytjRXZobWZEVlUwdkFDSVdQMHVzSUJzNHJTak56?=
- =?utf-8?B?bTdsaG5aRzRhYjcvd1czb0g4Y1dDKy83VzZlZVVMWWdVcS9CVmUvZVU5emhm?=
- =?utf-8?B?Mnppb25hNlhmTlVkenppOUdycXJrajlzNUtyTUFIc1hnakRGMlh5YkFGU1Z1?=
- =?utf-8?B?c1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CB179DFEBE763B4ABC71D8D76FAA1EA5@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 19 Jan 2023 15:42:06 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AC79EE0F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:41:31 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id z9so2563766qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1jM2JQTdRNAdYzy1GQ8Op4oYVTBiB1MTyaHN5HgqtFQ=;
+        b=G90JXst8UiJUIJm7dm3a/sYtG7NhkTvFEmQppGE0hH7IurH7MrzQIguR4FMczQzG4D
+         LOy+4VdCoyC2rOpVbAsvWND1TldbzniA5lIg3zl7FkX5gYQR9iz8vbNdXvRwbUcS620P
+         eXAGG4LWc3oQj8zfpvTUHYV58B/Hp+qZvnmBRKtoCzlHCk1N+WO6bgfKfDXfDY4Virhy
+         iMifmeqgDfdVuKndw50gQa93m9LQaUVL5w5FDlgW9S6nLhePhUOQG7QlR4wf9yfU8tYr
+         24sAQFPRErLH1z55azBDRTRFgrYiVrO86bp3vyFYdFAMmasFeHcs4ebwoBsQwK4T9J5H
+         UXZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1jM2JQTdRNAdYzy1GQ8Op4oYVTBiB1MTyaHN5HgqtFQ=;
+        b=IxP4kZfCU+c/C9gSI3ZGJ9E88+CeMdnuj4e1Avnwyq3Jqhd0XpEr+6NmOVDrAqD37j
+         luJHDEKI7T7QXw98NGOBAGJ7zT/GPCs2E/teTkW/bFLPlH2spibKuHCngwm8NvWyG+eh
+         Nj+HLx+l6zQrBmuc8E05CFzSetqP783Q4S3eNsreWA5nDeEeikZX5de01mUWWOwhBpPj
+         NILslBxFYLOFkpa4+MMha0HJfTngal7nPQdRPoEk6Seh7aKVzEnZoTBxugBYB+9lX6hd
+         Q83POWhaRgJ8m4JF/YHT9iPPfC5Lv8QoWh+gx0YbpPtqUyKzlT4gxVvVN3tpS5irMM9F
+         P4gA==
+X-Gm-Message-State: AFqh2kpBJFvMjmlhldkWqvxRL1S8ufQkwQ/vx+0DIJFvMd85nkDDYo1s
+        VsLOvIzYu46KSPLNMCvmZfPTOg==
+X-Google-Smtp-Source: AMrXdXvC9/kukIOkGJxFQ64UcL1d+ibzQMHjEy4HG2UUkfHs3di2p07mMQ01ChKb+J9L5KZYIHTnFA==
+X-Received: by 2002:ac8:4a18:0:b0:3b6:8d44:5648 with SMTP id x24-20020ac84a18000000b003b68d445648mr6609929qtq.46.1674160882813;
+        Thu, 19 Jan 2023 12:41:22 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id j25-20020ac874d9000000b003b0b903720esm12386762qtr.13.2023.01.19.12.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 12:41:22 -0800 (PST)
+Message-ID: <bb9fb55bf81b978041e44e04d619adf43488f467.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 2/2] media: amphion: support to decode sorenson spark
+ video
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Thu, 19 Jan 2023 15:41:19 -0500
+In-Reply-To: <ab85e597c37aad849480bfe912d5e06aebc51726.1673513975.git.ming.qian@nxp.com>
+References: <cover.1673513975.git.ming.qian@nxp.com>
+         <ab85e597c37aad849480bfe912d5e06aebc51726.1673513975.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b03a8262-1e0d-49b4-8d93-08dafa5d6d7c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 20:40:40.1972
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7FkXvMc2fLKxffM0rjm1TG0TkbFHv3TsA6if2juOrYHmy3nhhgKIPPWmr53av/2ddV3mtJggwrmeajWs/0mkIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4584
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAxLTE5IGF0IDE1OjI5ICswMDAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
-b3RlOg0KPiBPbiBUaHUsIEphbiAxOSwgMjAyMywgSHVhbmcsIEthaSB3cm90ZToNCj4gPiBPbiBU
-aHUsIDIwMjMtMDEtMTIgYXQgMDg6MzEgLTA4MDAsIGlzYWt1LnlhbWFoYXRhQGludGVsLmNvbSB3
-cm90ZToNCj4gPiA+ICtzdGF0aWMgdm9pZCB0ZHhfY2xlYXJfcGFnZSh1bnNpZ25lZCBsb25nIHBh
-Z2VfcGEpDQo+ID4gPiArew0KPiA+ID4gKwljb25zdCB2b2lkICp6ZXJvX3BhZ2UgPSAoY29uc3Qg
-dm9pZCAqKSBfX3ZhKHBhZ2VfdG9fcGh5cyhaRVJPX1BBR0UoMCkpKTsNCj4gPiA+ICsJdm9pZCAq
-cGFnZSA9IF9fdmEocGFnZV9wYSk7DQo+ID4gPiArCXVuc2lnbmVkIGxvbmcgaTsNCj4gPiA+ICsN
-Cj4gPiA+ICsJaWYgKCFzdGF0aWNfY3B1X2hhcyhYODZfRkVBVFVSRV9NT1ZESVI2NEIpKSB7DQo+
-ID4gPiArCQljbGVhcl9wYWdlKHBhZ2UpOw0KPiA+ID4gKwkJcmV0dXJuOw0KPiA+ID4gKwl9DQo+
-ID4gDQo+ID4gVGhlcmUgbWlnaHQgYmUgYmVsb3cgaXNzdWVzIGhlcmU6DQo+ID4gDQo+ID4gMSkg
-VGhlIGtlcm5lbCBzYXlzIHN0YXRpY19jcHVfaGFzKCkgc2hvdWxkIG9ubHkgYmUgdXNlZCBpbiBm
-YXN0IHBhdGNoIHdoZXJlIGVhY2gNCj4gPiBjeWNsZSBpcyBjb3VudGVkLCBvdGhlcndpc2UgdXNl
-IGJvb3RfY3B1X2hhcygpLiAgSSBkb24ndCBrbm93IHdoZXRoZXIgaGVyZSB5b3UNCj4gPiBzaG91
-bGQgdXNlIHN0YXRpY19jcHVfaGFzKCkuDQo+IA0KPiBUaGF0IGRvY3VtZW50YXRpb24gaXMgc3Rh
-bGVbKl0sIGdvIGFoZWFkIGFuZCB1c2UgY3B1X2ZlYXR1cmVfZW5hYmxlZCgpLg0KPiANCj4gaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIxMTA3MjExNTA1Ljg1NzItMS1icEBhbGllbjgu
-ZGUNCg0KVGhhbmtzIGZvciB0aGUgaW5mbyA6KQ0KDQo+IA0KPiA+IDIpIElJVUMgYSBDUFUgZmVh
-dHVyZSBiaXQgY2FuIGJlIGNsZWFyZWQgYnkgJ2NsZWFyY3B1aWQ9eHh4JyBrZXJuZWwgY29tbWFu
-ZA0KPiANCj4gQXMgeW91IG5vdGUgYmVsb3csIHVzaW5nIGNsZWFyY3B1aWQgdGFpbnRzIHRoZSBr
-ZXJuZWwsIGkuZS4gYW55IGJyZWFrYWdlIGR1ZSB0bw0KPiBjbGVhcmNwdWlkIGlzIHVzZXIgZXJy
-b3IuDQoNCkFncmVlZC4NCg0KDQo=
+Le jeudi 12 janvier 2023 =C3=A0 17:04 +0800, Ming Qian a =C3=A9crit=C2=A0:
+> Sorenson Spark is an implementation of H.263 for use
+> in Flash Video and Adobe Flash files.
+> amphion decoder can support it by insert some startcode
+> before sequence and picture.
+
+Its historical codec, but I'm surprise it does not also support H263 (and
+possibly H263+). Note a review comment of course, just a curiosity.
+
+>=20
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+>  drivers/media/platform/amphion/vdec.c       |  7 +++++++
+>  drivers/media/platform/amphion/vpu_malone.c | 18 ++++++++++++++++++
+>  2 files changed, 25 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platfo=
+rm/amphion/vdec.c
+> index 87f9f8e90ab1..09304b96f40d 100644
+> --- a/drivers/media/platform/amphion/vdec.c
+> +++ b/drivers/media/platform/amphion/vdec.c
+> @@ -165,6 +165,13 @@ static const struct vpu_format vdec_formats[] =3D {
+>  		.type =3D V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>  		.flags =3D V4L2_FMT_FLAG_DYN_RESOLUTION | V4L2_FMT_FLAG_COMPRESSED
+>  	},
+> +	{
+> +		.pixfmt =3D V4L2_PIX_FMT_SPK,
+> +		.mem_planes =3D 1,
+> +		.comp_planes =3D 1,
+> +		.type =3D V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+> +		.flags =3D V4L2_FMT_FLAG_DYN_RESOLUTION | V4L2_FMT_FLAG_COMPRESSED
+> +	},
+>  	{0, 0, 0, 0},
+>  };
+> =20
+> diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/=
+platform/amphion/vpu_malone.c
+> index 2c9bfc6a5a72..67ba637c4c7f 100644
+> --- a/drivers/media/platform/amphion/vpu_malone.c
+> +++ b/drivers/media/platform/amphion/vpu_malone.c
+> @@ -562,6 +562,7 @@ static struct malone_fmt_mapping fmt_mappings[] =3D {
+>  	{V4L2_PIX_FMT_H263,        MALONE_FMT_ASP},
+>  	{V4L2_PIX_FMT_JPEG,        MALONE_FMT_JPG},
+>  	{V4L2_PIX_FMT_VP8,         MALONE_FMT_VP8},
+> +	{V4L2_PIX_FMT_SPK,         MALONE_FMT_SPK},
+>  };
+> =20
+>  static enum vpu_malone_format vpu_malone_format_remap(u32 pixelformat)
+> @@ -987,6 +988,7 @@ static const struct malone_padding_scode padding_scod=
+es[] =3D {
+>  	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
+>  	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
+>  	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
+> +	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_SPK,         {0x34010000, 0x0}},
+>  	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0xefff0000, 0x0}},
+>  	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264,        {0x0B010000, 0}},
+>  	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264_MVC,    {0x0B010000, 0}},
+> @@ -998,6 +1000,7 @@ static const struct malone_padding_scode padding_sco=
+des[] =3D {
+>  	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
+>  	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
+>  	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
+> +	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_SPK,         {0x34010000, 0x0}},
+>  	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0x0, 0x0}},
+>  	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264,        {0x15010000, 0x0}},
+>  	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264_MVC,    {0x15010000, 0x0}},
+> @@ -1411,6 +1414,16 @@ static int vpu_malone_insert_scode_vp8_pic(struct =
+malone_scode_t *scode)
+>  	return size;
+>  }
+> =20
+> +static int vpu_malone_insert_scode_spk_seq(struct malone_scode_t *scode)
+> +{
+> +	return vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_SPK, 0);
+> +}
+> +
+> +static int vpu_malone_insert_scode_spk_pic(struct malone_scode_t *scode)
+> +{
+> +	return vpu_malone_insert_scode_pic(scode, MALONE_CODEC_ID_SPK, 0);
+> +}
+> +
+>  static const struct malone_scode_handler scode_handlers[] =3D {
+>  	{
+>  		/* fix me, need to swap return operation after gstreamer swap */
+> @@ -1427,6 +1440,11 @@ static const struct malone_scode_handler scode_han=
+dlers[] =3D {
+>  		.insert_scode_seq =3D vpu_malone_insert_scode_vp8_seq,
+>  		.insert_scode_pic =3D vpu_malone_insert_scode_vp8_pic,
+>  	},
+> +	{
+> +		.pixelformat =3D V4L2_PIX_FMT_SPK,
+> +		.insert_scode_seq =3D vpu_malone_insert_scode_spk_seq,
+> +		.insert_scode_pic =3D vpu_malone_insert_scode_spk_pic,
+> +	},
+>  };
+> =20
+>  static const struct malone_scode_handler *get_scode_handler(u32 pixelfor=
+mat)
+
