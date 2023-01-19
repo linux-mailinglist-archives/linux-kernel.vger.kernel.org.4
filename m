@@ -2,88 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC7B6735EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14CB6735F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjASKpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S230146AbjASKqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjASKo6 (ORCPT
+        with ESMTP id S230044AbjASKq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:44:58 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9151646D4E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:44:57 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id z5so1420190wrt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8xlnawePa78ICFwjfjsW90f7mFfyeG73gzlxTncqwyE=;
-        b=h5WDQK2D6C9l5TGsa7heKev8ShkmZ1JPY5cxwLtzRlVKbAZFrP1SjLeg6p7u0CzyX+
-         ZtI98ciCrs1G6ED70BKYjH1OQt1qjnvI0ruFbP3KmYzNKqmODOiSrIu/SS/4e1B1Ja5+
-         wLBlagSVGeherUSZGt2wnqhYfLeLmrYs/TVm6v9aNWTVzjgFf30B0wKbNCK3mI7LUGRZ
-         GCEtgyUbTxLKvPThn23sDnde6Q5JUoEnbJ6/W23yxrQFfZzsgw6ntkcyzuKOpOjDNE6/
-         dFiLBrO7Zg/s0EnMnMllp8N+jnRR8K4X1Al03LXNaNO8cYTZ6SM9xCElMxBS4u8YQxPt
-         IMRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8xlnawePa78ICFwjfjsW90f7mFfyeG73gzlxTncqwyE=;
-        b=m0V66wJlbSk8RPL81baDuqTpUU8R5R8ZuCrAsMklRAL3A3nd/QpccsLZ7q3tHHZ70f
-         fld0faLVNQsPtnkcpF2BIcmVJY79MW14CTeS/aW6V3cWhY7qO6fLp8Vi3cIT6LgQUFoV
-         5g4+QwSQkP8+cNVImef19fDYwXKfBj6lQGTQlEbRJEoqhLsuCY6t547LQD4MSxHzhEeC
-         Rsa9FpZAVr4GbvyReXDbYkCRPLtgzdg8+tG+zb5I+3U4329iHv2B0vfL+EePSCK/AKGT
-         u1zNkGwrT0DWlraKih0O+AnG+G5hQ2VQsvGpp7mtXBzoF60Wn533W2Omcc4LbJ8O7Ab4
-         SK0A==
-X-Gm-Message-State: AFqh2kpOSGypBdlCef3/aneXPcoynOXih9ZdeOGPHbnucikQz4sS9ZN3
-        yc7/gPXHGjb2rEWCpdZU8NQf0w==
-X-Google-Smtp-Source: AMrXdXvel3nvZiaEnBT/xHs7rT2NUHqn9HRzAttFMuh2VrOKEUaH5uPNdNIHlLOFA6xljS1sQgnihw==
-X-Received: by 2002:a5d:68c5:0:b0:2bc:846a:8eb2 with SMTP id p5-20020a5d68c5000000b002bc846a8eb2mr8837850wrw.11.1674125096077;
-        Thu, 19 Jan 2023 02:44:56 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600012c400b002bbb2d43f65sm30361062wrx.14.2023.01.19.02.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 02:44:55 -0800 (PST)
-Message-ID: <cd7a2eac-5d70-6dcd-ddbd-317e1cbd7d23@linaro.org>
-Date:   Thu, 19 Jan 2023 11:44:52 +0100
+        Thu, 19 Jan 2023 05:46:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A4D44BF5;
+        Thu, 19 Jan 2023 02:46:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD306150E;
+        Thu, 19 Jan 2023 10:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BE3C433EF;
+        Thu, 19 Jan 2023 10:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674125183;
+        bh=qpyXLL/Rf+o5zDU8yK7JwFneqwZHvHMocnZnj4DcFMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GcSm87FWVijyGcolTuRTchzoRQqrGIaiNtWpMRW8HAw4fjK10U+inBHAF0iabmfjm
+         MrF5yXxlBAznW4p30/xXuXxgzslfWblEsYUeuHrFGA5so64Q5fuAcCZo5DSNDLXRAr
+         466n4ulOvx79eKseouaQ4R3NTawwh9TlXsJ5ukRg=
+Date:   Thu, 19 Jan 2023 11:46:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: Re: [PATCH V3 2/2] usb: gadget: u_ether: Don't warn in
+ gether_setup_name_default()
+Message-ID: <Y8kfdm9juBi58bnj@kroah.com>
+References: <20230119102547.26698-1-jonathanh@nvidia.com>
+ <20230119102547.26698-2-jonathanh@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 1/9] dt-bindings: arm: Add support for DSB element
-Content-Language: en-US
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        Tao Zhang <taozha@qti.qualcomm.com>
-References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
- <1674114105-16651-2-git-send-email-quic_taozha@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1674114105-16651-2-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119102547.26698-2-jonathanh@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,80 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 08:41, Tao Zhang wrote:
-> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
-> Bit) element for TPDA. Specifies the DSB element size supported
-> by each monitor connected to the aggregator on each port. Should
-> be specified in pairs (port, dsb element size).
+On Thu, Jan 19, 2023 at 10:25:47AM +0000, Jon Hunter wrote:
+> The function gether_setup_name_default() is called by various USB
+> ethernet gadget drivers. Calling this function will select a random
+> host and device MAC addresses. A properly working driver should be
+> silent, so don't warn the user about default MAC addresses selection
+> happening and convert the warnings into debug messages.
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
-
-You are the same person and it is still the same organization
-(Qualcomm), right? Only one SoB.
-
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 > ---
->  .../bindings/arm/qcom,coresight-tpda.yaml          | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> V2 -> V3: Updated commit message.
+> V1 -> V2: Changed print to debug instead of info.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
-> index 2ec9b5b..298db7f 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
-> @@ -58,6 +58,26 @@ properties:
->      minItems: 1
->      maxItems: 2
+>  drivers/usb/gadget/function/u_ether.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index be8e7b448933..8feb40e38137 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -845,13 +845,13 @@ struct net_device *gether_setup_name_default(const char *netname)
+>  	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
 >  
-> +  qcom,dsb-element-size:
-> +    description: |
-> +      Specifies the DSB(Discrete Single Bit) element size supported by
-> +      each monitor connected to the aggregator on each port. Should be
-> +      specified in pairs <port, dsb element size>.
-
-s/port/port number/
-
-> +
-> +      Note: The maximum value of the port number depends on how many
-> +      input ports the current TPDA has. DSB element size currently only
-> +      supports 32-bit and 64-bit.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    items:
-
-Are some reasonable maxItems known?
-
-> +      items:
-> +        - description: |
-> +            "port" indicates TPDA input port number
-
-What is "port"? You quoted it like it was some name of variable or
-property. Where is then?
-
-> +          minimum: 0
-> +        - description: |
-> +            "dsb element size" indicates dsb element size
-
-"A" indicates A. This sentence does not make sense.
-
-Also missing units.
-
-s/dsb/DSB/
-
-> +          minimum: 0
-> +          maximum: 64
-> +
->    clocks:
->      maxItems: 1
+>  	eth_random_addr(dev->dev_mac);
+> -	pr_warn("using random self ethernet address %pM\n", dev->dev_mac);
+> +	pr_debug("using random self ethernet address %pM\n", dev->dev_mac);
 >  
-> @@ -100,6 +120,8 @@ examples:
->         compatible = "qcom,coresight-tpda", "arm,primecell";
->         reg = <0x6004000 0x1000>;
+>  	/* by default we always have a random MAC address */
+>  	net->addr_assign_type = NET_ADDR_RANDOM;
 >  
-> +       qcom,dsb-element-size = <0 32>;
-> +
->         clocks = <&aoss_qmp>;
->         clock-names = "apb_pclk";
->  
+>  	eth_random_addr(dev->host_mac);
+> -	pr_warn("using random host ethernet address %pM\n", dev->host_mac);
+> +	pr_debug("using random host ethernet address %pM\n", dev->host_mac);
 
-Best regards,
-Krzysztof
+In looking at this further, you are right, the structures are not
+initialized properly yet.
 
+So move these to a different function entirely, they should be in
+gether_register_netdev() instead, after the device is registered with
+the system.
+
+thanks,
+
+greg k-h
