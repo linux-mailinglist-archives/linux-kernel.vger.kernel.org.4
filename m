@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3CE673642
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8338B6735C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjASLBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
+        id S230080AbjASKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjASLBH (ORCPT
+        with ESMTP id S229760AbjASKjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:01:07 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F370C69
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:01:03 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q8so1176183wmo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EeGAqrfnaMqHhXn+fesK0LO0w9RhCIO69ufxIucqGQ4=;
-        b=j5fPN239VO7CGuPDw0nWo2IuJDq6j/Z8+SdHUiNK2P0zh116wOeLq5nWc76k3vicIx
-         1imNJgRhpbt7jIn6z8z8R5Bw1LMFAkT4CpdSYqfY5Nwxp1Nv5Rk//xYcw4Gc5ieaKp4f
-         +X8ddpI4CKfcf3vrTeo+74h83aTGUwWp95dzdBSWl31CsY91N1l8sNMSETisIbP9avhH
-         P85LI9WzGhYyWIkZhYN5e13r3yB0u0Ed3R9dacxiyRRxs5UFd7arJLjSLGOi5iitN7nt
-         pbM4+FNyTv0vsB+jXs4jSHR5jvXSfNzrUsQVo7tzQWvuIDwORyXAIC2ja4+E3rxnw83W
-         Yvnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EeGAqrfnaMqHhXn+fesK0LO0w9RhCIO69ufxIucqGQ4=;
-        b=SHPOKIfizMl0zfR+mhLJc1Fo/jhaYOAI+hGuByo1qDs0VJVJRWmLELsh5Og4xk0umh
-         QmyyZMCgdkhJ8HhoCi+CGdE2QKjQIHuRJg7m1cHX4siPGpOe1Vw2KSXPHiMLYk7Y7R8M
-         aTMlDtl2eLWJJBGYqxDbcXFQEHfEZ0P7bKpmilfVZLQA50QEi9Zr2VdNFLpD18u9ll1J
-         TSaTsjx8QX37hNy/m5XJFsVYXH8CiA4U9HMTnisrLM6kQN3vLC2AXg5gW9usPGVBfJuo
-         liVXzoUaxtGjMLiza4JmoN/GkjOmQYtZClWFQAXaick63btZjFviVXA58giGkidfgU8p
-         z/yw==
-X-Gm-Message-State: AFqh2kp01uHxLfviHXeIIAJkChqqizFAtqz3+joFygEVS2MpF8gAHbUT
-        dQsBOovguu+ZeC+w3C9n4LBJHA==
-X-Google-Smtp-Source: AMrXdXsRC0MZSuvOW1aKbfxRpR83K2ySsRX/3zn/1i8NoAU2D343B/n3197EvQhCQFFa2oJvNx+E1w==
-X-Received: by 2002:a05:600c:1c1b:b0:3d9:ebf9:7004 with SMTP id j27-20020a05600c1c1b00b003d9ebf97004mr9467839wms.29.1674126061689;
-        Thu, 19 Jan 2023 03:01:01 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id iv8-20020a05600c548800b003b47b80cec3sm5335621wmb.42.2023.01.19.03.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 03:01:01 -0800 (PST)
-Message-ID: <30393a75-b8ab-2087-4f76-8f1008f816d7@linaro.org>
-Date:   Thu, 19 Jan 2023 12:01:00 +0100
+        Thu, 19 Jan 2023 05:39:43 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFB02105;
+        Thu, 19 Jan 2023 02:39:41 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NyJzC4dW0z4f41Sv;
+        Thu, 19 Jan 2023 18:39:35 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCnUyHmHclj45hSBw--.55879S4;
+        Thu, 19 Jan 2023 18:39:36 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next v3 0/3] blk-cgroup: make sure pd_free_fn() is called in order
+Date:   Thu, 19 Jan 2023 19:03:47 +0800
+Message-Id: <20230119110350.2287325-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v1] arm64: dts: qcom: sm8350: Use 2 interconnect cells
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>, agross@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
-        rfoss@kernel.org
-Cc:     robert.foss@linaro.org
-References: <20230117115712.1054613-1-rfoss@kernel.org>
- <167408614052.2989059.12874514471754492819.b4-ty@kernel.org>
- <41b0c0cc-3ef5-362c-a09e-97a2ffca8e1f@linaro.org>
-In-Reply-To: <41b0c0cc-3ef5-362c-a09e-97a2ffca8e1f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCnUyHmHclj45hSBw--.55879S4
+X-Coremail-Antispam: 1UD129KBjvJXoWrur4DtF13tw1rtrWxXr4xWFg_yoW8Jry3pF
+        sxK3y5GrsxAFsrAa1aka12qa4Sgw4rJa4jgryft34rCrWqyrykCwn29ws8GFyUAr97GayU
+        XrnI9Fyvk34jy37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        XdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 11:50, Krzysztof Kozlowski wrote:
-> On 19/01/2023 00:55, Bjorn Andersson wrote:
->> On Tue, 17 Jan 2023 12:57:11 +0100, rfoss@kernel.org wrote:
->>> From: Robert Foss <robert.foss@linaro.org>
->>>
->>> Use two interconnect cells in order to optionally
->>> support a path tag.
->>>
->>>
->>
->> Applied, thanks!
->>
->> [1/1] arm64: dts: qcom: sm8350: Use 2 interconnect cells
->>       commit: 4f287e31ff5f464526651ee3cb3fd3e96b2e5746
-> 
-> 
-> I don't think this is correct patch. We talked that this must be rebased
-> on my interconnect cells change and I think it wasn't :(
+From: Yu Kuai <yukuai3@huawei.com>
 
-Ah, let's just fix it with one more patch:
+Changes in v3:
+ - add ack tag from Tejun for patch 1,2
+ - as suggested by Tejun, update commit message and comments in patch 3
 
-https://lore.kernel.org/linux-arm-msm/20230119105434.51635-1-krzysztof.kozlowski@linaro.org/T/#u
+The problem was found in iocost orignally([1]) that ioc can be freed in
+ioc_pd_free(). And later we found that there are more problem in
+iocost([2]).
 
-Best regards,
-Krzysztof
+After some discussion, as suggested by Tejun([3]), we decide to fix the
+problem that parent pd can be freed before child pd in cgroup layer
+first. And the problem in [1] will be fixed later if this patchset is
+applied.
+
+[1] https://lore.kernel.org/all/20221130132156.2836184-8-linan122@huawei.com/
+[2] https://lore.kernel.org/all/aa924294-2f54-1b53-fc6e-e4f8fa019b14@huaweicloud.com/
+[3] https://lore.kernel.org/all/20221227125502.541931-1-yukuai1@huaweicloud.com/
+
+Yu Kuai (3):
+  blk-cgroup: dropping parent refcount after pd_free_fn() is done
+  blk-cgroup: support to track if policy is online
+  blk-cgroup: synchronize pd_free_fn() from blkg_free_workfn() and
+    blkcg_deactivate_policy()
+
+ block/blk-cgroup.c     | 63 ++++++++++++++++++++++++++++++++----------
+ block/blk-cgroup.h     |  1 +
+ include/linux/blkdev.h |  1 +
+ 3 files changed, 50 insertions(+), 15 deletions(-)
+
+-- 
+2.31.1
 
