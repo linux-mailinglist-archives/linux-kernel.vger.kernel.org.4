@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C83673CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ABF673CD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjASOvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S231199AbjASOyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:54:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjASOv3 (ORCPT
+        with ESMTP id S230306AbjASOyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:51:29 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF1AF;
-        Thu, 19 Jan 2023 06:51:27 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id b7so2121582wrt.3;
-        Thu, 19 Jan 2023 06:51:27 -0800 (PST)
+        Thu, 19 Jan 2023 09:54:46 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E45798FA;
+        Thu, 19 Jan 2023 06:54:42 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id b7so2131455wrt.3;
+        Thu, 19 Jan 2023 06:54:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3MOWjLgerih44eb2IhlC3xN7d1/OgboMF3L7Yw/Sz9s=;
-        b=UKLn3NuwU8jNfGwSS+Zl9ru3zKeKrYe74d8m6w0umcr7JYtPbr9Lo7rDqWHKqPf6HC
-         +Fw0WNMOqL9mOiVu+zWoWbTWXlAPPEnfcXdw1vboWzGWVNpk+EPiJ97qdJ5RyXK4wSp6
-         BQKc+86C4tiSb08Pmn1c4tOdabHeaRy4WiUj+SuqRltTT9/EEb5eT7Nz+gwBIrOTirIv
-         oLj9R4+kuElA5PHDRRwApMjUFJpKrQQONPUBH10KSZpvFV8i027e/ME7hYeoaFbruUTF
-         EhPAEUGniCpNB9cnpBPzSXJMAQdHNr/nE48afvG36cpJgQGO/DAA4qirc9crLRG8Gi5t
-         +Evw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wy5TUZFPF5q8Yt4s63OdjaHjAcmxGBFMCBM3EbZvWiA=;
+        b=RQ/Ocry7XDJLW+Ir5Swv2D4r+NGiJfMvZheDWAMTdVu+GxyjOqvzOOwbiSrjvN4EPE
+         4zxlqYcP95+QFfgTqVIeQDR3eRhAKzFe3blYux+ZH6YdHI7eeX2zVmw9dQL0TsWetY6j
+         N9xog01QXKs0y1e+nIPyfEaNn1HzPy05DbWpZ6vOWP3guLc5DPl7QZVUxKp4M4+PScIw
+         vHNRLWou4Joj5VEgNBPu+zP9xDZR3oRCNzuqoisaq26mXMzGq8XsBbvHR7TzlpM38MkU
+         OohAXk68S5bqNutdw9eszxsLYfkAGPC1HNmEdbH7ITgzhkaqLizXbeiaHvSrDMCX8WdY
+         mUkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3MOWjLgerih44eb2IhlC3xN7d1/OgboMF3L7Yw/Sz9s=;
-        b=sCJuvOjLSQxILAh3Ph/WVXOHOmv/l3+jfBGjIJ1Jf+SVvZ7U/RC2yHSYN87O7cjdZk
-         5J/YqkbFJ2PhaYCbho7krK2H/TW5g4LugwNYATOxzljK+yo8FzyrQGfie0HPqMZbkfft
-         ERT/TVFnY/fRq4hz9S45k4bWusdRXLeLx6gVv53zHgQ6Zg1w8RjALyBE2W9cSFm1lOWE
-         +M95Uq1C0e0KSp8IP/FTwa93R3H1S7KstTE16DC14U6LJ4QvYyYUMegxxGmDSMugJiAl
-         dFMmvCPxeCSQZB+/Eh96bmPOpCobbIdRUv8wvK4FOzESOyLPmnpTEHVVjTizhaMnmmrm
-         bIig==
-X-Gm-Message-State: AFqh2kp6Ipae8LPqs0jIPC0JweVAhGL2+SAEOZxH6pZeiaEXIX3sQaqn
-        sDopCB9iiXYMvxWiApK1u/E=
-X-Google-Smtp-Source: AMrXdXs97cBZEinuOjEk6HszHHJPOjOYoErRkwOQkBBd34PHxu3oD8NtkYkq1qmL4HFFs6crkRk9HQ==
-X-Received: by 2002:a5d:5512:0:b0:2bd:bb55:e48d with SMTP id b18-20020a5d5512000000b002bdbb55e48dmr18602476wrv.66.1674139885482;
-        Thu, 19 Jan 2023 06:51:25 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b002b8fe58d6desm34308255wrj.62.2023.01.19.06.51.24
+        bh=wy5TUZFPF5q8Yt4s63OdjaHjAcmxGBFMCBM3EbZvWiA=;
+        b=FK97/uX08fsWKVMtmTl/PssJW7Y4D7Hp09amqyj4Ga7Qs6RwW3eHq7bx9xun1Jo5kI
+         lb2EIAfBW6YRZE4zdI5JwfqcIfe+4qu6VkMIVo8hCeMXLUcLZZKngp+FoLxO3OCvSo5N
+         ZY5Jn5nbe6/F9pHsDoywsjp9igugge7baLspiJuTxMX/N6B23SWV70UbfjZhdXBwMWH+
+         GpLYBFlBlveoHXhiJVyZ4itf3xjnDpcZ0ACoVZktMGIJEzUZudQDMVYRYavsTiRoinHT
+         GwrFtnazJlDfP3dhqztXqxgil7JTVmhUd5FBCfSzFbKZIn5E0w5XJT40JrEssoSpjpGU
+         deZA==
+X-Gm-Message-State: AFqh2kpum4xctB1i+AojT0KWBy1H/o7JajbfpYUjxk5r5qjc8FYqQXnY
+        yeD6Km6iBaOsidxI6i/bzamu+PDOLEIcIw==
+X-Google-Smtp-Source: AMrXdXu2WNrBPsS8qb3Vrho0oFI8358Pv6WvBJb0HPYxPZM3rU4S1uzhuV+Uun42ZoTKQGl4BclE6A==
+X-Received: by 2002:adf:f78d:0:b0:2bd:bed5:9207 with SMTP id q13-20020adff78d000000b002bdbed59207mr9873199wrp.12.1674140081020;
+        Thu, 19 Jan 2023 06:54:41 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id q15-20020adfab0f000000b002bde7999cd6sm16094172wrc.61.2023.01.19.06.54.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 06:51:24 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 19 Jan 2023 15:51:22 +0100
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y8lY6r0g6AvVwcQq@krava>
-References: <20230116215751.633675-1-irogers@google.com>
- <20230116215751.633675-2-irogers@google.com>
+        Thu, 19 Jan 2023 06:54:40 -0800 (PST)
+Date:   Thu, 19 Jan 2023 17:54:37 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     andy.shevchenko@gmail.com, andy@kernel.org, colin.i.king@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com
+Subject: Re: [PATCH v2] media: atomisp: pci: sh_css: Inline single invocation
+ of macro STATS_ENABLED()
+Message-ID: <Y8lZreSphK6DIkJg@kadam>
+References: <CAHp75Vc4QS=Gr-DSvf7pzCKktqGPfno4TBDmicj5CKgyHGjSsw@mail.gmail.com>
+ <20230119144203.17084-1-bpappas@pappasbrent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116215751.633675-2-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230119144203.17084-1-bpappas@pappasbrent.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,101 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 01:57:51PM -0800, Ian Rogers wrote:
-> HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> after tools/scripts/Makefile.include is included, meaning flags are
-> set assuming say CC is gcc, but then it can be later set to HOSTCC
-> which may be clang. tools/scripts/Makefile.include is needed for host
-> set up and common macros in objtool's Makefile. Rather than override
-> CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> builds and the linkage step. This means the Makefiles don't see things
-> like CC changing and tool flag determination, and similar, work
-> properly.
+On Thu, Jan 19, 2023 at 09:42:03AM -0500, Brent Pappas wrote:
+> Inline the single invocation of the macro STATS_ENABLED().
+> The macro abstraction is not necessary because the logic behind it is only
+> used once.
 > 
-> Also, clear the passed subdir as otherwise an outer build may break by
-> inadvertently passing an inappropriate value.
-
-I tested with cross builds for s390/ppc/arm64 and it was ok
-
-some comments below
-
-thanks,
-jirka
-
-
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
 > ---
->  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
->  1 file changed, 7 insertions(+), 10 deletions(-)
+
+Needs a V2: note which says what changed.
+
+>  drivers/staging/media/atomisp/pci/sh_css.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 76b737b2560d..515d87b32fb8 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -18,14 +18,11 @@ else
->  endif
+> diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+> index 726cb7aa4ecd..93789500416f 100644
+> --- a/drivers/staging/media/atomisp/pci/sh_css.c
+> +++ b/drivers/staging/media/atomisp/pci/sh_css.c
+> @@ -97,9 +97,6 @@
+>   */
+>  #define JPEG_BYTES (16 * 1024 * 1024)
 >  
->  # always use the host compiler
-> -AR       = $(HOSTAR)
-> -CC       = $(HOSTCC)
-> -LD       = $(HOSTLD)
-> -ARCH     = $(HOSTARCH)
+> -#define STATS_ENABLED(stage) (stage && stage->binary && stage->binary->info && \
+> -	(stage->binary->info->sp.enable.s3a || stage->binary->info->sp.enable.dis))
+> -
+>  struct sh_css my_css;
+>  
+>  int  __printf(1, 0) (*sh_css_printf)(const char *fmt, va_list args) = NULL;
+> @@ -3743,7 +3740,9 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
+>  			 * The SP will read the params after it got
+>  			 * empty 3a and dis
+>  			 */
+> -			if (STATS_ENABLED(stage)) {
+> +			if (stage && stage->binary && stage->binary->info &&
+                            ^^^^^^^^
+We know that "stage" must be non-NULL.  You should wait over night
+before resending v2 patches so that we think "This guy spend overnight
+running tests.  He must be very serious."  There is no rush.
 
-I wonder all the tools should use HOSTCC in the first place?
-seems more clear than forcing it from other makefiles
-
-subcmd even has:
-
-CC ?= $(CROSS_COMPILE)gcc
-LD ?= $(CROSS_COMPILE)ld
-AR ?= $(CROSS_COMPILE)ar
-
-which seems wrong unless I'm missing something.. should be always
-the host compiler, right?
-
-> +HOST_OVERRIDES := AR=$(HOSTAR) CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-> +		  ARCH=$(HOSTARCH) EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-
-there's extra AR set and ARCH value is not in ""
-
-> +
->  RM      ?= rm
->  CROSS_COMPILE =
-> -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
->  
->  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
->  
-> @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
->  	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> -		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> -		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> +		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  CFLAGS += -g \
-> @@ -76,11 +73,11 @@ export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
->  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> -	$(Q)$(MAKE) $(build)=resolve_btfids
-> +	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
->  	$(call msg,LINK,$@)
-> -	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> +	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
->  
->  clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.cmd           \
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+regards,
+dan carpenter
