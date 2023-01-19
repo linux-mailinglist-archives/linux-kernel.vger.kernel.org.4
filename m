@@ -2,123 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159A86740C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54842674048
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjASSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S230022AbjASRsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjASSUx (ORCPT
+        with ESMTP id S229488AbjASRsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:20:53 -0500
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA45387296
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:20:41 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 4B8E8201ADD;
-        Thu, 19 Jan 2023 18:14:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a289.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id C66FF2014CA;
-        Thu, 19 Jan 2023 18:14:42 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674152082; a=rsa-sha256;
-        cv=none;
-        b=qGmLA36dnQu91vQjun11BmaqCVdePn/CqWvRcondbWvbaKoszxGTuRSts0l1VzLuwhiTcg
-        U8+ldMe5QGv5MvfogotPiBcyPslBtsVRe9ul8XNZTlLodeIHP3rIoRcA1wbRKTtXfr5NJF
-        KIPqmloNei2Ckewrvi0i91E92cRIjcfixPYtwy7dSHwfMLP8tKSxUT86rNQLBE+PHcKS4d
-        VDod54c+8b+BYm2y6sY8VaB697ltJVYBKWkop09C6U+dzbpKeLuv5sQeInYVb9aaR4L1q4
-        bSURxS/TE40gyIPVzCr0DR32/usIftX9aRAxv7V4wdXJ2sOSxWqxbDj5LryWVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1674152082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Ql9tcvLXvhfRbsCJYs9I6JDJcfBUR32u9QTQqwgbOXM=;
-        b=9y0FVZJ2DLVHg14XfxA0Bk7RSiMH1PbEExmthLyOaiHaAzP/+hBAZ0vpzVpD1w8plEfld9
-        moHnb9KlWA3AyBIpjZcPcGd+1hyCHsBPHnRSoIbyJAVgAxDq0wdQOk92eBYY+JkZ+VrCTM
-        YUfYjZ0zJrbsuiVFq6wkDbSuhGIx3M41qXaAuGOOgB+K+qBxHz9AH3y+wLiURy450cyXOs
-        0fxpk4dPn2w1I30jiVnRcfTkKfKVvAoByuPEFEaR0Vs0/yX9oJNpjdEyp02tsLQKnO6zgz
-        J2whZZ02VzNbQAxjNqIZ9L6Bnfw7kAySJomScc/ghKGqlKcZyo68eOLgFR9uiw==
-ARC-Authentication-Results: i=1;
-        rspamd-6f569fcb69-rfqtq;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Macabre-Scare: 385b1d0f6e4cdac2_1674152083102_4036563736
-X-MC-Loop-Signature: 1674152083102:2009807844
-X-MC-Ingress-Time: 1674152083102
-Received: from pdx1-sub0-mail-a289.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.99.229.59 (trex/6.7.1);
-        Thu, 19 Jan 2023 18:14:43 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a289.dreamhost.com (Postfix) with ESMTPSA id 4NyW4L0LhBz1F;
-        Thu, 19 Jan 2023 10:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1674152082;
-        bh=Ql9tcvLXvhfRbsCJYs9I6JDJcfBUR32u9QTQqwgbOXM=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=TqQIwi+VCUrSF702HIi74kBKX488pO8s0RBkNeALQtgMXjdi2Ygp8+36kU8QyIR+p
-         ghwVBHdaqojGAEyHiBuvpH3NYMqBx91u8Dln1vqP9S+3c5J6YIOCkxOlYK3PD1bwhB
-         91dQVARNTdgM+hUe0Z/GoMYM+WDUO3OPKbsZss76ScNHQNcD7CoLSqZUSoHDhmyT9l
-         FKqWM2RRBLLqwOsD/TaJxWsLjhXY/W5vXzti1kKxi1oO54OAAVlhoDHA5K36V1fUbX
-         BchFDgCTjdRbvcLQwxPUkx+1aJtJumRI6XBbf2YIuta/Yl3m3jf/Z5UslHzL4v3ETx
-         mciyUnBH+whEw==
-Date:   Thu, 19 Jan 2023 09:48:18 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <20230119174818.up7haooxje4nzusu@offworld>
-References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
- <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
- <Y8gPhTGkfCbGwoUu@linutronix.de>
- <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
- <Y8j+lENBWNWgt4mf@linutronix.de>
- <20230119110220.kphftcehehhi5l5u@techsingularity.net>
- <Y8lvwKHmmnikVDgk@linutronix.de>
- <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
+        Thu, 19 Jan 2023 12:48:41 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8607C44AE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:48:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674150520; x=1705686520;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=FPQjkSgyOLoSk8C0J4CNAhrSv/EGmeASIHkuMk8fK1E=;
+  b=M/T4Hw73Sq+IQLQn4BjCF4uKqddKIkCi6HF5xPid5o96SZoJb5zvF6fU
+   xAPLTNm6qjhK+ffxsrSBR9PY+4QDuqAiPQ/rVlacKPAXKRt72Gm6GGi6z
+   v76bdIhevBzK0fUruHPbjzMBxnyQd3WPmCOUFJlzjfnZvr2u0IlWFEf78
+   nI5w7OWCfAw7sidwbGN2u3OwPyXJJ09EzneNBQH+UnGCD2ZuvBLaM4fhV
+   BB/XTru+LeC4/26o5oPc19HA43cuOA9ozJisMbTczWbRIxXl0iuEtP9qf
+   8UyV0pAqlX8IiFPou8/As1V1jidDW9F87QcE+lRSHe6+OmXvctQvu/jMv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324049324"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="324049324"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:48:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802719995"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="802719995"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 09:48:36 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
+In-Reply-To: <Y8lfz8C5uvx2w4fC@kroah.com>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
+ <Y8lfz8C5uvx2w4fC@kroah.com>
+Date:   Thu, 19 Jan 2023 19:48:35 +0200
+Message-ID: <87ilh2quto.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023, Mel Gorman wrote:
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
->The race could be closed by moving wait_lock acquisition before the
->atomic_sub in rwbase_write_lock() but it expands the scope of the wait_lock
->and I'm not sure that's necessary for either correctness or preventing
->writer starvation. It's a more straight-forward fix but expanding the
->scope of a lock unnecessarily has been unpopular in the past.
+> On Thu, Jan 19, 2023 at 03:57:17PM +0200, Alexander Shishkin wrote:
+>> From: Andi Kleen <ak@linux.intel.com>
+>> 
+>> The ADD_PORT operation reads and sanity checks the port id multiple
+>> times from the untrusted host. This is not safe because a malicious
+>> host could change it between reads.
+>> 
+>> Read the port id only once and cache it for subsequent uses.
+>> 
+>> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+>> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>> Cc: Amit Shah <amit@kernel.org>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ---
+>>  drivers/char/virtio_console.c | 10 ++++++----
+>>  1 file changed, 6 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+>> index f4fd5fe7cd3a..6599c2956ba4 100644
+>> --- a/drivers/char/virtio_console.c
+>> +++ b/drivers/char/virtio_console.c
+>> @@ -1563,10 +1563,13 @@ static void handle_control_message(struct virtio_device *vdev,
+>>  	struct port *port;
+>>  	size_t name_size;
+>>  	int err;
+>> +	unsigned id;
+>>  
+>>  	cpkt = (struct virtio_console_control *)(buf->buf + buf->offset);
+>>  
+>> -	port = find_port_by_id(portdev, virtio32_to_cpu(vdev, cpkt->id));
+>> +	/* Make sure the host cannot change id under us */
+>> +	id = virtio32_to_cpu(vdev, READ_ONCE(cpkt->id));
+>
+> Why READ_ONCE()?
+>
+> And how can it change under us?  Is the message still under control of
+> the "host"?  If so, that feels wrong as this is all in kernel memory,
+> not userspace memory right?
+>
+> If you are dealing with memory from a different process that you do not
+> trust, then you need to copy EVERYTHING at once.  Don't piece-meal copy
+> bits and bobs in all different places please.  Do it once and then parse
+> the local structure properly.
 
-Curiously, this is the documented behavior:
+This is the device memory or the VM host memory, not userspace or
+another process. And it can change under us willy-nilly.
 
-  * down_write/write_lock()
-  *  1) Lock rtmutex
-  *  2) Remove the reader BIAS to force readers into the slow path
+The thing is, we only need to cache two things to correctly process the
+request. Copying everything, on the other hand, would involve the entire
+buffer, not just the *cpkt, but also stuff that follows, which also
+differs between different event types. And we also don't care if the
+rest of it changes under us.
+
+> Otherwise this is going to be impossible to actually maintain over
+> time...
+
+An 'id' can't possibly be worse to maintain than multiple instances of
+'virtio32_to_cpu(vdev, cpkt->id)' sprinkled around the code.
+
+Thanks,
+--
+Alex
