@@ -2,130 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A351B673E4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB0F673E50
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjASQMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S230020AbjASQMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjASQMQ (ORCPT
+        with ESMTP id S230082AbjASQMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:12:16 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376F4B0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:12:14 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id n7so2357549wrx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lc6LHz9ja4vNZNoyKAs9kC/e4Vo4ndC3e3Y/kURZ1ck=;
-        b=ET/ZDO+lEWi5w2siCmWChJo4RnjAXoJq6sX4Whb88vF4ZrSua9hko3Zty3glcrofwe
-         b3nOI4ygcifnKm7jevzM9bORtR8Cg1t8YNhkLrH1Y87fz2Ifb++FltXK9cHW1OBQNU7z
-         8J+RUimQYWfsf7LcmpB9B1il9TWXmhCnQ9KXVLPg2grGEcIdPuqNr+A/iyci1xHKIUCQ
-         0sk5l40KzMmYSH5giXF0Hymp7m6yL4TwQfgvsblbcyKxfPwbRy6ZHlK3JtaSXIW5Wp99
-         8tZFKd/+9KhIKpJB2PJzhOiylbrzHvm4Fmlxaupm2/lNdgMnMpDDggEur6bGo5718fo2
-         ZHIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lc6LHz9ja4vNZNoyKAs9kC/e4Vo4ndC3e3Y/kURZ1ck=;
-        b=aNikhqOVDHdsiNhwMSv6jR3WSsCaLcjaBMoR0nvIp3L2Ix47oV1gsewUA1Uim7n7Z6
-         9qCIag8YyEK2q7pX3+f2QBRRUa1CCngFj0/Nj0lLP9XGOOFZjK7+B3vxQdmS4AJ4z3qC
-         NDlrIBV2ZaIaGoO502/ii2lqcwXbeUA3sl45hRhd6ZH0VCVTsErouMriQSYeCVBpRuNW
-         S8WKC5NXdw8ZIlfg6k9cuY5Cl4y34l3478Q4apyRMyMBZM3toyjhWxv1puHTX864Denh
-         dJ4KpMt33Q3nLStgGxUS9zgt/4wttElBbFzfmdGqemfCW/eJPiYKMPnuTrhGVmPurvds
-         DlrA==
-X-Gm-Message-State: AFqh2kp3xHhgpSlsFfSGKYUhZflFZq0zElxS3NHmd4rBePbyV9LGD/CC
-        b3mSJ0ZWQdZ0c9MqWLSscFj22GwQEo/RWXqM+KKaLw==
-X-Google-Smtp-Source: AMrXdXu8SLX9ZiJVh2bB2TpjWAXXCTqS7RBI/VZsbkXt6U5w2uJ11Nxa/L2K8RZo96a0rp4m518z8pMDSmValNBmqjU=
-X-Received: by 2002:adf:e2cd:0:b0:2bd:f8da:9be0 with SMTP id
- d13-20020adfe2cd000000b002bdf8da9be0mr388588wrj.375.1674144732404; Thu, 19
- Jan 2023 08:12:12 -0800 (PST)
+        Thu, 19 Jan 2023 11:12:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980A193E3;
+        Thu, 19 Jan 2023 08:12:30 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JG76j7024282;
+        Thu, 19 Jan 2023 16:12:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SUJFjDPwUC6+nNdCF9RovTnzhq/mVGT86gYrLoVlLhQ=;
+ b=CPGwoaR+Vv5Bgxg4iv2GasoYXpGnswMC6q21pqFUByCfYF02u6gA5EZT4gxvjO3tIQpv
+ hZAJLww2aSJSRj5SgZtYjJp82kk3Jb1oqcKm4jac1Epqmuy8DSWLXMoZs6qLJfVYLGab
+ 46UzbtexD0mczDwxIO6CP4u55dnCq9QZ6V1/P2tN7nFdYmk1u3/4XS09gM3Z2yO0yZVo
+ IU4oIF3IeloLJQIMEa2tfNk8Eb1u8iOCR85LGKMugaxV/jZfE9+MK8ry0lSvPEXw/S19
+ 3DTSJvqH01cnGX9GqXdzgL6cDifeZx2G6luL4Rx6f/fqhT6obMnSA4B1xFjLmbCbCjj5 Lw== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78aqhsdd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:12:16 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JFWapf014458;
+        Thu, 19 Jan 2023 16:12:15 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17d4hq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:12:15 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JGCE6E64946642
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 16:12:14 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45D9958055;
+        Thu, 19 Jan 2023 16:12:14 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C7745804B;
+        Thu, 19 Jan 2023 16:12:12 +0000 (GMT)
+Received: from [9.160.87.67] (unknown [9.160.87.67])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 16:12:12 +0000 (GMT)
+Message-ID: <5d0b26b1-ffc5-94dd-ced2-52cfef3842a4@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 11:12:11 -0500
 MIME-Version: 1.0
-References: <20230105090155.357604-1-irogers@google.com> <CAP-5=fUmJutjku92vn_6OxLJZKJ60yhkS_XLbL7C7p_ska+xZw@mail.gmail.com>
-In-Reply-To: <CAP-5=fUmJutjku92vn_6OxLJZKJ60yhkS_XLbL7C7p_ska+xZw@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 19 Jan 2023 08:12:00 -0800
-Message-ID: <CAP-5=fWMnSgV73Vc6HcAi+8XFTXizOpsQo5+HKq+tae58v=FCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] objtool build improvements
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Stephane Eranian <eranian@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 4/7] s390/pci: Use dma-iommu layer
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+ <20230104120543.308933-5-schnelle@linux.ibm.com>
+ <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+ <a623049fb595480ffdf1130bbe800d79705cef03.camel@linux.ibm.com>
+ <50c22529-e0f4-9124-fdc0-c8da49300b18@linux.ibm.com>
+ <0ce7d96b8447a293b147976e5993cb053feb9c52.camel@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <0ce7d96b8447a293b147976e5993cb053feb9c52.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: K3LxXT5TPOTNVukUayjbtyihCNrB2pbR
+X-Proofpoint-GUID: K3LxXT5TPOTNVukUayjbtyihCNrB2pbR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ suspectscore=0 spamscore=0 mlxlogscore=671 phishscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190130
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 9:41 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Thu, Jan 5, 2023 at 1:02 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Install libsubcmd and then get headers from there, this avoids
-> > inadvertent dependencies on things in tools/lib. Fix V=1
-> > support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
-> > being set for say gcc, and then CC being overridden to clang. Support
-> > HOSTCFLAGS as a make option.
-> >
-> > v3. Is a rebase that removes the merged "tools lib subcmd: Add install
-> >     target" patch. In:
-> > https://lore.kernel.org/lkml/CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com/
-> >     Nick rightly points out that:
-> > WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> >     became:
-> > WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> >     losing the EXTRA_WARNINGS which v3 now adds back in. Previous
-> >     testing had added the warnings to the end rather than the
-> >     beginning, thereby causing unexpected build issues that aren't present in v3.
-> > v2. Include required "tools lib subcmd: Add install target" that is
-> >     already in Arnaldo's tree:
-> > https://lore.kernel.org/lkml/20221109184914.1357295-3-irogers@google.com/
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
-> >     When building libsubcmd.a from objtool's Makefile, clear the
-> >     subdir to avoid it being appended onto OUTPUT and breaking the
-> >     build.
-> >
-> > Ian Rogers (3):
-> >   objtool: Install libsubcmd in build
-> >   objtool: Properly support make V=1
-> >   objtool: Alter how HOSTCC is forced
-> >
-> >  tools/objtool/Build    |  2 --
-> >  tools/objtool/Makefile | 66 ++++++++++++++++++++++++++++++------------
-> >  2 files changed, 47 insertions(+), 21 deletions(-)
->
-> Ping. Relatively small set of patches, with Reviewed-by and Tested-by,
-> would be nice to land. Thanks!
->
-> Ian
+On 1/19/23 11:04 AM, Niklas Schnelle wrote:
+> On Thu, 2023-01-19 at 10:59 -0500, Matthew Rosato wrote:
+>> On 1/19/23 6:03 AM, Niklas Schnelle wrote:
+>>>>>>>>>>>>>>>>>>>  
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>  static char *pci_sw_names[] = {
+>>>>>>>>>>>>>>>>>>> - "Allocated pages",
+>>>>>>>>>>>>>>>>>>> +/* TODO "Allocated pages", */
+>>>>>>>>>>>
+>>>>>>>>>>> ? Forgot to finish this?
+>>>
+>>> Definitely forgot to remove the TODO. I think my latest plan was to
+>>> just remove this counter. With the DMA API conversion the
+>>> dma_map_ops.alloc and dma_map_ops.free move to common code and I don't
+>>> see how we could differentiate these from map/unmap on our side. I'm
+>>> not sure how helpful this counter really is either. If you're
+>>> interested in how many pages are mapped long term I think it makes more
+>>> sense to look at the difference between mapped and unmapped pages. What
+>>> do you think?
+>>>>>>>>>>
+>>
+>> Sounds reasonable to me, but I also note that without this series, when viewing statistics for a device, mapped - unmapped != allocated.  Maybe allocated pages was already broken, or is it taking into account something else that mapped - unmapped would not (maybe mapping the same page multiple times)?
+>>
+>>
+> 
+> Allocated Pages only counts the memory allocated via dma_map_ops.alloc
+> so it would not count long term mappings of memory the driver allocated
+> differently and then mapped for long term use.
 
-Ping2. Small set of patches, 2x Reviewed-by and 1x Tested-by.
+Oh, right, I see it now.
 
-Thanks,
-Ian
-
->
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
-> >
+Seems to me then that mapped-unmapped is more indicative of the actual footprint anyway so in the absence of an obvious analogue I'm fine with just getting rid of it.
