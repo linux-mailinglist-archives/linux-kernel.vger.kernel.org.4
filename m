@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D003A672E6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34B672E70
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjASBsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S229814AbjASBtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjASBpm (ORCPT
+        with ESMTP id S229883AbjASBps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:45:42 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BE96CCD1;
-        Wed, 18 Jan 2023 17:40:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ny5166LGDz4f3v6d;
-        Thu, 19 Jan 2023 09:40:26 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP1 (Coremail) with SMTP id cCh0CgCXAy6Ln8hj1mNwBw--.27187S2;
-        Thu, 19 Jan 2023 09:40:29 +0800 (CST)
-Subject: Re: [PATCH v4 07/14] blk-mq: make blk_mq_commit_rqs a general
- function for all commits
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-        ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, john.garry@huawei.com, jack@suse.cz
-References: <20230118093726.3939160-1-shikemeng@huaweicloud.com>
- <20230118093726.3939160-7-shikemeng@huaweicloud.com>
- <20230118173745.GC12399@lst.de>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <f4dea0fc-5fcf-ceec-84d5-468b25c947ff@huaweicloud.com>
-Date:   Thu, 19 Jan 2023 09:40:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Wed, 18 Jan 2023 20:45:48 -0500
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644716CCE5;
+        Wed, 18 Jan 2023 17:41:12 -0800 (PST)
+Received: by mail-il1-f179.google.com with SMTP id o15so487727ill.11;
+        Wed, 18 Jan 2023 17:41:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NWx1ifZUs9l9sboCMEKp9kjSayYw0rzPlsqI93NKq28=;
+        b=T9QNXRcX4kmOjXHjg9TVOWUAUBw5ZXElRNTf1NepTjWHUV5/+XVcaBLadrIF2Bd35P
+         z0vFYQJ80Y3ZmuBvENh72cCzoFbD1TbPeooq4HD2qniBJ7cVFes/Ux/+lp22NjHSbt4I
+         edESdwIwDIyS2anq5bkUqzdFhmAoppG93BU+10uq1+nvoTBO0y6NzeL1JVSMB2TsDc7S
+         KAsllVvXyiuFmZJNrC8AKCpRqtVCiwKQK9w0T2LxaTpAYzYlRf47o4avj7e/wLdyzenF
+         fr29AWO0w/8zDiT5K6SGDaGcsFsODCPjSFvtsbXPuLMbdrLCQwHxHs6JG5m5QTgNN1pD
+         SBLQ==
+X-Gm-Message-State: AFqh2koTgqWfyjmju+0HLw6GPHpEgXj4RD2bg7lxJ4DcL6M86QmogdZy
+        Oncrlmbh1prFgB2hyvuEozM=
+X-Google-Smtp-Source: AMrXdXsJZ4ypc59+TTWzAf3aEnIx45RJ3OtVIK6QHrw6Knoq/hHcJIkl3VlsVqm4XiUC2vhhf+GLlw==
+X-Received: by 2002:a92:c54b:0:b0:308:cdc3:9370 with SMTP id a11-20020a92c54b000000b00308cdc39370mr9612880ilj.15.1674092471685;
+        Wed, 18 Jan 2023 17:41:11 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id d27-20020a02605b000000b00374fbd37c72sm10974050jaf.147.2023.01.18.17.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 17:41:11 -0800 (PST)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+To:     iam@sung-woo.kim
+Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
+        edumazet@google.com, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, wuruoyu@me.com
+Subject: BUG: KASAN: null-ptr-deref in _raw_spin_lock_bh+0x4c/0xc0
+Date:   Wed, 18 Jan 2023 20:40:57 -0500
+Message-Id: <20230119014057.3879476-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230119013405.3870506-1-iam@sung-woo.kim>
+References: <20230119013405.3870506-1-iam@sung-woo.kim>
 MIME-Version: 1.0
-In-Reply-To: <20230118173745.GC12399@lst.de>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: cCh0CgCXAy6Ln8hj1mNwBw--.27187S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFyDCr1xXr45JF1DJryxZrb_yoWkXFgE9F
-        yakrykWw4DWws2kws2kF43XFW8Ka4kXF98tF4DtFyrGrykJrZ5GFyDXFn8Zay7Gw42yF1f
-        AF9xZ3WUCrnFgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Write of size 4 at addr 0000000000000098 by task kworker/u3:0/76
 
-
-on 1/19/2023 1:37 AM, Christoph Hellwig wrote:
-> On Wed, Jan 18, 2023 at 05:37:19PM +0800, Kemeng Shi wrote:
->> +/*
->> + * blk_mq_commit_rqs will notify driver using bd->last that there is no
->> + * more requests. (See comment in struct blk_mq_ops for commit_rqs for
->> + * details)
->> + * Attention, we should explicitly call this in unusual cases:
->> + *  1) did not queue everything initially scheduled to queue
->> + *  2) the last attempt to queue a request failed
->> + */
->> +static void blk_mq_commit_rqs(struct blk_mq_hw_ctx *hctx, int queued,
->> +			      bool from_schedule)
-> 
-> Isn't from_schedule always false here as well now?
-Hi Christoph ,
-Yes, it's always false now. As blk_mq_commit_rqs is a general function
-for all commits now, I keep the from_schedule for commits where
-from_schedule maybe true in future. We can remove from_schedule now
-and add it back when from_schedule is indeed needed. Both way is
-acceptable for me. Please let me know which way do you prefer and I
-will send a new version if needed.
-Thanks.
-> Otherwise looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-
--- 
-Best wishes
-Kemeng Shi
-
+CPU: 0 PID: 76 Comm: kworker/u3:0 Not tainted 6.1.0-rc2 #129
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: hci0 hci_rx_work
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x7b/0xb3
+ print_report+0xed/0x200
+ ? __virt_addr_valid+0x5c/0x240
+ ? kasan_addr_to_slab+0xd/0xa0
+ ? _raw_spin_lock_bh+0x4c/0xc0
+ kasan_report+0xd3/0x100
+ ? _raw_spin_lock_bh+0x4c/0xc0
+ kasan_check_range+0x2d3/0x310
+ __kasan_check_write+0x14/0x20
+ _raw_spin_lock_bh+0x4c/0xc0
+ lock_sock_nested+0x3f/0x160
+ ? queue_work_on+0x90/0xd0
+ l2cap_sock_set_shutdown_cb+0x3d/0x60
+ l2cap_disconnect_req+0x1e3/0x2e0
+ l2cap_bredr_sig_cmd+0x3d2/0x5ec0
+ ? vprintk_emit+0x29b/0x4d0
+ ? vprintk_default+0x2b/0x30
+ ? vprintk+0xdc/0x100
+ ? _printk+0x67/0x85
+ ? bt_err+0x7f/0xc0
+ ? bt_err+0x9a/0xc0
+ l2cap_recv_frame+0x7bc/0x4e10
+ ? _printk+0x67/0x85
+ ? bt_err+0x7f/0xc0
+ ? __wake_up_klogd+0xc4/0xf0
+ l2cap_recv_acldata+0x327/0x650
+ ? hci_conn_enter_active_mode+0x1b7/0x1f0
+ hci_rx_work+0x6b7/0x7c0
+ process_one_work+0x461/0xaf0
+ worker_thread+0x5f8/0xba0
+ kthread+0x1c5/0x200
+ ? process_one_work+0xaf0/0xaf0
+ ? kthread_blkcg+0x90/0x90
+ ret_from_fork+0x1f/0x30
+ </TASK>
