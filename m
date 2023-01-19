@@ -2,101 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE035673D71
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1371E673D7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjASPZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S229844AbjASP3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjASPZQ (ORCPT
+        with ESMTP id S230510AbjASP3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:25:16 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD8E80882
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:25:13 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so2151456pjl.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:25:13 -0800 (PST)
+        Thu, 19 Jan 2023 10:29:51 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1B18298E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:29:48 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id b17so2616246pld.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u3x+gqjTmgbestDAk4Awmq54vOdmydIW5Pid7KApIj0=;
-        b=mBCVF1D4CCb5Ux/a0sTklFD5Mi8L9pIXDGbMCkJlimD4PHSACap2p25+kVgwBgrsIq
-         EvdnQ1DJdyozyD6i/NGQ9LHUxMYOj57ZDAvsSBtrXrWSIG9rE81ZQPLMflUW9tlr3kaQ
-         W5HhRhzDrOZXVo2eJJX+pBBPi5F1VgqXmlz+Dn+5py/XCqnPsdSKBwTESeGVpPIz964i
-         Y7hB+IGNBYCrP1QuYyMwMmClI1OOCW3cnNMzXyQEA2j3fMpJV5G+s3nKt4FHhRG/KAkL
-         4FVfZGb2GwNGLwVQhykEPhQCdeJbS7eHn+w6UX0yqcdlwsdurSpSSE/duLw9iP7/BBnl
-         1UDQ==
+        bh=JoeZWpRNsWJhyrWOKICRT+p+hJ0pH/jVJe5L8tZzDKE=;
+        b=gyEc+zZbgF6XMT7Sm4wHZQXewdDcMta7P6XtP/yslScovv1aoQENuCi1pph/8CZlIq
+         9l6PU11qUpOvB6egZTZQHtBe9hMezPpMfF0wXwlfI+A1MEXpFOYwl+wum9n8Fsy8dyFO
+         RvZLcIHOA+8xoHjgzx4yicPnekaCFBSM9PDPoVGGlc7roOYIFz1BtCptWO/wsrEZE+pK
+         NfxkaX263bnefQ6+baeDeHmLDnZB0KxAfCmuN8DqmUVIrExCUhN/5dh16t0b4CQZy94x
+         89HJwkZFOTh0lxO/B8/EfI3h+QPyVgNokSVxxNRwvsagvj1+CuW+TEnC4mB2/eRfE7H/
+         vNPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u3x+gqjTmgbestDAk4Awmq54vOdmydIW5Pid7KApIj0=;
-        b=g3lknP+GODbvbf2YGQmS/H0T40FnJuyO9/rq1cuNQiHFydZ2GTOwZNcOLBpAf8nJ7Y
-         0AkB4bW/zoOpGLrMSeOnHxuoCBUK+lQsugRRRl0S2BeAfxv1ZrHHrF4Be/QHEhb8ETQz
-         tu6uEs6W+pAU5+/uOu7npuGa7rSboL/EfkbEa6gGYmuBNQX2E0fr1yffdxJ2EgmLB2vs
-         ONOV5B5zPsAARhl5U/Zac8a9n+jO2qZOW8z0PXB2pjZxHIjsMrNwLmLnMEXfF/pxcE20
-         qJ4CatEX0uMbubBrNAtjOKvv0elNJ7cfdLUXCEaDEWneE7TgIMZOzuc2rGQhnjsxXoGs
-         FmOQ==
-X-Gm-Message-State: AFqh2krw+z5HeKnY4uaKHc0v1L+DOFu5N5MrfhWMx4iOc/AI566bD6ff
-        tkgMzNIIavTci6xftU2RDFidnw==
-X-Google-Smtp-Source: AMrXdXuFbwGpoS/BOsR3GLdQjSETsa46BfhBRwIB416u+GXbq71Q0+uUKVzOwXl/a9TU4tZ66S2N/Q==
-X-Received: by 2002:a05:6a20:ce43:b0:b8:c3c0:e7f7 with SMTP id id3-20020a056a20ce4300b000b8c3c0e7f7mr1187627pzb.1.1674141912349;
-        Thu, 19 Jan 2023 07:25:12 -0800 (PST)
+        bh=JoeZWpRNsWJhyrWOKICRT+p+hJ0pH/jVJe5L8tZzDKE=;
+        b=1jBmZm5MU5QqRipye2+1xSQOZaJITyiGdLx8ci+yG/ZNlk4Kw1XvoRKzgufmR+L59h
+         7T6PheeHqqriH5wwnsbrGOP+xiHlFTjpbMDQr6m3D0L35SXO2uwr6wTP7xdNYtQsfKEl
+         xPi0H70QVF3f4iMVumAeOZekQFFD5dF7QaldySECLXfVXT2Mfn86CMSZewUHC1Vn2Nj+
+         m9YJPd2EhTwCE2hAu+1HWJq1JRhN21x0uXUFwDAY63Np/GiyoGg0oWXZ/emxRNubwn3U
+         CxDjV1Aq3gYdOWpbyBGNZiGoLMjw7mtwQlajdv6FI0QVto69H6AoZD18cKqo8VUz3IAk
+         FQpQ==
+X-Gm-Message-State: AFqh2krwJlfTOcpj8GwFprRXdmcUciiPZXFBNVHcLYlMQLpZ54x7zG+k
+        DcVZBezWqey02ZK5Wp0PLA9fqw==
+X-Google-Smtp-Source: AMrXdXuvS8AZJX42bXwmLQ8QfqUcY4PwFKh/puu96hqRK42cg/DuvMprn5jaOq/Bqv+IZX2KJRBMAQ==
+X-Received: by 2002:a17:903:2614:b0:193:256d:8afe with SMTP id jd20-20020a170903261400b00193256d8afemr3075957plb.2.1674142187661;
+        Thu, 19 Jan 2023 07:29:47 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z16-20020a170903019000b001945339354asm5530181plg.197.2023.01.19.07.25.11
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b00186c3afb49esm25186385ple.209.2023.01.19.07.29.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 07:25:11 -0800 (PST)
-Date:   Thu, 19 Jan 2023 15:25:08 +0000
+        Thu, 19 Jan 2023 07:29:47 -0800 (PST)
+Date:   Thu, 19 Jan 2023 15:29:43 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <Y8lg1G2lRIrI/hld@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com>
- <20230119111308.GC2976263@ls.amr.corp.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8lh59ZYZkq4fsOX@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+ <080e0a246e927545718b6f427dfdcdde505a8859.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119111308.GC2976263@ls.amr.corp.intel.com>
+In-Reply-To: <080e0a246e927545718b6f427dfdcdde505a8859.camel@intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,66 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Isaku Yamahata wrote:
-> On Sat, Jan 14, 2023 at 12:37:59AM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Jan 19, 2023, Huang, Kai wrote:
+> On Thu, 2023-01-12 at 08:31 -0800, isaku.yamahata@intel.com wrote:
+> > +static void tdx_clear_page(unsigned long page_pa)
+> > +{
+> > +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> > +	void *page = __va(page_pa);
+> > +	unsigned long i;
+> > +
+> > +	if (!static_cpu_has(X86_FEATURE_MOVDIR64B)) {
+> > +		clear_page(page);
+> > +		return;
+> > +	}
 > 
-> > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > This patch series implements KVM guest private memory for confidential
-> > > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > > TDX-protected guest memory, machine check can happen which can further
-> > > crash the running host system, this is terrible for multi-tenant
-> > > configurations. The host accesses include those from KVM userspace like
-> > > QEMU. This series addresses KVM userspace induced crash by introducing
-> > > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > > via a fd-based approach, but it can never access the guest memory
-> > > content.
-> > > 
-> > > The patch series touches both core mm and KVM code. I appreciate
-> > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > > reviews are always welcome.
-> > >   - 01: mm change, target for mm tree
-> > >   - 02-09: KVM change, target for KVM tree
-> > 
-> > A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> > is available here:
-> > 
-> >   git@github.com:sean-jc/linux.git x86/upm_base_support
-> > 
-> > It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> > a WIP.
-> > 
-> > As for next steps, can you (handwaving all of the TDX folks) take a look at what
-> > I pushed and see if there's anything horrifically broken, and that it still works
-> > for TDX?
-> > 
-> > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-> > (and I mean that).
-> > 
-> > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-> > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
-> > merging so that the criteria for merging are clear, and so that if the list is large
-> > (haven't thought much yet), the work of writing and running tests can be distributed.
-> > 
-> > Regarding downstream dependencies, before this lands, I want to pull in all the
-> > TDX and SNP series and see how everything fits together.  Specifically, I want to
-> > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-> > don't miss an opportunity to make things simpler.  The patches in the SNP series to
-> > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-> > details.  Nothing remotely major, but something that needs attention since it'll
-> > be uAPI.
+> There might be below issues here:
 > 
-> Although I'm still debuging with TDX KVM, I needed the following.
-> kvm_faultin_pfn() is called without mmu_lock held.  the race to change
-> private/shared is handled by mmu_seq.  Maybe dedicated function only for
-> kvm_faultin_pfn().
+> 1) The kernel says static_cpu_has() should only be used in fast patch where each
+> cycle is counted, otherwise use boot_cpu_has().  I don't know whether here you
+> should use static_cpu_has().
 
-Gah, you're not on the other thread where this was discussed[*].  Simply deleting
-the lockdep assertion is safe, for guest types that rely on the attributes to
-define shared vs. private, KVM rechecks the attributes under the protection of
-mmu_seq.
+That documentation is stale[*], go ahead and use cpu_feature_enabled().
 
-I'll get a fixed version pushed out today.
+https://lore.kernel.org/all/20221107211505.8572-1-bp@alien8.de
 
-[*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
+> 2) IIUC a CPU feature bit can be cleared by 'clearcpuid=xxx' kernel command
+
+As you note below, using clearcpuid taints the kernel, i.e. any breakage due to
+clearcpuid is user error.
+
+> line, so looks you should use CPUID directly otherwise the MOVDIR64B below can
+> be unintentionally skipped.  In practice w/o doing MOVDIR64B is fine since KeyID
+> 0 doesn't have integrity enabled, but for the purpose you want to achieve
+> checking real CPUID should be better.
+> 
+> But maybe you don't want to do CPUID check here each time when reclaiming a
+> page.  In that case you can do CPUID during module initialization and cache
+> whether MOVDIR64B is truly present.  static_key is a good fit for this purpose
+> too I think.
+> 
+> But I am also seeing below in the kernel documentation:
+> 
+>         clearcpuid=X[,X...] [X86]
+> 			......
+>                         Note that using this option will taint your kernel.
+>                         Also note that user programs calling CPUID directly
+>                         or using the feature without checking anything
+>                         will still see it. This just prevents it from
+>                         being used by the kernel or shown in /proc/cpuinfo.
+>                         Also note the kernel might malfunction if you disable
+>                         some critical bits.
+> 
+> So the kernel is claiming using this will taint the kernel and it can even
+> malfunction.  So maybe it's OK to use static_cpu_has()/boot_cpu_has().
