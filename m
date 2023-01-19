@@ -2,148 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B197B672DDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7613F672E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjASBNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S230145AbjASBts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjASBNC (ORCPT
+        with ESMTP id S229792AbjASBpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:13:02 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501B7683FE;
-        Wed, 18 Jan 2023 17:12:59 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ny4PL5N8Jz4f3jLm;
-        Thu, 19 Jan 2023 09:12:54 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiAXmchj7jA8Bw--.49635S4;
-        Thu, 19 Jan 2023 09:12:57 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>
-Subject: [PATCH] ext4: init error handle resource before init group descriptors
-Date:   Thu, 19 Jan 2023 09:37:11 +0800
-Message-Id: <20230119013711.86680-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 18 Jan 2023 20:45:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040ED689E5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:38:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8623261637
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 01:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92019C433D2;
+        Thu, 19 Jan 2023 01:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674092317;
+        bh=YSrUgOMNa6VEvPshW9zUYk9PGjoMPkLxN4z0PDRGl6w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mmuheqesR2ZHMapnmu9F199l1IvLDUXk9rtrPODb8esM0NnViLLSUklsTLSgqXX2y
+         79IC3QKmvRflsansNhE1IPIj3kLwvLjuPzPFA8TMeNQqHKR6i6pAF7ViIL5cv4HYp6
+         fnBAQ3m2SEKPGm1NxD74K57Tv68Wcw2RcugDTbCM59arjxST1nhraEXSwb2SEd2qo1
+         UvyQWjw6REG4JGy00dYN7BibRmR8hQSma10HY3jxUpjPhVB4WZBTu+cRB6GB2l1+uo
+         QJfZu23GG8hTtD0/QCqMLRuptlBy7o9CAAUFIGLB8VfUdinPDqCvrinwss1Q7+cDWd
+         w65QKcVQzAeRQ==
+From:   SeongJae Park <sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] mm/damon: misc fixes
+Date:   Thu, 19 Jan 2023 01:38:28 +0000
+Message-Id: <20230119013831.1911-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiAXmchj7jA8Bw--.49635S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFy8Xr1fWrWUKw48Kr1ftFb_yoW5Ary7pa
-        s8CwnrCry5Grykua18Aa4vqFy0ka10kFW5GryfW3WfZas2qFyDXF1aqF1YyFyjgFZ7uw1f
-        Xa1kG347Cr17C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
-        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+This patchset contains three miscellaneous simple fixes for DAMON online
+tuning.
 
-Now, 's_err_report' timer is init after ext4_group_desc_init() when fill
-super. Theoretically, ext4_group_desc_init() may access to error handle
-as follows:
-__ext4_fill_super
-  ext4_group_desc_init
-    ext4_check_descriptors
-      ext4_get_group_desc
-        ext4_error
-          ext4_handle_error
-            ext4_commit_super
-              ext4_update_super
-                if (!es->s_error_count)
-                  mod_timer(&sbi->s_err_report, jiffies + 24*60*60*HZ);
-		  --> Accessing Uninitialized Variables
-timer_setup(&sbi->s_err_report, print_daily_error_info, 0);
+SeongJae Park (3):
+  mm/damon: update comments in damon.h for damon_attrs
+  mm/damon/core: update monitoring results for new monitoring attributes
+  mm/damon/core-test: add a test for damon_update_monitoring_results()
 
-Maybe above issue is just theoretical, as ext4_check_descriptors() didn't
-judge 'gpd' which get from ext4_get_group_desc(), if access to error handle
-ext4_get_group_desc() will return NULL, then will trigger null-ptr-deref in
-ext4_check_descriptors().
-However, from the perspective of pure code, it is better to initialize
-resource that may need to be used first.
+ include/linux/damon.h |  6 ++--
+ mm/damon/core-test.h  | 30 ++++++++++++++++++
+ mm/damon/core.c       | 71 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 104 insertions(+), 3 deletions(-)
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/super.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
-
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index b31db521d6bf..dc3907dff13a 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4738,7 +4738,6 @@ static int ext4_group_desc_init(struct super_block *sb,
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	unsigned int db_count;
- 	ext4_fsblk_t block;
--	int ret;
- 	int i;
- 
- 	db_count = (sbi->s_groups_count + EXT4_DESC_PER_BLOCK(sb) - 1) /
-@@ -4778,8 +4777,7 @@ static int ext4_group_desc_init(struct super_block *sb,
- 			ext4_msg(sb, KERN_ERR,
- 			       "can't read group descriptor %d", i);
- 			sbi->s_gdb_count = i;
--			ret = PTR_ERR(bh);
--			goto out;
-+			return PTR_ERR(bh);
- 		}
- 		rcu_read_lock();
- 		rcu_dereference(sbi->s_group_desc)[i] = bh;
-@@ -4788,13 +4786,10 @@ static int ext4_group_desc_init(struct super_block *sb,
- 	sbi->s_gdb_count = db_count;
- 	if (!ext4_check_descriptors(sb, logical_sb_block, first_not_zeroed)) {
- 		ext4_msg(sb, KERN_ERR, "group descriptors corrupted!");
--		ret = -EFSCORRUPTED;
--		goto out;
-+		return -EFSCORRUPTED;
- 	}
-+
- 	return 0;
--out:
--	ext4_group_desc_free(sbi);
--	return ret;
- }
- 
- static int ext4_load_and_init_journal(struct super_block *sb,
-@@ -5220,14 +5215,14 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 	if (ext4_geometry_check(sb, es))
- 		goto failed_mount;
- 
--	err = ext4_group_desc_init(sb, es, logical_sb_block, &first_not_zeroed);
--	if (err)
--		goto failed_mount;
--
- 	timer_setup(&sbi->s_err_report, print_daily_error_info, 0);
- 	spin_lock_init(&sbi->s_error_lock);
- 	INIT_WORK(&sbi->s_error_work, flush_stashed_error_work);
- 
-+	err = ext4_group_desc_init(sb, es, logical_sb_block, &first_not_zeroed);
-+	if (err)
-+		goto failed_mount3;
-+
- 	/* Register extent status tree shrinker */
- 	if (ext4_es_register_shrinker(sbi))
- 		goto failed_mount3;
 -- 
-2.31.1
+2.25.1
 
