@@ -2,46 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131DF672F39
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E3D672F3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjASCtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S229997AbjASCuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjASCsz (ORCPT
+        with ESMTP id S229838AbjASCul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:48:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E8081D91C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:48:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB91D1758;
-        Wed, 18 Jan 2023 18:49:33 -0800 (PST)
-Received: from [10.162.42.9] (unknown [10.162.42.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B6EE3F71A;
-        Wed, 18 Jan 2023 18:48:50 -0800 (PST)
-Message-ID: <37c41203-f131-91e7-c6bb-17f215d83eb1@arm.com>
-Date:   Thu, 19 Jan 2023 08:18:47 +0530
+        Wed, 18 Jan 2023 21:50:41 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAEF6843F;
+        Wed, 18 Jan 2023 18:50:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UY5WBl67ami4i6XN48OqDbz9sabBaLa4Wm6DOys3DHKlFwBifZlJ9jcObeR1WSUgGZsXrTW2Sg7KZOhObt4GtKD9d9LMh8fiBAekn2/2odwRZuZVRv6ykUs1K0fOMWTU2xLpEVXm36uf/j2DgQwn2NoaRI0FYoyjriCwL04CoB5bUxZzJTHKnaH6YgpPIkZY61C2RQZgTTAAbxGGuywUX1j1VUjLvCU/RVsaqj9s1yQnnG+uZXS43UgTpf81SJB9BhZQshwosoYTB0xWh9pVf7Wxukktkiutpy/NxJJf8JEq5RLyiAoaEb8L4Yae4ux3ijHGER/Z1VJ5pQCHvfF/nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=11bHEFOcE/qvbvFL4gCKtt/vQzEl2IVt9ZJCc3P0aIU=;
+ b=VaxJs0NYg8s3Unq+z63HmhldJvqZ8c6YLp2g7ymJrsLdFXyOFjZA1R0vUtzUqKFBPNmDDX8Hi/H/ji2R+ydeq/aMPAuI+sumU1sEDAB9NyKz/9WjskYdYHP86Bqn1zriEqJv4hY9F1lhrIB4SARJ6wKXLvkO2fRNWW1EosxuNAUvV9zMwGPgRAXdDUmz9gw6RsQ+nymJfsBoM4j4q9O//Tg9BdGD1XAtTSzB4ZtoWpOKI494Du6Bhu8Hx/bIypf+B8OxT8DDDPXnPwmCA+aqGYLlduZABgYRBEAxFG5B58xXY8Uf7tMnqgQGDj/uh68KkIF7mMfZ6aRYs2nZxIFLdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=11bHEFOcE/qvbvFL4gCKtt/vQzEl2IVt9ZJCc3P0aIU=;
+ b=LIAYlgeGpo0Z9P5glR7N+khXqQSu8cW3ewscSIqsK7Zog24Zaf0HT7V49+GA+RM247l/79kac5sAxMIvP3BgtTaFZ9RcdDaokGCKC7EEpIyNHZ/2AfqyozrDXn0zD3hl2hVgZ4t2vopXzUYLGh66upqJCLw+uh9Sk6qddZA9QJ4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW2PR12MB2506.namprd12.prod.outlook.com (2603:10b6:907:7::12)
+ by CY8PR12MB7193.namprd12.prod.outlook.com (2603:10b6:930:5b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
+ 2023 02:50:37 +0000
+Received: from MW2PR12MB2506.namprd12.prod.outlook.com
+ ([fe80::444e:a4dc:f113:7751]) by MW2PR12MB2506.namprd12.prod.outlook.com
+ ([fe80::444e:a4dc:f113:7751%7]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
+ 02:50:37 +0000
+Date:   Thu, 19 Jan 2023 10:50:15 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v11 00/11] Implement AMD Pstate EPP Driver
+Message-ID: <Y8iv56PPKkhEsL02@amd.com>
+References: <20230118075210.447418-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118075210.447418-1-perry.yuan@amd.com>
+X-ClientProxiedBy: TY2PR06CA0031.apcprd06.prod.outlook.com
+ (2603:1096:404:2e::19) To MW2PR12MB2506.namprd12.prod.outlook.com
+ (2603:10b6:907:7::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH V7 6/6] arm64/perf: Enable branch stack events via
- FEAT_BRBE
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20230105031039.207972-1-anshuman.khandual@arm.com>
- <20230105031039.207972-7-anshuman.khandual@arm.com>
- <Y8A6rsEXR/rmJY0N@FVFF77S0Q05N>
-Content-Language: en-US
-In-Reply-To: <Y8A6rsEXR/rmJY0N@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2506:EE_|CY8PR12MB7193:EE_
+X-MS-Office365-Filtering-Correlation-Id: b00a87cc-2c89-4e83-a2dc-08daf9c7f16c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Bdvg0WH/4oivzVpNCgtWGJTwEhaTk5PDaIN/FSKcveLUZTSuDDuxyGfdhkU8JvkKepJx/89p/8Aw6Dl8uvn6jb0nW7rKDkkM8dr4DYZ2upcc8/+8FV4Wcc5DPd0D7BaWulp8U5tsRLY5zTmCG90m+DYu2ynrFHedCKiyjGbBA5i2/q1PUqYrkP8OA/ltmbOhZEg2bl/FaB/Hv47f3GwP5vT+qWIdAxPpFaElQGiI67G2RnqkFGpzkka57q/9JYXZv7MxJNnTYwEvj7mlmks3mk4H9fPmlHsL30UOyKtdVDSo9oxeHv6GeJ+C7Cm2seufn9ymnlc+4k4XQAqVZbQwLGPC1pndiFvdFFi3qVSUEMsRt5dWVi/l06HvP3G5tvjihaMyLTrbAi+EtGEwl8pVaFvieLks52I7usDuHliS1Uhpm46YZ9ijkjb/mgWdw4Tf5c/NJcWevyZLav+cyR6HM+f5XTmbUE1NUPInmC3YUb8KcCfjJXppClvWRVuTOczE+mHu60CpXt5hSl74Rl4f4+8tNPZT8/R4+p2ZiBrmLOeZTJerPu0PGEj7HU1vl4CZmOGVgxPhI+agMD4/1fG/H16xyKOR9+Tc+Tk0EkQVGtIgPju9jV4IFVYvmouR6tJm+CbK1ApIkZR+rxL0BSD9ZOV2kB34ZUauQhKUHdtUq2+WV8kqfEqu0sM4zr3Kdmb8xDQsmjIxMPzOTWG9MN/dwQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199015)(36756003)(8936002)(2616005)(83380400001)(41300700001)(4326008)(316002)(110136005)(54906003)(66946007)(8676002)(66556008)(66476007)(38100700002)(86362001)(2906002)(5660300002)(30864003)(186003)(6512007)(26005)(478600001)(6486002)(966005)(6506007)(6666004)(45080400002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tfCdTMXn/3UbKC0IqqfiCnJg+95CDxkwtAztKsjaQ+RbExoiT5OpPtALQoXT?=
+ =?us-ascii?Q?OmdwswOmvTJw4Vb+7ft812bIa6XQWqGnUJSH10pLXOwA8uKypqIH8LpXKO8p?=
+ =?us-ascii?Q?RwKr1QlYcV45mFscJKN6RbQ29uA4SVgciydUP+TuFlfJaBY6o8J64yZop2rD?=
+ =?us-ascii?Q?IuvHl0qym8KXgIQ1kSuqoOL5CEpMaIDJvsX9Y1VwCCfMiG7JwMd4Kw1E36nr?=
+ =?us-ascii?Q?flrrRpcUpx3XMGG9KWU988hCrBXnmxBjBNbEBVQ6hyRhZWJVvTf9DhCxoMUS?=
+ =?us-ascii?Q?CLOvk4gbc6qPabaZCD8QYPsLuXdSz+3igZMJYd5Vl7eAIiMNcrxghX2pvbw6?=
+ =?us-ascii?Q?/QYplXKB7Tp7yRxAraCf7/UV2z+WEf2Oj2hBlOekY0TAeWA9HbH5pJuY6HDL?=
+ =?us-ascii?Q?mn+If5J+AlzJbl135FguU3lJhYGdsElubqB9ryVeiOVD0WCrOtvUu1CJ0lWN?=
+ =?us-ascii?Q?kZx6MrpthBkKfd38Fs9twtjuIyCx+r7FMH/tgKquG9pwOqe2rwc824u0N2Lt?=
+ =?us-ascii?Q?Eli6yx7aqHD9TrSmuuLutFG78aUG4VUvCEze7vmIgASq6AxlAA4eBmM+RiT/?=
+ =?us-ascii?Q?exPRlnrMuiYuXf9kXWcFEGtGF2sMBp1ewXJUK+uWQBV7w0bBMLd7uRpKVOl9?=
+ =?us-ascii?Q?tMlsKpmq06XzrOqP+r7EF27FBo2h8nA7g0tk4JPqbqNqeoyh8WPdZbpDyVZh?=
+ =?us-ascii?Q?OImb7jEmLSAQJ90B3GFFdvwH0I1l7rBAM95rJHPLP+dIzj66wxbduluOy5SE?=
+ =?us-ascii?Q?Sq/xy/uLfcReFPn6Ztcbzm3MYpTUIUQhFtgb8YL8SZcZDJ6NQOc+EM3GgFhe?=
+ =?us-ascii?Q?D6dOqw4Ij+eBB0ITbS+hGfaGZI0JmcbrCG4KIW2u5CQr9bgl9YanPkGhIndy?=
+ =?us-ascii?Q?gnOt6W5G2OV6H5uizA75c0ACnchBqV1YUrlRRey/Bl20oFfgV79zK4fckMyK?=
+ =?us-ascii?Q?Mp24g9zXMrGU4AwwdGkUkZ5AxZouEGlq9P1jLTjaHyjiwToUlH7UF1nXhxwL?=
+ =?us-ascii?Q?BPmugx0Urgl5j0Rx9qpyhsqAU2efuL6BEI+3xS+vwdvaTSUknlPddpjSwWST?=
+ =?us-ascii?Q?Kxty9vg3SWKcQYTfWO9PIL/b4RroVRbuALj+lewlsACEFGkV/Z0ylhfqN2JT?=
+ =?us-ascii?Q?ci+iHii9qjuKTVibqSGEM/1SSjFhvaCWgWpFlg1jYsEvOJtkGb3oldZh6fPz?=
+ =?us-ascii?Q?NJcZ9D8ECz3I99WEQZdb91fip7Mk79bLC9HaxqlksMVA0uj/Wm3Kxd19g7VR?=
+ =?us-ascii?Q?60W5Q7cq2LtSLuqkTyfigxaggt8KPxPYERoJ/62Z7BMZBIbtLCewdkWNRKoY?=
+ =?us-ascii?Q?GVOBMCNC8ZoYeHfO7yLQuC9MnblpIhB8TkzWi0nyJ5dybL7KxiZKzglCPndm?=
+ =?us-ascii?Q?PHZbplydWw5XEcoRJ0cIRAnUBtGZ79ZOZwcCEDgKqH/FqVHOshcAyXWBooKZ?=
+ =?us-ascii?Q?tsriJbSXq2qEW1rTBZ1gsaVRXCqL4BlAQBpoqzJEUcoMd7U5kjV4X9xIUaUT?=
+ =?us-ascii?Q?fGeNFM57aC0t0RpxeIKas1bbBhEX12OYe4q/6DzaGDdxxI0+o1HGrFyMRMXo?=
+ =?us-ascii?Q?7t/mhTu7IpkWvAyxbey+azUx5Jku+Xbrhuur4CQP?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b00a87cc-2c89-4e83-a2dc-08daf9c7f16c
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 02:50:37.3708
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c/1AMGlcbaCW1DxNxxlT4tEtO/m9SIFdgs2id+HBr/jzsO/Z6zO5otLWA477xFIeIjMT8BboL+D9GEdhiggrIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7193
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,944 +123,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 22:21, Mark Rutland wrote:
-> On Thu, Jan 05, 2023 at 08:40:39AM +0530, Anshuman Khandual wrote:
->> This enables branch stack sampling events in ARMV8 PMU, via an architecture
->> feature FEAT_BRBE aka branch record buffer extension. This defines required
->> branch helper functions pmuv8pmu_branch_XXXXX() and the implementation here
->> is wrapped with a new config option CONFIG_ARM64_BRBE.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/arm64/Kconfig                  |  11 +
->>  arch/arm64/include/asm/perf_event.h |   9 +
->>  arch/arm64/kernel/Makefile          |   1 +
->>  arch/arm64/kernel/brbe.c            | 512 ++++++++++++++++++++++++++++
->>  arch/arm64/kernel/brbe.h            | 257 ++++++++++++++
->>  5 files changed, 790 insertions(+)
->>  create mode 100644 arch/arm64/kernel/brbe.c
->>  create mode 100644 arch/arm64/kernel/brbe.h
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 03934808b2ed..915b12709a46 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -1363,6 +1363,17 @@ config HW_PERF_EVENTS
->>  	def_bool y
->>  	depends on ARM_PMU
->>  
->> +config ARM64_BRBE
->> +	bool "Enable support for Branch Record Buffer Extension (BRBE)"
->> +	depends on PERF_EVENTS && ARM64 && ARM_PMU
->> +	default y
->> +	help
->> +	  Enable perf support for Branch Record Buffer Extension (BRBE) which
->> +	  records all branches taken in an execution path. This supports some
->> +	  branch types and privilege based filtering. It captured additional
->> +	  relevant information such as cycle count, misprediction and branch
->> +	  type, branch privilege level etc.
->> +
->>  # Supported by clang >= 7.0 or GCC >= 12.0.0
->>  config CC_HAVE_SHADOW_CALL_STACK
->>  	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
->> diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
->> index a038902d6874..cf2e88c7b707 100644
->> --- a/arch/arm64/include/asm/perf_event.h
->> +++ b/arch/arm64/include/asm/perf_event.h
->> @@ -277,6 +277,14 @@ struct pmu_hw_events;
->>  struct arm_pmu;
->>  struct perf_event;
->>  
->> +#ifdef CONFIG_ARM64_BRBE
->> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event);
->> +bool armv8pmu_branch_valid(struct perf_event *event);
->> +void armv8pmu_branch_enable(struct perf_event *event);
->> +void armv8pmu_branch_disable(struct perf_event *event);
->> +void armv8pmu_branch_probe(struct arm_pmu *arm_pmu);
->> +void armv8pmu_branch_reset(void);
->> +#else
->>  static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event) { }
->>  static inline bool armv8pmu_branch_valid(struct perf_event *event) { return false; }
->>  static inline void armv8pmu_branch_enable(struct perf_event *event) { }
->> @@ -284,3 +292,4 @@ static inline void armv8pmu_branch_disable(struct perf_event *event) { }
->>  static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
->>  static inline void armv8pmu_branch_reset(void) { }
->>  #endif
->> +#endif
->> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
->> index ceba6792f5b3..6ee7ccb61621 100644
->> --- a/arch/arm64/kernel/Makefile
->> +++ b/arch/arm64/kernel/Makefile
->> @@ -46,6 +46,7 @@ obj-$(CONFIG_MODULES)			+= module.o
->>  obj-$(CONFIG_ARM64_MODULE_PLTS)		+= module-plts.o
->>  obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o
->>  obj-$(CONFIG_HW_PERF_EVENTS)		+= perf_event.o
->> +obj-$(CONFIG_ARM64_BRBE)		+= brbe.o
->>  obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
->>  obj-$(CONFIG_CPU_PM)			+= sleep.o suspend.o
->>  obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
->> diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
->> new file mode 100644
->> index 000000000000..cd03d3531e04
->> --- /dev/null
->> +++ b/arch/arm64/kernel/brbe.c
->> @@ -0,0 +1,512 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Branch Record Buffer Extension Driver.
->> + *
->> + * Copyright (C) 2022 ARM Limited
->> + *
->> + * Author: Anshuman Khandual <anshuman.khandual@arm.com>
->> + */
->> +#include "brbe.h"
->> +
->> +static bool valid_brbe_nr(int brbe_nr)
->> +{
->> +	return brbe_nr == BRBIDR0_EL1_NUMREC_8 ||
->> +	       brbe_nr == BRBIDR0_EL1_NUMREC_16 ||
->> +	       brbe_nr == BRBIDR0_EL1_NUMREC_32 ||
->> +	       brbe_nr == BRBIDR0_EL1_NUMREC_64;
->> +}
->> +
->> +static bool valid_brbe_cc(int brbe_cc)
->> +{
->> +	return brbe_cc == BRBIDR0_EL1_CC_20_BIT;
->> +}
->> +
->> +static bool valid_brbe_format(int brbe_format)
->> +{
->> +	return brbe_format == BRBIDR0_EL1_FORMAT_0;
->> +}
->> +
->> +static bool valid_brbe_version(int brbe_version)
->> +{
->> +	return brbe_version == ID_AA64DFR0_EL1_BRBE_IMP ||
->> +	       brbe_version == ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
->> +}
->> +
->> +static void select_brbe_bank(int bank)
->> +{
->> +	static int brbe_current_bank = BRBE_BANK_IDX_INVALID;
-> 
-> This is a per-cpu peroperty, so I don't understand how this can safely be
-> stored in a static variable. If this is necessary it needs to go in a per-cpu
-> variable, but I suspect we don't actually need it.
-
-You are right, we dont need it.
-
-> 
->> +	u64 brbfcr;
->> +
->> +	if (brbe_current_bank == bank)
->> +		return;
-> 
-> It looks like this is just for the same of optimizing redundant changes when
-> armv8pmu_branch_read() iterates over the records?
-
-Right, it is.
-
-> 
-> It'd be simpler to have armv8pmu_branch_read() iterate over each bank, then
-> within that iterate over each record within that bank.
-
-Sure, will drop this optimization completely. I will split the iteration into two
-separate loops, one each for bank 0 and other for bank 1.
-
-> 
->> +	WARN_ON(bank > BRBE_BANK_IDX_1);
->> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +	brbfcr &= ~BRBFCR_EL1_BANK_MASK;
->> +	brbfcr |= ((bank << BRBFCR_EL1_BANK_SHIFT) & BRBFCR_EL1_BANK_MASK);
-> 
-> You can use SYS_FIELD_PREP() for this:
-
-Sure, will do.
-
-> 
-> 	brbfcr &= ~BRBFCR_EL1_BANK_MASK;
-> 	brbfcr |= SYS_FIELD_PREP(BRBFCR_EL1, BANK, bank);
-> 
-> Please use FIELD_PREP for this.
-
-Done.
-
-> 
->> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
->> +	isb();
->> +	brbe_current_bank = bank;
->> +}
->> +
->> +static void select_brbe_bank_index(int buffer_idx)
->> +{
->> +	switch (buffer_idx) {
->> +	case BRBE_BANK0_IDX_MIN ... BRBE_BANK0_IDX_MAX:
->> +		select_brbe_bank(BRBE_BANK_IDX_0);
->> +		break;
->> +	case BRBE_BANK1_IDX_MIN ... BRBE_BANK1_IDX_MAX:
->> +		select_brbe_bank(BRBE_BANK_IDX_1);
->> +		break;
->> +	default:
->> +		pr_warn("unsupported BRBE index\n");
-> 
-> It would be worth logging the specific index in case we ever have to debug
-> this. It's probably worth also making this a WARN_ONCE() or WARN_RATELIMITED().
-
-This function will not be required once individual loops based read for each
-BRBE bank is implemented, thus reducing number of times select_brbe_bank()
-gets called i.e just two times once for bank 0 and other for bank 1.
-
-> 
->> +	}
->> +}
->> +
->> +static const char branch_filter_error_msg[] = "branch filter not supported";
->> +
->> +bool armv8pmu_branch_valid(struct perf_event *event)
->> +{
->> +	u64 branch_type = event->attr.branch_sample_type;
->> +
->> +	/*
->> +	 * If the event does not have at least one of the privilege
->> +	 * branch filters as in PERF_SAMPLE_BRANCH_PLM_ALL, the core
->> +	 * perf will adjust its value based on perf event's existing
->> +	 * privilege level via attr.exclude_[user|kernel|hv].
->> +	 *
->> +	 * As event->attr.branch_sample_type might have been changed
->> +	 * when the event reaches here, it is not possible to figure
->> +	 * out whether the event originally had HV privilege request
->> +	 * or got added via the core perf. Just report this situation
->> +	 * once and continue ignoring if there are other instances.
->> +	 */
->> +	if ((branch_type & PERF_SAMPLE_BRANCH_HV) && !is_kernel_in_hyp_mode())
->> +		pr_warn_once("%s - hypervisor privilege\n", branch_filter_error_msg);
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ABORT_TX) {
->> +		pr_warn_once("%s - aborted transaction\n", branch_filter_error_msg);
->> +		return false;
->> +	}
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_TX) {
->> +		pr_warn_once("%s - no transaction\n", branch_filter_error_msg);
->> +		return false;
->> +	}
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_IN_TX) {
->> +		pr_warn_once("%s - in transaction\n", branch_filter_error_msg);
->> +		return false;
->> +	}
->> +	return true;
->> +}
-> 
-> Is this called when validating user input? If so, NAK to printing anything to a
-> higher leval than debug. If there are constraints the user needs to be aware of
-
-You mean pr_debug() based prints ?
-
-> we should expose the relevant information under sysfs, but it seems that these
-> are just generic perf options that BRBE doesn't support.
-
-Right, these are generic perf options. As you mentioned, will replace these with
-pr_debug() instead.
-
-> 
-> It would be better to whitelist what we do support rather than blacklisting
-> what we don't.
-
-But with a negative list, user would know what is not supported via these pr_debug()
-based output when enabled ? But I dont have a strong opinion either way.
-
-> 
->> +
->> +static void branch_records_alloc(struct arm_pmu *armpmu)
->> +{
->> +	struct pmu_hw_events *events;
->> +	int cpu;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		events = per_cpu_ptr(armpmu->hw_events, cpu);
->> +
->> +		events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
->> +		WARN_ON(!events->branches);
->> +	}
->> +}
-> 
-> It would be simpler for this to be a percpu allocation.
-
-Could you please be more specific ? alloc_percpu_gfp() cannot be used here
-because 'events->branches' is not a __percpu variable unlike its parent
-'events' which is derived from armpmu.
-
-> 
-> If the allocation fails, we should propogate that error rather than just
-> WARNing, and fail probing the PMU.
-
-Sure, will change that.
-
-> 
-> Also, if the generic allocator fails it will print a warning (unless
-> __GFP_NOWARN was used), so we don't need the warning here.
-
-Sure, understood.
-
-> 
->> +
->> +static int brbe_attributes_probe(struct arm_pmu *armpmu, u32 brbe)
->> +{
->> +	struct brbe_hw_attr *brbe_attr = kzalloc(sizeof(struct brbe_hw_attr), GFP_KERNEL);
-> 
-> Same comments as for the failure path in branch_records_alloc().
-> 
->> +	u64 brbidr = read_sysreg_s(SYS_BRBIDR0_EL1);
-> 
-> Which context is this run in? Unless this is affine to a relevant CPU we can't
-> read the sysreg safely, and if we're in a cross-call we cannot allocate memory,
-> so this doesn't look right to me.
-
-Called from smp_call_function_any() context via __armv8pmu_probe_pmu().
-
-> 
-> I suspect CONFIG_DEBUG_ATOMIC_SLEEP=y and/or CONFIG_PROVE_LOCKING=y will complain here.
-
-Right, it does. Remember dropping pr_info() during BRBE probe for the exact same
-reason here but did not realize we will run into the same problem again.
-
-> 
-> Please follow the approach of armv8pmu_probe_pmu(), where we use a probe_info
-> structure that the callee can fill with information. Then we can do the
-> allocation in the main thread from a non-atomic context.
-
-Right, will do that. The only problem being 'struct brbe_hw_attr' which will not be
-visible in the main thread, might need an abstraction function to do the allocation
-in BRBE implementation. Regardless, a successful BRBE in the preceding function can
-be ascertained from armpmu->has_branch_stack().
-
-> 
->> +
->> +	WARN_ON(!brbe_attr);
->> +	armpmu->private = brbe_attr;
->> +
->> +	brbe_attr->brbe_version = brbe;
->> +	brbe_attr->brbe_format = brbe_fetch_format(brbidr);
->> +	brbe_attr->brbe_cc = brbe_fetch_cc_bits(brbidr);
->> +	brbe_attr->brbe_nr = brbe_fetch_numrec(brbidr);
-> 
-> As a minor thing, could we please s/fetch/get/ ? To me, 'fetch' sounds like a
-> memory operation, and elsewhere we use 'get' for this sort of getter function.
-
-Sure, but shall we change fetch as get for entire BRBE implementation (where ever
-there is a determination of field from a register value) or just the above function ?
-Default, will change all places.
-
-> 
->> +
->> +	if (!valid_brbe_version(brbe_attr->brbe_version) ||
->> +	   !valid_brbe_format(brbe_attr->brbe_format) ||
->> +	   !valid_brbe_cc(brbe_attr->brbe_cc) ||
->> +	   !valid_brbe_nr(brbe_attr->brbe_nr))
->> +		return -EOPNOTSUPP;
->> +
->> +	return 0;
->> +}
->> +
->> +void armv8pmu_branch_probe(struct arm_pmu *armpmu)
->> +{
->> +	u64 aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
->> +	u32 brbe;
->> +
->> +	brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
->> +	if (!brbe)
->> +		return;
->> +
->> +	if (brbe_attributes_probe(armpmu, brbe))
->> +		return;
->> +
->> +	branch_records_alloc(armpmu);
->> +	armpmu->features |= ARM_PMU_BRANCH_STACK;
->> +}
->> +
->> +static u64 branch_type_to_brbfcr(int branch_type)
->> +{
->> +	u64 brbfcr = 0;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
->> +		brbfcr |= BRBFCR_EL1_BRANCH_FILTERS;
->> +		return brbfcr;
->> +	}
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL) {
->> +		brbfcr |= BRBFCR_EL1_INDCALL;
->> +		brbfcr |= BRBFCR_EL1_DIRCALL;
->> +	}
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
->> +		brbfcr |= BRBFCR_EL1_RTN;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_IND_CALL)
->> +		brbfcr |= BRBFCR_EL1_INDCALL;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_COND)
->> +		brbfcr |= BRBFCR_EL1_CONDDIR;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_IND_JUMP)
->> +		brbfcr |= BRBFCR_EL1_INDIRECT;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_CALL)
->> +		brbfcr |= BRBFCR_EL1_DIRCALL;
->> +
->> +	return brbfcr;
->> +}
->> +
->> +static u64 branch_type_to_brbcr(int branch_type)
->> +{
->> +	u64 brbcr = (BRBCR_EL1_FZP | BRBCR_EL1_DEFAULT_TS);
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_USER)
->> +		brbcr |= BRBCR_EL1_E0BRE;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_KERNEL)
->> +		brbcr |= BRBCR_EL1_E1BRE;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_HV) {
->> +		if (is_kernel_in_hyp_mode())
->> +			brbcr |= BRBCR_EL1_E1BRE;
->> +	}
-> 
-> I assume that in that case we're actually writing to BRBCR_EL2, and this is
-> actually the E2BRE bit, which is at the same position? If so, I think that's
-> worth a comment above the USER/KERNEL/HV bits here.
-
-That is right, will add a comment.
-
-> 
-> How do the BRB* control registers work with E2H? Is BRBCR_EL1 rewritten to
-> BRBCR_EL2 by the hardware?
-
-Right, that is my understanding as well.
-
-With FEAT_VHE and HCR_EL2.E2H = 1, access to BRBCR_EL1 at EL2, accesses BRBCR_EL2
-without FEAT_VHE or HCR_EL2.E2H = 0, access to BRBCR_EL1 at EL2, accesses BRBCR_EL1
-
-> 
->> +
->> +	if (!(branch_type & PERF_SAMPLE_BRANCH_NO_CYCLES))
->> +		brbcr |= BRBCR_EL1_CC;
->> +
->> +	if (!(branch_type & PERF_SAMPLE_BRANCH_NO_FLAGS))
->> +		brbcr |= BRBCR_EL1_MPRED;
->> +
->> +	/*
->> +	 * The exception and exception return branches could be
->> +	 * captured, irrespective of the perf event's privilege.
->> +	 * If the perf event does not have enough privilege for
->> +	 * a given exception level, then addresses which falls
->> +	 * under that exception level will be reported as zero
->> +	 * for the captured branch record, creating source only
->> +	 * or target only records.
->> +	 */
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
->> +		brbcr |= BRBCR_EL1_EXCEPTION;
->> +		brbcr |= BRBCR_EL1_ERTN;
->> +	}
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL)
->> +		brbcr |= BRBCR_EL1_EXCEPTION;
->> +
->> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
->> +		brbcr |= BRBCR_EL1_ERTN;
->> +
->> +	return brbcr & BRBCR_EL1_DEFAULT_CONFIG;
->> +}
->> +
->> +void armv8pmu_branch_enable(struct perf_event *event)
->> +{
->> +	u64 branch_type = event->attr.branch_sample_type;
->> +	u64 brbfcr, brbcr;
->> +
->> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +	brbfcr &= ~BRBFCR_EL1_DEFAULT_CONFIG;
->> +	brbfcr |= branch_type_to_brbfcr(branch_type);
->> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
->> +	isb();
->> +
->> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->> +	brbcr &= ~BRBCR_EL1_DEFAULT_CONFIG;
->> +	brbcr |= branch_type_to_brbcr(branch_type);
->> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
->> +	isb();
->> +	armv8pmu_branch_reset();
->> +}
->> +
->> +void armv8pmu_branch_disable(struct perf_event *event)
->> +{
->> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +	u64 brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->> +
->> +	brbcr &= ~(BRBCR_EL1_E0BRE | BRBCR_EL1_E1BRE);
->> +	brbfcr |= BRBFCR_EL1_PAUSED;
->> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
->> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
->> +	isb();
->> +}
->> +
->> +static int brbe_fetch_perf_type(u64 brbinf, bool *new_branch_type)
-> 
-> It's a bit confusing to return the type and new_type fields in this way.
-> 
-> I think this would be clearer as a setter function, even if that results in it
-> being a bit longer, since it keeps all the type and new_type relationships in
-> one place and has a single path for returning the value:
-
-Makes sense.
-
-> 
-> static void brbe_set_perf_entry_type(struct perf_branch_entry *entry,
-> 				     u64 brbinf)
-> {
-> 	int brbe_type = brbe_fetch_type(brbinf);
-> 
-> 	switch (brbe_type) {
-> 	case BRBINF_EL1_TYPE_UNCOND_DIR;
-> 		entry->type = PERF_BR_UNCOND;
-> 		break;
-> 	...
-> 	case BRBINF_EL1_TYPE_DEBUG_HALT;
-> 		entry->type = PERF_BR_EXTEND_ABI;
-> 		entry->new_type = PERF_BR_ARM64_DEBUG_HALT;
-> 		break;
-> 	...
-> 	default:
-> 		...
-> 	}
-> }
-> 
-> ... and in theory that makes it easier to propogate an error in future if we
-> want to.
-
-Sure, will convert this function into brbe_set_perf_entry_type() as suggested.
-
-> 
->> +{
->> +	int brbe_type = brbe_fetch_type(brbinf);
->> +	*new_branch_type = false;
->> +
->> +	switch (brbe_type) {
->> +	case BRBINF_EL1_TYPE_UNCOND_DIR:
->> +		return PERF_BR_UNCOND;
->> +	case BRBINF_EL1_TYPE_INDIR:
->> +		return PERF_BR_IND;
->> +	case BRBINF_EL1_TYPE_DIR_LINK:
->> +		return PERF_BR_CALL;
->> +	case BRBINF_EL1_TYPE_INDIR_LINK:
->> +		return PERF_BR_IND_CALL;
->> +	case BRBINF_EL1_TYPE_RET_SUB:
->> +		return PERF_BR_RET;
->> +	case BRBINF_EL1_TYPE_COND_DIR:
->> +		return PERF_BR_COND;
->> +	case BRBINF_EL1_TYPE_CALL:
->> +		return PERF_BR_CALL;
->> +	case BRBINF_EL1_TYPE_TRAP:
->> +		return PERF_BR_SYSCALL;
->> +	case BRBINF_EL1_TYPE_RET_EXCPT:
->> +		return PERF_BR_ERET;
->> +	case BRBINF_EL1_TYPE_IRQ:
->> +		return PERF_BR_IRQ;
->> +	case BRBINF_EL1_TYPE_DEBUG_HALT:
->> +		*new_branch_type = true;
->> +		return PERF_BR_ARM64_DEBUG_HALT;
->> +	case BRBINF_EL1_TYPE_SERROR:
->> +		return PERF_BR_SERROR;
->> +	case BRBINF_EL1_TYPE_INST_DEBUG:
->> +		*new_branch_type = true;
->> +		return PERF_BR_ARM64_DEBUG_INST;
->> +	case BRBINF_EL1_TYPE_DATA_DEBUG:
->> +		*new_branch_type = true;
->> +		return PERF_BR_ARM64_DEBUG_DATA;
->> +	case BRBINF_EL1_TYPE_ALGN_FAULT:
->> +		*new_branch_type = true;
->> +		return PERF_BR_NEW_FAULT_ALGN;
->> +	case BRBINF_EL1_TYPE_INST_FAULT:
->> +		*new_branch_type = true;
->> +		return PERF_BR_NEW_FAULT_INST;
->> +	case BRBINF_EL1_TYPE_DATA_FAULT:
->> +		*new_branch_type = true;
->> +		return PERF_BR_NEW_FAULT_DATA;
->> +	case BRBINF_EL1_TYPE_FIQ:
->> +		*new_branch_type = true;
->> +		return PERF_BR_ARM64_FIQ;
->> +	case BRBINF_EL1_TYPE_DEBUG_EXIT:
->> +		*new_branch_type = true;
->> +		return PERF_BR_ARM64_DEBUG_EXIT;
->> +	default:
->> +		pr_warn("unknown branch type captured\n");
->> +		return PERF_BR_UNKNOWN;
-> 
-> It would be worth logging the specific value in case we ever have to debug
-> this. This should also be marked as _ratelimited or _once.
-
-Sure, will replace with a pr_warn_once() printing 'branch_type'.
-
-> 
->> +	}
->> +}
->> +
->> +static int brbe_fetch_perf_priv(u64 brbinf)
->> +{
->> +	int brbe_el = brbe_fetch_el(brbinf);
->> +
->> +	switch (brbe_el) {
->> +	case BRBINF_EL1_EL_EL0:
->> +		return PERF_BR_PRIV_USER;
->> +	case BRBINF_EL1_EL_EL1:
->> +		return PERF_BR_PRIV_KERNEL;
->> +	case BRBINF_EL1_EL_EL2:
->> +		if (is_kernel_in_hyp_mode())
->> +			return PERF_BR_PRIV_KERNEL;
->> +		return PERF_BR_PRIV_HV;
->> +	default:
->> +		pr_warn("unknown branch privilege captured\n");
->> +		return PERF_BR_PRIV_UNKNOWN;
-> 
-> It would be worth logging the specific value in case we ever have to debug
-> this. This should also be marked as _ratelimited or _once.
-
-Sure, will replace with a pr_warn_once() printing 'brbe_el.
-
-> 
->> +	}
->> +}
->> +
->> +static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
->> +			       u64 brbinf, u64 brbcr, int idx)
->> +{
->> +	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
->> +	bool new_branch_type;
->> +	int branch_type;
->> +
->> +	if (branch_sample_type(event)) {
->> +		branch_type = brbe_fetch_perf_type(brbinf, &new_branch_type);
->> +		if (new_branch_type) {
->> +			entry->type = PERF_BR_EXTEND_ABI;
->> +			entry->new_type = branch_type;
->> +		} else {
->> +			entry->type = branch_type;
->> +		}
->> +	}
-> 
-> With the suggestions bove, this would become:
-> 
-> 	if (branch_sample_type(event))
-> 		brbe_set_perf_entry_type(entry, brbinf);
-
-That's right, will change.
-
-> 
->> +	if (!branch_sample_no_cycles(event)) {
->> +		WARN_ON_ONCE(!(brbcr & BRBCR_EL1_CC));
->> +		entry->cycles = brbe_fetch_cycles(brbinf);
->> +	}
->> +
->> +	if (!branch_sample_no_flags(event)) {
->> +		/*
->> +		 * BRBINF_LASTFAILED does not indicate whether last transaction
->> +		 * got failed or aborted during the current branch record itself.
->> +		 * Rather, this indicates that all the branch records which were
->> +		 * in transaction until the curret branch record have failed. So
->> +		 * the entire BRBE buffer needs to be processed later on to find
->> +		 * all branch records which might have failed.
->> +		 */
-> 
-> This is quite difficult to follow.
-> 
-> I took in the ARM ARM, and it looks like this is all about TME transactions
-> (which Linux doesn't currently support). Per ARM DDI 0487I.a, page D15-5506:
-> 
-> | R_GVCJH
-> |   When an entire transaction is executed in a BRBE Non-prohibited region and
-> |   the transaction fails or is canceled then BRBFCR_EL1.LASTFAILED is set to
-> |   1.
-> 
-> | R_KBSZM
-> |   When a Branch record is generated, other than through the injection
-> |   mechanism, the value of BRBFCR_EL1.LASTFAILED is copied to the LASTFAILED
-> |   field in the Branch record and BRBFCR_EL1.LASTFAILED is set to 0.
-> 
-> | I_JBPHS
-> |   When a transaction fails or is canceled, Branch records generated in the
-> |   transaction are not removed from the Branch record buffer.
-> 
-> I think what this is saying is:
-> 
-> 	/*
-> 	 * BRBINFx_EL1.LASTFAILED indicates that a TME transaction failed (or
-> 	 * was cancelled) prior to this record, and some number of records
-> 	 * prior to this one may have been generated during an attempt to
-> 	 * execute the transaction.
-> 	 *
-> 	 * We will remove such entries later in process_branch_aborts().
-> 	 */
-> 
-> Is that right?
-
-Right, will update the comment here.
-
-> 
->> +
->> +		/*
->> +		 * All these information (i.e transaction state and mispredicts)
->> +		 * are not available for target only branch records.
->> +		 */
->> +		if (!brbe_target(brbinf)) {
-> 
-> Could we rename these heleprs for clarity, e.g.
-> brbe_record_is_{target_only,source_only,complete}()
-
-Sure, will do.
-
-> 
-> With that, it would also be clearer to have:
-> 
-> 	/*
-> 	 * These fields only exist for complete and source-only records.
-> 	 */
-> 	if (brbe_record_is_complete(brbinf) ||
-> 	    brbe_record_is_source_only()) {
-> 
-> ... and explicilty match the cases we care about[
-
-Sure, will invert the check and update the comment here.
-
-> 
-> 
->> +			WARN_ON_ONCE(!(brbcr & BRBCR_EL1_MPRED));
-> 
-> Huh? Why does the value of BRBCR matter here?
-
-This is just a code hardening measure here. Before recording branch record
-cycles or its flags, ensure BRBCR_EL1 was configured correctly to produce
-these additional information along with the branch records.
-
-> 
->> +			entry->mispred = brbe_fetch_mispredict(brbinf);
->> +			entry->predicted = !entry->mispred;
->> +			entry->in_tx = brbe_fetch_in_tx(brbinf);
->> +		}
->> +	}
->> +
->> +	if (branch_sample_priv(event)) {
->> +		/*
->> +		 * All these information (i.e branch privilege level) are not
->> +		 * available for source only branch records.
->> +		 */
->> +		if (!brbe_source(brbinf))
->> +			entry->priv = brbe_fetch_perf_priv(brbinf);
-> 
-> Same style comment as above.
-
-Sure, will do.
-
-> 
->> +	}
->> +}
->> +
->> +/*
->> + * A branch record with BRBINF_EL1.LASTFAILED set, implies that all
->> + * preceding consecutive branch records, that were in a transaction
->> + * (i.e their BRBINF_EL1.TX set) have been aborted.
->> + *
->> + * Similarly BRBFCR_EL1.LASTFAILED set, indicate that all preceding
->> + * consecutive branch records upto the last record, which were in a
->> + * transaction (i.e their BRBINF_EL1.TX set) have been aborted.
->> + *
->> + * --------------------------------- -------------------
->> + * | 00 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
->> + * --------------------------------- -------------------
->> + * | 01 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
->> + * --------------------------------- -------------------
->> + * | 02 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
->> + * --------------------------------- -------------------
->> + * | 03 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
->> + * --------------------------------- -------------------
->> + * | 04 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
->> + * --------------------------------- -------------------
->> + * | 05 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 1 |
->> + * --------------------------------- -------------------
->> + * | .. | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
->> + * --------------------------------- -------------------
->> + * | 61 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
->> + * --------------------------------- -------------------
->> + * | 62 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
->> + * --------------------------------- -------------------
->> + * | 63 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
->> + * --------------------------------- -------------------
-> 
-> Are we guaranteed to have a record between two transactions with TX = 0?
-
-With TX = 0 i.e no transaction was active, indicates normal sequence of branches
-creating their own branch records. How can there be a transaction with TX = 0 ?
-Could you please be more specific here ?
-
-> 
-> AFAICT you could have a sequence where a TCOMMIT is immediately followed by a
-> TSTART, and IIUC in that case you could have back-to-back records for distinct
-> transactions all with TX = 1, where the first transaction could be commited,
-> and the second might fail/cancel.
-> 
-> ... or do TCOMMIT/TCANCEL/TSTART get handled specially?
-
-I guess these are micro-architectural implementation details which unfortunately
-BRBINF_EL1/BRBCR_EL1 specifications do not capture in detail. But all it says is
-that upon encountering BRBINF_EL1.LASTFAILED or BRBFCR_EL1.LASTFAILED (just for
-the last record) all previous in-transaction branch records (BRBINF_EL1.TX = 1)
-should be considered aborted for branch record reporting purpose.
-
-> 
->> + *
->> + * BRBFCR_EL1.LASTFAILED == 1
->> + *
->> + * Here BRBFCR_EL1.LASTFAILED failes all those consecutive and also
->> + * in transaction branches near the end of the BRBE buffer.
->> + */
->> +static void process_branch_aborts(struct pmu_hw_events *cpuc)
->> +{
->> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +	bool lastfailed = !!(brbfcr & BRBFCR_EL1_LASTFAILED);
->> +	int idx = brbe_attr->brbe_nr - 1;
->> +	struct perf_branch_entry *entry;
->> +
->> +	do {
->> +		entry = &cpuc->branches->branch_entries[idx];
->> +		if (entry->in_tx) {
->> +			entry->abort = lastfailed;
->> +		} else {
->> +			lastfailed = entry->abort;
->> +			entry->abort = false;
->> +		}
->> +	} while (idx--, idx >= 0);
->> +}
->> +
->> +void armv8pmu_branch_reset(void)
->> +{
->> +	asm volatile(BRB_IALL);
->> +	isb();
->> +}
->> +
->> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->> +{
->> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->> +	u64 brbinf, brbfcr, brbcr;
->> +	int idx;
->> +
->> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +
->> +	/* Ensure pause on PMU interrupt is enabled */
->> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
-> 
-> As above, I think this needs commentary in the interrupt handler, since this
-> presumably needs us to keep the IRQ asserted until we're done
-> reading/manipulating records in the IRQ handler.
-
-The base IRQ handler armv8pmu_handle_irq() is in ARMV8 PMU code inside perf_event.c
-which could/should not access BRBE specific details without adding an another new
-abstraction function. But I guess adding a comment should be fine.
-
-> 
-> Do we ever read this outside of the IRQ handler? AFAICT we don't, and that
-> makes it seem like some of this is redundant.
-
-
-> 
->> +
->> +	/* Save and clear the privilege */
->> +	write_sysreg_s(brbcr & ~(BRBCR_EL1_E0BRE | BRBCR_EL1_E1BRE), SYS_BRBCR_EL1);
-> 
-> Why? Later on we restore this, and AFAICT we don't modify it.
-> 
-> If it's paused, why do we care about the privilege?
-
-This disables BRBE completely (not only pause) providing confidence that no
-branch record can come in while the existing records are being processed.
-
-> 
->> +
->> +	/* Pause the buffer */
->> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->> +	isb();
-> 
-> Why? If we're in the IRQ handler it's already paused, and if we're not in the
-> IRQ handler what prevents us racing with an IRQ?
-
-armv8pmu_branch_read() always gets called from an IRQ context only. The point
-here is to force a pause (and also disable, as I had explained earlier) before
-reading the buffer.
-
-> 
->> +
->> +	for (idx = 0; idx < brbe_attr->brbe_nr; idx++) {
->> +		struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
->> +
->> +		select_brbe_bank_index(idx);
->> +		brbinf = get_brbinf_reg(idx);
->> +		/*
->> +		 * There are no valid entries anymore on the buffer.
->> +		 * Abort the branch record processing to save some
->> +		 * cycles and also reduce the capture/process load
->> +		 * for the user space as well.
->> +		 */
->> +		if (brbe_invalid(brbinf))
->> +			break;
->> +
->> +		perf_clear_branch_entry_bitfields(entry);
->> +		if (brbe_valid(brbinf)) {
->> +			entry->from = get_brbsrc_reg(idx);
->> +			entry->to = get_brbtgt_reg(idx);
->> +		} else if (brbe_source(brbinf)) {
->> +			entry->from = get_brbsrc_reg(idx);
->> +			entry->to = 0;
->> +		} else if (brbe_target(brbinf)) {
->> +			entry->from = 0;
->> +			entry->to = get_brbtgt_reg(idx);
->> +		}
->> +		capture_brbe_flags(cpuc, event, brbinf, brbcr, idx);
->> +	}
->> +	cpuc->branches->branch_stack.nr = idx;
->> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
->> +	process_branch_aborts(cpuc);
->> +
->> +	/* Restore privilege, enable pause on PMU interrupt */
->> +	write_sysreg_s(brbcr | BRBCR_EL1_FZP, SYS_BRBCR_EL1);
-> 
-> Why do we have to save/restore this?
-
-Yes, this guarantees (more so than the paused state) that BRBE remains disabled in
-privilege levels that are relevant, while the contents are being read. 
-
-> 
->> +
->> +	/* Unpause the buffer */
->> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->> +	isb();
->> +	armv8pmu_branch_reset();
->> +}
-> 
-> Why do we enable it before we reset it?
-
-This is the last opportunity for a clean slate start for BRBE buffer before it is
-back recording the branches. Basically helps in ensuring a clean start.
-
-> 
-> Surely it would make sense to reset it first, and ammortize the cost of the ISB?
-> 
-> That said, as above, do we actually need to pause/unpause it? Or is it already
-> paused by virtue of the IRQ?
-
-Yes, it should be paused after an IRQ but it is also enforced before reading along
-with privilege level disable. Regardless the buffer needs to be un-paused and also
-enabled for required privilege levels before exiting from here.
+On Wed, Jan 18, 2023 at 03:51:59PM +0800, Yuan, Perry wrote:
+> Hi all,
+> 
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> 
+> AMD Energy Performance Preference (EPP) provides a hint to the hardware
+> if software wants to bias toward performance (0x0) or energy efficiency (0xff)
+> The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
+> value. So the EPP hint will impact the CPU cores frequency responsiveness.
+> 
+> We use the RAPL interface with "perf" tool to get the energy data of the package power.
+> Performance Per Watt (PPW) Calculation:
+> 
+> The PPW calculation is referred by below paper:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
+> 
+> Below formula is referred from below spec to measure the PPW:
+> 
+> (F / t) / P = F * t / (t * E) = F / E,
+> 
+> "F" is the number of frames per second.
+> "P" is power measured in watts.
+> "E" is energy measured in joules.
+> 
+> Gitsouce Benchmark Data on ROME Server CPU
+> +------------------------------+------------------------------+------------+------------------+
+> | Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
+> +==============================+==============================+============+==================+
+> | acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
+> +------------------------------+------------------------------+------------+------------------+
+> 
+> Tbench Benchmark Data on ROME Server CPU
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
+> +=============================================+===================+==============+=============+==================+
+> | acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> 
+> changes from v10:
+>  * pick up all new ack flas added by Ray
+>  * pick up Review-By flag added by Wyes
+>  * pick up Test-By flags added by Wyes
+>  * move the EPP macro definition to amd_pstate.h and drop the common
+>    code patch
+>  * add amd_perf_ctl_reset() in epp init code as well
+>  * As the warning which reminded by 0day, change amd_pstate_get_epp(cpudata, value)
+>    to amd_pstate_get_epp(cpudata, 0).
+> 
+> changes from v8:
+>  * drive all the feedbacks from Mario and change the codes in this
+>   version
+>  * drive all the feedbacks from Ray and change the codes in this
+>   version
+>  * pick up all the R-B flags from Mario
+>  * pick up all the R-B flags from Ray
+>  * drop boost/refresh_freq_limits callback
+>  * reuse policy->driver_data to store amd_cpudata struct
+>  * use switch-case in the driver mode switching function
+>  * add Kconfig dependency the INTEL_PSTATE for AMD_PSTATE build
+>  * fix some other code format and typos
+> 
+> changes from v7:
+>  * remove  iowait boost functions code
+>  * pick up ack by flag from Huang Ray.
+>  * add one new patch to support multiple working modes in the amd_pstate_param(),aligned with Wyse 
+>  * drop the patch "[v7 08/13] cpufreq: amd-pstate: add frequency dynamic boost sysfs control"
+>  * replace the cppc_get_epp_caps() with new cppc_get_epp_perf() wihch is
+>    more simple to use
+>  * remove I/O wait boost code from amd_pstate_update_status()
+>  * replace cppc_active var with enum type AMD_PSTATE_ACTIVE
+>  * squash amd_pstate_epp_verify_policy() into sigle function
+>  * remove "amd pstate" string from the pr_err, pr_debug logs info
+>  * rework patch [v7 03/13], move the common EPP profiles declaration
+>    into cpufreq.h which will be used by amd-pstate and intel-pstate
+>  * combine amd psate init functions.
+>  * remove epp_powersave from amd-pstate.h and dropping the codes.
+>  * move amd_pstate_params{} from amd-pstate.h into amd-pstate.c
+>  * drive some other feedbacks from huang ray 
+> 
+> changes from v6:
+>  * fix one legacy kernel hang issue when amd-pstate driver unregistering
+>  * add new documentation to introduce new global sysfs attributes
+>  * use sysfs_emit_at() to print epp profiles array
+>  * update commit info for patch v6 patch 1/11 as Mario sugguested.
+>  * trying to add the EPP profiles into cpufreq.h, but it will cause lots
+>    of build failues,continue to keep cpufreq_common.h used in v7
+>  * update commit info using amd-pstate as prefix same as before.
+>  * remove CONFIG_ACPI for the header as Ray suggested.
+>  * move amd_pstate_kobj to where it is used in patch "add frequency dynamic boost sysfs control"
+>  * drive feedback removing X86_FEATURE_CPPC check for the epp init from Huang Ray 
+>  * drive feedback from Mario
+>  
+> change from v5:
+>  * add one common header `cpufreq_commoncpufreq_common` to extract EPP profiles 
+>    definition for amd and intel pstate driver.
+>  * remove the epp_off value to avoid confusion.
+>  * convert some other sysfs sprintf() function with sysfs_emit() and add onew new patch
+>  * add acpi pm server priofile detection to enable dynamic boost control
+>  * fix some code format with checkpatch script
+>  * move the EPP profile declaration into common header file `cpufreq_common.h`
+>  * fix commit typos
+> 
+> changes from v4:
+>  * rebase driver based on the v6.1-rc7
+>  * remove the builtin changes patch because pstate driver has been
+>    changed to builtin type by another thread patch
+>  * update Documentation: amd-pstate: add amd pstate driver mode introduction 
+>  * replace sprintf with sysfs_emit() instead.
+>  * fix typo for cppc_set_epp_perf() in cppc_acpi.h header
+> 
+> changes from v3:
+>  * add one more document update patch for the active and passive mode
+>    introducion.
+>  * drive most of the feedbacks from Mario
+>  * drive feedback from Rafael for the cppc_acpi driver.
+>  * remove the epp raw data set/get function
+>  * set the amd-pstate drive by passing kernel parameter
+>  * set amd-pstate driver disabled by default if no kernel parameter
+>    input from booting
+>  * get cppc_set_auto_epp and cppc_set_epp_perf combined
+>  * pick up reviewed by flag from Mario
+> 
+> changes from v2:
+>  * change pstate driver as builtin type from module
+>  * drop patch "export cpufreq cpu release and acquire"
+>  * squash patch of shared mem into single patch of epp implementation
+>  * add one new patch to support frequency boost control
+>  * add patch to expose driver working status checking
+>  * rebase driver into v6.1-rc4 kernel release
+>  * move some declaration to amd-pstate.h
+>  * drive feedback from Mario for the online/offline patch
+>  * drive feedback from Mario for the suspend/resume patch
+>  * drive feedback from Ray for the cppc_acpi and some other patches
+>  * drive feedback from Nathan for the epp patch
+> 
+> changes from v1:
+>  * rebased to v6.0
+>  * drive feedbacks from Mario for the suspend/resume patch
+>  * drive feedbacks from Nathan for the EPP support on msr type
+>  * fix some typos and code style indent problems
+>  * update commit comments for patch 4/7
+>  * change the `epp_enabled` module param name to `epp`
+>  * set the default epp mode to be false
+>  * add testing for the x86_energy_perf_policy utility patchset(will
+>    send that utility patchset with another thread)
+> 
+> v10:https://lore.kernel.org/lkml/20230106061420.95715-1-perry.yuan@amd.com/
+> v9: https://lore.kernel.org/lkml/20221225163442.2205660-1-perry.yuan@amd.com/
+> v8: https://lore.kernel.org/lkml/20221219064042.661122-1-perry.yuan@amd.com/
+> v7: https://lore.kernel.org/lkml/20221208111852.386731-1-perry.yuan@amd.com/
+> v6: https://lore.kernel.org/lkml/20221202074719.623673-1-perry.yuan@amd.com/
+> v5: https://lore.kernel.org/lkml/20221128170314.2276636-1-perry.yuan@amd.com/
+> v4: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> v3: https://lore.kernel.org/all/20221107175705.2207842-1-Perry.Yuan@amd.com/
+> v2: https://lore.kernel.org/all/20221010162248.348141-1-Perry.Yuan@amd.com/
+> v1: https://lore.kernel.org/all/20221009071033.21170-1-Perry.Yuan@amd.com/
+> 
+> Perry Yuan (10):
+>   ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+>   Documentation: amd-pstate: add EPP profiles introduction
+>   cpufreq: amd-pstate: implement Pstate EPP support for the AMD
+>     processors
+>   cpufreq: amd-pstate: implement amd pstate cpu online and offline
+>     callback
+>   cpufreq: amd-pstate: implement suspend and resume callbacks
+>   cpufreq: amd-pstate: add driver working mode switch support
+>   Documentation: amd-pstate: add amd pstate driver mode introduction
+>   Documentation: introduce amd pstate active mode kernel command line
+>     options
+>   cpufreq: amd-pstate: convert sprintf with sysfs_emit()
+>   Documentation: amd-pstate: introduce new global sysfs attributes
+> 
+> Wyes Karny (1):
+>   cpufreq: amd-pstate: optimize driver working mode selection in
+>     amd_pstate_param()
+> 
+
+Hi Rafael,
+
+We have finished the review for these series, may we know if any additional
+comments from your side?
+
+Thanks,
+Ray
