@@ -2,119 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC36674334
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6365667430D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjAST4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S229814AbjASTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjAST4X (ORCPT
+        with ESMTP id S229752AbjASTrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:56:23 -0500
-X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Jan 2023 11:56:21 PST
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618030EE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:56:21 -0800 (PST)
-Date:   Thu, 19 Jan 2023 19:46:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674157581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ny5pbFcUDicEKi2kQlKMNoopMQxdvl4TAC0NXH0FWZc=;
-        b=lQclnKO49SxNR+ip+srDOZF4ojQRaxsKsDP61gap4s4i2v1bZmFg0XsAF39r6FsaTjUS3V
-        V6lZh7A2hzM1Jefk9R1hMMoYohp4/1i8UM7GYMSopzrNUMbfTn5BqZ8vkBY4ajH8SrOu8l
-        7N7ix/3EhvbqAfTJqoe1qdMbq6iKJKE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v7 7/7] KVM: arm64: Normalize cache configuration
-Message-ID: <Y8meCFkrVXurXlTk@google.com>
-References: <20230112023852.42012-1-akihiko.odaki@daynix.com>
- <20230112023852.42012-8-akihiko.odaki@daynix.com>
+        Thu, 19 Jan 2023 14:47:51 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D1E63E36
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:47:48 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 203so3936751yby.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P2j6lHak2WNm7vGtRzqgYAFuvxH6JX58ZqrhL7ZQFfg=;
+        b=tRwk9+zuhnApnMpCZGGlzVwa+yZTlhQpdZ6D/DvhQoFQpUTQCeM6lA4awAgkKlc6pA
+         569vcWotwshb2MJ3asbawGKsmiAf/09j93YtvGPhv8aIXeEodHvuQSIQ5ljSUAkeCXzO
+         IqeRDxz6EbgbHh8k87h+XcI+Gi5IBdHJFL4tHPiahQxfVXpu36hpl3PHH/mKcKNvwhOv
+         UCU76RUWF05xBZwsRriVr7hQXTTtQJ2FG3IoMxW3Mwj2/MvvT/4EBXFgCKYYlhd3hGTR
+         1qkSNLLzjXoHMCy86p9goHtqYEOQIkIXGOFAkld/l51jc9hZeYZmW078//u/yo9FNWkJ
+         t4Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P2j6lHak2WNm7vGtRzqgYAFuvxH6JX58ZqrhL7ZQFfg=;
+        b=fNh/32eET9gfVLpz7hC2+fBdcZMbFVP67eq/gNl9IxiAQjVCZi1dXbDPIoPgLlbsqf
+         VcAh/cgSB1XOUp26Mgeula/S9BftpkddiolOmQzUvf4sIis6sirhRe91FL5LlgzqnqiP
+         1GAOJIkmDW8AUR13edk47QWTRZNxTM1Njb3M0pgC0sJaK91xoC2JZab0OEivIV4LLz1S
+         UsQQjT9mZV2URx+B0oOofPfiA05QT9bqQmnvTjevM6729nzsRWTMYs5QYnYT9CDBqlgM
+         CwVK4Z9Q8BwRmzrRljy3Mf7l2rqaGMv8tjy5BHvH1emO0r2aGvT3yvRCUjmyNQ9iG7C2
+         Mx6g==
+X-Gm-Message-State: AFqh2kqGBpKZEs3ojqJBrSDWRJzgMRnIi5nEj9F+D4ckJpavUsnBkUxo
+        3FJQannGfbtckuiAbboApmxzIz4i2wPr/aB88nQJAA==
+X-Google-Smtp-Source: AMrXdXtVjG1suljuq7kTbxad3urbLbwnBS0I2yo5AivnT5FA4XZ5/ePVWQvbEfh73NgWws2sOxQOIRQCI7QYYkEgZCg=
+X-Received: by 2002:a25:ceca:0:b0:7e4:115c:9cf6 with SMTP id
+ x193-20020a25ceca000000b007e4115c9cf6mr1417330ybe.316.1674157667650; Thu, 19
+ Jan 2023 11:47:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112023852.42012-8-akihiko.odaki@daynix.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8k+syJu7elWAjRj@dhcp22.suse.cz> <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <20230119192002.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230119192002.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 19 Jan 2023 11:47:36 -0800
+Message-ID: <CAJuCfpEoGCs6JgjiWL1ACS8S8TmwM1x5EF7x8D=M9zqnkyqxBA@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     paulmck@kernel.org
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akihiko,
+On Thu, Jan 19, 2023 at 11:20 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Jan 19, 2023 at 10:52:03AM -0800, Suren Baghdasaryan wrote:
+> > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
+> > > > a list and free them in groups using one call_rcu() call per group.
+> > >
+> > > After some more clarification I can understand how call_rcu might not be
+> > > super happy about thousands of callbacks to be invoked and I do agree
+> > > that this is not really optimal.
+> > >
+> > > On the other hand I do not like this solution much either.
+> > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
+> > > much with processes with a huge number of vmas either. It would still be
+> > > in housands of callbacks to be scheduled without a good reason.
+> > >
+> > > Instead, are there any other cases than remove_vma that need this
+> > > batching? We could easily just link all the vmas into linked list and
+> > > use a single call_rcu instead, no? This would both simplify the
+> > > implementation, remove the scaling issue as well and we do not have to
+> > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+> >
+> > Yes, I agree the solution is not stellar. I wanted something simple
+> > but this is probably too simple. OTOH keeping all dead vm_area_structs
+> > on the list without hooking up a shrinker (additional complexity) does
+> > not sound too appealing either. WDYT about time domain throttling to
+> > limit draining the list to say once per second like this:
+> >
+> > void vm_area_free(struct vm_area_struct *vma)
+> > {
+> >        struct mm_struct *mm = vma->vm_mm;
+> >        bool drain;
+> >
+> >        free_anon_vma_name(vma);
+> >
+> >        spin_lock(&mm->vma_free_list.lock);
+> >        list_add(&vma->vm_free_list, &mm->vma_free_list.head);
+> >        mm->vma_free_list.size++;
+> > -       drain = mm->vma_free_list.size > VM_AREA_FREE_LIST_MAX;
+> > +       drain = jiffies > mm->last_drain_tm + HZ;
+> >
+> >        spin_unlock(&mm->vma_free_list.lock);
+> >
+> > -       if (drain)
+> > +       if (drain) {
+> >               drain_free_vmas(mm);
+> > +             mm->last_drain_tm = jiffies;
+> > +       }
+> > }
+> >
+> > Ultimately we want to prevent very frequent call_rcu() calls, so
+> > throttling in the time domain seems appropriate. That's the simplest
+> > way I can think of to address your concern about a quick spike in VMA
+> > freeing. It does not place any restriction on the list size and we
+> > might have excessive dead vm_area_structs if after a large spike there
+> > are no vm_area_free() calls but I don't know if that's a real problem,
+> > so not sure we should be addressing it at this time. WDYT?
+>
+> Just to double-check, we really did try the very frequent call_rcu()
+> invocations and we really did see a problem, correct?
 
-On Thu, Jan 12, 2023 at 11:38:52AM +0900, Akihiko Odaki wrote:
-> Before this change, the cache configuration of the physical CPU was
-> exposed to vcpus. This is problematic because the cache configuration a
-> vcpu sees varies when it migrates between vcpus with different cache
-> configurations.
-> 
-> Fabricate cache configuration from the sanitized value, which holds the
-> CTR_EL0 value the userspace sees regardless of which physical CPU it
-> resides on.
-> 
-> CLIDR_EL1 and CCSIDR_EL1 are now writable from the userspace so that
-> the VMM can restore the values saved with the old kernel.
-> 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+Correct. More specifically with CONFIG_RCU_NOCB_CPU=y we saw
+regressions when a process exits and all its VMAs get destroyed,
+causing a flood of call_rcu()'s.
 
-I needed to squash in the patch below to get all of this working.
-Writing back the value read for a given cache level was failing, which I
-caught with the get-reg-list selftest.
-
-Pushed the result here if you want to have a look:
-
-  https://github.com/oupton/linux/tree/kvm-arm64/virtual-cache-geometry
-
---
-Thanks,
-Oliver
-
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index 459e6d358dab..b6228f7d1d8d 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -148,17 +148,19 @@ static u32 get_ccsidr(struct kvm_vcpu *vcpu, u32 csselr)
- 
- static int set_ccsidr(struct kvm_vcpu *vcpu, u32 csselr, u32 val)
- {
--	u8 line_size = FIELD_GET(CCSIDR_EL1_LineSize, val);
-+	u8 line_size = SYS_FIELD_GET(CCSIDR_EL1, LineSize, val);
-+	u32 cur = get_ccsidr(vcpu, csselr);
-+	u8 min_line_size = SYS_FIELD_GET(CCSIDR_EL1, LineSize, cur);
- 	u32 *ccsidr = vcpu->arch.ccsidr;
- 	u32 i;
- 
--	if ((val & CCSIDR_EL1_RES0) || line_size < get_min_cache_line_size(csselr))
-+	if (cur == val)
-+		return 0;
-+
-+	if ((val & CCSIDR_EL1_RES0) || line_size < min_line_size)
- 		return -EINVAL;
- 
- 	if (!ccsidr) {
--		if (val == get_ccsidr(vcpu, csselr))
--			return 0;
--
- 		ccsidr = kmalloc_array(CSSELR_MAX, sizeof(u32), GFP_KERNEL);
- 		if (!ccsidr)
- 			return -ENOMEM;
+>
+> Although it is not perfect, call_rcu() is designed to take a fair amount
+> of abuse.  So if we didn't see a real problem, the frequent call_rcu()
+> invocations might be a bit simpler.
+>
+>                                                         Thanx, Paul
