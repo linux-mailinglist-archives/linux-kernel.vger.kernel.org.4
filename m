@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4833674675
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1623674582
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjASW4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S230007AbjASWKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjASWys (ORCPT
+        with ESMTP id S230055AbjASWJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:54:48 -0500
-X-Greylist: delayed 1804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Jan 2023 14:37:44 PST
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 730BD274BF;
-        Thu, 19 Jan 2023 14:37:36 -0800 (PST)
-Received: from [192.168.20.3] (unknown [77.239.252.99])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 65D081403B8;
-        Thu, 19 Jan 2023 21:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1674164550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pSfJvkA8qQyd90Fkn4T/rhPgWpZURUCYqaG0v5R3RU0=;
-        b=qa8xeREzk6YR2I5fkmVBjzmGpI4UWdZWWJj8pjXZuuvRW4Kq9MreLg3lySmQztFycriBTq
-        savt0hyq2evuc6CvQL0KD1Xu1mrCP7/eZKofZhlmfKYyPqmK0mwjHtm0KqsFoG6nLk8Kfc
-        CNA3UZaAGzdalPUuAA1rC1YLxrIsQQ4=
-Message-ID: <e079e820-2df0-3c95-10ef-527020b97f5d@postmarketos.org>
-Date:   Fri, 20 Jan 2023 00:42:31 +0300
+        Thu, 19 Jan 2023 17:09:35 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1BDA13E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:47:11 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id j9so2729364qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:47:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=09kTGcckMAMH+LEzhPYzGrk9M65a9aALWHozMS+Q/aY=;
+        b=qKpmZ5ryJalc87ZonxwejohBKZCo0rsxES39789UuyDOmMGwlqFsejI//GJWwGF6bU
+         Dzx6uf4ggaHImuV5cMYJEUBhMcEqGptxCFts/sptvkYvJ16KoJatmQzLfJVyuw7PihVG
+         /O5TdPme2Nc7QiYQpgEkayg7JdD+T3OuIXifrpwkQTLmDoY13WboXQvBGG9eOUUC7Z98
+         IpP13LjWYcWP8dYSnIR/Kz+0/8M6v0H4m7agpTHwpTYNJvxY5+Dgtp0Z/vO3dEe1bVop
+         layZaOSlvu3uNEtAwzJ/eK/RWCzy7Pw3HRACpENVKail+TD7iTn/CcqcJGxs3zW5ZLdd
+         QYQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=09kTGcckMAMH+LEzhPYzGrk9M65a9aALWHozMS+Q/aY=;
+        b=CAJQwxdsz89aiwzS7x60HuSSOnYqa/ZSaf5eqetAN5RnOdXVskuaPlQT0GeEpHodTN
+         Dj8moznF2b5lMrnbGWZ382rmnaMkIvi2ww0eVPYpVo0hN7It2ziK13ucqTGSPHuAixXH
+         IJlpWIP+r6keXIjaonmbTHYrgw0fsRQ4bNGJlxlV9FQHwBwIo9OD7y1gCEzVftVYsHe8
+         WRJcEQbej3FDSJKKTY5GvwRsjSpznO+n2h7qblFgyYDL4DYMt2IQkueUQIH+ACPSr0rC
+         1MVQMH3ahlzslstGICSwH/emKLAp7l5KK/0TVvip3qTByLyi8o7enxeF1Coy3V71/7iG
+         i4Pg==
+X-Gm-Message-State: AFqh2koNToDm8/ZiIfRNIG4xwN4/l2IZ9mHqKnarAPRfOMtmHTb/1VvJ
+        aZQ50KsbrwcYuMgBdDAOO9w=
+X-Google-Smtp-Source: AMrXdXvGmKEppd3QWANAh0nFETvqHSZHzwuruKqp4iKcXzlzT7Fzfd4M/oyXBL/2uBBFOnmvkFX3oA==
+X-Received: by 2002:ac8:67d7:0:b0:3b2:e9c2:37f3 with SMTP id r23-20020ac867d7000000b003b2e9c237f3mr18431126qtp.16.1674164829804;
+        Thu, 19 Jan 2023 13:47:09 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bn39-20020a05620a2ae700b00706bc44fda8sm3373373qkb.79.2023.01.19.13.47.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 13:47:09 -0800 (PST)
+Message-ID: <e0a09ca8-2ad8-c519-c47e-4707bfb4fe93@gmail.com>
+Date:   Thu, 19 Jan 2023 13:47:04 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/2] ARM: dts: qcom: msm8226: add clocks and
- clock-names to gcc node
-To:     Rayyan Ansari <rayyan@ansari.sh>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230119190534.317041-1-rayyan@ansari.sh>
- <20230119190534.317041-3-rayyan@ansari.sh>
-Content-Language: ru
-From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
-In-Reply-To: <20230119190534.317041-3-rayyan@ansari.sh>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v8 00/17] Introduce a unified API for SCMI Server testing
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, peter.hilber@opensynergy.com,
+        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
+        quic_kshivnan@quicinc.com
+References: <20230118121426.492864-1-cristian.marussi@arm.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230118121426.492864-1-cristian.marussi@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hi Christian,
 
-On 2023-01-19 22:05, Rayyan Ansari wrote:
-> Add the XO and Sleep Clock sources to the GCC node.
+On 1/18/23 04:14, Cristian Marussi wrote:
+> Hi all,
 > 
-> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
-> ---
->   arch/arm/boot/dts/qcom-msm8226.dtsi | 6 ++++++
+> This series aims to introduce a new SCMI unified userspace interface meant
+> to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
+> from the perspective of the OSPM agent (non-secure world only ...)
+> 
+> It is proposed as a testing/development facility, it is NOT meant to be a
+> feature to use in production, but only enabled in Kconfig for test
+> deployments.
+> 
+> Currently an SCMI Compliance Suite like the one at [1] can only work by
+> injecting SCMI messages at the SCMI transport layer using the mailbox test
+> driver (CONFIG_MAILBOX_TEST) via its few debugfs entries and looking at
+> the related replies from the SCMI backend Server.
 
-Should the same be done for msm8974 dtsi as well?
+Took a while but finally:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Any idea when the raw_mode_support or the acs_raw_mode_support will hit 
+your master branch in the scmi-tests repository?
+-- 
+Florian
+
