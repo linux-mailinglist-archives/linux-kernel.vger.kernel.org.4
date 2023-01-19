@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD76673C06
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82C2673C08
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjASOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S231625AbjASOck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjASOaz (ORCPT
+        with ESMTP id S231263AbjASOcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:30:55 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED587299;
-        Thu, 19 Jan 2023 06:29:28 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 47BEB6600874;
-        Thu, 19 Jan 2023 14:29:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674138566;
-        bh=p/A/jWIk2sK78OlSgWI3fy+vpqk60q5IY/hSeAcs6AY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AksgbLzNeb2yo5Q6rWlWYXCGSsU4Pw/YGPRQEW1/m2X3nIhXkAmzKvRiJFLQkhCgb
-         ukyskjoKouGS2gXuEQJINq9XuoH6OYZsUt9oO28COwpJ7T22eLdTZ7AmsIo2dphiBp
-         TyPFWJflc5dKPM7QADxTaqIOOoG12xtf2fJnqz/M2MwZp7vt5ww2+qtDmThvAsL1+A
-         aZ73cLGHN43OnZ3/21dRCEk1nfVUNkbY4RfPNxK56KRa3vWDqPI9MPhx4ahriTCyKH
-         8kVvCc1YbmOzwji4Zyr2Y1dyP3ZqS5tWPxRZnA4bjXC549UvdB/jdpvLWLEHtfYVdE
-         j/yIeZyytE8Sg==
-Message-ID: <b8fafc86-40fe-c0ef-1310-b4e284e14609@collabora.com>
-Date:   Thu, 19 Jan 2023 15:29:22 +0100
+        Thu, 19 Jan 2023 09:32:17 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044E88103B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:30:43 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id k16so1692406wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
+        b=vkJOCCzoL8vjtTPGRMsoOw1R7mAXvOAuerYWRxBWXaMunEvMBJjX9QndCAb/cafgXt
+         Wp7AkkYDAcaPRBYQ2VzjOWVN5wMoZwqSQeukFJm2XD2SjfcQjxuESHU2zwmh/1FcbtXJ
+         OR5MMr6FO9bGoSKOuVuORlUSNlWpvJonbFssJ4ND0rStfsU754zN4PuUj9O8ONNIjh4a
+         XtpkqnpVW9+jKKgKSW7R6dKH1iBsVvX0/s9opm2SOcUAbFbwYsgnVMH8XvKRL/D2Bxl+
+         wln/UUynFA/QaLNWDnaf5NjAcf474M7n22HbeVud8gC0gqsEEcvlanaQjOHrda0OhsBF
+         77EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
+        b=EjNfwb3Ow4slJmMfD2LBtyaKwSPFLI6F+ww3Zg4G9wdZ+RSLhqgLBHCcmje4Tk1khO
+         4jf9fruAHjhIWfrCl1E8TPO7Mtvh3DuMjyy5plq7v38Zc1tHEGrfSSTgLWJKPvB4B8pW
+         HElT7DiMfOpTJjthjRCpg8jmJqzLezOI0/fBVFublmLQCFMQuKlL03GUTYFN5MTL7NIe
+         yZ+Ev/r2JSBtLe7P3Btjndf3gkQqrgX++6k+Ix6HckIHUwQ+bkNiOCdWCiJSRjQYj5To
+         pcuEma4Gbfe/Wy6X1yijw7x6Nov+P3nkj68E2ya7atvIL0YVsAJF1XI4xYfWLvL1qdXV
+         wOSA==
+X-Gm-Message-State: AFqh2kqMiF3GQUhFwq6HHm8k0Qs4WrqAKFjB3vKgXfiicpiYAD45Rf7X
+        rmNaJrwEcExfJIIhpgtbU6FRSg==
+X-Google-Smtp-Source: AMrXdXt/qRZqd3d5H5nKuT29rqnbZSUkbKuOzkuX9Eo+5Br+urhGdBlFyU95SdJu1GACPisSU9MB5A==
+X-Received: by 2002:a05:600c:601c:b0:3d9:ee01:60a4 with SMTP id az28-20020a05600c601c00b003d9ee0160a4mr10567478wmb.1.1674138641269;
+        Thu, 19 Jan 2023 06:30:41 -0800 (PST)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05600c4fcc00b003daff80f16esm6836420wmq.27.2023.01.19.06.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 06:30:40 -0800 (PST)
+Message-ID: <000e333d-f6df-0d08-07a0-2e7056bb6792@linaro.org>
+Date:   Thu, 19 Jan 2023 14:30:39 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] clk: mediatek: add MT7981 clock support
+ Thunderbird/102.6.1
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
 Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>
-References: <cover.1674137304.git.daniel@makrotopia.org>
- <d1718b4f9887664e56b56019b8d21470407c4aaf.1674137304.git.daniel@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <d1718b4f9887664e56b56019b8d21470407c4aaf.1674137304.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Alex Elder <elder@linaro.org>, Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230119114125.5182c7ab@canb.auug.org.au>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230119114125.5182c7ab@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/01/23 15:12, Daniel Golle ha scritto:
-> Add MT7986 clock support, include topckgen, apmixedsys, infracfg and
-> ethernet subsystem clocks.
-> 
-> The drivers are based on clk-mt7981.c which can be found in MediaTek's
-> SDK sources. To be fit for upstream inclusion the driver has been split
-> into clock domains and the infracfg part has been significantly
-> de-bloated by removing all the 1:1 factors (aliases).
-> 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->   drivers/clk/mediatek/Kconfig               |  17 +
->   drivers/clk/mediatek/Makefile              |   4 +
->   drivers/clk/mediatek/clk-mt7981-apmixed.c  | 103 +++++
->   drivers/clk/mediatek/clk-mt7981-eth.c      | 138 +++++++
->   drivers/clk/mediatek/clk-mt7981-infracfg.c | 236 +++++++++++
->   drivers/clk/mediatek/clk-mt7981-topckgen.c | 431 +++++++++++++++++++++
->   include/dt-bindings/clock/mt7981-clk.h     | 215 ++++++++++
 
-dt-bindings go in a different commit; also, please follow binding rules for
-filenames... mt7981-clk.h -> mediatek,mt7981-clk.h
 
->   7 files changed, 1144 insertions(+)
->   create mode 100644 drivers/clk/mediatek/clk-mt7981-apmixed.c
->   create mode 100644 drivers/clk/mediatek/clk-mt7981-eth.c
->   create mode 100644 drivers/clk/mediatek/clk-mt7981-infracfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt7981-topckgen.c
->   create mode 100644 include/dt-bindings/clock/mt7981-clk.h
+On 19/01/2023 00:41, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the net-next tree got conflicts in:
+> 
+>   drivers/net/ipa/ipa_interrupt.c
+>   drivers/net/ipa/ipa_interrupt.h
+> 
+> between commit:
+> 
+>   9ec9b2a30853 ("net: ipa: disable ipa interrupt during suspend")
+> 
+> from the net tree and commits:
+> 
+>   8e461e1f092b ("net: ipa: introduce ipa_interrupt_enable()")
+>   d50ed3558719 ("net: ipa: enable IPA interrupt handlers separate from registration")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 > 
 
-Moreover, I have pushed a pretty big cleanup series, which would reduce a bit
-the size of the drivers that you're trying to introduce, and which is well
-tested and reviewed: can you please rebase this on top of [1]?
+Hi all, sorry for the delayed response to this.
 
-Thanks!
+If this is the same fixup in Matthieu's email [1] (which it appears to
+be), I can confirm that it's the correct fix here.
 
-[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711734
+I based the patch on master as it is a bug fix which we intend to
+backport, I should have mentioned the conflict with Alex's patch on
+-next, apologies for the miscommunication.
 
-Regards,
-Angelo
+-- 
+Kind Regards,
+Caleb (they/them)
