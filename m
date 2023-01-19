@@ -2,180 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1BB6738D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AD86738D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjASMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S230195AbjASMmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjASMlt (ORCPT
+        with ESMTP id S230044AbjASMl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:41:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEBA7ED50;
-        Thu, 19 Jan 2023 04:39:15 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5BB09501;
-        Thu, 19 Jan 2023 13:39:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674131953;
-        bh=2lco+Qsukw0ceEpuYI7PTg9Sfe2fOQKgi2R/lhYHdgw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P91nYFU9Cm5iINXxvJ1Rk14xRc4nHhpTxabESN4Fn4EgJFfBSbilUCd/8vmW//InW
-         pyN7RDmaPeP5qxirGYqkXaIpcglmdsZ2uhiJfO3EQ5jNhdS0vID45qgtOVMKbSHN1D
-         JI0iOJLOcPkXcuJl43PIPe1oxwxblJpyLen7Pep4=
-Message-ID: <ddbf82d0-155f-9189-44df-1f796c028b53@ideasonboard.com>
-Date:   Thu, 19 Jan 2023 14:39:09 +0200
+        Thu, 19 Jan 2023 07:41:59 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD3B798CB;
+        Thu, 19 Jan 2023 04:39:51 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so2728232wmq.1;
+        Thu, 19 Jan 2023 04:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZGmJZiHO4zSg1lq+3nWY4u/vstveQj+Y4K63K64lAc=;
+        b=fIkPSVW3pVRh4PvuaoGe4C12b1n3z0yflP1rqlHtDh+jJUJOA2wElr/gbM7PynBo4B
+         g9WegrXt4AH7zUifF9abOSJx5IC0lOol1lCSnn9TtWeAp38eV35bJC5Zkt8MQOOtkX7g
+         WrhGT8+705c740fDfk4giAvqzKRNDGbfs4SnDjLvC0JT3SGuw34zZIOKniR6/mhRyiti
+         /kcmIBsEO9mlC+W7IFX6kpf8TS16DXziwWRu7iswYM1SwAqUP52iUKgEVGsVQ+KG96dT
+         9iVQ1VG7Uo1tgklQaM6mys9J82LcWDvLdNsuMqb3UIrHldiAr93Vnu64RxQjH9NKOZie
+         gwmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aZGmJZiHO4zSg1lq+3nWY4u/vstveQj+Y4K63K64lAc=;
+        b=GutoEUVyJDxCf7cQDCWRbOppB8ZI7AlKG1/BNsHnupntss7zAIG/AoCH/Yy50H2n3H
+         YycCPQurUuOk+ZOOk8dMSOKTmMk0Mf/8Oq2QnZ54JaXB/St4J2dTd9UidegQaEhsZ4g6
+         8PGdyU0vrAV8aWyN/1+hP/GMtU3qGvB+poqqFZL15XKOIXLFcFps5RGjKisI2tgyDf+/
+         KsBoG2jDEFanl4h3t8zAQLumBg8GqoOOm1IjyL19k9PdnOFWFjDUbNBLd+CaM1we/5My
+         MCDjfzq3xCXYlbzmF/jlIkjtSfFZym8pEsbZuVWv9aeEqF44dqEMRqjhAR2jm/yddP+J
+         VSbg==
+X-Gm-Message-State: AFqh2kqtVZ67+Np02wIn+IT7h7uJ1EdPyey1enRT0cY3NbB/mbGeZ7jt
+        5Fp8WntqkE53HJWqAP0RFN0=
+X-Google-Smtp-Source: AMrXdXs3qps9TFsimlC0ZXZm9rFm+ANZ/7UMJBNHDcdqpzCUPYKOwemn+7BeQrCa76mPAy5viViNDA==
+X-Received: by 2002:a05:600c:2052:b0:3da:f9e8:9809 with SMTP id p18-20020a05600c205200b003daf9e89809mr10036385wmg.35.1674131989597;
+        Thu, 19 Jan 2023 04:39:49 -0800 (PST)
+Received: from localhost.localdomain (host-82-55-106-56.retail.telecomitalia.it. [82.55.106.56])
+        by smtp.gmail.com with ESMTPSA id q24-20020a05600c331800b003d1de805de5sm4509265wmp.16.2023.01.19.04.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 04:39:48 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v3] mm/highmem: Add notes about conversions from kmap{,_atomic}()
+Date:   Thu, 19 Jan 2023 13:39:45 +0100
+Message-Id: <20230119123945.10471-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
- <Y8gA+cz9m7PaEhfP@smile.fi.intel.com> <20230118181753.7a325953@booty>
- <Y8gu4mlXUlyiFKZD@smile.fi.intel.com> <20230119092115.02cbbab3@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230119092115.02cbbab3@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 10:21, Luca Ceresoli wrote:
-> Hi Andy,
-> 
-> On Wed, 18 Jan 2023 19:39:46 +0200
-> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-> 
->> On Wed, Jan 18, 2023 at 06:17:53PM +0100, Luca Ceresoli wrote:
->>> On Wed, 18 Jan 2023 16:23:53 +0200
->>> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
->>
->> ...
->>
->>>>> +A typical example follows.
->>>>> +
->>>>> +Topology::
->>>>> +
->>>>> +                      Slave X @ 0x10
->>>>> +              .-----.   |
->>>>> +  .-----.     |     |---+---- B
->>>>> +  | CPU |--A--| ATR |
->>>>> +  `-----'     |     |---+---- C
->>>>> +              `-----'   |
->>>>> +                      Slave Y @ 0x10
->>>>> +
->>>>> +Alias table:
->>>>> +
->>>>> +.. table::
->>>>> +
->>>>> +   ======   =====
->>>>> +   Client   Alias
->>>>> +   ======   =====
->>>>> +   X        0x20
->>>>> +   Y        0x30
->>>>> +   ======   =====
->>>>> +
->>>>> +Transaction:
->>>>> +
->>>>> + - Slave X driver sends a transaction (on adapter B), slave address 0x10
->>>>> + - ATR driver rewrites messages with address 0x20, forwards to adapter A
->>>>> + - Physical I2C transaction on bus A, slave address 0x20
->>>>> + - ATR chip propagates transaction on bus B with address translated to 0x10
->>>>> + - Slave X chip replies on bus B
->>>>> + - ATR chip forwards reply on bus A
->>>>> + - ATR driver rewrites messages with address 0x10
->>>>> + - Slave X driver gets back the msgs[], with reply and address 0x10
->>>>
->>>> I'm not sure I got the real / virtual status of the adapters. Are the B and C
->>>> virtual ones, while A is the real?
->>>
->>> Let me reply, as I wrote these docs back at the times and thus I feel
->>> guilty in case that's unclear. :)
->>>
->>> I don't like the word "virtual" in this situation. A, B and C are all
->>> physical busses, made of copper and run by electrons on PCBs. B and C
->>> are the "remote" or "downstream" busses (w.r.t. the CPU), where the i2c
->>> devices are and where transactions happen using the address that the
->>> chip responds to. A is the "local" or "upstream" bus that is driven
->>> directly by the CPU (*) and where address aliases are used. Using
->>> aliases there is necessary because using address 0x10 would be
->>> ambiguous as there are two 0x10 chips out there.
->>>
->>> (*) There could be more layers of course, but still A is "closer to the
->>> CPU than B and C", for the sake of completeness.
->>
->> Can the diagram and/or text be updated to elaborate this?
-> 
-> Let's see whether the text below is better. I haven't changed the
-> image, I don't think we can do much more in ASCII, but maybe we can
-> replace it with an SVG [0]?
-> 
-> [0]
-> https://github.com/lucaceresoli/docs/blob/master/video-serdes-linux/images/i2c-ti.svg
-> 
-> A typical example follows.
-> 
-> Topology::
-> 
->                        Slave X @ 0x10
->                .-----.   |
->    .-----.     |     |---+---- B
->    | CPU |--A--| ATR |
->    `-----'     |     |---+---- C
->                `-----'   |
->                        Slave Y @ 0x10
+kmap() and kmap_atomic() have been deprecated. kmap_local_page() should
+always be used in new code and the call sites of the two deprecated
+functions should be converted. This latter task can lead to errors if it
+is not carried out with the necessary attention to the context around
+and between the maps and unmaps.
 
-Slightly beside the point of this discussion, but one thing (I think) I 
-tried to highlight in some older cover letter was that we don't really 
-have the above structure. We have something like this (a quick edit, sorry):
+Therefore, add further information to the Highmem's documentation for the
+purpose to make it clearer that (1) kmap() and kmap_atomic() must not
+any longer be called in new code and (2) developers doing conversions from
+kmap() amd kmap_atomic() are expected to take care of the context around
+and between the maps and unmaps, in order to not break the code.
 
-                             .------.  Slave X @ 0x10
-                 .------.    | FPDS |   |
-     .-----.     | FPDD |-F1-`------'---+---- B
-     | CPU |--A--| ATR  |
-     `-----'     |      |-F2-.------.---+---- C
-                 `------'    | FPDS |   |
-                             `------'  Slave Y @ 0x10
+Relevant parts of this patch have been taken from messages exchanged
+privately with Ira Weiny (thanks!).
 
-Where FPDD = Deserializer, FPDS = Serializer, F1/F2 = FPD-Link bus 1/2.
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-So the ATR functionality is in the deserializer, but the actual remote 
-i2c bus is on the serializer.
+Changes from v2:
+	Merge two sentences into one (thanks to bagas Sanjaya).
 
-The current code manages this so that the deserializer driver owns the 
-ATR and programs the HW (as the ATR is part of the deserializer), but 
-it's the serializer driver that adds the remote adapter to the ATR 
-(using i2c_atr pointer given by the deserializer driver).
+ Documentation/mm/highmem.rst | 41 +++++++++++++++++++++++++++---------
+ 1 file changed, 31 insertions(+), 10 deletions(-)
 
-  Tomi
+diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
+index 0f731d9196b0..e691a06fb337 100644
+--- a/Documentation/mm/highmem.rst
++++ b/Documentation/mm/highmem.rst
+@@ -57,7 +57,8 @@ list shows them in order of preference of use.
+   It can be invoked from any context (including interrupts) but the mappings
+   can only be used in the context which acquired them.
+ 
+-  This function should be preferred, where feasible, over all the others.
++  This function should always be used, whereas kmap_atomic() and kmap() have
++  been deprecated.
+ 
+   These mappings are thread-local and CPU-local, meaning that the mapping
+   can only be accessed from within this thread and the thread is bound to the
+@@ -100,10 +101,21 @@ list shows them in order of preference of use.
+   (included in the "Functions" section) for details on how to manage nested
+   mappings.
+ 
+-* kmap_atomic().  This permits a very short duration mapping of a single
+-  page.  Since the mapping is restricted to the CPU that issued it, it
+-  performs well, but the issuing task is therefore required to stay on that
+-  CPU until it has finished, lest some other task displace its mappings.
++* kmap_atomic(). This function has been deprecated; use kmap_local_page().
++
++  NOTE: Conversions to kmap_local_page() must take care to follow the mapping
++  restrictions imposed on kmap_local_page(). Furthermore, the code between
++  calls to kmap_atomic() and kunmap_atomic() may implicitly depend on the side
++  effects of atomic mappings, i.e. disabling page faults or preemption, or both.
++  In that case, explicit calls to pagefault_disable() or preempt_disable() or
++  both must be made in conjunction with the use of kmap_local_page().
++
++  [Legacy documentation]
++
++  This permits a very short duration mapping of a single page.  Since the
++  mapping is restricted to the CPU that issued it, it performs well, but
++  the issuing task is therefore required to stay on that CPU until it has
++  finished, lest some other task displace its mappings.
+ 
+   kmap_atomic() may also be used by interrupt contexts, since it does not
+   sleep and the callers too may not sleep until after kunmap_atomic() is
+@@ -115,11 +127,20 @@ list shows them in order of preference of use.
+ 
+   It is assumed that k[un]map_atomic() won't fail.
+ 
+-* kmap().  This should be used to make short duration mapping of a single
+-  page with no restrictions on preemption or migration. It comes with an
+-  overhead as mapping space is restricted and protected by a global lock
+-  for synchronization. When mapping is no longer needed, the address that
+-  the page was mapped to must be released with kunmap().
++* kmap(). This function has been deprecated; use kmap_local_page().
++
++  NOTE: Conversions to kmap_local_page() must take care to follow the mapping
++  restrictions imposed on kmap_local_page(). In particular, it is necessary to
++  make sure that the kernel virtual memory pointer is only valid in the thread
++  that obtained it.
++
++  [Legacy documentation]
++
++  This should be used to make short duration mapping of a single page with no
++  restrictions on preemption or migration. It comes with an overhead as mapping
++  space is restricted and protected by a global lock for synchronization. When
++  mapping is no longer needed, the address that the page was mapped to must be
++  released with kunmap().
+ 
+   Mapping changes must be propagated across all the CPUs. kmap() also
+   requires global TLB invalidation when the kmap's pool wraps and it might
+-- 
+2.39.0
 
