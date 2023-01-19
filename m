@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58194672DCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FB4672DD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjASBCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S229812AbjASBGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjASBCp (ORCPT
+        with ESMTP id S229483AbjASBGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:02:45 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B44C59552;
-        Wed, 18 Jan 2023 17:02:44 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so4285720pjg.4;
-        Wed, 18 Jan 2023 17:02:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzC0sU/N12ncEGDzD9fPcibOi5DmMLZMi0fdgF9XEqw=;
-        b=AYtPSQ8/l89DagqqXtQI6yiVXSzsTcUBaQiMk2f1jiZyJ5ELiIGB0pZLTJnp8amdI2
-         E9USP8ckmgFNAtbnEoOYYEmnUi5knwgQiQIsu+XBK87SrVt3G4Z7NEK00vhQjdlc4uAe
-         cUWuQ9+EIWNEUEecO15jMDjh7K8C3W/p/vLOToGoVZwCyALXyYsxihbAnAW9nkojB1jD
-         W4PyN1pMYXFeHmI2ySiO/3SOQnFtrWf3y7kddaOhygH3d8MNWuA//hY+i/Lb0SZ6YloL
-         AS9FQBWer3V6rNXX0e0CrLQATvoZgKgHf3OyQiHAf0umnVjJScE+CMG+PuftHWcDfxSI
-         KSeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bzC0sU/N12ncEGDzD9fPcibOi5DmMLZMi0fdgF9XEqw=;
-        b=DhtYQrVP7/6ydcAhzZh4GzL046UxGqzzP7Nx9dgmIEmU3b1dUS+sJIqoG+PKwylhxL
-         ha1pxTBqFPFYQzwT7dvEF7goVqYWfXGHuBwLyRs2zxO01KxyCKqCFvWKqil16GJBdihy
-         XvTsS+dXrMYsSa1SYpRR9ffR55HM3wMe0+xK9oczOL2qNfDC/IEC3nrOya5wK6mmQvGd
-         1m/dbiEa8xcV1WTDvCBqdXPpTmYENnkKaZTYN7z4wpOti8H3W//XgqHvB9cFxEoyg56L
-         o3Ox74GpxSYOlMCpc62rlmwKtEMB7ucy3bur3lcwgQXIap9f3gMjKDPeN6PYXjaaE2GB
-         XrnQ==
-X-Gm-Message-State: AFqh2krBdcYV4CugroocLyjefY8pTsdwM8YMR71qVwgzdLv0/pgheZ9o
-        XRMo9vGZALst+b+BAiyZwpU=
-X-Google-Smtp-Source: AMrXdXt4gseTnAfOPrChP9m2wVf26VWcohagyq74svl8eO9K6vlv12wRtzJHCZkfmem+ShkJYon6sA==
-X-Received: by 2002:a05:6a20:ba87:b0:af:8e92:3eeb with SMTP id fb7-20020a056a20ba8700b000af8e923eebmr9175136pzb.9.1674090163920;
-        Wed, 18 Jan 2023 17:02:43 -0800 (PST)
-Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id e3-20020a63f543000000b004cd2eebc551sm5414418pgk.62.2023.01.18.17.02.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 17:02:43 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 11:02:36 +1000
-Message-Id: <CPVRFKZUFEFE.3IPS9CFR9KPD6@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
-        <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 04/24] powerpc/secvar: Handle format string in the
- consumer
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-5-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-5-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:06:30 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81E0611FF;
+        Wed, 18 Jan 2023 17:06:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674090388; x=1705626388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BPmuKu3ALXclWFXWYEerlnT/WujFOtJ7HOkbe6NnTqc=;
+  b=NeFTwucmzbT66JAoOXSispTexKqmB+nmEgKIr6PjIXDkHPvKYlIawsGv
+   yPsHewROUXqQT9Eyjg19cTtVZ0hWcLBdkUmoMgn+UPetadXanAVsdkcIW
+   rxlf5N5BifbCwhDFhHdyV0xROzFBKDxqAsBCTS9FfPy88MCmi3g3UR90J
+   DTd55ryN695LZ/nlELRPyGuQekiF8V2XfNl+atsWT4MzEyg+61rYbUgFJ
+   9M1pYea4bT5RlNdsuCFu3ysZwDOebhkVxVmm14rWzj95U7z+8DAdRC87J
+   5GIKcrry2tOlTWfYQ/1mmUerCRJkgM+1KjZIDzbAIVMsFGMxPvThyI75M
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="308715844"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="308715844"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 17:06:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="767990286"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="767990286"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2023 17:06:24 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIJNn-0000vH-1h;
+        Thu, 19 Jan 2023 01:06:23 +0000
+Date:   Thu, 19 Jan 2023 09:06:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
+        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <202301190817.vjgEwo3J-lkp@intel.com>
+References: <20230118201055.147228-4-gregory.price@memverge.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118201055.147228-4-gregory.price@memverge.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
->
-> The code that handles the format string in secvar-sysfs.c is entirely
-> OPAL specific, so create a new "format" op in secvar_operations to make
-> the secvar code more generic.  No functional change.
->
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->
-> ---
->
-> v2: Use sysfs_emit() instead of sprintf() (gregkh)
->
-> v3: Enforce format string size limit (ruscur)
-> ---
->  arch/powerpc/include/asm/secvar.h            |  3 +++
->  arch/powerpc/kernel/secvar-sysfs.c           | 23 ++++--------------
->  arch/powerpc/platforms/powernv/opal-secvar.c | 25 ++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm=
-/secvar.h
-> index 07ba36f868a7..8b6475589120 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -11,12 +11,15 @@
->  #include <linux/types.h>
->  #include <linux/errno.h>
-> =20
-> +#define SECVAR_MAX_FORMAT_LEN	30 // max length of string returned by ->f=
-ormat()
-> +
->  extern const struct secvar_operations *secvar_ops;
-> =20
->  struct secvar_operations {
->  	int (*get)(const char *key, u64 key_len, u8 *data, u64 *data_size);
->  	int (*get_next)(const char *key, u64 *key_len, u64 keybufsize);
->  	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
-> +	ssize_t (*format)(char *buf);
+Hi Gregory,
 
-Maybe pass the buf size as an argument here? Which is a bit less error
-prone and more flexible than finding the right #define for it.
+Thank you for the patch! Yet something to improve:
 
-Thanks,
-Nick
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.2-rc4 next-20230118]
+[cannot apply to tip/core/entry]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+patch link:    https://lore.kernel.org/r/20230118201055.147228-4-gregory.price%40memverge.com
+patch subject: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
+config: sparc-buildonly-randconfig-r005-20230118 (https://download.01.org/0day-ci/archive/20230119/202301190817.vjgEwo3J-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bd6833b41ed48c444c09346f695efe229deec2e9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+        git checkout bd6833b41ed48c444c09346f695efe229deec2e9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash arch/sparc/mm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/sched.h:31,
+                    from include/linux/mm.h:28,
+                    from arch/sparc/mm/tlb.c:9:
+>> include/linux/syscall_user_dispatch.h:45:5: error: no previous prototype for 'syscall_user_dispatch_get_config' [-Werror=missing-prototypes]
+      45 | int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/syscall_user_dispatch.h:51:5: error: no previous prototype for 'syscall_user_dispatch_set_config' [-Werror=missing-prototypes]
+      51 | int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/sched.h:31,
+                    from arch/sparc/mm/init_64.c:11:
+>> include/linux/syscall_user_dispatch.h:45:5: error: no previous prototype for 'syscall_user_dispatch_get_config' [-Werror=missing-prototypes]
+      45 | int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/syscall_user_dispatch.h:51:5: error: no previous prototype for 'syscall_user_dispatch_set_config' [-Werror=missing-prototypes]
+      51 | int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/mm/init_64.c: In function 'arch_hugetlb_valid_size':
+   arch/sparc/mm/init_64.c:355:24: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
+     355 |         unsigned short hv_pgsz_idx;
+         |                        ^~~~~~~~~~~
+   arch/sparc/mm/init_64.c: At top level:
+   arch/sparc/mm/init_64.c:2630:6: error: no previous prototype for 'vmemmap_free' [-Werror=missing-prototypes]
+    2630 | void vmemmap_free(unsigned long start, unsigned long end,
+         |      ^~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/syscall_user_dispatch_get_config +45 include/linux/syscall_user_dispatch.h
+
+    44	
+  > 45	int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+    46		void __user *data)
+    47	{
+    48		return -EINVAL;
+    49	}
+    50	
+  > 51	int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
+    52		void __user *data)
+    53	{
+    54		return -EINVAL;
+    55	}
+    56	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
