@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C923672F2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5DB672F2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjASCnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        id S229981AbjASCnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjASCm6 (ORCPT
+        with ESMTP id S229934AbjASCm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:42:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38637B47E;
-        Wed, 18 Jan 2023 18:42:58 -0800 (PST)
+        Wed, 18 Jan 2023 21:42:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CC4B47E;
+        Wed, 18 Jan 2023 18:42:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE44EB80A29;
-        Thu, 19 Jan 2023 02:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68C5C433F0;
-        Thu, 19 Jan 2023 02:42:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0945B81FBA;
+        Thu, 19 Jan 2023 02:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3ABDC4339B;
+        Thu, 19 Jan 2023 02:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674096175;
-        bh=ynDeNozJvjU7+2OdaF3xoRj/R1KFU7FIil+EFkOuDRY=;
+        s=k20201202; t=1674096176;
+        bh=XiJBo+Rb6OfHZD1AubVx/LNMabwU6aDM9SbmNqLeqhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rnXICSpVfBfXZci7nc2q8kkT7++j7vPT5f8MJjKsdvQ1H41xzmuXgGvjMYGhdUK4F
-         wSwAX3+iFQWay5xUcDusoa38bDHqbhUylPnY2dc5ybACrK/wRf8tphdHD7gf3ebHbE
-         SaE8GSo9y36ZyrYt7dcJFhdvBlK/pjOOT0b6gYQfHpUM9RKbqgJUCZSVbbK/UEP8kU
-         2+AZgFTw7R5F2+0cH1G6RMdz44GbWNliVB/6gx//xcUMvbJOf6Umyd/8rvf1WNSkHU
-         MeoWsZFpW3G2IBFa6BLTzsY/YTogGC48D9Fi1ttzYvlv14JUW4ajom5TPt6UfqRWTl
-         7Ha3vnxP2YjeA==
+        b=ErRaTj/aXXv5NF/K3DC2vRjXJBMKY8qC/1oGNtKrpPoWpsUGlBPbIAsgOUqGLDvTo
+         ey/WiZnuUm1ceZs1JqXj2jgQJbgyfTKY8ArZ5CXhW0sI6oMdhoMXApEd4eVpFazrEd
+         P6OVL9GKGyb5IVQuvTb1ZE5bwaTQlQO9T8FUeCyinj1IBwwl1F5QNFb584A2bmb1wZ
+         n0tQSGkqlm4tF23hhMpXr7R/xUmZSGdordvxI5Gts/vVIaIL2cq1i5Vp4SIxYs7DJp
+         HuBWZg+3YP1wmijbx4ot+tvYsu70rcyTcB91wEEQgHGYHwOs+fxfkQaSVnRtsl7PG9
+         B0d0SlZSsTTcA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, lpieralisi@kernel.org,
-        devicetree@vger.kernel.org, bhelgaas@google.com, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@linaro.org
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: PCI: qcom: Allow both GIC-ITS and internal MSI controller
-Date:   Wed, 18 Jan 2023 20:42:50 -0600
-Message-Id: <167409616954.3024582.9628170500602623153.b4-ty@kernel.org>
+To:     robh+dt@kernel.org, quic_molvera@quicinc.com, agross@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org
+Cc:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_tdas@quicinc.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/2] clk: qcom: Add clocks for the QDU1000 and QRU1000 SoCs
+Date:   Wed, 18 Jan 2023 20:42:51 -0600
+Message-Id: <167409616956.3024582.17239635574684353077.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230111123004.21048-1-manivannan.sadhasivam@linaro.org>
-References: <20230111123004.21048-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230112204446.30236-1-quic_molvera@quicinc.com>
+References: <20230112204446.30236-1-quic_molvera@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,16 +57,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023 18:00:03 +0530, Manivannan Sadhasivam wrote:
-> The binding should specify both MSI implementations and the OS/driver
-> should choose the one based on the platform requirements.
+On Thu, 12 Jan 2023 12:44:44 -0800, Melody Olvera wrote:
+> This series adds the GCC, RPMh, and PDC clock support required for the
+> QDU1000 and QRU1000 SoCs along with the devicetree bindings for them.
 > 
+> The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+> 1000 are new SoCs meant for enabling Open RAN solutions. See more at
+> https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
 > 
+> [...]
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: sm8450: Allow both GIC-ITS and internal MSI controller
-      commit: 0da2eff44e78ded247fe35d8a3f73508263d0948
+[1/2] dt-bindings: clock: Add QDU1000 and QRU1000 GCC clocks
+      commit: f636dee9b60dd1cc4d8dcac98cf975991bc12d58
+[2/2] clk: qcom: Add QDU1000 and QRU1000 GCC support
+      commit: 475b330cca2acbf19a00e80a12c66919209b0183
 
 Best regards,
 -- 
