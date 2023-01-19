@@ -2,200 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90259672DDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3C3672DE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjASBMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S229928AbjASBNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjASBMv (ORCPT
+        with ESMTP id S229916AbjASBNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:12:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60E8683FB
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674090722;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1s/focwXYH9ypammfY4jmkagsBW5DWFSgWPXj6TkN40=;
-        b=Hu5a+7mwqzsF2odY++vG+OBtoQj06h7tu00WCNFkhZF07rZ7gHTj1kjG8i1VPU6qua2lqr
-        OewnIOXxU9Q8w4oh9kLnxjjONG5lo30feD4pq9bUkt63sZWt6ZTmRpMYSb7tTOEaousDoA
-        nxyNpGnSbvtY4ur3UILOwMbKciT61hg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-462-g-IkxgauOgGNQSydGKEIsg-1; Wed, 18 Jan 2023 20:11:56 -0500
-X-MC-Unique: g-IkxgauOgGNQSydGKEIsg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CECDD101A521;
-        Thu, 19 Jan 2023 01:11:55 +0000 (UTC)
-Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3E18D40C2064;
-        Thu, 19 Jan 2023 01:11:47 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in
- no running vcpu context
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
-        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
-        shan.gavin@gmail.com
-References: <20230116040405.260935-1-gshan@redhat.com>
- <20230116040405.260935-2-gshan@redhat.com> <Y8cKQRIbpLWVcdcw@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <0626e135-5d6b-8d09-ccd1-068e42a052f6@redhat.com>
-Date:   Thu, 19 Jan 2023 12:11:44 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <Y8cKQRIbpLWVcdcw@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:13:09 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5856843B;
+        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v23so879843plo.1;
+        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=trQ8wPDdZRnOhR09mO+bG/KeF7fjbj/nqEQErtarT5c=;
+        b=iedPpwf5nA+2keWvD77tT1QHT2acngdr0fxuAbMcmef4fExDwXZU8yzdvJCxhpT2ym
+         mq2SWTKZN8VkEL1mCgymWRb/aODT6vdXJ2OhQNWKI1eQMQeVnu3gz0WFxHYMFwydsOjx
+         2/W05BJEfDQjIy3JZXoaQCcJhjrfYpJmuh5iFYvhHXr3Z6jgbchYnFCzBsxcCdNTZdeF
+         uB7Dnjl5+7QtYFW8tfqC74mpu8BS5VZCJNZ7LytWzt3Rim3m0WZ1iAd21BhwhZQX3KDt
+         ouzBsmDpWRIvzUVq3beb+KIenmmnAf6jNHWJNN+pMiHLw6aKFM2vJbFS5VRKj2iaFoNL
+         WXSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=trQ8wPDdZRnOhR09mO+bG/KeF7fjbj/nqEQErtarT5c=;
+        b=gdmXwXWstN0t63Q9Mz7k3kO+ki3oBLAirw9GF86uQwdEU+nyR6LcYDyuJxJCtp+w29
+         t4CYQmV/I4YA8WLzH9zLwKPip6BeQ2q0S6ViBaPUbX3wOhzFAUNfe9HCUIIzAW6Mw+Je
+         izqc2VQE0Vgc18GeSFkE9qH4zD9ULdmYDuDiv0dYScQLXw3G+F2qBw7sxGCxcr9QKhgH
+         BwHX+/dSUB07W7HVQdOMmF/3kf0O62W7Odmf4fP0FFyOtVrR7vHMDSTBR5As8fQfun2+
+         N41WPDW0fupp0z2I4Gk6Inv67j9YQU3hDBb4ycZCEieuVHHLtTuR9LF6/CC3K1nkULuC
+         Il7g==
+X-Gm-Message-State: AFqh2kpRwaz82eh9X5mpHyD8qvQ25rBKJ3c508Vkjk2pUFoObx/ooY0+
+        9kGwjtmEHU6XoFF5mWCwexM=
+X-Google-Smtp-Source: AMrXdXsFGIbounHZJ2Dj4H4446MRSLS+KlWWG8txSiLuHDvKJ/U3YrT2y5kFsBYYfzOil7tpMtE/pg==
+X-Received: by 2002:a17:902:a9c5:b0:194:60c3:482f with SMTP id b5-20020a170902a9c500b0019460c3482fmr23642700plr.26.1674090787240;
+        Wed, 18 Jan 2023 17:13:07 -0800 (PST)
+Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
+        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b00186f0f59c85sm2511649plg.235.2023.01.18.17.13.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 17:13:06 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 19 Jan 2023 11:12:57 +1000
+Message-Id: <CPVRNHVV9L6U.34DQEC4B6NB51@bobo>
+Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
+        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
+        <gcwilson@linux.ibm.com>
+Subject: Re: [PATCH v3 16/24] powerpc/pseries: Implement signed update for
+ PLPKS objects
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.13.0
+References: <20230118061049.1006141-1-ajd@linux.ibm.com>
+ <20230118061049.1006141-17-ajd@linux.ibm.com>
+In-Reply-To: <20230118061049.1006141-17-ajd@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
+> From: Nayna Jain <nayna@linux.ibm.com>
+>
+> The Platform Keystore provides a signed update interface which can be use=
+d
+> to create, replace or append to certain variables in the PKS in a secure
+> fashion, with the hypervisor requiring that the update be signed using th=
+e
+> Platform Key.
+>
+> Implement an interface to the H_PKS_SIGNED_UPDATE hcall in the plpks
+> driver to allow signed updates to PKS objects.
+>
+> (The plpks driver doesn't need to do any cryptography or otherwise handle
+> the actual signed variable contents - that will be handled by userspace
+> tooling.)
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> [ajd: split patch, add timeout handling and misc cleanups]
+> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+>
+> ---
+>
+> v3: Merge plpks fixes and signed update series with secvar series
+>
+>     Fix error code handling in plpks_confirm_object_flushed() (ruscur)
+>
+>     Pass plpks_var struct to plpks_signed_update_var() by reference (mpe)
+>
+>     Consistent constant naming scheme (ruscur)
+> ---
+>  arch/powerpc/include/asm/hvcall.h      |  3 +-
+>  arch/powerpc/include/asm/plpks.h       |  5 ++
+>  arch/powerpc/platforms/pseries/plpks.c | 71 ++++++++++++++++++++++++--
+>  3 files changed, 73 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm=
+/hvcall.h
+> index 95fd7f9485d5..33b26c0cb69b 100644
+> --- a/arch/powerpc/include/asm/hvcall.h
+> +++ b/arch/powerpc/include/asm/hvcall.h
+> @@ -336,7 +336,8 @@
+>  #define H_SCM_FLUSH		0x44C
+>  #define H_GET_ENERGY_SCALE_INFO	0x450
+>  #define H_WATCHDOG		0x45C
+> -#define MAX_HCALL_OPCODE	H_WATCHDOG
+> +#define H_PKS_SIGNED_UPDATE	0x454
+> +#define MAX_HCALL_OPCODE	H_PKS_SIGNED_UPDATE
 
-On 1/18/23 7:51 AM, Oliver Upton wrote:
-> On Mon, Jan 16, 2023 at 12:04:02PM +0800, Gavin Shan wrote:
->> When dirty ring is enabled, the dirty page information is pushed to
->> the dirty ring if there is a running VCPU context. Otherwise, the
->> dirty page information is still tracked by the backup dirty bitmap.
->> In order to detect if there is a running VCPU context when a guest
->> page becomes dirty, kvm_arch_allow_write_without_running_vcpu() was
->> introduced to warn when no running VCPU context exists on unknown
->> cases.
->>
->> Other than the site of saving ITS tables, it's possible to save vgic3
->> LPI pending status in no running vcpu context because it can happen when
->> ITS ITE is restored through the command KVM_DEV_ARM_ITS_RESTORE_TABLES
->> on 'kvm-arm-vgic-its' device.
->>
->> Fix it by allowing to save vgic3 LPI pending status in no running
->> vcpu context.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   Documentation/virt/kvm/api.rst | 5 +++--
->>   arch/arm64/kvm/vgic/vgic-its.c | 3 ++-
->>   arch/arm64/kvm/vgic/vgic-v3.c  | 3 +++
->>   include/kvm/arm_vgic.h         | 1 +
->>   4 files changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->> index 9807b05a1b57..18b245a0ba02 100644
->> --- a/Documentation/virt/kvm/api.rst
->> +++ b/Documentation/virt/kvm/api.rst
->> @@ -8071,8 +8071,9 @@ state is final and avoid missing dirty pages from another ioctl ordered
->>   after the bitmap collection.
->>   
->>   NOTE: One example of using the backup bitmap is saving arm64 vgic/its
->> -tables through KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on
->> -KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
->> +tables and vgic3 LPI pending status through KVM_DEV_ARM_{VGIC_GRP_CTRL,
->> +ITS_SAVE_TABLES} and KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES}
->> +command on KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
->>   
->>   8.30 KVM_CAP_XEN_HVM
->>   --------------------
->> diff --git a/arch/arm64/kvm/vgic/vgic-its.c b/arch/arm64/kvm/vgic/vgic-its.c
->> index 94a666dd1443..119a9c7a0a52 100644
->> --- a/arch/arm64/kvm/vgic/vgic-its.c
->> +++ b/arch/arm64/kvm/vgic/vgic-its.c
->> @@ -2792,7 +2792,8 @@ bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
->>   {
->>   	struct vgic_dist *dist = &kvm->arch.vgic;
->>   
->> -	return dist->save_its_tables_in_progress;
->> +	return dist->save_vgic_v3_tables_in_progress ||
->> +	       dist->save_its_tables_in_progress;
-> 
-> I'd much prefer using a single bool to keep track of this, i.e:
-> 
-
-Yes, it's clean to have 'dist->save_tables_in_progress' for all
-3 cases. One more concern like below.
-
-> 	return dist->save_tables_in_progress;
-> 
->>   }
->>   
->>   static int vgic_its_set_attr(struct kvm_device *dev,
->> diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
->> index 2074521d4a8c..32998c8587a8 100644
->> --- a/arch/arm64/kvm/vgic/vgic-v3.c
->> +++ b/arch/arm64/kvm/vgic/vgic-v3.c
->> @@ -304,6 +304,7 @@ void vgic_v3_enable(struct kvm_vcpu *vcpu)
->>   int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
->>   {
->>   	struct kvm_vcpu *vcpu;
->> +	struct vgic_dist *dist = &kvm->arch.vgic;
->>   	int byte_offset, bit_nr;
->>   	gpa_t pendbase, ptr;
->>   	bool status;
->> @@ -339,7 +340,9 @@ int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
->>   	if (status) {
->>   		/* clear consumed data */
->>   		val &= ~(1 << bit_nr);
->> +		dist->save_vgic_v3_tables_in_progress = true;
->>   		ret = kvm_write_guest_lock(kvm, ptr, &val, 1);
->> +		dist->save_vgic_v3_tables_in_progress = false;
-> 
-> With the above suggestion of using a bool, this should become a helper
-> used at all the affected callsites:
-> 
->    static int vgic_write_guest_lock(struct kvm *kvm, gpa_t gpa,
->    				   const void *data, unsigned long len)
->    {
->    	struct vgic_dist *dist = &kvm->arch.vgic;
-> 	int ret;
-> 
-> 	dist->save_tables_in_progress = true;
-> 	ret = kvm_write_guest_lock(kvm, gpa, data, len);
-> 	dist->save_tables_in_progress = false;
-> 
-> 	return ret;
->    }
-> 
-
-I will have vgic_write_guest_lock() in v2. Note that those 3 paths can't be
-running in parallel since one switch is shared by them. Alternatively, we
-extend struct vgic_dist::save_tables_in_progress from 'bool' to 'unsigned long'.
-Several bit is defined for each site as below. In this way, the 3 paths can be
-running in parallel:
-
-   unsigned long struct vgic_dist::save_tables_in_progress
-
-   #define VGIC_DIST_SAVE_ITS_ITE		0	/* ITS Translation Entry */
-   #define VGIC_DIST_SAVE_ITS_DTE		1	/* ITS Device Table Entry */
-   #define VGIC_DIST_SAVE_ITS_CTE		2	/* ITS Collection Table Entry */
-   #define VGIC_DIST_SAVE_ITS_CT			3	/* ITS Collection Table */
-   #define VGIC_DIST_SAVE_VGIC3_LPI		4	/* VGIC3 LPI Pending Status */
-   #define VGIC_DIST_SAVE_VGIC3_PENDING_TABLE	5	/* VGIC3 Pending Table */
-
-The drawback is the calls are limited to 64. If those 3 paths can't be running
-in parallel, we needn't the extension at all.
+^ Bad rebase.
 
 Thanks,
-Gavin
-
+Nick
