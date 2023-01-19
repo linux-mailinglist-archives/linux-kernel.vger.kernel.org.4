@@ -2,142 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EA06745CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1B66745CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjASWUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S230225AbjASWVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjASWU1 (ORCPT
+        with ESMTP id S230206AbjASWUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:20:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A4030DA
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:03:16 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674165794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uel7La7hyJ+SpLk/s5wn/i75eVtrZzw/es9LS+wzOCU=;
-        b=b7evZP3GLAocWGw1udw+K67SZFP5JBXoJbAvOampRJ0NeFOLN7sBUGzS/kFZjp2iJvhnll
-        M1An8WRx2ABTxeDrZEjJHYeRC7Banh15m6V2o3PzWpUjK6+K1YrJj4+kfYnoYA532dZwCB
-        x6lk3waZ+jMTploPsOoXQlM1vNXz/uDet0Goi845pkivHeeb9eT3ATK3jLOl75/PLnPIsX
-        7Pn+sksCflqh90PoVAtIiiOUbdW6GQ640tYA11iQs7X0bkfjQIVYEk1mTSrz+XPYDF/uhw
-        E27/T1Ck+dxvjT3kemZexvyocGXvxJ5UMD4maryUgODAyWDUnP48oKuX3eW9vw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674165794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uel7La7hyJ+SpLk/s5wn/i75eVtrZzw/es9LS+wzOCU=;
-        b=1jDTElfFXCkfva+yh+0rY2cYzWXD+B0dYzxVy4CfK0yrf1MMNu6AgiK88LLIUwD7rkBBxx
-        hnyfBeJMTIywHyCw==
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: [PATCH v1 Part2 2/5] x86/microcode/intel: Add minimum required
- revision to microcode header
-In-Reply-To: <20230113172920.113612-3-ashok.raj@intel.com>
-References: <20230113172920.113612-1-ashok.raj@intel.com>
- <20230113172920.113612-3-ashok.raj@intel.com>
-Date:   Thu, 19 Jan 2023 23:03:14 +0100
-Message-ID: <873586i3ml.ffs@tglx>
+        Thu, 19 Jan 2023 17:20:45 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3C56A40;
+        Thu, 19 Jan 2023 14:03:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=p9Z+Yh5j2hHRnI1dTcIkipPU5fNAxSSsh4y2kn8Gq5A=; b=aNssFuNpx0WmIbJlX5P0hvebXE
+        nccag5OkWX4/UsWrQTfQ0KYWgsChCf2ZU2kxBZihsIixWpGLFxGfah7boyRB5ladtE9B2qJeoHpMY
+        YS/aFgivlkTa1HHPn9sSAJBze726rX1o/kmYazk2HU9OtWLZNjkSkOisVPBAAhY/Qa7WoD7QrSuVl
+        +H2eOrM02hbt8DPHFkhGcPGOuMeSK8BXgofuNuCLr9Zge0XrbEjkgo5G5PC1rO9pk0aWBp2vjhsl0
+        YisrO0TY6+3sgIgKTA6xLpW9vJ9h8VzM+cNMKfkPhMqU8EFAmFTSPdIv6L8jT94gVcThmOzydGHsA
+        0oxri4Nw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pId0N-002smJ-0r;
+        Thu, 19 Jan 2023 22:03:31 +0000
+Date:   Thu, 19 Jan 2023 22:03:31 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Eric Chanudet <echanude@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Larsson <alexl@redhat.com>,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: Re: [RFC PATCH 1/1] fs/namespace: defer free_mount from
+ namespace_unlock
+Message-ID: <Y8m+M/ffIEEWbfmv@ZenIV>
+References: <20230119205521.497401-1-echanude@redhat.com>
+ <20230119205521.497401-2-echanude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119205521.497401-2-echanude@redhat.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13 2023 at 09:29, Ashok Raj wrote:
-> In general users don't have the necessary information to determine
-> whether a late loading of a new microcode version has removed any feature
-> (MSR, CPUID etc) between what is currently loaded and this new microcode.
+On Thu, Jan 19, 2023 at 03:55:21PM -0500, Eric Chanudet wrote:
+> From: Alexander Larsson <alexl@redhat.com>
+> 
+> Use call_rcu to defer releasing the umount'ed or detached filesystem
+> when calling namepsace_unlock().
+> 
+> Calling synchronize_rcu_expedited() has a significant cost on RT kernel
+> that default to rcupdate.rcu_normal_after_boot=1.
+> 
+> For example, on a 6.2-rt1 kernel:
+> perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
+>            0.07464 +- 0.00396 seconds time elapsed  ( +-  5.31% )
+> 
+> With this change applied:
+> perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
+>         0.00162604 +- 0.00000637 seconds time elapsed  ( +-  0.39% )
+> 
+> Waiting for the grace period before completing the syscall does not seem
+> mandatory. The struct mount umount'ed are queued up for release in a
+> separate list and no longer accessible to following syscalls.
 
-s/this new microcode/a newer microcode revision/
-
-> To address this issue, Intel has added a "minimum required version" field
-> to a previously reserved field in the file header. Microcode updates
-
-s/file header/microcode header/ perhaps?
-
-> should only be applied if the current microcode version is equal
-> to, or greater than this minimum required version.
->
-> Thomas made some suggestions[1] on how meta-data in the microcode file
-> could provide Linux with information to decide if the new microcode is
-> suitable candidate for late loading. But even the "simpler" option#1
-> requires a lot of metadata and corresponding kernel code to parse it.
->
-> The proposal here is an even simpler option.
-
-IIRC this was also suggested by this Thomas dude, right?
-
-> Simply "OS visible features" such as CPUID and MSRs are the only two
-> examples. The microcode must not change these OS visible features
-> because they cause problems after late loading. When microcode changes
-> features, microcode will change the min_rev to prevent such microcodes
-> from being late loaded.
->
-> Pseudo code for late loading is as follows:
->
-> if header.min_required_id == 0
->         This is old format microcode, block late loading
-> else if current_ucode_version < header.min_required_id
->         Current version is too old, block late loading of this microcode.
-> else
->         OK to proceed with late loading.
->
-> Any microcode that modifies the interface to an OS-visible feature
-> will set the min_version to itself. This will enforce this microcode is
-> not suitable for late loading unless the currently loaded revision is
-> greater or equal to the new microcode affecting the change.
-
-Up to this paragraph the changelog made sense.
-
-If the currently loaded revision is the same as the to be loaded
-revision, then there is nothing to do.
-
-If the currently loaded revision is greater than the to be loaded
-revision then it is not loaded as the kernel does not support
-downgrading in the first place.
-
-Even if it would support downgrading then this would be outright wrong
-for this case:
-
-Rev:        10
-Min-Rev:    10
-
-Rev:        20
-Min-Rev:    20
-
-If Rev 20 is loaded, then you absolutely cannot load Rev 10 because that
-would have the reverse side effects due to which Rev 20 prevents late
-loading.
-
-See?
-
-Thanks,
-
-        tglx
+You *really* do not want to have umount(2) return without having
+the filesystems shut down.
