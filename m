@@ -2,173 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C7F672EAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFB9672EBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjASCM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S229865AbjASCPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjASCM0 (ORCPT
+        with ESMTP id S229863AbjASCPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:12:26 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA10222F1;
-        Wed, 18 Jan 2023 18:12:25 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 18 Jan 2023 21:15:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACF567963
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:15:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny5jz1T6qz4xN1;
-        Thu, 19 Jan 2023 13:12:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674094343;
-        bh=Zwx5h8g4pu1ve4peLagMpUQQBjAjjyv/cZ9FL+9fN0g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Qa2Un7n989BB/MPCzfMvxr2SE02pGdX92SHEIk0H1asQjBoFUDuLy9eTLFS0fzA4o
-         79KTu13mZxM5bPH9PN1wXWl9QIOw+j5HOt1Y5g/8QnqV6w0VJF+Hs1rRlkgq03hXuy
-         gc7C6Hbfj/XsfDKYf40avvH6521R7Ps0M+jd5xS17G27SdtonvAvssSifB8Y8E2oAK
-         +FSS8w8tZCGiNmJ1K+siU10J5U3eN1jUBvN/vC+gRC55FwscOXNZDET3Zq5M7R7izs
-         B+DZcrs+tK8edaSRWgkeWt9scM/0uxGFi4GiSjN7Drtx/3AZIvuNVpxF9cqvqBNlml
-         UPrMbYKKqiSSA==
-Date:   Thu, 19 Jan 2023 13:12:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm tree
-Message-ID: <20230119131222.4b7697c1@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0B0261A00
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108E2C43392;
+        Thu, 19 Jan 2023 02:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674094532;
+        bh=/ltzt1Csvme38n0fgFnKgL3v4ZrlbvWtk/qKHYPTuKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CZwBvMQ8J2a8d74b5+qWBj0Sg2Pz1MqrqBX5s/RCOY2CMm/15OKkU5OJo8TVJ50A3
+         3MGsro7MojCMTSZAl5qwRz7BZxeACUgEB4rcengZCYoqFaJhEDUuMUEF5g+yFxyqNX
+         mMkNLyXmIHr5yC+vz6oYt3SQa/yr1QIEg63rO7zVn0obUkpjlW/4xOb2sVtkNTLM7b
+         b1obWw+aqf+rcZw8iiOgUFNK37IupLEIuou7nVE9a9ifMwN+DWzlXRBPw0b8NHXd1P
+         61UlgHnPOdOCj9UXRdaTAWC56a6BPRDmFShuzEoAudtYVSjC6x86cQZvYP2uoGIBQz
+         +um6MNQTFERCA==
+Date:   Wed, 18 Jan 2023 18:15:30 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: add compression feature check for all compress
+ mount opt
+Message-ID: <Y8inwtRzVHXsxxyT@google.com>
+References: <20230112201032.66300-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bf4x3piptK9LwHOeyvf8I+i";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112201032.66300-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bf4x3piptK9LwHOeyvf8I+i
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 01/13, Yangtao Li wrote:
+> Opt_compress_chksum, Opt_compress_mode and Opt_compress_cache
+> lack the necessary check to see if the image supports compression,
+> let's add it.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/f2fs/super.c | 55 +++++++++++++++++++++++++------------------------
+>  1 file changed, 28 insertions(+), 27 deletions(-)
+> 
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 5fc83771042d..8ef1449272b3 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -89,7 +89,7 @@ static struct shrinker f2fs_shrinker_info = {
+>  	.seeks = DEFAULT_SEEKS,
+>  };
+>  
+> -enum {
+> +enum f2fs_mount_opt {
+>  	Opt_gc_background,
+>  	Opt_disable_roll_forward,
+>  	Opt_norecovery,
+> @@ -655,6 +655,30 @@ static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
+>  #endif
+>  #endif
+>  
+> +static bool f2fs_mount_opt_need_skip(struct f2fs_sb_info *sbi, enum f2fs_mount_opt opt)
+> +{
+> +	switch (opt) {
+> +	case Opt_compress_algorithm:
+> +	case Opt_compress_log_size:
+> +	case Opt_compress_extension:
+> +	case Opt_nocompress_extension:
+> +	case Opt_compress_chksum:
+> +	case Opt_compress_mode:
+> +	case Opt_compress_cache:
+> +#ifdef CONFIG_F2FS_FS_COMPRESSION
+> +		if (f2fs_sb_has_compression(sbi))
+> +			return false;
+> +
+> +		f2fs_info(sbi, "Image doesn't support compression");
+> +#else
+> +		f2fs_info(sbi, "compression options not supported");
+> +#endif
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  {
+>  	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+> @@ -685,6 +709,9 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  		args[0].to = args[0].from = NULL;
+>  		token = match_token(p, f2fs_tokens, args);
+>  
+> +		if (f2fs_mount_opt_need_skip(sbi, token))
+> +			continue;
 
-Hi all,
+It seems this changes the behavior?
 
-After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
-
-In file included from drivers/gpu/drm/drm_fb_helper.c:33:
-drivers/gpu/drm/drm_fb_helper.c: In function 'drm_fb_helper_single_fb_probe=
-':
-drivers/gpu/drm/drm_fb_helper.c:1968:24: error: 'dev' undeclared (first use=
- in this function); did you mean 'cdev'?
- 1968 |         if (dev_is_pci(dev->dev))
-      |                        ^~~
-include/linux/pci.h:1151:25: note: in definition of macro 'dev_is_pci'
- 1151 | #define dev_is_pci(d) ((d)->bus =3D=3D &pci_bus_type)
-      |                         ^
-drivers/gpu/drm/drm_fb_helper.c:1968:24: note: each undeclared identifier i=
-s reported only once for each function it appears in
- 1968 |         if (dev_is_pci(dev->dev))
-      |                        ^~~
-include/linux/pci.h:1151:25: note: in definition of macro 'dev_is_pci'
- 1151 | #define dev_is_pci(d) ((d)->bus =3D=3D &pci_bus_type)
-      |                         ^
-In file included from include/linux/atomic/atomic-instrumented.h:20,
-                 from include/linux/atomic.h:82,
-                 from include/linux/console.h:17,
-                 from drivers/gpu/drm/drm_fb_helper.c:32:
-include/linux/compiler_types.h:299:27: error: expression in static assertio=
-n is not an integer
-  299 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
-ypeof(b))
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:20:9: note: in expansion of macro 'static_asse=
-rt'
-   20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
-e'
-   20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |                       ^~~~~~~~~~~
-include/linux/pci.h:541:23: note: in expansion of macro 'container_of'
-  541 | #define to_pci_dev(n) container_of(n, struct pci_dev, dev)
-      |                       ^~~~~~~~~~~~
-drivers/gpu/drm/drm_fb_helper.c:1969:46: note: in expansion of macro 'to_pc=
-i_dev'
- 1969 |                 vga_switcheroo_client_fb_set(to_pci_dev(dev->dev), =
-fb_helper->info);
-      |                                              ^~~~~~~~~~
-
-Caused by commit
-
-  cff84bac9922 ("drm/fh-helper: Split fbdev single-probe helper")
-
-interacting with commit
-
-  d1d5101452ab ("drm/fb-helper: Set framebuffer for vga-switcheroo clients")
-
-from the drm-misc-fixes tree.
-
-I have added the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 19 Jan 2023 12:42:56 +1100
-Subject: [PATCH] fix up for "drm/fb-helper: Set framebuffer for vga-switche=
-roo clients"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/drm_fb_helper.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helpe=
-r.c
-index 97049a26fca2..5e445c61252d 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -1942,6 +1942,7 @@ static int drm_fb_helper_single_fb_probe(struct drm_f=
-b_helper *fb_helper,
- 					 int preferred_bpp)
- {
- 	struct drm_client_dev *client =3D &fb_helper->client;
-+	struct drm_device *dev =3D fb_helper->dev;
- 	struct drm_fb_helper_surface_size sizes;
- 	int ret;
-=20
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/bf4x3piptK9LwHOeyvf8I+i
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPIpwYACgkQAVBC80lX
-0GxXjQf/bdLniuOQx+0xXvX3g6drJhBnipUuQwfDR92l7Yr0+0PjOVq6q6TvvCR4
-Qa20WX+CZXVKhdCOKievTU8FZzVo+EnO5BIXyNgBCPCtcTkay/5VG8LnrJryQ22x
-ykuPi3XHZY2Dg1q91Mu6NsCyO1RkYQ1uDrkpcTriAZ+3SiJd1SnFfSopijAhN1F0
-M1JQCfQUHr1T5Dy2ctE2FJnLGN4yVeOD7VS1PNd5QUFakZAK7mg4UrGMxtkVk0WZ
-NKizvAa2D4gPVdZG8x9m1ZI4YWE4TQ8/bx4QYVxhBXayE/NvGhX21cc30mAuAa5Z
-sq7KA7y8e0Qi9kqj/TgZjuYgpvWrLg==
-=XQJJ
------END PGP SIGNATURE-----
-
---Sig_/bf4x3piptK9LwHOeyvf8I+i--
+> +
+>  		switch (token) {
+>  		case Opt_gc_background:
+>  			name = match_strdup(&args[0]);
+> @@ -1068,10 +1095,6 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			break;
+>  #ifdef CONFIG_F2FS_FS_COMPRESSION
+>  		case Opt_compress_algorithm:
+> -			if (!f2fs_sb_has_compression(sbi)) {
+> -				f2fs_info(sbi, "Image doesn't support compression");
+> -				break;
+> -			}
+>  			name = match_strdup(&args[0]);
+>  			if (!name)
+>  				return -ENOMEM;
+> @@ -1122,10 +1145,6 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			kfree(name);
+>  			break;
+>  		case Opt_compress_log_size:
+> -			if (!f2fs_sb_has_compression(sbi)) {
+> -				f2fs_info(sbi, "Image doesn't support compression");
+> -				break;
+> -			}
+>  			if (args->from && match_int(args, &arg))
+>  				return -EINVAL;
+>  			if (arg < MIN_COMPRESS_LOG_SIZE ||
+> @@ -1137,10 +1156,6 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			F2FS_OPTION(sbi).compress_log_size = arg;
+>  			break;
+>  		case Opt_compress_extension:
+> -			if (!f2fs_sb_has_compression(sbi)) {
+> -				f2fs_info(sbi, "Image doesn't support compression");
+> -				break;
+> -			}
+>  			name = match_strdup(&args[0]);
+>  			if (!name)
+>  				return -ENOMEM;
+> @@ -1161,10 +1176,6 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			kfree(name);
+>  			break;
+>  		case Opt_nocompress_extension:
+> -			if (!f2fs_sb_has_compression(sbi)) {
+> -				f2fs_info(sbi, "Image doesn't support compression");
+> -				break;
+> -			}
+>  			name = match_strdup(&args[0]);
+>  			if (!name)
+>  				return -ENOMEM;
+> @@ -1204,16 +1215,6 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  		case Opt_compress_cache:
+>  			set_opt(sbi, COMPRESS_CACHE);
+>  			break;
+> -#else
+> -		case Opt_compress_algorithm:
+> -		case Opt_compress_log_size:
+> -		case Opt_compress_extension:
+> -		case Opt_nocompress_extension:
+> -		case Opt_compress_chksum:
+> -		case Opt_compress_mode:
+> -		case Opt_compress_cache:
+> -			f2fs_info(sbi, "compression options not supported");
+> -			break;
+>  #endif
+>  		case Opt_atgc:
+>  			set_opt(sbi, ATGC);
+> -- 
+> 2.25.1
