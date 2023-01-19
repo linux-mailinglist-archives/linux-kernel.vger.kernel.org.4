@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3044267359A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEA667359C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjASKe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S230391AbjASKfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjASKeP (ORCPT
+        with ESMTP id S230421AbjASKea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:34:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F2B676C6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:52 -0800 (PST)
+        Thu, 19 Jan 2023 05:34:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364651C7F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:33:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FA3161510
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35464C433D2;
-        Thu, 19 Jan 2023 10:33:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69073615A4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F227CC433EF;
+        Thu, 19 Jan 2023 10:33:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674124431;
-        bh=L8rZG8Abv4/0u4UKyqrEt+o9G0yPEGVbe8tLin4R8q8=;
+        s=k20201202; t=1674124433;
+        bh=lE8cxHa+majFz2bt4UMSv6xjfGunkNiy3qsn64CriFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VL5edJ2bj4lOGlm12KhhDKhfXmeIon0shD/povk/Zu/MaSV79lcORskCI+ltk7c1E
-         0ayxnDp1nnMcrCrpb3PYTphUP9PTo/kgfmWrsq987gfQ4WMJzDGlAX2gWtI9PiHPOb
-         BnWNHOwOJXudEQvw+AwPAYL1Uj7oEz1grIJu0WCWeNvWOvEpuKpea+iIMmpAvo+wvZ
-         0FUfaEtQZBv9VzQAdh2CuZHvAXsOSSUEfIbnh7oLydpp45fnhMQrrO/MMQ70bljboG
-         bpHDZ9YDh07FNv0xeSSx1t0uj9Eaeoy4o6VI4XljeTDRfnDYN9p8F6Kfx40hcS2KYY
-         l0vy9IJxRgUgQ==
+        b=EQkDGq4G0nT2lune2DeaPF7nwC0uKX4nOyFBHtyW+nVpkDNLiRDP2cU03qRUiqCWL
+         sgerjwEGgdBh2nQBZuU9VMGD1UZZVThC4SUmbbXA4SRQNeVczHu0B+13xLC63eJ1fP
+         Qr19qsnl6AccQ6mCQP9WHjZFCpMOB3klDblvRgfMGsk2L2oxPbIn1bYEQw3m1kuSgg
+         rgQpQWaXacWzFAKLsTTcNDZSfirQvqsnGrHLdpnlgr6WykBoKYRd7/XP6ZDjMuUoqh
+         09QQbZUiTGBw61mUE89M/yZU5jqXFXE9OM00Iqmwsq+8p975vmFhq5CfbQxPgGUypG
+         dI+0Tbw+Tv1hQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 05/10] habanalabs: refactor user interrupt type
-Date:   Thu, 19 Jan 2023 12:33:34 +0200
-Message-Id: <20230119103339.718430-5-ogabbay@kernel.org>
+Cc:     Moti Haimovski <mhaimovski@habana.ai>
+Subject: [PATCH 07/10] habanalabs: enhance info printed on FW load errors
+Date:   Thu, 19 Jan 2023 12:33:36 +0200
+Message-Id: <20230119103339.718430-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230119103339.718430-1-ogabbay@kernel.org>
 References: <20230119103339.718430-1-ogabbay@kernel.org>
@@ -52,134 +52,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Moti Haimovski <mhaimovski@habana.ai>
 
-In order to support more user interrupt types in the future, we
-enumerate the user interrupt type instead of using a boolean.
+This commit enhances the following error messages to also provide the
+type of error occurred, this in order to ease debugging of errors
+detected during firmware-load.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: Moti Haimovski <mhaimovski@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/accel/habanalabs/common/habanalabs.h | 21 ++++++++++++--------
- drivers/accel/habanalabs/common/irq.c        | 19 +++++++++++++-----
- drivers/accel/habanalabs/gaudi2/gaudi2.c     |  9 +++++----
- 3 files changed, 32 insertions(+), 17 deletions(-)
+ drivers/accel/habanalabs/common/firmware_if.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
-index 0b7fe4afd92d..a0dfbf4f6cbb 100644
---- a/drivers/accel/habanalabs/common/habanalabs.h
-+++ b/drivers/accel/habanalabs/common/habanalabs.h
-@@ -1083,20 +1083,25 @@ struct hl_cq {
- 	atomic_t		free_slots_cnt;
- };
- 
-+enum hl_user_interrupt_type {
-+	HL_USR_INTERRUPT_CQ = 0,
-+	HL_USR_INTERRUPT_DECODER,
-+};
-+
- /**
-  * struct hl_user_interrupt - holds user interrupt information
-  * @hdev: pointer to the device structure
-+ * @type: user interrupt type
-  * @wait_list_head: head to the list of user threads pending on this interrupt
-  * @wait_list_lock: protects wait_list_head
-  * @interrupt_id: msix interrupt id
-- * @is_decoder: whether this entry represents a decoder interrupt
-  */
- struct hl_user_interrupt {
--	struct hl_device	*hdev;
--	struct list_head	wait_list_head;
--	spinlock_t		wait_list_lock;
--	u32			interrupt_id;
--	bool			is_decoder;
-+	struct hl_device		*hdev;
-+	enum hl_user_interrupt_type	type;
-+	struct list_head		wait_list_head;
-+	spinlock_t			wait_list_lock;
-+	u32				interrupt_id;
- };
- 
- /**
-@@ -2691,11 +2696,11 @@ void hl_wreg(struct hl_device *hdev, u32 reg, u32 val);
- 	p->size = sz; \
- })
- 
--#define HL_USR_INTR_STRUCT_INIT(usr_intr, hdev, intr_id, decoder) \
-+#define HL_USR_INTR_STRUCT_INIT(usr_intr, hdev, intr_id, intr_type) \
- ({ \
- 	usr_intr.hdev = hdev; \
- 	usr_intr.interrupt_id = intr_id; \
--	usr_intr.is_decoder = decoder; \
-+	usr_intr.type = intr_type; \
- 	INIT_LIST_HEAD(&usr_intr.wait_list_head); \
- 	spin_lock_init(&usr_intr.wait_list_lock); \
- })
-diff --git a/drivers/accel/habanalabs/common/irq.c b/drivers/accel/habanalabs/common/irq.c
-index 8bbcc223df91..a986d7dea453 100644
---- a/drivers/accel/habanalabs/common/irq.c
-+++ b/drivers/accel/habanalabs/common/irq.c
-@@ -333,13 +333,22 @@ irqreturn_t hl_irq_handler_user_interrupt(int irq, void *arg)
- 	struct hl_user_interrupt *user_int = arg;
- 	struct hl_device *hdev = user_int->hdev;
- 
--	if (user_int->is_decoder)
--		handle_user_interrupt(hdev, &hdev->common_decoder_interrupt);
--	else
-+	switch (user_int->type) {
-+	case HL_USR_INTERRUPT_CQ:
- 		handle_user_interrupt(hdev, &hdev->common_user_cq_interrupt);
- 
--	/* Handle user cq or decoder interrupts registered on this specific irq */
--	handle_user_interrupt(hdev, user_int);
-+		/* Handle user cq interrupt registered on this specific irq */
-+		handle_user_interrupt(hdev, user_int);
-+		break;
-+	case HL_USR_INTERRUPT_DECODER:
-+		handle_user_interrupt(hdev, &hdev->common_decoder_interrupt);
-+
-+		/* Handle decoder interrupt registered on this specific irq */
-+		handle_user_interrupt(hdev, user_int);
-+		break;
-+	default:
-+		break;
-+	}
- 
- 	return IRQ_HANDLED;
+diff --git a/drivers/accel/habanalabs/common/firmware_if.c b/drivers/accel/habanalabs/common/firmware_if.c
+index ef228087ef55..da892d8fb3d6 100644
+--- a/drivers/accel/habanalabs/common/firmware_if.c
++++ b/drivers/accel/habanalabs/common/firmware_if.c
+@@ -335,7 +335,7 @@ int hl_fw_send_cpu_message(struct hl_device *hdev, u32 hw_queue_id, u32 *msg,
+ 			dev_dbg(hdev->dev, "Device CPU packet timeout (0x%x) due to FW reset\n",
+ 					tmp);
+ 		else
+-			dev_err(hdev->dev, "Device CPU packet timeout (0x%x)\n", tmp);
++			dev_err(hdev->dev, "Device CPU packet timeout (status = 0x%x)\n", tmp);
+ 		hdev->device_cpu_disabled = true;
+ 		goto out;
+ 	}
+@@ -1346,8 +1346,7 @@ static void detect_cpu_boot_status(struct hl_device *hdev, u32 status)
+ 		break;
+ 	default:
+ 		dev_err(hdev->dev,
+-			"Device boot progress - Invalid status code %d\n",
+-			status);
++			"Device boot progress - Invalid or unexpected status code %d\n", status);
+ 		break;
+ 	}
  }
-diff --git a/drivers/accel/habanalabs/gaudi2/gaudi2.c b/drivers/accel/habanalabs/gaudi2/gaudi2.c
-index 80cd4413b87d..65c720a0c64c 100644
---- a/drivers/accel/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/accel/habanalabs/gaudi2/gaudi2.c
-@@ -2966,11 +2966,11 @@ static void gaudi2_user_interrupt_setup(struct hl_device *hdev)
+@@ -1377,8 +1376,8 @@ int hl_fw_wait_preboot_ready(struct hl_device *hdev)
+ 		pre_fw_load->wait_for_preboot_timeout);
  
- 	/* Initialize common user CQ interrupt */
- 	HL_USR_INTR_STRUCT_INIT(hdev->common_user_cq_interrupt, hdev,
--				HL_COMMON_USER_CQ_INTERRUPT_ID, false);
-+				HL_COMMON_USER_CQ_INTERRUPT_ID, HL_USR_INTERRUPT_CQ);
+ 	if (rc) {
+-		dev_err(hdev->dev, "CPU boot ready status timeout\n");
+ 		detect_cpu_boot_status(hdev, status);
++		dev_err(hdev->dev, "CPU boot ready timeout (status = %d)\n", status);
  
- 	/* Initialize common decoder interrupt */
- 	HL_USR_INTR_STRUCT_INIT(hdev->common_decoder_interrupt, hdev,
--				HL_COMMON_DEC_INTERRUPT_ID, true);
-+				HL_COMMON_DEC_INTERRUPT_ID, HL_USR_INTERRUPT_DECODER);
+ 		/* If we read all FF, then something is totally wrong, no point
+ 		 * of reading specific errors
+@@ -2427,7 +2426,7 @@ static int hl_fw_dynamic_wait_for_boot_fit_active(struct hl_device *hdev,
+ 		hdev->fw_poll_interval_usec,
+ 		dyn_loader->wait_for_bl_timeout);
+ 	if (rc) {
+-		dev_err(hdev->dev, "failed to wait for boot\n");
++		dev_err(hdev->dev, "failed to wait for boot (status = %d)\n", status);
+ 		return rc;
+ 	}
  
- 	/* User interrupts structure holds both decoder and user interrupts from various engines.
- 	 * We first initialize the decoder interrupts and then we add the user interrupts.
-@@ -2983,10 +2983,11 @@ static void gaudi2_user_interrupt_setup(struct hl_device *hdev)
- 	 */
- 	for (i = GAUDI2_IRQ_NUM_DCORE0_DEC0_NRM, j = 0 ; i <= GAUDI2_IRQ_NUM_SHARED_DEC1_NRM;
- 										i += 2, j++)
--		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, true);
-+		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i,
-+						HL_USR_INTERRUPT_DECODER);
+@@ -2454,7 +2453,7 @@ static int hl_fw_dynamic_wait_for_linux_active(struct hl_device *hdev,
+ 		hdev->fw_poll_interval_usec,
+ 		fw_loader->cpu_timeout);
+ 	if (rc) {
+-		dev_err(hdev->dev, "failed to wait for Linux\n");
++		dev_err(hdev->dev, "failed to wait for Linux (status = %d)\n", status);
+ 		return rc;
+ 	}
  
- 	for (i = GAUDI2_IRQ_NUM_USER_FIRST, k = 0 ; k < prop->user_interrupt_count; i++, j++, k++)
--		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, false);
-+		HL_USR_INTR_STRUCT_INIT(hdev->user_interrupt[j], hdev, i, HL_USR_INTERRUPT_CQ);
- }
+@@ -2793,7 +2792,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
  
- static inline int gaudi2_get_non_zero_random_int(void)
+ 	if (rc) {
+ 		dev_dbg(hdev->dev,
+-			"No boot fit request received, resuming boot\n");
++			"No boot fit request received (status = %d), resuming boot\n", status);
+ 	} else {
+ 		rc = hdev->asic_funcs->load_boot_fit_to_device(hdev);
+ 		if (rc)
+@@ -2816,7 +2815,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
+ 
+ 		if (rc) {
+ 			dev_err(hdev->dev,
+-				"Timeout waiting for boot fit load ack\n");
++				"Timeout waiting for boot fit load ack (status = %d)\n", status);
+ 			goto out;
+ 		}
+ 
+@@ -2894,7 +2893,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
+ 
+ 		if (rc) {
+ 			dev_err(hdev->dev,
+-				"Failed to get ACK on skipping BMC, %d\n",
++				"Failed to get ACK on skipping BMC (status = %d)\n",
+ 				status);
+ 			WREG32(msg_to_cpu_reg, KMD_MSG_NA);
+ 			rc = -EIO;
+@@ -2921,7 +2920,7 @@ static int hl_fw_static_init_cpu(struct hl_device *hdev,
+ 				"Device reports FIT image is corrupted\n");
+ 		else
+ 			dev_err(hdev->dev,
+-				"Failed to load firmware to device, %d\n",
++				"Failed to load firmware to device (status = %d)\n",
+ 				status);
+ 
+ 		rc = -EIO;
 -- 
 2.25.1
 
