@@ -2,53 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F546673898
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666FE6738A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjASMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S230358AbjASMe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjASM2R (ORCPT
+        with ESMTP id S230434AbjASMeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:28:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EBA5DC35;
-        Thu, 19 Jan 2023 04:28:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E992600BE;
-        Thu, 19 Jan 2023 12:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D2FEC43398;
-        Thu, 19 Jan 2023 12:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674131295;
-        bh=0ZwU3ll6yCQEYeTrv7/BPkLSK2FHjtCf0ety5Px9ILI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BogfNdNVixEaRfHwT5Kx6XFgl4eGUVZ4am0BsUogC/LMAeksnbVueN2ks7RE42zIi
-         0pCYB56gCstxxHKSxT+V6NoNFdCsNHCklOrd+PmnUcpHHVu1oBRH8x7M3G2xj0+Gzc
-         zf+tUsp7SCT8IycMZkcJKdL0dvoUmuXU6m5cDYgY=
-Date:   Thu, 19 Jan 2023 13:28:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] ucsi_ccg: Refine the UCSI Interrupt handling
-Message-ID: <Y8k3XB53iHeE0XZF@kroah.com>
-References: <20230118061523.1537992-1-haotienh@nvidia.com>
+        Thu, 19 Jan 2023 07:34:02 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948FE7ED42
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:30:05 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id k16so1399690wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UcNbpiHNkJaSlONNLaq69/U1cHe0Wi/deeXgruiIYlk=;
+        b=zs1r3iTSdsastCcqC1s6jGo+TMaT++Dj/p0LpEv0Rc68YNsHs7a66i3FWNetl7mOk6
+         7IGujmpIUkdMotwpYTQOKI1Kic2VCZirLmVFHBV4uRLf7LjYLdHEyz8T2kaOQYYv5cnV
+         7jVZSc8xv7W5mwt9QOysf+VPkuLuvpFDy9beQUDRUaXqcPO6JvIsOFbjkT/XUxsV14pU
+         9P8yt4rmJkY5FTONzvTx3SdklJU2g1RcyaC5YG9DFSywVMTzpdj9epxAIGadnaEJr8sN
+         16R/XWnbnjRjWIQ55vUnxX81Pwipdi/7ARLnltxEc4LfOAaEhfZMmIhdH5VvjBScH/P3
+         SRdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UcNbpiHNkJaSlONNLaq69/U1cHe0Wi/deeXgruiIYlk=;
+        b=Voe0B+IyPsqeyLXKm/1NC5PqCaBRYvisfdVGt1xpfxzPrsS7cu29guuTT40UK6k6hd
+         EcRoaeqA1ArPzUGIdmwxYamxfzLzZ7GZ8YthIwS5A6XrryjW/tlib+bRRlpYCjRZIm0K
+         a7/snzPBMuEqwqvWfW8J/DA3q5wS+ajysGjB7eRtBFQObn++FJXcz6qwedHBijNay6Wx
+         +qQHPcyM3xr0jVbIQ3F7OSrY2SxohEdNUt+oyK2rWecktsxsJ1sLBiTCyEn2LftJI/Sg
+         x/OqkraOXRyYER6tBLMc7YuMx4GaQL+T1SrnG9hWrDeZJ1BopKGGQiJMDSAZmzwxHo1f
+         V8MQ==
+X-Gm-Message-State: AFqh2koqf09mqCYU75DGDS7JSPM9VRMgJL3rGAXxlEH9gj7R0gw+ghKq
+        C+3xaVZxMBpzdpzBEa9GNbrNHLypRdICh2hQ
+X-Google-Smtp-Source: AMrXdXvOzeYIEi4dp0Tgez1Sr/c2pgde4bny/gVuIgmZz8MDwKTiqF6jrgaPfXhhhJWF/xIm33wYIg==
+X-Received: by 2002:a05:600c:1d22:b0:3d9:6bc3:b8b9 with SMTP id l34-20020a05600c1d2200b003d96bc3b8b9mr10165519wms.9.1674131380376;
+        Thu, 19 Jan 2023 04:29:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003cf71b1f66csm5119821wmb.0.2023.01.19.04.29.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 04:29:39 -0800 (PST)
+Message-ID: <8322af81-139c-b840-dbf0-d52d86e92032@linaro.org>
+Date:   Thu, 19 Jan 2023 13:29:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118061523.1537992-1-haotienh@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: sm8550: Add PCIe HC and PHY
+ support
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20230118230526.1499328-1-abel.vesa@linaro.org>
+ <167408614065.2989059.2950818972854332656.b4-ty@kernel.org>
+ <Y8jyQAR7fF1NRmwu@hovoldconsulting.com> <Y8kzBz0ApSWgOkVJ@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y8kzBz0ApSWgOkVJ@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,197 +83,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 02:15:23PM +0800, Haotien Hsu wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
+On 19/01/2023 13:09, Abel Vesa wrote:
+> On 23-01-19 08:33:20, Johan Hovold wrote:
+>> On Wed, Jan 18, 2023 at 05:55:31PM -0600, Bjorn Andersson wrote:
+>>> On Thu, 19 Jan 2023 01:05:24 +0200, Abel Vesa wrote:
+>>>> This patchset adds PCIe controllers and PHYs support to SM8550 platform
+>>>> and enables them on the MTP board.
+>>>>
+>>>> The v1 was here:
+>>>> https://lore.kernel.org/all/20221116130430.2812173-1-abel.vesa@linaro.org/
+>>>>
+>>>> Changes since v1:
+>>>>  * ordered pcie related nodes alphabetically in MTP dts
+>>>>  * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
+>>>>  * dropped the child node from the phy nodes, like Johan suggested,
+>>>>    and updated to use the sc8280xp binding scheme
+>>>>  * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
+>>>>    to "nocsr"
+>>>>  * reordered all pcie nodes properties to look similar to the ones
+>>>>    from sc8280xp
+>>>>
+>>>> [...]
+>>>
+>>> Applied, thanks!
+>>>
+>>> [1/2] arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
+>>>       commit: 7d1158c984d37e79ab8bb55ab152a0b35566cb89
+>>> [2/2] arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
+>>>       commit: 1eeef306b5d80494cdb149f058013c3ab43984b4
+>>
+>> I believe there were still some changes needed to the controller
+>> and PHY bindings so this should not have been merged.
+>>
+>> 	https://lore.kernel.org/all/Y8fuUI4xaNkADkWl@hovoldconsulting.com/
+>> 	https://lore.kernel.org/lkml/Y8giHJMtPu4wTlmA@hovoldconsulting.com/
+>>
+>> Perhaps in the future you can send the dts changes along with the (PHY)
+>> driver changes so that they can be kept in lock-step and avoid this.
 > 
-> For the CCGx, when the OPM field in the INTR_REG is cleared, then the
-> CCI data in the PPM is reset.
-> 
-> To align with the CCGx UCSI interface guide, this patch updates the
-> driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
-> When a new command is sent, the driver will clear the old CCI and
-> MESSAGE_IN copy.
-> 
-> Finally, clear UCSI_READ_INT before calling complete() to ensure that
-> the ucsi_ccg_sync_write() would wait for the interrupt handling to
-> complete.
-> It prevents the driver from resetting CCI prematurely.
-> 
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> ---
-> V1->V2
-> - Fix uninitialized symbol 'cci'
-> v2->v3
-> - Remove misusing Reported-by tags
-> v3->v4
-> - Add comments for op_lock
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 90 ++++++++++++++++++++++++++++---
->  1 file changed, 83 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index eab3012e1b01..532813a32cc1 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
->  	bool checked;
->  } __packed;
->  
-> +#define CCGX_MESSAGE_IN_MAX 4
-> +struct op_region {
-> +	u32 cci;
+> Well, that is a bit hard to do, because phy patches are based on
+> linux-phy/next, while dtsi patches are based on Bjorn's tree which,
+> so ...
 
-This is coming from hardware so you have to specify the endian-ness of
-it, right?
+... which we long time solved by basing your patches on linux-next.
+That's the only way for inter-tree patchsets to be properly based.
 
-> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
+Best regards,
+Krzysztof
 
-Same here.
-
-> +};
-> +
->  struct ucsi_ccg {
->  	struct device *dev;
->  	struct ucsi *ucsi;
-> @@ -222,6 +228,13 @@ struct ucsi_ccg {
->  	bool has_multiple_dp;
->  	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
->  	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
-> +
-> +	/*
-> +	 * This spinlock protects op_data which includes CCI and MESSAGE_IN that
-> +	 * will be updated in ISR
-> +	 */
-> +	spinlock_t op_lock;
-> +	struct op_region op_data;
->  };
->  
->  static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-> @@ -305,12 +318,57 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
->  	return 0;
->  }
->  
-> +static void ccg_op_region_read(struct ucsi_ccg *uc, unsigned int offset,
-> +		void *val, size_t val_len)
-> +{
-> +	struct op_region *data = &uc->op_data;
-> +
-> +	spin_lock(&uc->op_lock);
-> +	if (offset == UCSI_CCI)
-> +		memcpy(val, &data->cci, val_len);
-> +	else if (offset == UCSI_MESSAGE_IN)
-> +		memcpy(val, &data->message_in, val_len);
-
-What happens if the offset is neither of these?
-
-You seem to be only calling this if that value is set correctly, but
-this seems very fragile.  You are also only calling this in one place,
-so why is this a function at all?  Just do the copy under the lock as
-needed in the calling location instead.
-
-> +	spin_unlock(&uc->op_lock);
-> +}
-> +
-> +static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
-> +{
-> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
-> +	struct op_region *data = &uc->op_data;
-> +	u32 message_in[CCGX_MESSAGE_IN_MAX];
-
-Are you sure you can put this big of a buffer on the stack?
-
-> +
-> +	if (UCSI_CCI_LENGTH(cci))
-> +		if (ccg_read(uc, reg, (void *)&message_in,
-> +					sizeof(message_in))) {
-
-Are you allowed to copy in into stack memory?  This ends up being an i2c
-message, right?  Can that be transferred into non-dma-able memory?
-
-> +			dev_err(uc->dev, "failed to read MESSAGE_IN\n");
-
-Why can you not fail this function?  You are throwing away the error
-here, that's not good.
-
-> +			return;
-> +		}
-> +
-> +	spin_lock(&uc->op_lock);
-> +	memcpy(&data->cci, &cci, sizeof(cci));
-
-Perhaps just:
-	data->cci = cci;
-as this is only a 32bit value.
-
-> +	if (UCSI_CCI_LENGTH(cci))
-> +		memcpy(&data->message_in, &message_in, sizeof(message_in));
-> +	spin_unlock(&uc->op_lock);
-> +}
-> +
-> +static void ccg_op_region_clean(struct ucsi_ccg *uc)
-> +{
-> +	struct op_region *data = &uc->op_data;
-> +
-> +	spin_lock(&uc->op_lock);
-> +	memset(&data->cci, 0, sizeof(data->cci));
-
-	data->cci = 0;
-
-> +	memset(&data->message_in, 0, sizeof(data->message_in));
-
-Or better yet, do it all at once:
-	memset(&data, 0, sizeof(*data));
-
-> +	spin_unlock(&uc->op_lock);
-
-But why do you need to do this at all?  Why "clean" the whole buffer
-out, why not just set cci to 0 and be done with it?
-
-Or why even clean this out at all, what happens if you do not?
-
-> +}
-> +
->  static int ucsi_ccg_init(struct ucsi_ccg *uc)
->  {
->  	unsigned int count = 10;
->  	u8 data;
->  	int status;
->  
-> +	spin_lock_init(&uc->op_lock);
-> +
->  	data = CCGX_RAB_UCSI_CONTROL_STOP;
->  	status = ccg_write(uc, CCGX_RAB_UCSI_CONTROL, &data, sizeof(data));
->  	if (status < 0)
-> @@ -520,9 +578,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
->  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
->  	struct ucsi_capability *cap;
->  	struct ucsi_altmode *alt;
-> -	int ret;
-> +	int ret = 0;
-> +
-> +	if ((offset == UCSI_CCI) || (offset == UCSI_MESSAGE_IN))
-> +		ccg_op_region_read(uc, offset, val, val_len);
-> +	else
-> +		ret = ccg_read(uc, reg, val, val_len);
->  
-> -	ret = ccg_read(uc, reg, val, val_len);
->  	if (ret)
->  		return ret;
->  
-> @@ -559,9 +621,13 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
->  static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
->  				const void *val, size_t val_len)
->  {
-> +	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
->  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
->  
-> -	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
-> +	if (offset == UCSI_CONTROL)
-> +		ccg_op_region_clean(uc);
-
-Why is this needed?  You have not documented it the need for this.
-
-thanks,
-
-greg k-h
