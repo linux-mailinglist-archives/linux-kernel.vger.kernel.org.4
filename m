@@ -2,102 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFDB67441A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA833674422
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjASVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S229773AbjASVOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjASVMj (ORCPT
+        with ESMTP id S230059AbjASVNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:12:39 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC3437F12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:06:38 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so1948669otf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:06:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
-        b=oJOlW+iIdsgztiJbGIFj+Ooe2Z71Eij/ZHcbu3TSXSg6mQDzOU+7alzWESWWIVbDyU
-         xBJJ1tKToXA6l/al5COqFvmU3ZDh0ByU0i+gMdNbmfWyzaBvqpViLjVEx/ulV4kXFvkl
-         sM0ck5402dz7IhpBEbzh1Jts8GGfTpjZiCI6+MbbgbOHQC5PeTuPY1ht9Sv29qsP2V1j
-         ICY6lU93Y57QpcI5t1zi2A4lDpnjcSheF82Jq/sugTFJMlSUq4ms7Z60d6rSCQMCRl17
-         ysPD0FUAmHEfhFNbvpTg8NOUp1ndlXhe+LbTqvJXLUKkbwDZXWWYM14jxH1t0r7A1Nz5
-         vKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
-        b=Wc14DTXBVmCxAMIV1LuQZfKEohbQ3povYNEf1FdpNUyNY6OWVP03JIZOnMJVqI9Ygm
-         INphaPbSUo2a5UBx/PBqtXyOilTwvwP+CAsmXCfPx5xPENdZTQUxaazNSJ0SAG8rylD3
-         hkWkWWG5UfgUrPGcuFGeIBgRIbn914jadVQYOuBZHNXMAIiE0vsOmtsSaXZFxjcPH0kT
-         Jzged8MKB0IwRmm0K73NgOeed7sRIlQ3cwwnBOyE+GQInWGyscnVWvm0GmEJckXd6XKD
-         RjEOe5ypwHLOh6AvibuhTeN58XsrZl/NdXIdVIbaoSnzpNY7jhzpXxcWn7nd1ttQ8Af9
-         r++A==
-X-Gm-Message-State: AFqh2kqaiDH+2+bSPiZYNzoNHaP2YMQxhe9NZiKOuSIs/KTHjDyPFB1t
-        ZjE8M0/5XqHprrB854y/xfEuXuYZfWleOiH8kvM=
-X-Google-Smtp-Source: AMrXdXvtQGM1RFZ5r34V3iH/NxtjsptBGyiUFXMhttSYYiPyjC01TVh6K9xCjDvKfOMl1ZDm6S6+fg63HRHNemCpw/o=
-X-Received: by 2002:a05:6830:54f:b0:677:2287:3c79 with SMTP id
- l15-20020a056830054f00b0067722873c79mr543874otb.104.1674162398194; Thu, 19
- Jan 2023 13:06:38 -0800 (PST)
+        Thu, 19 Jan 2023 16:13:24 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51DD2748C;
+        Thu, 19 Jan 2023 13:09:24 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 59C8E359;
+        Thu, 19 Jan 2023 21:09:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 59C8E359
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674162564; bh=A5Zz/yiuvjOWBmyGWIOHswcn5ewUhZYXAGNXTnyzqU0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=heZwQbRvrCO3PIAZ/0BIse7NMy6liObuJf1f2xUfP/VDhIr6TM4lXo6q5F12BKuw8
+         4lWEFro2Kja1PpVFPi+XaJfETOX/893pTskvht27SuIEZ0C6JaxmrhQGGS4FpVkpdb
+         qbou1iIXkY+HIwcE1O4DkMiR5OG9FE04YMKSCL7GuWjn6qyuuEUdRTkl2ztAFegifb
+         CQ8GSpBn8VY8wtlGN2pmCSziop96t6UgLYY3sdoxTbePSulSlE+NatIosOZ769Ejrq
+         VFXWhjCoOkD/TiFqpTVgAStg4ED+5HD381MRrSv7z7E3nz2mBWOqy+rPVYDyvlBRZ0
+         dEJn7WyLoS5TQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Jakob Koschel <jkl820.git@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakob Koschel <jkl820.git@gmail.com>
+Subject: Re: [PATCH] docs/scripts/gdb: add necessary make scripts_gdb step
+In-Reply-To: <20230112-documentation-gdb-v1-1-09ab556e9124@gmail.com>
+References: <20230112-documentation-gdb-v1-1-09ab556e9124@gmail.com>
+Date:   Thu, 19 Jan 2023 14:09:23 -0700
+Message-ID: <878rhy8c58.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Received: by 2002:ac9:6f8e:0:b0:49a:4a8c:dbca with HTTP; Thu, 19 Jan 2023
- 13:06:37 -0800 (PST)
-Reply-To: ab8111977@gmail.com
-From:   MS NADAGE LASSOU <nadagalassou3@gmail.com>
-Date:   Thu, 19 Jan 2023 22:06:37 +0100
-Message-ID: <CAAPPVT03RBU7FK7dyVL-0xSd_5rUAUo7NsLbSw1A8XTtGbvbng@mail.gmail.com>
-Subject: LETS JOIN HANDS FOR THIS ACHIEVEMENT.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:331 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4996]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [nadagalassou3[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ab8111977[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nadagalassou3[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings.
+Jakob Koschel <jkl820.git@gmail.com> writes:
 
-I am Ms Nadage lassou,I have a business for our benefit.
-Thanks, i will send you the details once i hear from you.
-Regards.
-Ms Nadage Lassou
+> In order to debug the kernel successfully with gdb you need to run
+> 'make scripts_gdb' nowadays.
+>
+> This was changed with the following commit:
+>
+> Commit 67274c083438340ad16c ("scripts/gdb: delay generation of gdb
+> constants.py")
+>
+> In order to have a complete guide for beginners this remark
+> should be added to the offial documentation.
+>
+> ---
+>
+>
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+
+Applied, thanks.
+
+jon
