@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997C86732A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CCA6732A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 08:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjASHlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 02:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S229758AbjASHlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 02:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjASHk4 (ORCPT
+        with ESMTP id S229972AbjASHlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 02:40:56 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CA567788;
-        Wed, 18 Jan 2023 23:40:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04177CE1FC5;
-        Thu, 19 Jan 2023 07:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE71DC433EF;
-        Thu, 19 Jan 2023 07:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674114033;
-        bh=HBcgxXlu9/ZACXw7g8KqVJy5ZYWiB2l1H7RYFxeC6fQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aikj+Tm0mxQSXuCWYiKIXLRj14UnB+nMSQhIyK8mH6yJLzfHKQc/rtTRBMy9Ln1CL
-         /ujxFOzacdbq8flTz7jBikUzUlx544jn/cTroWsxyZP7ksClAwTQOqyEG41doEER2j
-         JpOTbf4cl7dWwfUuyykuKegKtmz6nKKhsAOhBWrnqhCYkLMgoY3JEVnxAJ7Ku5ailD
-         IqTU+V+vR5s8YmnxQ/rTfNZh89o3XXv6vK4eFwzuSjiUGR4k05X2NpathNGO3xXhH3
-         FMumtZ3Xe8sATx8oksRCgca7KvmKLiDgRY2OE4dCzoD5ZyfgMu+JjEmuQDUzkFA1rK
-         aNHOe80fu4ImQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pIPXf-00055C-B3; Thu, 19 Jan 2023 08:41:00 +0100
-Date:   Thu, 19 Jan 2023 08:40:59 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/8] dt-bindings: phy: Add QMP PCIe PHY comptible for
- SM8550
-Message-ID: <Y8j0C+rnUOMG6hLi@hovoldconsulting.com>
-References: <20230118005328.2378792-1-abel.vesa@linaro.org>
- <20230118005328.2378792-2-abel.vesa@linaro.org>
- <Y8giHJMtPu4wTlmA@hovoldconsulting.com>
- <Y8hjy8WRpPh8DVvG@linaro.org>
+        Thu, 19 Jan 2023 02:41:24 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22539613F4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:41:20 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id q8so789100wmo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 23:41:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lgG2FwvgVbALatyDiQTv2yfiCg1ShOPwxPOzuE7lY8w=;
+        b=Hm5Gi9OwoeVtoxiHQJgLNbxVz8+wv2x0eXhe7xsVamqCXuAYPWWRQIsYEi5R1A7/BS
+         kQBPB5SrKQ/jndNqMhzTVyg/hMEmfqt4uqnPxLOkOfeL8LSKunfGNdKrZVcOMSre6Seg
+         CjyjenT8VJVgZSWOgws89ekyKbtGK2M+hl5UqmrLrfDEOFkHEN7B2Qaasu0Zpn3ZGXKs
+         nJ9hicBPjkU4lafBf3YIxX4LjiwoLMKmdlBP+7zKz3/H3T9TwUCWCYGb0OG7ggGnvKex
+         QyatAcDxiLiUCquK5y8BrCcjbq5NNxs2+PD9GSTRVTJMBpwAkX3WfJ/mSMAHR6jIyCYl
+         O1iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lgG2FwvgVbALatyDiQTv2yfiCg1ShOPwxPOzuE7lY8w=;
+        b=yAOffrxRfDg6yZTW+/857gOCewduXMKYdB2QcGxa+Vvg44cdQ5t8BtQNbBIlognzT8
+         I929A7DQYEot7EFBVtIXnCoqjiIfJCOL910Yh5tzgDhzk8Rl52BUkjzDttjzaEenKBkM
+         /71iGN1T+7u2aDnGSrJY1Thc7f8h40WX0eRv9bCncqdrC/Pt2mY94tgRwHRs31t9bJTf
+         A60j3jysQGioCNQDaD9KILNR4rpoKRvWdONkVglUQzqw4m9gCpvVowbKBXPajxyzxYSv
+         UMNZh9Qlw2sdeovOyyPlQIGA9Rw+5g/5QzV5Mob3pUR0PPIx+arTwO/d0p4FJTnLcGne
+         6lfQ==
+X-Gm-Message-State: AFqh2kprS5GrjP/54zkYAMuZyKSodeyHHas5mrycVgOjM76NdAwmrs40
+        gpjwF20w81dsoDEbkOJTClYfdhd5b8AsHK6ajzQ=
+X-Google-Smtp-Source: AMrXdXtFYetCnqJMuUza3ThlLq2gmtyA6w5C8ivcJj+POBDTQtKq6frwQjMMe5OHhZF4BdLBpB9o5w==
+X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr2096450wmq.40.1674114079084;
+        Wed, 18 Jan 2023 23:41:19 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id bg1-20020a05600c3c8100b003db09eaddb5sm4380139wmb.3.2023.01.18.23.41.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 23:41:18 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     upstream@lists.phytec.de, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Wadim Egorov <w.egorov@phytec.de>
+Cc:     daniel@ffwll.ch, airlied@gmail.com, jernej.skrabec@gmail.com,
+        jonas@kwiboo.se, Laurent.pinchart@ideasonboard.com,
+        robert.foss@linaro.org, andrzej.hajda@intel.com
+In-Reply-To: <20221228145704.939801-1-w.egorov@phytec.de>
+References: <20221228145704.939801-1-w.egorov@phytec.de>
+Subject: Re: [PATCH] drm/bridge: sii902x: Allow reset line to be tied to a
+ sleepy GPIO controller
+Message-Id: <167411407820.262112.2141398001739030044.b4-ty@linaro.org>
+Date:   Thu, 19 Jan 2023 08:41:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8hjy8WRpPh8DVvG@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:25:31PM +0200, Abel Vesa wrote:
-> On 23-01-18 17:45:16, Johan Hovold wrote:
-> > On Wed, Jan 18, 2023 at 02:53:21AM +0200, Abel Vesa wrote:
-> > > Document the QMP PCIe PHY compatible for SM8550.
-> > > 
-> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > ---
-> > >  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml     | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
-> > > index 8a85318d9c92..65f26cfff3fb 100644
-> > > --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
-> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
-> > > @@ -20,6 +20,8 @@ properties:
-> > >        - qcom,sc8280xp-qmp-gen3x2-pcie-phy
-> > >        - qcom,sc8280xp-qmp-gen3x4-pcie-phy
-> > >        - qcom,sm8350-qmp-gen3x1-pcie-phy
-> > > +      - qcom,sm8550-qmp-gen3x2-pcie-phy
-> > > +      - qcom,sm8550-qmp-gen4x2-pcie-phy
-> > >  
-> > >    reg:
-> > >      minItems: 1
-> > 
-> > I don't think I'll have time to look at this week, but I did notice that
-> > you fail do describe the clocks, regulators, and resets (as you also
-> > did for the UFS PHY binding) which are currently different from
-> > sc8280xp.
+Hi,
+
+On Wed, 28 Dec 2022 15:57:04 +0100, Wadim Egorov wrote:
+> Switch to gpiod_set_value_cansleep() in sii902x_reset().
+> This is relevant if the reset line is tied to a I2C GPIO
+> controller.
 > 
-> Hmm, sorry about that. I will double check against the pcie phy nodes I
-> have for sm8550.
 > 
-> As for the UFS, if your are referring to the following patchset [1], the phy
-> node looks exactly the same as on sc8280xp, therefore no other binding
-> update, other than compatible, was needed.
-> 
-> [1] https://lore.kernel.org/all/20230117224148.1914627-2-abel.vesa@linaro.org/
 
-Yes, but I was referring to your original submission which added
-different names for the clocks without updating the binding. In that
-case, those clocks were really the same ones as the ones on sc8280xp so
-it was only the driver and dts changes that were wrong:
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-	https://lore.kernel.org/all/Y8And9VVvpnSInlj@hovoldconsulting.com/
+[1/1] drm/bridge: sii902x: Allow reset line to be tied to a sleepy GPIO controller
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=5688ca34698c734d5591add39e72380123132656
 
-> > Please be more careful when adding compatible strings so we get this
-> > right. You should also double check that the differences are really
-> > warranted and not just due the vendor using different names for the same
-> > resource.
-
-Johan
+-- 
+Neil
