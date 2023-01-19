@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9930A673EE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7AA673EF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjASQca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S229904AbjASQeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjASQcU (ORCPT
+        with ESMTP id S229630AbjASQeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:32:20 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32764E533;
-        Thu, 19 Jan 2023 08:32:16 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l8so1981500wms.3;
-        Thu, 19 Jan 2023 08:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kISsw3ka351W71cdTlHfeqvj1tDvB34A5YrxX8eaPhY=;
-        b=NSkj7iMOP2CnoZNIaPDjSKL+KKbshuGz1XlGid8CesKFWQes8jnfg7LV5VtSmrraMS
-         4tR3Ms9c3Ea8vM5JnC4FPTfui6ag0x7JhjwkdG+EhvtZlddPLFr1VYagyWzDyxLJX/NV
-         OgWCLU8qqBpnGmAvPLyEXPJbtgPiSsXtFDwcggKhzVYAYHGbYubjEkp12f0WK1NNymvv
-         /jvkTZr+i5oi9sYME7TkSchyaT/pOjy5TG0ciQRQwiLiHXeeMY7268YO+ZosuXuq1tGA
-         mpUg42XC2S12FRBRwFo81tmmkDCFCLzwniZxI/NU4Y2gDmmrWvefRcxBFnqkWDRFiNR9
-         q60Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kISsw3ka351W71cdTlHfeqvj1tDvB34A5YrxX8eaPhY=;
-        b=anbFSr6YxETuW9Io/bUT0R7kkGGDdHP6/2BhU1Qm6Vu5o6SQwyi4oSOM5ipIY/sa7u
-         AcW5HeN8QdsSZNhYOiB15mRMHGJjsBhXQJ9GrHaQFup67+fWef9XUpxVCzsrDz8ZjvFQ
-         ycCcOfqPuoAaPQdY4yS3xdBd8pilH1S4P1VjTYesYKOBJafnpVPEAPA9PCduoyUFLQaj
-         Hg2Bqp3sYmpTp2iw0SeDetiDkfOKg9R4uuyKwZbo4OoIHVWfRtZ/grPSSHTzNNXtDFq9
-         OpNryIOBLdqqZV33cs9qOi9/F9eWkDCHuSui/U5VBwl62VKsMkXbkKcyiSqa9ErH2dGG
-         Wnnw==
-X-Gm-Message-State: AFqh2kqt1xRawlrByTbJK5Cu6s9M7NXKT93omVXeznYHPlbXlqdi/ErY
-        B8hhBpLXp/8S3+H9Tb6JuOA=
-X-Google-Smtp-Source: AMrXdXv9EBtbXnsYULYPFoJNloy6O/ErN/hAcWIoch5i2nj40w/DPTMPhwgaX6fLP3mKWsam8/XI7A==
-X-Received: by 2002:a05:600c:c16:b0:3da:26e5:10b6 with SMTP id fm22-20020a05600c0c1600b003da26e510b6mr11197814wmb.30.1674145935484;
-        Thu, 19 Jan 2023 08:32:15 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id fk6-20020a05600c0cc600b003a84375d0d1sm5193380wmb.44.2023.01.19.08.32.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 08:32:15 -0800 (PST)
-Message-ID: <c0026ce0-caca-1ca2-dc4c-72d14078de6f@gmail.com>
-Date:   Thu, 19 Jan 2023 17:32:13 +0100
+        Thu, 19 Jan 2023 11:34:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C0E273E;
+        Thu, 19 Jan 2023 08:34:01 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JG75kV030492;
+        Thu, 19 Jan 2023 16:33:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=gpBeZaKJVwURhx4wdQwWJGpYDQ3EKm5zWBTAAcoaczw=;
+ b=XikSSdojukO+2TdXfcwv1yaBtAeTpzcl+zOPnyDG6vuOCQUtm9uGx4dFTA/vERPZrOD/
+ Ie02vmMg8/Z2SUhxvE2YVWuV2qR8RNr/yssLeXa/TxONZdODCz+OJXQX0kIJv7atz49T
+ PgwNLP9U3z8gE01T0L/YipW0klLqlyX6NLWzjGEwOyr63NoAqLSme+nPH7/3cWhFDuTF
+ rKlfOqlAzLTxKkGu26V4+I4NtZl9SJf7hS+YCRFvDqoznR5d7U2wENhoEXkUNcBkALy2
+ vVfYOSxHqHL+cs9Oq1A2L2oweziyRcpMEXDjlLP0dwKvZgwb2cbIMHe3k5MvpgtoheBS Ig== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78rwsf03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:33:50 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J0KLfg025743;
+        Thu, 19 Jan 2023 16:33:48 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3n3m16d2f2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:33:48 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JGXi3K42467652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 16:33:44 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAF872004D;
+        Thu, 19 Jan 2023 16:33:44 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81E6620040;
+        Thu, 19 Jan 2023 16:33:43 +0000 (GMT)
+Received: from [9.171.48.94] (unknown [9.171.48.94])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 16:33:43 +0000 (GMT)
+Message-ID: <69047c319c6cb2afd7331daeb7fc8459fdd34f80.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 4/7] s390/pci: Use dma-iommu layer
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 17:33:43 +0100
+In-Reply-To: <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+         <20230104120543.308933-5-schnelle@linux.ibm.com>
+         <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 8/9] dt-bindings: display: mediatek: Fix the fallback
- for mediatek,mt8186-disp-ccorr
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        hsinyi@chromium.org
-References: <20230118091829.755-1-allen-kh.cheng@mediatek.com>
- <20230118091829.755-9-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230118091829.755-9-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YZOWeBdINlbx0f3T2Q9RjIaVgPDSFmo7
+X-Proofpoint-ORIG-GUID: YZOWeBdINlbx0f3T2Q9RjIaVgPDSFmo7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ phishscore=0 malwarescore=0 spamscore=0 impostorscore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015
+ mlxlogscore=726 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190134
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-01-17 at 10:09 -0500, Matthew Rosato wrote:
+> On 1/4/23 7:05 AM, Niklas Schnelle wrote:
+> > While s390 already has a standard IOMMU driver and previous changes hav=
+e
+> > added I/O TLB flushing operations this driver is currently only used fo=
+r
+> > user-space PCI access such as vfio-pci. For the DMA API s390 instead
+> > utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
+> > the same hardware and shares some code but requires a complex and
+> > fragile hand over between DMA API and IOMMU API use of a device and
+> > despite code sharing still leads to significant duplication and
+> > maintenance effort. Let's utilize the common code DMAP API
+> > implementation from drivers/iommu/dma-iommu.c instead allowing us to
+> > get rid of arch/s390/pci/pci_dma.c.
+> >=20
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> > index ef38b1514c77..6b0fe8761509 100644
+> > --- a/arch/s390/pci/pci.c
+> > +++ b/arch/s390/pci/pci.c
+> > @@ -124,7 +124,11 @@ int zpci_register_ioat(struct zpci_dev *zdev, u8 d=
+maas,
+> > =20
+> >  	WARN_ON_ONCE(iota & 0x3fff);
+> >  	fib.pba =3D base;
+> > -	fib.pal =3D limit;
+> > +	/* Work around off by one in ISM virt device */
+> > +	if (zdev->pft =3D=3D 0x5 && limit > base)
+>=20
+> Nit: maybe a named #define for the ISM pft rather than hard-coding 0x5 he=
+re
+>=20
 
-
-On 18/01/2023 10:18, Allen-KH Cheng wrote:
-> The mt8186-disp-ccorr is not fully compatible with the mt8183-disp-ccorr
-> implementation. It causes a crash when system resumes if it binds to the
-> device.
-> 
-> We should use mt8192-disp-ccorr as fallback of mt8186-disp-ccorr.
-> 
-> Fixes: 8a26ea19d4dc ("dt-bindings: display: mediatek: add MT8186 SoC binding")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   .../devicetree/bindings/display/mediatek/mediatek,ccorr.yaml    | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
-> index 63fb02014a56..117e3db43f84 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
-> @@ -32,7 +32,7 @@ properties:
->         - items:
->             - enum:
->                 - mediatek,mt8186-disp-ccorr
-> -          - const: mediatek,mt8183-disp-ccorr
-> +          - const: mediatek,mt8192-disp-ccorr
->   
->     reg:
->       maxItems: 1
+Hmm, I agree in principle but not sure where to put this #define. Maybe
+also important to mention that the off-by-one has actually been fixed
+in current firmware but of course we still have to support broken
+devices and the workaround still works with fixed ISM.
