@@ -2,205 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3488E672E8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9669672E90
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjASB6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S229690AbjASCA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjASB5r (ORCPT
+        with ESMTP id S229665AbjASCA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:57:47 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DCC24128;
-        Wed, 18 Jan 2023 17:57:40 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J18pou004323;
-        Thu, 19 Jan 2023 01:57:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=GejtsQXmqWA8A6r2URa+Ahm9Rucef480F6z05mm28cM=;
- b=dihzjYQQIddX0IjhTMaN00ea7NMj5ZUwVtMHuoS9S6db3p2DkgaG2bdaHY/g2B9Ixp2M
- jA2qVTAXE2xa/H3MC3NU0fAk2IJjqSo1V9ANfEzzU8xF3xVnZNe/GwTGXDUiNG3HQ2vH
- rhauoz6XRVI9pWAHjY6mm1wJEoFWikcnYSy+Qb9b/+94N2h4u75Tm5lSC76E8n6G9YIR
- hlSaw0G9DLEAq/E6IGz9amQf5oEkB6gROLtwaD3TEBOD2bukT8GmR85ExIP6d9lyGSVb
- eQnSUKVK6TPxY/YJRVTXXv5Uv28bCESvQQTgGLOStPQTj4n8f3hZmYONh82SnlxOjCMx KQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5ws6kt36-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 01:57:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J1vN2U029723
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 01:57:23 GMT
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 18 Jan 2023 17:57:22 -0800
-Date:   Wed, 18 Jan 2023 17:57:19 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Wed, 18 Jan 2023 21:00:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014C768B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:00:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD6A6B81D66
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBCBC433D2;
+        Thu, 19 Jan 2023 02:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674093652;
+        bh=9rGecye3A9HkDxj4QdN4bMjjPezDbh4TPWj5J+UblD4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kkPS7iYmiXYaAW5OuXRSyAewoWMJ2IJibKOY5fHSz96x73zwuAWt+FUjg0aYpZ9IB
+         OYDI2zVKoIr2Cn2OobjNxGvxfe5B8q0j/0/6dkh4+Ae2Ck+wdMCl3hS0WA4yHFQsS7
+         d/57YfEPy32BRMpjS5CL9BVXeT0WNKhfFzfcapHfcobaHHBv/Xv/auDPqsNbnwtD7A
+         BgtyQbHQNpOEPpasDEyE8Of9AvstYHHunN8XDfd2PBPZPHmYlZlqiAia/5Yi0eeboe
+         QtAy+UxbjWiJ3tpj65/fsFlc92zx0jvDenEH7ruzWPKJD/m3hqF/RY+gV9jHxWHTsm
+         cjeqyyBm4wcTg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        SeongJae Park <sj@kernel.org>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>
-Subject: Re: [RFC v4 3/5] usb: dwc3: core: Do not setup event buffers for
- host only controllers
-Message-ID: <20230119015535.GF28337@jackp-linux.qualcomm.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-4-quic_kriskura@quicinc.com>
- <20230119003850.id3gtcokdim5pvf7@synopsys.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "damon@lists.linux.dev" <damon@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 30/48] mm/damon: Stop using vma_mas_store() for maple tree store
+Date:   Thu, 19 Jan 2023 02:00:50 +0000
+Message-Id: <20230119020050.2156-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230117224734.c4lo4spezufwsims@revolver>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230119003850.id3gtcokdim5pvf7@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 27jiZz9dfSBcvJImV5Zws5IVlhBz31Ar
-X-Proofpoint-ORIG-GUID: 27jiZz9dfSBcvJImV5Zws5IVlhBz31Ar
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 clxscore=1011 lowpriorityscore=0 mlxscore=0
- adultscore=0 spamscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
+Hello Daniel and Liam,
 
-On Thu, Jan 19, 2023 at 12:38:51AM +0000, Thinh Nguyen wrote:
-> On Sun, Jan 15, 2023, Krishna Kurapati wrote:
-> > Multiport controllers being host-only capable do not have GEVNTADDR
 
-Multiport may not be relevant here.  Host-only is though.
+Sorry for late reply.
 
-> > HI/LO, SIZE, COUNT reigsters present. Accsesing them to setup event
+On Tue, 17 Jan 2023 22:47:36 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+
+> * Daniel Latypov <dlatypov@google.com> [230117 17:20]:
+> > On Tue, Jan 17, 2023 at 11:11 AM SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > Cc-ing kunit people.
+> > >
+> > > Hi Liam,
+> > >
+> > >
+> > > Could we put touching file name on the summary?
+> > > E.g., mm/damon/vaddr-test: Stop using ...
+> > >
+> > > On Tue, 17 Jan 2023 02:34:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+> > >
+> > > > From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+> > > >
+> > > > Prepare for the removal of the vma_mas_store() function by open coding
+> > > > the maple tree store in this test code.  Set the range of the maple
+> > > > state and call the store function directly.
+> > > >
+> > > > Cc: SeongJae Park <sj@kernel.org>
+> > > > Cc: damon@lists.linux.dev
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > > > ---
+> > > >  mm/damon/vaddr-test.h | 19 +++++++++++++------
+> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
+> > > > index bce37c487540..6098933d3272 100644
+> > > > --- a/mm/damon/vaddr-test.h
+> > > > +++ b/mm/damon/vaddr-test.h
+> > > > @@ -14,19 +14,26 @@
+> > > >
+> > > >  #include <kunit/test.h>
+> > > >
+> > > > -static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+> > > > +static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+> > > >                       ssize_t nr_vmas)
+> > > >  {
+> > > > -     int i;
+> > > > +     int i, ret = -ENOMEM;
+> > > >       MA_STATE(mas, mt, 0, 0);
+> > > >
+> > > >       if (!nr_vmas)
+> > > > -             return;
+> > > > +             return -ENOENT;
+> > 
+> > We could pass in the `test` object here and give more detailed info, e.g.
+> >   (if !nr_vmas)
+> >      kunit_skip(test, "...");
+> > 
+> > And below could be
+> > 
+> > bool stored_all = false; // instead of ret
+> > ...
+> > for (...) {
+> > 
+> > }
+> > stored_all = true;
+> > 
+> > failed:
+> >   mas_unlock(&mas);
+> >   if (!stored_all) kunit_skip(test, "failed to...");
+> > 
+> > > >
+> > > >       mas_lock(&mas);
+> > > > -     for (i = 0; i < nr_vmas; i++)
+> > > > -             vma_mas_store(&vmas[i], &mas);
+> > > > +     for (i = 0; i < nr_vmas; i++) {
+> > > > +             mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
+> > > > +             if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
+> > > > +                     goto failed;
+> > > > +     }
+> > > > +     ret = 0;
+> > > > +
+> > > > +failed:
+> > > >       mas_unlock(&mas);
+> > > > +     return ret;
+> > > >  }
+> > > >
+> > > >  /*
+> > > > @@ -71,7 +78,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
+> > > >       };
+> > > >
+> > > >       mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
+> > > > -     __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas));
+> > > > +     KUNIT_EXPECT_EQ(test, __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)), 0);
+> > >
+> > > In case of the __link_vmas() failure, I think we should skip this test using
+> > > 'kunit_skip()', rather marking this test failed.
+> > 
+> > As noted above, I'd suggest we also pass in the `test` object to
+> > __link_vmas() and call kunit_skip() from there.
 > 
-> I think you should reword "present" to something else. They're still
-> present
+> My thoughts were if we are testing adding nothing to the list, then
+> there is probably a problem with the test and so that should be
+> highlighted with a failure.
+> 
+> I really don't mind either way.
 
-In our case we have an instance where the IP is statically configured
-via coreConsultant with DWC_USB31_MODE==1 (host only) and we did observe
-that none of the registers pertaining to device mode (including GEVNT*
-and of course all the D* ones) are even *present* in the register map.
-If we try to access them we encounter some kind of access error or stall
-(or translation fault as described).  So the approach here is to first
-verify by checking the HWPARAMS0 register if the HW is even capable of
-device mode in the first place.
+I didn't wrote '__link_vmas()' to test vma manipulation functions it internally
+uses, but just to offload test setup for 'damon_test_three_regions_in_vmas()'.
+I agree that the detailed failure reason could be helpful for better
+understanding as the function can now fail from 'mas_store_gfp()'s memory
+allocation failure.
 
-> but those registers are to be set while operating in device
-> mode. The rest looks fine.
+That said, I think we can get the detail from the return value of
+'__link_vmas()'. I'm further worrying if passing 'test' object to the function
+makes people think the function itself is for testing something inside it.
 
-Are you suggesting only touching the GEVNT* registers when *operating*
-in device mode, even in the case of a dual-role capable controller?  In
-that case would it make more sense to additionally move the calls to
-dwc3_event_buffers_{setup,cleanup} out of core.c and into
-dwc3_gadget_{init,exit} perhaps?  That way we avoid them completely
-unless and until we switch into peripheral mode (assuming controller
-supports that, which we should already have checks for).  Moreover, if
-the devicetree dr_mode property is set to host-only we'd also avoid
-calling these.
+Also, I don't think the function returning non-error for zero value 'nr_vmas'
+as a problem but just expected behavior, as previously commented[1].
 
-> > buffers during core_init can cause an SMMU Fault. Avoid event buffers
-> > setup if the GHWPARAMS0 tells that the controller is host-only.
-> > 
-> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > ---
-> >  drivers/usb/dwc3/core.c | 23 +++++++++++++++--------
-> >  1 file changed, 15 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 7e0a9a598dfd..f61ebddaecc0 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -871,9 +871,12 @@ static void dwc3_clk_disable(struct dwc3 *dwc)
-> >  
-> >  static void dwc3_core_exit(struct dwc3 *dwc)
-> >  {
-> > -	int i;
-> > +	int		i;
-> > +	unsigned int	hw_mode;
-> >  
-> > -	dwc3_event_buffers_cleanup(dwc);
-> > +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST)
+So I'd prefer doing kunit_skip() here.
 
-If we stick with this approach, we probably could just check
-dwc->dr_mode instead as probe should have already set that to be an
-intersection between the values given in devicetree "dr_mode" and the
-HWPARAMS0 capability.
+If I'm missing something or wrong, please let me know.
+
+[1] https://lore.kernel.org/damon/20230117191614.116521-1-sj@kernel.org/
+
 
 Thanks,
-Jack
-
-> > +		dwc3_event_buffers_cleanup(dwc);
-> >  
-> >  	usb_phy_set_suspend(dwc->usb2_phy, 1);
-> >  	usb_phy_set_suspend(dwc->usb3_phy, 1);
-> > @@ -1246,10 +1249,12 @@ static int dwc3_core_init(struct dwc3 *dwc)
-> >  		}
-> >  	}
-> >  
-> > -	ret = dwc3_event_buffers_setup(dwc);
-> > -	if (ret) {
-> > -		dev_err(dwc->dev, "failed to setup event buffers\n");
-> > -		goto err4;
-> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST) {
-> > +		ret = dwc3_event_buffers_setup(dwc);
-> > +		if (ret) {
-> > +			dev_err(dwc->dev, "failed to setup event buffers\n");
-> > +			goto err4;
-> > +		}
-> >  	}
-> >  
-> >  	/*
-> > @@ -1886,7 +1891,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> >  	struct resource		*res, dwc_res;
-> >  	struct dwc3		*dwc;
-> >  	int			ret, i;
-> > -
-> > +	unsigned int		hw_mode;
-> >  	void __iomem		*regs;
-> >  
-> >  	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
-> > @@ -2063,7 +2068,9 @@ static int dwc3_probe(struct platform_device *pdev)
-> >  err5:
-> >  	dwc3_debugfs_exit(dwc);
-> >  
-> > -	dwc3_event_buffers_cleanup(dwc);
-> > +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST)
-> > +		dwc3_event_buffers_cleanup(dwc);
-> >  
-> >  	usb_phy_set_suspend(dwc->usb2_phy, 1);
-> >  	usb_phy_set_suspend(dwc->usb3_phy, 1);
-> > -- 
-> > 2.39.0
-> > 
+SJ
