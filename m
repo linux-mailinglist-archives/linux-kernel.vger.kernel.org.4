@@ -2,119 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2507673D07
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC791673D0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjASPF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S229609AbjASPGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjASPFX (ORCPT
+        with ESMTP id S229712AbjASPGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:05:23 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A761B47428;
-        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id rl14so3082770ejb.2;
-        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+KexWLSH93Ec8V05gNl80AF1pI7NWr9fNaHQgJTqsrc=;
-        b=0tZHDrQ/nebNzwNJLlz4XqS6iQUgGkcLXNIS8sTDyezozkzfBUhG+ZIrlAareN2MYI
-         xBPpYpP+s2YwBevCF8YvX33SjDlsyQYumkkN5P0avX5gzsVzsBCune8d0zIQ30GBs1Hu
-         tIPCjo5vTEYK9v/VAizvYg34/5gcIsIBQx+itmQigEMIIAhKbfZSl1XXue923Pi7+DJ8
-         GbONzzLS2djXgMAWeQ27raQu6N+ex9S9JKqU3GT1w4dNPjMNMzmKHyGFK/OiLV2RKC5m
-         euS0XHAl755wFePfFXMKGRhevIdN+j0JdAB7++Vy0CjRlWW0KWPRtjQjYUwTu0guEGPd
-         FvRw==
-X-Gm-Message-State: AFqh2ko+jRk8YEd7Ce1FU/lpS64kJu7FVyeDbTCx2cISjzBdjf4Hyyif
-        9DELM/9wx8Zfj7bHBqdRo2q5xJGxaLFHHTyrbuA=
-X-Google-Smtp-Source: AMrXdXtCAyoG77gOytAc/WL4aLFNMoefgkOF1Ymab5D9Eh9gzbiSMGfZuiBLIpuDcEW8STiUncojFyEhlOk4xuJ1AmE=
-X-Received: by 2002:a17:906:3283:b0:84d:4b8e:efc with SMTP id
- 3-20020a170906328300b0084d4b8e0efcmr784466ejw.390.1674140720983; Thu, 19 Jan
- 2023 07:05:20 -0800 (PST)
+        Thu, 19 Jan 2023 10:06:22 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BA87EFA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:06:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NyQjk54d0z9v7c6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:58:18 +0800 (CST)
+Received: from [10.81.219.171] (unknown [10.81.219.171])
+        by APP1 (Coremail) with SMTP id LxC2BwB3_wpFXMljUWCtAA--.3338S2;
+        Thu, 19 Jan 2023 16:05:52 +0100 (CET)
+Message-ID: <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
+Date:   Thu, 19 Jan 2023 16:05:38 +0100
 MIME-Version: 1.0
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
- <20230118211123.111493-3-daniel.lezcano@linaro.org> <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
- <db701c97-883e-f231-68fa-c851c6a1a862@linaro.org> <CAJZ5v0jFQv09MQw8Z0gn1=Yf3JJD=BWKy3+Xy7RWUy1NXAK7wg@mail.gmail.com>
- <85e0a85d-6935-11cc-8396-4c3e425188f2@linaro.org> <CAJZ5v0gR-Z1DNcpRCkK6KapjU_F87RZKpE0ssQn1Y5BiH+sG_g@mail.gmail.com>
- <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
-In-Reply-To: <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 16:05:09 +0100
-Message-ID: <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+ <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
+ <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
+ <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwB3_wpFXMljUWCtAA--.3338S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZFW3Zw4kGw43ArW7WrW7urg_yoW5tr4kpF
+        W8Kan7Ka1vyrnY9r92ywn8Z342yw1fJry8Jr1DC3W5Aw45W3yIkry0gw4Ygas8Ars2ya98
+        ZryrZF9xXrWDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 19/01/2023 14:24, Rafael J. Wysocki wrote:
-> > On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 19/01/2023 13:11, Rafael J. Wysocki wrote:
-> >>> On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 19/01/2023 08:41, Zhang, Rui wrote:
-> >>>>> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
-> >>>>>> If the thermal framework fails to initialize, the mutex can be used
-> >>>>>> by
-> >>>>>> the different functions registering a thermal zone anyway.
-> >>>>>
-> >>>>> Hmm, even with no governors and unregistered thermal sysfs class?
-> >>>>>
-> >>>>> IMO, thermal APIs for registering a thermal_zone/cooling_device should
-> >>>>> yield early if thermal_init fails.
-> >>>>> For other APIs that relies on a valid
-> >>>>> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
-> >>>>> be changed.
-> >>>>>
-> >>>>> what do you think?
-> >>>>
-> >>>> I think you are right.
-> >>>>
-> >>>> It would be nice if we can check if the thermal class is registered and
-> >>>> bail out if not. But there is no function to check that AFAICS.
-> >>>>
-> >>>> Alternatively we can convert the thermal class static structure to a
-> >>>> pointer and set it to NULL in case of error in thermal_init() ?
-> >>>
-> >>> It doesn't matter if this is a NULL pointer or a static object that's
-> >>> clearly marked as unused.
-> >>
-> >> Without introducing another global variable, is it possible to know if
-> >> the class is used or not ?
-> >
-> > If thermal_class.p is cleared to NULL on class_register() failures in
-> > thermal_init() (unfortunately, the driver core doesn't do that, but
-> > maybe it should - let me cut a patch for that), then it can be used
-> > for that.
->
-> It should be in class_unregister() too, right ?
->
-> And is it possible to add a class_is_registered() ? in order to prevent
-> accessing class structure internals ?
 
-I suppose so.
 
-And we'd like it to be used some places like
-thermal_zone_device_register_with_trips(), wouldn't we?
+On 1/19/2023 4:13 AM, Alan Stern wrote:
+> On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
+>>
+>> On 1/18/2023 8:52 PM, Alan Stern wrote:
+>>> On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
+>>>> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+>>>> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+>>>> -		fencerel(After-unlock-lock) ; [M])
+>>>> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
+>>> Shouldn't the po case of (co | po) remain intact here?
+>> You can leave it here, but it is already covered by two other parts: the
+>> ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
+>> ppo, and the ordering given through pb is covered by its inclusion in
+>> strong-order.
+> What about the ordering given through
+> A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
+> superseded by pb as well,
+Indeed, in fact all of A-cumul(strong-fence) is already covered through pb.
+> but it seems odd not to have it in hb.
+> In general, the idea in the memory model is that hb ordering relies on
+> the non-strong properties of fences, whereas pb relies on the properties
+> of strong fences, and rb relies on the properties of the RCU fences.
+
+I agree in the sense that all strong-ordering operations are 
+A-cumulative and not including them in A-cumul is weird.
+On the other side  the model becomes a tiny bit smaller and simpler when 
+all ordering of prop;strong-ordering goes through a single place (pb).
+
+If you want, you could think of the A-cumulativity of strong ordering 
+operations as being a consequence of their strong properties. 
+Mathematically it already is the case, since
+   overwrite&ext ; cumul-fence* ; rfe ; strong-fence ; cumul-fence* ; rfe?
+is a subset of
+   prop ; strong-fence ; hb*
+
+
+
+>>>> @@ -91,8 +89,12 @@ acyclic hb as happens-before
+>>>>    (* Write and fence propagation ordering *)
+>>>>    (****************************************)
+>>>> -(* Propagation: Each non-rf link needs a strong fence. *)
+>>>> -let pb = prop ; strong-fence ; hb* ; [Marked]
+>>>> +(* Strong ordering operations *)
+>>>> +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
+>>>> +		[After-unlock-lock] ; po ; [M])
+>>> This is not the same as the definition removed above.  In particular,
+>>> po-unlock-lock-po only allows one step along the locking chain -- it has
+>>> rf where the definition above has co.
+>> Indeed it is not, but the subsequent lock-unlock sequences are in hb*. For
+>> this reason it can be simplified to just consider the directly following
+>> unlock().
+> I'm not sure that argument is right.  The smp_mb__after_unlock_lock
+> needs to go after the _last_ lock in the sequence, not after the first.
+> So you don't have to worry about subsequent lock-unlock sequences; you
+> have to worry about preceding lock-unlock sequences.
+
+I formalized a proof of equivalence in Coq a few months ago, but I was 
+recalling the argument incorrectly from memory.
+I think the correct argument is that the previous po-unlock-lock-po form 
+a cumul-fence*;rfe;po sequence that starts with a po-rel.
+so any
+     prop; .... ; co ; ... ; this fence ;...
+can be rewritten to
+     prop; cumul_fence* ; po-unlock-lock-po ; this fence ;...
+and because the the first cumul-fence here needs to start with 
+po-release, the prop ;cumul-fence* can be merged into a larger prop, leaving
+     prop; po-unlock-lock-po ; this fence ;...
+
+Best wishes,
+jonas
+
