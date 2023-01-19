@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0464F6737F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BBB6737FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjASMJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S231136AbjASML2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjASMJt (ORCPT
+        with ESMTP id S229501AbjASMLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:09:49 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEF82BEC3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:09:46 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h16so1620160wrz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:09:46 -0800 (PST)
+        Thu, 19 Jan 2023 07:11:24 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69E8474E3;
+        Thu, 19 Jan 2023 04:11:23 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1128895wmq.0;
+        Thu, 19 Jan 2023 04:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iJM/h+lldPXDlTcAuDUdunbYkmcG7VHMb5074kf6tA0=;
-        b=P1XDghb5jL3e1MRSpcUCp94PDNobl2vr2DOi5acBorxHYFvq6rY8KEpa/V6WNDlFSN
-         ai8t3W95n5hWIn/P6vOafgpSvOgDRbsNcGX1RbE/vHw5iGSYs/3aQyYdPe/tG/jS0n1v
-         HqLo582UeEhdXlcVT3jRHVfQkgDO5Yc9pZJPfPRpV26F10Xo6t5WYWQONLSixF9YOt5w
-         0a/9INrTDeYQHUa+Z7p7NQoAS5Y1lmB5MVJa16LK+DJHmp7wjNgVWhCGgwK4AqXmFx24
-         YV8ZptHfnkPtIqS50zj/mBP5ZSiq1Uec1u6XNKrpwiSt5fw467Jb5q3WuT3a+qN78hKX
-         2HqQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KYDHXKfGKMOLeZXEVoSz6EIYCUqDCJgfKR9UAUj/K0U=;
+        b=aJGuvCA2vIjsi8uAH84tZm9aAezVq97s9WNCbsZDQmnOpzRW+1lMbXFfSU7HOGVzSW
+         wtC/T97Ki7P1ST29TBrs9sS3tCGfDqJ04TTHI3BTR3bzZw4FJhcTNoRt0Oc2xlRVKX2r
+         1peVBnvoG837z6+hrn0swqwm96Xlc0IyBn1Koqvx7CJeR6dPikU6hds4X5GZA6JtevmA
+         IZhp/S1ZQ9zRWCfC2pmHgnN/Y9ial4zbAfaNB/hCOgTmbdWftA7WYv62O3lSgtb6FKVs
+         5qZIHF2bHYzXpxOvcWQelRmJTdQaAlbANmO0o8if7ThepL9UCnX5PZuW9VQuhXd5pl5d
+         JoNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iJM/h+lldPXDlTcAuDUdunbYkmcG7VHMb5074kf6tA0=;
-        b=dQIgVpdOrJNUV/U/25ZKHFxGruVL2TXYUDnS//S6JapG9tUMcrFFJCi+amoVd4ClD3
-         OEHeCSXqBq0rX/DZDRxuU4Opm6pg/VrCp2REZfwT1IAFv5VeEzleFPuVMm7lT1G/yKd6
-         5YNnjug2w3MLxQLAN9s0SVdsNCtFLbFU1bEJRpSmPJ8xnBXgjPGbs2lwllNTzPxF/7Oc
-         6onMRycBIkqPpLdfj08FQZdqI2Ni+oXjsnf/hgGYYcGGqe+fTYzNUcXO9yDJQWeiaaSr
-         o66I9MlXNzkJV7B4ygNqnIPY8ILWEQ8D4BfEpnYXMqL1V9C8L6CpLhDalkQDKSHYLi5u
-         ToZA==
-X-Gm-Message-State: AFqh2kpYD/Jmk4LeytIcYOmp4k53fLL1xtKHO5AJepyIKkNy68n44WW2
-        S6lKQx4wdCtpTKy+K0KuuxTttQ==
-X-Google-Smtp-Source: AMrXdXs7QQi4g4VYJPo232c8Q5V9/773sn0KHvyX6ENIS2uuYmJA9wUi1iKQcFkDf4ozmhlPdvZszw==
-X-Received: by 2002:a5d:6b09:0:b0:2be:110d:5d59 with SMTP id v9-20020a5d6b09000000b002be110d5d59mr8620305wrw.51.1674130185366;
-        Thu, 19 Jan 2023 04:09:45 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b0024274a5db0asm33607850wrj.2.2023.01.19.04.09.44
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KYDHXKfGKMOLeZXEVoSz6EIYCUqDCJgfKR9UAUj/K0U=;
+        b=hyfVTK4nE9r1HNPbP0E2eqTO+AVDen53rUcACm7KbQdu42nU30zFSyamyL6DXgyhYj
+         x/ErcTkIwBFdTMd4APVUwSW23q+gPu6LhafeqfjADJFb47zAEjWw75eMOnm3zOuQ7naZ
+         4bkIhrxR4NuDfjsNUQN6oa+tG8fKH0LAp05QjeTb4GcXBX0tOCNl2YOWt0TD7FdU1nc/
+         ocGEuwE5aWKMCMHvLz6OsEyZOtEeR8SlgJ9/+nQNGaz/vU94YqHPdqRTCsl80aDuyqCS
+         EZJOlhxVSxa7/jKDslEoVkUufic5xD9OylG8I61QSb9mzysKU0W60StAl4+bD1hWo/uK
+         l49Q==
+X-Gm-Message-State: AFqh2kqi7X5Vv8YmBXLR0bUGGk4oOlDHjZ/A0o1w4y0yhWGhscbiDJ87
+        Fz/OXrIHm1WQ9izGTv3WJBpBouOk+28=
+X-Google-Smtp-Source: AMrXdXvJcQWDLi4Jxn4FqIja5NrGHS0d0QAgadktDo1jcQgFlHSbsdsXSUAe1QA258Miw+iu1ayOhw==
+X-Received: by 2002:a1c:6a10:0:b0:3da:f665:5b66 with SMTP id f16-20020a1c6a10000000b003daf6655b66mr10453726wmc.6.1674130282080;
+        Thu, 19 Jan 2023 04:11:22 -0800 (PST)
+Received: from suse.localnet (host-82-55-106-56.retail.telecomitalia.it. [82.55.106.56])
+        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003db0b0cc2afsm4914948wmq.30.2023.01.19.04.11.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 04:09:44 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:09:43 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: sm8550: Add PCIe HC and PHY
- support
-Message-ID: <Y8kzBz0ApSWgOkVJ@linaro.org>
-References: <20230118230526.1499328-1-abel.vesa@linaro.org>
- <167408614065.2989059.2950818972854332656.b4-ty@kernel.org>
- <Y8jyQAR7fF1NRmwu@hovoldconsulting.com>
+        Thu, 19 Jan 2023 04:11:21 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     corbet@lwn.net, akpm@linux-foundation.org, bigeasy@linutronix.de,
+        ira.weiny@intel.com, rppt@kernel.org,
+        Deming Wang <wangdeming@inspur.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Deming Wang <wangdeming@inspur.com>
+Subject: Re: [PATCH] mm/highmem: fix spelling mistakeo
+Date:   Thu, 19 Jan 2023 13:11:19 +0100
+Message-ID: <1841674.tdWV9SEqCh@suse>
+In-Reply-To: <20230118004356.4198-1-wangdeming@inspur.com>
+References: <20230118004356.4198-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8jyQAR7fF1NRmwu@hovoldconsulting.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-19 08:33:20, Johan Hovold wrote:
-> On Wed, Jan 18, 2023 at 05:55:31PM -0600, Bjorn Andersson wrote:
-> > On Thu, 19 Jan 2023 01:05:24 +0200, Abel Vesa wrote:
-> > > This patchset adds PCIe controllers and PHYs support to SM8550 platform
-> > > and enables them on the MTP board.
-> > > 
-> > > The v1 was here:
-> > > https://lore.kernel.org/all/20221116130430.2812173-1-abel.vesa@linaro.org/
-> > > 
-> > > Changes since v1:
-> > >  * ordered pcie related nodes alphabetically in MTP dts
-> > >  * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
-> > >  * dropped the child node from the phy nodes, like Johan suggested,
-> > >    and updated to use the sc8280xp binding scheme
-> > >  * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
-> > >    to "nocsr"
-> > >  * reordered all pcie nodes properties to look similar to the ones
-> > >    from sc8280xp
-> > > 
-> > > [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [1/2] arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
-> >       commit: 7d1158c984d37e79ab8bb55ab152a0b35566cb89
-> > [2/2] arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
-> >       commit: 1eeef306b5d80494cdb149f058013c3ab43984b4
-> 
-> I believe there were still some changes needed to the controller
-> and PHY bindings so this should not have been merged.
-> 
-> 	https://lore.kernel.org/all/Y8fuUI4xaNkADkWl@hovoldconsulting.com/
-> 	https://lore.kernel.org/lkml/Y8giHJMtPu4wTlmA@hovoldconsulting.com/
-> 
-> Perhaps in the future you can send the dts changes along with the (PHY)
-> driver changes so that they can be kept in lock-step and avoid this.
+On mercoled=EC 18 gennaio 2023 01:43:56 CET Deming Wang wrote:
+> Substitute occurrencies of "higmem" with "highmem".
 
-Well, that is a bit hard to do, because phy patches are based on
-linux-phy/next, while dtsi patches are based on Bjorn's tree which,
-so ...
+s/occurrencies/occurrences
+=20
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  Documentation/mm/highmem.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
+> index 59d1078f53df..7da4a0d175f0 100644
+> --- a/Documentation/mm/highmem.rst
+> +++ b/Documentation/mm/highmem.rst
+> @@ -83,7 +83,7 @@ list shows them in order of preference of use.
+>    for pages which are known to not come from ZONE_HIGHMEM. However, it is
+>    always safe to use kmap_local_page() / kunmap_local().
+>=20
+> -  While it is significantly faster than kmap(), for the higmem case it
+> +  While it is significantly faster than kmap(), for the highmem case it
+>    comes with restrictions about the pointers validity. Contrary to kmap()
+>    mappings, the local mappings are only valid in the context of the call=
+er
+>    and cannot be handed to other contexts. This implies that users must
+> --
+> 2.27.0
 
-> 
-> Johan
+I think you missed a patch which is already in Andrew's -mm-unstable tree:
+
+[PATCH] mm: Fix two spelling mistakes in highmem.h
+https://lore.kernel.org/lkml/20230105121305.30714-1-fmdefrancesco@gmail.com/
+
+=46abio
+
+
+
