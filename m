@@ -2,235 +2,704 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE5674724
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC869674727
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjASXYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S230077AbjASXYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjASXYO (ORCPT
+        with ESMTP id S229575AbjASXYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:24:14 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEC31F90D;
-        Thu, 19 Jan 2023 15:24:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674170652; x=1705706652;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=+/sno7dazBfaMrTyuFvt713rz8UHVVugmhHLx/hw1Cw=;
-  b=GwSTjdFq4thJO2gfLBfU70BGLd7KpjhtN7MChOIUHRRUAR3gQR5uR4sp
-   +lvnFoYsvnt5vhxg3B0/uj91G9PWkzlN58gngd+MvJeX4Tyxtitrrgy8l
-   5cok6+mYu0EuT2zYcMhzCCQfIiwT5HbHPpxESdZ1ysyuundxDFECV4Eg0
-   79CmgbjITVD5CuSG9hdGkf6ymtzkCmgaHf35u1+lxNT/bGDoEj2S8YJtt
-   VZimJKTV3D4YFMwKWKsZ7AJ9cIGJ432uOFSCvAK7iEVwhlZ8krWJOzAiC
-   YhywWYvk+SJ8vLC6Aoizt+juD7IA7Qb2oAqc4aZJVQY7akagEw2VakmlV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="313347873"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="313347873"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:24:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="690824426"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="690824426"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2023 15:24:11 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 15:24:11 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 15:24:11 -0800
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.49) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 19 Jan 2023 15:24:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QEXCY7OinOuq1Ut29TD/c5ZiW94TLR0A6HiN/ZB/34v7i5/wUx/krsFRshAP1xWy3gK/G1F6Y1CiVWwLBoVCuRk85Tl4xA9Zo31krCEe5lCkUhwomA6dp/HX8eA8cX4FXPgHwoH89r79d2qkQ86HsY8AIToTrFpyhGVzQpZgv4LDz9g6cshx+dxaxD6hUAI4pi2MWSb8tQoj1jtN3GZchpOKbdMm7E9z0qb1pY8qMYGSFcYzxL0wgz3kIIc4otCQMV6pImjqqRnNz6zAQbOton5z3eI9Mb4oEEK3sYZDvOXdBtcZDSxZRbGZO41Hq8qhNGtKYeFoa262V87gzZGQOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+/sno7dazBfaMrTyuFvt713rz8UHVVugmhHLx/hw1Cw=;
- b=k7CLxoiztKBcXJrXIu4RnQQ+KimIu6iqJJt0EvUwso9/qNk+T8/LxHn0bnZ95Bz9Zc0W8v4uqrJ/CWDtJktYOCtA4T2otzo/Cx0EB+s43eqRnE8nUPNhu5JeWUiSkympwcYF3t0k14txXQsS3SFCYDghPo7T6oD5gzsXJhBsdjXFPI0pOlXOmCucz6LtXyi+aCWakKUKR3awTq1NM9aWiEWqE8ogkXuE/EAI0cfWHf7Rqqa2RVw7XR5BM074/vh4LS9mO1LbUmbEH/gayLKE6btFdiMD63R+L/lKHymsJLnGmdx1HaVbv0DOoW+T8yw+IPUT/UA9+LWRKeI6XBNRdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by IA1PR11MB8174.namprd11.prod.outlook.com (2603:10b6:208:450::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
- 2023 23:24:03 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a%8]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 23:24:03 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "dmatlack@google.com" <dmatlack@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Thread-Topic: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Thread-Index: AQHZJqOgR/AYJ+DUHUGfsmh5dZfuuq6cVDsAgAAiagCAAS3PgIAFJp+AgAA/zQCAABQhgIAAAWcAgAKFUoCAAETpAIAAVHGAgAAP1gCAABm5AIAAAM8AgAADfwA=
-Date:   Thu, 19 Jan 2023 23:24:03 +0000
-Message-ID: <6ad5de218ba9be52d63ebb5846ad6b2d1aa3eab8.camel@intel.com>
-References: <20230114111621.00001840@gmail.com>  <Y8bFCb+rs25dKcMY@google.com>
- <20230117214414.00003229@gmail.com>     <Y8cLcY12zDWqO8nd@google.com>
- <Y8cMnjHFNIFaoX27@google.com>
-         <eadc4a4e37ea0b04b8348395244b792bd34a762d.camel@intel.com>
-         <Y8ljwsrrBBdh1aYw@google.com>
-         <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
-         <Y8m34OEVBfL7Q4Ns@google.com>
-         <38f506575caacd5488f73315b231c3282f893d46.camel@intel.com>
-         <Y8nOIjkskcXAi00V@google.com>
-In-Reply-To: <Y8nOIjkskcXAi00V@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|IA1PR11MB8174:EE_
-x-ms-office365-filtering-correlation-id: 1abd1589-7827-4136-ee49-08dafa7440a1
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dN1mCNPzB8XPOot6uQITmZJ5LHI78JsCIfsRZYhZJEbMR2zA+9EVA6mdzWC+jOvqz2l0o4m1fYfIUOavD7uDpk1/yV+ixDMhkLECQIrTsApFfVE3uXZkgS8QO6ZEjKx8O8oV83VIEoXoFkyZ8S4DODub2GQ0ZRaFmQ80oBDYf+Gtsybvvlyzl/wwnC5Sc6VYRyrzQZNV0z/2GC1a1dQ/CdwPtYfTYjT9UFxGjeAjRflCWNars8c8cuPuc6G67TFt5gdTzAJt2WVdCTgJRGm6b4JWQASa3T6RjL2zDIF/OzQDEG3nhlAdB3zbX+1aj6ZPuE9YLjCanWeJmMaomgLp3vzbdrj8B10Oks4P0oel9e9gOjwQcLZk4qrUbaj/pfRTy6bM3JKVeRLJ9WOH8t1sNrMltfinhaDnHG5ErA5yl6aTA5KlsPWaUOkchzwGiT4N4WCWp7IGmX1qJDKmX/WxnNd0csIK5iSxCvu58JlDZg+saNR9F8g7k26TTn8pOxDRQkJw1Alk7fdd2Lt9Run2KQe9zEci06BiZJOyh+kRqqHbJMm1frjvtx3GlE1JmnnAEQHyUmNyA01o5+QSMQdYJALvFRZ3X15cxX/m9eOctlS6f88RB2VORa3mfPinIhtubnY9mxq/OO9estBzYfZ5ya7kk1wc3ynN+B7VmA+l3ymkGXl0BJEgRTvU/TfF/fcq/Pyc4EkjCn7W6EqKY0Dddg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(136003)(396003)(346002)(366004)(451199015)(6486002)(478600001)(86362001)(66556008)(122000001)(66946007)(2906002)(91956017)(8936002)(5660300002)(66476007)(82960400001)(76116006)(38100700002)(316002)(54906003)(107886003)(71200400001)(38070700005)(6506007)(36756003)(26005)(64756008)(8676002)(4326008)(66446008)(41300700001)(6916009)(2616005)(186003)(6512007)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YU4rUGtSbytvSFh5LzdEcjdrNnJ1amkyVkdUQW1GN1RDTy8rMi9PSGpHSzdZ?=
- =?utf-8?B?T3NDaWwxR3htME9MRktMZ2pLQkdNenhBeDN3QU1VeHRrYmlRMzlyMytGZTYy?=
- =?utf-8?B?bnV0V1lqTTl1SktqMm1SbmhRSGdWMzNGeU1IdHNvZ2J1QmdIUmV5dVQ5Mi9G?=
- =?utf-8?B?SDBUdzBWT20xejFPOFVQWDFjUk9TZDBjWE8vanBlQWVLRGhrOEVYMHp6K05n?=
- =?utf-8?B?N1pjWWFFMUF6MlVUTHJXemYzeTNua1Y3ZDdnRUl6VFBOVlJkYjRVN3FNVU1v?=
- =?utf-8?B?VC8zVXdPL3V4YWRRWWN4RXhjZ3FXOW5Tb2VCMGJ4aDcrclgrQkRQakoxUThz?=
- =?utf-8?B?NTl6MDlGa3Y3QytDdHduME9hcXlwOFBzZkZpL0pzc0J4WlFMOGFxUG83aE5F?=
- =?utf-8?B?UWMvb2ZSQVkyL012OG92SnlHWVdoUWJCVHJiZGRGSmc4Q0ZhLzhZS21CWS83?=
- =?utf-8?B?SWpzNzNEa2VQMkF0QXhLY0M4dUNmVEh4dGRPRGJITjR6eWYrVk5lcWNpb0to?=
- =?utf-8?B?c2x0WmVOMEpLaVlhK0J6MW5ZMHRSditkTWJjTkNHVTMxZFZLRTREbXMrajgy?=
- =?utf-8?B?Q0ZVMFJpdmZOY29iUExHam1kSGpPbWNrOTJWaTNUWWJKN2R1VUh3SDhkU0Jj?=
- =?utf-8?B?ZWc5QmVraTNWRWUrcy9oQnduZVJ0RTZWZ3k3NmVqQXVaRStJWkVUSGxrSlVo?=
- =?utf-8?B?Q05nSUpiTDQrRXRXTnlxd0g0ZmRCaTZzVmVyRW9HRlVqZk44Tk45NHdaZE50?=
- =?utf-8?B?OFBUWnNQTGdoQm4wK005SGljR2ZMWkdOdGd6ZGJFK25oNmZQQzZZKzJVKy92?=
- =?utf-8?B?RllPL3hPSUEvU2FDS0Z4VDFhZ2hnMTJlMVlSOUZkOEIzQUk0b1doeDVlNkg2?=
- =?utf-8?B?a2ZMOCtuNXEyQzhpVm9TR3djTGRCRHVZRE5tSkZaODFuN1JLVHJMQVNQWjlq?=
- =?utf-8?B?YlZvWDluaC8wUitBOWlPa1BLRFBXUTY1K3RMaDh1NXZ3REZtRk00QjRJak03?=
- =?utf-8?B?UUR0bHplSmZmUGRXVGJ0aWhMRXFRa1JtcXg2MTNYNGF6SnpIaWRXK3pGd2Ri?=
- =?utf-8?B?RFRJa0VaNVZlSnJrV3dUbjlhYlV6NkFJejRGL004NER2cnF1Z0NWZDFVS05D?=
- =?utf-8?B?VEg4ZGJGQTRYQjNqVU53Z1FGSEJWNktsb3hkaFVucXNvV0x4b080NTJjWnV0?=
- =?utf-8?B?blF2RW9TczMxZm5KR29hTk94VThUdDQ2dGxYOVE5OHgwNEpzMjdkUk82ZStX?=
- =?utf-8?B?RWQzM0tJWkZ5Y01kYU9iNU0yMUlQb1pJaDNIdzBIMkU5QW9nZmZhUnhvaTJK?=
- =?utf-8?B?Rk8wdm1qZGpHdEFCREFYUXAzclVmTXBOUTk1RkEzRnEraTV5cWs2RVJOK2ND?=
- =?utf-8?B?Q1N0cG8ybTNTek9DVFBFd0E3QU5LWS9BTDI4OWQ4MlJJWTFrUDhsb1ZQbHRX?=
- =?utf-8?B?bC80TWsrZDkzSGdRM2JhWk9NZE4wZmhKbkdyNExsZ0w0blhia1g0MExzdG1s?=
- =?utf-8?B?TjNmZVQ4Rm1ScWppVkpldHJqSFRPNGFYazhzS0NFdkVvaDZYc25NVkNsN3Uv?=
- =?utf-8?B?dFViMzYyMDVqT2p6ZFNoQ2dyaFhpYUZ5Z2poNnBCWUthNFp3bWl3eVFVR2wz?=
- =?utf-8?B?NTBzbzF6TXRVRmVBMkVlZnJLV3U4L2VzcnpKMlEvcGFsd0RhQWpjbjVaTzk3?=
- =?utf-8?B?ejVOSGIzbmU4aVNUQUNkVDAyMUVKQW85UXpjU0xpbm5wQXp6QkZIQXNBWmdC?=
- =?utf-8?B?ZlFxSktZNE5QZnVNS1l1WUNQWll1cFhOVkU2MGx6MzNDYjFVVVBtTzdocnVX?=
- =?utf-8?B?a2pMTFNzSXBkT1B2ZGpyMUhLN2xncWtyM2lFM2xVRXFwR3RJZzZSbzFBYThZ?=
- =?utf-8?B?V0ZlY1NPdXpuU2JwenJScTZjQzF5TFJiQjBLekpRRFNOSklDWUlPa2VkVDU5?=
- =?utf-8?B?MmlrS3BrVDA3YUFrdFJzS3NDZzJjNW51SDR3eHEza0dXcXQ1bW5NQ29XQkh5?=
- =?utf-8?B?TzdJZGpYVG9GdHp2VDhQWEJLbmc4VzZPMldLbklHSUtYMzNrZ3Fwei84VkNh?=
- =?utf-8?B?K2V3cFplSnlwVlJtQjN4bWtuQWFwckdtMFVqamMyUFJycXZnK2RzZmc3RWcx?=
- =?utf-8?B?Q1VwNVdoNjdOZWJaZnZscENYWnNEZktwTWtpS1JQSVFZYXdrREhHOTVMdSs5?=
- =?utf-8?B?UFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <254C9417E07EBB4499E8019EC78C7068@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 19 Jan 2023 18:24:25 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392A37F04
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:24:20 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q8so2787689wmo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:24:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mvP+cAd7hqfutgxVUlMnflOc7xzidb88YL6WgRrDqMg=;
+        b=ARP6+oi/eLFlqfNoETz+oPqKv2sA0/Xle6yb8zx6XXgKQT8wlul08+9XSxJXJwtlVq
+         wA13lEoZA9bUM9FZFgBJhdv4TaXoBu/a/XWXB1B35mxR7XjddFYufZQQMtjQirxPp22z
+         /ckqPdAWXFkqz6I3poEbiJ/JGPofHDptCQxcGgDXMSMoOz7zwdmR7mbU75lV8MEk1lEB
+         jm8r1KGn7VTZNh99jcYJMo+D5zpUMNYHAC/c/oZAIxfdRlzCj/eaDYzi15/WFu7W1I8c
+         SF6Wht9LWKV5nOMnlqmN/bfr2buhqGg5Zf1/Bx6Fhie0ucRVYd71FgPKVbbFk368CLNf
+         Rs5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mvP+cAd7hqfutgxVUlMnflOc7xzidb88YL6WgRrDqMg=;
+        b=dUNGJ4qTsNFae6ow7tdolY+MdbHgSLmb0Vg/Hk9mCDI/M6UXU6BW7asd6iad28K7oS
+         HhZt2tx9Seedq7ADBNUueMbMatWJO4ywxyaHQs6I/MPzZoj6wuo3hP5Ayrc0YE1VNBhC
+         SGFcK/gwBS3+Rq7UIQ+Iw+P1wvJGhpPMU0hW2jrPZas4lBbjrt9DMokovANeubItNV8l
+         k5ZNkAsxauc5HWzjgaVh2D6lT0NPouRLLxW08CFkowb4gT/EKNX8jcsCcl4D7Quo8R5/
+         5nVczPKt72nASw8j5MbkN2ukXEhbyPl6MTL/Wtzc0jtg6mTmx6CPl/7LhnEs8Mk0yQ4A
+         NrtA==
+X-Gm-Message-State: AFqh2ko7dM2d8YRqXy7k+1ULQZjJ4LMFa5STLYb3SQs3xTqtK2k3KQxr
+        8ZEGSEJy/1AePPyM+k8dxUlALA==
+X-Google-Smtp-Source: AMrXdXuLbELwbnjxiNRumFgelDvnJ41KcIKBn8UJLczIupzLNP1N77LHkY4MzA/1pZoT39jTVZtaOg==
+X-Received: by 2002:a05:600c:4928:b0:3d3:4aa6:4fe6 with SMTP id f40-20020a05600c492800b003d34aa64fe6mr12107930wmp.3.1674170658631;
+        Thu, 19 Jan 2023 15:24:18 -0800 (PST)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05600c2cad00b003cfa622a18asm621282wmc.3.2023.01.19.15.24.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 15:24:18 -0800 (PST)
+Message-ID: <46acf2f4-3272-c33d-887f-05d4f4aad4d7@linaro.org>
+Date:   Thu, 19 Jan 2023 23:24:17 +0000
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1abd1589-7827-4136-ee49-08dafa7440a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 23:24:03.3537
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I+U1PkmjesCeLdnsUfwFF4IDSXAtFx0+Cdv7mQKnEz3DM8KWOlSkCa5HikMjICCDjDvK73ioK3TlMaBjVnguRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8174
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFT PATCH v2 4/6] arm64: dts: qcom: sdm845: move audio to
+ separate file
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20230118103458.107434-1-krzysztof.kozlowski@linaro.org>
+ <20230118103458.107434-4-krzysztof.kozlowski@linaro.org>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230118103458.107434-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAxLTE5IGF0IDIzOjExICswMDAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
-b3RlOg0KPiBPbiBUaHUsIEphbiAxOSwgMjAyMywgSHVhbmcsIEthaSB3cm90ZToNCj4gPiBPbiBU
-aHUsIDIwMjMtMDEtMTkgYXQgMjE6MzYgKzAwMDAsIFNlYW4gQ2hyaXN0b3BoZXJzb24gd3JvdGU6
-DQo+ID4gPiBPbiBUaHUsIEphbiAxOSwgMjAyMywgSHVhbmcsIEthaSB3cm90ZToNCj4gPiA+ID4g
-T24gVGh1LCAyMDIzLTAxLTE5IGF0IDE1OjM3ICswMDAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
-b3RlOg0KPiA+ID4gPiA+IE9uIFRodSwgSmFuIDE5LCAyMDIzLCBIdWFuZywgS2FpIHdyb3RlOg0K
-PiA+ID4gPiA+ID4gT24gVHVlLCAyMDIzLTAxLTE3IGF0IDIxOjAxICswMDAwLCBTZWFuIENocmlz
-dG9waGVyc29uIHdyb3RlOg0KPiA+ID4gPiA+ID4gPiBPbiBUdWUsIEphbiAxNywgMjAyMywgU2Vh
-biBDaHJpc3RvcGhlcnNvbiB3cm90ZToNCj4gPiA+ID4gPiA+ID4gPiBPbiBUdWUsIEphbiAxNywg
-MjAyMywgWmhpIFdhbmcgd3JvdGU6DQo+ID4gPiA+ID4gPiA+IE9oLCB0aGUgb3RoZXIgaW1wb3J0
-YW50IHBpZWNlIEkgZm9yZ290IHRvIG1lbnRpb24gaXMgdGhhdCBkcm9wcGluZyBtbXVfbG9jayBk
-ZWVwDQo+ID4gPiA+ID4gPiA+IGluIEtWTSdzIE1NVSBpbiBvcmRlciB0byB3YWl0IGlzbid0IGFs
-d2F5cyBhbiBvcHRpb24uICBNb3N0IGZsb3dzIHdvdWxkIHBsYXkgbmljZQ0KPiA+ID4gPiA+ID4g
-PiB3aXRoIGRyb3BwaW5nIG1tdV9sb2NrIGFuZCBzbGVlcGluZywgYnV0IHNvbWUgcGF0aHMsIGUu
-Zy4gZnJvbSB0aGUgbW11X25vdGlmaWVyLA0KPiA+ID4gPiA+ID4gPiAoY29uZGl0aW9uYWxseSkg
-ZGlzYWxsb3cgc2xlZXBpbmcuDQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IENvdWxkIHdlIGRv
-IHNvbWV0aGluZyBzaW1pbGFyIHRvIHRkcF9tbXVfaXRlcl9jb25kX3Jlc2NoZWQoKSBidXQgbm90
-IHNpbXBsZSBidXN5DQo+ID4gPiA+ID4gPiByZXRyeWluZyAiWCB0aW1lcyIsICBhdCBsZWFzdCBh
-dCB0aG9zZSBwYXRocyB0aGF0IGNhbiByZWxlYXNlIG1tdV9sb2NrKCk/DQo+ID4gPiA+ID4gDQo+
-ID4gPiA+ID4gVGhhdCdzIGVmZmVjdGl2ZWx5IHdoYXQgaGFwcGVucyBieSB1bndpbmRpbmcgdXAg
-dGhlIHN0YWsgd2l0aCBhbiBlcnJvciBjb2RlLg0KPiA+ID4gPiA+IEV2ZW50dWFsbHkgdGhlIHBh
-Z2UgZmF1bHQgaGFuZGxlciB3aWxsIGdldCB0aGUgZXJyb3IgYW5kIHJldHJ5IHRoZSBndWVzdC4N
-Cj4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IEJhc2ljYWxseSB3ZSB0cmVhdCBURFhfT1BFUkFORF9C
-VVNZIGFzIHNlYW1jYWxsX25lZWRicmVhaygpLCBzaW1pbGFyIHRvDQo+ID4gPiA+ID4gPiByd2xv
-Y2tfbmVlZGJyZWFrKCkuICBJIGhhdmVuJ3QgdGhvdWdodCBhYm91dCBkZXRhaWxzIHRob3VnaC4N
-Cj4gPiA+ID4gPiANCj4gPiA+ID4gPiBJIGFtIHN0cm9uZ2x5IG9wcG9zZWQgdG8gdGhhdCBhcHBy
-b2FjaC4gIEkgZG8gbm90IHdhbnQgdG8gcG9sbHV0ZSBLVk0ncyBNTVUgY29kZQ0KPiA+ID4gPiA+
-IHdpdGggYSBidW5jaCBvZiByZXRyeSBsb2dpYyBhbmQgZXJyb3IgaGFuZGxpbmcganVzdCBiZWNh
-dXNlIHRoZSBURFggbW9kdWxlIGlzDQo+ID4gPiA+ID4gdWx0cmEgcGFyYW5vaWQgYW5kIGhvc3Rp
-bGUgdG8gaHlwZXJ2aXNvcnMuDQo+ID4gPiA+IA0KPiA+ID4gPiBSaWdodC4gIEJ1dCBJSVVDIHRo
-ZXJlJ3MgbGVnYWwgY2FzZXMgdGhhdCBTRVBUIFNFQU1DQUxMIGNhbiByZXR1cm4gQlVTWSBkdWUg
-dG8NCj4gPiA+ID4gbXVsdGlwbGUgdGhyZWFkcyB0cnlpbmcgdG8gcmVhZC9tb2RpZnkgU0VQVCBz
-aW11bHRhbmVvdXNseSBpbiBjYXNlIG9mIFREUCBNTVUuIA0KPiA+ID4gPiBGb3IgaW5zdGFuY2Us
-IHBhcmFsbGVsIHBhZ2UgZmF1bHRzIG9uIGRpZmZlcmVudCB2Y3B1cyBvbiBwcml2YXRlIHBhZ2Vz
-LiAgSQ0KPiA+ID4gPiBiZWxpZXZlIHRoaXMgaXMgdGhlIG1haW4gcmVhc29uIHRvIHJldHJ5Lg0K
-PiA+ID4gDQo+ID4gPiBVbSwgY3J1ZC4gIEkgdGhpbmsgdGhlcmUncyBhIGJpZ2dlciBpc3N1ZS4g
-IEtWTSBhbHdheXMgb3BlcmF0ZXMgb24gaXRzIGNvcHkgb2YgdGhlDQo+ID4gPiBTLUVQVCB0YWJs
-ZXMgYW5kIGFzc3VtZXMgdGhlIHRoZSByZWFsIFMtRVBUIHRhYmxlcyB3aWxsIGFsd2F5cyBiZSBz
-eW5jaHJvbml6ZWQgd2l0aA0KPiA+ID4gS1ZNJ3MgbWlycm9yLiAgVGhhdCBhc3N1bXB0aW9uIGRv
-ZXNuJ3QgaG9sZCB0cnVlIHdpdGhvdXQgc2VyaWFsaXppbmcgU0VBTUNBTExzIGluDQo+ID4gPiBz
-b21lIHdheS4gIEUuZy4gaWYgYSBTUFRFIGlzIHphcHBlZCBhbmQgbWFwcGVkIGF0IHRoZSBzYW1l
-IHRpbWUsIHdlIGNhbiBlbmQgdXAgd2l0aDoNCj4gPiA+IA0KPiA+ID4gICB2Q1BVMCAgICAgICAg
-ICAgICAgICAgICAgICB2Q1BVMQ0KPiA+ID4gICA9PT09PSAgICAgICAgICAgICAgICAgICAgICA9
-PT09PQ0KPiA+ID4gICBtaXJyb3JbeF0gPSB4eXoNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgb2xkX3NwdGUgPSBtaXJyb3JbeF0NCj4gPiA+ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgbWlycm9yW3hdID0gUkVNT1ZFRF9TUFRFDQo+ID4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHNlcHRbeF0gPSBSRU1PVkVEX1NQVEUNCj4gPiA+ICAgc2VwdFt4XSA9IHh5
-eg0KPiA+IA0KPiA+IElJVUMgdGhpcyBjYXNlIGNhbm5vdCBoYXBwZW4sIGFzIHRoZSB0d28gc3Rl
-cHMgaW4gdGhlIHZjcHUwIGFyZSB3aXRoaW4gcmVhZA0KPiA+IGxvY2ssIHdoaWNoIHByZXZlbnRz
-IGZyb20gdmNwdTEsIHdoaWNoIGhvbGRzIHRoZSB3cml0ZSBsb2NrIGR1cmluZyB6YXBwaW5nIFNQ
-VEUuDQo+IA0KPiBaYXBwaW5nIFNQVEVzIGNhbiBoYXBwZW4gd2hpbGUgaG9sZGluZyBtbXVfbG9j
-ayBmb3IgcmVhZCwgZS5nLiBzZWUgdGhlIGJ1ZyBmaXhlZA0KPiBieSBjb21taXQgMjFhMzZhYzZi
-NmM3ICgiS1ZNOiB4ODYvbW11OiBSZS1jaGVjayB1bmRlciBsb2NrIHRoYXQgVERQIE1NVSBTUCBo
-dWdlcGFnZQ0KPiBpcyBkaXNhbGxvd2VkIikuDQoNClNvcnJ5LCBJIG5vdyByZWNhbGwgdGhhdCBJ
-IG9uY2UgaGFkIHBhdGNoIHRvIGNoYW5nZSB3cml0ZSBwYXRoIHRvIGhvbGQNCndyaXRlX2xvY2so
-KSBmb3IgVERYIGd1ZXN0IHRvIGF2b2lkIHN1Y2ggcHJvYmxlbS4gIEkgdGhvdWdodCBpdCB3YXMg
-dXBzdHJlYW0NCmJlaGF2aW91ciA6KQ0K
+
+
+On 18/01/2023 10:34, Krzysztof Kozlowski wrote:
+> Re-organize SDM845 sound components into separate, audio DTSI which
+> should be included and customized by the SDM845 boards wanting audio.
+> The DTSI includes:
+> 1. WCD9340 codec node because it is not a property of the SoC, but board.
+> 2. Common sound DAI links, shared with all sound cards.
+
+Hi Krzysztof,
+
+I know I already reported this on IRC, I thought I'd duplicate the info
+here for completeness sake.
+
+Due to how the sound node is parsed the device numbers in alsa are
+derived from the index of the sound/mmX-dai-link child nodes.
+
+For boards which use more than 3 FE's this causes breaking changes in
+userspace, as the slim-dai-link and slimcap-dai-link nodes now come
+before the other mmX-dai-link nodes, for example with my OnePlus 6
+patches "aplay -l" shows:
+
+card 0: O6 [OnePlus 6], device 0: MultiMedia1 (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: O6 [OnePlus 6], device 1: MultiMedia2 (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: O6 [OnePlus 6], device 2: MultiMedia3 (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: O6 [OnePlus 6], device 5: MultiMedia4 (*) [] <-- 5 instead of 3
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: O6 [OnePlus 6], device 6: MultiMedia5 (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: O6 [OnePlus 6], device 7: MultiMedia6 (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+This breaks the UCM configs shipped by postmarketOS and Mobian - though
+none of it is "upstream".
+
+Would it be reasonable to add all 6 FE DAI's and then disable the unused
+ones on a per-board basis?
+
+> 
+> The Xiaomi Polaris, although includes WCD9340 codec, it lacks sound
+> node, so it stays disabled.
+> 
+> On all others boards not using audio, keep the Slimbus node disabled as
+> it is empty.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Move also sound node.
+> 2. Rewrite commit msg.
+> 
+> RFC - please kindly test the boards.
+> ---
+>  .../boot/dts/qcom/sdm845-audio-wcd9340.dtsi   | 125 ++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |  55 +-------
+>  .../qcom/sdm845-xiaomi-beryllium-common.dtsi  |  53 +-------
+>  .../boot/dts/qcom/sdm845-xiaomi-polaris.dts   |   1 +
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          |  60 +--------
+>  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts |  59 ++-------
+>  .../boot/dts/qcom/sdm850-samsung-w737.dts     |  60 ++-------
+>  7 files changed, 151 insertions(+), 262 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi b/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
+> new file mode 100644
+> index 000000000000..0a94fde6741d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-audio-wcd9340.dtsi
+> @@ -0,0 +1,125 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * SDM845 SoC device tree source
+> + *
+> + * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +&slim {
+> +	status = "okay";
+> +
+> +	slim@1 {
+> +		reg = <1>;
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+> +		wcd9340_ifd: ifd@0,0 {
+> +			compatible = "slim217,250";
+> +			reg = <0 0>;
+> +		};
+> +
+> +		wcd9340: codec@1,0 {
+> +			compatible = "slim217,250";
+> +			reg = <1 0>;
+> +			slim-ifc-dev = <&wcd9340_ifd>;
+> +
+> +			#sound-dai-cells = <1>;
+> +
+> +			interrupts-extended = <&tlmm 54 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			#clock-cells = <0>;
+> +			clock-frequency = <9600000>;
+> +			clock-output-names = "mclk";
+> +			qcom,micbias1-microvolt = <1800000>;
+> +			qcom,micbias2-microvolt = <1800000>;
+> +			qcom,micbias3-microvolt = <1800000>;
+> +			qcom,micbias4-microvolt = <1800000>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			wcdgpio: gpio-controller@42 {
+> +				compatible = "qcom,wcd9340-gpio";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				reg = <0x42 0x2>;
+> +			};
+> +
+> +			swm: swm@c85 {
+> +				compatible = "qcom,soundwire-v1.3.0";
+> +				reg = <0xc85 0x40>;
+> +				interrupts-extended = <&wcd9340 20>;
+> +
+> +				qcom,dout-ports = <6>;
+> +				qcom,din-ports = <2>;
+> +				qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1f 0x3f 0x7 0x1f 0x3f 0x0f 0x0f>;
+> +				qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0c 0x6 0x12 0x0d 0x07 0x0a>;
+> +				qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1f 0x00 0x00 0x1f 0x00 0x00>;
+> +
+> +				#sound-dai-cells = <1>;
+> +				clocks = <&wcd9340>;
+> +				clock-names = "iface";
+> +				#address-cells = <2>;
+> +				#size-cells = <0>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&sound {
+> +	compatible = "qcom,sdm845-sndcard";
+> +	status = "disabled";
+> +
+> +	mm1-dai-link {
+> +		link-name = "MultiMedia1";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> +		};
+> +	};
+> +
+> +	mm2-dai-link {
+> +		link-name = "MultiMedia2";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> +		};
+> +	};
+> +
+> +	mm3-dai-link {
+> +		link-name = "MultiMedia3";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> +		};
+> +	};
+> +
+> +	sound_slim_dai_link: slim-dai-link {
+> +		link-name = "SLIM Playback";
+> +		cpu {
+> +			sound-dai = <&q6afedai SLIMBUS_0_RX>;
+> +		};
+> +
+> +		platform {
+> +			sound-dai = <&q6routing>;
+> +		};
+> +
+> +		codec {
+> +			sound-dai = <&wcd9340 0>;
+> +		};
+> +	};
+> +
+> +	slimcap-dai-link {
+> +		link-name = "SLIM Capture";
+> +		cpu {
+> +			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> +		};
+> +
+> +		platform {
+> +			sound-dai = <&q6routing>;
+> +		};
+> +
+> +		codec {
+> +			sound-dai = <&wcd9340 1>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> index 4833e89affc2..11b0554a6aea 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> @@ -11,6 +11,7 @@
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  #include <dt-bindings/sound/qcom,q6asm.h>
+>  #include "sdm845.dtsi"
+> +#include "sdm845-audio-wcd9340.dtsi"
+>  #include "pm8998.dtsi"
+>  #include "pmi8998.dtsi"
+>  
+> @@ -726,27 +727,7 @@ &quat_mi2s_sd2_active
+>  		"MM_DL2",  "MultiMedia2 Playback",
+>  		"MM_DL4",  "MultiMedia4 Playback",
+>  		"MultiMedia3 Capture", "MM_UL3";
+> -
+> -	mm1-dai-link {
+> -		link-name = "MultiMedia1";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> -		};
+> -	};
+> -
+> -	mm2-dai-link {
+> -		link-name = "MultiMedia2";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> -		};
+> -	};
+> -
+> -	mm3-dai-link {
+> -		link-name = "MultiMedia3";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> -		};
+> -	};
+> +	status = "okay";
+>  
+>  	mm4-dai-link {
+>  		link-name = "MultiMedia4";
+> @@ -769,35 +750,11 @@ codec {
+>  			sound-dai = <&lt9611_codec 0>;
+>  		};
+>  	};
+> +};
+>  
+> -	slim-dai-link {
+> -		link-name = "SLIM Playback";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+> -		};
+> -	};
+> -
+> -	slimcap-dai-link {
+> -		link-name = "SLIM Capture";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&wcd9340 1>;
+> -		};
+> +&sound_slim_dai_link {
+> +	codec {
+> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+>  	};
+>  };
+>  
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> index 5de8b4c372fc..54eabacdc031 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> @@ -7,6 +7,7 @@
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  #include <dt-bindings/sound/qcom,q6asm.h>
+>  #include "sdm845.dtsi"
+> +#include "sdm845-audio-wcd9340.dtsi"
+>  #include "pm8998.dtsi"
+>  #include "pmi8998.dtsi"
+>  
+> @@ -384,57 +385,7 @@ &sound {
+>  		"AMIC1", "MIC BIAS1",
+>  		"AMIC2", "MIC BIAS2",
+>  		"AMIC3", "MIC BIAS3";
+> -
+> -	mm1-dai-link {
+> -		link-name = "MultiMedia1";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> -		};
+> -	};
+> -
+> -	mm2-dai-link {
+> -		link-name = "MultiMedia2";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> -		};
+> -	};
+> -
+> -	mm3-dai-link {
+> -		link-name = "MultiMedia3";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> -		};
+> -	};
+> -
+> -	slim-dai-link {
+> -		link-name = "SLIM Playback";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&wcd9340 0>;
+> -		};
+> -	};
+> -
+> -	slimcap-dai-link {
+> -		link-name = "SLIM Capture";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&wcd9340 1>;
+> -		};
+> -	};
+> +	status = "okay";
+>  };
+>  
+>  &tlmm {
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> index a80c3dd9a2da..f81619c8a3ba 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> @@ -13,6 +13,7 @@
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  #include <dt-bindings/sound/qcom,q6asm.h>
+>  #include "sdm845.dtsi"
+> +#include "sdm845-audio-wcd9340.dtsi"
+>  #include "pm8998.dtsi"
+>  #include "pmi8998.dtsi"
+>  #include "pm8005.dtsi"
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 0f1cb2c8addd..27d1917f5358 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -3831,65 +3831,7 @@ slim: slim-ngd@171c0000 {
+>  			iommus = <&apps_smmu 0x1806 0x0>;
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
+> -
+> -			slim@1 {
+> -				reg = <1>;
+> -				#address-cells = <2>;
+> -				#size-cells = <0>;
+> -
+> -				wcd9340_ifd: ifd@0,0 {
+> -					compatible = "slim217,250";
+> -					reg = <0 0>;
+> -				};
+> -
+> -				wcd9340: codec@1,0 {
+> -					compatible = "slim217,250";
+> -					reg = <1 0>;
+> -					slim-ifc-dev = <&wcd9340_ifd>;
+> -
+> -					#sound-dai-cells = <1>;
+> -
+> -					interrupts-extended = <&tlmm 54 IRQ_TYPE_LEVEL_HIGH>;
+> -					interrupt-controller;
+> -					#interrupt-cells = <1>;
+> -
+> -					#clock-cells = <0>;
+> -					clock-frequency = <9600000>;
+> -					clock-output-names = "mclk";
+> -					qcom,micbias1-microvolt = <1800000>;
+> -					qcom,micbias2-microvolt = <1800000>;
+> -					qcom,micbias3-microvolt = <1800000>;
+> -					qcom,micbias4-microvolt = <1800000>;
+> -
+> -					#address-cells = <1>;
+> -					#size-cells = <1>;
+> -
+> -					wcdgpio: gpio-controller@42 {
+> -						compatible = "qcom,wcd9340-gpio";
+> -						gpio-controller;
+> -						#gpio-cells = <2>;
+> -						reg = <0x42 0x2>;
+> -					};
+> -
+> -					swm: swm@c85 {
+> -						compatible = "qcom,soundwire-v1.3.0";
+> -						reg = <0xc85 0x40>;
+> -						interrupts-extended = <&wcd9340 20>;
+> -
+> -						qcom,dout-ports = <6>;
+> -						qcom,din-ports = <2>;
+> -						qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1f 0x3f 0x7 0x1f 0x3f 0x0f 0x0f>;
+> -						qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0c 0x6 0x12 0x0d 0x07 0x0a>;
+> -						qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1f 0x00 0x00 0x1f 0x00 0x00>;
+> -
+> -						#sound-dai-cells = <1>;
+> -						clocks = <&wcd9340>;
+> -						clock-names = "iface";
+> -						#address-cells = <2>;
+> -						#size-cells = <0>;
+> -					};
+> -				};
+> -			};
+> +			status = "disabled";
+>  		};
+>  
+>  		lmh_cluster1: lmh@17d70800 {
+> diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> index d55ffd69155e..b979d8ae8698 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> @@ -13,6 +13,7 @@
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  #include <dt-bindings/sound/qcom,q6asm.h>
+>  #include "sdm850.dtsi"
+> +#include "sdm845-audio-wcd9340.dtsi"
+>  #include "pm8998.dtsi"
+>  
+>  /*
+> @@ -522,57 +523,7 @@ &sound {
+>  		"MM_DL1",  "MultiMedia1 Playback",
+>  		"MM_DL3",  "MultiMedia3 Playback",
+>  		"MultiMedia2 Capture", "MM_UL2";
+> -
+> -	mm1-dai-link {
+> -		link-name = "MultiMedia1";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> -		};
+> -	};
+> -
+> -	mm2-dai-link {
+> -		link-name = "MultiMedia2";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> -		};
+> -	};
+> -
+> -	mm3-dai-link {
+> -		link-name = "MultiMedia3";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> -		};
+> -	};
+> -
+> -	slim-dai-link {
+> -		link-name = "SLIM Playback";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+> -		};
+> -	};
+> -
+> -	slimcap-dai-link {
+> -		link-name = "SLIM Capture";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&wcd9340 1>;
+> -		};
+> -	};
+> +	status = "okay";
+>  
+>  	slim-wcd-dai-link {
+>  		link-name = "SLIM WCD Playback";
+> @@ -590,6 +541,12 @@ codec {
+>  	};
+>  };
+>  
+> +&sound_slim_dai_link {
+> +	codec {
+> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+> +	};
+> +};
+> +
+>  &tlmm {
+>  	gpio-reserved-ranges = <0 4>, <81 4>;
+>  
+> diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> index 6730804f4e3e..75773b06701b 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> @@ -14,6 +14,7 @@
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  #include <dt-bindings/sound/qcom,q6asm.h>
+>  #include "sdm850.dtsi"
+> +#include "sdm845-audio-wcd9340.dtsi"
+>  #include "pm8998.dtsi"
+>  
+>  /*
+> @@ -436,7 +437,6 @@ dai@2 {
+>  };
+>  
+>  &sound {
+> -	compatible = "qcom,sdm845-sndcard";
+>  	model = "Samsung-W737";
+>  
+>  	audio-routing =
+> @@ -447,57 +447,7 @@ &sound {
+>  		"MM_DL1",  "MultiMedia1 Playback",
+>  		"MM_DL3",  "MultiMedia3 Playback",
+>  		"MultiMedia2 Capture", "MM_UL2";
+> -
+> -	mm1-dai-link {
+> -		link-name = "MultiMedia1";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> -		};
+> -	};
+> -
+> -	mm2-dai-link {
+> -		link-name = "MultiMedia2";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> -		};
+> -	};
+> -
+> -	mm3-dai-link {
+> -		link-name = "MultiMedia3";
+> -		cpu {
+> -			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> -		};
+> -	};
+> -
+> -	slim-dai-link {
+> -		link-name = "SLIM Playback";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_RX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+> -		};
+> -	};
+> -
+> -	slimcap-dai-link {
+> -		link-name = "SLIM Capture";
+> -		cpu {
+> -			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> -		};
+> -
+> -		platform {
+> -			sound-dai = <&q6routing>;
+> -		};
+> -
+> -		codec {
+> -			sound-dai = <&wcd9340 1>;
+> -		};
+> -	};
+> +	status = "okay";
+>  
+>  	slim-wcd-dai-link {
+>  		link-name = "SLIM WCD Playback";
+> @@ -515,6 +465,12 @@ codec {
+>  	};
+>  };
+>  
+> +&sound_slim_dai_link {
+> +	codec {
+> +		sound-dai = <&left_spkr>, <&right_spkr>, <&swm 0>, <&wcd9340 0>;
+> +	};
+> +};
+> +
+>  &tlmm {
+>  	gpio-reserved-ranges = <0 6>, <85 4>;
+>  
+
+-- 
+Kind Regards,
+Caleb (they/them)
