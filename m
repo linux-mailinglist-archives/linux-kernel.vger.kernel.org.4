@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713C66739CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B296739D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjASNTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S231310AbjASNTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjASNSf (ORCPT
+        with ESMTP id S231148AbjASNS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:18:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558BC3ABD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:18:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pIUoD-0005uJ-4J; Thu, 19 Jan 2023 14:18:25 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pIUoC-0079jT-G6; Thu, 19 Jan 2023 14:18:24 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pIUoB-00G51L-Bm; Thu, 19 Jan 2023 14:18:23 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v1 4/4] net: dsa: microchip: enable EEE support
-Date:   Thu, 19 Jan 2023 14:18:21 +0100
-Message-Id: <20230119131821.3832456-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230119131821.3832456-1-o.rempel@pengutronix.de>
-References: <20230119131821.3832456-1-o.rempel@pengutronix.de>
+        Thu, 19 Jan 2023 08:18:56 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546521BCE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:18:54 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E2B871EC0691;
+        Thu, 19 Jan 2023 14:18:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674134333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=KQnyLQfK7qJC86oYK37cAQ7hek4siDxOAmRxTyQrFa0=;
+        b=PZtimvQkqlW/cJilj6IlzV376vPd6z0Ph1rqtUb3ByHCk/BeQkmicHqrBF+DY+kYjExKTd
+        WSM2lsHs//3WaJrIcjFy2fnI+Sc3ZkLWm9cCgQBuq1ytKkWulN3q2Fnry/oCuZunWxvxgd
+        HNIOXbeTbVZCwhjTV29fcAxtjneo6X0=
+Date:   Thu, 19 Jan 2023 14:18:47 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        =?utf-8?B?SsO2cmcgUsO2ZGVs?= <joro@8bytes.org>
+Cc:     x86@kernel.org, Joan Bruguera <joanbrugueram@gmail.com>,
+        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        Jan Beulich <jbeulich@suse.com>,
+        Roger Pau Monne <roger.pau@citrix.com>,
+        Kees Cook <keescook@chromium.org>, mark.rutland@arm.com,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 2/7] x86/boot: Delay sev_verify_cbit() a bit
+Message-ID: <Y8lDN73cNOmNuciV@zn.tnic>
+References: <20230116142533.905102512@infradead.org>
+ <20230116143645.649204101@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230116143645.649204101@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of KSZ9477 family switches provides EEE support. To enable it, we
-just need to register set_mac_eee/set_mac_eee handlers and validate
-supported chip version and port.
+On Mon, Jan 16, 2023 at 03:25:35PM +0100, Peter Zijlstra wrote:
+> Per the comment it is important to call sev_verify_cbit() before the
+> first RET instruction, this means we can delay calling this until more
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz_common.c | 35 ++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Make that "... this means that this can be delayed until... "
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 5e1e5bd555d2..2f1f71b3be86 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -2645,6 +2645,39 @@ static int ksz_max_mtu(struct dsa_switch *ds, int port)
- 	return -EOPNOTSUPP;
- }
- 
-+static int ksz_validate_eee(struct dsa_switch *ds, int port)
-+{
-+	struct ksz_device *dev = ds->priv;
-+
-+	if (!dev->info->internal_phy[port])
-+		return -EOPNOTSUPP;
-+
-+	switch (dev->chip_id) {
-+	case KSZ8563_CHIP_ID:
-+	case KSZ9477_CHIP_ID:
-+	case KSZ9563_CHIP_ID:
-+	case KSZ9567_CHIP_ID:
-+	case KSZ9893_CHIP_ID:
-+	case KSZ9896_CHIP_ID:
-+	case KSZ9897_CHIP_ID:
-+		return 0;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int ksz_get_mac_eee(struct dsa_switch *ds, int port,
-+			   struct ethtool_eee *e)
-+{
-+	return ksz_validate_eee(ds, port);
-+}
-+
-+static int ksz_set_mac_eee(struct dsa_switch *ds, int port,
-+			   struct ethtool_eee *e)
-+{
-+	return ksz_validate_eee(ds, port);
-+}
-+
- static void ksz_set_xmii(struct ksz_device *dev, int port,
- 			 phy_interface_t interface)
- {
-@@ -3006,6 +3039,8 @@ static const struct dsa_switch_ops ksz_switch_ops = {
- 	.port_hwtstamp_set	= ksz_hwtstamp_set,
- 	.port_txtstamp		= ksz_port_txtstamp,
- 	.port_rxtstamp		= ksz_port_rxtstamp,
-+	.get_mac_eee		= ksz_get_mac_eee,
-+	.set_mac_eee		= ksz_set_mac_eee,
- };
- 
- struct ksz_device *ksz_switch_alloc(struct device *base, void *priv)
+And I believe this is not about the first RET insn but about the *next* RET
+which will pop poisoned crap from the unencrypted stack and do shits with it.
+
+Also, there's this over sev_verify_cbit():
+
+ * sev_verify_cbit() is called before switching to a new long-mode page-table
+ * at boot.
+
+so you can't move it under the
+
+	movq    %rax, %cr3
+
+Looking at this more, there's a sme_enable() call on the BSP which is already in
+C.
+
+So, can we do that C-bit verification once on the BSP, *in C* which would be a
+lot easier, and be done with it?
+
+Once it is verified there, the bit is the same on all APs so all good.
+
+Right?
+
+joro?
+
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
