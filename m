@@ -2,357 +2,991 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811AF672F38
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131DF672F39
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjASCsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S229986AbjASCtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjASCsS (ORCPT
+        with ESMTP id S229837AbjASCsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:48:18 -0500
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5A51CF4B;
-        Wed, 18 Jan 2023 18:48:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1674096497; x=1705632497;
-  h=message-id:date:mime-version:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=7ykvX4PM26257DZ2NGH3psG5zJRH0pCV+rmvUyfK61o=;
-  b=gfc8hKKZbTL0n2WPyhr4rvAvKKygQDkwq/BJf3iPXMIAdKQwKFzLscGw
-   roJAlpHMh900eYItONIlRvDbTZFoeUxzQdKwmXV+Jsj5zuJeD+vHubZ4g
-   amvrDYs58/99Ij2JhUgw114ckLPSWW2uRyo00DtLEZa5UnfsiEALVPmK8
-   k=;
-X-IronPort-AV: E=Sophos;i="5.97,226,1669075200"; 
-   d="scan'208";a="256179274"
-Subject: Re: EXT4 IOPS degradation in 5.10 compared to 5.4
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 02:48:16 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id 6B1FE42FDE;
-        Thu, 19 Jan 2023 02:48:14 +0000 (UTC)
-Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Thu, 19 Jan 2023 02:48:13 +0000
-Received: from [10.94.104.252] (10.43.161.198) by
- EX19D002UWC004.ant.amazon.com (10.13.138.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Thu, 19 Jan 2023 02:48:12 +0000
-Message-ID: <c166a551-8e4a-b68e-cb7f-74b911379c49@amazon.com>
-Date:   Wed, 18 Jan 2023 18:48:10 -0800
+        Wed, 18 Jan 2023 21:48:55 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E8081D91C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:48:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB91D1758;
+        Wed, 18 Jan 2023 18:49:33 -0800 (PST)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B6EE3F71A;
+        Wed, 18 Jan 2023 18:48:50 -0800 (PST)
+Message-ID: <37c41203-f131-91e7-c6bb-17f215d83eb1@arm.com>
+Date:   Thu, 19 Jan 2023 08:18:47 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
-To:     Jan Kara <jack@suse.cz>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <abuehaze@amazon.com>
-References: <03d52010-06a8-9bff-0565-b698b48850a9@amazon.com>
- <20230112113820.hjwvieq3ucbwreql@quack3>
- <1cfef086-b3c1-6607-9328-b1bf70896ce4@amazon.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH V7 6/6] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-7-anshuman.khandual@arm.com>
+ <Y8A6rsEXR/rmJY0N@FVFF77S0Q05N>
 Content-Language: en-US
-In-Reply-To: <1cfef086-b3c1-6607-9328-b1bf70896ce4@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.161.198]
-X-ClientProxiedBy: EX13D40UWC004.ant.amazon.com (10.43.162.175) To
- EX19D002UWC004.ant.amazon.com (10.13.138.186)
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8A6rsEXR/rmJY0N@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/12/23 22:21, Mark Rutland wrote:
+> On Thu, Jan 05, 2023 at 08:40:39AM +0530, Anshuman Khandual wrote:
+>> This enables branch stack sampling events in ARMV8 PMU, via an architecture
+>> feature FEAT_BRBE aka branch record buffer extension. This defines required
+>> branch helper functions pmuv8pmu_branch_XXXXX() and the implementation here
+>> is wrapped with a new config option CONFIG_ARM64_BRBE.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  arch/arm64/Kconfig                  |  11 +
+>>  arch/arm64/include/asm/perf_event.h |   9 +
+>>  arch/arm64/kernel/Makefile          |   1 +
+>>  arch/arm64/kernel/brbe.c            | 512 ++++++++++++++++++++++++++++
+>>  arch/arm64/kernel/brbe.h            | 257 ++++++++++++++
+>>  5 files changed, 790 insertions(+)
+>>  create mode 100644 arch/arm64/kernel/brbe.c
+>>  create mode 100644 arch/arm64/kernel/brbe.h
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 03934808b2ed..915b12709a46 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -1363,6 +1363,17 @@ config HW_PERF_EVENTS
+>>  	def_bool y
+>>  	depends on ARM_PMU
+>>  
+>> +config ARM64_BRBE
+>> +	bool "Enable support for Branch Record Buffer Extension (BRBE)"
+>> +	depends on PERF_EVENTS && ARM64 && ARM_PMU
+>> +	default y
+>> +	help
+>> +	  Enable perf support for Branch Record Buffer Extension (BRBE) which
+>> +	  records all branches taken in an execution path. This supports some
+>> +	  branch types and privilege based filtering. It captured additional
+>> +	  relevant information such as cycle count, misprediction and branch
+>> +	  type, branch privilege level etc.
+>> +
+>>  # Supported by clang >= 7.0 or GCC >= 12.0.0
+>>  config CC_HAVE_SHADOW_CALL_STACK
+>>  	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
+>> diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
+>> index a038902d6874..cf2e88c7b707 100644
+>> --- a/arch/arm64/include/asm/perf_event.h
+>> +++ b/arch/arm64/include/asm/perf_event.h
+>> @@ -277,6 +277,14 @@ struct pmu_hw_events;
+>>  struct arm_pmu;
+>>  struct perf_event;
+>>  
+>> +#ifdef CONFIG_ARM64_BRBE
+>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event);
+>> +bool armv8pmu_branch_valid(struct perf_event *event);
+>> +void armv8pmu_branch_enable(struct perf_event *event);
+>> +void armv8pmu_branch_disable(struct perf_event *event);
+>> +void armv8pmu_branch_probe(struct arm_pmu *arm_pmu);
+>> +void armv8pmu_branch_reset(void);
+>> +#else
+>>  static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event) { }
+>>  static inline bool armv8pmu_branch_valid(struct perf_event *event) { return false; }
+>>  static inline void armv8pmu_branch_enable(struct perf_event *event) { }
+>> @@ -284,3 +292,4 @@ static inline void armv8pmu_branch_disable(struct perf_event *event) { }
+>>  static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
+>>  static inline void armv8pmu_branch_reset(void) { }
+>>  #endif
+>> +#endif
+>> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+>> index ceba6792f5b3..6ee7ccb61621 100644
+>> --- a/arch/arm64/kernel/Makefile
+>> +++ b/arch/arm64/kernel/Makefile
+>> @@ -46,6 +46,7 @@ obj-$(CONFIG_MODULES)			+= module.o
+>>  obj-$(CONFIG_ARM64_MODULE_PLTS)		+= module-plts.o
+>>  obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o
+>>  obj-$(CONFIG_HW_PERF_EVENTS)		+= perf_event.o
+>> +obj-$(CONFIG_ARM64_BRBE)		+= brbe.o
+>>  obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
+>>  obj-$(CONFIG_CPU_PM)			+= sleep.o suspend.o
+>>  obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
+>> diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
+>> new file mode 100644
+>> index 000000000000..cd03d3531e04
+>> --- /dev/null
+>> +++ b/arch/arm64/kernel/brbe.c
+>> @@ -0,0 +1,512 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Branch Record Buffer Extension Driver.
+>> + *
+>> + * Copyright (C) 2022 ARM Limited
+>> + *
+>> + * Author: Anshuman Khandual <anshuman.khandual@arm.com>
+>> + */
+>> +#include "brbe.h"
+>> +
+>> +static bool valid_brbe_nr(int brbe_nr)
+>> +{
+>> +	return brbe_nr == BRBIDR0_EL1_NUMREC_8 ||
+>> +	       brbe_nr == BRBIDR0_EL1_NUMREC_16 ||
+>> +	       brbe_nr == BRBIDR0_EL1_NUMREC_32 ||
+>> +	       brbe_nr == BRBIDR0_EL1_NUMREC_64;
+>> +}
+>> +
+>> +static bool valid_brbe_cc(int brbe_cc)
+>> +{
+>> +	return brbe_cc == BRBIDR0_EL1_CC_20_BIT;
+>> +}
+>> +
+>> +static bool valid_brbe_format(int brbe_format)
+>> +{
+>> +	return brbe_format == BRBIDR0_EL1_FORMAT_0;
+>> +}
+>> +
+>> +static bool valid_brbe_version(int brbe_version)
+>> +{
+>> +	return brbe_version == ID_AA64DFR0_EL1_BRBE_IMP ||
+>> +	       brbe_version == ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
+>> +}
+>> +
+>> +static void select_brbe_bank(int bank)
+>> +{
+>> +	static int brbe_current_bank = BRBE_BANK_IDX_INVALID;
+> 
+> This is a per-cpu peroperty, so I don't understand how this can safely be
+> stored in a static variable. If this is necessary it needs to go in a per-cpu
+> variable, but I suspect we don't actually need it.
 
-On 1/13/23 2:13 PM, Bhatnagar, Rishabh wrote:
->
-> On 1/12/23 3:38 AM, Jan Kara wrote:
->> CAUTION: This email originated from outside of the organization. Do 
->> not click links or open attachments unless you can confirm the sender 
->> and know the content is safe.
->>
->>
->>
->> Hi!
->>
->> On Wed 11-01-23 18:06:39, Bhatnagar, Rishabh wrote:
->>> We have been seeing a consistent 3% degradation in IOPS score 
->>> between 5.4
->>> and 5.10 stable kernels while running fio tests.
->>>
->>> I'm running test case on m6g.8xlarge AWS instances using arm64. The 
->>> test
->>> involves:
->>>
->>> 1. Creating 100GB volume with IO1 500 iops. Attaching it to the 
->>> instance.
->>>
->>> 2. Setup and mount fs:
->>>
->>> mke2fs -m 1 -t ext4 -b 4096 -L /mnt /dev/nvme1n1
->>> mount -t ext4 -o noatime,nodiratime,data=ordered /dev/nvme1n1 /mnt
->>>
->>> 3. Install fio package and run following test:
->>> (running 16 threads doing random buffered 16kb writes on a file.
->>> ioengine=psync, runtime=60secs)
->>>
->>> jobs=16
->>> blocksize="16k"
->>> filesize=1000000
->>>
->>> if [[ -n $1 ]]; then jobs=$1; fi
->>> if [[ -n $2 ]]; then blocksize=$2; fi
->>>
->>> /usr/bin/fio --name=fio-test --directory=/mnt --rw=randwrite
->>> --ioengine=psync --buffered=1 --bs=${blocksize} \
->>>          --max-jobs=${jobs} --numjobs=${jobs} --runtime=30 --thread \
->>>          --filename=file0 --filesize=${filesize} \
->>>          --fsync=1 --group_reporting --create_only=1 > /dev/null
->>>
->>> sudo echo 1 > /proc/sys/vm/drop_caches
->>>
->>> set -x
->>> echo "Running with jobs=${jobs} filesize=${filesize} 
->>> blocksize=${blocksize}"
->>> /usr/bin/fio --name=fio-test --directory=/mnt --rw=randwrite
->>> --ioengine=psync --buffered=1 --bs=${blocksize} \
->>>          --max-jobs=${jobs} --numjobs=${jobs} --runtime=60 --thread \
->>>          --filename=file0 --filesize=${filesize} \
->>>          --fsync=1 --group_reporting --time_based
->>>
->>> After doing some kernel bisecting between we were able to pinpoint this
->>> commit that drops the iops score by 10~15 points (~3%).
->>> ext4: avoid unnecessary transaction starts during writeback
->>> (6b8ed62008a49751fc71fefd2a4f89202a7c2d4d)
->>>
->>> We see higher iops/bw/total io after reverting the commit compared 
->>> to base
->>> 5.10 kernel.
->>> Although the average clat is higher after reverting the commit the 
->>> higher bw
->>> drives the iops score higher as seen in below fio output.
->> I expect the difference is somewhere in waiting for the journal. Can you
->> just check whether there's a difference if you use --fdatasync=1 
->> instead of
->> --fsync=1? With this workload that should avoid waiting for the journal
->> because the only metadata updates are mtime timestamps in the inode.
-> There is a difference of 5% with and with the commit if i change this 
-> to fdatasync=1.
->>> Fio output (5.10.162):
->>> write: io=431280KB, bw=7186.3KB/s, iops=449, runt= 60015msec
->>> clat (usec): min=6, max=25942, avg=267.76,stdev=1604.25
->>> lat (usec): min=6, max=25943, avg=267.93,stdev=1604.25
->>> clat percentiles (usec):
->>> | 1.00th=[ 9], 5.00th=[ 10], 10.00th=[ 16], 20.00th=[ 24]
->>> | 30.00th=[ 34], 40.00th=[ 45], 50.00th=[ 58], 60.00th=[ 70],
->>> | 70.00th=[ 81], 80.00th=[ 94], 90.00th=[ 107], 95.00th=[ 114],
->>> | 99.00th=[10048], 99.50th=[14016], 99.90th=[20096], 99.95th=[21888],
->>> | 99.99th=[24448]
->>> lat (usec) : 10=3.46%, 20=12.54%, 50=26.66%, 100=41.16%, 250=13.64%
->>> lat (usec) : 500=0.02%, 750=0.03%, 1000=0.01%
->>> lat (msec) : 2=0.23%, 4=0.50%, 10=0.73%, 20=0.91%, 50=0.12%
->>> cpu : usr=0.02%, sys=0.42%, ctx=299540, majf=0, minf=0
->>> IO depths : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, 
->>> >=64=0.0%
->>> submit : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
->>> complete : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, 
->>> >=64=0.0%
->>> issued : total=r=0/w=26955/d=0, short=r=0/w=0/d=0, drop=r=0/w=0/d=0
->>> latency : target=0, window=0, percentile=100.00%, depth=1
->>> Run status group 0 (all jobs):
->>> WRITE: io=431280KB, aggrb=7186KB/s, minb=7186KB/s, maxb=7186KB/s,
->>> mint=60015msec, maxt=60015msec
->>> Disk stats (read/write):
->>> nvme1n1: ios=0/30627, merge=0/2125, ticks=0/410990, in_queue=410990,
->>> util=99.94%
->>>
->>> Fio output (5.10.162 with revert):
->>> write: io=441920KB, bw=7363.7KB/s, iops=460, runt= 60014msec
->>> clat (usec): min=6, max=35768, avg=289.09, stdev=1736.62
->>> lat (usec): min=6, max=35768, avg=289.28,stdev=1736.62
->>> clat percentiles (usec):
->>> | 1.00th=[ 8], 5.00th=[ 10], 10.00th=[ 16], 20.00th=[ 24],
->>> | 30.00th=[ 36], 40.00th=[ 46], 50.00th=[ 59], 60.00th=[ 71],
->>> | 70.00th=[ 83], 80.00th=[ 97], 90.00th=[ 110], 95.00th=[ 117],
->>> | 99.00th=[10048], 99.50th=[14144], 99.90th=[21632], 99.95th=[25984],
->>> | 99.99th=[28288]
->>> lat (usec) : 10=4.13%, 20=11.67%, 50=26.59%, 100=39.57%, 250=15.28%
->>> lat (usec) : 500=0.03%, 750=0.03%, 1000=0.03%
->>> lat (msec) : 2=0.20%, 4=0.64%, 10=0.80%, 20=0.86%, 50=0.18%
->>> cpu : usr=0.01%, sys=0.43%, ctx=313909, majf=0, minf=0
->>> IO depths : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, 
->>> >=64=0.0%
->>> submit : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
->>> complete : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, 
->>> >=64=0.0%
->>> issued : total=r=0/w=27620/d=0, short=r=0/w=0/d=0, drop=r=0/w=0/d=0
->>> latency : target=0, window=0, percentile=100.00%, depth=1
->>> Run status group 0 (all jobs):
->>> WRITE: io=441920KB, aggrb=7363KB/s, minb=7363KB/s, maxb=7363KB/s,
->>> mint=60014msec, maxt=60014msec
->>> Disk stats (read/write):
->>> nvme1n1: ios=0/31549, merge=0/2348, ticks=0/409221, in_queue=409221,
->>> util=99.88%
->>>
->>>
->>> Also i looked ext4_writepages latency which increases when the 
->>> commit is
->>> reverted. (This makes sense since the commit avoids unnecessary
->>> transactions).
->>>
->>> ./funclatency ext4_writepages -->(5.10.162)
->>> avg = 7734912 nsecs, total: 134131121171 nsecs, count: 17341
->>>
->>> ./funclatency ext4_writepages -->(5.10.162 with revert)
->>> avg = 9036068 nsecs, total: 168956404886 nsecs, count: 18698
->>>
->>>
->>> Looking at the journal transaction data I can see that the average
->>> transaction commit time decreases after reverting the commit.
->>> This probably helps in the IOPS score.
->> So what the workload is doing is:
->> write()
->>    inode lock
->>    dirty 16k of page cache
->>    dirty inode i_mtime
->>    inode unlock
->> fsync()
->>    walk all inode pages, write dirty ones
->>    wait for all pages under writeback in the inode to complete IO
->>    force transaction commit and wait for it
->>
->> Now this has the best throughput (and the worst latency) if all 16
->> processes work in lockstep - i.e., like:
->>
->>    task1         task2           task3 ...
->>    write()
->>                  write()
->>                                  write()
->>    fsync()
->>                  fsync()
->>                                  fsync()
->>
->> because in that case we writeout all dirty pages from 16 processes in 
->> one
->> sweep together and also we accumulate 16 mtime updates in single
->> transaction commit.
->>
->> Now I suspect the commit you've identified leads to less synchronization
->> between the processes and thus in less batching happening. In particular
->> before the commit we've called mpage_prepare_extent_to_map() twice 
->> and the
->> second invocation starts at where the first invocation saw last dirty 
->> page.
->> So it potentially additionally writes newly dirtied pages beyond that 
->> place
->> and that effectively synchronizes processes more.
->>
->> To confirm the theory, it might be interesting to gather a histogram 
->> of a
->> number of pages written back by ext4_writepages() call with / without 
->> the
->> commit.
->>
->> Honza
->> -- 
->> Jan Kara <jack@suse.com>
->> SUSE Labs, CR
->
-> Hi Jan
->
-> I collected some data w.r.t to number of pages being written by 
-> ext4_writepages. What you pointed out seems to be correct.
-> Without the commit I see more batching (more writeback count from 4-20 
-> pages)happening compared to with the commit.
->
-> Without the commit (reverted):
->
-> [0-1]   —>  4246
-> [2-3]   —>  312
-> [4-5]   —>  20836
-> [6-7]   —>  205
-> [8-9]   —>  895
-> [10-11] —>  56
-> [12-13] —>  422
-> [14-15] —>  62
-> [16-17] —>  234
-> [18-19] —>  66
-> [20-21] —>  77
-> [22-23] —>  9
-> [24-25] —>  26
-> [26-27] —>  1
-> [28-29] —>  13
->
-> Average page count : 3.9194
->
->
-> With the commit:
->
-> [0-1]   —> 1635
-> [2-3]   —> 123
-> [4-5]   —> 24302
-> [6-7]   —> 38
-> [8-9]   —> 604
-> [10-11] —> 19
-> [12-13] —> 123
-> [14-15] —> 12
-> [16-17] —> 24
-> [18-19] —> 3
-> [20-21] —> 8
-> [22-23] —> 1
-> [24-25] —> 3
-> [26-27] —> 0
-> [28-29] —> 1
->
-> Average page count : 3.9184
->
-> Also looking at journal data I see that without the commit we have 
-> more handles per journal transaction:
->
-> Without the commit:
-> cat /proc/fs/jbd2/nvme1n1-8/info
-> 2092 transactions (2091 requested), each up to 8192 blocks
-> average:
-> 0ms waiting for transaction
-> 0ms request delay
-> 20ms running transaction
-> 0ms transaction was being locked
-> 0ms flushing data (in ordered mode)
-> 20ms logging transaction
-> 15981us average transaction commit time
-> 67 handles per transaction
-> 1 blocks per transaction
-> 2 logged blocks per transaction
->
-> With the commit:
-> cat /proc/fs/jbd2/nvme1n1-8/info
-> 2143 transactions (2143 requested), each up to 8192 blocks
-> average:
-> 0ms waiting for transaction
-> 0ms request delay
-> 0ms running transaction
-> 0ms transaction was being locked
-> 0ms flushing data (in ordered mode)
-> 20ms logging transaction
-> 20731us average transaction commit time
-> 51 handles per transaction
-> 1 blocks per transaction
-> 3 logged blocks per transaction
->
-> Thanks
-> Rishabh
->
-Hi Jan
+You are right, we dont need it.
 
-Gentle reminder.
+> 
+>> +	u64 brbfcr;
+>> +
+>> +	if (brbe_current_bank == bank)
+>> +		return;
+> 
+> It looks like this is just for the same of optimizing redundant changes when
+> armv8pmu_branch_read() iterates over the records?
 
-Any thoughts on this data? Is there a usecase where this commit brings 
-benefits that are worth considering if we decide to revert this?
+Right, it is.
 
+> 
+> It'd be simpler to have armv8pmu_branch_read() iterate over each bank, then
+> within that iterate over each record within that bank.
+
+Sure, will drop this optimization completely. I will split the iteration into two
+separate loops, one each for bank 0 and other for bank 1.
+
+> 
+>> +	WARN_ON(bank > BRBE_BANK_IDX_1);
+>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +	brbfcr &= ~BRBFCR_EL1_BANK_MASK;
+>> +	brbfcr |= ((bank << BRBFCR_EL1_BANK_SHIFT) & BRBFCR_EL1_BANK_MASK);
+> 
+> You can use SYS_FIELD_PREP() for this:
+
+Sure, will do.
+
+> 
+> 	brbfcr &= ~BRBFCR_EL1_BANK_MASK;
+> 	brbfcr |= SYS_FIELD_PREP(BRBFCR_EL1, BANK, bank);
+> 
+> Please use FIELD_PREP for this.
+
+Done.
+
+> 
+>> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +	brbe_current_bank = bank;
+>> +}
+>> +
+>> +static void select_brbe_bank_index(int buffer_idx)
+>> +{
+>> +	switch (buffer_idx) {
+>> +	case BRBE_BANK0_IDX_MIN ... BRBE_BANK0_IDX_MAX:
+>> +		select_brbe_bank(BRBE_BANK_IDX_0);
+>> +		break;
+>> +	case BRBE_BANK1_IDX_MIN ... BRBE_BANK1_IDX_MAX:
+>> +		select_brbe_bank(BRBE_BANK_IDX_1);
+>> +		break;
+>> +	default:
+>> +		pr_warn("unsupported BRBE index\n");
+> 
+> It would be worth logging the specific index in case we ever have to debug
+> this. It's probably worth also making this a WARN_ONCE() or WARN_RATELIMITED().
+
+This function will not be required once individual loops based read for each
+BRBE bank is implemented, thus reducing number of times select_brbe_bank()
+gets called i.e just two times once for bank 0 and other for bank 1.
+
+> 
+>> +	}
+>> +}
+>> +
+>> +static const char branch_filter_error_msg[] = "branch filter not supported";
+>> +
+>> +bool armv8pmu_branch_valid(struct perf_event *event)
+>> +{
+>> +	u64 branch_type = event->attr.branch_sample_type;
+>> +
+>> +	/*
+>> +	 * If the event does not have at least one of the privilege
+>> +	 * branch filters as in PERF_SAMPLE_BRANCH_PLM_ALL, the core
+>> +	 * perf will adjust its value based on perf event's existing
+>> +	 * privilege level via attr.exclude_[user|kernel|hv].
+>> +	 *
+>> +	 * As event->attr.branch_sample_type might have been changed
+>> +	 * when the event reaches here, it is not possible to figure
+>> +	 * out whether the event originally had HV privilege request
+>> +	 * or got added via the core perf. Just report this situation
+>> +	 * once and continue ignoring if there are other instances.
+>> +	 */
+>> +	if ((branch_type & PERF_SAMPLE_BRANCH_HV) && !is_kernel_in_hyp_mode())
+>> +		pr_warn_once("%s - hypervisor privilege\n", branch_filter_error_msg);
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ABORT_TX) {
+>> +		pr_warn_once("%s - aborted transaction\n", branch_filter_error_msg);
+>> +		return false;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_NO_TX) {
+>> +		pr_warn_once("%s - no transaction\n", branch_filter_error_msg);
+>> +		return false;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_IN_TX) {
+>> +		pr_warn_once("%s - in transaction\n", branch_filter_error_msg);
+>> +		return false;
+>> +	}
+>> +	return true;
+>> +}
+> 
+> Is this called when validating user input? If so, NAK to printing anything to a
+> higher leval than debug. If there are constraints the user needs to be aware of
+
+You mean pr_debug() based prints ?
+
+> we should expose the relevant information under sysfs, but it seems that these
+> are just generic perf options that BRBE doesn't support.
+
+Right, these are generic perf options. As you mentioned, will replace these with
+pr_debug() instead.
+
+> 
+> It would be better to whitelist what we do support rather than blacklisting
+> what we don't.
+
+But with a negative list, user would know what is not supported via these pr_debug()
+based output when enabled ? But I dont have a strong opinion either way.
+
+> 
+>> +
+>> +static void branch_records_alloc(struct arm_pmu *armpmu)
+>> +{
+>> +	struct pmu_hw_events *events;
+>> +	int cpu;
+>> +
+>> +	for_each_possible_cpu(cpu) {
+>> +		events = per_cpu_ptr(armpmu->hw_events, cpu);
+>> +
+>> +		events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
+>> +		WARN_ON(!events->branches);
+>> +	}
+>> +}
+> 
+> It would be simpler for this to be a percpu allocation.
+
+Could you please be more specific ? alloc_percpu_gfp() cannot be used here
+because 'events->branches' is not a __percpu variable unlike its parent
+'events' which is derived from armpmu.
+
+> 
+> If the allocation fails, we should propogate that error rather than just
+> WARNing, and fail probing the PMU.
+
+Sure, will change that.
+
+> 
+> Also, if the generic allocator fails it will print a warning (unless
+> __GFP_NOWARN was used), so we don't need the warning here.
+
+Sure, understood.
+
+> 
+>> +
+>> +static int brbe_attributes_probe(struct arm_pmu *armpmu, u32 brbe)
+>> +{
+>> +	struct brbe_hw_attr *brbe_attr = kzalloc(sizeof(struct brbe_hw_attr), GFP_KERNEL);
+> 
+> Same comments as for the failure path in branch_records_alloc().
+> 
+>> +	u64 brbidr = read_sysreg_s(SYS_BRBIDR0_EL1);
+> 
+> Which context is this run in? Unless this is affine to a relevant CPU we can't
+> read the sysreg safely, and if we're in a cross-call we cannot allocate memory,
+> so this doesn't look right to me.
+
+Called from smp_call_function_any() context via __armv8pmu_probe_pmu().
+
+> 
+> I suspect CONFIG_DEBUG_ATOMIC_SLEEP=y and/or CONFIG_PROVE_LOCKING=y will complain here.
+
+Right, it does. Remember dropping pr_info() during BRBE probe for the exact same
+reason here but did not realize we will run into the same problem again.
+
+> 
+> Please follow the approach of armv8pmu_probe_pmu(), where we use a probe_info
+> structure that the callee can fill with information. Then we can do the
+> allocation in the main thread from a non-atomic context.
+
+Right, will do that. The only problem being 'struct brbe_hw_attr' which will not be
+visible in the main thread, might need an abstraction function to do the allocation
+in BRBE implementation. Regardless, a successful BRBE in the preceding function can
+be ascertained from armpmu->has_branch_stack().
+
+> 
+>> +
+>> +	WARN_ON(!brbe_attr);
+>> +	armpmu->private = brbe_attr;
+>> +
+>> +	brbe_attr->brbe_version = brbe;
+>> +	brbe_attr->brbe_format = brbe_fetch_format(brbidr);
+>> +	brbe_attr->brbe_cc = brbe_fetch_cc_bits(brbidr);
+>> +	brbe_attr->brbe_nr = brbe_fetch_numrec(brbidr);
+> 
+> As a minor thing, could we please s/fetch/get/ ? To me, 'fetch' sounds like a
+> memory operation, and elsewhere we use 'get' for this sort of getter function.
+
+Sure, but shall we change fetch as get for entire BRBE implementation (where ever
+there is a determination of field from a register value) or just the above function ?
+Default, will change all places.
+
+> 
+>> +
+>> +	if (!valid_brbe_version(brbe_attr->brbe_version) ||
+>> +	   !valid_brbe_format(brbe_attr->brbe_format) ||
+>> +	   !valid_brbe_cc(brbe_attr->brbe_cc) ||
+>> +	   !valid_brbe_nr(brbe_attr->brbe_nr))
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +void armv8pmu_branch_probe(struct arm_pmu *armpmu)
+>> +{
+>> +	u64 aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+>> +	u32 brbe;
+>> +
+>> +	brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
+>> +	if (!brbe)
+>> +		return;
+>> +
+>> +	if (brbe_attributes_probe(armpmu, brbe))
+>> +		return;
+>> +
+>> +	branch_records_alloc(armpmu);
+>> +	armpmu->features |= ARM_PMU_BRANCH_STACK;
+>> +}
+>> +
+>> +static u64 branch_type_to_brbfcr(int branch_type)
+>> +{
+>> +	u64 brbfcr = 0;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
+>> +		brbfcr |= BRBFCR_EL1_BRANCH_FILTERS;
+>> +		return brbfcr;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL) {
+>> +		brbfcr |= BRBFCR_EL1_INDCALL;
+>> +		brbfcr |= BRBFCR_EL1_DIRCALL;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
+>> +		brbfcr |= BRBFCR_EL1_RTN;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_IND_CALL)
+>> +		brbfcr |= BRBFCR_EL1_INDCALL;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_COND)
+>> +		brbfcr |= BRBFCR_EL1_CONDDIR;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_IND_JUMP)
+>> +		brbfcr |= BRBFCR_EL1_INDIRECT;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_CALL)
+>> +		brbfcr |= BRBFCR_EL1_DIRCALL;
+>> +
+>> +	return brbfcr;
+>> +}
+>> +
+>> +static u64 branch_type_to_brbcr(int branch_type)
+>> +{
+>> +	u64 brbcr = (BRBCR_EL1_FZP | BRBCR_EL1_DEFAULT_TS);
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_USER)
+>> +		brbcr |= BRBCR_EL1_E0BRE;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_KERNEL)
+>> +		brbcr |= BRBCR_EL1_E1BRE;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_HV) {
+>> +		if (is_kernel_in_hyp_mode())
+>> +			brbcr |= BRBCR_EL1_E1BRE;
+>> +	}
+> 
+> I assume that in that case we're actually writing to BRBCR_EL2, and this is
+> actually the E2BRE bit, which is at the same position? If so, I think that's
+> worth a comment above the USER/KERNEL/HV bits here.
+
+That is right, will add a comment.
+
+> 
+> How do the BRB* control registers work with E2H? Is BRBCR_EL1 rewritten to
+> BRBCR_EL2 by the hardware?
+
+Right, that is my understanding as well.
+
+With FEAT_VHE and HCR_EL2.E2H = 1, access to BRBCR_EL1 at EL2, accesses BRBCR_EL2
+without FEAT_VHE or HCR_EL2.E2H = 0, access to BRBCR_EL1 at EL2, accesses BRBCR_EL1
+
+> 
+>> +
+>> +	if (!(branch_type & PERF_SAMPLE_BRANCH_NO_CYCLES))
+>> +		brbcr |= BRBCR_EL1_CC;
+>> +
+>> +	if (!(branch_type & PERF_SAMPLE_BRANCH_NO_FLAGS))
+>> +		brbcr |= BRBCR_EL1_MPRED;
+>> +
+>> +	/*
+>> +	 * The exception and exception return branches could be
+>> +	 * captured, irrespective of the perf event's privilege.
+>> +	 * If the perf event does not have enough privilege for
+>> +	 * a given exception level, then addresses which falls
+>> +	 * under that exception level will be reported as zero
+>> +	 * for the captured branch record, creating source only
+>> +	 * or target only records.
+>> +	 */
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY) {
+>> +		brbcr |= BRBCR_EL1_EXCEPTION;
+>> +		brbcr |= BRBCR_EL1_ERTN;
+>> +	}
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_CALL)
+>> +		brbcr |= BRBCR_EL1_EXCEPTION;
+>> +
+>> +	if (branch_type & PERF_SAMPLE_BRANCH_ANY_RETURN)
+>> +		brbcr |= BRBCR_EL1_ERTN;
+>> +
+>> +	return brbcr & BRBCR_EL1_DEFAULT_CONFIG;
+>> +}
+>> +
+>> +void armv8pmu_branch_enable(struct perf_event *event)
+>> +{
+>> +	u64 branch_type = event->attr.branch_sample_type;
+>> +	u64 brbfcr, brbcr;
+>> +
+>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +	brbfcr &= ~BRBFCR_EL1_DEFAULT_CONFIG;
+>> +	brbfcr |= branch_type_to_brbfcr(branch_type);
+>> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +
+>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>> +	brbcr &= ~BRBCR_EL1_DEFAULT_CONFIG;
+>> +	brbcr |= branch_type_to_brbcr(branch_type);
+>> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
+>> +	isb();
+>> +	armv8pmu_branch_reset();
+>> +}
+>> +
+>> +void armv8pmu_branch_disable(struct perf_event *event)
+>> +{
+>> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +	u64 brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>> +
+>> +	brbcr &= ~(BRBCR_EL1_E0BRE | BRBCR_EL1_E1BRE);
+>> +	brbfcr |= BRBFCR_EL1_PAUSED;
+>> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
+>> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +}
+>> +
+>> +static int brbe_fetch_perf_type(u64 brbinf, bool *new_branch_type)
+> 
+> It's a bit confusing to return the type and new_type fields in this way.
+> 
+> I think this would be clearer as a setter function, even if that results in it
+> being a bit longer, since it keeps all the type and new_type relationships in
+> one place and has a single path for returning the value:
+
+Makes sense.
+
+> 
+> static void brbe_set_perf_entry_type(struct perf_branch_entry *entry,
+> 				     u64 brbinf)
+> {
+> 	int brbe_type = brbe_fetch_type(brbinf);
+> 
+> 	switch (brbe_type) {
+> 	case BRBINF_EL1_TYPE_UNCOND_DIR;
+> 		entry->type = PERF_BR_UNCOND;
+> 		break;
+> 	...
+> 	case BRBINF_EL1_TYPE_DEBUG_HALT;
+> 		entry->type = PERF_BR_EXTEND_ABI;
+> 		entry->new_type = PERF_BR_ARM64_DEBUG_HALT;
+> 		break;
+> 	...
+> 	default:
+> 		...
+> 	}
+> }
+> 
+> ... and in theory that makes it easier to propogate an error in future if we
+> want to.
+
+Sure, will convert this function into brbe_set_perf_entry_type() as suggested.
+
+> 
+>> +{
+>> +	int brbe_type = brbe_fetch_type(brbinf);
+>> +	*new_branch_type = false;
+>> +
+>> +	switch (brbe_type) {
+>> +	case BRBINF_EL1_TYPE_UNCOND_DIR:
+>> +		return PERF_BR_UNCOND;
+>> +	case BRBINF_EL1_TYPE_INDIR:
+>> +		return PERF_BR_IND;
+>> +	case BRBINF_EL1_TYPE_DIR_LINK:
+>> +		return PERF_BR_CALL;
+>> +	case BRBINF_EL1_TYPE_INDIR_LINK:
+>> +		return PERF_BR_IND_CALL;
+>> +	case BRBINF_EL1_TYPE_RET_SUB:
+>> +		return PERF_BR_RET;
+>> +	case BRBINF_EL1_TYPE_COND_DIR:
+>> +		return PERF_BR_COND;
+>> +	case BRBINF_EL1_TYPE_CALL:
+>> +		return PERF_BR_CALL;
+>> +	case BRBINF_EL1_TYPE_TRAP:
+>> +		return PERF_BR_SYSCALL;
+>> +	case BRBINF_EL1_TYPE_RET_EXCPT:
+>> +		return PERF_BR_ERET;
+>> +	case BRBINF_EL1_TYPE_IRQ:
+>> +		return PERF_BR_IRQ;
+>> +	case BRBINF_EL1_TYPE_DEBUG_HALT:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_ARM64_DEBUG_HALT;
+>> +	case BRBINF_EL1_TYPE_SERROR:
+>> +		return PERF_BR_SERROR;
+>> +	case BRBINF_EL1_TYPE_INST_DEBUG:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_ARM64_DEBUG_INST;
+>> +	case BRBINF_EL1_TYPE_DATA_DEBUG:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_ARM64_DEBUG_DATA;
+>> +	case BRBINF_EL1_TYPE_ALGN_FAULT:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_NEW_FAULT_ALGN;
+>> +	case BRBINF_EL1_TYPE_INST_FAULT:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_NEW_FAULT_INST;
+>> +	case BRBINF_EL1_TYPE_DATA_FAULT:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_NEW_FAULT_DATA;
+>> +	case BRBINF_EL1_TYPE_FIQ:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_ARM64_FIQ;
+>> +	case BRBINF_EL1_TYPE_DEBUG_EXIT:
+>> +		*new_branch_type = true;
+>> +		return PERF_BR_ARM64_DEBUG_EXIT;
+>> +	default:
+>> +		pr_warn("unknown branch type captured\n");
+>> +		return PERF_BR_UNKNOWN;
+> 
+> It would be worth logging the specific value in case we ever have to debug
+> this. This should also be marked as _ratelimited or _once.
+
+Sure, will replace with a pr_warn_once() printing 'branch_type'.
+
+> 
+>> +	}
+>> +}
+>> +
+>> +static int brbe_fetch_perf_priv(u64 brbinf)
+>> +{
+>> +	int brbe_el = brbe_fetch_el(brbinf);
+>> +
+>> +	switch (brbe_el) {
+>> +	case BRBINF_EL1_EL_EL0:
+>> +		return PERF_BR_PRIV_USER;
+>> +	case BRBINF_EL1_EL_EL1:
+>> +		return PERF_BR_PRIV_KERNEL;
+>> +	case BRBINF_EL1_EL_EL2:
+>> +		if (is_kernel_in_hyp_mode())
+>> +			return PERF_BR_PRIV_KERNEL;
+>> +		return PERF_BR_PRIV_HV;
+>> +	default:
+>> +		pr_warn("unknown branch privilege captured\n");
+>> +		return PERF_BR_PRIV_UNKNOWN;
+> 
+> It would be worth logging the specific value in case we ever have to debug
+> this. This should also be marked as _ratelimited or _once.
+
+Sure, will replace with a pr_warn_once() printing 'brbe_el.
+
+> 
+>> +	}
+>> +}
+>> +
+>> +static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
+>> +			       u64 brbinf, u64 brbcr, int idx)
+>> +{
+>> +	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
+>> +	bool new_branch_type;
+>> +	int branch_type;
+>> +
+>> +	if (branch_sample_type(event)) {
+>> +		branch_type = brbe_fetch_perf_type(brbinf, &new_branch_type);
+>> +		if (new_branch_type) {
+>> +			entry->type = PERF_BR_EXTEND_ABI;
+>> +			entry->new_type = branch_type;
+>> +		} else {
+>> +			entry->type = branch_type;
+>> +		}
+>> +	}
+> 
+> With the suggestions bove, this would become:
+> 
+> 	if (branch_sample_type(event))
+> 		brbe_set_perf_entry_type(entry, brbinf);
+
+That's right, will change.
+
+> 
+>> +	if (!branch_sample_no_cycles(event)) {
+>> +		WARN_ON_ONCE(!(brbcr & BRBCR_EL1_CC));
+>> +		entry->cycles = brbe_fetch_cycles(brbinf);
+>> +	}
+>> +
+>> +	if (!branch_sample_no_flags(event)) {
+>> +		/*
+>> +		 * BRBINF_LASTFAILED does not indicate whether last transaction
+>> +		 * got failed or aborted during the current branch record itself.
+>> +		 * Rather, this indicates that all the branch records which were
+>> +		 * in transaction until the curret branch record have failed. So
+>> +		 * the entire BRBE buffer needs to be processed later on to find
+>> +		 * all branch records which might have failed.
+>> +		 */
+> 
+> This is quite difficult to follow.
+> 
+> I took in the ARM ARM, and it looks like this is all about TME transactions
+> (which Linux doesn't currently support). Per ARM DDI 0487I.a, page D15-5506:
+> 
+> | R_GVCJH
+> |   When an entire transaction is executed in a BRBE Non-prohibited region and
+> |   the transaction fails or is canceled then BRBFCR_EL1.LASTFAILED is set to
+> |   1.
+> 
+> | R_KBSZM
+> |   When a Branch record is generated, other than through the injection
+> |   mechanism, the value of BRBFCR_EL1.LASTFAILED is copied to the LASTFAILED
+> |   field in the Branch record and BRBFCR_EL1.LASTFAILED is set to 0.
+> 
+> | I_JBPHS
+> |   When a transaction fails or is canceled, Branch records generated in the
+> |   transaction are not removed from the Branch record buffer.
+> 
+> I think what this is saying is:
+> 
+> 	/*
+> 	 * BRBINFx_EL1.LASTFAILED indicates that a TME transaction failed (or
+> 	 * was cancelled) prior to this record, and some number of records
+> 	 * prior to this one may have been generated during an attempt to
+> 	 * execute the transaction.
+> 	 *
+> 	 * We will remove such entries later in process_branch_aborts().
+> 	 */
+> 
+> Is that right?
+
+Right, will update the comment here.
+
+> 
+>> +
+>> +		/*
+>> +		 * All these information (i.e transaction state and mispredicts)
+>> +		 * are not available for target only branch records.
+>> +		 */
+>> +		if (!brbe_target(brbinf)) {
+> 
+> Could we rename these heleprs for clarity, e.g.
+> brbe_record_is_{target_only,source_only,complete}()
+
+Sure, will do.
+
+> 
+> With that, it would also be clearer to have:
+> 
+> 	/*
+> 	 * These fields only exist for complete and source-only records.
+> 	 */
+> 	if (brbe_record_is_complete(brbinf) ||
+> 	    brbe_record_is_source_only()) {
+> 
+> ... and explicilty match the cases we care about[
+
+Sure, will invert the check and update the comment here.
+
+> 
+> 
+>> +			WARN_ON_ONCE(!(brbcr & BRBCR_EL1_MPRED));
+> 
+> Huh? Why does the value of BRBCR matter here?
+
+This is just a code hardening measure here. Before recording branch record
+cycles or its flags, ensure BRBCR_EL1 was configured correctly to produce
+these additional information along with the branch records.
+
+> 
+>> +			entry->mispred = brbe_fetch_mispredict(brbinf);
+>> +			entry->predicted = !entry->mispred;
+>> +			entry->in_tx = brbe_fetch_in_tx(brbinf);
+>> +		}
+>> +	}
+>> +
+>> +	if (branch_sample_priv(event)) {
+>> +		/*
+>> +		 * All these information (i.e branch privilege level) are not
+>> +		 * available for source only branch records.
+>> +		 */
+>> +		if (!brbe_source(brbinf))
+>> +			entry->priv = brbe_fetch_perf_priv(brbinf);
+> 
+> Same style comment as above.
+
+Sure, will do.
+
+> 
+>> +	}
+>> +}
+>> +
+>> +/*
+>> + * A branch record with BRBINF_EL1.LASTFAILED set, implies that all
+>> + * preceding consecutive branch records, that were in a transaction
+>> + * (i.e their BRBINF_EL1.TX set) have been aborted.
+>> + *
+>> + * Similarly BRBFCR_EL1.LASTFAILED set, indicate that all preceding
+>> + * consecutive branch records upto the last record, which were in a
+>> + * transaction (i.e their BRBINF_EL1.TX set) have been aborted.
+>> + *
+>> + * --------------------------------- -------------------
+>> + * | 00 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
+>> + * --------------------------------- -------------------
+>> + * | 01 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
+>> + * --------------------------------- -------------------
+>> + * | 02 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
+>> + * --------------------------------- -------------------
+>> + * | 03 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 04 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 05 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 1 |
+>> + * --------------------------------- -------------------
+>> + * | .. | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
+>> + * --------------------------------- -------------------
+>> + * | 61 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 62 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 63 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+> 
+> Are we guaranteed to have a record between two transactions with TX = 0?
+
+With TX = 0 i.e no transaction was active, indicates normal sequence of branches
+creating their own branch records. How can there be a transaction with TX = 0 ?
+Could you please be more specific here ?
+
+> 
+> AFAICT you could have a sequence where a TCOMMIT is immediately followed by a
+> TSTART, and IIUC in that case you could have back-to-back records for distinct
+> transactions all with TX = 1, where the first transaction could be commited,
+> and the second might fail/cancel.
+> 
+> ... or do TCOMMIT/TCANCEL/TSTART get handled specially?
+
+I guess these are micro-architectural implementation details which unfortunately
+BRBINF_EL1/BRBCR_EL1 specifications do not capture in detail. But all it says is
+that upon encountering BRBINF_EL1.LASTFAILED or BRBFCR_EL1.LASTFAILED (just for
+the last record) all previous in-transaction branch records (BRBINF_EL1.TX = 1)
+should be considered aborted for branch record reporting purpose.
+
+> 
+>> + *
+>> + * BRBFCR_EL1.LASTFAILED == 1
+>> + *
+>> + * Here BRBFCR_EL1.LASTFAILED failes all those consecutive and also
+>> + * in transaction branches near the end of the BRBE buffer.
+>> + */
+>> +static void process_branch_aborts(struct pmu_hw_events *cpuc)
+>> +{
+>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>> +	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +	bool lastfailed = !!(brbfcr & BRBFCR_EL1_LASTFAILED);
+>> +	int idx = brbe_attr->brbe_nr - 1;
+>> +	struct perf_branch_entry *entry;
+>> +
+>> +	do {
+>> +		entry = &cpuc->branches->branch_entries[idx];
+>> +		if (entry->in_tx) {
+>> +			entry->abort = lastfailed;
+>> +		} else {
+>> +			lastfailed = entry->abort;
+>> +			entry->abort = false;
+>> +		}
+>> +	} while (idx--, idx >= 0);
+>> +}
+>> +
+>> +void armv8pmu_branch_reset(void)
+>> +{
+>> +	asm volatile(BRB_IALL);
+>> +	isb();
+>> +}
+>> +
+>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>> +{
+>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>> +	u64 brbinf, brbfcr, brbcr;
+>> +	int idx;
+>> +
+>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +
+>> +	/* Ensure pause on PMU interrupt is enabled */
+>> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+> 
+> As above, I think this needs commentary in the interrupt handler, since this
+> presumably needs us to keep the IRQ asserted until we're done
+> reading/manipulating records in the IRQ handler.
+
+The base IRQ handler armv8pmu_handle_irq() is in ARMV8 PMU code inside perf_event.c
+which could/should not access BRBE specific details without adding an another new
+abstraction function. But I guess adding a comment should be fine.
+
+> 
+> Do we ever read this outside of the IRQ handler? AFAICT we don't, and that
+> makes it seem like some of this is redundant.
+
+
+> 
+>> +
+>> +	/* Save and clear the privilege */
+>> +	write_sysreg_s(brbcr & ~(BRBCR_EL1_E0BRE | BRBCR_EL1_E1BRE), SYS_BRBCR_EL1);
+> 
+> Why? Later on we restore this, and AFAICT we don't modify it.
+> 
+> If it's paused, why do we care about the privilege?
+
+This disables BRBE completely (not only pause) providing confidence that no
+branch record can come in while the existing records are being processed.
+
+> 
+>> +
+>> +	/* Pause the buffer */
+>> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>> +	isb();
+> 
+> Why? If we're in the IRQ handler it's already paused, and if we're not in the
+> IRQ handler what prevents us racing with an IRQ?
+
+armv8pmu_branch_read() always gets called from an IRQ context only. The point
+here is to force a pause (and also disable, as I had explained earlier) before
+reading the buffer.
+
+> 
+>> +
+>> +	for (idx = 0; idx < brbe_attr->brbe_nr; idx++) {
+>> +		struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
+>> +
+>> +		select_brbe_bank_index(idx);
+>> +		brbinf = get_brbinf_reg(idx);
+>> +		/*
+>> +		 * There are no valid entries anymore on the buffer.
+>> +		 * Abort the branch record processing to save some
+>> +		 * cycles and also reduce the capture/process load
+>> +		 * for the user space as well.
+>> +		 */
+>> +		if (brbe_invalid(brbinf))
+>> +			break;
+>> +
+>> +		perf_clear_branch_entry_bitfields(entry);
+>> +		if (brbe_valid(brbinf)) {
+>> +			entry->from = get_brbsrc_reg(idx);
+>> +			entry->to = get_brbtgt_reg(idx);
+>> +		} else if (brbe_source(brbinf)) {
+>> +			entry->from = get_brbsrc_reg(idx);
+>> +			entry->to = 0;
+>> +		} else if (brbe_target(brbinf)) {
+>> +			entry->from = 0;
+>> +			entry->to = get_brbtgt_reg(idx);
+>> +		}
+>> +		capture_brbe_flags(cpuc, event, brbinf, brbcr, idx);
+>> +	}
+>> +	cpuc->branches->branch_stack.nr = idx;
+>> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>> +	process_branch_aborts(cpuc);
+>> +
+>> +	/* Restore privilege, enable pause on PMU interrupt */
+>> +	write_sysreg_s(brbcr | BRBCR_EL1_FZP, SYS_BRBCR_EL1);
+> 
+> Why do we have to save/restore this?
+
+Yes, this guarantees (more so than the paused state) that BRBE remains disabled in
+privilege levels that are relevant, while the contents are being read. 
+
+> 
+>> +
+>> +	/* Unpause the buffer */
+>> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +	armv8pmu_branch_reset();
+>> +}
+> 
+> Why do we enable it before we reset it?
+
+This is the last opportunity for a clean slate start for BRBE buffer before it is
+back recording the branches. Basically helps in ensuring a clean start.
+
+> 
+> Surely it would make sense to reset it first, and ammortize the cost of the ISB?
+> 
+> That said, as above, do we actually need to pause/unpause it? Or is it already
+> paused by virtue of the IRQ?
+
+Yes, it should be paused after an IRQ but it is also enforced before reading along
+with privilege level disable. Regardless the buffer needs to be un-paused and also
+enabled for required privilege levels before exiting from here.
