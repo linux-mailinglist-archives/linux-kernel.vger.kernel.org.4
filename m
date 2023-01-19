@@ -2,127 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50653674139
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3305E674144
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjASStM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S229518AbjASSuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjASStI (ORCPT
+        with ESMTP id S230213AbjASSt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:49:08 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8B88B31D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:06 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id d10so1611540ilc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:06 -0800 (PST)
+        Thu, 19 Jan 2023 13:49:58 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A57295140
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:55 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 7so2285891pga.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:49:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3wtwBFRkiv3X+2Mf5N6N6dytbuxwHCKEX2M461yzzZ4=;
-        b=lMBkz8QDQPnPHUB4vYgP2C+JhfxfjbUPZ3Fr4QrobFtcxonCwGXYQIv+WOOb9XCEZy
-         KhDKaf8dD4BVHOo9XTpbEvyj4y7+qdfhqxF2IJdcniC06Q1IWYIvGM3LYh872UF5c5wI
-         RaTcO3g2pyey0WFLyj/8o1QrSoqVW+pBA57z7fWqpxc1WuIBTDQVoftwhoy4LDrbsz2X
-         jJyfZTlbrwCnyUIPkwzJyqJlPpR09CvvZYLkBGUkpZevGgp3N8+Mo43t4ujg1CVg9uao
-         AMhmFjZAv/6ELk8+w+ExsDR2dCIGQB58xVB+yVcqbnsj6e+fGVRxFT4LG4LYGQuQAWVc
-         lMfw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xNVXfWTFHPUTtkdhJd1rvFQYW6suzNo+IYrlxBerVjw=;
+        b=JCfzsF2f0L14x6DnDb97ikzDMd+kmDUm+hY4g0ikovS6VCInjBWJHaf/91emjlkbvv
+         7wIBq95BwSi0sYX+qpZD/SDvgq6Rh0mChGWHNsKn3x3hLmQ8FzFzJ8/ZbJBpvglwgQ4P
+         DCgQbf4DC/hZmnSwoV0J3qJIQ2CUCL3azLbW7iE8ZYMMJf7aB+WsETKfdqrzzfEJ6ojU
+         vsPAh6PoOnotNaQto+c0+ylg5pDTEUWQjzlqfqHA4n+xq9Aj/eYU3tjl8BclPsCxy96X
+         tvpdUK9qzbs7kasSXAsdoo6MSNp8cPe7grioN6SM05rjDR6+YxuYdpreH2mSGn1YnH2i
+         7GNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3wtwBFRkiv3X+2Mf5N6N6dytbuxwHCKEX2M461yzzZ4=;
-        b=mDAkXVDekc2X2FRfmQqL+rAmOWSAvuhOSVq0cVKzEmDgs9uoHuJN0qbfWVjGZ2IQGh
-         Sfs1ptgJafhuKZ3jsBrUbJRgkbXrdOjWw613Yre5jvo2sqg4pCtODmNX50Br5zqrF+Pf
-         vMr56fp8kT+F36J5/XYwbR55Ad3Y9E/9DCXmw6YcKEslbeyooM6wXOSPATEcDeQoAxPK
-         85DPgH+1BoqzExFaIujQbgsFeZq3Wxv70kWOqZyS07gFQPgOAD0TkyI8FnlSpp0ndCuw
-         8AacdettoHYgehgTXM+NkKI/1OSEWBaagCu/IU+4T9dCUcEFYjkgMI6b2Vt2HgtJOL43
-         AykQ==
-X-Gm-Message-State: AFqh2kouH1qYQ+UwXC2o8xI8JiaM0Slk9QVUH1tFTxTxRhHOfWUiJsxg
-        2Tl+pmm47xkm8te6zAqqpTl9UA==
-X-Google-Smtp-Source: AMrXdXuOIDv/Uc+qYNqeQ8Q8kAd4DMYl/OagR+jmXwMlKcHcWIjFQRndKUZEf8kRrQA9a4OoOFaVEg==
-X-Received: by 2002:a92:d342:0:b0:30b:c9ec:fc23 with SMTP id a2-20020a92d342000000b0030bc9ecfc23mr2013949ilh.2.1674154145943;
-        Thu, 19 Jan 2023 10:49:05 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id a88-20020a029461000000b0039e5786d7b7sm11754955jai.18.2023.01.19.10.49.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 10:49:05 -0800 (PST)
-Message-ID: <4f22f15f-c15f-5fba-1569-3da8c0f37f0e@kernel.dk>
-Date:   Thu, 19 Jan 2023 11:49:04 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xNVXfWTFHPUTtkdhJd1rvFQYW6suzNo+IYrlxBerVjw=;
+        b=pXnkzZlAmkV/oUZjeSyqdXWa9zd02EYSuaCHeQaPQCTkcDAJ64fB9If4JBXWsyoWDJ
+         oSvyEHyJV8eiN2cx8Fq2PduFUYjON4ag2pvnchFqS6c5UqTo+oMAME3BqzqWXyNl/lT8
+         fEsl/yTKp+2o1+MHZjrDelkIG32/xeFIngPN1WRCON/VFXPU0e8Y6892dviOdcigwPEa
+         ksPfc0rjCzJm3EWsaO6QTUTEs5M3cIeW5sn7F4RVvwDamnRyGgmZZZdpTvJ9NYSiIcI7
+         V6A2MIlvlSEQtJtgLJplWjjYBadQcJyDQiabi/aA6QZo3ylaWmn2/6KTLBleXIqe+XGv
+         kQZg==
+X-Gm-Message-State: AFqh2kqLaDLUpK9ZaVrkLpRDKTo8xgO+ZUxY+/P2SAPxW2Ewbrhvw7ak
+        VIiPPsZNJOHT+79NUTXu2RyK4x6ySj1rpVyHKR+Saw==
+X-Google-Smtp-Source: AMrXdXs6HTI9i0wEtQHX5RB47auesuGHCq06fYXVQ7aeMwYLK4yjX/E0p+7CcZlE0F4L6rvrtuk8H7gqPyauTnlR1T4=
+X-Received: by 2002:a63:d455:0:b0:478:ae53:a299 with SMTP id
+ i21-20020a63d455000000b00478ae53a299mr956491pgj.260.1674154194728; Thu, 19
+ Jan 2023 10:49:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: ublk-nbd: ublk-nbd is avaialbe
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nbd@other.debian.org
-References: <Y8lSYBU9q5fjs7jS@T590>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y8lSYBU9q5fjs7jS@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-63-michael.roth@amd.com>
+In-Reply-To: <20221214194056.161492-63-michael.roth@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Thu, 19 Jan 2023 10:49:43 -0800
+Message-ID: <CAAH4kHZVaeL57bGAzeDjJDTumsnb96iAYBdhm7cs_8TjBg+v3w@mail.gmail.com>
+Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 7:23 AM, Ming Lei wrote:
-> Hi,
-> 
-> ublk-nbd[1] is available now.
-> 
-> Basically it is one nbd client, but totally implemented in userspace,
-> and wrt. current nbd-client in [2], the transmission phase is done
-> by linux block nbd driver.
-> 
-> The handshake implementation is borrowed from nbd project[2], so
-> basically ublk-nbd just adds new code for implementing transmission
-> phase, and it can be thought as moving linux block nbd driver into
-> userspace.
-> 
-> The added new code is basically in nbd/tgt_nbd.cpp, and io handling
-> is based on liburing[3], and implemented by c++20 coroutine, so
-> everything is done in single pthread totally lockless, meantime turns
-> out it is pretty easy to design & implement, attributed to ublk framework,
-> c++20 coroutine and liburing.
-> 
-> ublk-nbd supports both tcp and unix socket, and allows to enable io_uring
-> send zero copy via command line '--send_zc', see details in README[4].
-> 
-> No regression is found in xfstests by using ublk-nbd as both test device
-> and scratch device, and builtin test(make test T=nbd) runs well.
-> 
-> Fio test("make test T=nbd") shows that ublk-nbd performance is
-> basically same with nbd-client/nbd driver when running fio on real
-> ethernet link(1g, 10+g), but ublk-nbd IOPS is higher by ~40% than
-> nbd-client(nbd driver) with 512K BS, which is because linux nbd
-> driver sets max_sectors_kb as 64KB at default.
-> 
-> But when running fio over local tcp socket, it is observed in my test
-> machine that ublk-nbd performs better than nbd-client/nbd driver,
-> especially with 2 queue/2 jobs, and the gap could be 10% ~ 30%
-> according to different block size.
+> +
+> +       /* Page-align the length */
+> +       length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
+> +
 
-This is pretty nice! Just curious, have you tried setting up your
-ring with
-
-p.flags |= IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN;
-
-and see if that yields any extra performance improvements for you?
-Depending on how you do processing, you should not need to do any
-further changes there.
-
-A "lighter" version is just setting IORING_SETUP_COOP_TASKRUN.
+I believe Ashish wanted this to be PAGE_ALIGN(params.certs_len)
 
 -- 
-Jens Axboe
-
-
+-Dionna Glaze, PhD (she/her)
