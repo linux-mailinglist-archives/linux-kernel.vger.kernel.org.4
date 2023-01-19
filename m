@@ -2,153 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21782674066
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729516740D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjASR6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S230080AbjASSYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjASR6K (ORCPT
+        with ESMTP id S229689AbjASSYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:58:10 -0500
-Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazon11020025.outbound.protection.outlook.com [52.101.61.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2315D90845;
-        Thu, 19 Jan 2023 09:58:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mhWvpi1LogqDdiQkwPQ0C2ws/kTi/Y6GoVgrKFPWXsx0f6jeNTeaopbsPbhs2grdebweqPGTflGy+vH8T5nGgLsyVMmE9eBIDKzpqrM5xDU6BOzXzpNEVqdCx7BTiyT7wV8IQnCYoYL0EO4WoRjC+xldmRsKoqwG8fVyK/wQEqHKkfbADcvtLSVSNanfKGx5AXEhkS+6/yj69oIOiHZDTz4JC+XapvcGtE1CpLG3eEFe64BqxJSOLyuNdw4xIbyNWYkEE8WmwmFz/+wf7vGpcDFdgzw2n+95XFFFTxYRAYTQMLakCqM/b2B379r5jEkLErTyEJlcS0Xtz/rLvuOdpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qh3rgYYm5wrfvbeCfMfz2kTKIwu/ZzgJqo5/ap+J8KE=;
- b=au3R/pcv+zjsp0dUJ1TkVRfGuh8kTiAxfskTeX2wIsFdunFdsfYyxjkohwVHTLlSDisRqQo/WiH8NMOMmb4qG5cRvF8m9l1twAksq/otAr4NyMI5d5xfAid6yldb/5r4U0gRaHBeJnkvsA0CB59fn4dBO2FEr/iThWyxSi7GwxGvldHxtnJaARtWWIHItkvNb0lOHE770lAeDFsVMwY0WHLJ8gpsf7U735vOmB/KaRcv2XhKS9DwK+AInOfZCjAn1oBCDiweDYP8H20UTKJbiafmPLTvmLEX35jkUWe85Bvjg7NUfsmuhOIYuz/s9d8aK66nkl7WboGsS7+0hiNxnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qh3rgYYm5wrfvbeCfMfz2kTKIwu/ZzgJqo5/ap+J8KE=;
- b=jtC6vQLFU+VeysdHCnOvj0HKXL1UtlTs2MAQsWDbg2Auzjuzj7qyE+ytLBHkMdGslOhHBXMIAJ6kZtv5z07J6yNRY0k1JIYJsi6fesJgOceADnqOvuNHGUXj3pajOfVTuRvhaFP26fUcgvJPE1V8h8Z83QBpVxO8ZBdgbc0MWGM=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by PH0PR21MB1307.namprd21.prod.outlook.com (2603:10b6:510:10f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.6; Thu, 19 Jan
- 2023 17:58:04 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d%5]) with mapi id 15.20.6043.006; Thu, 19 Jan 2023
- 17:58:04 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>, Borislav Petkov <bp@alien8.de>
-CC:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
- Confidential VMs
-Thread-Topic: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
- Confidential VMs
-Thread-Index: AQHZJo6ylykThdLA10Cb0ddOjSIUP66mEVyA
-Date:   Thu, 19 Jan 2023 17:58:04 +0000
-Message-ID: <SA1PR21MB1335741F74F96320304708ABBFC49@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <Y7xhLCgCq0MOsqxH@zn.tnic> <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
-In-Reply-To: <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fc23ee3d-dbbd-4be7-a57e-3d8eafff84ee;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-19T17:55:37Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH0PR21MB1307:EE_
-x-ms-office365-filtering-correlation-id: 9de61f5c-8972-4658-cc19-08dafa46b677
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FZHi9QmgPin/xFR71mhCHN7Oj9nbl5XBbalBuzSWAgNK3Wiw0wYiNC7O0X7LfUczsnW6n0j/soQ5lmAt60TCobwIsAZCMW4jIrWtM33vBdatfyy2nt+X3gSwMOY75KTQQ4f2qb3ju1yDe+LdCA75D5uAQ8Udep/Hs+qoxTa8KftmyMACt5EhV/ZCIiR4ITPWbiVwq/5KIX0VH5T65StuVWuKPY1timAJRIfSq2CuAgTs/xbYktBYsvjT//KRp4uetJGzEi+XZXk+1dZ86Cp1d3hdFLa4f6CHE276qMLM5nS026sdS53a6zu2wi7WD8MxsfEhToXi3AxjRmIf37y0TiVxM/erVy7OzkMLr3uk3hcnGyEQr3DHbj3EciHJGz1aYArJ1+e81G+hzgaiXck5k5XXon5PqZ03ac+OS47pjhkmd0shcIAI9rDAnwKHOPxj5fGb8Nw3tM7ykTXYy6gA2e9IMS4WF87FOf4tO84T1pifWbflQW6XNbST3Usyvy0sCm3OUhT1+PNwyrRHjaoY+Jek8Iuk/4xcCssI9FMICWTE6TFisSUTihmakot2A6BgM2feQPEr3OS6rmNFc+6syRo/0Hu1bpDU+Lb/MJ67t59ioDi738JnNZMrAOM1y6tSrUfzWjFJADo2UbrGtljIxEWqKsv3/1epZRtVOVM5SF1YmNaHaefLWNLaHt97zpBAj/RKg3Ff4x2aLjDR17faelrCtZoooJwtziN8ItnGYolIbg4O7VeWMH9/FLDE5ZfS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(451199015)(76116006)(86362001)(53546011)(8990500004)(6506007)(478600001)(7696005)(71200400001)(316002)(33656002)(122000001)(8936002)(52536014)(5660300002)(82960400001)(26005)(7406005)(66476007)(66556008)(66946007)(7416002)(38100700002)(82950400001)(66446008)(8676002)(64756008)(4326008)(41300700001)(9686003)(186003)(10290500003)(38070700005)(55016003)(2906002)(54906003)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Y+XGiOEGgGLcg4yLuPNnY3wiYEFYJSe8JJIhAdyGPt4dcTabFb+WI8hMdZFX?=
- =?us-ascii?Q?jqvaOlOJCMTiOamYBO55+sEFOb6BeARSVZgpHbaQK19Y/IIHuZvBf4aNNt3Z?=
- =?us-ascii?Q?KMvXQpQ+Dr3VFf89brcp5m3gSVUg0SbCZqXJktNhvce+OXqPi7su0kr9JxeX?=
- =?us-ascii?Q?FW1seyy4Op9FZeJwhRiUspJYTEspaNC0WFCmzKVVKk89xw7kzIex9Nty3rCx?=
- =?us-ascii?Q?xmtK6MzKQj+pQ7hO8107SGjsiHmLgnDHFg1KkpgII7Ms4fkerYKAUw9ScfhO?=
- =?us-ascii?Q?flR1lkRYW2UmXVsDJD4HS+24yVzIfcqqejzMwX7S+pRs1eI1xQ0TGei9czyf?=
- =?us-ascii?Q?T7R2tHEqFuwrc1HpavVUMmyqle2N0NQsTWoJBjtrkDF3l4ht+P8BUczwOdOu?=
- =?us-ascii?Q?7c1B92hN8edOYcxEZOxQ6s99PBoqXJLRvr0GQBO+BWbcztOrgt9VIwpHCKPL?=
- =?us-ascii?Q?T3R/4x6DaP4sUQpB8j6G33B8ItVp7BBYNO3EN7SDqZ3V9pyzyR0aA+F8oJOV?=
- =?us-ascii?Q?DUMVsl7gXSoUZTc9wkZIbAaKgz5kW8DP7tH2t6ACZaa0YGgOrOPjhTMSC3CL?=
- =?us-ascii?Q?qO2H00wgf5bhWR2BScv7FFwnlecaqKX7E8Bs5DjKwrYh7GJmvQOg3AhBJqJX?=
- =?us-ascii?Q?AcX75zyyiBg0yJdvxmsbxywZPeAm3ppkqFtf/65d6cHNtFinLwgRhus0oiQB?=
- =?us-ascii?Q?6PRV9NN0EzljxA26HZGSxehVGqaigJOnmwDWHb4c/cDftCrHYBZjSWfVzjNF?=
- =?us-ascii?Q?LtnbPFuB5KcaXgGug8yBcaW/bzVOM17YNmQ8CCQ07TuqB4L5wO84rFSdjM8u?=
- =?us-ascii?Q?Sg/S0/TgxrsV+33OQ1Me0KjM0xGISpoLx2cBIeOVybfhH6AQfhrqZS78Ed71?=
- =?us-ascii?Q?DTh9nGktp5vJJsKk+TzAtkElpfqRTg+RO/S/T4yPVxK5jNOG3RlBQi25VI9q?=
- =?us-ascii?Q?w0N9kPdlPrV0RsW/SCTPC5K3N4iHd4XftTxKV52m5JgQknoS3VOYEVyZXm4p?=
- =?us-ascii?Q?OTI+AynhX5gSvvBiCzspTHcaOgsh6egygBYrQmjV6vkCu7Rk7y/cC/kpXvkC?=
- =?us-ascii?Q?kj27/EwbnX1hd3LIpx5Rnh6K1QUwi0EnPMuqaUwPxQ6fFDFfCJx3fLNjdA9N?=
- =?us-ascii?Q?xpsHIreC8z+Y5c8/b8Yvo6Q/j0oR8EGQDuuwBHQUeJLerQ+5QUQCr6RTtLfn?=
- =?us-ascii?Q?k+yBm/9OABRbDLpVADatozWlDTwrrEBrHzZPmCsZbA23px9ZF5y9A4EAS9xq?=
- =?us-ascii?Q?47cW0b9tr9nZYvCP4Mh50Hk123Abf3YKeuzikG4uVqqvKTKni9cGo8HOX4HU?=
- =?us-ascii?Q?keKVqJLQfthYb3y0DS1LH7OnCRmskOL42g7zolMuY3ViHein54aLAHPBy5jy?=
- =?us-ascii?Q?qTccVhgA9Lg61SK96TTMYHEgP/xrzK/NDU8DGrz0FXNqTUxNE0mm5wbudcxd?=
- =?us-ascii?Q?4kvNIbiXIM9OKVmj5YeAErGMTsTr5U6zUJTgAkn9bKM0X8JcJktMh2GIuwM+?=
- =?us-ascii?Q?oQYW8OVhhNrbf7OQzQ6xvRYC9z8ABUClGy1TRMAquSRULWC1d+VbkBZ6ZUZ7?=
- =?us-ascii?Q?seveoEHx67CUH6SXVO8EVKgd2IgXvMPm27dLyjJJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 19 Jan 2023 13:24:44 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A061A8386E;
+        Thu, 19 Jan 2023 10:24:43 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 02183141143;
+        Thu, 19 Jan 2023 18:24:43 +0000 (UTC)
+Received: from pdx1-sub0-mail-a289.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 6621F1410BE;
+        Thu, 19 Jan 2023 18:24:42 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674152682; a=rsa-sha256;
+        cv=none;
+        b=FzboCCTPoGW8k90iF9zhaKMlZfwycAtoBKNrvJrvdBEMlXWgTnwe1PXLTOFKoBx8qDcP/F
+        PfE0tBQnMqJ86P+gtGlGejn6jlpa3ICA2pSLDGJHty+r2m3rPXtjt7cL/4AOgVGqVraCZM
+        87pKSo3YgBdP170c/e/ghWN8rlHXXVsZ3G4tn54HHijfG8hVvnINaV/6mmLJx5BH/JklYZ
+        q5lnW+TKhPfxTKTF/6tElk65SMl5E6hcGiewCQNyclOuUFvOHtM5GA904MaV7vBnu/mftS
+        6c/FkfkAQFOOdepQn0gOOJ+q7MNbglH0AfuKGmyESJNOlIKFdgu8/k5lQIWIMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1674152682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=XdMCywKhvt+qgNHKB6pCT4yp65QZ8oX82WvstHDKH30=;
+        b=ZRk54CbRXx6xPdPvw0WV51MqLmlMrZFOgIxpaXy/lsN/zGhzP/Hw3OCeabw+zsBBLpkxq2
+        Lf8usi+9kBU8bBR8bEAuSWFqBMnORBeh7iPyVwwAwBekQoYiOlNhOlH45ZHuSpwPLJfmXN
+        QAx/j6zu/2cA8WQN6PFu6XwEe7HaWbM4EN1HtHV8JtZl7eXvty9vE48VgRJxQJSTynpq5R
+        4LqX8AcZhdf1bmANO3fqUSdnrDEd12kjPTbCisIDtWBjV5htLdLpEfoR+gk3ueQWIuBHng
+        P1GCkzGgdVxsglqT6+JzP8lT402yqNyqagUMheHrFBWoZb4msPa/jzrH5ZIq9w==
+ARC-Authentication-Results: i=1;
+        rspamd-7cf955c847-wgrhk;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Grain-Ski: 490dd1944f14967c_1674152682755_1281930886
+X-MC-Loop-Signature: 1674152682755:2371508031
+X-MC-Ingress-Time: 1674152682755
+Received: from pdx1-sub0-mail-a289.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.227.166 (trex/6.7.1);
+        Thu, 19 Jan 2023 18:24:42 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a289.dreamhost.com (Postfix) with ESMTPSA id 4NyWHs4t1Jz1W;
+        Thu, 19 Jan 2023 10:24:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1674152682;
+        bh=XdMCywKhvt+qgNHKB6pCT4yp65QZ8oX82WvstHDKH30=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=jjejct0Fx77WUGSvJWm7DekSBheCTBqNgNtsWoa5iuj2wsftfyPDonmIBb1Ynp7Iw
+         CUVTuCY2BfJEWDO1l8aW5QnVNDiFAoeClhaIePIcmmb7214C8CUm/OuRZHYY/5Mdpj
+         qHtS4Wg4JwjYeOYp5tutwgmrb6sIC7iJMScomjdcdBo0n+gkKHWObwPn7YGiQH9qwh
+         4qIw9srqsUMv++7KQZeD4T3/KSqTDwi5mLaqImOncg+8/ThYVCwu9Mex2xOQgtAPcx
+         AJWU0xdHTG/Zcml6GI6TLz5Eo4d5UohJR8DjboyoU838lPy27LVdSfj4/R4szbfUpg
+         GXs8R4puNIFXg==
+Date:   Thu, 19 Jan 2023 09:58:18 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <20230119175818.2rc4uvxkr3o6u37o@offworld>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8gPhTGkfCbGwoUu@linutronix.de>
+ <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+ <Y8j+lENBWNWgt4mf@linutronix.de>
+ <20230119110220.kphftcehehhi5l5u@techsingularity.net>
+ <Y8lvwKHmmnikVDgk@linutronix.de>
+ <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
+ <20230119174818.up7haooxje4nzusu@offworld>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9de61f5c-8972-4658-cc19-08dafa46b677
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 17:58:04.1836
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fwK6BMLa+gCDHAcC3b7RjEjtCcuVZtH2eYxGDagbANUsOdWRWzBa6kjigsVBV3Oczg5+vPBqYF2lMaoXF2xPAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1307
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230119174818.up7haooxje4nzusu@offworld>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,41 +110,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Wei Liu <wei.liu@kernel.org>
-> Sent: Thursday, January 12, 2023 6:04 AM
-> To: Borislav Petkov <bp@alien8.de>
-> [...]
-> On Mon, Jan 09, 2023 at 07:47:08PM +0100, Borislav Petkov wrote:
-> > On Thu, Dec 01, 2022 at 07:30:18PM -0800, Michael Kelley wrote:
-> > > This patch series adds support for PCI pass-thru devices to Hyper-V
-> > > Confidential VMs (also called "Isolation VMs"). But in preparation, i=
-t
-> > > first changes how private (encrypted) vs. shared (decrypted) memory i=
-s
-> > > handled in Hyper-V SEV-SNP guest VMs. The new approach builds on the
-> > > confidential computing (coco) mechanisms introduced in the 5.19 kerne=
-l
-> > > for TDX support and significantly reduces the amount of Hyper-V speci=
-fic
-> > > code. Furthermore, with this new approach a proposed RFC patch set fo=
-r
-> > > generic DMA layer functionality[1] is no longer necessary.
-> >
-> > In any case, this is starting to get ready - how do we merge this?
-> >
-> > I apply the x86 bits and give Wei an immutable branch to add the rest o=
-f the
-> > HyperV stuff ontop?
->=20
-> I can take all the patches if that's easier for you. I don't think
-> anyone else is depending on the x86 patches in this series.
->=20
-> Giving me an immutable branch works too.
->=20
-> Thanks,
-> Wei.
-> > --
-> > Regards/Gruss,
-> >     Boris.
+On Thu, 19 Jan 2023, Davidlohr Bueso wrote:
 
-Hi Boris, Wei, any news on this?
+>On Thu, 19 Jan 2023, Mel Gorman wrote:
+>
+>>The race could be closed by moving wait_lock acquisition before the
+>>atomic_sub in rwbase_write_lock() but it expands the scope of the wait_lock
+>>and I'm not sure that's necessary for either correctness or preventing
+>>writer starvation. It's a more straight-forward fix but expanding the
+>>scope of a lock unnecessarily has been unpopular in the past.
+>
+>Curiously, this is the documented behavior:
+>
+> * down_write/write_lock()
+> *  1) Lock rtmutex
+> *  2) Remove the reader BIAS to force readers into the slow path
+
+Nevermind, this was the rtmutex, not the wait_lock, sorry for the noise.
