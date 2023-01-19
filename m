@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4469867367B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EE5673685
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjASLOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229807AbjASLRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjASLOO (ORCPT
+        with ESMTP id S229459AbjASLRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:14:14 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA4B68420
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:14:08 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id i4so870476wrs.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:14:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rWQf2TFUhuWnAtSN5Oiw58HXBV+drD5QeE/qkk75i94=;
-        b=bgtbWPjfqqb4T0zb5meTH1JYPl8eLqoBSihVQ5iSIOAKMzopmezZSow2cG5cE4ZgSB
-         Ev5XtwXhdtFF9rLE9C3MYQIWjGqf7lsJ4M4is+xTEKi6ixR/nQuJmM5Uw7XxUJY9AU/3
-         G6Z+cH5x1dcuPAa/mxyTMYdq4/o49D1sy0XRQ3b4Tngf4FPNyjpbO/95U7i3tOWr9mmh
-         bQaPx5b8SepR89e2yMMVBbqn2L9LJ5D/X0VZ0hHeSodPVd5cBMpVRFf0HeX6dR/FIOiS
-         2R3hE0lhcYlaAYBLLUw+kg7chc9SdkQ6tifD0ZVC33uZmp3JPi5Keco335II17q7VAs0
-         fxZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWQf2TFUhuWnAtSN5Oiw58HXBV+drD5QeE/qkk75i94=;
-        b=XUWNcgOsvL4xoRgrBOLH7qryNoZI2xzygf7S2Nue7fEvxPFCeLJKHPENDzl8d2l3ER
-         T5pgjm811Gf/H9g/PZpjePRGl5C13b8QeMD1/2dKk82ZI1PN3bn3Wihx4GLJSgfEuGyC
-         kbodLjB1LN+wPzh44KDk3GhaiasOo3FJaRj/sTsbg12d2i9oIG7Fhp4cY5eJwjmJl8rZ
-         cjKYr+SiKaa1C6RfUOOGGhZz58yPN0wA8DtX4duUX9jq8IYT5O3s/tvC67ZPtdj90bj0
-         qsxugPCxacaleKSa/3rn7ek+YAa5HtdxvpLMvjFOjQ0b35LkEOgXH9l82oJrTcjp4H1n
-         ccdA==
-X-Gm-Message-State: AFqh2kpHMcqBlariorGJieLq+eHsn1WiEAnU6II/ejXAXDyPqzXUw8nu
-        o4oB3YgJWL3LYLjiGIyL6gutF3jGK10ehL0K
-X-Google-Smtp-Source: AMrXdXuxD3W/9db9SL+yOUMNCb+67nqBttWmQ6K8aQb2t9v/o0u90zsQZIAoaID3CgFIaX5A/KgbTg==
-X-Received: by 2002:a5d:4e04:0:b0:2bb:31dc:2d62 with SMTP id p4-20020a5d4e04000000b002bb31dc2d62mr8497695wrt.67.1674126846711;
-        Thu, 19 Jan 2023 03:14:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m5-20020adfe0c5000000b002bdfe3aca17sm11143937wri.51.2023.01.19.03.14.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 03:14:05 -0800 (PST)
-Message-ID: <821fc151-260b-f248-8d68-40e85ae5e031@linaro.org>
-Date:   Thu, 19 Jan 2023 12:14:04 +0100
+        Thu, 19 Jan 2023 06:17:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2AB64DA1;
+        Thu, 19 Jan 2023 03:17:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674127065; x=1705663065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+V4r9ZArU3A1gYY8X12Cens1VVxsFLF0cBxVdWqJJIA=;
+  b=XTa4iFB42WeA0TPUEx2dLOF2xZOdSwvPDCTZ8JoExEe6MHizUK28X+Su
+   d93tpL8OEvGG5nKWlIcMJicxOFgUxLXRR0uOEwXWq6W6+QR/E0foEc9SY
+   ja0C7m47qruKJzN75IG3J0vJI2OfhXFfgjblDWeYUiXj6qNVQTx6lygUO
+   46afn+VXbmikFmj3Sa/7x6rjZY+O4yzCvNCpCA1L0ve4UT2FQWr67vySj
+   Wt88DWLzyRYiHXpXBxMWQqrNbPp4QGk9+SqjbiBiWXeLVFGmbgmSBL5JG
+   bc8Rz+c0Y+hZacf6rG5yGz8JHi5RTbDTRgS/ER0pmI+bEvpyLJBXw2Uke
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="313132942"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="313132942"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 03:17:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="662080952"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="662080952"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 03:17:43 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 96D67203C4;
+        Thu, 19 Jan 2023 13:17:41 +0200 (EET)
+Date:   Thu, 19 Jan 2023 11:17:41 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] device property: Make
+ fwnode_graph_for_each_endpoint() consistent
+Message-ID: <Y8km1Zwl1IUXh4s2@paasikivi.fi.intel.com>
+References: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 1/4] dt-bindings: arm: mediatek: migrate MT8195
- vppsys0/1 to mtk-mmsys driver
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230118031509.29834-1-moudy.ho@mediatek.com>
- <20230118031509.29834-2-moudy.ho@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118031509.29834-2-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117152120.42531-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2023 04:15, Moudy Ho wrote:
-> MT8195 VPPSYS 0/1 should be probed from mtk-mmsys driver to
-> populate device by platform_device_register_data then start
-> its own clock driver.
+On Tue, Jan 17, 2023 at 05:21:20PM +0200, Andy Shevchenko wrote:
+> Make fwnode_graph_for_each_endpoint() consistent with the rest of
+> for_each_*() definitions in the file, i.e. use the form of
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->  .../arm/mediatek/mediatek,mt8195-clock.yaml      | 16 ----------------
->  1 file changed, 16 deletions(-)
+> 	for (iter = func(NULL); iter; \
+> 	     iter = func(iter))
+> 
+> as it's done in all the rest of the similar macro definitions.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Sakari Ailus
