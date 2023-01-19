@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB13674BDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0062D674BD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjATFLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S231276AbjATFLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjATFLC (ORCPT
+        with ESMTP id S230430AbjATFK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:11:02 -0500
+        Fri, 20 Jan 2023 00:10:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E92C4E9A;
-        Thu, 19 Jan 2023 20:59:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E8AC380F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:59:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2DEFB820FE;
-        Thu, 19 Jan 2023 06:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0264AC433D2;
-        Thu, 19 Jan 2023 06:14:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58EE8B82105
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:12:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A8FC433EF;
+        Thu, 19 Jan 2023 07:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674108859;
-        bh=gjLSPUZt6xaons6m+9xOYICSVfpvADrPllIevlXag+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qz1H4e0Py4Tql1URFdxEPgDq7ngGrjMVeEiAohrmrS9pI9dOYn4+JrudXDqgQIHfj
-         Pv64m/GBCpNThxNzDbugtuX4GB3Xumhh/VNw/qYSOPn62Ka/UdpsVwl1x3qmISqclS
-         Bl+4SnecHK0mGtc6QmYNQna7X6jUXZOWhmFwxAYkk9LDkqFGBJDkZebX5YlhSkeGmT
-         MYAeHmYF2/MorMkNqhJfH3RsEGpLcTCZ3HGO66tjLC6ej6EK56B+VinzQW+zPz/zax
-         Ieblx4iiVeZznjPga/BF1vjX96D2dybUrSE2OOaluZS+0ZS27lej/gV8H0sNHgXuky
-         wefTKdQGjUbPA==
-Date:   Thu, 19 Jan 2023 11:44:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Colin Cross <ccross@android.com>,
-        Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the phy-next tree
-Message-ID: <Y8jft7UDgvMqPwv7@matsya>
-References: <20230119153623.339d6739@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119153623.339d6739@canb.auug.org.au>
+        s=k20201202; t=1674112342;
+        bh=ppCaKUMocfObxQmoemgltocCkqn+mmzyJALotudKBys=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L1Frc4CLCNnwEaRoKRcsZSHweWOGCOh8V2cEPqf5hfWfY2bA/5RRZTobxNeRPVVLE
+         20vWPnnb/olFBOaBKpP6eF2DbJtE3zdBUY/jvOjsWluM9x4pM8S/RfvpMVU+QyUJP+
+         S8ruxNw8ythX6P1zyg+2MM+StI8NqXJcXL55IVYD8XvW/8CStNH6RzIpkhBsrz0yNa
+         IcRRyhbV12LkGFHova9iXVR0r6ZBMX68f1hlMSCHDjbs7iKweA6KGhcyeV+sV+GIis
+         nCXo1iT6DTWdpbB6eTDHdT5nj8bc7XlNilmXxxsAqiP6kbjJIGzL4hotchmbkQ23Nt
+         A6I9c7agvx5VA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pIP5w-0030D7-GT;
+        Thu, 19 Jan 2023 07:12:20 +0000
+Date:   Thu, 19 Jan 2023 07:11:21 +0000
+Message-ID: <87bkmvdmna.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] KVM: arm64: vgic: Fix soft lockup during VM teardown
+In-Reply-To: <28061ceb-a7ce-0aca-a97d-8227dcfe6800@nvidia.com>
+References: <20230118022348.4137094-1-sdonthineni@nvidia.com>
+        <863588njmt.wl-maz@kernel.org>
+        <28061ceb-a7ce-0aca-a97d-8227dcfe6800@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sdonthineni@nvidia.com, james.morse@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, vsethi@nvidia.com, yuzenghui@huawei.com, oliver.upton@linux.dev, suzuki.poulose@arm.com, ardb@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,22 +74,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-01-23, 15:36, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the tegra tree as a different commit
-> (but the same patch):
-> 
->   fb1ff01307ee ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
-> 
-> this is commit
-> 
->   56052eee689a ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
-> 
-> in the tegra tree.
+[dropping the now dead old kvmarm list]
 
-Ideally, this should go thru phy tree or some other tree with
-phy-maintainers ack!
+On Wed, 18 Jan 2023 19:24:01 +0000,
+Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+> 
+> 
+> 
+> On 1/18/23 05:54, Marc Zyngier wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > Shanker,
+> > 
+> > Please Cc all the KVM/arm64 reviewers when sending KVM/arm64 patches.
+> > 
+> > On Wed, 18 Jan 2023 02:23:48 +0000,
+> > Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+> >> 
+> >> Getting intermittent CPU soft lockups during the virtual machines
+> >> teardown on a system with GICv4 features enabled. The function
+> >> __synchronize_hardirq() has been waiting for IRQD_IRQ_INPROGRESS
+> >> to be cleared forever as per the current implementation.
+> >> 
+> >> CPU stuck here for a long time leads to soft lockup:
+> >>    while (irqd_irq_inprogress(&desc->irq_data))
+> >>        cpu_relax();
+> > 
+> > Is it a soft-lockup from which the system recovers? or a livelock
+> > which leaves the system dead?
+> > 
+> The system is not recovering, did a power cycle to recover.
+
+This isn't a soft-lockup then. This is at best a livelock.
+
+> > Are these two traces an indication of concurrent events? Or are they
+> > far apart?
+> > 
+> Concurrent.
+
+So you can see the VM being torn down while the vgic save sequence is
+still in progress?
+
+If you can actually see that, then this is a much bigger bug than the
+simple race you are describing, and we're missing a reference on the
+kvm structure. This would be a *MAJOR* bug.
+
+Please post the full traces, not snippets. The absolutely full kernel
+log, the configuration, what you run, how you run it, *EVERYTHING*. I
+need to be able to reproduce this.
+
+> 
+> >> 
+> >> irqreturn_t handle_irq_event(struct irq_desc *desc)
+> >> {
+> >>      irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+> >>      raw_spin_unlock(&desc->lock);
+> >> 
+> >>      ret = handle_irq_event_percpu(desc);
+> >> 
+> >>      raw_spin_lock(&desc->lock);
+> >>      irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+> >> }
+> > 
+> > How is that relevant to this trace? Do you see this function running
+> > concurrently with the teardown? If it matters here, it must be a VPE
+> > doorbell, right? But you claim that this is on a GICv4 platform, while
+> > this would only affect GICv4.1... Or are you using GICv4.1?
+> > 
+> handle_irq_event() is running concurrently with irq_domain_activate_irq()
+> which happens before free_irq() called. Corruption at [78.983544] and
+> teardown started at [87.360891].
+
+But that doesn't match the description you made of concurrent
+events. Does it take more than 9 seconds for the vgic state to be
+saved to memory?
+
+> 
+> [   78.983544] irqd_set_activated: lost IRQD_IRQ_INPROGRESS old=0x10401400, new=0x10441600
+> 
+> [   87.360891]  __synchronize_hardirq+0x48/0x140
+> 
+> Yes, I'm using GICv4.1, used these 2 functions to trace the issue.
+
+Then *please* be precise in your descriptions. You send people in the
+wrong direction.
+
+[...]
+
+> I ran stress test launch/teardown multiple VMs for 3hrs. The issue
+> is not reproducible. The same test fails in 10-30min without code
+> changes.
+
+That doesn't add up with the earlier description of concurrent events,
+with the VM teardown and the vgic saving running in parallel. My patch
+doesn't prevent this.
+
+So either your testing is insufficient, or your description of
+concurrent events is inaccurate.
+
+	M.
 
 -- 
-~Vinod
+Without deviation from the norm, progress is not possible.
