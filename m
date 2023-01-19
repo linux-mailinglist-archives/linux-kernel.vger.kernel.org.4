@@ -2,193 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D357E673F8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5105F673F87
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjASRIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S230427AbjASRHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjASRIh (ORCPT
+        with ESMTP id S230041AbjASRHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:08:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A045B91
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:07:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674148056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pqPtX1lNXT4wzPBwXnIzKZzklFS/y19TFXoC88LMxYU=;
-        b=gJhEalUH6z6j4GmQfMd0hg0qWDVISkPNRMSezNeRLi/Va06xOnMig0I/CFG7Zr3V722aWm
-        khabCuQvU1TDan5JnArFmqweUrBoQlb6/EdFhwJVgxECdMQjU1eyMlK60kj9+uq94xHhRT
-        IWJeEAq2/TxHV7hEvELJz2Ehdjr9E2E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-Bj8moCsvOqiDTVIs4nrKag-1; Thu, 19 Jan 2023 12:07:31 -0500
-X-MC-Unique: Bj8moCsvOqiDTVIs4nrKag-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 19 Jan 2023 12:07:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E3A5CB;
+        Thu, 19 Jan 2023 09:07:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 63B8418A63ED;
-        Thu, 19 Jan 2023 17:07:31 +0000 (UTC)
-Received: from lithium.redhat.com (unknown [10.39.195.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 081612026D76;
-        Thu, 19 Jan 2023 17:07:28 +0000 (UTC)
-From:   Giuseppe Scrivano <gscrivan@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     keescook@chromium.org, bristot@redhat.com, ebiederm@xmission.com,
-        brauner@kernel.org, cyphar@cyphar.com, bmasney@redhat.com,
-        viro@zeniv.linux.org.uk, alexl@redhat.com, peterz@infradead.org,
-        gscrivan@redhat.com
-Subject: [PATCH v2 2/2] selftests: add tests for prctl(SET_HIDE_SELF_EXE)
-Date:   Thu, 19 Jan 2023 18:07:18 +0100
-Message-Id: <20230119170718.3129938-2-gscrivan@redhat.com>
-In-Reply-To: <20230119170718.3129938-1-gscrivan@redhat.com>
-References: <20230119170718.3129938-1-gscrivan@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B47D61CE5;
+        Thu, 19 Jan 2023 17:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9DBC433EF;
+        Thu, 19 Jan 2023 17:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674148036;
+        bh=dy2HQg065wkbvQBN59EGg0efxbySx94VB4zoBym3aX0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zxtfm8knK25V+i2iygIrl/LwqGZyjnBVSBksqPA50uy4OWFR5P/2dqp+Sfs4MilYe
+         pR+O7YuyeVmFthVaaEJqC4jop9hTD02o05b2se0dz8m9+RQvQ0GoCbJOwwHtyRGiuo
+         mAy4hciaTThgiKBR/A/eABgesUv7O9n8YUzs4erzarF06qdhIghFE8/ZlyQ2fsfUlo
+         L/8h2Eq6Y84V0yi/oyN/bvHKIaGh54oWc0/nFSdAnToO9zTkiBfadL6q8eWv65Ivc2
+         1GIL0JvPeGcwnN4nAjksocfooE4S64tBHN9l1hSlGif48JjB/g6SHmtyZdZdQmBXgt
+         Si6q35rjn1QKg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pIYO3-0007wJ-59; Thu, 19 Jan 2023 18:07:39 +0100
+Date:   Thu, 19 Jan 2023 18:07:39 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 6.2-rc5
+Message-ID: <Y8l42/yYoPZNiJa4@hovoldconsulting.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
----
- tools/testing/selftests/prctl/Makefile        |   2 +-
- tools/testing/selftests/prctl/hide-self-exe.c | 101 ++++++++++++++++++
- 2 files changed, 102 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/prctl/hide-self-exe.c
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
 
-diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
-index c7923b205222..024e107b26ec 100644
---- a/tools/testing/selftests/prctl/Makefile
-+++ b/tools/testing/selftests/prctl/Makefile
-@@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
- ifeq ($(ARCH),x86)
- TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
--		disable-tsc-test
-+		disable-tsc-test hide-self-exe
- all: $(TEST_PROGS)
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/prctl/hide-self-exe.c b/tools/testing/selftests/prctl/hide-self-exe.c
-new file mode 100644
-index 000000000000..f86cef8e061c
---- /dev/null
-+++ b/tools/testing/selftests/prctl/hide-self-exe.c
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Tests for prctl(PR_GET_HIDE_SELF_EXE, ...) / prctl(PR_SET_HIDE_SELF_EXE, ...)
-+ *
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <signal.h>
-+#include <inttypes.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sys/wait.h>
-+
-+#include <sys/prctl.h>
-+#include <linux/prctl.h>
-+
-+#ifndef PR_SET_HIDE_SELF_EXE
-+# define PR_SET_HIDE_SELF_EXE		65
-+# define PR_GET_HIDE_SELF_EXE		66
-+#endif
-+
-+int main(void)
-+{
-+	int status;
-+	pid_t pid;
-+	int ret;
-+
-+	ret = open("/proc/self/exe", O_RDONLY);
-+	if (ret < 0) {
-+		perror("open /proc/self/exe");
-+		exit(EXIT_FAILURE);
-+	}
-+	close(ret);
-+
-+	ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
-+	if (ret != 0) {
-+		perror("prctl(PR_GET_HIDE_SELF_EXE)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	ret = prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0);
-+	if (ret != 0) {
-+		perror("prctl(PR_SET_HIDE_SELF_EXE)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* check it doesn't fail a second time.  */
-+	ret = prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0);
-+	if (ret != 0) {
-+		perror("prctl(PR_SET_HIDE_SELF_EXE)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
-+	if (ret != 1) {
-+		perror("prctl(PR_GET_HIDE_SELF_EXE)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	ret = open("/proc/self/exe", O_RDONLY);
-+	if (ret >= 0 || errno != ENOENT) {
-+		perror("open /proc/self/exe succeeded");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("fork");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (pid == 0) {
-+		/* Verify that it is still unreachable after fork().  */
-+		ret = open("/proc/self/exe", O_RDONLY);
-+		if (ret >= 0 || errno != ENOENT)
-+			exit(EXIT_FAILURE);
-+		close(ret);
-+
-+		/* And that it cannot be unset.  */
-+		ret = prctl(PR_GET_HIDE_SELF_EXE, 0, 0, 0, 0);
-+		if (ret != 1) {
-+			perror("prctl(PR_GET_HIDE_SELF_EXE)");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		/* HIDE_SELF_EXE is cleared after execve.  */
-+		ret = system("cat /proc/self/exe > /dev/null");
-+		exit(ret == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
-+	}
-+	if (waitpid(pid, &status, 0) != pid) {
-+		perror("waitpid");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (status != 0) {
-+		perror("child failed");
-+		exit(EXIT_FAILURE);
-+	}
-+	exit(EXIT_SUCCESS);
-+}
-+
--- 
-2.38.1
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.2-rc5
+
+for you to fetch changes up to 71dfd381a7c051f16a61f82fbd38a4cca563bdca:
+
+  USB: serial: option: add Quectel EM05CN modem (2023-01-16 08:47:47 +0100)
+
+----------------------------------------------------------------
+USB-serial fixes for 6.2-rc5
+
+Here are some new device ids, mostly for Quectel modems.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Ali Mirghasemi (1):
+      USB: serial: option: add Quectel EC200U modem
+
+Duke Xin(辛安文) (5):
+      USB: serial: option: add Quectel EM05-G (CS) modem
+      USB: serial: option: add Quectel EM05-G (GR) modem
+      USB: serial: option: add Quectel EM05-G (RS) modem
+      USB: serial: option: add Quectel EM05CN (SG) modem
+      USB: serial: option: add Quectel EM05CN modem
+
+Michael Adler (1):
+      USB: serial: cp210x: add SCALANCE LPE-9000 device id
+
+ drivers/usb/serial/cp210x.c |  1 +
+ drivers/usb/serial/option.c | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+)
