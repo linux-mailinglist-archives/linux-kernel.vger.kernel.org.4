@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07102674562
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B09674564
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjASWBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S230029AbjASWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjASWBN (ORCPT
+        with ESMTP id S229912AbjASWBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:01:13 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEBA17154
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:35 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id h21so2674121qta.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:35 -0800 (PST)
+        Thu, 19 Jan 2023 17:01:15 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7066FF89
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:37 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id h10so2463881qvq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:39:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sparkcharge.io; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=diUS7SbW+4cNCdAZHjd5Rb9WzsMVmloUYnR4biBBhXI=;
-        b=xZayoIa34oX8jpXw5WEG7a1XwkbdqXP7TWyTJXPzHmxAgsQgZyCK7miSfSHLuTxwQT
-         IePLF8SK3U8Hx6tl9ole8Op4kDgozndWjmtij8TNRJqqLxJxZBwnFkAbOOhmO6vGXBX+
-         KnpvRquWY/6tESSK+Tk2lFB3MRz77pHkdJMHIINmXV3Xi8Em81/fRMqeaEQUnixeqDfB
-         IggX6yHiULbL/z9Ws62zZLdVMG2pzKnHL5ACRNw7y86yfD9ekSmnlX1l5GNV2hZkj5du
-         P1j14kebMDOU4+Wwwth2PUCBi0ZhUYYdILBwxgYz8ZRJXRkq4ZGZ72j2njvmqnlzwa/m
-         8Njg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LV9OZ3zFtkDLpf/Q73kAo3k3wQt+efvU2HfxDW5J4xU=;
+        b=kz0ICmRjeaxis1CYzfaXRho4F72emDWp9/L3clEhmPqjdhbGbB5XIeMKlYo9btykB3
+         zGzlOVNVou7LgZyhrrgR0ZHyr9lVCkwtFbqGxa6kKdDdTWPYdpnFT2YhpsG2LiW/FOAq
+         WZd5mS8N2eaC+pQ4qcUiWy9CMd6Jq5apRPRSr81Mzasf138XZil/KWNqR592FiNr40iM
+         nsIgSVI1CLl6sEXJk+XnOvX+MsiSGDYouaR1WwAj5U5xNYzTeK0dOt1mzQgMv3jT5KCM
+         MJKGSLu5j1Fo1FsGUP2KK6PODs+RdS6Fmmi205mXcwZTx2JwcQhHM8iu5SbenaD/BduX
+         UO9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=diUS7SbW+4cNCdAZHjd5Rb9WzsMVmloUYnR4biBBhXI=;
-        b=c7JT+M956hxsn3Xl6fOf/zBMwntKZllMesTL4aLHMgCZkaaFwoZa0J1WGRTlsqFxeG
-         Q6Aqvby6KnF1UbcaoU6gagxdvp1Y5BsPl/hAK3gUMm7H9UR8agE4joiNhu4iyyL/t//R
-         /kstm/AYApZEgGLvFkLXnweGzwlE3P52ew7TjprBv5idxw8kRrp26Y4FqD87d2daxccx
-         +KhA2BraN8OBSKdyedPh5zC9nSOje6X2l6ZPX1aVyRgNbwt7sZMN1k9hrrwvDrDyW/9R
-         CaIhs0Ub65r8ha8f5cECRq06UwH2D1394MEd8BLdoDYwgc/7Odlpg9C538p0qIWQoGsx
-         o8Zg==
-X-Gm-Message-State: AFqh2kpBYtUaPgbBLbnc31sC4AUtwL9+5/Qw8IJ5F4ClEBAKqlK2Bumn
-        BPgOS5hijZ0iCBEpEsp+acsAIf6QW3zGyv4f40U=
-X-Google-Smtp-Source: AMrXdXu20D+eAnx/j7BRIFAVfNKdOhXio7U6ZSQzIOr1FUFoa4y0uo3eY/M2amHQ3H0kkH8huV7Q8Q==
-X-Received: by 2002:ac8:66da:0:b0:3a7:e9a2:4f4a with SMTP id m26-20020ac866da000000b003a7e9a24f4amr18376043qtp.8.1674164367865;
-        Thu, 19 Jan 2023 13:39:27 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LV9OZ3zFtkDLpf/Q73kAo3k3wQt+efvU2HfxDW5J4xU=;
+        b=a1kmv991khoKaZZbiLe9uLDt7j/3gQ5HpoemiSDFwAtW64EtWEdb6oiPsMdgzQTqBc
+         vDJkcT5Isw7uh2yVtekbClvFDw/hLQKQfiifI4/hSyPXzoxl8gmHdnpSkbjqRVKGh51G
+         1XLSUMtvsARL5bOBKRboHrSP19kKJe2+zyeP6+uCkyjNAF3QsE/LSPxqS/KTOpzcROB7
+         5s75jdFDj0NJvzI6RtsVJDaJT4ApM5hdnuIGPrxjyo1hEfVOC2OrfJKVbUfJaaJJvSTf
+         +YIktj0YWZNTUOh4nSskPBfZlFJ1mdtGGybhyd0wdt3JiouBHArpFTnqpy8KdslfWmAn
+         vMrw==
+X-Gm-Message-State: AFqh2kpD137EgPxiP6Szsh5pFJHI3uKGFQGSxZtJbvJTu1ffY0Xw3uT1
+        LRV4FyAfaG5wwG/biICbQc7wpQ==
+X-Google-Smtp-Source: AMrXdXtb5Ys7U4vEwZn2MJGVTLV/Z41jZFry7umz0eWRnZoQ4kwzNYiVTdYkHv2tq+ujtfAqvxVwLw==
+X-Received: by 2002:a05:6214:5d8d:b0:531:e636:e236 with SMTP id mf13-20020a0562145d8d00b00531e636e236mr16867754qvb.28.1674164371726;
+        Thu, 19 Jan 2023 13:39:31 -0800 (PST)
 Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.26
+        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:39:27 -0800 (PST)
+        Thu, 19 Jan 2023 13:39:31 -0800 (PST)
 From:   Dennis Lambe Jr <dennis@sparkcharge.io>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -62,10 +63,12 @@ Cc:     =?UTF-8?q?Myl=C3=A8ne=20Josserand?=
         Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>
-Subject: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance from DT
-Date:   Thu, 19 Jan 2023 21:39:00 +0000
-Message-Id: <20230119213903.899756-1-dennis@sparkcharge.io>
+Subject: [PATCH v3 1/3] rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+Date:   Thu, 19 Jan 2023 21:39:01 +0000
+Message-Id: <20230119213903.899756-2-dennis@sparkcharge.io>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
+References: <20230119213903.899756-1-dennis@sparkcharge.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
@@ -77,77 +80,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other than adding a sign-off to one of the changelogs, this is a RESEND.
+The style guide recommends IS_ENABLED rather than ifdef for wrapping
+conditional code wherever possible.
 
-Alexandre Belloni, what do you need for this before you'd want to apply
-it? In case it's additional reviewers, I have CC'd some more
-potentially-interested parties this time and updated Atsushi Nemoto's
-email address to one that's hopefully more current.
+Functions that are only called on DeviceTree platforms would otherwise
+need to be cluttered up with __maybe_unused, which is especially
+undesirable if there's nothing inherently DT-specific about those
+functions.
 
-I think the original author listed in the header for this driver,
-Alexander Bigga, is inaccurate. It looks to me like his name got copied
-over by Atsushi Nemoto when he created m41t82.c by deriving it from a
-similar driver. At any rate, Alexander Bigga's listed email address
-bounces, I didn't find a newer one for him, and he doesn't show up in
-the kernel commit log after 2007. I don't think he can be considered the
-maintainer for this driver anymore if he ever was.
+Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
+---
 
-Changes in v3:
-* dt-bindings: added Krzysztof Kozlowski sign-off to changelog
+Notes:
+    v1 -> v2: spelling fix in changelog
 
-Changes in v2:
-* dt-bindings: remove accidental wakeup-sources line
-    suggested by Krzysztof Kozlowski
-* spelling fixes in changelogs
+ drivers/rtc/rtc-m41t80.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-The m41t82 and m41t83 have an adjustable internal capacitance that
-defaults to 25 pF per xtal pin. This patch series adds the ability to
-configure it via the devicetree.
-
-Patch 1 just changes `#ifdef CONFIG_OF` to `if (IS_ENABLED(CONFIG_OF))`
-in m41t80_probe() so that I don't need to use __maybe_unused on my new
-functions and variables.
-
-Patch 2 is the dt-bindings.
-
-Patch 3 is the actual feature implementation.
-
-The desired capacitance comes from the quartz-load-femtofarads property,
-following the example of two other RTC ICs that have adjustable internal
-load capacitance, the NXP pcf85063 and pcf8523. The m41t82 and m41t83
-support much finer-grained control over the capacitance than those
-chips, and ST calls the feature "analog calibration", but it looks to me
-like it's essentially the same kind of thing.
-
-My use case for this is:
-
-ST specifies not to add any additional external load capacitance[1], but
-the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal
-pin[3]. The resulting combined capacitance appears to be outside of the
-operating range of the xtal, because when power is removed from the
-boards I'm testing with, the RTC reports an Oscillator-Fail flag on the
-next power on.
-
-I found I could work around the problem by reducing the internal load
-capacitance as low as it will go.
-
-References:
-[1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
-[2] https://www.mikroe.com/rtc-9-click
-[3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
-
-Previous versions:
-v1: https://lore.kernel.org/linux-rtc/20221219190915.3912384-1-dennis@sparkcharge.io/T/
-
-Dennis Lambe Jr (3):
-  rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
-  dt-bindings: m41t80: add xtal load capacitance
-  rtc: m41t80: set xtal load capacitance from DT
-
- .../devicetree/bindings/rtc/st,m41t80.yaml    | 16 ++++
- drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
- 2 files changed, 92 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index 494052dbd39f..f963b76e5fc0 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -909,10 +909,11 @@ static int m41t80_probe(struct i2c_client *client)
+ 	if (IS_ERR(m41t80_data->rtc))
+ 		return PTR_ERR(m41t80_data->rtc);
+ 
+-#ifdef CONFIG_OF
+-	wakeup_source = of_property_read_bool(client->dev.of_node,
+-					      "wakeup-source");
+-#endif
++	if (IS_ENABLED(CONFIG_OF)) {
++		wakeup_source = of_property_read_bool(client->dev.of_node,
++						      "wakeup-source");
++	}
++
+ 	if (client->irq > 0) {
+ 		rc = devm_request_threaded_irq(&client->dev, client->irq,
+ 					       NULL, m41t80_handle_irq,
 -- 
 2.25.1
 
