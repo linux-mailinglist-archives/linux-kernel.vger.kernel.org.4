@@ -2,254 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3019A67420C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E646567420F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjASTFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S231124AbjASTFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjASTFE (ORCPT
+        with ESMTP id S230166AbjASTFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:05:04 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16048658F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:14 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d2so2790449wrp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:14 -0800 (PST)
+        Thu, 19 Jan 2023 14:05:17 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6448951A0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:25 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 12so422052plo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bagGf68ry1JpnwUnvUmcScyJ7gubFGzB5rLy+GIW+8o=;
-        b=Lng8WB8mNVBoxfvrWFqe/ikPrxiqLnUVY+IlWZrUeFSnrEwGf8PQ2OSEZTbUoOIxIE
-         yp5GE7dz1OlvzCPE9TS5VjLyoxAwaMZCEIoP0SZg1kMHCCa/10c+q6CwO5wq8UNYkUYh
-         wFyujVatb6VulfkDnKiTp//G4JCu3dunSo1DaeIA50eCsOqBLJ0jdNRSbG9BNVwNQOP/
-         AGq1pS6ktFJQQWoB7HYUQGvtjxkNQBrJO8aF97LWtZJsc076PW9jvie+lTQZ9fXGMjDS
-         zxMxRNcyvHCAJgg0eUyoKBl5LHOTZSOnU93hmqE9TrMPOyVUWv/CcfMTLhJoLNvHfVXW
-         2FbQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lK1NIKrkWSVJySo5ySVaU+O2VgoLfd/S7FGV0rSbQ74=;
+        b=QTn+X4kDogFDm06PTrlrVc2vNfFhO2XlOJ0qiZo24LxGEM/89sltLSXVJzttDD/cGk
+         3ukNWOmfhe/7vdx/GMmJB1g61Nhhjyjos5lKhPMPKRrnv9RLNclDtHFSUbcxNdM0nFvE
+         xDxJabbKiVPzKOnx37qj+i3cHJaDQwNVsALkIHCrY1yttQxxc9Hh/Z0uvgy7E0GTHsau
+         7rCwmHJCgp9cPQbyX5wi6Ix9uXT6TL61jopXBLtm/Gfb4EexW9GREra0c8lYwRblnS24
+         3O4jfs0GRWqYTOZ9wpswS2DBS2wFSHHjFeaHgq8Jwz4+iSKRslqQOHp6LNMN/WPaAOK2
+         CPZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bagGf68ry1JpnwUnvUmcScyJ7gubFGzB5rLy+GIW+8o=;
-        b=UoXW3ufMeZ51snwMLZYFq+e0zU77TMYHCQ5R4ko3NKqqrZY6uFn7p2QsMT7Jy0xQ7f
-         H/91bsYhOLS+KCPWc4UwTYstqxlr/IN6wem9tbFtB7CbqjR6jok8ZZYrf8IlZ5A3G8WS
-         Hv0GsXkUgZQFAxW6wa5jYvqv6SW2dIfYypepeipAgI32q3c1o3JK+++Pqxz/7ROUBVv9
-         uPvs9pHsVfTpfb9S4krgyLaPBb2MQPYIPFNSm23yTbGvS7k5B6O73WB45mcRnBpn+XNM
-         i3QBQSGKwvR/OIcSb3LlrjUUZfNB43HsnL2KWrMKsRiQM3BdHSvWM24OoWndjTAwMYvG
-         4GSg==
-X-Gm-Message-State: AFqh2krvQyHADp5nRxNL/Q4CHNE0Uyewsm7Q3ruEIpttx9KaI7iJhW0t
-        jFYAk4eXLNTFAmDUbHwMQKyvXctV+aObGJ1+bDs31Q==
-X-Google-Smtp-Source: AMrXdXvTbpMyodd9JEqQHJBir1fi+EoHAfCdibnzLye5PKbc80ZS7WAGOSZ37YLGZY+MXuaY36zb5aZsWcHktYC9Nn0=
-X-Received: by 2002:adf:e2cd:0:b0:2bd:f8da:9be0 with SMTP id
- d13-20020adfe2cd000000b002bdf8da9be0mr407328wrj.375.1674154963570; Thu, 19
- Jan 2023 11:02:43 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lK1NIKrkWSVJySo5ySVaU+O2VgoLfd/S7FGV0rSbQ74=;
+        b=nb67/6ghPeLqvRHzGp8pVjSinDsieLn3EKrwvhki44fvAKultuP6Huoz8lpAO2nKgn
+         BZdxkahMAcg6k9WEU2+6A3TRQeyqMw34RDoZ/skt3qjbJWXWSTJNH4z0H1xv2+TQ78K0
+         +C9S6UFPPBydHRjfoyarUvhgMDSZkp13hmAUMqByTJjHa5ffqfMW9BjiqdaCTaqSfIal
+         8BYbIKmWo2bQyPTOoI3nsiyIs2Kr/ZGQnE8ZxMgdpTmJNKa2E9F2C0YvHIWIwkHFZAPp
+         P8Bn5gPIGikD+iPOGQwQ8wtnrUCdyUMPEgNE+1d0/qoP4Y8Km7iDSjxURkzQIhafsc49
+         bJBw==
+X-Gm-Message-State: AFqh2kprPDToCtpk/P8NictJLGRwzRj1HIX06CK2S5cPQM5sDke2B0TY
+        v6gUD5LcPOVsvdHibH64eJs=
+X-Google-Smtp-Source: AMrXdXslOK1iyghyiIbtzl9nS5k1IBppvDOwu8D8IdCN6zSPqWlgTe/WgBiH37ZjOqCXoTZjyMz40A==
+X-Received: by 2002:a17:90a:3cc4:b0:225:d450:2ccc with SMTP id k4-20020a17090a3cc400b00225d4502cccmr11638474pjd.30.1674155026269;
+        Thu, 19 Jan 2023 11:03:46 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id q99-20020a17090a1b6c00b0021952b5e9bcsm3364479pjq.53.2023.01.19.11.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 11:03:45 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 19 Jan 2023 09:03:44 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Li Lingfeng <lilingfeng3@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        jack@suse.cz, bingjingc@synology.com, ebiggers@google.com,
+        james.smart@broadcom.com, houtao1@huawei.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH-next RESEND v2] lib: parser: optimize match_NUMER apis to
+ use local array
+Message-ID: <Y8mUEL3VrizxFika@slm.duckdns.org>
+References: <20230111042215.4120156-1-lilingfeng3@huawei.com>
 MIME-Version: 1.0
-References: <20230119183118.126387-1-irogers@google.com>
-In-Reply-To: <20230119183118.126387-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 19 Jan 2023 11:02:31 -0800
-Message-ID: <CAP-5=fXsG06+j9bOyWTUK_wXJTZP0cvy=9hD6DFFuc3HQefyOg@mail.gmail.com>
-Subject: Re: [PATCH v3] perf script flamegraph: Avoid d3-flame-graph package dependency
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111042215.4120156-1-lilingfeng3@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:31 AM Ian Rogers <irogers@google.com> wrote:
->
-> Currently flame graph generation requires a d3-flame-graph template to
-> be installed. Unfortunately this is hard to come by for things like
-> Debian [1]. If the template isn't installed then ask if it should be
-> downloaded from jsdelivr CDN. The downloaded HTML file is validated
-> against an md5sum. If the download fails, generate a minimal flame
-> graph with the javascript coming from links to jsdelivr CDN.
->
-> v3. Adds a warning message and quits before download in live mode.
-> v2. Change the warning to a prompt about downloading and add the
->     --allow-download command line flag. Add an md5sum check for the
->     downloaded HTML.
->
-> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Wed, Jan 11, 2023 at 12:22:15PM +0800, Li Lingfeng wrote:
+> Memory will be allocated to store substring_t in match_strdup(), which means
+> the caller of match_strdup() may need to be scheduled out to wait for reclaiming
+> memory.
+> 
+> Using local array to store substring_t to remove the restriction.
+> 
+> Link: https://lore.kernel.org/all/20221104023938.2346986-5-yukuai1@huaweicloud.com/
+> Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
 
+This will fix a sleep-in-atomic in #linus, so it'd be great if we can get it
+merged. Can you please apply the suggested changes and repost? I think we
+can route this through block too as the current breakage is there. So,
+please cc Jens too.
 
-Apologies, please ignore this patch. I accidentally picked this merged
-change up with a wild card.
+Thanks.
 
-Thanks,
-Ian
-
-> ---
->  tools/perf/scripts/python/flamegraph.py | 107 +++++++++++++++++++-----
->  1 file changed, 85 insertions(+), 22 deletions(-)
->
-> diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
-> index b6af1dd5f816..cf7ce8229a6c 100755
-> --- a/tools/perf/scripts/python/flamegraph.py
-> +++ b/tools/perf/scripts/python/flamegraph.py
-> @@ -19,12 +19,34 @@
->  # pylint: disable=missing-function-docstring
->
->  from __future__ import print_function
-> -import sys
-> -import os
-> -import io
->  import argparse
-> +import hashlib
-> +import io
->  import json
-> +import os
->  import subprocess
-> +import sys
-> +import urllib.request
-> +
-> +minimal_html = """<head>
-> +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
-> +</head>
-> +<body>
-> +  <div id="chart"></div>
-> +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
-> +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
-> +  <script type="text/javascript">
-> +  const stacks = [/** @flamegraph_json **/];
-> +  // Note, options is unused.
-> +  const options = [/** @options_json **/];
-> +
-> +  var chart = flamegraph();
-> +  d3.select("#chart")
-> +        .datum(stacks[0])
-> +        .call(chart);
-> +  </script>
-> +</body>
-> +"""
->
->  # pylint: disable=too-few-public-methods
->  class Node:
-> @@ -50,16 +72,6 @@ class FlameGraphCLI:
->          self.args = args
->          self.stack = Node("all", "root")
->
-> -        if self.args.format == "html" and \
-> -                not os.path.isfile(self.args.template):
-> -            print("Flame Graph template {} does not exist. Please install "
-> -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
-> -                  "package, specify an existing flame graph template "
-> -                  "(--template PATH) or another output format "
-> -                  "(--format FORMAT).".format(self.args.template),
-> -                  file=sys.stderr)
-> -            sys.exit(1)
-> -
->      @staticmethod
->      def get_libtype_from_dso(dso):
->          """
-> @@ -128,16 +140,63 @@ class FlameGraphCLI:
->              }
->              options_json = json.dumps(options)
->
-> +            template_md5sum = None
-> +            if self.args.format == "html":
-> +                if os.path.isfile(self.args.template):
-> +                    template = f"file://{self.args.template}"
-> +                else:
-> +                    if not self.args.allow_download:
-> +                        print(f"""Warning: Flame Graph template '{self.args.template}'
-> +does not exist. To avoid this please install a package such as the
-> +js-d3-flame-graph or libjs-d3-flame-graph, specify an existing flame
-> +graph template (--template PATH) or use another output format (--format
-> +FORMAT).""",
-> +                              file=sys.stderr)
-> +                        if self.args.input == "-":
-> +                            print("""Not attempting to download Flame Graph template as script command line
-> +input is disabled due to using live mode. If you want to download the
-> +template retry without live mode. For example, use 'perf record -a -g
-> +-F 99 sleep 60' and 'perf script report flamegraph'. Alternatively,
-> +download the template from:
-> +https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html
-> +and place it at:
-> +/usr/share/d3-flame-graph/d3-flamegraph-base.html""",
-> +                                  file=sys.stderr)
-> +                            quit()
-> +                        s = None
-> +                        while s != "y" and s != "n":
-> +                            s = input("Do you wish to download a template from cdn.jsdelivr.net? (this warning can be suppressed with --allow-download) [yn] ").lower()
-> +                        if s == "n":
-> +                            quit()
-> +                    template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
-> +                    template_md5sum = "143e0d06ba69b8370b9848dcd6ae3f36"
-> +
->              try:
-> -                with io.open(self.args.template, encoding="utf-8") as template:
-> -                    output_str = (
-> -                        template.read()
-> -                        .replace("/** @options_json **/", options_json)
-> -                        .replace("/** @flamegraph_json **/", stacks_json)
-> -                    )
-> -            except IOError as err:
-> -                print("Error reading template file: {}".format(err), file=sys.stderr)
-> -                sys.exit(1)
-> +                with urllib.request.urlopen(template) as template:
-> +                    output_str = "".join([
-> +                        l.decode("utf-8") for l in template.readlines()
-> +                    ])
-> +            except Exception as err:
-> +                print(f"Error reading template {template}: {err}\n"
-> +                      "a minimal flame graph will be generated", file=sys.stderr)
-> +                output_str = minimal_html
-> +                template_md5sum = None
-> +
-> +            if template_md5sum:
-> +                download_md5sum = hashlib.md5(output_str.encode("utf-8")).hexdigest()
-> +                if download_md5sum != template_md5sum:
-> +                    s = None
-> +                    while s != "y" and s != "n":
-> +                        s = input(f"""Unexpected template md5sum.
-> +{download_md5sum} != {template_md5sum}, for:
-> +{output_str}
-> +continue?[yn] """).lower()
-> +                    if s == "n":
-> +                        quit()
-> +
-> +            output_str = output_str.replace("/** @options_json **/", options_json)
-> +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
-> +
->              output_fn = self.args.output or "flamegraph.html"
->          else:
->              output_str = stacks_json
-> @@ -172,6 +231,10 @@ if __name__ == "__main__":
->                          choices=["blue-green", "orange"])
->      parser.add_argument("-i", "--input",
->                          help=argparse.SUPPRESS)
-> +    parser.add_argument("--allow-download",
-> +                        default=False,
-> +                        action="store_true",
-> +                        help="allow unprompted downloading of HTML template")
->
->      cli_args = parser.parse_args()
->      cli = FlameGraphCLI(cli_args)
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+-- 
+tejun
