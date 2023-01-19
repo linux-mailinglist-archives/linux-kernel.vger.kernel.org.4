@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43A4674051
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6613674058
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjASRuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S230064AbjASRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjASRtx (ORCPT
+        with ESMTP id S230250AbjASRvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:49:53 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B5C9085A;
-        Thu, 19 Jan 2023 09:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674150582; x=1705686582;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=17SBNARovi0mn+Dn5/PkCCYJAQkxV/ALHR2WMFSdnJQ=;
-  b=Z1Zolsp5OBef+MJYrsU49Q/VHaul0EKfn6j/F0O+coJZUdB5JagFu5+y
-   Jlew/yERVYVZbrSmCs3T034RYQv0gs1CeVgkK7ehWW5BQNjzLNQKzzPQO
-   NW9JBr2xCTlqt5DZsFAyLtL62oGZ36N/sWfV1HKzyDJAGeRODWOPxjb0B
-   GaCSHz1Dg1rbsiKgLuE9h1G4eCwnEupWGcheYOSoMIEL9ZaYg3k0JffzL
-   nCqPAIYdX0u8Few4bsXf78soQXGkQLTdCa0von4mWjnP6JZ0VvGs/55YH
-   vRNYnFnplJo9VLa7pO1waDmdQocEGB4Mv3ornUWOiKv08tfjBBD2Zsceg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="313251616"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="313251616"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:49:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905627080"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="905627080"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Jan 2023 09:49:38 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8528E36D; Thu, 19 Jan 2023 19:50:13 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Oleksij Rempel <linux@rempel-privat.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH net-next v1 1/1] net: mdiobus: Convert to use fwnode_device_is_compatible()
-Date:   Thu, 19 Jan 2023 19:50:10 +0200
-Message-Id: <20230119175010.77035-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 19 Jan 2023 12:51:42 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F6793CE;
+        Thu, 19 Jan 2023 09:51:37 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id n8so2369459oih.0;
+        Thu, 19 Jan 2023 09:51:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=88CEYayVz9P+ewRhEaNDKsu17wnm0wIpWAPH9sbb1IA=;
+        b=EEnKd0O6AIC2cl4W7Xht0Ia5DcY00mMYZ88d5zfHtf/K5dlK2QHlMiS0GT6/aKhXve
+         JktxSD+UPZlrfreqBodlCse2AHqRKyL+WdLj/w20VoAX+1kuZ9Bpu/OgVGpQhlzWbunB
+         Uc7myhQVGcxPXMtcHmN2ULO3pnHmhK1uw++TucduEYSWookBYGkpMKteK6t7Z26Lj5Ae
+         9uCp1cPMfA08SRm7eeX3mLARonRv0QqwEhFIcKCEI/IvGNf7dAGyA/XUz4/p8s6RevAL
+         CxRGgpegXBmUR3vwCFjmBfBA2FdrQFpRd2wgAwNFfWhzFxy5E1xLDi8b2ZhEdj52fDOp
+         /YrQ==
+X-Gm-Message-State: AFqh2krUO71vl0X4OmWnWL5t0aGIvLETHzvwLEwk2HEWsrj9oBC14ipt
+        IyKy0mwaVmW7nymsH6YFgA==
+X-Google-Smtp-Source: AMrXdXtXwGBPksu+/jJLSzW2KkFBYnEBDrD8ZPFZET2oHNBgRWSgf6Q/22TJC6L0+eIw9JAIJ04kvA==
+X-Received: by 2002:a05:6808:200e:b0:360:de9c:98cd with SMTP id q14-20020a056808200e00b00360de9c98cdmr6659825oiw.49.1674150696295;
+        Thu, 19 Jan 2023 09:51:36 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c6-20020aca1c06000000b0035763a9a36csm2159422oic.44.2023.01.19.09.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 09:51:35 -0800 (PST)
+Received: (nullmailer pid 2099339 invoked by uid 1000);
+        Thu, 19 Jan 2023 17:51:35 -0000
+Date:   Thu, 19 Jan 2023 11:51:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        lee@kernel.org, lee.jones@linaro.org
+Subject: Re: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
+Message-ID: <20230119175135.GA2085792-robh@kernel.org>
+References: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace open coded fwnode_device_is_compatible() in the driver.
+On Fri, Dec 02, 2022 at 06:32:26AM -0500, Jesse Taube wrote:
+> Some devices may want to use this driver without having a specific
+> compatible string. Add a generic compatible string to allow this.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/net/mdio/fwnode_mdio.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+What devices need this?
 
-diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
-index b782c35c4ac1..1183ef5e203e 100644
---- a/drivers/net/mdio/fwnode_mdio.c
-+++ b/drivers/net/mdio/fwnode_mdio.c
-@@ -115,7 +115,7 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
- 	struct mii_timestamper *mii_ts = NULL;
- 	struct pse_control *psec = NULL;
- 	struct phy_device *phy;
--	bool is_c45 = false;
-+	bool is_c45;
- 	u32 phy_id;
- 	int rc;
- 
-@@ -129,11 +129,7 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
- 		goto clean_pse;
- 	}
- 
--	rc = fwnode_property_match_string(child, "compatible",
--					  "ethernet-phy-ieee802.3-c45");
--	if (rc >= 0)
--		is_c45 = true;
--
-+	is_c45 = fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45");
- 	if (is_c45 || fwnode_get_phy_id(child, &phy_id))
- 		phy = get_phy_device(bus, addr, is_c45);
- 	else
--- 
-2.39.0
+Is that no specific compatible string at all or just in the kernel? 
+Because the former definitely goes against DT requirements. The latter 
+enables the former without a schema.
 
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> ---
+>  drivers/mfd/simple-mfd-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> index f4c8fc3ee463..0bda0dd9276e 100644
+> --- a/drivers/mfd/simple-mfd-i2c.c
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+>  };
+>  
+>  static const struct of_device_id simple_mfd_i2c_of_match[] = {
+> +	{ .compatible = "simple-mfd-i2c-generic" },
+
+Simple and generic? There is no such device. Anywhere.
+
+This is also not documented which is how I found it (make 
+dt_compatible_check). But this should be reverted or dropped rather than 
+documented IMO.
+
+Rob
