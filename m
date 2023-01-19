@@ -2,197 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F244B67364C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8423567364F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjASLDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S229934AbjASLEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjASLCs (ORCPT
+        with ESMTP id S230321AbjASLES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:02:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0666F47EC9;
-        Thu, 19 Jan 2023 03:02:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4968E176A;
-        Thu, 19 Jan 2023 03:03:26 -0800 (PST)
-Received: from [10.57.75.229] (unknown [10.57.75.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8DC43F71A;
-        Thu, 19 Jan 2023 03:02:42 -0800 (PST)
-Message-ID: <b14b7507-e20a-2223-b772-fc865e5c9558@arm.com>
-Date:   Thu, 19 Jan 2023 11:02:41 +0000
+        Thu, 19 Jan 2023 06:04:18 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED7E8697;
+        Thu, 19 Jan 2023 03:04:03 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JB3YvI020930;
+        Thu, 19 Jan 2023 11:03:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=p7+tDIUczXm2hNnJv1jrE/wZ/DyIB+QCJXRJEJrRQME=;
+ b=ZhWHr2uSXcUQ0UdIzpFMiOUqECKma+beANl7ysmL3ewbmmRhSqC83JncaJuHdAqbS+Uh
+ /yRHyp3RP3qCTcMTig5/QV/DgJImI0pilUBEE7pC6Vt/GSUEPiEVaTfi6jXko6D2EWfg
+ FExaKkOuUaAuVD2ix8SsLdGWAI368sApm82Dx0ySKAEO3wHZEhM69BSCijDZz2Rvb37H
+ +Co9YKuxHNbRo4lfngyLLSQQJHmBGyeEPD99+fNfLc3+F20TpyQA8VkFypg1jJda/FRy
+ DuVi1UyBi191utApXh2Z/fJeEyPUl2qqxwpepYYVvuxblQmMiKSz2vUkAhKc3y62HHi0 4g== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n74ng80a9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 11:03:51 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J2TJXV029613;
+        Thu, 19 Jan 2023 11:03:49 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n3knfcsw1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 11:03:49 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JB3j8j46793064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 11:03:46 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D96FE2004B;
+        Thu, 19 Jan 2023 11:03:45 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A212D20040;
+        Thu, 19 Jan 2023 11:03:44 +0000 (GMT)
+Received: from [9.171.48.94] (unknown [9.171.48.94])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 11:03:44 +0000 (GMT)
+Message-ID: <a623049fb595480ffdf1130bbe800d79705cef03.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 4/7] s390/pci: Use dma-iommu layer
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 12:03:44 +0100
+In-Reply-To: <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+         <20230104120543.308933-5-schnelle@linux.ibm.com>
+         <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v7 13/15] coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID
- used for Trace ID
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Leo Yan <leo.yan@linaro.org>, James Clark <james.clark@arm.com>
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20230116124928.5440-1-mike.leach@linaro.org>
- <20230116124928.5440-14-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230116124928.5440-14-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qk4YpQUfMoRPN6V_Q70OQ9TcYAlKI_hs
+X-Proofpoint-ORIG-GUID: qk4YpQUfMoRPN6V_Q70OQ9TcYAlKI_hs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_08,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=774
+ spamscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 suspectscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike
+> > > > > > > > > > > > > > > > =C2=A0
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > =C2=A0static char *pci_sw_names[] =3D {
+> > > > > > > > > > > > > > > > - "Allocated pages",
+> > > > > > > > > > > > > > > > +/* TODO "Allocated pages", */
+> > > > > > > >=20
+> > > > > > > > ? Forgot to finish this?
 
-On 16/01/2023 12:49, Mike Leach wrote:
-> Use the perf_report_aux_output_id() call to output the CoreSight trace ID
-> and associated CPU as a PERF_RECORD_AUX_OUTPUT_HW_ID record in the
-> perf.data file.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> ---
->   drivers/hwtracing/coresight/coresight-etm-perf.c |  7 +++++++
->   include/linux/coresight-pmu.h                    | 14 ++++++++++++++
->   2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
-> index bdb9ab86173a..12fff661456e 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm-perf.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
-> @@ -4,6 +4,7 @@
->    * Author: Mathieu Poirier <mathieu.poirier@linaro.org>
->    */
->   
-> +#include <linux/bitfield.h>
->   #include <linux/coresight.h>
->   #include <linux/coresight-pmu.h>
->   #include <linux/cpumask.h>
-> @@ -448,6 +449,7 @@ static void etm_event_start(struct perf_event *event, int flags)
->   	struct perf_output_handle *handle = &ctxt->handle;
->   	struct coresight_device *sink, *csdev = per_cpu(csdev_src, cpu);
->   	struct list_head *path;
-> +	u64 hw_id;
->   
->   	if (!csdev)
->   		goto fail;
-> @@ -493,6 +495,11 @@ static void etm_event_start(struct perf_event *event, int flags)
->   	if (source_ops(csdev)->enable(csdev, event, CS_MODE_PERF))
->   		goto fail_disable_path;
->   
-> +	/* output cpu / trace ID in perf record */
-> +	hw_id = FIELD_PREP(CS_AUX_HW_ID_VERSION_MASK, CS_AUX_HW_ID_CURR_VERSION);
-> +	hw_id |= FIELD_PREP(CS_AUX_HW_ID_TRACE_ID_MASK, coresight_trace_id_read_cpu_id(cpu));
-> +	perf_report_aux_output_id(event, hw_id);
-> +
-
-One minor nit:
-
-This ends up putting the HWID packet for every single time the event is 
-scheduled on the CPU and thus we have :
-
-$ perf report -D | grep OUTPUT_HW_ID
-...
-AUX_OUTPUT_HW_ID events:         55  (18.3%)
-
-We could do the above step only once per CPU for the lifetime of the 
-event by book keeping the info in event_data. With that we get, one
-record per CPU and:
-
-$ perf report -D | grep OUTPUT_HW_ID
-...
-AUX_OUTPUT_HW_ID events:          5  ( 1.9%)
-
-Here is a quick patch. We can queue this separately if you all are Ok 
-with this. Thoughts ?
-
----8>---
-
-diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c 
-b/drivers/hwtracing/coresight/coresight-etm-perf.c
-index 12fff661456e..5335f3a2b010 100644
---- a/drivers/hwtracing/coresight/coresight-etm-perf.c
-+++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
-@@ -495,10 +495,16 @@ static void etm_event_start(struct perf_event 
-*event, int flags)
-         if (source_ops(csdev)->enable(csdev, event, CS_MODE_PERF))
-                 goto fail_disable_path;
-
--       /* output cpu / trace ID in perf record */
--       hw_id = FIELD_PREP(CS_AUX_HW_ID_VERSION_MASK, 
-CS_AUX_HW_ID_CURR_VERSION);
--       hw_id |= FIELD_PREP(CS_AUX_HW_ID_TRACE_ID_MASK, 
-coresight_trace_id_read_cpu_id(cpu));
--       perf_report_aux_output_id(event, hw_id);
-+       /*
-+        * output cpu / trace ID in perf record, once for the lifetime
-+        * of the event.
-+        */
-+       if (!cpumask_test_cpu(cpu, &event_data->aux_hwid_done)) {
-+               cpumask_set_cpu(cpu, &event_data->aux_hwid_done);
-+               hw_id = FIELD_PREP(CS_AUX_HW_ID_VERSION_MASK, 
-CS_AUX_HW_ID_CURR_VERSION);
-+               hw_id |= FIELD_PREP(CS_AUX_HW_ID_TRACE_ID_MASK, 
-coresight_trace_id_read_cpu_id(cpu));
-+               perf_report_aux_output_id(event, hw_id);
-+       }
-
-  out:
-         /* Tell the perf core the event is alive */
-diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.h 
-b/drivers/hwtracing/coresight/coresight-etm-perf.h
-index 468f7799ab4f..9b11bb3d96d9 100644
---- a/drivers/hwtracing/coresight/coresight-etm-perf.h
-+++ b/drivers/hwtracing/coresight/coresight-etm-perf.h
-@@ -55,6 +55,7 @@ struct etm_filters {
-  struct etm_event_data {
-         struct work_struct work;
-         cpumask_t mask;
-+       cpumask_t aux_hwid_done;
-         void *snk_config;
-         u32 cfg_hash;
-         struct list_head * __percpu *path;
-
-
-
->   out:
->   	/* Tell the perf core the event is alive */
->   	event->hw.state = 0;
-> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> index 624f4843453e..51ac441a37c3 100644
-> --- a/include/linux/coresight-pmu.h
-> +++ b/include/linux/coresight-pmu.h
-> @@ -7,6 +7,8 @@
->   #ifndef _LINUX_CORESIGHT_PMU_H
->   #define _LINUX_CORESIGHT_PMU_H
->   
-> +#include <linux/bits.h>
-> +
->   #define CORESIGHT_ETM_PMU_NAME "cs_etm"
->   
->   /*
-> @@ -43,4 +45,16 @@
->   #define ETM4_CFG_BIT_RETSTK	12
->   #define ETM4_CFG_BIT_VMID_OPT	15
->   
-> +/*
-> + * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
-> + * Used to associate a CPU with the CoreSight Trace ID.
-> + * [07:00] - Trace ID - uses 8 bits to make value easy to read in file.
-> + * [59:08] - Unused (SBZ)
-> + * [63:60] - Version
-> + */
-> +#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(7, 0)
-> +#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(63, 60)
-> +
-> +#define CS_AUX_HW_ID_CURR_VERSION 0
-> +
->   #endif
-
+Definitely forgot to remove the TODO. I think my latest plan was to
+just remove this counter. With the DMA API conversion the
+dma_map_ops.alloc and dma_map_ops.free move to common code and I don't
+see how we could differentiate these from map/unmap on our side. I'm
+not sure how helpful this counter really is either. If you're
+interested in how many pages are mapped long term I think it makes more
+sense to look at the difference between mapped and unmapped pages. What
+do you think?
+> > > > > > >=20
