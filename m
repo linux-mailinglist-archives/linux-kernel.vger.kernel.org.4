@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4821B674BF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B50D674C96
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjATFPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S230253AbjATFha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjATFOz (ORCPT
+        with ESMTP id S230107AbjATFgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:14:55 -0500
+        Fri, 20 Jan 2023 00:36:47 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D829545212;
-        Thu, 19 Jan 2023 21:03:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DE45B5B7;
+        Thu, 19 Jan 2023 21:33:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3972B82015;
-        Thu, 19 Jan 2023 04:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B590C433EF;
-        Thu, 19 Jan 2023 04:26:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB378B8206B;
+        Thu, 19 Jan 2023 04:54:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04CC7C433F2;
+        Thu, 19 Jan 2023 04:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674102381;
-        bh=Mfk8kWgrggh7nLfPyOq/xtH5uobwBVywJEcQt80do9w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O+/lT7YvCltvh3aXo3p5FdOCc6qZIONAmVtNYqX5UY80lHSuJrC8/mMfq4xQXSeIU
-         LUeG3Owic9BOxrXKhO8UhYFIMgD5Y97kMZb3SWScz8uzbAN9CkCUvaRFYcCC4qF206
-         rwoRxp7h9b9vOGf3i4TpltaoBO4d9bNM7TUp6QXGN8SZ/hpzJPUD04zhrSVGKXrznZ
-         xOCAWki2QdNb+uUd0l2VgHoKbKUKGhsJ27JKG8OX/O6HFelcZ5kahfPkVTmg9Ky2p9
-         ZUHHONT6BgB9fj4/XDGE49oQExT0BxxVkhh2gShlrjyS6J8+Pzjv4lQEz2inJeyTQ3
-         FuQMfiBCw8mWg==
-Date:   Wed, 18 Jan 2023 22:26:19 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/9] PCI/AER: Remove redundant Device Control Error
- Reporting Enable
-Message-ID: <20230119042619.GA288847@bhelgaas>
+        s=k20201202; t=1674104042;
+        bh=9B8AESEnaiyyvG9bBTaaDPwbKe9TAiv/vyN8K/61H08=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qLcujfbpKxYaAmL0gAhh6QQUl6Va+0xU6t7jkMJg6U2amU27lcnYghTUv13FV6m9G
+         Ic4FGg5JjSZpJugbWHNULmZ1Gb+1oyhwRkg3RMaM5yIRbYQFaLGfx0PENCLenMrSC+
+         AwFweHYWMywbEWU0PawPwjKf33YJpGm3ktPZQJSLBPI7yITnFwVAvlhnV83YveO71N
+         UKhVzyK2/peUu4ApOQZQM04bfTGG8blSYtiH0kFCV2xzmliHmtD2yogOhtVs3c4zsM
+         Q7z4vea+17LlDUYmLCyTHW+CUlhMVw7gwjPsb+0ILAw5kT9ZJZ5wHX3dDx3I2RfEUI
+         UE2oTS+kLyQww==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski@linaro.org, agross@kernel.org
+Cc:     marijn.suijten@somainline.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 1/2] Revert "soc: qcom: rpmpd: Add SM4250 support"
+Date:   Wed, 18 Jan 2023 22:53:57 -0600
+Message-Id: <167410403676.3048186.9960546404192439260.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230113152232.2624545-1-konrad.dybcio@linaro.org>
+References: <20230113152232.2624545-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e773b789-9ac1-eb45-b1ab-11fc93aede40@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,56 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 07:55:33PM -0800, Sathyanarayanan Kuppuswamy wrote:
-> On 1/18/23 3:46 PM, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
-> > ths PCI core sets the Device Control bits that enable error reporting for
-> > PCIe devices.
-> > 
-> > This series removes redundant calls to pci_enable_pcie_error_reporting()
-> > that do the same thing from the AER driver and several NIC drivers.
-> > 
-> > There are several more drivers where this should be removed; I started with
-> > just the Intel drivers here.
-> > 
-> > Bjorn Helgaas (9):
-> >   PCI/AER: Remove redundant Device Control Error Reporting Enable
-> >   e1000e: Remove redundant pci_enable_pcie_error_reporting()
-> >   fm10k: Remove redundant pci_enable_pcie_error_reporting()
-> >   i40e: Remove redundant pci_enable_pcie_error_reporting()
-> >   iavf: Remove redundant pci_enable_pcie_error_reporting()
-> >   ice: Remove redundant pci_enable_pcie_error_reporting()
-> >   igb: Remove redundant pci_enable_pcie_error_reporting()
-> >   igc: Remove redundant pci_enable_pcie_error_reporting()
-> >   ixgbe: Remove redundant pci_enable_pcie_error_reporting()
+On Fri, 13 Jan 2023 16:22:31 +0100, Konrad Dybcio wrote:
+> SM4250 and SM6115 use a shared device tree and the RPMPDs are
+> identical. There's no need for a separate entry, so remove it.
 > 
-> It should be simpler to do in one patch. Any reason to split
-> it into multiple patches?
-
-Sure, the driver patches could easily be squashed, either by me or be
-the netdev folks if they prefer it that way.  There are close to 50
-callers, and I hesitate to do them all in a single patch because it
-becomes unwieldy to backport (probably pointless for this situation)
-or to revert if there's any issue.
-
-These are all trivial removals, but there are a few that are more
-complicated and will require closer review, so I didn't include those
-here.
-
-> >  drivers/net/ethernet/intel/e1000e/netdev.c    |  7 ---
-> >  drivers/net/ethernet/intel/fm10k/fm10k_pci.c  |  5 --
-> >  drivers/net/ethernet/intel/i40e/i40e_main.c   |  4 --
-> >  drivers/net/ethernet/intel/iavf/iavf_main.c   |  5 --
-> >  drivers/net/ethernet/intel/ice/ice_main.c     |  3 --
-> >  drivers/net/ethernet/intel/igb/igb_main.c     |  5 --
-> >  drivers/net/ethernet/intel/igc/igc_main.c     |  5 --
-> >  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  5 --
-> >  drivers/pci/pcie/aer.c                        | 48 -------------------
-> >  9 files changed, 87 deletions(-)
-> > 
+> This reverts commit 5b617b1b10c1c6a4365d8f956032e95c53b8e388.
 > 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+> 
+
+Applied, thanks!
+
+[1/2] Revert "soc: qcom: rpmpd: Add SM4250 support"
+      commit: a36489778ba8f7eb98c3e9fca2d300090bf1ffcd
+[2/2] Revert "dt-bindings: power: rpmpd: Add SM4250 support"
+      commit: dfe5ac7023624617d402ca1c295552fbd271e20c
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
