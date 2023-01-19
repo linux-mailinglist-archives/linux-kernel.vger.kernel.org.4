@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB17674A99
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF540674AC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjATE26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S229458AbjATEeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjATE2a (ORCPT
+        with ESMTP id S230097AbjATEds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:28:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282CB1ECF;
-        Thu, 19 Jan 2023 20:28:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B5E8B82135;
-        Thu, 19 Jan 2023 08:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A543FC433D2;
-        Thu, 19 Jan 2023 08:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674116991;
-        bh=wiIwzJ1J9iz0naLuw7+n0CgUx6j+UpqtC2oWoSfJfc0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qwUegg87DEOi/Wj+waB+iMZarjqP2Pfzov442nwZ0wm6u2wc1eQhCqdJ/9qhwbxr8
-         cbtLWwv6HL4ZwZlpE6h8dQ1Q+xT22AYflOifZ6C6/L3yYWrRpFqlumuuaJxCY6PH/N
-         TIjp1f+/4YkOOhCjWYuMcnWNUvmCKFb2OWsqkw9FQ7EL2PRK9EEBN1UaOJtu20gAE9
-         ruTLifWMtafnXEpnXg99nGvO1DNnQboiV/2ea3VXmSQxtG29VliC5exrl/6n3/T2CJ
-         xHzOHh6BE2T3DjJHKSGmxq6xisILxxMOTohSeKb/sPAifCLXkhvsCFqiZkV71ANAQp
-         o2e7SC4lHpdFA==
-Received: by mail-lf1-f52.google.com with SMTP id g13so2139839lfv.7;
-        Thu, 19 Jan 2023 00:29:51 -0800 (PST)
-X-Gm-Message-State: AFqh2kpYAT5RKgoUJAJ2h8NXNjlU714Fcmloxkg3AxbgF/QUq5C7y1EM
-        CGZ+uq02eL6IXRLfRwXM99fBlfHmpKUWRz6Xeqc=
-X-Google-Smtp-Source: AMrXdXtv4mp0PXcDo9ZDkHrj+7QhEher1afjbD7W9N7lNoxMQo/TrO/llB4c4E3n7IN/pxlJJ4KOeYqAnvBdr76zgrY=
-X-Received: by 2002:a05:6512:308a:b0:4d1:3e32:5436 with SMTP id
- z10-20020a056512308a00b004d13e325436mr1044480lfd.215.1674116989690; Thu, 19
- Jan 2023 00:29:49 -0800 (PST)
+        Thu, 19 Jan 2023 23:33:48 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EC5BCE36
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:32:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674189169; x=1705725169;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oCO75c7hpSpf7YAc/etqBp/Xdevy0oa9hctB/aBK/D8=;
+  b=fQsJpVixa78uxTdi2+os6+rsDwY7sB1EJCMxsOs4JbbiXljcvbgZ6L68
+   N/JlhTC+TKBVX7Imsd0RNbD1ZBxKoIJpdVJFRxICPZbNE/JBjKu5Q2Zyk
+   PfAJO6Afjfhalj4mIw0ZuVqninzGZGfR1B5n+EUKxf0xOGdBL+LNoz1yv
+   3dF3mg3wP/QTsAqOHqdmS67iGkqa7Hm669NgACStTpEgoczQoOv1t4bLV
+   YYEjs6ov/lgbyIe+kD/QMt0tdYER+qyT/RnvrXlN3dDmEVFZ1cpl6d1+s
+   cv0DUIWAYVJLczbi8A/WvhqcPEu/ilm0UjLVsotOvxPHkd5GVA4T+2io5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411472481"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="411472481"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 00:55:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="660114044"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="660114044"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.185.248]) ([10.252.185.248])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 00:55:48 -0800
+Message-ID: <379823f4-d1c3-8943-4afe-e33f4d21785c@linux.intel.com>
+Date:   Thu, 19 Jan 2023 16:55:45 +0800
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
- <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
- <20230118074047.GA27385@lst.de> <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
- <20230119053545.GA16775@lst.de>
-In-Reply-To: <20230119053545.GA16775@lst.de>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 19 Jan 2023 00:29:36 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com
+Subject: Re: [PATCH V2 3/7] iommu/vt-d: Support Enhanced Command Interface
+To:     kan.liang@linux.intel.com, joro@8bytes.org, will@kernel.org,
+        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230118205006.3182907-1-kan.liang@linux.intel.com>
+ <20230118205006.3182907-4-kan.liang@linux.intel.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230118205006.3182907-4-kan.liang@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:35 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Wed, Jan 18, 2023 at 01:52:51PM -0800, Song Liu wrote:
-> > In this way we can use the array in the for loops, and use mod->core_text,
-> > etc. when we only need to access one of them.
->
-> Just use the array please instead of making it too ugly.  If that
-> is the only sensible way to iterate we have a good argument for the
-> array and can live with it.
+On 2023/1/19 4:50, kan.liang@linux.intel.com wrote:
+> +#ifdef CONFIG_INTEL_IOMMU
+> +#define ecmd_get_status_code(res)	((res & 0xff) >> 1)
+> +
+> +/*
+> + * Function to submit a command to the enhanced command interface. The
+> + * valid enhanced command descriptions are defined in Table 47 of the
+> + * VT-d spec. The VT-d hardware implementation may support some but not
+> + * all commands, which can be determined by checking the Enhanced
+> + * Command Capability Register.
+> + *
+> + * Return values:
+> + *  - 0: Command successful without any error;
+> + *  - Negative: software error value;
+> + *  - Nonzero positive: failure status code defined in Table 48.
+> + */
+> +int ecmd_submit_sync(struct intel_iommu *iommu, u8 ecmd, u64 oa, u64 ob)
+> +{
+> +	unsigned long flags;
+> +	u64 res;
+> +	int ret;
+> +
+> +	if (!cap_ecmds(iommu->cap))
+> +		return -ENODEV;
+> +
+> +	raw_spin_lock_irqsave(&iommu->register_lock, flags);
+> +
+> +	res = dmar_readq(iommu->reg + DMAR_ECRSP_REG);
+> +	if (res & DMA_ECMD_ECRSP_IP) {
+> +		ret = -EBUSY;
+> +		goto err;
+> +	}
+> +
+> +	/*
+> +	 * Unconditionally write the operand B, because
+> +	 * - There is no side effect if an ecmd doesn't require an
+> +	 *   operand B, but we set the register to some value.
+> +	 * - It's not invoked in any critical path. The extra MMIO
+> +	 *   write doesn't bring any performance concerns.
+> +	 */
+> +	dmar_writeq(iommu->reg + DMAR_ECEO_REG, ob);
+> +	dmar_writeq(iommu->reg + DMAR_ECMD_REG, ecmd | (oa << DMA_ECMD_OA_SHIFT));
+> +
+> +	IOMMU_WAIT_OP(iommu, DMAR_ECRSP_REG, dmar_readq,
+> +		      !(res & DMA_ECMD_ECRSP_IP), res);
+> +
+> +	if (res & DMA_ECMD_ECRSP_IP) {
+> +		ret = -ETIMEDOUT;
+> +		goto err;
+> +	}
+> +
+> +	ret = ecmd_get_status_code(res);
+> +err:
+> +	raw_spin_unlock_irqrestore(&iommu->register_lock, flags);
+> +
+> +	return ret;
+> +}
+> +#endif /* CONFIG_INTEL_IOMMU */
 
-Hmm.. I think it won't be ugly outside of the struct definition...
-Alternatively, how about use something like
+Can we remove the "#ifdef CONFIG_INTEL_IOMMU"? Or if this is currently
+only intel-iommu specific, how about moving it to drivers/iommu/intel
+/iommu.c?
 
-#define core_text mod_mem[MOD_MEM_TYPE_TEXT]
-...
-
-which is similar to
-
-struct sock {
-        /*
-         * Now struct inet_timewait_sock also uses sock_common, so please just
-         * don't add nothing before this first member (__sk_common) --acme
-         */
-        struct sock_common      __sk_common;
-#define sk_node                 __sk_common.skc_node
-#define sk_nulls_node           __sk_common.skc_nulls_node
-...
-};
-
-?
-
-Thanks,
-Song
+--
+Best regards,
+baolu
