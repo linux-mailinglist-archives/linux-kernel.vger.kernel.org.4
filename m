@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47832672E97
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6551C672E9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjASCDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S229741AbjASCFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjASCDZ (ORCPT
+        with ESMTP id S229889AbjASCEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:03:25 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C84E20055;
-        Wed, 18 Jan 2023 18:03:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny5WS2dwbz4xG5;
-        Thu, 19 Jan 2023 13:03:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674093796;
-        bh=dVbqFBHL26lCqydTCV/yOYw42UZm5LPdZP4HPOgRF50=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KjnTZeIlAoIyC15I7fEa36IumKJtU6K7jHwJmdeJdswg6RGkdF/cFZG4ruTradeKn
-         x2v6voZ3S5JOTk3EonsJOg/ibUmnvAB+wTcbWATqOXqMxcoV3blJTcPfzxyU6jlbfL
-         EEhI4tbKaZJJl51IiTFfzqRsqoVUC2nrxjUmBu7ZeKmz6kiZkiA0+XHB7KctS2+rs6
-         QTx70bmXPrewNNWP1Wa6I5DaBKzJk1ozCL5LSFX4XjwXq5dGh8GHHjEmndmevbLLAB
-         IIfeV9RrXanwQRTmLsmfm+yjGZZJZAFLGU1zHBdKEyjK3fDcWNbvF8D/ltij4QIAJb
-         lV0umfCvDLbRA==
-Date:   Thu, 19 Jan 2023 13:03:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>
-Subject: Re: linux-next: manual merge of the drm-msm-lumag tree with Linus',
- drm-msm trees
-Message-ID: <20230119130315.766c9e71@canb.auug.org.au>
-In-Reply-To: <20230119122350.2a767def@canb.auug.org.au>
-References: <20230119122350.2a767def@canb.auug.org.au>
+        Wed, 18 Jan 2023 21:04:42 -0500
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2655E29E3B;
+        Wed, 18 Jan 2023 18:04:36 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id i70so356328ioa.12;
+        Wed, 18 Jan 2023 18:04:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MM+Dhy8E31duBDrBRfUCSOTn9Cy8FOge7XCfAeSm4uQ=;
+        b=ctsGKNNmPFc3fGuYsqN64vsOZeNb8Zq/DvK2XCcd8EXnH5WuhNOV0tRdId9newnG2T
+         T/ivxBo3H4NAvDzy7GMEZHRhVLqdMg4s+BxzaQpZF2DgzzfLQvN3+e4CzxVOeCuxByFR
+         rVW6avg4JOrdyqiXT5gbTzFPs/fLNSKhVhA931xy+jp1u0wAJkIGdchoUH+Ka/d1niUe
+         Q/D0PKImbZoFg3sOjHVEBDggGXn5UWAkkQ7Ib+A2PbSyGIxtx1NW1/AXYgFUPCAlDVGq
+         KGjIWx/T+Cyol+23Ej5IRf8U4EzSNzDszJMlQLTgTpCrwgrJRIeH7Zs0MxCJV+2fRL/c
+         FU1g==
+X-Gm-Message-State: AFqh2kppE/43pJP2InjRpZa90ne4dk92wbCK+6fWv2bx9wmDNBF26DRu
+        Yic6nfGQXz4apJGEF5Zut60=
+X-Google-Smtp-Source: AMrXdXsBfNz2Ma45dlU+sOA80H4I1bfauU80Tz34bDdys5gY4Zzh1WjTmTkmVsuUkAYHFrzRnx3gpg==
+X-Received: by 2002:a5d:9f0c:0:b0:6e2:d23a:6296 with SMTP id q12-20020a5d9f0c000000b006e2d23a6296mr6257857iot.20.1674093875324;
+        Wed, 18 Jan 2023 18:04:35 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id e5-20020a056602158500b006ff6e8b3b8csm372247iow.41.2023.01.18.18.04.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 18:04:34 -0800 (PST)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+To:     iam@sung-woo.kim
+Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
+        edumazet@google.com, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, wuruoyu@me.com
+Subject: [PATCH] L2CAP: Fix null-ptr-deref in l2cap_sock_set_shutdown_cb
+Date:   Wed, 18 Jan 2023 21:04:07 -0500
+Message-Id: <20230119020406.3900747-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230119014057.3879476-1-iam@sung-woo.kim>
+References: <20230119014057.3879476-1-iam@sung-woo.kim>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RTQ4IJ=wgbeTGIJQqAHD.ox";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/RTQ4IJ=wgbeTGIJQqAHD.ox
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fix a critical typo on the prev patch - Sorry!
 
-Hi all,
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+---
+ net/bluetooth/l2cap_sock.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-On Thu, 19 Jan 2023 12:23:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the drm-msm-lumag tree got a conflict in:
->=20
->   drivers/gpu/drm/msm/msm_drv.c
->=20
-> between commits:
->=20
->   d73b1d02de08 ("drm/msm: Hangcheck progress detection")
->   8636500300a0 ("drm/msm: Fix failure paths in msm_drm_init()")
->=20
-> from Linus', drm-msm trees and commit:
->=20
->   643b7d0869cc ("drm/msm: Add missing check and destroy for alloc_ordered=
-_workqueue")
->=20
-> from the drm-msm-lumag tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index ca8f07f35..b9381d45d 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -1681,9 +1681,11 @@ static void l2cap_sock_set_shutdown_cb(struct l2cap_chan *chan)
+ {
+ 	struct sock *sk = chan->data;
+ 
+-	lock_sock(sk);
+-	sk->sk_shutdown = SHUTDOWN_MASK;
+-	release_sock(sk);
++	if (sk) {
++		lock_sock(sk);
++		sk->sk_shutdown = SHUTDOWN_MASK;
++		release_sock(sk);
++	}
+ }
+ 
+ static long l2cap_sock_get_sndtimeo_cb(struct l2cap_chan *chan)
+-- 
+2.25.1
 
-Actually, the fixup was this:
-
-f39d6f85acf03a184bb086cae8fd24d2c6d787fe
-diff --cc drivers/gpu/drm/msm/msm_drv.c
-index 0509e90d05e3,b052327181b2..d476c4ff0dd5
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@@ -420,7 -418,11 +420,9 @@@ static int msm_drm_init(struct device *
-  	priv->dev =3D ddev;
- =20
-  	priv->wq =3D alloc_ordered_workqueue("msm", 0);
-+ 	if (!priv->wq)
-+ 		return -ENOMEM;
- =20
- -	priv->hangcheck_period =3D DRM_MSM_HANGCHECK_DEFAULT_PERIOD;
- -
-  	INIT_LIST_HEAD(&priv->objects);
-  	mutex_init(&priv->obj_lock);
- =20
-@@@ -542,8 -544,6 +544,7 @@@
- =20
-  err_msm_uninit:
-  	msm_drm_uninit(dev);
-- err_drm_dev_put:
- +	drm_dev_put(ddev);
-  	return ret;
-  }
- =20
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RTQ4IJ=wgbeTGIJQqAHD.ox
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPIpOMACgkQAVBC80lX
-0GwwQwf9FneWw/LqN6qNMAvu5yckpBQIQWXFv0tsftLy5q/HMYLlh5HmAz3hRN6u
-BLvy2SITecY8SIHq0jLkRSDapnfAJmTttnpG3d6AMygfCvjE2ueHogIUpczHlD2v
-LvYEVXVVVB5oOQ5lbtGD20pFNBdXkj+YhWiGf4Yxzce6wkpBRmBouu66s1ouCHVr
-4fZ01FihYIx8CWAZcFkB2WhIn6PDGtlb1O63WKz39TChCkfqf6I+hg00OfPWD/po
-7tmJ23k2XoOJCjqV+IQ8XERjU7XSL0f+0F+fQdqm+LFp9YVqNsXfm9e7VGN5GhJd
-rm3ppGqivMtl6Z/zfdrecozBvtqI1w==
-=R/sK
------END PGP SIGNATURE-----
-
---Sig_/RTQ4IJ=wgbeTGIJQqAHD.ox--
