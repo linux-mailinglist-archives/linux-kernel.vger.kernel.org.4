@@ -2,127 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3785673EC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCA4673EC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjASQ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S230126AbjASQ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbjASQ1x (ORCPT
+        with ESMTP id S229983AbjASQ2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:27:53 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753C4B740;
-        Thu, 19 Jan 2023 08:27:44 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id e3so2370504wru.13;
-        Thu, 19 Jan 2023 08:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G/U5zgB7p6OPqHMQlkEy+bwIc9R4WIoTQK22mTGWePo=;
-        b=fehBeiL89VwQgVcafbZ9QQSKjqCm23MRx5+udadtSKvVH7KDt3+9ShdubuWImJZN/d
-         hWHtyRDCOTanWJpvde1aFlT+v2Q+xYATcGL4q1NVrotOUXxUqFeTWXWJfgo9a0F/LrK7
-         dcLbQMkXf057SiNAUXv2qK89NpwC8CGpy40BDeccLXhCdCcj8a7VaNsJsiX0m2GV50gJ
-         f1a/OxIqlVSvdITWsbx6fVKoy/306HGBPBl8SfeZsONDZ2qrOfWfa+QDqBEVm6wSmGJI
-         aDSoOaqcOOT4Yq4pcCZc1qO00QACoRO9B/3vJM6eiRtXluU2ClwyQznEWa5GZG72NLbB
-         Js8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G/U5zgB7p6OPqHMQlkEy+bwIc9R4WIoTQK22mTGWePo=;
-        b=l0LUK/FISh5cqB2byZJcwGAf92pjepLTZO9pRd0mTCr/TKJOrSu6OqAeLvnjeblZu8
-         RtRGeORsHY4Vn1QxJnhFMplxDjOiHMSFDQftsuRiX+aDliW4+khTd8N+n+2TgLWX0dJS
-         vKsFO6W4FZ1oJUVqx2tmCOLuIVGBKjjGo9v8aG01mFu0waLLJ5eYXoMuBtJ4QNrcWGZ7
-         icSIKXAD77GBlNYvSFHbmmbuLXKd+yj02b1Ft3ImtCLRMUM8t0+tlrdVTEg8Z0kzyRJC
-         X1vVEVOEJYM1jfkO8BIchAKhNqrSpU+920lrhYSL2Up0NustEDOIcEYDR5Imnm6NuWJz
-         3m7Q==
-X-Gm-Message-State: AFqh2kq0jZ+tjVFIW1iJP8jA4+YjDagpm5rC2EqyX7E1lyL1S/tvFvQI
-        IJVslheFWVngjZ7+hewuqHc=
-X-Google-Smtp-Source: AMrXdXs9Cqz0kN5li7jUZKL9XHr8uTasSMBvof1S8Lp/gYpd11zsi5j9VtdWxlRUsSXtROeRulr9/w==
-X-Received: by 2002:adf:ee10:0:b0:2bd:d5f5:8820 with SMTP id y16-20020adfee10000000b002bdd5f58820mr10124489wrn.27.1674145663376;
-        Thu, 19 Jan 2023 08:27:43 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id co22-20020a0560000a1600b002a01e64f7a1sm10707038wrb.88.2023.01.19.08.27.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 08:27:42 -0800 (PST)
-Message-ID: <9d991211-4c5a-f6c7-6179-b5740a484a75@gmail.com>
-Date:   Thu, 19 Jan 2023 17:27:41 +0100
+        Thu, 19 Jan 2023 11:28:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299304A1DF;
+        Thu, 19 Jan 2023 08:28:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2DA461CBA;
+        Thu, 19 Jan 2023 16:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF4E8C433F0;
+        Thu, 19 Jan 2023 16:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674145720;
+        bh=d0+CExtO2OcCawPxA7eHa5qZ0do7CwZUvPxeHDQOWy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B8xhynKWA8UPLBqcFZeBzDg6e2/PkvCP1jlmk3DZdpoFCTJwC5kCWpYFDI8LPDEaO
+         KxVWVM1OOfTgRhPJhJVufwcywblgJdnCD/o9Hp11VCnFWz9c2LyuG5Idz5wc/dAh4G
+         m6I/jJeFbKlfmdyUeK0ii343XG8U8dJkyJFbRMrRITxunNi/fd3ZsC+hvMBU9oPqqW
+         8/q7X9XX0yfLID7WCRq4CoVX3rp3zjJFNtvGcD6moikKMdl5Z7XewU8b+XMtisRZuL
+         dolP/lvGwslC46nOHNbJPUCO/e3/3SkULKzMdFYo9D9TOKSOHICRVzlU4/hSy8OKV1
+         jaAiXTX5f7xbA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 24CB6405BE; Thu, 19 Jan 2023 13:28:36 -0300 (-03)
+Date:   Thu, 19 Jan 2023 13:28:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Christy Lee <christylee@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>, Xin Gao <gaoxin@cdjrlc.com>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Stephane Eranian <eranian@google.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 0/7] Add and use run_command_strbuf
+Message-ID: <Y8lvtEwRBmUHnx7s@kernel.org>
+References: <20230110222003.1591436-1-irogers@google.com>
+ <CAP-5=fVQg4z-pd-ovjSPkxJ1p0fhQ4MuhWCqjN1ha52q44N6Rg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/9] dt-bindings: spmi: spmi-mtk-pmif: Document
- mediatek,mt8195-spmi as fallback of mediatek,mt8186-spmi
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        hsinyi@chromium.org
-References: <20230118091829.755-1-allen-kh.cheng@mediatek.com>
- <20230118091829.755-3-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230118091829.755-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fVQg4z-pd-ovjSPkxJ1p0fhQ4MuhWCqjN1ha52q44N6Rg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/01/2023 10:18, Allen-KH Cheng wrote:
-> The mt8186-spmi is used as compatible with mt8195-spmi on the MT8186,
-> document this situation.
+Em Thu, Jan 19, 2023 at 08:05:36AM -0800, Ian Rogers escreveu:
+> On Tue, Jan 10, 2023 at 2:20 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > It is commonly useful to run a command using "/bin/sh -c" (like popen)
+> > and to place the output in a string. Move strbuf to libapi, add a new
+> > run_command that places output in a strbuf, then use it in help and
+> > llvm in perf. Some small strbuf efficiency improvements are
+> > included. Whilst adding a new function should increase lines-of-code,
+> > by sharing two similar usages in perf llvm and perf help, the overall
+> > lines-of-code is moderately reduced.
+> >
+> > First "perf llvm: Fix inadvertent file creation" is cherry-picked
+> > from:
+> > https://lore.kernel.org/lkml/20230105082609.344538-1-irogers@google.com/
+> > to avoid a merge conflict. The next patches deal with moving strbuf,
+> > adding the run_command function with Makefile dependency from
+> > libsubcmd to libapi, and improving the strbuf performance. The final
+> > two patches add usage from the perf command.
+> >
+> > Ian Rogers (7):
+> >   perf llvm: Fix inadvertent file creation
+> >   tools lib: Move strbuf to libapi
+> >   tools lib subcmd: Add run_command_strbuf
+> >   tools lib api: Minor strbuf_read improvements
+> >   tools lib api: Tweak strbuf allocation size computation
+> >   perf help: Use run_command_strbuf
+> >   perf llvm: Remove read_from_pipe
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> This isn't ready yet. Kernel test robot reported legitimate build
+> breakages in other tools outside of perf, I'm looking to address those
+> in separate patch series.
+> https://lore.kernel.org/lkml/20230116215751.633675-1-irogers@google.com/
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Thanks for the heads up, I recall seeing a build bot report.
 
-> ---
->   .../devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml   | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-> index abcbbe13723f..e4f465abcfe9 100644
-> --- a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-> +++ b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-> @@ -18,9 +18,14 @@ allOf:
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - mediatek,mt6873-spmi
-> -      - mediatek,mt8195-spmi
-> +    oneOf:
-> +      - enum:
-> +          - mediatek,mt6873-spmi
-> +          - mediatek,mt8195-spmi
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-spmi
-> +          - const: mediatek,mt8195-spmi
->   
->     reg:
->       maxItems: 2
+It's great to have that build bot testing perf patches, thanks to
+whoever put it in place!
+
+- Arnaldo
