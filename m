@@ -2,200 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ECF67396F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753EC673970
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjASNG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        id S230525AbjASNGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjASNF4 (ORCPT
+        with ESMTP id S230398AbjASNF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:05:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB6521C3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:04:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5209E61183
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:04:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B790C433F0;
-        Thu, 19 Jan 2023 13:04:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674133497;
-        bh=zviOFyfevw+hoK5UnH3O85aVKCM479kmlJkkL5nCyR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=urzKR+0UZ7gVDXdL14hB7vWE6Ggp+20+f0u1wy7CObyWRyhDoydEv6i96o14OKwtY
-         3TaJiuco1X3O/jLrRP8suGd33FCp4eNt3TtIOkE7QV59HPC1rS6kXh/exNwOHA1PWC
-         GSce4S4hDim28G7qglyDJRFDb1BD1d/dlK8N0ab7GzMP0YPqtfVuEyUTz+dGSRnE5i
-         KTldWtiGlgDikxAmbSRoYlwr/+swX3gi0satCer4JoyhG/EVYITrYd6klviiX59iZL
-         fSualy8+je3AIMqXDRDRDQLB/8WT6pJA5lIKe+qzqH0LSnVyKgBUwlFRquONanpMz5
-         KDGv3V7YfXCmw==
-Date:   Thu, 19 Jan 2023 15:04:46 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] memblock: Avoid useless checks in
- memblock_merge_regions().
-Message-ID: <Y8k/7snAXgnHrspr@kernel.org>
-References: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
- <20230113082659.65276-4-zhangpeng.00@bytedance.com>
+        Thu, 19 Jan 2023 08:05:59 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2748B7ED43;
+        Thu, 19 Jan 2023 05:05:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lafcwe6ON+vqqxY2VzqdznyCpIzS7sU7C5uiEhzlHEk+onbwdlSZ3f1IegG33VrGdjEspAjD88UwSV+QNvbp/AlUOyg/1K4J57798HF5w3FJQdRbJUHbHZspDXSoEb87TUd9xsVOp9S4Tkt2pL2QIQXQJdepxnMUm7aN8ZNNkTZlkyPzQRs6mJauWhvPLQj95k4sY5pS7c+qg66FWjrWrZ32bcWWgCLj2Ni5R7sVONnVImIlFwpBxCbAijtSQT3oeojvM5OxCOSiAAO7dc4pXQZqP8IAsthZXYSQx/DjZIGNo+WcZ7BXlmVeLR1JnHlD4MTDab3DnWaKdcrYNcpAvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I80IDrMETKSFhfzESFRMZXokS7MwFUuxK4/Sk3mH6eM=;
+ b=O7zgvHqaxbKWLEmBUU0XEZgnmoT//tufpbwa1lgPRoZQZIgrY6+hwW58ZkMyEVr5YPzL7cZPiqBnHm95oE0qyYpsrqVqSqhskYCtocCP6evcR5YYN82ZXPNQnJeUwBRgPhbcSEpJ4Pka1bnrwRW8SdlthaP1s7htPkyqlGfx4NuzkYrNLUT03jBMiQ0rTqZXF8AdcKUJ9qJ6M+rjxvvFIZACq6c0fO0JTCuHqyg/Ewm8zCNxUXeMpQGoctalDlTv9AMR21QZXZPOiLoQXbQxqFtpqbQ5DWT+HXGPVO6mNVTOhgqBux0jwWPJpcvi2IU+cxZTsyt4DkJBIrz3+qn05Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I80IDrMETKSFhfzESFRMZXokS7MwFUuxK4/Sk3mH6eM=;
+ b=AQmN4DV3kGjNJeCoKqfocMFTabp678x7leb4J1Ze7YA4+STJDI1raHXFEKwAscSdZdWhQWJ76M93LL4pyOz5LRiC25dcJt99N7ZHX7+XO4hTUEfSXUr2AuXmYLjSgmrOGNLCP1Twv4Sz4FT3zdTKwOkcFzBUj2NFWSPlKYsd67s=
+Received: from DS7PR05CA0075.namprd05.prod.outlook.com (2603:10b6:8:57::16) by
+ DS0PR12MB7874.namprd12.prod.outlook.com (2603:10b6:8:141::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13; Thu, 19 Jan 2023 13:05:13 +0000
+Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:57:cafe::8b) by DS7PR05CA0075.outlook.office365.com
+ (2603:10b6:8:57::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.17 via Frontend
+ Transport; Thu, 19 Jan 2023 13:05:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6023.16 via Frontend Transport; Thu, 19 Jan 2023 13:05:13 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 19 Jan
+ 2023 07:05:11 -0600
+From:   Robert Richter <rrichter@amd.com>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Robert Richter <rrichter@amd.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cxl/mbox: Add debug messages for supported mailbox commands
+Date:   Thu, 19 Jan 2023 14:04:50 +0100
+Message-ID: <20230119130450.107519-1-rrichter@amd.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113082659.65276-4-zhangpeng.00@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT022:EE_|DS0PR12MB7874:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0bb196b7-3c2c-45a5-665b-08dafa1dcda5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 06PrbHP4lKtNtev7P8KOcjkDAGWFHC2VsVll8iLVCcsetqoYqgSa0GRf2Q7xUAccyu4LUHCQ6d00h3gB4kDdvTsLVegb9SuwAQ+CEFg8Szc/g0UmL/7yWFpAax65vwHQth7i4QfoHj+doOVvzY1Fos4ZgqTbhHVr7huZFRIvtLBFZW8iFnm05Bpz5dut+FdiJ5hO14CRIZ4BCl8gX38WioPzQpNS2NGZ8z8xEwgnjkH5kUZIa2SuCATK51I4rZlL2XJ+S2/ZPObqlHT1AKRseBRscoRq2uVYXQIceC8Vk+Ya/rRXB3s/M3Q79u0gqfS9pntDcuyjXCDX2smpFjDMJhziEGrYHKGR9Otxo+DvFzr3oR/JNA6xqpNCKOul2Vv06kJZkztmoTDNBMt5dQDYdDaIIrbNmeW7a86jXILL4dB5S31/zgsuCU6KnsSdSKjrKEIjkBP+r+zY7NKRJNxIui4Oyn05cUBbDlYRP8RQQARnFGtjqOTO2oSM4SWNOUIDu2nJ+5lMVOPw4WmNoNOLjZQndMFBllKz7daLxzKBReQXV2fHuuYwjT6AluHDNSIBLY0yqvKHrXQHkie2in8q4jvVIM9Uu75+m1/FgAhfgy3lkGGn1nvw3TGJE07efTbxBVkwmEcujh8WG4oGYcuGadVeDiSyrrTBVNXco/tHjAJxsN9ov+/mc7B9q3+IzKLhiWnRR+yQkOsAC7BY9+nr6RTGGCbx2FvEiEgcGgwUWBY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(356005)(70206006)(2906002)(15650500001)(4744005)(5660300002)(8936002)(82740400003)(81166007)(36860700001)(70586007)(316002)(47076005)(54906003)(6666004)(110136005)(426003)(478600001)(36756003)(82310400005)(8676002)(40480700001)(4326008)(41300700001)(1076003)(16526019)(336012)(186003)(83380400001)(40460700003)(26005)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 13:05:13.6729
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bb196b7-3c2c-45a5-665b-08dafa1dcda5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7874
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:26:59PM +0800, Peng Zhang wrote:
-> memblock_merge_regions() is called after regions have been modified to
-> merge the neighboring compatible regions. That will check all regions
-> but most checks is useless.
-> 
-> Most of the time we only insert one or a few new regions, or modify one
-> or a few regions. At this time, we don't need to check all regions. We
-> only need to check the changed regions, because other not related
-> regions cannot be merged. So this patch add two parameters to
-> memblock_merge_regions() to indicate the lower and upper boundary to scan.
-> 
-> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
-> ---
->  mm/memblock.c | 36 ++++++++++++++++++++++++------------
->  1 file changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index cb92770ac22e..e19eb08efc73 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -523,15 +523,18 @@ static int __init_memblock memblock_double_array(struct memblock_type *type,
->  /**
->   * memblock_merge_regions - merge neighboring compatible regions
->   * @type: memblock type to scan
-> - *
-> - * Scan @type and merge neighboring compatible regions.
-> + * @start_rgn: start scanning from (@start_rgn - 1)
-> + * @end_rgn: end scanning at (@end_rgn - 1)
-> + * Scan @type and merge neighboring compatible regions in [@start_rgn - 1, @end_rgn)
->   */
-> -static void __init_memblock memblock_merge_regions(struct memblock_type *type)
-> +static void __init_memblock memblock_merge_regions(struct memblock_type *type,
-> +						   int start_rgn,
-> +						   int end_rgn)
+Only unsupported mailbox commands are reported in debug messages. A
+list of supported commands is useful too. Change debug messages to
+also report the opcodes of supported commands.
 
-Make start_rgn and end_rgn unsigned longs and ...
+On that occasion also add missing trailing newlines.
 
->  {
-> -	int i = 0;
-> +	int i = max(start_rgn - 1, 0);
-  
-... open code max() as 
+Signed-off-by: Robert Richter <rrichter@amd.com>
+---
+ drivers/cxl/core/mbox.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-	if (start_rgn)
-		i = start_rgn;
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index a48ade466d6a..ffa9f84c2dce 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -629,11 +629,12 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+ 
+ 		if (!cmd) {
+ 			dev_dbg(cxlds->dev,
+-				"Opcode 0x%04x unsupported by driver", opcode);
++				"Opcode 0x%04x unsupported by driver\n", opcode);
+ 			continue;
+ 		}
+ 
+ 		set_bit(cmd->info.id, cxlds->enabled_cmds);
++		dev_dbg(cxlds->dev, "Opcode 0x%04x supported by driver\n", opcode);
+ 	}
+ }
+ 
 
-> -	/* cnt never goes below 1 */
-> -	while (i < type->cnt - 1) {
-> +	end_rgn = min(end_rgn, (int)type->cnt - 1);
-
-... and drop the casting here.
-
-> +	while (i < end_rgn) {
->  		struct memblock_region *this = &type->regions[i];
->  		struct memblock_region *next = &type->regions[i + 1];
->  
-> @@ -548,6 +551,7 @@ static void __init_memblock memblock_merge_regions(struct memblock_type *type)
->  		/* move forward from next + 1, index of which is i + 2 */
->  		memmove(next, next + 1, (type->cnt - (i + 2)) * sizeof(*next));
->  		type->cnt--;
-> +		end_rgn--;
->  	}
->  }
->  
-> @@ -604,7 +608,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  	bool insert = false;
->  	phys_addr_t obase = base;
->  	phys_addr_t end = base + memblock_cap_size(base, &size);
-> -	int idx, start_idx, nr_new;
-> +	int idx, start_idx, nr_new, start_rgn = -1, end_rgn;
->  	struct memblock_region *rgn;
->  
->  	if (!size)
-> @@ -659,10 +663,14 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  #endif
->  			WARN_ON(flags != rgn->flags);
->  			nr_new++;
-> -			if (insert)
-> +			if (insert) {
-> +				if (start_rgn == -1)
-
-you can initialize start_rgn with 0 and use if(!start_rgn) here.
-
-> +					start_rgn = idx;
-> +				end_rgn = idx + 1;
->  				memblock_insert_region(type, idx++, base,
->  						       rbase - base, nid,
->  						       flags);
-> +			}
->  		}
->  		/* area below @rend is dealt with, forget about it */
->  		base = min(rend, end);
-> @@ -671,9 +679,13 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  	/* insert the remaining portion */
->  	if (base < end) {
->  		nr_new++;
-> -		if (insert)
-> +		if (insert) {
-> +			if (start_rgn == -1)
-
-Ditto.
-
-> +				start_rgn = idx;
-> +			end_rgn = idx + 1;
->  			memblock_insert_region(type, idx, base, end - base,
->  					       nid, flags);
-> +		}
->  	}
->  
->  	if (!nr_new)
-> @@ -690,7 +702,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  		insert = true;
->  		goto repeat;
->  	} else {
-> -		memblock_merge_regions(type);
-> +		memblock_merge_regions(type, start_rgn, end_rgn);
->  		return 0;
->  	}
->  }
-> @@ -927,7 +939,7 @@ static int __init_memblock memblock_setclr_flag(phys_addr_t base,
->  			r->flags &= ~flag;
->  	}
->  
-> -	memblock_merge_regions(type);
-> +	memblock_merge_regions(type, start_rgn, end_rgn);
->  	return 0;
->  }
->  
-> @@ -1300,7 +1312,7 @@ int __init_memblock memblock_set_node(phys_addr_t base, phys_addr_t size,
->  	for (i = start_rgn; i < end_rgn; i++)
->  		memblock_set_region_node(&type->regions[i], nid);
->  
-> -	memblock_merge_regions(type);
-> +	memblock_merge_regions(type, start_rgn, end_rgn);
->  #endif
->  	return 0;
->  }
-> -- 
-> 2.20.1
-> 
-
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 -- 
-Sincerely yours,
-Mike.
+2.30.2
+
