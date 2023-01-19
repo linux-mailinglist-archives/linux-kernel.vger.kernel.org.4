@@ -2,164 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9091C6738F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E08D6738FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjASMuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S230219AbjASMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjASMtk (ORCPT
+        with ESMTP id S230480AbjASMul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:49:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED4D1E1EE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674132533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YAKRFMXRp2ApOVKi5cAZjE7qcay8g+VNvLJ9cfYcxHU=;
-        b=dbL2dHJfjXoE87j2A0CVDxCXYGbKr/+uvio9oI6MNKcJyNKqsHiBdWmq1ET/Uw//H/R7Ng
-        /sPCvNGzFVwjMjioH+YmKHyObpwAYYq6b0IxU+B/0DwlTsXZPMKdr7rZjy9lntdD2LGAGx
-        LaLJPX1F8Xnr8VSZaIL8UMQjIhnvQx8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-674-P25k8TtnNPWS2eseBHZwiA-1; Thu, 19 Jan 2023 07:48:48 -0500
-X-MC-Unique: P25k8TtnNPWS2eseBHZwiA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 608A1183B3C0;
-        Thu, 19 Jan 2023 12:48:48 +0000 (UTC)
-Received: from localhost (ovpn-13-24.pek2.redhat.com [10.72.13.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 853622026D68;
-        Thu, 19 Jan 2023 12:48:47 +0000 (UTC)
-Date:   Thu, 19 Jan 2023 20:48:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        lstoakes@gmail.com, stephen.s.brennan@oracle.com,
-        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y8k8K9Ztfm/Yj5PO@fedora>
-References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-4-bhe@redhat.com>
- <Y8U6Gi5d4F8mO0ib@pc636>
- <Y8kSwyJBe426pj7R@fedora>
+        Thu, 19 Jan 2023 07:50:41 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B623EFCB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:50:39 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o17-20020a05600c511100b003db021ef437so1179923wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vINAOHB0D9rvl5tJCPLb+x7BlTbDRMrljWXzEV7kSao=;
+        b=RY7Vg6JaH9+t0kB7071r6RQ9RvqZlkoi4uMfO86SVw+7Drf8P6bD0ncXN8C0BLNqA8
+         9je5xqiSIHP8K1TZLYGBHXonYih1OKWiSUB8ufrBRN3R50mWi6n7E5z8f63ttzDEJd/A
+         o3LL/kQZlC0BAToxymuqN0Py96hygMil+8S/K0PefC99i7CUHQ0Ca9RDRPek+2gGvUx/
+         Qjog5JenHuzIkBxdluNgDEkyHHm1e6Hdv4SFe405KYw7/tjZA9q4hOI93VCnkpXEXgyl
+         gXBM7Y99pa1Vs2HHBHOrFrZKwLIYHkv244gFTIUP3Rs8H1FXADIpwirumhWYlNkCtp3o
+         2fCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vINAOHB0D9rvl5tJCPLb+x7BlTbDRMrljWXzEV7kSao=;
+        b=gyDuR7EdKV8PphCu86AX7eZ9yCoABe8SlegOkeVkMWq4ekT1JJg4Bfr1ZFY3J8wLr2
+         oxYa4UvCz0uiVjbdUfDIaGteYcQ2XI61D46pxEyzikW7bfArJT5b94Ue85NRd+pc4g30
+         l26AkVx/uovnR++RCYgbABlLvW+K6NMJiTAP4Md+u5lj74LvYETY1li4XG/0sZk8JAWD
+         ZF9E9QBXaCfoIW6HLJY0ksp6XHwj+aulPrZ3+uVfhNQCXJle58c1tnocm1l871Dcz11r
+         B/hOxwOqPcC7uDY3VtYaYn0FbkoMYCI/UMd7uyJWzJ6a15Q18RejV8SIljvKhVK43SLe
+         g7nQ==
+X-Gm-Message-State: AFqh2kpvPTekBxnpLxkPaVwhy1avvC7V2yBcvjzX/p4IzNC/E+4AEihi
+        j0Ttn7mupK1AnlGQvGPjoUO5Xg==
+X-Google-Smtp-Source: AMrXdXulkYGRio9+cl/JJvmQN42EgGNQJ+UBCNhWNqg7IozoecnfItdDp9BbzJ1XmPi8/DKolzz63Q==
+X-Received: by 2002:a05:600c:46cb:b0:3db:1afd:ac45 with SMTP id q11-20020a05600c46cb00b003db1afdac45mr4232890wmo.7.1674132638414;
+        Thu, 19 Jan 2023 04:50:38 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id l5-20020adfe9c5000000b002238ea5750csm19139601wrn.72.2023.01.19.04.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 04:50:37 -0800 (PST)
+Date:   Thu, 19 Jan 2023 14:50:36 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: sm8550: Add PCIe HC and PHY
+ support
+Message-ID: <Y8k8nEugQMO7mC0C@linaro.org>
+References: <20230118230526.1499328-1-abel.vesa@linaro.org>
+ <167408614065.2989059.2950818972854332656.b4-ty@kernel.org>
+ <Y8jyQAR7fF1NRmwu@hovoldconsulting.com>
+ <Y8kzBz0ApSWgOkVJ@linaro.org>
+ <8322af81-139c-b840-dbf0-d52d86e92032@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8kSwyJBe426pj7R@fedora>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8322af81-139c-b840-dbf0-d52d86e92032@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/19/23 at 05:52pm, Baoquan He wrote:
-> On 01/16/23 at 12:50pm, Uladzislau Rezki wrote:
-> > On Fri, Jan 13, 2023 at 11:19:17AM +0800, Baoquan He wrote:
-> > > Currently, vread can read out vmalloc areas which is associated with
-> > > a vm_struct. While this doesn't work for areas created by vm_map_ram()
-> > > interface because it doesn't have an associated vm_struct. Then in vread(),
-> > > these areas are all skipped.
-> > > 
-> > > Here, add a new function vmap_ram_vread() to read out vm_map_ram areas.
-> > > The area created with vmap_ram_vread() interface directly can be handled
-> > > like the other normal vmap areas with aligned_vread(). While areas
-> > > which will be further subdivided and managed with vmap_block need
-> > > carefully read out page-aligned small regions and zero fill holes.
-> > > 
-> > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > ---
-> > >  mm/vmalloc.c | 80 +++++++++++++++++++++++++++++++++++++++++++++++-----
-> > >  1 file changed, 73 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > > index ab4825050b5c..13875bc41e27 100644
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@ -3544,6 +3544,65 @@ static int aligned_vread(char *buf, char *addr, unsigned long count)
-> > >  	return copied;
-> > >  }
-> > >  
-> > > +static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags)
-> > > +{
-> > > +	char *start;
-> > > +	struct vmap_block *vb;
-> > > +	unsigned long offset;
-> > > +	unsigned int rs, re, n;
-> > > +
-> > > +	/*
-> > > +	 * If it's area created by vm_map_ram() interface directly, but
-> > > +	 * not further subdividing and delegating management to vmap_block,
-> > > +	 * handle it here.
-> > > +	 */
-> > > +	if (!(flags & VMAP_BLOCK)) {
-> > > +		aligned_vread(buf, addr, count);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * Area is split into regions and tracked with vmap_block, read out
-> > > +	 * each region and zero fill the hole between regions.
-> > > +	 */
-> > > +	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-> > > +
-> > > +	spin_lock(&vb->lock);
-> > > +	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
-> > >
-> > CPU-X invokes free_vmap_block() whereas we take the vb->lock and do
-> > some manipulations with vb that might be already freed over RCU-core.
+On 23-01-19 13:29:38, Krzysztof Kozlowski wrote:
+> On 19/01/2023 13:09, Abel Vesa wrote:
+> > On 23-01-19 08:33:20, Johan Hovold wrote:
+> >> On Wed, Jan 18, 2023 at 05:55:31PM -0600, Bjorn Andersson wrote:
+> >>> On Thu, 19 Jan 2023 01:05:24 +0200, Abel Vesa wrote:
+> >>>> This patchset adds PCIe controllers and PHYs support to SM8550 platform
+> >>>> and enables them on the MTP board.
+> >>>>
+> >>>> The v1 was here:
+> >>>> https://lore.kernel.org/all/20221116130430.2812173-1-abel.vesa@linaro.org/
+> >>>>
+> >>>> Changes since v1:
+> >>>>  * ordered pcie related nodes alphabetically in MTP dts
+> >>>>  * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
+> >>>>  * dropped the child node from the phy nodes, like Johan suggested,
+> >>>>    and updated to use the sc8280xp binding scheme
+> >>>>  * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
+> >>>>    to "nocsr"
+> >>>>  * reordered all pcie nodes properties to look similar to the ones
+> >>>>    from sc8280xp
+> >>>>
+> >>>> [...]
+> >>>
+> >>> Applied, thanks!
+> >>>
+> >>> [1/2] arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
+> >>>       commit: 7d1158c984d37e79ab8bb55ab152a0b35566cb89
+> >>> [2/2] arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
+> >>>       commit: 1eeef306b5d80494cdb149f058013c3ab43984b4
+> >>
+> >> I believe there were still some changes needed to the controller
+> >> and PHY bindings so this should not have been merged.
+> >>
+> >> 	https://lore.kernel.org/all/Y8fuUI4xaNkADkWl@hovoldconsulting.com/
+> >> 	https://lore.kernel.org/lkml/Y8giHJMtPu4wTlmA@hovoldconsulting.com/
+> >>
+> >> Perhaps in the future you can send the dts changes along with the (PHY)
+> >> driver changes so that they can be kept in lock-step and avoid this.
 > > 
-> > Should we protect it by the rcu_read_lock() also here?
+> > Well, that is a bit hard to do, because phy patches are based on
+> > linux-phy/next, while dtsi patches are based on Bjorn's tree which,
+> > so ...
 > 
-> Just go over the vb and vbq code again, seems we don't need the
-> rcu_read_lock() here. The rcu lock is needed when operating on the
-> vmap_block_queue->free list. I don't see race between the vb accessing
-> here and those list adding or removing on vmap_block_queue->free with
-> rcu. If I miss some race windows between them, please help point out.
-> 
-> However, when I check free_vmap_block(), I do find a risk. As you said,
+> ... which we long time solved by basing your patches on linux-next.
+> That's the only way for inter-tree patchsets to be properly based.
 
-Forgot to add details about why there's no race between free_vmap_block()
-and vmap_ram_vread() because we have taken vmap_area_lock at the beginning
-of vread(). So, except of the missing checking on returned value from
-xa_load(), free_vmap_block() either is blocked to wait for vmap_area_lock
-before calling unlink_va(), or finishes calling unlink_va() to remove
-the vmap from vmap_area_root tree. In both cases, no race happened.
+Yeah, I just realized that out after I sent the reply :-)
 
-> CPU-x invokes free_vmap_block() and executed xa_erase() to remove the vb
-> from vmap_blocks tree. Then vread() comes into vmap_ram_vread() and call
-> xa_load(), it would be null. I should check the returned vb in
-> free_vmap_block().
-> 
-> 
-> static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags)
-> {
-> ......
-> if (!(flags & VMAP_BLOCK)) {
->                 aligned_vread(buf, addr, count);
->                 return;
->         }
-> 
->         /*
->          * Area is split into regions and tracked with vmap_block, read out
->          * each region and zero fill the hole between regions.
->          */
->         vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-> 	if (!vb)    <-- vb need be checked here to avoid accessing erased vb from vmap_blocks tree
-> 		memset(buf, 0, count);
-> ......
-> }
-> 
+Will send a single patchset which adds both the controller changes,
+the phy changes and the dts/i changes (including all related bindings
+updates).
 
+> 
+> Best regards,
+> Krzysztof
+> 
