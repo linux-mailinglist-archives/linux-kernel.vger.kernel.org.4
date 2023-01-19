@@ -2,119 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFF4673525
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB8267352C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjASKKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S229997AbjASKLl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 Jan 2023 05:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjASKKE (ORCPT
+        with ESMTP id S229590AbjASKLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:10:04 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A605066FB6;
-        Thu, 19 Jan 2023 02:10:03 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F4D77EC;
-        Thu, 19 Jan 2023 11:10:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674123001;
-        bh=KeS3ZYlh0v1hgL0ubBbk0cm/I4qwuUYr/hTn/NPRngw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jC2PNGu9dua0vIbdOBh1G+iQ0MzFzcucrYoElYzktJUvYPo770BRKM3Lksy5LKOjn
-         VD7dMrirvMpZTaCupD6iBWTPWYnFJNHpYg9uq7Tu/Il4GfJsywW4TgpFx9O9Lxc77P
-         AG1sd5foL/PfPoZ1TR2hq7a15lL7LfdojcvU8YV0=
-Message-ID: <db2e7386-e625-5bad-0c99-bae633e96d80@ideasonboard.com>
-Date:   Thu, 19 Jan 2023 12:09:57 +0200
+        Thu, 19 Jan 2023 05:11:36 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D3EA768A;
+        Thu, 19 Jan 2023 02:11:35 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 61F9B80F1;
+        Thu, 19 Jan 2023 10:11:34 +0000 (UTC)
+Date:   Thu, 19 Jan 2023 12:11:33 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Juerg Haefliger <juergh@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the omap tree with the arm-soc tree
+Message-ID: <Y8kXVekfGHEcPvWg@atomide.com>
+References: <20230110095041.0d6311d2@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
- <Y8gA+cz9m7PaEhfP@smile.fi.intel.com> <20230118181753.7a325953@booty>
- <Y8gu4mlXUlyiFKZD@smile.fi.intel.com> <20230119092115.02cbbab3@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230119092115.02cbbab3@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20230110095041.0d6311d2@canb.auug.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 10:21, Luca Ceresoli wrote:
-
-<snip>
-
->>>>> +void i2c_atr_set_driver_data(struct i2c_atr *atr, void *data)
->>>>> +{
->>>>> +	atr->priv = data;
->>>>> +}
->>>>> +EXPORT_SYMBOL_NS_GPL(i2c_atr_set_driver_data, I2C_ATR);
->>>>> +
->>>>> +void *i2c_atr_get_driver_data(struct i2c_atr *atr)
->>>>> +{
->>>>> +	return atr->priv;
->>>>> +}
->>>>> +EXPORT_SYMBOL_NS_GPL(i2c_atr_get_driver_data, I2C_ATR);
->>>>
->>>> Just to be sure: Is it really _driver_ data and not _device instance_ data?
->>>
->>> It is device instance data indeed. I don't remember why this got
->>> changed, but in v3 it was i2c_atr_set_clientdata().
->>
->> It's me who was and is against calling it clientdata due to possible
->> confusion with i2c_set/get_clientdata() that is about *driver data*.
->> I missed that time the fact that this is about device instance data.
->> I dunno which name would be better in this case, i2c_atr_set/get_client_priv() ?
+* Stephen Rothwell <sfr@canb.auug.org.au> [230109 22:57]:
+> Hi all,
 > 
-> Not sure I'm following you here. The i2c_atr_set_clientdata() name was
-> given for similarity with i2c_set_clientdata(). The latter wraps
-> dev_set_drvdata(), which sets `struct device`->driver_data. There is
-> one driver_data per each `struct device` instance, not per each driver.
-> The same goes for i2c_atr_set_driver_data(): there is one priv pointer
-> per each `struct i2c_atr` instance.
+> Today's linux-next merge of the omap tree got a conflict in:
+> 
+>   arch/arm/mach-omap1/Kconfig
+> 
+> between commit:
+> 
+>   67d3928c3df5 ("ARM: omap1: remove unused board files")
+> 
+> from the arm-soc tree and commit:
+> 
+>   609c1fabc7c5 ("ARM: omap1: Kconfig: Fix indentation")
+> 
+> from the omap tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary.
 
-I'm a bit confused. What is "driver data" and what is "device instance 
-data"?
+Thanks, I just dropped "ARM: omap1: remove unused board files" to
+simplify things.
 
-This deals with the driver's private data, where the "driver" is the 
-owner/creator of the i2c-atr. The i2c-atr itself doesn't have a device 
-(it's kind of part of the owner's device), and there's no driver in 
-i2c-atr.c
+Juerg, care to update and resend in a few weeks after v6.3-rc1
+after the omap1 clean-up patches are merged?
 
-I don't like "client" here, as it reminds me of i2c_client (especially 
-as we're in i2c context).
+Regards,
 
-What about i2c_atr_set_user_data()? Or "owner_data"?
+Tony
 
-  Tomi
 
