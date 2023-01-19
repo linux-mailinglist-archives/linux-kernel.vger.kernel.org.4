@@ -2,109 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB60674407
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E154667440B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjASVKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S229758AbjASVLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjASVJi (ORCPT
+        with ESMTP id S230087AbjASVJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:09:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1F130F8;
-        Thu, 19 Jan 2023 13:03:02 -0800 (PST)
-Date:   Thu, 19 Jan 2023 21:02:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674162180;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xY+SzRBo17JQPxRpIt0Xv07Ckhs+cRTjf+iujupdH3Q=;
-        b=JdNClVOVN7juiNVlv1BdgZTUI5ocscMjE1ceI8aFyc+YKF8jOq7DjbbvtORx99zIj6dUgN
-        k4fY1KIX0X9AGuPYkRAu+ow/eLCxtCv92PWFpjSfxXjJ4EE1rUvB5JEv1B6KEvS5nzFmvN
-        me1GUQQHQw8PNId1X/O2X3DQZfP7xiTr1rwv+ePumrIp2uGRTx0+FDvpChl2hxgAC9PmHH
-        0eciBohNaOSUmzevgHnZn18Ty4uSwZFTCdy1cppopUGTnvDXHkfWshIGM/WHO5ESkqiwNz
-        S9eMAgor8NVg3jz6GKTKCzVncBRnNZQ8g4dBBqVIKCqDJrD1nU1SBUZeUuh9dQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674162180;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xY+SzRBo17JQPxRpIt0Xv07Ckhs+cRTjf+iujupdH3Q=;
-        b=DB2zZ4Nd7aoqpqZ9B0qoCnuTHdNlear3ASzlWBeSKmlLshVJ+HX4gO1MecP+8BpnLSUfAE
-        A3X0t0cHxY4IruCg==
-From:   "tip-bot2 for Gustavo A. R. Silva" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu: Replace zero-length array in struct
- xregs_state with flexible-array member
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <o9YQ@work>
-References: <o9YQ@work>
-MIME-Version: 1.0
-Message-ID: <167416217961.4906.13789346237944390735.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        Thu, 19 Jan 2023 16:09:40 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F28A5CD0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:03:24 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id j1-20020aa78001000000b0057d28e11cb6so1431320pfi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbDaaSJvobNV5Ds3Rih74TAbfU3rZrDtTb01NjKp5c8=;
+        b=nlIRxtqTxEsjrzPTxiV77OKW32I7a3XK4lGJoXuRkPNkeRHdUk1m4n7TcSW07fQlKJ
+         hue5f8oHh/mNJMcxjdaFlvTxSzIDL07lCF4QThggcqDgtu7HmsB+xQvucmQf5PCZFpfM
+         P7NAwsFA4lcHlsKioKPMt7deX8FKBfHLKlzM/ck4dMYBN9F1Qey9Q/HgBmQbfkjRSLnG
+         987eUFe4zMeRnjNOZBcg93wp7F2g4VTbOKAd5nR95MAmI4E/5uITheNAYf307CSndAbm
+         xEdD7fw72/LDoG+NTTDMW+e0oJH7ITzLJfoz5ewjrvL65pDbnlb8GDJnjT/thi7+AGGo
+         kIrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbDaaSJvobNV5Ds3Rih74TAbfU3rZrDtTb01NjKp5c8=;
+        b=mHO3HzRfmTw7tbEaTZTZlxOOlt7XDz85ymHI8YYnqXoTV73OZqVA3KwZtmYD7hF8J0
+         sluP9mgk9JDx9nRdmS04WxLABVmcp/DYUqNdqCmgZviBDMRFOjGdsHqTt62TM4ZahpC9
+         BUGP93wJxRt6OqQZj7e8jVoEK+PBAOyOhRA3+iHmeiFTAeT4V/kTlbnItk0Tts51jB1H
+         Zmhk4W+hJHkl1QKQHGgTKJSMOymV6gkVHbtvhU0eqGGEtF0u5vgnAz2S3xlK+UEEe/fy
+         HxmVFtWXp57VnznhPIwHhWv78taZABziDXsnUkkxaDSEIDxJxUee8Qwe4RWtOTwrAz3S
+         5ghQ==
+X-Gm-Message-State: AFqh2kpP27VfLlUA1Mz2s/v9lyZ0+FRRBwJNpfEHeb7MHxTy7BZwKiG6
+        RboBWM3OiCJVZBVyHCmNwqOcWIL33O8=
+X-Google-Smtp-Source: AMrXdXv/g5a++qTJuSYmiefMV47cq9t1IJPRfU1gkDEpKaCysYl+MIo7uP388svuElqQwAQez/+tE5jeFik=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:8d94:b0:189:a2d4:7f5 with SMTP id
+ v20-20020a1709028d9400b00189a2d407f5mr1253044plo.23.1674162204086; Thu, 19
+ Jan 2023 13:03:24 -0800 (PST)
+Date:   Thu, 19 Jan 2023 21:03:10 +0000
+In-Reply-To: <20221109115952.92816-1-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20221109115952.92816-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+Message-ID: <167409033032.2372165.7505423763939430005.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: svm/avic: Drop "struct kvm_x86_ops" for avic_hardware_setup()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
+On Wed, 09 Nov 2022 19:59:52 +0800, Like Xu wrote:
+> Even in commit 4bdec12aa8d6 ("KVM: SVM: Detect X2APIC virtualization
+> (x2AVIC) support"), where avic_hardware_setup() was first introduced,
+> its only pass-in parameter "struct kvm_x86_ops *ops" is not used at all.
+> Clean it up a bit to avoid compiler ranting from LLVM toolchain.
+> 
+> 
 
-Commit-ID:     aa81cb9d9723694bb18359adbef7964030758dba
-Gitweb:        https://git.kernel.org/tip/aa81cb9d9723694bb18359adbef7964030758dba
-Author:        Gustavo A. R. Silva <gustavoars@kernel.org>
-AuthorDate:    Mon, 09 Jan 2023 19:40:38 -06:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 19 Jan 2023 21:59:35 +01:00
+Applied to kvm-x86 svm, thanks!
 
-x86/fpu: Replace zero-length array in struct xregs_state with flexible-array member
+[1/1] KVM: svm/avic: Drop "struct kvm_x86_ops" for avic_hardware_setup()
+      https://github.com/kvm-x86/linux/commit/6e66dcbdfe90
 
-Zero-length arrays are deprecated [1] and have to be replaced by C99
-flexible-array members.
-
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-on memcpy() and help to make progress towards globally enabling
--fstrict-flex-arrays=3 [2]
-
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
-Link: https://github.com/KSPP/linux/issues/78
-Link: https://lore.kernel.org/r/Y7zCFpa2XNs/o9YQ@work
----
- arch/x86/include/asm/fpu/types.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
-index eb7cd11..7f6d858 100644
---- a/arch/x86/include/asm/fpu/types.h
-+++ b/arch/x86/include/asm/fpu/types.h
-@@ -321,7 +321,7 @@ struct xstate_header {
- struct xregs_state {
- 	struct fxregs_state		i387;
- 	struct xstate_header		header;
--	u8				extended_state_area[0];
-+	u8				extended_state_area[];
- } __attribute__ ((packed, aligned (64)));
- 
- /*
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
