@@ -2,189 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1001D672F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 04:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D0A672F6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 04:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjASDG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 22:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S229884AbjASDLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 22:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjASDGY (ORCPT
+        with ESMTP id S229790AbjASDKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 22:06:24 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EAC728C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:06:23 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 203so900103yby.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:06:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSVT8YMAjXFFuPOc52FToBAxdMmpNVmxrCRZs5o5VjI=;
-        b=Y3pFPShzMo7m/C/Jbyf8twwR/ljuAb7pInc97aWWrCPc6JmUlDjeCObiYI61nbhC6c
-         XDC3+gNU8ufbrG9efFIMnn3lk5g6TfpACZQZluk5wa+WHfNbal0TxzV9FHP71U8SfZGl
-         zJ3XfQ4oA3eBQnWNLCL7/czQ2ga6mAo+WgrMgKdBaidMspmMI1kkfFKNTha1zKJSom8S
-         WRHM2N8jEkYX/FccbMRwxEu0oDNfEwk84BYuIibSI86OhQhg/8l5nMIxe8ngCEQt7GPM
-         5kZ4y3DznA986yj2Jba7c1HPZL6x1yPp1RSV9IXEgSPtlTmAPv2KDF7kuFK6eT1zoTcB
-         dPig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qSVT8YMAjXFFuPOc52FToBAxdMmpNVmxrCRZs5o5VjI=;
-        b=dLw6nImch1Ac6rIkf3fWHJ3j42bwrFKAwx7LzJNu1oXbczPK2HItpTHhHoaa1dzicj
-         3mQxLWZniu7uitu4CH55496AVLd6y2sU7Gk+YkivzW8CUXPJUmSXQK35aeGUT+SP3MVm
-         MzoK9xMwQeH/KzVWmzIFWn7yTQp1m2ySZkOeqdRy9ZwqLPQTz4ccioYSdcJejPbZqOOg
-         Nmz1cJrRKRITweIo5PXl6R0LU1jXvMLlaqQQc6IEt1rHDfKQbHHTEg3Ek6lYUgPyQ9W6
-         Y4Gh2cMxIfqY+KIwbV0IaJhpRGzN6uCSvYnlVkHzWEhVEbmZaEcyMqaISLDbe7lVLRmS
-         IdFA==
-X-Gm-Message-State: AFqh2kq5/BPfeBlm24MBafDxaB9NnJFas1yAwOuNGPFjIyu4LvIP6OV2
-        PTmfmf/ZGFrnP831RvWlYvI8c2EFNyOioh9+tbAgVg==
-X-Google-Smtp-Source: AMrXdXsAS+F/t+k+RLycofXHpm2MVkThS9HDzF+oG0yCkqMTTq9jCZYTPVYA3UVQC5g/ZQoWjF19SIwf+o09Ru1wZ6k=
-X-Received: by 2002:a05:6902:11cd:b0:7d6:c4f6:b4ea with SMTP id
- n13-20020a05690211cd00b007d6c4f6b4eamr976386ybu.59.1674097582453; Wed, 18 Jan
- 2023 19:06:22 -0800 (PST)
+        Wed, 18 Jan 2023 22:10:16 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D055D5974A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:10:07 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J0xD67026187;
+        Thu, 19 Jan 2023 03:09:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=AxCd/tGfdAUukxKYoUvez6+rwBG5VJlhtV1vA+3JmQ0=;
+ b=U7qDSdP2WSKkVuOcpHt+9rluNdva6S4KowuZyp2JiWtnb9jkrR5t4jRX4VD3xVsNSvJ+
+ lBkhi8KNCVpRTA77FTdE8/JfMMXSPD0oi14tyjAJzqgztHq2HCKnqlKmd9xAUfN9fw1V
+ 7zWhcump1ultkDNGFDZtjsIsDDQYOqxxyP4HNAQuBqktzfTfguB8D8bXzc2BDCuABmhH
+ 2u8rdtqrQF3GxTIyPRpjwpVsrekY3TCrKcW4WGfTNgEhudSvUF1YAJfCRKL15Pj8NYva
+ +n4khYhiV/YwLvXbrQyqVbI8YvJBt1qmvSp5oTjJ1HCZMAkmvsHE/+RIZc7xzcaVyKXp YQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6j23gpvx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 03:09:31 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30J2pXJY019126;
+        Thu, 19 Jan 2023 03:09:31 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6j23gpvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 03:09:30 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30I6aPIc007521;
+        Thu, 19 Jan 2023 03:09:28 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n3m16me6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 03:09:28 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30J39Qma46399872
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 03:09:26 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 517CE20040;
+        Thu, 19 Jan 2023 03:09:26 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D5042004B;
+        Thu, 19 Jan 2023 03:09:22 +0000 (GMT)
+Received: from [9.43.78.165] (unknown [9.43.78.165])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 03:09:22 +0000 (GMT)
+Message-ID: <c698ef14-1151-594b-2e63-7ec4bd91d318@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 08:39:20 +0530
 MIME-Version: 1.0
-References: <CAJuCfpEMEsSYcKakFiDK=QV+apW-2baLcUcw7uRyrmKkWVnR8A@mail.gmail.com>
- <20230113022555.2467724-1-kamatam@amazon.com> <CAJuCfpEH7kC=S8S_SRLW-X483kpaL4xdn5b35Ou08V7b56QdJA@mail.gmail.com>
-In-Reply-To: <CAJuCfpEH7kC=S8S_SRLW-X483kpaL4xdn5b35Ou08V7b56QdJA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 18 Jan 2023 19:06:10 -0800
-Message-ID: <CAJuCfpHV2-pnHd6U3paA1fO2gaYP1RTqAJwp_5QC7C2YR3JG5g@mail.gmail.com>
-Subject: Re: another use-after-free in ep_remove_wait_queue()
-To:     Munehisa Kamata <kamatam@amazon.com>
-Cc:     ebiggers@kernel.org, hannes@cmpxchg.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mengcc@amazon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v15 1/7] crash: move crash_prepare_elf64_headers()
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20221209153656.3284-1-eric.devolder@oracle.com>
+ <20221209153656.3284-2-eric.devolder@oracle.com>
+ <09567e13-c5ed-d1b9-027c-9340fce6a0a8@linux.ibm.com>
+ <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nubomwF2PdTjnsfyYjY7Il4AknAk-Ntq
+X-Proofpoint-ORIG-GUID: UraENucsSKNdsICQ1jfC93kg8NwytkcG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301190019
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 9:52 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Jan 12, 2023 at 6:26 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> >
-> > On Thu, 2023-01-12 22:01:24 +0000, Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > On Mon, Jan 9, 2023 at 7:06 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Mon, Jan 9, 2023 at 5:33 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > >
-> > > > > On Sun, Jan 8, 2023 at 3:49 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > > > >
-> > > > > > On 8 Jan 2023 14:25:48 -0800 PM Munehisa Kamata <kamatam@amazon.com> wrote:
-> > > > > > >
-> > > > > > > That patch survived the repro in my original post, however, the waker
-> > > > > > > (rmdir) was getting stuck until a file descriptor of the epoll instance or
-> > > > > > > the pressure file got closed. So, if the following modified repro runs
-> > > > > > > with the patch, the waker never returns (unless the sleeper gets killed)
-> > > > > > > while holding cgroup_mutex. This doesn't seem to be what you expected to
-> > > > > > > see with the patch, does it? Even wake_up_all() does not appear to empty
-> > > > > > > the queue, but wake_up_pollfree() does.
-> > > > > >
-> > > > > > Thanks for your testing. And the debugging completes.
-> > > > > >
-> > > > > > Mind sending a patch with wake_up_pollfree() folded?
-> > > > >
-> > > > > I finally had some time to look into this issue. I don't think
-> > > > > delaying destruction in psi_trigger_destroy() because there are still
-> > > > > users of the trigger as Hillf suggested is a good way to go. Before
-> > > > > [1] correct trigger destruction was handled using a
-> > > > > psi_trigger.refcount. For some reason I thought it's not needed
-> > > > > anymore when we placed one-trigger-per-file restriction in that patch,
-> > > > > so I removed it. Obviously that was a wrong move, so I think the
-> > > > > cleanest way would be to bring back the refcounting. That way the last
-> > > > > user of the trigger (either psi_trigger_poll() or psi_fop_release())
-> > > > > will free the trigger.
-> > > > > I'll check once more to make sure I did not miss anything and if there
-> > > > > are no objections, will post a fix.
-> > > >
-> > > > Uh, I recalled now why refcounting was not helpful here. I'm making
-> > > > the same mistake of thinking that poll_wait() blocks until the call to
-> > > > wake_up() which is not the case. Let me think if there is anything
-> > > > better than wake_up_pollfree() for this case.
-> > >
-> > > Hi Munehisa,
-> > > Sorry for the delay. I was trying to reproduce the issue but even
-> > > after adding a delay before ep_remove_wait_queue() it did not happen.
-> >
-> > Hi Suren,
-> >
-> > Thank you for your help here.
-> >
-> > Just in case, do you have KASAN enabled in your config? If not, this may
-> > just silently corrupt a certain memory location and not immediately
-> > followed by obvious messages or noticeable event like oops.
->
-> Yes, KASAN was enabled in my build.
->
-> >
-> > > One thing about wake_up_pollfree() solution that does not seem right
-> > > to me is this comment at
-> > > https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L253:
-> > >
-> > > `In the very rare cases where a ->poll() implementation uses a
-> > > waitqueue whose lifetime is tied to a task rather than to the 'struct
-> > > file' being polled, this function must be called before the waitqueue
-> > > is freed...`
-> > >
-> > > In our case we free the waitqueue from cgroup_pressure_release(),
-> > > which is the handler for `release` operation on cgroup psi files. The
-> > > other place calling psi_trigger_destroy() is psi_fop_release(), which
-> > > is also tied to the lifetime to the psi files.  Therefore the lifetime
-> > > of the trigger's waitqueue is tied to the lifetime of the files and
-> > > IIUC, we should not be required to use wake_up_pollfree().
-> > > Could you please post your .config file? I might be missing some
-> > > configuration which prevents the issue from happening on my side.
-> >
-> > Sure, here is my config.
-> >
-> >  https://gist.github.com/kamatam9/a078bdd9f695e7a0767b061c60e48d50
-> >
-> > I confirmed that it's reliably reproducible with v6.2-rc3 as shown below.
-> >
-> >  https://gist.github.com/kamatam9/096a79cf59d8ed8785c4267e917b8675
->
-> Thanks! I'll try to figure out the difference.
 
-Sorry for the slow progress on this issue. I'm multiplexing between
-several tasks ATM but I did not forget about this one.
-Even though I still can't get the kasan UAF report, I clearly see the
-wrong order when tracing these functions and forcing the delay before
-ep_remove_wait_queue(). I don't think that should be happening, so
-something in the release process I think needs fixing. Will update
-once I figure out the root cause, hopefully sometime this week.
-
-
-> Suren.
+On 12/01/23 22:53, Eric DeVolder wrote:
 >
-> >
-> >
-> > Regards,
-> > Munehisa
-> >
-> >
-> > > Thanks,
-> > > Suren.
-> > >
-> > > >
-> > > >
-> > > > >
-> > > > > [1] https://lore.kernel.org/lkml/20220111232309.1786347-1-surenb@google.com/
-> > > > >
-> > > > > Thanks,
-> > > > > Suren.
-> > > > >
-> > > > > >
-> > > > > > Hillf
-> > >
-> > >
+>
+> On 1/8/23 23:05, Sourabh Jain wrote:
+>>
+>> On 09/12/22 21:06, Eric DeVolder wrote:
+>>> At the outcome of this patch set, the crash_prepare_elf64_headers()
+>>> is utilized on both the kexec_file_load() and kexec_load() paths. As
+>>> such, need to move this function out of kexec_file.c and into a
+>>> common location crash_core.c.
+>>>
+>>> No functionality change.
+>>>
+>>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>>> Acked-by: Baoquan He <bhe@redhat.com>
+>>> ---
+>>>   kernel/crash_core.c | 100 
+>>> ++++++++++++++++++++++++++++++++++++++++++++
+>>>   kernel/kexec_file.c |  99 -------------------------------------------
+>>>   2 files changed, 100 insertions(+), 99 deletions(-)
+>>>
+>>> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+>>> index a0eb4d5cf557..46c160d14045 100644
+>>> --- a/kernel/crash_core.c
+>>> +++ b/kernel/crash_core.c
+>>> @@ -10,6 +10,7 @@
+>>>   #include <linux/utsname.h>
+>>>   #include <linux/vmalloc.h>
+>>>   #include <linux/sizes.h>
+>>> +#include <linux/kexec.h>
+>>>   #include <asm/page.h>
+>>>   #include <asm/sections.h>
+>>> @@ -314,6 +315,105 @@ static int __init parse_crashkernel_dummy(char 
+>>> *arg)
+>>>   }
+>>>   early_param("crashkernel", parse_crashkernel_dummy);
+>>> +int crash_prepare_elf64_headers(struct crash_mem *mem, int 
+>>> need_kernel_map,
+>>> +              void **addr, unsigned long *sz)
+>>> +{
+>>> +    Elf64_Ehdr *ehdr;
+>>> +    Elf64_Phdr *phdr;
+>>> +    unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
+>>> +    unsigned char *buf;
+>>> +    unsigned int cpu, i;
+>>> +    unsigned long long notes_addr;
+>>> +    unsigned long mstart, mend;
+>>> +
+>>> +    /* extra phdr for vmcoreinfo ELF note */
+>>> +    nr_phdr = nr_cpus + 1;
+>>> +    nr_phdr += mem->nr_ranges;
+>>> +
+>>> +    /*
+>>> +     * kexec-tools creates an extra PT_LOAD phdr for kernel text 
+>>> mapping
+>>> +     * area (for example, ffffffff80000000 - ffffffffa0000000 on 
+>>> x86_64).
+>>> +     * I think this is required by tools like gdb. So same physical
+>>> +     * memory will be mapped in two ELF headers. One will contain 
+>>> kernel
+>>> +     * text virtual addresses and other will have __va(physical) 
+>>> addresses.
+>>> +     */
+>>> +
+>>> +    nr_phdr++;
+>>> +    elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
+>>> +    elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+>> Seems like above function is out of CONFIG_KEXEC_FILE but some of the
+>> structure/attributes like crash_mem and ELF_CORE_HEADER_ALIGN are
+>> still defined under CONFIG_KEXEC_FILE (look for include/linux/kexec.h).
+>>
+>> This leads to kernel build issue when CONFIG_KEXEC_FILE is disabled.
+>>
+>> Thanks,
+>> Sourabh Jain
+>
+> After looking into this for a bit, to allow hotplug without kexec_file 
+> would require quite a bit of code movement. Why? Because hotplug is 
+> basically built on top of (part of) the infrastructure that was needed 
+> for kexec_file.
+>
+> I'd be inclined to suggest that KEXEC_FILE be a required dependency 
+> for CRASH_HOTPLUG, ie:
+
+Since kexec_load is deprecated I don't see any harm in doing that.
+
+- Sourabh Jain
