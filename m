@@ -2,110 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FABB6745C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7192A6745C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjASWSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S229948AbjASWSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjASWRa (ORCPT
+        with ESMTP id S229788AbjASWRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:17:30 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1923D9EEA;
-        Thu, 19 Jan 2023 13:59:54 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id ud5so9390676ejc.4;
-        Thu, 19 Jan 2023 13:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m3VE041wvuNRNbjGYZtx0e/0zgM5UPT7CKrc367fPVk=;
-        b=IPCeWzq6Su6zBpvw0I/tB6Sg+z9fwSOmfPRSY3r5ylze79JUCxWH7yR76NoAjnfhLh
-         /3mvmpBmlBNQd1w54wWfwthiQ7XwLGSwPVXyGcDeLBja5rMaREw6mUQUQGXTpF0S8FCt
-         KGvwJFgmRa5lNwhjPEdBH2Q5V3WlMnDp3GRTcfjgJaxvftYQoufWESdoRZihxi8k2wwP
-         +v5a1pYiZOUNqipdHEIU8A7GXXUhk5pFB9Upv3xzLeWLVJq2xaI04K9dU4UumlONHsB7
-         YdDMkZ/A0IfpAKgSnPA4+0CZV4bsg+chTUPE6koNjqn5vhjTmno0C8rBZ/qWwu7EigsR
-         Yv1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m3VE041wvuNRNbjGYZtx0e/0zgM5UPT7CKrc367fPVk=;
-        b=vdkMh6COPaxH0TqZ2IUqWr6Fopi67gVyc0ngPD5lav+e8yMIdGJ7ljRfOMZXHdbQ7n
-         8Yd1B9ToXZ4S7R9W7vwRzHVaUyAzLi/66+H83hg0hcSBEhzmdW8dl4AjH7u0mk7VSSTe
-         zYCe12pJ6rYyA64cgNcAyyqz501fZ0KyVjUZIkW0Dk87XPv2jaj7e6JDjXhvKMdkWGv5
-         plGx4mrxtMcHlKksVcYD4SJywHfBRkdJNh50IuYVz9ypZhnxbzzhHMv9ME00j/cZd4t2
-         9Xu/dYg/r6ZU55BvQkN8algGsZfyVi/DVbUte+QBcjcufSmz20insCt0EugJg3HqFetF
-         7Jdg==
-X-Gm-Message-State: AFqh2kr1At2Sfc9p1lSmZeFx5x80OKUDsg6oD3W+COjKW/VS+ohlI6o7
-        bZa08belDdhZAZt4eXWI8w8=
-X-Google-Smtp-Source: AMrXdXudkdRSemBU0Ipq+6BnTLm7omlc+r5e91BFxGZUSaPfat1wNjMDIRVlQJVRWpm6uCKC96ehLQ==
-X-Received: by 2002:a17:906:2b8e:b0:86e:3531:5548 with SMTP id m14-20020a1709062b8e00b0086e35315548mr11768857ejg.73.1674165592554;
-        Thu, 19 Jan 2023 13:59:52 -0800 (PST)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id nd38-20020a17090762a600b0084d1b34973dsm16915714ejc.61.2023.01.19.13.59.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Jan 2023 13:59:52 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs tree
-From:   Jakob Koschel <jkl820.git@gmail.com>
-In-Reply-To: <87ilh26vrd.fsf@meer.lwn.net>
-Date:   Thu, 19 Jan 2023 22:59:41 +0100
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3804F4A3-7CD0-4A77-8E4A-07459F9DC64B@gmail.com>
-References: <20230120083419.1fff9149@canb.auug.org.au>
- <87ilh26vrd.fsf@meer.lwn.net>
-To:     Jonathan Corbet <corbet@lwn.net>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 19 Jan 2023 17:17:33 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33845998D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674165630; x=1705701630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BGvMe5XZTO7EPe0aA0+lFd4ZQG2rCjnj5LJpTL7waa8=;
+  b=f7bHLkk7WNRlPMMgU3Q3JsOfjzm0UR9uZaIB/3y9ciGHpJgG0hC25YQI
+   e9EBTekQSCHlgy/OFHRnuKIzZzFq3rX9oTBnGoDdkVlyF1NBEoh4WOy0b
+   paTHNUxvOJU1tuaUGnyyD0hRAqBOOH/+yy6rDomsT8NtHfkKhwMkPVE1d
+   sC8UrH+d8iydcxQFeO/cbmsRA4ivUGpfdOWnR8ewdDOvAnGmwHhPK95xs
+   4eLCe4hUqHAZPMJXIUFePwhOpkdGtkWzPaZYAg2L+0UKIxyY1oeBwap4P
+   ml3K6tHaeWJUKhUpPWuG0rM1vlqFTWXmJg2mdFUxy2iJXZ6y6gtsXIl/k
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323128828"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="323128828"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 14:00:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784225128"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="784225128"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 14:00:25 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIcxM-0001to-2n;
+        Thu, 19 Jan 2023 22:00:24 +0000
+Date:   Fri, 20 Jan 2023 06:00:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
+        vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 05/19] soundwire: amd: add soundwire interrupt handling
+Message-ID: <202301200537.eS27M0By-lkp@intel.com>
+References: <20230111090222.2016499-6-Vijendar.Mukunda@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111090222.2016499-6-Vijendar.Mukunda@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Vijendar,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on next-20230119]
+[cannot apply to vkoul-dmaengine/next linus/master v6.2-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijendar-Mukunda/ASoC-amd-ps-create-platform-devices-based-on-acp-config/20230111-170749
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230111090222.2016499-6-Vijendar.Mukunda%40amd.com
+patch subject: [PATCH 05/19] soundwire: amd: add soundwire interrupt handling
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230120/202301200537.eS27M0By-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ee04e2b3a1ee45081b430ae161c53aa8964d5c36
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vijendar-Mukunda/ASoC-amd-ps-create-platform-devices-based-on-acp-config/20230111-170749
+        git checkout ee04e2b3a1ee45081b430ae161c53aa8964d5c36
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/soundwire/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+                         ^~~~~~~~~
+   drivers/soundwire/amd_master.c:610:26: warning: shift count is negative [-Wshift-count-negative]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+                         ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/soundwire/amd_master.h:184:38: note: expanded from macro 'AMD_SDW_MCP_SLAVE_STAT_4_11'
+   #define AMD_SDW_MCP_SLAVE_STAT_4_11             GENMASK(39, 24)
+                                                   ^
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:358:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:346:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:338:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/soundwire/amd_master.c:610:26: warning: shift count is negative [-Wshift-count-negative]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+                         ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/soundwire/amd_master.h:184:38: note: expanded from macro 'AMD_SDW_MCP_SLAVE_STAT_4_11'
+   #define AMD_SDW_MCP_SLAVE_STAT_4_11             GENMASK(39, 24)
+                                                   ^
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:358:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:346:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:338:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/soundwire/amd_master.c:610:26: warning: shift count is negative [-Wshift-count-negative]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+                         ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/soundwire/amd_master.h:184:38: note: expanded from macro 'AMD_SDW_MCP_SLAVE_STAT_4_11'
+   #define AMD_SDW_MCP_SLAVE_STAT_4_11             GENMASK(39, 24)
+                                                   ^
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:358:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:346:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:338:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/soundwire/amd_master.c:610:26: warning: shift count is negative [-Wshift-count-negative]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+                         ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/soundwire/amd_master.h:184:38: note: expanded from macro 'AMD_SDW_MCP_SLAVE_STAT_4_11'
+   #define AMD_SDW_MCP_SLAVE_STAT_4_11             GENMASK(39, 24)
+                                                   ^
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^
+   include/linux/bitfield.h:129:30: note: expanded from macro 'FIELD_GET'
+                   (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+                                              ^~~~~
+   drivers/soundwire/amd_master.c:610:26: warning: shift count is negative [-Wshift-count-negative]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+                         ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/soundwire/amd_master.h:184:38: note: expanded from macro 'AMD_SDW_MCP_SLAVE_STAT_4_11'
+   #define AMD_SDW_MCP_SLAVE_STAT_4_11             GENMASK(39, 24)
+                                                   ^
+   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^
+   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^
+   include/linux/bitfield.h:129:50: note: expanded from macro 'FIELD_GET'
+                   (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+                                                         ~~~~~~~~~^~~~~~
+   include/linux/bitfield.h:45:38: note: expanded from macro '__bf_shf'
+   #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+                                        ^
+>> drivers/soundwire/amd_master.c:1223:80: warning: shift count >= width of type [-Wshift-count-overflow]
+           slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STATUS_8TO_11, status_change_8to11) << 32;
+                                                                                         ^  ~~
+   23 warnings generated.
 
 
-> On 19. Jan 2023, at 22:48, Jonathan Corbet <corbet@lwn.net> wrote:
->=20
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
->=20
->> Hi all,
->>=20
->> Commit
->>=20
->>  6b25b190a9a3 ("docs/scripts/gdb: add necessary make scripts_gdb =
-step")
->>=20
->> is missing a Signed-off-by from its author.
->=20
-> Sigh...my tooling is supposed to catch that...  Patch dropped; Jakob,
-> would you like to send me a properly signed-off version?
+vim +1223 drivers/soundwire/amd_master.c
 
-whops, it was the first time using b4 submit and I can see Sined-off-by =
-in the email
-=
-(https://lore.kernel.org/linux-kernel/20230112-documentation-gdb-v1-1-09ab=
-556e9124@gmail.com/)
+  1212	
+  1213	static void amd_sdwc_update_slave_status(u32 status_change_0to7, u32 status_change_8to11,
+  1214						 struct amd_sdwc_ctrl *ctrl)
+  1215	{
+  1216		u64 slave_stat = 0;
+  1217		u32 val = 0;
+  1218		int dev_index;
+  1219	
+  1220		if (status_change_0to7 == AMD_SDW_SLAVE_0_ATTACHED)
+  1221			memset(ctrl->status, 0, sizeof(ctrl->status));
+  1222		slave_stat = status_change_0to7;
+> 1223		slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STATUS_8TO_11, status_change_8to11) << 32;
+  1224		dev_dbg(ctrl->dev, "%s: status_change_0to7:0x%x status_change_8to11:0x%x\n",
+  1225			__func__, status_change_0to7, status_change_8to11);
+  1226		if (slave_stat) {
+  1227			for (dev_index = 0; dev_index <= SDW_MAX_DEVICES; ++dev_index) {
+  1228				if (slave_stat & AMD_SDW_MCP_SLAVE_STATUS_VALID_MASK(dev_index)) {
+  1229					val = (slave_stat >> AMD_SDW_MCP_SLAVE_STAT_SHIFT_MASK(dev_index)) &
+  1230					      AMD_SDW_MCP_SLAVE_STATUS_MASK;
+  1231					switch (val) {
+  1232					case SDW_SLAVE_ATTACHED:
+  1233						ctrl->status[dev_index] = SDW_SLAVE_ATTACHED;
+  1234						break;
+  1235					case SDW_SLAVE_UNATTACHED:
+  1236						ctrl->status[dev_index] = SDW_SLAVE_UNATTACHED;
+  1237						break;
+  1238					case SDW_SLAVE_ALERT:
+  1239						ctrl->status[dev_index] = SDW_SLAVE_ALERT;
+  1240						break;
+  1241					default:
+  1242						ctrl->status[dev_index] = SDW_SLAVE_RESERVED;
+  1243						break;
+  1244					}
+  1245				}
+  1246			}
+  1247		}
+  1248	}
+  1249	
 
-was it perhaps put in the wrong place?
-
-I'll be taking a look!
-
->=20
-> Thanks,
->=20
-> jon
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
