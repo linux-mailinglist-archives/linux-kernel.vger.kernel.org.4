@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102B6674663
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFB6674671
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjASWyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S230266AbjASWz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjASWxR (ORCPT
+        with ESMTP id S229807AbjASWyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:53:17 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7BFDA8ED
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:35:52 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id k16so2721033wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:35:52 -0800 (PST)
+        Thu, 19 Jan 2023 17:54:33 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459635895D;
+        Thu, 19 Jan 2023 14:37:07 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id f3so2768049pgc.2;
+        Thu, 19 Jan 2023 14:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5uMI4CJ0tmLZKY5iYY8/PVPFxzdMy3XqhHCLQ4x93U=;
-        b=PXnUA2TMT1ZJGGkhQcewcqvTOgWQghOf9G1hAWc2/ueZAI+bUtmtWRyV5MSLHHbGZe
-         q9ybynQ/kknfNfIE8kCpZkjGKoodgl6KuQt/wNR5rIKGRPZk8Cb603+HbtkdnlTdWL2r
-         PIoaDLZqbxYf/xH7ABz24Zxsnrf6DoHno40tZfYjVT93J3+bLaoc9/q/HD4eN2+U2QPu
-         vopVl4hLKKeHaYK0uNq7eBK6k+aEBkvZuATrd8tAeaaDbxOv5BoGVxwmtTryT5x+kzoV
-         mJw04yaPLnAKOgiUbUIFcItq1R3BcA2lvYh5bc6ZF9Z93M+TwKwaEcXDijZyiGpGD76h
-         pXFA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c3/xglDrs4GgAM40Pjq1vzK1v2T7qf4JcCCRFWl6k4g=;
+        b=NSYj639Mp9v5ap+wI0hCjvD0/JJIjDFxjIAk8s0W6QQZeGagLHTMYL5/dvvI2DPi4B
+         +aGueObJ+RXaUVDn4NiXYFIhEcPYWxInkxzarthRsu1sZZ256/vMx7XvGmJtSYSWRLwB
+         vl6fpplWJgAyhnKrjElYHYhD8OeiwcbmHLjIG5BiksGBX7KJzcLCywEenDObbw+Mxjwr
+         pmu+l0l6CF6xX7jvLuX0TRIXSYOrvw5purr8S55V7TS8hL4NzHy8DcBRiXHfgymzDvFg
+         PvZjALLBOjVmU5MNA64b0nuXlR2yYuFwQaHv+ETJElDhkdksrjTql7nEvp7HQxv7QCn3
+         HOLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+5uMI4CJ0tmLZKY5iYY8/PVPFxzdMy3XqhHCLQ4x93U=;
-        b=WyNjChD/yNMn6s4RqFo5lQo4z1D8Dr/9NAwIujVE/ZATpttF41vivFIqMs6jlEyLeN
-         0MAh1H7vWknhJIzRvpR/T/zLMyag1XeyQ3dPgfF1x7lEBwW0Vm/zRW66me6t2HbzeY1M
-         cEEBryedhp8ko1SQAafU7DzCnQY2a1bEj7pp+9S0eeBUoPwMBrGwwCQx7SZ+P8ApzcHW
-         HRo6ZS7DHwn+27u7nznPyhrM6mxt/S7y2H7LsR9LxdH9ERwMczgxARmcXT8Xlp69t2TW
-         kccWhDR4cmlQGSyLUMBK7mcBipUqf+ka0DuajN6YgOoKHUrT89/dR/uoCD96LbQ6ZY0Q
-         jfbA==
-X-Gm-Message-State: AFqh2koh1h3I7FiVkTT7/b+19Ghlbxpm7i4PDoMUhVt7w56lslGTJ8bT
-        7IjIFRbZSTEgZJGoomYOO4s103e1xHP9kg7g08rWng==
-X-Google-Smtp-Source: AMrXdXszZA1YB3+62ISSDQ0qN+Gew0cUy7aPrrR3EadtMSVxYbsrN1yH+woao6S148BuxneRIO+eolk3FYMMbWZQVDk=
-X-Received: by 2002:a05:600c:3095:b0:3d9:7950:dc5f with SMTP id
- g21-20020a05600c309500b003d97950dc5fmr668501wmn.120.1674167748498; Thu, 19
- Jan 2023 14:35:48 -0800 (PST)
-MIME-Version: 1.0
-References: <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
- <CADrL8HUdg1Fr=tLEQRkDjeTzNzzSM6EPhvDgzURxSZSBMLgjoQ@mail.gmail.com>
- <6548b3b3-30c9-8f64-7d28-8a434e0a0b80@redhat.com> <Y8gRpEonhXgqfb41@x1n>
- <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
- <Y8hITxr/BBMuO6WX@monkey> <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
- <Y8l+f2wNp2gAjvYg@monkey> <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
- <Y8m9gJX4PNoIrpjE@monkey> <Y8nCyqLF71g88Idv@x1n>
-In-Reply-To: <Y8nCyqLF71g88Idv@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 19 Jan 2023 14:35:12 -0800
-Message-ID: <CADrL8HXkdxDdixWRKNw6RFdbiBX-Cb1Lk7qxg6LdeNywbMOaOA@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c3/xglDrs4GgAM40Pjq1vzK1v2T7qf4JcCCRFWl6k4g=;
+        b=OpVuXW90GREJ8IPsBgaqU3tmELFOp4W+5eWlo+Q4wj0EQvohSimiv5iIP/nbKMBSDl
+         +QgbbhwKsf2aXFQ+yWDH62NAvqLscYAkolUtMrSzIA+U8gZJ3CBuYgUlDQVWFOkgHmQm
+         Z8EB1vbArrSTFv/3geeyzgVVJQ67U1Z3wslOnP0+oDDO5qU//mfNbAJ9104Y7HN7IIP+
+         zcjXcxunpwpwa/kJ4MoteHh2xf45+xrYrP9IfH9oS9j3rLCGFMEXeWZOOSk+p1x815Ry
+         SsGhayfVldf9dr8TwS/QcO2bs5T/IS/yy54lYdPsy4KkftCwkmPe2h5Bm0tlrKBTZcL2
+         2Ilg==
+X-Gm-Message-State: AFqh2ko9jBOMzyZ/8bInYMczvJo1WTEnXDMpYXwlreoiix5J3ddKEY5O
+        YiIgHEDFbkTDmlDqffsrRII=
+X-Google-Smtp-Source: AMrXdXtheeUgW/ehdT20D8crA3E+xLX19dRj8kq2j9cAtxWEF6/jTGrekTIsjKUTNo8D+nlbVHnJHA==
+X-Received: by 2002:a62:ab0b:0:b0:58b:46c9:a6b1 with SMTP id p11-20020a62ab0b000000b0058b46c9a6b1mr13080521pff.33.1674167826597;
+        Thu, 19 Jan 2023 14:37:06 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id c202-20020a621cd3000000b0058dc1d54db1sm6563910pfc.206.2023.01.19.14.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 14:37:05 -0800 (PST)
+Date:   Thu, 19 Jan 2023 14:37:04 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230119223704.GD2976263@ls.amr.corp.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
+ <20230119111308.GC2976263@ls.amr.corp.intel.com>
+ <Y8lg1G2lRIrI/hld@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8lg1G2lRIrI/hld@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,42 +105,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 2:23 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Jan 19, 2023 at 02:00:32PM -0800, Mike Kravetz wrote:
-> > I do not know much about the (primary) live migration use case.  My
-> > guess is that page table lock contention may be an issue?  In this use
-> > case, HGM is only enabled for the duration the live migration operation,
-> > then a MADV_COLLAPSE is performed.  If contention is likely to be an
-> > issue during this time, then yes we would need to pass around with
-> > something like hugetlb_pte.
->
-> I'm not aware of any such contention issue.  IMHO the migration problem is
-> majorly about being too slow transferring a page being so large.  Shrinking
-> the page size should resolve the major problem already here IIUC.
+On Thu, Jan 19, 2023 at 03:25:08PM +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 
-This will be problematic if you scale up VMs to be quite large. Google
-upstreamed the "TDP MMU" for KVM/x86 that removed the need to take the
-MMU lock for writing in the EPT violation path. We found that this
-change is required for VMs >200 or so vCPUs to consistently avoid CPU
-soft lockups in the guest.
+> On Thu, Jan 19, 2023, Isaku Yamahata wrote:
+> > On Sat, Jan 14, 2023 at 12:37:59AM +0000,
+> > Sean Christopherson <seanjc@google.com> wrote:
+> > 
+> > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > > This patch series implements KVM guest private memory for confidential
+> > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > > > TDX-protected guest memory, machine check can happen which can further
+> > > > crash the running host system, this is terrible for multi-tenant
+> > > > configurations. The host accesses include those from KVM userspace like
+> > > > QEMU. This series addresses KVM userspace induced crash by introducing
+> > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > > > via a fd-based approach, but it can never access the guest memory
+> > > > content.
+> > > > 
+> > > > The patch series touches both core mm and KVM code. I appreciate
+> > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > > > reviews are always welcome.
+> > > >   - 01: mm change, target for mm tree
+> > > >   - 02-09: KVM change, target for KVM tree
+> > > 
+> > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> > > is available here:
+> > > 
+> > >   git@github.com:sean-jc/linux.git x86/upm_base_support
+> > > 
+> > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> > > a WIP.
+> > > 
+> > > As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> > > I pushed and see if there's anything horrifically broken, and that it still works
+> > > for TDX?
+> > > 
+> > > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
+> > > (and I mean that).
+> > > 
+> > > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
+> > > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
+> > > merging so that the criteria for merging are clear, and so that if the list is large
+> > > (haven't thought much yet), the work of writing and running tests can be distributed.
+> > > 
+> > > Regarding downstream dependencies, before this lands, I want to pull in all the
+> > > TDX and SNP series and see how everything fits together.  Specifically, I want to
+> > > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
+> > > don't miss an opportunity to make things simpler.  The patches in the SNP series to
+> > > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
+> > > details.  Nothing remotely major, but something that needs attention since it'll
+> > > be uAPI.
+> > 
+> > Although I'm still debuging with TDX KVM, I needed the following.
+> > kvm_faultin_pfn() is called without mmu_lock held.  the race to change
+> > private/shared is handled by mmu_seq.  Maybe dedicated function only for
+> > kvm_faultin_pfn().
+> 
+> Gah, you're not on the other thread where this was discussed[*].  Simply deleting
+> the lockdep assertion is safe, for guest types that rely on the attributes to
+> define shared vs. private, KVM rechecks the attributes under the protection of
+> mmu_seq.
+> 
+> I'll get a fixed version pushed out today.
+> 
+> [*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
 
-Requiring each UFFDIO_CONTINUE (in the post-copy path) to serialize on
-the same PTL would be problematic in the same way.
+Now I have tdx kvm working. I've uploaded at the followings.
+It's rebased to v6.2-rc3.
+        git@github.com:yamahata/linux.git tdx/upm
+        git@github.com:yamahata/qemu.git tdx/upm
 
->
-> AFAIU 4K-only solution should only reduce any lock contention because locks
-> will always be pte-level if VM_HUGETLB_HGM set.  When walking and creating
-> the intermediate pgtable entries we can use atomic ops just like generic
-> mm, so no lock needed at all.  With uncertainty on the size of mappings,
-> we'll need to take any of the multiple layers of locks.
->
+kvm_mmu_do_page_fault() needs the following change.
+kvm_mem_is_private() queries mem_attr_array.  kvm_faultin_pfn() also uses
+kvm_mem_is_private(). So the shared-private check in kvm_faultin_pfn() doesn't
+make sense. This change would belong to TDX KVM patches, though.
 
-Other than taking the HugeTLB VMA lock for reading, walking/allocating
-page tables won't need any additional locking.
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index 72b0da8e27e0..f45ac438bbf4 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -430,7 +430,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+                .max_level = vcpu->kvm->arch.tdp_max_page_level,
+                .req_level = PG_LEVEL_4K,
+                .goal_level = PG_LEVEL_4K,
+-               .is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
++               .is_private = kvm_is_private_gpa(vcpu->kvm, cr2_or_gpa),
+        };
+        int r;
 
-We take the PTL to allocate the next level down, but so does generic
-mm (look at __pud_alloc, __pmd_alloc for example). Maybe I am
-misunderstanding.
 
-- James
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
