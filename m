@@ -2,78 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598BB676B13
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 05:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7184676B24
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 06:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjAVEpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 23:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S229644AbjAVFDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 00:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjAVEo6 (ORCPT
+        with ESMTP id S229480AbjAVFDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 23:44:58 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBB223131
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 20:44:58 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30M4ifcP1810703
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Sat, 21 Jan 2023 20:44:41 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30M4ifcP1810703
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674362682;
-        bh=9Ab0ZijIloczLbeQG6t/QkuzyM4WvID+T58SXRdtSVc=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=BPbLJU3DuoKO3bcAyH/dElIU0H9XvgdJDXsFkCekZKEZJdlGRmLjXGt6w4rlxNSOE
-         ffFPJaFdEXDIxcx7cVcbLRQBgjn49E4Bz090L+Ry3o7QS73RV1NuTigRy0FL6a7UX8
-         PmnAi2H4lX/zHkVVknR9gtP4sfA0D3Mpxw3NL5xZOMg5zh1lChMJxBHBALCiUzyCBq
-         0vE5nv6jMuwPGHK9a+X/fiw6KBfrNGifgTSvBpjkysuFahq+BBRPxeBqj0KTq67m93
-         eAwap1Thzj3F4zK+hK/OsV1FS8K09paElb30OSRuhG059d2cMDeRma85TpTbSYMssT
-         cslfshLkx6/iw==
-Date:   Sat, 21 Jan 2023 20:44:38 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Li, Xin3" <xin3.li@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
-User-Agent: K-9 Mail for Android
-In-Reply-To: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
-Message-ID: <65D9F1DE-96D4-4CC7-A21C-A740B7DDE0C8@zytor.com>
+        Sun, 22 Jan 2023 00:03:18 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A2118A97;
+        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id d10so6820078pgm.13;
+        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
+        b=ZmJe4uoWdrrnu2t0uTnKxkUzdqQIQCbXavzLn5Cckr5wQAN/XNChg6QUa3fC3gqvec
+         ZmffyDkvxjsGFn8lwh7w0D2Wqa4wOTLJ6so7CRqVkI/3oPrMWiS7YDk5EU6RD4IAiARw
+         WO/6KN+/Y/+1/1XOkM5/8yvgltDyHbcAUSDgyZ51d5H+evuJC7n6s0N4/gWuEGKZljYU
+         H6dofb3q0KXwc6iZhZDP6IDfiBZBIgK26cERQryQo/3ttWk3pnyh+th3liOs7N1HT3VD
+         exVu0cfFBrJAXSXqMGAtUNVm3cISNCjmI7HSrQfjXbsnybNZsh9PGCBXdD+eQ//CEweb
+         FHZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
+        b=sqw+lnym3lFQ9Ah61wyFTZCX0rkzG/rnxetzqwy//eaPst26fiyS3Nc04gzf0b9zrD
+         U0PBKDgd+wvSFDR1NebN+TqB9vYQwi11Bdj5LEkgE0XdU0m8qvFH4HU6MhPnh6v1hgNp
+         u19AJBQW95I8Im8ow/9oc/d2tGgMQvEIArwxVQe4PmfXRGiM2hvgGcSe9r2PGvSgnLPU
+         VGXCLJsOlSHVv/DDhhyYxmLIq8VlCmoyidl97YbyfQMauPhzY8l7/K+q4AZbGzFzwll7
+         j8y53BUPmpu5nqrYH+KcHdvdeiXdzBDwUnVSRAoXLiYSElx0e2hESzrTvebf/1sjVhpx
+         dTag==
+X-Gm-Message-State: AFqh2kowCwCDW+73unZOIU1Bhbf2n3DapW1pTkezp+YG0aNMA9G/7Ylk
+        DbnpWMRumHH0z7I7ONTLr94=
+X-Google-Smtp-Source: AMrXdXu31CyeCOIYHJy4PMa+lMnTUCPNOOCVGdySsvrNk+I6w/8v5j3J3q9D4DHiL0qBs7XWzHuMxg==
+X-Received: by 2002:a05:6a00:4519:b0:58d:f047:53b7 with SMTP id cw25-20020a056a00451900b0058df04753b7mr14535557pfb.3.1674363796900;
+        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
+Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056a00000b00b0058dd9c46a8csm9062788pfk.64.2023.01.21.21.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
+Date:   Thu, 19 Jan 2023 03:47:02 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC 1/3] vsock: support sockmap
+Message-ID: <Y8i9NlRpIR/KE/q2@bullseye>
+References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+ <20230118-support-vsock-sockmap-connectible-v1-1-d47e6294827b@bytedance.com>
+ <Y8w7d+6UASP3jUHf@pop-os.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8w7d+6UASP3jUHf@pop-os.localdomain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 21, 2023 8:34:09 PM PST, Dave Hansen <dave=2Ehansen@intel=2Ecom>=
- wrote:
->On 1/21/23 19:38, Li, Xin3 wrote:
->>> However, it doesn't seem to make sense to do so to me=2E The current b=
-ehavior is
->>> much more of an artifact than desired behavior=2E
->> We kind of have an agreement that %r11 =3D %flags after returning from =
-the kernel=2E
->>=20
->> And the question is, is it what we want?
->
->Can the selftest just set r11=3Drflags before the syscall?  The old
->syscall entry path will set r11=3Drflags=2E  The FRED path won't touch it=
-=2E
->Either case will pass an r11=3D=3Drflags check=2E
+On Sat, Jan 21, 2023 at 11:22:31AM -0800, Cong Wang wrote:
+> On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
+> > +static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
+> > +{
+> > +	struct vsock_sock *vsk = vsock_sk(sk);
+> > +
+> > +	if (!vsk->transport)
+> > +		return -ENODEV;
+> > +
+> > +	if (!vsk->transport->read_skb)
+> > +		return -EOPNOTSUPP;
+> 
+> Can we move these two checks to sockmap update path? It would make
+> vsock_read_skb() faster.
+> 
+> > +
+> > +	return vsk->transport->read_skb(vsk, read_actor);
+> > +}
+> 
+> Essentially can be just this one line.
+> 
+> Thanks.
 
-That's a good idea=2E
+That makes sense, will do.
+
+Thanks,
+Bobby
