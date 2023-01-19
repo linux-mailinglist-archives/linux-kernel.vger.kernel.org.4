@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68DD67403C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534F867403D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjASRpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S229876AbjASRqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjASRpc (ORCPT
+        with ESMTP id S229885AbjASRqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:45:32 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39535B59D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:45:27 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id w14so3826639edi.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:45:27 -0800 (PST)
+        Thu, 19 Jan 2023 12:46:34 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DC34F87F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:46:33 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vw16so7621626ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:46:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yCueC+kG6+G8iq3m73OLmpsWjfxU0yEo1uLN/H9w3xc=;
-        b=Po8NK4Esq7bg3ZGf7dFDhO1x/2AzxLym3eT3SdebR/lqBPt/6rm1dyOGbOtbtCZQ9C
-         nH78jIH/1/EQhKEGA7YJ4lqU5xgPvbu36kxO+51OHKbd0y9UR2dgIACedEWIUpfAOGjm
-         uGNJLyvocpn8ut5V/TygukFbgXCzPWvxjNkvrgZ+/7UZWaPeL6ycyqUQCqyh1Mx0anwh
-         2fG6M84W0RKLMMba51agXis+J8Ul7+BIkqZnv2RWd/p6dzA+bj3h3z2MV/WJTqPo6NXo
-         6uK7nc9/AL25wIdAWFisQJXGwi6+EOWd7z5mEW12XCHMR7kk6Zkp/wUzJ7SYQTEnHxxp
-         JdEA==
+        bh=N5RJqblptK4/I1QKvuqzaQWihSAsPbhuGtEAuJnE228=;
+        b=Y77KxKdd5+LbM3Jqo2daeLmZkrJEtmVGbVkERc+m3ZABiuK08Ggfh5tYOl5yrHIAY0
+         q8h0Rbd9bnC4/j4epCuS9/EKfMUTYsHGmETd/hYNT84AaRTqRA7fKQRirwVelv4jSNX3
+         D0U0wNKq98ejFHrPpzEwVWn9uYrt+VlhPLwCNqGH+3/xjAxYzPWcpBY+L4RhKSFNKwc3
+         G6JOtiiycsBSWYxl8Oo87WnISdzCFI1qAic02InCukak2BLgrcwxiy0+/iFiNO5T3nKr
+         +Ye08LjXgaDtOlw1NrlnJ2R6CSfR9h5aD76iEvdK7HxpKNexEOb8C4kGk32KXkROA3hC
+         Optg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yCueC+kG6+G8iq3m73OLmpsWjfxU0yEo1uLN/H9w3xc=;
-        b=fYi2v8euDZwRydSBRwtrUV6mWlAIH7rFjgftxokI4DJCEaVMxbjtzsXhDrrSHHriHJ
-         8Tw831WPR4qfAnUWRMN68F7/5lY/PvKhyww+FBmKjFnhhV0GzsNuO1W7xH6K/zpo11ff
-         jDhQgttyOM936/RCc/ybtr/+Po9Qs/gUXeRgFkAwON/Y4VnZ3KdUTH2oFHJYXxSrEAh0
-         aVa+yjinVyhi5kiwLi8iJ7DCsG4wJOfcLonS3kkiopal7WTx7W/dC1AQVFVsYNnAHDya
-         G/+uXV+HzguqSM78hLD3qpdELEF2Mu2qnprgt622+l1OR3nH6ttlPhYN226oQZ4RpZOB
-         IgXA==
-X-Gm-Message-State: AFqh2kpuQzkQdi5IbKCmUyAtXWqFdFsjYjJ97ZCgAV6g4HWEjlbFXc83
-        ZFe4S9n68xF65eG0+YA2UCE=
-X-Google-Smtp-Source: AMrXdXvIE5RyU6AO9ZuhqpGaXSnAy81/ruty02LgQqV5TocZY4F1CDUxuJiu1LLCH/rK4JK/d2wUtA==
-X-Received: by 2002:a05:6402:10d4:b0:48f:fcc9:665e with SMTP id p20-20020a05640210d400b0048ffcc9665emr21369738edu.0.1674150326317;
-        Thu, 19 Jan 2023 09:45:26 -0800 (PST)
+        bh=N5RJqblptK4/I1QKvuqzaQWihSAsPbhuGtEAuJnE228=;
+        b=OwUkkob7nWN95t/TdT05wxei1aCALBCDrYrx3IZXvgPqsVLic5VFdvqiGyuNYezmRk
+         MyYX4xNTMqiBSV/R3+NTadNvXwGb5etJ8FYK8f4m0+sYMRxtvBeXfWBAcbFltwkrEc4l
+         chL0FTKjK6pqUNPw5DB24aUja9dZVu2PBZC2szwqibTfsM7IAwgcrp1LpthRF/G5oCWS
+         oobpNCkpBiQH17Vy8hk3+D0wkwiuniWInskhQiQl2Y6UUHAB0LZ471mLiFIz8oCBrlPe
+         /EqmluVfvGemrT/zpb/FVK4TlZ5C4l+t0CmRDosRbFc3NkU00TXMUiS5q/f3050koWRA
+         gdYg==
+X-Gm-Message-State: AFqh2kre5StiSDzZ4Cfbtn3pGiCINvbJfF0V4z0cBEJXbMXCOtOK8wmn
+        rcJH02r4ERpbf5W9mcqbrbU=
+X-Google-Smtp-Source: AMrXdXsFka3LYJbePLZ9HkMmo1a+eUIgpgXI6HfcAEJAezkdgpKTPPfnMDNKcuy+udAxYwE3LwokhA==
+X-Received: by 2002:a17:906:f49:b0:864:8c78:e7ff with SMTP id h9-20020a1709060f4900b008648c78e7ffmr7861249ejj.23.1674150391578;
+        Thu, 19 Jan 2023 09:46:31 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id k26-20020a508ada000000b00487fc51c532sm16354456edk.33.2023.01.19.09.45.25
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0087276f66c6asm4487651ejf.115.2023.01.19.09.46.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 09:45:25 -0800 (PST)
-Message-ID: <e20e80fd-cb10-2f41-b5d8-8d6673e2b506@gmail.com>
-Date:   Thu, 19 Jan 2023 18:45:24 +0100
+        Thu, 19 Jan 2023 09:46:31 -0800 (PST)
+Message-ID: <60759e5f-4760-1b0c-2848-06ec5a07b40a@gmail.com>
+Date:   Thu, 19 Jan 2023 18:46:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] soc: mediatek: pm-domains: Add buck isolation offset
- and mask to power domain data
+Subject: Re: [PATCH 2/2] soc: mediatek: pm-domains: Add buck isolation setting
+ in power domain
 Content-Language: en-US
 To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>
@@ -65,9 +65,9 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
 References: <20230117032640.13504-1-allen-kh.cheng@mediatek.com>
- <20230117032640.13504-2-allen-kh.cheng@mediatek.com>
+ <20230117032640.13504-3-allen-kh.cheng@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230117032640.13504-2-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20230117032640.13504-3-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,36 +83,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 17/01/2023 04:26, Allen-KH Cheng wrote:
-> Add buck isolation offset and mask to power domain data.
+> In some chipsets, we need to disable EXT_BUCK_ISO before turning on the
+> specific power pm-domains (mtcmos), such as ADSP in MT8192 and CAM_VCORE
+> in MT8188.
 > 
+> Add the MTK_SCPD_EXT_BUCK_ISO flag to control the buck isolation setting
+> in the mediatek power domain driver.
+> 
+> Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
+
+ From my understanding this patch does not fix anything. It's a feature needed 
+for new HW not supported by the mentioned commit. I applied the patch but 
+droppend the Fixes tag. If you do not agree, please explain why we need it.
+
+Regards,
+Matthias
+
 > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks!
-
 > ---
->   drivers/soc/mediatek/mtk-pm-domains.h | 4 ++++
->   1 file changed, 4 insertions(+)
+>   drivers/soc/mediatek/mtk-pm-domains.c | 8 ++++++++
+>   drivers/soc/mediatek/mtk-pm-domains.h | 1 +
+>   2 files changed, 9 insertions(+)
 > 
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
+> index 474b272f9b02..be972e35b26e 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> @@ -218,6 +218,10 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	if (ret)
+>   		goto err_reg;
+>   
+> +	if (pd->data->ext_buck_iso_offs && MTK_SCPD_CAPS(pd, MTK_SCPD_EXT_BUCK_ISO))
+> +		regmap_clear_bits(scpsys->base, pd->data->ext_buck_iso_offs,
+> +				  pd->data->ext_buck_iso_mask);
+> +
+>   	/* subsys power on */
+>   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_ON_BIT);
+>   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_ON_2ND_BIT);
+> @@ -272,6 +276,10 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+>   	if (ret < 0)
+>   		return ret;
+>   
+> +	if (pd->data->ext_buck_iso_offs && MTK_SCPD_CAPS(pd, MTK_SCPD_EXT_BUCK_ISO))
+> +		regmap_set_bits(scpsys->base, pd->data->ext_buck_iso_offs,
+> +				pd->data->ext_buck_iso_mask);
+> +
+>   	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
+>   
+>   	/* subsys power off */
 > diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> index 7d3c0c36316c..a5f24c58e35a 100644
+> index a5f24c58e35a..5ec53ee073c4 100644
 > --- a/drivers/soc/mediatek/mtk-pm-domains.h
 > +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> @@ -81,6 +81,8 @@ struct scpsys_bus_prot_data {
->    * @ctl_offs: The offset for main power control register.
->    * @sram_pdn_bits: The mask for sram power control bits.
->    * @sram_pdn_ack_bits: The mask for sram power control acked bits.
-> + * @ext_buck_iso_offs: The offset for external buck isolation
-> + * @ext_buck_iso_mask: The mask for external buck isolation
->    * @caps: The flag for active wake-up action.
->    * @bp_infracfg: bus protection for infracfg subsystem
->    * @bp_smi: bus protection for smi subsystem
-> @@ -91,6 +93,8 @@ struct scpsys_domain_data {
->   	int ctl_offs;
->   	u32 sram_pdn_bits;
->   	u32 sram_pdn_ack_bits;
-> +	int ext_buck_iso_offs;
-> +	u32 ext_buck_iso_mask;
->   	u8 caps;
->   	const struct scpsys_bus_prot_data bp_infracfg[SPM_MAX_BUS_PROT_DATA];
->   	const struct scpsys_bus_prot_data bp_smi[SPM_MAX_BUS_PROT_DATA];
+> @@ -10,6 +10,7 @@
+>   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
+>   /* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
+>   #define MTK_SCPD_ALWAYS_ON		BIT(5)
+> +#define MTK_SCPD_EXT_BUCK_ISO		BIT(6)
+>   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
+>   
+>   #define SPM_VDE_PWR_CON			0x0210
