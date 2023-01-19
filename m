@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E288A673D46
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6173B673D48
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjASPR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S230343AbjASPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjASPRy (ORCPT
+        with ESMTP id S229683AbjASPR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:17:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F0181033
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:17:52 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pIWfe-0000BA-C4; Thu, 19 Jan 2023 16:17:42 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pIWfW-0001oM-RK; Thu, 19 Jan 2023 16:17:34 +0100
-Date:   Thu, 19 Jan 2023 16:17:34 +0100
-From:   Sascha Hauer <sha@pengutronix.de>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v2 5/6] drm/rockchip: vop2: add support for the rgb
- output block
-Message-ID: <20230119151734.GH24755@pengutronix.de>
-References: <20230119143911.3793654-1-michael.riesch@wolfvision.net>
- <20230119143911.3793654-6-michael.riesch@wolfvision.net>
+        Thu, 19 Jan 2023 10:17:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE882996
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:17:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3A261B53
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAA2C433F0;
+        Thu, 19 Jan 2023 15:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674141476;
+        bh=d+RJax+gn4iXgWIKUImZxLaGkCJ5L1Iboau8yyzzzoo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RstmJ0otBERnHgKaLfZmAkGg1CCZYd56wwtN40ndpz9lrPOBCMIOFK0CJYHfOmfso
+         jc3mcT/BcLQShASUz3WUg/Z3vIokxDEnAY70iKfutYE4SC/aE7ClvHFkairLaXiNX8
+         pB3vIyr8m2N79vEUrntQW9d/xfLWYhM83obdtkZg=
+Date:   Thu, 19 Jan 2023 16:17:48 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 1/6] virtio console: Harden multiport against invalid
+ host input
+Message-ID: <Y8lfHKz08EVeNa5o@kroah.com>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119143911.3793654-6-michael.riesch@wolfvision.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,72 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On Thu, Jan 19, 2023 at 03:39:10PM +0100, Michael Riesch wrote:
-> The Rockchip VOP2 features an internal RGB output block, which can be
-> attached to the video port 2 of the VOP2. Add support for this output
-> block.
+On Thu, Jan 19, 2023 at 03:57:16PM +0200, Alexander Shishkin wrote:
+> From: Andi Kleen <ak@linux.intel.com>
 > 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> It's possible for the host to set the multiport flag, but pass in
+> 0 multiports, which results in:
+> 
+> BUG: KASAN: slab-out-of-bounds in init_vqs+0x244/0x6c0 drivers/char/virtio_console.c:1878
+> Write of size 8 at addr ffff888001cc24a0 by task swapper/1
+> 
+> CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.0-rc1-140273-gaab0bb9fbaa1-dirty #588
+> Call Trace:
+>  init_vqs+0x244/0x6c0 drivers/char/virtio_console.c:1878
+>  virtcons_probe+0x1a3/0x5b0 drivers/char/virtio_console.c:2042
+>  virtio_dev_probe+0x2b9/0x500 drivers/virtio/virtio.c:263
+>  call_driver_probe drivers/base/dd.c:515
+>  really_probe+0x1c9/0x5b0 drivers/base/dd.c:601
+>  really_probe_debug drivers/base/dd.c:694
+>  __driver_probe_device+0x10d/0x1f0 drivers/base/dd.c:754
+>  driver_probe_device+0x68/0x150 drivers/base/dd.c:786
+>  __driver_attach+0xca/0x200 drivers/base/dd.c:1145
+>  bus_for_each_dev+0x108/0x190 drivers/base/bus.c:301
+>  driver_attach+0x30/0x40 drivers/base/dd.c:1162
+>  bus_add_driver+0x325/0x3c0 drivers/base/bus.c:618
+>  driver_register+0xf3/0x1d0 drivers/base/driver.c:171
+> ...
+> 
+> Add a suitable sanity check.
+> 
+> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Amit Shah <amit@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
-> v2:
->  - move away from wrong assumption that the RGB block is always
->    connected to video port 2 -> check devicetree to find RGB block
-
-Traces of that assumption are still in the commmit message.
-
+>  drivers/char/virtio_console.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 44 ++++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> +static int vop2_find_rgb_encoder(struct vop2 *vop2)
-> +{
-> +	struct device_node *node = vop2->dev->of_node;
-> +	struct device_node *endpoint;
-> +	int i;
-> +
-> +	for (i = 0; i < vop2->data->nr_vps; i++) {
-> +		endpoint = of_graph_get_endpoint_by_regs(node, i,
-> +							 ROCKCHIP_VOP2_EP_RGB0);
-> +		if (!endpoint)
-> +			continue;
-> +
-> +		of_node_put(endpoint);
-> +		return i;
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +
->  static struct reg_field vop2_cluster_regs[VOP2_WIN_MAX_REG] = {
->  	[VOP2_WIN_ENABLE] = REG_FIELD(RK3568_CLUSTER_WIN_CTRL0, 0, 0),
->  	[VOP2_WIN_FORMAT] = REG_FIELD(RK3568_CLUSTER_WIN_CTRL0, 1, 5),
-> @@ -2698,11 +2721,29 @@ static int vop2_bind(struct device *dev, struct device *master, void *data)
->  	if (ret)
->  		return ret;
+> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+> index 6a821118d553..f4fd5fe7cd3a 100644
+> --- a/drivers/char/virtio_console.c
+> +++ b/drivers/char/virtio_console.c
+> @@ -1843,6 +1843,9 @@ static int init_vqs(struct ports_device *portdev)
+>  	int err;
 >  
-> +	ret = vop2_find_rgb_encoder(vop2);
-> +	if (ret > 0) {
-
-'0' seems to be a valid vp as well. Shouldn't this be ret >= 0?
-
-> +		vop2->rgb = rockchip_rgb_init(dev, &vop2->vps[ret].crtc,
-> +					      vop2->drm, ret);
-> +		if (IS_ERR(vop2->rgb)) {
-> +			if (PTR_ERR(vop2->rgb) == -EPROBE_DEFER) {
-> +				ret = PTR_ERR(vop2->rgb);
-> +				goto err_crtcs;
-> +			}
-> +			vop2->rgb = NULL;
-> +		}
-> +	}
+>  	nr_ports = portdev->max_nr_ports;
+> +	if (use_multiport(portdev) && nr_ports < 1)
+> +		return -EINVAL;
 > +
+>  	nr_queues = use_multiport(portdev) ? (nr_ports + 1) * 2 : 2;
+>  
+>  	vqs = kmalloc_array(nr_queues, sizeof(struct virtqueue *), GFP_KERNEL);
+> -- 
+> 2.39.0
+> 
 
-Sascha
+Why did I only get a small subset of these patches?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+And why is the whole thread not on lore.kernel.org?
+
+And the term "hardening" is marketing fluff.   Just say, "properly parse
+input" or something like that, as what you are doing is fixing
+assumptions about the data here, not causing anything to be more (or
+less) secure.
+
+But, this still feels wrong.  Why is this happening here, in init_vqs()
+and not in the calling function that already did a bunch of validation
+of the ports and the like?  Are those checks not enough?  if not, fix it
+there, don't spread it out all over the place...
+
+thanks,
+
+greg k-h
