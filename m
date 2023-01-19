@@ -2,124 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9820F674287
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF887674293
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjASTPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S231191AbjASTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjASTO3 (ORCPT
+        with ESMTP id S231400AbjASTRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:14:29 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057BF485B6;
-        Thu, 19 Jan 2023 11:13:09 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id a9so3864049ybb.3;
-        Thu, 19 Jan 2023 11:13:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f66M40S9HUafYr8hVajn8DVAsyr9TRcLXW/GMSQFYTg=;
-        b=TfdQOo0L5L7tRei4gTZQorDhEqkwLnIcUwjUkQ5nAUhG3adcGnD6aApx5mVazXjz8G
-         BKhASFxhlmU79yGq2yYeB7ddF5FQzvqefzN90g3fCYjYV/9sFaZ0LDQ3hJo2xA6cu2GN
-         lld1fXQg5qPS2DBEMwaxNTCpjmFZcbBeKU49OPbifSyy2uMi1ixSRTiydAInHXYJKKzE
-         wvBavFk9xhLq2N00xTLR41SV4jXSPGVygDS47MqvDluRTjxkeRN0CfD1LQeH9FKLjLpZ
-         dkLR7EexO2NPd68tPR7TjSKVS1btSYjLdr1QXKL8PGFhIoS9WrTU13eWGZ+1Yu/ekS5D
-         t3sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f66M40S9HUafYr8hVajn8DVAsyr9TRcLXW/GMSQFYTg=;
-        b=3vWHd0KoPm0MXsBIRCgfb3mkYgcUEOr625g5xgNlXEQPUUpolnvyzZQB5F6LhU9Hcy
-         iBs4Zh0G0jbw5FwTXUD/Nbm/gLwVXREV1kqP+PtSqr/ZARGc5nO9MPsvtOT0RDVAzcga
-         p1katRQkK31f86P8N+YNe340dA1TDnMM5nopJzYwI8P8YPizA+Y7EpXoNSB6XmNjJ8md
-         aEG1Ad0e0GytlAlX4VK8ewSg3bEBxkpofE6x6Ra0adLzzFUFpGk2YPta72qKCBqmCgcg
-         B9468zNb3SXo0VhB32IvoDSN8XHHZiPP/0duluKqbkUJ5iyL3iwAQ9fiYL+bNhty96CV
-         E1Og==
-X-Gm-Message-State: AFqh2krxkatH1mlK3u/CfOWLzKa7pTa8SitdRCPV1qtDcLMo0nPo0EtV
-        SBUOm1ECmQZxwaukG7PnBTEm5iLBK57auHzB9GWcm0bvlc3w/SjGZ4M=
-X-Google-Smtp-Source: AMrXdXumWEsfO8yQUnD942SmOi0Y3bznUxHvZmVpHNlFlXQoQITYE3p8CLDqSTQjynmP8x3QEbD3SlTm3TDvC5kC0xs=
-X-Received: by 2002:a5b:688:0:b0:7e1:ed59:4e43 with SMTP id
- j8-20020a5b0688000000b007e1ed594e43mr1580106ybq.323.1674155587313; Thu, 19
- Jan 2023 11:13:07 -0800 (PST)
+        Thu, 19 Jan 2023 14:17:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33E99D29D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:17:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36FD461D54
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3F5C433F0;
+        Thu, 19 Jan 2023 19:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674155827;
+        bh=eCVbGXT27QnDo1PpAtkdYdCPSqT1Q5ve44Q8Q75yHjw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FCre4bIyUsGr3UbsqKMkAQvOnNpSp+ZWq+NbqqKwwWefnRM01gepbNKLipNzquSuy
+         TS1GmlOYCg6zD4+UEVOtBJY+0ZPzqe/LmfVDG1bJ9ZhVV0p32LzzMAiWRBMPn1T1h4
+         lAj0M0gK0MPei3TtqZWQkMcaTNS1rzDw3cKDdRJFes7uSpMhuW4+YiOaItA+N+gKAc
+         JMMK/ovArgjTbmyUfDHcWXuHF2hwBrtaAlfxcWTYx4Ccah0CVipkCZ8Vylnq9UGQx7
+         NSQGdLJX6rKSEaJIAZ+2hMcEPpSmmYmmGZ10dwS+6DGIGltSWvjltMSHYoKUe32kIM
+         fDrsAF3VjIYdg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0FE685C1A49; Thu, 19 Jan 2023 11:17:07 -0800 (PST)
+Date:   Thu, 19 Jan 2023 11:17:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <20230119191707.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-40-surenb@google.com>
+ <Y8bFdB47JT/luMld@dhcp22.suse.cz>
+ <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
+ <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
+ <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
+ <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <CAJuCfpHZuKq45FL1gs+=rx5s2AOaZ9TPC1bdAWjYzfkrOABTOw@mail.gmail.com>
+ <Y8k8/vPGXBvyHLJE@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20230118160220.776302-1-varmavinaym@gmail.com>
-In-Reply-To: <20230118160220.776302-1-varmavinaym@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 19 Jan 2023 20:12:56 +0100
-Message-ID: <CANiq72m66PbmDmGUoQecOzJRSFg+G+3KKGkkqS3ySNAPxCe1Ag@mail.gmail.com>
-Subject: Re: [PATCH] scripts: `make rust-analyzer` for out-of-tree modules
-To:     Vinay Varma <varmavinaym@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8k8/vPGXBvyHLJE@dhcp22.suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 5:02 PM Vinay Varma <varmavinaym@gmail.com> wrote:
->
-> Adds support for out-of-tree rust modules to use the `rust-analyzer`
-> make target to generate the rust-project.json file.
+On Thu, Jan 19, 2023 at 01:52:14PM +0100, Michal Hocko wrote:
+> On Wed 18-01-23 11:01:08, Suren Baghdasaryan wrote:
+> > On Wed, Jan 18, 2023 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> [...]
+> > > There are a couple of possibilities here.
+> > >
+> > > First, if I am remembering correctly, the time between the call_rcu()
+> > > and invocation of the corresponding callback was taking multiple seconds,
+> > > but that was because the kernel was built with CONFIG_LAZY_RCU=y in
+> > > order to save power by batching RCU work over multiple call_rcu()
+> > > invocations.  If this is causing a problem for a given call site, the
+> > > shiny new call_rcu_hurry() can be used instead.  Doing this gets back
+> > > to the old-school non-laziness, but can of course consume more power.
+> > 
+> > That would not be the case because CONFIG_LAZY_RCU was not an option
+> > at the time I was profiling this issue.
+> > Laxy RCU would be a great option to replace this patch but
+> > unfortunately it's not the default behavior, so I would still have to
+> > implement this batching in case lazy RCU is not enabled.
+> > 
+> > >
+> > > Second, there is a much shorter one-jiffy delay between the call_rcu()
+> > > and the invocation of the corresponding callback in kernels built with
+> > > either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
+> > > or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
+> > > on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
+> > > of this delay is to avoid lock contention, and so this delay is incurred
+> > > only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
+> > > This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
+> > > invoking call_rcu() at least 16 times within a given jiffy will incur
+> > > the added delay.  The reason for this delay is the use of a separate
+> > > ->nocb_bypass list.  As Suren says, this bypass list is used to reduce
+> > > lock contention on the main ->cblist.  This is not needed in old-school
+> > > kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
+> > > (including most datacenter kernels) because in that case the callbacks
+> > > enqueued by call_rcu() are touched only by the corresponding CPU, so
+> > > that there is no need for locks.
+> > 
+> > I believe this is the reason in my profiled case.
+> > 
+> > >
+> > > Third, if you are instead seeing multiple milliseconds of CPU consumed by
+> > > call_rcu() in the common case (for example, without the aid of interrupts,
+> > > NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
+> > 
+> > I don't think I've seen such a case.
+> > Thanks for clarifications, Paul!
+> 
+> Thanks for the explanation Paul. I have to say this has caught me as a
+> surprise. There are just not enough details about the benchmark to
+> understand what is going on but I find it rather surprising that
+> call_rcu can induce a higher overhead than the actual kmem_cache_free
+> which is the callback. My naive understanding has been that call_rcu is
+> really fast way to defer the execution to the RCU safe context to do the
+> final cleanup.
 
-Thanks for sending this! A few nits below...
+If I am following along correctly (ha!), then your "induce a higher
+overhead" should be something like "induce a higher to-kfree() latency".
 
-> When this parameter is passed, I have chosen
-> not to add the non-core modules (samples and drivers) into the result
-> since these are not expected to be used in third party modules.
+Of course, there already is a higher latency-to-kfree via call_rcu()
+than via a direct call to kfree(), and callback-offload CPUs that are
+being flooded with callbacks raise that latency a jiffy or so more in
+order to avoid lock contention.
 
-Sounds good to me.
+If this becomes a problem, the callback-offloading code can be a bit
+smarter about avoiding lock contention, but need to see a real problem
+before I make that change.  But if there is a real problem I will of
+course fix it.
 
-> changes are also made to the Makefile and rust/Makefile allowing the
-> `rust-analyzer` target to be used for out-of-tree modules as well.
->
-> Signed-off-by: Vinay Varma <varmavinaym@gmail.com>
+Or did I miss a turn in this discussion?
 
-A `Link: ` to the GitHub PR would be nice here:
-https://github.com/Rust-for-Linux/linux/pull/914.
-
-Possibly another one to the out-of-tree approach at
-https://github.com/Rust-for-Linux/rust-out-of-tree-module/pull/2.
-
->  import logging
->  import pathlib
->  import sys
-> +import os
-
-Please keep the `import`s sorted.
-
-> -    for folder in ("samples", "drivers"):
-> +    extra_src_dirs = ["samples", "drivers"] if external_src is None else [external_src]
-
-If you send a v2 for the above, this could be a tuple like in the
-original line, to minimize the diff.
-
-> +            if os.path.exists(path.parent / "Makefile") and f"{name}.o" not in open(path.parent / "Makefile").read():
-
-In Python one would typically go with the EAFP style instead
-(https://docs.python.org/3/glossary.html#term-EAFP), which would also
-reduce the duplication of the path computation. But it would take more
-lines... Not a big deal in any case.
-
-Thanks!
-
-Cheers,
-Miguel
+							Thanx, Paul
