@@ -2,153 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF887674293
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337CA6742A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjASTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S231448AbjASTUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjASTRp (ORCPT
+        with ESMTP id S231599AbjASTUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:17:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33E99D29D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:17:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36FD461D54
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3F5C433F0;
-        Thu, 19 Jan 2023 19:17:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674155827;
-        bh=eCVbGXT27QnDo1PpAtkdYdCPSqT1Q5ve44Q8Q75yHjw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FCre4bIyUsGr3UbsqKMkAQvOnNpSp+ZWq+NbqqKwwWefnRM01gepbNKLipNzquSuy
-         TS1GmlOYCg6zD4+UEVOtBJY+0ZPzqe/LmfVDG1bJ9ZhVV0p32LzzMAiWRBMPn1T1h4
-         lAj0M0gK0MPei3TtqZWQkMcaTNS1rzDw3cKDdRJFes7uSpMhuW4+YiOaItA+N+gKAc
-         JMMK/ovArgjTbmyUfDHcWXuHF2hwBrtaAlfxcWTYx4Ccah0CVipkCZ8Vylnq9UGQx7
-         NSQGdLJX6rKSEaJIAZ+2hMcEPpSmmYmmGZ10dwS+6DGIGltSWvjltMSHYoKUe32kIM
-         fDrsAF3VjIYdg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0FE685C1A49; Thu, 19 Jan 2023 11:17:07 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:17:07 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <20230119191707.GW2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-40-surenb@google.com>
- <Y8bFdB47JT/luMld@dhcp22.suse.cz>
- <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
- <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
- <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
- <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <CAJuCfpHZuKq45FL1gs+=rx5s2AOaZ9TPC1bdAWjYzfkrOABTOw@mail.gmail.com>
- <Y8k8/vPGXBvyHLJE@dhcp22.suse.cz>
+        Thu, 19 Jan 2023 14:20:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35DC095177
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:19:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80BC01516;
+        Thu, 19 Jan 2023 11:19:22 -0800 (PST)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D9C603F67D;
+        Thu, 19 Jan 2023 11:18:39 -0800 (PST)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org, will@kernel.org
+Cc:     hch@lst.de, jgg@nvidia.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, rafael.j.wysocki@intel.com,
+        gregkh@linuxfoundation.org
+Subject: [PATCH 0/8] iommu: The early demise of bus ops
+Date:   Thu, 19 Jan 2023 19:18:18 +0000
+Message-Id: <cover.1673978700.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8k8/vPGXBvyHLJE@dhcp22.suse.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:52:14PM +0100, Michal Hocko wrote:
-> On Wed 18-01-23 11:01:08, Suren Baghdasaryan wrote:
-> > On Wed, Jan 18, 2023 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> [...]
-> > > There are a couple of possibilities here.
-> > >
-> > > First, if I am remembering correctly, the time between the call_rcu()
-> > > and invocation of the corresponding callback was taking multiple seconds,
-> > > but that was because the kernel was built with CONFIG_LAZY_RCU=y in
-> > > order to save power by batching RCU work over multiple call_rcu()
-> > > invocations.  If this is causing a problem for a given call site, the
-> > > shiny new call_rcu_hurry() can be used instead.  Doing this gets back
-> > > to the old-school non-laziness, but can of course consume more power.
-> > 
-> > That would not be the case because CONFIG_LAZY_RCU was not an option
-> > at the time I was profiling this issue.
-> > Laxy RCU would be a great option to replace this patch but
-> > unfortunately it's not the default behavior, so I would still have to
-> > implement this batching in case lazy RCU is not enabled.
-> > 
-> > >
-> > > Second, there is a much shorter one-jiffy delay between the call_rcu()
-> > > and the invocation of the corresponding callback in kernels built with
-> > > either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
-> > > or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
-> > > on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
-> > > of this delay is to avoid lock contention, and so this delay is incurred
-> > > only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
-> > > This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
-> > > invoking call_rcu() at least 16 times within a given jiffy will incur
-> > > the added delay.  The reason for this delay is the use of a separate
-> > > ->nocb_bypass list.  As Suren says, this bypass list is used to reduce
-> > > lock contention on the main ->cblist.  This is not needed in old-school
-> > > kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
-> > > (including most datacenter kernels) because in that case the callbacks
-> > > enqueued by call_rcu() are touched only by the corresponding CPU, so
-> > > that there is no need for locks.
-> > 
-> > I believe this is the reason in my profiled case.
-> > 
-> > >
-> > > Third, if you are instead seeing multiple milliseconds of CPU consumed by
-> > > call_rcu() in the common case (for example, without the aid of interrupts,
-> > > NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
-> > 
-> > I don't think I've seen such a case.
-> > Thanks for clarifications, Paul!
-> 
-> Thanks for the explanation Paul. I have to say this has caught me as a
-> surprise. There are just not enough details about the benchmark to
-> understand what is going on but I find it rather surprising that
-> call_rcu can induce a higher overhead than the actual kmem_cache_free
-> which is the callback. My naive understanding has been that call_rcu is
-> really fast way to defer the execution to the RCU safe context to do the
-> final cleanup.
+Hi all,
 
-If I am following along correctly (ha!), then your "induce a higher
-overhead" should be something like "induce a higher to-kfree() latency".
+[ Christoph, Greg, Rafael; feel free to ignore all the IOMMU details,
+ just a heads-up for some pretty trivial header motion in patch #6 ]
 
-Of course, there already is a higher latency-to-kfree via call_rcu()
-than via a direct call to kfree(), and callback-offload CPUs that are
-being flooded with callbacks raise that latency a jiffy or so more in
-order to avoid lock contention.
+This is sort of an RFC, in the sense that the patches are functionally
+ready but I don't expect that we necessarily want to merge all them
+right away; at this point it's more for the sake of visibility and
+checking if anyone strongly objects to the direction I'm taking. As such
+I've based these patches on 6.2-rc3 and made no effort to integrate them
+with the IOMMUFD-related work going on in parallel and/or already
+queued, even though there is some functional intersection and almost
+certain conflicts. If we reach a consensus that we would like any of
+this for 6.3 I'll rebase as appropriate.
 
-If this becomes a problem, the callback-offloading code can be a bit
-smarter about avoiding lock contention, but need to see a real problem
-before I make that change.  But if there is a real problem I will of
-course fix it.
+Patches #1-6 here work up to what I originally expected to be the
+triumphant finale of the whole mission, but as it turns out is actually
+feasible and convenient to get out of the way *before* getting into the
+really fiddly bits of refactoring the DT/ACPI of_xlate stuff, ARM DMA
+ops, and the iommu_domain_alloc() interface. Patch #8 is included here
+as the precursor to another cleanup series for drivers that currently
+have an awkward domain_finalise step in their .attach_dev op, but I'm
+unlikely to start writing those patches for a while yet. Patch #7 is
+also here nominally, but in fact I think it could already go anywhere
+since the last rework of iommu_device_register().
 
-Or did I miss a turn in this discussion?
+Thanks,
+Robin.
 
-							Thanx, Paul
+
+Robin Murphy (8):
+  iommu: Decouple iommu_present() from bus ops
+  iommu: Validate that devices match domains
+  iommu: Factor out a "first device in group" helper
+  iommu: Switch __iommu_domain_alloc() to device ops
+  iommu/arm-smmu: Don't register fwnode for legacy binding
+  iommu: Retire bus ops
+  iommu: Clean up open-coded ownership checks
+  iommu: Pass device through ops->domain_alloc
+
+ drivers/iommu/amd/iommu.c                   |   3 +-
+ drivers/iommu/apple-dart.c                  |   3 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   6 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  15 +--
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     |  19 +--
+ drivers/iommu/exynos-iommu.c                |   3 +-
+ drivers/iommu/fsl_pamu_domain.c             |   3 +-
+ drivers/iommu/intel/iommu.c                 |   3 +-
+ drivers/iommu/iommu.c                       | 130 +++++++++++++-------
+ drivers/iommu/ipmmu-vmsa.c                  |   3 +-
+ drivers/iommu/msm_iommu.c                   |   3 +-
+ drivers/iommu/mtk_iommu.c                   |  10 +-
+ drivers/iommu/mtk_iommu_v1.c                |   6 +-
+ drivers/iommu/omap-iommu.c                  |   3 +-
+ drivers/iommu/rockchip-iommu.c              |   3 +-
+ drivers/iommu/s390-iommu.c                  |   3 +-
+ drivers/iommu/sprd-iommu.c                  |  11 +-
+ drivers/iommu/sun50i-iommu.c                |   3 +-
+ drivers/iommu/tegra-gart.c                  |   3 +-
+ drivers/iommu/tegra-smmu.c                  |   3 +-
+ drivers/iommu/virtio-iommu.c                |   6 +-
+ include/acpi/acpi_bus.h                     |   2 +
+ include/linux/device.h                      |   1 -
+ include/linux/device/bus.h                  |   5 -
+ include/linux/dma-map-ops.h                 |   1 +
+ include/linux/iommu.h                       |   4 +-
+ 26 files changed, 139 insertions(+), 116 deletions(-)
+
+-- 
+2.36.1.dirty
+
