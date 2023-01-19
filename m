@@ -2,185 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A422F674350
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB2167434E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjASUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjASUJ2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229775AbjASUJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 19 Jan 2023 15:09:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DAC94C91
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674158920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PggIzfygRD9QgTxjyyjnr/C8VTVpVGfqEDvg752Zp0M=;
-        b=eJSV+lBKb0BrTqp7ePQaetMiF4Hn8xErHrzIdDk3sA7jIoWYpPJRBpMBQn1qT+45VM1zhV
-        fykm9tjU83RAdp+DFW3fNRv6ALbcbN2FBoqCgDVgAQwX1p6GcVO8cbTrx8WpWrVxFvpAju
-        zqxB1w4/dfKEww8WHv4mgXBB1JVKrKc=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-180-e94RbOI9Mu-g354tMHVgkQ-1; Thu, 19 Jan 2023 15:08:39 -0500
-X-MC-Unique: e94RbOI9Mu-g354tMHVgkQ-1
-Received: by mail-pg1-f199.google.com with SMTP id f132-20020a636a8a000000b00473d0b600ebso1491830pgc.14
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:08:39 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbjASUJ0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 19 Jan 2023 15:09:26 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239A69373F;
+        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id qx13so8570485ejb.13;
+        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PggIzfygRD9QgTxjyyjnr/C8VTVpVGfqEDvg752Zp0M=;
-        b=tGrx/pP6Le70TDL4YNEWhvq9U2ATXbadZYihGcXFrSF5dwjLktM/PvwV43bOXwDYGh
-         4dz5Bj/SVYk/2LyA5JLKPzSQ3vt1Q1+tstIMy6ARsedkSrIP6DHAL+wpzC2QkF2nQLZZ
-         hV9+3QYpntSeRibnt6Xh/KiowzvT27Ui/VGaMW5ITDAmqnoE78wUeMxQi/2NgR6WhKhw
-         fM9IlwKIH7Bs82pQFUQQZNq7LV1FFRI1UnkPH1GM9TPM293kGFi3KE1DGJoUSJs+T/TS
-         cM2VUerxPvjVtTHgiaVX1qlIJgX1ATAiutz4G2zSvig/EMfd7TRkrRu7jO04/orrqTDw
-         Lhaw==
-X-Gm-Message-State: AFqh2kqJneAS44a5Ig1z9enAbUvgqf4DFCgkEhVrCUVl1A0lcB8cTsOR
-        KFtBs86A9xneb8+dMVzjb/ORmEyMshbFFSka9KB/rpZFHtZo8+ANctm6eccIcBEGB6hF+6hDbhB
-        8wVpGeMuxsHPd5z9bTjYhooP1rjYoDLLRzO50wrqy
-X-Received: by 2002:a17:90b:187:b0:226:f8dc:b230 with SMTP id t7-20020a17090b018700b00226f8dcb230mr1387628pjs.227.1674158918002;
-        Thu, 19 Jan 2023 12:08:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtINLEsUn4AGw4oV584OPWe9mWjhWHelFifskuQ1poGCUHOYupjz59bzO972Ny1TiIOn7Hlp/JYMe1BV5mDjR0=
-X-Received: by 2002:a17:90b:187:b0:226:f8dc:b230 with SMTP id
- t7-20020a17090b018700b00226f8dcb230mr1387616pjs.227.1674158917773; Thu, 19
- Jan 2023 12:08:37 -0800 (PST)
+        bh=ICucaelScFBp72R2uUWOJT+N8a5uz5WEAv6I/4JxUuk=;
+        b=jK2NeiJo854AoGrsi4rBI6CsgqTo57Rj7k3Flb+3Y3rggNJ4obxdJQF7QLfSSjygtw
+         c3kg4MCURwA1vGFCMiEo+IFo0f7STKpMB7T8KkisbEpRYkP5J/Iz9cDL/Al5D9kxmfFU
+         SyfawoNrnwyp8RcodoCDxT/Ycl8LzmHFpR2zfgfBexmlCnI2pS4LFWEDuNw8tpShJJCZ
+         0J02cjmMFHMtJ4MA9xmnm+mn/nMTo6tsVwqHPO/WasVJImdFEND2Op9jlkZzEzWvNnfQ
+         WwBynWaN4LTHb8Z4WutS9E3d1Etti1rsCw/G6mchGlXYugT7zxISLuXOwSMJVy7prqN8
+         gVww==
+X-Gm-Message-State: AFqh2krz6+vYPxB5vYIK55y+i5E76wbbozpeUNOMUkHO+epCVxxcwOHN
+        uuaeMEpTqUuLC7XCpH223KjEBb/oR7j0H0yRU3A=
+X-Google-Smtp-Source: AMrXdXv6fX2i+S2TtdLghlFy/s9iCVkLfqeNqxedK50jvgkzbYaKWuoSuxSIsR/xYEbeYYMXk6rDtTfGx2efzkjlP14=
+X-Received: by 2002:a17:906:eb1b:b0:86e:abe4:5acf with SMTP id
+ mb27-20020a170906eb1b00b0086eabe45acfmr1265955ejb.615.1674158963797; Thu, 19
+ Jan 2023 12:09:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117181533.2350335-1-neelx@redhat.com> <2bdeb975-6d45-67bb-3017-f19df62fe7af@intel.com>
- <CACjP9X-hKf8g2UqitV8_G7WQW7u6Js5EsCNutsAMA4WD7YYSwA@mail.gmail.com>
- <42e74619-f2d0-1079-28b1-61e9e17ae953@intel.com> <CACjP9X8SHZAd_+HSLJCxYxSRQuRmq3r48id13r17n2ehrec2YQ@mail.gmail.com>
- <820cf397-a99e-44d4-cf9e-3ad6876e4d06@intel.com> <CACjP9X_v9AFVNRgz2a-qJce+ZqR0TzRzyd4gPFufESoRXmCdJQ@mail.gmail.com>
- <423a29e2-886d-2c41-16d4-a8fca5537c2e@intel.com>
-In-Reply-To: <423a29e2-886d-2c41-16d4-a8fca5537c2e@intel.com>
-From:   Daniel Vacek <neelx@redhat.com>
-Date:   Thu, 19 Jan 2023 21:08:01 +0100
-Message-ID: <CACjP9X-Ab76We7SVie7rpyykvKjiPuNktWeVa9y3Wb6i6oo4mg@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH] ice/ptp: fix the PTP worker retrying
- indefinitely if the link went down
-To:     Jacob Keller <jacob.e.keller@intel.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "Kolacinski, Karol" <karol.kolacinski@intel.com>,
-        Siddaraju <siddaraju.dh@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+References: <cover.1674030722.git.viresh.kumar@linaro.org> <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+ <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com> <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
+In-Reply-To: <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 Jan 2023 21:09:12 +0100
+Message-ID: <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 8:25 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
-> On 1/19/2023 1:38 AM, Daniel Vacek wrote:
-> > On Wed, Jan 18, 2023 at 11:22 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
-> >> On 1/18/2023 2:11 PM, Daniel Vacek wrote:
-> >>> On Wed, Jan 18, 2023 at 9:59 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
-> >>>> On 1/18/2023 7:14 AM, Daniel Vacek wrote:
-> >>>> 1) request tx timestamp
-> >>>> 2) timestamp occurs
-> >>>> 3) link goes down while processing
-> >>>
-> >>> I was thinking this is the case we got reported. But then again, I'm
-> >>> not really experienced in this field.
-> >>>
-> >>
-> >> I think it might be, or at least something similar to this.
-> >>
-> >> I think that can be fixed with the link check you added. I think we
-> >> actually have a copy of the current link status in the ice_ptp or
-> >> ice_ptp_tx structure which could be used instead of having to check back
-> >> to the other structure.
-> >
-> > If you're talking about ptp_port->link_up that one is always false no
-> > matter the actual NIC link status. First I wanted to use it but
-> > checking all the 8 devices available in the dump data it just does not
-> > match the net_dev->state or the port_info->phy.link_info.link_info
-> >
-> > crash> net_device.name,state 0xff48df6f0c553000
-> >   name = "ens1f1",
-> >   state = 0x7,    // DOWN
-> > crash> ice_port_info.phy.link_info.link_info 0xff48df6f05dca018
-> >   phy.link_info.link_info = 0xc0,    // DOWN
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f05dd44e0
-> >   port_num = 0x1
-> >   link_up = 0x0,    // False
-> >
-> > crash> net_device.name,state 0xff48df6f25e3f000
-> >   name = "ens1f0",
-> >   state = 0x3,    // UP
-> > crash> ice_port_info.phy.link_info.link_info 0xff48df6f070a3018
-> >   phy.link_info.link_info = 0xe1,    // UP
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f063184e0
-> >   port_num = 0x0
-> >   link_up = 0x0,    // False
-> >
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f25b844e0
-> >   port_num = 0x2
-> >   link_up = 0x0,    // False even this device is UP
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f140384e0
-> >   port_num = 0x3
-> >   link_up = 0x0,    // False even this device is UP
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f055044e0
-> >   port_num = 0x0
-> >   link_up = 0x0,    // False even this device is UP
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f251cc4e0
-> >   port_num = 0x1
-> >   link_up = 0x0,
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f33a9c4e0
-> >   port_num = 0x2
-> >   link_up = 0x0,
-> > crash> ice_ptp_port.port_num,link_up 0xff48df6f3bb7c4e0
-> >   port_num = 0x3
-> >   link_up = 0x0,
-> >
-> > In other words, the ice_ptp_port.link_up is always false and cannot be
-> > used. That's why I had to fall back to
-> > hw->port_info->phy.link_info.link_info
-> >
+On Thu, Jan 19, 2023 at 6:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Hmm. We call ice_ptp_link_change in ice_link_event which is called from
-> ice_handle_link_event...
+> On 18-01-23, 20:58, Rafael J. Wysocki wrote:
+> > On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > put_device() shouldn't be called before a prior call to
+> > > device_register(). __thermal_cooling_device_register() doesn't follow
+> > > that properly and needs fixing. Also
+> > > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> > > on few error paths.
+> > >
+> > > Fix all this by placing the calls at the right place.
+> > >
+> > > Based on initial work done by Caleb Connolly.
+> > >
+> > > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> > > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> >
+> > OK, so I think that this patch is needed for 6.2 and the other two may
+> > be queued up for later (they do depend on this one, though, of
+> > course).  Is my understanding correct?
 >
-> In ice_link_event, a local link_up field is set based on
-> phy_info->link_info.link_info & ICE_AQ_LINK_UP
->
-> What kernel are you testing on? Does it include 6b1ff5d39228 ("ice:
-> always call ice_ptp_link_change and make it void")?
->
-> Prior to this commit the field was only valid for E822 devices, but I
-> fixed that as it was used for other checks as well.
->
-> I am guessing that the Red Hat kernel you are using lacks several of
-> these clean ups and fixes.
+> Right.
 
-Yeah, makes perfect sense. We don't have that commit in 8.4. All the data
-I have and present here are from 4.18.0-305.49.1.rt7.121.el8_4.x86_64
-
-> For the current code in the net-next kernel I believe we can safely use
-> the ptp_port->link_up field.
-
-I'll fix that up and drop you a v3. Thank you for the review.
-
---nX
-
-> Thanks,
-> Jake
-
+OK, applied as 6.2-rc material and I'll get to the other two when this goes in.
