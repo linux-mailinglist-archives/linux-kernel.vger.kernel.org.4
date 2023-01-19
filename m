@@ -2,126 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C46673FF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFC8673FF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjASR2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:28:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S230026AbjASR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjASR2p (ORCPT
+        with ESMTP id S230050AbjASR27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:28:45 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EB47D67A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:28:38 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1811598wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:28:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qzug9pLoxRuQXnYlv7XgDcrHUWACV82JptfG9Z4/D4s=;
-        b=QbQ+xtuogSjENXvuyQHvcBc+32t2eHBeMI6TM7rGc5E/n9VjD0JiQ0xDLxWk5JLDiW
-         9n+vkvnjzxKrkmxQapT8ZQNJtTHYsILzs6i3pCjsdvGuPWWgPXt7QcCnLlXIM7TJ34ZF
-         fRQCrzHfsE4fUlpI4OmgUk7WTZdRGcVN4seKNiS7lxLB823RToSOFSNliSV3CpNQTepO
-         giBfIh3YKY85HDfCjhPB2EFSRlcT90XANR9Ua0VVH8fR1/JVYZU2be/HrujPTe6mw2UA
-         KlJTx8w4VH+DFQq07YrJ3O2Uek8o/MEr7UUPvSjJkbr9TcWbsoKA1D+sCtZOQLkbiOth
-         lgew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qzug9pLoxRuQXnYlv7XgDcrHUWACV82JptfG9Z4/D4s=;
-        b=eokkC8CvcK4UkDNC7qFI7jtQ0dfbTIpUXG46X5l9jlBIXJ3ijWhGlWvF1ulnfWqRNG
-         CSwo5n10EPB1J3idUaDGzcTIxvxT5hBQb1i63UAs0yp5Hc6OYa6aJEHwPxmprkqpLxud
-         +WUbWRDr0jDKD232o+yV+1+FZ+JH4koMQWpXtZuYKoEDvKrTpJeMf7PZi0rWVvoV/+8s
-         +EGkyL6CHCqUPhUapYcvnxLDCF7+rHGrZ8EN0uO5ewY4A8QCxJZ9WJSM915AIZYF7M11
-         sTJHPaKZkVeFWCrXlwifIWi5hy2QyBydjJouo9VEtzOrdsael4F9Ik5Ur9ufCrzpGCBf
-         l8Ow==
-X-Gm-Message-State: AFqh2krCeRe3uzZ58F0NE3vlNIwWUn/7qBS4Wonx7RCF04vSJKoAzvth
-        VRtnExMoJj8AHXzc7D+wIf/JiW6CB8At8cSQ
-X-Google-Smtp-Source: AMrXdXvE4JbSwyhINg/vGJhV3TJVbuG9yiJGQSLKxogSjADoupUFsnQPqxFTdf59WZc19Q/vzSxYNw==
-X-Received: by 2002:a05:600c:1c01:b0:3da:fc07:5e80 with SMTP id j1-20020a05600c1c0100b003dafc075e80mr14344237wms.12.1674149316600;
-        Thu, 19 Jan 2023 09:28:36 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id h11-20020a05600c314b00b003db2e3f2c7csm124186wmo.0.2023.01.19.09.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:28:36 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 19 Jan 2023 18:28:20 +0100
-Subject: [PATCH v2 2/2] spi: spidev: add new mediatek support
+        Thu, 19 Jan 2023 12:28:59 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13EE7E4A6;
+        Thu, 19 Jan 2023 09:28:48 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mzyi6-1oXrRJ0Xt0-00x5OC; Thu, 19 Jan 2023 18:28:31 +0100
+Message-ID: <b16c0134-b8a6-573c-4ad9-c4620fc98d5c@i2se.com>
+Date:   Thu, 19 Jan 2023 18:28:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com>
-References: <20230118-mt8365-spi-support-v2-0-be3ac97a28c6@baylibre.com>
-In-Reply-To: <20230118-mt8365-spi-support-v2-0-be3ac97a28c6@baylibre.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1100; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=61svYXCZ66IwrOCd3PQBt6hGhHxViuxrH5xxuI0gaAc=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjyX3BZ7lIoc0AZFKip7TYkMJRfcUdwbQhZSjn7YMf
- k4V70euJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8l9wQAKCRArRkmdfjHURaGzEA
- Cse+twuYNDKqhiv19vFcsZ60OAjlW4CXdtrhyIL2bHptTaSOg7JyNtOnjB01lKA0ya6rS+u2nW9j4o
- hlc+8MaBCChk5X+kzT6BM85SGzs5eHxzRPtmmjklTRsc0xFcfxK5kxtNc+WWGfK7YqjjkYNF1KEm9L
- M9yThVqXvmICYWj/Pmf+fxPlIcKby79BQV3eb6yAPIkRbhjO12OrzYxwDyNlctmY8QNEu2ZCWsq1j1
- rylE9a+t4Ell965hDseNAepDxAYyP5WtRHb5CbPfQEWlAVYJES1wf93kp6mCqZivGj5ZiU4jgfVchT
- O/hHqW4bnnEty1df+gn6fma7UIRbGPUQ+5b4CF2ptY32XBGzz3QLNwSX4u9GS94GUeynGFKT8e9Us2
- JjB8I+Y5DRMU6ux8selSaxjEnPDzi6T1TjstPjxaqIlKf28oTc+HW/1JyyGUa/EnD6CuKTRxBJcaeG
- AkbykIGzMz2FmUoj6DeUanMvm7On3ePP/H/IE5i/Pyf1N+Sz9HoWuu9iFpM32VjqbKiKdGsBy1UEOE
- +l+qx1H/8f5znJAgGMHPZ7jC8xxfLqrqKFpjje0QnYATaTStBGDizhldbyKbgle80Dsplt1P6ly3kl
- zOSUllGmhlkbclA+RUuAPROB1nqFcWFwMD8j09sCT46hgHJOxKH/jVhOMadw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/4] gpiolib: get rid of exessive
+ ->of_gpio_ranges_fallback()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+References: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Z/9yRM+iSc0SiMv8AvZINVzfAQcaGFv+QRJ7oGfjFC54VAuylI3
+ SZ+qYsKsxV8vBPVklmO4e1rMYuo9nzLtQhBbfcyPxiTGNNLskPL/KZ+0SYCJPYzgZxt7m4k
+ AmbL8bbXoSuf6KFDx1NtrDeLJHRh2jrGqXh0fDqkD4yTdwFkrjWH/vFMvLT/3Mq0qrAtSor
+ ARoRFfmTZoHfPqrRp5NIQ==
+UI-OutboundReport: notjunk:1;M01:P0:YJCObP7Zmsg=;+MbDRnIRKM8+p3rT3vi2DFL1Bgf
+ 0wt5aJSJ1ijrbN4WRR/lMzwLoMM+st/vv34oy7RQz9lPj3xZboy1H5uVuSthsvFP8xl5IlwyV
+ DjbATypWLO8mb2Nbu7A1icqezGH0Dcyl1RMQ/Vmf6ESOn3Nz0tN8LqIA0jRhoi+b3AqxscjXm
+ pm6dDJzUyQAllVZH6x3DgiJ8Xqqq32Fnv1kmw9kJmvegs7McGvsmUGdxScU48dtKKsS/feFwk
+ 3W9GD5pCdArZq8R5+DMKV4l4Bsv0GQm0tBpQXT3LJfAYqZk4utKpw5l/yqTsxP24uTQiQ2VYX
+ VU/e/n07+RHZ8cswk2xo9d/0K0mReEjkSf0YTFBUc7zunD8KripOQ1/D354LNSjQKNuu9AKvv
+ PSLO4aHXTEr6gDDxHwjmO6oplpNMyN3eNtKKAAJYdGnDSF8bCsownj0qSBAIt5cwUwXky9tR1
+ fUeculjxGrCiqkxCwTBTQXH/LCAkqWXP03wChJrXUZGI/JYEmy+7RWNXokV70DwHbK9cQrCty
+ xe/57X/C9/qISYHBghaddqf/Td5MB+vnwYmVeeRpOIyjOUBuk1eXYE89MPtCxQC+pjN4eW8Se
+ Km3LnbdjDAhbbGBBYcxYsqK8qLaUwhXU+r7AGuezaKbtwuRAzPw2bkHo7xdDaYkaj6Hj++/Wm
+ 2K8eJBKK45VvLdxKnN29b7x3xgJWEMx7xOFUYAgusQ==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the "mediatek,genio" compatible string to support Mediatek
-SPI controller on the genio boards.
+Hi Andy,
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/spi/spidev.c | 2 ++
- 1 file changed, 2 insertions(+)
+Am 13.01.23 um 22:53 schrieb Andy Shevchenko:
+> The ->of_gpio_ranges_fallback() repeats the idea that lies behind
+> ->add_pin_ranges(), while the latter covers more cases that the former
+> hook. Drop the former one for good.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 6313e7d0cdf8..e23b825b8d30 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -702,6 +702,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
- 	{ .name = "m53cpld" },
- 	{ .name = "spi-petra" },
- 	{ .name = "spi-authenta" },
-+	{ .name = "genio" },
- 	{},
- };
- MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
-@@ -728,6 +729,7 @@ static const struct of_device_id spidev_dt_ids[] = {
- 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
- 	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
- 	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
-+	{ .compatible = "mediatek,genio", .data = &spidev_of_check },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+i successful tested booting of this series with multi_v7_defconfig on 
+Raspberry Pi 4 (with and without gpio-ranges in DTB):
 
--- 
-b4 0.10.1
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+
+>
+> Changelog v3:
+> - moved check of the property presense to GPIO library
+> - split out the refcount fix in a separate patch
+> - added cover letter
+>
+> Andy Shevchenko (4):
+>    gpiolib: Check "gpio-ranges" before calling ->add_pin_ranges()
+>    pinctrl: bcm2835: Remove of_node_put() in
+>      bcm2835_of_gpio_ranges_fallback()
+>    pinctrl: bcm2835: Switch to use ->add_pin_ranges()
+>    Revert "gpiolib: of: Introduce hook for missing gpio-ranges"
+>
+>   drivers/gpio/gpiolib-of.c             |  5 -----
+>   drivers/gpio/gpiolib.c                |  8 ++++++++
+>   drivers/pinctrl/bcm/pinctrl-bcm2835.c | 10 ++++------
+>   include/linux/gpio/driver.h           | 12 ------------
+>   4 files changed, 12 insertions(+), 23 deletions(-)
+>
