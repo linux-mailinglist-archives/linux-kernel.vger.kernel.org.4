@@ -2,147 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04223673F96
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55105673F9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjASRJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S230006AbjASRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjASRJS (ORCPT
+        with ESMTP id S229865AbjASRKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:09:18 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B63F5B91
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:09:16 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id b7so2531009wrt.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:09:16 -0800 (PST)
+        Thu, 19 Jan 2023 12:10:46 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17F6808B3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:10:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vY1pR8A7OW80xkAZYg++krO0fJkxZ30BhhNRiI4WE+4=;
-        b=P65lYM/d/tq/Tl+523m0GHYdBPr1YEqPOFcgIGr7Fb3OmHUpAzkHxBwCvneoSkKqSA
-         cN0C1PdoheStFj4oa4A9us8dMWFJn7V+qQYlsv37VHnvy1GYHeegrbBb0cBJ1c0kyVzm
-         QCvRRVTGBRpngeUjZifN4H6yV9v0BpllFhZvtPnyMwPnPPjI76H5wBeVC6JlND4/YIQp
-         GHn2y2tC18K5hsmJ/YGbBCbCLWg/wKzrdV5V2kR1EL9Z8mwfqxXhcTGYB8lOD4x6oGV6
-         P6DNeaV4536ihL0rpi7B/3oCM2OY1hdr3f1tmb8ZjZm2tEA5cizIF3FwtEtHFHD9Phya
-         uARw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vY1pR8A7OW80xkAZYg++krO0fJkxZ30BhhNRiI4WE+4=;
-        b=BXWv5ma/AWyXPbdKg6i2sds/OTkg++9hC/1Opc4vkScILK8Mz25Gha8Eaje3UZ+voh
-         K9A2MUtMtCaxtnOZpTO+G37+Q7aPszpJ7DwQKNVLMROOsXAiw0kJtDmSfxXzei1QOLmn
-         NH4CFYVJxY5Ap2FBU6imSfZR9k2tGG+VaOgQ9d3mm70gJtSNqS2g+rXoEUtxWjCkbut/
-         lCsIsNKLTy50OEhGwlrcel5VHs1oH76urKKEB3uIfid0FqAlV5Mi/ZyiGdhJrzmmalWe
-         xTu5ZMjPgh44jmlZrKUQY2Mx3E/3uh5XRkHvIQMdJjnABrvbYDnBTSvlQSaUbj9wQlP2
-         78dA==
-X-Gm-Message-State: AFqh2kqAPAS15Ty8XuPL8BmVWm/yJNLEAqlCJf+Zp527tj9fOYcmsDG4
-        zcNVCxHvhc7c9g5F2lNfqJCzjQ==
-X-Google-Smtp-Source: AMrXdXuVy8ToVBnQPqscQFHF/FAJ0rM3gQzJN+hV5KyJBH7B3bYj/kUMevWR4CjW9sGQCBIdSI7M8g==
-X-Received: by 2002:adf:e841:0:b0:2bd:bf01:5c3 with SMTP id d1-20020adfe841000000b002bdbf0105c3mr10191130wrn.61.1674148155117;
-        Thu, 19 Jan 2023 09:09:15 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id bu9-20020a056000078900b002be1dcb6efbsm8738701wrb.9.2023.01.19.09.09.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:09:14 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 19 Jan 2023 18:08:54 +0100
-Subject: [PATCH v2 3/3] arm64: dts: mediatek: enable i2c0 for mt8365-evk board
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1674148241; x=1705684241;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=8RD2NMlTLbb1fDHF7JSh91WOGDcsE0IX4cxLuRZNagI=;
+  b=nC4Vl50fVFOJewPwmCWlKc97tY8XhInmwBdhuy5C0VIdp8AZYUZfOmwg
+   jXVMAuuYWBIRjGW4drT9tqafJnAd/wcUlRG+3yoQSzRZeq43384Sw3P0a
+   +ytwU+9EaKKkJ2L9Gck7lBwAWn8Ucw6+cbLrn4lJhhLH5/o23tNs+BT5H
+   w=;
+X-IronPort-AV: E=Sophos;i="5.97,229,1669075200"; 
+   d="scan'208";a="172897248"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 17:10:39 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 152C741CE6;
+        Thu, 19 Jan 2023 17:10:39 +0000 (UTC)
+Received: from EX19D003UWC001.ant.amazon.com (10.13.138.144) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Thu, 19 Jan 2023 17:10:38 +0000
+Received: from freeip.amazon.com (10.43.162.56) by
+ EX19D003UWC001.ant.amazon.com (10.13.138.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Thu, 19 Jan 2023 17:10:37 +0000
+Date:   Thu, 19 Jan 2023 11:10:29 -0600
+From:   Geoff Blake <blakgeof@amazon.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+CC:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] perf/arm-cmn: Add shutdown routine
+In-Reply-To: <7071a073-08f5-104b-f10f-e1013d1b5390@arm.com>
+Message-ID: <ed89d1a0-3aac-d8dc-2056-21cb4609e7fb@amazon.com>
+References: <2bb86e97-6cef-700e-70ed-4f303da10fd9@amazon.com> <20221215180039.18035-1-blakgeof@amazon.com> <ab93909a-2c81-302f-9f85-33cf1a745e74@amazon.com> <7071a073-08f5-104b-f10f-e1013d1b5390@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221122-mt8365-i2c-support-v2-3-e4c7c514e781@baylibre.com>
-References: <20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com>
-In-Reply-To: <20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com>
-To:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1340; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=VOgzUWYZ5LqJIocyR/msYYzp26C90wB0hqeJ/d6bEGk=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjyXk2ouw0TaK/YymL8/LwYG7zbgNsYWk7Sm4QaG1v
- Hq9eNMeJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8l5NgAKCRArRkmdfjHURZhID/
- 9Uub2bUuBaf78i7z9ZyRrS0l1yJ8Bdey5zQzK/4aK8mPTm5Nl9fubCpzirBoXEG8bhSVJjvmZwyo1G
- RaJkZfkeBqgLOJKpWVHZNGWpoGrsrNBkJoWkhNvK2qfqsOrK1w2RIbO8lefpgWEyvDM3JRCEW/WDJc
- i0pj+XSJSlvga7oQPj9FmDe9blRKUlGJDJTa2RQvdpsD+RE+Cq2wK75i0s0+Qmi6JEW8QcWXLIroNv
- lgqeZRqvP4ZBHWeQ6zRF/u+lyUNHKnRR4jU9DIM5f7xBmwQT3rAEdrRck4Px0Peb8tBqrov38SNyq9
- A70WPxxZ8VFGSC1FkhuROcCV61CNyfxQSdAI9eKlmzav2RDqVbTjBSX+5jxcbLsd+gS2kS5rWWlFiE
- 8psXIUQHk9FxSOt0knnWdNgq2oMQ9MkBrmh3xDVJVKkCzBm1DJ/89cXh+Ems3p1VUYNt3MHOXIDDeM
- 1SQoV1em6g9NpHeegLBV1V/zKJ7D2+6avO1l9p2Ay8/4GZHtSOosLIQn2i0iT1mIgiXVZ3fFTv1SLK
- Ck+g+gNQ+/TN0hXC0qiPja3qxrwsuv1EnANH9SEJMt2OLgrXDyUV5yHWgRwmbBCWt/mfsh7+mbL31H
- 80CefxZZyl5wX20zlkLw5zEso3Vz3EOdA4uXryCmzG3y74NAbfq2W1SSwkVw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D41UWC001.ant.amazon.com (10.43.162.107) To
+ EX19D003UWC001.ant.amazon.com (10.13.138.144)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the I2C0 bus provides communication with:
-- The integrated RT9466 Switching Battery Charger.
-- The integrated MT6691 LP4X buck for VDDQ.
-- The integrated MT6691 LP4X buck for VDD2.
-- The pin header, to plug external I2C devices.
 
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-index 275ea3a0e708..d5d76a7dbd82 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -88,6 +88,15 @@ optee_reserved: optee@43200000 {
- 	};
- };
+On Thu, 19 Jan 2023, Robin Murphy wrote:
  
-+&i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+};
-+
- &pio {
- 	gpio_keys: gpio-keys-pins {
- 		pins {
-@@ -97,6 +106,16 @@ pins {
- 		};
- 	};
- 
-+	i2c0_pins: i2c0 {
-+		pins_i2c {
-+			pinmux = <MT8365_PIN_57_SDA0__FUNC_SDA0_0>,
-+				 <MT8365_PIN_58_SCL0__FUNC_SCL0_0>;
-+			mediatek,pull-up-adv = <3>;
-+			mediatek,drive-strength-adv = <00>;
-+			bias-pull-up;
-+		};
-+	};
-+
- 	uart0_pins: uart0-pins {
- 		pins {
- 			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
+> If you have a convincing argument that returning IRQ_NONE for unexpected
+> spurious interrupts is a real and important concern, then please propose
+> a general solution, because if it matters for arm-cmn then it matters
+> for hundreds of other drivers too, by rough estimate:
+> 
+> $ git grep -l IRQ_NONE '*.c' | xargs git grep -L IRQF_SHARED | wc -l
+> 834
 
--- 
-b4 0.10.1
+The general solution for IRQ_NONE exists in the layer above the 
+driver, it complains with a visible warning that something might be wrong 
+and then moves on. Nothing more is needed.
+
+Your shutdown routine that flips DT_EN in CMN_DT_DTC_CTL is sufficient, as 
+after some testing it solves the problem with left over IRQs for my kexec 
+use case.  
+
+-Geoff
