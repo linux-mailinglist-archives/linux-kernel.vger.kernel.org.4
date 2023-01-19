@@ -2,169 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA79D6742CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1486742D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjAST05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S230004AbjAST3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjAST0t (ORCPT
+        with ESMTP id S229811AbjAST3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:26:49 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2043.outbound.protection.outlook.com [40.107.96.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6031095172
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:26:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJuOwFMRebjkeGWJII0IMwxYvUqECAvZyFiQeYUeuA9bhw+UJ5SAJqdwkFqg2tPtwtP/IIt2nUfF1qJhhYMQUsmFRev5oZSTjp93SD/YcdGRGtIaMmBZeaC2Uy5vB3x+fTEy2Liki44eSI3BK55KdiNIPXnsebNUxtBDWbQ3/vFfs1V4CFqkCvoD1N0bFH0yX9DBXIVt49ElGbs30JRwOP8S//S3PV+NxBSuuW29mwnEpk2+wmDpHMYUHPYuiujk5Z+v/ojSaZ3ZXm8bUpKNe4a/oteR96oyPIFlt6rNuqbbQriF5uW1kAEn93znZNgJHF3ciAbafhj4M94kHO4OTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UrNpmRpYvAmAVA+MadQo1Dzb4+AnlYQny3+suNqlQNU=;
- b=StZ/E5lINIuMcOnEm2H/77UGV8R6Pt9NubYJ/cBoGiKp6CXDgVPM81uTy152w+eTj/rlozM8E6/du72kWsUpbk4lT+RrFgY7DnyBhFBlD4MYaWRXYbIhajVrqrnCughcqSIhYSIci5V0CTC96J+1e5tOc1A37qY5pDdC1NY5GriefKawM8XymrQtV8zW5exfkS4DafpnFmRkdP66SUKZA/wD4BH3hipAEqyfcq53b9MvIkda3Df6UBiScxrmxzuCF/JtS6QntB+OsextF93CH25eYfRjK/ubDCgM/AG7lMocpvwtq40Tttz825RW/1mVX3EZQKHw57VNq+o1Lxw0gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UrNpmRpYvAmAVA+MadQo1Dzb4+AnlYQny3+suNqlQNU=;
- b=uCbn7eAJfXxeyrxu/dTXghTkwcofYzOgy+8s7AwZeJrYE42JGYeqmuVBw/y6x0tqS7uuFBXBj92BvLeNZb4CPCh8nwzNzcQlFFF4YzhH2PMvb/ClWSWYMJeQcUoY7y/bFvAeqcXV+J08D8klz7l7EjUzXZoK9nihqsi34ZZC2L1dQv5QdZL7iX9WEb10X5/3388FkJdWp7PJrkII9i2loCCOk6TUJtWVZGR2M9tSIqCp+AaeBaljHw8IO11R/kIqScNUvyNwvEz30fvCpNu/YX6VCMYLUuixWmKFG9TEPqanYPjIHlDA85mzu+VROVFHLUJyonO5tQDVCgJ36Kz85g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW3PR12MB4362.namprd12.prod.outlook.com (2603:10b6:303:5d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.26; Thu, 19 Jan
- 2023 19:26:38 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.6002.013; Thu, 19 Jan 2023
- 19:26:38 +0000
-Date:   Thu, 19 Jan 2023 15:26:38 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, will@kernel.org, hch@lst.de,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] iommu: Switch __iommu_domain_alloc() to device ops
-Message-ID: <Y8mZbh56MzXWpbi9@nvidia.com>
-References: <cover.1673978700.git.robin.murphy@arm.com>
- <25ea8128b9228f9893507ad5a764ff25db5961a0.1673978700.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25ea8128b9228f9893507ad5a764ff25db5961a0.1673978700.git.robin.murphy@arm.com>
-X-ClientProxiedBy: MN2PR07CA0010.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::20) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 19 Jan 2023 14:29:32 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B70D7495B;
+        Thu, 19 Jan 2023 11:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674156571; x=1705692571;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XiEoqcw1GCxHBI/TeAEMlbF5M4j7VYAXm9Oo4Dv0gzE=;
+  b=P7nVsk6j6W4SB3IZxdDJaCdA+qo3hm37BrFtmauh3KXmtF1LFHAu/eUS
+   rMpckN+VevNck46q7wxqOpSG7TUQgRPChmVt0tDpm0HzKCZLl5jZCFcOT
+   s8N97z6W253tbsnbUE/QyBZOKb37IGGOimhVQzjyFH9WAiJiOjiuZhNwU
+   wHj7I7z2Kirogk1vaWaW1d+CuyzMr1vO1YMLSBKam56g5CiBvfleIuP3H
+   yyTjKiK4AlFPxvFXKPlyuzLHS9r3QQriK4EaS/x5Q0c3drRBM+gzjqy3z
+   jVDFFE8BrN1RChrvm1xJjS9AGKpwMR0/LIf3sQIw0J1BOLf34F9xrO2qB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305763093"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="305763093"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 11:29:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905669312"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="905669312"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jan 2023 11:29:27 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal: int340x: Protect trip temperature from dynamic update
+Date:   Thu, 19 Jan 2023 11:29:21 -0800
+Message-Id: <20230119192921.3215965-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4362:EE_
-X-MS-Office365-Filtering-Correlation-Id: 825a1d6b-b08e-4ace-a11b-08dafa531614
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TIy2iaOM9F6i0YVqylUtMzd7qsD+KiB5t/8wvOs2tUSPoeZ7EVX0LUS4u0tXIm0rzQUTDZ5o7fJLGu5MFY5q5/oY6X1eka2g8rcxPMa5bzECAnfnqxt5vDPJwf+4Az5J6owLW2yYEwkRZjjhUHxrebucyO3IWm+3l0wEeFUN5LfOnNJgJb/TWSat6qZXvHfl77lj8PdTajo7iJcXXcvISM0BFiO7fYoLpochsw/11Vqg+LY9tCJ7PTmR+LCRE00+5BIGRRlAn8zo0eKzxtYZPF+w3zTUf9uP5BZEhAYPQSgue6J6dB2k/OeUi/GNb2sHXgmqChC4D/Ujyle5Gac9JNajDpAOE3Ln4Y661q2JOrtGezMyEhAqCKgL7srV7bZ3v3OygRzH/m4x3GAsrZalY0xtFG+PxMnS7VcxduV5DwAaRgV8Er27QRkZTbKKHSfvBrYtPBs5Esg1LQWd2eWALWfdhTRSZV9E3TGcchfWGfX18VpmkBURJECirNtf2FMPnYHLSmhNKrAlL+iWvrHoI5rSksgBl6xIvMiUcvbyK8AsZgfo3jRDM1PD9ZMBmJMWHiR3EljnPZYMO6lTSD92utWMUznXnyMJsW2Dy1hE8UyCd6loclMsWD7dVjLLi6eZ9Z08ps29dR3JL6C4p6oNYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199015)(186003)(6512007)(26005)(38100700002)(478600001)(6506007)(6486002)(86362001)(2906002)(41300700001)(8936002)(2616005)(316002)(5660300002)(8676002)(6916009)(66476007)(4326008)(66946007)(66556008)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jnu40UETrZUkZtzk9rXf4bceYpIJAiBJQh4wZEZ6e9qqShMx23A2WcCe8q5D?=
- =?us-ascii?Q?XjF7AbZbev9fcdcM5iHq0GMwwIJ1NNe7FPOub1pMdoquWWd/MuTjxfHyYo/4?=
- =?us-ascii?Q?1KZ9peyGBis50Rv20pYMrMeg6Cc7Gw3FcY48OOf1onFJxp5ButTlxQT3FYmp?=
- =?us-ascii?Q?qnUkvxUymsCA49YO1FGXcxGsGRMW9IG5LaWQEqCBMglSRvhfPSOSztp645SJ?=
- =?us-ascii?Q?EjIEd5dWrVPGLdq8VhdxFkMrqzRjiuVbya2O8BBzGXaLsbrrSWjlqHpIMPTM?=
- =?us-ascii?Q?fdfLYAarvX/ixog2XH9pjZv+GGbDrV+QP4TpmTl6TPKog2kKayCHw9qG4hsj?=
- =?us-ascii?Q?s/RVwlx4gBXlz98S1cFcXbLt4T/38J/lMf46dJlWBq+g7PZ46RNaI270+SWh?=
- =?us-ascii?Q?jvSZHPcDP9W8gdHTBssLVvWBzWZ4yTWw6sReYAFiPnKUzbmE48ebLvC6JFsx?=
- =?us-ascii?Q?oJxoWKzuWk5ze+yA8YA/xmesI5xxS4dXpl6oTycah3oO6Ti8jHdq7xtbryfZ?=
- =?us-ascii?Q?M2YuzOvW3sydu73kMEfS2p1GCcN4Pz4MPMRwnyB+CDfd0NT1Hh/C4SyS7o/G?=
- =?us-ascii?Q?89JfqiMng4K96XIc5e4ifexwyFz3pEcAGbSs7FbLLYuwInwyms5NFSkCXUlU?=
- =?us-ascii?Q?14uoOmpP3Mq5g3r+0STcA7zpVuRIN+qEvEcTXOMkqNB2JRwm/jwvFBbhCVQG?=
- =?us-ascii?Q?E0+fR9CIPl4YCyALCwsRRG5q7VPeTYowbLxQ/OVPb1tVme4oLQiOniGfRHSI?=
- =?us-ascii?Q?xp7eViCRTT1dplo2VZJi9RoPBIOUqLDiBE8Hx/0T/HU0m/+tL9Uh+BtIVbYY?=
- =?us-ascii?Q?0gEuZr5wUXPo5olVNBwIeFaOESVKp11JX7d6gMMMXnOPS9zlrE6vJFAChpnD?=
- =?us-ascii?Q?ro1kzelx+K65pGWAlwqVyVviJIVksVZUPUZrck2WKcCBppk10xZBrDFLRHqs?=
- =?us-ascii?Q?vNYWbu45DwSGioYF0yXjX495HarrvUr+gmVK6niLVYr+lGSaBjZTsHj9ziJo?=
- =?us-ascii?Q?9Pipiux8bf/I8x16slLD3fpgdNGl3a1pcZ3/M5B0Op0FmZNzCZYzCe6xUBKr?=
- =?us-ascii?Q?+AUXdXWxgAFrIx2A0Edw8Qpzn53TuRcSCwWYgOMWRFvXclOJyLniyt/OHRiT?=
- =?us-ascii?Q?ySR63GvTdDDOYeJfkxs/gWg8JrJsfOdC66yd3JU+WiZ8kePqyyrtEyeuxefu?=
- =?us-ascii?Q?cWUYzC0YUIGpUT9Lsm7WkJ9Xp8ex9aQ1RZxcP5/v5tx+pDTlCNdALA+umi9Q?=
- =?us-ascii?Q?j7KcufahUwZkCo8Q7hlHTT2j8W9a8VaqXIw34s41UZy/j0kaj++prT+M51yL?=
- =?us-ascii?Q?2f0tbIHbcHRqxH8DqsBNusULAMk3ZKPBp7mIzkSp+DuVFdeeAURF/9zYONWW?=
- =?us-ascii?Q?KDcAhgsChj14p1cusrImEYMabxnFl9JWMonyOiopjuWzbUTXdNZv1OeE2TkZ?=
- =?us-ascii?Q?TPFcJm8t1AA+ZYXyTmDv15r8lPjshGktoMyw+zutKjOojrESlHcK096DAeHU?=
- =?us-ascii?Q?yB5jmHbplFVNCHk+Cxt5quzYZH2IOOdWpXkrc5mLxhjd2lxzNUK99VvAaJfQ?=
- =?us-ascii?Q?p5b6DbCQM8aUYftgkC8VbbaKu3iAxSP5Npfi8Oky?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 825a1d6b-b08e-4ace-a11b-08dafa531614
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 19:26:38.7120
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GWZX4eu5Sz1iuMw7Oq7aN6GsNnZhm8OiXdnrfZjOkR+5O/jY3H0qmRuw+Au2+jhV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4362
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 07:18:22PM +0000, Robin Murphy wrote:
+Trip temperatures are read using ACPI methods and stored in the memory
+during zone initializtion and when the firmware sends a notification for
+change. This trip temperature is returned when the thermal core calls via
+callback get_trip_temp().
 
-> -static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
-> +static struct iommu_domain *__iommu_domain_alloc(struct device *dev,
->  						 unsigned type)
->  {
-> -	const struct iommu_ops *ops = bus ? bus->iommu_ops : NULL;
-> +	const struct iommu_ops *ops = dev_iommu_ops(dev);
->  	struct iommu_domain *domain;
->  
-> -	if (!ops)
-> -		return NULL;
-> -
->  	domain = ops->domain_alloc(type);
->  	if (!domain)
->  		return NULL;
-> @@ -1970,9 +1968,28 @@ static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
->  	return domain;
->  }
->  
-> +static int __iommu_domain_alloc_dev(struct device *dev, void *data)
-> +{
-> +	struct device **alloc_dev = data;
-> +
-> +	if (!device_iommu_mapped(dev))
-> +		return 0;
+But it is possible that while updating the memory copy of the trips when
+the firmware sends a notification for change, thermal core is reading the
+trip temperature via the callback get_trip_temp(). This may return invalid
+trip temperature.
 
-Is 0 the right thing? see below
+To address this add a mutex to protect the invalid temperature reads in
+the callback get_trip_temp() and int340x_thermal_read_trips().
 
-> +
-> +	WARN_ONCE(*alloc_dev && dev_iommu_ops(dev) != dev_iommu_ops(*alloc_dev),
-> +		"Multiple IOMMU drivers present, which the public IOMMU API can't fully support yet. This may not work as expected, sorry!\n");
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org # 5.0+
+---
+ .../intel/int340x_thermal/int340x_thermal_zone.c | 16 +++++++++++++++-
+ .../intel/int340x_thermal/int340x_thermal_zone.h |  1 +
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-if (WARN_ONCE(..))
-   return -EINVAL
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index 62c0aa5d0783..fd9080640e03 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -49,6 +49,8 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+ 	if (d->override_ops && d->override_ops->get_trip_temp)
+ 		return d->override_ops->get_trip_temp(zone, trip, temp);
+ 
++	mutex_lock(&d->trip_mutex);
++
+ 	if (trip < d->aux_trip_nr)
+ 		*temp = d->aux_trips[trip];
+ 	else if (trip == d->crt_trip_id)
+@@ -65,10 +67,14 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+ 				break;
+ 			}
+ 		}
+-		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
++		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT) {
++			mutex_unlock(&d->trip_mutex);
+ 			return -EINVAL;
++		}
+ 	}
+ 
++	mutex_unlock(&d->trip_mutex);
++
+ 	return 0;
+ }
+ 
+@@ -180,6 +186,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+ 	int trip_cnt = int34x_zone->aux_trip_nr;
+ 	int i;
+ 
++	mutex_lock(&int34x_zone->trip_mutex);
++
+ 	int34x_zone->crt_trip_id = -1;
+ 	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
+ 					     &int34x_zone->crt_temp))
+@@ -207,6 +215,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+ 		int34x_zone->act_trips[i].valid = true;
+ 	}
+ 
++	mutex_unlock(&int34x_zone->trip_mutex);
++
+ 	return trip_cnt;
+ }
+ EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
+@@ -230,6 +240,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 	if (!int34x_thermal_zone)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	mutex_init(&int34x_thermal_zone->trip_mutex);
++
+ 	int34x_thermal_zone->adev = adev;
+ 	int34x_thermal_zone->override_ops = override_ops;
+ 
+@@ -281,6 +293,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+ 	kfree(int34x_thermal_zone->aux_trips);
+ err_trip_alloc:
++	mutex_destroy(&int34x_thermal_zone->trip_mutex);
+ 	kfree(int34x_thermal_zone);
+ 	return ERR_PTR(ret);
+ }
+@@ -292,6 +305,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
+ 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
+ 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+ 	kfree(int34x_thermal_zone->aux_trips);
++	mutex_destroy(&int34x_thermal_zone->trip_mutex);
+ 	kfree(int34x_thermal_zone);
+ }
+ EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+index 3b4971df1b33..8f9872afd0d3 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+@@ -32,6 +32,7 @@ struct int34x_thermal_zone {
+ 	struct thermal_zone_device_ops *override_ops;
+ 	void *priv_data;
+ 	struct acpi_lpat_conversion_table *lpat_table;
++	struct mutex trip_mutex;
+ };
+ 
+ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
+-- 
+2.38.1
 
-So that iommu_domain_alloc fails?
-
-> +	*alloc_dev = dev;
-> +	return 0;
-> +}
-> +
->  struct iommu_domain *iommu_domain_alloc(struct bus_type *bus)
->  {
-> -	return __iommu_domain_alloc(bus, IOMMU_DOMAIN_UNMANAGED);
-> +	struct device *dev = NULL;
-> +
-> +	if (bus_for_each_dev(bus, NULL, &dev, __iommu_domain_alloc_dev))
-> +		return NULL;
-
-eg shouldn't iommu_domain_alloc() return NULL if any devices are
-!device_iommu_mapped ?
-
-Jason
