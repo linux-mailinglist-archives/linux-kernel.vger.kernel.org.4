@@ -2,106 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D6B672E04
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3006A672E0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjASBUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229796AbjASBXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjASBS5 (ORCPT
+        with ESMTP id S230117AbjASBVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:18:57 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC076C562;
-        Wed, 18 Jan 2023 17:16:02 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p24so830907plw.11;
-        Wed, 18 Jan 2023 17:16:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IbDZxGDp8FFFBhm3skdTuca0wCb1RqhnA6hZ3TKJit8=;
-        b=m91VX7/3DOiTpb7lvJW92AF59U5cpWwU6ggAKRCUGvVcfgSWDB9SQEa4+AuPlc/ug6
-         +XMf3JArGv1o8ktY842QajeWbV/9MtDIPqUVISTALLYEej2cRWueeCdyZqKIoeKaNj49
-         fLQKEfWJ7p9SyMwlRlIPGxLzozGjLQ5CLA52smpT2EQjxEXNKCqldz0hb+m+igeKsRF9
-         khQAWIW34B+51/9Y1W7A+zc66C0mOSmHQbeKN2wWM7vC+dy+v+eWp7nrHZMwvjufIgj5
-         xxtifri2RM3VciVmBbf7F6HY88isNfLKYnDQkgO30fqIq+qxPmJJJwjeaprz+nbKxuqh
-         xrtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IbDZxGDp8FFFBhm3skdTuca0wCb1RqhnA6hZ3TKJit8=;
-        b=J6E0hbGv0AYzO2tNpN6rEaK0BSyR4mqya6LRZcNtsmsikurxgNPXFp5nM/fIQ8lr2n
-         ncWMf9bZBoRBzkfvTgXTpRv83QsA1jatj9eR9RjcG6mOJ21hA8Bce1tOL2O9sGOfSyuh
-         OLasYOYMLmqO0h2ASL4xm+gxbAdDquVEjj/JsR+VxZu97YPBgPjG4pr6ck4HtegAv5lf
-         m9UmrU/bS6g17bGJ7nIF8UOSQ7DaY2lqW2/ndnvQ0RRn2/LVPIGQxzFC43Rfaa1G6Eop
-         qs31ySzJisJPqyJdggx8EJP4wVmG4F+yUskIbmJsNvEIgT4Zz+zu+9vhQ6J2BEC2yYYp
-         0PTw==
-X-Gm-Message-State: AFqh2kqNnlU3V+xSBZR29MvrSEu9ZElFOP5QKQEEDJs1hUjLkR8vS2ch
-        Oh2EKZSI/DYTuUOJn7470Jw=
-X-Google-Smtp-Source: AMrXdXt1QQNOAQpB1Kri+S7V27/Xl104ByL7t0pHQAj/LRNQdRDTMhaBvcDcOaq3Ci4N5vVEYOpbvA==
-X-Received: by 2002:a17:902:7209:b0:194:73c4:6bdd with SMTP id ba9-20020a170902720900b0019473c46bddmr9728122plb.17.1674090961806;
-        Wed, 18 Jan 2023 17:16:01 -0800 (PST)
-Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902694300b00194a53ab3e6sm4235447plt.286.2023.01.18.17.15.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 17:16:01 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 11:15:54 +1000
-Message-Id: <CPVRPRLUQYA6.VGAMPDLW043V@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
-        <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 13/24] powerpc/pseries: Fix handling of PLPKS object
- flushing timeout
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-14-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-14-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 20:21:35 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FE16D363;
+        Wed, 18 Jan 2023 17:17:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674091050; x=1705627050;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F5YioTq1mi0FQzL5L6+ik6gE1Fz9rrGR1YKFWv3B5uk=;
+  b=Ds3/zgRQfS/PhiZxJ/5djSQ9723dihPfUO8HXJ42m2REXbAbvCSd35b4
+   4SxbXEazGvDLyCdkavXIpjn6bJEpwrq//j312RyxBPwk5V2Nmf1gpE5tP
+   d+l29TcmS98BapN5h2GOzaa7JJIndtogyRsmT645QxZFW5b3mDQ4Mq61Q
+   ZTjjGXUsAec2EmNFHrwGdPrtcp8fEW42/3xtBQmD1B/+aQW7VRuwi2/Ao
+   Iva9amS/2CT+PZnP2ZuhE09e9KCV3ttSMiNfsV5kpnz9IMCtPJm0K/3ER
+   wt+MV3Jcasd12wkEeMznMS3l1ly+TXOhP6lQgjfJv03ketuzuBLDAqs4j
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323842330"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="323842330"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 17:17:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="723314432"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="723314432"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 17:17:25 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIJYS-0000vw-12;
+        Thu, 19 Jan 2023 01:17:24 +0000
+Date:   Thu, 19 Jan 2023 09:16:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <202301190907.YBfaBhHB-lkp@intel.com>
+References: <20230118201055.147228-4-gregory.price@memverge.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118201055.147228-4-gregory.price@memverge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
-> plpks_confirm_object_flushed() uses the H_PKS_CONFIRM_OBJECT_FLUSHED hcal=
-l
-> to check whether changes to an object in the Platform KeyStore have been
-> flushed to non-volatile storage.
->
-> The hcall returns two output values, the return code and the flush status=
-.
-> plpks_confirm_object_flushed() polls the hcall until either the flush
-> status has updated, the return code is an error, or a timeout has been
-> exceeded.
->
-> While we're still polling, the hcall is returning H_SUCCESS (0) as the
-> return code. In the timeout case, this means that upon exiting the pollin=
-g
-> loop, rc is 0, and therefore 0 is returned to the user.
->
-> Handle the timeout case separately and return ETIMEDOUT if triggered.
->
-> Fixes: 2454a7af0f2a ("powerpc/pseries: define driver for Platform KeyStor=
-e")
+Hi Gregory,
 
-Can fixes go to the start of the series?
+Thank you for the patch! Yet something to improve:
 
-Thanks,
-Nick
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.2-rc4 next-20230118]
+[cannot apply to tip/core/entry]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+patch link:    https://lore.kernel.org/r/20230118201055.147228-4-gregory.price%40memverge.com
+patch subject: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230119/202301190907.YBfaBhHB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/bd6833b41ed48c444c09346f695efe229deec2e9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230119-041259
+        git checkout bd6833b41ed48c444c09346f695efe229deec2e9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: fs/isofs/inode.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/inode.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/dir.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/dir.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/util.o: in function `syscall_user_dispatch_get_config':
+   fs/isofs/util.c:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/util.o: in function `syscall_user_dispatch_set_config':
+   fs/isofs/util.c:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/rock.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/rock.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/export.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/export.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/joliet.o: in function `syscall_user_dispatch_get_config':
+   fs/isofs/joliet.c:49: multiple definition of `syscall_user_dispatch_get_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/isofs/joliet.o: in function `syscall_user_dispatch_set_config':
+   fs/isofs/joliet.c:49: multiple definition of `syscall_user_dispatch_set_config'; fs/isofs/namei.o:include/linux/syscall_user_dispatch.h:49: first defined here
+--
+   ld: fs/autofs/inode.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/inode.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/root.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/root.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/symlink.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/symlink.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/waitq.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/waitq.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/expire.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/expire.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/dev-ioctl.o: in function `syscall_user_dispatch_get_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_get_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+   ld: fs/autofs/dev-ioctl.o: in function `syscall_user_dispatch_set_config':
+>> include/linux/syscall_user_dispatch.h:49: multiple definition of `syscall_user_dispatch_set_config'; fs/autofs/init.o:include/linux/syscall_user_dispatch.h:49: first defined here
+
+
+vim +49 include/linux/syscall_user_dispatch.h
+
+    44	
+    45	int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+    46		void __user *data)
+    47	{
+    48		return -EINVAL;
+  > 49	}
+    50	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
