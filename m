@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3544674105
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593FC674107
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjASSbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S230309AbjASSb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjASSbk (ORCPT
+        with ESMTP id S230260AbjASSbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:31:40 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544F175A37
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:31:39 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id u6-20020a170903124600b00188cd4769bcso1827659plh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:31:39 -0800 (PST)
+        Thu, 19 Jan 2023 13:31:49 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890D994C8A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:31:46 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id l15-20020a170902f68f00b001948ddc7cddso1808570plg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 10:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XyXhvPvPbADpaSv/EYaQvarEBuQZacwnWp/5FIvc94s=;
-        b=dUXnT88TH2X/cpMgLnC/jDim2bvVeneZtEmqqSsTVO+h3X/PsM+8YkeiPvU8ZQevzK
-         Zn4T2ff7XcwlgxMq6h9V5y2e3yHL+hYcJZ/ojweALCJFZICxQl8Fsy3e+fZ2yAFMj2gl
-         K1kmwYEsi1V7TNTsLu+fyq4tEgA6H1KjmzyksYGbA0TG5R2RDMOxtEN8jNIXvLmB6Fsp
-         Lq/pLiQAnxNuvSPRsfzFvj9lcp1BCon/lS5gVIy/b/INatUUqVF9IcxCv/H6BxuPFLFI
-         xbgAQEzjCQwJcOkE0tZR4SgoVqD0CH9QMwJzoTZChK1QvzubxA4nmkGwN3cFaoQOkSeO
-         BzXw==
+        bh=rSuiBVm55Q80Tk0UPfBL9kzPamY+Qqa2tBQ8WoHmUiI=;
+        b=PBdaBmAqFJb9V7fBj1q6ZWOgsj2wnTFqbx3DuY8v+5ZG/7IsnCWzCvJb6ai+Yj4l7T
+         bwLnzbUcBrgx4KXhrOKir9eCFKGiWIAdn426HYOfXoK6biy7c/uZYEbI4uWi/mYdBhHc
+         WzTbUwkWte+V2dtcmbK6YNPfBWYkCRNlCh2Nyq+bm+KlmLAV1Fh/OKPuMS7nTmJ5pmqA
+         T3IfJm/+dWZmfFX6bn5Z/ChMIX9NWV0FdH9GEHCzDvjEVsoNJ3rGhhhAXkrf6HMx4MJb
+         chznyhMZs5cBhS3cMMcahT6zUqQ6XGqDavm4uYJr75s3QBGkHgDSukvkOpAHtrxFEr6r
+         AJbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XyXhvPvPbADpaSv/EYaQvarEBuQZacwnWp/5FIvc94s=;
-        b=qRfG6phKK8mgXXnjPTerONR+PidcxMuvhWJ5mxEoxQphOErqX9Ckhs9++l3b2XXG1I
-         PEnzwG5Mb/Re0cRpgkaapsFLvUdYaNsYnz6JnbhH67prvEG7v3IcRlbxA80dgdB7SsP1
-         fR2azA3fEQxc9AUjBnDsnsZCZTui7n+V4t46m7ltPSOEKGZ4py/ySDmnKJmjBWdVFEGN
-         qckhBNsXKtmtHTVTjNmQa7zniCyWkNEGlmXU6TrPT0ut/IagetNML3hb/GpXZdmWhON3
-         ARtiy+dxCQ1I43xX4TAx/1qgII5M6nTG45Ju4TwpQ0iy3zDSSwL7eIXJ9PbbDfMJBu2d
-         +tzg==
-X-Gm-Message-State: AFqh2kr2AlK0sdd8uPwooFz9OdSn4lcTjy028DUUlP+yS4p3ZT4ZlTOt
-        ZztkqmVb16lAcNqdO8/JdifYvsSwguzb
-X-Google-Smtp-Source: AMrXdXvlXtBxk9hh9EaucGVFPSaRYxAfCvKM4hryIGhpEvBoWdDLNvcI5VBW2IwQu9pYeY+rKvQ5G2EtAKOX
+        bh=rSuiBVm55Q80Tk0UPfBL9kzPamY+Qqa2tBQ8WoHmUiI=;
+        b=SDhSqtDxiOXCe8OXm6xIL9dSXr18iK2DqI9e/O5lRDXHaU4KcSdtngK7nm577H48j1
+         DnolrKzNpcPHyZWpgRPp6g3OVno7EeeVawKjKCT2qbH0+yt86NWBnaA2dO7KOVS0rR0t
+         csyuEoHHv4TUxZ23yEmWIqVmFeIAQ8WWgl0PgfnxMqkmLRSQLPe/HpjuPcga4w3FR1F/
+         sdRog3zCAzqlaK0kasLvGj37QfU5C54HFT4aM7pHxgXgH+55OaLxrvrGHaHiRtrGWgbV
+         bgbL5EeH5rPf1/IXPZ2ZzDOvtxXDMO/PDpUVXJgHlzkRoOJdIvxpfq47s1axSml9QGmt
+         QugA==
+X-Gm-Message-State: AFqh2koGD46r9n2tviCMc9Gc8cDQX5RZvVUNYVmrtr5sVUch5rL07WY4
+        lxpPTMTPtedaFTow+6a2raokLlbPvMAz
+X-Google-Smtp-Source: AMrXdXtsxYiVhuSjUb9OTQPGztNrobPwSI7MihfNsySf7aq292BvQTRsTTNhd4egDqahfTeW50jRWeHJHzVS
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:93c6:b65e:5f33:bc6b])
- (user=irogers job=sendgmr) by 2002:aa7:8f95:0:b0:58d:a316:b578 with SMTP id
- t21-20020aa78f95000000b0058da316b578mr1125043pfs.58.1674153098798; Thu, 19
- Jan 2023 10:31:38 -0800 (PST)
-Date:   Thu, 19 Jan 2023 10:31:17 -0800
+ (user=irogers job=sendgmr) by 2002:a63:3381:0:b0:4b4:e491:c331 with SMTP id
+ z123-20020a633381000000b004b4e491c331mr851563pgz.19.1674153105597; Thu, 19
+ Jan 2023 10:31:45 -0800 (PST)
+Date:   Thu, 19 Jan 2023 10:31:18 -0800
 In-Reply-To: <20230119183118.126387-1-irogers@google.com>
-Message-Id: <20230119183118.126387-2-irogers@google.com>
+Message-Id: <20230119183118.126387-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230119183118.126387-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Subject: [PATCH v3 1/2] tools/resolve_btfids: Install subcmd headers
+Subject: [PATCH v3 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
 From:   Ian Rogers <irogers@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -79,98 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously tools/lib/subcmd was added to the include path, switch to
-installing the headers and then including from that directory. This
-avoids dependencies on headers internal to tools/lib/subcmd. Add the
-missing subcmd directory to the affected #include.
+HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+after tools/scripts/Makefile.include is included, meaning flags are
+set assuming say CC is gcc, but then it can be later set to HOSTCC
+which may be clang. tools/scripts/Makefile.include is needed for host
+set up and common macros in objtool's Makefile. Rather than override
+CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+builds and the linkage step. This means the Makefiles don't see things
+like CC changing and tool flag determination, and similar, work
+properly.
+
+Also, clear the passed subdir as otherwise an outer build may break by
+inadvertently passing an inappropriate value.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
- tools/bpf/resolve_btfids/main.c   |  2 +-
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
 diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 19a3112e271a..76b737b2560d 100644
+index 76b737b2560d..ac8e302babc6 100644
 --- a/tools/bpf/resolve_btfids/Makefile
 +++ b/tools/bpf/resolve_btfids/Makefile
-@@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
- BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
- LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
- SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-+SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
+@@ -18,14 +18,11 @@ else
+ endif
  
- LIBBPF_DESTDIR := $(LIBBPF_OUT)
- LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
- 
-+SUBCMD_DESTDIR := $(SUBCMD_OUT)
-+SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
+ # always use the host compiler
+-AR       = $(HOSTAR)
+-CC       = $(HOSTCC)
+-LD       = $(HOSTLD)
+-ARCH     = $(HOSTARCH)
++HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
++		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
 +
- BINARY     := $(OUTPUT)/resolve_btfids
- BINARY_IN  := $(BINARY)-in.o
+ RM      ?= rm
+ CROSS_COMPILE =
+-CFLAGS  := $(KBUILD_HOSTCFLAGS)
+-LDFLAGS := $(KBUILD_HOSTLDFLAGS)
  
- all: $(BINARY)
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
  
-+prepare: $(BPFOBJ) $(SUBCMDOBJ)
-+
- $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
- 	$(call msg,MKDIR,,$@)
- 	$(Q)mkdir -p $(@)
+@@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
  
  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
--	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
-+	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-+		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-+		    $(abspath $@) install_headers
+ 	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+-		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
++		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+ 		    $(abspath $@) install_headers
  
  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-@@ -60,14 +68,14 @@ CFLAGS += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-           -I$(LIBBPF_INCLUDE) \
--          -I$(SUBCMD_SRC)
-+          -I$(SUBCMD_INCLUDE)
+-		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
++		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+ 		    $(abspath $@) install_headers
  
- LIBS = -lelf -lz
- 
- export srctree OUTPUT CFLAGS Q
+ CFLAGS += -g \
+@@ -76,11 +73,11 @@ export srctree OUTPUT CFLAGS Q
  include $(srctree)/tools/build/Makefile.include
  
--$(BINARY_IN): $(BPFOBJ) fixdep FORCE | $(OUTPUT)
-+$(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
- 	$(Q)$(MAKE) $(build)=resolve_btfids
+ $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+-	$(Q)$(MAKE) $(build)=resolve_btfids
++	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
  
  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-@@ -79,7 +87,8 @@ clean_objects := $(wildcard $(OUTPUT)/*.o                \
-                             $(OUTPUT)/.*.o.d             \
-                             $(LIBBPF_OUT)                \
-                             $(LIBBPF_DESTDIR)            \
--                            $(OUTPUT)/libsubcmd          \
-+                            $(SUBCMD_OUT)                \
-+                            $(SUBCMD_DESTDIR)            \
-                             $(OUTPUT)/resolve_btfids)
+ 	$(call msg,LINK,$@)
+-	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
++	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
  
- ifneq ($(clean_objects),)
-@@ -96,4 +105,4 @@ tags:
- 
- FORCE:
- 
--.PHONY: all FORCE clean tags
-+.PHONY: all FORCE clean tags prepare
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 80cd7843c677..77058174082d 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -75,7 +75,7 @@
- #include <linux/err.h>
- #include <bpf/btf.h>
- #include <bpf/libbpf.h>
--#include <parse-options.h>
-+#include <subcmd/parse-options.h>
- 
- #define BTF_IDS_SECTION	".BTF_ids"
- #define BTF_ID		"__BTF_ID__"
+ clean_objects := $(wildcard $(OUTPUT)/*.o                \
+                             $(OUTPUT)/.*.o.cmd           \
 -- 
 2.39.0.246.g2a6d74b583-goog
 
