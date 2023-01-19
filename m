@@ -2,172 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFE7674361
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931EA67435B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjASUOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S230195AbjASUOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjASUOi (ORCPT
+        with ESMTP id S229919AbjASUOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:14:38 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E6951A1;
-        Thu, 19 Jan 2023 12:14:33 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E94845FD0B;
-        Thu, 19 Jan 2023 23:14:28 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1674159269;
-        bh=aaR9evVc2lGAxgc1j/OH4BgiwZu8Sx2LjYz7IF3WmyE=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=IVx6sMXPad9O6kUyupdXBr38dNNjeS2a9tD41LuD4fjg0SBi+eegOpmcl4idROZi8
-         Fj0ju5drKSGyEfmAIiRaxvRXYE9dUXnRl7iNpZDNJRsSWmmL1TqghFQ0DXGso8uxjP
-         jaCeVZRxvavFnXcGDusMsMHMMQKsQ+F7+KvXvZdUFbf9FHGzDtOzmJzfFeHBZ5K+rL
-         WhBddfYAXt817R0Yos21SaAuqpgqim/9KGZnlzx7r6buXEjO4rOSKRCZ+rJ23MOSwa
-         mrfYbzZ4VXevWpK0F4sDEHuBG1avsWWHVFIZtYkMpbAfmNWAkXfkZmhYwzNBQm47Np
-         QM1+cGt7qWMfg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 23:14:14 +0300 (MSK)
-Date:   Thu, 19 Jan 2023 23:14:14 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lucas Stankus <lucas.p.stankus@gmail.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Renato Lui Geh <renatogeh@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        <kernel@pengutronix.de>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Robert Yang <decatf@gmail.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Philippe Reynes <tremyfr@yahoo.fr>,
-        Alexandru Lazar <alazar@startmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Harald Geyer <harald@ccbib.org>,
-        Eugene Zaikonnikov <ez@norophonic.com>,
-        Phil Reid <preid@electromag.com.au>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <chrome-platform@lists.linux.dev>
-Subject: Re: [PATCH 1/5] dt-bindings: iio: drop unneeded quotes
-Message-ID: <20230119201414.2gt2lw2qozm7vyjh@CAB-WSD-L081021>
-References: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
+        Thu, 19 Jan 2023 15:14:30 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF3D9519D;
+        Thu, 19 Jan 2023 12:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674159269; x=1705695269;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZeCUFjyvh3AJ3w7Siul74Jx9GEqX2RiuD1sWIC7joAA=;
+  b=D40ygtbqg0jvLqVYvsNG2kt2eMvTjxCY23KJO2qu/googHJrHoBhoc5B
+   d3hM3x+x8I6k699yxPLmneriFLBRFffkECYR0c6XokQSsygmmqOO/9GbR
+   dU1zDuYsvdWTcPBjt6/m59IswrsdxPDKbHRMd10yUiAXIv7dhlwpaUMzN
+   wBjBhOBozxUcPLe86n0LPdpl13QtAWVy+BJoAhYJh+nck+vQz2FUefWS9
+   4xHiKsBCJIlqkXy96Qsp6ILkjB2+3isJDVmadGMgfR+JkQDudPmqiBIao
+   Xt8dTuihc/L8YX0LFejL6ongUYA9WcMoQPoEzTg28y/7CzWBiXrTmMDSM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305776648"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="305776648"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 12:14:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802771059"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="802771059"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 12:14:28 -0800
+Received: from [10.209.115.195] (kliang2-mobl1.ccr.corp.intel.com [10.209.115.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id B1306580AA4;
+        Thu, 19 Jan 2023 12:14:26 -0800 (PST)
+Message-ID: <c8238848-801b-af31-d9aa-91839fae5885@linux.intel.com>
+Date:   Thu, 19 Jan 2023 15:14:25 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/01/19 16:54:00 #20783955
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1] perf tools: Fix foolproof typo
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Ali Saidi <alisaidi@amazon.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        James Clark <james.clark@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230119201036.156441-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230119201036.156441-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
 
-Thank you for the patch!
-I'm okay with changes to memsensing,msa311.yaml schema.
 
-On Wed, Jan 18, 2023 at 07:44:09PM +0100, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
+On 2023-01-19 3:10 p.m., Ian Rogers wrote:
+> In the context of LBR stitching documentation.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+Thanks Ian.
+
+Acked-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+
 > ---
->  .../devicetree/bindings/iio/accel/memsensing,msa311.yaml  | 5 ++---
->  Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml | 2 +-
->  Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml | 2 +-
->  .../devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml    | 2 +-
->  Documentation/devicetree/bindings/iio/adc/avia-hx711.yaml | 4 ++--
->  .../devicetree/bindings/iio/adc/ingenic,adc.yaml          | 4 ++--
->  .../devicetree/bindings/iio/adc/microchip,mcp3911.yaml    | 4 ++--
->  .../devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml    | 2 +-
->  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml   | 2 +-
->  .../devicetree/bindings/iio/adc/st,stm32-adc.yaml         | 8 ++++----
->  .../devicetree/bindings/iio/adc/ti,ads131e08.yaml         | 2 +-
->  Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml | 2 +-
->  .../devicetree/bindings/iio/dac/lltc,ltc1660.yaml         | 4 ++--
->  .../devicetree/bindings/iio/dac/lltc,ltc2632.yaml         | 4 ++--
->  .../devicetree/bindings/iio/dac/st,stm32-dac.yaml         | 4 ++--
->  Documentation/devicetree/bindings/iio/imu/st,lsm6dsx.yaml | 2 +-
->  .../devicetree/bindings/iio/temperature/ti,tmp117.yaml    | 6 +++---
->  17 files changed, 29 insertions(+), 30 deletions(-)
+>  tools/perf/Documentation/perf-c2c.txt    | 2 +-
+>  tools/perf/Documentation/perf-report.txt | 2 +-
+>  tools/perf/Documentation/perf-script.txt | 2 +-
+>  tools/perf/Documentation/perf-top.txt    | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-> index 23528dcaa073..d530ec041fe7 100644
-> --- a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-> +++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-> @@ -1,9 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> -
->  %YAML 1.2
->  ---
-> -$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: MEMSensing digital 3-Axis accelerometer
->  
-
-Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-
-[...]
-
--- 
-Thank you,
-Dmitry
+> diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
+> index 5c5eb2def83e..af5c3106f468 100644
+> --- a/tools/perf/Documentation/perf-c2c.txt
+> +++ b/tools/perf/Documentation/perf-c2c.txt
+> @@ -121,7 +121,7 @@ REPORT OPTIONS
+>  	perf c2c record --call-graph lbr.
+>  	Disabled by default. In common cases with call stack overflows,
+>  	it can recreate better call stacks than the default lbr call stack
+> -	output. But this approach is not full proof. There can be cases
+> +	output. But this approach is not foolproof. There can be cases
+>  	where it creates incorrect call stacks from incorrect matches.
+>  	The known limitations include exception handing such as
+>  	setjmp/longjmp will have calls/returns not match.
+> diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+> index 4fa509b15948..9b0c0dbf9a77 100644
+> --- a/tools/perf/Documentation/perf-report.txt
+> +++ b/tools/perf/Documentation/perf-report.txt
+> @@ -507,7 +507,7 @@ include::itrace.txt[]
+>  	perf record --call-graph lbr.
+>  	Disabled by default. In common cases with call stack overflows,
+>  	it can recreate better call stacks than the default lbr call stack
+> -	output. But this approach is not full proof. There can be cases
+> +	output. But this approach is not foolproof. There can be cases
+>  	where it creates incorrect call stacks from incorrect matches.
+>  	The known limitations include exception handing such as
+>  	setjmp/longjmp will have calls/returns not match.
+> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> index 68e37de5fae4..8d77182fbf31 100644
+> --- a/tools/perf/Documentation/perf-script.txt
+> +++ b/tools/perf/Documentation/perf-script.txt
+> @@ -502,7 +502,7 @@ include::itrace.txt[]
+>  	perf record --call-graph lbr.
+>  	Disabled by default. In common cases with call stack overflows,
+>  	it can recreate better call stacks than the default lbr call stack
+> -	output. But this approach is not full proof. There can be cases
+> +	output. But this approach is not foolproof. There can be cases
+>  	where it creates incorrect call stacks from incorrect matches.
+>  	The known limitations include exception handing such as
+>  	setjmp/longjmp will have calls/returns not match.
+> diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
+> index e534d709cc5a..c60e615b7183 100644
+> --- a/tools/perf/Documentation/perf-top.txt
+> +++ b/tools/perf/Documentation/perf-top.txt
+> @@ -334,7 +334,7 @@ use '-e e1 -e e2 -G foo,foo' or just use '-e e1 -e e2 -G foo'.
+>  	callgraph. The option must be used with --call-graph lbr recording.
+>  	Disabled by default. In common cases with call stack overflows,
+>  	it can recreate better call stacks than the default lbr call stack
+> -	output. But this approach is not full proof. There can be cases
+> +	output. But this approach is not foolproof. There can be cases
+>  	where it creates incorrect call stacks from incorrect matches.
+>  	The known limitations include exception handing such as
+>  	setjmp/longjmp will have calls/returns not match.
