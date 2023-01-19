@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC791673D0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B85673D16
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjASPGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S230024AbjASPHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjASPGW (ORCPT
+        with ESMTP id S229689AbjASPHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:06:22 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BA87EFA
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:06:16 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NyQjk54d0z9v7c6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:58:18 +0800 (CST)
-Received: from [10.81.219.171] (unknown [10.81.219.171])
-        by APP1 (Coremail) with SMTP id LxC2BwB3_wpFXMljUWCtAA--.3338S2;
-        Thu, 19 Jan 2023 16:05:52 +0100 (CET)
-Message-ID: <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
-Date:   Thu, 19 Jan 2023 16:05:38 +0100
+        Thu, 19 Jan 2023 10:07:17 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E85283C3;
+        Thu, 19 Jan 2023 07:07:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674140836; x=1705676836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=woLpKP+4ChVEfynHbF9D8nFvbiL39hwbIGHk3XoR4Gw=;
+  b=P3XB6ijeBykCSvn+da2M8r5Xp3hkFg7vGPBURpK6l/LkMQwMgx9JZfal
+   Gmthfjh66/HrXTEvZUhaWzQmSwFosLj7KYWwUWqEmh7lLMVSdEysCAhcp
+   4sA3UzeGnH2bG5b2Own50M2SCf6F8fvzSPFYEAPbBL8tOrIzGdG4u9mpT
+   2HiIqe3Mnt/3DjD6MSbHFu+ab3UiADDCEYmxCzybFlizRaMIv4XR0FCMc
+   tkq8+htKft2HrAX0T7pLSQUlCR3XaMl5Zz45UtTyUzMotntaKMa5ikBtt
+   Op24KrbXvoJ0Tme7i8HV2OnfYVOMwzqRJHbMxOD9Q79l1SaVbn/ATjspl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325349196"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="325349196"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 07:06:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610090966"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="610090966"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 07:06:18 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pIWUa-00Bil1-1G;
+        Thu, 19 Jan 2023 17:06:16 +0200
+Date:   Thu, 19 Jan 2023 17:06:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Okan Sahin <okan.sahin@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] drivers: mfd: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <Y8lcaAFMaUaMTE2m@smile.fi.intel.com>
+References: <20230118063822.14521-1-okan.sahin@analog.com>
+ <20230118063822.14521-2-okan.sahin@analog.com>
+ <Y8eq0GtVZfVdNKYn@smile.fi.intel.com>
+ <Y8lTUegNjFZrXh1o@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwB3_wpFXMljUWCtAA--.3338S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFW3Zw4kGw43ArW7WrW7urg_yoW5tr4kpF
-        W8Kan7Ka1vyrnY9r92ywn8Z342yw1fJry8Jr1DC3W5Aw45W3yIkry0gw4Ygas8Ars2ya98
-        ZryrZF9xXrWDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8lTUegNjFZrXh1o@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 02:27:29PM +0000, Lee Jones wrote:
+> On Wed, 18 Jan 2023, Andy Shevchenko wrote:
+> > On Wed, Jan 18, 2023 at 09:38:08AM +0300, Okan Sahin wrote:
 
+...
 
-On 1/19/2023 4:13 AM, Alan Stern wrote:
-> On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/18/2023 8:52 PM, Alan Stern wrote:
->>> On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
->>>> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
->>>> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
->>>> -		fencerel(After-unlock-lock) ; [M])
->>>> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
->>> Shouldn't the po case of (co | po) remain intact here?
->> You can leave it here, but it is already covered by two other parts: the
->> ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
->> ppo, and the ordering given through pb is covered by its inclusion in
->> strong-order.
-> What about the ordering given through
-> A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
-> superseded by pb as well,
-Indeed, in fact all of A-cumul(strong-fence) is already covered through pb.
-> but it seems odd not to have it in hb.
-> In general, the idea in the memory model is that hb ordering relies on
-> the non-strong properties of fences, whereas pb relies on the properties
-> of strong fences, and rb relies on the properties of the RCU fences.
+> > > +/*
+> > > + * Copyright (c) 2022 Analog Devices, Inc.
+> > 
+> > Happy New Year!
+> 
+> If the code hasn't changed greatly since the Copyright, there is no
+> requirement to update the date.
 
-I agree in the sense that all strong-ordering operations are 
-A-cumulative and not including them in A-cumul is weird.
-On the other side  the model becomes a tiny bit smaller and simpler when 
-all ordering of prop;strong-ordering goes through a single place (pb).
+It would have made sense if we have/had seen that code in the past.
+And since it's a v3 I think this is the case.
 
-If you want, you could think of the A-cumulativity of strong ordering 
-operations as being a consequence of their strong properties. 
-Mathematically it already is the case, since
-   overwrite&ext ; cumul-fence* ; rfe ; strong-fence ; cumul-fence* ; rfe?
-is a subset of
-   prop ; strong-fence ; hb*
+-- 
+With Best Regards,
+Andy Shevchenko
 
-
-
->>>> @@ -91,8 +89,12 @@ acyclic hb as happens-before
->>>>    (* Write and fence propagation ordering *)
->>>>    (****************************************)
->>>> -(* Propagation: Each non-rf link needs a strong fence. *)
->>>> -let pb = prop ; strong-fence ; hb* ; [Marked]
->>>> +(* Strong ordering operations *)
->>>> +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
->>>> +		[After-unlock-lock] ; po ; [M])
->>> This is not the same as the definition removed above.  In particular,
->>> po-unlock-lock-po only allows one step along the locking chain -- it has
->>> rf where the definition above has co.
->> Indeed it is not, but the subsequent lock-unlock sequences are in hb*. For
->> this reason it can be simplified to just consider the directly following
->> unlock().
-> I'm not sure that argument is right.  The smp_mb__after_unlock_lock
-> needs to go after the _last_ lock in the sequence, not after the first.
-> So you don't have to worry about subsequent lock-unlock sequences; you
-> have to worry about preceding lock-unlock sequences.
-
-I formalized a proof of equivalence in Coq a few months ago, but I was 
-recalling the argument incorrectly from memory.
-I think the correct argument is that the previous po-unlock-lock-po form 
-a cumul-fence*;rfe;po sequence that starts with a po-rel.
-so any
-     prop; .... ; co ; ... ; this fence ;...
-can be rewritten to
-     prop; cumul_fence* ; po-unlock-lock-po ; this fence ;...
-and because the the first cumul-fence here needs to start with 
-po-release, the prop ;cumul-fence* can be merged into a larger prop, leaving
-     prop; po-unlock-lock-po ; this fence ;...
-
-Best wishes,
-jonas
 
