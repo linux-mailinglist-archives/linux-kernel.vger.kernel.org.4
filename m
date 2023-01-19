@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF34B672E70
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB31672E6F
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjASBtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S229787AbjASBtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjASBps (ORCPT
+        with ESMTP id S229884AbjASBps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 Jan 2023 20:45:48 -0500
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644716CCE5;
-        Wed, 18 Jan 2023 17:41:12 -0800 (PST)
-Received: by mail-il1-f179.google.com with SMTP id o15so487727ill.11;
-        Wed, 18 Jan 2023 17:41:12 -0800 (PST)
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103CD5528C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:41:58 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v3so367116pgh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 17:41:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zADmnpsuNtIYVpwfxpwV4/VpUfEveCJ2KWctJtlT7fU=;
+        b=LNTqwVnpccT/EMOVWj9IzyZDxA243X49Lg53XS5JGSwSOVlY1TF6Ueh1mG55Zkz6HX
+         zN84OJXLd79el+ZxutRyA1u5W4r9t8AHUdVbUNDiZ7aukBwVxKdkD8UWLlDsf8V0ghgT
+         MVkK+a9wTqXvSYCuH8pVRXpckyOdKKUihZdHl2qnBdyQOnux9Ng0zF3mEqweDoNPU3z4
+         d+zEUdTMLGBNrTZ0Wu+qiVDIwrUoxBpLH5PS0Z63wdEUtBPK6qOF/u+JX7oStXcJr004
+         etlr7ksTagfF9SG64GMnKx0Zv5Vs9IJANlpokxWE+ju5PdCOU4W69KeOVWt2oI3dW1Aw
+         jsRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NWx1ifZUs9l9sboCMEKp9kjSayYw0rzPlsqI93NKq28=;
-        b=T9QNXRcX4kmOjXHjg9TVOWUAUBw5ZXElRNTf1NepTjWHUV5/+XVcaBLadrIF2Bd35P
-         z0vFYQJ80Y3ZmuBvENh72cCzoFbD1TbPeooq4HD2qniBJ7cVFes/Ux/+lp22NjHSbt4I
-         edESdwIwDIyS2anq5bkUqzdFhmAoppG93BU+10uq1+nvoTBO0y6NzeL1JVSMB2TsDc7S
-         KAsllVvXyiuFmZJNrC8AKCpRqtVCiwKQK9w0T2LxaTpAYzYlRf47o4avj7e/wLdyzenF
-         fr29AWO0w/8zDiT5K6SGDaGcsFsODCPjSFvtsbXPuLMbdrLCQwHxHs6JG5m5QTgNN1pD
-         SBLQ==
-X-Gm-Message-State: AFqh2koTgqWfyjmju+0HLw6GPHpEgXj4RD2bg7lxJ4DcL6M86QmogdZy
-        Oncrlmbh1prFgB2hyvuEozM=
-X-Google-Smtp-Source: AMrXdXsJZ4ypc59+TTWzAf3aEnIx45RJ3OtVIK6QHrw6Knoq/hHcJIkl3VlsVqm4XiUC2vhhf+GLlw==
-X-Received: by 2002:a92:c54b:0:b0:308:cdc3:9370 with SMTP id a11-20020a92c54b000000b00308cdc39370mr9612880ilj.15.1674092471685;
-        Wed, 18 Jan 2023 17:41:11 -0800 (PST)
-Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
-        by smtp.googlemail.com with ESMTPSA id d27-20020a02605b000000b00374fbd37c72sm10974050jaf.147.2023.01.18.17.41.10
+        bh=zADmnpsuNtIYVpwfxpwV4/VpUfEveCJ2KWctJtlT7fU=;
+        b=Fd8SXKSgUaF7x/uCVdu5b7xIeRWzcARFcRzXumIDeljnghI39XEmEZDuNyaKRBeDG1
+         qjSqrd/YnyCGoY6W/BOlxS/BQC2C0ZxxpJwCPzEBAJKQ97gLFoDpRyAudVO8lWUPkuQj
+         BZhyei6TyGM74GPrsohA7c5hsKg1n3ssIB/yjiqD137SAkMBoMcLZuBDn+/PJySsF+T2
+         JdeREQknJrPfNoPY6nQH964EeKWNO2+Uyg+Q5ClR4On/GM/bLCh81UKb4WHI6bB2emNT
+         gBNigqCqNY6BIidvKHAZiObxZNfyARfzORkd6c+OOJNqAAMwgb0pqzj9o/4/KyIjyyTz
+         1mXw==
+X-Gm-Message-State: AFqh2kquRw6pSHUE882ACEkduvpNShf5OPMZFIKeMB9e5TWPIIalIN3T
+        vjx1jWsheHU69beCIymCGQI=
+X-Google-Smtp-Source: AMrXdXvd30Li23W1X4ve12v8MsWM7nbmYggz0o7t+4I7HvcbapsEpk1veNozzWIWgcJQBVw4Pv5lhQ==
+X-Received: by 2002:a05:6a00:10:b0:576:a74a:13c3 with SMTP id h16-20020a056a00001000b00576a74a13c3mr11296420pfk.1.1674092517155;
+        Wed, 18 Jan 2023 17:41:57 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id z20-20020aa79594000000b0058de2c315e6sm2348593pfj.158.2023.01.18.17.41.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 17:41:11 -0800 (PST)
-From:   Sungwoo Kim <iam@sung-woo.kim>
-To:     iam@sung-woo.kim
-Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
-        edumazet@google.com, johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, wuruoyu@me.com
-Subject: BUG: KASAN: null-ptr-deref in _raw_spin_lock_bh+0x4c/0xc0
-Date:   Wed, 18 Jan 2023 20:40:57 -0500
-Message-Id: <20230119014057.3879476-1-iam@sung-woo.kim>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230119013405.3870506-1-iam@sung-woo.kim>
-References: <20230119013405.3870506-1-iam@sung-woo.kim>
+        Wed, 18 Jan 2023 17:41:56 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 18 Jan 2023 15:41:55 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Richard Clark <richard.xnu.clark@gmail.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        "linux-kernel@vger.kernel.org," <linux-kernel@vger.kernel.org>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH] workqueue: fix enum type for gcc-13
+Message-ID: <Y8if47fU4C+06JNz@slm.duckdns.org>
+References: <20230117164041.1207412-1-arnd@kernel.org>
+ <99ea6e86d2594b40a6de96cc821c447b@AcuMS.aculab.com>
+ <Y8ggiF+7k0rViXcY@slm.duckdns.org>
+ <a1d48420-862e-47e6-9435-462e23bb6be3@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1d48420-862e-47e6-9435-462e23bb6be3@app.fastmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Write of size 4 at addr 0000000000000098 by task kworker/u3:0/76
+On Wed, Jan 18, 2023 at 09:32:45PM +0100, Arnd Bergmann wrote:
+> the enum type has to be compatible with 'long long' because
+> anything shorter would not fit both -1 and -1u (UINT_MAX).
+> A and B were both signed types to match the signedness of the
+> enum type, but A was actually a 32-bit integer since that is
+> sufficient, while B was also a 64-bit type since it exceeds
+> INT_MAX. Now they are both the same type.
 
-CPU: 0 PID: 76 Comm: kworker/u3:0 Not tainted 6.1.0-rc2 #129
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: hci0 hci_rx_work
-Call Trace:
- <TASK>
- dump_stack_lvl+0x7b/0xb3
- print_report+0xed/0x200
- ? __virt_addr_valid+0x5c/0x240
- ? kasan_addr_to_slab+0xd/0xa0
- ? _raw_spin_lock_bh+0x4c/0xc0
- kasan_report+0xd3/0x100
- ? _raw_spin_lock_bh+0x4c/0xc0
- kasan_check_range+0x2d3/0x310
- __kasan_check_write+0x14/0x20
- _raw_spin_lock_bh+0x4c/0xc0
- lock_sock_nested+0x3f/0x160
- ? queue_work_on+0x90/0xd0
- l2cap_sock_set_shutdown_cb+0x3d/0x60
- l2cap_disconnect_req+0x1e3/0x2e0
- l2cap_bredr_sig_cmd+0x3d2/0x5ec0
- ? vprintk_emit+0x29b/0x4d0
- ? vprintk_default+0x2b/0x30
- ? vprintk+0xdc/0x100
- ? _printk+0x67/0x85
- ? bt_err+0x7f/0xc0
- ? bt_err+0x9a/0xc0
- l2cap_recv_frame+0x7bc/0x4e10
- ? _printk+0x67/0x85
- ? bt_err+0x7f/0xc0
- ? __wake_up_klogd+0xc4/0xf0
- l2cap_recv_acldata+0x327/0x650
- ? hci_conn_enter_active_mode+0x1b7/0x1f0
- hci_rx_work+0x6b7/0x7c0
- process_one_work+0x461/0xaf0
- worker_thread+0x5f8/0xba0
- kthread+0x1c5/0x200
- ? process_one_work+0xaf0/0xaf0
- ? kthread_blkcg+0x90/0x90
- ret_from_fork+0x1f/0x30
- </TASK>
+Yeah, the new behavior makes total sense.
+
+> I don't think there is a chance they will revert to the old behavior,
+> though we could try asking for an command line flag to warn about
+> cases where this changes code generation.
+
+but the way that it's transitioning doesn't really make sense to me. We do
+phase out support for old compilers, so it isn't that difficult to manage
+this transition smoothly - add a compat option in the new versions, switch
+code later once old compilers are phased out and drop the compat flag.
+
+The way it's currently done causes situations which can't be handled
+logically - we end up having to regroup enums based on their value range
+rather than the logical type they need to be because there's no way to
+override the enum type on older compilers.
+
+Thanks.
+
+-- 
+tejun
