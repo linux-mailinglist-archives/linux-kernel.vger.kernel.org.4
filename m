@@ -2,185 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF15673CC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3596C673CC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjASOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S230225AbjASOt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjASOsy (ORCPT
+        with ESMTP id S229724AbjASOtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:48:54 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D51374971
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674139698; x=1705675698;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=j1RdAoD/wGl8iHKdRlcOQs9OkVUn7Q4Q+LreHOO1Lu0=;
-  b=Ka3zwo5jpxxgtEr133L5Yf8ruTd6IiODsiuW25I6wgZ//HfkUTsV4vWJ
-   ZDSAxYPwGpmHwXprayEXxshWKiAdSl8jgauI+wifS/Dmto8G+wHwvWPXY
-   sPr6XoeHuNJ9J4vsaPKO/j6qXdpl/8Ab+dOtoXv6PY7iVsZGSuaWbOTJL
-   +d9Txk8KDB6njUYEBXOATGmCIcn8wleQe4WF9we/anjObnZU6trylEcRZ
-   ILV9pAsMDAEyvGec+z9Utxk0W3iWqkTbyFyWArpX5ADRFa9/ax7P27s00
-   UiR5AjPteFeq169xPOZ2TQPRa7saK7udvd4yxiIoz4Ebk0NcpWwS96xHI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="305670168"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="305670168"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:48:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="784082510"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="784082510"
-Received: from sahamad-mobl1.amr.corp.intel.com (HELO [10.213.187.97]) ([10.213.187.97])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:48:15 -0800
-Message-ID: <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
-Date:   Thu, 19 Jan 2023 08:48:14 -0600
+        Thu, 19 Jan 2023 09:49:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55767AF;
+        Thu, 19 Jan 2023 06:49:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 13B49208B8;
+        Thu, 19 Jan 2023 14:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674139754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DPS4obwwsmfPtCuVpCuOX+Y34p5KNkQnrFysGNasucA=;
+        b=SXEWsqfCR02LELaF+lEocgRPIQEH0/KaC1PeLFzh7CwYvNJYGyNgbf7C47jaQjlRBmjuLv
+        lKxNBfOt22gvtIjJqCcTDyk2yxWnOXXwbl22RcLQB+YDfzjm3wxgytxod2acEX+DZgct7i
+        XZjWUySRyc/P9OmK2OuXKljEgWSTlH0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674139754;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DPS4obwwsmfPtCuVpCuOX+Y34p5KNkQnrFysGNasucA=;
+        b=0uH9M1oLQ4hpPtsy4jOkl/VNbFm+mHAJY9ZowysrEtElD8Qzzn2wo7oy2HW+PZ/FNC+rUl
+        amKX1wOF2qY4A9Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E841E139ED;
+        Thu, 19 Jan 2023 14:49:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NTwpOGlYyWPlMQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 19 Jan 2023 14:49:13 +0000
+Message-ID: <f58d5183-5dfc-c908-ac9a-baf9339c9387@suse.cz>
+Date:   Thu, 19 Jan 2023 15:49:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+ Thunderbird/102.6.1
+Subject: Re: [PATCH for 6.1 regression] mm, mremap: fix mremap() expanding for
+ vma's with vm_ops->close()
 Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
- <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
- <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
- <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Fabian Vogt <fvogt@suse.com>,
+        =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
+        stable@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <20230117101939.9753-1-vbabka@suse.cz>
+ <2f03bd25-bfa1-a8fe-558e-ae3ce22b97fa@leemhuis.info>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <2f03bd25-bfa1-a8fe-558e-ae3ce22b97fa@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> +static int cs42l42_sdw_dai_startup(struct snd_pcm_substream *substream,
->>> +                   struct snd_soc_dai *dai)
->>> +{
->>> +    struct cs42l42_private *cs42l42 =
->>> snd_soc_component_get_drvdata(dai->component);
->>> +
->>> +    if (!cs42l42->init_done)
->>> +        return -ENODEV;
->>
->> Can this happen? IIRC the ASoC framework would use
->> pm_runtime_resume_and_get() before .startup, which would guarantee that
->> the device is initialized, no?
->>
+On 1/19/23 14:37, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> On 17.01.23 11:19, Vlastimil Babka wrote:
+>> Fabian has reported another regression in 6.1 due to ca3d76b0aa80 ("mm:
+>> add merging after mremap resize"). The problem is that vma_merge() can
+>> fail when vma has a vm_ops->close() method, causing is_mergeable_vma()
+>> test to be negative. This was happening for vma mapping a file from
+>> fuse-overlayfs, which does have the method. But when we are simply
+>> expanding the vma, we never remove it due to the "merge" with the added
+>> area, so the test should not prevent the expansion.
+>> 
+>> As a quick fix, check for such vmas and expand them using vma_adjust()
+>> directly as was done before commit ca3d76b0aa80. For a more robust long
+>> term solution we should try to limit the check for vma_ops->close only
+>> to cases that actually result in vma removal, so that no merge would be
+>> prevented unnecessarily.
+>> 
+>> Reported-by: Fabian Vogt <fvogt@suse.com>
+>> Link: https://bugzilla.suse.com/show_bug.cgi?id=1206359#c35
+>> Fixes: ca3d76b0aa80 ("mm: add merging after mremap resize")
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> Cc: Jakub Matěna <matenajakub@gmail.com>
+>> Cc: <stable@vger.kernel.org>
+>> Tested-by: Fabian Vogt <fvogt@suse.com>
+>> ---
 > 
-> Yes, this can happen. Because of the way that the SoundWire enumeration
-> was implemented in the core code, it isn't a probe event so we cannot
-> call snd_soc_register_component() on enumeration because -EPROBE_DEFER
-> wouldn't be handled. So the snd_soc_register_component() must be called
-> from probe(). This leaves a limbo situation where we've registered the
-> driver but in fact don't yet have any hardware. ALSA/ASoC doesn't know
-> that we've registered before we are functional so they are happy to
-> go ahead and try to use the soundcard. If for some reason the hardware
-> failed to enumerate we can get here without having enumerated.
-
-Humm, yes, but you've also made the regmap cache-only, so is there
-really a problem?
-
-FWIW I don't see a startup callback in any other codec driver. It may be
-wrong but it's also a sign that this isn't a problem we've seen so far
-on existing Intel-based platforms.
-
+> Thx for highlighting it and CCing me.
 > 
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int cs42l42_sdw_dai_hw_params(struct snd_pcm_substream
->>> *substream,
->>> +                     struct snd_pcm_hw_params *params,
->>> +                     struct snd_soc_dai *dai)
->>> +{
->>> +    struct cs42l42_private *cs42l42 =
->>> snd_soc_component_get_drvdata(dai->component);
->>> +    struct sdw_stream_runtime *sdw_stream =
->>> snd_soc_dai_get_dma_data(dai, substream);
->>> +    struct sdw_stream_config stream_config = {0};
->>> +    struct sdw_port_config port_config = {0};
->>> +    int ret;
->>> +
->>> +    if (!sdw_stream)
->>> +        return -EINVAL;
->>> +
->>> +    /* Needed for PLL configuration when we are notified of new bus
->>> config */
->>> +    cs42l42->sample_rate = params_rate(params);
->>
->> wouldn't it be better to check if the sample_rate is supported by the
->> PLL here, instead of in the .prepare step ...
->>
-> It depends on the soundwire bus clock. We need to know both to determine
-> whether they are valid. IFF we can assume that the call to
-> sdw_stream_add_slave() will always invoke the bus_config() callback we
-> can call cs42l42_pll_config() from cs42l42_sdw_bus_config() and return
-> an error from cs42l42_sdw_bus_config() if the {swire_clk, sample_rate}
-> pair isn't valid.
-
-You lost me here. Are you saying the soundwire bus clock is only known
-in the prepare stage?
-
-
->>> +static int cs42l42_sdw_dai_set_sdw_stream(struct snd_soc_dai *dai,
->>> void *sdw_stream,
->>> +                      int direction)
->>> +{
->>> +    if (!sdw_stream)
->>> +        return 0;
->>> +
->>> +    if (direction == SNDRV_PCM_STREAM_PLAYBACK)
->>> +        dai->playback_dma_data = sdw_stream;
->>> +    else
->>> +        dai->capture_dma_data = sdw_stream;
->>> +
->>> +    return 0;
->>
->> Humm, this is interesting, you are not using the sdw_stream_data that
->> all other codecs use, but in hindsight I have no idea why we allocate
->> something to only store a pointer.
->>
+> Quick question: how fast do you think this should head towards mainline?
 > 
-> Indeed. I can see no reason to wrap this pointer in another struct when
-> we can store the pointer direct so I dropped the wrapper struct.
+> The patch landed in next today, so that step in the process is already
+> covered. But is the issue serious enough to say "send this to Linus
+> after it was a day or two in next, so it can be quickly backported to
+> stable"?
 
-I'll see if we can simplify the other codec drivers.
+I think it's not as serious as the previous one, the conditions should be
+more rare. But you made me realize I should probably reply to the "stalls in
+qemu" one in that sense. Thanks!
 
->>> +static int cs42l42_sdw_update_status(struct sdw_slave *peripheral,
->>> +                     enum sdw_slave_status status);s
->>> +{
->>> +    struct cs42l42_private *cs42l42 =
->>> dev_get_drvdata(&peripheral->dev);
->>> +
->>> +    switch (status) {
->>> +    case SDW_SLAVE_ATTACHED:
->>> +        dev_dbg(cs42l42->dev, "ATTACHED\n");
->>> +        if (!cs42l42->init_done)
->>> +            cs42l42_sdw_init(peripheral);
->>
->> unclear to me what happens is the bus suspends, how would you redo the
->> init?
->>
+>> Thorsten: this should be added to the previous regression which wasn't
+>> fully fixed by the previous patch:
+>> https://linux-regtracking.leemhuis.info/regzbot/regression/20221216163227.24648-1-vbabka@suse.cz/
+>>  mm/mremap.c | 13 ++++++++++++-
+>>  1 file changed, 12 insertions(+), 1 deletion(-)
+>> [...]
 > 
-> We don't need to re-run the init(). A regcache_sync() will restore
-> settings.
+> In that case let me just briefly drop a link to the regression, as
+> regzbot will notice that and file is as an activity.
+> 
+> https://lore.kernel.org/lkml/20221216163227.24648-1-vbabka@suse.cz/
+> 
+> And simply consider your patch submission as a new report I track
+> separately:
+> 
+> #regzbot introduced ca3d76b0aa80 ^
+> https://bugzilla.suse.com/show_bug.cgi?id=1206359#c35
+> #regzbot title mm, mremap: another issue with mremap not fully fixed
+> with the previous fix for the regression
+> #regzbot fix: mm, mremap: fix mremap() expanding for vma's with
+> vm_ops->close()
+> #regzbot ignore-activity
+> 
+> Not ideal, but that will make sure it's on regzbot radar (where way too
+> many dots appear currently, as I'm a bit behind with things... :-/ )
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
 
-ah, interesting. Other codec drivers play with specific registers that
-aren't in regmap. There's also headset calibration that's done
-differently in the first init or later.
