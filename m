@@ -2,170 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C906742F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B75674309
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjASThh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S230422AbjASTnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjASThe (ORCPT
+        with ESMTP id S230092AbjASTnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:37:34 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927884DCEC;
-        Thu, 19 Jan 2023 11:37:32 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id vw16so8389598ejc.12;
-        Thu, 19 Jan 2023 11:37:32 -0800 (PST)
+        Thu, 19 Jan 2023 14:43:15 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4589A5BA4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:43:05 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id k16so2381327wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:43:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TWUY+nGMwQRRn9qKV3OMcfKlHJ0IrJJCjkoiQnnNiJE=;
-        b=Z4OiSgGlE0/HqZproBTYFHawXPoWq6Y9lq7aytkKanyqbAxcFn/IhnzTwcBT7ufpFm
-         VgkzcQr5W2SUjcIptV7XcVBIK8opxIYkiT0aOjLx1PL8sd+qzDQu2tv9ynfiiMhu7GLZ
-         JL3/MzBzKMdWVFRVuI6OtPntTwf26zQjIBS+VvOr4dKmGYjHzhrKGL1jQ6BwKOlbcPFX
-         89gKG/t7d4PlCKlNCEHI99vESX8SPmAlXNAHNhESLWCsYqu5l2j0FmrvxRiXAZnPg0oq
-         HIEHVP76V5fHn+AArHLe9oOj4044MMzWuqloik4ZbIgA36uXKOZ/oXWo3I6xpDmg5lpX
-         Ckrw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eKem4CrvsN6UzjteZLRdzpKBaL5/XKV3SElZ27ChjVU=;
+        b=J963c0a2Puoxu9j1z0lGFtHvCheHJcNXglvr1U3HBRbhI8+ZZC9lnAQ9rhFSV59S4K
+         +SHoRI9ZBUxGgOneFBGLuvYGimULI5dWBK6lMS7Dv2EV70dwzIRwxxvEVAsE7Rd5Oh57
+         znylKtCnUV5XBknUunRRm7HIXNJMdLSFt9msEjnMhRiXU1lN10/WbGecEUzhtHoRQ+9F
+         M85I0dWKvowbBMeucSarHRsNEgJfA5O6jFJQcIS4bWdPXGnPQF2EgKiQHJTUMP//wpYq
+         4fyw3nMp2p8uWcMW+n4+horZsooGz3VUbvuZIRGMmIUuO76u50GfVQrS6zyZ1Q9aYuVi
+         el3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TWUY+nGMwQRRn9qKV3OMcfKlHJ0IrJJCjkoiQnnNiJE=;
-        b=W9aFtPAr2q1Lb0ETQJFL7BmX/40JAOFYrdGgtvywyi9yuYx0GyWHN1rH3IdwYe39n5
-         PkcgRbZi4tKi7yeC0Mf93+ReUeu0QBMiJMUW0beLE+VKLoK8XirtwoIOLrjxSLyLi3Hj
-         C3wW2Loo5DyKsrpyQbtZpV04hpkaJ1q5LI/CL/1PUzrX6zlJvr+R6hxFAyqkjhlQdL8Q
-         REuxgLPp/4stBWzOKvKUTTetyn+j7lwpJRz11tRF7SH2ZNi/nuoQ4QBOciBc7uBVbSPs
-         kpeqrs4MnYIw47TmVvVfqrbZee7bHeveR+lOEYpYPywup126A+Qxkz6baPn/yWPh/qTr
-         sDDg==
-X-Gm-Message-State: AFqh2kpbmWFldQukbWjmLAZT2P29zFD0WFseKBkvW8LWs6jBgDzDseye
-        WYi/ypcUG1aSE7xPiiHoDKk=
-X-Google-Smtp-Source: AMrXdXs7cTdwMd4l/GYKEkUZlgXHRmArxsYaAYbuWxd/uQ48tWPmsVrg2sQxrbWFBYuOW5+e25gd9g==
-X-Received: by 2002:a17:906:52d0:b0:870:5496:26c0 with SMTP id w16-20020a17090652d000b00870549626c0mr12054824ejn.34.1674157050955;
-        Thu, 19 Jan 2023 11:37:30 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c477:4300:3c6e:3915:fc5a:2ff1? (dynamic-2a01-0c23-c477-4300-3c6e-3915-fc5a-2ff1.c23.pool.telefonica.de. [2a01:c23:c477:4300:3c6e:3915:fc5a:2ff1])
-        by smtp.googlemail.com with ESMTPSA id y16-20020a1709063a9000b0084ce5d5d21bsm16722676ejd.22.2023.01.19.11.37.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 11:37:30 -0800 (PST)
-Message-ID: <c6d797f8-8177-75c7-4522-eea3da6b56d8@gmail.com>
-Date:   Thu, 19 Jan 2023 20:37:23 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eKem4CrvsN6UzjteZLRdzpKBaL5/XKV3SElZ27ChjVU=;
+        b=hyfWSk0YMFd5ZREeFZr/y1M3rd6zsy9/63Zgv17e3x4bT3H1LVH1t4olQX5v/sz2+4
+         z+Xl0u+eGmam1qzSHltQt4uX4+ukuOemNeJH4jclISzw/nZvs8I8+NTJ3qcz8uOOKYG8
+         x3w0zkBJxpHi2csSyORROXjusODDx+mf/zBornJ7J4uqHANfSiI973Tx5HW7M7Z3wOS6
+         j9HRYDvYzjyaQK0Xw6vyC1S/vDTjrtvJG/SN1uhgl+CVSrLYHy1FGBHCJeagJXclwHRp
+         vzB5hn9qOa5nKz2b+pZUDg2fBKzY2qvUW9FnVFSdR+PZn3/0PYVgT9JEzppfFVMlJzlh
+         8IeA==
+X-Gm-Message-State: AFqh2kpP7lhVhYhVhV5IoN5q7Mfl9SvR0hFG6wO/oqbRhNhQAbyJPq7N
+        3RWcKC69c7wEGRcL6rRzMkke0Zix2pjiEQb6SJ64WQ==
+X-Google-Smtp-Source: AMrXdXvRLBcTg3N1mRggUj0aMqxC2ECHD8OQdGzX9zGmxFQ14LYwePLR9DxDSA9cJ9DEvpeq13GsV0os4HYRLRzABN0=
+X-Received: by 2002:a05:600c:3583:b0:3da:221b:fc1f with SMTP id
+ p3-20020a05600c358300b003da221bfc1fmr765056wmq.175.1674157383482; Thu, 19 Jan
+ 2023 11:43:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-To:     Peter Suti <peter.suti@streamunlimited.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <52861a84-0fe2-37f0-d66a-145f2ebe1d79@gmail.com>
- <20221214134620.3028726-1-peter.suti@streamunlimited.com>
- <c6863a3e-8855-50fe-25cb-0b38bc3a05e0@gmail.com>
- <CACMGZgZY4Zb+3vHUDAS0+3r55K4_J40dtbsTPTFZMd6duBikpQ@mail.gmail.com>
- <7c4aa0d2-d8e9-416b-b2ad-f5c3c8ea33de@gmail.com>
- <CACMGZgaS7z2YoViA3jV-gVBvASSq1maiGj_6hfrJQ3zr69esgQ@mail.gmail.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v3] mmc: meson-gx: fix SDIO interrupt handling
-In-Reply-To: <CACMGZgaS7z2YoViA3jV-gVBvASSq1maiGj_6hfrJQ3zr69esgQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y8BtJzBLTpw5IR+H@x1n> <CADrL8HUi-j4ais45Xq8Jpb6a7DsWiXrKNeJfsqBRMi1Lier8xA@mail.gmail.com>
+ <Y8B8mW2zSWDDwp7G@x1n> <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
+ <CADrL8HUdg1Fr=tLEQRkDjeTzNzzSM6EPhvDgzURxSZSBMLgjoQ@mail.gmail.com>
+ <6548b3b3-30c9-8f64-7d28-8a434e0a0b80@redhat.com> <Y8gRpEonhXgqfb41@x1n>
+ <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
+ <Y8hITxr/BBMuO6WX@monkey> <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
+ <Y8l+f2wNp2gAjvYg@monkey>
+In-Reply-To: <Y8l+f2wNp2gAjvYg@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 19 Jan 2023 11:42:26 -0800
+Message-ID: <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.01.2023 14:32, Peter Suti wrote:
-> On Thu, Jan 12, 2023 at 10:27 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->>
->> On 09.01.2023 12:52, Peter Suti wrote:
->>> On Wed, Dec 14, 2022 at 10:33 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->>>>
->>>> On 14.12.2022 14:46, Peter Suti wrote:
->>>>>
->>>>> diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
->>>>> index 6e5ea0213b47..7d3ee2f9a7f6 100644
->>>>> --- a/drivers/mmc/host/meson-gx-mmc.c
->>>>> +++ b/drivers/mmc/host/meson-gx-mmc.c
->>>>> @@ -1023,6 +1023,22 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->>>>>       if (ret == IRQ_HANDLED)
->>>>>               meson_mmc_request_done(host->mmc, cmd->mrq);
->>>>>
->>>>> +     /*
->>>>> +     * Sometimes after we ack all raised interrupts,
->>>>> +     * an IRQ_SDIO can still be pending, which can get lost.
->>>>> +     *
->>>>
->>>> A reader may scratch his head here and wonder how the interrupt can get lost,
->>>> and why adding a workaround instead of eliminating the root cause for losing
->>>> the interrupt. If you can't provide an explanation why the root cause for
->>>> losing the interrupt can't be fixed, presumably you would have to say that
->>>> you're adding a workaround for a suspected silicon bug.
->>> After talking to the manufacturer, we got the following explanation
->>> for this situation:
->>
->> To which manufacturer did you talk, Marvell or Amlogic?
-> 
-> Amlogic
-> 
->>
->>> "wifi may have dat1 interrupt coming in, without this the dat1
->>> interrupt would be missed"
->>
->> I don't understand this sentence. W/o the interrupt coming in
->> the interrupt would be missed? Can you explain it?
-> 
-> So the "without this" part of that sentence referred to the patch.
-> Which means that without the patch, the interrupt can be missed.
-> 
->>
->>> Supposedly this is fixed in their codebase.
->>
->> Which codebase do you mean? A specific vendor driver? Or firmware?
-> 
-> The vendor driver from openlinux2.amlogic.com handles SDIO interrupts
-> a bit differently. It uses mmc_signal_sdio_irq()
-> 
->>
->>> Unfortunately we were not able to find out more and can't prepare a
->>> patch with a proper explanation.
->>
->> The workaround is rather simple, so we should add it.
->> It's just unfortunate that we have no idea about the root cause of the issue.
-> 
-> After doing a more long term stress test, it was revealed that this
-> patch is still not sufficient, but only masks the underlying problem
-> better. Reverting 066ecde fixes the issue fully for us (verified
-> overnight with iperf).
-> v1 and v2 also fix the issue, but v3 does not correct the bug when
-> WiFi is stressed for a longer time. And therefore it should not be
-> used.
-> Could you please give us some advice on how to investigate this further?
+On Thu, Jan 19, 2023 at 9:32 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 01/19/23 08:57, James Houghton wrote:
+> > > > > > I wonder if the following crazy idea has already been discussed: treat the
+> > > > > > whole mapping as a single large logical mapping. One reference and one
+> > > > > > mapping, no matter how the individual parts are mapped into the assigned
+> > > > > > page table sub-tree.
+> > > > > >
+> > > > > > Because for hugetlb with MAP_SHARED, we know that the complete assigned
+> > > > > > sub-tree of page tables can only map the given hugetlb page, no fragments of
+> > > > > > something else. That's very different to THP in private mappings ...
+> > > > > >
+> > > > > > So as soon as the first piece gets mapped, we increment refcount+mapcount.
+> > > > > > Other pieces in the same subtree don't do that.
+> > > > > >
+> > > > > > Once the last piece is unmapped (or simpler: once the complete subtree of
+> > > > > > page tables is gone), we decrement refcount+mapcount. Might require some
+> > > > > > brain power to do this tracking, but I wouldn't call it impossible right
+> > > > > > from the start.
+> > > > > >
+> > > > > > Would such a design violate other design aspects that are important?
+> > > >
+> > > > This is actually how mapcount was treated in HGM RFC v1 (though not
+> > > > refcount); it is doable for both [2].
+> > >
+> > > My apologies for being late to the party :)
+> > >
+> > > When Peter first brought up the issue with ref/map_count overflows I was
+> > > thinking that we should use a scheme like David describes above.  As
+> > > James points out, this was the approach taken in the first RFC.
+> > >
+> > > > One caveat here: if a page is unmapped in small pieces, it is
+> > > > difficult to know if the page is legitimately completely unmapped (we
+> > > > would have to check all the PTEs in the page table).
+> > >
+> > > Are we allowing unmapping of small (non-huge page sized) areas with HGM?
+> > > We must be if you are concerned with it.  What API would cause this?
+> > > I just do not remember this discussion.
+> >
+> > There was some discussion about allowing MADV_DONTNEED on
+> > less-than-hugepage pieces [3] (it actually motivated the switch from
+> > UFFD_FEATURE_MINOR_HUGETLBFS_HGM to MADV_SPLIT). It isn't implemented
+> > in this series, but it could be implemented in the future.
+>
+> OK, so we do not actually create HGM mappings until a uffd operation is
+> done at a less than huge page size granularity.  MADV_SPLIT just says
+> that HGM mappings are 'possible' for this vma.  Hopefully, my understanding
+> is correct.
 
-One more thought:
-When checking device tree I found that my system uses IRQ_TYPE_LEVEL_HIGH
-for the SDIO interrupt. meson-g12-common.dtsi uses IRQ_TYPE_EDGE_RISING
-in mainline Linux, however vendor kernel uses IRQ_TYPE_LEVEL_HIGH
-in meson-g12-common.dtsi. A wrong interrupt trigger type may result in
-lost interrupts.
-So you could check which trigger type your system uses for the SDIO interrupt.
-If it's IRQ_TYPE_EDGE_RISING, re-test with IRQ_TYPE_LEVEL_HIGH.
+Right, that's the current meaning of MADV_SPLIT for hugetlb.
 
+> I was concerned about things like the page fault path, but in that case
+> we have already 'entered HGM mode' via a uffd operation.
+>
+> Both David and Peter have asked whether eliminating intermediate mapping
+> levels would be a simplification.  I trust your response that it would
+> not help much in the current design/implementation.  But, it did get me
+> thinking about something else.
+>
+> Perhaps we have discussed this before, and perhaps it does not meet all
+> user needs, but one way possibly simplify this is:
+>
+> - 'Enable HGM' via MADV_SPLIT.  Must be done at huge page (hstate)
+>   granularity.
+> - MADV_SPLIT implicitly unmaps everything with in the range.
+> - MADV_SPLIT says all mappings for this vma will now be done at a base
+>   (4K) page size granularity.  vma would be marked some way.
+> - I think this eliminates the need for hugetlb_pte's as we KNOW the
+>   mapping size.
+> - We still use huge pages to back 4K mappings, and we still have to deal
+>   with the ref/map_count issues.
+> - Code touching hugetlb page tables would KNOW the mapping size up front.
+>
+> Again, apologies if we talked about and previously dismissed this type
+> of approach.
 
+I think Peter was the one who originally suggested an approach like
+this, and it meets my needs. However, I still think the way that
+things are currently implemented is the right way to go.
 
+Assuming we want decent performance, we can't get away with the same
+strategy of just passing pte_t*s everywhere. The PTL for a 4K PTE
+should be based on the PMD above the PTE, so we need to either pass
+around the PMD above our PTE, or we need to pass around the PTL. This
+is something that hugetlb_pte does for us, so, in some sense, even
+going with this simpler approach, we still need a hugetlb_pte-like
+construct.
 
+Although most of the other complexity that HGM introduces would have
+to be introduced either way (like having to deal with putting
+compound_head()/page_folio() in more places and doing some
+per-architecture updates), there are some complexities that the
+simpler approach avoids:
 
+- We avoid problems related to compound PTEs (the problem being: two
+threads racing to populate a contiguous and non-contiguous PTE that
+take up the same space could lead to user-detectable incorrect
+behavior. This isn't hard to fix; it will be when I send the arm64
+patches up.)
 
+- We don't need to check if PTEs get split from under us in PT walks.
+(In a lot of cases, the appropriate action is just to treat the PTE as
+if it were pte_none().) In the same vein, we don't need
+hugetlb_pte_present_leaf() at all, because PTEs we find will always be
+leaves.
 
+- We don't have to deal with sorting hstates or implementing
+for_each_hgm_shift()/hugetlb_alloc_largest_pte().
+
+None of these complexities are particularly major in my opinion.
+
+This might seem kind of contrived, but let's say you have a VM with 1T
+of memory, and you find 100 memory errors all in different 1G pages
+over the life of this VM (years, potentially). Having 10% of your
+memory be 4K-mapped is definitely worse than having 10% be 2M-mapped
+(lost performance and increased memory overhead). There might be other
+cases in the future where being able to have intermediate mapping
+sizes could be helpful.
+
+> > > When I was thinking about this I was a bit concerned about having enough
+> > > information to know exactly when to inc or dec counts.  I was actually
+> > > worried about knowing to do the increment.  I don't recall how it was
+> > > done in the first RFC, but from a high level it would need to be done
+> > > when the first hstate level PTE is allocated/added to the page table.
+> > > Right?  My concern was with all the places where we could 'error out'
+> > > after allocating the PTE, but before initializing it.  I was just thinking
+> > > that we might need to scan the page table or keep metadata for better
+> > > or easier accounting.
+> >
+> > The only two places where we can *create* a high-granularity page
+> > table are: __mcopy_atomic_hugetlb (UFFDIO_CONTINUE) and
+> > copy_hugetlb_page_range. RFC v1 did not properly deal with the cases
+> > where we error out. To correctly handle these cases, we basically have
+> > to do the pagecache lookup before touching the page table.
+> >
+> > 1. For __mcopy_atomic_hugetlb, we can lookup the page before doing the
+> > PT walk/alloc. If PT walk tells us to inc the page ref/mapcount, we do
+> > so immediately. We can easily pass the page into
+> > hugetlb_mcopy_atomic_pte() (via 'pagep') .
+> >
+> > 2. For copy_hugetlb_page_range() for VM_MAYSHARE, we can also do the
+> > lookup before we do the page table walk. I'm not sure how to support
+> > non-shared HGM mappings with this scheme (in this series, we also
+> > don't support non-shared; we return -EINVAL).
+> > NB: The only case where high-granularity mappings for !VM_MAYSHARE
+> > VMAs would come up is as a result of hwpoison.
+> >
+> > So we can avoid keeping additional metadata for what this series is
+> > trying to accomplish, but if the above isn't acceptable, then I/we can
+> > try to come up with a scheme that would be acceptable.
+>
+> Ok, I was thinking we had to deal with other code paths such as page
+> fault.  But, now I understand that is not the case with this design.
+>
+> > There is also the possibility that the scheme implemented in this
+> > version of the series is acceptable (i.e., the page_mapcount() API
+> > difference, which results in slightly modified page migration behavior
+> > and smaps output, is ok... assuming we have the refcount overflow
+> > check).
+> >
+> > >
+> > > I think Peter mentioned it elsewhere, we should come up with a workable
+> > > scheme for HGM ref/map counting.  This can be done somewhat independently.
+> >
+> > FWIW, what makes the most sense to me right now is to implement the
+> > THP-like scheme and mark HGM as mutually exclusive with the vmemmap
+> > optimization. We can later come up with a scheme that lets us retain
+> > compatibility. (Is that what you mean by "this can be done somewhat
+> > independently", Mike?)
+>
+> Sort of, I was only saying that getting the ref/map counting right seems
+> like a task than can be independently worked.  Using the THP-like scheme
+> is good.
+
+Ok! So if you're ok with the intermediate mapping sizes, it sounds
+like I should go ahead and implement the THP-like scheme.
+
+- James
