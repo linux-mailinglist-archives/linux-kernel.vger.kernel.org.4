@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426C26743B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8357F6743B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjASUvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S230320AbjASUvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjASUuw (ORCPT
+        with ESMTP id S229971AbjASUvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:50:52 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F4993E2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:50:43 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-482d3bf0266so31084047b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:50:43 -0800 (PST)
+        Thu, 19 Jan 2023 15:51:02 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979BD37F04
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:51:01 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id 38-20020a630b26000000b004773803dda1so1529541pgl.17
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:51:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I5zKIgdYxLOeIw+F0RNN/Gej7dLsvMuoifdDKOUDvn8=;
-        b=bfk8GfyqJ7JqDF4/qX9DAE8lNvs2ToBrLSEIek8c1xehWOtV7FDrMbE5/P+Pcc31pt
-         4o/2T/juZKOkEAeQEFMjl7cd3kqvkrAnY1idI44/B1aDhDMwhSZca6BD/7FqplSxAFzL
-         Rm36/WlSC10KKls+ow+5fIGpkrL4VimFnoRRKjiIzR2RpOrE+4JB4dTlQNUdMkx1E3vt
-         fSO61ImCFbVxMOPAFVFKwgrilXgBWv/oNSDl92yCm82P0m38nRjsO8OL47fDRgBJlB3a
-         iexE95ZxSh6DQw9SqW5KqrYp/NblNC8x2ZrE+Ljq4PwNWRjXa802D30gdEGlYQjlgQro
-         RfHQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XsNKOZkXicuUiWtCUwXDxRNTwl8e+lP+GlMNu/Zjg6M=;
+        b=JF8NAJSFnN55aB49k7/Uv/peGr/u7pSGRAMLm4JpTT83MaFh90yvAduttmZCb6BwHK
+         t75bfnPw7ZPhC6ASYCKjOWRQ57+FbZtWIF2D801w/Tw1Wvv4fMdA7cCcz4kNwiu4mTMs
+         2HNcfs4P7uP5DgdmSE2yE9v3IE45bVlHqKcEdIFADNd9GYzp3JjRTDUnuij/uHgfTd41
+         Gzc7X8fsplVxQmdZxq+nCRZedaGXAaK/SQCAlU50jMepBJtGuNlRfaI78x92soGJLQsg
+         Bg5U9I4f/vbZJ7CkoMUc9+Oef9zVN3/w3O/FycYVMRSWmMHAKFz7io7Zxubv9cO0ATvb
+         7U9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I5zKIgdYxLOeIw+F0RNN/Gej7dLsvMuoifdDKOUDvn8=;
-        b=Ut04DaqxyftLW2GqtPP6xzuUefbv2f/aFNl0nh4XZsRqRMCOK5VRmncOvPI6al+36S
-         Hs1MIgTVVootIZlC3cQjOzyFByFMtg2Qas/RWaU6pN/9bLKo2rkk/tV1p8v4QN+ebl13
-         fapNVlFLn+OOtvp5xN9LC5a9hBo3PKRdhQYyL0Gcpg8mKLj9+pyDynMhj2cvW96yTeyI
-         aSLurNP46i+wViTegVTDtM/Iq+CQ43Ruuw+wZ/BLiKYIFYxULiqz28c/ZxfP19rEIWlS
-         Zpju/yezCKlhht1y+h/DW6C6qye3YvWMb+YUYkvFAGx+6bNzZItp+EEwju5mFe0g/R3P
-         V1qQ==
-X-Gm-Message-State: AFqh2koeToEFfexAfWxDubUh2Yn+KAQ2/peCvWWviT4adzqxs4T00iZ9
-        y82winfgJQyTvZXbcPM7Fq64bbSbbQ4=
-X-Google-Smtp-Source: AMrXdXvdAmawkY65N0z8ChOhh03gGqiCHYC0ZxDh4xBZrwQh4i+3/4czj/veJ3RvoTtxKatt9dQA1juQd1I=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XsNKOZkXicuUiWtCUwXDxRNTwl8e+lP+GlMNu/Zjg6M=;
+        b=v4ie7F8uDMLUTqAkkkgk+sl69DHMGv7t4p5+o+bihFAjx8nf97+GtOvXBAjYSozJH/
+         O7MIYeAd1YjBmAMI1HubbdUQLRyrTptyolWJL3uRvXzVZwaQlZjFkApsZ71JbajqsCTn
+         f7PsjL0bgLj4n3fhpFJU3P+uFTktj5MfRv/kpa5nYradSMc+VIFjwBDn/OkKMbQfqKGX
+         JPwq34KH8YwqetNdmd+jvZubJ1h7D4NXav1n0QNSfmFUIgqrl+aD2QkyNc2vGozAfByb
+         Kl28vKQUFKj1TqCm3jl402RJsos7Y8vAOVgSJuukhT+iBvpQIMsuGKeLu9ZG96Erf+ha
+         56qw==
+X-Gm-Message-State: AFqh2kpFMI4DwfP/40J/fhs+WNZ+lK9XVSEOLUEfaYBn0G2otSPiF/9i
+        yGCsFx2MXyDiv2QGFkD23Y4RAJi4VR0=
+X-Google-Smtp-Source: AMrXdXt00r6KEjTmHH+Xwy4v/JD/mxOBK32bvnMYN1yS2pn4RGD9SGTHp9Qit1Etf++FfDA6vUdtwX9BXvk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:d248:0:b0:4ce:b871:b32f with SMTP id
- m8-20020a81d248000000b004ceb871b32fmr1502469ywl.328.1674161443092; Thu, 19
- Jan 2023 12:50:43 -0800 (PST)
-Date:   Thu, 19 Jan 2023 20:48:50 +0000
-In-Reply-To: <20220901211811.2883855-1-jmattson@google.com>
+ (user=seanjc job=sendgmr) by 2002:a17:902:ab94:b0:194:6417:cd27 with SMTP id
+ f20-20020a170902ab9400b001946417cd27mr1100464plr.34.1674161461022; Thu, 19
+ Jan 2023 12:51:01 -0800 (PST)
+Date:   Thu, 19 Jan 2023 20:48:52 +0000
+In-Reply-To: <20230118195905.gonna.693-kees@kernel.org>
 Mime-Version: 1.0
-References: <20220901211811.2883855-1-jmattson@google.com>
+References: <20230118195905.gonna.693-kees@kernel.org>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <167409017216.2371531.17640004005999578366.b4-ty@google.com>
-Subject: Re: [PATCH v3 1/2] x86/cpufeatures: Add macros for Intel's new fast
- rep string features
+Message-ID: <167409066308.2374724.17477861672467900544.b4-ty@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Replace 0-length arrays with flexible arrays
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)" 
-        <kvm@vger.kernel.org>, Jim Mattson <jmattson@google.com>
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -83,20 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Sep 2022 14:18:06 -0700, Jim Mattson wrote:
-> KVM_GET_SUPPORTED_CPUID should reflect these host CPUID bits. The bits
-> are already cached in word 12. Give the bits X86_FEATURE names, so
-> that they can be easily referenced. Hide these bits from
-> /proc/cpuinfo, since the host kernel makes no use of them at present.
+On Wed, 18 Jan 2023 11:59:09 -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1]. Replace struct kvm_nested_state's
+> "data" union 0-length arrays with flexible arrays. (How are the
+> sizes of these arrays verified?) Detected with GCC 13, using
+> -fstrict-flex-arrays=3:
 > 
+> arch/x86/kvm/svm/nested.c: In function 'svm_get_nested_state':
+> arch/x86/kvm/svm/nested.c:1536:17: error: array subscript 0 is outside array bounds of 'struct kvm_svm_nested_state_data[0]' [-Werror=array-bounds=]
+>  1536 |                 &user_kvm_nested_state->data.svm[0];
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/uapi/linux/kvm.h:15,
+>                  from include/linux/kvm_host.h:40,
+>                  from arch/x86/kvm/svm/nested.c:18:
+> arch/x86/include/uapi/asm/kvm.h:511:50: note: while referencing 'svm'
+>   511 |                 struct kvm_svm_nested_state_data svm[0];
+>       |                                                  ^~~
 > 
+> [...]
 
-Applied to kvm-x86 misc, thanks!
+Applied to kvm-x86 misc, thanks!  Based on the linux-next complaint, I assume
+you (temporarily?) applied this to your tree as well.  Holler if I've confused
+you :-)
 
-[1/2] x86/cpufeatures: Add macros for Intel's new fast rep string features
-      https://github.com/kvm-x86/linux/commit/751b1e1ee8e9
-[2/2] KVM: x86: Expose CPUID.(EAX=7,ECX=1).EAX[12:10] to the guest
-      https://github.com/kvm-x86/linux/commit/bbbe171ac12f
+[1/1] KVM: x86: Replace 0-length arrays with flexible arrays
+      https://github.com/kvm-x86/linux/commit/2a8c2de0544e
 
 --
 https://github.com/kvm-x86/linux/tree/next
