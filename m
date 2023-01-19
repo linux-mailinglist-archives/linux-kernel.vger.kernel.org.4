@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007B3674429
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803D3674430
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjASVSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S229711AbjASVU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:20:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjASVR3 (ORCPT
+        with ESMTP id S229974AbjASVTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:17:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4354DBE8;
-        Thu, 19 Jan 2023 13:12:34 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674162752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rRUXLP0p0WQ+Qd4xVEuRKMl25ggID9YoYcEY3DCIiik=;
-        b=mdQ7CD0wRJvfaZDOr0f82Dc4967iwC75I1+s5lDCu1fHHwtrp+IBba8UPSoQ/va3j4Qar2
-        ATGu2nZLLKa0vJ8CheBHLvt0I89xHSG06ZUusQKDPY104va7qqUjwYfiuIUukk+LaqO7Gu
-        N+aHnCbtSnW+e8Smx0L+A2DiKy1AOSyLQ5QGRIN4vgJHVE1sRkt9jT/0k9LahiDV7T+AiK
-        jKmIL8dmtVDNgeoMh+UAXcZ37mv49o4hNCz9KdPCGAyDUP9ZfpqnymsWZ0f3dG4LxhFiyw
-        RTndkgdz2BKS/FhRmtxFB9hP9YbenuT2IOAVALIMh4inh4bZRqxisS45FivGfA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674162752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rRUXLP0p0WQ+Qd4xVEuRKMl25ggID9YoYcEY3DCIiik=;
-        b=0BJ5w/p0x778LsQ1MznxzGrIdB3OE1QGABAUfN3vpOmJUgdDINUgQsr9tLqZGxSzWuC+ct
-        ivl26is4VR39BBBw==
-To:     Igor Mammedov <imammedo@redhat.com>,
-        "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Cc:     linux-kernel@vger.kernel.org, amakhalov@vmware.com,
-        ganb@vmware.com, ankitja@vmware.com, bordoloih@vmware.com,
-        keerthanak@vmware.com, blamoreaux@vmware.com, namit@vmware.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Lewis Caroll <lewis.carroll@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>, x86@kernel.org,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2] x86/hotplug: Do not put offline vCPUs in mwait idle
- state
-In-Reply-To: <20230116155526.05d37ff9@imammedo.users.ipa.redhat.com>
-References: <20230116060134.80259-1-srivatsa@csail.mit.edu>
- <20230116155526.05d37ff9@imammedo.users.ipa.redhat.com>
-Date:   Thu, 19 Jan 2023 22:12:31 +0100
-Message-ID: <87bkmui5z4.ffs@tglx>
+        Thu, 19 Jan 2023 16:19:38 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6C3A9592
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:13:23 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 78so2595939pgb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:13:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXQAX4zgQIEcR46hfecs8ivLI9Fp7qzLdoZtzRMFxAM=;
+        b=LeGGy9TXclqavq1GJEP5BeJuqLAP77mJj9M/dx+YZB1k8oz48n4eWPGqVlYjqDCLRE
+         41YHxOMQmIPn4GecoCfNdSfjX7LtOwzw481wfJI+TUHrlJT0YXSVbMTSxk7vLqaMm35k
+         isUkT8z/Zm8eLWKwPPOPPE3qKEIo5tMt4u/U9Z2tA27ZMD9AbBVh5NaY8RcniOdcvUMi
+         pyrAFAChvhZharJnDgULt0wPu06u8xTrPVKuwTv/MbeonFQrYfzcIF/B0ce5rWIFQ39h
+         ubIZ7WeGiuR3cNGBk8p1LMXvjgWovU46wbhWELbGrWsie3y+NdQUdLbxAI2m+8DqNVzX
+         1Jow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fXQAX4zgQIEcR46hfecs8ivLI9Fp7qzLdoZtzRMFxAM=;
+        b=DeXByVsi6G8qchel4ltwQh0eHqjOljWXDcm8q7Mz1+bxdkefjUe1DVX8kC3tYKz8ba
+         WxkhQt1bwjvSXNXKTdrUjdwWKikCy4VJdxaOwdjfCif9tcbXfyXdqYta299ZaeYStkmS
+         GcsbriEwMmygMxIG2YjfZGKRn/NRRwDf7LvdD2wJkFpjdsgFZ2d+63cPw197snMMB9BA
+         SO4vMxJ3sjbWpm23nKCsOBLrnLGBNeLvJF2sPKi5f1gX+Fv9XxQ1d8tT/iZR3ISO3G6k
+         WLAfdvGhOQqRFxN04Q8Gf74fhtwd/Kh+wZ4f0f53bpoi3IrqTJv8EjYSQzUxGWGWTk4z
+         +mQA==
+X-Gm-Message-State: AFqh2kpx+BGdlxa88d+Qs/NEuQ5osPRqiTT5edMluPFub2RRHOBiTWsY
+        vysY2PeHXGBuLEv7PUTAmiE=
+X-Google-Smtp-Source: AMrXdXumu9XC7Z8ZOUJf2HdYTRDa5zAIDrKrYOpAsbDGhZlQd+VrdxHeJwh7Lw8m+T9WViOxlLj1cw==
+X-Received: by 2002:a05:6a00:f91:b0:583:319a:4413 with SMTP id ct17-20020a056a000f9100b00583319a4413mr13329053pfb.24.1674162800057;
+        Thu, 19 Jan 2023 13:13:20 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id 66-20020a620645000000b00581172f7456sm7056240pfg.56.2023.01.19.13.13.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 13:13:19 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/dma: Drop unbalanced obj unref
+Date:   Thu, 19 Jan 2023 13:13:25 -0800
+Message-Id: <20230119211325.2851211-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16 2023 at 15:55, Igor Mammedov wrote:
-> "Srivatsa S. Bhat" <srivatsa@csail.mit.edu> wrote:
->> Fix this by preventing the use of mwait idle state in the vCPU offline
->> play_dead() path for any hypervisor, even if mwait support is
->> available.
->
-> if mwait is enabled, it's very likely guest to have cpuidle
-> enabled and using the same mwait as well. So exiting early from
->  mwait_play_dead(), might just punt workflow down:
->   native_play_dead()
->         ...
->         mwait_play_dead();
->         if (cpuidle_play_dead())   <- possible mwait here                                              
->                 hlt_play_dead(); 
->
-> and it will end up in mwait again and only if that fails
-> it will go HLT route and maybe transition to VMM.
+From: Rob Clark <robdclark@chromium.org>
 
-Good point.
+In the error path, drm_gem_dma_mmap() is dropping an obj reference that
+it doesn't own.
 
-> Instead of workaround on guest side,
-> shouldn't hypervisor force VMEXIT on being uplugged vCPU when it's
-> actually hot-unplugging vCPU? (ex: QEMU kicks vCPU out from guest
-> context when it is removing vCPU, among other things)
+Fixes: f5ca8eb6f9bd ("drm/cma-helper: Implement mmap as GEM CMA object functions")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/drm_gem_dma_helper.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-For a pure guest side CPU unplug operation:
-
-    guest$ echo 0 >/sys/devices/system/cpu/cpu$N/online
-
-the hypervisor is not involved at all. The vCPU is not removed in that
-case.
-
-So to ensure that this ends up in HLT something like the below is
-required.
-
-Note, the removal of the comment after mwait_play_dead() is intentional
-because the comment is completely bogus. Not having MWAIT is not a
-failure. But that wants to be a seperate patch.
-
-Thanks,
-
-        tglx
----        
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 55cad72715d9..3f1f20f71ec5 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1833,7 +1833,10 @@ void native_play_dead(void)
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
+diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c b/drivers/gpu/drm/drm_gem_dma_helper.c
+index 1e658c448366..784356d6f39d 100644
+--- a/drivers/gpu/drm/drm_gem_dma_helper.c
++++ b/drivers/gpu/drm/drm_gem_dma_helper.c
+@@ -544,8 +544,6 @@ int drm_gem_dma_mmap(struct drm_gem_dma_object *dma_obj, struct vm_area_struct *
+ 				  dma_obj->dma_addr,
+ 				  vma->vm_end - vma->vm_start);
+ 	}
+-	if (ret)
+-		drm_gem_vm_close(vma);
  
--	mwait_play_dead();	/* Only returns on failure */
-+	if (this_cpu_has(X86_FEATURE_HYPERVISOR))
-+		hlt_play_dead();
-+
-+	mwait_play_dead();
- 	if (cpuidle_play_dead())
- 		hlt_play_dead();
+ 	return ret;
  }
+-- 
+2.38.1
 
-
-  
