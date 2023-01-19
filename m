@@ -2,156 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A332673F12
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3099A673F17
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjASQjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S230309AbjASQkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 11:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjASQje (ORCPT
+        with ESMTP id S229689AbjASQkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:39:34 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E74B4ED19
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:39:32 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so1701653wmc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:39:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=flCnIliu3iTWinWqZKjSC4lmc9rb7ayevnIotzFYCWI=;
-        b=Hy2CExWui+HpZKSlyvCRqhCmkhM0iYSBz3Gujxv6sd/OSmc/V2uCkvVZgrfNAhkEBg
-         JCSejuljnFRtHsmJRiz+ZRmQmbJoFrqndEamihTkusk+8r73akv48Xu6O4ij9D3PufSf
-         4xcwSa53Crwv8fclWb5YuzW8gM7oc96LbQPjN0xgtzgpUlZa/LRqJOZeAS0KRF7TNVSw
-         wqleFX5leMPIGhBFUarwc934JnYZCPR7zCpNy9kbHRnEGP4A6KOW+Gej/cbQKcHLeTTF
-         Wh/XSY/qwZetU44VSZUsmzrRRTTtjEzC5P8H9YEzv/WqonY1suEwQGLkTvCsmVrXfR4R
-         +WnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=flCnIliu3iTWinWqZKjSC4lmc9rb7ayevnIotzFYCWI=;
-        b=ZfdXqd/YMegojzXF1nv3vItGFDwsSjaQUb06lY7FBlWpydBkPcEODMt/hV4HJuXSr0
-         k23BfocYulKmWrEuUWM6h51LnV9AD/Ht/p70zhux8UhEd4O/3U4sDsZl7NfN5Y5O01WO
-         VVECB0ShxoUMlNd+sGfcRsFfHavClHwUygMkkgjdlaIeHMWWCSwYOvnLfoUQF3pqdFVB
-         36hwfGKgG4Zawemcrs51AliQkJ9SpBr5wVVrqvPFWMb6mT5T4jMzA90fz8crsA/9ndf5
-         89DqO0Ft9Hy/rdrSqFH5ivkS09g+DxE49esXlWH5GPgnDZxFHbygjaDdkcOlY3lTV/fL
-         w1cA==
-X-Gm-Message-State: AFqh2kqCOqmkd4MHwmZX4gaVLrcyuobFCoe/0FeCAFtJ2EAzueXbIWtj
-        oJJjGgePQD3KX5ngEi47A827FA==
-X-Google-Smtp-Source: AMrXdXsedc12wFrc9SXMJvJbhGtzKzaIIvBgMGZ6Iz9DRUVFzJwoDq+wH/AnMCJ0QI14ucqk15sPUw==
-X-Received: by 2002:a05:600c:1906:b0:3da:1d51:ef9d with SMTP id j6-20020a05600c190600b003da1d51ef9dmr11323730wmq.15.1674146370951;
-        Thu, 19 Jan 2023 08:39:30 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l36-20020a05600c1d2400b003d1e1f421bfsm6274378wms.10.2023.01.19.08.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 08:39:30 -0800 (PST)
-Message-ID: <54674d67-7be3-0abc-4252-e7f4158f56f2@linaro.org>
-Date:   Thu, 19 Jan 2023 17:39:29 +0100
+        Thu, 19 Jan 2023 11:40:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235AB3D91D;
+        Thu, 19 Jan 2023 08:40:42 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JG7DKJ017633;
+        Thu, 19 Jan 2023 16:40:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dIXQyuOOZ/H3pvQtiEYavSez6rN+kpLvatTL5kYH34k=;
+ b=l40gJG3TMCXXHRlB2hIKYbqRYd2bee4XKfKenTT+lWVmVZQnG4UIihJdJT57ougoB2j+
+ Bly+PH0TwQ1ivUqduFa6HWC+aAfKppVDDoZCt00Vq51kT+ZUVCdyhOpzY9C2nL3a8ce8
+ HdRWdsJSD7O7bmLETj6uLksR3JtiMTVABpPnLXceAf5ylx1xPjMSWYh3icJ18az7ViVP
+ Q0qDOEtRZxKq2TJT+JwF9+hrCZXWfJrikUw7PgCobIY2iOeiLds4ULzz+l3Z6CUueyeZ
+ D/Nh3I941HGUO8j53kAwxTxx9FXs53v6uStDI5LNWJArVFT2z2na63n4d49ktJ0uVN+W vQ== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78qs9x0w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:40:30 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JFWa0c014458;
+        Thu, 19 Jan 2023 16:40:29 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17d8pe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 16:40:29 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JGeRCo28901908
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 16:40:27 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7FBBA58068;
+        Thu, 19 Jan 2023 16:40:27 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 613CB58059;
+        Thu, 19 Jan 2023 16:40:25 +0000 (GMT)
+Received: from [9.160.87.67] (unknown [9.160.87.67])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 16:40:25 +0000 (GMT)
+Message-ID: <0e9f6597-305d-b08d-e153-13ba9ae46ab2@linux.ibm.com>
+Date:   Thu, 19 Jan 2023 11:40:24 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 4/7] s390/pci: Use dma-iommu layer
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
- <20230118211123.111493-3-daniel.lezcano@linaro.org>
- <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
- <db701c97-883e-f231-68fa-c851c6a1a862@linaro.org>
- <CAJZ5v0jFQv09MQw8Z0gn1=Yf3JJD=BWKy3+Xy7RWUy1NXAK7wg@mail.gmail.com>
- <85e0a85d-6935-11cc-8396-4c3e425188f2@linaro.org>
- <CAJZ5v0gR-Z1DNcpRCkK6KapjU_F87RZKpE0ssQn1Y5BiH+sG_g@mail.gmail.com>
- <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
- <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20230104120543.308933-1-schnelle@linux.ibm.com>
+ <20230104120543.308933-5-schnelle@linux.ibm.com>
+ <71b9e85d-960f-7403-0113-135746127f3b@linux.ibm.com>
+ <69047c319c6cb2afd7331daeb7fc8459fdd34f80.camel@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <69047c319c6cb2afd7331daeb7fc8459fdd34f80.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MCGFh9H8R5Ex0YgjDidpBNdxwUeRVsZ-
+X-Proofpoint-ORIG-GUID: MCGFh9H8R5Ex0YgjDidpBNdxwUeRVsZ-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=810
+ priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190134
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 16:05, Rafael J. Wysocki wrote:
-> On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 19/01/2023 14:24, Rafael J. Wysocki wrote:
->>> On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 19/01/2023 13:11, Rafael J. Wysocki wrote:
->>>>> On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
->>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>
->>>>>> On 19/01/2023 08:41, Zhang, Rui wrote:
->>>>>>> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
->>>>>>>> If the thermal framework fails to initialize, the mutex can be used
->>>>>>>> by
->>>>>>>> the different functions registering a thermal zone anyway.
->>>>>>>
->>>>>>> Hmm, even with no governors and unregistered thermal sysfs class?
->>>>>>>
->>>>>>> IMO, thermal APIs for registering a thermal_zone/cooling_device should
->>>>>>> yield early if thermal_init fails.
->>>>>>> For other APIs that relies on a valid
->>>>>>> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
->>>>>>> be changed.
->>>>>>>
->>>>>>> what do you think?
->>>>>>
->>>>>> I think you are right.
->>>>>>
->>>>>> It would be nice if we can check if the thermal class is registered and
->>>>>> bail out if not. But there is no function to check that AFAICS.
->>>>>>
->>>>>> Alternatively we can convert the thermal class static structure to a
->>>>>> pointer and set it to NULL in case of error in thermal_init() ?
->>>>>
->>>>> It doesn't matter if this is a NULL pointer or a static object that's
->>>>> clearly marked as unused.
->>>>
->>>> Without introducing another global variable, is it possible to know if
->>>> the class is used or not ?
+On 1/19/23 11:33 AM, Niklas Schnelle wrote:
+> On Tue, 2023-01-17 at 10:09 -0500, Matthew Rosato wrote:
+>> On 1/4/23 7:05 AM, Niklas Schnelle wrote:
+>>> While s390 already has a standard IOMMU driver and previous changes have
+>>> added I/O TLB flushing operations this driver is currently only used for
+>>> user-space PCI access such as vfio-pci. For the DMA API s390 instead
+>>> utilizes its own implementation in arch/s390/pci/pci_dma.c which drives
+>>> the same hardware and shares some code but requires a complex and
+>>> fragile hand over between DMA API and IOMMU API use of a device and
+>>> despite code sharing still leads to significant duplication and
+>>> maintenance effort. Let's utilize the common code DMAP API
+>>> implementation from drivers/iommu/dma-iommu.c instead allowing us to
+>>> get rid of arch/s390/pci/pci_dma.c.
 >>>
->>> If thermal_class.p is cleared to NULL on class_register() failures in
->>> thermal_init() (unfortunately, the driver core doesn't do that, but
->>> maybe it should - let me cut a patch for that), then it can be used
->>> for that.
+>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+>>> index ef38b1514c77..6b0fe8761509 100644
+>>> --- a/arch/s390/pci/pci.c
+>>> +++ b/arch/s390/pci/pci.c
+>>> @@ -124,7 +124,11 @@ int zpci_register_ioat(struct zpci_dev *zdev, u8 dmaas,
+>>>  
+>>>  	WARN_ON_ONCE(iota & 0x3fff);
+>>>  	fib.pba = base;
+>>> -	fib.pal = limit;
+>>> +	/* Work around off by one in ISM virt device */
+>>> +	if (zdev->pft == 0x5 && limit > base)
 >>
->> It should be in class_unregister() too, right ?
+>> Nit: maybe a named #define for the ISM pft rather than hard-coding 0x5 here
 >>
->> And is it possible to add a class_is_registered() ? in order to prevent
->> accessing class structure internals ?
 > 
-> I suppose so.
-> 
-> And we'd like it to be used some places like
-> thermal_zone_device_register_with_trips(), wouldn't we?
+> Hmm, I agree in principle but not sure where to put this #define. Maybe
 
-Yes, in thermal_zone_device_register_with_trips() and 
-thermal_cooling_device_register().
+I would suggest pci_clp.h since the value is coming from a clp.
+
+> also important to mention that the off-by-one has actually been fixed
+> in current firmware but of course we still have to support broken
+> devices and the workaround still works with fixed ISM.
+
++1 
 
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
