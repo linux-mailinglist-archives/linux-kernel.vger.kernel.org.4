@@ -2,154 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC8467427C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9820F674287
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjASTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        id S231324AbjASTPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjASTNg (ORCPT
+        with ESMTP id S231210AbjASTO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:13:36 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9648BA85;
-        Thu, 19 Jan 2023 11:12:37 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r205so2495461oib.9;
-        Thu, 19 Jan 2023 11:12:37 -0800 (PST)
+        Thu, 19 Jan 2023 14:14:29 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057BF485B6;
+        Thu, 19 Jan 2023 11:13:09 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id a9so3864049ybb.3;
+        Thu, 19 Jan 2023 11:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IUy7GLABZ5KCsScXO19g5oGUisQlGEvz/MbBgHRXn0=;
-        b=UpNfO+fLo0XtRNq+Zjx0IvXDu61ZVqKlEhHq5TH7jefsHQFH8m7qeJvJa5NBXqflIY
-         LiZStuvaYyz9nQAr/njjPZxgqSDCu2HSAA0mu3VEq1BBU2lq0NyzLus46sephBrBwZ+H
-         JB5Nr7nZpyDM4yN0fwHBHqwnWobnYP0T4rFNt0zC4HqfOx2RdoYZTeHyFwSKPbQHqE9Z
-         6Z8ZwBcJlTvUSdionPgEFDNkgujetb30X3cI8j7k7UUbwbrejSwU4cYF1BZSdbEOkbxK
-         PX4j5pT//oReOn/yhDleAzoB2jkD7ef2KKfTicRU3NDTUY4mXcvXo3VVnlJoqLXIofMy
-         Hf9g==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f66M40S9HUafYr8hVajn8DVAsyr9TRcLXW/GMSQFYTg=;
+        b=TfdQOo0L5L7tRei4gTZQorDhEqkwLnIcUwjUkQ5nAUhG3adcGnD6aApx5mVazXjz8G
+         BKhASFxhlmU79yGq2yYeB7ddF5FQzvqefzN90g3fCYjYV/9sFaZ0LDQ3hJo2xA6cu2GN
+         lld1fXQg5qPS2DBEMwaxNTCpjmFZcbBeKU49OPbifSyy2uMi1ixSRTiydAInHXYJKKzE
+         wvBavFk9xhLq2N00xTLR41SV4jXSPGVygDS47MqvDluRTjxkeRN0CfD1LQeH9FKLjLpZ
+         dkLR7EexO2NPd68tPR7TjSKVS1btSYjLdr1QXKL8PGFhIoS9WrTU13eWGZ+1Yu/ekS5D
+         t3sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9IUy7GLABZ5KCsScXO19g5oGUisQlGEvz/MbBgHRXn0=;
-        b=qpCNBOmA/EGtOynr3gbAPVLxMoMKYlxft4xnBcqn6u41wQvpibhBDDA7b8NIjtdJbF
-         qKVuNeyHsqK7kuc8jzAPk3zO+R+U0A8eXQZ7cdTi8PzPFmixvkfPrTuVygGrULbhAumG
-         QOOWPRLkt2546QmjTzbzTJ4MLQKnWeizcxi/mUbzF+e/ou95uuY3ICKkBbAWwGCsEZxW
-         GArg41WBx+oW66hcrsae3aSIQqv1GKf4vmnTxWA/OTDYMTBSRrRmHzGHizM5YSUr7T30
-         QmDv9fgv5OuS08MooYsEDFQzc+jn/IiyzRTH3SUX+Vbg10NG/X2rPPc9eUyQ33DmM2EP
-         mL9A==
-X-Gm-Message-State: AFqh2kq65YNyZNFYTcBTDIKw2GIicB65UdLQ06Egn0UuiEb/3xHzKqll
-        C8+Fv3GolOF4X01EICcCgbg=
-X-Google-Smtp-Source: AMrXdXsz2qG9hNhQ2wRQBsd7Jr3zo+UJhvpVrm4FIJlPBrR9O/h7c7M4pfciMirVcNLa5MRC2rzPcg==
-X-Received: by 2002:aca:3402:0:b0:36a:3a8a:212d with SMTP id b2-20020aca3402000000b0036a3a8a212dmr4224163oia.45.1674155554544;
-        Thu, 19 Jan 2023 11:12:34 -0800 (PST)
-Received: from localhost.localdomain ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id o9-20020a0568080f8900b0035e461d9b1bsm18431209oiw.50.2023.01.19.11.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 11:12:34 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-To:     gregkh@linuxfoundation.org
-Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Gaurav Pathak <gauravpathak129@gmail.com>
-Subject: [PATCH] staging: r8188eu: Fix some endian problems
-Date:   Thu, 19 Jan 2023 13:12:19 -0600
-Message-Id: <20230119191219.12080-1-Larry.Finger@lwfinger.net>
-X-Mailer: git-send-email 2.39.0
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f66M40S9HUafYr8hVajn8DVAsyr9TRcLXW/GMSQFYTg=;
+        b=3vWHd0KoPm0MXsBIRCgfb3mkYgcUEOr625g5xgNlXEQPUUpolnvyzZQB5F6LhU9Hcy
+         iBs4Zh0G0jbw5FwTXUD/Nbm/gLwVXREV1kqP+PtSqr/ZARGc5nO9MPsvtOT0RDVAzcga
+         p1katRQkK31f86P8N+YNe340dA1TDnMM5nopJzYwI8P8YPizA+Y7EpXoNSB6XmNjJ8md
+         aEG1Ad0e0GytlAlX4VK8ewSg3bEBxkpofE6x6Ra0adLzzFUFpGk2YPta72qKCBqmCgcg
+         B9468zNb3SXo0VhB32IvoDSN8XHHZiPP/0duluKqbkUJ5iyL3iwAQ9fiYL+bNhty96CV
+         E1Og==
+X-Gm-Message-State: AFqh2krxkatH1mlK3u/CfOWLzKa7pTa8SitdRCPV1qtDcLMo0nPo0EtV
+        SBUOm1ECmQZxwaukG7PnBTEm5iLBK57auHzB9GWcm0bvlc3w/SjGZ4M=
+X-Google-Smtp-Source: AMrXdXumWEsfO8yQUnD942SmOi0Y3bznUxHvZmVpHNlFlXQoQITYE3p8CLDqSTQjynmP8x3QEbD3SlTm3TDvC5kC0xs=
+X-Received: by 2002:a5b:688:0:b0:7e1:ed59:4e43 with SMTP id
+ j8-20020a5b0688000000b007e1ed594e43mr1580106ybq.323.1674155587313; Thu, 19
+ Jan 2023 11:13:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230118160220.776302-1-varmavinaym@gmail.com>
+In-Reply-To: <20230118160220.776302-1-varmavinaym@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 19 Jan 2023 20:12:56 +0100
+Message-ID: <CANiq72m66PbmDmGUoQecOzJRSFg+G+3KKGkkqS3ySNAPxCe1Ag@mail.gmail.com>
+Subject: Re: [PATCH] scripts: `make rust-analyzer` for out-of-tree modules
+To:     Vinay Varma <varmavinaym@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparse lists the following warnings:
+On Wed, Jan 18, 2023 at 5:02 PM Vinay Varma <varmavinaym@gmail.com> wrote:
+>
+> Adds support for out-of-tree rust modules to use the `rust-analyzer`
+> make target to generate the rust-project.json file.
 
-  CHECK   drivers/staging/r8188eu/core/rtw_mlme.c
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49: warning: incorrect type in
-					 argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    got unsigned short
-					 [assigned] [usertype] media_status_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57: warning: incorrect type in
-					 argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    got unsigned short
-					 [assigned] [usertype] media_status
-  CHECK   drivers/staging/r8188eu/core/rtw_mlme_ext.c
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58: warning: incorrect type
-					 in argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    got unsigned short
-					 [assigned] [usertype] media_status
+Thanks for sending this! A few nits below...
 
-The second argument of rtl8188e_set_FwMediaStatus_cmd() needs to be in CPU
-order, not little-endian; however, when it uses that value to call
-FillH2CCmd_88E() the parameter must be in little-endian order as that
-value will be sent to the firmware. Note that the conversion from LE to CPU
-order was le16_to_cpu() rather than the correct cpu_to_le16.
+> When this parameter is passed, I have chosen
+> not to add the non-core modules (samples and drivers) into the result
+> since these are not expected to be used in third party modules.
 
-The definition of FillH2CCmd_88E() is revised, and the proper conversion
-routine is used.
+Sounds good to me.
 
-Note that the original code performed one byte swap on the secong argument
-of FillH2CCmd_88E(), and got the correct answer even though the semantics
-were very wrong.
+> changes are also made to the Makefile and rust/Makefile allowing the
+> `rust-analyzer` target to be used for out-of-tree modules as well.
+>
+> Signed-off-by: Vinay Varma <varmavinaym@gmail.com>
 
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-Reportewd-by: Gaurav Pathak <gauravpathak129@gmail.com>
----
-Greg,
+A `Link: ` to the GitHub PR would be nice here:
+https://github.com/Rust-for-Linux/linux/pull/914.
 
-I intended this patch as an example for Gaurav, but as it has not been
-resubmitted, I am sending it to you. If you thing he deserves to be the
-author, then please edit the patch before applying. Thanks, Larry
----
+Possibly another one to the out-of-tree approach at
+https://github.com/Rust-for-Linux/rust-out-of-tree-module/pull/2.
 
- drivers/staging/r8188eu/hal/rtl8188e_cmd.c     | 4 ++--
- drivers/staging/r8188eu/include/rtl8188e_cmd.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>  import logging
+>  import pathlib
+>  import sys
+> +import os
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-index 8310d7f53982..788904d4655c 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-@@ -193,9 +193,9 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *adapt, u8 Mode)
- 
- }
- 
--void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt)
-+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, u16 mstatus_rpt)
- {
--	u16 mst_rpt = le16_to_cpu(mstatus_rpt);
-+	__le16 mst_rpt = cpu_to_le16(mstatus_rpt);
- 
- 	FillH2CCmd_88E(adapt, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
- }
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_cmd.h b/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-index 1e01c1662f9a..c785cf8ed683 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-@@ -85,6 +85,6 @@ void rtl8188e_Add_RateATid(struct adapter *padapter, u32 bitmap, u8 arg,
- void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state);
- 
- void CheckFwRsvdPageContent(struct adapter *adapt);
--void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt);
-+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, u16 mstatus_rpt);
- 
- #endif/* __RTL8188E_CMD_H__ */
--- 
-2.39.0
+Please keep the `import`s sorted.
 
+> -    for folder in ("samples", "drivers"):
+> +    extra_src_dirs = ["samples", "drivers"] if external_src is None else [external_src]
+
+If you send a v2 for the above, this could be a tuple like in the
+original line, to minimize the diff.
+
+> +            if os.path.exists(path.parent / "Makefile") and f"{name}.o" not in open(path.parent / "Makefile").read():
+
+In Python one would typically go with the EAFP style instead
+(https://docs.python.org/3/glossary.html#term-EAFP), which would also
+reduce the duplication of the path computation. But it would take more
+lines... Not a big deal in any case.
+
+Thanks!
+
+Cheers,
+Miguel
