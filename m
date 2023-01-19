@@ -2,137 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D73673ED2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5954C673ECB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 17:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjASQ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 11:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjASQ3B (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230130AbjASQ3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 19 Jan 2023 11:29:01 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4097315563
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:28:58 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id r30so2389756wrr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 08:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=KyDTae+yIRm9B46y4fh6l6TTAmMj8UP4bhexXvaxQvg=;
-        b=jQmM25167/Sn9MWbEEi7q8VYIVZHNgon8DyMdOgJCTr9GR1WuYLMkyIHkOf+KPaf6Q
-         qUkEZ82pmtBBSKocFxUDWgHD0OLIUMPR1EBi2Pp2x6U/tWE78MhwQZ1aOjpJllx4k56D
-         tzP70DHL16qp514tucSo9s9AKLuq4ILNJ+rd/Db75VCaEdppiC6BAW1rhdVXDlnNhRcx
-         ikHz6B7jXfJ2J0qBCXWaUO6gE7SLOisgUfgM5dlPop+8KrIuII43CKJ2hodbxjViJD75
-         VP3NOJq9R3x8U6WftOTdcYAQb7v3ufd3XyeFsCjpCS7tztVGs5XmspmRSVxb9lVHXtNg
-         wSsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KyDTae+yIRm9B46y4fh6l6TTAmMj8UP4bhexXvaxQvg=;
-        b=b8qoWFxaco6LM1WDkymxfap9zwazIsLcnCx2GvAxHs63sdGXR5q6xBFg0HIRjB3UPi
-         7LCGCM7YcKboWPJ2ZPzBCg/x79i1ZGw9ysqMB0J91F4QZtCJ+onNNomhCNbSde2aeYyO
-         934F3v6256ZoQXQs6kVuND4eqfsA6ru5VFdFMQzzViIPmez3VsaDWGTVn1cOTkiurbjW
-         IA1GiJq22kYw2YyTVeDaV7KrT3tqHyqKN8Klc8hqA72ieqk8g/+ly4lqpC7SlCRFO6sQ
-         euv5IjYMifVrHnqXBeQx09CKvmwuh1N3Q3A0scttuVc24pmmzB085W6YRPELO460h0ep
-         Z7fQ==
-X-Gm-Message-State: AFqh2kpopBZJdqSIQd2Wwhthn+GblFejMEAtX3pjTyKj+8VZrDwBZuU9
-        48awX1xlU8ecRhCOkj/kIfhEVPFP+4Fym5nr
-X-Google-Smtp-Source: AMrXdXv+CmLOrA89B0ZuZyKvu9Y6N46QigmiVMi0IyY1PCKErMDy0IN7Aid9IuYATD/a9LBe7hsUOQ==
-X-Received: by 2002:a05:6000:689:b0:2bd:ffad:1bce with SMTP id bo9-20020a056000068900b002bdffad1bcemr11263798wrb.59.1674145736528;
-        Thu, 19 Jan 2023 08:28:56 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id f7-20020a5d6647000000b002bbeb700c38sm29008771wrw.91.2023.01.19.08.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:28:55 -0800 (PST)
-Subject: [PATCH 0/2] Add MediaTek MT8365 SPI support
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAMBvyWMC/w3LwQ5AMAwA0F+RnjXZMMHfdNPQhFlWXBb/bsd3eAWUs7DC0hTI/IrKFSts20DYKW
- 6MslZDZ7reWDvheU/96FCToD4pXflGs86jD87RQAZq9KSMPlMMe63xOY7v+wFAMS4raQAAAA==
-From:   Alexandre Mergnat <amergnat@baylibre.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230099AbjASQ2z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 19 Jan 2023 11:28:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7473583;
+        Thu, 19 Jan 2023 08:28:53 -0800 (PST)
 Date:   Thu, 19 Jan 2023 17:28:48 +0100
-Message-Id: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1434; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=zgfYtWJl6Qnh+hLsShyx1UnAkEV+3eaUlo+MkmgoDbQ=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjyW/GdVwaejjtWKRvxKzRFY+EaDyo/lXcw1dm3b7c
- BghChKGJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8lvxgAKCRArRkmdfjHURVPHEA
- CvuZFIUu1KDwRFFmDhM1p3ChGZDGxZhGCrp3BOOs7Mmoku/x9997da+lBrVEZ+5Kwpi4sm/2UV9W4g
- 47uNrjzbVfOPUJDqFfJDKk/FMEo2t2LauRdVmOG6zNHUj2/XKa0CU8wt8vVQE4XxH9nvX0ewx+k8IX
- DyjnKgV7dwjYD0T1JNMB+8iSDiSTtbEdFBvEc0jrMZSPAJRGk8TJX00ttRwWWs8VTQ3LFgCKJb85Ix
- blfxbAAwqg6cvy//4jErY0QNhrPEIoLrbGLbOaekvOhKeopaWyIGZFVhLifWtCSNykjnb8umEqvz35
- ekvplHL+BK7TYjX+H0bGy4uhoRkTGKGl0210Tid45WkfpqX3CMQaMGHMzqzhQG5xPUc1VvL0DccZCS
- /Gbc/uXRyJCLhU5oVWCyYUNNi0SOKttpVw+ZJVfiO/NYXFAmBEKtROZx8L4I4SFoeTEEE1qo9B/+Ln
- Nm/3pD4ZOPHlsrzNFfDkOTIEaAsgSa3o0NvP0YQbJzZ4P6BVLSxAkHyGvVacrw05mNWdcbMw5gX000
- oYRe5+d9rpLg+UjuAIhtQRVD07hq4lsUxYu5PGVuQZc/qEwC0MElkgEJEnJc2uGK4RpPicKq99DW64
- 9JEM8NsHRlfWoYA+SWcz1KF8CmEpMUUSIvb4XgLYXLI/n3UET3fz8Arn1Vkw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674145730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xSJxOY/6fo3NzgfrGyFmvSSdAM8W+liCARNIy2pivbo=;
+        b=YIMzvNKahXri42yD5JeF01x8Eqfv+1DuiYSm1Sy4pONAMb9Te/6wXX9XBhmurZDGU78uiX
+        Ivx/Nahdmrn6kxKRx32e/vyxHlkxjsbTiyRatVUw9WPJUnc8gwYKgpBrfKWRXnKbR5LAMS
+        V1ZxxarS1m6se3HDPjWeXFr82+hNk4+Mj/YkMOHusUVYSx0AnhRIv59/SXDol0gtMRgEzq
+        z61I54j7v24KVS8q37MCWzMRp7iaGLz7tmte1UJ+rt/3spoYO/0S/sJL5bQ/3LBGRFxByt
+        vGn/mG2peJfOLEMHFXOAE3oqlbTsqprB2ZFIEnA6p3g+NVps/Z7ni5qNscNytw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674145730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xSJxOY/6fo3NzgfrGyFmvSSdAM8W+liCARNIy2pivbo=;
+        b=CBTxq6QMcx5mZJlDwhB5e5VyLK8DxS6BUydVFDQ+sA3LiZJo3ZoEYDsxX4qgh9L1xZ2k7i
+        HKlGJLc/mZk/ByBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <Y8lvwKHmmnikVDgk@linutronix.de>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8gPhTGkfCbGwoUu@linutronix.de>
+ <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+ <Y8j+lENBWNWgt4mf@linutronix.de>
+ <20230119110220.kphftcehehhi5l5u@techsingularity.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230119110220.kphftcehehhi5l5u@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-This patch series adds SPI support for MT8365-EVK board.
-The SPIDEV is enabled, it can be used through the board pin header,
-as described directly on the PCB.
+On 2023-01-19 11:02:20 [+0000], Mel Gorman wrote:
+> > - Once the writer removes READER_BIAS, it forces the reader into the
+> >   slowpath.
+> 
+> Removed in __rwbase_write_trylock IIUC
 
-This series depends to another one which add support for
-MT8365 SoC and EVK board. Link [1].
+And added back in case try trylock failed via __rwbase_write_unlock().
+The RTmutex is unlocked and the READER_BIAS is "returned".
 
-Test:
-- Loopback MOSI and MISO pins
-- Issue the following command:
-spidev_test -D /dev/spidev0.0 -v
-- RX line should be the same as TX line.
+> >   At that time the writer does not own the wait_lock meaning
+> >   the reader _could_ check the timeout before writer had a chance to set
+> >   it. The worst thing is probably that if jiffies does not have the
+> >   highest bit set then it will always disable the reader bias here.
+> >   The easiest thing is probably to check timeout vs 0 and ensure on the
+> >   writer side that the lowest bit is always set (in the unlikely case it
+> >   will end up as zero).
+> > 
+> 
+> I am missing something important. On the read side, we have
+> 
 
-Regards,
-Alex
+Look at this side by side:
 
-[1]: https://lore.kernel.org/linux-mediatek/20230101220149.3035048-1-bero@baylibre.com/
+                writer                                                       reader
 
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+| static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+|                                      unsigned int state)
+| {
+|         /* Force readers into slow path */
+|         atomic_sub(READER_BIAS, &rwb->readers);
 
----
-Alexandre Mergnat (2):
-      arm64: dts: mediatek: add spidev support for mt8365-evk board
-      spi: spidev: add new mediatek support
 
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 24 ++++++++++++++++++++++++
- drivers/spi/spidev.c                        |  2 ++
- 2 files changed, 26 insertions(+)
----
-base-commit: 8b6cfcce3ce939db11166680a57253c39110f07e
-change-id: 20230118-mt8365-spi-support-0d96bc55a4a0
+|                                                               static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+|                                                                                                     unsigned int state)
+|                                                               {       
+|                                                                       struct rt_mutex_base *rtm = &rwb->rtmutex;
+|                                                                       int ret;                         
+|                                                               
+|                                                                       raw_spin_lock_irq(&rtm->wait_lock);
 
-Best regards,
--- 
-Alexandre Mergnat <amergnat@baylibre.com>
+Reader has the lock, writer will wait.
+
+|                                                                       /*
+|                                                                        * Allow readers, as long as the writer has not completely
+|                                                                        * acquired the semaphore for write.
+|                                                                        */
+|                                                                       if (atomic_read(&rwb->readers) != WRITER_BIAS) {
+
+here, the timeout value is not yet populated by the writer so the reader
+compares vs 0.
+
+|                                                                               atomic_inc(&rwb->readers);
+|                                                                               raw_spin_unlock_irq(&rtm->wait_lock);
+|                                                                               return 0;
+|                                                                       }
+|                                                              
+
+|         raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+|         if (__rwbase_write_trylock(rwb))
+|                 goto out_unlock;
+|
+
+Hope this makes it easier.
+
+Sebastian
