@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10136733F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC8A6733F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 09:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjASIoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 03:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S229915AbjASIpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 03:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjASIoS (ORCPT
+        with ESMTP id S229501AbjASIpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 03:44:18 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5571677B6;
-        Thu, 19 Jan 2023 00:44:05 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2263460010;
-        Thu, 19 Jan 2023 08:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674117844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5+uhyQtS1mg9Pdmjr6UXBzPNPAvqOBVv9nU3qb1kqdk=;
-        b=PJx4ICKiGVIzXOLdZ6Gh9j30sxGpjPI22w4v4C5JTXH4aLsu3mvZv1JYpzeBhDWGzXKPCp
-        zjOqFVNACtpo44OgHEorej+XRokIeKZFlmtFpzpVqc/QIw2PXdW9FjFkzmixC5nxKJn82/
-        ZcGT7hvQ5nW20kOxb5iXmpOCcANNEl7s5yTuPJhonxjO6BEV+V6DIkc0VU6KYVHL1Nw1Ua
-        j/yfC0RuQJJN0/7M8BxDRpx8nDQhV0SOCMO5avuzjoRVDrHl9Ry3k9AS2H7+2CeDKWEEbs
-        /Zuy2+ndcInwatHfWXETLrmprEcRRYM0JPFXTZcbQpK95NjEFpQB6UfLBAZxfQ==
-Date:   Thu, 19 Jan 2023 09:43:58 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
-Message-ID: <20230119094358.010bc826@booty>
-In-Reply-To: <Y8gvu/E5EoPqo8J1@smile.fi.intel.com>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
-        <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
-        <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
-        <Y8gvu/E5EoPqo8J1@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 19 Jan 2023 03:45:38 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B994E66FB8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:45:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id v5so1982441edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:45:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MetS4zEUaxTfPd/u3Ip9L5fgpunrgvS3jQ8pBOXt1mM=;
+        b=PP4FgTsOX7M7u20b3L0El1yV5cE65Y86ooftaSLBpFPeygfOBLHIFCEch+eqAzHbFB
+         5r0a/kFOb8+5d+yu2OKxVCujxhqNuLnmyCFaAAd4NyNUpRK36cBTvSVcidxbwUtOgySf
+         xj2wcJ5VQSlf6Vx0E0DCZdtAo/ySP8fWsI+kF1jeGt7GP7FtwiTKqoe2fKK1DFG5FL+b
+         UGKgfmyHdXDLSqsxVXbRonqHuXFo9rtSj607TajE1MU9StjF3BsitnybzgVBUMfjpeZn
+         0GPQSuryTGCAABSm7vZJgi56f2oc3MR6L56nwBqq4SLkfmOtXDTTiye53dw78LDPG0RL
+         9Ocg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MetS4zEUaxTfPd/u3Ip9L5fgpunrgvS3jQ8pBOXt1mM=;
+        b=brtmxoYUenjDGydE5jZssrxCC0vKiFpli+xLiwE+D+MpeaTamEuXUPQx83x+IV1y4i
+         SxFk/iV+8JTIjdvvcYW8sGUhLbJZWAEcgkIUgtCmluvSj0HC7eb7S9hV5wAdym2JkykF
+         GFizzkE9OEEIYjexd4gsZ8qOE5HGzGHvLRvnZpvgpxZevvu5r4BDTQ5IThNa+xVKihut
+         hXnZV696bPC8APlArnoWXbIfGfzUzeBhG5JTKfIqgYZ5o8T4b9Ap28D4iI4+O0W3NgH/
+         Yba2iFeQsDOnY0DIx2gm12UP/nZNvtDx6zC77otLUftV2ZC98uesA1PnhxV80wiSpDGT
+         Sr8w==
+X-Gm-Message-State: AFqh2koOLGjaLQAN+EdyHWzA5E9fMRwOH2O0RUsnrmRH2N6iBMvCd5Qe
+        vlgSE0rZx4lN4Wfmx3lvLXCisfzmR1opkTIH
+X-Google-Smtp-Source: AMrXdXs2xG8hVYhIa1aU3CZbotbYriwT0Cnx4/lLKT7ZPgtBxrr5nbaBghkK/Mu1CsMf1UZNzrngLw==
+X-Received: by 2002:a05:6402:1ccc:b0:49c:fdd2:a47d with SMTP id ds12-20020a0564021ccc00b0049cfdd2a47dmr12308104edb.37.1674117936369;
+        Thu, 19 Jan 2023 00:45:36 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id eo9-20020a056402530900b00463bc1ddc76sm7520001edb.28.2023.01.19.00.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 00:45:36 -0800 (PST)
+Date:   Thu, 19 Jan 2023 09:45:34 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: alternative: proceed one more instruction for
+ auipc/jalr pair
+Message-ID: <20230119084534.v3asjioao2zyvpje@orel>
+References: <20230115162811.3146-1-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230115162811.3146-1-jszhang@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-On Wed, 18 Jan 2023 19:43:23 +0200
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-
-> On Wed, Jan 18, 2023 at 07:28:20PM +0200, Tomi Valkeinen wrote:
-> > On 18/01/2023 18:01, Andy Shevchenko wrote:  
-> > > On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:  
-> > > > Hi,
-> > > > 
-> > > > You can find the v6 from:
-> > > > 
-> > > > https://lore.kernel.org/all/20230105140307.272052-1-tomi.valkeinen@ideasonboard.com/
-> > > > 
-> > > > Main changes:
-> > > > 
-> > > > * i2c-atr: Use bus notifier. This allows us to drop the patch that adds
-> > > >    the attach_client/detach_client callbacks. On the downside, it removes
-> > > >    the option for error handling if the translation setup fails, and also
-> > > >    doesn't provide us the pointer to the i2c_board_info. I belive both
-> > > >    are acceptable downsides.
-> > > > 
-> > > > * Use fwnode in the fpdlink drivers instead of OF
-> > > > 
-> > > > * Addressed all the review comments (I hope)
-> > > > 
-> > > > * Lots of cosmetic or minor fixes which I came up while doing the fwnode
-> > > >    change  
-> > > 
-> > > I believe my comments to the first driver applies to the next two, so please
-> > > address them whenever you are agree / it's possible / it makes sense.
-> > > 
-> > > About ATR implementation. We have the i2c bus (Linux representation of
-> > > the driver model) and i2c_adapter and i2c_client objects there. Can't we
-> > > have an i2c_client_aliased in similar way and be transparent with users?  
+On Mon, Jan 16, 2023 at 12:28:11AM +0800, Jisheng Zhang wrote:
+> If we patched auipc + jalr pair, we'd better proceed one more
+> instruction. Andrew pointed out "There's not a problem now, since
+> we're only adding a fixup for jal, not jalr, but we should
+> future-proof this and there's no reason to revisit an already fixed-up
+> instruction anyway."
 > 
-> > Can you clarify what you mean here?
-> > 
-> > The i2c_clients are not aware of the i2c-atr. They are normal i2c clients.
-> > The FPD-Link drivers are aware of the ATR, as the FPD-Link hardware contains
-> > the ATR support.  
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+>  arch/riscv/kernel/alternative.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Can't that hardware be represented as I2C adapter? In such case the ATR specifics
-> can be hidden from the client (drivers).
-> 
-> I'm worrying about code duplication and other things that leak into drivers as
-> ATR callbacks.
+> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+> index fc341b69bf62..2354c69dc7d1 100644
+> --- a/arch/riscv/kernel/alternative.c
+> +++ b/arch/riscv/kernel/alternative.c
+> @@ -122,6 +122,7 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+>  
+>  			riscv_alternative_fix_auipc_jalr(alt_ptr + i * sizeof(u32),
+>  							 insn, insn2, patch_offset);
+> +			i++;
+>  		}
+>  
+>  		if (riscv_insn_is_jal(insn)) {
+> -- 
+> 2.38.1
+>
 
-Which callbacks do you refer to? i2c_atr_ops? I don't think we can do
-without the attach/detach_client ones, it's where the driver-specific
-implementation is hooked for the generic ATR infra to call it.
-
-However now I noticed the select/deselect ops are still there. IIRC
-they are not used by any driver and in the past the plan was to just
-remove them. Tomi, do you think there is a good reason to keep them?
-
-> It might be that I didn't get how hw exactly functioning on this
-> level and why we need those callbacks.
-
-As far as "how hw exactly works", in case you haven't seen that, the
-best explanation I was able to give is in my ELCE 2019 talk, at minute
-~22. It's a 2-3 minute watch. The slides have pointers to other talks
-and discussion.
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
