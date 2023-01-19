@@ -2,157 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE51672D44
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 01:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F90672D4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 01:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjASALy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 19:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S229646AbjASAP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 19:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjASALu (ORCPT
+        with ESMTP id S229606AbjASAP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 19:11:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8913E08D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 16:11:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7495A61ACE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 00:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AC4C433EF;
-        Thu, 19 Jan 2023 00:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674087107;
-        bh=+vKp94IjqzCbXRJhpm9qWbaAwtlskkDfxJvECB2O8Cg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XMPcHDafOjV3lqL10kIOWaonP8nwSJUMQSFkK1BI687PKqamkb1uzQ5HJsNQ3tUmg
-         aEtZ2DaMklzQXi3WymD3740MllCOL5SrKsZ+zolOSVxzw5b1E1LjgkAQiguDWSOJGN
-         NxXEz12zyqRnOS/Z4dxjDPbA/RwcpEENSRyuZK6KRMg6QmBeUyLfGUYes0+HtjKRUj
-         PdlIWEi74SQJqb5PY+qJ6kONGOS+GkmQowJ2+l3Fs80oRnY49WNiBavcaS86uFutpb
-         DjmKzgmDVlFsGu8zosxzwv423LFeKc21MvUm7Y02bWuzz4VQnnW6pJHyb5Yl8sS+LW
-         9UZbmh8Ss6jqg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 768C55C0A1A; Wed, 18 Jan 2023 16:11:47 -0800 (PST)
-Date:   Wed, 18 Jan 2023 16:11:47 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
- <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+        Wed, 18 Jan 2023 19:15:56 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CEE5355F;
+        Wed, 18 Jan 2023 16:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B4JKTopwf+ah1JzO+o8lKdNMaw0A3fc5NXU+YNHQFBU=; b=RQ+fXNP99ggIbZtBXxqO4wTlTl
+        5hJSTT5zs8PR1I7e3wiqq5aC8sq0ARV3Xp7QGdkSLljcjiLdfklaz5WAs6eCPn49gFu0N9VQqFXDM
+        oM05bDhNraV2tKr1XSZfPIazui4XxePY0SFJyITfItPI/5d9a59kxoo7qCK/suhZiDtunkbg3fHJC
+        SOF8gaSn70LL+c97Xei2fWI03cNHSqga8PhaRRmTeyEEgPjx28qXC+1IlM9o5WaX9P4BcmAZ2F6+5
+        uOzCs5+WZFkgTV3bBj65ecJsnymTxkrNBXqvxxZxMbo8mcEB45B2nqHOLJFr5A93nMKWKbnKG/2uo
+        UyOdFPkA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIIam-002dwf-2G;
+        Thu, 19 Jan 2023 00:15:44 +0000
+Date:   Thu, 19 Jan 2023 00:15:44 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v6 03/34] iov_iter: Pass I/O direction into
+ iov_iter_get_pages*()
+Message-ID: <Y8iLsPlSLy5YVffX@ZenIV>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391050409.2311931.7103784292954267373.stgit@warthog.procyon.org.uk>
+ <Y8ZU1Jjx5VSetvOn@infradead.org>
+ <Y8h62KsnI8g/xaRz@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8h62KsnI8g/xaRz@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 10:24:50PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/18/2023 10:12 PM, Paul E. McKenney wrote:
-> 
-> > The only difference between srcu_read_lock() and srcu_read_unlock()
-> > on the one hand and srcu_down_read() and srcu_up_read() on the other
-> > is that a matching pair of srcu_read_lock() and srcu_read_unlock()
-> > must be running on the same task.  In contrast, srcu_down_read() and
-> > srcu_up_read() are not subject to this constraint.
+On Wed, Jan 18, 2023 at 11:03:52PM +0000, Al Viro wrote:
+> On Mon, Jan 16, 2023 at 11:57:08PM -0800, Christoph Hellwig wrote:
+> > On Mon, Jan 16, 2023 at 11:08:24PM +0000, David Howells wrote:
+> > > Define FOLL_SOURCE_BUF and FOLL_DEST_BUF to indicate to get_user_pages*()
+> > > and iov_iter_get_pages*() how the buffer is intended to be used in an I/O
+> > > operation.  Don't use READ and WRITE as a read I/O writes to memory and
+> > > vice versa - which causes confusion.
+> > > 
+> > > The direction is checked against the iterator's data_source.
 > > 
-> > > What I was suggesting below is how to redefine "match" between read_down and
-> > > read_up that work more like a cross-thread semaphore.
-> > Understood, but what I don't understand is why not simply this:
-> > 
-> > let srcu-rscs-down = ([Srcu-down] ; (data | rf)* ; [Srcu-up]) & loc
+> > Why can't we use the existing FOLL_WRITE?
 > 
-> Oh, I had thought that it should be more like a semaphore rather than just a
-> cross-cpu mutex.
-> 
-> Here's an example of how what you are describing would be used:
-> 
-> P0{
->    idx = srcu_down(&ss);
->    store_release(done,1);
-> }
-> 
-> P1{
->     while (! load_acquire(done));
->     srcu_up(&ss,idx)
-> }
+> 	I'm really not fond of passing FOLL_... stuff into iov_iter
+> primitives.  That space contains things like FOLL_PIN, which makes
+> no sense whatsoever for non-user-backed iterators; having the
+> callers pass it in makes them automatically dependent upon the
+> iov_iter flavour.
 
-Exactly!!!
+Actually, looking at that thing...  Currently we use it only for
+FOLL_PCI_P2PDMA.  It alters behaviour of get_user_pages_fast(), but...
+it is completely ignored for ITER_BVEC or ITER_PIPE.  So how the
+hell is it supposed to work?
 
-> What I was thinking of is more something like this:
-> 
-> P0{
->    idx1 = srcu_down(&ss);
->    srcu_up(&ss,idx1);
-> }
-> 
-> P1{
->     idx2 = srcu_down(&ss);
->     srcu_up(&ss,idx2)
-> }
+And ITER_BVEC *can* get there.  blkdev_direct_IO() can get anything
+->write_iter() can get, and io_uring will feed stuff to it.  For
+that matter, ->read_iter() can lead to it as well, so
+generic_file_splice_read() can end up passing ITER_PIPE to that
+sucker.
 
-And srcu_read_lock() and srcu_read_unlock() already do this.
-
-> where the big difference to srcu_lock/unlock would be that if P0 and P1
-> happened to get the same index -- which you could very well check or
-> synchronize on -- that you would be guaranteed that the grace period only
-> ends once *all* threads that are using this index have called up. (note that
-> I believe that your implementation has this property, and some users may
-> come to rely on it if they find out!)
-
-They are permitted and encouraged to rely on the fact that
-synchronize_srcu() waits until all pre-existing SRCU read-side critical
-sections have completed, which I believe is quite close to what you
-are saying.  But if they want to look at the return values from either
-srcu_read_lock() or srcu_down_read(), they would be better off using
-either get_state_synchronize_srcu() or start_poll_synchronize_srcu().
-
-Huh.  I need to add a NUM_ACTIVE_SRCU_POLL_OLDSTATE, don't I?  I first
-need to figure out what its value would be.
-
-> If you want this latter kind of guarantee, then you need to do so something
-> along the lines of what Alan or I wrote.
-> 
-> If all you need is the ability to use the first scenario, without any
-> guarantee that if the index happened to be the same (or providing an API
-> where you can do the down with a fixed index provided by P0) the grace
-> period will extend, then what you propose should be right.
-> 
-> But from Alan's comments I had misunderstood that that wouldn't be the case.
-
-"What do you need?"  "Well, what can be provided?"  ;-)
-
-							Thanx, Paul
+Could somebody give a braindump on that thing?  It looks like we
+have pages that should not be DMA'd to/from unless driver takes
+some precautions and we want to make sure they won't be fed to
+drivers that don't take such.  With checks done in a very odd
+place...
