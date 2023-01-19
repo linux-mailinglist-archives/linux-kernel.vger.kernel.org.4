@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F856739AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6525B6739BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjASNMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S230240AbjASNRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjASNM3 (ORCPT
+        with ESMTP id S230314AbjASNQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:12:29 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E57C85A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:10:55 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pIUgA-0005xy-F9; Thu, 19 Jan 2023 14:10:06 +0100
-Message-ID: <849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info>
-Date:   Thu, 19 Jan 2023 14:10:05 +0100
+        Thu, 19 Jan 2023 08:16:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9ACE0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:16:55 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIUmN-0005TZ-Kf; Thu, 19 Jan 2023 14:16:31 +0100
+Received: from [2a0a:edc0:0:1101:1d::54] (helo=dude05.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIUmL-0079ie-U0; Thu, 19 Jan 2023 14:16:29 +0100
+Received: from afa by dude05.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIUmL-0059ix-7U; Thu, 19 Jan 2023 14:16:29 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     kernel@pengutronix.de, Oleksij Rempel <ore@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: dsa: microchip: fix probe of I2C-connected KSZ8563
+Date:   Thu, 19 Jan 2023 14:10:15 +0100
+Message-Id: <20230119131014.1228773-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: regression on aarch64? panic on boot
-Content-Language: en-US, de-DE
-To:     Klaus Jensen <its@irrelevant.dk>, Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <Y8XINx8fpGPKudW6@cormorant.local>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <Y8XINx8fpGPKudW6@cormorant.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674133855;0087d679;
-X-HE-SMSGID: 1pIUgA-0005xy-F9
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+Starting with commit eee16b147121 ("net: dsa: microchip: perform the
+compatibility check for dev probed"), the KSZ switch driver now bails
+out if it thinks the DT compatible doesn't match the actual chip:
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+  ksz9477-switch 1-005f: Device tree specifies chip KSZ9893 but found
+  KSZ8563, please fix it!
 
-On 16.01.23 22:57, Klaus Jensen wrote:
-> 
-> I'm getting panics when booting from a QEMU hw/nvme device on an aarch64
-> guest in roughly 20% of boots on v6.2-rc4. Example panic below.
-> 
-> I've bisected it to commit eac3ef262941 ("nvme-pci: split the initial
-> probe from the rest path").
-> 
-> I'm not seeing this on any other emulated platforms that I'm currently
-> testing (x86_64, riscv32/64, mips32/64 and sparc64).
-> [...]
+Problem is that the "microchip,ksz8563" compatible is associated
+with ksz_switch_chips[KSZ9893]. Same issue also affected the SPI driver
+for the same switch chip and was fixed in commit b44908095612
+("net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip").
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+Reuse ksz_switch_chips[KSZ8563] introduced in aforementioned commit
+to get I2C-connected KSZ8563 probing again.
 
-#regzbot ^introduced eac3ef262941
-#regzbot title nvme: occasional boot problems due to the newly supported
-async driver probe
-#regzbot ignore-activity
+Fixes: eee16b147121 ("net: dsa: microchip: perform the compatibility check for dev probed")
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+ drivers/net/dsa/microchip/ksz9477_i2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+diff --git a/drivers/net/dsa/microchip/ksz9477_i2c.c b/drivers/net/dsa/microchip/ksz9477_i2c.c
+index c1a633ca1e6d..e315f669ec06 100644
+--- a/drivers/net/dsa/microchip/ksz9477_i2c.c
++++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
+@@ -104,7 +104,7 @@ static const struct of_device_id ksz9477_dt_ids[] = {
+ 	},
+ 	{
+ 		.compatible = "microchip,ksz8563",
+-		.data = &ksz_switch_chips[KSZ9893]
++		.data = &ksz_switch_chips[KSZ8563]
+ 	},
+ 	{
+ 		.compatible = "microchip,ksz9567",
+-- 
+2.30.2
 
