@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677C9673051
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4FE673021
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjASE3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S230506AbjASE0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjASEO5 (ORCPT
+        with ESMTP id S230106AbjASD5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:14:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E4C6E82F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674101256; x=1705637256;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9LcZBYGDhBOOdba4bfvLDoiPsfgsdNgi8ugQN5xCxek=;
-  b=lsxHOCMmNmAVtZ7ZzesxTTgEeAkGNkXgK+5aeRm2LVGR7Mz6jckWSx6v
-   O1wwSMEVE9kee7i2G1InVAz7RydHVlVEGF0a7J00hvsGzs/TelsgJ8bZ+
-   kXi6H3u4io7CiGgy6EalF44gUyY4oLoOT4dIoMBDKFGqQxzrU9EXWCoL1
-   ksXyrRZRntagpZ0BPBb0fUY3V6PF0cD+aUtQO6d+3S0tJMTeHj/MN5H0H
-   ZUNz1gt/vMSTBZ7nroINUxNkSKywIRaLEKyc0eCb9ZQP/mi8duCKMXQ1I
-   WIeD9pNFKkz5HdEJW+G6rMy9ZaxWwjWOVckiTpq80raY8emKR60bkpWQI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="305558733"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="305558733"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 19:49:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="661981566"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="661981566"
-Received: from bakersax-mobl.amr.corp.intel.com (HELO [10.209.33.66]) ([10.209.33.66])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 19:49:06 -0800
-Message-ID: <001efe2e-0ae8-e3fe-f872-d5401ec802c9@linux.intel.com>
-Date:   Wed, 18 Jan 2023 19:49:06 -0800
+        Wed, 18 Jan 2023 22:57:04 -0500
+Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283B75EF86;
+        Wed, 18 Jan 2023 19:55:05 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VZs-RX4_1674100188;
+Received: from 30.0.176.247(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZs-RX4_1674100188)
+          by smtp.aliyun-inc.com;
+          Thu, 19 Jan 2023 11:49:50 +0800
+Message-ID: <b9efa4d1-2223-7f8f-ed89-62069d9d91bf@linux.alibaba.com>
+Date:   Thu, 19 Jan 2023 11:49:47 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 1/9] PCI/AER: Remove redundant Device Control Error
- Reporting Enable
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Stefan Roese <sr@denx.de>, Ashok Raj <ashok.raj@intel.com>,
-        Keith Busch <kbusch@kernel.org>
-References: <20230118234612.272916-1-helgaas@kernel.org>
- <20230118234612.272916-2-helgaas@kernel.org>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230118234612.272916-2-helgaas@kernel.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v8 1/9] perf pmu: Add #slots literal support for arm64
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1673940573-90503-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <06d33eb8-d2a9-4792-fa83-c64059ab7326@oracle.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <06d33eb8-d2a9-4792-fa83-c64059ab7326@oracle.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,128 +62,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/18/23 3:46 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+在 2023/1/17 下午4:45, John Garry 写道:
+> On 17/01/2023 07:29, Jing Zhang wrote:
+>> The slots in each architecture may be different, so add #slots literal
+>> to obtain the slots of different architectures, and the #slots can be
+>> applied in the metric. Currently, The #slots just support for arm64,
+>> and other architectures will return NAN.
+>>
+>> On arm64, the value of slots is from the register PMMIR_EL1.SLOT, which
+>> I can read in /sys/bus/event_source/device/armv8_pmuv3_*/caps/slots.
+>> PMMIR_EL1.SLOT might read as zero if the PMU version is lower than
+>> ID_AA64DFR0_EL1_PMUVer_V3P4 or the STALL_SLOT event is not implemented.
+>>
+>> Signed-off-by: Jing Zhang<renyu.zj@linux.alibaba.com>
 > 
-> The following bits in the PCIe Device Control register enable sending of
-> ERR_COR, ERR_NONFATAL, or ERR_FATAL Messages (or reporting internally in
-> the case of Root Ports):
-> 
->   Correctable Error Reporting Enable
->   Non-Fatal Error Reporting Enable
->   Fatal Error Reporting Enable
->   Unsupported Request Reporting Enable
-> 
-> These enable bits are set by pci_enable_pcie_error_reporting(), and since
-> f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"), we
-> do that in this path during enumeration:
-> 
->   pci_init_capabilities
->     pci_aer_init
->       pci_enable_pcie_error_reporting
-> 
-> Previously, the AER service driver also traversed the hierarchy when
-> claiming a Root Port, enabling error reporting for downstream devices, but
-> this is redundant.
-> 
-> Remove the code that enables this error reporting in the AER .probe() path.
-> Also remove similar code that disables error reporting in the AER .remove()
-> path.
-> 
-> Note that these Device Control Reporting Enable bits do not control
-> interrupt generation.  That's done by the similarly-named bits in the AER
-> Root Error Command register, which are still set by aer_probe() and cleared
-> by aer_remove(), since the AER service driver handles those interrupts.
-> See PCIe r6.0, sec 6.2.6.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Stefan Roese <sr@denx.de>
-> Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Cc: Ashok Raj <ashok.raj@intel.com>
-> Cc: Keith Busch <kbusch@kernel.org>
-> ---
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
 
-Looks fine to me.
-
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
->  drivers/pci/pcie/aer.c | 48 ------------------------------------------
->  1 file changed, 48 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 625f7b2cafe4..b7b69e0c778c 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -1224,42 +1224,6 @@ static irqreturn_t aer_irq(int irq, void *context)
->  	return IRQ_WAKE_THREAD;
->  }
->  
-> -static int set_device_error_reporting(struct pci_dev *dev, void *data)
-> -{
-> -	bool enable = *((bool *)data);
-> -	int type = pci_pcie_type(dev);
-> -
-> -	if ((type == PCI_EXP_TYPE_ROOT_PORT) ||
-> -	    (type == PCI_EXP_TYPE_RC_EC) ||
-> -	    (type == PCI_EXP_TYPE_UPSTREAM) ||
-> -	    (type == PCI_EXP_TYPE_DOWNSTREAM)) {
-> -		if (enable)
-> -			pci_enable_pcie_error_reporting(dev);
-> -		else
-> -			pci_disable_pcie_error_reporting(dev);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -/**
-> - * set_downstream_devices_error_reporting - enable/disable the error reporting  bits on the root port and its downstream ports.
-> - * @dev: pointer to root port's pci_dev data structure
-> - * @enable: true = enable error reporting, false = disable error reporting.
-> - */
-> -static void set_downstream_devices_error_reporting(struct pci_dev *dev,
-> -						   bool enable)
-> -{
-> -	set_device_error_reporting(dev, &enable);
-> -
-> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC)
-> -		pcie_walk_rcec(dev, set_device_error_reporting, &enable);
-> -	else if (dev->subordinate)
-> -		pci_walk_bus(dev->subordinate, set_device_error_reporting,
-> -			     &enable);
-> -
-> -}
-> -
->  /**
->   * aer_enable_rootport - enable Root Port's interrupts when receiving messages
->   * @rpc: pointer to a Root Port data structure
-> @@ -1289,12 +1253,6 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
->  	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
->  	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
->  
-> -	/*
-> -	 * Enable error reporting for the root port device and downstream port
-> -	 * devices.
-> -	 */
-> -	set_downstream_devices_error_reporting(pdev, true);
-> -
->  	/* Enable Root Port's interrupt in response to error messages */
->  	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
->  	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
-> @@ -1313,12 +1271,6 @@ static void aer_disable_rootport(struct aer_rpc *rpc)
->  	int aer = pdev->aer_cap;
->  	u32 reg32;
->  
-> -	/*
-> -	 * Disable error reporting for the root port device and downstream port
-> -	 * devices.
-> -	 */
-> -	set_downstream_devices_error_reporting(pdev, false);
-> -
->  	/* Disable Root's interrupt in response to error messages */
->  	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
->  	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Thank you John!
