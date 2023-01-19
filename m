@@ -2,238 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3B267404C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856FF67404E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjASRtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S230265AbjASRtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjASRtI (ORCPT
+        with ESMTP id S230250AbjASRtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:49:08 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928C918B10;
-        Thu, 19 Jan 2023 09:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=hX4OYiBGR92+HjPLeBF5dAXZ5JjVpQRGM664v9KvkC8=; b=dA9yfFFkGxgp4w9VJmvyzmjN1Y
-        Ah0YE+IoIoTV0DsGTEw6tdX1i1gobS9ntaQoBy6kaeZ82q7SQUyjcHc3UKBJ4R2ymA5aP+173/54x
-        Nfpxmx6rfOMqgDhEl0RMhP/XpBY7bFvgCcq0iHbjm1KR0JcS66NE4yEI+WS7+IUCJPVU=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41480 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pIZ1y-00088F-2h; Thu, 19 Jan 2023 12:48:54 -0500
-Date:   Thu, 19 Jan 2023 12:48:53 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230119124853.9193fd073b8a95b45e20f41c@hugovil.com>
-In-Reply-To: <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-13-hugo@hugovil.com>
-        <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 19 Jan 2023 12:49:25 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C308F7E4;
+        Thu, 19 Jan 2023 09:49:15 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v13so3800917eda.11;
+        Thu, 19 Jan 2023 09:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HzbxECxJMQfMp/BMDtp/vx0yN9hZtlBlPpuqP9cm6XE=;
+        b=DBf7kxBij7qqGeC7y7+/eqPUNl/8sOo6pjwRD5rPQGl0lx7NTp7BuXJfur2TrngUPV
+         ULYhqcN9kHR5CXjNHQhWdKbwud/976vBMvMeJAP5FMwrgIVv+p8E2GmSmpu0KR3uuip2
+         veExlKiY2VEZtxAQWVGpiOuAZKtVjqGZ4r/rlY6JQVS4D68da+htH0j4rwKbEcY/eMTy
+         YPG1U327j7N6pnxhrtJ2fF+jYpFJWE4q2/ijC158tRJd0AIXqKXEJu6AylTqq9vl2i+m
+         8ffY5NgAvCR0JE4zsEayxYlyib5K1zL2xstODNZP6fh9hcdL5axzDvBbMJ7uk/pvIgDv
+         63WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HzbxECxJMQfMp/BMDtp/vx0yN9hZtlBlPpuqP9cm6XE=;
+        b=Haae86DmmCX2N6A0IYAuXR0558+O7eBqnqIPPbRPMz60ULOmedvvDamCg5glvHIDgy
+         9y4epY6bqBXArQmR3yBN2BsxVp4Xl8j8nWcjyOYyMgvUqaIWoABHmrANx6gCUyxenVDx
+         UF0UNaFK4FEABbhu0qesnyqIILLGy2DVmDTklZlHFH7Svfuqth/G0l67MSkyJaO6NQhc
+         BLLAebl8HrniJBx3tASUQxggRSdcvpd8bU8DcC1XiwTllVx2l6DU0D8pkdFM8Zbq+Fvh
+         EXJHGVhNjSrxDLcndvdWZ+ZILW01WhpB/S5cBvQiV0ydh2Q5MjpLJmQhrVs+kYCR5EPl
+         hDTw==
+X-Gm-Message-State: AFqh2kpvC2s5enIaVP0ImDNByTrB1ON9Yt+8maiY06sHbcQnHaqigaVR
+        0tcL8vYGI4y6SgyQyfBL+xA=
+X-Google-Smtp-Source: AMrXdXsZQQe0vv6Eyi0PePX3epUTaqg5CG+wRcZzRJjobIDth2dMK20TRtch3CyxAPpklgKJPDsJvg==
+X-Received: by 2002:a05:6402:10c4:b0:48e:94ec:b7ac with SMTP id p4-20020a05640210c400b0048e94ecb7acmr10498888edu.7.1674150554336;
+        Thu, 19 Jan 2023 09:49:14 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id eq19-20020a056402299300b0049e65e4ff20sm1440818edb.14.2023.01.19.09.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 09:49:13 -0800 (PST)
+Message-ID: <8d05d100-ef97-049a-561f-1a65db7a4112@gmail.com>
+Date:   Thu, 19 Jan 2023 18:49:12 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] arm64: dts: mediatek: mt8192: Mark scp_adsp clock as
+ broken
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>
+References: <20221229101202.1655924-1-wenst@chromium.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221229101202.1655924-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 12/14] rtc: pcf2127: support generic watchdog timing
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 14:23:14 +0100
-Philipp Rosenberger <p.rosenberger@kunbus.com> wrote:
 
-> Hi Hugo,
+
+On 29/12/2022 11:12, Chen-Yu Tsai wrote:
+> The scp_adsp clock controller is under the SCP_ADSP power domain. This
+> power domain is currently not supported nor defined.
 > 
-> shouldn't the timeout set with pcf2127_wdt_set_timeout() be in seconds? 
-> With your changes this value is dependent on the configuration of the 
-> timer source clock for watchdog timer. So with a default of 1/4Hz this 
-> will be almost seconds * 4.
+> Mark the clock controller as broken for now, to avoid the system from
+> trying to access it, and causing the CPU or bus to stall.
 > 
-> I think we need to do the same calculations as in the 
-> pcf2127_watchdog_init() when calculating the timeout from the 
-> PCF2127_WD_VAL_DEFAULT.
+> Fixes: 5d2b897bc6f5 ("arm64: dts: mediatek: Add mt8192 clock controllers")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+
+Applied thanks!
+
+> ---
+> Changes since v1:
+> - Changed "broken" to "fail"
+> - Rebased onto v6.2-rc1 plus v6.2-tmp/* from mediatek repo
 > 
-> Best regards,
-> Philipp
-
-Hi Philipp,
-you are right that the value store/computed inside the structure wdd (struct watchdog_device) should be in seconds, according to the header file documentation in watchdog.h.
-
-However, in the PCF2127 datasheet, the value n that is stored in the PCF2127_REG_WD_VAL register does not represent a value in seconds, but a counter value. It is given by this equation:
-
-    n = source_clock_frequency x timer_period_in_seconds
-
-For the PCF2127, since the clock used is 1Hz, it works as the previous equation can be simplified as:
-
-    n = timer_period_in_seconds
-
-However, if the source clock is different than 1Hz, it would no longer work. Also, since the PCF2131 uses a default clock of 1/4 Hz, it also would not work.
-
-That is the reason why I modified the watchdog timer value (n) computation to take the clock into account. I then use the desired timeout in seconds given by  PCF2127_WD_VAL_DEFAULT to compute the counter value (n).
-
-So what I am proposing to do is to store the PCF2127_WD_VAL_DEFAULT value in wdd->timeout, as before, but convert it to a counter value in pcf2127_wdt_active_ping(). Or to only compute it once, I could define a new variable and compute/set it in pcf2127_watchdog_init().
-
-Hugo.
-
- 
-> On 15.12.22 16:02, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Introduce in the configuration structure two new values to hold the
-> > watchdog clock source and the min_hw_heartbeat_ms value.
-> > 
-> > The minimum and maximum timeout values are automatically computed from
-> > the watchdog clock source value for each variant.
-> > 
-> > The PCF2131 has no 1Hz watchdog clock source, as is the case for
-> > PCF2127/29.
-> > 
-> > The next best choice is using a 1/4Hz clock, giving a watchdog timeout
-> > range between 4 and 1016s. By using the same register configuration as
-> > for the PCF2127/29, the 1/4Hz clock source is selected.
-> > 
-> > Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
-> > but it should be between 2 and 254s, because the watchdog is triggered
-> > when the timer value reaches 1, not 0.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >   drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
-> >   1 file changed, 48 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 11fbdab6bf01..3fd2fee4978b 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -157,9 +157,29 @@
-> >   
-> >   /* Watchdog timer value constants */
-> >   #define PCF2127_WD_VAL_STOP		0
-> > -#define PCF2127_WD_VAL_MIN		2
-> > -#define PCF2127_WD_VAL_MAX		255
-> > -#define PCF2127_WD_VAL_DEFAULT		60
-> > +#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
-> > +/* PCF2127/29 watchdog timer value constants */
-> > +#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
-> > +#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
-> > +/* PCF2131 watchdog timer value constants */
-> > +#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
-> > +#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
-> > +/*
-> > + * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
-> > + * value, n, and the clock frequency, f, in Hz.
-> > + *
-> > + * The PCF2127/29 datasheet gives t as:
-> > + *   t = n / f
-> > + * The PCF2131 datasheet gives t as:
-> > + *   t = (n - 1) / f
-> > + * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
-> > + * the value 1, and not zero. Consequently, the equation from the PCF2131
-> > + * datasheet seems to be the correct one for both variants.
-> > + */
-> > +#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
-> > +
-> > +/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
-> > +#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
-> >   
-> >   /* Mask for currently enabled interrupts */
-> >   #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-> > @@ -202,6 +222,11 @@ struct pcf21xx_config {
-> >   	u8 reg_wd_val; /* Watchdog value register. */
-> >   	u8 reg_clkout; /* Clkout register. */
-> >   	u8 reg_reset;  /* Reset register if available. */
-> > +
-> > +	/* Watchdog configuration. */
-> > +	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
-> > +	int wdd_min_hw_heartbeat_ms;
-> > +
-> >   	unsigned int ts_count;
-> >   	struct pcf21xx_ts_config ts[4];
-> >   	struct attribute_group attribute_group;
-> > @@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
-> >   	pcf2127->wdd.parent = dev;
-> >   	pcf2127->wdd.info = &pcf2127_wdt_info;
-> >   	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
-> > -	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
-> > -	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
-> > -	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
-> > -	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-> > +
-> > +	pcf2127->wdd.min_timeout =
-> > +		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
-> > +	pcf2127->wdd.max_timeout =
-> > +		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
-> > +	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
-> > +					  pcf2127->cfg->wdd_clock_hz_x1000);
-> > +
-> > +	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
-> > +	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
-> > +	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
-> > +
-> > +	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
-> >   	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-> >   
-> >   	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
-> > @@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
-> >   		.reg_clkout = PCF2127_REG_CLKOUT,
-> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 1,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2127_REG_TS1_BASE,
-> > @@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
-> >   		.reg_clkout = PCF2127_REG_CLKOUT,
-> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 1,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2127_REG_TS1_BASE,
-> > @@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_val = PCF2131_REG_WD_VAL,
-> >   		.reg_clkout = PCF2131_REG_CLKOUT,
-> >   		.reg_reset  = PCF2131_REG_SR_RESET,
-> > +		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 4,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2131_REG_TS1_BASE,
-> > @@ -1215,7 +1255,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >   
-> >   	/*
-> >   	 * Watchdog timer enabled and reset pin /RST activated when timed out.
-> > -	 * Select 1Hz clock source for watchdog timer.
-> > +	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
-> >   	 * Note: Countdown timer disabled and not available.
-> >   	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
-> >   	 * of register watchdg_tim_ctl. The bit[6] is labeled
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index dd618c563e8a..ef4fcefa2bfc 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -644,6 +644,8 @@ scp_adsp: clock-controller@10720000 {
+>   			compatible = "mediatek,mt8192-scp_adsp";
+>   			reg = <0 0x10720000 0 0x1000>;
+>   			#clock-cells = <1>;
+> +			/* power domain dependency not upstreamed */
+> +			status = "fail";
+>   		};
+>   
+>   		uart0: serial@11002000 {
