@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A507674772
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A9767478D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 00:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjASXwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 18:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S230179AbjASXxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 18:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjASXwH (ORCPT
+        with ESMTP id S230010AbjASXxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:52:07 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58E29F398;
-        Thu, 19 Jan 2023 15:52:04 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DD2D2240003;
-        Thu, 19 Jan 2023 23:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674172323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HoYj7soWc4efzFRwg0HwkO/RREKv/HkGYPmHsNZ+ugg=;
-        b=d+y5aB5liVdDMNs7xy/6ser1eaS/Q+e/szVENUA6+MN/ibCLTHG1X49FjOax+oSxE7mRq2
-        4j1OwduPkI86qwr1fL+L1LPsBVD8u02UGU9xMt8QZ/7L314Z+XL6sPsXFTFDPiTLt7bjtn
-        xstpFREEmVXK5iaI2lXD0VINT71EVT1rkBWEVHiIpU1gmhRtjF8NSMNPckNGb9oiDWsKSo
-        ty/LbAD6z4dcbIMSNzCyerTVOdgIVWHPpcyrak7pcPjJf5mgpGtP/8uUaczX2J7Y3k4MjH
-        A+DHST1lpvP80rsurh5g3iXwZETlIY41FZOQsqx6YpJswprAZVRiGi28pb3p2A==
-Date:   Fri, 20 Jan 2023 00:52:01 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Dennis Lambe <dennis@sparkcharge.io>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
-        Gary Bisson <gary.bisson@boundarydevices.com>,
-        Javier Martinez Canillas <javier@osg.samsung.com>,
-        Troy Kisky <troy.kisky@boundarydevices.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
- from DT
-Message-ID: <Y8nXoZjco8uIrtFJ@mail.local>
-References: <20230119213903.899756-1-dennis@sparkcharge.io>
- <Y8nBloQfBPK3t5ce@mail.local>
- <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
+        Thu, 19 Jan 2023 18:53:16 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377346082;
+        Thu, 19 Jan 2023 15:53:15 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id dw9so4018979pjb.5;
+        Thu, 19 Jan 2023 15:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hnQrEGftYzdf6tY/q/kKi64pUoSAmvwVM0T/m3uVwb8=;
+        b=Zzk2Pe5m9zaOfWTtCfHa6+NqdpP84oStIEScj/E3t2Oy2NcfilIjARw9BKNZ5gozDd
+         5IYf2E4hMqq1h5R2if5mKKUikutc+wFCc6wZ0kHtIqYNzNdSufesvNV7BnlaRBOph0g3
+         /zJ5dJdOBRVUZOmCs5vXfLxiYSpAEsfOMp0ye10pybO4Xkpgo+zQbk4Pso8mg/bAfU9f
+         tzZYcH9rNuz584ID02LCqr9jp5BXr8hjsm/7ck2s1Kw4SV6EYsmguHBpArf6iD8hSFZa
+         lV+VqvRI3l2rE+SkLWptue+/6M80lxhLoFz5yTH7rStbKz/02jWtQOXyw99f/oSyW3mZ
+         o51w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hnQrEGftYzdf6tY/q/kKi64pUoSAmvwVM0T/m3uVwb8=;
+        b=MO3qq/fpj8UqL8TPZhRtuCsOXj36TG2kHxiaCJc4SWMleRztnt+dPKhEOi6LBY31wP
+         4yN0YJMdTX5fklydJs8hs4p3KE3voQI4oAqEBqXc+UxoeY6vLDq9WRBMQy5Xxvxb8yrN
+         eKqkscybonZzrZstDUuRwslTcLpoCMF4PHfqav0/qRvttfkpS1JcAnP4uF+NRP4gumFD
+         gRiSaG+ix49LY83OpVasTbyMsC8fr362HpUfJmgcKXXc1FkEkiQlNcSJYU8WuKEkS7Yg
+         Bll2vWbrOMPHMvGqHjEESooE5o7jNLN+kdvIp9jGH6v3lgHAIwH9faxLGCOn8ALhXkF/
+         dpHA==
+X-Gm-Message-State: AFqh2koHrEa4Jz/EtDUpw6ZPvZoa4wF1CzboptAZwGWVetAPi0PdfP72
+        ZWo4QTCMAUZv7HdcpHkPDd/z2Wi0KbJaF6p/2hE=
+X-Google-Smtp-Source: AMrXdXtGqpDrTESFDKKUOM8ZNc4b9DnkLVz69Kgqe3L58sjNRH4OgzKd6FgS0GY4vG4UBR2KLQG4NbqGZVGWqsShLUQ=
+X-Received: by 2002:a17:90b:f0a:b0:229:55bb:e575 with SMTP id
+ br10-20020a17090b0f0a00b0022955bbe575mr1232525pjb.144.1674172394876; Thu, 19
+ Jan 2023 15:53:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+References: <20230119204434.4017605-1-joel@joelfernandes.org>
+In-Reply-To: <20230119204434.4017605-1-joel@joelfernandes.org>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Fri, 20 Jan 2023 07:53:03 +0800
+Message-ID: <CAABZP2xy17GZKujvLNTmpLJi+BnGHhiQS0dn_F5_5brSd37D5Q@mail.gmail.com>
+Subject: Re: [PATCH] tick/nohz: Fix cpu_is_hotpluggable() by checking with
+ nohz subsystem
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        rcu <rcu@vger.kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,73 +76,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 18:27:44-0500, Dennis Lambe wrote:
-> On Thu, Jan 19, 2023 at 5:18 PM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> 
-> > I need to find time to think about it because while setting the analog
-> > trimming statically from the device tree solves your immediate problem,
-> > it will also remove the possibility to handle it from userspace later
-> > on. I would really prefer this uses the offset interface or a better
-> > interface that unfortunately doesn't exist yet.
-> 
-> Thanks for letting me know what you're thinking about this. I think I
-> see what you're getting at.
-> 
-> However, I think this is more complex than either of us had
-> considered. The M41T82 has two different calibration capabilities:
-> 
-> 1. Digital calibration. This looks to me like it behaves similarly to
-> the digital calibration feature of the M41T00, which ds1307.c exposes
-> through the offset interface. The M41T8x driver doesn't currently
-> expose the digital calibration register at all, but if it did I would
-> agree that the offset interface looks appropriate.
-> 
-> 2. Analog calibration -- that's what the datasheet calls it, but the
-> range on it is very big -- 3.5 pF all the way up to 17.4 pF -- and
-> their reference design uses it as the only xtal load capacitance in
-> the circuit. Most of the values you could set for this would be wildly
-> inappropriate for any given design's choice of xtal oscillator.
-> 
-> Between these, I don't know if you'd want to expose just one, the
-> other, or some synthesis of both via the offset interface or some new
-> interface.
-> 
-> I'd make the case that the xtal's required load capacitance is a
-> hardware requirement that's appropriate to configure via the Device
-> Tree. Even if you did want to allow some amount of runtime fine-tuning
-> of this register, you'd still want to document a rational starting
-> value chosen based on the hardware.
-> 
-> I agree with you, though, that if a runtime fine-tuning feature were
-> added, we'd have to find a way to choose whether to initialize the
-> register on boot or not, so that we didn't overwrite the fine-tuning.
-> 
-> Just to demonstrate something that could work, and would be
-> backward-compatible with this patchset, here's a hypothetical design:
-> * dt-bindings: add quartz-load-femtofarad-tuning-min and
-> quartz-load-femtofarad-tuning-max
-> * Limit run-time tuning adjustments to be within that range
-> * Only overwrite the analog calibration register on start-up if its
-> value is outside that range
-> 
-> After thinking through all this, I'd still advocate for merging this
-> patchset in some form and leaving integration with runtime APIs as a
-> potential future enhancement. I look forward to hearing your thoughts
-> about it.
+On Fri, Jan 20, 2023 at 4:45 AM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
+> However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
+> torture tests that do offlining to end up trying to offline this CPU causing
+> test failures. Such failure happens on all architectures.
+>
+> Fix it by asking the opinion of the nohz subsystem on whether the CPU can
+> be hotplugged.
+>
+> [ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
+Thanks for your fantastic work
+I applied this fix to linux-5.15.y, and perform new round of rcu
+torture test on PPC VM of Open Source Lab of Oregon State University.
+Could you please wait for the test to finish?
 
-I specifically referred to analog trimming in my reply because I knew it
-could do digital trimming and I also said that we will probably need a
-new interface for this.
-The main existing issue is that the register changes the capacitance but
-the datasheet doesn't give the actual effect in ppm which doesn't
-integrate well with the existing userspace tooling.
+The test results of linux-5.15.y before your patch can be viewed at [1]
+The patched source code of linux-5.15.y can be viewed at [2]
+The ongoing test of patched linux-5.15.y can be viewed at [3]
 
-I advocate against merging as is without more thought because changing
-anything later will mean breaking the DT ABI and this is not allowed.
+[1] http://140.211.169.189/linux-stable-rc/tools/testing/selftests/rcutorture/res/2023.01.18-13.22.39-torture/
+[2] http://140.211.169.189/linux-stable-rc/
+[3] http://140.211.169.189/linux-stable-rc/tools/testing/selftests/rcutorture/res/2023.01.19-23.40.55-torture/
 
+Hope to continue to benefit the community.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thank you all
+Zhouyi
+>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: rcu <rcu@vger.kernel.org>
+> Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  drivers/base/cpu.c       |  3 ++-
+>  include/linux/tick.h     |  2 ++
+>  kernel/time/tick-sched.c | 12 +++++++++++-
+>  3 files changed, 15 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 55405ebf23ab..450dca235a2f 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -487,7 +487,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
+>  bool cpu_is_hotpluggable(unsigned int cpu)
+>  {
+>         struct device *dev = get_cpu_device(cpu);
+> -       return dev && container_of(dev, struct cpu, dev)->hotpluggable;
+> +       return dev && container_of(dev, struct cpu, dev)->hotpluggable
+> +               && tick_nohz_cpu_hotpluggable(cpu);
+>  }
+>  EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+>
+> diff --git a/include/linux/tick.h b/include/linux/tick.h
+> index bfd571f18cfd..9459fef5b857 100644
+> --- a/include/linux/tick.h
+> +++ b/include/linux/tick.h
+> @@ -216,6 +216,7 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
+>                                      enum tick_dep_bits bit);
+>  extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
+>                                        enum tick_dep_bits bit);
+> +extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
+>
+>  /*
+>   * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
+> @@ -280,6 +281,7 @@ static inline void tick_nohz_full_add_cpus_to(struct cpumask *mask) { }
+>
+>  static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
+>  static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
+> +static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
+>
+>  static inline void tick_dep_set(enum tick_dep_bits bit) { }
+>  static inline void tick_dep_clear(enum tick_dep_bits bit) { }
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index 9c6f661fb436..383a060f30c5 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -510,7 +510,7 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+>         tick_nohz_full_running = true;
+>  }
+>
+> -static int tick_nohz_cpu_down(unsigned int cpu)
+> +static int tick_nohz_cpu_hotplug_ret(unsigned int cpu)
+>  {
+>         /*
+>          * The tick_do_timer_cpu CPU handles housekeeping duty (unbound
+> @@ -522,6 +522,16 @@ static int tick_nohz_cpu_down(unsigned int cpu)
+>         return 0;
+>  }
+>
+> +static int tick_nohz_cpu_down(unsigned int cpu)
+> +{
+> +       return tick_nohz_cpu_hotplug_ret(cpu);
+> +}
+> +
+> +bool tick_nohz_cpu_hotpluggable(unsigned int cpu)
+> +{
+> +       return tick_nohz_cpu_hotplug_ret(cpu) == 0;
+> +}
+> +
+>  void __init tick_nohz_init(void)
+>  {
+>         int cpu, ret;
+> --
+> 2.39.0.246.g2a6d74b583-goog
+>
