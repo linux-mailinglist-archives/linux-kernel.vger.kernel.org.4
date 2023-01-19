@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639516736AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA7F6736AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 12:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjASLXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 06:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S229989AbjASLYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 06:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjASLXc (ORCPT
+        with ESMTP id S230301AbjASLYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:23:32 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D894D6F31D;
-        Thu, 19 Jan 2023 03:23:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674127411; x=1705663411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=R/RxuuT7IkxXhFxtCaN5MvQfGNn2LuusbfKNM0MIJds=;
-  b=YgLXzSrfRJTpYzDrX0/J9RzLtVwcWU6Lp1ErUKewkqm2NUhqOa97yGVS
-   0igxt9z+Fo4uhhq7k6nUNDuWYNaSTZ0KgOd3Kb7LQN6JczGxUghh83xaD
-   FgaGExF99ghg0AS9uH5yncBK9U44qGkNXzZotFCyZN9fb43YjUADTIC6m
-   0l4aNv3yNRRGAwq0zphaNJbMWmcxdvKvQX1sEDIrI1vGiQl47Z8XI92YZ
-   bhDc9JbxOU0pvi/ZcBxHCYHYtrfUtgCdUdDFn0T7YSHpfSviPysL0JRj4
-   +gWsAt02PD3K53RM4IfdRWjyMcEpBs9X0ouc2FF2vMahgWljpvQ8oILSI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304942739"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="304942739"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 03:23:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="802602459"
-X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="802602459"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 03:23:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pIT0x-00BcTJ-2x;
-        Thu, 19 Jan 2023 13:23:27 +0200
-Date:   Thu, 19 Jan 2023 13:23:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>
-Subject: Re: [PATCH v1 1/2] iio: core: Replace
- iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
-Message-ID: <Y8koLwGVjyrDb66P@smile.fi.intel.com>
-References: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
- <5f9b713b-9c71-7da6-e674-b6ebd28dc5d5@metafoo.de>
- <Y8gVDs0UoiHqCRsM@smile.fi.intel.com>
- <64406c4f-c9da-b434-360b-1050ff685d2d@metafoo.de>
- <bb2e8b7b4ca894ed53d70bf04e2d52bed2553105.camel@gmail.com>
+        Thu, 19 Jan 2023 06:24:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4842A71F06
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 03:23:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D062D61B83
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307C8C433D2;
+        Thu, 19 Jan 2023 11:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674127435;
+        bh=3lFUHRnmz0TyXZNkO1Fe02t8bWD12XHGw6NMyyyfs+E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=PGIRNk6apWydgW7CPWjKgc6/lCQ1ZLoDqT/l1uWYOdaCcqamXu0P4hGejg8zxxpDT
+         WRna4WHuRtXM+07v3SnVNMOy1mPTNV4TwM2bJYXMBFqKZkQzds4NbrtRAsyyK8Fd/n
+         2u2ZSGZh9LJuJ6ld3o0unloKvGgc9bhkyWtM2OWSBbX0v+IVrT+kMqXzGnuDMdooyl
+         KMG4V4irkQHvyhSGX+pdCFwmGuVSkfOGs8Vuwo0g7VEv5s/2gerUl9x5JhxjDh0gOX
+         UGpDIzUq/goE0LFFro58/7UOZoOiHkMSu2zwko9oPOFn1DALumBOg9iohBSSx6DsDo
+         XAfb40UBRDMpQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BDCF75C0623; Thu, 19 Jan 2023 03:23:54 -0800 (PST)
+Date:   Thu, 19 Jan 2023 03:23:54 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230119112354.GP2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
+ <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
+ <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8hclxuhpGm+krkz@rowland.harvard.edu>
+ <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8iom6Mjz9rCX42A@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bb2e8b7b4ca894ed53d70bf04e2d52bed2553105.camel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8iom6Mjz9rCX42A@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:00:45AM +0100, Nuno Sá wrote:
-> On Wed, 2023-01-18 at 08:37 -0800, Lars-Peter Clausen wrote:
-> > On 1/18/23 07:49, Andy Shevchenko wrote:
-> > > On Wed, Jan 18, 2023 at 07:22:30AM -0800, Lars-Peter Clausen wrote:
-> > > > On 1/17/23 23:48, Andy Shevchenko wrote:
-> > > > > None of the current users is using gaps in the list of the
-> > > > > items.
-> > > > > No need to have a specific function for that, just replace it
-> > > > > by
-> > > > > library available __sysfs_match_string().
-> > > > Hm, I specifically remember adding this for a driver where there
-> > > > were gaps.
-> > > > One of the DACs. But it might be that the driver itself never
-> > > > made it
-> > > > upstream.
-> > > I have checked all modules that have struct iio_enum and/or ("or"
-> > > probably may
-> > > not happen) IIO_ENUM() in them.
-> > > 
-> > > It might be that I missed something.
-> > I checked too, I can't find it either. The driver probably never made
-> > it 
-> > upstream.
+On Wed, Jan 18, 2023 at 09:19:07PM -0500, Alan Stern wrote:
+> On Wed, Jan 18, 2023 at 04:02:14PM -0800, Paul E. McKenney wrote:
+> > On Wed, Jan 18, 2023 at 03:54:47PM -0500, Alan Stern wrote:
+> > > How does this differ from srcu_read_lock() and srcu_read_unlock()?  And 
+> > > how do the "up" and "down" parts figure into it? -- what is going up or 
+> > > down?
+> > 
+> > Functionally and from a performance/scalability viewpoint, they
+> > are identical to srcu_read_lock() and srcu_read_unlock().  The only
+> > difference is that srcu_down_read() and srcu_up_read() lack the lockdep
+> > machinery that complains when a matching pair of srcu_read_lock() and
+> > srcu_read_unlock() are used from different tasks.
 > 
-> Yeah, I also did a quick check and I could find it in one adc (most
-> likely we have more downstream users of this) that did not make it
-> upstream. Eventually, we want to have it upstream but the ABI using the
-> gaps can arguably be dropped...
+> This makes me wonder if there's any need for srcu_down_read and 
+> srcu_up_read at all.  Why not just use srcu_read_lock and 
+> srcu_read_unlock, and remove the lockdep check?
+
+Because the lockdep check is quite helpful in finding bugs in the
+common case.
+
+> > Within the implementation, nothing ever goes down, it is all
+> > this_cpu_inc().  The "down" and "up" are by analogy to down() and up(),
+> > where "down()" says acquire some rights to a resource and "up()" says
+> > release those rights.
 > 
-> Anyways, from my side I'm fine with this change. We can revert it if we
-> ever have a real user for this. I'll just have to be careful when
-> updating ADI tree (but that is our problem :)).
+> Another reason not to use those names.  If you insist on making these 
+> operations distinct from srcu_read_lock and srcu_read_unlock, why not 
+> borrow the "_get" and "_put" nomenclature used by the device core?  I 
+> suspect more people would associate them with acquiring and releasing 
+> rights to a resource.  (Although in this case it might be so clear 
+> exactly what that resource is.)
+> 
+> > Wait, I can make "down" work.
+> > 
+> > A call to srcu_down_read() reduces the quantity computed by summing the
+> > unlocks then subtracting the sum of the locks.  A call to srcu_up_read()
+> > increases that same quantity.  ;-)
+> 
+> I can't honestly call that a resoundingly convincing argument.  :-)
 
-We usually do not keep a dead code in the kernel, and handling gaps is
-a dead code. And yes, we always can return to that when we have a user,
-most likely as a part of the generic library and not just IIO.
+It is exactly the same argument for the name of down() and up().  ;-)
 
--- 
-With Best Regards,
-Andy Shevchenko
+And the analogy between mutex_lock() and down() on the one hand an
+srcu_read_lock() and srcu_down_read() should be helpful as well.
 
-
+							Thanx, Paul
