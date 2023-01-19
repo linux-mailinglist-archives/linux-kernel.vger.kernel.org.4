@@ -2,117 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDECB67308E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECA3673097
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjASEsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S229973AbjASEvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 23:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjASEr1 (ORCPT
+        with ESMTP id S229724AbjASEvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:47:27 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB106A40;
-        Wed, 18 Jan 2023 20:42:53 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id br9so1519469lfb.4;
-        Wed, 18 Jan 2023 20:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtDJTYU8IQbrJDzbr5O6n1dEsQoWlgEN9W+rVKPgh8E=;
-        b=WWGTHcijH4H7fpQK0uUkoZ0nBgwCaROpz+B+nm6k3j8Jj3ANt1DkujCkFtDDK6y1KU
-         1kLjHP0o/Da16AClAyEEaGmp0YA2VRup+fDV9Um6nzDxJABDafT7dQC4ApNE3fKSn7AW
-         cjck46z+8hGYWqf8bu0vq7VPl/rJ+qlMX7XUQkw9/+OuAE5KuToi01w4N5RrFWQ+fW50
-         TzqkmQDPsZyIBFRVt788yXMuiaMxdszK3fnhs9YZ5X8+lDMGKZxWFYRJMx/QsX98Ndj/
-         cwy7FFHWS0x+U3Jc91PrT1wX2i+R83nCuJ/XqkCUgxjWSO323b3gW4UoKLY57YMLK5NK
-         RdoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DtDJTYU8IQbrJDzbr5O6n1dEsQoWlgEN9W+rVKPgh8E=;
-        b=mhpUMgj7LVLbMEKnEIxEnidx3QTQL0vWBR7rP0XQC3S/9MXeJe0IoiX0xYjT0EOpDT
-         7iHla0j8Xd/Kx7ODlYS3GQOPKcStLYbg8H9wvsnn6SkarC4M+sqnZQxwywcfEMsSLtKo
-         tslVH45e0Xjj2YNdlx9lRO8K7bivP4UFk7HT1t1OqOzuJph+s+MfF8NR6a0tePlGvhof
-         2k5E2mEpZrHDwl8cAgYAunnpkb+PZIocw3OII9NdD8yLE/I0/uOih+c6Ygagk5tLXGdx
-         SqsVloBfvEhbXZKrKYw2gaUjBj8ZOLdClp7eEbht8+ZLdy5kdT3DpIaCJdQeUIAY7WU4
-         hWLg==
-X-Gm-Message-State: AFqh2kp6Gx0bhA6YXPsI0V8lzMth4BsoqF2jJmZbFz2ghJR0nxkVXz4F
-        Ix3lhWdFAA3aBe3AAfF0WTRXmQ7qUcS0PS6rhL4=
-X-Google-Smtp-Source: AMrXdXvoxhGxJdgDx5sJ/XpyewEboRPn/nOKW83Kdl8MInWFXe61sElRK2+7lYQuj2gJAm+Ir+QmhG1b+RPfXXqQMkQ=
-X-Received: by 2002:a05:6512:96a:b0:4c4:dd2a:284f with SMTP id
- v10-20020a056512096a00b004c4dd2a284fmr585669lft.440.1674103371385; Wed, 18
- Jan 2023 20:42:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20230117221858.734596-1-jmaxwell37@gmail.com> <20230118203849.7c00187a@kernel.org>
-In-Reply-To: <20230118203849.7c00187a@kernel.org>
-From:   Jonathan Maxwell <jmaxwell37@gmail.com>
-Date:   Thu, 19 Jan 2023 15:42:14 +1100
-Message-ID: <CAGHK07D2K7JajnzDGYV5sLeMVX1TDUtkTqLO62ib3h+GWrRWfA@mail.gmail.com>
-Subject: Re: [net-next v2] ipv6: Document that max_size sysctl is depreciated
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, martin.lau@kernel.org,
-        joel@joelfernandes.org, paulmck@kernel.org, eyal.birger@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrea.mayer@uniroma2.it
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 23:51:15 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF727C868;
+        Wed, 18 Jan 2023 20:45:00 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2E52F32002D8;
+        Wed, 18 Jan 2023 23:44:58 -0500 (EST)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Wed, 18 Jan 2023 23:45:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674103497; x=1674189897; bh=RA62djbRjH
+        AtR5eYDGCg3s9PgydQzyaEPXFw3P5ADCE=; b=bQ1Lex1biSOsg9sZ0oCG32YJjg
+        ymUiX5FA89IlkUP0WnP4Mqbfg3cRGRfDMd/Q9HMHxZyPeveH/z8DNzb9Y2JyciS9
+        PbR458V7YzwoRUwih89rXDzIQeadvmjl4laV/9igg04WSdFxrnnOafzF1oehvDhV
+        0XayKr4JLT10lkAZu7NShyxFpzhNgRANVRnvZBuZpCszrKLwIWYebsJyx6jGy5lr
+        zkVjlgVd103/d/Z3i2laAkK2x0leJjXwsw5Wf+dzjJ3jK4CiVCz+0qPuE158uMq7
+        cWkgoFDu0cNjnseoQ+eeu9L4IPa6Le4Uc5xvVu8zdwPvQ9mUCD0aB3zHWiQQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674103497; x=1674189897; bh=RA62djbRjHAtR5eYDGCg3s9PgydQ
+        zyaEPXFw3P5ADCE=; b=gH4TLQKqQ3ouj/hKJKXkuCBSaYp1Utvr1tqT5JHO8dAS
+        LqMSLpW0Q1IiOhP11OGXZnGtFt6/CNcATiaWIEajheAAQqh/+sVZC1mKFZyV6Gfr
+        1zJShEs48+Id9p6LgF4Hv78ghevwRh/72pA3tZGN3pq9BF2LRG/kyuF1A+LofmL4
+        7oTrKkLV9/3vOJdY6eCabQcLB3OyzxsRmSreTHRKUCYT7vOqzXzafdg15xpCH/x3
+        0/+9NGh8xLdxaLeVwGSCyyqZKgHswU9a/IVf4B2mLGdH3fp2uWzroVajfJ8toLIG
+        XD+wjySvyoz7fvaZ5PVyU+V9eszLfmriVqQKpz7i2g==
+X-ME-Sender: <xms:yMrIY7pCyXxUMOvaDKg2BAcTqICUraG38J-Nrpj3Jqt5QjSlu4Tu_w>
+    <xme:yMrIY1qhEgvdxItp5fbsmCTEN1D2vbWb98Gg8GxGhXwrFWABp7HZHQV3cPqpLhGPC
+    OvL8Qv3UAAvNOjnZQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:yMrIY4PnPTa0pI2mk7ylIXFS6WM5xsFnHxvupr09IJ7xciQy9a-poQ>
+    <xmx:yMrIY-6wAgKJPmeYq1fdu5mkCyeb74PoPwTI_8bMlCnagMBn9b8N2A>
+    <xmx:yMrIY67txgF_3CsmtcEk9pWkopnv4Fg3GzuNDnu2P2ykVK1LxhHxAg>
+    <xmx:ycrIY_pByLB2jT-LFgxAD3ro1NLEN5i3aZT12bkvkjM1hHQvuvnyIw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A40C61700089; Wed, 18 Jan 2023 23:44:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <9a82d30a-c8ca-47fb-a976-f7f4d99cefec@app.fastmail.com>
+In-Reply-To: <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+ <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+Date:   Thu, 19 Jan 2023 15:14:36 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Kevin Hilman" <khilman@baylibre.com>,
+        "Jerome Brunet" <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "Chin-Ting Kuo" <chin-ting_kuo@aspeedtech.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Kamal Dasu" <kdasu.kdev@gmail.com>,
+        "Broadcom internal kernel review list" 
+        <bcm-kernel-feedback-list@broadcom.com>, "Han Xu" <han.xu@nxp.com>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Serge Semin" <fancer.lancer@gmail.com>,
+        "Haibo Chen" <haibo.chen@nxp.com>,
+        "Yogesh Gaur" <yogeshgaur.83@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Heiko Stuebner" <heiko@sntech.de>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Li-hao Kuo" <lhjeff911@gmail.com>,
+        "Michal Simek" <michal.simek@xilinx.com>,
+        "Orson Zhai" <orsonzhai@gmail.com>,
+        "Baolin Wang" <baolin.wang@linux.alibaba.com>,
+        "Chunyan Zhang" <zhang.lyra@gmail.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        "Maxime Ripard" <mripard@kernel.org>,
+        =?UTF-8?Q?=EF=BF=BDecki?= <rafal@milecki.pl>,
+        "Vaishnav Achath" <vaishnav.a@ti.com>,
+        "Parshuram Thombare" <pthombar@cadence.com>,
+        "Leilk Liu" <leilk.liu@mediatek.com>,
+        "Gabor Juhos" <juhosg@openwrt.org>,
+        "Bert Vermeulen" <bert@biot.com>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Marek Vasut" <marex@denx.de>,
+        "Birger Koblitz" <mail@birger-koblitz.de>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Anson Huang" <Anson.Huang@nxp.com>,
+        "Chris Packham" <chris.packham@alliedtelesis.co.nz>,
+        "Kuldeep Singh" <singh.kuldeep87k@gmail.com>,
+        "Pragnesh Patel" <pragnesh.patel@sifive.com>,
+        "Christophe Kerello" <christophe.kerello@foss.st.com>,
+        "Patrice Chotard" <patrice.chotard@foss.st.com>,
+        "Erwan Leray" <erwan.leray@foss.st.com>,
+        "Fabrice Gasnier" <fabrice.gasnier@foss.st.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 2/2] spi: dt-bindings: cleanup examples - indentation, lowercase
+ hex
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 3:38 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 18 Jan 2023 09:18:58 +1100 Jon Maxwell wrote:
-> > Subject: [net-next v2] ipv6: Document that max_size sysctl is depreciated
-> >
-> > v2: use correct commit syntax.
->
-> change log under the --- lines
->
-> > Document that max_size is depreciated due to:
-> >
-> > af6d10345ca7 ("ipv6: remove max_size check inline with ipv4")
->
->  ^ commit
 
-Okay I'll add that.
 
+On Thu, 19 Jan 2023, at 04:09, Krzysztof Kozlowski wrote:
+> Cleanup examples:
+>  - use 4-space indentation (for cases when it is neither 4 not 2 space),
+>  - drop redundant blank lines,
+>  - use lowercase hex.
 >
-> the word "commit" should be there before the hash
+> No functional impact except adjusting to preferred coding style.
 >
-> > Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
-> > ---
-> >  Documentation/networking/ip-sysctl.rst | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> > index 7fbd060d6047..edf1fcd10c5c 100644
-> > --- a/Documentation/networking/ip-sysctl.rst
-> > +++ b/Documentation/networking/ip-sysctl.rst
-> > @@ -156,6 +156,9 @@ route/max_size - INTEGER
-> >       From linux kernel 3.6 onwards, this is deprecated for ipv4
-> >       as route cache is no longer used.
-> >
-> > +     From linux kernel 6.2 onwards, this is deprecated for ipv6
->
-> 6.2 or 6.3? 6.2 is what's currently in Linus's tree, net-next
-> is 6.3 and the commit in the commit msg is in net-next only.
->
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  26 +--
+>  .../bindings/spi/amlogic,meson6-spifc.yaml    |  22 +--
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      |  24 +--
 
-I'll change this to 6.3.
+For the Aspeed change:
 
-Regards
-
-Jon
-
-> > +     as garbage collection manages cached route entries.
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
