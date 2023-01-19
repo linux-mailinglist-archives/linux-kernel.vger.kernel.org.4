@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFE56742ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0FA6742EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjASTgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S230417AbjASTg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjASTgI (ORCPT
+        with ESMTP id S230254AbjASTg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:36:08 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E434DCEC
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:36:03 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30JJZ95D909956
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 19 Jan 2023 11:35:09 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30JJZ95D909956
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674156911;
-        bh=KFNC6n5tjG56AZ6QGCCnA813vxZPvPdVzmseUKYQm/I=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=TfwjDirpObGhbZuqhQo/OjXlYctFSVNIqq7knSM29fRDfZ2tQke+RwtNnj4zfQlUu
-         Bq7qw2iSUSh4dJSDm7i/EaoS584mAtH8JI0HxllkzWt3z0T8MZU4Yg0NjdsZBw+YZK
-         ZfM4pgmJ0Ook31LrNi0G4ZIduvwtcQZqBqp0unnHdEG7AuhbJIo+R1m0AcjiUZ0cRr
-         NKhVSWrU3s9CUZaUwpuO6d8p7hTU5Lu7doD4erJ735/nqwxXHrIi/r4/iUAE4IvqIK
-         0aAr/sWn86woN3PLoEzLyYRrgoztLvaP7svvxfNwZ4ItddpzPXF3KsA96J5mrIBTMy
-         XnFHIg1J9H7Nw==
-Date:   Thu, 19 Jan 2023 11:35:06 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Joan Bruguera <joanbrugueram@gmail.com>
-CC:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        Jan Beulich <jbeulich@suse.com>,
-        Roger Pau Monne <roger.pau@citrix.com>,
-        Kees Cook <keescook@chromium.org>, mark.rutland@arm.com,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        =?ISO-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>,
-        jroedel@suse.de, kirill.shutemov@linux.intel.com,
-        dave.hansen@intel.com, kai.huang@intel.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/7=5D_x86/boot=3A_Remove_ve?= =?US-ASCII?Q?rify=5Fcpu=28=29_from_secondary=5Fstartup=5F64=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y8e/yKgVZgbqgvAG@hirez.programming.kicks-ass.net>
-References: <20230116142533.905102512@infradead.org> <20230116143645.589522290@infradead.org> <Y8e/yKgVZgbqgvAG@hirez.programming.kicks-ass.net>
-Message-ID: <5718C98C-C07A-4BD1-9182-7F3A8BDBC605@zytor.com>
+        Thu, 19 Jan 2023 14:36:27 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 617CD58293
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:36:25 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE8DF13D5;
+        Thu, 19 Jan 2023 11:37:06 -0800 (PST)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FEAC3F67D;
+        Thu, 19 Jan 2023 11:36:24 -0800 (PST)
+Message-ID: <651bfdea-19ce-1b4b-3ebd-bbd558d8403b@arm.com>
+Date:   Thu, 19 Jan 2023 19:36:19 +0000
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/8] iommu: Factor out a "first device in group" helper
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     joro@8bytes.org, will@kernel.org, hch@lst.de,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1673978700.git.robin.murphy@arm.com>
+ <592bff75a7fc4d50d5b2435a09dfff19f1072973.1673978700.git.robin.murphy@arm.com>
+ <Y8mYlV/ODKZ3EG57@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Y8mYlV/ODKZ3EG57@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 18, 2023 1:45:44 AM PST, Peter Zijlstra <peterz@infradead=2Eorg>=
- wrote:
->On Mon, Jan 16, 2023 at 03:25:34PM +0100, Peter Zijlstra wrote:
->> The boot trampolines from trampoline_64=2ES have code flow like:
->>=20
->>   16bit BIOS			SEV-ES				64bit EFI
->>=20
->>   trampoline_start()		sev_es_trampoline_start()	trampoline_start_64()
->>     verify_cpu()			  |				|
->>   switch_to_protected:    <---------------'				v
->>        |							pa_trampoline_compat()
->>        v								|
->>   startup_32()		<-----------------------------------------------'
->>        |
->>        v
->>   startup_64()
->>        |
->>        v
->>   tr_start() :=3D head_64=2ES:secondary_startup_64()
->>=20
->> Since AP bringup always goes through the 16bit BIOS path (EFI doesn't
->> touch the APs), there is already a verify_cpu() invocation=2E
->
->So supposedly TDX/ACPI-6=2E4 comes in on trampoline_startup64() for APs -=
--
->can any of the TDX capable folks tell me if we need verify_cpu() on
->these?
->
->Aside from checking for LM, it seems to clear XD_DISABLE on Intel and
->force enable SSE on AMD/K7=2E Surely none of that is needed for these
->shiny new chips?
->
->I mean, I can hack up a patch that adds verify_cpu() to the 64bit entry
->point, but it seems really sad to need that on modern systems=2E
+On 19/01/2023 7:23 pm, Jason Gunthorpe wrote:
+> On Thu, Jan 19, 2023 at 07:18:21PM +0000, Robin Murphy wrote:
+>> This pattern for picking the first device out of the group list is
+>> repeated a few times now, so it's clearly worth factoring out.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>   drivers/iommu/iommu.c | 22 ++++++++++------------
+>>   1 file changed, 10 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index bc53ffbba4de..5b37766a09e2 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -1084,6 +1084,11 @@ void iommu_group_remove_device(struct device *dev)
+>>   }
+>>   EXPORT_SYMBOL_GPL(iommu_group_remove_device);
+>>   
+>> +static struct device *iommu_group_first_dev(struct iommu_group *group)
+>> +{
+> 
+> Add a
+>   lockdep_assert_held(&group->lock);
+> 
+> ?
 
-Sad, perhaps, but really better for orthogonality =E2=80=93 fewer special =
-cases=2E
+Sure, could do. I guess I didn't consider it since 
+iommu_group_device_count() and __iommu_group_for_each_dev() don't assert 
+it either, but that's not to say they couldn't change too.
+
+>> -	group->blocking_domain =
+>> -		__iommu_domain_alloc(dev->dev->bus, IOMMU_DOMAIN_BLOCKED);
+>> +	group->blocking_domain = __iommu_domain_alloc(dev->bus, IOMMU_DOMAIN_BLOCKED);
+>>   	if (!group->blocking_domain) {
+>>   		/*
+>>   		 * For drivers that do not yet understand IOMMU_DOMAIN_BLOCKED
+>>   		 * create an empty domain instead.
+>>   		 */
+>> -		group->blocking_domain = __iommu_domain_alloc(
+>> -			dev->dev->bus, IOMMU_DOMAIN_UNMANAGED);
+>> +		group->blocking_domain = __iommu_domain_alloc(dev->bus, IOMMU_DOMAIN_UNMANAGED);
+>>   		if (!group->blocking_domain)
+>>   			return -EINVAL;
+> 
+> These are extra hunks?
+
+The annoyingly-subtle difference between "dev->dev->bus" and "dev->bus" 
+is precisely one of the reasons I think hiding the group_device behind a 
+helper is worthwhile ;)
+
+Thanks,
+Robin.
