@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82C2673C08
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48716673C12
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjASOck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S230483AbjASOdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjASOcR (ORCPT
+        with ESMTP id S231482AbjASOcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:32:17 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044E88103B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:30:43 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k16so1692406wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:30:43 -0800 (PST)
+        Thu, 19 Jan 2023 09:32:54 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F47222DF7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:32:01 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4fd37a1551cso4813007b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:32:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
-        b=vkJOCCzoL8vjtTPGRMsoOw1R7mAXvOAuerYWRxBWXaMunEvMBJjX9QndCAb/cafgXt
-         Wp7AkkYDAcaPRBYQ2VzjOWVN5wMoZwqSQeukFJm2XD2SjfcQjxuESHU2zwmh/1FcbtXJ
-         OR5MMr6FO9bGoSKOuVuORlUSNlWpvJonbFssJ4ND0rStfsU754zN4PuUj9O8ONNIjh4a
-         XtpkqnpVW9+jKKgKSW7R6dKH1iBsVvX0/s9opm2SOcUAbFbwYsgnVMH8XvKRL/D2Bxl+
-         wln/UUynFA/QaLNWDnaf5NjAcf474M7n22HbeVud8gC0gqsEEcvlanaQjOHrda0OhsBF
-         77EA==
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RxbmQQnppwWipwY+7UMUv45QxwTbva6H7m4OgO4CL+g=;
+        b=jAf0mB3bHlNaeYBduqwR1vVVqS+WYNlZmEDa2g59jQ1zQ5s4Rt73Et8LXdtllpnq4f
+         RAnPn83bUgVqODpdayn1j27M58kqRj04/J7DY75PTxSdZdfeAPhZbXR3XS9JpAOxc4lz
+         LABBEX47Tzb3k0Uxva9hJztJ4w7HEC4rKhDFcdvrLdLmS75odAOiqH0FC9hPShIFOhIa
+         duLs1ec89noN1qlI0didbv10lAKWO44VW7I4hCyhcPFam46gb3ZSQq82dXSMalz6T+wD
+         ZHNjkzdUT3XVoI70P+E4zcRFWtcN7o9Sy+CHL4m01advLhRlKb6fKpUZGmgFV9imI9Tv
+         BX8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
-        b=EjNfwb3Ow4slJmMfD2LBtyaKwSPFLI6F+ww3Zg4G9wdZ+RSLhqgLBHCcmje4Tk1khO
-         4jf9fruAHjhIWfrCl1E8TPO7Mtvh3DuMjyy5plq7v38Zc1tHEGrfSSTgLWJKPvB4B8pW
-         HElT7DiMfOpTJjthjRCpg8jmJqzLezOI0/fBVFublmLQCFMQuKlL03GUTYFN5MTL7NIe
-         yZ+Ev/r2JSBtLe7P3Btjndf3gkQqrgX++6k+Ix6HckIHUwQ+bkNiOCdWCiJSRjQYj5To
-         pcuEma4Gbfe/Wy6X1yijw7x6Nov+P3nkj68E2ya7atvIL0YVsAJF1XI4xYfWLvL1qdXV
-         wOSA==
-X-Gm-Message-State: AFqh2kqMiF3GQUhFwq6HHm8k0Qs4WrqAKFjB3vKgXfiicpiYAD45Rf7X
-        rmNaJrwEcExfJIIhpgtbU6FRSg==
-X-Google-Smtp-Source: AMrXdXt/qRZqd3d5H5nKuT29rqnbZSUkbKuOzkuX9Eo+5Br+urhGdBlFyU95SdJu1GACPisSU9MB5A==
-X-Received: by 2002:a05:600c:601c:b0:3d9:ee01:60a4 with SMTP id az28-20020a05600c601c00b003d9ee0160a4mr10567478wmb.1.1674138641269;
-        Thu, 19 Jan 2023 06:30:41 -0800 (PST)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id o12-20020a05600c4fcc00b003daff80f16esm6836420wmq.27.2023.01.19.06.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 06:30:40 -0800 (PST)
-Message-ID: <000e333d-f6df-0d08-07a0-2e7056bb6792@linaro.org>
-Date:   Thu, 19 Jan 2023 14:30:39 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RxbmQQnppwWipwY+7UMUv45QxwTbva6H7m4OgO4CL+g=;
+        b=g+G3CjHZD1EbIJHswFNyLBpr3W4+D6C7e+o6l4F3EYwxExTzFRT01iP09mM3qaSCio
+         lvQJGlCR47otCIq0GDFA3/p6pcRAKm/fNaNxZkMpdRST0qCpfo+7bUMaTPtEIFNYGxKi
+         rTXb3gXsRDN/Sw9wLExyCoFuyYMUPs+JeDZH2LoHBS17bTswWY3RJQBsb0N/SfLS74nr
+         VctkymuEMOgyUeXBA/sGHn8AKadVMPh6UbdXZjagozXs+IZKmrf4FJmUoGwWZwSmGJZ5
+         JOVwRPeQA1PW6alNXelkwf3xfnSrFOT9N/04ui3OzomTDrMqe85gasiDEkOr90/lhaC4
+         TVBg==
+X-Gm-Message-State: AFqh2kruzhJGSxXnh/UCQFX0gsJgpBYFrTa46jBSJsSCszJt8KpwaBgn
+        W48FZAO3BBckJc5nNdam9KQzDEqMXu8xy6joPZWPww==
+X-Google-Smtp-Source: AMrXdXtJ9W+vaXTePLu279j/F8U38ArAthhZLyHvsMhW95lavv0nHZWowqIK5iJxnWnP9Zyr4/2chS0gedQfh31Vy2w=
+X-Received: by 2002:a81:66d7:0:b0:4be:6d20:dc66 with SMTP id
+ a206-20020a8166d7000000b004be6d20dc66mr1304877ywc.151.1674138720498; Thu, 19
+ Jan 2023 06:32:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     Alex Elder <elder@linaro.org>, Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230119114125.5182c7ab@canb.auug.org.au>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230119114125.5182c7ab@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
+ <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com> <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
+ <Y8lHqd9FlxiXTLuW@kroah.com> <CAMEGJJ1oZ9XFw0609PrEABAgDwvapbc3hG4hJ=vBekUOepdiWw@mail.gmail.com>
+ <Y8lS5eBliYw5EHBb@kadam>
+In-Reply-To: <Y8lS5eBliYw5EHBb@kadam>
+From:   Phil Elwell <phil@raspberrypi.com>
+Date:   Thu, 19 Jan 2023 14:31:50 +0000
+Message-ID: <CAMEGJJ2b1KFQY1m1eTcvf8_kGBBTjzrBD2i_M2uR+6v4gEcbVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] Drop custom logging
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,44 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 19 Jan 2023 at 14:25, Dan Carpenter <error27@gmail.com> wrote:
+>
+> On Thu, Jan 19, 2023 at 01:47:44PM +0000, Phil Elwell wrote:
+> > > > I understand the desire to remove the custom logging. I don't welcome
+> > > > the loss of flexibility that comes with such a strategy
+> > >
+> > > What "loss of flexibility"?  You now have access to the full dynamic
+> > > debugging facilities that all of the rest of the kernel has.  What is
+> > > lacking?
+> >
+> > Perhaps I've missed something, either in this patch set or the kernel
+> > as a whole, but how is one supposed to set different logging levels on
+> > different facilities within a driver/module, or even for the module as
+> > a whole?
+>
+> Yeah.  You will be still able to do that and more besides after the
+> transition.  Cleaning this up makes the code better in every way.
+>
+> Documentation/admin-guide/dynamic-debug-howto.rst
 
-
-On 19/01/2023 00:41, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the net-next tree got conflicts in:
-> 
->   drivers/net/ipa/ipa_interrupt.c
->   drivers/net/ipa/ipa_interrupt.h
-> 
-> between commit:
-> 
->   9ec9b2a30853 ("net: ipa: disable ipa interrupt during suspend")
-> 
-> from the net tree and commits:
-> 
->   8e461e1f092b ("net: ipa: introduce ipa_interrupt_enable()")
->   d50ed3558719 ("net: ipa: enable IPA interrupt handlers separate from registration")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-
-Hi all, sorry for the delayed response to this.
-
-If this is the same fixup in Matthieu's email [1] (which it appears to
-be), I can confirm that it's the correct fix here.
-
-I based the patch on master as it is a bug fix which we intend to
-backport, I should have mentioned the conflict with Alex's patch on
--next, apologies for the miscommunication.
-
--- 
-Kind Regards,
-Caleb (they/them)
+Are you saying this patch set gets us to that point?
