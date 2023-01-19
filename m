@@ -2,112 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD406738C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7436738C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 13:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjASMie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 07:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S230468AbjASMjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 07:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjASMhv (ORCPT
+        with ESMTP id S230329AbjASMiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:37:51 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5058F7E694
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:34:25 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h16so1683974wrz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:34:25 -0800 (PST)
+        Thu, 19 Jan 2023 07:38:23 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460F7ED71
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:35:03 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id n85so894575iod.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 04:35:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8rfEMuDyZxUr/lsXYzAmRQq2T1KGzsa28lJ/dp8Na0=;
-        b=uVzH5ljAauUiCFlvukItmwkf22rMDfOGSirz90QzPyVNy9A1Nzas9Lyh/1l3ZKigGm
-         GNjswLxOXkN+FBh33Od9dmamLU2yf5gapgJrgg7P1DQezLfU9ccHz/scMB/zgSE/tegV
-         6rjLDrbdb7HUVuWw9l0uOuJionnr7wMgKfN4XGOIC4DFLp+eLEBeUXB0POsZZMWakV08
-         eCzrf8Vqtci0edsFH9/Vi13Xb/vSVSBJtGY4C0n3OUYwq0xZQDG6XctrNKEcJd+r3SAT
-         adWb1ZLX8Fbq6ftdt2xQ94VojSKVYw40WY/GYz1l9OuALzdFR0IKc+PdSf++RVQ7pOJ6
-         GCRg==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nQbD+o3e6AGfj4JrXLW4n4TAW6xDycZlCjij+AwmP6o=;
+        b=aanUOmVhKuSxk0yM3zH/O4Bjwh/zn6MBXyuKl5D09cefgSzjBCDl2Fclox+DWN8z7N
+         91ylZu8dGXzVcWRWIb+BnWQ+CHRmcSRbQrk/TaigbldmAX0gI/6ZOYUA3WCHrS0Ft3Yq
+         /4AZZ+5LXqc8bYs9t52ZnmMIToiS20OhzLmGoNQ2vXCsnt12Ls5YiRmtqe3Z+AD5Mog3
+         WvIZWhKpuD2j8bl3O5v9PMc54YzpRsdPaOGQJq6GmKft2w8tR/hkV7pxukgBygJY76G0
+         llMeVtjx5UhzJj7D4rscEYgnnVZok68N2LGZHfDJdtZQXOO7Nloy2dPpYArvoR+ht1uQ
+         uLog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n8rfEMuDyZxUr/lsXYzAmRQq2T1KGzsa28lJ/dp8Na0=;
-        b=X4MYa0F76KfChmCkNOYnNLwylgNmi3jRdHp1R5mOKez7SN4O+GzyM98Tk2WVq9VJpZ
-         tFIXZM+G4ysqZmCOEA554j+/3nvRMTelmxJI1+zmjgXoBcxZegVYhMVV0OzsoyXX8yOG
-         LJIMAKHzNFmYTR8X0JE8laktcIDIC0lrT3a2Vyi1nV8rKVFX3cJjRExlkRDHMxUslud9
-         XMrvpaGoNjaaB04lT0Je9TD8KmhOaj0wXSNlrx19Z9pTUXceM1/K3mbAVj98Kk45K4VD
-         bwmgbpcGKX5SGFmgHuiRBmV+MlnSd5fpf11eust6D4eqON6NfGksMuXQAb84ZJ+O89SM
-         n+jQ==
-X-Gm-Message-State: AFqh2krI7Jn6nanPSTQBiq7gVag/41BWZoIHdBC41jU+kzZvkNDG8uF/
-        rjZFLg+nTJeNUVGEkNwpK/4Geg==
-X-Google-Smtp-Source: AMrXdXvzVVbesAd0ZmGM9ysqilbbXkk1wRoX+XB1+gxFbmc3m9tTTSqEwRqVqqLxwV35oAz7m3k7/w==
-X-Received: by 2002:a05:6000:1b85:b0:2be:f21:6af6 with SMTP id r5-20020a0560001b8500b002be0f216af6mr9229691wru.23.1674131612583;
-        Thu, 19 Jan 2023 04:33:32 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b00241fde8fe04sm33247124wrr.7.2023.01.19.04.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 04:33:32 -0800 (PST)
-Message-ID: <af7824c3-ebdf-5913-1fa8-1c167911d06a@linaro.org>
-Date:   Thu, 19 Jan 2023 13:33:29 +0100
+        bh=nQbD+o3e6AGfj4JrXLW4n4TAW6xDycZlCjij+AwmP6o=;
+        b=nrWm3FS4KVnI2cd+sehHy/4Vu4/3zsuOFKCiFuKxg4Ejv0no5atA0HSu9zI4p6F5FJ
+         pxtYJIZiuravo98ynUcXDVvUpMHM+nsLRixDcWi314Ru3tmwrXMSeZj5gz7+24cuj4Xr
+         RtuoAiS25ZTehEB7rJuNJJYzHWRJ2jchkW4dUQm/3P1rCmomKERJ65+kCsLXlFzcdb04
+         +Yd2sVEwQxlf5scWoG6Qf7WkZOUZsXAsOi2x9uVbtvPdRRvH/QLodG4rtDdRtWuy+5lH
+         7dPyjl9I4BsoUu4O/GA1+PeEeost2EelMMMBxvJv9Kd3Ntpd2vxRbAcPIRD0lze4fRbr
+         jzjQ==
+X-Gm-Message-State: AFqh2kpL5AC7gojZrfNUzQkBvrUazWLvduFA+ZooZRrF3CHwKFc5aWuB
+        qIYD9F0xlBXBaafqOVDvC/aLz8YiLf8N4g+rkbA=
+X-Google-Smtp-Source: AMrXdXuHR2fsJzwVzNKCk7JHcBcd1sWvREZZdinhjj6Spy/5aZQ2oSQijhzFqmNRTR4OSt1EusNZ9O7oJ6ejR7S2ISI=
+X-Received: by 2002:a5d:8492:0:b0:704:a571:c597 with SMTP id
+ t18-20020a5d8492000000b00704a571c597mr700063iom.215.1674131655878; Thu, 19
+ Jan 2023 04:34:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 7/7] dt-bindings: remoteproc: qcom: sc7280-adsp-pil:
- Add missing properties
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
-        robh+dt@kernel.org, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
-        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
-        konrad.dybcio@somainline.org, mka@chromium.org
-References: <1674131227-26456-1-git-send-email-quic_srivasam@quicinc.com>
- <1674131227-26456-8-git-send-email-quic_srivasam@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1674131227-26456-8-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a92:d783:0:b0:30b:f2e2:b9eb with HTTP; Thu, 19 Jan 2023
+ 04:34:14 -0800 (PST)
+Reply-To: te463602@gmail.com
+From:   "Dr. Anthony Omoyibo" <anthonyomoyibo9@gmail.com>
+Date:   Thu, 19 Jan 2023 04:34:14 -0800
+Message-ID: <CAN5Lstyx3GEf3iHhWBCa56q-YKp54L+sc6=z3ukVP8pTuiDkYw@mail.gmail.com>
+Subject: Very Urgent,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 13:27, Srinivasa Rao Mandadapu wrote:
-> Add reg-names and power-domain-names for remoteproc ADSP pheripheral
-> loader. Add firmware-name property to distinguish and load different
-> firmware binaries of various vendors.
-> Change qcom,halt-regs property phandle to tcsr_1 from tcsr_mutex.
-> Also add required-opps property and change power domain from LCX to CX,
-> which is actual PD to be controlled, for setting appropriate
-> performance state.
-> This is to make compatible with remoteproc ADSP PIL driver and
-> latest device tree changes.
-> 
-> Fixes: 8490a99586ab ("dt-bindings: remoteproc: qcom: Add SC7280 ADSP support")
-> 
+-- 
+Hi,
+I tried e-mailing you more than twice but my email bounced back
+failure, Note this, soonest you receive this email revert to me before
+I deliver the message it's importunate, pressing, crucial. Await your
+response.
 
-Here and in all other patches you sent recently - no blank lines between
-the tags.
-
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
->  .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 30 +++++++++++++++++++---
->  1 file changed, 26 insertions(+), 4 deletions(-)
-> 
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Best regards
+Dr. Anthony Omoyibo
