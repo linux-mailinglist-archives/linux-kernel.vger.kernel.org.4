@@ -2,43 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D1C674349
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A422F674350
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjASUGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S230079AbjASUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjASUGJ (ORCPT
+        with ESMTP id S229964AbjASUJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 15:06:09 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0C74E9516C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:06:07 -0800 (PST)
-Received: (qmail 262815 invoked by uid 1000); 19 Jan 2023 15:06:07 -0500
-Date:   Thu, 19 Jan 2023 15:06:07 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
+        Thu, 19 Jan 2023 15:09:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DAC94C91
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674158920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PggIzfygRD9QgTxjyyjnr/C8VTVpVGfqEDvg752Zp0M=;
+        b=eJSV+lBKb0BrTqp7ePQaetMiF4Hn8xErHrzIdDk3sA7jIoWYpPJRBpMBQn1qT+45VM1zhV
+        fykm9tjU83RAdp+DFW3fNRv6ALbcbN2FBoqCgDVgAQwX1p6GcVO8cbTrx8WpWrVxFvpAju
+        zqxB1w4/dfKEww8WHv4mgXBB1JVKrKc=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-180-e94RbOI9Mu-g354tMHVgkQ-1; Thu, 19 Jan 2023 15:08:39 -0500
+X-MC-Unique: e94RbOI9Mu-g354tMHVgkQ-1
+Received: by mail-pg1-f199.google.com with SMTP id f132-20020a636a8a000000b00473d0b600ebso1491830pgc.14
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PggIzfygRD9QgTxjyyjnr/C8VTVpVGfqEDvg752Zp0M=;
+        b=tGrx/pP6Le70TDL4YNEWhvq9U2ATXbadZYihGcXFrSF5dwjLktM/PvwV43bOXwDYGh
+         4dz5Bj/SVYk/2LyA5JLKPzSQ3vt1Q1+tstIMy6ARsedkSrIP6DHAL+wpzC2QkF2nQLZZ
+         hV9+3QYpntSeRibnt6Xh/KiowzvT27Ui/VGaMW5ITDAmqnoE78wUeMxQi/2NgR6WhKhw
+         fM9IlwKIH7Bs82pQFUQQZNq7LV1FFRI1UnkPH1GM9TPM293kGFi3KE1DGJoUSJs+T/TS
+         cM2VUerxPvjVtTHgiaVX1qlIJgX1ATAiutz4G2zSvig/EMfd7TRkrRu7jO04/orrqTDw
+         Lhaw==
+X-Gm-Message-State: AFqh2kqJneAS44a5Ig1z9enAbUvgqf4DFCgkEhVrCUVl1A0lcB8cTsOR
+        KFtBs86A9xneb8+dMVzjb/ORmEyMshbFFSka9KB/rpZFHtZo8+ANctm6eccIcBEGB6hF+6hDbhB
+        8wVpGeMuxsHPd5z9bTjYhooP1rjYoDLLRzO50wrqy
+X-Received: by 2002:a17:90b:187:b0:226:f8dc:b230 with SMTP id t7-20020a17090b018700b00226f8dcb230mr1387628pjs.227.1674158918002;
+        Thu, 19 Jan 2023 12:08:38 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtINLEsUn4AGw4oV584OPWe9mWjhWHelFifskuQ1poGCUHOYupjz59bzO972Ny1TiIOn7Hlp/JYMe1BV5mDjR0=
+X-Received: by 2002:a17:90b:187:b0:226:f8dc:b230 with SMTP id
+ t7-20020a17090b018700b00226f8dcb230mr1387616pjs.227.1674158917773; Thu, 19
+ Jan 2023 12:08:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230117181533.2350335-1-neelx@redhat.com> <2bdeb975-6d45-67bb-3017-f19df62fe7af@intel.com>
+ <CACjP9X-hKf8g2UqitV8_G7WQW7u6Js5EsCNutsAMA4WD7YYSwA@mail.gmail.com>
+ <42e74619-f2d0-1079-28b1-61e9e17ae953@intel.com> <CACjP9X8SHZAd_+HSLJCxYxSRQuRmq3r48id13r17n2ehrec2YQ@mail.gmail.com>
+ <820cf397-a99e-44d4-cf9e-3ad6876e4d06@intel.com> <CACjP9X_v9AFVNRgz2a-qJce+ZqR0TzRzyd4gPFufESoRXmCdJQ@mail.gmail.com>
+ <423a29e2-886d-2c41-16d4-a8fca5537c2e@intel.com>
+In-Reply-To: <423a29e2-886d-2c41-16d4-a8fca5537c2e@intel.com>
+From:   Daniel Vacek <neelx@redhat.com>
+Date:   Thu, 19 Jan 2023 21:08:01 +0100
+Message-ID: <CACjP9X-Ab76We7SVie7rpyykvKjiPuNktWeVa9y3Wb6i6oo4mg@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH] ice/ptp: fix the PTP worker retrying
+ indefinitely if the link went down
+To:     Jacob Keller <jacob.e.keller@intel.com>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        "Kolacinski, Karol" <karol.kolacinski@intel.com>,
+        Siddaraju <siddaraju.dh@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,103 +88,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 04:05:38PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/19/2023 4:13 AM, Alan Stern wrote:
-> > On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
-> > > 
-> > > On 1/18/2023 8:52 PM, Alan Stern wrote:
-> > > > On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
-> > > > > -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> > > > > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
-> > > > > -		fencerel(After-unlock-lock) ; [M])
-> > > > > +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
-> > > > Shouldn't the po case of (co | po) remain intact here?
-> > > You can leave it here, but it is already covered by two other parts: the
-> > > ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
-> > > ppo, and the ordering given through pb is covered by its inclusion in
-> > > strong-order.
-> > What about the ordering given through
-> > A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
-> > superseded by pb as well,
-> Indeed, in fact all of A-cumul(strong-fence) is already covered through pb.
-> > but it seems odd not to have it in hb.
-> > In general, the idea in the memory model is that hb ordering relies on
-> > the non-strong properties of fences, whereas pb relies on the properties
-> > of strong fences, and rb relies on the properties of the RCU fences.
-> 
-> I agree in the sense that all strong-ordering operations are A-cumulative
-> and not including them in A-cumul is weird.
+On Thu, Jan 19, 2023 at 8:25 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
+> On 1/19/2023 1:38 AM, Daniel Vacek wrote:
+> > On Wed, Jan 18, 2023 at 11:22 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
+> >> On 1/18/2023 2:11 PM, Daniel Vacek wrote:
+> >>> On Wed, Jan 18, 2023 at 9:59 PM Jacob Keller <jacob.e.keller@intel.com> wrote:
+> >>>> On 1/18/2023 7:14 AM, Daniel Vacek wrote:
+> >>>> 1) request tx timestamp
+> >>>> 2) timestamp occurs
+> >>>> 3) link goes down while processing
+> >>>
+> >>> I was thinking this is the case we got reported. But then again, I'm
+> >>> not really experienced in this field.
+> >>>
+> >>
+> >> I think it might be, or at least something similar to this.
+> >>
+> >> I think that can be fixed with the link check you added. I think we
+> >> actually have a copy of the current link status in the ice_ptp or
+> >> ice_ptp_tx structure which could be used instead of having to check back
+> >> to the other structure.
+> >
+> > If you're talking about ptp_port->link_up that one is always false no
+> > matter the actual NIC link status. First I wanted to use it but
+> > checking all the 8 devices available in the dump data it just does not
+> > match the net_dev->state or the port_info->phy.link_info.link_info
+> >
+> > crash> net_device.name,state 0xff48df6f0c553000
+> >   name = "ens1f1",
+> >   state = 0x7,    // DOWN
+> > crash> ice_port_info.phy.link_info.link_info 0xff48df6f05dca018
+> >   phy.link_info.link_info = 0xc0,    // DOWN
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f05dd44e0
+> >   port_num = 0x1
+> >   link_up = 0x0,    // False
+> >
+> > crash> net_device.name,state 0xff48df6f25e3f000
+> >   name = "ens1f0",
+> >   state = 0x3,    // UP
+> > crash> ice_port_info.phy.link_info.link_info 0xff48df6f070a3018
+> >   phy.link_info.link_info = 0xe1,    // UP
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f063184e0
+> >   port_num = 0x0
+> >   link_up = 0x0,    // False
+> >
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f25b844e0
+> >   port_num = 0x2
+> >   link_up = 0x0,    // False even this device is UP
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f140384e0
+> >   port_num = 0x3
+> >   link_up = 0x0,    // False even this device is UP
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f055044e0
+> >   port_num = 0x0
+> >   link_up = 0x0,    // False even this device is UP
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f251cc4e0
+> >   port_num = 0x1
+> >   link_up = 0x0,
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f33a9c4e0
+> >   port_num = 0x2
+> >   link_up = 0x0,
+> > crash> ice_ptp_port.port_num,link_up 0xff48df6f3bb7c4e0
+> >   port_num = 0x3
+> >   link_up = 0x0,
+> >
+> > In other words, the ice_ptp_port.link_up is always false and cannot be
+> > used. That's why I had to fall back to
+> > hw->port_info->phy.link_info.link_info
+> >
+>
+> Hmm. We call ice_ptp_link_change in ice_link_event which is called from
+> ice_handle_link_event...
+>
+> In ice_link_event, a local link_up field is set based on
+> phy_info->link_info.link_info & ICE_AQ_LINK_UP
+>
+> What kernel are you testing on? Does it include 6b1ff5d39228 ("ice:
+> always call ice_ptp_link_change and make it void")?
+>
+> Prior to this commit the field was only valid for E822 devices, but I
+> fixed that as it was used for other checks as well.
+>
+> I am guessing that the Red Hat kernel you are using lacks several of
+> these clean ups and fixes.
 
-The reason for including A-cumul(strong-fence | po-rel) in the 
-definition of cumul-fence had nothing to do with the fact that the 
-fences needed to be strong.  It was simply a convenient way to list 
-all the A-cumulative fences.  It could just as well have been written 
-A-cumul(mb | gp | po-rel).
+Yeah, makes perfect sense. We don't have that commit in 8.4. All the data
+I have and present here are from 4.18.0-305.49.1.rt7.121.el8_4.x86_64
 
-> On the other side  the model becomes a tiny bit smaller and simpler when all
-> ordering of prop;strong-ordering goes through a single place (pb).
-> 
-> If you want, you could think of the A-cumulativity of strong ordering
-> operations as being a consequence of their strong properties. Mathematically
+> For the current code in the net-next kernel I believe we can safely use
+> the ptp_port->link_up field.
 
-That's backward logic.  Being strong isn't the reason the fences are 
-A-cumulative.  Indeed, the model could have been written not to assume 
-that strong fences are A-cumulative.
+I'll fix that up and drop you a v3. Thank you for the review.
 
-> it already is the case, since
->   overwrite&ext ; cumul-fence* ; rfe ; strong-fence ; cumul-fence* ; rfe?
-> is a subset of
->   prop ; strong-fence ; hb*
+--nX
 
-Invalid reasoning.  If strong fences had not been A-cumulative then this 
-inclusion wouldn't matter, because the pb relation would have been 
-defined differently.
+> Thanks,
+> Jake
 
-
-> > > > > @@ -91,8 +89,12 @@ acyclic hb as happens-before
-> > > > >    (* Write and fence propagation ordering *)
-> > > > >    (****************************************)
-> > > > > -(* Propagation: Each non-rf link needs a strong fence. *)
-> > > > > -let pb = prop ; strong-fence ; hb* ; [Marked]
-> > > > > +(* Strong ordering operations *)
-> > > > > +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
-> > > > > +		[After-unlock-lock] ; po ; [M])
-> > > > This is not the same as the definition removed above.  In particular,
-> > > > po-unlock-lock-po only allows one step along the locking chain -- it has
-> > > > rf where the definition above has co.
-> > > Indeed it is not, but the subsequent lock-unlock sequences are in hb*. For
-> > > this reason it can be simplified to just consider the directly following
-> > > unlock().
-> > I'm not sure that argument is right.  The smp_mb__after_unlock_lock
-> > needs to go after the _last_ lock in the sequence, not after the first.
-> > So you don't have to worry about subsequent lock-unlock sequences; you
-> > have to worry about preceding lock-unlock sequences.
-> 
-> I formalized a proof of equivalence in Coq a few months ago, but I was
-> recalling the argument incorrectly from memory.
-> I think the correct argument is that the previous po-unlock-lock-po form a
-> cumul-fence*;rfe;po sequence that starts with a po-rel.
-> so any
->     prop; .... ; co ; ... ; this fence ;...
-> can be rewritten to
->     prop; cumul_fence* ; po-unlock-lock-po ; this fence ;...
-> and because the the first cumul-fence here needs to start with po-release,
-> the prop ;cumul-fence* can be merged into a larger prop, leaving
->     prop; po-unlock-lock-po ; this fence ;...
-
-This may be so, but I would like to point out that the memory model was 
-not particularly designed to be as short or as simple as possible, but 
-more to reflect transparently the intuitions that kernel programmers 
-have about the ways ordering should work in the kernel.  It may very 
-well include redundancies as a result.  I don't think that's a bad 
-point.
-
-For example, the prop relation is meant to cover all fences that order 
-store propagations in the usual way (basically all fences except rmb).  
-This includes both weak and strong fences; the fact that strong fences 
-also have other ordering properties doesn't mean they should be kept out 
-of prop.
-
-Alan
