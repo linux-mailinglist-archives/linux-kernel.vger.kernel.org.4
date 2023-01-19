@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB17674C67
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15998674BF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjATFaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S231288AbjATFPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjATF2x (ORCPT
+        with ESMTP id S230182AbjATFOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:28:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAAB72C33;
-        Thu, 19 Jan 2023 21:23:54 -0800 (PST)
+        Fri, 20 Jan 2023 00:14:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A94F30B24;
+        Thu, 19 Jan 2023 21:03:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E504BB82671;
-        Thu, 19 Jan 2023 17:00:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71553C433D2;
-        Thu, 19 Jan 2023 17:00:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0C14B8267E;
+        Thu, 19 Jan 2023 17:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F41FC433D2;
+        Thu, 19 Jan 2023 17:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674147604;
-        bh=IsPO8S/oCSzGPZ8455uZgGSwmix/EjYODvjeJWwsjEg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O6eOYocHeXXxAvmJL57obWdcak0zyidIdD/Y4h6WcW3rWpgn+/IS7jZ6BgmZYUgOO
-         dZIBuUYgGFO3pK3BOjmu0JzO6BqqpWxKf4eOkQ+H7ZlaGblFpbh6nrf3Jf9a2JQSNs
-         QaTr/dD47vaDLEm5XVMKNcu4G3RueX0kw1RTasT6HsmWo/+IHCs6kcSC3HgHHV4TFW
-         xLog8lPDBI1sJVUI38NGMwD/PocFVFu8/TW37AQQFrBVf0sV5wVHYahlM8sYvFd8no
-         PLr7PfLFsxoRRvqEsqiF0bIZZe60p/afuUfUDDLr2haFsG46QvxNEGRlrtJ8CSkUn0
-         SS7KXsBHV5ycw==
-Date:   Thu, 19 Jan 2023 11:00:03 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zeno Davatz <zdavatz@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Moreira-Guedes <brunodout.dev@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>
-Subject: Re: [Bug 216859] New: PCI bridge to bus boot hang at enumeration
-Message-ID: <20230119170003.GA316230@bhelgaas>
+        s=k20201202; t=1674148521;
+        bh=rtOB0o7GVvlggA/TPHQGC4w4owt9Pi+Sfuf3oR1Rh8Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M4xYxrNNGs/aDeLFzDWywmEiIJk806FJQ4ofwDBksVtNW4Q1NypdPwmlDmwVd0jHL
+         OEmTMHgEmExFX8ri6hWBIO2t8UNcCts+AG5ztYpXzHphO/UEF//nMqe7ZlYjv4oQ0c
+         O0XhQWxCdlaP8Eigf0ujBq24OqwZMQVoUKLczuKWGgaf/CstfgePJ/UzuPkcZWnNEj
+         JYXMkQ6ZOoZ0TuEBeLE89sbeMr4gaxXY0+qJPDnITzjmmoQc6Rd3ugwiMkDR/+J92b
+         FkPbE2iQVDceu+SRly8XF8IstHOxq5ljtTR2jJZHOVpqxwDSVdtL6q9MmhgIO7jprO
+         8dud3XEiJDNtQ==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Sohom Datta <sohomdatta1+git@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v6.2: 3rd batch
+Date:   Thu, 19 Jan 2023 14:15:10 -0300
+Message-Id: <20230119171510.166368-1-acme@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119000458.GA275446@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,86 +61,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc bjorn@helgaas.com to avoid spamassassin]
+Hi Linus,
 
-On Wed, Jan 18, 2023 at 06:04:58PM -0600, Bjorn Helgaas wrote:
-> On Fri, Jan 06, 2023 at 05:42:33PM +0100, Zeno Davatz wrote:
-> > On Fri, Dec 30, 2022 at 7:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Wed, Dec 28, 2022 at 12:42:34PM -0600, Bjorn Helgaas wrote:
-> > > > On Wed, Dec 28, 2022 at 06:42:38PM +0100, Zeno Davatz wrote:
-> > > > > On Wed, Dec 28, 2022 at 1:02 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > On Wed, Dec 28, 2022 at 08:37:52AM +0000, bugzilla-daemon@kernel.org wrote:
-> > > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=216859
-> > > > > >
-> > > > > > >            Summary: PCI bridge to bus boot hang at enumeration
-> > > > > > >     Kernel Version: 6.1-rc1
-> > > > > > > ...
-> > > > > >
-> > > > > > > With Kernel 6.1-rc1 the enumeration process stopped working for me,
-> > > > > > > see attachments.
-> > > > > > >
-> > > > > > > The enumeration works fine with Kernel 6.0 and below.
-> > > > > > >
-> > > > > > > Same problem still exists with v6.1. and v6.2.-rc1
-> > > > > >
-> > > > > > Thank you very much for your report, Zeno!
-> > > > > >
-> > > > > > v6.0 works, v6.1-rc1 fails.  Would you mind booting v6.1-rc1 with the
-> > > > > > "ignore_loglevel initcall_debug" kernel parameters and taking a photo
-> > > > > > when it hangs?
-> > > > >
-> > > > > I will try this after Januar 7th 2023.
-> > 
-> > I updated the issue:
-> > 
-> > https://bugzilla.kernel.org/show_bug.cgi?id=216859
-> > 
-> > I booted with the option: "ignore_loglevel initcall_debug"
-> 
-> Thanks!  There's so much pcie output in that picture that we can't see
-> any of the initcall logging.  Can you capture another movie, but use
-> kernel parameters like "ignore_loglevel initcall_debug boot_delay=100"
-> to slow things down?  The full-speed boot is too fast for the camera
-> to capture all the output.  You can do this on any convenient kernel
-> that hangs.
+	Sync of UAPI headers with the kernel sources, to address
+warnings while building perf and two small fixes for the main tools + a
+'perf test' fix related to the build-id fix.
 
-Thanks for the new movie!  The last initcalls I see before the hang
-are:
+	 Please consider pulling,
 
-  init_mqueue_fs
-  key_proc_init
-  jent_mod_init
+Best regards,
 
-We must have returned from jent_mod_init() because I think the "saving
-config space" messages we see at the hang are from
-pcie_portdrv_init().
+- Arnaldo
 
-I built 833477fce7a1 ("Merge tag 'sound-6.1-rc1' of
-git://git.kernel.org/pub/scl) with your .config and when I boot it on
-qemu, I see this:
+The following changes since commit c1649ec55708ae42091a2f1bca1ab49ecd722d55:
 
-  calling  jent_mod_init+0x0/0x32 @ 1
-  initcall jent_mod_init+0x0/0x32 returned 0 after 27185 usecs
-  calling  af_alg_init+0x0/0x45 @ 1
-  NET: Registered PF_ALG protocol family
-  ...
-  calling  sg_pool_init+0x0/0xb4 @ 1
-  initcall sg_pool_init+0x0/0xb4 returned 0 after 462 usecs
-  calling  pcie_portdrv_init+0x0/0x43 @ 1
-  pcieport 0000:00:1c.0: vgaarb: pci_notify
-  pcieport 0000:00:1c.0: runtime IRQ mapping not provided by arch
-  pcieport 0000:00:1c.0: enabling bus mastering
-  pcieport 0000:00:1c.0: PME: Signaling with IRQ 24
-  pcieport 0000:00:1c.0: AER: enabled with IRQ 24
-  pcieport 0000:00:1c.0: saving config space at offset 0x0 (reading 0x34208086)
-  pcieport 0000:00:1c.0: saving config space at offset 0x4 (reading 0x100507)
-  pcieport 0000:00:1c.0: saving config space at offset 0x8 (reading 0x6040002)
-  ...
+  Merge tag 'nfsd-6.2-4' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux (2023-01-17 09:29:17 -0800)
 
-Would you mind trying again with "boot_delay=1000 pcie_ports=compat"?
+are available in the Git repository at:
 
-"boot_delay=1000" should slow it down more (all the action is in the
-last 3 seconds and it's still hard to see) and "pcie_ports=compat"
-should turn off the PCIe port driver.
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.2-3-2023-01-19
 
-Bjorn
+for you to fetch changes up to 3d9c07c4cfc06cf7927cd00c04dffd1165d03c53:
+
+  perf test build-id: Fix test check for PE file (2023-01-18 10:52:06 -0300)
+
+----------------------------------------------------------------
+perf tools fixes for v6.2: 3rd batch.
+
+- Prevent reading into undefined memory in the expression lexer,
+  accounting for a trailer backslash followed by the null byte.
+
+- Fix file mode when copying files to the build id cache, the problem
+  happens when the cache directory is in a different file system than the
+  file being cached, otherwise the mode was preserved as only a hard link
+  would be done to save space.
+
+- Fix a related build-id 'perf test' entry that checked that permission
+  when caching PE (Portable Executable) files, used when profiling
+  Windows executables under wine.
+
+- Sync the tools/ copies of kvm headers, build_bug.h, socket.h and
+  arm64's cputype.h with the kernel sources.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Arnaldo Carvalho de Melo (6):
+      tools headers UAPI: Sync linux/kvm.h with the kernel sources
+      tools headers UAPI: Sync x86's asm/kvm.h with the kernel sources
+      tools kvm headers arm64: Update KVM header from the kernel sources
+      tools headers arm64: Sync arm64's cputype.h with the kernel sources
+      perf beauty: Update copy of linux/socket.h with the kernel sources
+      tools headers: Syncronize linux/build_bug.h with the kernel sources
+
+Athira Rajeev (2):
+      perf buildid-cache: Fix the file mode with copyfile() while adding file to build-id cache
+      perf test build-id: Fix test check for PE file
+
+Sohom Datta (1):
+      perf expr: Prevent normalize() from reading into undefined memory in the expression lexer
+
+ tools/arch/arm64/include/asm/cputype.h         |  8 +++++++-
+ tools/arch/arm64/include/uapi/asm/kvm.h        |  1 +
+ tools/arch/x86/include/uapi/asm/kvm.h          |  5 +++++
+ tools/include/linux/build_bug.h                |  9 +++++++++
+ tools/include/uapi/linux/kvm.h                 |  3 +++
+ tools/perf/tests/shell/buildid.sh              | 15 ++++++++++++++-
+ tools/perf/trace/beauty/include/linux/socket.h |  5 ++++-
+ tools/perf/util/build-id.c                     | 10 +++++++---
+ tools/perf/util/expr.l                         |  5 ++++-
+ 9 files changed, 54 insertions(+), 7 deletions(-)
