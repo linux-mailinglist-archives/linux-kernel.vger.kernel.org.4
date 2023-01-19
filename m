@@ -2,166 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C904A673B2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F695673B0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjASOFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S229787AbjASOFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjASOFe (ORCPT
+        with ESMTP id S229737AbjASOE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:05:34 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739A610A95
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:05:18 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o17-20020a05600c511100b003db021ef437so1339994wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tdzLx2rjpsgXXb95YU4XbB/gELmiE43urwK2w4Jau2U=;
-        b=vVd8Qawd3TGl/+7/UUOb2DuwoF5lEe89dWHkVISK2bs64h+fTBIbUl2Fthh/dy+Jty
-         Or9Jeudrz4m4UjL96qIP2ME+EufCL+JJ6z4ot5pFgqSjpGr+2K3KKyeNFQqxfaVCI3NX
-         CX5LWnyd0vsgLxm36u5D1rBMAhFvgkaN4iznJebPQ5p0beVQtTOY7F/m2QViuUdbYtQT
-         ONbSVULotAEI33sigmQQARi4TC6mbpqgHe2dESteZVm0Fn+HVIpjVw86h6oRfWO/hC0H
-         bCdSXi2xVwnvhcVukAo14MFyloqXbspryLxW7+SW8PorP2/iKdrEMcrAbeNY4z9zRxPu
-         WmCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tdzLx2rjpsgXXb95YU4XbB/gELmiE43urwK2w4Jau2U=;
-        b=xGZgJean9qyAEG03IYC5RAPggOng/3MWQ9MiNddRKdBEvpEQ2Kd8o7aGGg1cJlijR3
-         /rdlj/6N2BTBnuC9N2wi28PNyZxWtpefFvPUdOCn1hUSwktfBD+8/HJcGMIwz7UTaXy2
-         tDXaIDkpyT+XLcWCjJqi707NbTdNeRw1MUHKzaMXwvqBSKN2B02KHF0A8BSgQObuwW49
-         l0cuaqhWJE/UhinXq1SnNM06W+3KR862DnYttBz2J7Q/+tI4uJiz1nehfZkFwC7LWYUy
-         nhSLzSvEz6Q7bIpedtP2nkEn3BhThZqkMsOtBN5BlA/0ljcLn0XoMjnK+ZegayEgKxb5
-         zrAg==
-X-Gm-Message-State: AFqh2kqxvbCCRsZxf3ncemNBVN1K933CItsMzJNwhWoztWs6EWXd0l2g
-        WP15iwI9PemeEzyEZc2nmQDbxg==
-X-Google-Smtp-Source: AMrXdXviTZDeiLnNc6VIA/2gM5JrP6ipeTkEq5o4L/88uUw0I/ghv9st9wJbFIRs8lBIXdLsEz/5FA==
-X-Received: by 2002:a05:600c:198a:b0:3db:114:a6a0 with SMTP id t10-20020a05600c198a00b003db0114a6a0mr10470788wmq.21.1674137117958;
-        Thu, 19 Jan 2023 06:05:17 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c4f4a00b003d96efd09b7sm5263883wmq.19.2023.01.19.06.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 06:05:17 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 07/12] phy: qcom-qmp: qserdes-lane-shared: Add v6 register offsets
-Date:   Thu, 19 Jan 2023 16:04:48 +0200
-Message-Id: <20230119140453.3942340-8-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230119140453.3942340-1-abel.vesa@linaro.org>
-References: <20230119140453.3942340-1-abel.vesa@linaro.org>
+        Thu, 19 Jan 2023 09:04:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B926B0;
+        Thu, 19 Jan 2023 06:04:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7766BCE22B1;
+        Thu, 19 Jan 2023 14:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A4EC433D2;
+        Thu, 19 Jan 2023 14:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674137091;
+        bh=gnM0aF25mfMtoSW5Jtq0KcQ6CpBJFX2/gUgnyKab6aE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R+WBUwyUX9r9ew85BwDT6f4mopSskOyprmZFXKFKVpw5cAfwk76ywX0DiuYfKsMR7
+         WlZn2EYIBOc4VZoqcBUvvqwLFUxxmZmTx8B5dnKMbp/2GLatFipzDLr3OFqCeBpr48
+         SjecCr/l3f3dCOiEhylhdNTVTFv8TKYAX/Je/Ho4=
+Date:   Thu, 19 Jan 2023 15:04:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] fix out-of-bounds access when specifying invalid
+ console
+Message-ID: <Y8lOAVTBlay2QrYC@kroah.com>
+References: <20221209112737.3222509-1-svens@linux.ibm.com>
+ <yt9dh6x6n4tq.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dh6x6n4tq.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new SM8550 SoC bumps up the HW version of QMP phy to v6.20 for
-PCIE g4x2. Add the new lane shared PCIE specific offsets in a dedicated
-header file.
+On Wed, Jan 04, 2023 at 08:20:49AM +0100, Sven Schnelle wrote:
+> Sven Schnelle <svens@linux.ibm.com> writes:
+> 
+> > Hi,
+> >
+> > these two patches fix a crash in the tty driver when a user specifies an
+> > invalid console like 'console=tty3000'. The first patch adds a check to
+> > tty_driver_lookup_tty(), the second one prevents that such a console gets
+> > registered in the vt driver.
+> >
+> > Changes in v2:
+> > - trim commit message in first patch
+> > - add second patch as suggested by Jiri Slaby
+> >
+> > Sven Schnelle (2):
+> >   tty: fix out-of-bounds access in tty_driver_lookup_tty()
+> >   tty/vt: prevent registration of console with invalid number
+> >
+> >  drivers/tty/tty_io.c | 8 +++++---
+> >  drivers/tty/vt/vt.c  | 6 ++++++
+> >  2 files changed, 11 insertions(+), 3 deletions(-)
+> 
+> Gentle ping... I couldn't find that this was applied anywhere?
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
-
-This patchset relies on the following patchset:
-https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
-
-The v3 of this patchset is:
-https://lore.kernel.org/all/20230118005328.2378792-1-abel.vesa@linaro.org/
-
-Changes since v3:
- * none
-
-Changes since v2:
- * none
-
-Changes since v1:
- * split all the offsets into separate patches, like Vinod suggested
-
-
- .../phy-qcom-qmp-qserdes-ln-shrd-v6.h         | 32 +++++++++++++++++++
- drivers/phy/qualcomm/phy-qcom-qmp.h           |  1 +
- 2 files changed, 33 insertions(+)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
-new file mode 100644
-index 000000000000..86d7d796d5d7
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023, Linaro Limited
-+ */
-+
-+#ifndef QCOM_PHY_QMP_QSERDES_LN_SHRD_V6_H_
-+#define QCOM_PHY_QMP_QSERDES_LN_SHRD_V6_H_
-+
-+#define QSERDES_V6_LN_SHRD_RXCLK_DIV2_CTRL			0xa0
-+#define QSERDES_V6_LN_SHRD_RX_Q_EN_RATES			0xb0
-+#define QSERDES_V6_LN_SHRD_DFE_DAC_ENABLE1			0xb4
-+#define QSERDES_V6_LN_SHRD_TX_ADAPT_POST_THRESH1		0xc4
-+#define QSERDES_V6_LN_SHRD_TX_ADAPT_POST_THRESH2		0xc8
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B0			0xd4
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B1			0xd8
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B2			0xdc
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B3			0xe0
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B4			0xe4
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B5			0xe8
-+#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B6			0xec
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH1_RATE210	0xf0
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH1_RATE3		0xf4
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH2_RATE210	0xf8
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH2_RATE3		0xfc
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH3_RATE210	0x100
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH3_RATE3		0x104
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH4_RATE3		0x10c
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH5_RATE3		0x114
-+#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH6_RATE3		0x11c
-+#define QSERDES_V6_LN_SHRD_RX_SUMMER_CAL_SPD_MODE		0x128
-+
-+#endif
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.h b/drivers/phy/qualcomm/phy-qcom-qmp.h
-index e5974e6caf51..148663ee713a 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.h
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.h
-@@ -24,6 +24,7 @@
- #include "phy-qcom-qmp-qserdes-com-v6.h"
- #include "phy-qcom-qmp-qserdes-txrx-v6.h"
- #include "phy-qcom-qmp-qserdes-txrx-v6_20.h"
-+#include "phy-qcom-qmp-qserdes-ln-shrd-v6.h"
- 
- #include "phy-qcom-qmp-qserdes-pll.h"
- 
--- 
-2.34.1
-
+Sorry, still digging out of a lot of patches...
