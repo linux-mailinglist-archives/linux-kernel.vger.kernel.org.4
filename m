@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4C4673588
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2AD67358E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 11:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjASKcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 05:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S229575AbjASKdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 05:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjASKcj (ORCPT
+        with ESMTP id S230044AbjASKdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 05:32:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AC9E8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:32:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E584B5CC34;
-        Thu, 19 Jan 2023 10:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674124356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tegevk4l6eSAVcZhXnC6lhrFkkCioF18pmZkx/QMwxI=;
-        b=Es6O2oAVkAEqFiIdqT+svJN6AueN7ixIB4oXi+Gf4j8u2FQwi8O9dHU20bnTWLOOSgFBpC
-        Px1Oa8a7f6c8HyRHu8X5z9qY0tDXWqhaI5dfS7I+6qAxEDPJKFZoop0kmELlHk/XFJczW3
-        I+2VpMwQmUsMyrzKqFegwRE6s6UmV/8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674124356;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tegevk4l6eSAVcZhXnC6lhrFkkCioF18pmZkx/QMwxI=;
-        b=ZOZTb1xywmP4Ivu22dC+fS2VcRg7Epu4N+/9ViuwvDjwkOpVMDQYmEMfg2BcLlmj1gGVad
-        lnvxKCplItVQtfDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB0D5139ED;
-        Thu, 19 Jan 2023 10:32:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id y59NLEQcyWNRIAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 19 Jan 2023 10:32:36 +0000
-Message-ID: <6e9e406a-8a94-4e34-9e5e-f4bb3a321b4e@suse.cz>
-Date:   Thu, 19 Jan 2023 11:32:36 +0100
+        Thu, 19 Jan 2023 05:33:08 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13595EF8A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:32:54 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h16so1364104wrz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9k2ZCvXwJCt6LMPn3Qm6skL5MW78g6QFwWzJJkZLtZk=;
+        b=RmhHiXoeA97MjfWH1RB8qm6wclb9aooX22GME4ePw6MMjpZhZBdNhBXAc5XZL5sBL0
+         6EgZ4av2GKr+mk2Yrr1MavRpsn9P5hcxax0a7S6c5fd0O0o34YJG8T9anZ35qGB/OmU4
+         7V0yp/nvMcuFhHF8QysdjUpxtUil5tlGd1FRmMWc2kLw+Ydeyswp3hbvFtkinNrQdeoF
+         9eJHN9FRRh4EtiCLfXbKFh90V3HEuTkKi+vaFqoOjHtHXvqoW2CWDAuogQ6z+9C40SkT
+         cjhQc3o5fQ+BlqyrOTZJ+YdafDiwRkxkjchN+hWTBkyaxJC5GmxrQzIfhzMhbUnJHSKb
+         UCEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9k2ZCvXwJCt6LMPn3Qm6skL5MW78g6QFwWzJJkZLtZk=;
+        b=oj+htaYlUKrvY/ZrRu1/6VpyTvf/Nd2M9rYGn3paPqoX6KPmXXgtf0vH4JK5kmFP84
+         HRXK+m51GLL3WJzNzada/F9bKeSdnNLFrnt2752YJsplHNA58QUN0nijKYB3NFzlBTJj
+         oazJ3xqxMOWw5N3pEv80uwZyaB0RurBkFjQEqo2qneIZ2CA+puC21ThJtlsw5TtSi5nv
+         xBaJruiIZyEfmQ8blr6vqjxki+KlCCv8AAzYHsUnGj5QowGzhw+e0DU+KbrEKBNVOlKT
+         nOedEsRK5HXDqARGfdRTZaDm5taRYv5BfhObJL6oiqLOv3RW/p72UOC2xrIHhLqeHJNd
+         9Dhg==
+X-Gm-Message-State: AFqh2kph50H4GzvecmSgQ2ynu70Nj9mwmSZ+u4XAaw5U6P0TYooVBR5s
+        YwMwjpuWmzTaqKgoPyqehrvGFQ==
+X-Google-Smtp-Source: AMrXdXuYd2TH1VffEdv9EbMiawuBaGDqOQv4dyU1JIm4zVGy84yqlClhcPpAsfLs75moxtlYA6unqw==
+X-Received: by 2002:a5d:6f15:0:b0:2bd:fdd8:2d0a with SMTP id ay21-20020a5d6f15000000b002bdfdd82d0amr10699155wrb.40.1674124372952;
+        Thu, 19 Jan 2023 02:32:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ba29-20020a0560001c1d00b002b065272da2sm12541420wrb.13.2023.01.19.02.32.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 02:32:52 -0800 (PST)
+Message-ID: <038c7f64-c003-08e2-0489-3a78411bee31@linaro.org>
+Date:   Thu, 19 Jan 2023 11:32:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCHv4 2/2] mm: use stack_depot_early_init for kmemleak
+ Thunderbird/102.7.0
+Subject: Re: [RESEND PATCH v1 2/2] dt-bindings: imx8ulp: clock: no spaces
+ before tabs
 Content-Language: en-US
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-References: <1674091345-14799-1-git-send-email-zhaoyang.huang@unisoc.com>
- <1674091345-14799-2-git-send-email-zhaoyang.huang@unisoc.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <1674091345-14799-2-git-send-email-zhaoyang.huang@unisoc.com>
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230119085421.102804-1-marcel@ziswiler.com>
+ <20230119085421.102804-3-marcel@ziswiler.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230119085421.102804-3-marcel@ziswiler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 02:22, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On 19/01/2023 09:54, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 > 
-> Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
-> Solve this by having stackdepot use stack_depot_early_init.
+> This fixes the following warnings:
 > 
-> On 1/4/23 17:08, Mirsad Goran Todorovac wrote:
-> I hate to bring bad news again, but there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
+> include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
+>  before tabs
+> include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
+>  before tabs
 > 
-> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff951c118568b0 (size 16):
-> comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
-> hex dump (first 16 bytes):
->     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->     backtrace:
-> [root@pc-mtodorov ~]#
-> 
-> Apparently, backtrace of called functions on the stack is no longer printed with the list of memory leaks.
-> This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and BIOS version M22KT49A (11/10/2022)
-> and 6.2-rc1 and 6.2-rc2 builds.
-> This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU enabled on a vanilla mainstream kernel
-> from Mr. Torvalds' tree. I don't know if this is deliberate feature for some reason or a bug.
-> Please find attached the config, lshw and kmemleak output.
 
-I think we could replace the full quote of the report with
 
-Link: https://lore.kernel.org/all/5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr/
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-also
-
-Fixes: 56a61617dd22 ("mm: use stack_depot for recording kmemleak's backtrace")
-
-(Andrew can do that when picking up, no need to send v5)
-
-> reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-But to be cleaner I'd also suggest Andrew adds the hunk below. The call
-to stack_depot_init() becomes no-op after this patch so it's not a bug
-to leave it there, but it's just misleading now.
-
----8<---
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 91dda5c2753a..55dc8b8b0616 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -2095,7 +2095,6 @@ void __init kmemleak_init(void)
- 	if (kmemleak_error)
- 		return;
- 
--	stack_depot_init();
- 	jiffies_min_age = msecs_to_jiffies(MSECS_MIN_AGE);
- 	jiffies_scan_wait = msecs_to_jiffies(SECS_SCAN_WAIT * 1000);
- 
+Best regards,
+Krzysztof
 
