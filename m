@@ -2,75 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3648674645
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5D4674648
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjASWiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S230004AbjASWiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjASWhA (ORCPT
+        with ESMTP id S229816AbjASWhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:37:00 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D645B1EF5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:18:37 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id k13so3715691plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 14:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YsEdBrnw8zv1WxOe57aMagHA1fKjs6sNS2NjosWdfFQ=;
-        b=B2NdqkujJqlDIO723PRvDabnr6cpc1OZ/iqkknchwf5q3JQpQDddqf3qQX2vcWgV8Q
-         7Xf7jSOk2vnIbHl1NBVXNen8dJDdM/Ks7gurYZYSniofoeC8RI+dv5LqZbXIaqR5avMs
-         /TPL63LyCGHUFNhDMpYB2CBdO1Fpk/Kr91O1Kn94u3lZTim/1gdCEItaaTHVJrWZaxsv
-         A57bR+Oum3I5RHNGBkKhncfgHfbWrST/Es4JiJlVSsTJgoW/XUcjVZi/AshEkXRLQFNw
-         bq07VkTMqpYwaRHzkdUbc6NWkOZi0U1DnbfT5H8B6Mcxwhxa6oxp8Ca95SzawwiUctEp
-         ggjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YsEdBrnw8zv1WxOe57aMagHA1fKjs6sNS2NjosWdfFQ=;
-        b=ZZNC9Y3bGOU+NgQ4g5VGgoCvCApcGIQBNfZ+k0p2Lnb0xoOSTczNIPIuv6ZcwWSCa5
-         pOJWQbpBI3/svmwnj7Z0/iKcCQ9Nmxyt9LmcA0DwsJRoGQi+FjzdkCH/cG6SX+3nEFQd
-         T6FXHLnQS2gWa0tKRUNOHKyn4X9kjv7p5UNeH6dZP6WIE6K70nJDmlIfj+bWtwSEO0CN
-         qOkFRzgkVPChzYurxr1EmdkOJfQlQb10UuLRTj937d63FSDU0myeQOe7sEJ7I1g06bJm
-         PjdYtmDTUFZZAquZy7WZvQLEhpPTQo9qSjHTndF4j9l8auaaqC/eGVgkl9pVc7q1cAKh
-         TCXw==
-X-Gm-Message-State: AFqh2krJ68pdZY32AHY/8Vs8JtUZ8RfutBI8dKgMNOQAKxpq53uLHT7Q
-        +oqAmi2Fixe/nJZx04zMIK60ew==
-X-Google-Smtp-Source: AMrXdXtC8J4Wgo0OEX0QMSLV9liCSNVuXn9aZJsWFGfOfKOcGFMmRJrnH2SQ6dfQ90jSfb8oBinU2g==
-X-Received: by 2002:a05:6a20:8ba5:b0:b8:93b8:ee2f with SMTP id m37-20020a056a208ba500b000b893b8ee2fmr11692479pzh.45.1674166716555;
-        Thu, 19 Jan 2023 14:18:36 -0800 (PST)
-Received: from vineet-framework.ba.rivosinc.com ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id w29-20020a63af1d000000b00477bfac06b7sm2850502pge.34.2023.01.19.14.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 14:18:36 -0800 (PST)
-From:   Vineet Gupta <vineetg@rivosinc.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Vineet Gupta <vineetg@rivosinc.com>
-Subject: [PATCH v4] riscv: elf: add .riscv.attributes parsing
-Date:   Thu, 19 Jan 2023 14:18:33 -0800
-Message-Id: <20230119221833.3629409-1-vineetg@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <67c50e8d-ae78-076d-cf25-b7781f2209d7@rivosinc.com>
-References: <67c50e8d-ae78-076d-cf25-b7781f2209d7@rivosinc.com>
+        Thu, 19 Jan 2023 17:37:06 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC510B747;
+        Thu, 19 Jan 2023 14:18:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PEXOVk/EJ7Sb9doam88dUjUE0/dMugXODGhSNHg1Rc5Zv+3Wk7XqERDqZP/NvjoMFjFokUEbI1KvuCLq5KwSL48B0AlzjNhKLXjMziDx/rG6QpmzdesOTfS02FJ06UoUSUoQwOtVT6wHK1fMjtPjG2W63q8+c3q1+Tfp91ec2A/dd8GUSYdPGemzBdiErQdw5SgKxl1pcR4cDOAT4jN711ExdBY80dxXcJSPBsobo6P7Zrb7364PRzxXmX1TfayiufnIxdAL1H203KpBntcuzhiSS9/cO/e6rCNclR+dQ2eQsW5Mrw1sA5HwLGkXTarvJMC1cMZv43bS151o78ooWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fQAvO+vPnSsQkwXtBC0qEi41z0FWZ73yOQabW51oc3I=;
+ b=MTxA6OBj5LkEn0JxI9INMSHpzmirMISccUAvyO+CpIyGH4QTeoD00Tu0fy8hXch0iyGNnCiIdp4D1y/ILyxGY+I/j3Y384HvAnLOJkWIOIPZqw+xNfdB6nfFfWUfyZBSE4tq/LL1lZlDC4av5lgjjeH3KgbxLQhV6FKEin4SS2Ua2ykMTf7WSbFY8KyHqYTOprU4TAse7lk6uXRcHs9iHoLcK7np88SE4geteZwQAgJrNsH/VoNvDogVTK5pWB7qnRgQ+cSX4qaDaT0+X4h/2B9JfiMglr0p7DB2058xTCoYESPcEaWXBY9y5175JbvPmvCzTKRYI3OWGHBJjVhB3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fQAvO+vPnSsQkwXtBC0qEi41z0FWZ73yOQabW51oc3I=;
+ b=AjuicwzJEfvXhhYP1FY0p/Evu71ltcTL64JyhNZluAGmk8mnxTkjB+wSyCfR0cZwmJsxxmRBiqrfOjgvSSpViZkAWP+IyKy4ztTbM+fAKuSRwP7+WPX2YRqQRdwwZP8m0/urk5JBD7jlR/zBKeumJErLA0WUdj8Qvc4plUMnBxY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Thu, 19 Jan
+ 2023 22:18:46 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::5317:fa3f:5cbe:45e9]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::5317:fa3f:5cbe:45e9%3]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
+ 22:18:46 +0000
+Message-ID: <d09e13c2-3a3d-924b-05b3-560fe1121516@amd.com>
+Date:   Thu, 19 Jan 2023 16:18:39 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
+Content-Language: en-US
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-63-michael.roth@amd.com>
+ <CAAH4kHZVaeL57bGAzeDjJDTumsnb96iAYBdhm7cs_8TjBg+v3w@mail.gmail.com>
+From:   "Kalra, Ashish" <ashish.kalra@amd.com>
+In-Reply-To: <CAAH4kHZVaeL57bGAzeDjJDTumsnb96iAYBdhm7cs_8TjBg+v3w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0130.namprd13.prod.outlook.com
+ (2603:10b6:208:2bb::15) To SN6PR12MB2767.namprd12.prod.outlook.com
+ (2603:10b6:805:75::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|PH7PR12MB5974:EE_
+X-MS-Office365-Filtering-Correlation-Id: e76a7f86-e9c0-4a26-d607-08dafa6b2178
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4gb90v+E0qr24+8KIIfqdJJZDiine2of12V1UILkf0s1bDtm5c3+P+0zw13jvM+vKvY1TzngGUuhGaxBh/S1CfU4VGDn6Qof17eanRKx5J9u9bpsbPXLP6L9djHiTSdguyrOgbJIZ218g3hip5ctZZea/tWoyZOjICgParFON7kY1KyCbY3NqzlVvqq/r5SyvhcEuE/knODl3Z6WiPbBMpZaEY41Mddop9YZkyfnuVUarKl2o9hN3bUAPL7GhW+6OZxBupjCGxUuhZ+U36hDeChWxbjbMRoMFwPS4MOQh+seAqrtL3+i5e/p2vdZ/mA49HHhIqeH1WnryAtMlZkc4FIgqw3nLB8fIczBgorHtZsUfJn9E8Qjk/vc6c+cf4w54jh4FG1i4aGsBXNzgq+uGrMrNjJOHlT7zTz/p5Cb4iss8DLgudflE2nlWxzVzwDEgKiF+7VGq10Hec7rjjG0pRvmIQrYSVkauoSHWN0CbNf2K0k3v97ybK8mL7xdjGCepKw33ur1n2gNjvEpCHpK+Qm2BLg9okRluK+Ojeu8e0Y2vE1Hw7oLXxgz4ErcNkrVIk6gyB/Vlmh2brnRSSLNGjD6i0B0P8G/Y6g5lYgD1HdMg5LR6l7YH7SWR1jTKg6BvW/Lluw6ymZdVHqQa/+jy1osVSKvj/6N5ksMFGmiLo/7OoRcLh+wKso9TBVIkANupgvE14kKmuxm5fMb5lKKipI1TQVxWqIQhmtW0cuksbE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(366004)(39860400002)(136003)(376002)(451199015)(86362001)(2616005)(186003)(26005)(36756003)(4326008)(8676002)(66556008)(66946007)(53546011)(66476007)(31696002)(41300700001)(6512007)(4744005)(7416002)(6666004)(478600001)(6636002)(6506007)(110136005)(316002)(38100700002)(6486002)(7406005)(2906002)(5660300002)(83380400001)(8936002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFRydjQ0dlRXOGloaGZ0NXltLzJTMkE5NFhPczJjVnpaVHFxcXIvTTdUTDBG?=
+ =?utf-8?B?TmI2ZG5SbUc5OEVCSWdUWCswQWJOeFRJMDRyVHo5d2hwRHhRWDFIeTB5d0JX?=
+ =?utf-8?B?NjdNWEdHc3hBajFhcFF0WHVZSXowSGdFNEY1K0xwdnJZbXNEMnNRalN3R2Rk?=
+ =?utf-8?B?dExqR1B3aGhmenk2R0hkN3lZSkE0cXlSZXdjMkM2WEVRMnN1L3VBZTN0SkRk?=
+ =?utf-8?B?eWM1dVI3aGdhWmNIK0VVb2pjOFhGK3paeEN5Y0NDMm9FRVIrc0wyZnplZjVl?=
+ =?utf-8?B?a3h0SDVCM1ltUXlIVHJMQUtTUjdXSFczcmErRE1MTy94NlhqWkNwOFRvdmw3?=
+ =?utf-8?B?RU5TSHQzdU9pSHJHbnBFbjdrd2hUbUhiM2NFWko3WmNuS0R2TjM5eE1sNmhM?=
+ =?utf-8?B?dzNMMEpEYTZnYTBUZ2N5c2EvRmNraVY5TzdhOHpRU2dWQjk3Y2Y4amkxcVo0?=
+ =?utf-8?B?dzBKc0FmelpmbzhlNFlYOXNTZGZtTTd4bDRVZ2RYMjA4OUtwYnA4bEgxL0xM?=
+ =?utf-8?B?bFpnZjBSbVlQQmxQcFRmSTFMTWwxVTlMTjVNcHBrVWtrRWdlRHBwMTM5YlhP?=
+ =?utf-8?B?TnZPbUsxRWl0QzUyMy85RmtVTTRHV29tSDVxall1OTJHemtoYndJbUdIazZj?=
+ =?utf-8?B?WlFPdVlsR2QrTmZqc1BzTG9DZmZXd0Z3R3FUUHVkd3VySkhpWEJORnQ0L3hO?=
+ =?utf-8?B?NGFxZ0xwOHlibVBHajllS3Q0SXpjNTVKa2tTa3VXUDYzQXZtanJrajk2emN1?=
+ =?utf-8?B?UWJUelpmcjgvRjZsWUQ2V2NjbkpXYUlmM3dTMUlVNURBaXJNV1NtNXVLOGk0?=
+ =?utf-8?B?WHA2UG9MV0daTzFmUEV3ZHZMRHRIT0V4Slp5U3kyYk9WRUR6TUIxTEtxbTEr?=
+ =?utf-8?B?S0xNbmxQdWV0VGFtOThsT2NldmNUZ0pUaStaVUN5Qjk3bjEzR09jYyt3QlFo?=
+ =?utf-8?B?UzA4OUpUMjA3cTh0R2tpMkF6VFdjUExvOXE3MURkOTNGSEN6alRFeVpTdzVO?=
+ =?utf-8?B?dEtJSjU1c2IvRXFGV0plUVAxTHhoSU03dEpEY1lUYmxxUVlGKzJMY1IycUJn?=
+ =?utf-8?B?WUpmL3FPdDBjbjhMdzRnNXVSNUp0WFRJN3RWdnJGMlE1RGlPeExYYVdqS1lI?=
+ =?utf-8?B?WjdUWUhaVFNpWDhjNUVsS1NqWDdLbWx5WW5pVVdHNTR1Q21ZYm5wTUd1SW12?=
+ =?utf-8?B?aUMrZDQyNWtlaTJ4QURReUQzNGJacW1XWElHVER6MTN1a2JiSndBTnV6NXBP?=
+ =?utf-8?B?YXFLN0IvaXByVVFNd25kTzRId2JSSVlOZHA2WllZcUNWK3VWSllJakFaV0Nt?=
+ =?utf-8?B?bXdORlBXY2tjL1NYQ095OTZ5dWtXUjNFWllOTHRqOHpvcExjaXVUQmZXbDRk?=
+ =?utf-8?B?VFhuWm1tMzFMbzZmWWZ6T3VDd1h6RG1WUlJvTVJIOHlhK241Mi92amt2WTNZ?=
+ =?utf-8?B?Y0tYcW53cjJpOHdVM3ZhTlBRRjZ0OEw4dVZweXhwZmxtalZ1NVRxRUQ5Z0pk?=
+ =?utf-8?B?RHhIQy9uYU5LNG9uY2w3TmZJMHlqbHBhTXFYbzRFV2RBNUVUaDVqVEl6OEIw?=
+ =?utf-8?B?U2pOcnpwbVlQMG85czBleDhTT1R1ZUFwUERpb09Md0krQ0trTkhjOU5Ga3d5?=
+ =?utf-8?B?ZEtVbHl2WVU2ME1CUjFSUU9nL0UvVUE4NjNSN0FYcHFCOG42UU9LQWgzREJN?=
+ =?utf-8?B?eGdIMkg1MCsxeUVYZm1mZ1FhTzhnakYxWk1US2s5b2ZUYUhEMnhkWjdhSGN4?=
+ =?utf-8?B?QW5ieVZhUU42OXJ0RnZxTTFCdEFrcmlkNUdVbXoyVERmSk84Sy9qYW9POS9y?=
+ =?utf-8?B?SDdjSnBjUlpWemZLYnR4SVRiRnFjUlhwSkQvWlZ3YkkzeXNaMVI2NVRRY3ov?=
+ =?utf-8?B?RzdSMlhtdkVuTTI3ZzdVSGtENnlwMU11d1hsdlJKRy9VYmdHM1IxTjllMHUy?=
+ =?utf-8?B?bHdjUWxweW1VcjZJYWVCRHdqcmpTNWdjV20rbUJ3dGMwa3AvdVZVbDV3KzM1?=
+ =?utf-8?B?eUpUZlhsNTUrTi9KK0xaa2NBVkxRSjZTR3VYY2N0UllBR25MczVyNHhvNk9l?=
+ =?utf-8?B?cWFhdnI0b1h0WGVUckozV0VsV3ZNOTY2S3ZmYTNxUnBmY0FLUUhBcXp4Q013?=
+ =?utf-8?Q?v4klIc+u998OjkFeqwHHKpzEj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e76a7f86-e9c0-4a26-d607-08dafa6b2178
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 22:18:45.9483
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: afhsZLqjDPcvOc3iRwAcJZ/hrzjFh8di3KrNZCFEBhN7PnbJ2+ajbndshX1JOqVOq7oykPTUo0I42htMLRLWfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5974
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,326 +139,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the elf loader hook to parse RV specific
-.riscv.attributes section. This section is inserted by compilers
-(gcc/llvm) with build related information such as -march organized as
-tag/value attribute pairs.
+Hello Dionna,
 
-It identifies the various attribute tags (and corresponding values) as
-currently specified in the psABI specification.
+Do you also have other updates to this patch with regard to review 
+comments from Dov ?
 
-This patch only implements the elf parsing mechanics, leaving out the
-recording/usage of the attributes to subsequent patches.
+Thanks,
+Ashish
 
-Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
----
-Changes since v3 [3]
-  - Address more review comments from Jessica.
-    Specifically handle unknown tags better knowing they can only be
-    int/string.
-
-Changes since v2 [2]
-  - Address Jessica's review comments.
-    Mostly robustify code some more, checking for end of buffer etc.
-
-Changes since v1 [1]
-  - Handling potential oob accesses against malformed elf contents.
-  - Handling of multiple sub-subsections
-
-[1]https://lore.kernel.org/linux-riscv/20230110201841.2069353-1-vineetg@rivosinc.com
-[2]https://lore.kernel.org/linux-riscv/20230112210622.2337254-1-vineetg@rivosinc.com
-[3]https://lore.kernel.org/linux-riscv/20230119174357.3550008-1-vineetg@rivosinc.com
-
-Given the current state of discussions, the intended Vector extension
-support would likely not need it, still posting the reworked code for
-logical conclusion and for posterity in case need comes up in future
-for something like CFI elf annotation.
-Maintainers/reviewers can decide whether to merge it.
----
- arch/riscv/Kconfig           |   1 +
- arch/riscv/include/asm/elf.h |  11 ++
- arch/riscv/kernel/Makefile   |   1 +
- arch/riscv/kernel/elf-attr.c | 225 +++++++++++++++++++++++++++++++++++
- 4 files changed, 238 insertions(+)
- create mode 100644 arch/riscv/kernel/elf-attr.c
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e2b656043abf..f7e0ab05a2d2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -12,6 +12,7 @@ config 32BIT
- 
- config RISCV
- 	def_bool y
-+	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index e7acffdf21d2..7ab8bd0ec330 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -116,6 +116,17 @@ do {							\
- 		*(struct user_regs_struct *)regs;	\
- } while (0);
- 
-+struct arch_elf_state {
-+};
-+
-+#define INIT_ARCH_ELF_STATE {}
-+
-+extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
-+			    bool is_interp, struct arch_elf_state *state);
-+
-+extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp_ehdr,
-+			  struct arch_elf_state *state);
-+
- #ifdef CONFIG_COMPAT
- 
- #define SET_PERSONALITY(ex)					\
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 4cf303a779ab..eff6d845ac9d 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-+obj-y	+= elf-attr.o
- obj-y	+= probes/
- obj-$(CONFIG_MMU) += vdso.o vdso/
- 
-diff --git a/arch/riscv/kernel/elf-attr.c b/arch/riscv/kernel/elf-attr.c
-new file mode 100644
-index 000000000000..ac5df800516e
---- /dev/null
-+++ b/arch/riscv/kernel/elf-attr.c
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Rivos Inc.
-+ */
-+
-+#include <linux/binfmts.h>
-+#include <linux/elf.h>
-+#include <asm/unaligned.h>
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) "rv-elf-attr: " fmt
-+
-+#define PT_RISCV_ATTRIBUTES		0x70000003
-+
-+#define RV_ATTR_TAG_file		1
-+
-+#define RV_ATTR_TAG_stack_align		4
-+#define RV_ATTR_TAG_arch		5
-+#define RV_ATTR_TAG_unaligned_access	6
-+
-+#define RV_ATTR_VENDOR_RISCV		"riscv"
-+
-+#define RV_ATTR_SEC_SZ			SZ_1K
-+
-+static void rv_elf_attr_int(u64 tag, u64 val)
-+{
-+	if (tag == RV_ATTR_TAG_stack_align ||
-+	    tag == RV_ATTR_TAG_unaligned_access)
-+		pr_debug("Tag %llx=%llx\n", tag, val);
-+	else
-+		pr_debug("Unrecognized int Tag [%llx]=%llx\n", tag, val);
-+}
-+
-+static void rv_elf_attr_str(u64 tag, const unsigned char *str)
-+{
-+	if (tag == RV_ATTR_TAG_arch)
-+		pr_debug("Tag %llx=[%s]\n", tag, str);
-+	else
-+		pr_debug("Unrecognized string Tag [%llx]=[%s]\n", tag, str);
-+}
-+
-+/*
-+ * Decode a ule128 encoded value.
-+ */
-+static int
-+decode_uleb128_safe(unsigned char **dpp, u64 *val, const unsigned char *p_end)
-+{
-+	unsigned char *bp = *dpp;
-+	unsigned char byte;
-+	unsigned int shift = 0;
-+	u64 result = 0;
-+
-+	while (bp < p_end) {
-+		byte = *bp++;
-+		result |= (byte & 0x7f) << shift;
-+		if ((byte & 0x80) == 0) {
-+			*dpp = bp;
-+			*val = result;
-+			return 0;
-+		}
-+		shift += 7;
-+	}
-+
-+	return -1;
-+}
-+
-+/*
-+ * Parse a single elf attribute.
-+ */
-+static int rv_parse_elf_attr_safe(unsigned char **dpp, unsigned char *p_end)
-+{
-+	unsigned char *p = *dpp;
-+	unsigned char *str;
-+	u64 tag, val;
-+
-+	if (decode_uleb128_safe(&p, &tag, p_end))
-+		goto bad_attr;
-+
-+	if (tag % 2) {
-+		u32 s_len;
-+
-+		str = p;
-+		s_len = strnlen(p, p_end - p) + 1;
-+		if ((p + s_len) > p_end)
-+			goto bad_attr;
-+		p += s_len;
-+		rv_elf_attr_str(tag, str);
-+	} else {
-+		if (decode_uleb128_safe(&p, &val, p_end))
-+			goto bad_attr;
-+		rv_elf_attr_int(tag, val);
-+	}
-+
-+	*dpp = p;
-+	return 0;
-+bad_attr:
-+	return -ENOEXEC;
-+}
-+
-+/*
-+ * Parse .riscv.attributes elf section.
-+ */
-+static int rv_parse_elf_attributes(struct file *f, const struct elf_phdr *phdr,
-+				   struct arch_elf_state *state)
-+{
-+	unsigned char buf[RV_ATTR_SEC_SZ];
-+	unsigned char *p, *p_end;
-+	ssize_t n;
-+	int ret = 0;
-+	loff_t pos;
-+
-+	pr_debug("Section .riscv.attributes found\n");
-+
-+	/* Assume a reasonable size for now */
-+	if (phdr->p_filesz > sizeof(buf))
-+		goto bad_elf;
-+
-+	memset(buf, 0, RV_ATTR_SEC_SZ);
-+	pos = phdr->p_offset;
-+	n = kernel_read(f, &buf, phdr->p_filesz, &pos);
-+
-+	if (n < 0)
-+		return n;
-+	else if (n == 0)
-+		return -ENOEXEC;
-+
-+	p = buf;
-+	p_end = p + n;
-+
-+	/* sanity check format-version */
-+	if (*p++ != 'A')
-+		goto bad_elf;
-+
-+	/*
-+	 * elf attribute section organized as Vendor sub-sections(s)
-+	 *   {sub-section length, vendor name, vendor data}
-+	 * Vendor data organized as sub-subsection(s)
-+	 *   {tag, sub-subsection length, attributes contents}
-+	 * Attribute contents organized as
-+	 *   {tag, value} pair(s).
-+	 */
-+	while ((p_end - p) >= 4) {
-+		u32 sub_len, vname_len;
-+
-+		sub_len = get_unaligned_le32(p);
-+		if (sub_len <= 4 || sub_len > (p_end - p))
-+			goto bad_elf;
-+
-+		p += 4;
-+		sub_len -= 4;
-+
-+		/* Vendor name string */
-+		vname_len = strnlen(p, sub_len) + 1;
-+		if (vname_len > sub_len)
-+			goto bad_elf;
-+
-+		/* skip non-mandatory sub-section for now */
-+		if (strncmp(p, RV_ATTR_VENDOR_RISCV, sub_len)) {
-+			p += sub_len;
-+			continue;
-+		}
-+
-+		p += vname_len;
-+		sub_len -= vname_len;
-+
-+		/* Vendor data: sub-subsections(s) */
-+		while (sub_len > 0) {
-+			unsigned char *p_ss_end, *p_ss_start = p;
-+			u32 ss_len;
-+			u64 tag;
-+
-+			if (decode_uleb128_safe(&p, &tag, p_end))
-+				goto bad_elf;
-+
-+			if ((p_end - p) < 4)
-+				goto bad_elf;
-+
-+			ss_len = get_unaligned_le32(p);
-+			if (ss_len > sub_len)
-+				goto bad_elf;
-+
-+			p += 4;
-+			sub_len -= ss_len;
-+			p_ss_end = p_ss_start + ss_len;
-+
-+			/* For now handle attributes relating to whole file */
-+			if (tag != RV_ATTR_TAG_file) {
-+				p = p_ss_end;
-+				continue;
-+			}
-+
-+			/* Attribute(s): tag:value pairs */
-+			while (p < p_ss_end) {
-+				ret = rv_parse_elf_attr_safe(&p, p_end);
-+				if (ret)
-+					goto bad_elf;
-+			}
-+		}
-+	}
-+
-+	return ret;
-+bad_elf:
-+	return -ENOEXEC;
-+}
-+
-+/*
-+ * Hook invoked by generic elf loader to parse riscv specific elf segments.
-+ */
-+int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
-+		     bool is_interp, struct arch_elf_state *state)
-+{
-+	struct elf_phdr *phdr = _phdr;
-+	int ret = 0;
-+
-+	if (phdr->p_type == PT_RISCV_ATTRIBUTES)
-+		ret = rv_parse_elf_attributes(elf, phdr, state);
-+
-+	return ret;
-+}
-+
-+int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
-+		   struct arch_elf_state *state)
-+{
-+	return 0;
-+}
--- 
-2.34.1
-
+On 1/19/2023 12:49 PM, Dionna Amalie Glaze wrote:
+>> +
+>> +       /* Page-align the length */
+>> +       length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
+>> +
+> 
+> I believe Ashish wanted this to be PAGE_ALIGN(params.certs_len)
+> 
