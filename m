@@ -2,125 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA39672E89
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3488E672E8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 02:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjASB5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 20:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S229681AbjASB6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 20:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjASB4o (ORCPT
+        with ESMTP id S229977AbjASB5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:56:44 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348636D363;
-        Wed, 18 Jan 2023 17:54:36 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id ud5so1974065ejc.4;
-        Wed, 18 Jan 2023 17:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e5LSz9bvo3BZ3yzR2LZdddWGu50g7D481ggXK11d8M0=;
-        b=k0PPWVKhCWmYp+/4o8oguC5R37MopUd//IyT1BMNYlmFuqOfC+PXEqR4ju6ET6EHPj
-         UMETuVxZJ7cjl47cvVjMIcJzgFi7PdATI6UypFahVC/NzuqT8pMg4hwu2Y+jNHdr51f7
-         rYTf0pCFhgx8Eids2p5agC7kJgzMXgEFPTZb8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e5LSz9bvo3BZ3yzR2LZdddWGu50g7D481ggXK11d8M0=;
-        b=PjQgsXmWXWhkCBvL06eEe0xvoycs5lA3ziPbS8Ijm44sgInL9CiIUPfDlbzj8CXqvK
-         2OXKTi/INFzH7iLlvAOzCtFZThRWGHjM98No+UOHFgQEGHymw+8NqlmAvVh5Nd0BieX0
-         j6ZU7S9E1NAzbWjHciFisOnVURnwd0w7HAx25/A4dFNtgHLmxWczUl3k2O5XfO6QYYc4
-         dmeaJmy1t/o23tioy0DwRohzIRxx3J7HOOdO+ukpcisodXf8oSAeZhAXoomjcGEIzGrd
-         MkHVeHmG7MCeCv82qkuELajff6CZFUe94wpmQ9yQ5sVWERHC13fG1Y0sSyPqeQfcw46H
-         pemg==
-X-Gm-Message-State: AFqh2krVBs3q2lCqTW1dFYPQAPnpjEDBDQWal9IpE0Ab0mty5bNeXYjV
-        8tfbLy8K81EwJlVEi3EW7dpm5KQD6Hm4ZeYsYCJxhvXI8R9ORA==
-X-Google-Smtp-Source: AMrXdXu+ox64PdWPYUzYVyZ0V9eEMhNYJBdrtYqnVqBurU84ellrmAEXv1jl+qoNNn06JcsWkIRO245bljA8fWYGORE=
-X-Received: by 2002:a17:906:3b85:b0:7c1:4665:9684 with SMTP id
- u5-20020a1709063b8500b007c146659684mr1204502ejf.23.1674093274564; Wed, 18 Jan
- 2023 17:54:34 -0800 (PST)
+        Wed, 18 Jan 2023 20:57:47 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DCC24128;
+        Wed, 18 Jan 2023 17:57:40 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J18pou004323;
+        Thu, 19 Jan 2023 01:57:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=GejtsQXmqWA8A6r2URa+Ahm9Rucef480F6z05mm28cM=;
+ b=dihzjYQQIddX0IjhTMaN00ea7NMj5ZUwVtMHuoS9S6db3p2DkgaG2bdaHY/g2B9Ixp2M
+ jA2qVTAXE2xa/H3MC3NU0fAk2IJjqSo1V9ANfEzzU8xF3xVnZNe/GwTGXDUiNG3HQ2vH
+ rhauoz6XRVI9pWAHjY6mm1wJEoFWikcnYSy+Qb9b/+94N2h4u75Tm5lSC76E8n6G9YIR
+ hlSaw0G9DLEAq/E6IGz9amQf5oEkB6gROLtwaD3TEBOD2bukT8GmR85ExIP6d9lyGSVb
+ eQnSUKVK6TPxY/YJRVTXXv5Uv28bCESvQQTgGLOStPQTj4n8f3hZmYONh82SnlxOjCMx KQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5ws6kt36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 01:57:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30J1vN2U029723
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 01:57:23 GMT
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 17:57:22 -0800
+Date:   Wed, 18 Jan 2023 17:57:19 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>
+Subject: Re: [RFC v4 3/5] usb: dwc3: core: Do not setup event buffers for
+ host only controllers
+Message-ID: <20230119015535.GF28337@jackp-linux.qualcomm.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-4-quic_kriskura@quicinc.com>
+ <20230119003850.id3gtcokdim5pvf7@synopsys.com>
 MIME-Version: 1.0
-References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
- <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com> <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
-In-Reply-To: <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 19 Jan 2023 01:54:22 +0000
-Message-ID: <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
-To:     Andrew Jeffery <andrew@aj.id.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230119003850.id3gtcokdim5pvf7@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 27jiZz9dfSBcvJImV5Zws5IVlhBz31Ar
+X-Proofpoint-ORIG-GUID: 27jiZz9dfSBcvJImV5Zws5IVlhBz31Ar
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 clxscore=1011 lowpriorityscore=0 mlxscore=0
+ adultscore=0 spamscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190010
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 at 22:48, Andrew Jeffery <andrew@aj.id.au> wrote:
-> On Sat, 27 Aug 2022, at 07:26, Linus Walleij wrote:
-> > On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
-> >
-> >> When the driver want to disable the signal of the function, it doesn't
-> >> need to query the state of the mux function's signal on a pin. The
-> >> condition below will miss the disable of the signal:
+Hi Thinh,
 
-> > I can't see the verdict for this patch? Will there be a new
-> > version, or are we in the middle of a discussion?
-> > I'd really like Andrew's ACK on the result before merging.
->
-> Apologies, it's been a bit of A Week :)
->
-> Given the approach has been discussed with the IP designer and solves a bug I'm okay for it to be merged. If we run into issues it is easy enough to back it out.
+On Thu, Jan 19, 2023 at 12:38:51AM +0000, Thinh Nguyen wrote:
+> On Sun, Jan 15, 2023, Krishna Kurapati wrote:
+> > Multiport controllers being host-only capable do not have GEVNTADDR
 
-As foreseen by Andrew, this caused a regression. On the Romulus
-machine the device tree contains a gpio hog for GPIO S7. With the
-patch applied:
+Multiport may not be relevant here.  Host-only is though.
 
-[    0.384796] aspeed-g5-pinctrl 1e6e2080.pinctrl: request pin 151
-(AA20) for 1e780000.gpio:943
-[    0.385009] Muxing pin 151 for GPIO
-[    0.385081] Disabling signal VPOB9 for VPO
-[    0.402291] aspeed-g5-pinctrl 1e6e2080.pinctrl: Failed to acquire
-regmap for IP block 1
-[    0.402521] aspeed-g5-pinctrl 1e6e2080.pinctrl: request() failed for pin 151
+> > HI/LO, SIZE, COUNT reigsters present. Accsesing them to setup event
+> 
+> I think you should reword "present" to something else. They're still
+> present
 
-The code path is aspeed-gpio -> pinmux-g5 -> regmap -> clk, and the
-of_clock code returns an error as it doesn't have a valid struct
-clk_hw pointer. The regmap call happens because pinmux wants to check
-the GFX node (IP block 1) to query bits there.
+In our case we have an instance where the IP is statically configured
+via coreConsultant with DWC_USB31_MODE==1 (host only) and we did observe
+that none of the registers pertaining to device mode (including GEVNT*
+and of course all the D* ones) are even *present* in the register map.
+If we try to access them we encounter some kind of access error or stall
+(or translation fault as described).  So the approach here is to first
+verify by checking the HWPARAMS0 register if the HW is even capable of
+device mode in the first place.
 
-For reference, reverting the patch gives us this trace:
+> but those registers are to be set while operating in device
+> mode. The rest looks fine.
 
-[    0.393160] Muxing pin 151 for GPIO
-[    0.393267] Disabling signal VPOB9 for VPO
-[    0.393383] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
-[    0.393552] Disabling signal VPOB9 for VPOOFF1
-[    0.393681] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
-[    0.393835] Disabling signal VPOB9 for VPOOFF2
-[    0.393965] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
-[    0.394097] Enabling signal GPIOS7 for GPIOS7
-[    0.394217] Muxed pin 151 as GPIOS7
-[    0.394411] gpio-943 (seq_cont): hogged as output/low
+Are you suggesting only touching the GEVNT* registers when *operating*
+in device mode, even in the case of a dual-role capable controller?  In
+that case would it make more sense to additionally move the calls to
+dwc3_event_buffers_{setup,cleanup} out of core.c and into
+dwc3_gadget_{init,exit} perhaps?  That way we avoid them completely
+unless and until we switch into peripheral mode (assuming controller
+supports that, which we should already have checks for).  Moreover, if
+the devicetree dr_mode property is set to host-only we'd also avoid
+calling these.
 
-This can be reproduced in qemu without userspace:
+> > buffers during core_init can cause an SMMU Fault. Avoid event buffers
+> > setup if the GHWPARAMS0 tells that the controller is host-only.
+> > 
+> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 23 +++++++++++++++--------
+> >  1 file changed, 15 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 7e0a9a598dfd..f61ebddaecc0 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -871,9 +871,12 @@ static void dwc3_clk_disable(struct dwc3 *dwc)
+> >  
+> >  static void dwc3_core_exit(struct dwc3 *dwc)
+> >  {
+> > -	int i;
+> > +	int		i;
+> > +	unsigned int	hw_mode;
+> >  
+> > -	dwc3_event_buffers_cleanup(dwc);
+> > +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST)
 
-qemu-system-arm -M romulus-bmc -nographic -kernel arch/arm/boot/zImage
--dtb arch/arm/boot/dts/aspeed-bmc-opp-romulus.dtb -no-reboot
+If we stick with this approach, we probably could just check
+dwc->dr_mode instead as probe should have already set that to be an
+intersection between the values given in devicetree "dr_mode" and the
+HWPARAMS0 capability.
 
-Billy, do you have any suggestions?
+Thanks,
+Jack
 
-Cheers,
-
-Joel
+> > +		dwc3_event_buffers_cleanup(dwc);
+> >  
+> >  	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> >  	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> > @@ -1246,10 +1249,12 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> >  		}
+> >  	}
+> >  
+> > -	ret = dwc3_event_buffers_setup(dwc);
+> > -	if (ret) {
+> > -		dev_err(dwc->dev, "failed to setup event buffers\n");
+> > -		goto err4;
+> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST) {
+> > +		ret = dwc3_event_buffers_setup(dwc);
+> > +		if (ret) {
+> > +			dev_err(dwc->dev, "failed to setup event buffers\n");
+> > +			goto err4;
+> > +		}
+> >  	}
+> >  
+> >  	/*
+> > @@ -1886,7 +1891,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> >  	struct resource		*res, dwc_res;
+> >  	struct dwc3		*dwc;
+> >  	int			ret, i;
+> > -
+> > +	unsigned int		hw_mode;
+> >  	void __iomem		*regs;
+> >  
+> >  	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+> > @@ -2063,7 +2068,9 @@ static int dwc3_probe(struct platform_device *pdev)
+> >  err5:
+> >  	dwc3_debugfs_exit(dwc);
+> >  
+> > -	dwc3_event_buffers_cleanup(dwc);
+> > +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > +	if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST)
+> > +		dwc3_event_buffers_cleanup(dwc);
+> >  
+> >  	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> >  	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> > -- 
+> > 2.39.0
+> > 
