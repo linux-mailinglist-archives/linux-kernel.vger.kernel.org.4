@@ -2,115 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D59673962
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE27673967
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjASNES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S230402AbjASNFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjASND2 (ORCPT
+        with ESMTP id S230265AbjASNEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:03:28 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E8561896;
-        Thu, 19 Jan 2023 05:02:26 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id d6-20020a056830138600b0068585c52f86so1162736otq.4;
-        Thu, 19 Jan 2023 05:02:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qEzWKNVhTxhmNjpAWCuBDyNcXgW4w9tcJfOj8LQ7RrY=;
-        b=W5luZURTg4Ph7qywOByMMFhfDacOPzTNPuK/VtHmVKa+0JKIoA4pXqodZPlqG3wcSS
-         2uZKGd73yUOnmR7IG6ccOS/VO1XmzPQzF+8HBEzQj8uMaSI8OeD4ZQ2T9bFEGgZRU2zF
-         j7lHmPrBiHUbq2YvuXE3SjT04wVQ5zXWnM4jTiuzALkOI18S/aPkOCUbKUsn31WBGL6U
-         kHeDPATjthuWd6gyYEXZNDyTCLvEOJoiGayUNwnzwSGVMgDZOLMzoKWeYIgAEP4vJicj
-         pLYbsosqFdD9QH44YRkC5AeUYtupAIJ5dMcsYO9USMcztkOR4S3ww25ACT0HIFO++GWP
-         1hTQ==
-X-Gm-Message-State: AFqh2kqwsTs0ZT0qZ316av3AVJ1NMuma57qnCqqGfPfboW9W7s7+Sg6f
-        mT2FfvAf67KYseOqM0juhA==
-X-Google-Smtp-Source: AMrXdXuS0RwLdG32aXLQuMazq1vnSK/yWK2wwrLeyNfrY1C2VusapTqW5U+LsHMCNe53FfekOB/c4w==
-X-Received: by 2002:a9d:7113:0:b0:678:2dcc:9277 with SMTP id n19-20020a9d7113000000b006782dcc9277mr5441279otj.31.1674133343855;
-        Thu, 19 Jan 2023 05:02:23 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c4-20020a9d6c84000000b00684eaf9018csm7174270otr.34.2023.01.19.05.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:02:23 -0800 (PST)
-Received: (nullmailer pid 1589489 invoked by uid 1000);
-        Thu, 19 Jan 2023 13:02:22 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Thu, 19 Jan 2023 08:04:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670B7E6A5;
+        Thu, 19 Jan 2023 05:03:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D087160ED9;
+        Thu, 19 Jan 2023 13:03:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8570C433D2;
+        Thu, 19 Jan 2023 13:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674133380;
+        bh=4fpRwxBDEvKhdeNvpW0jXDdE0yZhmx+fqvJjKU6UQ8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jxzWnwrIOK3O/jYLSAqMZPG5FXGQqLLw1cHUt7kw3BLgocy1ioIoytm80AedZHoMO
+         mtbNusCHvs3V0zPrfLPLj+gCAJ+jVAKbLB/m2iNDLAX4nWrUD6vCjYE4qWFQxtfOKI
+         +4j88CsxiWONiAV+Ubv20xf/nuI0MILqna0DufCw=
+Date:   Thu, 19 Jan 2023 14:02:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: ohci-omap: avoid unused-variable warning
+Message-ID: <Y8k/gXy8YQd0/oyr@kroah.com>
+References: <20230118082746.391542-1-arnd@kernel.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, quic_plai@quicinc.com,
-        devicetree@vger.kernel.org, perex@perex.cz, bgoswami@quicinc.com,
-        tiwai@suse.com, quic_rohkumar@quicinc.com, agross@kernel.org,
-        robh+dt@kernel.org, alsa-devel@alsa-project.org,
-        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
-        andersson@kernel.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, judyhsiao@chromium.org,
-        lgirdwood@gmail.com
-In-Reply-To: <1674108674-8392-2-git-send-email-quic_srivasam@quicinc.com>
-References: <1674108674-8392-1-git-send-email-quic_srivasam@quicinc.com>
- <1674108674-8392-2-git-send-email-quic_srivasam@quicinc.com>
-Message-Id: <167413318302.1585278.7105957388478984370.robh@kernel.org>
-Subject: Re: [PATCH 1/3] ASoC: qcom: dt-bindings: lpass-va-macro: Update clock name
-Date:   Thu, 19 Jan 2023 07:02:22 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118082746.391542-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 19 Jan 2023 11:41:12 +0530, Srinivasa Rao Mandadapu wrote:
-> Upadte clock name from core to macro in lpass-va-macro node
-> to make it compatible with existing driver and device tree node.
+On Wed, Jan 18, 2023 at 09:27:34AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Fixes: 67d99b23c881 ("ASoC: qcom: dt-bindings: add bindings for lpass va macro codec")
+> The dead code removal has led to 'need_transceiver' not being
+> used at all when OTG support is disabled:
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Tested-by: Ratna Deepthi Kudaravalli <quic_rkudarv@quicinc.com>
+> drivers/usb/host/ohci-omap.c: In function 'ohci_omap_reset':
+> drivers/usb/host/ohci-omap.c:99:33: error: unused variable 'need_transceiver' [-Werror=unused-variable]
+>    99 |         int                     need_transceiver = (config->otg != 0);
+> 
+> Change the #ifdef check into an IS_ENABLED() check to make the
+> code more readable and let the compiler see where it is used.
+> 
+> Fixes: 8825acd7cc8a ("ARM: omap1: remove dead code")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+> The patch that caused the issue is in the boardfile-removal branch
+> of the soc tree. I would just add the patch there.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.example.dtb: codec@3370000: clock-names: 'oneOf' conditional failed, one must be fixed:
-	['mclk', 'core', 'dcodec'] is too long
-	'macro' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.example.dtb: codec@3370000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1674108674-8392-2-git-send-email-quic_srivasam@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
