@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5126730D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316266730E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjASE56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S229568AbjASFAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjASE5i (ORCPT
+        with ESMTP id S230121AbjASE7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:57:38 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C24C173B;
-        Wed, 18 Jan 2023 20:49:29 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id k13so1291669plg.0;
-        Wed, 18 Jan 2023 20:49:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:in-reply-to:references
-         :thread-topic:message-id:cc:to:from:subject:date:user-agent:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uB53X8NfVOcgU/1u8f7B1T9n/HDCJATuCsWMqfxTUps=;
-        b=OMI8mG9R2PcTK+5KpVpio21Q3y8wuh7F0PJ+eukS/KqNW18KCUd3DdlNokOCzLDWQi
-         OQKUlKTexwONbHJrEjE85d1T6cggfRQsNUZLi9bENYuw1QW3gR7StN0SWi22t2ghbggN
-         uBIw3uYBAGIG1K6U2wjPCdK0aqpbpdU/NQ7wrorTekoYfVolHCRxrHcQMkYJd1Fh4TU0
-         /QUyWkDXR+D4r/wXuEqDXTWO4BsPdul8az7kfuksGA/vEd5+4w/VQgb3XzIcvZXVH6GE
-         3cbHaDuNc+Luk5JClZ1I3vtqlTv1DgwdAKiiJrATl95R4hUKKu+CrHjcpzDHmJVApcVP
-         n/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:in-reply-to:references
-         :thread-topic:message-id:cc:to:from:subject:date:user-agent
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uB53X8NfVOcgU/1u8f7B1T9n/HDCJATuCsWMqfxTUps=;
-        b=3i28+YDjqPpydh3S12TUkt/sJMeW/5CcJmQvNpoB9Gaf3DAHtgwMV6CWoDBj3qtZWF
-         2lR/vu5IBiCGsvR6LvkiGPChZ6Q9Js7dv7CxeEzp27QdwXctiRZ0on1LeO5zMdz/h89C
-         a4DUFxLpZRcrzQO2NDv2mL4L7NF2tTcWDWqrwyGxnCdLpUNbRC/5Qm9Fr/bNf3niryy3
-         R8zGbN/F0TrotDKXG8PrK9Odh2ZyOwFyIy0WXVwarXV3JnNKzKU+qD4vdMg764j4uXZl
-         +9zgtW4Xiw3Dbe/tdYiW/D+DmC0GAzMSaLFcI62up2taEmrhfquKcQmoxvUbtOFrRnV1
-         KUcA==
-X-Gm-Message-State: AFqh2krJ4sTYTsgCzAlRmDkc+PDc2GpdaG3EskqjHQ7iVFeAeDtxQM/3
-        BvZVgP6dUAE40jhRjhOXWu4=
-X-Google-Smtp-Source: AMrXdXuf5+i0/imRH7RxwbUPWF3x5XeB1hzJqB7/ciE3KAulvudk2j+yIZy9Yyguq5QXrHIN7Qysdw==
-X-Received: by 2002:a17:902:c408:b0:194:6afa:ca with SMTP id k8-20020a170902c40800b001946afa00camr14122117plk.56.1674103769118;
-        Wed, 18 Jan 2023 20:49:29 -0800 (PST)
-Received: from [192.168.0.102] ([1.189.141.197])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902e30a00b00192a04bc620sm23972741plc.295.2023.01.18.20.49.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Jan 2023 20:49:28 -0800 (PST)
-User-Agent: Microsoft-MacOutlook/16.69.23010700
-Date:   Thu, 19 Jan 2023 12:49:23 +0800
-Subject: Re: [PATCH] media:cec:fix double free and uaf issue when cancel data
- during noblocking
-From:   Xinghui Li <korantwork@gmail.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, <mchehab@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        Xinghui Li <korantli@tencent.com>, loydlv <loydlv@tencent.com>
-Message-ID: <4D54942F-92F0-429D-9F54-3D8F7705D576@gmail.com>
-Thread-Topic: [PATCH] media:cec:fix double free and uaf issue when cancel data
- during noblocking
-References: <20230111123712.160882-1-korantwork@gmail.com>
- <b1a8593b-b4f3-b943-39db-ed17679e32cb@xs4all.nl>
-In-Reply-To: <b1a8593b-b4f3-b943-39db-ed17679e32cb@xs4all.nl>
-Mime-version: 1.0
-Content-type: text/plain;
-        charset="UTF-8"
-Content-transfer-encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 Jan 2023 23:59:51 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8271E252BB;
+        Wed, 18 Jan 2023 20:54:16 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 4732E3200933;
+        Wed, 18 Jan 2023 23:54:14 -0500 (EST)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Wed, 18 Jan 2023 23:54:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674104053; x=1674190453; bh=Jp0nEIifZi
+        HOJSvV20z7BP6fpn/Kau5COB1QREBO070=; b=MUTjYaga/VCVR8wOIxvTD1adQB
+        bVcsOamVjgMrs5qSWExP21qadvS9tslA8kaK8PAv1FY/Ij+tKRK4qMo/AkgwDK4u
+        +Egl+gmfZqsMV7bp+XfiZybdaBEKaPRO9xomqyOIi0rZrUMLuUT7Lz9xr3OMMRvr
+        WOcmHZVaDGAsYPVTh8VH/DEv8EmBtdKXnrgdt141UDjJIqFZZWJh/8WvaCFM6Rw3
+        K8rrIgzZFIWll7Q8TjYbSjpzmNJKqqeklTpZAL57RjU+vYBHXNx+zq25vqpvFXG8
+        mxFDlhr4IDsFMYzYFVBfOU38Ro7U3V/XGqGnnF4EBHvMktipbUfTiY73XyGw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674104053; x=1674190453; bh=Jp0nEIifZiHOJSvV20z7BP6fpn/K
+        au5COB1QREBO070=; b=Q52GecV34my9RM50i4VjcIWg/PrSmrWYotOymHrXZiyQ
+        VHgeG2VvTiQD5hf6H8K2Ug2TVQhUQdbMzfGPs2WDeOUbjjUtk7ZC3FU7g6U7pm10
+        sOQt57lRcqImb454oTPbUCyqG6QweAJfGVw/Ms0iczG7rylZwDkQbv28kEu8fw2x
+        CN+pqnWIa895VWyzaiyb+CfEGWBJIYtduX9QiuhkaRVL32fme9CmuuKWRM4A0X93
+        hMBgFKlQsCaJ1HHV8X7MS0eH1iqmThckugzVf1mD9aajNyFnJUljp9iYDAD1/Cyd
+        EfQN5wgL9dF3KyR3Z1iXLxbPMR+91z+iar22sJH7Bg==
+X-ME-Sender: <xms:9czIY6kWaYeYw_FKjA7Nl7poJpuOj4scvZKNgvQWSRcttVOaIlC0GQ>
+    <xme:9czIYx2Y3Msp27EujWGe4TaFxUvoTP9gxq-_jT6sfZOTDYijUAZUD-tlvYYzE9tqB
+    IHD23qA3o33QjBZWA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:9czIY4oqs1Uo2gRCmXk67fJ8llPsqDtXBwE7XqNCwaNyPfo-DgNM4Q>
+    <xmx:9czIY-mEnJ0P4Vqa60Ko5f3Hofzf5pgIN3gYWvf368x1UkzE1KD3Yw>
+    <xmx:9czIY42xHYz1PSscl1louZ3dhQXg6D_yYEuGVx7UM6aJ5wr_7QE2kQ>
+    <xmx:9czIY2m5I1IcHq89PeACGhMtafkHrE2oynuAdpnu6dTpWzSUSMEe4Q>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 183811700089; Wed, 18 Jan 2023 23:54:12 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <47290046-59a2-4bf0-8af0-3a7b4304deb3@app.fastmail.com>
+In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+Date:   Thu, 19 Jan 2023 15:23:52 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Kevin Hilman" <khilman@baylibre.com>,
+        "Jerome Brunet" <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "Chin-Ting Kuo" <chin-ting_kuo@aspeedtech.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Kamal Dasu" <kdasu.kdev@gmail.com>,
+        "Broadcom internal kernel review list" 
+        <bcm-kernel-feedback-list@broadcom.com>, "Han Xu" <han.xu@nxp.com>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Serge Semin" <fancer.lancer@gmail.com>,
+        "Haibo Chen" <haibo.chen@nxp.com>,
+        "Yogesh Gaur" <yogeshgaur.83@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Heiko Stuebner" <heiko@sntech.de>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Li-hao Kuo" <lhjeff911@gmail.com>,
+        "Michal Simek" <michal.simek@xilinx.com>,
+        "Orson Zhai" <orsonzhai@gmail.com>,
+        "Baolin Wang" <baolin.wang@linux.alibaba.com>,
+        "Chunyan Zhang" <zhang.lyra@gmail.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        "Maxime Ripard" <mripard@kernel.org>,
+        =?UTF-8?Q?=EF=BF=BDecki?= <rafal@milecki.pl>,
+        "Vaishnav Achath" <vaishnav.a@ti.com>,
+        "Parshuram Thombare" <pthombar@cadence.com>,
+        "Leilk Liu" <leilk.liu@mediatek.com>,
+        "Gabor Juhos" <juhosg@openwrt.org>,
+        "Bert Vermeulen" <bert@biot.com>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Marek Vasut" <marex@denx.de>,
+        "Birger Koblitz" <mail@birger-koblitz.de>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Anson Huang" <Anson.Huang@nxp.com>,
+        "Chris Packham" <chris.packham@alliedtelesis.co.nz>,
+        "Kuldeep Singh" <singh.kuldeep87k@gmail.com>,
+        "Pragnesh Patel" <pragnesh.patel@sifive.com>,
+        "Christophe Kerello" <christophe.kerello@foss.st.com>,
+        "Patrice Chotard" <patrice.chotard@foss.st.com>,
+        "Erwan Leray" <erwan.leray@foss.st.com>,
+        "Fabrice Gasnier" <fabrice.gasnier@foss.st.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2023/1/18 18:18=EF=BC=8C=E2=80=9CHans Verkuil=E2=80=9D<hverkuil-cisco@xs4all.nl <mailto:h=
-verkuil-cisco@xs4all.nl>> =E5=86=99=E5=85=A5:
-
->...while this free is called if data->blocking is true. (see the 'if (!blo=
-ck) return 0;'
->further up).
-Do you mean this code?
-
-	/* All done if we don't need to block waiting for completion */
-	if (!block)
-		return 0;
-I notice this part code. But I'm not sure if 'block' will be modified in ot=
-her sync operations.=20
-So I sent this patch for community to review.
-
->So I have my doubts if this patch actually addresses the correct issue.
->Do you have an actual debug trace of the UAF? Or even better, code to repr=
-oduce
->this issue.
-
-And we found this issue by the code scanning tool developed by loydlv and f=
-iltered from 200 issue by human.
-So it could be the none-issue. If so, I hope I didn't waste too much of you=
-r time. __
 
 
+On Thu, 19 Jan 2023, at 04:09, Krzysztof Kozlowski wrote:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/spi/allwinner,sun4i-a10-spi.yaml  |  2 +-
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml  |  2 +-
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml   |  6 +++---
+>  .../bindings/spi/amlogic,meson6-spifc.yaml     |  6 +++---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml       |  2 +-
 
+For the Aspeed change:
 
-
-
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
