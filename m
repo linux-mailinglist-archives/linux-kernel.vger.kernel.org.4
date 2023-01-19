@@ -2,133 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6E667306A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 05:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83057672F82
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 04:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjASEhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 23:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S229769AbjASDky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 22:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjASEgw (ORCPT
+        with ESMTP id S229446AbjASDja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 23:36:52 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F19B7C84B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:33:28 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id g10so731049qvo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 20:33:28 -0800 (PST)
+        Wed, 18 Jan 2023 22:39:30 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3A04DE32
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:39:12 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15ebfdf69adso1309150fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 19:39:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=932/KQGWtMWjBdrKFZjdbv0KuCSiMt6IcZgAE6+dbyE=;
-        b=EhzBLEnM/KzZH9y8HH+CW6J/9tes2aMNaJ1KN5SKhC916AaYIqDUcFYYjJzdTsdcNi
-         zxDXYEQsbNs/nw17sjlITGjjevhf717/PVzSXkJnebUPDUFUhbxv5GOE7nOcM8FbsW0B
-         hvzi+TyAIR1mkuSGyif4bKGxECg4c01vNOEo4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aM8iDrd+dulL6aZ193yV7HSVHkd3onqhyS0eiH7EX0=;
+        b=K3bnMRBl9Y5G7sg8Q20fp9EUqQJEM9w2rAGCeEJ58/yVxvNV8lUnk2IDjoLVfPT+ys
+         x64Y20nIFx1l5qAWb7zxuFNapkKW7Hxn2ELf1m4OONKh+ztXgIxaTRyeZztDWf9xkaHk
+         0rHHhCaQ6AI6KmOHN1mV5sZVBwrUOA18PRAcI3g2hMs3ZnCooY9Mfgz65YsYKjpXw3JL
+         u69FS4H4PNBqTvOo/RDAU26z3ufRx6ASdWfO5Pqxbwxk6YfI4uSGDt9qjTkG9M5tEL6r
+         tFuq7q8U5jCf6PUs0/lotWNoaWWuHCnNe/JXMDdKB2vAfVVyLF65DZ4iZyibQLDvzeXc
+         BlSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=932/KQGWtMWjBdrKFZjdbv0KuCSiMt6IcZgAE6+dbyE=;
-        b=7yCkVAxn17eVQHa2qNzd32QaX4FIe2bSiJIZYFUdHMTrZsVw2n6/d9ln/D6wNBEPDE
-         TtRJ9oRrbG2W62selAYoW/p+zqSfpweoAyyJIxI0/EcpR2QPXN7+BdnJF1dWt5EiJXOk
-         rMixNu0STp3ood1Oe3KCMbfauX1ZVW3uTPNomPM7/wlRYOPs2xnZlgiVqVTPtU5Ud1nj
-         bIY7kMmRiltm/Wv1Wx/uTGYBzNdKhzP9UAtEMqynp+Xbw2ov8lbizZLsI1pwTxIvk64u
-         OGw6t5VrCksoFR98MyiPE0kTwFYXgzdaVzOLn3VcejiYeARLAST+QKxesttZ3ekqyDrl
-         foSQ==
-X-Gm-Message-State: AFqh2krrpZjfas7gZApbSJ4WBwWutbcSf8rjqeM3W+DgvJ1uCWtl/0I1
-        rc/MY8Txqsk7DYWX8SRTHUlNXHHG+JSdvyo6
-X-Google-Smtp-Source: AMrXdXvxvxXnINoIrUWSo06I1ZVSMYQimE0lPuCxqnVGQe+a1eymA/7hGJNzSxahRJ2MTtacimuKng==
-X-Received: by 2002:a17:90a:c282:b0:229:472d:af3d with SMTP id f2-20020a17090ac28200b00229472daf3dmr9641936pjt.1.1674098611663;
-        Wed, 18 Jan 2023 19:23:31 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:dc41:dbaf:a0e3:7b4b])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090a154900b00229bd164ba9sm2042173pja.7.2023.01.18.19.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 19:23:31 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] soc: qcom: stats: Populate all subsystem debugfs files
-Date:   Wed, 18 Jan 2023 19:23:29 -0800
-Message-Id: <20230119032329.2909383-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+        bh=2aM8iDrd+dulL6aZ193yV7HSVHkd3onqhyS0eiH7EX0=;
+        b=DbDjaeZ0hoyEbIuyQk2B5dI5tgvp/ZNjhkaKJr8doRMToW0c97jce5nnZaaLieEeuc
+         FWuLqwPEZfRDy40jy1FIIMmdLvv1igB07/dW7JlI3dF2OnFC5K5R4XvpQ6FQv+zkclhE
+         +BSEftne3re6OtGV1Cj+uR6NBBpDEZxS6ceAEntKapUQzcANsbfT2Ey0ZXPp8hBbbX8w
+         WqwO+8WeDLdJ4TqVKIYSs33BYi3kearnhNUHZTGhQewNgahg0RrtY3RGHXvq9Nh+BENt
+         4MXNaHgZNgYHQk5YxiHoIs+N/3oHEhWIrAocs+e0XuvrUOn1ntNaGl9I/xYtvP+OSl5G
+         RosA==
+X-Gm-Message-State: AFqh2ko0C5vjPtUpYD1qB6teY8p96udcIDALJ5HcQgWnE6sr2ticxz3X
+        qqn2ywTfjUvcSc8VBpPUrA4DNYSQ1YCNmAM+j2VIr2z3
+X-Google-Smtp-Source: AMrXdXuhtNH+PLsKPrU5l4hivxjoTe0rrDnG6rW/fskBNkyXJF2zC/DPYgTMixpy74dNpdLMr6ffM0kYKE6NWxm0UO0=
+X-Received: by 2002:a05:6808:4387:b0:35b:d93f:cbc4 with SMTP id
+ dz7-20020a056808438700b0035bd93fcbc4mr541759oib.96.1674098945563; Wed, 18 Jan
+ 2023 19:29:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202301181539003991927@zte.com.cn>
+In-Reply-To: <202301181539003991927@zte.com.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 18 Jan 2023 22:28:54 -0500
+Message-ID: <CADnq5_Nb-UQheq7rV5x6taOjj+tQT4sGB_0unj3scWBO_EGDHA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: remove duplicate included header files
+To:     ye.xingchen@zte.com.cn
+Cc:     alexander.deucher@amd.com, sunpeng.li@amd.com, xinhui.pan@amd.com,
+        rodrigo.siqueira@amd.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, wenjing.liu@amd.com,
+        michael.strauss@amd.com, dri-devel@lists.freedesktop.org,
+        george.shen@amd.com, jun.lei@amd.com, christian.koenig@amd.com,
+        jimmy.kizito@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver relies on SMEM to populate items for each subsystem before
-the device probes. The items in SMEM that are being looked for are
-populated by the subsystems lazily, and therefore may not exist until
-the device has booted. For example, if I build this driver into the
-kernel on Trogdor Lazor and boot up, I don't see a 'modem' debugfs file
-populated, because the modem boots and populates the SMEM item after
-this driver probes.
+Applied.  Thanks!
 
-Always populate the files for the subsystems if they're in SMEM, and
-make the qcom_subsystem_sleep_stats_show() function return 0 if the SMEM
-items still isn't there. This way we can run a simple command like
+Alex
 
-	grep ^ /sys/kernel/debug/qcom_stats/*
-
-and collect the subsystem sleep stats without interspersed errors or
-missing details entirely because this driver probed first.
-
-Fixes: 1d7724690344 ("soc: qcom: Add Sleep stats driver")
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/soc/qcom/qcom_stats.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
-index 6228af057120..c207bb96c523 100644
---- a/drivers/soc/qcom/qcom_stats.c
-+++ b/drivers/soc/qcom/qcom_stats.c
-@@ -92,7 +92,7 @@ static int qcom_subsystem_sleep_stats_show(struct seq_file *s, void *unused)
- 	/* Items are allocated lazily, so lookup pointer each time */
- 	stat = qcom_smem_get(subsystem->pid, subsystem->smem_item, NULL);
- 	if (IS_ERR(stat))
--		return -EIO;
-+		return 0;
- 
- 	qcom_print_stats(s, stat);
- 
-@@ -170,20 +170,14 @@ static void qcom_create_soc_sleep_stat_files(struct dentry *root, void __iomem *
- static void qcom_create_subsystem_stat_files(struct dentry *root,
- 					     const struct stats_config *config)
- {
--	const struct sleep_stats *stat;
- 	int i;
- 
- 	if (!config->subsystem_stats_in_smem)
- 		return;
- 
--	for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
--		stat = qcom_smem_get(subsystems[i].pid, subsystems[i].smem_item, NULL);
--		if (IS_ERR(stat))
--			continue;
--
-+	for (i = 0; i < ARRAY_SIZE(subsystems); i++)
- 		debugfs_create_file(subsystems[i].name, 0400, root, (void *)&subsystems[i],
- 				    &qcom_subsystem_sleep_stats_fops);
--	}
- }
- 
- static int qcom_stats_probe(struct platform_device *pdev)
-
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
--- 
-https://chromeos.dev
-
+On Wed, Jan 18, 2023 at 2:49 AM <ye.xingchen@zte.com.cn> wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> resource.h is included more than once.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> index 1e60827911c6..6747e4b199de 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> @@ -47,7 +47,6 @@
+>  #include "link/link_dp_training_auxless.h"
+>  #include "link/link_dp_phy.h"
+>  #include "link/link_dp_capability.h"
+> -#include "resource.h"
+>  #define DC_LOGGER \
+>         link->ctx->logger
+>
+> --
+> 2.25.1
