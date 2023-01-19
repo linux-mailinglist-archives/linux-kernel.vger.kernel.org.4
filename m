@@ -2,172 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB3F673A05
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207426739EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjASNXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S230123AbjASNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjASNXe (ORCPT
+        with ESMTP id S229966AbjASNWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:23:34 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BCC83;
-        Thu, 19 Jan 2023 05:23:33 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id EA88E5CE24;
-        Thu, 19 Jan 2023 13:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674134611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7SU3rQc/6KT2OT+CNuvmsp7JyhHd1jX5deqXc9F/9wA=;
-        b=iI07z7Blumf+H21YP2Mkk2ClWk78WRME3oLbSOOFV/v4BOWBRybqtzAwUEGhtJa98uOp+V
-        gdPNXpxmVXBXQ+lJqBacxUrwGxP0sQSKA2q+UbhEy6kQhDJL5VQBDq6hdOZaDmZKHLkeWV
-        LFyHklh8vHoXmn7OKFGEmVz7u1Zbg64=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674134611;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7SU3rQc/6KT2OT+CNuvmsp7JyhHd1jX5deqXc9F/9wA=;
-        b=WFHyP+E9iU1XvgkR3PtCE6TnVRXhNO8Ezz3UaOX08tobrcUA+H73ECL7O37u4RPh4pZa/l
-        LdACLQbVs6HPquBg==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9AFC82C141;
-        Thu, 19 Jan 2023 13:23:31 +0000 (UTC)
-Date:   Thu, 19 Jan 2023 14:23:30 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Erhard F." <erhard_f@mailbox.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
- disaply code
-Message-ID: <20230119132330.GP16547@kitsune.suse.cz>
-References: <20230119095323.4659-1-msuchanek@suse.de>
- <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
- <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+        Thu, 19 Jan 2023 08:22:25 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ED98A43;
+        Thu, 19 Jan 2023 05:22:24 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4e4a6af2d99so26604877b3.4;
+        Thu, 19 Jan 2023 05:22:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=G4fZ9zBI53tAb3LwiJE/Rf4i55bprLCIO2PumR6qd/k=;
+        b=Yqpo72Dt0Vy3DBQ0lbnuCkjZROFPgsp9fKyaptY11lCxfcX1+y3mnoFub2Lg0mjIhB
+         LsUtFhxslYZp22POlouANUCr0z6FYkYavenLzlTDBh8JGOMJc/I+OXbbqWBp3Ga0a6iA
+         E8CiJv0znZqAb7H5Vd9D3YaXfGxGu6iu+aggVyMlPTEGSySEtYN0sI38ZxiRayEfD284
+         4h3joigVuGUlquNB2o9kJwpvPGp0FCOfwqeQs9oKtbUVoHYA1XmbwXERc0PJM3ZpYwm4
+         XDFyp+cDMnPCxMGTe+B7ij//uVhyaxUhAsqCoe+O+p3ipLlUB6CQX5l6pNzyKtoFQEK1
+         laCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G4fZ9zBI53tAb3LwiJE/Rf4i55bprLCIO2PumR6qd/k=;
+        b=jtk2uq/l7MGPVx1OxiYjOadT8NQNNABlKhsdr5cR717dI/+7nxSFpiCXRUp97qzvOM
+         tQM7yO1xu4fnH0zJ7kprXVKFWxuh/xPZ++U/seOxObxYWM3MFABGNOUGTpez2FVPIrYt
+         qyx+39VX5PZ8Sf366yZLnoNto2XJcKZKWHNpE+EKlTC4zklrs2ilqkwd7yjPeoihfUhC
+         3qqIl70CdxtdDO+szDl3GndfYcoRTCt7dE4fCjz+/rx3Xs73lndHJl23s+jLmVKHSo3+
+         Gadq1WyTj1H9M39j3v+4b+HGkLHhIwfWnCCsnDKRv7PITSQKOr8MTF+4k1hvnIiDHJ7a
+         1/QQ==
+X-Gm-Message-State: AFqh2kqv2juaDVL2L5HjIY4ASO6E5WjMj4T8K2yvIFWKYs//3l/LER8W
+        4l7jX7V6ZULCa7FNvL4z+jc=
+X-Google-Smtp-Source: AMrXdXsyWixdXkY4yqV98IMqp19Qw0xGQkiTvoR5q1FyXSVIOgU5JoCEx5kkhcVMtB9LIzOaNpvozg==
+X-Received: by 2002:a81:9b51:0:b0:47e:f5c4:2bda with SMTP id s78-20020a819b51000000b0047ef5c42bdamr8610330ywg.12.1674134543260;
+        Thu, 19 Jan 2023 05:22:23 -0800 (PST)
+Received: from p200300f6ef015700e657423a1f156bec.dip0.t-ipconnect.de (p200300f6ef015700e657423a1f156bec.dip0.t-ipconnect.de. [2003:f6:ef01:5700:e657:423a:1f15:6bec])
+        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b0070209239b87sm4475647qkb.41.2023.01.19.05.22.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 05:22:22 -0800 (PST)
+Message-ID: <93c5f822dd332c188e05da2d7e7eb1ac72cc6067.camel@gmail.com>
+Subject: Re: [PATCH v1 1/2] iio: core: Replace
+ iio_sysfs_match_string_with_gaps() by __sysfs_match_string()
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>
+Date:   Thu, 19 Jan 2023 14:24:07 +0100
+In-Reply-To: <Y8koLwGVjyrDb66P@smile.fi.intel.com>
+References: <20230118074828.66155-1-andriy.shevchenko@linux.intel.com>
+         <5f9b713b-9c71-7da6-e674-b6ebd28dc5d5@metafoo.de>
+         <Y8gVDs0UoiHqCRsM@smile.fi.intel.com>
+         <64406c4f-c9da-b434-360b-1050ff685d2d@metafoo.de>
+         <bb2e8b7b4ca894ed53d70bf04e2d52bed2553105.camel@gmail.com>
+         <Y8koLwGVjyrDb66P@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 02:11:13PM +0100, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 19.01.23 um 11:24 schrieb Christophe Leroy:
-> > 
-> > 
-> > Le 19/01/2023 à 10:53, Michal Suchanek a écrit :
-> > > The commit 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > > breaks build because of wrong argument to snprintf. That certainly
-> > > avoids the runtime error but is not the intended outcome.
-> > > 
-> > > Also use standard device name format of-display.N for all created
-> > > devices.
-> > > 
-> > > Fixes: 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > > ---
-> > > v2: Update the device name format
-> > > ---
-> > >    drivers/of/platform.c | 12 ++++++++----
-> > >    1 file changed, 8 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > > index f2a5d679a324..8c1b1de22036 100644
-> > > --- a/drivers/of/platform.c
-> > > +++ b/drivers/of/platform.c
-> > > @@ -525,7 +525,9 @@ static int __init of_platform_default_populate_init(void)
-> > >    	if (IS_ENABLED(CONFIG_PPC)) {
-> > >    		struct device_node *boot_display = NULL;
-> > >    		struct platform_device *dev;
-> > > -		int display_number = 1;
-> > > +		int display_number = 0;
-> > > +		char buf[14];
-> > 
-> > Can you declare that in the for block where it is used instead ?
-> > 
-> > > +		char *of_display_format = "of-display.%d";
-> > 
-> > Should be const ?
-> 
-> That should be static const of_display_format[] = then
+On Thu, 2023-01-19 at 13:23 +0200, Andy Shevchenko wrote:
+> On Thu, Jan 19, 2023 at 09:00:45AM +0100, Nuno S=C3=A1 wrote:
+> > On Wed, 2023-01-18 at 08:37 -0800, Lars-Peter Clausen wrote:
+> > > On 1/18/23 07:49, Andy Shevchenko wrote:
+> > > > On Wed, Jan 18, 2023 at 07:22:30AM -0800, Lars-Peter Clausen
+> > > > wrote:
+> > > > > On 1/17/23 23:48, Andy Shevchenko wrote:
+> > > > > > None of the current users is using gaps in the list of the
+> > > > > > items.
+> > > > > > No need to have a specific function for that, just replace
+> > > > > > it
+> > > > > > by
+> > > > > > library available __sysfs_match_string().
+> > > > > Hm, I specifically remember adding this for a driver where
+> > > > > there
+> > > > > were gaps.
+> > > > > One of the DACs. But it might be that the driver itself never
+> > > > > made it
+> > > > > upstream.
+> > > > I have checked all modules that have struct iio_enum and/or
+> > > > ("or"
+> > > > probably may
+> > > > not happen) IIO_ENUM() in them.
+> > > >=20
+> > > > It might be that I missed something.
+> > > I checked too, I can't find it either. The driver probably never
+> > > made
+> > > it=20
+> > > upstream.
+> >=20
+> > Yeah, I also did a quick check and I could find it in one adc (most
+> > likely we have more downstream users of this) that did not make it
+> > upstream. Eventually, we want to have it upstream but the ABI using
+> > the
+> > gaps can arguably be dropped...
+> >=20
+> > Anyways, from my side I'm fine with this change. We can revert it
+> > if we
+> > ever have a real user for this. I'll just have to be careful when
+> > updating ADI tree (but that is our problem :)).
+>=20
+> We usually do not keep a dead code in the kernel, and handling gaps
+> is a dead code.
 
-Why? It sounds completely fine to have a const pointer to a string
-constatnt.
+Yes, I know... That is why I cannot really complain about this
+change :)
 
-Thanks
-
-Michal
-
-> 
-> > 
-> > >    		int ret;
-> > >    		/* Check if we have a MacOS display without a node spec */
-> > > @@ -556,7 +558,10 @@ static int __init of_platform_default_populate_init(void)
-> > >    			if (!of_get_property(node, "linux,opened", NULL) ||
-> > >    			    !of_get_property(node, "linux,boot-display", NULL))
-> > >    				continue;
-> > > -			dev = of_platform_device_create(node, "of-display", NULL);
-> > > +			ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-> > > +			if (ret >= sizeof(buf))
-> > > +				continue;
-> > 
-> > 
-> > Can you make buf big enough to avoid that ?
-> > 
-> > And by the way could it be called something else than 'buf' ?
-> > 
-> > See exemple here :
-> > https://elixir.bootlin.com/linux/v6.1/source/drivers/fsi/fsi-occ.c#L690
-> > 
-> > 
-> > > +			dev = of_platform_device_create(node, buf, NULL);
-> > >    			if (WARN_ON(!dev))
-> > >    				return -ENOMEM;
-> > >    			boot_display = node;
-> > > @@ -564,10 +569,9 @@ static int __init of_platform_default_populate_init(void)
-> > >    		}
-> > >    		for_each_node_by_type(node, "display") {
-> > > -			char *buf[14];
-> > >    			if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
-> > >    				continue;
-> > > -			ret = snprintf(buf, "of-display-%d", display_number++);
-> > > +			ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-> > >    			if (ret >= sizeof(buf))
-> > >    				continue;
-> > >    			of_platform_device_create(node, buf, NULL);
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
-
-
+- Nuno S=C3=A1
 
