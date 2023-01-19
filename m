@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA426745C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FABB6745C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 23:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjASWSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 17:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S229688AbjASWSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 17:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjASWR2 (ORCPT
+        with ESMTP id S229654AbjASWRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:17:28 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ACD80891
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:59:20 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id fd15so2738300qtb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 13:59:20 -0800 (PST)
+        Thu, 19 Jan 2023 17:17:30 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1923D9EEA;
+        Thu, 19 Jan 2023 13:59:54 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id ud5so9390676ejc.4;
+        Thu, 19 Jan 2023 13:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EV/40Ti1p6uQrxSptqxGHz+KSFTZGf7X5IQ035Z+iAI=;
-        b=LnVd/1DrtbOe8GTxJzFDxRWyyAa/5JCkNoCt6gPGU7wbMjBNA4F8PFREiRfvxceeGN
-         JTGz1uKZoU3we6uTh/QCzsY/mrVKvL0Wew3ejYIMtQAPEPPPt/HTn/42LNwnRO2EVNE7
-         cBjB0vQEyMujAFTcsLrCdus2QU0OpS0p/Jae0=
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m3VE041wvuNRNbjGYZtx0e/0zgM5UPT7CKrc367fPVk=;
+        b=IPCeWzq6Su6zBpvw0I/tB6Sg+z9fwSOmfPRSY3r5ylze79JUCxWH7yR76NoAjnfhLh
+         /3mvmpBmlBNQd1w54wWfwthiQ7XwLGSwPVXyGcDeLBja5rMaREw6mUQUQGXTpF0S8FCt
+         KGvwJFgmRa5lNwhjPEdBH2Q5V3WlMnDp3GRTcfjgJaxvftYQoufWESdoRZihxi8k2wwP
+         +v5a1pYiZOUNqipdHEIU8A7GXXUhk5pFB9Upv3xzLeWLVJq2xaI04K9dU4UumlONHsB7
+         YdDMkZ/A0IfpAKgSnPA4+0CZV4bsg+chTUPE6koNjqn5vhjTmno0C8rBZ/qWwu7EigsR
+         Yv1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EV/40Ti1p6uQrxSptqxGHz+KSFTZGf7X5IQ035Z+iAI=;
-        b=7KB2X5kOijIoEjrTJvtwVtsTsNhCXyXrBF/OpfiDy7UobZnoYLLIKOFkEeoChpMEUc
-         VG7JdVvRgsLpW7EapgkrriBj370YKLQC398IqaMSrH5n3dXvbDw7wvh28RE2gxgfLEoN
-         2/et3YUK/pjeJg61mDkVqxQQRbxkTrUU8qNzxRZWkG/SWY5h74ntxVLYCQhbLI2G7M6B
-         azIcPuvhR5nEB2Dy5qRQQ7Tbb8seKeSURfKRk1spt7exReWPvOIYB4Zdl2dS4pUz+HDo
-         6ln2M65MSatVXJS37j6FWtVdCjPy3aqVtehk0s6/CeZr1S1xolMGzQg0sWa4j8F9WClN
-         JucQ==
-X-Gm-Message-State: AFqh2koJKwUupyG/zmyu2d7pmjoVyHP+sync5fS23a3FdzsMWsKF/fVF
-        AAIresPcQscJ7NXbRpR9bGYr4g==
-X-Google-Smtp-Source: AMrXdXtQ2KdUqaVXNbNXTktG2wL1uKAVDAGBejMPLK4ZkW00g42p5U9OFzfWgOpYButqotoDz3RNDQ==
-X-Received: by 2002:ac8:7511:0:b0:3ac:342:c686 with SMTP id u17-20020ac87511000000b003ac0342c686mr15919643qtq.46.1674165559761;
-        Thu, 19 Jan 2023 13:59:19 -0800 (PST)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05620a0c4200b006f9f3c0c63csm25153182qki.32.2023.01.19.13.59.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:59:19 -0800 (PST)
-Date:   Thu, 19 Jan 2023 16:59:18 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     sam@ravnborg.org, linux-kernel@vger.kernel.org,
-        users@linux.kernel.org
-Subject: Re: [PATCH 13/15] backlight: omap1: Use backlight helpers
-Message-ID: <20230119215918.3tv5e55a5sfcpf4v@meerkat.local>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
- <20230107-sam-video-backlight-drop-fb_blank-v1-13-1bd9bafb351f@ravnborg.org>
- <Y8m8CM35ku+Fuppc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8m8CM35ku+Fuppc@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m3VE041wvuNRNbjGYZtx0e/0zgM5UPT7CKrc367fPVk=;
+        b=vdkMh6COPaxH0TqZ2IUqWr6Fopi67gVyc0ngPD5lav+e8yMIdGJ7ljRfOMZXHdbQ7n
+         8Yd1B9ToXZ4S7R9W7vwRzHVaUyAzLi/66+H83hg0hcSBEhzmdW8dl4AjH7u0mk7VSSTe
+         zYCe12pJ6rYyA64cgNcAyyqz501fZ0KyVjUZIkW0Dk87XPv2jaj7e6JDjXhvKMdkWGv5
+         plGx4mrxtMcHlKksVcYD4SJywHfBRkdJNh50IuYVz9ypZhnxbzzhHMv9ME00j/cZd4t2
+         9Xu/dYg/r6ZU55BvQkN8algGsZfyVi/DVbUte+QBcjcufSmz20insCt0EugJg3HqFetF
+         7Jdg==
+X-Gm-Message-State: AFqh2kr1At2Sfc9p1lSmZeFx5x80OKUDsg6oD3W+COjKW/VS+ohlI6o7
+        bZa08belDdhZAZt4eXWI8w8=
+X-Google-Smtp-Source: AMrXdXudkdRSemBU0Ipq+6BnTLm7omlc+r5e91BFxGZUSaPfat1wNjMDIRVlQJVRWpm6uCKC96ehLQ==
+X-Received: by 2002:a17:906:2b8e:b0:86e:3531:5548 with SMTP id m14-20020a1709062b8e00b0086e35315548mr11768857ejg.73.1674165592554;
+        Thu, 19 Jan 2023 13:59:52 -0800 (PST)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id nd38-20020a17090762a600b0084d1b34973dsm16915714ejc.61.2023.01.19.13.59.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 Jan 2023 13:59:52 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs tree
+From:   Jakob Koschel <jkl820.git@gmail.com>
+In-Reply-To: <87ilh26vrd.fsf@meer.lwn.net>
+Date:   Thu, 19 Jan 2023 22:59:41 +0100
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3804F4A3-7CD0-4A77-8E4A-07459F9DC64B@gmail.com>
+References: <20230120083419.1fff9149@canb.auug.org.au>
+ <87ilh26vrd.fsf@meer.lwn.net>
+To:     Jonathan Corbet <corbet@lwn.net>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:54:16PM +0000, Lee Jones wrote:
-> My tools appear to dislike the line break in the Message-Id header.
-> This isn't something I've encountered before.  Is this a B4 thing?
 
-It's more like it's a Python thing. The upcoming version of b4 will avoid this
-(by not relying on Python to do message generation).
 
-> Is this standard?  Should I adapt my tooling to scan over line breaks?
+> On 19. Jan 2023, at 22:48, Jonathan Corbet <corbet@lwn.net> wrote:
+>=20
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>=20
+>> Hi all,
+>>=20
+>> Commit
+>>=20
+>>  6b25b190a9a3 ("docs/scripts/gdb: add necessary make scripts_gdb =
+step")
+>>=20
+>> is missing a Signed-off-by from its author.
+>=20
+> Sigh...my tooling is supposed to catch that...  Patch dropped; Jakob,
+> would you like to send me a properly signed-off version?
 
-This is RFC conformant, so if your tools are not able to deal with this
-situation, you should consider modifying them.
+whops, it was the first time using b4 submit and I can see Sined-off-by =
+in the email
+=
+(https://lore.kernel.org/linux-kernel/20230112-documentation-gdb-v1-1-09ab=
+556e9124@gmail.com/)
 
--K
+was it perhaps put in the wrong place?
+
+I'll be taking a look!
+
+>=20
+> Thanks,
+>=20
+> jon
+
