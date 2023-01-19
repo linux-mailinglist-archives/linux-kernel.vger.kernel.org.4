@@ -2,200 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84F367310F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A92673108
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 06:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjASFQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 00:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S229816AbjASFNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 00:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjASFQz (ORCPT
+        with ESMTP id S229804AbjASFMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 00:16:55 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAFDBC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:16:53 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id k1-20020a6b3c01000000b006f744aee560so568637iob.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 21:16:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1aU/PL6tMgM5C6OSxI3zVtDB4cScYrJPqlQCL27Nfk=;
-        b=Pt30wQbvrEClukh3D4gdTxfvDKti++4B7Gmig1YDpHmGMuaZ8QvftOoa45bA9OuLkK
-         69xkTMT25JdIGGwwS/sjOEPBY2VF1Va6MH+Ac+a+7KGFsUm/zaQOx7P7MnDXOLTdAmQD
-         GP+d1syXz6L0/uA5qtZytgAixqrzaQIX32Jmapwh3/AcZZISVbAdYIBKrcbttJjz6O27
-         L79Dt3mvnZHUvzZb/bcmIx29+Z65n8YQXqVGdwRC07Pw0817VoFR/0Y+kRgKZDLk6CUd
-         DDqMR6Ch9MMPB7TqCTn9j0ZVsOo9KDJ9RenqFT8ydayCs2dcNWJadkrK5vxAnZk69mqd
-         XCbw==
-X-Gm-Message-State: AFqh2kplrLnQD0J3PyuA7ZDHZdw5I/PMG7XnI6N5Ymhs1Qp9oYeQIw+O
-        v/1Dty11gYx7PMqBBc4c+hRzadXnWQrIb+CKmCiPEpTvGTwi
-X-Google-Smtp-Source: AMrXdXsalJ7tUBzAKiJ8+jhNoYGnkgZ+haQ55kzASOWynPY1qLjZRDasj9IZ87sJHX0TToddN6uyKrAP7Xsl5vY5NIJRTPiyDcyq
+        Thu, 19 Jan 2023 00:12:34 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4796D24128;
+        Wed, 18 Jan 2023 21:11:26 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ny7HX4Tmnz4f3xcK;
+        Thu, 19 Jan 2023 11:23:04 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+Zt8hj+1ZBBw--.54593S3;
+        Thu, 19 Jan 2023 11:23:06 +0800 (CST)
+Subject: Re: [PATCH -next v2 3/3] blk-cgroup: synchronize pd_free_fn() from
+ blkg_free_workfn() and blkcg_deactivate_policy()
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230118123152.1926314-1-yukuai1@huaweicloud.com>
+ <20230118123152.1926314-4-yukuai1@huaweicloud.com>
+ <Y8gm0BVh5d83lVXN@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <9a9b6f38-9d1b-b007-96d7-2cda433763f4@huaweicloud.com>
+Date:   Thu, 19 Jan 2023 11:23:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:c001:0:b0:39d:72ab:a7c5 with SMTP id
- y1-20020a02c001000000b0039d72aba7c5mr930742jai.247.1674098297625; Wed, 18 Jan
- 2023 19:18:17 -0800 (PST)
-Date:   Wed, 18 Jan 2023 19:18:17 -0800
-In-Reply-To: <20230119030102.3388-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000059dbb505f295624e@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
-From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y8gm0BVh5d83lVXN@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R+Zt8hj+1ZBBw--.54593S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZFWkCF4xAFWkJrWfGryUJrb_yoW5tw1rpr
+        ZxGas8trZ5tr4Ik3Wjvr13Wr9agw4rtrWUG3yrGa4Ykr4Y9rsYqFnrCrWvkFWxAFs5GF4f
+        Zr4DKFnxGw48GrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Read in io_req_caches_free
+ÔÚ 2023/01/19 1:05, Tejun Heo Ð´µÀ:
+> Hello,
+> 
+> On Wed, Jan 18, 2023 at 08:31:52PM +0800, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Currently parent pd can be freed before child pd:
+>>
+>> t1: remove cgroup C1
+>> blkcg_destroy_blkgs
+>>   blkg_destroy
+>>    list_del_init(&blkg->q_node)
+>>    // remove blkg from queue list
+>>    percpu_ref_kill(&blkg->refcnt)
+>>     blkg_release
+>>      call_rcu
+>>
+>> t2: from t1
+>> __blkg_release
+>>   blkg_free
+>>    schedule_work
+>> 			t4: deactivate policy
+>> 			blkcg_deactivate_policy
+>> 			 pd_free_fn
+>> 			 // parent of C1 is freed first
+>> t3: from t2
+>>   blkg_free_workfn
+>>    pd_free_fn
+>>
+>> If policy(for example, ioc_timer_fn() from iocost) access parent pd from
+>> child pd after pd_offline_fn(), then UAF can be triggered.
+>>
+>> Fix the problem by delaying 'list_del_init(&blkg->q_node)' from
+>> blkg_destroy() to blkg_free_workfn(), and use a new disk level mutex to
+>                                              ^
+>                                              using
+> 
+>> protect blkg_free_workfn() and blkcg_deactivate_policy).
+>    ^                                                     ^
+>    synchronize?                                          ()
+> 
+>> @@ -118,16 +118,26 @@ static void blkg_free_workfn(struct work_struct *work)
+>>   {
+>>   	struct blkcg_gq *blkg = container_of(work, struct blkcg_gq,
+>>   					     free_work);
+>> +	struct request_queue *q = blkg->q;
+>>   	int i;
+>>   
+>> +	if (q)
+>> +		mutex_lock(&q->blkcg_mutex);
+> 
+> A comment explaining what the above is synchronizing would be useful.
+> 
+>> +
+>>   	for (i = 0; i < BLKCG_MAX_POLS; i++)
+>>   		if (blkg->pd[i])
+>>   			blkcg_policy[i]->pd_free_fn(blkg->pd[i]);
+>>   
+>>   	if (blkg->parent)
+>>   		blkg_put(blkg->parent);
+>> -	if (blkg->q)
+>> -		blk_put_queue(blkg->q);
+>> +
+>> +	if (q) {
+>> +		if (!list_empty(&blkg->q_node))
+> 
+> We can drop the above if.
+> 
+>> +			list_del_init(&blkg->q_node);
+>> +		mutex_unlock(&q->blkcg_mutex);
+>> +		blk_put_queue(q);
+>> +	}
+>> +
+>>   	free_percpu(blkg->iostat_cpu);
+>>   	percpu_ref_exit(&blkg->refcnt);
+>>   	kfree(blkg);
+>> @@ -462,9 +472,14 @@ static void blkg_destroy(struct blkcg_gq *blkg)
+>>   	lockdep_assert_held(&blkg->q->queue_lock);
+>>   	lockdep_assert_held(&blkcg->lock);
+>>   
+>> -	/* Something wrong if we are trying to remove same group twice */
+>> -	WARN_ON_ONCE(list_empty(&blkg->q_node));
+>> -	WARN_ON_ONCE(hlist_unhashed(&blkg->blkcg_node));
+>> +	/*
+>> +	 * blkg is removed from queue list in blkg_free_workfn(), hence this
+>> +	 * function can be called from blkcg_destroy_blkgs() first, and then
+>> +	 * before blkg_free_workfn(), this function can be called again in
+>> +	 * blkg_destroy_all().
+> 
+> How about?
+> 
+> 	 * blkg stays on the queue list until blkg_free_workfn(), hence this
+> 	 * function can be called from blkcg_destroy_blkgs() first and again
+> 	 * from blkg_destroy_all() before blkg_free_workfn().
+> 
+>> +	 */
+>> +	if (hlist_unhashed(&blkg->blkcg_node))
+>> +		return;
+>>   
+>>   	for (i = 0; i < BLKCG_MAX_POLS; i++) {
+>>   		struct blkcg_policy *pol = blkcg_policy[i];
+>> @@ -478,8 +493,11 @@ static void blkg_destroy(struct blkcg_gq *blkg)
+>>   
+>>   	blkg->online = false;
+>>   
+>> +	/*
+>> +	 * Delay deleting list blkg->q_node to blkg_free_workfn() to synchronize
+>> +	 * pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy().
+>> +	 */
+> 
+> So, it'd be better to add a more comprehensive comment in blkg_free_workfn()
+> explaining why we need this synchronization and how it works and then point
+> to it from here.
+> 
+> Other than comments, it looks great to me. Thanks a lot for your patience
+> and seeing it through.
+Thanks for the suggestions, I'll send a new patch based on your
+suggestions.
 
-==================================================================
-BUG: KASAN: use-after-free in wq_stack_extract io_uring/slist.h:126 [inline]
-BUG: KASAN: use-after-free in io_alloc_req io_uring/io_uring.h:357 [inline]
-BUG: KASAN: use-after-free in io_req_caches_free+0x1a2/0x254 io_uring/io_uring.c:2748
-Read of size 8 at addr ffff88801c8dc938 by task kworker/u4:2/41
-
-CPU: 1 PID: 41 Comm: kworker/u4:2 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: events_unbound io_ring_exit_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- wq_stack_extract io_uring/slist.h:126 [inline]
- io_alloc_req io_uring/io_uring.h:357 [inline]
- io_req_caches_free+0x1a2/0x254 io_uring/io_uring.c:2748
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2980
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 5602:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x434 io_uring/io_uring.c:1066
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0xd/0xc2 io_uring/io_uring.c:2419
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3442
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 41:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x20f/0x254 io_uring/io_uring.c:2750
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2980
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-The buggy address belongs to the object at ffff88801c8dc8c0
- which belongs to the cache io_kiocb of size 232
-The buggy address is located 120 bytes inside of
- 232-byte region [ffff88801c8dc8c0, ffff88801c8dc9a8)
-
-The buggy address belongs to the physical page:
-page:ffffea0000723700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1c8dc
-memcg:ffff888021840981
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff88801bf2ba00 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000000c000c 00000001ffffffff ffff888021840981
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5602, tgid 5601 (syz-executor.0), ts 88366341970, free_ts 87676511455
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x434 io_uring/io_uring.c:1066
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0xd/0xc2 io_uring/io_uring.c:2419
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3442
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page_list+0x176/0xcd0 mm/page_alloc.c:3528
- release_pages+0xcb1/0x1330 mm/swap.c:1072
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
- tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
- tlb_flush_mmu mm/mmu_gather.c:299 [inline]
- tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
- exit_mmap+0x202/0x7c0 mm/mmap.c:3100
- __mmput+0x128/0x4c0 kernel/fork.c:1212
- mmput+0x60/0x70 kernel/fork.c:1234
- exec_mmap fs/exec.c:1034 [inline]
- begin_new_exec+0x1027/0x2f80 fs/exec.c:1293
- load_elf_binary+0x801/0x4ff0 fs/binfmt_elf.c:1001
- search_binary_handler fs/exec.c:1736 [inline]
- exec_binprm fs/exec.c:1778 [inline]
- bprm_execve fs/exec.c:1853 [inline]
- bprm_execve+0x7fd/0x1ae0 fs/exec.c:1809
- do_execveat_common+0x72c/0x880 fs/exec.c:1960
- do_execve fs/exec.c:2034 [inline]
- __do_sys_execve fs/exec.c:2110 [inline]
- __se_sys_execve fs/exec.c:2105 [inline]
- __x64_sys_execve+0x93/0xc0 fs/exec.c:2105
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88801c8dc800: 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc
- ffff88801c8dc880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff88801c8dc900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff88801c8dc980: fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc
- ffff88801c8dca00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
-Tested on:
-
-commit:         0a093b28 Add linux-next specific files for 20230112
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=110560fa480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1259a9b1480000
+Kuai
+> 
 
