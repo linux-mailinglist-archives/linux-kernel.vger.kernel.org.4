@@ -2,197 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B216567410B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7081674112
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 19:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjASSdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 13:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S229929AbjASSgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 13:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjASSdJ (ORCPT
+        with ESMTP id S229544AbjASSge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 13:33:09 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2069.outbound.protection.outlook.com [40.107.22.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26999032;
-        Thu, 19 Jan 2023 10:33:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sd6TgjY8GQncFiLsdrZleUGPfjunBbWkDPEPiseMbAqsh6SEIoX/CCYxZEtmDZE1dMW24eNIdq0xiy1wQOTFir/UBNcsW+ex4sfBZfWntEaMKm/sEOwTCE8E87v3CUVtHEs1fGG7oo/Bz3YUWWC8DwtvisFAWtD+IU1+wDr2puPQU3y8ETlAwbX04Y7TpdekoxyiM/hrlPRDQDhwD5/+tkH4EdtoaYeGy7MvTgKuJs55LOpjl2z8FS6lgcGnr94sfGiGKJGVOPob/Zyt84d8lidxK+v+637FuT3rKpe9AD5+HStMKIF7K6VEI78KdzhfA0ugNrLv3UoCisjNCjn0lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KR3a7ahaWjgZ0ivbJD5TzD2dleLEh+hKL4GlTrr0CUI=;
- b=n5LGR1Ftv7ud+7EmKLGSlRufSp1IZiubMWF2YBsiBraQcL3koAC47FmoUzj01hoBpQR5kcMz4+1U3bFlreAP/vdzVuPn+vWgkmRt8ckPVZxnfNTKHNhE4IOguELbKyDvovdhXmlgBUVeOLIpQRizHZcfu10uzLYP7xzfvIYIEUGNMPJzAeBTB3BXcgcAuXxXghiXTnDxEbYO+jZj8HS55fRC8HuPP3SjfTpGlHPi7yEBQLAh6yXeEaf6BM7rk9kz3XsEvKdkTR+3g7g0/pwZwE6FeQJgq7QCHGkVFHuSGz76Mg9YIoSggxbohVz7GHTJQweYS8Gc/krTot57T8vsOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KR3a7ahaWjgZ0ivbJD5TzD2dleLEh+hKL4GlTrr0CUI=;
- b=ltn7GG97o3HgpXzK76wQquhlerZFEbBsI3FSgDVgKgQdq4wuPVu/7+lJLVsBKfwewTpmSi51Ye/CNzOxnkyjbNABlk5NY0KNeqYmyqj+tj690QXZXvz8P/afu7WiC4tG4jnL6KmXmRPm0FyaNw5TZJRC62FoBxe4+dV2UIUV2Grjqcjg64Pq0LGmQwgfxOewqc+Vw2YErqguaa7Fu1WCXA9ew4MKC92UbTN0xfguYQs/GUCsSELhfF2I3jNIe1xhtiAI+4GeEk98VdMd26WLK+9xPgz+lRLTYCNzIwFG3pxAf0wryT3auW4y5pFzlfy/lPNSfU50ca1VSEAeaKSSPA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DB9PR03MB7225.eurprd03.prod.outlook.com (2603:10a6:10:227::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
- 2023 18:33:04 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::6b03:ac16:24b5:9166]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::6b03:ac16:24b5:9166%2]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
- 18:33:04 +0000
-Message-ID: <535a0566-5c96-3477-9b94-332d54bf724e@seco.com>
-Date:   Thu, 19 Jan 2023 13:32:59 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next v5 4/4] phy: aquantia: Determine rate adaptation
- support from registers
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>
-References: <20230103220511.3378316-1-sean.anderson@seco.com>
- <20230103220511.3378316-5-sean.anderson@seco.com>
- <20230105140421.bqd2aed6du5mtxn4@skbuf>
- <6ffe6719-648c-36aa-74be-467c8db40531@seco.com>
- <20230105173445.72rvdt4etvteageq@skbuf>
- <Y7cNCK4h0do9pEPo@shell.armlinux.org.uk>
- <20230106230343.2noq2hxr4quqbtk4@skbuf>
- <3ede0be8-4da5-4f64-6c67-4c9e7853ea50@seco.com>
- <20230106232905.ievmjro2asx3dv3s@skbuf>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20230106232905.ievmjro2asx3dv3s@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR16CA0044.namprd16.prod.outlook.com
- (2603:10b6:208:234::13) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Thu, 19 Jan 2023 13:36:34 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D2866033;
+        Thu, 19 Jan 2023 10:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674153393; x=1705689393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zwVVjUESJIESReT22YjiSWRMur/H9GgTgPJMfoIT7L0=;
+  b=KWphWsiCioYMECx6nzJITeyUJJQuDX/swYpZgLsElr+y+knr6YER8gWU
+   2fExfoMTHUfJYfan5o1vdIw4nGW1hmvLejw61cF7l3Ks6Mc5dCG69qMHq
+   mEgphmjDSbMuzJNX8SftxL40XMSwGF4Y2fLhVbL54UUzlHNijhPLl6EJs
+   qv8SY0IqFQ+xa64hU1az9Fc/7jE8ZDM2H0P97+/KAVK77W4kH507EjBv5
+   41DUvK41HuC3ZLPIA/dn8DaEBVBQ8OIzRlsgf1HmBSnFQnpThYh8N3OID
+   5JLlT/+OcrEYeQMdZXlB80keCTAnDU8rEjEak6F/izI+ekTIM/eZrlV/z
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="389895167"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="389895167"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 10:36:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="768345053"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="768345053"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 10:36:06 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIZld-0001jS-1k;
+        Thu, 19 Jan 2023 18:36:05 +0000
+Date:   Fri, 20 Jan 2023 02:35:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jianhua Lu <lujianhua000@gmail.com>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Helge Deller <deller@gmx.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: Re: [PATCH v6 2/2] backlight: ktz8866: Add support for Kinetic
+ KTZ8866 backlight
+Message-ID: <202301200239.m4ZDprWz-lkp@intel.com>
+References: <20230118131002.15453-2-lujianhua000@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DB9PR03MB7225:EE_
-X-MS-Office365-Filtering-Correlation-Id: e09347ba-9faa-4743-1eec-08dafa4b9a06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xzbeq8f/8N6QP69HguXtwQH7uIff6czxtMcMGiLx7ij7fAR3dolVHIEtsgmXoyxmlhVtJSReJyxtaOpP5ZMXYzHd7uHyapEzrHwq35qQRHATaxFL0P1MjBHOQfcB1Zc5VLXeeOtGxjjQb/xaPg65jPpk7jFMsW32pRU/hThzYX8bpqNyAHGp3PIVrOCbsrBEPAjJSjOd7VKFSsGaXTu4BOQ1vSf3DJ/3SretG98Vc1FInQMNigV/YWCd0k0b0JxjeZD19HH6+PEHhdLkBX4EbJ4u+zCShC5nVDKir708Gt5aEm1ONeiMjweSvH+82pWYbnGGbomoJCgBaXlVDkfbyHV2/XtARgsHekkb+lUUcRvZ0OSc1FZbHLGuNp1Zk1cF7MXQBhddNFmlE8JxDHCwXRPcVzYKkkyTPOYH9zrUjKeD80BZLkTNM/bv3xtZra0WARu3Bony7HydjR29wvrfE1h1cC55aMkKxa+7CZ+k+YqJ6lhxL6HR2EJCN5EzBx6gOkZGi/puE0O/KS4GWSxIRf0zMWB/NsLCYtkyEMnCH6EuZXgbenmOlFfqFbDM92Nr11uPqKMLjd8X8bPZR2X/rwbH3kU4SOhYTpHA/IwVvkVUbei1jcO9KUIWHMKdnMlqx/yMNgTh0fOxnzpIWrM7ZPXZ5QeXlyEw0DqtnFw9P3L9tfD359a4cnawMiwmyR2xKy0ElK6u1kI6AyWXzx1F51jnxH7wD2U3/LFe91kuLDwBqzmimKXzmDru9BO95NzQI31DL51mrgzUiaIQikJPkw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(39850400004)(396003)(376002)(136003)(451199015)(53546011)(31686004)(316002)(38350700002)(6506007)(38100700002)(54906003)(2906002)(2616005)(6666004)(66946007)(66476007)(66556008)(4326008)(26005)(6512007)(478600001)(6916009)(8676002)(31696002)(8936002)(7416002)(186003)(52116002)(5660300002)(83380400001)(41300700001)(86362001)(36756003)(6486002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDQ0MGUwdmdOZTlGUjlMZTM3RmgyR3p1czlRdnpyYWw0WUlzZDF4MHFvTmRQ?=
- =?utf-8?B?VXZPOHd1aTNXY3hlcURjejJEaHQ3OW0yUWo2bjJmaUVJY3R2MnRTS2M2YXIv?=
- =?utf-8?B?cTZDSkhGNmdVUXozK0tsdmdNYWh5K2dkTUlueFlsU2E5SGV1WkFsTHRGalkv?=
- =?utf-8?B?ekFSR2NDWXh4U3FvdjVJS0xHS2VEVXRUc2ZaTG84Q0w0NG5GaURicW81VHJN?=
- =?utf-8?B?aFFvaU1QWCtLVUZzazVtcW0zNStWWVV3eERzbG1saWJuc21mOTVJeDdNS1U1?=
- =?utf-8?B?STM1T0FsbmxUQzZNVFZhVkpyN21yeTZUWDJTWmtycForVHYvMmxzczVubEZv?=
- =?utf-8?B?QytwNjlPTDRYNHJJSGF5MFM0QXE0eFFqcyszd09NQ2FYUHVkREJiZnZ5VFlt?=
- =?utf-8?B?UllTRnMxOXJyb0VEcUwyeGtKb1ByeFl6dVB6UzE0bEZvQ0hQSEtBNTFOeVF2?=
- =?utf-8?B?TnVFUFRZVGtMZlFFUkc3Qlkza1RORHhHOEFGWS94RXR6QkZkeTdQUnRUUkpu?=
- =?utf-8?B?R1RIYW44akdTQUdpZE0wSTFqSklPTVMwZldkTjBqU0tXU21mRkRFUGVMN3Jx?=
- =?utf-8?B?YkR2RVd4cjdMUUwvTjFBZ3RFd3Mwam93alB4T2tVbGFXalBPdnVSeWtnNkNo?=
- =?utf-8?B?V0ZqcklVRWQxZkdraWhKTk5yMUI5ZGNXcXRYbkxTelpuMU92THIzQ0NkbTdW?=
- =?utf-8?B?LytPZlJEeGJaZHRtSnRyOXd5dHA4YUJQVm1yUWJrTkFaRzdWbGdSSXA2Qm0x?=
- =?utf-8?B?bTlxb0RBSUJsY3JaZmEvbm5YUUZpektaVUJiM0tKVnVWWkZRK2l3NmZyWGc4?=
- =?utf-8?B?azBLN1VoTFB1TTNjUjA1MWF6Nk1XcVM0UTZrL09Kanp6Q0tmK0ZaYVhoeVJ6?=
- =?utf-8?B?Tjh0OWpNM3FsWUdRQ0pWYklBNlNnd1Q3eTFSSlRLR0F3d3dCUWt0alQwOG1Q?=
- =?utf-8?B?Ly9LckRVL1BqVmd0Q2lMSWVZbC9QcnlrSW1DSi9BbkE1cGxRTW43TUlBdUND?=
- =?utf-8?B?ajNaMjltMkIwZHRVR1JJZmtReHpYQnppclVyQ2JvZzFUK28zQnExVncwZlRh?=
- =?utf-8?B?SDBPMEVhSXNkSEJta0w4SGR3RGZ5R1ZxMy9FSkNmMk45MGJYeE1Pb0NGUTEz?=
- =?utf-8?B?T0xkYVljcUo4emlkSTY2ajM3cU0wbEMzbTNma2FmeERpdDBlV0V5L3V1Rllk?=
- =?utf-8?B?WkZsNlZhNFQrR0hvTEJGQXJ2eDhwb0R3eGRvTmNOaWdlcCsrSUxmZXZTdzI1?=
- =?utf-8?B?M1hmcE9pdU5wRCs3RVk5bWcxL3BTRTBrZVExUVlLdXEwU0plV2JDZnFTWVdP?=
- =?utf-8?B?VEtISjhkQlFoaXA1R0dFWFpoQkpVMnlSM21Cbk9uYTluaTZOd2MvSm5od0lC?=
- =?utf-8?B?YUZSQ1NFa01oSTBHYVFvY2x2TmptdzEwSlZYUnZyN1dIZnNGOW1henpZS2dq?=
- =?utf-8?B?SVcyclRSU3JQc2pxeGI5aE9vcENRVGNxWWZ0WktWWjdPYkxGL0RqVGpkdlhX?=
- =?utf-8?B?SVRYUmRaVkhNdUJQNUZuV1Ird0hkMExtZjhFQ0tCUmMxd3Z6WEpDaWl4Wktj?=
- =?utf-8?B?eExaUlhqMVF3ZmZ1djVDN1Vya3JYeURzbXU5WWVTQ2JqL21mUDNhUDlXVkMw?=
- =?utf-8?B?T0lhdUJ3a0VyK0NDNDQ0UjR1ZUM1SlgrQ3o5QkJkME52MnZUcUcwdWd3UmNk?=
- =?utf-8?B?RmV6bTd6S1p4S1gzelRqRHk4SURkUldKeHJJM0JEeDM3ZXlLdVgvWEJFSkhU?=
- =?utf-8?B?ZEllY3VJWUdESEtYOHVNbDdPNnFTaVkwWE85U0tCNGw2T3cxM0pKSnF0K28v?=
- =?utf-8?B?WVp5QzlVa1dBcjFybmVhRFpZc2hQbWNnTmlKZDIrWTRNZGM2RDNyNElFNzRW?=
- =?utf-8?B?VmhiOTdEWElaaDZubys1R2s1Nng5TEhMTFYwRSs3QUJZYnkxK0VRdVdLQzlN?=
- =?utf-8?B?V29VamtBRnloYkJLOTQvUTJGNlFCbWJnbUdRblo4OFh3ekQzUWNiUW1YQmpt?=
- =?utf-8?B?UTdoKysxM1JYaUl6Z0hvTXVGUy9TZVlUUGU0SVFzOFp1SmdxczRnRHNjeHdi?=
- =?utf-8?B?dncvbTZITFc1NzNCT0ZSLzhEMmdxbU1BSElQMWxUWFB4M1ZkQ3JzTGlIaUJW?=
- =?utf-8?B?azFtSVpWT2FJQy9FNWd3eVJrb1hzbUwxRkk1dWxjaUxjYkIvZ3o2bkJ5WWQ5?=
- =?utf-8?B?bXc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e09347ba-9faa-4743-1eec-08dafa4b9a06
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 18:33:04.1804
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JGZBV/MT3Ep5mTxQZ74sywlOvYlJZ45IwOGlkrlaqnQaHJ5docM067C9xnihNmZKYUm39jc7rzlllEksDi9nXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7225
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118131002.15453-2-lujianhua000@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/23 18:29, Vladimir Oltean wrote:
-> On Fri, Jan 06, 2023 at 06:21:26PM -0500, Sean Anderson wrote:
->> On 1/6/23 18:03, Vladimir Oltean wrote:
->> > On Thu, Jan 05, 2023 at 05:46:48PM +0000, Russell King (Oracle) wrote:
->> >> On Thu, Jan 05, 2023 at 07:34:45PM +0200, Vladimir Oltean wrote:
->> >> > So we lose the advertisement of 5G and 2.5G, even if the firmware is
->> >> > provisioned for them via 10GBASE-R rate adaptation, right? Because when
->> >> > asked "What kind of rate matching is supported for 10GBASE-R?", the
->> >> > Aquantia driver will respond "None".
->> >> 
->> >> The code doesn't have the ability to do any better right now - since
->> >> we don't know what sets of interface modes _could_ be used by the PHY
->> >> and whether each interface mode may result in rate adaption.
->> >> 
->> >> To achieve that would mean reworking yet again all the phylink
->> >> validation from scratch, and probably reworking phylib and most of
->> >> the PHY drivers too so that they provide a lot more information
->> >> about their host interface behaviour.
->> >> 
->> >> I don't think there is an easy way to have a "perfect" solution
->> >> immediately - it's going to take a while to evolve - and probably
->> >> painfully evolve due to the slowness involved in updating all the
->> >> drivers that make use of phylink in some way.
->> > 
->> > Serious question. What do we gain in practical terms with this patch set
->> > applied? With certain firmware provisioning, some unsupported link modes
->> > won't be advertised anymore. But also, with other firmware, some supported
->> > link modes won't be advertised anymore.
->> 
->> Well, before the rate adaptation series, none of this would be
->> advertised. I would rather add advertisement only for what we can
->> actually support. We can always come back later and add additional
->> support.
-> 
-> Well, yes. But practically, does it matter that we are negotiating a
-> link speed that we don't support, when the effect is the same (link
-> doesn't come up)? The only practical case I see is where advertising
-> e.g. an unsupported 2.5G would cause the link to not establish at a
-> supported 1G. But as you say, I don't think this will be the case with
-> the firmware provisioning that Tim gave as an example?
+Hi Jianhua,
 
-I suppose.
+I love your patch! Perhaps something to improve:
 
-I still think we should try to prevent bad firmware from tripping us up.
-At the very least, I think we could detect bad configurations and warn
-about them, so the user knows it's the firmware and not us.
+[auto build test WARNING on lee-backlight/for-backlight-next]
+[also build test WARNING on lee-backlight/for-backlight-fixes lee-leds/for-leds-next pavel-leds/for-next linus/master v6.2-rc4 next-20230119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---Sean
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianhua-Lu/backlight-ktz8866-Add-support-for-Kinetic-KTZ8866-backlight/20230118-214354
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
+patch link:    https://lore.kernel.org/r/20230118131002.15453-2-lujianhua000%40gmail.com
+patch subject: [PATCH v6 2/2] backlight: ktz8866: Add support for Kinetic KTZ8866 backlight
+config: parisc-randconfig-r031-20230119 (https://download.01.org/0day-ci/archive/20230120/202301200239.m4ZDprWz-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b862510e8bf9eb34db9d71a372b9de05682cb8ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianhua-Lu/backlight-ktz8866-Add-support-for-Kinetic-KTZ8866-backlight/20230118-214354
+        git checkout b862510e8bf9eb34db9d71a372b9de05682cb8ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/video/backlight/
 
->> > IIUC, Tim Harvey's firmware ultimately had incorrect provisioning, it's
->> > not like the existing code prevents his use case from working.
->> 
->> The existing code isn't great as-is, since all the user sees is that we
->> e.g. negotiated for 1G, but the link never came up.
->> 
->> --Sean
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/bits.h:6,
+                    from include/linux/ratelimit_types.h:5,
+                    from include/linux/ratelimit.h:5,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/backlight.h:12,
+                    from drivers/video/backlight/ktz8866.c:8:
+   include/vdso/bits.h: In function 'ktz8866_init':
+>> include/vdso/bits.h:7:40: warning: 'val' is used uninitialized [-Wuninitialized]
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^~
+   drivers/video/backlight/ktz8866.c:98:22: note: 'val' was declared here
+      98 |         unsigned int val;
+         |                      ^~~
+
+
+vim +/val +7 include/vdso/bits.h
+
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  6  
+3945ff37d2f48d Vincenzo Frascino 2020-03-20 @7  #define BIT(nr)			(UL(1) << (nr))
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  8  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
