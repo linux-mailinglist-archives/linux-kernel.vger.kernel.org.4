@@ -2,152 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CE6674049
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3B267404C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 18:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjASRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 12:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S230119AbjASRtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 12:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjASRtF (ORCPT
+        with ESMTP id S230073AbjASRtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 12:49:05 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FDB9005
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 09:49:02 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JG7Cps017532;
-        Thu, 19 Jan 2023 17:48:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Tb9OixybtBCyFPCDnz9x7s2Bqq8Qp0KlkN3FH+tXIPE=;
- b=VLzXNZ9ypYnZctWCEcadCsobXs6JagtWwWon1dNCFGwGfrtX4/GKc/TzXuDE8xVeNd9z
- 4mEW6/0g77rcK3F11LXMAJMC7DxjhTTjJSKyTaKt1t3Ne8etGA0EfYWtRG45fYfIq1Y4
- xymIq8tUZ27nYga47n+66dHhCkrvn30pcfk3IhcBbX6JTG4G3+BCSORzr/PkxhWgGKKd
- Kyzx3VDIax4k12hT0p1nLnEIolJlFbtk+8n7FNgmOTINb7mj/mzsukrumAas3pKdmPS1
- sCZpit3urna1G5kCaN25y3uWdGTt9mftDqmnLHozmeyXXJJwUpM5S2llKJtLA7R136I0 6w== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n78qsbnkv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 17:48:52 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JFOkiT027632;
-        Thu, 19 Jan 2023 17:48:51 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n3m185k9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 17:48:51 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JHmoSu53871042
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 17:48:50 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 11C665803F;
-        Thu, 19 Jan 2023 17:48:50 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E045558054;
-        Thu, 19 Jan 2023 17:48:48 +0000 (GMT)
-Received: from [9.160.43.39] (unknown [9.160.43.39])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 17:48:48 +0000 (GMT)
-Message-ID: <ca233daf-1bcd-3b2e-68bc-2b9d48f4c7ee@linux.ibm.com>
-Date:   Thu, 19 Jan 2023 11:48:48 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 0/5] fsi: Add regmap and refactor sbefifo
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, jk@ozlabs.org,
-        joel@jms.id.au, alistair@popple.id.au
-References: <20221102205148.1334459-1-eajames@linux.ibm.com>
-Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20221102205148.1334459-1-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 19 Jan 2023 12:49:08 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928C918B10;
+        Thu, 19 Jan 2023 09:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hX4OYiBGR92+HjPLeBF5dAXZ5JjVpQRGM664v9KvkC8=; b=dA9yfFFkGxgp4w9VJmvyzmjN1Y
+        Ah0YE+IoIoTV0DsGTEw6tdX1i1gobS9ntaQoBy6kaeZ82q7SQUyjcHc3UKBJ4R2ymA5aP+173/54x
+        Nfpxmx6rfOMqgDhEl0RMhP/XpBY7bFvgCcq0iHbjm1KR0JcS66NE4yEI+WS7+IUCJPVU=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41480 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pIZ1y-00088F-2h; Thu, 19 Jan 2023 12:48:54 -0500
+Date:   Thu, 19 Jan 2023 12:48:53 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230119124853.9193fd073b8a95b45e20f41c@hugovil.com>
+In-Reply-To: <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-13-hugo@hugovil.com>
+        <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nirlGIyyvAQCqQqNFU6MBDqjE4QnkRbn
-X-Proofpoint-ORIG-GUID: nirlGIyyvAQCqQqNFU6MBDqjE4QnkRbn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_11,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=518
- priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0
- bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190144
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 12/14] rtc: pcf2127: support generic watchdog timing
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 18 Jan 2023 14:23:14 +0100
+Philipp Rosenberger <p.rosenberger@kunbus.com> wrote:
 
-On 11/2/22 15:51, Eddie James wrote:
-> The SBEFIFO hardware can now be attached over a new I2C endpoint interface
-> called the I2C Responder (I2CR). In order to use the existing SBEFIFO
-> driver, add a regmap driver for the FSI bus and an endpoint driver for the
-> I2CR. Then, refactor the SBEFIFO and OCC drivers to clean up and use the
-> new regmap driver or the I2CR interface.
+> Hi Hugo,
+> 
+> shouldn't the timeout set with pcf2127_wdt_set_timeout() be in seconds? 
+> With your changes this value is dependent on the configuration of the 
+> timer source clock for watchdog timer. So with a default of 1/4Hz this 
+> will be almost seconds * 4.
+> 
+> I think we need to do the same calculations as in the 
+> pcf2127_watchdog_init() when calculating the timeout from the 
+> PCF2127_WD_VAL_DEFAULT.
+> 
+> Best regards,
+> Philipp
+
+Hi Philipp,
+you are right that the value store/computed inside the structure wdd (struct watchdog_device) should be in seconds, according to the header file documentation in watchdog.h.
+
+However, in the PCF2127 datasheet, the value n that is stored in the PCF2127_REG_WD_VAL register does not represent a value in seconds, but a counter value. It is given by this equation:
+
+    n = source_clock_frequency x timer_period_in_seconds
+
+For the PCF2127, since the clock used is 1Hz, it works as the previous equation can be simplified as:
+
+    n = timer_period_in_seconds
+
+However, if the source clock is different than 1Hz, it would no longer work. Also, since the PCF2131 uses a default clock of 1/4 Hz, it also would not work.
+
+That is the reason why I modified the watchdog timer value (n) computation to take the clock into account. I then use the desired timeout in seconds given by  PCF2127_WD_VAL_DEFAULT to compute the counter value (n).
+
+So what I am proposing to do is to store the PCF2127_WD_VAL_DEFAULT value in wdd->timeout, as before, but convert it to a counter value in pcf2127_wdt_active_ping(). Or to only compute it once, I could define a new variable and compute/set it in pcf2127_watchdog_init().
+
+Hugo.
+
+ 
+> On 15.12.22 16:02, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Introduce in the configuration structure two new values to hold the
+> > watchdog clock source and the min_hw_heartbeat_ms value.
+> > 
+> > The minimum and maximum timeout values are automatically computed from
+> > the watchdog clock source value for each variant.
+> > 
+> > The PCF2131 has no 1Hz watchdog clock source, as is the case for
+> > PCF2127/29.
+> > 
+> > The next best choice is using a 1/4Hz clock, giving a watchdog timeout
+> > range between 4 and 1016s. By using the same register configuration as
+> > for the PCF2127/29, the 1/4Hz clock source is selected.
+> > 
+> > Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
+> > but it should be between 2 and 254s, because the watchdog is triggered
+> > when the timer value reaches 1, not 0.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >   drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
+> >   1 file changed, 48 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 11fbdab6bf01..3fd2fee4978b 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -157,9 +157,29 @@
+> >   
+> >   /* Watchdog timer value constants */
+> >   #define PCF2127_WD_VAL_STOP		0
+> > -#define PCF2127_WD_VAL_MIN		2
+> > -#define PCF2127_WD_VAL_MAX		255
+> > -#define PCF2127_WD_VAL_DEFAULT		60
+> > +#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
+> > +/* PCF2127/29 watchdog timer value constants */
+> > +#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
+> > +#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
+> > +/* PCF2131 watchdog timer value constants */
+> > +#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
+> > +#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
+> > +/*
+> > + * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
+> > + * value, n, and the clock frequency, f, in Hz.
+> > + *
+> > + * The PCF2127/29 datasheet gives t as:
+> > + *   t = n / f
+> > + * The PCF2131 datasheet gives t as:
+> > + *   t = (n - 1) / f
+> > + * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
+> > + * the value 1, and not zero. Consequently, the equation from the PCF2131
+> > + * datasheet seems to be the correct one for both variants.
+> > + */
+> > +#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
+> > +
+> > +/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
+> > +#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
+> >   
+> >   /* Mask for currently enabled interrupts */
+> >   #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
+> > @@ -202,6 +222,11 @@ struct pcf21xx_config {
+> >   	u8 reg_wd_val; /* Watchdog value register. */
+> >   	u8 reg_clkout; /* Clkout register. */
+> >   	u8 reg_reset;  /* Reset register if available. */
+> > +
+> > +	/* Watchdog configuration. */
+> > +	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
+> > +	int wdd_min_hw_heartbeat_ms;
+> > +
+> >   	unsigned int ts_count;
+> >   	struct pcf21xx_ts_config ts[4];
+> >   	struct attribute_group attribute_group;
+> > @@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
+> >   	pcf2127->wdd.parent = dev;
+> >   	pcf2127->wdd.info = &pcf2127_wdt_info;
+> >   	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
+> > -	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
+> > -	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
+> > -	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
+> > -	pcf2127->wdd.min_hw_heartbeat_ms = 500;
+> > +
+> > +	pcf2127->wdd.min_timeout =
+> > +		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
+> > +	pcf2127->wdd.max_timeout =
+> > +		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
+> > +	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
+> > +					  pcf2127->cfg->wdd_clock_hz_x1000);
+> > +
+> > +	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
+> > +	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
+> > +	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
+> > +
+> > +	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
+> >   	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
+> >   
+> >   	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
+> > @@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
+> >   		.reg_clkout = PCF2127_REG_CLKOUT,
+> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 1,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2127_REG_TS1_BASE,
+> > @@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
+> >   		.reg_clkout = PCF2127_REG_CLKOUT,
+> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 1,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2127_REG_TS1_BASE,
+> > @@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_val = PCF2131_REG_WD_VAL,
+> >   		.reg_clkout = PCF2131_REG_CLKOUT,
+> >   		.reg_reset  = PCF2131_REG_SR_RESET,
+> > +		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 4,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2131_REG_TS1_BASE,
+> > @@ -1215,7 +1255,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >   
+> >   	/*
+> >   	 * Watchdog timer enabled and reset pin /RST activated when timed out.
+> > -	 * Select 1Hz clock source for watchdog timer.
+> > +	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
+> >   	 * Note: Countdown timer disabled and not available.
+> >   	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
+> >   	 * of register watchdg_tim_ctl. The bit[6] is labeled
+> 
 
 
-I'm abandoning the rest of this series in favor of an FSI master driver 
-through the I2C responder. It makes a lot more sense to implement a 
-master driver here because then we get all the engine drivers for free, 
-rather than rework them to talk over i2c.
-
-Thanks,
-
-Eddie
-
-
->
-> Changes since v1:
->   - Instead of a regmap driver for the I2CR, just have a private interface
->     driver for FSI, since SBEFIFO is likely the only user.
->
-> Eddie James (5):
->    regmap: Add FSI bus support
->    drivers: fsi: Add I2C Responder driver
->    drivers: fsi: Rename sbefifo and occ sources
->    drivers: fsi: separate char device code for occ and sbefifo
->    drivers: fsi: occ and sbefifo refactor
->
->   drivers/base/regmap/Kconfig      |    6 +-
->   drivers/base/regmap/Makefile     |    1 +
->   drivers/base/regmap/regmap-fsi.c |  231 ++++++
->   drivers/fsi/Kconfig              |   32 +-
->   drivers/fsi/Makefile             |    9 +-
->   drivers/fsi/fsi-occ.c            |  766 --------------------
->   drivers/fsi/fsi-sbefifo.c        | 1144 ------------------------------
->   drivers/fsi/i2cr.c               |  116 +++
->   drivers/fsi/i2cr.h               |   19 +
->   drivers/fsi/occ-cdev.c           |  157 ++++
->   drivers/fsi/occ.c                |  536 ++++++++++++++
->   drivers/fsi/occ.h                |   57 ++
->   drivers/fsi/sbefifo-cdev.c       |  218 ++++++
->   drivers/fsi/sbefifo-fsi.c        |   68 ++
->   drivers/fsi/sbefifo-i2c.c        |   73 ++
->   drivers/fsi/sbefifo.c            |  797 +++++++++++++++++++++
->   drivers/fsi/sbefifo.h            |   50 ++
->   include/linux/regmap.h           |   37 +
->   18 files changed, 2398 insertions(+), 1919 deletions(-)
->   create mode 100644 drivers/base/regmap/regmap-fsi.c
->   delete mode 100644 drivers/fsi/fsi-occ.c
->   delete mode 100644 drivers/fsi/fsi-sbefifo.c
->   create mode 100644 drivers/fsi/i2cr.c
->   create mode 100644 drivers/fsi/i2cr.h
->   create mode 100644 drivers/fsi/occ-cdev.c
->   create mode 100644 drivers/fsi/occ.c
->   create mode 100644 drivers/fsi/occ.h
->   create mode 100644 drivers/fsi/sbefifo-cdev.c
->   create mode 100644 drivers/fsi/sbefifo-fsi.c
->   create mode 100644 drivers/fsi/sbefifo-i2c.c
->   create mode 100644 drivers/fsi/sbefifo.c
->   create mode 100644 drivers/fsi/sbefifo.h
->
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
