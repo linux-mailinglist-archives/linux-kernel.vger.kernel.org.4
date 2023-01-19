@@ -2,114 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5343F673CB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF15673CC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 15:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjASOrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 09:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S230103AbjASOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 09:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbjASOrF (ORCPT
+        with ESMTP id S231494AbjASOsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:47:05 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BD275A25
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:44:28 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pIW9D-0004rQ-Rv; Thu, 19 Jan 2023 15:44:11 +0100
-Message-ID: <27bd67f4-8b08-6c5b-137c-e9ef543e6d56@leemhuis.info>
-Date:   Thu, 19 Jan 2023 15:44:11 +0100
+        Thu, 19 Jan 2023 09:48:54 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D51374971
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 06:48:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674139698; x=1705675698;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j1RdAoD/wGl8iHKdRlcOQs9OkVUn7Q4Q+LreHOO1Lu0=;
+  b=Ka3zwo5jpxxgtEr133L5Yf8ruTd6IiODsiuW25I6wgZ//HfkUTsV4vWJ
+   ZDSAxYPwGpmHwXprayEXxshWKiAdSl8jgauI+wifS/Dmto8G+wHwvWPXY
+   sPr6XoeHuNJ9J4vsaPKO/j6qXdpl/8Ab+dOtoXv6PY7iVsZGSuaWbOTJL
+   +d9Txk8KDB6njUYEBXOATGmCIcn8wleQe4WF9we/anjObnZU6trylEcRZ
+   ILV9pAsMDAEyvGec+z9Utxk0W3iWqkTbyFyWArpX5ADRFa9/ax7P27s00
+   UiR5AjPteFeq169xPOZ2TQPRa7saK7udvd4yxiIoz4Ebk0NcpWwS96xHI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="305670168"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="305670168"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:48:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="784082510"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="784082510"
+Received: from sahamad-mobl1.amr.corp.intel.com (HELO [10.213.187.97]) ([10.213.187.97])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:48:15 -0800
+Message-ID: <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
+Date:   Thu, 19 Jan 2023 08:48:14 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at "Loading
- Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
-Content-Language: en-US, de-DE
-To:     "Erhard F." <erhard_f@mailbox.org>, sandipan.das@amd.com
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230119022303.177052e4@yea>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230119022303.177052e4@yea>
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
+ <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
+ <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
+ <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674139468;e4b0ccca;
-X-HE-SMSGID: 1pIW9D-0004rQ-Rv
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+>>> +static int cs42l42_sdw_dai_startup(struct snd_pcm_substream *substream,
+>>> +                   struct snd_soc_dai *dai)
+>>> +{
+>>> +    struct cs42l42_private *cs42l42 =
+>>> snd_soc_component_get_drvdata(dai->component);
+>>> +
+>>> +    if (!cs42l42->init_done)
+>>> +        return -ENODEV;
+>>
+>> Can this happen? IIRC the ASoC framework would use
+>> pm_runtime_resume_and_get() before .startup, which would guarantee that
+>> the device is initialized, no?
+>>
+> 
+> Yes, this can happen. Because of the way that the SoundWire enumeration
+> was implemented in the core code, it isn't a probe event so we cannot
+> call snd_soc_register_component() on enumeration because -EPROBE_DEFER
+> wouldn't be handled. So the snd_soc_register_component() must be called
+> from probe(). This leaves a limbo situation where we've registered the
+> driver but in fact don't yet have any hardware. ALSA/ASoC doesn't know
+> that we've registered before we are functional so they are happy to
+> go ahead and try to use the soundcard. If for some reason the hardware
+> failed to enumerate we can get here without having enumerated.
 
-On 19.01.23 02:23, Erhard F. wrote:
-> Hi!
-> 
-> I did a kernel bisect for an issue I originally posted on https://github.com/ClangBuiltLinux/linux/issues/1774
-> 
-> It is about kernel 6.1.x not booting on my machines when built with clang. A gcc built kernel with the same config just works fine. Turns out kernel v6.2-rc4 and earlier v6.2-rc are still affected.
-> 
-> I did a kernel bisect which revealed this commit:
-> 
->  # git bisect bad
-> 706460a96fc654e80b6bed1f562b00d2ce9f2f4d is the first bad commit
-> commit 706460a96fc654e80b6bed1f562b00d2ce9f2f4d
-> Author: Sandipan Das <sandipan.das@amd.com>
-> Date:   Thu Aug 11 17:59:51 2022 +0530
-> 
->     perf/x86/amd/core: Add generic branch record interfaces
->     
->     AMD processors that are capable of recording branches support either Branch
->     Sampling (BRS) or Last Branch Record (LBR). In preparation for adding Last
->     Branch Record Extension Version 2 (LbrExtV2) support, introduce new static
->     calls which act as gateways to call into the feature-dependent functions
->     based on what is available on the processor.
->     
->     Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->     Link: https://lore.kernel.org/r/b75dbc32663cb395f0d701167e952c6a6b0445a3.1660211399.git.sandipan.das@amd.com
-> 
->  arch/x86/events/amd/core.c | 34 ++++++++++++++++++++++------------
->  1 file changed, 22 insertions(+), 12 deletions(-)
-> 
-> 
-> For more details please have a look at https://github.com/ClangBuiltLinux/linux/issues/1774
+Humm, yes, but you've also made the regmap cache-only, so is there
+really a problem?
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+FWIW I don't see a startup callback in any other codec driver. It may be
+wrong but it's also a sign that this isn't a problem we've seen so far
+on existing Intel-based platforms.
 
-#regzbot introduced 706460a96fc654e80b6be ^
-https://github.com/ClangBuiltLinux/linux/issues/1774
-#regzbot title perf/x86/amd/core: clang 15 built kernel fails to boot
-#regzbot ignore-activity
+> 
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int cs42l42_sdw_dai_hw_params(struct snd_pcm_substream
+>>> *substream,
+>>> +                     struct snd_pcm_hw_params *params,
+>>> +                     struct snd_soc_dai *dai)
+>>> +{
+>>> +    struct cs42l42_private *cs42l42 =
+>>> snd_soc_component_get_drvdata(dai->component);
+>>> +    struct sdw_stream_runtime *sdw_stream =
+>>> snd_soc_dai_get_dma_data(dai, substream);
+>>> +    struct sdw_stream_config stream_config = {0};
+>>> +    struct sdw_port_config port_config = {0};
+>>> +    int ret;
+>>> +
+>>> +    if (!sdw_stream)
+>>> +        return -EINVAL;
+>>> +
+>>> +    /* Needed for PLL configuration when we are notified of new bus
+>>> config */
+>>> +    cs42l42->sample_rate = params_rate(params);
+>>
+>> wouldn't it be better to check if the sample_rate is supported by the
+>> PLL here, instead of in the .prepare step ...
+>>
+> It depends on the soundwire bus clock. We need to know both to determine
+> whether they are valid. IFF we can assume that the call to
+> sdw_stream_add_slave() will always invoke the bus_config() callback we
+> can call cs42l42_pll_config() from cs42l42_sdw_bus_config() and return
+> an error from cs42l42_sdw_bus_config() if the {swire_clk, sample_rate}
+> pair isn't valid.
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+You lost me here. Are you saying the soundwire bus clock is only known
+in the prepare stage?
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+>>> +static int cs42l42_sdw_dai_set_sdw_stream(struct snd_soc_dai *dai,
+>>> void *sdw_stream,
+>>> +                      int direction)
+>>> +{
+>>> +    if (!sdw_stream)
+>>> +        return 0;
+>>> +
+>>> +    if (direction == SNDRV_PCM_STREAM_PLAYBACK)
+>>> +        dai->playback_dma_data = sdw_stream;
+>>> +    else
+>>> +        dai->capture_dma_data = sdw_stream;
+>>> +
+>>> +    return 0;
+>>
+>> Humm, this is interesting, you are not using the sdw_stream_data that
+>> all other codecs use, but in hindsight I have no idea why we allocate
+>> something to only store a pointer.
+>>
+> 
+> Indeed. I can see no reason to wrap this pointer in another struct when
+> we can store the pointer direct so I dropped the wrapper struct.
+
+I'll see if we can simplify the other codec drivers.
+
+>>> +static int cs42l42_sdw_update_status(struct sdw_slave *peripheral,
+>>> +                     enum sdw_slave_status status);s
+>>> +{
+>>> +    struct cs42l42_private *cs42l42 =
+>>> dev_get_drvdata(&peripheral->dev);
+>>> +
+>>> +    switch (status) {
+>>> +    case SDW_SLAVE_ATTACHED:
+>>> +        dev_dbg(cs42l42->dev, "ATTACHED\n");
+>>> +        if (!cs42l42->init_done)
+>>> +            cs42l42_sdw_init(peripheral);
+>>
+>> unclear to me what happens is the bus suspends, how would you redo the
+>> init?
+>>
+> 
+> We don't need to re-run the init(). A regcache_sync() will restore
+> settings.
+
+ah, interesting. Other codec drivers play with specific registers that
+aren't in regmap. There's also headset calibration that's done
+differently in the first init or later.
