@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305D0674401
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB60674407
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 22:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjASVKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 16:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S229488AbjASVKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 16:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjASVJ3 (ORCPT
+        with ESMTP id S230036AbjASVJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:09:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202D2A1010;
-        Thu, 19 Jan 2023 13:02:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7C9C6CE25B1;
-        Thu, 19 Jan 2023 21:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F97C433F0;
-        Thu, 19 Jan 2023 21:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674162165;
-        bh=Gl+Z25/Z/2UsEtuRKbFkcBEiWO+If4DwRr3vxCyOQNo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ub1SDnk2kwxWunkh+eJXGbifSHZ2fNMd9GrSFrsjepV7ErDo4pp9WzqkJhNcKW0jM
-         QfKHsmHnnDwO7avjf9WZLShAspoOqWSY335WaR6JRqq4REnBuJ01LoxauEceqzOcej
-         o67J4+AccHWF+g51KnyJ9Z6IZZ+i6BZq60AmO4Y5lJkizFeags2gApN1R+ogPq3vfV
-         0MGKdwyAb67KwPvt2lX2lGEWXrPbY6IDVKl0kqg5yUvcMnCsNfUH9vp4bWjK0OFGBQ
-         bx8L/l8V+C8sH823lgC/Jw3cuhU3Xsnu1G5tV8w/siWI9UnK6jCcmzM3vDypQM0BD7
-         MLUh78Ttm+Mmw==
-Date:   Thu, 19 Jan 2023 21:02:40 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-Message-ID: <Y8mv8PzL1UsP9gNh@google.com>
-References: <20221007153323.1326-1-henning.schild@siemens.com>
+        Thu, 19 Jan 2023 16:09:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1F130F8;
+        Thu, 19 Jan 2023 13:03:02 -0800 (PST)
+Date:   Thu, 19 Jan 2023 21:02:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674162180;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xY+SzRBo17JQPxRpIt0Xv07Ckhs+cRTjf+iujupdH3Q=;
+        b=JdNClVOVN7juiNVlv1BdgZTUI5ocscMjE1ceI8aFyc+YKF8jOq7DjbbvtORx99zIj6dUgN
+        k4fY1KIX0X9AGuPYkRAu+ow/eLCxtCv92PWFpjSfxXjJ4EE1rUvB5JEv1B6KEvS5nzFmvN
+        me1GUQQHQw8PNId1X/O2X3DQZfP7xiTr1rwv+ePumrIp2uGRTx0+FDvpChl2hxgAC9PmHH
+        0eciBohNaOSUmzevgHnZn18Ty4uSwZFTCdy1cppopUGTnvDXHkfWshIGM/WHO5ESkqiwNz
+        S9eMAgor8NVg3jz6GKTKCzVncBRnNZQ8g4dBBqVIKCqDJrD1nU1SBUZeUuh9dQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674162180;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xY+SzRBo17JQPxRpIt0Xv07Ckhs+cRTjf+iujupdH3Q=;
+        b=DB2zZ4Nd7aoqpqZ9B0qoCnuTHdNlear3ASzlWBeSKmlLshVJ+HX4gO1MecP+8BpnLSUfAE
+        A3X0t0cHxY4IruCg==
+From:   "tip-bot2 for Gustavo A. R. Silva" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/fpu] x86/fpu: Replace zero-length array in struct
+ xregs_state with flexible-array member
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <o9YQ@work>
+References: <o9YQ@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221007153323.1326-1-henning.schild@siemens.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167416217961.4906.13789346237944390735.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Oct 2022, Henning Schild wrote:
+The following commit has been merged into the x86/fpu branch of tip:
 
-> If we register a "leds-gpio" platform device for GPIO pins that do not
-> exist we get a -EPROBE_DEFER and the probe will be tried again later.
-> If there is no driver to provide that pin we will poll forever and also
-> create a lot of log messages.
-> 
-> So check if that GPIO driver is configured, if so it will come up
-> eventually. If not, we exit our probe function early and do not even
-> bother registering the "leds-gpio". This method was chosen over "Kconfig
-> depends" since this way we can add support for more devices and GPIO
-> backends more easily without "depends":ing on all GPIO backends.
-> 
-> Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version of Siemens driver")
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
->  1 file changed, 2 insertions(+)
+Commit-ID:     aa81cb9d9723694bb18359adbef7964030758dba
+Gitweb:        https://git.kernel.org/tip/aa81cb9d9723694bb18359adbef7964030758dba
+Author:        Gustavo A. R. Silva <gustavoars@kernel.org>
+AuthorDate:    Mon, 09 Jan 2023 19:40:38 -06:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 19 Jan 2023 21:59:35 +01:00
 
-FYI: I'm going to try my best not to take another one like this.
+x86/fpu: Replace zero-length array in struct xregs_state with flexible-array member
 
-Please try to improve the whole situation for you next submission.
+Zero-length arrays are deprecated [1] and have to be replaced by C99
+flexible-array members.
 
-Applied, thanks.
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+on memcpy() and help to make progress towards globally enabling
+-fstrict-flex-arrays=3 [2]
 
--- 
-Lee Jones [李琼斯]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
+Link: https://github.com/KSPP/linux/issues/78
+Link: https://lore.kernel.org/r/Y7zCFpa2XNs/o9YQ@work
+---
+ arch/x86/include/asm/fpu/types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
+index eb7cd11..7f6d858 100644
+--- a/arch/x86/include/asm/fpu/types.h
++++ b/arch/x86/include/asm/fpu/types.h
+@@ -321,7 +321,7 @@ struct xstate_header {
+ struct xregs_state {
+ 	struct fxregs_state		i387;
+ 	struct xstate_header		header;
+-	u8				extended_state_area[0];
++	u8				extended_state_area[];
+ } __attribute__ ((packed, aligned (64)));
+ 
+ /*
