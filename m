@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1862F6742DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F296742E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 20:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjASTbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 14:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S230340AbjASTcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 14:32:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjASTbn (ORCPT
+        with ESMTP id S230240AbjASTcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:31:43 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CF6395740
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 11:31:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5406C13D5;
-        Thu, 19 Jan 2023 11:32:21 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 91B7E3F67D;
-        Thu, 19 Jan 2023 11:31:38 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, Ludvig.Parsson@axis.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        f.fainelli@gmail.com, james.quinlan@broadcom.com
-Subject: Re: [PATCH 0/9] Rework SCMI initialization and probing sequence
-Date:   Thu, 19 Jan 2023 19:31:34 +0000
-Message-Id: <167415666655.1301843.11494809761405438346.b4-ty@arm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20221222185049.737625-1-cristian.marussi@arm.com>
-References: <20221222185049.737625-1-cristian.marussi@arm.com>
+        Thu, 19 Jan 2023 14:32:41 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC99402C7;
+        Thu, 19 Jan 2023 11:32:37 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674156755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHxykVY6P+CjvCy3BM/v+eaFbSdX57m2P+2wz/O0ELw=;
+        b=iNnOhimeyI7dlFF9r/d3A60O5YHoZubdJeoBRFd4qs6qhTVUKhHJd16w1sy0gLPKlq0ttO
+        JKzF/Wwh1tjgHYCdX3ycl2Cgv8N2Jng2ndyw1FUJN+kWYrF+aSJriPCYBLpTYtt/Isyaaz
+        ZjR6aeOqAa16PMpySfI3CS9rcCNKZEnmIui3mEYdQ2WPQAJkCJSMMjY2A4+QbovbqaO3ap
+        GvOkCmMtSR2ZtpwbPxT1OQxY0EJsXvk8CBBu3g2M1mlmgsywjM8cq6MLExV1+mXX1drAxS
+        qeFNtFh1Cl6ySWiqCKdGTnjUVzgOJB6typ9eXts1SySwLwnwvDXZISmPoS16Ug==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674156755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHxykVY6P+CjvCy3BM/v+eaFbSdX57m2P+2wz/O0ELw=;
+        b=AaPaVme/sKpCnlh+tVrWSlI5TkptV7MVp/WmAM5NfSMvKL34v23rLPa8iuFR/gxfXGP6zo
+        XoIdw10zTxJgrHDg==
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        x86 Maintainers <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Add x86 ACPI paths to the ACPI entry
+In-Reply-To: <12136077.O9o76ZdvQC@kreacher>
+References: <12136077.O9o76ZdvQC@kreacher>
+Date:   Thu, 19 Jan 2023 20:32:34 +0100
+Message-ID: <87ilh2ialp.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Dec 2022 18:50:40 +0000, Cristian Marussi wrote:
-> under some configurations the SCMI core stack, which is now initialized
-> as a whole at the subsys_initcall level, can be dependent on some other
-> Kernel subsystems (like TEE) when some SCMI transport backend like optee
-> is used.
-> 
-> This has been reported to lead to some awkward probe loop which, even
-> though successful at the end, leaves a track of errors in the logs coming
-> directly from the core Linux driver model facilities.
-> 
-> [...]
+On Thu, Jan 19 2023 at 19:41, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> In order for things like get_maintainer.pl to print linux-acpi as a
+> list to receive copies of ACPI-related patches, add paths to ACPI files
+> in the arch/x86/ directory to the ACPI entry in MAINTAINERS.
+>
+> While at it, make the list of ACPI files listed in the suspend-to-RAM
+> entry more precise.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied to sudeep.holla/linux (for-next/scmi), thanks!
-
-[1/9] firmware: arm_scmi: Simplify chan_available transport operation
-      https://git.kernel.org/sudeep.holla/c/7a75b7afd8ff
-[2/9] firmware: arm_scmi: Use dedicated devices to initialize channels
-      https://git.kernel.org/sudeep.holla/c/05a2801d8b90
-[3/9] firmware: arm_scmi: Move protocol registration helpers
-      https://git.kernel.org/sudeep.holla/c/9115c20ac1ee
-[4/9] firmware: arm_scmi: Add common notifier helpers
-      https://git.kernel.org/sudeep.holla/c/53b8c25df708
-[5/9] firmware: arm_scmi: Refactor protocol device creation
-      https://git.kernel.org/sudeep.holla/c/d3cd7c525fd2
-[6/9] firmware: arm_scmi: Move handle get/set helpers
-      https://git.kernel.org/sudeep.holla/c/971fc0665f13
-[7/9] firmware: arm_scmi: Refactor device create/destroy helpers
-      https://git.kernel.org/sudeep.holla/c/2c3e674465e7
-[8/9] firmware: arm_scmi: Introduce a new lifecycle for protocol devices
-      https://git.kernel.org/sudeep.holla/c/ee5dcedaf72d
-[9/9] firmware: arm_scmi: Split bus and driver into distinct modules
-      https://git.kernel.org/sudeep.holla/c/37b5be828032
---
-Regards,
-Sudeep
-
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
