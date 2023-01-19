@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64866743C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECCD6743C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 21:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjASU5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 15:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S229926AbjASU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 15:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjASUzk (ORCPT
+        with ESMTP id S230219AbjASUzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 Jan 2023 15:55:40 -0500
-Received: from galois.linutronix.de (unknown [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5121523C79
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:54:03 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674161627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EWtBqF1zcJDZerK6PL/ZNIRR4wUuEq1ydE1wWa2rzqw=;
-        b=R84T16LI4E3eWl8eJTaVPXD9BxuZLU7mz2J46TTHXM6IfkQnqBqKKHfqAC4gh+4XVmif4z
-        VDUNi3r1/CVqfGPBUYV7n9uBp3i+MDX4JtwSQDqR82Ofa2uXz8fnQ5IRxrmbV2fYYjXvq1
-        /m55Bzx/HcjpLPtVOnakIP3e/CxF1Y53V0H6v+qjGbULluBMhYAG4UK5us5chrACggCFVU
-        qiUsVqYgyjAKoUX4Y5x4BDfrGapSgw5xK58cyAKXX88LHx6zf219Ix9gDejLR5HUx25Lmr
-        GUerpKWHOqQG8hQwY3b7HKmf8n9qVavoKIHRsSi4GtzOANDbTKceWLPXSAjPfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674161627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EWtBqF1zcJDZerK6PL/ZNIRR4wUuEq1ydE1wWa2rzqw=;
-        b=3ux97f/C300cfX5uKoHhzWVumpkNZiZ1j/8TrqHEFgeJDaB3kmX4sEXKcn98wWEtFd93Dy
-        HuIMRQWP273V2UAA==
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
-In-Reply-To: <CAAq0SUkN38V00HqV3Hk3ee_-=vfkKxG9xtR3n=4gAT+zCs+=Zg@mail.gmail.com>
-References: <20230117172649.52465-1-wander@redhat.com> <875yd4k8qd.ffs@tglx>
- <CAAq0SUkN38V00HqV3Hk3ee_-=vfkKxG9xtR3n=4gAT+zCs+=Zg@mail.gmail.com>
-Date:   Thu, 19 Jan 2023 21:53:46 +0100
-Message-ID: <87fsc6i6ud.ffs@tglx>
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624FA93D5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:53:55 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so2981926pjl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 12:53:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2KcT1B8s7M/PNmZVbAhx+44siier/Z0Bi5IFTKZqhSo=;
+        b=XAgJvIe5jiyVPT35+zzdOGbh0bAX75igSobjxQPQb3V2VEnDZbbJ4ZSiqmCnTUTORj
+         iE3wGITERXtoEphfvXQN1afG7rdUqM6qPyC8k0mWW5OLWp7VxMWogiEmqzAcm4w7KUKP
+         9URdCyHqDcmDv7cfQtHYBtj05bTcu6j7G3aeiE2aO8rGE/REg3X55SaIQDec+QXis4xh
+         BJpzH3l0PQbAaAfoSnfE8sXJSCdbdRovRCmZnUQa5mdUxHSRgu399zysJZIYVuLcq8xE
+         WNviQbgq00pQkJgFzX4ezG5ak7/hMHJ8Nr3WpI5167O+HmqBBz10A4Nrc+T3glWR8iZg
+         0jAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2KcT1B8s7M/PNmZVbAhx+44siier/Z0Bi5IFTKZqhSo=;
+        b=n1fF3skAexnwHVlY6h9Tj6PyrNsR2upb0hfeSEVgeX/K0zAwEc6DWndzJvj7VPtSaB
+         SNmuDdRzOhTZQq4odFL3hObTMC1mFqaHXULHtJbR5OW901e25rRFeS1I2Z9iCoEtLBdh
+         rx7xJhyoO3MR56RKT7hjtJ/j46BLVx0fCcubXYKi+Q16NDL+dZvsHuAEMVWUQxoMX8wg
+         oze2aaGE/hsA1oHVr2i2JIPF03bCsn72kZ8gzmpmc4L6Ts2Jq1Ka/GvaPYkmqes8455w
+         aTcrP+PwNhaZpYbKWBAIPTohyuqM7UPfZq/OxAarB79FnNKDTl1aVO8fCjvHkjS6wCgq
+         kMmQ==
+X-Gm-Message-State: AFqh2kqyV4G5UDdVxxuDPXBRqi/+v2NEen9QlDsIl1ztKFWFZsCt+q0m
+        MXMzJafB6scKWsEMIIfByPUnlQ==
+X-Google-Smtp-Source: AMrXdXsvOKIW9T+xlMXLE2cFVBinBZzTPgRdQQsdFv6UMtL6T21qjfDkZACMu1CYoW/BXimgIfCTFw==
+X-Received: by 2002:a17:902:f312:b0:194:d5ff:3ae3 with SMTP id c18-20020a170902f31200b00194d5ff3ae3mr54586ple.2.1674161634760;
+        Thu, 19 Jan 2023 12:53:54 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m4-20020a170902768400b001948720f6bdsm9641853pll.98.2023.01.19.12.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 12:53:54 -0800 (PST)
+Date:   Thu, 19 Jan 2023 20:53:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [RFC 1/2] selftests: KVM: Move dirty logging functions to
+ memstress.(c|h)
+Message-ID: <Y8mt3uv5iF6i/DD1@google.com>
+References: <20230119200553.3922206-1-bgardon@google.com>
+ <Y8mqd7HUzXDnhXLV@google.com>
+ <CANgfPd902Sd+LCd61D8=ba2ZTbJCRu3emLXtE212_8NWW6c3Pw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANgfPd902Sd+LCd61D8=ba2ZTbJCRu3emLXtE212_8NWW6c3Pw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wander!
+On Thu, Jan 19, 2023, Ben Gardon wrote:
+> Woops!
 
-On Wed, Jan 18 2023 at 15:49, Wander Lairson Costa wrote:
-> On Tue, Jan 17, 2023 at 9:05 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> On Tue, Jan 17 2023 at 14:26, Wander Lairson Costa wrote:
->> > rt_mutex_adjust_prio_chain() acquires the wait_lock. In the requeue
->> > phase, waiter may be initially in the top of the queue, but after
->> > dequeued and requeued it may no longer be true.
->>
->> That's related to your above argumentation in which way?
->>
->
-> I think I made the mistake of not explicitly saying at least three
-> tasks are involved:
->
-> - A Task T1 that currently holds the mutex
-> - A Task T2 that is the top waiter
-> - A Task T3 that changes the top waiter
->
-> T3 tries to acquire the mutex, but as T1 holds it, it calls
-> task_blocked_on_lock() and saves the owner. It eventually calls
-> rt_mutex_adjust_prio_chain(), but it releases the wait lock before
-> doing so. This opens a window for T1 to release the mutex and wake up
-> T2. Before T2 runs, T3 acquires the wait lock again inside
-> rt_mutex_adjust_prio_chain(). If the "dequeue/requeue" piece of code
-> changes the top waiter, then 1) When T2 runs, it will verify that it
-> is no longer the top waiter and comes back to sleep 2) As you observed
-> below, the waiter doesn't point to the top waiter and, therefore, it
-> will wake up the wrong task.
+Heh, and top posting too.  Me thinks you had too long of a break ;-)
 
-This is still confusing as hell because the wait locks you are talking
-about belong to different rtmutexes.  So there is no drops wait lock and
-reacquires wait lock window.
+> I did not mean to tag this RFC. Sorry about that. I will include a cover
+> letter in the future and can resend these with one if preferred.
 
-There must be (multiple) lock chains involved, but I couldn't figure out
-yet what the actaul scenario is in the case of a pure rt_spinlock clock
-chain:
+Eh, no need, damage done.  I was just confused.
 
-> Another piece of information I forgot: I spotted the bug in the
-> spinlock_rt, which uses a rtmutex under the hood. It has a different
-> code path in the lock scenario, and there is no call to
-> remove_waiter() (or I am missing something).
-
-Correct. But this still might be a lock chain issue where a non
-rt_spinlock which allows early removal.
-
-> Anyway, you summed it up pretty well here: "@waiter is no longer the
-> top waiter due to the requeue operation". I tried (and failed) to
-> explain the call chain that ends up in the buggy scenario, but now I
-> think I should just describe the fundamental problem (the waiter
-> doesn't point to the top waiter).
-
-You really want to provide the information WHY this case can happen at
-all. If it's not the removal case and related to some other obscure lock
-chain problem, then we really need to understand the scenario because
-that lets us analyze whether there are other holes we did not think
-about yet.
-
-If you have traces which show the sequence of lock events leading to
-this problem, then you should be able to decode the scenario. If you
-fail to extract the information, then please provide the traces so we
-can stare at them.
-
-Thanks,
-
-        tglx
+> On Thu, Jan 19, 2023 at 12:39 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > Please provide cover letters for multi-patch series, regardless of how trivial
+> > the series is.
+> >
+> > This series especially needs a cover explaining why it's tagged "RFC".
