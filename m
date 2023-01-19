@@ -2,51 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8687C673D5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01612673D5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 16:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjASPU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 10:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S230507AbjASPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 10:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjASPU5 (ORCPT
+        with ESMTP id S230421AbjASPVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:20:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247B382D4A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 07:20:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 Jan 2023 10:21:09 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2589486EEA;
+        Thu, 19 Jan 2023 07:20:59 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B66DF61C1E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 15:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A6CC433F0;
-        Thu, 19 Jan 2023 15:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674141650;
-        bh=Z93Mar8UW12+jdRSu1d1fZyY1H/c6Y49D8CTkfdzgSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HEcAfPBm/7BVmv/yV865KTwPnKS5UGMl1qdsOR8KJ3rDL2pc52tEBsXD2CXJz2m5x
-         VLLZ/zfEEBXJNFVj+0qP0nbXmi7h6AZ4lLhRK91qBWmMrVQqemGuGn17/aPClEyE60
-         WBgDaw4IMYW4W4JgLmjwwW14n3Qt+Puypnj07mUE=
-Date:   Thu, 19 Jan 2023 16:20:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-Message-ID: <Y8lfz8C5uvx2w4fC@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E6515CF87;
+        Thu, 19 Jan 2023 15:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674141658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+bijK/57LraMRcjjukMyAka7jOBDKoo0azbec51CHr4=;
+        b=aLJ7Vi2tZbfSMbh9ss7dORVlM8id/4iLLKhIrCjiomfNdmWwR9UZ1xfTak0JsTkNhgLkpM
+        a+gUmPYK5M/Qf5eij+TyiJimAONbBWFm+PvPAusQQWq5mTZULw34cUpolO2ZstwpL3RZOj
+        oZ1tGvug+b533OVKzZW6/7+dpFV+jYE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674141658;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+bijK/57LraMRcjjukMyAka7jOBDKoo0azbec51CHr4=;
+        b=WY5LGUnAknFE8AiMAiWsO2W8ECPmG4VaLrnp26dq8MSXkOMt3uLo3hVHWdWphPfwCx95h6
+        r5AlzaN3yNBKD7AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 697F7134F5;
+        Thu, 19 Jan 2023 15:20:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mKmTGNpfyWMIRAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 19 Jan 2023 15:20:58 +0000
+Message-ID: <190c1c68-0249-a291-f2ab-45c9a7f716d7@suse.de>
+Date:   Thu, 19 Jan 2023 16:20:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Erhard F." <erhard_f@mailbox.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <20230119095323.4659-1-msuchanek@suse.de>
+ <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+ <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+ <20230119132330.GP16547@kitsune.suse.cz>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230119132330.GP16547@kitsune.suse.cz>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------hrL0XHWHA5bbnro0AHMZM0MN"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,54 +83,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:57:17PM +0200, Alexander Shishkin wrote:
-> From: Andi Kleen <ak@linux.intel.com>
-> 
-> The ADD_PORT operation reads and sanity checks the port id multiple
-> times from the untrusted host. This is not safe because a malicious
-> host could change it between reads.
-> 
-> Read the port id only once and cache it for subsequent uses.
-> 
-> Signed-off-by: Andi Kleen <ak@linux.intel.com>
-> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Amit Shah <amit@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/char/virtio_console.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
-> index f4fd5fe7cd3a..6599c2956ba4 100644
-> --- a/drivers/char/virtio_console.c
-> +++ b/drivers/char/virtio_console.c
-> @@ -1563,10 +1563,13 @@ static void handle_control_message(struct virtio_device *vdev,
->  	struct port *port;
->  	size_t name_size;
->  	int err;
-> +	unsigned id;
->  
->  	cpkt = (struct virtio_console_control *)(buf->buf + buf->offset);
->  
-> -	port = find_port_by_id(portdev, virtio32_to_cpu(vdev, cpkt->id));
-> +	/* Make sure the host cannot change id under us */
-> +	id = virtio32_to_cpu(vdev, READ_ONCE(cpkt->id));
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------hrL0XHWHA5bbnro0AHMZM0MN
+Content-Type: multipart/mixed; boundary="------------hXohnY0kZhhQ8LRpKgUVVVWJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Erhard F." <erhard_f@mailbox.org>, Rob Herring <robh+dt@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE"
+ <devicetree@vger.kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ open list <linux-kernel@vger.kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Message-ID: <190c1c68-0249-a291-f2ab-45c9a7f716d7@suse.de>
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+References: <20230119095323.4659-1-msuchanek@suse.de>
+ <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+ <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+ <20230119132330.GP16547@kitsune.suse.cz>
+In-Reply-To: <20230119132330.GP16547@kitsune.suse.cz>
 
-Why READ_ONCE()?
+--------------hXohnY0kZhhQ8LRpKgUVVVWJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-And how can it change under us?  Is the message still under control of
-the "host"?  If so, that feels wrong as this is all in kernel memory,
-not userspace memory right?
+SGkNCg0KQW0gMTkuMDEuMjMgdW0gMTQ6MjMgc2NocmllYiBNaWNoYWwgU3VjaMOhbmVrOg0K
+PiBPbiBUaHUsIEphbiAxOSwgMjAyMyBhdCAwMjoxMToxM1BNICswMTAwLCBUaG9tYXMgWmlt
+bWVybWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMTkuMDEuMjMgdW0gMTE6MjQgc2No
+cmllYiBDaHJpc3RvcGhlIExlcm95Og0KPj4+DQo+Pj4NCj4+PiBMZSAxOS8wMS8yMDIzIMOg
+IDEwOjUzLCBNaWNoYWwgU3VjaGFuZWsgYSDDqWNyaXTCoDoNCj4+Pj4gVGhlIGNvbW1pdCAy
+ZDY4MWQ2YTIzYTEgKCJvZjogTWFrZSBvZiBmcmFtZWJ1ZmZlciBkZXZpY2VzIHVuaXF1ZSIp
+DQo+Pj4+IGJyZWFrcyBidWlsZCBiZWNhdXNlIG9mIHdyb25nIGFyZ3VtZW50IHRvIHNucHJp
+bnRmLiBUaGF0IGNlcnRhaW5seQ0KPj4+PiBhdm9pZHMgdGhlIHJ1bnRpbWUgZXJyb3IgYnV0
+IGlzIG5vdCB0aGUgaW50ZW5kZWQgb3V0Y29tZS4NCj4+Pj4NCj4+Pj4gQWxzbyB1c2Ugc3Rh
+bmRhcmQgZGV2aWNlIG5hbWUgZm9ybWF0IG9mLWRpc3BsYXkuTiBmb3IgYWxsIGNyZWF0ZWQN
+Cj4+Pj4gZGV2aWNlcy4NCj4+Pj4NCj4+Pj4gRml4ZXM6IDJkNjgxZDZhMjNhMSAoIm9mOiBN
+YWtlIG9mIGZyYW1lYnVmZmVyIGRldmljZXMgdW5pcXVlIikNCj4+Pj4gU2lnbmVkLW9mZi1i
+eTogTWljaGFsIFN1Y2hhbmVrIDxtc3VjaGFuZWtAc3VzZS5kZT4NCj4+Pj4gLS0tDQo+Pj4+
+IHYyOiBVcGRhdGUgdGhlIGRldmljZSBuYW1lIGZvcm1hdA0KPj4+PiAtLS0NCj4+Pj4gICAg
+IGRyaXZlcnMvb2YvcGxhdGZvcm0uYyB8IDEyICsrKysrKysrLS0tLQ0KPj4+PiAgICAgMSBm
+aWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4+Pj4NCj4+
+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvb2YvcGxhdGZvcm0uYyBiL2RyaXZlcnMvb2YvcGxh
+dGZvcm0uYw0KPj4+PiBpbmRleCBmMmE1ZDY3OWEzMjQuLjhjMWIxZGUyMjAzNiAxMDA2NDQN
+Cj4+Pj4gLS0tIGEvZHJpdmVycy9vZi9wbGF0Zm9ybS5jDQo+Pj4+ICsrKyBiL2RyaXZlcnMv
+b2YvcGxhdGZvcm0uYw0KPj4+PiBAQCAtNTI1LDcgKzUyNSw5IEBAIHN0YXRpYyBpbnQgX19p
+bml0IG9mX3BsYXRmb3JtX2RlZmF1bHRfcG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4+PiAgICAg
+CWlmIChJU19FTkFCTEVEKENPTkZJR19QUEMpKSB7DQo+Pj4+ICAgICAJCXN0cnVjdCBkZXZp
+Y2Vfbm9kZSAqYm9vdF9kaXNwbGF5ID0gTlVMTDsNCj4+Pj4gICAgIAkJc3RydWN0IHBsYXRm
+b3JtX2RldmljZSAqZGV2Ow0KPj4+PiAtCQlpbnQgZGlzcGxheV9udW1iZXIgPSAxOw0KPj4+
+PiArCQlpbnQgZGlzcGxheV9udW1iZXIgPSAwOw0KPj4+PiArCQljaGFyIGJ1ZlsxNF07DQo+
+Pj4NCj4+PiBDYW4geW91IGRlY2xhcmUgdGhhdCBpbiB0aGUgZm9yIGJsb2NrIHdoZXJlIGl0
+IGlzIHVzZWQgaW5zdGVhZCA/DQo+Pj4NCj4+Pj4gKwkJY2hhciAqb2ZfZGlzcGxheV9mb3Jt
+YXQgPSAib2YtZGlzcGxheS4lZCI7DQo+Pj4NCj4+PiBTaG91bGQgYmUgY29uc3QgPw0KPj4N
+Cj4+IFRoYXQgc2hvdWxkIGJlIHN0YXRpYyBjb25zdCBvZl9kaXNwbGF5X2Zvcm1hdFtdID0g
+dGhlbg0KPiANCj4gV2h5PyBJdCBzb3VuZHMgY29tcGxldGVseSBmaW5lIHRvIGhhdmUgYSBj
+b25zdCBwb2ludGVyIHRvIGEgc3RyaW5nDQo+IGNvbnN0YXRudC4NCg0KR2VuZXJhbGx5IHNw
+ZWFraW5nOg0KDQonc3RhdGljJyBiZWNhdXNlIHlvdXIgY29uc3QgcG9pbnRlciBpcyB0aGVu
+IG5vdCBhIGxvY2FsIHZhcmlhYmxlLCBzbyBpdCANCnRha2VzIHByZXNzdXJlIG9mZiB0aGUg
+c3RhY2suIEZvciBnbG9iYWwgdmFyaWFibGVzLCB5b3UgZG9uJ3Qgd2FudCB0aGVtIA0KdG8g
+c2hvdyB1cCBpbiBhbnkgbGlua2VyIHN5bWJvbCB0YWJsZXMuDQoNClRoZSBzdHJpbmcgIm9m
+LWRpc3BsYXkuJWQiIGlzIHN0b3JlZCBhcyBhbiBhcnJheSBpbiB0aGUgRUxGIGRhdGEgDQpz
+ZWN0aW9uLiBBbmQgeW91ciBjaGFyIHBvaW50ZXIgaXMgYSByZWZlcmVuY2UgdG8gdGhhdCBh
+cnJheS4gRm9yIHN0YXRpYyANCnBvaW50ZXJzLCB0aGVzZSBpbmRpcmVjdGlvbnMgdGFrZSBD
+UFUgY3ljbGVzIHRvIHVwZGF0ZSB3aGVuIHRoZSBsb2FkZXIgDQpoYXMgdG8gcmVsb2NhdGUg
+c2VjdGlvbnMuIElmIHlvdSBkZWNsYXJlIG9mX2Rpc3BsYXlfZm9ybWF0W10gZGlyZWN0bHkg
+YXMgDQphcnJheSwgeW91IGF2b2lkIHRoZSByZWZlcmVuY2UgYW5kIHdvcmsgZGlyZWN0bHkg
+d2l0aCB0aGUgYXJyYXkuDQoNCk9mIGNvdXJzZSwgdGhpcyBpcyBhIGtlcm5lbCBtb2R1bGUg
+YW5kIHRoZSBzdHJpbmcgaXMgc2VsZi1jb250YWluZWQgDQp3aXRoaW4gdGhlIGZ1bmN0aW9u
+LiBTbyB0aGUgY29tcGlsZXIgY2FuIHByb2JhYmx5IGRldGVjdCB0aGF0IGFuZCANCm9wdGlt
+aXplIHRoZSBjb2RlIHRvIGJlIGxpa2UgdGhlICdzdGF0aWMgY29uc3QgW10nIHZlcnNpb24u
+IEl0J3Mgc3RpbGwgDQpnb29kIHRvIGZvbGxvdyBiZXN0IHByYWN0aWNlcywgYXMgc29tZW9u
+ZSBtaWdodCBjb3B5IGZyb20gdGhpcyBmdW5jdGlvbi4NCg0KQmVzdCByZWdhcmRzDQpUaG9t
+YXMNCg0KPiANCj4gVGhhbmtzDQo+IA0KPiBNaWNoYWwNCj4gDQo+Pg0KPj4+DQo+Pj4+ICAg
+ICAJCWludCByZXQ7DQo+Pj4+ICAgICAJCS8qIENoZWNrIGlmIHdlIGhhdmUgYSBNYWNPUyBk
+aXNwbGF5IHdpdGhvdXQgYSBub2RlIHNwZWMgKi8NCj4+Pj4gQEAgLTU1Niw3ICs1NTgsMTAg
+QEAgc3RhdGljIGludCBfX2luaXQgb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1bGF0ZV9pbml0
+KHZvaWQpDQo+Pj4+ICAgICAJCQlpZiAoIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgs
+b3BlbmVkIiwgTlVMTCkgfHwNCj4+Pj4gICAgIAkJCSAgICAhb2ZfZ2V0X3Byb3BlcnR5KG5v
+ZGUsICJsaW51eCxib290LWRpc3BsYXkiLCBOVUxMKSkNCj4+Pj4gICAgIAkJCQljb250aW51
+ZTsNCj4+Pj4gLQkJCWRldiA9IG9mX3BsYXRmb3JtX2RldmljZV9jcmVhdGUobm9kZSwgIm9m
+LWRpc3BsYXkiLCBOVUxMKTsNCj4+Pj4gKwkJCXJldCA9IHNucHJpbnRmKGJ1Ziwgc2l6ZW9m
+KGJ1ZiksIG9mX2Rpc3BsYXlfZm9ybWF0LCBkaXNwbGF5X251bWJlcisrKTsNCj4+Pj4gKwkJ
+CWlmIChyZXQgPj0gc2l6ZW9mKGJ1ZikpDQo+Pj4+ICsJCQkJY29udGludWU7DQo+Pj4NCj4+
+Pg0KPj4+IENhbiB5b3UgbWFrZSBidWYgYmlnIGVub3VnaCB0byBhdm9pZCB0aGF0ID8NCj4+
+Pg0KPj4+IEFuZCBieSB0aGUgd2F5IGNvdWxkIGl0IGJlIGNhbGxlZCBzb21ldGhpbmcgZWxz
+ZSB0aGFuICdidWYnID8NCj4+Pg0KPj4+IFNlZSBleGVtcGxlIGhlcmUgOg0KPj4+IGh0dHBz
+Oi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2LjEvc291cmNlL2RyaXZlcnMvZnNpL2Zz
+aS1vY2MuYyNMNjkwDQo+Pj4NCj4+Pg0KPj4+PiArCQkJZGV2ID0gb2ZfcGxhdGZvcm1fZGV2
+aWNlX2NyZWF0ZShub2RlLCBidWYsIE5VTEwpOw0KPj4+PiAgICAgCQkJaWYgKFdBUk5fT04o
+IWRldikpDQo+Pj4+ICAgICAJCQkJcmV0dXJuIC1FTk9NRU07DQo+Pj4+ICAgICAJCQlib290
+X2Rpc3BsYXkgPSBub2RlOw0KPj4+PiBAQCAtNTY0LDEwICs1NjksOSBAQCBzdGF0aWMgaW50
+IF9faW5pdCBvZl9wbGF0Zm9ybV9kZWZhdWx0X3BvcHVsYXRlX2luaXQodm9pZCkNCj4+Pj4g
+ICAgIAkJfQ0KPj4+PiAgICAgCQlmb3JfZWFjaF9ub2RlX2J5X3R5cGUobm9kZSwgImRpc3Bs
+YXkiKSB7DQo+Pj4+IC0JCQljaGFyICpidWZbMTRdOw0KPj4+PiAgICAgCQkJaWYgKCFvZl9n
+ZXRfcHJvcGVydHkobm9kZSwgImxpbnV4LG9wZW5lZCIsIE5VTEwpIHx8IG5vZGUgPT0gYm9v
+dF9kaXNwbGF5KQ0KPj4+PiAgICAgCQkJCWNvbnRpbnVlOw0KPj4+PiAtCQkJcmV0ID0gc25w
+cmludGYoYnVmLCAib2YtZGlzcGxheS0lZCIsIGRpc3BsYXlfbnVtYmVyKyspOw0KPj4+PiAr
+CQkJcmV0ID0gc25wcmludGYoYnVmLCBzaXplb2YoYnVmKSwgb2ZfZGlzcGxheV9mb3JtYXQs
+IGRpc3BsYXlfbnVtYmVyKyspOw0KPj4+PiAgICAgCQkJaWYgKHJldCA+PSBzaXplb2YoYnVm
+KSkNCj4+Pj4gICAgIAkJCQljb250aW51ZTsNCj4+Pj4gICAgIAkJCW9mX3BsYXRmb3JtX2Rl
+dmljZV9jcmVhdGUobm9kZSwgYnVmLCBOVUxMKTsNCj4+DQo+PiAtLSANCj4+IFRob21hcyBa
+aW1tZXJtYW5uDQo+PiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3
+YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7D
+vHJuYmVyZywgR2VybWFueQ0KPj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2Vz
+Y2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0KPiANCj4gDQo+IA0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
+R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
+IEl2byBUb3Rldg0K
 
-If you are dealing with memory from a different process that you do not
-trust, then you need to copy EVERYTHING at once.  Don't piece-meal copy
-bits and bobs in all different places please.  Do it once and then parse
-the local structure properly.
+--------------hXohnY0kZhhQ8LRpKgUVVVWJ--
 
-Otherwise this is going to be impossible to actually maintain over
-time...
+--------------hrL0XHWHA5bbnro0AHMZM0MN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-thanks,
+-----BEGIN PGP SIGNATURE-----
 
-greg k-h
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPJX9kFAwAAAAAACgkQlh/E3EQov+Ap
+thAAluEwlz7dsOI61KA7WGHTsw934yyIYBEvpfpsoRZmIesT9cWO7JcK8NogJ+kjFcQuiNtL3Bbl
+9DdCQWgzg5N/G8HbRezeApkF/mN4wnaxgKiwEnCHha93PDzoxizE0uRvtCdL8p44fxe22Ua4dktr
+Wcer/VjPC+c5e2UqnfpT7NQWrsmBBqnW1DcYc9m1+9nf4BJnuGdFHbyB0vTkDG4g0XSFrS/AnwAi
+rCCdluB9ge2dS2o6Homp1dOn4t+DSKz25mmD8lHMtNrp7cmK+oG0BGICvJzD5cfPkKUvDuOJb88B
+zx4GOpVJQUKMgagWE0cLQlTLnT6idtZi9bd5FprelUrmY41xLxILAoSnty8J6mMOPBwPcFFRxjx/
+f6kNTtQ7qRJ49uBtde4NNEMXsgPLX88agNRofGraXI4zpYmkXEa4NMFA5qDM5Xpe/sd1E+XEzjs/
+oMpN1CEIwXfvTuWODmBHdJiBC9IJ9dd0aspM8IeL4fR71hcEsO7O9AeF0Wvdrw9ekRgHHtkyGjpF
+Z0XQGTYkL0+Y4GG+WbwdWoCX528SBpvPMXXEA7+DNb2UtLLB+kfYqP1j1FdDGtgrxPY5tG+Z/O5l
+vlegW9csMIx0y/kytWgmGG4Wt5ksf6A00A/drWDU+XUqqYWWnr841zO6KNVzsRYk1zBaBTjeYEgX
+Jok=
+=YC4Z
+-----END PGP SIGNATURE-----
+
+--------------hrL0XHWHA5bbnro0AHMZM0MN--
