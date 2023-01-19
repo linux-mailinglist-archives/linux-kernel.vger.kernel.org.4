@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35306739AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F586739AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjASNMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
+        id S231132AbjASNNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjASNMK (ORCPT
+        with ESMTP id S231254AbjASNMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:12:10 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6908583
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:10:42 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id b7so1822026wrt.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:10:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=blNpZwh2SZlig8QQ/nC77W3/O0N7mDjpaqH8VDOv2eU=;
-        b=DzFy88bDZoVlfwhHlTp6yaa4pDvXz2S+rRv+4hM9hJnwR6Pea0ryUtzFRVDKTcUUsl
-         M4WGeBQ4f5np3UXyL67X+o7x7P/J5qmVp0R5lkDakCtZEQtlusfYKHLxzghATAV4nd0a
-         z98YCC83E6ttozJrFFjGynwEZszZmhKvl9UoIjEdSD7XkJiDRHgQRbis6wO6FxJADvfK
-         cktGAaPSDhZo4THEOHj8dKlw+WulH7V4oQJ2on2nX0h1OfkOosTQ7XIRanih5OYRUAxK
-         ltD8viS7fmAMLiiNqe9YAR8H52ZHuJTSCfhfO8zLeGpcQBwvgn9pof+aob41Ehwdclxf
-         BgQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=blNpZwh2SZlig8QQ/nC77W3/O0N7mDjpaqH8VDOv2eU=;
-        b=hJTxVZFVoM8o2bhfibPcKA6VIyOOH9aNgUwSnbPL41hfEifqikDpHEcYwqL8QXbsvk
-         oWRTUDELtqI7jQj9X4wFtEDfQTejmzpM8mmCxCEIVL1VVfFvbyqSAMjmnz9683S72lfF
-         XUm37m8UGFd0kMoR1gD+tqMZ/9QagqdbH6PN7K4TEWZw/0dCyHXW0IBo/pBQdnAhDrBg
-         q+pMg1PFplBzVNx5AjuXdqT/ciFebPy5z1Zo26o4m3C8kYdimuWr6HTOlFeL24j4BnDP
-         FucWPGCjoq14stD+WKKZewrHTTulozZByQ0ozWMD91fibcJXoHfTYpy76HZQHrdcIdcy
-         E2Rg==
-X-Gm-Message-State: AFqh2koAKHeVwWx/p6YSEXZxcwhgqZaY4xyxGJU5EcV5NMHJFBjZUTRQ
-        wD1JLOp6mFZvU5z0neeNKIap0A==
-X-Google-Smtp-Source: AMrXdXvrY6LK2dvL+iGhjr8puYL3YHweG43wf3Hfc7anlN9+EMnZ5/F6pOfVqjpVCAvI/2eVrdRgvw==
-X-Received: by 2002:a05:6000:1816:b0:2bd:fe5a:b579 with SMTP id m22-20020a056000181600b002bdfe5ab579mr8424345wrh.70.1674133837495;
-        Thu, 19 Jan 2023 05:10:37 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f16-20020a5d50d0000000b002755e301eeasm15881791wrt.100.2023.01.19.05.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:10:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: drop type for operating-points-v2
-Date:   Thu, 19 Jan 2023 14:10:33 +0100
-Message-Id: <20230119131033.117324-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 19 Jan 2023 08:12:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0DD7ED42;
+        Thu, 19 Jan 2023 05:11:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 275C63F1FC;
+        Thu, 19 Jan 2023 13:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674133874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1FirY7h0i2QIsVeYxDQ3RuTXuyrq437+DrvUPk5jmI0=;
+        b=UMdHW9c71e6sFUDYGkQoJFuDR/DqdVp6yF3t3flD7KPM901AHIYv6ZRSQxkbdkobm0vG8L
+        ajqKOgnW2OjAKmYqtjsznIV4CLe25b76+T0FQ3KnDtA6Iwpsg7JfYqUHUMpGFWonDxYknI
+        MT0Ad0A4CkpgW9dvPz3rksACts3fy2E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674133874;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1FirY7h0i2QIsVeYxDQ3RuTXuyrq437+DrvUPk5jmI0=;
+        b=WEqRGDrMxWR8aD3mqFW3UHgOugEy5Xne1UyWGQ7MuGqdUg5ArwmQ2+kFWRjaOrxY5Kd0P5
+        UMmQh6AbtZWv4NBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E895F134F5;
+        Thu, 19 Jan 2023 13:11:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CMfNN3FByWM3eAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 19 Jan 2023 13:11:13 +0000
+Message-ID: <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+Date:   Thu, 19 Jan 2023 14:11:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michal Suchanek <msuchanek@suse.de>,
+        "Erhard F." <erhard_f@mailbox.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <20230119095323.4659-1-msuchanek@suse.de>
+ <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MC0t0GQxYToFVJIwzeIk8Qt3"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,247 +81,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type for operating-points-v2 property is coming from dtschema
-(/schemas/opp/opp.yaml), so individual bindings can just use simple
-"true".
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MC0t0GQxYToFVJIwzeIk8Qt3
+Content-Type: multipart/mixed; boundary="------------7aDZnfzFb63INJkMdZVpvxiM";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Michal Suchanek <msuchanek@suse.de>, "Erhard F." <erhard_f@mailbox.org>,
+ Rob Herring <robh+dt@kernel.org>
+Cc: "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE"
+ <devicetree@vger.kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ open list <linux-kernel@vger.kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Message-ID: <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+References: <20230119095323.4659-1-msuchanek@suse.de>
+ <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+In-Reply-To: <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--------------7aDZnfzFb63INJkMdZVpvxiM
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
----
+SGkNCg0KQW0gMTkuMDEuMjMgdW0gMTE6MjQgc2NocmllYiBDaHJpc3RvcGhlIExlcm95Og0K
+PiANCj4gDQo+IExlIDE5LzAxLzIwMjMgw6AgMTA6NTMsIE1pY2hhbCBTdWNoYW5layBhIMOp
+Y3JpdMKgOg0KPj4gVGhlIGNvbW1pdCAyZDY4MWQ2YTIzYTEgKCJvZjogTWFrZSBvZiBmcmFt
+ZWJ1ZmZlciBkZXZpY2VzIHVuaXF1ZSIpDQo+PiBicmVha3MgYnVpbGQgYmVjYXVzZSBvZiB3
+cm9uZyBhcmd1bWVudCB0byBzbnByaW50Zi4gVGhhdCBjZXJ0YWlubHkNCj4+IGF2b2lkcyB0
+aGUgcnVudGltZSBlcnJvciBidXQgaXMgbm90IHRoZSBpbnRlbmRlZCBvdXRjb21lLg0KPj4N
+Cj4+IEFsc28gdXNlIHN0YW5kYXJkIGRldmljZSBuYW1lIGZvcm1hdCBvZi1kaXNwbGF5Lk4g
+Zm9yIGFsbCBjcmVhdGVkDQo+PiBkZXZpY2VzLg0KPj4NCj4+IEZpeGVzOiAyZDY4MWQ2YTIz
+YTEgKCJvZjogTWFrZSBvZiBmcmFtZWJ1ZmZlciBkZXZpY2VzIHVuaXF1ZSIpDQo+PiBTaWdu
+ZWQtb2ZmLWJ5OiBNaWNoYWwgU3VjaGFuZWsgPG1zdWNoYW5la0BzdXNlLmRlPg0KPj4gLS0t
+DQo+PiB2MjogVXBkYXRlIHRoZSBkZXZpY2UgbmFtZSBmb3JtYXQNCj4+IC0tLQ0KPj4gICAg
+ZHJpdmVycy9vZi9wbGF0Zm9ybS5jIHwgMTIgKysrKysrKystLS0tDQo+PiAgICAxIGZpbGUg
+Y2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL29mL3BsYXRmb3JtLmMgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMN
+Cj4+IGluZGV4IGYyYTVkNjc5YTMyNC4uOGMxYjFkZTIyMDM2IDEwMDY0NA0KPj4gLS0tIGEv
+ZHJpdmVycy9vZi9wbGF0Zm9ybS5jDQo+PiArKysgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMN
+Cj4+IEBAIC01MjUsNyArNTI1LDkgQEAgc3RhdGljIGludCBfX2luaXQgb2ZfcGxhdGZvcm1f
+ZGVmYXVsdF9wb3B1bGF0ZV9pbml0KHZvaWQpDQo+PiAgICAJaWYgKElTX0VOQUJMRUQoQ09O
+RklHX1BQQykpIHsNCj4+ICAgIAkJc3RydWN0IGRldmljZV9ub2RlICpib290X2Rpc3BsYXkg
+PSBOVUxMOw0KPj4gICAgCQlzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpkZXY7DQo+PiAtCQlp
+bnQgZGlzcGxheV9udW1iZXIgPSAxOw0KPj4gKwkJaW50IGRpc3BsYXlfbnVtYmVyID0gMDsN
+Cj4+ICsJCWNoYXIgYnVmWzE0XTsNCj4gDQo+IENhbiB5b3UgZGVjbGFyZSB0aGF0IGluIHRo
+ZSBmb3IgYmxvY2sgd2hlcmUgaXQgaXMgdXNlZCBpbnN0ZWFkID8NCj4gDQo+PiArCQljaGFy
+ICpvZl9kaXNwbGF5X2Zvcm1hdCA9ICJvZi1kaXNwbGF5LiVkIjsNCj4gDQo+IFNob3VsZCBi
+ZSBjb25zdCA/DQoNClRoYXQgc2hvdWxkIGJlIHN0YXRpYyBjb25zdCBvZl9kaXNwbGF5X2Zv
+cm1hdFtdID0gdGhlbg0KDQo+IA0KPj4gICAgCQlpbnQgcmV0Ow0KPj4gICAgDQo+PiAgICAJ
+CS8qIENoZWNrIGlmIHdlIGhhdmUgYSBNYWNPUyBkaXNwbGF5IHdpdGhvdXQgYSBub2RlIHNw
+ZWMgKi8NCj4+IEBAIC01NTYsNyArNTU4LDEwIEBAIHN0YXRpYyBpbnQgX19pbml0IG9mX3Bs
+YXRmb3JtX2RlZmF1bHRfcG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4gICAgCQkJaWYgKCFvZl9n
+ZXRfcHJvcGVydHkobm9kZSwgImxpbnV4LG9wZW5lZCIsIE5VTEwpIHx8DQo+PiAgICAJCQkg
+ICAgIW9mX2dldF9wcm9wZXJ0eShub2RlLCAibGludXgsYm9vdC1kaXNwbGF5IiwgTlVMTCkp
+DQo+PiAgICAJCQkJY29udGludWU7DQo+PiAtCQkJZGV2ID0gb2ZfcGxhdGZvcm1fZGV2aWNl
+X2NyZWF0ZShub2RlLCAib2YtZGlzcGxheSIsIE5VTEwpOw0KPj4gKwkJCXJldCA9IHNucHJp
+bnRmKGJ1Ziwgc2l6ZW9mKGJ1ZiksIG9mX2Rpc3BsYXlfZm9ybWF0LCBkaXNwbGF5X251bWJl
+cisrKTsNCj4+ICsJCQlpZiAocmV0ID49IHNpemVvZihidWYpKQ0KPj4gKwkJCQljb250aW51
+ZTsNCj4gDQo+IA0KPiBDYW4geW91IG1ha2UgYnVmIGJpZyBlbm91Z2ggdG8gYXZvaWQgdGhh
+dCA/DQo+IA0KPiBBbmQgYnkgdGhlIHdheSBjb3VsZCBpdCBiZSBjYWxsZWQgc29tZXRoaW5n
+IGVsc2UgdGhhbiAnYnVmJyA/DQo+IA0KPiBTZWUgZXhlbXBsZSBoZXJlIDoNCj4gaHR0cHM6
+Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjYuMS9zb3VyY2UvZHJpdmVycy9mc2kvZnNp
+LW9jYy5jI0w2OTANCj4gDQo+IA0KPj4gKwkJCWRldiA9IG9mX3BsYXRmb3JtX2RldmljZV9j
+cmVhdGUobm9kZSwgYnVmLCBOVUxMKTsNCj4+ICAgIAkJCWlmIChXQVJOX09OKCFkZXYpKQ0K
+Pj4gICAgCQkJCXJldHVybiAtRU5PTUVNOw0KPj4gICAgCQkJYm9vdF9kaXNwbGF5ID0gbm9k
+ZTsNCj4+IEBAIC01NjQsMTAgKzU2OSw5IEBAIHN0YXRpYyBpbnQgX19pbml0IG9mX3BsYXRm
+b3JtX2RlZmF1bHRfcG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4gICAgCQl9DQo+PiAgICANCj4+
+ICAgIAkJZm9yX2VhY2hfbm9kZV9ieV90eXBlKG5vZGUsICJkaXNwbGF5Iikgew0KPj4gLQkJ
+CWNoYXIgKmJ1ZlsxNF07DQo+PiAgICAJCQlpZiAoIW9mX2dldF9wcm9wZXJ0eShub2RlLCAi
+bGludXgsb3BlbmVkIiwgTlVMTCkgfHwgbm9kZSA9PSBib290X2Rpc3BsYXkpDQo+PiAgICAJ
+CQkJY29udGludWU7DQo+PiAtCQkJcmV0ID0gc25wcmludGYoYnVmLCAib2YtZGlzcGxheS0l
+ZCIsIGRpc3BsYXlfbnVtYmVyKyspOw0KPj4gKwkJCXJldCA9IHNucHJpbnRmKGJ1Ziwgc2l6
+ZW9mKGJ1ZiksIG9mX2Rpc3BsYXlfZm9ybWF0LCBkaXNwbGF5X251bWJlcisrKTsNCj4+ICAg
+IAkJCWlmIChyZXQgPj0gc2l6ZW9mKGJ1ZikpDQo+PiAgICAJCQkJY29udGludWU7DQo+PiAg
+ICAJCQlvZl9wbGF0Zm9ybV9kZXZpY2VfY3JlYXRlKG5vZGUsIGJ1ZiwgTlVMTCk7DQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-This depends on my pull request, at least logically:
-https://github.com/devicetree-org/dt-schema/pull/95
+--------------7aDZnfzFb63INJkMdZVpvxiM--
 
-Patch could be applied in parallel but only if above PULL is
-accepted/correct.
----
- .../devicetree/bindings/display/msm/dp-controller.yaml         | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml   | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml | 3 +--
- .../bindings/display/tegra/nvidia,tegra20-host1x.yaml          | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml   | 3 +--
- .../devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml          | 3 +--
- .../devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml          | 3 +--
- Documentation/devicetree/bindings/power/power-domain.yaml      | 3 ---
- Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml  | 3 +--
- 15 files changed, 14 insertions(+), 31 deletions(-)
+--------------MC0t0GQxYToFVJIwzeIk8Qt3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-index 3e54956e57db..d7678fcd1710 100644
---- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-@@ -71,8 +71,7 @@ properties:
-     items:
-       - const: dp
- 
--  operating-points-v2:
--    maxItems: 1
-+  operating-points-v2: true
- 
-   opp-table: true
- 
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-index 6eedee503aa0..69be95afd562 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-@@ -59,8 +59,7 @@ properties:
-   iommus:
-     maxItems: 1
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-index 75546f250ad7..511cbe74e729 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-@@ -47,8 +47,7 @@ properties:
-     items:
-       - const: dsi
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-index 0d55e6206b5e..3c095a5491fe 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-@@ -46,8 +46,7 @@ properties:
-   interconnect-names:
-     maxItems: 4
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-index bf38accd98eb..1026b0bc3dc8 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-@@ -49,8 +49,7 @@ properties:
-   interconnect-names:
-     maxItems: 4
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-index 4755a73473c7..59a52e732ca3 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-@@ -51,8 +51,7 @@ properties:
-     minItems: 4
-     maxItems: 10
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-index 035b9f1f2eb5..f65e59cfffa7 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-@@ -50,8 +50,7 @@ properties:
-     items:
-       - const: hdmi
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-index 913ca104c871..94c5242c03b2 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-@@ -90,8 +90,7 @@ properties:
-     items:
-       - const: dma-mem # read
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-index 5f4f0fb4b692..2cd3e60cd0a8 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-@@ -47,8 +47,7 @@ properties:
-   interconnect-names:
-     maxItems: 6
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-index 467b015e5700..6c84d8b7eb7b 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-@@ -30,8 +30,7 @@ properties:
-     items:
-       - description: module clock
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-index 782a4b10150a..a42bf33d1e7d 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-@@ -55,8 +55,7 @@ properties:
-     minItems: 4
-     maxItems: 5
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml b/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-index 481901269872..02f0b0462377 100644
---- a/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-+++ b/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-@@ -44,8 +44,7 @@ properties:
-     items:
-       - const: fuse
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-index fe0270207622..fda0b45ee577 100644
---- a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-@@ -82,8 +82,7 @@ properties:
-   iommus:
-     maxItems: 1
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-index 889091b9814f..d1235e562041 100644
---- a/Documentation/devicetree/bindings/power/power-domain.yaml
-+++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-@@ -43,9 +43,6 @@ properties:
-       domain would be considered as capable of being powered-on or powered-off.
- 
-   operating-points-v2:
--    $ref: /schemas/types.yaml#/definitions/phandle-array
--    items:
--      maxItems: 1
-     description:
-       Phandles to the OPP tables of power domains provided by a power domain
-       provider. If the provider provides a single power domain only or all
-diff --git a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-index 739d3155dd32..41cea4979132 100644
---- a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-+++ b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-@@ -63,8 +63,7 @@ properties:
-   pinctrl-1:
-     description: configuration for the sleep state
- 
--  operating-points-v2:
--    $ref: /schemas/types.yaml#/definitions/phandle
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPJQXEFAwAAAAAACgkQlh/E3EQov+DW
+HQ/+NMKu8FFc3SPvTeXiYwlozz3pBcghEOj/ojkuRXGFmflBbiYd3/jQbGHjkGhOTa11yMNu8Pce
+R9jl4Ga15yBfGGjmYsTiXb9DAwsxyqPM6VNHdu09YlxxMPhbpUJFKAFYLN2fqOrlSYlJroMjTuz8
+EnOPAmGFerYwO/O8G0aoYYZkCH582xPb+tQT9ykKwOjsOo0cNr56WNPTfwiTWXwDKKq01c7gQzvj
+g2rheJ/Oz2J0fI6aR25nKDZ/tpFrYNb3kZwTxX0mA8ya1lsEEsnWVo3BXQ4KIozu8IRnXRWuA/mC
+GfLt79DppQB7z+j1rY6+pGbQYl/LVdjbPcduR3/tt3RABV/RudCiwsSCI8D2623BHcxUFhe/wuM+
+jnlW17eIfDqgXO9+fn8pAkx+UbMZ741TxdI/m0qKiNRn7xmlfeLZK7Tp0fqGrwIcJDFUEOypry4Y
+ibEf6GrScRkj3pzdM3VTec2yoxsrYixUjSh3H5rYxeTxPJjcOYHg26a/HltDj6sDquLib/m/95xQ
+Q9YTWLKS9YI/JD44ra4XrTvQcbkD5MQtvPyQC1CNuxjQ2J/t4UoKa/3BRKzjN8G/5UWUsy2oRKfu
++EMoq7lBvm5GQLiZBYXe+DR3wNvQILfadvFmhLncYh4hSSUGiIxtvm4kDMopaH4MpQxLQMsUypHf
+ueE=
+=ivhp
+-----END PGP SIGNATURE-----
+
+--------------MC0t0GQxYToFVJIwzeIk8Qt3--
