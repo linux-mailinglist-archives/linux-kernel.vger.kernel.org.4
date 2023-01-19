@@ -2,191 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9669672E90
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30C2672E92
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 03:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjASCA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 Jan 2023 21:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S229766AbjASCBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 Jan 2023 21:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjASCA4 (ORCPT
+        with ESMTP id S229720AbjASCBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:00:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014C768B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:00:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD6A6B81D66
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 02:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBCBC433D2;
-        Thu, 19 Jan 2023 02:00:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674093652;
-        bh=9rGecye3A9HkDxj4QdN4bMjjPezDbh4TPWj5J+UblD4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkPS7iYmiXYaAW5OuXRSyAewoWMJ2IJibKOY5fHSz96x73zwuAWt+FUjg0aYpZ9IB
-         OYDI2zVKoIr2Cn2OobjNxGvxfe5B8q0j/0/6dkh4+Ae2Ck+wdMCl3hS0WA4yHFQsS7
-         d/57YfEPy32BRMpjS5CL9BVXeT0WNKhfFzfcapHfcobaHHBv/Xv/auDPqsNbnwtD7A
-         BgtyQbHQNpOEPpasDEyE8Of9AvstYHHunN8XDfd2PBPZPHmYlZlqiAia/5Yi0eeboe
-         QtAy+UxbjWiJ3tpj65/fsFlc92zx0jvDenEH7ruzWPKJD/m3hqF/RY+gV9jHxWHTsm
-         cjeqyyBm4wcTg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        SeongJae Park <sj@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "damon@lists.linux.dev" <damon@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 30/48] mm/damon: Stop using vma_mas_store() for maple tree store
-Date:   Thu, 19 Jan 2023 02:00:50 +0000
-Message-Id: <20230119020050.2156-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230117224734.c4lo4spezufwsims@revolver>
-References: 
+        Wed, 18 Jan 2023 21:01:18 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52DD45895
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:01:17 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b7so449364wrt.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 18:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pu1tq3n/LdB6P4+KI23iUwlSXgHNKcoPMfDjTSYiEt0=;
+        b=YligMrxe4E/orUgqR8VvI6pwrEwgaXISw8haCFjF/uJle48taVQYMygU3blqy0PhYu
+         5NjJq/dS99GAw4Bf9u4qfjx+7h2j/6YUYENx8CmpBsMsmzY0Ubp1IOb4t15z9hL/TACI
+         n6YPwlPWgVpXdvdchff0menWL2ZG7BV7Of+WuVBoVVff/SbAcYsKI1VEOfj3L6qqvqy4
+         zB4iQORX8DvkN7pL8vTJrt3m+WnTLb+RaHzaBME95RTp5exIDlRCPbjs2zZfsUDp4LpB
+         oVxDLqk5M3f3a4hQRnMASQilI3rMojvmnvvV8miygPf0EviOGFAL3xPm+ugtkEWltgdQ
+         7p7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pu1tq3n/LdB6P4+KI23iUwlSXgHNKcoPMfDjTSYiEt0=;
+        b=wZiMi2IMG8jaUA+keFFVcMX/KzpP+MQ79vU1AVxudTad4xSKn/wE7psannWrOzDYRy
+         ZkUjI4RjZHrtIYweLNYHiNKMKiR/e6si6uSKXa2KqYDyUKiSA+OBqR3hcoyctYRPJPq6
+         d7DFfjpRZMshY7Zd0NzXYOGEh+scr5GV4LqcaMB2WCfMx7+Bh3MwXBo7Io37Q3x+ENW9
+         PTcPMVbjmmRVzaS1wiWYrBGHR/4f8TEQmzKsiSCiVpFUmWq6xNrc/du1/0Vzi4gEtzAz
+         86F3AyZNTA54+ORgETUFA6DkcqQo8MYcOgLtEx1DYLzp6P+ZtMxQlmQfYecgVYZOMR1S
+         AOEQ==
+X-Gm-Message-State: AFqh2kqr/NRi3zQR27oevl1d/uzujgBoQdp2Vh+CQgNyVBzU/jEOwle6
+        HmAYp3MOoztqyFo43UxfCAo9xC1B4s+attx9hJS97g==
+X-Google-Smtp-Source: AMrXdXvGBk5yLN/gW9lWvReD+EGsDcrto7RDqABj5uRF8qWeaRh0yOMij495GRMURAhXONtQlFD3pCS9LGGRDh2eRfA=
+X-Received: by 2002:adf:ec88:0:b0:2bd:c1c9:131c with SMTP id
+ z8-20020adfec88000000b002bdc1c9131cmr221748wrn.402.1674093676160; Wed, 18 Jan
+ 2023 18:01:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113210703.62107-1-nhuck@google.com> <Y8HI+42TxxlJxT6D@slm.duckdns.org>
+In-Reply-To: <Y8HI+42TxxlJxT6D@slm.duckdns.org>
+From:   Nathan Huckleberry <nhuck@google.com>
+Date:   Wed, 18 Jan 2023 18:01:04 -0800
+Message-ID: <CAJkfWY4Az45dNkPu5JpDsiMV-gRLe2VjVuixQd9xNG7zdLb4jA@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Add WQ_SCHED_FIFO
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Sandeep Dhavale <dhavale@google.com>,
+        Daeho Jeong <daehojeong@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel and Liam,
+On Fri, Jan 13, 2023 at 1:11 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Fri, Jan 13, 2023 at 01:07:02PM -0800, Nathan Huckleberry wrote:
+> > Add a WQ flag that allows workqueues to use SCHED_FIFO with the least
+> > imporant RT priority.  This can reduce scheduler latency for IO
+> > post-processing when the CPU is under load without impacting other RT
+> > workloads.  This has been shown to improve app startup time on Android
+> > [1].
+> >
+> > Scheduler latency affects several drivers as evidenced by [1], [2], [3],
+> > [4].  Some of these drivers have moved post-processing into IRQ context.
+> > However, this can cause latency spikes for real-time threads and jitter
+> > related jank on Android.  Using a workqueue with SCHED_FIFO improves
+> > scheduler latency without causing latency problems for RT threads.
+> >
+> > [1]:
+> > https://lore.kernel.org/linux-erofs/20230106073502.4017276-1-dhavale@google.com/
+> > [2]:
+> > https://lore.kernel.org/linux-f2fs-devel/20220802192437.1895492-1-daeho43@gmail.com/
+> > [3]:
+> > https://lore.kernel.org/dm-devel/20220722093823.4158756-4-nhuck@google.com/
+> > [4]:
+> > https://lore.kernel.org/dm-crypt/20200706173731.3734-1-ignat@cloudflare.com/
+> >
+> > This change has been tested on dm-verity with the following fio config:
+> >
+> > [global]
+> > time_based
+> > runtime=120
+> >
+> > [do-verify]
+> > ioengine=sync
+> > filename=/dev/testing
+> > rw=randread
+> > direct=1
+> >
+> > [burn_8x90%_qsort]
+> > ioengine=cpuio
+> > cpuload=90
+> > numjobs=8
+> > cpumode=qsort
+> >
+> > Before:
+> > clat (usec): min=13, max=23882, avg=29.56, stdev=113.29 READ:
+> > bw=122MiB/s (128MB/s), 122MiB/s-122MiB/s (128MB/s-128MB/s), io=14.3GiB
+> > (15.3GB), run=120001-120001msec
+> >
+> > After:
+> > clat (usec): min=13, max=23137, avg=19.96, stdev=105.71 READ:
+> > bw=180MiB/s (189MB/s), 180MiB/s-180MiB/s (189MB/s-189MB/s), io=21.1GiB
+> > (22.7GB), run=120012-120012msec
+>
 
+Hi Tejun,
 
-Sorry for late reply.
+> Given that its use case mostly intersects with WQ_HIGHPRI, would it make
+> more sense to add a switch to alter its behavior instead? I don't really
+> like the idea of pushing the decision between WQ_HIGHPRI and WQ_SCHED_FIFO
+> to each user.
 
-On Tue, 17 Jan 2023 22:47:36 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+Do you think something similar should be done for WQ_UNBOUND? In most
+places where WQ_HIGHPRI is used, WQ_UNBOUND is also used because it
+boosts performance. However, I suspect that most of these benchmarks
+were done on x86-64. I've found that WQ_UNBOUND significantly reduces
+performance on arm64/Android.
 
-> * Daniel Latypov <dlatypov@google.com> [230117 17:20]:
-> > On Tue, Jan 17, 2023 at 11:11 AM SeongJae Park <sj@kernel.org> wrote:
-> > >
-> > > Cc-ing kunit people.
-> > >
-> > > Hi Liam,
-> > >
-> > >
-> > > Could we put touching file name on the summary?
-> > > E.g., mm/damon/vaddr-test: Stop using ...
-> > >
-> > > On Tue, 17 Jan 2023 02:34:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
-> > >
-> > > > From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-> > > >
-> > > > Prepare for the removal of the vma_mas_store() function by open coding
-> > > > the maple tree store in this test code.  Set the range of the maple
-> > > > state and call the store function directly.
-> > > >
-> > > > Cc: SeongJae Park <sj@kernel.org>
-> > > > Cc: damon@lists.linux.dev
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > > > ---
-> > > >  mm/damon/vaddr-test.h | 19 +++++++++++++------
-> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
-> > > > index bce37c487540..6098933d3272 100644
-> > > > --- a/mm/damon/vaddr-test.h
-> > > > +++ b/mm/damon/vaddr-test.h
-> > > > @@ -14,19 +14,26 @@
-> > > >
-> > > >  #include <kunit/test.h>
-> > > >
-> > > > -static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> > > > +static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> > > >                       ssize_t nr_vmas)
-> > > >  {
-> > > > -     int i;
-> > > > +     int i, ret = -ENOMEM;
-> > > >       MA_STATE(mas, mt, 0, 0);
-> > > >
-> > > >       if (!nr_vmas)
-> > > > -             return;
-> > > > +             return -ENOENT;
-> > 
-> > We could pass in the `test` object here and give more detailed info, e.g.
-> >   (if !nr_vmas)
-> >      kunit_skip(test, "...");
-> > 
-> > And below could be
-> > 
-> > bool stored_all = false; // instead of ret
-> > ...
-> > for (...) {
-> > 
-> > }
-> > stored_all = true;
-> > 
-> > failed:
-> >   mas_unlock(&mas);
-> >   if (!stored_all) kunit_skip(test, "failed to...");
-> > 
-> > > >
-> > > >       mas_lock(&mas);
-> > > > -     for (i = 0; i < nr_vmas; i++)
-> > > > -             vma_mas_store(&vmas[i], &mas);
-> > > > +     for (i = 0; i < nr_vmas; i++) {
-> > > > +             mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
-> > > > +             if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
-> > > > +                     goto failed;
-> > > > +     }
-> > > > +     ret = 0;
-> > > > +
-> > > > +failed:
-> > > >       mas_unlock(&mas);
-> > > > +     return ret;
-> > > >  }
-> > > >
-> > > >  /*
-> > > > @@ -71,7 +78,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
-> > > >       };
-> > > >
-> > > >       mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
-> > > > -     __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas));
-> > > > +     KUNIT_EXPECT_EQ(test, __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)), 0);
-> > >
-> > > In case of the __link_vmas() failure, I think we should skip this test using
-> > > 'kunit_skip()', rather marking this test failed.
-> > 
-> > As noted above, I'd suggest we also pass in the `test` object to
-> > __link_vmas() and call kunit_skip() from there.
-> 
-> My thoughts were if we are testing adding nothing to the list, then
-> there is probably a problem with the test and so that should be
-> highlighted with a failure.
-> 
-> I really don't mind either way.
+From the documentation, using WQ_UNBOUND for performance doesn't seem
+correct. It's only supposed to be used for long-running work. It might
+make more sense to get rid of WQ_UNBOUND altogether and only move work
+to unbound worker pools once it has stuck around for long enough.
 
-I didn't wrote '__link_vmas()' to test vma manipulation functions it internally
-uses, but just to offload test setup for 'damon_test_three_regions_in_vmas()'.
-I agree that the detailed failure reason could be helpful for better
-understanding as the function can now fail from 'mas_store_gfp()'s memory
-allocation failure.
+Android will probably need to remove WQ_UNBOUND from all of these
+performance critical users.
 
-That said, I think we can get the detail from the return value of
-'__link_vmas()'. I'm further worrying if passing 'test' object to the function
-makes people think the function itself is for testing something inside it.
-
-Also, I don't think the function returning non-error for zero value 'nr_vmas'
-as a problem but just expected behavior, as previously commented[1].
-
-So I'd prefer doing kunit_skip() here.
-
-If I'm missing something or wrong, please let me know.
-
-[1] https://lore.kernel.org/damon/20230117191614.116521-1-sj@kernel.org/
-
+If there are performance benefits to using unbinding workqueues from
+CPUs on x86-64, that should probably be a config flag, not controlled
+by every user.
 
 Thanks,
-SJ
+Huck
+
+>
+> Thanks.
+>
+> --
+> tejun
