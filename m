@@ -2,161 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3AA673A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7780E673A4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 Jan 2023 14:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjASNd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 08:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S231208AbjASNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 08:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjASNdU (ORCPT
+        with ESMTP id S231134AbjASNdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:33:20 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3613A792A3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:33:18 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J6b7EP026436;
-        Thu, 19 Jan 2023 07:33:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=Qdj5yJCTH6YPwOqPKaexQVYsrtIuqnvBl15sgQXVvOA=;
- b=mkxbCxhjOSZwYmYC9S9WNF207S1PSOAJlwg/4DjcojmCf1PoP8euiBET1ePiVgKl48UY
- 6F0lVHqzv2cFYtAxKlyPgnqnUXp2wLk/zoRXc2f2mvKvua8HWJazC679YBQahbpyIXpW
- RvYsqd+2MmO3yDf0RK3RE1y/tCTHiwsXh3hHS0EKPjgCDxmsOlIeACxo3YPHkwbBS2TT
- b5njEeF0ExPMRiRQ1fBoukyrtYD0NZB8kTWDNU2s+cL8OVCcKRmN/Cwfa1GLD//v6p7V
- xTUp8tvShCNyZzc4RbHatFniYCW9imXNSXZEt60fL/p3qbscQp1ZpAJcHZIydMqxrGK3 sg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3n3tp6fxe0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 07:33:05 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Thu, 19 Jan
- 2023 07:33:03 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
- Transport; Thu, 19 Jan 2023 07:33:03 -0600
-Received: from [198.61.64.248] (EDIN4L06LR3.ad.cirrus.com [198.61.64.248])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 032F1B12;
-        Thu, 19 Jan 2023 13:33:02 +0000 (UTC)
-Message-ID: <c19f2890-3c0f-5f72-d9fb-b59fe67205e8@opensource.cirrus.com>
-Date:   Thu, 19 Jan 2023 13:33:02 +0000
+        Thu, 19 Jan 2023 08:33:15 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E6C74E9F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:33:14 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id n7so1881272wrx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 05:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b6PeiBNsTffvX/+4lco6RlfjzIGjTxljWE9nlGGQ60s=;
+        b=u9CLrJA58gIJ7sWycV0DKTP4oJj5TQqH5ZpZF6mne+zMV/Amze+sz05Vm627nA6l7f
+         W7W6Jorg0uzHv9qA90odd7XDydVt4meLs1HgjZUSbbCLSp97FjwdnCkRKZtQcniqhgX1
+         f/9XJYTjXPDnBoV/Prnfft4b9RKWK8zd5sHmn0I/t5pbi04eQc+ePtOkzq7+zx+v+HK+
+         gemTi+gJNzg56DfmuI1iCTmuKZ9CJHydXwaygOCYmaXOovt/2AMrYuSizXHjR09YAbOY
+         n0s7odIw6Gf4RQXzXN8eNJi8dzHv5zt90aJEL2Pdm86dukdKnyhTRsWP2WeHQaZSxObn
+         pjEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b6PeiBNsTffvX/+4lco6RlfjzIGjTxljWE9nlGGQ60s=;
+        b=pmIXy8E8mlkJgy6EIWlvPWZeks4dGX+XFOL6q6VbEHX5HN0cvrrvp6WFFyGO7o3clT
+         SNq/avNnOE3Zo+Iwnd1xmwvh0iPFgMlbFQ3gHVigmkswgwFr0pyoAqcBzIhQI1nQLknO
+         75gJS4aIxINkJqhs3+qBVFlATpEjdFE3lJdl5YCO+N9RBnBAXsDF9irI1d7NPDzV/Edi
+         NBbiKHu1Zzty3orluI+7jqSlpToxQP+B1yksBxjY7m5H1v9wHybgX/93zqKzKj9y6cJi
+         I5vgbSViPHuritkiT/RGk8tIW+eescmou9as6yjztJzBVRgI5UwwzdgyJq6fcDmZtpiO
+         X3BA==
+X-Gm-Message-State: AFqh2kpJXAN1lRzrLf8qit1MuBm3xFylb/IS4fmY8oY640JSwTNSiZgZ
+        NMYyAdLQsTjJsStWromxqYLM/g==
+X-Google-Smtp-Source: AMrXdXtpARPAFImaw2quJx+/Q2zAHbUDSbv0xp/JTokBa7EhBS3eWwexKNtaG9aCwUtv/pIP/LpQvQ==
+X-Received: by 2002:a5d:66c9:0:b0:2b9:d6ba:21ef with SMTP id k9-20020a5d66c9000000b002b9d6ba21efmr9518068wrw.65.1674135192733;
+        Thu, 19 Jan 2023 05:33:12 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b00268aae5fb5bsm34369555wre.3.2023.01.19.05.33.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 05:33:12 -0800 (PST)
+Message-ID: <ffa9e555-f351-d05c-0524-6bc81b88120b@linaro.org>
+Date:   Thu, 19 Jan 2023 14:33:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/8] ASoC: cs42l42: Add SOFT_RESET_REBOOT register
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
- <20230118160452.2385494-3-sbinding@opensource.cirrus.com>
- <eb9fe53e-013b-e477-1d14-8d0c1c7514fc@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 5/7] arm64: dts: qcom: sc7280: Update lpass_tlmm node
 Content-Language: en-US
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <eb9fe53e-013b-e477-1d14-8d0c1c7514fc@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org
+References: <1674131227-26456-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674131227-26456-6-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1674131227-26456-6-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: cUza3pSPXLNPOIesvK996hdxD_dFE0Qx
-X-Proofpoint-GUID: cUza3pSPXLNPOIesvK996hdxD_dFE0Qx
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/1/23 16:41, Pierre-Louis Bossart wrote:
+On 19/01/2023 13:27, Srinivasa Rao Mandadapu wrote:
+> Update lpass_tlmm clock properties, as different clock sources
+> are required in ADSP enabled platforms
 > 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
+>  .../arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> On 1/18/23 10:04, Stefan Binding wrote:
->> From: Richard Fitzgerald <rf@opensource.cirrus.com>
->>
->> The SOFT_RESET_REBOOT register is needed to recover CS42L42 state after
->> a Soundwire bus reset.
-> 
-> Humm, you probably want to clarify the terminology, the 'soft reset' is
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> index 674b01a..232e1dc 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> @@ -167,6 +167,15 @@
+>  	};
+>  };
+>  
+> +&lpass_tlmm {
+> +	clocks = <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+> +		 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+> +
+> +	clock-names = "core", "audio";
+> +	reg = <0 0x033c0000 0x0 0x20000>,
+> +	      <0 0x03550000 0x0 0xa100>;
 
-SOFT_RESET is what the register is called.
+What is the difference? The length of audio IO space? You need to
+explain this in commit msg.
 
-> defined in the SoundWire spec as the case where the peripheral device
-> loses sync. Bus reset is a Severe Reset, but there's also a Hard Reset.
->
-> does this 'SOFT_RESET_REBOOT' need to be accessed when there's a soft
-> reset, or only after a Severe/Hard Reset?
-> 
 
-After a bus(severe)-reset or a forced(hard)-reset, but the code in
-driver/soundwire doesn't issue FORCE_RESET so there's no need to handle
-that. If there was some reason to have the core SoundWire code issue
-FORCE_RESET it would also need to add a callback to all clients so they
-can do any special handling.
+Best regards,
+Krzysztof
 
- From the datasheet:
-
-"After a FORCE_RESET, the master must issue a reboot command (set 
-SFT_RST_REBOOT; see
-p. 162) and wait for 2.5 ms.
-
-After a bus reset, the master must issue a reboot command (set
-SFT_RST_REBOOT; see p. 162) and wait for 2.5 ms."
-
-SFT_RESET_REBOOT is in the SOFT_RESET_REBOOT register.
-
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
->> ---
->>   include/sound/cs42l42.h    | 5 +++++
->>   sound/soc/codecs/cs42l42.c | 2 ++
->>   2 files changed, 7 insertions(+)
->>
->> diff --git a/include/sound/cs42l42.h b/include/sound/cs42l42.h
->> index 1d1c24fdd0cae..3994e933db195 100644
->> --- a/include/sound/cs42l42.h
->> +++ b/include/sound/cs42l42.h
->> @@ -34,6 +34,7 @@
->>   #define CS42L42_PAGE_24		0x2400
->>   #define CS42L42_PAGE_25		0x2500
->>   #define CS42L42_PAGE_26		0x2600
->> +#define CS42L42_PAGE_27		0x2700
->>   #define CS42L42_PAGE_28		0x2800
->>   #define CS42L42_PAGE_29		0x2900
->>   #define CS42L42_PAGE_2A		0x2A00
->> @@ -720,6 +721,10 @@
->>   
->>   #define CS42L42_SRC_SDOUT_FS		(CS42L42_PAGE_26 + 0x09)
->>   
->> +/* Page 0x27 DMA */
->> +#define CS42L42_SOFT_RESET_REBOOT	(CS42L42_PAGE_27 + 0x01)
->> +#define CS42L42_SFT_RST_REBOOT_MASK	BIT(1)
->> +
->>   /* Page 0x28 S/PDIF Registers */
->>   #define CS42L42_SPDIF_CTL1		(CS42L42_PAGE_28 + 0x01)
->>   #define CS42L42_SPDIF_CTL2		(CS42L42_PAGE_28 + 0x02)
->> diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
->> index 2fefbcf7bd130..82aa11d6937be 100644
->> --- a/sound/soc/codecs/cs42l42.c
->> +++ b/sound/soc/codecs/cs42l42.c
->> @@ -293,6 +293,7 @@ bool cs42l42_readable_register(struct device *dev, unsigned int reg)
->>   	case CS42L42_SPDIF_SW_CTL1:
->>   	case CS42L42_SRC_SDIN_FS:
->>   	case CS42L42_SRC_SDOUT_FS:
->> +	case CS42L42_SOFT_RESET_REBOOT:
->>   	case CS42L42_SPDIF_CTL1:
->>   	case CS42L42_SPDIF_CTL2:
->>   	case CS42L42_SPDIF_CTL3:
->> @@ -358,6 +359,7 @@ bool cs42l42_volatile_register(struct device *dev, unsigned int reg)
->>   	case CS42L42_LOAD_DET_DONE:
->>   	case CS42L42_DET_STATUS1:
->>   	case CS42L42_DET_STATUS2:
->> +	case CS42L42_SOFT_RESET_REBOOT:
->>   		return true;
->>   	default:
->>   		return false;
