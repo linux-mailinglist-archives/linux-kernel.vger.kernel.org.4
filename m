@@ -2,84 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FCA675B98
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A4A675B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjATRcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S229880AbjATRc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjATRcs (ORCPT
+        with ESMTP id S229701AbjATRcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:32:48 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE82DDBD1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:32:27 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id k10-20020a17090a590a00b0022ba875a1a4so2729620pji.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:32:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzZUJul5MFooCmTKNeGi62hfP4UpWHkt4+Ru2KtJQLY=;
-        b=aM5VYrG8H6wfMgb95CrnoI5K5qT7KmlmewMqPewyGYYwVwaWZUZBrXNmSp1twxgt4C
-         dxmczf3JkD+VgZRymajOXqM4E58gW5vtSO3r2Lhi9B6N3DoJXgSN3WaMVKd/U23cuMSt
-         +q6U2/OQSwMeuD2CP2VMWPvwlxOiK678b4/BffGvuiGSTsegWNYepfBamTFtI9De16X5
-         mRXAHThO0veBT7YjDu4Pt82yh4qeqeknhJN8w6dddBRj8mrRo68P70xci0CDzD8prZdD
-         Gfsy++xqIPyZGtdj94Yuv66GCVzXvMXsS+GfUH7qFKikgVQ/UExX9e/Pp5Ad/5/GaEWg
-         iccA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzZUJul5MFooCmTKNeGi62hfP4UpWHkt4+Ru2KtJQLY=;
-        b=ZzMliUC78aE9VNJXSwOZ8e/hqe4icTwX6izqreIiAvsswf9gMbBoIotBNpKObwwoZv
-         g827AxHvSHI2fsgeoqJJaLBAycWQ3iMvytJzAicAnVL/aqGjfqiIXT5USpVmvw6TWj4E
-         PYaOPo4gYI54mn8ju2/fbBG4FQBpqJbAJMlikR9yp+j18lEDE5+GGABEgSy8bMg1/Oy1
-         +kSqHYUYpsvEeIv2cwvSWEwqFbHtIGSSTZKqoS7MFDU0PQvjPEj7uNjYh4N8E49HxRLC
-         T4Moc+owbHp4u4BR7MjHB2igOlFYFq72OXKP07MkQtPeysZ51ezCpqDK3j3aXvK93hzR
-         Y9zQ==
-X-Gm-Message-State: AFqh2kppdY0XpmjUY/6R5aFAXSKTARTAdXMfbZS1DQB2Xm1RgwAYCwEZ
-        EU6xhGWvvUSIE/qngDWjq+kJfw==
-X-Google-Smtp-Source: AMrXdXs2ofj8TfyAiMiN1pQk1GK+kciLgaHCBrMx504KETYVQR92DTLijuncdiR8KnKxceGB8ubXwA==
-X-Received: by 2002:a05:6a20:54a8:b0:b9:14e:184b with SMTP id i40-20020a056a2054a800b000b9014e184bmr336338pzk.3.1674235946362;
-        Fri, 20 Jan 2023 09:32:26 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b0019460ac7c6asm3871334plk.283.2023.01.20.09.32.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 09:32:25 -0800 (PST)
-Date:   Fri, 20 Jan 2023 17:32:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH] perf/x86: KVM: Disable vPMU support on hybrid CPUs (host
- PMUs)
-Message-ID: <Y8rQJf3ki8a1aRjW@google.com>
-References: <20230120004051.2043777-1-seanjc@google.com>
- <1dec071d-c010-cd89-9e58-d643e71e775c@linux.intel.com>
+        Fri, 20 Jan 2023 12:32:25 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2080.outbound.protection.outlook.com [40.107.100.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B36FD07
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:31:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VnjE3zo9LyA+hl0fDjQerf0OTwPydaohXjmHzSQseFgyz8XpIrvFL0BU57+I4j3+RmeZtRZcygKo//uXQ/4zFSh/YzrchWzCrTV8zFP2iPG+EOR8s/LFELyapstDoXgeO+oQEW9gTVJ8gH5Iv7znGFVmtyF5S+r2MKtyx7dgCF1RE/aCIwiyqDXRhXVG0qHIWys+Hwr81zSpz+J0q/Z8BYE5++7VgO7TffwgxD9voON0aEBeWeDWk8XLNrtlCrtdlV6TVlAvQc52YHpEclsO7SVHHED7P3nMmMpAXgKAc1ZDWpGPVPe5DjxABIcfFYzjDLt9VXnMoaJI0Gzuz1w7vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1UaUlVHi9t0u9oFk/h5G2dJi5oO6zN5KYpcCNzQnFns=;
+ b=BCxBKoERGhxKxiGQTvCyfsDvxpWdSQ+w08Pyupx9QbgPZ7rjSiiXY4MHJr0R3o7dWeRUq8XXu3WnCOV4vHUv45nsXBPQVZsXtjQ9IQM9l3bLRLm1qVyGgsm+Xlvzg/ZwdRzvC/pAFLuFdbUsNQGdcav0+u7I+fON3FGeT4F1UTkZqqD4ZdijvKIqDtOZC0DPSeOVgyOMYMoMP+7mJAZ+uwmnMCs+abRi/Ryu5R7l0D/+NSILup7xQPE1MxQky6FFP4w0WHLzE1tgDbz1QZJYk60ugCd2ki6ultVR3Jls34RDSILKSPcAOOvBjDnQ3HsdDCU7PFeD5GvaBGF4X3QiKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1UaUlVHi9t0u9oFk/h5G2dJi5oO6zN5KYpcCNzQnFns=;
+ b=r4dRhdTAymOD5wYjNNKY3PVonzSA/B939lsj62MoALZQBEwOKrMEMIw4KXzplaUyWA72iphZQkjhvszlBdLlVuwEhkC5Qm9LxoQUGAX1i9E+HsaxSknY2kP9oGb0jhWXrQhfr8rPA0+Srg/Yw/b2qcKh6atL/qTPMKOCg4eQTVg=
+Received: from BN9PR03CA0168.namprd03.prod.outlook.com (2603:10b6:408:f4::23)
+ by DM4PR12MB7741.namprd12.prod.outlook.com (2603:10b6:8:103::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Fri, 20 Jan
+ 2023 17:31:46 +0000
+Received: from BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f4:cafe::1b) by BN9PR03CA0168.outlook.office365.com
+ (2603:10b6:408:f4::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27 via Frontend
+ Transport; Fri, 20 Jan 2023 17:31:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT074.mail.protection.outlook.com (10.13.176.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6023.16 via Frontend Transport; Fri, 20 Jan 2023 17:31:45 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 20 Jan
+ 2023 11:31:43 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: use a more appropriate return value in dp_retrieve_lttpr_cap()
+Date:   Fri, 20 Jan 2023 12:32:23 -0500
+Message-ID: <20230120173226.98569-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1dec071d-c010-cd89-9e58-d643e71e775c@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT074:EE_|DM4PR12MB7741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77d5ffcd-5b88-4624-165f-08dafb0c3405
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Nr1dzFOGMJQRyzkC/kMAcDjeh0cldPF0X+AE472sPcy5Nx4w6tKniXa3dC3S42KSttRsGEjz4ffgow33vA2wTNn9oisCkRuPcSTtzQoCMqgJDRxT+1Uu9iFw5qkGC9YA2MAyd0ORKcqivm6tCTSdNALG7njDE7jTTZD6i4wQdSxIuI8KH7lNxcp90UClqDkBZ/BrkMIdg5jgBhY4Vn5HaHhMQNYBCxq1RxD32TBEJSnHAcgaxzVfa6pN5CokF5dOdShIBNwplAAyv/fcr6wDhMrOcbxCkDIrjC4+MUJy0PAm7qxwjCq569d6fhgHcJgrLAXYtP7bZ+jYBhOQx15D5LdsxAEujKzI0betULrupyh6BYJktTl/3yroVhVK88EluYiUmJafEOi6+aImNPdSOgC2QgG6M7t2k6xBdnbZG2P8giUiA1rJKGJ2ENJLyQl+4g6PAGIfnTeUSO8EMnDC7cytpTaHi0GPH4FzkaK8LoPfofmvhwDgYCBwfdqM7qqZlLkYsSV2WfqokDjzEdW8/hA+hS6z643GNIfowDQ7MqcAKvZd4FF+VDvA6uT2R4Y6ZRdD/PcE7TA4qhdyvRJxA5HKZ2ekSjnmk49ImVmJ2O+NPes/tEn0GZcmghbkjxWf6KM6Id+EuLWWv9aiiWnpzj8fqmKXPTOiDlhH8llYEKa57Wy/ENo0DOsvg/XTMBtHnQDhQOG9mek+XexejRk9p2ILHV0fDNPsr9B2QTBNOeBllPb5iGtR80IxXyzJpOghiZnH8uP/tZOs5knwYGEPeQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199015)(46966006)(36840700001)(40470700004)(83380400001)(36860700001)(82740400003)(81166007)(70586007)(6916009)(5660300002)(44832011)(356005)(4326008)(8936002)(2906002)(70206006)(1076003)(82310400005)(86362001)(426003)(478600001)(40480700001)(336012)(16526019)(186003)(26005)(2616005)(41300700001)(54906003)(40460700003)(8676002)(316002)(6666004)(47076005)(36756003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 17:31:45.6805
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77d5ffcd-5b88-4624-165f-08dafb0c3405
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7741
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,41 +106,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023, Liang, Kan wrote:
-> 
-> On 2023-01-19 7:40 p.m., Sean Christopherson wrote:
-> > Disable KVM support for virtualizing PMUs on hosts with hybrid PMUs until
-> > KVM gains a sane way to enumeration the hybrid vPMU to userspace and/or
-> > gains a mechanism to let userspace opt-in to the dangers of exposing a
-> > hybrid vPMU to KVM guests.
-> > 
-> > Virtualizing a hybrid PMU, or at least part of a hybrid PMU, is possible,
-> > but it requires userspace to pin vCPUs to pCPUs to prevent migrating a
-> > vCPU between a big core and a little core, requires the VMM to accurately
-> > enumerate the topology to the guest (if exposing a hybrid CPU to the
-> > guest), and also requires the VMM to accurately enumerate the vPMU
-> > capabilities to the guest.
-> 
-> Current kernel only return the common counters to KVM, which is
-> available on both e-core and p-core. In theory, there should be no
-> problem with the migration between cores. You don't have to pin vCPU.
-> The only problem is that you probably can only use the architecture events.
+Not all ASICs support LTTPR, however if they don't it doesn't mean that
+we have encountered unexpected behaviour. So, use DC_NOT_SUPPORTED
+instead of DC_ERROR_UNEXPECTED.
 
-And how exactly is KVM supposed to tell the guest that it can only use
-architectural events?  I see CPUID bits that enumerate which architectural events
-are supported, but I'm not seeing anything that says _only_ architectural events
-are supported.
+Reviewed-by: Wenjing Liu <wenjing.liu@amd.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> There is nothing wrong for the information provided by the kernel. I
-> think it should be a KVM issue (my guess is the CPUID enumeration.) we
-> should fix rather than simply disable the PMU for entire hybrid machines.
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
+index e72ad1b8330f..21fd9275ae4c 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_dp_capability.c
+@@ -1462,7 +1462,7 @@ enum dc_status dp_retrieve_lttpr_cap(struct dc_link *link)
+ 	bool vbios_lttpr_interop = link->dc->caps.vbios_lttpr_aware;
+ 
+ 	if (!vbios_lttpr_interop || !link->dc->caps.extended_aux_timeout_support)
+-		return DC_ERROR_UNEXPECTED;
++		return DC_NOT_SUPPORTED;
+ 
+ 	/* By reading LTTPR capability, RX assumes that we will enable
+ 	 * LTTPR extended aux timeout if LTTPR is present.
+-- 
+2.39.0
 
-I'm not arguing this isn't KVM's problem, and I'm all for proper enabling in KVM,
-but I'm not seeing any patches being posted.  In the meantime, we've got bug reports
-coming in about KVM guests having PMU problems on hybrid hosts, and a pile of
-evidence that strongly suggests this isn't going to be fixed by a one-line patch.
-
-Again, I'm not against enabling vPMU on hybrid CPUs, but AFAICT the enabling is
-non-trivial and may require new uAPI to provide the necessary information to
-userspace.  As a short term fix, and something that can be backported to stable
-trees, I don't see a better alternative than disabling vPMU support.
