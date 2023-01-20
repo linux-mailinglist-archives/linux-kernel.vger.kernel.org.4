@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259E867580D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5826267580E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjATPEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S229596AbjATPEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjATPEa (ORCPT
+        with ESMTP id S231288AbjATPEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:04:30 -0500
+        Fri, 20 Jan 2023 10:04:32 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FDB81013
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:03:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF84B2E66
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:03:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674227022;
+        s=mimecast20190719; t=1674227028;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F1TJWHWdZqDFCr8xEA0m937H+WTiVZmJanYCSnQgjrk=;
-        b=aBw3t80SCMtSlaTEoenyoVBHtZz+Vxk9rFf7DH2Lv66xzogqsM5cjEBtW+rvh1kRa1g1LR
-        3rOuEySgjIG/wSgvGemc1SpdTW3z11BQLYtsXZdkRlN+T3LwK7Tktmb7AINbZ8PTqkPohB
-        i9grLRDACUvJucBwrv1JbVJf9ZE8RmM=
+        bh=Lda/+ml5+8vWZrx9vfKLtfMa+7nWIziVhjlRSwPRz3M=;
+        b=dLYPoSVO6rnvIsMAH9X9Bq66MUJXwYdu+oCku7s5I8eIjgZqlH2i4Qk4sN/zS26eSKFlmp
+        VPRd5N6jYbfUGIPrHsmSYUdiM8xU8u4wVhvQLYcUCkc8aI5KRqechgR1B0VeSA/WXxylEf
+        q9+3J5No++34u6JmW4kGpCeojZBK6fI=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-XksM0rtCN-K57tGpGanOQQ-1; Fri, 20 Jan 2023 10:03:35 -0500
-X-MC-Unique: XksM0rtCN-K57tGpGanOQQ-1
+ us-mta-554-bhRqpXYPNP-zoGd957nf9Q-1; Fri, 20 Jan 2023 10:03:43 -0500
+X-MC-Unique: bhRqpXYPNP-zoGd957nf9Q-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18E4F181E3EE;
-        Fri, 20 Jan 2023 15:03:34 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43D06800DB5;
+        Fri, 20 Jan 2023 15:03:42 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.22.32.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 44B13492B02;
-        Fri, 20 Jan 2023 15:03:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A7F02492B02;
+        Fri, 20 Jan 2023 15:03:37 +0000 (UTC)
 From:   Wander Lairson Costa <wander@redhat.com>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -49,10 +49,12 @@ To:     Ingo Molnar <mingo@redhat.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
-        Stafford Horne <shorne@gmail.com>, Guo Ren <guoren@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stafford Horne <shorne@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Oleg Nesterov <oleg@redhat.com>,
         Wander Lairson Costa <wander@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
@@ -61,9 +63,9 @@ To:     Ingo Molnar <mingo@redhat.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Andrei Vagin <avagin@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/4] sched/rt: use put_task_struct_atomic_safe() to avoid potential splat
-Date:   Fri, 20 Jan 2023 12:02:41 -0300
-Message-Id: <20230120150246.20797-4-wander@redhat.com>
+Subject: [PATCH v2 4/4] sched/core: use put_task_struct_atomic_safe() to avoid potential splat
+Date:   Fri, 20 Jan 2023 12:02:42 -0300
+Message-Id: <20230120150246.20797-5-wander@redhat.com>
 In-Reply-To: <20230120150246.20797-1-wander@redhat.com>
 References: <20230120150246.20797-1-wander@redhat.com>
 MIME-Version: 1.0
@@ -79,45 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rto_push_irq_work_func() is called in hardirq context, and it calls
-push_rt_task(), which calls put_task_struct().
+push_cpu_stop() is called form a context in which it must not sleep.
+Since push_cpu_stop() calls put_task_struct(), it potentially can sleep
+under PREEMPT_RT if the usage count reaches zero.
 
-If the kernel is compiled with PREEMPT_RT and put_task_struct() reaches
-zero usage count, it triggers a splat because __put_task_struct()
-indirectly acquires sleeping locks.
-
-The put_task_struct() call pairs with an earlier get_task_struct(),
-which makes the probability of the usage count reaches zero pretty
-low. In any case, let's play safe and use the atomic safe version.
+Use put_task_struct_atomic_safe(0 instead to avoid this potential splat.
 
 Signed-off-by: Wander Lairson Costa <wander@redhat.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/sched/rt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index ed2a47e4ddae..30a4e9607bec 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2147,7 +2147,7 @@ static int push_rt_task(struct rq *rq, bool pull)
- 		/*
- 		 * Something has shifted, try again.
- 		 */
--		put_task_struct(next_task);
-+		put_task_struct_atomic_safe(next_task);
- 		next_task = task;
- 		goto retry;
- 	}
-@@ -2160,7 +2160,7 @@ static int push_rt_task(struct rq *rq, bool pull)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index c437260e19b0..e5d0c66cb90c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2565,7 +2565,7 @@ int push_cpu_stop(void *arg)
+ 	raw_spin_rq_unlock(rq);
+ 	raw_spin_unlock_irq(&p->pi_lock);
  
- 	double_unlock_balance(rq, lowest_rq);
- out:
--	put_task_struct(next_task);
-+	put_task_struct_atomic_safe(next_task);
- 
- 	return ret;
+-	put_task_struct(p);
++	put_task_struct_atomic_safe(p);
+ 	return 0;
  }
+ 
 -- 
 2.39.0
 
