@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DA66749F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B88674A05
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjATDRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 22:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S229642AbjATDU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 22:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjATDRm (ORCPT
+        with ESMTP id S229483AbjATDUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 22:17:42 -0500
+        Thu, 19 Jan 2023 22:20:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CF6B1ECB;
-        Thu, 19 Jan 2023 19:17:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD47C0;
+        Thu, 19 Jan 2023 19:20:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F181961DF5;
-        Fri, 20 Jan 2023 03:17:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03EE5C433F1;
-        Fri, 20 Jan 2023 03:17:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A5561DEF;
+        Fri, 20 Jan 2023 03:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1BEABC433F1;
+        Fri, 20 Jan 2023 03:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674184656;
-        bh=uU3oYI54L8VUNcIszGsQrFwwcTkBniJmQ4MJV8jgxeU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X3IJSsoJlyArYgPxfFji8JJ141V1EnCDTsHj9ob0eTDDZV0plBOD289ABFprkPp2B
-         AOPSuN8cf9XjiRx2B7m0rbBnfdY1zVSBAqImK4HcrYZ3nD71tMO7/IrjZwt1foHMH9
-         XT35k/MAw3kgcM6jQUZDW628l8GyrtxPY4FuURpp1+ovx2k6bqF4494bpV8kqeeZ3n
-         qKFT9XD6KolBzJJtZM1Qoq+JU8bVOddZRgFb0n8FoLX1vKj9D6qWG7+HEA/mc05KIt
-         x4ICHCaEUBvtbM5KHlVNRXvETKVMJBbac76tNDpJW5seXBx3XyqF30XgS2MvFct1rx
-         ZQjWWK3/GmIpw==
-Date:   Thu, 19 Jan 2023 19:17:35 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 2/9] e1000e: Remove redundant
- pci_enable_pcie_error_reporting()
-Message-ID: <20230119191735.4bc11fd2@kernel.org>
-In-Reply-To: <20230118234612.272916-3-helgaas@kernel.org>
-References: <20230118234612.272916-1-helgaas@kernel.org>
-        <20230118234612.272916-3-helgaas@kernel.org>
+        s=k20201202; t=1674184821;
+        bh=jHP/KfWRf0rvAsjTo62SlFaUXRfLpQHjGLZgs37HA/Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RdAEBAJhYVgvVjAK+ZcD1cZy5KyT7Bo21zsQvlF2VTwAH21IpzJE+gNPQzyY+/DNp
+         /hKsrlOfsNa1O7GGQzMTxVd49D0KV8WTvqFSfVI6SNGaU5xwkeOpf1NXAOVNDXxTsb
+         XkunSeI4Sepf5E8+kqX9dbEdSLTqeCjREQBIADbSmcbo+hH2GOcCrIfssU66ceGXfi
+         Tt6Wby55uToUrWrXcC2GBuwjLXXo8z/iLw6DMs51QuO+zMpWNevRrSPM5IfaGQ64m8
+         ScMN6tADReoB5upTcQ+Qu/TCTnC8LoZUECyAzrf+w4AapzPanTuw2bu6RDPNun2v6Z
+         uvC9eTRpjpklw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F3107C43147;
+        Fri, 20 Jan 2023 03:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next 1/1] net: phy: fix use of uninit variable when
+ setting PLCA config
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167418482098.4845.761688179914150843.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 Jan 2023 03:20:20 +0000
+References: <f22f1864165a8dbac8b7a2277f341bc8e7a7b70d.1674056765.git.piergiorgio.beruto@gmail.com>
+In-Reply-To: <f22f1864165a8dbac8b7a2277f341bc8e7a7b70d.1674056765.git.piergiorgio.beruto@gmail.com>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, o.rempel@pengutronix.de,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,22 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 17:46:05 -0600 Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> pci_enable_pcie_error_reporting() enables the device to send ERR_*
-> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-> native"), the PCI core does this for all devices during enumeration.
-> 
-> Remove the redundant pci_enable_pcie_error_reporting() call from the
-> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-> from the driver .remove() path.
-> 
-> Note that this doesn't control interrupt generation by the Root Port; that
-> is controlled by the AER Root Error Command register, which is managed by
-> the AER service driver.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Hello:
 
-How would you like to route these? Looks like there's no dependency 
-so we can pick them up?
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 18 Jan 2023 16:47:31 +0100 you wrote:
+> Coverity reported the following:
+> 
+> *** CID 1530573:    (UNINIT)
+> drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
+> 1030     				return ret;
+> 1031
+> 1032     			val = ret;
+> 1033     		}
+> 1034
+> 1035     		if (plca_cfg->node_cnt >= 0)
+> vvv     CID 1530573:    (UNINIT)
+> vvv     Using uninitialized value "val".
+> 1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
+> 1037     			      (plca_cfg->node_cnt << 8);
+> 1038
+> 1039     		if (plca_cfg->node_id >= 0)
+> 1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
+> 1041     			      (plca_cfg->node_id);
+> drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
+> 1070     				return ret;
+> 1071
+> 1072     			val = ret;
+> 1073     		}
+> 1074
+> 1075     		if (plca_cfg->burst_cnt >= 0)
+> vvv     CID 1530573:    (UNINIT)
+> vvv     Using uninitialized value "val".
+> 1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
+> 1077     			      (plca_cfg->burst_cnt << 8);
+> 1078
+> 1079     		if (plca_cfg->burst_tmr >= 0)
+> 1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
+> 1081     			      (plca_cfg->burst_tmr);
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net-next,1/1] net: phy: fix use of uninit variable when setting PLCA config
+    https://git.kernel.org/netdev/net-next/c/1038bfb23649
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
