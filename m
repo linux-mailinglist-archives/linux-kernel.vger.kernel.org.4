@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EAF6757A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFCE6757A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjATOor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
+        id S230231AbjATOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjATOop (ORCPT
+        with ESMTP id S230456AbjATOpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:44:45 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5A949559
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:44:24 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r9so5060192wrw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:44:24 -0800 (PST)
+        Fri, 20 Jan 2023 09:45:02 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1832BCFD26;
+        Fri, 20 Jan 2023 06:44:38 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id q130so2537422iod.4;
+        Fri, 20 Jan 2023 06:44:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DI74kqIGhcvphZcqXp7Uudy88nH45WfLRZNDMde28kk=;
-        b=H+K1ITtusUahctY8XWnxDrvCtyuxSsR2thgXbFkbAxu4WV90mgjTxTtscI8bJJMIof
-         GmErfbhL/pqRtYfeOQBaStGLFtTMUGf8j/i4zwPsvMypjtRROJ/ZOT2jM/w1M4bbo/LV
-         R/nA3elup7rBLmWIJKvDqZt53NTY8qTab7S+jZyKkXCuXOJ0A5xPlGuBtdBALBakd6Jc
-         FSd6sxtT2e0+K72PGB57GA/N+WJfbD7v56PxrpzLQImX3K8l4elArqz1Drc9CB8Wn6Pw
-         T9WjE/IH/XhqwbuSDEaDxdObjn2vw1z+UpLsS05Mc/pcmX56Z0WkpZgUpnwiynTlGRIq
-         JyYQ==
+        bh=hDCYG8WxS/pUjt/n8MvGqQ4mEBFsqI4uxAOlI7paeNc=;
+        b=ZKv2kJnbHZoYZy1tJyO4tdeh91R61byMjNI2lb14x8KJae1X5W0y4SjIBSNS1kHRdb
+         oigCmrD81gGVVGUbcrqhcIFKQz6nDsSr5DazytIj3JGvflF/m2P6KyFYPTlTVvVuTxKF
+         +CCZvCHJ20T0wdFaUFkadoTZO92RW8K6iiqfnrrGwPtJz5XlVdOVELQkcnQwSlf8vekW
+         jLCkuE7eZFleOD4LEysRktAkKxR/OUdQDMYlodZFOEgM2s3cv73ohw2KPUYkZVt3G/ct
+         2WD1tWGgvuTcdRDQ8D6tW9faTAs/szW+tedVcUEXKO15Ibc57FL/ptN/1uFkGrw3wXIz
+         pqzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DI74kqIGhcvphZcqXp7Uudy88nH45WfLRZNDMde28kk=;
-        b=eLGC0iSm4ooAloar0/U2wkTfYIzK1tF8HQ3uvn2+qf2vF4o8/wFFIwNN+9hFqFu+nY
-         LngXk+Rom31lmfyuTI5FfVL0srbxOsDuYKrWyAQZiCpT+aojzQUyWSa5usDKiujz0jzt
-         vdI3pn8LOmAxH2bGWyNec1cC/0bGGxvvlb1AnzJ/m1vcp/oFL1/GkjJSHRt6nfBgQNyM
-         dynaMufGJLIzlDaQoX1URWuUkJqU9Zheq/SzVRFR6B5hV9JpcXPLPwc5qJMXNmp16rhe
-         5vWYk/yaLiUi66tnbu1wi7IuG+8hcjAEvMJ3ACRBu34P+lTQ1quBSHGuWmLdpkD4ze5F
-         3I+w==
-X-Gm-Message-State: AFqh2kqxTMoERy0U5Ex9XpFYQFuQMxZTR0/UKZpo05WDE8flVWGY/QhY
-        VmEE4owxFeuTEoZan0WcaFmhqQ==
-X-Google-Smtp-Source: AMrXdXshS14JEHOLp6q7yDAz3zTPa/DW8O3ydsOpzDBaHgIyGrfAgQoGm5BCJQ2o/D/4tqOc0huowQ==
-X-Received: by 2002:a5d:4446:0:b0:2ba:c946:868b with SMTP id x6-20020a5d4446000000b002bac946868bmr12590447wrr.23.1674225812586;
-        Fri, 20 Jan 2023 06:43:32 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q17-20020a056000137100b002be4ff0c917sm2302421wrz.84.2023.01.20.06.43.31
+        bh=hDCYG8WxS/pUjt/n8MvGqQ4mEBFsqI4uxAOlI7paeNc=;
+        b=a1hcwUn/ThxYlF+tuzUb2bA5ERssRJcEX+0n+IZZ8iYCf67WCeSePo4CAoBrmyc6vS
+         ymY8EUbAz6Ur6ZhtUd/PGeEfDJYriVKDPkzBUr0IhZ0vmi3h8cW3FBaN1lS2hbiFzyN3
+         4P8NuKgJD7LOM0lArSelE1kkS8L9dfkSls6uxrB70/fpWdcFhBRKlN2CbPtXtPKxq75G
+         Hfn4QyEDJbRrY3b0Y3hXfasHCTFXHPetS+7Hq2x/knELXQJO2fhCw8Pd1LneR6k/E34B
+         JPD52OpBXb04X6b4/sGJyrr78MTbeTqqZzIIP+sk6fHZNQuJXFRs1KNyg1HFbzjkcaBi
+         JXEA==
+X-Gm-Message-State: AFqh2koFdht3Qx1OpBMLifFfRDlOkhQjvw3xqWI5cdw8Q+CWxBIZbRZT
+        knKbX+9ea2jTv7fSyZFCFb3TpTVunD68
+X-Google-Smtp-Source: AMrXdXuMycxFXCNiEYKeHDhmhI7Qlr14maanOHP2VLUa80rQsKw4EVW4q2yPZ6+LLLQfFL6ThMcBsA==
+X-Received: by 2002:a5d:8348:0:b0:6e3:c112:3339 with SMTP id q8-20020a5d8348000000b006e3c1123339mr9578231ior.16.1674225846816;
+        Fri, 20 Jan 2023 06:44:06 -0800 (PST)
+Received: from fedora.mshome.net ([104.184.156.161])
+        by smtp.gmail.com with ESMTPSA id p185-20020a0229c2000000b003a7c47efde0sm1513852jap.11.2023.01.20.06.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 06:43:32 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: net: asix,ax88796c: allow SPI peripheral properties
-Date:   Fri, 20 Jan 2023 15:43:29 +0100
-Message-Id: <20230120144329.305655-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 20 Jan 2023 06:44:06 -0800 (PST)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v3 0/3] Checkpoint Support for Syscall User Dispatch
+Date:   Fri, 20 Jan 2023 09:43:53 -0500
+Message-Id: <20230120144356.40717-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AX88796C device node on SPI bus can use SPI peripheral properties in
-certain configurations:
+v3: Kernel test robot static function fix
+    Whitespace nitpicks
 
-  exynos3250-artik5-eval.dtb: ethernet@0: 'controller-data' does not match any of the regexes: 'pinctrl-[0-9]+'
+v2: Implements the getter/setter interface in ptrace rather than prctl
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/net/asix,ax88796c.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
 
-diff --git a/Documentation/devicetree/bindings/net/asix,ax88796c.yaml b/Documentation/devicetree/bindings/net/asix,ax88796c.yaml
-index 699ebf452479..164d1ff9e83c 100644
---- a/Documentation/devicetree/bindings/net/asix,ax88796c.yaml
-+++ b/Documentation/devicetree/bindings/net/asix,ax88796c.yaml
-@@ -19,6 +19,7 @@ description: |
- 
- allOf:
-   - $ref: ethernet-controller.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
- 
- properties:
-   compatible:
-@@ -39,8 +40,8 @@ properties:
-       it should be marked GPIO_ACTIVE_LOW.
-     maxItems: 1
- 
-+  controller-data: true
-   local-mac-address: true
--
-   mac-address: true
- 
- required:
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+This patch set implements 3 features to enable software such as CRIU
+to cleanly interpose upon software leveraging syscall user dispatch.
+
+- Implement PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH, akin to a similar
+  feature for SECCOMP.  This allows a ptracer to temporarily disable
+  syscall user dispatch, making syscall injection possible.
+
+- Implement an fs/proc extension that reports whether Syscall User
+  Dispatch is being used in proc/status.  A similar value is present
+  for SECCOMP, and is used to determine whether special logic is
+  needed during checkpoint/resume.
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+
+Gregory Price (3):
+  ptrace,syscall_user_dispatch: Implement Syscall User Dispatch
+    Suspension
+  fs/proc/array: Add Syscall User Dispatch to proc status
+  ptrace,syscall_user_dispatch: add a getter/setter for sud
+    configuration
+
+ .../admin-guide/syscall-user-dispatch.rst     |  5 +-
+ fs/proc/array.c                               |  8 +++
+ include/linux/ptrace.h                        |  2 +
+ include/linux/syscall_user_dispatch.h         | 19 +++++++
+ include/uapi/linux/ptrace.h                   | 16 +++++-
+ kernel/entry/syscall_user_dispatch.c          | 54 +++++++++++++++++++
+ kernel/ptrace.c                               | 13 +++++
+ 7 files changed, 115 insertions(+), 2 deletions(-)
+
 -- 
-2.34.1
+2.39.0
 
