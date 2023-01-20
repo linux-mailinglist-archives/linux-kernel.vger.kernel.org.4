@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B07675C5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BE6675C61
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjATSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S229730AbjATSEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjATSDw (ORCPT
+        with ESMTP id S229764AbjATSD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:03:52 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DCA4F374
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:03:45 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id c85so4552853pfc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:03:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZLEr74jd+tUz0+0f9Cwbp09dUHXroWVszy4owEq+EY=;
-        b=YfviymZ4gffu7RyM19IBZOTknY/LB/XJsivInw5h66GhlSILfjudpANYD2fUAUBmzv
-         cIYQlVhnuS+wwBFySRnPR0WpqocGnHBiirrqtc8r5FjNJF4gUAmkQI2/Lsxm3ZkdmVir
-         N40CEXab5II+pxtamF1fSeHQB1NZuYiho3tnC7YZCgY9/qNOS2+R6r2P0kduEeS3EeuI
-         OsAEWrEHd2qtvFxwKVQFmyfX40PbDFPDPlKbjexQTHYqKovwap2a281WXqWa2Jcr8F7X
-         V5ALapjrlOH+UQP/J55580pjC6M620Nml7lWGHc/Eo2+LngeQpc7tDzfLYliizh9E2gX
-         aIVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6ZLEr74jd+tUz0+0f9Cwbp09dUHXroWVszy4owEq+EY=;
-        b=wBoKQz4ZWoDbsBRvzNJ3H4AoOSLiDDfgWT390Jgs0c/azkYTHn+Qyicrh7oAQ1IJ2P
-         AKUTCw+5cAf/g6TYcScLioKttEqPcEltHpLhi/i+0LWyGXvIjIlwAjgQIlt+yvxvlEMx
-         GqYlrUsjZh4HwqglyMvDOtwQGrW8fPeArhfPbqpa90bfNl6eE693zpEqR+934dboAw++
-         UKloLcRCf0pVjAZoZmK+vMfrWaQj636/AfgQad4Hh3mwZLWi81LY+l7vILu/HgEjmPMu
-         dbcMvdmNOsGAnIBeeBQcldHA8llPFD3yoJNGB1psBDusX6G3w0KQ0YEQsHhvhq74Gpvg
-         bs2Q==
-X-Gm-Message-State: AFqh2krh6w1G8904//684xZoXvLEfgG+SAar7ixPVUZGfke3Totf4SAv
-        C/+b9GTC0Bj6qUO0hzrZW2GZCSirUa2M78mf73fE2w==
-X-Google-Smtp-Source: AMrXdXtRkmECi6CBrgqcecX9f684KnNS+539ijTpn7AXkNXqRjWNFwvuMUmqIHRaku0lv0eCvUw4BHTgCXyXS3M7Cak=
-X-Received: by 2002:a05:6a00:4c14:b0:580:f2b8:213c with SMTP id
- ea20-20020a056a004c1400b00580f2b8213cmr1655596pfb.8.1674237825214; Fri, 20
- Jan 2023 10:03:45 -0800 (PST)
+        Fri, 20 Jan 2023 13:03:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E014459E46;
+        Fri, 20 Jan 2023 10:03:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BF9362047;
+        Fri, 20 Jan 2023 18:03:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00E3C433EF;
+        Fri, 20 Jan 2023 18:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674237829;
+        bh=ap8FyQeJDDy3jM707/8Gq4iOiU+FGtOYe43VN4brGaA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=MYcF5iztC5a6KZKWsW69MJEXn20PjbBeKsah9PQeQuIWY1kcu+XFqlrykl0sYyGTX
+         gNEcjEeklbvnfiMkQyGGzPlZw6hFFlbyRLjvEJducqEJosp8AXsAd09lijOxhQUwI2
+         GnLB+s7vLeWLx6Z5wR/+4cLdme5LrGwEzP4d9+JntA9naUEh1bydTIC9hz5/uEpDak
+         1ABCrmWdIihMLvDQqxhmS4712z0TSwuWSzNN7mUb7R5vjtuIIrG0jL7vAKskp4POAf
+         b6c6wNPlT3rBEzGKRBYdMH4Alsya3x08CWk10Z+KJ5rotivVQcHqS1wgoLpO4ZEGxU
+         kPMyxiVkDizjQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 772BB5C17DC; Fri, 20 Jan 2023 10:03:49 -0800 (PST)
+Date:   Fri, 20 Jan 2023 10:03:49 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        sfr@canb.auug.org.au
+Subject: Re: [PATCH rcu v2 03/20] drivers/cpufreq: Remove "select SRCU"
+Message-ID: <20230120180349.GO2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
+ <20230113001132.3375334-3-paulmck@kernel.org>
+ <CAJZ5v0ge-bYk+PM7c98+wNi28q9aOwERxfqC9K9ZSfCmUOzFfg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230111194001.1947849-1-dionnaglaze@google.com>
- <20230111194001.1947849-3-dionnaglaze@google.com> <Y8qgjgPCmnPR4tQL@zn.tnic>
-In-Reply-To: <Y8qgjgPCmnPR4tQL@zn.tnic>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Fri, 20 Jan 2023 10:03:33 -0800
-Message-ID: <CAAH4kHbDk8d1sqsNaJmGLkpjyXyHBH=9BWSh8XOZCAKu8vvFAQ@mail.gmail.com>
-Subject: Re: [PATCH v11 2/7] x86/sev: Change snp_guest_issue_request's fw_err
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0ge-bYk+PM7c98+wNi28q9aOwERxfqC9K9ZSfCmUOzFfg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Why not make it a u64 directly and be done with it?
->
-> ---
+On Fri, Jan 20, 2023 at 05:54:17PM +0100, Rafael J. Wysocki wrote:
+> On Fri, Jan 13, 2023 at 1:11 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > Now that the SRCU Kconfig option is unconditionally selected, there is
+> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> > Kconfig statements.
+> >
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > Cc: <linux-pm@vger.kernel.org>
+> > Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
+> > ---
+> >  drivers/cpufreq/Kconfig | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> > index 2a84fc63371e2..785541df59379 100644
+> > --- a/drivers/cpufreq/Kconfig
+> > +++ b/drivers/cpufreq/Kconfig
+> > @@ -3,7 +3,6 @@ menu "CPU Frequency scaling"
+> >
+> >  config CPU_FREQ
+> >         bool "CPU Frequency scaling"
+> > -       select SRCU
+> >         help
+> >           CPU Frequency scaling allows you to change the clock speed of
+> >           CPUs on the fly. This is a nice method to save power, because
+> > --
+> 
+> Applied as 6.3 material, thanks!
 
-I was operating under the assumption that kvm: sev: patches should
-only touch kvm, and virt: coco: sev-guest should only touch sev-guest.
-If you're okay with a patch that changes both areas at the same time,
-then I could do that.
+Thank you, I will drop it from my tree on my next rebase.
 
--- 
--Dionna Glaze, PhD (she/her)
+							Thanx, Paul
