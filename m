@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0067F675446
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB2367544D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjATMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S230108AbjATMVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjATMTg (ORCPT
+        with ESMTP id S229450AbjATMVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:19:36 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30C238B303
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 04:19:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8363C14BF;
-        Fri, 20 Jan 2023 04:20:16 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D379E3F71A;
-        Fri, 20 Jan 2023 04:19:33 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-        ALKML <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org,
-        Pierre Gondois <pierre.gondois@arm.com>
-Subject: [GIT PULL]  cacheinfo/arch_topology: Updates for v6.3
-Date:   Fri, 20 Jan 2023 12:18:56 +0000
-Message-Id: <20230120121856.1407369-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 20 Jan 2023 07:21:45 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF3B8B303;
+        Fri, 20 Jan 2023 04:21:42 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pIqNP-0003oi-Vu; Fri, 20 Jan 2023 13:20:12 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-riscv@lists.infradead.org
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Guo Ren <guoren@kernel.org>,
+        Chris Stillson <stillson@rivosinc.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Dao Lu <daolu@rivosinc.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Ruinland Tsai <ruinland.tsai@sifive.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Alexander Graf <graf@amazon.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Myrtle Shah <gatecat@ds0.me>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Colin Cross <ccross@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Barret Rhoden <brho@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Chris Stillson <stillson@rivosinc.com>
+Subject: Re: [PATCH v12 06/17] riscv: Reset vector register
+Date:   Fri, 20 Jan 2023 13:20:09 +0100
+Message-ID: <2331455.NG923GbCHz@diego>
+In-Reply-To: <20220921214439.1491510-6-stillson@rivosinc.com>
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-6-stillson@rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Am Mittwoch, 21. September 2022, 23:43:48 CET schrieb Chris Stillson:
+> @@ -431,6 +431,29 @@ ENTRY(reset_regs)
+>  	csrw	fcsr, 0
+>  	/* note that the caller must clear SR_FS */
+>  #endif /* CONFIG_FPU */
+> +
+> +#ifdef CONFIG_VECTOR
+> +	csrr	t0, CSR_MISA
+> +	li	t1, COMPAT_HWCAP_ISA_V
+> +	and	t0, t0, t1
+> +	beqz	t0, .Lreset_regs_done
+> +
+> +	/*
+> +	 * Clear vector registers and reset vcsr
+> +	 * VLMAX has a defined value, VLEN is a constant,
+> +	 * and this form of vsetvli is defined to set vl to VLMAX.
+> +	 */
+> +	li	t1, SR_VS
+> +	csrs	CSR_STATUS, t1
+> +	csrs	CSR_VCSR, x0
+> +	vsetvli t1, x0, e8, m8, ta, ma
+> +	vmv.v.i v0, 0
+> +	vmv.v.i v8, 0
+> +	vmv.v.i v16, 0
+> +	vmv.v.i v24, 0
+> +	/* note that the caller must clear SR_VS */
+> +#endif /* CONFIG_VECTOR */
+> +
+>  .Lreset_regs_done:
 
-Please pull !
+Not sure how much they go together, but the #ifdef CONFIG_FPU block above
+your new VECTOR block also jumps to the same .Lreset_regs_done, so with
+the patch as is the vector-reset block is never reached in the !FPU case.
 
-It has been tested on RISC-V which is the main users outside of arm64.
-The ACPI the RISC-V parts are acked-by the respective maintainers. All
-the changes are in the -next for sometime and no issues reported at this
-time.
+So maybe making them independent of each other might prevent issues
+down the roead.
 
-Regards,
-Sudeep
 
--->8
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/archtopo-cacheinfo-updates-6.3
-
-for you to fetch changes up to 198102c9103fc78d8478495971947af77edb05c1:
-
-  cacheinfo: Fix shared_cpu_map to handle shared caches at different levels (2023-01-18 09:58:40 +0000)
-
-----------------------------------------------------------------
-cacheinfo and arch_topology updates for v6.3
-
-The main change is to build the cache topology information for all
-the CPUs from the primary CPU. Currently the cacheinfo for secondary CPUs
-is created during the early boot on the respective CPU itself. Preemption
-and interrupts are disabled at this stage. On PREEMPT_RT kernels, allocating
-memory and even parsing the PPTT table for ACPI based systems triggers a:
-  'BUG: sleeping function called from invalid context'
-
-To prevent this bug, the cacheinfo is now allocated from the primary CPU
-when preemption and interrupts are enabled and before booting secondary
-CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
-only, without relying on any architecture specific mechanism if done so
-early.
-
-The other minor change included here is to handle shared caches at
-different levels when not all the CPUs on the system have the same
-cache hierarchy.
-
-----------------------------------------------------------------
-Pierre Gondois (6):
-      cacheinfo: Use RISC-V's init_cache_level() as generic OF implementation
-      cacheinfo: Return error code in init_of_cache_level()
-      cacheinfo: Check 'cache-unified' property to count cache leaves
-      ACPI: PPTT: Remove acpi_find_cache_levels()
-      ACPI: PPTT: Update acpi_find_last_cache_level() to acpi_get_cache_info()
-      arch_topology: Build cacheinfo from primary CPU
-
-Yong-Xuan Wang (1):
-      cacheinfo: Fix shared_cpu_map to handle shared caches at different levels
-
- arch/arm64/kernel/cacheinfo.c |  11 +--
- arch/riscv/kernel/cacheinfo.c |  42 -----------
- drivers/acpi/pptt.c           |  93 ++++++++++++++----------
- drivers/base/arch_topology.c  |  12 +++-
- drivers/base/cacheinfo.c      | 161 +++++++++++++++++++++++++++++++++++-------
- include/linux/cacheinfo.h     |  11 ++-
- 6 files changed, 213 insertions(+), 117 deletions(-)
