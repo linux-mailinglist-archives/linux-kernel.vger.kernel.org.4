@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1077675BC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF6A675BCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjATRmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S230323AbjATRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjATRmV (ORCPT
+        with ESMTP id S230305AbjATRmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:42:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8325F6E40A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:42:18 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r2so5498506wrv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VDZkhqwFOsgIMnr1ffA8Wl9YS35ktcX3ijiYmPNgJyc=;
-        b=oB2RYPntMat4uRWwi//YXNXL76SLyz8fEv0Jznjb62D98tEATsMU/ZDIdky+Fq7wKl
-         Uze/1ee3DQzUZZcX6Hpc52V/VC+NHN6QonF5LYdHcKKjiWI0uVxZApwCFsGBS8PxU3fa
-         sO741v5i66XxXjJAlw8pufEXnPVF6WWfr598Xwdjs8T+/xD7qObRf60hpZxl01QPePng
-         1OftdfPiHPJSMwoZ8X12u4IT2F9MXwBH9ytf0o9GYNsmiUu0BVHZdgZR3S2R5Bftzo+6
-         xg9Lyc2z+e1kMkxWVFmfcahlZCPCqVTcr3jdi4/cgaHKe0JxtmJ/QkM0P0m5xfhbql6R
-         sY7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VDZkhqwFOsgIMnr1ffA8Wl9YS35ktcX3ijiYmPNgJyc=;
-        b=En1ErreOodJKTppQApdEU3SFj43XeWQ3zeaAbCB2XLHio+fM7vEccPu+ZxUsYPZwcl
-         EkgUTP7dI4E3L1oAiPoLtIYIjdZg9csb18lQpmBaC5RyZ5z9PxUYP896uROHp8y/jXMi
-         feLaMMAWToSjM0gZSzeTIWtLSYoKALWQy7PJFYCQbas24IvN8kMuiyQPAtWnO/JPCOWg
-         wllxT+CAgb+g18/ahwTnR+n7n5IlMrP8cTk9y67duyGH19mgw89Es0POnbvQhp86bL42
-         1x9LRqm7ZhWVukF6XSDayy852bgbUuZzEWX6S7LZM5UrC+ZN8X0YDF7FEA22vfgrVWmE
-         /U9g==
-X-Gm-Message-State: AFqh2kqmtGK26qlJrCx/AAQRILARByuN3gdMxorGQmYrp00ZkiKYZeJS
-        zQAWs5IwyPbuE19G0hlwtBT8yw==
-X-Google-Smtp-Source: AMrXdXvfmB6jJvru/xlfNUOX0PYXnlRnAIySB/9Oaj3KA00ntii9qjhOJPKti8muOdsK1HdA5OI10A==
-X-Received: by 2002:a5d:4a51:0:b0:2be:57b5:d50b with SMTP id v17-20020a5d4a51000000b002be57b5d50bmr2802921wrs.3.1674236537252;
-        Fri, 20 Jan 2023 09:42:17 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id l5-20020adfe9c5000000b002238ea5750csm22416303wrn.72.2023.01.20.09.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:42:16 -0800 (PST)
-Message-ID: <2b77d20c-efe4-a0f3-4260-5817f3068eb0@linaro.org>
-Date:   Fri, 20 Jan 2023 17:42:15 +0000
+        Fri, 20 Jan 2023 12:42:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164454F849;
+        Fri, 20 Jan 2023 09:42:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C69962013;
+        Fri, 20 Jan 2023 17:42:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57C3C433A1;
+        Fri, 20 Jan 2023 17:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674236560;
+        bh=WMahhW6oUd2zW6eBCstPrXu22SWG93RzbfOHBsyIEW8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=guFUxnOCFuHNzVn+ojSHmkOO6vd50slt/V26hSoreOwzXTTcrXI9Ba69r7cXs4eg7
+         qI/wt/u9gI0+o3i5/eBONpoa0TtTsENloBmouzjnH9raWWt6wxgKBJ+rqbd1pW4l33
+         2oKDcq61uIYNcBCccKZVYUILvcknqp4KXIMIg7aWNa3c3W43+cm+6Z4GQTMvpmnA16
+         EynmVv7buelQO3zfpXHrQDWhWhJm+Xm+dHdjRIKXDZchSTPISoToBdc96R40LKnYro
+         IjDfkblDblozrSMHnwTnJLpuGlxF43gWG7u8Y7C0pyDKBtaEZjuUb/8sFPhTzfBURg
+         Z2NPCOasa/fOg==
+Received: by mail-lj1-f175.google.com with SMTP id e16so6297722ljn.3;
+        Fri, 20 Jan 2023 09:42:40 -0800 (PST)
+X-Gm-Message-State: AFqh2kr3lNF1X/vDmjd21iv+TyhbNw26LgNR/2XaWkj7dpCk5PpI2hYA
+        g0a2X+WuHtBLYQts+BLSfXbDziN7kI3QppQUpKg=
+X-Google-Smtp-Source: AMrXdXt6Tvta5YOpbskhbejsHqM1dM6W6pAAEg9w/RUcutSgRTCoAvGHEmbj0qZW4G/b0Q3iTkPqWtLG32IMzZe4sRg=
+X-Received: by 2002:a2e:a5c4:0:b0:289:1305:680d with SMTP id
+ n4-20020a2ea5c4000000b002891305680dmr843375ljp.421.1674236558924; Fri, 20 Jan
+ 2023 09:42:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 3/3] nvmem: stm32: detect bsec pta presence for
- STM32MP15x
-Content-Language: en-US
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     Etienne CARRIERE <etienne.carriere@linaro.org>,
-        Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
-        Lionel DEBIEVE <lionel.debieve@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230118172940.841094-1-patrick.delaunay@foss.st.com>
- <20230118182856.v6.3.I59210046e368cfc22bd3cca2afe1653674f8ece8@changeid>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230118182856.v6.3.I59210046e368cfc22bd3cca2afe1653674f8ece8@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+ <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+ <20230118074047.GA27385@lst.de> <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
+ <20230119053545.GA16775@lst.de> <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
+In-Reply-To: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 20 Jan 2023 09:42:26 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4snf6cBYSDRbALSNM4OE36-dusir8HQQ90Li7u067ZWA@mail.gmail.com>
+Message-ID: <CAPhsuW4snf6cBYSDRbALSNM4OE36-dusir8HQQ90Li7u067ZWA@mail.gmail.com>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,107 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 12:29 AM Song Liu <song@kernel.org> wrote:
+>
+> On Wed, Jan 18, 2023 at 9:35 PM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > On Wed, Jan 18, 2023 at 01:52:51PM -0800, Song Liu wrote:
+> > > In this way we can use the array in the for loops, and use mod->core_text,
+> > > etc. when we only need to access one of them.
+> >
+> > Just use the array please instead of making it too ugly.  If that
+> > is the only sensible way to iterate we have a good argument for the
+> > array and can live with it.
+>
+> Hmm.. I think it won't be ugly outside of the struct definition...
+> Alternatively, how about use something like
+>
+> #define core_text mod_mem[MOD_MEM_TYPE_TEXT]
+> ...
+>
+> which is similar to
+>
+> struct sock {
+>         /*
+>          * Now struct inet_timewait_sock also uses sock_common, so please just
+>          * don't add nothing before this first member (__sk_common) --acme
+>          */
+>         struct sock_common      __sk_common;
+> #define sk_node                 __sk_common.skc_node
+> #define sk_nulls_node           __sk_common.skc_nulls_node
+> ...
+> };
 
+So here are the two versions, both with secondary addr_[min|max] for
+CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
 
-On 18/01/2023 17:29, Patrick Delaunay wrote:
-> On STM32MP15x SoC, the SMC backend is optional when OP-TEE is used;
-> the PTA BSEC should be used as it is done on STM32MP13x platform,
-> but the BSEC SMC can be also used: it is a legacy mode in OP-TEE,
-> not recommended but used in previous OP-TEE firmware.
-> 
-> The presence of OP-TEE is dynamically detected in STM32MP15x device tree
-> and the supported NVMEM backend is dynamically detected:
-> - PTA with stm32_bsec_pta_find
-> - SMC with stm32_bsec_check
-> 
-> With OP-TEE but without PTA and SMC detection, the probe is deferred for
-> STM32MP15x devices.
-> 
-> On STM32MP13x platform, only the PTA is supported with cfg->ta = true
-> and this detection is skipped.
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
+v2. Just use mod_mem array:
+https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?h=remotes/song-md/new_module_alloc_build_test_v2
 
+v3. mod_mem array and the defines:
+#define mod_core_text mod_mem[MOD_MEM_TYPE_TEXT]
+#define mod_core_data mod_mem[MOD_MEM_TYPE_DATA]
+etc.
+https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?h=remotes/song-md/new_module_alloc_build_test_v3
 
-Applied thanks,
+I personally like the v3 better. Please share you
+comments on this.
 
---srini
-
-> 
-> Changes in v6:
-> - added reviewed by Etienne Carriere
-> 
-> Changes in v5:
-> - update the BSEC SMC detection logic in stm32_romem_probe()
->    after Etienne Carierre review to support NVMEM probe after OP-TEE probe
-> 
-> Changes in v3:
-> - use of_find_compatible_node in optee_presence_check function
->    instead of of_find_node_by_path("/firmware/optee")
-> 
-> Changes in v2:
-> - Added patch in the serie for BSEC PTA support on STM32MP15x
->    with dynamic detection of OP-TEE presence and SMC support (legacy mode)
-> 
->   drivers/nvmem/stm32-romem.c | 38 +++++++++++++++++++++++++++++++++----
->   1 file changed, 34 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-> index 978a63edf297..ba779e26937a 100644
-> --- a/drivers/nvmem/stm32-romem.c
-> +++ b/drivers/nvmem/stm32-romem.c
-> @@ -159,6 +159,31 @@ static int stm32_bsec_pta_write(void *context, unsigned int offset, void *buf,
->   	return stm32_bsec_optee_ta_write(priv->ctx, priv->lower, offset, buf, bytes);
->   }
->   
-> +static bool stm32_bsec_smc_check(void)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	/* check that the OP-TEE support the BSEC SMC (legacy mode) */
-> +	ret = stm32_bsec_smc(STM32_SMC_READ_SHADOW, 0, 0, &val);
-> +
-> +	return !ret;
-> +}
-> +
-> +static bool optee_presence_check(void)
-> +{
-> +	struct device_node *np;
-> +	bool tee_detected = false;
-> +
-> +	/* check that the OP-TEE node is present and available. */
-> +	np = of_find_compatible_node(NULL, NULL, "linaro,optee-tz");
-> +	if (np && of_device_is_available(np))
-> +		tee_detected = true;
-> +	of_node_put(np);
-> +
-> +	return tee_detected;
-> +}
-> +
->   static int stm32_romem_probe(struct platform_device *pdev)
->   {
->   	const struct stm32_romem_cfg *cfg;
-> @@ -195,11 +220,16 @@ static int stm32_romem_probe(struct platform_device *pdev)
->   	} else {
->   		priv->cfg.size = cfg->size;
->   		priv->lower = cfg->lower;
-> -		if (cfg->ta) {
-> +		if (cfg->ta || optee_presence_check()) {
->   			rc = stm32_bsec_optee_ta_open(&priv->ctx);
-> -			/* wait for OP-TEE client driver to be up and ready */
-> -			if (rc)
-> -				return rc;
-> +			if (rc) {
-> +				/* wait for OP-TEE client driver to be up and ready */
-> +				if (rc == -EPROBE_DEFER)
-> +					return -EPROBE_DEFER;
-> +				/* BSEC PTA is required or SMC not supported */
-> +				if (cfg->ta || !stm32_bsec_smc_check())
-> +					return rc;
-> +			}
->   		}
->   		if (priv->ctx) {
->   			rc = devm_add_action_or_reset(dev, stm32_bsec_optee_ta_close, priv->ctx);
+Thanks,
+Song
