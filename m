@@ -2,114 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E1E674CF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E54674CF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjATGCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S231177AbjATGCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:02:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjATGB4 (ORCPT
+        with ESMTP id S229701AbjATGCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:01:56 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9E2B2A9;
-        Thu, 19 Jan 2023 22:01:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1674194486; bh=2HTFXG94hmGf8elB+ZGfbE05fbZFJ3N1BBWe/PnHMYg=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=CXCcqAAjf3jrbmcESAaVjifzWD4XGAJDWhDIcbzxTaTmr1yuchXTueHqsio/yrb1G
-         ft49Gqn5tkv90edo1fBSQhNqVZgk2FWuqPuRssbw523kEuH7370SgiDblq+0LM9GVM
-         4l9fU+cLNOYFHj6shVb/g4oO0GoXNFYQlwJwrlmbyHjnsrka8EEU31FQc+0g5X4pmd
-         irFf++3FKQvCOA5RwocFNPKtd26VOgNsQlPAby4oDnONg8M9fcEgobQQK2rEYfMFQl
-         FGGAYy6HbRbAGeCz7le7lxMU8hrK05QKrtDRVpwSGxu3mDVzEsJk8igpld3PatNLLN
-         20pJI5/+oseGg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([185.221.149.244]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MvK0X-1oSR1g3vaz-00rI6r; Fri, 20
- Jan 2023 07:01:26 +0100
-Message-ID: <c9b77d7df95c2ae354e655ada0f34ea3c83f0bba.camel@gmx.de>
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-From:   Mike Galbraith <efault@gmx.de>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Cc:     Pavel Machek <pavel@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-Date:   Fri, 20 Jan 2023 07:01:23 +0100
-In-Reply-To: <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
-         <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com> <Y8krsVFguwWLy+zT@duo.ucw.cz>
-         <Y8lCspFtQ0wg6uCy@uudg.org> <Y8mwF0m+M1+e/fz/@eldamar.lan>
-         <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Fri, 20 Jan 2023 01:02:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D8311E84;
+        Thu, 19 Jan 2023 22:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674194572; x=1705730572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qM+DFnnvJkoyvR1H6whsmmQlNslV3KwkAOtUcsz+XpQ=;
+  b=B3CpRZK6Xi3awaN+fyeL9HYibhQsJKnpJAn5Rl/fOXLcvgl2gojUDvQd
+   WiWlgxrKa+mlay9c4aX6TAZl0OE9ecMyj29smiEseNv890C1zsDiNYMHk
+   syMuSqmpjOV+RIjvyWsy6O1vmBKeUv+23Zr6Ox23pXmnJ726AUiudIGGh
+   uiPDT6Dg7wt4oDt8KtpFuVxBxZ4pnwZwfXJps5inGK2rHJrQo/XVs4qOH
+   /h9eUVCsDQmiKbPLfhOKH3yabuHS4g9PyZqHiOJ7gRsE/BPqyC1bNcU/e
+   4PZ6oK74qdireKT0352pdHrSjOOEPMnjWTZO8eIFSS03yTxyb57m/yXE7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305879815"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="305879815"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 22:02:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610365725"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="610365725"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 22:02:43 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIkU5-0002FI-34;
+        Fri, 20 Jan 2023 06:02:41 +0000
+Date:   Fri, 20 Jan 2023 14:01:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested
+ pointers
+Message-ID: <202301201328.KZrjrJXf-lkp@intel.com>
+References: <20230119235833.2948341-2-void@manifault.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ny3ueawLfOJf2WQgVtegw2ap7gBT/CvPRPQCFdlKZODxWZ2vuuA
- iRFFo+iiO8MWT288kxpCwH0BDCRWL8yS9dIOh5CoYDyUvSq8iDhSt2CUdGLI1JCxImxl9z1
- wgmbXrFgEGdPokq2cJ74qPSo5Uj/JU1dFoCRIY/PEP6xWFvcLM27VWGwE9xKK4dkqw2AL3j
- CjgJwcwY7ZGGGoBoTafzA==
-UI-OutboundReport: notjunk:1;M01:P0:IAKBSwuht70=;NhdDCTifPmQI9s9BFfDJr57WvvA
- gBAf2dcNknJMlcmwerzfG/Brur9S1wXfcqig3zCDMrvmYihzp3tujk1RQNS597xK/2S6Pd71d
- jm2RrXZ2JXhnPklpH7kOnEmDxV7zAWg6mHy/CbieFEAsjO9P7ECSeU7fzpetRUY0Qgi3uJuFE
- o8+cc2Pml/NmUzyFbWjatt8mgot+6pKNZTK089/PQmu1M3K2Z3t/nSh0Z4v955/l0KJQ9TMwF
- 5506z7U+n7ELvrBwkpatWTF562DA3sbvyHqKgfdCY5ac7PXtCCs55xLwBeAdV4ko/nqqijWO+
- k6JomYHRu+pmQLAcUJhmQ8dK7Zt4TqSSqDmGEsK4vz9dfLx+rXAqf33RHggO5rfj4afywhQdL
- 8zw7PIYj8F/kvYBiUvy6Cdnp9lyGRBqUp4cHpqbB26fPK+lDeQpsuRFmbX2maysOMs9vZQtt/
- 0r3OX3yOTyOoHXHDvP8FlL0MhMpDzDdxZiFjATvPZJ98Q8Rc2/sTaMyVNRLPs4VNmnEP/1XDr
- gSSHTvSqMObqiYwPl0t4sRGittA0ArzVv0ij9a0ABgEgjPaRnjG+Yg18Q1+8/vqBqVMkaaoK0
- vuPbVwqq4Ms3/b9zi5tlj0tLEWKuxexsD8WWsCT/Fd9aQHUpDRGMegHS77yaOhGc5AIWS0GIJ
- x9xWOQxH99cI5hjVm3+qDFqOd47HfgHMbBaFiS/W8lc1t1LJrpxoHrWRzVzUk10Os4CteTp19
- UbmunKzQkj/omL/Csn0NLAF3k6BfcSVqe8lcb+mc989DOG1itipR/4nStVCofyPHcZ8WEwjUI
- ICDwwLU7UqUBUZ2dRTYptv0Q2P1UgKjal6O9VRsDoz8/zwcftSC18cem25IwSZNN4Xbd/l/BX
- PRHUIxWcWPj6eTjiptxJqcnpXvNmwM6JEGnLY3m78NOJLbdKgCKn7VCk6gx/TYEn5xAEdtBHb
- G5b3CHZANeiPaOb2RM5ReyLmx3w=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119235833.2948341-2-void@manifault.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-19 at 16:09 -0700, Jens Axboe wrote:
->
-> I guess we need to twiddle that asm to deal with eg 16 bits, rather than
-> attempt to backport any TIF removal patches.
+Hi David,
 
-Hm, 'mov' gets past the weird ass rules committee, so seems it should
-be trivial for someone who speaks arm.  This built/booted once on rpi4.
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index d5bc1dbdd2fd..a4931bff8ea9 100644
-=2D-- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -751,7 +760,12 @@ SYM_CODE_START_LOCAL(ret_to_user)
- 	bl	trace_hardirqs_off
- #endif
- 	ldr	x19, [tsk, #TSK_TI_FLAGS]
-+#ifndef CONFIG_PREEMPT_RT
- 	and	x2, x19, #_TIF_WORK_MASK
-+#else
-+	mov	x2, #_TIF_WORK_MASK
-+	and	x2, x19, x2
-+#endif
- 	cbnz	x2, work_pending
- finish_ret_to_user:
- 	user_enter_irqoff
+[auto build test WARNING on bpf-next/master]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230119235833.2948341-2-void%40manifault.com
+patch subject: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested pointers
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230120/202301201328.KZrjrJXf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8f6df14342b1be3516f8e21037edf771df851427
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+        git checkout 8f6df14342b1be3516f8e21037edf771df851427
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/btf.c:533:5: warning: no previous prototype for function 'bpf_find_btf_id' [-Wmissing-prototypes]
+   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+       ^
+   kernel/bpf/btf.c:533:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/bpf_find_btf_id +533 kernel/bpf/btf.c
+
+   532	
+ > 533	s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+   534	{
+   535		struct btf *btf;
+   536		s32 ret;
+   537		int id;
+   538	
+   539		btf = bpf_get_btf_vmlinux();
+   540		if (IS_ERR(btf))
+   541			return PTR_ERR(btf);
+   542		if (!btf)
+   543			return -EINVAL;
+   544	
+   545		ret = btf_find_by_name_kind(btf, name, kind);
+   546		/* ret is never zero, since btf_find_by_name_kind returns
+   547		 * positive btf_id or negative error.
+   548		 */
+   549		if (ret > 0) {
+   550			btf_get(btf);
+   551			*btf_p = btf;
+   552			return ret;
+   553		}
+   554	
+   555		/* If name is not found in vmlinux's BTF then search in module's BTFs */
+   556		spin_lock_bh(&btf_idr_lock);
+   557		idr_for_each_entry(&btf_idr, btf, id) {
+   558			if (!btf_is_module(btf))
+   559				continue;
+   560			/* linear search could be slow hence unlock/lock
+   561			 * the IDR to avoiding holding it for too long
+   562			 */
+   563			btf_get(btf);
+   564			spin_unlock_bh(&btf_idr_lock);
+   565			ret = btf_find_by_name_kind(btf, name, kind);
+   566			if (ret > 0) {
+   567				*btf_p = btf;
+   568				return ret;
+   569			}
+   570			spin_lock_bh(&btf_idr_lock);
+   571			btf_put(btf);
+   572		}
+   573		spin_unlock_bh(&btf_idr_lock);
+   574		return ret;
+   575	}
+   576	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
