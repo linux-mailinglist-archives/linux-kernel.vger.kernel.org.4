@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359B9675A6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5189B675A74
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjATQto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S229711AbjATQu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjATQtm (ORCPT
+        with ESMTP id S230504AbjATQuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:49:42 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05314EE5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:49:41 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id bk16so5355580wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ReqL3/KdTtoMI5gOn47wEfy8Brch/hDuTRzHxmxqXLI=;
-        b=HrWAbzIu1bfu5+Ce6Jw2FEMPVasYO23fFdoUKI+s2D5dbd/iFNqYGuO1NWjYcusFKy
-         fP9liXt78VZOHABtZOIYTAWWAAwkkrz7GVp/N10X76oFvPrJmDlHk+4Fgwv8rjCKwuus
-         tFouDnkYAVUa4IIcvCYAQxzY/2uIqD/2hPonHIq4+yuN/6kQgGsnpArb/o55+WXIgbEB
-         tRn0xd4tH8ozAowgLV/G7pe9Hr7HEcWabeLEvmDCDJNMCpwGvWH2rIokvMONX8B9UE5M
-         pQuSJnDvLsfG3xLeUvaKGtLV2rDhWCWwojOJBeUj/zyGuO6T4FPiweqaOlj1sZm9tP9y
-         mvEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ReqL3/KdTtoMI5gOn47wEfy8Brch/hDuTRzHxmxqXLI=;
-        b=GrEa7MBqZgSXYHIqFZELC9sAx3KP3OOo0Dv22yykXYA4+zwoNXPKZuyxbd0iVmBTAe
-         p9Oe7ReJC6CS31cFTt1nkugNpr7cYlx5hMrwZH4hJoTmZhqkl0pJH80ocGRykiRrFMAP
-         SOrtF6bolITvQxoVQYq7ziaEr7lGqS1CFZWU/FMxglTqkEjM9xB26M8BjnJR0Os3j3h3
-         29ah5C+hyUAmkyLuLthCETjxNqNMP7a/2r8Sq1Dq2cDTIWZprHxqOWiO6rMNJYZLCKOG
-         y5J5B/n3dS35F8yyr/JQNJ9JrXMpOfcsn3qh2FB6ltEXfPLjFm1meqv+NbilDa97f5s6
-         Aefw==
-X-Gm-Message-State: AFqh2koQwCVCb8vOZq/wPoYdqwZXlIMOG/Bul4Fy/nBuuu4AqsrJJ047
-        T/Rdx6uS0EEhEjhL852KwdOM9Q==
-X-Google-Smtp-Source: AMrXdXtEWQc0BoNfAHarjgxoITnBqOmzi3Fm+XNUr6JyoaeecEc3V7G+XJtcFtNOp9ktTOsRs0d5CQ==
-X-Received: by 2002:a5d:4e84:0:b0:2be:c94c:ebff with SMTP id e4-20020a5d4e84000000b002bec94cebffmr1852291wru.56.1674233380271;
-        Fri, 20 Jan 2023 08:49:40 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id y18-20020a5d6152000000b002425be3c9e2sm35581781wrt.60.2023.01.20.08.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 08:49:39 -0800 (PST)
-Message-ID: <e5ff49d4-45c7-8c4a-d624-d8f7cc9ce2cb@linaro.org>
-Date:   Fri, 20 Jan 2023 16:49:38 +0000
+        Fri, 20 Jan 2023 11:50:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2A8C79C0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=F1zALDE7aTxyrS74rgv02kuygXmkrK+dwh/wuZBtihs=; b=jpqicOFLnybxU1J/sYTsyjmHPn
+        IEXlj2YUuwcpXrOpxj/kOzWraZQxHDLwL/HfUlrGfp7en08E+Avdj99YfFJk4Z/yRrQePX17QhoS+
+        FA2mD3Kigz+l/dmYCChZGbrulREuzox3D1s6THtew9Ls+d3Svi+wdKOQf0y9RCMaKD+n77iffBNvp
+        LpDQp1f8VOeerGgi1fQvCHNbTXO5MvvYGluxo1BA+N2fFNzNVGFgtHSziBUaY4aCKyT0hN7n+V2Nj
+        ZzpoLyWOq2pnrBe+A3C34mNKkV5vKx/QB8xoHfHIH4J4YXe4tRXqut4+NIv0Sx5IOGnAQhLoMyFGW
+        luSl9FIg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIuaE-002ElZ-3c; Fri, 20 Jan 2023 16:49:42 +0000
+Date:   Fri, 20 Jan 2023 16:49:42 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-40-surenb@google.com>
+ <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
+ <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+ <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+ <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6350: Add camera clock
- controller
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
- <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 13:13, Luca Weiss wrote:
-> +		camcc: clock-controller@ad00000 {
-> +			compatible = "qcom,sm6350-camcc";
-> +			reg = <0 0x0ad00000 0 0x16000>;
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
+On Fri, Jan 20, 2023 at 08:45:21AM -0800, Suren Baghdasaryan wrote:
+> On Fri, Jan 20, 2023 at 8:20 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
+> > > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
+> > > > > > a list and free them in groups using one call_rcu() call per group.
+> > > > >
+> > > > > After some more clarification I can understand how call_rcu might not be
+> > > > > super happy about thousands of callbacks to be invoked and I do agree
+> > > > > that this is not really optimal.
+> > > > >
+> > > > > On the other hand I do not like this solution much either.
+> > > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
+> > > > > much with processes with a huge number of vmas either. It would still be
+> > > > > in housands of callbacks to be scheduled without a good reason.
+> > > > >
+> > > > > Instead, are there any other cases than remove_vma that need this
+> > > > > batching? We could easily just link all the vmas into linked list and
+> > > > > use a single call_rcu instead, no? This would both simplify the
+> > > > > implementation, remove the scaling issue as well and we do not have to
+> > > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+> > > >
+> > > > Yes, I agree the solution is not stellar. I wanted something simple
+> > > > but this is probably too simple. OTOH keeping all dead vm_area_structs
+> > > > on the list without hooking up a shrinker (additional complexity) does
+> > > > not sound too appealing either.
+> > >
+> > > I suspect you have missed my idea. I do not really want to keep the list
+> > > around or any shrinker. It is dead simple. Collect all vmas in
+> > > remove_vma and then call_rcu the whole list at once after the whole list
+> > > (be it from exit_mmap or remove_mt). See?
+> >
+> > Yes, I understood your idea but keeping dead objects until the process
+> > exits even when the system is low on memory (no shrinkers attached)
+> > seems too wasteful. If we do this I would advocate for attaching a
+> > shrinker.
+> 
+> Maybe even simpler, since we are hit with this VMA freeing flood
+> during exit_mmap (when all VMAs are destroyed), we pass a hint to
+> vm_area_free to batch the destruction and all other cases call
+> call_rcu()? I don't think there will be other cases of VMA destruction
+> floods.
 
-Should you include
-
-required-opps = <&rpmhpd_opp_low_svs>;
-
-?
-
----
-bod
-
+... or have two different call_rcu functions; one for munmap() and
+one for exit.  It'd be nice to use kmem_cache_free_bulk().
