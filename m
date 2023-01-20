@@ -2,92 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D684675A91
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47168675A95
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjATQ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S229885AbjATQ5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATQ4H (ORCPT
+        with ESMTP id S229698AbjATQ5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:56:07 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA437B2EA;
-        Fri, 20 Jan 2023 08:55:33 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id mg12so15499427ejc.5;
-        Fri, 20 Jan 2023 08:55:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9m2NFPSTNnzbZ6uoQzeQe+dPEOJYdnmvCnlxt5htzBY=;
-        b=7pRzDJIPD7TXT2dXMGXvnL7cGFHaa+7wIksxMWVMlO+9rnPc4d9W2HiDmZU8RcVwFZ
-         lhdO8HhFEo1hGTW5pPVMgZCimvJBUKPU8/TQ/eIOhVCFJNhfahVh2bwE68GG9zSA2lFG
-         AoPtx2YlqcWGz3MfqcuJJLlAQh86ElL8KgLe5f8QQOyn468n2mMI1w4XuDbWv7Mx6j5/
-         GUhn630TGqPV8jTdwjhI7aenryO0MTT5OisTVNNsWop9NVgbphvTUB6upeRfRgr+gDoY
-         Xh1vSc8HB4ZKk+xcaC/bsJ6kkBKiDgOffZkDXMJIq/WH140gZIEtmHzJFEpCfvcrohjp
-         eBzQ==
-X-Gm-Message-State: AFqh2kqgSI2QYnO+BKCA4yqkm8YPNUt0HI5kMCfZTXD5nEfFM5+zxXIt
-        8xq61iV9O/mAm5TpBvPP2e/3oVu6VHXZacvRfn8=
-X-Google-Smtp-Source: AMrXdXvDOE6HlqspQEUNRnN4d/uMbmudFtV/inUv2YbDlb4+YLsxba5iDHoVSZUuc0jyAOgUYFvvuMt74P4miet8h6g=
-X-Received: by 2002:a17:906:940c:b0:86f:d628:e184 with SMTP id
- q12-20020a170906940c00b0086fd628e184mr1926123ejx.96.1674233715519; Fri, 20
- Jan 2023 08:55:15 -0800 (PST)
+        Fri, 20 Jan 2023 11:57:17 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A8D7B2CC;
+        Fri, 20 Jan 2023 08:56:52 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 17A60100007;
+        Fri, 20 Jan 2023 16:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674233801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HF1zcyrDbSQAeGSxKbh2vrY+GncQaEmDCUhB8D21gCo=;
+        b=MI7kNqGSatGfQSpefBSK3zCXWaWNQXihqIOmpuEQjTfhLCjwYTwJ6M1OBo2RVKK80IcOkz
+        5qzrFwsRv9Ictyt5oBJh1tOCcxvQbUbUwKboBTxDEukZ9mS18HTUD1F/ecpRnG9q/G6kr1
+        XEXu6vLMbEEos5+cRvqrQjHS3DZ10Or29DIJHj+wbOX4ueyXKfDuSYDBPLFUpPcgUdMCue
+        /AEEuBob4VCgXeapkpHVMljQuzlyLeaxxlxtRtVjvJI1ebgT0p006gLf0IYJNHVEQSlj7m
+        GCgdImiae0MPlZVrSr9r0+NzqFrTL22auiZ3IqFv0K6zk5OOcEmPuLiri0/7dQ==
+Date:   Fri, 20 Jan 2023 17:56:39 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 08/14] rtc: pcf2127: add support for PCF2131
+ interrupts on output INT_A
+Message-ID: <Y8rHx8U4peB+fnW8@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+ <20221215150214.1109074-9-hugo@hugovil.com>
 MIME-Version: 1.0
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1> <20230113001132.3375334-16-paulmck@kernel.org>
-In-Reply-To: <20230113001132.3375334-16-paulmck@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 17:55:04 +0100
-Message-ID: <CAJZ5v0gNbp4ZgPRDfLV6kmieUo7zcQSEGjdsB=G8Zr4W=HAHoQ@mail.gmail.com>
-Subject: Re: [PATCH rcu v2 16/20] kernel/power: Remove "select SRCU"
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, John Ogness <john.ogness@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215150214.1109074-9-hugo@hugovil.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 1:11 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> Kconfig statements.
->
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: <linux-pm@vger.kernel.org>
-> Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
-> Reviewed-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  kernel/power/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index 60a1d3051cc79..4b31629c5be4b 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -118,7 +118,6 @@ config PM_SLEEP
->         def_bool y
->         depends on SUSPEND || HIBERNATE_CALLBACKS
->         select PM
-> -       select SRCU
->
->  config PM_SLEEP_SMP
->         def_bool y
-> --
+On 15/12/2022 10:02:09-0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> The PCF2127 and PCF2129 have one output interrupt pin. The PCF2131 has
+> two, named INT_A and INT_B. The hardware support that any interrupt
+> source can be routed to either one or both of them.
+> 
+> Force all interrupt sources to go to the INT A pin.
+> 
+> Support to route any interrupt source to INT A/B pins is not supported
+> by this driver at the moment.
+> 
 
-Applied as 6.3 material, thanks!
+The main issue with this is that this will created a breaking change
+once someone needs support for INTB
+
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 4148e135f935..68af4d0438b8 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -191,6 +191,7 @@ struct pcf21xx_config {
+>  	int max_register;
+>  	unsigned int has_nvmem:1;
+>  	unsigned int has_bit_wd_ctl_cd0:1;
+> +	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
+>  	u8 regs_td_base; /* Time/data base registers. */
+>  	u8 regs_alarm_base; /* Alarm function base registers. */
+>  	u8 reg_wd_ctl; /* Watchdog control register. */
+> @@ -879,6 +880,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x1d,
+>  		.has_nvmem = 1,
+>  		.has_bit_wd_ctl_cd0 = 1,
+> +		.has_int_a_b = 0,
+>  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> @@ -902,6 +904,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x19,
+>  		.has_nvmem = 0,
+>  		.has_bit_wd_ctl_cd0 = 0,
+> +		.has_int_a_b = 0,
+>  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> @@ -925,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x36,
+>  		.has_nvmem = 0,
+>  		.has_bit_wd_ctl_cd0 = 0,
+> +		.has_int_a_b = 1,
+>  		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2131_REG_WD_CTL,
+> @@ -1017,6 +1021,28 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
+>  	return ret;
+>  }
+>  
+> +/* Route all interrupt sources to INT A pin. */
+> +static int pcf2127_configure_interrupt_pins(struct device *dev)
+> +{
+> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Mask bits need to be cleared to enable corresponding
+> +	 * interrupt source.
+> +	 */
+> +	ret = regmap_write(pcf2127->regmap,
+> +			   PCF2131_REG_INT_A_MASK1, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(pcf2127->regmap,
+> +			   PCF2131_REG_INT_A_MASK2, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+> +}
+> +
+>  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  			 int alarm_irq, const char *name, const struct pcf21xx_config *config)
+>  {
+> @@ -1076,6 +1102,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+>  	}
+>  
+> +	if (pcf2127->cfg->has_int_a_b) {
+> +		/* Configure int A/B pins, independently of alarm_irq. */
+> +		ret = pcf2127_configure_interrupt_pins(dev);
+> +		if (ret) {
+> +			dev_err(dev, "failed to configure interrupt pins\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	if (pcf2127->cfg->has_nvmem) {
+>  		struct nvmem_config nvmem_cfg = {
+>  			.priv = pcf2127,
+> -- 
+> 2.30.2
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
