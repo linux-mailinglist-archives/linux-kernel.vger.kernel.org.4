@@ -2,191 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2236749CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48396749D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjATDNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 22:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S229648AbjATDPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 22:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjATDN0 (ORCPT
+        with ESMTP id S229462AbjATDO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 22:13:26 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF558AEDA2;
-        Thu, 19 Jan 2023 19:13:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YPQL3Ug7Z5R7pj76EMFPQOXfs2qZyZRUwVBtMWZod2hQr6vlSyGu1/qsWGbBzU+l3KAMxdkWYz5/qfq1uVPy1aTL2zuvtLwAhk6UyM18yNjyMcj0pgGo+RteMM7CxJqpj3Wmiv6vk1LF3Q0CdUTOFqyFaNI+A13IHMpyRP27aCHl1k83VKzGN8ZHyTDhpbTIunEZBQ+R58ajlqJfCj5E1Up5Plt4i3i5odYVnHUxcKfBebMAH4luOzBwc4cLOOsc/0sxtKChV0Ytpb84TSvJnJNq6PqdUyAH+B2XVP2KR9gaTPeGU4hNAxWPLI4BF2qU9q7nEyqGay915wwBW5TZPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r55GGCszmmGL2c3WK5rvEb3vBVGxF2/mrici6yBv4V4=;
- b=dKuTlnZ+m6yYOZJKPdl2YKQNmDzxTJD/94T5BT6MejiKsjWZFxxstiO0YqOzSO8aOE0JI6zUvAXi8mCpA04epsGiLocb5pvJwe9YyHfE7sWkSf8VPdQKx9RsSdH1PQkZdkLgqsVHHSjz7wJWg2Dr5dmLyQTlAaY/QsqTMeavVx9oWRs3hEssq72ALgJX/R1u42YTA6IkGDJjafrDcCD23V7O0FqWyXNGcBfVYMHtkDkWNnFKXWEElMYJhiSdRAvUN1UD3/BSTp/vSoqmKLh9vCwjGLaSctYhWCYjQZ6L+JDfibJzFn4yv80ru0oI5r5m3T2KfogVMgGUFWUAQ/Tb5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r55GGCszmmGL2c3WK5rvEb3vBVGxF2/mrici6yBv4V4=;
- b=34AQ5sE3mVfzt07tCR9ff+mpGz3hqL9u+/BJGmD4n2CrKzqkKcGaBcNIs6En60KvtwqF3y4VO3+AW1QZ5gf8k8QMY8IdveG9XeC9TSJWjsbGNHGfAlhfZZPE8Rl+Z2TdBB/1pINAwwXOio0+NekFFOIuq7X88OdyjxkXpeahJfM=
-Received: from DS7PR03CA0303.namprd03.prod.outlook.com (2603:10b6:8:2b::19) by
- DM4PR12MB7622.namprd12.prod.outlook.com (2603:10b6:8:109::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.23; Fri, 20 Jan 2023 03:13:20 +0000
-Received: from DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::9d) by DS7PR03CA0303.outlook.office365.com
- (2603:10b6:8:2b::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25 via Frontend
- Transport; Fri, 20 Jan 2023 03:13:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT035.mail.protection.outlook.com (10.13.172.100) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6023.16 via Frontend Transport; Fri, 20 Jan 2023 03:13:20 +0000
-Received: from aiemdeew.1.ozlabs.ru (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 19 Jan
- 2023 21:13:07 -0600
-From:   Alexey Kardashevskiy <aik@amd.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-CC:     <kvm@vger.kernel.org>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, Yury Norov <yury.norov@gmail.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Juergen Gross <jgross@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH kernel v3 3/3] x86/sev: Do not handle #VC for DR7 read/write
-Date:   Fri, 20 Jan 2023 14:10:47 +1100
-Message-ID: <20230120031047.628097-4-aik@amd.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230120031047.628097-1-aik@amd.com>
-References: <20230120031047.628097-1-aik@amd.com>
+        Thu, 19 Jan 2023 22:14:59 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FE246B5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:14:58 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id n2so2999841qvo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:14:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4xKzm9ndNgAZ3n1qGRub6U8C9Gfc3KHDIIF/tjQDlEM=;
+        b=m44zaOQkQ6ybI6EyHHLAMaKTSDPlX152AcKKf/sdncMKOtzTj5XdOkYow8SRBzCSWh
+         EtIkORMprMVXC2tqTdODJ1BMRULcWsZa8H8Eb7HponRkwZEw8BCsxdbry0jorzjdyPMo
+         hNKDLBH8k5iXsaC9wFlQ8M9/5tWc30NrUj0WU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4xKzm9ndNgAZ3n1qGRub6U8C9Gfc3KHDIIF/tjQDlEM=;
+        b=u/mYEgVMJtIoPDLYMBkCiUBRZMJj1g8nEStFdZWVIoMxkqWnaPl8PUsZEXzmXqhknB
+         yTfyh3hTGps5EUtiT9YgJNfBNCCrMUswVHx6xs+hjouF6XNmAWiN4ah+zxzM1e/14TS7
+         zxEEMHlPBjnYjpmSAPDT3JACSYsayU+S9B0n5pXrEZ50zmQcugbf/aO1Qx8vns25GsGr
+         yDxC5Vf+ZkFY8PjTzqVzeCU5tsP4d/d//hrLsbArt8Dso/9Z+HZLcw7eTN7nf02RSlG1
+         1ygOw7xaSmzgYkYcH8QkHeDoMjaHlu7gsu/SIBKrYK86XyBvxDYLlY68mhOvhAOItH22
+         FnOA==
+X-Gm-Message-State: AFqh2kos+STO82ky84WbwmDyyLtqmGdJ8SUPVVItjkxBopwYrLd9xvoo
+        40M8344Ucd2VknW36r1LX8/HNcoDT4wHqP1U
+X-Google-Smtp-Source: AMrXdXtpT0zkxvA6pOTV7mgIcAXwUW5c9AzZqy9wFlj68ECsfrrn7DoOmRWSp+Jeeku//5n831bY8w==
+X-Received: by 2002:a05:6214:5d11:b0:534:a476:e10 with SMTP id me17-20020a0562145d1100b00534a4760e10mr18371006qvb.25.1674184497085;
+        Thu, 19 Jan 2023 19:14:57 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05620a0d8600b006fa43e139b5sm25312634qkl.59.2023.01.19.19.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 19:14:56 -0800 (PST)
+Date:   Fri, 20 Jan 2023 03:14:55 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+Message-ID: <Y8oHL0uuSEef5aiI@google.com>
+References: <20230118073014.2020743-1-qiang1.zhang@intel.com>
+ <20230118180714.GD2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT035:EE_|DM4PR12MB7622:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d553487-8014-4529-f8c2-08dafa944890
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R3JO53eyfBJpXDk7B8dWVFm02xOS6WpdG8jCcw9o+t7UZtdYNnTRQcqi/VusWuL4tpS8pG0BWsIvZeVIaHYo4ZI2k4CSSA8YOZJ3gUnFdyWvWCPTs7SC3UlVFMTw9TBhnWTPwLT1zcSZtarYyOozT9XsRd/lk077kAvK/BgBKE8hK6iarPQdc9TUjCqqzzB7nD6LIyBXk/Hl5p8VFnGdyHVjPMAfuxu8Wiy1hYUG4+4VZ+fgE2LG7U2o2hV2aOY0Ddsoh/KKwGxOMZ8lfoqLkIAx02HpJrnVwdFH0Dm7ComEoIplHCZdsRnhBQepFZYVrAnucbsQRRi6s6aHrU3o9HWOGgffAmUPP8BJcJ/4C45WzQDlu8c0ghiq2rwzRCo8ZU0hlUD9D8ploR54YXw0yzmmIdfBIeTCi+jekPpBh7DbND565jknAq0uMiYqmhml/FIDsn/GqRazrAU/VZOhe4o2bBPs6MQPolP5VcoBdM/IVLKs3Hptlvsr+O9UxmY1nNDItSlf7/3s7+7PF1QHOWct7rSwIbgcaqAy3gJZSMp8OI04VEk2xDLMX7LcRoAOSper30/naHknMFKZowsrFNaGZyMsqPzd7qNCEutsYlQHGfpD3HIg05wAhNh/wZ8JgNBTiDHxEMoUxQ8HEZDhTlFV9KVB719PrpCwPis6PTME8lzGg+NGcnyfSr9M7qP96bXh4zNSh7EV4xpVNLlJ68B6yNYGnUosMD1NXDJIa9s=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(40470700004)(36840700001)(46966006)(82740400003)(81166007)(36860700001)(7049001)(5660300002)(356005)(2906002)(8676002)(4326008)(7416002)(6862004)(8936002)(70586007)(70206006)(426003)(40480700001)(2616005)(6200100001)(82310400005)(478600001)(47076005)(16526019)(186003)(26005)(336012)(1076003)(316002)(54906003)(41300700001)(40460700003)(6666004)(37006003)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 03:13:20.5129
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d553487-8014-4529-f8c2-08dafa944890
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7622
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118180714.GD2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With MSR_AMD64_SEV_DEBUG_SWAP enabled, the VM should not get #VC
-events for DR7 read/write which it rather avoided.
+On Wed, Jan 18, 2023 at 10:07:14AM -0800, Paul E. McKenney wrote:
+> On Wed, Jan 18, 2023 at 03:30:14PM +0800, Zqiang wrote:
+> > When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's ->
+> > grpmask has not been cleared from the corresponding rcu_node structure's
+> > ->qsmask, after that will clear and report quiescent state, but in this
+> > time, this also means that current grace period is not end, the current
+> > grace period is ongoing, because the rcu_gp_in_progress() currently return
+> > true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossible
+> > to return true.
+> > 
+> > This commit therefore remove impossible rcu_gp_kthread_wake() calling.
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> 
+> Queued (wordsmithed as shown below, as always, please check) for further
+> testing and review, thank you both!
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit fbe3e300ec8b3edd2b8f84dab4dc98947cf71eb8
+> Author: Zqiang <qiang1.zhang@intel.com>
+> Date:   Wed Jan 18 15:30:14 2023 +0800
+> 
+>     rcu: Remove never-set needwake assignment from rcu_report_qs_rdp()
+>     
+>     The rcu_accelerate_cbs() function is invoked by rcu_report_qs_rdp()
+>     only if there is a grace period in progress that is still blocked
+>     by at least one CPU on this rcu_node structure.  This means that
+>     rcu_accelerate_cbs() should never return the value true, and thus that
+>     this function should never set the needwake variable and in turn never
+>     invoke rcu_gp_kthread_wake().
+>     
+>     This commit therefore removes the needwake variable and the invocation
+>     of rcu_gp_kthread_wake() in favor of a WARN_ON_ONCE() on the call to
+>     rcu_accelerate_cbs().  The purpose of this new WARN_ON_ONCE() is to
+>     detect situations where the system's opinion differs from ours.
+>     
+>     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>     Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index b2c2045294780..7a3085ad0a7df 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  {
+>  	unsigned long flags;
+>  	unsigned long mask;
+> -	bool needwake = false;
+>  	bool needacc = false;
+>  	struct rcu_node *rnp;
+>  
+> @@ -1988,7 +1987,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		 * NOCB kthreads have their own way to deal with that...
+>  		 */
+>  		if (!rcu_rdp_is_offloaded(rdp)) {
+> -			needwake = rcu_accelerate_cbs(rnp, rdp);
+> +			/*
+> +			 * The current GP has not yet ended, so it
+> +			 * should not be possible for rcu_accelerate_cbs()
+> +			 * to return true.  So complain, but don't awaken.
+> +			 */
+> +			WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
+>  		} else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
+>  			/*
+>  			 * ...but NOCB kthreads may miss or delay callbacks acceleration
+> @@ -2000,8 +2004,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		rcu_disable_urgency_upon_qs(rdp);
+>  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>  		/* ^^^ Released rnp->lock */
+> -		if (needwake)
+> -			rcu_gp_kthread_wake();
 
-Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
----
-Changes:
-v2:
-* use new bit definition
----
- arch/x86/include/asm/msr-index.h       | 1 +
- tools/arch/x86/include/asm/msr-index.h | 1 +
- arch/x86/kernel/sev.c                  | 6 ++++++
- 3 files changed, 8 insertions(+)
+AFAICS, there is almost no compiler benefit of doing this, and zero runtime
+benefit of doing this. The WARN_ON_ONCE() also involves a runtime condition
+check of the return value of rcu_accelerate_cbs(), so you still have a
+branch. Yes, maybe slightly smaller code without the wake call, but I'm not
+sure that is worth it.
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index cb3d0f6e6ac2..e15afe3500ff 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -574,6 +574,7 @@
- #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
- #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
- #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-+#define MSR_AMD64_SEV_DEBUG_SWAP	BIT_ULL(7)
- 
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
- 
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index 37ff47552bcb..27c1c349e49b 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -565,6 +565,7 @@
- #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
- #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
- #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-+#define MSR_AMD64_SEV_DEBUG_SWAP	BIT_ULL(7)
- 
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
- 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 679026a640ef..8184f8ba4edc 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -1618,6 +1618,9 @@ static enum es_result vc_handle_dr7_write(struct ghcb *ghcb,
- 	long val, *reg = vc_insn_get_rm(ctxt);
- 	enum es_result ret;
- 
-+	if (sev_status & MSR_AMD64_SEV_DEBUG_SWAP)
-+		return ES_VMM_ERROR;
-+
- 	if (!reg)
- 		return ES_DECODE_FAILED;
- 
-@@ -1655,6 +1658,9 @@ static enum es_result vc_handle_dr7_read(struct ghcb *ghcb,
- 	struct sev_es_runtime_data *data = this_cpu_read(runtime_data);
- 	long *reg = vc_insn_get_rm(ctxt);
- 
-+	if (sev_status & MSR_AMD64_SEV_DEBUG_SWAP)
-+		return ES_VMM_ERROR;
-+
- 	if (!reg)
- 		return ES_DECODE_FAILED;
- 
--- 
-2.38.1
+And, if the opinion of system differs, its a bug anyway, so more added risk.
+
+
+>  
+>  		if (needacc) {
+>  			rcu_nocb_lock_irqsave(rdp, flags);
+
+And when needacc = true, rcu_accelerate_cbs_unlocked() tries to do a wake up
+anyway, so it is consistent with nocb vs !nocb.
+
+So I am not a fan of this change. ;-)
+
+thanks,
+
+ - Joel
 
