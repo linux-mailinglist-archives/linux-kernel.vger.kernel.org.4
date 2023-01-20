@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7386675A1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C362675A27
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjATQgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S230213AbjATQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjATQgj (ORCPT
+        with ESMTP id S229910AbjATQjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:36:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C996D917FF;
-        Fri, 20 Jan 2023 08:36:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8276061FFE;
-        Fri, 20 Jan 2023 16:35:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A07DC4339B;
-        Fri, 20 Jan 2023 16:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674232549;
-        bh=r7K+Ya5L1lTN5wHwgGTJIKfXMxPBDnujeeK5v157kB4=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=QqJae6/KoJEjT+YlHt6Ax4bIYKhR2ElNfUU4VM1c+uOOOAw+ArFNNkF05QjSDmQ3j
-         yVM7CmnOPNhaFUKOxQlCB5qG8xd3KogywribmeUqC1Eh+rhWy9NArEGzc9pmTqky2x
-         GtNJP8nBfOYKVCdlMROJX4+48hv2nH9vPZ825a4K5A/y2BYVlQNHWaYSdhVD9mUGTw
-         7/W9fCoGWGfFskotm2g32pUBySomRq1g3P9OoaP2ZgmVJFR/cw5+PaKKPBxJXjx9nW
-         EocxLbbyun+qcgPLaKQDpsu/aJwNnvP47ntZQnh2vfdeiWzb/HaXoCN3xaHfzWigE/
-         xdHUPbov5pKSw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120133010.299797-1-krzysztof.kozlowski@linaro.org>
-References: <20230120133010.299797-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] regulator: dt-bindings: fixed-regulator: allow gpios
- property
-Message-Id: <167423254806.1373484.8432300435483887839.b4-ty@kernel.org>
-Date:   Fri, 20 Jan 2023 16:35:48 +0000
+        Fri, 20 Jan 2023 11:39:23 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AD94699;
+        Fri, 20 Jan 2023 08:39:20 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1AE58FF809;
+        Fri, 20 Jan 2023 16:39:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674232759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RTcqpcvjSuMhMocjoOJ/438aoJ+MVvQH8jGg8nUJVFs=;
+        b=UgsGEBFradR2vJ/uKQZyFKy1n+VNMKyvJZRXJqKyf3d7Njiz/zvui1+dBOQYGl5fM6mAN/
+        2CD9WCo5y8OYzN/4Yzn6kCtKs4oRdouV2/up6CLL0CD9up7v3OJDFcBId9T2ilf7jtsp4J
+        7/FfC9xL0AJbVJtZnQmYcStq16Si0gSijHaepuRGbP0eLiaJst+3ftZylEuEhmmQ/ykO8x
+        +C3Oyy8EDrdNvZS202w/pB7SlZbDroPwH978z7DJfrtiK7nZJ53A2XstOvnM0A0H9MpSH8
+        S5vEH2DVT2RgUC+mxc4PSCu9zCBW0xM8+lgeg/2lsf3v3kkVuxqLE6eSHhlH2Q==
+Date:   Fri, 20 Jan 2023 17:39:17 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     Hugo Villeneuve <hugo@hugovil.com>, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 09/14] rtc: pcf2127: set PWRMNG value for PCF2131
+Message-ID: <Y8rDtWEoepkd1D1u@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+ <20221215150214.1109074-10-hugo@hugovil.com>
+ <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-77e06
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 14:30:10 +0100, Krzysztof Kozlowski wrote:
-> 'gpios' is in general preferred even for single GPIO specifiers and
-> there are DTS boards using it (exynos4412-p4note.dtsi), so allow both
-> versions.
+Hello,
+
+On 07/01/2023 19:36:06+0100, Bruno Thomsen wrote:
+> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+> >
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > Default PWRMNG[2:0] bits are set to 000b for PCF2127/29, but to
+> > 111b for PCF2131.
+> >
+> > Set these bits to 000b to select same mode as PCF2127/29.
+> >
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
+> Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
 > 
+> I think it's a good idea[1] but there have been concerns about
+> setting default values in the past[2]. In case somebody needs
+> a different behaviour they should add a device tree property.
+> 
+> [1] https://lore.kernel.org/linux-rtc/20190910143945.9364-1-bruno.thomsen@gmail.com/
+> [2] https://lore.kernel.org/linux-rtc/20191211163354.GC1463890@piout.net/
 
-Applied to
+I confirm this is still my point of view and I won't take this patch as
+this may break existing users.
 
-   broonie/regulator.git for-next
+> 
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 68af4d0438b8..241189ee4a05 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -53,6 +53,7 @@
+> >  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+> >  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+> >  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
+> > +#define PCF2127_CTRL3_PWRMNG_MASK              GENMASK(7, 5)
+> >  /* Control register 4 */
+> >  #define PCF2131_REG_CTRL4              0x03
+> >  #define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
+> > @@ -1129,6 +1130,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> >                                 PCF2127_BIT_CTRL1_POR_OVRD);
+> >
+> > +       /* Make sure PWRMNG[2:0] is set to 000b. This is the default for
+> > +        * PCF2127/29, but not for PCF2131 (default of 111b).
+> > +        *
+> > +        * PWRMNG[2:0]  = 000b:
+> > +        *   battery switch-over function is enabled in standard mode;
+> > +        *   battery low detection function is enabled
+> > +        */
+> > +       ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+> > +                               PCF2127_CTRL3_PWRMNG_MASK);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "PWRMNG config failed\n");
+> > +               return ret;
+> > +       }
+> > +
+> >         ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+> >         if (ret < 0)
+> >                 return ret;
+> > --
+> > 2.30.2
+> >
 
-Thanks!
-
-[1/1] regulator: dt-bindings: fixed-regulator: allow gpios property
-      commit: 12df2c182ccb850988d2680a422211a812fb5cb2
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
