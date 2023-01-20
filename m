@@ -2,241 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A44F6755B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219E46755B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjATNXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S229942AbjATNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjATNXf (ORCPT
+        with ESMTP id S229893AbjATNYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:23:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B57188
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:23:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DAF661F69
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD7BC433EF
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674221012;
-        bh=nMu1cLBd8eJz73r1HHHpA+tiI85UX9du0hhXOWGjjXA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KXuBguqgtUS+PQbSKUu27Y55mSZBWDUlMg5HJ04Xqn7eTfEwZdEPz04efj5mbFSK8
-         CpMCkJwNeasn0y6PXs/47VFxr0bpjXOT9aHHFR99Tdee+E5Z63aL4tDd/b39I+qA2b
-         c1ZGXLhKPORsYdwwMmXAhBElKzdwhaT7QiMK788BA/65l8ugB+5tk8nKm31SEQS58w
-         3ExGsVXIlWkL5PCrDtXFkEO+xFJrTsEBzGD8rSkcvsfP8Hqm5V4JVQYmLufcACcbKq
-         YkeQ8T8Z+BumXzOGZ0X39kUR0P/XqdYb0+ipFF2Rr3NZuQrM2OJy5R0a1/o044UffH
-         7/ErhlGJ6DSgQ==
-Received: by mail-ej1-f41.google.com with SMTP id mp20so13888018ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:23:32 -0800 (PST)
-X-Gm-Message-State: AFqh2kovS1dbGwyKdJcrP3xE5+ukmvvOhRj6WXu90mWlWdt8lPq6YhwJ
-        kGZDq6LkdL8HvZJT6kaQk1TbVMJ0uQnqInbzvC8=
-X-Google-Smtp-Source: AMrXdXvYPyEHXP5j/HuIGaQzuipLX5rsFr1ZzrctOuj882YeGL0KoxTVaz8L6XVCUiuGDSA3Gjvz9tnrdpR24nGi9vs=
-X-Received: by 2002:a17:906:eb13:b0:84d:4cb1:2591 with SMTP id
- mb19-20020a170906eb1300b0084d4cb12591mr2108454ejb.202.1674221011014; Fri, 20
- Jan 2023 05:23:31 -0800 (PST)
+        Fri, 20 Jan 2023 08:24:48 -0500
+Received: from outbound-smtp48.blacknight.com (outbound-smtp48.blacknight.com [46.22.136.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95540BF8A6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:24:45 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp48.blacknight.com (Postfix) with ESMTPS id 0A427FAE0F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:24:43 +0000 (GMT)
+Received: (qmail 16057 invoked from network); 20 Jan 2023 13:24:43 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 20 Jan 2023 13:24:43 -0000
+Date:   Fri, 20 Jan 2023 13:24:41 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
+References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
+ <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8gPhTGkfCbGwoUu@linutronix.de>
+ <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+ <Y8j+lENBWNWgt4mf@linutronix.de>
+ <20230119110220.kphftcehehhi5l5u@techsingularity.net>
+ <Y8lvwKHmmnikVDgk@linutronix.de>
+ <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
+ <Y8pP3CD1PQ4KWhXF@linutronix.de>
 MIME-Version: 1.0
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn> <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
- <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn> <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
- <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn> <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
- <20230120003156.48ca16ea2a6f73398e568358@kernel.org>
-In-Reply-To: <20230120003156.48ca16ea2a6f73398e568358@kernel.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 20 Jan 2023 21:23:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H59SOQ3QQgbbJ-U1VK5z=zaGR4kEtnTmz9HUALSAnrcGA@mail.gmail.com>
-Message-ID: <CAAhV-H59SOQ3QQgbbJ-U1VK5z=zaGR4kEtnTmz9HUALSAnrcGA@mail.gmail.com>
-Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as non-kprobe-able
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y8pP3CD1PQ4KWhXF@linutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:32 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Wed, 18 Jan 2023 15:17:00 +0800
-> Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> > On Wed, Jan 18, 2023 at 2:24 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> > >
-> > >
-> > >
-> > > On 01/18/2023 02:05 PM, Jinyang He wrote:
-> > > >
-> > > > On 2023-01-18 12:23, Tiezhu Yang wrote:
-> > > >>
-> > > >>
-> > > >> On 01/18/2023 12:14 PM, Huacai Chen wrote:
-> > > >>> If memcpy should be blacklisted, then what about memset and memmove?
-> > > >>
-> > > >> According to the test results, there are no problems to probe
-> > > >> memset and memmove, so no need to blacklist them for now,
-> > > >> blacklist memcpy is because it may cause recursive exceptions,
-> > > >> there is a detailed discussion in the following link:
-> > > >>
-> > > >> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
-> > > >>
-> > > >
-> > > > Hi, Tiezhu,
-> > > >
-> > > > I cannot reproduce the results when kprobe memcpy. Could you please give
-> > > > some details. Emm, I just replace "kernel_clone" with "memcpy" in
-> > > > kprobe_example.c.
-> > >
-> > > Please remove the related "_ASM_NOKPROBE(memcpy)" code in
-> > > arch/loongarch/lib/memcpy.S, and then compile and update kernel,
-> > > execute the following cmd after reboot, I can reproduce the hang
-> > > problem easily (it will take a few minutes).
-> > >
-> > > modprobe kprobe_example symbol="memcpy"
-> > Then, why is handle_syscall different from other exception handlers?
->
-> I need to check the loongarch implementation of handle_syscall() but
-> I guess in that handler the register set is not completely set as
-> kernel one. In that case, the software breakpoint handler may not
-> possible to handle it correctly. So it is better to avoid probing such
-> "border" function by kprobes.
-Seems reasonable, handle_syscall() indeed doesn't save all registers.
-But for memcpy(), I still think memmove() and memset() may have the
-same problem.
+On Fri, Jan 20, 2023 at 09:25:00AM +0100, Sebastian Andrzej Siewior wrote:
+> On 2023-01-19 17:41:01 [+0000], Mel Gorman wrote:
+> > 
+> > Yes, it makes your concern much clearer but I'm not sure it actually matters
+> > in terms of preventing write starvation or in terms of correctness. At
+> > worst, a writer is blocked that could have acquired the lock during a tiny
+> > race but that's a timing issue rather than a correctness issue.
+> 
+> Correct. My concern is that one reader may need to wait 4ms+ for the
+> lock while a following reader (that one that sees the timeout) does not.
+> This can lead to confusion later on.
+> 
 
-Huacai
->
-> Thank you,
->
-> >
-> > Huacai
-> > >
-> > > >
-> > > > And for your call trace,
-> > > >
-> > > >  handler_pre()
-> > > >    pr_info()
-> > > >      printk()
-> > > >       _printk()
-> > > >         vprintk()
-> > > >           vprintk_store()
-> > > >             memcpy()
-> > > >
-> > > > I think when we should skip this time kprobe which triggered in
-> > > > handler_{pre, post}. That means this time kprobe will not call
-> > > > handler_{pre, post} agian, and not cause recursion. I remember
-> > > > your codes had done this skip action. So, that's so strange if
-> > > > recursion in handler_{pre, post}.
-> > > >
-> > > >
-> > > > Thanks,
-> > > >
-> > > > Jinyang
-> > > >
-> > > >
-> > > >>
-> > > >> Thanks,
-> > > >> Tiezhu
-> > > >>
-> > > >>>
-> > > >>> Huacai
-> > > >>>
-> > > >>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn>
-> > > >>> wrote:
-> > > >>>>
-> > > >>>> Some assembler symbols are not kprobe safe, such as handle_syscall
-> > > >>>> (used as syscall exception handler), *memcpy* (may cause recursive
-> > > >>>> exceptions), they can not be instrumented, just blacklist them for
-> > > >>>> kprobing.
-> > > >>>>
-> > > >>>> Here is a related problem and discussion:
-> > > >>>> Link:
-> > > >>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
-> > > >>>>
-> > > >>>>
-> > > >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > > >>>> ---
-> > > >>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
-> > > >>>>  arch/loongarch/kernel/entry.S    |  1 +
-> > > >>>>  arch/loongarch/lib/memcpy.S      |  3 +++
-> > > >>>>  3 files changed, 14 insertions(+)
-> > > >>>>
-> > > >>>> diff --git a/arch/loongarch/include/asm/asm.h
-> > > >>>> b/arch/loongarch/include/asm/asm.h
-> > > >>>> index 40eea6a..f591b32 100644
-> > > >>>> --- a/arch/loongarch/include/asm/asm.h
-> > > >>>> +++ b/arch/loongarch/include/asm/asm.h
-> > > >>>> @@ -188,4 +188,14 @@
-> > > >>>>  #define PTRLOG         3
-> > > >>>>  #endif
-> > > >>>>
-> > > >>>> +/* Annotate a function as being unsuitable for kprobes. */
-> > > >>>> +#ifdef CONFIG_KPROBES
-> > > >>>> +#define _ASM_NOKPROBE(name)                            \
-> > > >>>> +       .pushsection "_kprobe_blacklist", "aw";         \
-> > > >>>> +       .quad   name;                                   \
-> > > >>>> +       .popsection
-> > > >>>> +#else
-> > > >>>> +#define _ASM_NOKPROBE(name)
-> > > >>>> +#endif
-> > > >>>> +
-> > > >>>>  #endif /* __ASM_ASM_H */
-> > > >>>> diff --git a/arch/loongarch/kernel/entry.S
-> > > >>>> b/arch/loongarch/kernel/entry.S
-> > > >>>> index d53b631..55e23b1 100644
-> > > >>>> --- a/arch/loongarch/kernel/entry.S
-> > > >>>> +++ b/arch/loongarch/kernel/entry.S
-> > > >>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
-> > > >>>>
-> > > >>>>         RESTORE_ALL_AND_RET
-> > > >>>>  SYM_FUNC_END(handle_syscall)
-> > > >>>> +_ASM_NOKPROBE(handle_syscall)
-> > > >>>>
-> > > >>>>  SYM_CODE_START(ret_from_fork)
-> > > >>>>         bl      schedule_tail           # a0 = struct task_struct *prev
-> > > >>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
-> > > >>>> index 7c07d59..3b7e1de 100644
-> > > >>>> --- a/arch/loongarch/lib/memcpy.S
-> > > >>>> +++ b/arch/loongarch/lib/memcpy.S
-> > > >>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
-> > > >>>>         ALTERNATIVE     "b __memcpy_generic", \
-> > > >>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
-> > > >>>>  SYM_FUNC_END(memcpy)
-> > > >>>> +_ASM_NOKPROBE(memcpy)
-> > > >>>>
-> > > >>>>  EXPORT_SYMBOL(memcpy)
-> > > >>>>
-> > > >>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
-> > > >>>>  2:     move    a0, a3
-> > > >>>>         jr      ra
-> > > >>>>  SYM_FUNC_END(__memcpy_generic)
-> > > >>>> +_ASM_NOKPROBE(__memcpy_generic)
-> > > >>>>
-> > > >>>>  /*
-> > > >>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
-> > > >>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
-> > > >>>>  3:     move    a0, a3
-> > > >>>>         jr      ra
-> > > >>>>  SYM_FUNC_END(__memcpy_fast)
-> > > >>>> +_ASM_NOKPROBE(__memcpy_fast)
-> > > >>>> --
-> > > >>>> 2.1.0
-> > > >>>>
-> > > >>
-> > >
-> > >
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Ok, yes, that is a valid concern I had not considered when thinking in
+terms of correctness or writer starvation. It would be very tricky to
+diagnose if it happened.
+
+> > The race could be closed by moving wait_lock acquisition before the
+> > atomic_sub in rwbase_write_lock() but it expands the scope of the wait_lock
+> > and I'm not sure that's necessary for either correctness or preventing
+> > writer starvation. It's a more straight-forward fix but expanding the
+> > scope of a lock unnecessarily has been unpopular in the past.
+> > 
+> > I think we can close the race that concerns you but I'm not convinced we
+> > need to and changing the scope of wait_lock would need a big comment and
+> > probably deserves a separate patch.
+> 
+> would it work to check the timeout vs 0 before and only apply the
+> timeout check if it is != zero? The writer would need to unconditionally
+> or the lowest bit. That should close gaps at a low price. The timeout
+> variable is always read within the lock so there shouldn't be need for
+> any additional barriers.
+> 
+
+Yes, as a bonus point, it can be checked early in rwbase_allow_reader_bias
+and is an cheap test for the common case so it's win-win all round.
+
+Patch is now this;
+
+--8<--
+locking/rwbase: Prevent indefinite writer starvation
+
+rw_semaphore and rwlock are explicitly unfair to writers in the presense
+of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
+("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
+
+        The implementation is writer unfair, as it is not feasible to do
+        priority inheritance on multiple readers, but experience has shown
+        that real-time workloads are not the typical workloads which are
+        sensitive to writer starvation.
+
+While atypical, it's also trivial to block writers with PREEMPT_RT
+indefinitely without ever making forward progress. Since LTP-20220121,
+the dio_truncate test case went from having 1 reader to having 16 readers
+and the number of readers is sufficient to prevent the down_write ever
+succeeding while readers exist. Eventually the test is killed after 30
+minutes as a failure.
+
+dio_truncate is not a realtime application but indefinite writer starvation
+is undesirable. The test case has one writer appending and truncating files
+A and B while multiple readers read file A. The readers and writer are
+contending for one file's inode lock which never succeeds as the readers
+keep reading until the writer is done which never happens.
+
+This patch records a timestamp when the first writer is blocked. DL /
+RT tasks can continue to take the lock for read as long as readers exist
+indefinitely. Other readers can acquire the read lock unless a writer
+has been blocked for a minimum of 4ms. This is sufficient to allow the
+dio_truncate test case to complete within the 30 minutes timeout.
+
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ include/linux/rwbase_rt.h  |  3 +++
+ kernel/locking/rwbase_rt.c | 38 +++++++++++++++++++++++++++++++++++---
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/rwbase_rt.h b/include/linux/rwbase_rt.h
+index 1d264dd08625..b969b1d9bb85 100644
+--- a/include/linux/rwbase_rt.h
++++ b/include/linux/rwbase_rt.h
+@@ -10,12 +10,14 @@
+ 
+ struct rwbase_rt {
+ 	atomic_t		readers;
++	unsigned long		waiter_timeout;
+ 	struct rt_mutex_base	rtmutex;
+ };
+ 
+ #define __RWBASE_INITIALIZER(name)				\
+ {								\
+ 	.readers = ATOMIC_INIT(READER_BIAS),			\
++	.waiter_timeout = 0,					\
+ 	.rtmutex = __RT_MUTEX_BASE_INITIALIZER(name.rtmutex),	\
+ }
+ 
+@@ -23,6 +25,7 @@ struct rwbase_rt {
+ 	do {							\
+ 		rt_mutex_base_init(&(rwbase)->rtmutex);		\
+ 		atomic_set(&(rwbase)->readers, READER_BIAS);	\
++		(rwbase)->waiter_timeout = 0;			\
+ 	} while (0)
+ 
+ 
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index c201aadb9301..9d5bbf2985de 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -39,7 +39,10 @@
+  * major surgery for a very dubious value.
+  *
+  * The risk of writer starvation is there, but the pathological use cases
+- * which trigger it are not necessarily the typical RT workloads.
++ * which trigger it are not necessarily the typical RT workloads. SCHED_OTHER
++ * reader acquisitions will be forced into the slow path if a writer is
++ * blocked for more than RWBASE_RT_WAIT_TIMEOUT jiffies. New DL / RT readers
++ * can still starve a writer indefinitely.
+  *
+  * Fast-path orderings:
+  * The lock/unlock of readers can run in fast paths: lock and unlock are only
+@@ -65,6 +68,27 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
+ 	return 0;
+ }
+ 
++/*
++ * Allow reader bias for SCHED_OTHER tasks with a pending writer for a
++ * minimum of 4ms or 1 tick. This matches RWSEM_WAIT_TIMEOUT for the
++ * generic RWSEM implementation.
++ */
++#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
++
++static bool __sched rwbase_allow_reader_bias(struct rwbase_rt *rwb)
++{
++	/*
++	 * Allow reader bias if no writer is blocked or for DL / RT tasks.
++	 * Such tasks should be designed to avoid heavy writer contention
++	 * or indefinite starvation.
++	 */
++	if (!rwb->waiter_timeout || rt_task(current))
++		return true;
++
++	/* Allow reader bias unless a writer timeout has expired. */
++	return time_before(jiffies, rwb->waiter_timeout);
++}
++
+ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 				      unsigned int state)
+ {
+@@ -74,9 +98,11 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 	raw_spin_lock_irq(&rtm->wait_lock);
+ 	/*
+ 	 * Allow readers, as long as the writer has not completely
+-	 * acquired the semaphore for write.
++	 * acquired the semaphore for write and reader bias is still
++	 * allowed.
+ 	 */
+-	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
++	if (atomic_read(&rwb->readers) != WRITER_BIAS &&
++	    rwbase_allow_reader_bias(rwb)) {
+ 		atomic_inc(&rwb->readers);
+ 		raw_spin_unlock_irq(&rtm->wait_lock);
+ 		return 0;
+@@ -255,6 +281,7 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+ 	for (;;) {
+ 		/* Optimized out for rwlocks */
+ 		if (rwbase_signal_pending_state(state, current)) {
++			rwb->waiter_timeout = 0;
+ 			rwbase_restore_current_state();
+ 			__rwbase_write_unlock(rwb, 0, flags);
+ 			trace_contention_end(rwb, -EINTR);
+@@ -264,12 +291,17 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+ 		if (__rwbase_write_trylock(rwb))
+ 			break;
+ 
++		/* Record timeout when reader bias is ignored. */
++		rwb->waiter_timeout = jiffies + RWBASE_RT_WAIT_TIMEOUT;
++
+ 		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+ 		rwbase_schedule();
+ 		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
+ 
+ 		set_current_state(state);
+ 	}
++
++	rwb->waiter_timeout = 0;
+ 	rwbase_restore_current_state();
+ 	trace_contention_end(rwb, 0);
+ 
