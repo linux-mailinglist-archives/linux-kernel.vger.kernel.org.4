@@ -2,160 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E54674CF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3667674D31
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbjATGCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229776AbjATGUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjATGCx (ORCPT
+        with ESMTP id S229762AbjATGUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:02:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D8311E84;
-        Thu, 19 Jan 2023 22:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674194572; x=1705730572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qM+DFnnvJkoyvR1H6whsmmQlNslV3KwkAOtUcsz+XpQ=;
-  b=B3CpRZK6Xi3awaN+fyeL9HYibhQsJKnpJAn5Rl/fOXLcvgl2gojUDvQd
-   WiWlgxrKa+mlay9c4aX6TAZl0OE9ecMyj29smiEseNv890C1zsDiNYMHk
-   syMuSqmpjOV+RIjvyWsy6O1vmBKeUv+23Zr6Ox23pXmnJ726AUiudIGGh
-   uiPDT6Dg7wt4oDt8KtpFuVxBxZ4pnwZwfXJps5inGK2rHJrQo/XVs4qOH
-   /h9eUVCsDQmiKbPLfhOKH3yabuHS4g9PyZqHiOJ7gRsE/BPqyC1bNcU/e
-   4PZ6oK74qdireKT0352pdHrSjOOEPMnjWTZO8eIFSS03yTxyb57m/yXE7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305879815"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="305879815"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 22:02:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610365725"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="610365725"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 22:02:43 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIkU5-0002FI-34;
-        Fri, 20 Jan 2023 06:02:41 +0000
-Date:   Fri, 20 Jan 2023 14:01:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, tj@kernel.org
-Subject: Re: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested
- pointers
-Message-ID: <202301201328.KZrjrJXf-lkp@intel.com>
-References: <20230119235833.2948341-2-void@manifault.com>
+        Fri, 20 Jan 2023 01:20:42 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9285F829B2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:20:40 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id j9so3473797qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kNfUWjB4PhLqRtHK64co0lEKokvExnDsRJFLDZxWoJw=;
+        b=PXOVLGBo8Czc7tLW/m3chlxdm29daD37dxwZlGU5W9kPt8yBoD/oifsQfQptpSqjEo
+         0+LXmU1sRoMUCFjkcPCTOtLkzY13WgslHaC8qpCNpFARM/P5FplvmdiqsBOVD7KFdZTB
+         +VQtMdaAl3TgzgKmxOopJa0WWoYS9KO/zCet0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kNfUWjB4PhLqRtHK64co0lEKokvExnDsRJFLDZxWoJw=;
+        b=tEkOFucUB9bTDRRoIgWB2lj37Wc2EayQH7i0YKVbtePJNO5Y5A10ksyNV6M3ZC5/TB
+         Tp3UQRvTWrZLtinCHGq0VeBqB/JXjJKj7XLKlHhh/0LSCD+qRY/bG/HD7xpA+WLPxzI2
+         oJDmFvcm5hT1HEu/8+QQM59tmZGIo1RdikMBtZRGlfUfBJIIRgNDhPPYhQovlPuMaiDY
+         fm66fiyz0EIsspsn/Mkn7FeFZuiwEzEC2POPNhihxiDDxkllXuSS733QbVHnDDTpZWrx
+         mikYL93Eqp5adJbn+a9HCvJWgOcJnWqH0Ocf+NAiJjNSYglL2NckuliITGde1RXYmObl
+         gcXQ==
+X-Gm-Message-State: AFqh2koz9U5JrMVR9sppbvMs/Kq4T5VNEtboGoe/imX5eUhOkEykRQuy
+        mTD3Uk3Nx1z8HmDOpGbmGrzBHA==
+X-Google-Smtp-Source: AMrXdXv4mjktNFlsGj1V5kfSI/3x7iKmyV8Gp2HZ12WXvlG0vWCcHOJSKbAhW7Vq5xhr7fZxmnubgQ==
+X-Received: by 2002:ac8:5a95:0:b0:3a8:faf:296a with SMTP id c21-20020ac85a95000000b003a80faf296amr25332954qtc.54.1674195639266;
+        Thu, 19 Jan 2023 22:20:39 -0800 (PST)
+Received: from localhost.localdomain ([2605:a601:a780:1400:641c:466b:fa8e:b05a])
+        by smtp.gmail.com with ESMTPSA id e26-20020ac845da000000b003a527d29a41sm6903273qto.75.2023.01.19.22.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 22:20:38 -0800 (PST)
+From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
+To:     ajit.khaparde@broadcom.com
+Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        selvin.xavier@broadcom.com
+Subject: [PATCH net-next v8 0/8] Add Auxiliary driver support
+Date:   Thu, 19 Jan 2023 22:05:27 -0800
+Message-Id: <20230120060535.83087-1-ajit.khaparde@broadcom.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119235833.2948341-2-void@manifault.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000061e07e05f2ac0c03"
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+--00000000000061e07e05f2ac0c03
+Content-Transfer-Encoding: 8bit
 
-Thank you for the patch! Perhaps something to improve:
+Add auxiliary device driver for Broadcom devices.
+The bnxt_en driver will register and initialize an aux device
+if RDMA is enabled in the underlying device.
+The bnxt_re driver will then probe and initialize the
+RoCE interfaces with the infiniband stack.
 
-[auto build test WARNING on bpf-next/master]
+We got rid of the bnxt_en_ops which the bnxt_re driver used to
+communicate with bnxt_en.
+Similarly  We have tried to clean up most of the bnxt_ulp_ops.
+In most of the cases we used the functions and entry points provided
+by the auxiliary bus driver framework.
+And now these are the minimal functions needed to support the functionality.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230119235833.2948341-2-void%40manifault.com
-patch subject: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested pointers
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230120/202301201328.KZrjrJXf-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8f6df14342b1be3516f8e21037edf771df851427
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-        git checkout 8f6df14342b1be3516f8e21037edf771df851427
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+We will try to work on getting rid of the remaining if we find any
+other viable option in future.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+v1->v2:
+- Incorporated review comments including usage of ulp_id &
+  complex function indirections.
+- Used function calls provided by the auxiliary bus interface
+  instead of proprietary calls.
+- Refactor code to remove ROCE driver's access to bnxt structure.
 
-All warnings (new ones prefixed by >>):
+v2->v3:
+- Addressed review comments including cleanup of some unnecessary wrappers
+- Fixed warnings seen during cross compilation
 
->> kernel/bpf/btf.c:533:5: warning: no previous prototype for function 'bpf_find_btf_id' [-Wmissing-prototypes]
-   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
-       ^
-   kernel/bpf/btf.c:533:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
-   ^
-   static 
-   1 warning generated.
+v3->v4:
+- Cleaned up bnxt_ulp.c and bnxt_ulp.h further
+- Removed some more dead code
+- Sending the patchset as a standalone series
+
+v4->v5:
+- Removed the SRIOV config callback which bnxt_en driver was calling into
+  bnxt_re driver.
+- Removed excessive checks for rdev and other pointers.
+
+v5->v6:
+- Removed excessive checks for dev and other pointers
+- Remove runtime interrupt vector allocation. bnxt_en preallocates
+interrupt vectors for bnxt_re to use.
+
+v6->v7:
+- Removed incorrect usage of inline
+- Updated Kconfig to select AUXILIARY BUS support
+- Addressed various comments including removal of unnecessary forward
+  declaration, using static functions where possible, unnecessary jump,
+  cleanup logic, etc..
+- Added Leon's Reviewed-by, to the commit log in the patches, from
+  previous version.
+
+v7->v8:
+- Addressed various comments to remove unnecessary check for id, removed
+  setting pointer to NULL after free, renamed private pointers to avoid
+  confusing them with the auxiliary device names and refactored some
+  code accordingly.
+- Auxiliary device will be released through auxiliary_device_uninit();
 
 
-vim +/bpf_find_btf_id +533 kernel/bpf/btf.c
+Commit message uses Leon's Reviewed-by from earlier version.
 
-   532	
- > 533	s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
-   534	{
-   535		struct btf *btf;
-   536		s32 ret;
-   537		int id;
-   538	
-   539		btf = bpf_get_btf_vmlinux();
-   540		if (IS_ERR(btf))
-   541			return PTR_ERR(btf);
-   542		if (!btf)
-   543			return -EINVAL;
-   544	
-   545		ret = btf_find_by_name_kind(btf, name, kind);
-   546		/* ret is never zero, since btf_find_by_name_kind returns
-   547		 * positive btf_id or negative error.
-   548		 */
-   549		if (ret > 0) {
-   550			btf_get(btf);
-   551			*btf_p = btf;
-   552			return ret;
-   553		}
-   554	
-   555		/* If name is not found in vmlinux's BTF then search in module's BTFs */
-   556		spin_lock_bh(&btf_idr_lock);
-   557		idr_for_each_entry(&btf_idr, btf, id) {
-   558			if (!btf_is_module(btf))
-   559				continue;
-   560			/* linear search could be slow hence unlock/lock
-   561			 * the IDR to avoiding holding it for too long
-   562			 */
-   563			btf_get(btf);
-   564			spin_unlock_bh(&btf_idr_lock);
-   565			ret = btf_find_by_name_kind(btf, name, kind);
-   566			if (ret > 0) {
-   567				*btf_p = btf;
-   568				return ret;
-   569			}
-   570			spin_lock_bh(&btf_idr_lock);
-   571			btf_put(btf);
-   572		}
-   573		spin_unlock_bh(&btf_idr_lock);
-   574		return ret;
-   575	}
-   576	
+Please apply. Thanks.
+
+The following are changes since commit 3ef4a8c8963b29813170177899f84ffb93f1a8f1
+  'Merge branch 'net-phy-remove-probe_capabilities'
+and are available in the git repository at:
+  https://github.com/ajitkhaparde1/net-next/tree/aux-bus-v8
+
+
+Ajit Khaparde (7):
+  bnxt_en: Add auxiliary driver support
+  RDMA/bnxt_re: Use auxiliary driver interface
+  bnxt_en: Remove usage of ulp_id
+  bnxt_en: Use direct API instead of indirection
+  bnxt_en: Use auxiliary bus calls over proprietary calls
+  RDMA/bnxt_re: Remove the sriov config callback
+  bnxt_en: Remove runtime interrupt vector allocation
+
+Hongguang Gao (1):
+  bnxt_en: Remove struct bnxt access from RoCE driver
+
+ drivers/infiniband/hw/bnxt_re/bnxt_re.h       |  10 +-
+ drivers/infiniband/hw/bnxt_re/main.c          | 635 +++++++-----------
+ drivers/net/ethernet/broadcom/Kconfig         |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  11 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   8 +
+ .../net/ethernet/broadcom/bnxt/bnxt_sriov.c   |   7 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c | 506 +++++++-------
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h |  52 +-
+ 8 files changed, 494 insertions(+), 736 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.1 (Apple Git-137.1)
+
+
+--00000000000061e07e05f2ac0c03
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
+K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
+xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
+OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
+aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
+KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
+aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
+u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
+4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINOnKKGpXLPYDpSgu6e8
+LU4mpWLyV+Kr9f6Bk35HV4MJMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIzMDEyMDA2MjAzOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBdckJpMqIm3vuYej3NWX55fyXGmjnNUC0xNpqi
+786J5OC+MmQPSfSH8NM4yMBCgidw9O3Na1/bNAuwxY+DYaxqVmNu0R26MpUCNgVXSvsgXxIb8v3c
+/B/oPsWrRBT84xwz3mIS9HD/wl4jdwZI2lHJ6yFd16cgrEaP/S9aux8Ed2aykewDamXLdjaZ44I0
+s14Xgrs7gon0+rPkrk5h0kFi0cUt6IwbPCePALJqSJnjqaYFWdJGwxobd3raRkc5w0WXhPQ9X/B7
+oDNqq2mgSbeZGieKEyXTMJfRLU3ipCzX3AFIFPfBIn/8LC6TTZK8YjH78dzSQPqlzY40DOvqwZgu
+--00000000000061e07e05f2ac0c03--
