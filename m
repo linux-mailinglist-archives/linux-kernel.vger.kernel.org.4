@@ -2,98 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F194675EEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D66675EF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjATUcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S229824AbjATUdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjATUcT (ORCPT
+        with ESMTP id S229738AbjATUdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:32:19 -0500
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD29872A0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:32:18 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 2DA83240703
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 21:32:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1674246737; bh=3U0QnUhsNTtPLMBnBxIw39Ig6pLG0EYmIgcK+IN7/kA=;
-        h=Date:Subject:To:Cc:From:From;
-        b=EPkwnkvLqv2AwwBtomWlVDCBZGFP2N0pdw/aQtJQ7lxEmPYP1KybdCWd9mlTthko2
-         pDohf4+15VO9UVdf12rpvMTgW9m9dEe1K/HT3cwAFCURlggWvEBL7Cjd8wY+ZAwOU7
-         qCCTYe5v3noiuXY0zBAb8plviBLs20OlMbT032Bh9uqAFIbxabG5njA0LSYGEB2yNL
-         iRrWpvA9wud2jXTPL7MIYT70rWgCI7tNFnaAR006Cox7KLTxBG5Y6HPNNIYfj3vPVv
-         CEtItMqrRmk/61gt/qITb3ChgrCGOXdgdgxGTZL7rCKOHP/hUn2ijhIYFZ4L2nWYbQ
-         EFoY6l7qutVug==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4NzB4Y0LxQz9rxL;
-        Fri, 20 Jan 2023 21:32:13 +0100 (CET)
-Message-ID: <5de61071-6b22-440c-d095-1360512fbccd@posteo.de>
-Date:   Fri, 20 Jan 2023 20:32:12 +0000
+        Fri, 20 Jan 2023 15:33:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EB8A0F8;
+        Fri, 20 Jan 2023 12:32:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BF08B82A59;
+        Fri, 20 Jan 2023 20:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DEABC433D2;
+        Fri, 20 Jan 2023 20:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674246775;
+        bh=Mpd3ggMAesKvNDM2J5TjcadboGsqRMW6xSnwxTQzs9M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f/2YTssoLBjjzLSBf54MtKOiJn2xOGzgzBiDMuZYAA+cYBNvfT2kZfrIwQk+makKA
+         DBiADCIkkzpVrrbTdTON2aMMIHNjVvji6xB4w4j0vcNqrscNqhRC+a7rV1323TLN3O
+         jY7YwMuK25eZrsJv2k9kmZeC9o/pfJRNa0X4c3D0OfOL0MHzWfIS6OV6/7m9D/6iCS
+         E8PlUu/ztkOjzpjBAD9d7y8EbKMQtvjxwuxDiaSi8Cit+6y9XAfMAe2mbI9eox5dgv
+         QR4zjGRMd0RZ3roPzIXG3k99ph4S45ZAUwMqHYvO9QV8GQ65ObE9rI0LC5jPTiF1mh
+         jZPrE6AzyXK0w==
+Date:   Fri, 20 Jan 2023 12:32:53 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <20230120203253.5r7dkge6x4vsx5ov@treble>
+References: <20230118204728.1876249-1-song@kernel.org>
+ <20230120191642.7bmqt6t4qngisqep@treble>
+ <CAPhsuW436=wRKLixWNtE9Rx=6A0gKrOCR8EUOdwTrPw5W6gddg@mail.gmail.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards
- support
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
-        renedis@hotmail.com, robert@swiecki.net,
-        sahan.h.fernando@gmail.com, sst@poczta.fm, to.eivind@gmail.com,
-        torvic9@mailbox.org
-References: <20230111212241.7456-1-pauk.denis@gmail.com>
- <20230111212241.7456-2-pauk.denis@gmail.com>
- <20230115161224.GA1246527@roeck-us.net>
- <6fd769f9-da0e-c4a8-dc0e-a1e464c2d9fc@posteo.de>
- <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
-Content-Language: de-DE
-From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
-In-Reply-To: <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW436=wRKLixWNtE9Rx=6A0gKrOCR8EUOdwTrPw5W6gddg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, I didn't want to annoy you! Just wondered why it didn't work and 
-whether I made a mistake, or if it really wasn't included in linux-next.
+On Fri, Jan 20, 2023 at 11:41:02AM -0800, Song Liu wrote:
+> > >   The livepatch module has a relocation which references a symbol
+> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >   tries to replace the old relocation with a new one, it sees that
+> > >   the previous one is nonzero and it errors out.
+> >
+> > Should we add a selftest to make sure this problem doesn't come back?
+> 
+> IIRC, a selftest for this issue is not easy without Joe's klp-convert work.
+> At the moment I use kpatch-build for testing.
 
-Thanks for all your amazing work in making this chip function properly 
-and bringing fan control to many of the latest AM5 boards! :)
+Ah right, I remember that now.
 
-Kind regards,
-Sebastian
+> How about:
+> 
+> Signed-off-by: Song Liu <song@kernel.org>
+> Originally-by: Miroslav Benes <mbenes@suse.cz>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-Am 20.01.23 um 21:28 schrieb Guenter Roeck:
-> On 1/20/23 11:50, Sebastian Arnhold wrote:
->> Is it just me, or is the support for my mainboard "TUF GAMING 
->> X670E-PLUS WIFI" now implemented into the latest "linux-next" kernel 
->> (I verified this by looking at the source code at 
->> /drivers/hwmon/nct6775-core.c), but the actual patch that contains 
->> the NCT6799D driver is still missing?
->>
->> I had to patch my linux-next kernel with the patch from 
->> https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/ 
->> to get it working.
->>
->
-> Well, yes, I do have day-to-day work that I am getting paid for,
-> and I did not have time to resubmit the patch adding support for
-> NCT6799.
->
-> Guenter
->
+Yes, but the ordering looks off, I think it should be more like:
+
+Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Originally-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Song Liu <song@kernel.org>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+
+And then make sure 'From:' is you.
+
+BTW, this patch affects both livepatch and x86, so the subject prefix
+should have "x86" added, something like:
+
+  livepatch,x86: Clear relocations on module removal
+
+> > This code really needs to be removed anyway, it's been dead for at least
+> > 15 years.
+> 
+> Shall we remove it now? Within the same patch? Or with a preparation
+> patch?
+> 
+
+A preparatory patch sounds good.
+
+> > > +                                    (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+> > > +                             return -ENOEXEC;
+> > > +                     }
+> > > +                     write(loc, &val, write_size);
+> > > +             } else {
+> > > +                     if (memcmp(loc, &val, write_size)) {
+> > > +                             pr_warn("x86/modules: Clearing invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
+> > > +                                     (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+> > > +                     }
+> > > +                     write(loc, &zero, write_size);
+> >
+> > If the value doesn't match then something has gone badly wrong.  Why go
+> > ahead with the clearing in that case?
+> 
+> We can pr_err() then return -ENOEXEC (?). But I guess we need to
+> handle the error case in:
+>   klp_cleanup_module_patches_limited()
+>   klp_module_coming()
+>   klp_module_going()
+> and all the functions that call klp_module_going().
+> 
+> This seems a big overkill to me...
+> 
+> Or do you mean we just skip the write()?
+
+At the very least, skip the write.
+
+But I really think it should just break out of the loop and return an
+error, there's no point in trying to continue clearing the rest of the
+relocations if one of them failed.
+
+It's probably fine for the callers to ignore the error, the module's
+going to get unloaded regardless.
+
+-- 
+Josh
