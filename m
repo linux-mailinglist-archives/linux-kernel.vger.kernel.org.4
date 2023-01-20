@@ -2,241 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9139867601B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FC467601A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjATWWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S229725AbjATWWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjATWWL (ORCPT
+        with ESMTP id S229556AbjATWWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:22:11 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22E7762DE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:22:08 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NzDL86PR3z9v7Jk
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 06:14:08 +0800 (CST)
-Received: from [10.81.218.54] (unknown [10.81.218.54])
-        by APP2 (Coremail) with SMTP id GxC2BwDnuWDtE8tjkDexAA--.5719S2;
-        Fri, 20 Jan 2023 23:21:44 +0100 (CET)
-Message-ID: <a4cf8b8e-2527-545a-7175-a2ca4d7028c4@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 23:21:30 +0100
+        Fri, 20 Jan 2023 17:22:00 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A404D6FD11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:21:58 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5018be4ae8eso29354847b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUZ0ffAJxXSAs75mrnI1JYQKtxulHE6LLibfAEIYCUE=;
+        b=Hp9pWr8vPaWaHT+lrAMRQ2ucltxYK2bG/0HMjvFmx3K6MDIeTUplEsmdQbjt4FgodK
+         PrAUBGgKy9MnLhlVVEPXB1G2qw5pC/mgmQ3kDbMFNr+T6lwuuu6/xbPfjv7QXrA4BTRI
+         Kuga8w97T3EIpIO96C3x8Y1VQT7bioTSMyBKrcwydWpRy4cZkn0qDM2yGNYY4vs4dHhr
+         24ziDrJuOztpNU3hRnEqYJhQLzAvvRY7Oz7fi7HVA3ITzX4BSU1xXOYprlZZcQ/DHRyM
+         KRYh/85BN6IavNe8kucJOQzQfX0xX28K08m5VF1bzzuteRw29hJ5+WlP0eows+mZyfW/
+         guIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aUZ0ffAJxXSAs75mrnI1JYQKtxulHE6LLibfAEIYCUE=;
+        b=7OWhsXZx/pR1B52RBdxq8CnaE1y0doiRQfHPO2H5VOFYSULogpRM6Eew7IMYk+foci
+         7ElxlDf763ZnXbQJeFRt/sR6KX3/YZ2ek+Tx9k9mDK5h86lUXZs0ZLLSRp/uMaXezH98
+         wStY8Dlu+IcLD6dmY0kHSTWiPEz4faLNY9hgn3IzwLddvVhmSf9ndVhLXm8k6g5lfNw7
+         x2Puc0yb6P2rVoEjC75/TaAaX1uTLo1ikOIyWk+fjUQxWAiqc+/W8nC5vM+mpkDklAG9
+         6ah+PGzwvFRo9dtsJN/Ri+6tuoV8MyKxETfIeWLpJoPicpiKMUits6yXRRnSb8/FcTf6
+         9RSw==
+X-Gm-Message-State: AFqh2koGSrXk5or2wQ0wOgm1hp0rRklvPaMTfTOvn443c/24wSgeUrfV
+        xXgi7Ij+Ox7QNjwKtzscGzjKOwTaKpSRUquv+coTEw==
+X-Google-Smtp-Source: AMrXdXvfyZ/JFeXqv55u2yuUwNm8Qm2ZSkWJdfn1rcJ73hXEVb6L9MkB0VNXwsliYqKgDcQANAkWmZs9heZw+eiV5dA=
+X-Received: by 2002:a0d:e611:0:b0:4ff:b3a2:5962 with SMTP id
+ p17-20020a0de611000000b004ffb3a25962mr467741ywe.111.1674253317753; Fri, 20
+ Jan 2023 14:21:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
- <20230120154709.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230120154709.GG2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnuWDtE8tjkDexAA--.5719S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gw13JF4kXw13XrWfXw1rtFb_yoWxGFyrpF
-        Z5tFyFywnrAr17uFn2v3W7try0yry8Ka15Xrn5Xry8Zws0gFn3urySgw1a9F43Cr1fJr4q
-        vr4YqasxZa4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9vb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2
-        xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-        WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
-        Jr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230114111621.00001840@gmail.com> <Y8bFCb+rs25dKcMY@google.com>
+ <20230117214414.00003229@gmail.com> <Y8cLcY12zDWqO8nd@google.com>
+ <Y8cMnjHFNIFaoX27@google.com> <eadc4a4e37ea0b04b8348395244b792bd34a762d.camel@intel.com>
+ <Y8ljwsrrBBdh1aYw@google.com> <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
+ <Y8m34OEVBfL7Q4Ns@google.com> <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
+ <Y8ndcGHUHQjHfbF9@google.com>
+In-Reply-To: <Y8ndcGHUHQjHfbF9@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Fri, 20 Jan 2023 14:21:31 -0800
+Message-ID: <CALzav=d4vwHTnXP8wetA_Hqd3Tzc_NLp=3M-akwNSN1-ToL+Eg@mail.gmail.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/20/2023 4:47 PM, Paul E. McKenney wrote:
-> On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
->>
->> On 1/19/2023 7:41 PM, Paul E. McKenney wrote:
->>> On Thu, Jan 19, 2023 at 02:39:01PM +0100, Jonas Oberhauser wrote:
->>>> On 1/19/2023 1:11 AM, Paul E. McKenney wrote:
->>>>> On Wed, Jan 18, 2023 at 10:24:50PM +0100, Jonas Oberhauser wrote:
->>>>>> What I was thinking of is more something like this:
->>>>>>
->>>>>> P0{
->>>>>>       idx1 = srcu_down(&ss);
->>>>>>       srcu_up(&ss,idx1);
->>>>>> }
->>>>>>
->>>>>> P1{
->>>>>>        idx2 = srcu_down(&ss);
->>>>>>        srcu_up(&ss,idx2)
->>>>>> }
->>>>> And srcu_read_lock() and srcu_read_unlock() already do this.
->>>> I think I left out too much from my example.
->>>> And filling in the details led me down a bit of a rabbit hole of confusion
->>>> for a while.
->>>> But here's what I ended up with:
->>>>
->>>>
->>>> P0{
->>>>       idx1 = srcu_down(&ss);
->>>>       store_rel(p1, true);
->>>>
->>>>
->>>>       shared cs
->>>>
->>>>       R x == ?
->>>>
->>>>       while (! load_acq(p2));
->>>>       R idx2 == idx1 // for some reason, we got lucky!
->>>>       srcu_up(&ss,idx1);
->>> Although the current Linux-kernel implementation happens to be fine with
->>> this sort of abuse, I am quite happy to tell people "Don't do that!"
->>> And you can do this with srcu_read_lock() and srcu_read_unlock().
->>> In contrast, this actually needs srcu_down_read() and srcu_up_read():
->> My point/clarification request wasn't about whether you could write that
->> code with read_lock() and read_unlock(), but what it would/should mean for
->> the operational and axiomatic models.
->> As I wrote later in the mail, for the operational model it is quite clear
->> that x==1 should be allowed for lock() and unlock(), but would probably be
->> forbidden for down() and up().
-> Agreed, the math might say something or another about doing something
-> with the srcu_read_lock() or srcu_down_read() return values (other than
-> passing them to srcu_read_unlock() or srcu_up_read(), respectively),
-> but such somethings are excluded by convention.
+On Thu, Jan 19, 2023 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> So it would be nice for LKMM to complain about such abuse, but not
-> at all mandatory.
-
-I think at the very least it would be nice if the convention was written 
-down somewhere.
-
->> My clarification request is whether that difference in the probable
->> operational model should be reflected in the axiomatic model (as I first
->> suspected based on the word "semaphore" being dropped a lot), or whether
->> it's just due to abuse (i.e., yes the axiomatic model and operational model
->> might be different here, but you're not allowed to look).
-> For the moment, I am taking the door labeled "abuse".
+> On Thu, Jan 19, 2023, Huang, Kai wrote:
+> > On Thu, 2023-01-19 at 21:36 +0000, Sean Christopherson wrote:
+> > > The least invasive idea I have is expand the TDP MMU's concept of "frozen" SPTEs
+> > > and freeze (a.k.a. lock) the SPTE (KVM's mirror) until the corresponding S-EPT
+> > > update completes.
+> >
+> > This will introduce another "having-to-wait while SPTE is frozen" problem I
+> > think, which IIUC means (one way is) you have to do some loop and retry, perhaps
+> > similar to yield_safe.
 >
-> Maybe someday someone will come up with a valid use case, but they have
-> to prove it first.  ;-)
-
-Luckily, I currently don't have a stake in this :D
-I currently don't think it's necessary to take a peek at cookies before 
-deciding whether it should be used or not, since the decision can't 
-depend on the value of the cookie anyways.
-
+> Yes, but because the TDP MMU already freezes SPTEs (just for a shorter duration),
+> I'm 99% sure all of the affected flows already know how to yield/bail when necessary.
 >
->> Which brings us to the next point:
->>
->>> Could you please review the remainder to see what remains given the
->>> usage restrictions that I called out above?
->> Perhaps we could say that reading an index without using it later is
->> forbidden?
->>
->> flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
->> thrown-srcu-cookie-on-floor
->>
->> So if there is an srcu_down() that produces a cookie that is read by some
->> read R, and R doesn't then pass that value into an srcu_up(), the
->> srcu-warranty is voided.
-> I like the general idea, but I am dazed and confused by this "flag"
-> statement.
+> The problem with the zero-step mitigation is that it could (theoretically) cause
+> a "busy" error on literally any accesses, which makes it infeasible for KVM to have
+> sane behavior.  E.g. freezing SPTEs to avoid the ordering issues isn't necessary
+> when holding mmu_lock for write, whereas the zero-step madness brings everything
+> into play.
 
-Too bad, I was aiming for dazed and amazed. Ah well, I'll take what I 
-can get.
+(I'm still ramping up on TDX so apologies in advance if the following
+is totally off base.)
 
-> Ah, separate down/up tags could make this "flag" statement at least
-> somewhat less dazing and confusing.
+The complexity, and to a lesser extent the memory overhead, of
+mirroring Secure EPT tables with the TDP MMU makes me wonder if it is
+really worth it. Especially since the initial TDX support has so many
+constraints that would seem to allow a simpler implementation: all
+private memory is pinned, no live migration support, no test/clear
+young notifiers, etc.
 
-Let me use up/down names and also fix the statement a little bit in 
-analogy to the other issue we had with the rf from the other subthread.
+For the initial version of KVM TDX support, what if we implemented the
+Secure EPT management entirely off to the side? i.e. Not on top of the
+TDP MMU. For example, write TDX-specific routines for:
 
-let  use-cookie = (data|[~(Srcu-up|Srcu-unlock)] ; rfe)* ; data
+ - Fully populating the Secure EPT tree some time during VM creation.
+ - Tearing down the Secure EPT tree during VM destruction.
+ - Support for unmapping/mapping specific regions of the Secure EPT
+tree for private<->shared conversions.
 
-flag ~empty [Srcu-down] ; use-cookie; [~Srcu-up] ; rf ; [~ domain(use-cookie;[Srcu-up])] as thrown-srcu-cookie-on-floor
+With that in place, KVM never would need to handle a fault on a Secure
+EPT mapping. Any fault (e.g. due to an in-progress private<->shared
+conversion) can just return back to the guest to retry the memory
+access until the operation is complete.
 
-Here use-cookie is essentially just a name for the relation we used 
-before to see where the cookie is being used in the end when defining 
-how to match srcu events: it links (among other things) an srcu-down to 
-every store that stores the cookie produced by that srcu-down,
-and every read that reads such a cookie to the srcu_up() that uses the 
-cookie returned by that read. (Because of how srcu's up() and down() are 
-currently formalized, those two happen to be the same thing, but maybe 
-it helps thinking of them as seperate for now).
+If we start with only supporting 4K pages in the Secure EPT, the
+Secure EPT routines described above would be almost trivial to
+implement. Huge Pages would add some complexity, but I don't think it
+would be terrible. Concurrency can be handled with a single lock since
+we don't have to worry about concurrent faulting.
 
-Then the relation
-
-[Srcu-down] ; use-cookie ; [~Srcu-up] ; rf ; [~ domain(use-cookie;[Srcu-up])]
-
-links an event X to an event R exactly in the following case:
-
-  X ->use-cookie W ->rf R
-  and X \in Srcu-down, W \not\in Srcu-up, and R \not\in domain(use-cookie;[Srcu-up])
-
-meaning X is an srcu_down(), and its cookie is stored by the write W, 
-and R is a read that looks at the cookie (it reads from W), but(!) the 
-cookie read by R is never used by any srcu_up().
-
-More precisely, imagine that in contrast to what I just claimed, the 
-cookie read by R would actually be used in some srcu_up() event U.
-Then R would be linked by use-cookie to U; we would have
-   R ->use-cookie U
-   and U \in Srcu-up
-which we could rewrite as
-   R ->use-cookie;[Srcu-up] U
-
-Now because R appears on the left-hand-side of the relation with some 
-event (here U), R is in the domain(*) of this relation :
-   R \in domain(use-cookie;[Srcu-up])
-which is a contradiction.
-
-In other words, the relation would be non-empty (= the flag is raised) 
-exactly when there is a read R that reads a cookie produced by some 
-srcu_down() event X, but the return value of that read is never used as 
-input to srcu_up().
-This seems to be exactly the "drop on the floor" metaphor you mentioned 
-(and from my own experience I know it's bad to drop cookies on the floor).
-
-does that make it more clear why it might be a reasonable formalization 
-of that principle?
-jonas
-
-(*anyways I hope so, I always mix up domain and range, but I think 
-domain is the left side and range the right side. I can also barely keep 
-apart reft and light though, so...)
-
-
+This would avoid having TDX add a bunch of complexity to the TDP MMU
+(which would only be used for shared mappings). If and when we want to
+have more complicated memory management for TDX private mappings, we
+could revisit TDP MMU integration. But I think this design could even
+get us to the point of supporting Dirty Logging (where the only fault
+KVM would have to handle for TDX private mappings would be
+write-protection faults). I'm not sure it would work for Demand-Paging
+(at least the performance would not be great behind a single lock),
+but we can cross that bridge when we get there.
