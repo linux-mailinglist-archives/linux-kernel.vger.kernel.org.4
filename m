@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66522675011
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD1967509B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjATJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S230041AbjATJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjATJAU (ORCPT
+        with ESMTP id S230110AbjATJUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:00:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E772E35A9;
-        Fri, 20 Jan 2023 01:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 Jan 2023 04:20:05 -0500
+Received: from zeeaster.vergenet.net (zeeaster.vergenet.net [206.189.110.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F16420E
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:20:02 -0800 (PST)
+Received: from momiji.horms.nl (86-93-216-223.fixed.kpn.net [86.93.216.223])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 832DD61E71;
-        Fri, 20 Jan 2023 09:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D70EFC4339E;
-        Fri, 20 Jan 2023 09:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674205218;
-        bh=XYwWfibzMqaOTMPJmOSyGrs30Nnfqge12Om0Go1KGi0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JrkQXJHs9BK46+TkQp2kVLXIifwozNHtlyJ0RF4XVOijb2pQMIL1w2mY6Uw3Ob5YN
-         xKyIQPu/DNQ0RGrGQ4njywrUrx5d1QYmGMj4c78UE06R/Kdsijnd2UQRRBGATUXmfT
-         BbG5+VK1O4tbFJ56GIlER8dqUZ9CVfdeHSHI8zan01RElEyfn9Kfalg4F2RD0xwUiy
-         lR/tkEb2tKd4I/00BBu0HtiosAR90UxdX4LkdHIeJUCgGqFW+x2vr6xIXMbtchHmC/
-         WIPei0aX3n3AzScxOabJ7uV04yC3ZK8W79c9hROF7MaJXPbFPYPaQ3/bIIN1U19Y4N
-         eLM+gFwa2lMAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9778C04E33;
-        Fri, 20 Jan 2023 09:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by zeeaster.vergenet.net (Postfix) with ESMTPSA id EBCFE20095;
+        Fri, 20 Jan 2023 09:02:53 +0000 (UTC)
+Received: by momiji.horms.nl (Postfix, from userid 7100)
+        id 0E8C794030F; Fri, 20 Jan 2023 10:02:53 +0100 (CET)
+Date:   Fri, 20 Jan 2023 10:02:52 +0100
+From:   Simon Horman <horms@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, wangkefeng.wang@huawei.com
+Subject: Re: [PATCH 2/2] arm64/kdump: add code comments for crashkernel
+ reservation cases
+Message-ID: <Y8pYvBvDonUya1mx@vergenet.net>
+References: <20230117034921.185150-1-bhe@redhat.com>
+ <20230117034921.185150-3-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next: PATCH v7 0/7] dsa: lan9303: Move to PHYLINK
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167420521875.28394.1687143741537531165.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 Jan 2023 09:00:18 +0000
-References: <20230117205703.25960-1-jerry.ray@microchip.com>
-In-Reply-To: <20230117205703.25960-1-jerry.ray@microchip.com>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, jbe@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117034921.185150-3-bhe@redhat.com>
+Organisation: Horms Solutions BV
+X-Virus-Scanned: clamav-milter 0.103.7 at zeeaster
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Jan 17, 2023 at 11:49:21AM +0800, Baoquan He wrote:
+> This will help understand codes on crashkernel reservations on arm64.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+FWIIW, I think you can fold this into the first patch.
 
-On Tue, 17 Jan 2023 14:56:56 -0600 you wrote:
-> This patch series moves the lan9303 driver to use the phylink
-> api away from phylib.
+And, although I have no good idea at this moment, I do wonder
+if the logic can be simplified - I for one really needed the
+comments to understand the retry logic.
+
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> ---
+>  arch/arm64/mm/init.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> Migrating to phylink means removing the .adjust_link api. The
-> functionality from the adjust_link is moved to the phylink_mac_link_up
-> api.  The code being removed only affected the cpu port.  The other
-> ports on the LAN9303 do not need anything from the phylink_mac_link_up
-> api.
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 26a05af2bfa8..f88ad17cb20d 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -177,6 +177,10 @@ static void __init reserve_crashkernel(void)
+>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>  					       search_base, crash_max);
+>  	if (!crash_base) {
+> +		/*
+> +		 * For crashkernel=size[KMG]@offset[KMG], print out failure
+> +		 * message if can't reserve the specified region.
+> +		 */
+>  		if (fixed_base) {
+>  			pr_warn("cannot reserve crashkernel region [0x%llx-0x%llx]\n",
+>  				search_base, crash_max);
+> @@ -188,6 +192,11 @@ static void __init reserve_crashkernel(void)
+>  		 * high memory, the minimum required low memory will be
+>  		 * reserved later.
+>  		 */
+> +		/*
+> +		 * For crashkernel=size[KMG], if the first attempt was for
+> +		 * low memory, fall back to high memory, the minimum required
+> +		 * low memory will be reserved later.
+> +		 */
+
+I think this duplicates the preceding comment.
+Perhaps just replace the earlier comment with this one.
+
+>  		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
+>  			crash_max = CRASH_ADDR_HIGH_MAX;
+>  			search_base = CRASH_ADDR_LOW_MAX;
+> @@ -195,6 +204,10 @@ static void __init reserve_crashkernel(void)
+>  			goto retry;
+>  		}
+>  
+> +		/*
+> +		 * For crashkernel=size[KMG],high, if the first attempt was for
+> +		 * high memory, fall back to low memory.
+> +		 */
+>  		if (high && (crash_max == CRASH_ADDR_HIGH_MAX)) {
+>  			crash_max = CRASH_ADDR_LOW_MAX;
+>  			search_base = 0;
+> -- 
+> 2.34.1
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next:,v7,1/7] dsa: lan9303: align dsa_switch_ops members
-    https://git.kernel.org/netdev/net-next/c/9755126dc038
-  - [net-next:,v7,2/7] dsa: lan9303: move Turbo Mode bit init
-    https://git.kernel.org/netdev/net-next/c/1bcb5df81e4b
-  - [net-next:,v7,3/7] dsa: lan9303: Add exception logic for read failure
-    https://git.kernel.org/netdev/net-next/c/601f574a1b44
-  - [net-next:,v7,4/7] dsa: lan9303: write reg only if necessary
-    https://git.kernel.org/netdev/net-next/c/de375aa860fb
-  - [net-next:,v7,5/7] dsa: lan9303: Port 0 is xMII port
-    https://git.kernel.org/netdev/net-next/c/56e23d91bcfd
-  - [net-next:,v7,6/7] dsa: lan9303: Migrate to PHYLINK
-    https://git.kernel.org/netdev/net-next/c/332bc552a402
-  - [net-next:,v7,7/7] dsa: lan9303: Add flow ctrl in link_up
-    https://git.kernel.org/netdev/net-next/c/87523986570e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
