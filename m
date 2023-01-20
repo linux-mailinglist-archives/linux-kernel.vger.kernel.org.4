@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B216759CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242DA6759D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjATQVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S229881AbjATQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjATQVQ (ORCPT
+        with ESMTP id S229672AbjATQXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:21:16 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3956483;
-        Fri, 20 Jan 2023 08:20:59 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 259BC514;
-        Fri, 20 Jan 2023 17:20:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674231657;
-        bh=TGw+9CqZ256cySJaKQjXSViSWw8UUagtG2DMuiJ6f30=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pbKHdaPQw04NikCqa0MGBl4kIGWAHGvr7G2B7Y3X3Y4P3lzbBFCsdt4j7v8BDRra9
-         gd5yHuYhjjWZngkA5Fzz+9/4Kh9vyrR7FbNCTEzy02XnSxlab30cYuxwNlsK150csh
-         sbIZ46aA0Vy/saKhqeRuYsDSPkShvVLufNJTYiIw=
-Message-ID: <515a21fa-17f4-1f73-ed5c-adcc7f74ddb3@ideasonboard.com>
-Date:   Fri, 20 Jan 2023 18:20:53 +0200
+        Fri, 20 Jan 2023 11:23:52 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556E18B33C;
+        Fri, 20 Jan 2023 08:23:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OdOOh6S7JZ6WpzcIu6Ln2+FzF5CWHFaOfQ2iqywhwqI=; b=TM6dW0xDnyF6VGq8WKjA3Eo/Ue
+        zzkbVqz0xRBQgzhqREEYsphkVV+fzqkNO7S0Su5Y4ldyJP5bsak2yUhRxSG4z1JbybhLm9wjUV/yj
+        VpsjhOFAMgVyoWO4sCAxAYVgaIP/u7PSiICLrEAeThiBbMBdKl1XOmMIZi1DTutXKVADDH4hxIY1A
+        MvO1ZoBw1u+Rzt5ArKpOZHCB2gjlI95XDFjW7zqvi66k0EbTz22vmD11mu2bosfJRCoEGCtxg3OMG
+        22N/nMk0wI3De4ZBtOYVHClVrVxVGCDGqlVh16/RjRaw8Hi/yehAh2oWumn+ylotRG/myot+LpwMU
+        njDdNDbw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIuA1-000jM7-19;
+        Fri, 20 Jan 2023 16:22:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D681A300033;
+        Fri, 20 Jan 2023 17:23:02 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BC92A20DC0E8E; Fri, 20 Jan 2023 17:23:02 +0100 (CET)
+Date:   Fri, 20 Jan 2023 17:23:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Cc:     mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, akpm@osdl.org, arjan@linux.intel.com,
+        tglx@linutronix.de, joel@joelfernandes.org, paulmck@kernel.org,
+        stern@rowland.harvard.edu, diogo.behrens@huawei.com,
+        jonas.oberhauser@huawei.com, linux-kernel@vger.kernel.org,
+        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
+Message-ID: <Y8q/5hgXrvOp6vku@hirez.programming.kicks-ass.net>
+References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
- <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
- <Y8gvu/E5EoPqo8J1@smile.fi.intel.com> <20230119094358.010bc826@booty>
- <Y8q6ggmOsygyVdTT@smile.fi.intel.com> <20230120171718.3674af61@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230120171718.3674af61@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 18:17, Luca Ceresoli wrote:
-> Hi Andy,
+On Fri, Jan 20, 2023 at 02:55:25PM +0100, Hernan Ponce de Leon wrote:
+> From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
 > 
-> On Fri, 20 Jan 2023 18:00:02 +0200
-> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+> Following the defition of data race in
+> tools/memory-model/linux-kernel.cat the dartagnan tool
+> https://github.com/hernanponcedeleon/Dat3M
+> reported a race between mark_rt_mutex_waiters and rt_mutex_cmpxchg_release.
 > 
->> On Thu, Jan 19, 2023 at 09:43:58AM +0100, Luca Ceresoli wrote:
->>> On Wed, 18 Jan 2023 19:43:23 +0200
->>> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
->>>> On Wed, Jan 18, 2023 at 07:28:20PM +0200, Tomi Valkeinen wrote:
->>>>> On 18/01/2023 18:01, Andy Shevchenko wrote:
->>>>>> On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:
->>
->> ...
->>
->>>>> Can you clarify what you mean here?
->>>>>
->>>>> The i2c_clients are not aware of the i2c-atr. They are normal i2c clients.
->>>>> The FPD-Link drivers are aware of the ATR, as the FPD-Link hardware contains
->>>>> the ATR support.
->>>>
->>>> Can't that hardware be represented as I2C adapter? In such case the ATR specifics
->>>> can be hidden from the client (drivers).
->>>>
->>>> I'm worrying about code duplication and other things that leak into drivers as
->>>> ATR callbacks.
->>>
->>> Which callbacks do you refer to? i2c_atr_ops? I don't think we can do
->>> without the attach/detach_client ones, it's where the driver-specific
->>> implementation is hooked for the generic ATR infra to call it.
->>>
->>> However now I noticed the select/deselect ops are still there. IIRC
->>> they are not used by any driver and in the past the plan was to just
->>> remove them. Tomi, do you think there is a good reason to keep them?
->>>    
->>>> It might be that I didn't get how hw exactly functioning on this
->>>> level and why we need those callbacks.
->>>
->>> As far as "how hw exactly works", in case you haven't seen that, the
->>> best explanation I was able to give is in my ELCE 2019 talk, at minute
->>> ~22. It's a 2-3 minute watch. The slides have pointers to other talks
->>> and discussion.
->>
->> Probably I have missed the URL in the discussion, care to resend?
+> Commit 23f78d4a03c5 ("[PATCH] pi-futex: rt mutex core")
+> later removed in commit d0aa7a70bf03 ("futex_requeue_pi optimization")
+> and reverted in commit bd197234b0a6
+> ("Revert "futex_requeue_pi optimization"")
 > 
-> I hadn't sent any URL :)
+> The original commit introduced the data race.
 > 
-> Here's the shortcut to go straight to the ATR description:
-> https://youtu.be/7hLv6fYAW-E?t=1350
+> Cc: stable@vger.kernel.org # v2.6.18.x
+> Fixes: 23f78d4a03c5 ("[PATCH] pi-futex: rt mutex core")
+> Signed-off-by: Hernan Ponce de Leon <hernanl.leon@huawei.com>
+> ---
+>  kernel/locking/rtmutex.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Slides:
-> https://elinux.org/images/f/fc/Ceresoli-elce2019-video-serdes-linux.pdf
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index 010cf4e6d0b8..7ed9472edd48 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
+>  	unsigned long owner, *p = (unsigned long *) &lock->owner;
+>  
+>  	do {
+> -		owner = *p;
+> +		owner = READ_ONCE(*p);
+>  	} while (cmpxchg_relaxed(p, owner,
+>  				 owner | RT_MUTEX_HAS_WAITERS) != owner);
+>  
 
-A small note: the current implementation doesn't match the slides, as 
-the adapter is now (at least kind of) in the serializer (the "ideal 
-solution" in the slides.
+Can't we replace the whole of that function with:
 
-  Tomi
+	set_bit(0, (unsigned long *)&lock->owner);
 
+?
