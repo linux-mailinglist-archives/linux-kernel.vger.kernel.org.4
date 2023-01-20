@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F26E675538
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5711A67553B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjATNEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S230017AbjATNGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjATNEa (ORCPT
+        with ESMTP id S229626AbjATNGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:04:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D93C131D;
-        Fri, 20 Jan 2023 05:04:19 -0800 (PST)
-Date:   Fri, 20 Jan 2023 14:04:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674219856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u1W0wx5GLXqJFqLI02c9LueVs242lVw0159Mgl2bhFE=;
-        b=3R+rSoPpKs/9y39PgQ9cpha7hWA0zUk0UZ73qQvoXWjXXdYcW49Ep16oKAXStcVyMHIfPu
-        o0pe/VzSgDfLVAn19lPkhgtf3AFMSnqyr0vnHoDZUwuiHEaEP1x0DuMMOtnz79/I6bbwhU
-        xxjzoNg63xsvN5Wg7l+WtAuHNXuuPg/rsQV0bCJSeWMvka/PAfMXmjorY/+5wFVN0GOSR+
-        7d7NnCCvtvY4ivemfvO7J5rv8paI1OI+ZEv8bt6IWw8br1J3ls41WkF2y9weW06ngwJQ2C
-        GE9J2AZt3+1eGNQM4LVlK5+E7ryfwY/F8hRbC2aYhjxi+GhaUN38EsL5I87atA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674219856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u1W0wx5GLXqJFqLI02c9LueVs242lVw0159Mgl2bhFE=;
-        b=USf0ngINaW5LREgzu8Y4CtaQnxziEViykdcDhSBl3QuEeT/GvovJ2VWOS0EiPte6HDv/Oq
-        Yyvg5fnu/7otr9AA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Pavel Machek <pavel@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-Message-ID: <Y8qRTwEnEJz0L4mm@linutronix.de>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
- <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com>
- <Y8krsVFguwWLy+zT@duo.ucw.cz>
- <Y8lCspFtQ0wg6uCy@uudg.org>
- <Y8mwF0m+M1+e/fz/@eldamar.lan>
- <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk>
- <Y8oNTkUVDr7iQWzp@uudg.org>
- <c427d686-c850-4195-011b-93f51faa176d@kernel.dk>
- <Y8qOOxON9Vfsek0l@uudg.org>
+        Fri, 20 Jan 2023 08:06:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B5BCE06;
+        Fri, 20 Jan 2023 05:06:32 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CADAD660230B;
+        Fri, 20 Jan 2023 13:06:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674219991;
+        bh=Q5x2AtmYaA0fgZ4jp//x0TyHgSicTqhcPO5/1kpTO4w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CmsJPrUv5BhTSOordLZ4nQ1PesnxSdh3BQ4Tu+d2hpQH1h+WV91YkA6dN6CN6eAgf
+         0rvZ9f1X+ipOJxujYxzItFTDlYCNpXgg0T6hZmeJvicxv6PpGtNcd9C9h6usKmc5Gq
+         5CBJfki6cEB7oME4uujjbuFfyB3hPI0RXkP99B+muAlS89oXR44/yKpPfgBBmiViqp
+         lwkYeV451Gxe9rMSgKxUz607+/Cp03e/CXrPVPH2/UwfuVU0Iwu6/6XsEuKjUDoFx/
+         0gb+Ly6vVbLvv1/Irxx5ZRSY7/MpGLi0+H28PxHT9HAVOgZJzs+5Tpn84yqvb4acVQ
+         PvB1JjTj93S5g==
+Message-ID: <4d277d1e-f06a-07ad-f2c3-f910880a40d7@collabora.com>
+Date:   Fri, 20 Jan 2023 14:06:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8qOOxON9Vfsek0l@uudg.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] usb: mtu3: fix the failure of qmu stop
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>
+References: <20230119033322.21426-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230119033322.21426-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,13 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-20 09:51:07 [-0300], Luis Claudio R. Goncalves wrote:
-> My question is: do you prefer renumbering the bits or the neat asm hack
-> that Mike proposed? 
+Il 19/01/23 04:33, Chunfeng Yun ha scritto:
+> This happens when do stress test of uvc stream on/off which will
+> enable/disable endpoints. uvc has four tx requests, and may disable
+> endpoint between queue tx requests as following:
+>      enable ep --> start qmu
+>      queue tx request0
+>      queue tx request1
+>      queue tx request2 --> resume qmu
+>      disable ep --> stop qmu may fail [1]
+>      queue tx request3 --> will resume qmu, may cause qmu can't work
+>                            when enable ep next time [2]
+> 
+> [1]: when the tx fifo has some data to transmit, and
+>      try to stop qmu (stop ep) meanwhile resume qmu (queue tx request),
+>      it may cause stop qmu timeout, then can be fixed by flushing fifo
+>      when stop qmu.
+> [2]: it resumes qmu again, shall stop qmu again.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Reported-by: Min Guo <min.guo@mediatek.com>
 
-That change, that was stable-backported, should have hit the devel tree
-first. Why not sync with that?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> Luis
 
-Sebastian
