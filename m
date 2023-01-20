@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D486761B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7326761BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjATXnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S229761AbjATXrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjATXnA (ORCPT
+        with ESMTP id S229500AbjATXrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:43:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356B7DBE6;
-        Fri, 20 Jan 2023 15:42:55 -0800 (PST)
+        Fri, 20 Jan 2023 18:47:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A50712855;
+        Fri, 20 Jan 2023 15:47:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 729F7620E7;
-        Fri, 20 Jan 2023 23:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448D0C433D2;
-        Fri, 20 Jan 2023 23:42:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD695B82A99;
+        Fri, 20 Jan 2023 23:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009E0C433EF;
+        Fri, 20 Jan 2023 23:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674258174;
-        bh=jOiDj1nTgDbA+vCo7Om5n16foMSR0Jzva+bUM8XvgWE=;
+        s=k20201202; t=1674258432;
+        bh=0UTo512SxTtTGc9vnyttJwZavTdapDdH6OHtTgTtZTw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ylp+WtdDSbUV9qYxCK/NhYNvqZKwU6kso6L95frHoTxvaQK4UPPibKrCB1i0HLzmT
-         ZKIqndsDqyR7Dw/XOo9dxa8HTWnJ/IMYETqnqN6CEQ4FYE/FyaFb7s7zv41BIghyoY
-         Gc4AxZYV0IB7R0SP6RJLkachyQPACiAAqsj6xLx5AselcF9UR4clPmRr9XG9IHJF4e
-         WAUbkOeNUQI7NVt+z5Uy8+nR/33vH9oeYh0alW/N0ee1oLcGWG2gR1+tmrAL9f8FYG
-         4qvzPPqW4R0mcsJC5R4rRhegVnuNxZzsdVxJFdHLdmAe6PXbGdzyhNiZQFiD8k6X+L
-         i90qVnaJiD1qg==
-Date:   Fri, 20 Jan 2023 23:42:51 +0000
+        b=e5MjcFSMgJO/CmMsqY474TOH38GxPhM6n8jFnx/2OseJ8ZRTETCPKn1+jlBmh+lH+
+         /CWSgT+iYE6ExbFf8Rl0txUbmMPIi01alCKYwEy3FysA05TgsWjUSlE92t7rfeN7lF
+         LwnUm/RYi9jaApJ7NQ16WmyJ+7o1KDeZm+SYKnfqxBhqzoeORSK3EJF4bchN+mlHJd
+         4b26CX7C8tpyBP74oQ2QzvGd01+zuQ2X19sZZ2En4ixI9XKra9Ds+DaOt16lTXzOHy
+         rIeAIXPXnUDWMZ8vxJlYn1o7ctSzkNSNKr+ptDz8P0Dfm/od80iT9vvF/GI+qeUlG/
+         1iO3KVVpalIJQ==
+Date:   Fri, 20 Jan 2023 23:47:09 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y8sm+8JJo8VUsUBo@kernel.org>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y7azFdnnGAdGPqmv@kernel.org>
- <20230106094000.GA2297836@chaop.bj.intel.com>
- <Y7xrtf9FCuYRYm1q@google.com>
- <20230110091432.GA2441264@chaop.bj.intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Altmanninger <aclopte@gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <Y8sn/fLG0PGr4WA5@kernel.org>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+ <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <Y7w74EBYP3+FHlkw@zx2c4.com>
+ <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230110091432.GA2441264@chaop.bj.intel.com>
+In-Reply-To: <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -89,84 +67,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 05:14:32PM +0800, Chao Peng wrote:
-> On Mon, Jan 09, 2023 at 07:32:05PM +0000, Sean Christopherson wrote:
-> > On Fri, Jan 06, 2023, Chao Peng wrote:
-> > > On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
-> > > > On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> > > > > To make future maintenance easy, internally use a binary compatible
-> > > > > alias struct kvm_user_mem_region to handle both the normal and the
-> > > > > '_ext' variants.
-> > > > 
-> > > > Feels bit hacky IMHO, and more like a completely new feature than
-> > > > an extension.
-> > > > 
-> > > > Why not just add a new ioctl? The commit message does not address
-> > > > the most essential design here.
-> > > 
-> > > Yes, people can always choose to add a new ioctl for this kind of change
-> > > and the balance point here is we want to also avoid 'too many ioctls' if
-> > > the functionalities are similar.  The '_ext' variant reuses all the
-> > > existing fields in the 'normal' variant and most importantly KVM
-> > > internally can reuse most of the code. I certainly can add some words in
-> > > the commit message to explain this design choice.
+On Tue, Jan 10, 2023 at 06:19:48PM +0100, Vlastimil Babka wrote:
+> On 1/9/23 17:08, Jason A. Donenfeld wrote:
+> > Hi Thorsten,
 > > 
-> > After seeing the userspace side of this, I agree with Jarkko; overloading
-> > KVM_SET_USER_MEMORY_REGION is a hack.  E.g. the size validation ends up being
-> > bogus, and userspace ends up abusing unions or implementing kvm_user_mem_region
-> > itself.
-> 
-> How is the size validation being bogus? I don't quite follow. Then we
-> will use kvm_userspace_memory_region2 as the KVM internal alias, right?
-> I see similar examples use different functions to handle different
-> versions but it does look easier if we use alias for this function.
-> 
+> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
+> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
+> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
+> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
+> >>>>> "tpm_try_transmit" error this time. The first indication of a problem
+> >>>>> is this during a resume from suspend to ram:
+> >>>>>
+> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
+> >>>>>
+> >>>>> and then periodically 
+> >>>>>
+> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
+> >>>>
+> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
+> >>>> original problem was reported against TPM 2.0  because of a missing
+> >>>> try_get_ops().
+> >>>
+> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
+> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
+> >>> considering it's the same hardware from Vlastimil causing this. I also
+> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
+> >>> that's not correct.
+> >>
+> >> James, are you or some other TPM developer looking into this? Or is this
+> >> deadlocked now? And if so: how can we get this unstuck to get this
+> >> regression solved?
+> >>
+> >> Side note: I wonder if the problem that Johannes reported yesterday in
+> >> this thread (
+> >> https://lore.kernel.org/all/Y7VCcgHUC6JtnO2b@gmail.com/
+> >> ) is related or something else, as it seems his issue happens with 6.1,
+> >> while Vlastimil's problems should be fixed there. Or am I missing something?
 > > 
-> > It feels absolutely ridiculous, but I think the best option is to do:
+> > So, this is now in rc3:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
 > > 
-> > #define KVM_SET_USER_MEMORY_REGION2 _IOW(KVMIO, 0x49, \
-> > 					 struct kvm_userspace_memory_region2)
+> > That should help avoid the worst of the issue -- laptop not sleeping.
+> > But the race or whatever it is still does exist. So you might want to
+> > keep this in your tracker to periodically nudge the TPM folks about it.
 > 
-> Just interesting, is 0x49 a safe number we can use? 
+> Heh, booted rc3 and managed to hit it on very first suspend to ram attempt:
 > 
-> > 
-> > /* for KVM_SET_USER_MEMORY_REGION2 */
-> > struct kvm_user_mem_region2 {
-> > 	__u32 slot;
-> > 	__u32 flags;
-> > 	__u64 guest_phys_addr;
-> > 	__u64 memory_size;
-> > 	__u64 userspace_addr;
-> > 	__u64 restricted_offset;
-> > 	__u32 restricted_fd;
-> > 	__u32 pad1;
-> > 	__u64 pad2[14];
-> > }
-> > 
-> > And it's consistent with other KVM ioctls(), e.g. KVM_SET_CPUID2.
+> tpm tpm0: A TPM error (28) occurred continue selftest
 > 
-> Okay, agree from KVM userspace API perspective this is more consistent
-> with similar existing examples. I see several of them.
+> But thanks to the patch, the next suspend worked:
 > 
-> I think we will also need a CAP_KVM_SET_USER_MEMORY_REGION2 for this new
-> ioctl.
+> [  236.598900] tpm tpm0: Error (28) sending savestate before suspend
+> [  236.598915] tpm_tis 00:08: Ignoring error 28 while suspending
+> 
+> and on resume again:
+> 
+> [  238.196645] tpm tpm0: A TPM error (28) occurred continue selftest
+> 
+> and indeed now I keep getting (as expected)
+> 
+> [  399.671077] tpm tpm0: A TPM error (28) occurred attempting get random
+> 
+> So hopefully somebody will look into the root cause at some point.
 
-The current API in the patch set is trivial for C user space but for
-any other more "constrained" language such as Rust a new ioctl would be
-easier to adapt.
+I would start by using tpm1_auto_startup() also here, and see
+the effect:
 
-> > 
-> > Regarding the userspace side of things, please include Vishal's selftests in v11,
-> > it's impossible to properly review the uAPI changes without seeing the userspace
-> > side of things.  I'm in the process of reviewing Vishal's v2[*], I'll try to
-> > massage it into a set of patches that you can incorporate into your series.
-> 
-> Previously I included Vishal's selftests in the github repo, but not
-> include them in this patch series. It's OK for me to incorporate them
-> directly into this series and review together if Vishal is fine.
-> 
-> Chao
-> > 
-> > [*] https://lore.kernel.org/all/20221205232341.4131240-1-vannapurve@google.com
+https://lore.kernel.org/linux-integrity/Y8U1QxA4GYvPWDky@kernel.org/
 
 BR, Jarkko
