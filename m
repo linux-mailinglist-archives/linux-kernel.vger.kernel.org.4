@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C06675070
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D49675076
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjATJPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S229993AbjATJP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjATJPH (ORCPT
+        with ESMTP id S229988AbjATJPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:15:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678528BA92
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:14:47 -0800 (PST)
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <m.tretter@pengutronix.de>)
-        id 1pInTg-0001QK-Bq; Fri, 20 Jan 2023 10:14:28 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 20 Jan 2023 10:14:22 +0100
-Subject: [PATCH RESEND 2/2] arm64: dts: rockchip: Add RGA2 support to rk356x
+        Fri, 20 Jan 2023 04:15:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4758C934;
+        Fri, 20 Jan 2023 01:14:57 -0800 (PST)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NytxL47qDzqVmh;
+        Fri, 20 Jan 2023 17:09:58 +0800 (CST)
+Received: from [10.67.103.121] (10.67.103.121) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 20 Jan 2023 17:14:54 +0800
+Subject: Re: [PATCH for-next 0/3] Refactor rq inline and add cqe inline
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     <jgg@nvidia.com>, <linux-rdma@vger.kernel.org>,
+        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>
+References: <20221224102201.3114536-1-xuhaoyue1@hisilicon.com>
+ <Y6w2aRPSXAv4s5Pp@unreal>
+From:   "xuhaoyue (A)" <xuhaoyue1@hisilicon.com>
+Message-ID: <6aa101b0-970e-9331-4819-7202b6c2bfcf@hisilicon.com>
+Date:   Fri, 20 Jan 2023 17:14:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <Y6w2aRPSXAv4s5Pp@unreal>
 Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230119-rk3568-rga-v1-2-43d4d14365e6@pengutronix.de>
-References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
-In-Reply-To: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
-To:     Jacob Chen <jacob-chen@iotwrt.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Michael Tretter <m.tretter@pengutronix.de>
-X-Mailer: b4 0.11.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: m.tretter@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.103.121]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rk3568 also features a RGA2 block. Add the necessary device tree
-node.
+On 2022/12/28 20:28:25, Leon Romanovsky wrote:
+> On Sat, Dec 24, 2022 at 06:21:58PM +0800, Haoyue Xu wrote:
+>> The patchset mainly removes the kernel space
+>> rq inline features and supports cqe inline in user space.
+>>
+>> Luoyouming (3):
+>>   RDMA/hns: Remove rq inline in kernel
+>>   RDMA/hns: Add compatibility handling for only support userspace rq
+>>     inline
+>>   RDMA/hns: Support cqe inline in user space
+>>
+>>  drivers/infiniband/hw/hns/hns_roce_device.h |  19 +---
+>>  drivers/infiniband/hw/hns/hns_roce_hw_v2.c  | 109 ++++++--------------
+>>  drivers/infiniband/hw/hns/hns_roce_hw_v2.h  |   3 +-
+>>  drivers/infiniband/hw/hns/hns_roce_main.c   |  12 +++
+>>  drivers/infiniband/hw/hns/hns_roce_qp.c     |  66 +-----------
+>>  include/uapi/rdma/hns-abi.h                 |   4 +
+> 
+> Your commit messages are too scarce for patches which touch UAPI.
+> Please add more details about why you deleted, what users should do next
+> and what are the features you are adding,
+> 
+> Thanks
+> 
+>>  6 files changed, 54 insertions(+), 159 deletions(-)
+>>
+>> -- 
+>> 2.30.0
+>>
+> .
+> 
 
-Acked-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Leon,
+Sorry for the late response.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 5706c3e24f0a..704b13f7f717 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -612,6 +612,17 @@ vdpu_mmu: iommu@fdea0800 {
- 		#iommu-cells = <0>;
- 	};
- 
-+	rga: rga@fdeb0000 {
-+		compatible = "rockchip,rk3568-rga", "rockchip,rk3288-rga";
-+		reg = <0x0 0xfdeb0000 0x0 0x180>;
-+		interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_RGA>, <&cru HCLK_RGA>, <&cru CLK_RGA_CORE>;
-+		clock-names = "aclk", "hclk", "sclk";
-+		resets = <&cru SRST_RGA_CORE>, <&cru SRST_A_RGA>, <&cru SRST_H_RGA>;
-+		reset-names = "core", "axi", "ahb";
-+		power-domains = <&power RK3568_PD_RGA>;
-+	};
-+
- 	vepu: video-codec@fdee0000 {
- 		compatible = "rockchip,rk3568-vepu";
- 		reg = <0x0 0xfdee0000 0x0 0x800>;
+The cqe inline feature works as follows: payloads less than or equal to 32 bytes will be placed in the cqe, and the hardware will no longer need to access the pbl table and move the payload data.
+Instead, the driver will move the payload to the user data space, which is conducive to improving the latency performance of the send/receive operation.
+If rq inline and cqe inline are enabled at the same time, the data packet whose payload length is less than or equal to 32 bytes uses the cqe inline feature,
+and the data packet greater than 32 bytes and less than or equal to 1024 bytes uses the rq inline feature.
 
--- 
-2.30.2
+For the reason of deleting kernel space rq inline, Since no user currently uses kernel-mode rq inline, then only supports user-mode rq inline in further plans.
+To reduce maintenance, remove unsupported kernel state rq inline-related code.
+I will add this to the user-space patch if this explanation is ok?
+
+Sincerely,
+Haoyue
