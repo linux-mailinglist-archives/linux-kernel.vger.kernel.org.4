@@ -2,148 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF56675971
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746316758D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjATQDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S230162AbjATPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjATQDM (ORCPT
+        with ESMTP id S229660AbjATPhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:03:12 -0500
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E513757C;
-        Fri, 20 Jan 2023 08:03:11 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 525C5921F1E;
-        Fri, 20 Jan 2023 16:03:09 +0000 (UTC)
-Received: from pdx1-sub0-mail-a252.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B90CD921C5A;
-        Fri, 20 Jan 2023 16:03:08 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674230588; a=rsa-sha256;
-        cv=none;
-        b=q2/rf39yNFXhsT+BBAG+bmgYIoACFBGCOr5bljkMWx/C3vtHVhJI8mQWMGge4pR+AgG9hh
-        3kWoXVL/8HL0VGFhJ+f5OaakD97MMTLVIwkVMIVUOWuxxEcggWTLozz8f9W5+Kb1ndkdcp
-        Zzwigj+SG9y1ZszjApK1gMvRPai2+VnRJMXMu8aViZrSx8Fp5YFg7XSB99CaLN541A8qVD
-        BCYadfsHrPTUxyFalFxVKcHm++hgKleoRJbDyVOUcVCFfJ5o2I9/puB11cc0l+Vv4kIN9y
-        opxVh/YJPCpQ9PtNNemvbNJAIjF9ZPyHDDMo5lruPk8/nHeNbZC62kfz4dg8VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1674230588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=YjsmVTbUWOCRC7AkGQ9Kv1tBzMlRgafFXKVOC+akWHc=;
-        b=hSXSETVHH+AHqmcnnrH7uufObeXTrYOx+1pXCE5dgDvUUhez1CqGMXmkYoJRgVYXjNW+Nw
-        yN88DazvFvE7eFL+S2MZdbI8hM25TMtLNJL3bEPQkqOLLbfO+mcuqiR/2QcGKkqHr/AdY+
-        43bvJ1KISlyV4wVoNJ7D59PVUPLIwBTIMrAzc3pfm3j4j6IAM6kqbqHmGiDQ5acm7t35MK
-        441EYmbLGzoWUxPt5rLTZCmOxYZFtHt6XvHec43JNJWMIRFcTtJlQpdvEHDdBbnXY5cHim
-        cDMpriFesdHdJ4RZaNwvQ9gv9aWK1nhTpDrENmsosZTnKcgjgTwwV+Da7aTTSA==
-ARC-Authentication-Results: i=1;
-        rspamd-6f569fcb69-tfh7x;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Little-Language: 1db9b7194e4a6579_1674230589149_3639751266
-X-MC-Loop-Signature: 1674230589149:1274289475
-X-MC-Ingress-Time: 1674230589149
-Received: from pdx1-sub0-mail-a252.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.48.119 (trex/6.7.1);
-        Fri, 20 Jan 2023 16:03:09 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 20 Jan 2023 10:37:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78FCD232;
+        Fri, 20 Jan 2023 07:36:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a252.dreamhost.com (Postfix) with ESMTPSA id 4Nz4635f8Jz35;
-        Fri, 20 Jan 2023 08:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1674230588;
-        bh=YjsmVTbUWOCRC7AkGQ9Kv1tBzMlRgafFXKVOC+akWHc=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=qKMSyeDboRPvnjfOjqW975gvrM4osnzRg9fnq0VzLKSh7MIXraHCnLPcm1/9MFtVc
-         c+dH1upHny5++UUK2UVRa/xNbrRAfOlpJligopayV/bydMz/5UuhxKG2uiq/z9iML1
-         JVAGwT/3Td+f+UDxYDFHO2KhdoseWJjuOOa7dXDrX3LzeR81xgKxCkjTGxx4DFYCtF
-         v5TF3P9LU+3Zap2lBOopLr/vn9UnV4cdp2CJ2dIKrs1q48GNEhU+C1JnkVxYl1m9GV
-         Z+8Imjgyz2hOySK4MKstirzBjk+B8eKtHnANvFlJgQzEuTz5/kSv7mbzTiMdqxn+FB
-         1ILKvvxHRZwVQ==
-Date:   Fri, 20 Jan 2023 07:36:41 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <20230120153641.ttgwdfvobygwuc4i@offworld>
-References: <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
- <Y8gPhTGkfCbGwoUu@linutronix.de>
- <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
- <Y8j+lENBWNWgt4mf@linutronix.de>
- <20230119110220.kphftcehehhi5l5u@techsingularity.net>
- <Y8lvwKHmmnikVDgk@linutronix.de>
- <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
- <Y8pP3CD1PQ4KWhXF@linutronix.de>
- <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02E6161FC4;
+        Fri, 20 Jan 2023 15:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D9AC433D2;
+        Fri, 20 Jan 2023 15:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674229006;
+        bh=tkiPft3TsqZUu2mhyvdgu0O7D18zLDJUjdrbxMv2t2c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ZUKLOiEQ+v0oNiSQM1uiSH9DUrM1qn9Lz1uXkeOHTOWYy8yF+lyElJ7sWEqOmJp4o
+         +EBfqMcqEiE3x+EzXJE4MsZzV2x0fjgQ/w7a2ljtoVeSmQHR1KMLzglbG58/bjgWH6
+         gh43drcmpQW79gSoVrlUeYfGOnSPZv1IZI291DJ5SYZv6nlMFghLLQeHFqee2nkcLZ
+         xB81ooJKtb7wxfelrLDEbgy/0QoqII0KPXNQEUEqq3Y0rIUOX1j3xGyGi0uX6zTBIY
+         Ln1u3DO4rIJmwvXr2uN+uE3Z8DRnlf6Xp3q5jBmtAb/aMFxKhQNm/oFMVsHBC8r8O5
+         uLUA9JsZSfW+w==
+Date:   Fri, 20 Jan 2023 09:36:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+Message-ID: <20230120153644.GA636025@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H59FLAFGD8oDZGjXWgL2ei_L=rYAaFWWp1skUT9nUPVYg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023, Mel Gorman wrote:
+On Fri, Jan 20, 2023 at 09:31:43PM +0800, Huacai Chen wrote:
+> On Thu, Jan 19, 2023 at 8:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Thu, Jan 19, 2023 at 08:25:20PM +0800, Huacai Chen wrote:
+> > > Ping?
+> >
+> > I suggested another possible way to do this that wasn't so much of a
+> > special case.  Did you explore that at all?
+>
+> That is a little difficult for me, but what is worse is that the root
+> cause doesn't come from gpu or console drivers, but from the root
+> port. That means: even if we can workaround the gpu issue in another
+> way, there are still problems on other devices. Besides the graphics
+> card, the most frequent problematic device is the sata controller
+> connected on LS7A chipset, there are incomplete I/O accesses after the
+> root port disabled and also cause reboot failure.
 
->locking/rwbase: Prevent indefinite writer starvation
->
->rw_semaphore and rwlock are explicitly unfair to writers in the presense
->of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
->("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
->
->        The implementation is writer unfair, as it is not feasible to do
->        priority inheritance on multiple readers, but experience has shown
->        that real-time workloads are not the typical workloads which are
->        sensitive to writer starvation.
->
->While atypical, it's also trivial to block writers with PREEMPT_RT
->indefinitely without ever making forward progress. Since LTP-20220121,
->the dio_truncate test case went from having 1 reader to having 16 readers
->and the number of readers is sufficient to prevent the down_write ever
->succeeding while readers exist. Eventually the test is killed after 30
->minutes as a failure.
->
->dio_truncate is not a realtime application but indefinite writer starvation
->is undesirable. The test case has one writer appending and truncating files
->A and B while multiple readers read file A. The readers and writer are
->contending for one file's inode lock which never succeeds as the readers
->keep reading until the writer is done which never happens.
->
->This patch records a timestamp when the first writer is blocked. DL /
->RT tasks can continue to take the lock for read as long as readers exist
->indefinitely. Other readers can acquire the read lock unless a writer
->has been blocked for a minimum of 4ms. This is sufficient to allow the
->dio_truncate test case to complete within the 30 minutes timeout.
->
->Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Yes, SATA sounds like another case where we want to use the device
+after we call the driver's remove/shutdown method.  That's not
+*worse*, it's just another case where we might have to mark devices
+for special handling.
 
-LGTM (albeit Sebastian's last comment).
+If we remove/shutdown *any* Root Port, not just LS7A, I think the idea
+of assuming downstream devices can continue to work as usual is a
+little suspect.  They might continue to work by accident today, but it
+doesn't seem like a robust design.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> > I know there's no *existing* way to mark devices that we need to use
+> > all the way through shutdown or reboot, but if it makes sense, there's
+> > no reason we couldn't add one.  That has the potential of being more
+> > generic, e.g., we could do it for all console devices, as opposed to
+> > quirking a Root Port that just happens to be in the path to the
+> > console.
+> >
+> > > On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> > > > > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe
+> > > > > > services during shutdown") we observe poweroff/reboot
+> > > > > > failures on systems with LS7A chipset.
+> > > > > >
+> > > > > > We found that if we remove "pci_command &=
+> > > > > > ~PCI_COMMAND_MASTER" in do_pci_disable_device(), it can
+> > > > > > work well. The hardware engineer says that the root cause
+> > > > > > is that CPU is still accessing PCIe devices while
+> > > > > > poweroff/reboot, and if we disable the Bus Master Bit at
+> > > > > > this time, the PCIe controller doesn't forward requests to
+> > > > > > downstream devices, and also does not send TIMEOUT to CPU,
+> > > > > > which causes CPU wait forever (hardware deadlock).
+> > > > > >
+> > > > > > To be clear, the sequence is like this:
+> > > > > >
+> > > > > >   - CPU issues MMIO read to device below Root Port
+> > > > > >
+> > > > > >   - LS7A Root Port fails to forward transaction to secondary bus
+> > > > > >     because of LS7A Bus Master defect
+> > > > > >
+> > > > > >   - CPU hangs waiting for response to MMIO read
+> > > > > >
+> > > > > > Then how is userspace able to use a device after the
+> > > > > > device is removed?
+> > > > > >
+> > > > > > To give more details, let's take the graphics driver (e.g.
+> > > > > > amdgpu) as an example. The userspace programs call
+> > > > > > printf() to display "shutting down xxx service" during
+> > > > > > shutdown/reboot, or the kernel calls printk() to display
+> > > > > > something during shutdown/reboot. These can happen at any
+> > > > > > time, even after we call pcie_port_device_remove() to
+> > > > > > disable the pcie port on the graphic card.
+> > > > > >
+> > > > > > The call stack is: printk() --> call_console_drivers() -->
+> > > > > > con->write() --> vt_console_print() --> fbcon_putcs()
+> > > > > >
+> > > > > > This scenario happens because userspace programs (or the
+> > > > > > kernel itself) don't know whether a device is 'usable',
+> > > > > > they just use it, at any time.
+> > > > >
+> > > > > Thanks for this background.  So basically we want to call
+> > > > > .remove() on a console device (or a bridge leading to it),
+> > > > > but we expect it to keep working as usual afterwards?
+> > > > >
+> > > > > That seems a little weird.  Is that the design we want?
+> > > > > Maybe we should have a way to mark devices so we don't
+> > > > > remove them during shutdown or reboot?
+> > > >
+> > > > Sounds reasonable, but it seems no existing way can mark this.
+> > > >
+> > > > Huacai
+> > > > >
+> > > > > > This hardware behavior is a PCIe protocol violation (Bus Master should
+> > > > > > not be involved in CPU MMIO transactions), and it will be fixed in new
+> > > > > > revisions of hardware (add timeout mechanism for CPU read request,
+> > > > > > whether or not Bus Master bit is cleared).
+> > > > > >
+> > > > > > On some x86 platforms, radeon/amdgpu devices can cause similar problems
+> > > > > > [1][2]. Once before I wanted to make a single patch to solve "all of
+> > > > > > these problems" together, but it seems unreasonable because maybe they
+> > > > > > are not exactly the same problem. So, this patch add a new function
+> > > > > > pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
+> > > > > > dedicated for the shutdown path, and then add a quirk just for LS7A to
+> > > > > > avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
+> > > > > > platforms behave as before.
+> > > > > >
+> > > > > > [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
+> > > > > > [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
+> > > > > >
+> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > > ---
+> > > > > >  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
+> > > > > >  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
+> > > > > >  include/linux/pci.h                   |  1 +
+> > > > > >  3 files changed, 37 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> > > > > > index 759ec211c17b..641308ba4126 100644
+> > > > > > --- a/drivers/pci/controller/pci-loongson.c
+> > > > > > +++ b/drivers/pci/controller/pci-loongson.c
+> > > > > > @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > >                       DEV_PCIE_PORT_2, loongson_mrrs_quirk);
+> > > > > >
+> > > > > > +static void loongson_bmaster_quirk(struct pci_dev *pdev)
+> > > > > > +{
+> > > > > > +     /*
+> > > > > > +      * Some Loongson PCIe ports will cause CPU deadlock if there is
+> > > > > > +      * MMIO access to a downstream device when the root port disable
+> > > > > > +      * the Bus Master bit during poweroff/reboot.
+> > > > > > +      */
+> > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
+> > > > > > +
+> > > > > > +     bridge->no_dis_bmaster = 1;
+> > > > > > +}
+> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > +                     DEV_PCIE_PORT_0, loongson_bmaster_quirk);
+> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > +                     DEV_PCIE_PORT_1, loongson_bmaster_quirk);
+> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > +                     DEV_PCIE_PORT_2, loongson_bmaster_quirk);
+> > > > > > +
+> > > > > >  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
+> > > > > >  {
+> > > > > >       pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
+> > > > > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> > > > > > index 2cc2e60bcb39..96f45c444422 100644
+> > > > > > --- a/drivers/pci/pcie/portdrv.c
+> > > > > > +++ b/drivers/pci/pcie/portdrv.c
+> > > > > > @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
+> > > > > >  {
+> > > > > >       device_for_each_child(&dev->dev, NULL, remove_iter);
+> > > > > >       pci_free_irq_vectors(dev);
+> > > > > > -     pci_disable_device(dev);
+> > > > > >  }
+> > > > > >
+> > > > > >  /**
+> > > > > > @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
+> > > > > >       }
+> > > > > >
+> > > > > >       pcie_port_device_remove(dev);
+> > > > > > +
+> > > > > > +     pci_disable_device(dev);
+> > > > > > +}
+> > > > > > +
+> > > > > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> > > > > > +{
+> > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> > > > > > +
+> > > > > > +     if (pci_bridge_d3_possible(dev)) {
+> > > > > > +             pm_runtime_forbid(&dev->dev);
+> > > > > > +             pm_runtime_get_noresume(&dev->dev);
+> > > > > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
+> > > > > > +     }
+> > > > > > +
+> > > > > > +     pcie_port_device_remove(dev);
+> > > > > > +
+> > > > > > +     if (!bridge->no_dis_bmaster)
+> > > > > > +             pci_disable_device(dev);
+> > > > > >  }
+> > > > > >
+> > > > > >  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
+> > > > > > @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
+> > > > > >
+> > > > > >       .probe          = pcie_portdrv_probe,
+> > > > > >       .remove         = pcie_portdrv_remove,
+> > > > > > -     .shutdown       = pcie_portdrv_remove,
+> > > > > > +     .shutdown       = pcie_portdrv_shutdown,
+> > > > > >
+> > > > > >       .err_handler    = &pcie_portdrv_err_handler,
+> > > > > >
+> > > > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > > > > > index 3df2049ec4a8..a64dbcb89231 100644
+> > > > > > --- a/include/linux/pci.h
+> > > > > > +++ b/include/linux/pci.h
+> > > > > > @@ -573,6 +573,7 @@ struct pci_host_bridge {
+> > > > > >       unsigned int    ignore_reset_delay:1;   /* For entire hierarchy */
+> > > > > >       unsigned int    no_ext_tags:1;          /* No Extended Tags */
+> > > > > >       unsigned int    no_inc_mrrs:1;          /* No Increase MRRS */
+> > > > > > +     unsigned int    no_dis_bmaster:1;       /* No Disable Bus Master */
+> > > > > >       unsigned int    native_aer:1;           /* OS may use PCIe AER */
+> > > > > >       unsigned int    native_pcie_hotplug:1;  /* OS may use PCIe hotplug */
+> > > > > >       unsigned int    native_shpc_hotplug:1;  /* OS may use SHPC hotplug */
+> > > > > > --
+> > > > > > 2.31.1
+> > > > > >
