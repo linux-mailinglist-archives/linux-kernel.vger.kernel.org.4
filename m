@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFD1674CBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BAE674CCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjATFsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S231503AbjATFvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjATFsp (ORCPT
+        with ESMTP id S231295AbjATFuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:48:45 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CD111664
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HRjwOCVzwM/JW0nRSbGXBKRTYmFcFNAcwf5tRy6Wjq8=; b=ZScI6oZlQ7OMuf2sCUd8I7tW18
-        LTf13QwNry53D3aVeuvTAMDXP20zG98bna3DYZQKwZhKRBxPGFDj3n5oIMBVqKkqOexJKfedtrfMT
-        RwJ6T3l9A40J7bzI3nh/rkWXqu5QkqJb9jAGPWnOFRvxVWZXfBKMk1QS0AqJchv5WQstfd30k2jSL
-        hQMW2QSwVSC3vHWERzQP2qyIHaccG4KPimx4Qq1R2/dBv4JZdb3LT17Oc3sLFg3EnE0XYx/5Zd3SA
-        QjBZLV76VGJy4VATUcQiun3SY9grv09T50xsz9/zou0N3h6YY2wGcVqRngqHBPD7qGB5fsGBXELzl
-        3lq72dvA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIkGQ-001hrA-Na; Fri, 20 Jan 2023 05:48:35 +0000
-Date:   Fri, 20 Jan 2023 05:48:34 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, jhubbard@nvidia.com
-Subject: Re: [PATCH 3/9] mm/hugetlb: convert putback_active_hugepage to take
- in a folio
-Message-ID: <Y8orMisdXzaUI0t8@casper.infradead.org>
-References: <20230119211446.54165-1-sidhartha.kumar@oracle.com>
- <20230119211446.54165-4-sidhartha.kumar@oracle.com>
+        Fri, 20 Jan 2023 00:50:46 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126FE193E9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:50:45 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pIkIU-0007Ki-6a; Fri, 20 Jan 2023 06:50:42 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pIkIS-0000mw-1a; Fri, 20 Jan 2023 06:50:40 +0100
+Date:   Fri, 20 Jan 2023 06:50:40 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Arun.Ramadoss@microchip.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 2/4] net: phy: micrel: add EEE configuration
+ support for KSZ9477 variants of PHYs
+Message-ID: <20230120055040.GH6162@pengutronix.de>
+References: <20230119131821.3832456-1-o.rempel@pengutronix.de>
+ <20230119131821.3832456-3-o.rempel@pengutronix.de>
+ <Y8lO+2JojN8zOkkY@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230119211446.54165-4-sidhartha.kumar@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8lO+2JojN8zOkkY@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:14:40PM -0800, Sidhartha Kumar wrote:
-> -void putback_active_hugepage(struct page *page)
-> +void putback_active_hugetlb_folio(struct folio *folio)
+On Thu, Jan 19, 2023 at 03:08:59PM +0100, Andrew Lunn wrote:
+> > +static int ksz9477_get_eee_caps(struct phy_device *phydev,
+> > +				struct ethtool_eee *data)
+> > +{
+> > +	int val;
+> > +
+> > +	/* At least on KSZ8563 (which has same PHY_ID as KSZ9477), the
+> > +	 * MDIO_PCS_EEE_ABLE register is a mirror of MDIO_AN_EEE_ADV register.
+> > +	 * So, we need to provide this information by driver.
+> > +	 */
+> > +	data->supported = SUPPORTED_100baseT_Full;
+> > +
+> > +	/* KSZ8563 is able to advertise not supported MDIO_EEE_1000T.
+> > +	 * We need to test if the PHY is 1Gbit capable.
+> > +	 */
+> > +	val = phy_read(phydev, MII_BMSR);
+> > +	if (val < 0)
+> > +		return val;
+> > +
+> > +	if (val & BMSR_ERCAP)
+> > +		data->supported |= SUPPORTED_1000baseT_Full;
+> 
+> This works, but you could also look at phydev->supported and see if
+> one of the 1G modes is listed. That should be faster, since there is
+> no MDIO transaction involved. Not that this is on any sort of hot
+> path.
 
-Maybe call this folio_putback_active_hugetlb()?  It fits better
-with folio_putback_lru().
+ack. Sounds good.
 
-> +++ b/mm/migrate.c
-> @@ -151,7 +151,7 @@ void putback_movable_pages(struct list_head *l)
->  
->  	list_for_each_entry_safe(page, page2, l, lru) {
->  		if (unlikely(PageHuge(page))) {
-> -			putback_active_hugepage(page);
-> +			putback_active_hugetlb_folio(page_folio(page));
->  			continue;
->  		}
->  		list_del(&page->lru);
-
-Maybe we need a patch first to convert this loop from an iteration of
-page->lru to folio->lru to avoid that call to page_folio()?
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
