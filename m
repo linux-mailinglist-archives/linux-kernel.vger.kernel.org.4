@@ -2,118 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC13E675E5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B38675E61
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjATTsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S229999AbjATTs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjATTsJ (ORCPT
+        with ESMTP id S229995AbjATTsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:48:09 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9CE94324
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d03v7w3Y8XlCff6/igHH0oG20Hre0Avz6+XHwVubR4M=; b=BdJbrjdi06pDLVM5tbWxRZ44cA
-        ExOvpVsVE3JY9GP6qCHzk1++rM1Kfhr2+GQehjehl2bbBDCMutwJUv+sQg1gGKgj9Bi1Y5Ej8YSdU
-        MVgVi27aTKjBFhFBRk7H6ozd3AS+8pYnqjrXKsas3ZOV2ticNZDDL6vk+1V7us0TtAz+7aCRMHC8A
-        9R4EoeI+82A2VN3n+1V5Eh/udQcWeOQSeNezfY2hjwkIguOb8ZabvNNWDZlAvqrP6Bzq3ItJaV9+8
-        /5wTealt3nuwoEMJNarZFzByWlLy0hjfcairU6GiTBzLfYcPF84L7RJcvEE3qRxbDN1zMt6e/fkXN
-        rianS3PQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIxMV-002MtE-4I; Fri, 20 Jan 2023 19:47:43 +0000
-Date:   Fri, 20 Jan 2023 19:47:43 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>
-Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm-unstable 5/5] mm/mempolicy: Convert migrate_page_add()
- to migrate_folio_add()
-Message-ID: <Y8rv3/GfW8XDDXj7@casper.infradead.org>
-References: <20230118232219.27038-1-vishal.moola@gmail.com>
- <20230118232219.27038-6-vishal.moola@gmail.com>
- <4dd1a4f4-4da6-8079-a8de-bea7d8c18681@intel.com>
+        Fri, 20 Jan 2023 14:48:41 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED6A3A583;
+        Fri, 20 Jan 2023 11:48:32 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id eb38fa6f8f139020; Fri, 20 Jan 2023 20:48:30 +0100
+Received: from kreacher.localnet (unknown [213.134.183.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E55B723101AB;
+        Fri, 20 Jan 2023 20:48:29 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v1 2/2] thermal: Fail object registration if thermal class is not registered
+Date:   Fri, 20 Jan 2023 20:48:07 +0100
+Message-ID: <4780418.GXAFRqVoOG@kreacher>
+In-Reply-To: <5905717.lOV4Wx5bFT@kreacher>
+References: <5905717.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4dd1a4f4-4da6-8079-a8de-bea7d8c18681@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.98
+X-CLIENT-HOSTNAME: 213.134.183.98
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgudefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekfedrleeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedrleekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdp
+ rhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:24:16AM +0800, Yin, Fengwei wrote:
-> On 1/19/2023 7:22 AM, Vishal Moola (Oracle) wrote:
-> > @@ -1022,27 +1022,23 @@ static long do_get_mempolicy(int *policy, nodemask_t *nmask,
-> >  }
-> >  
-> >  #ifdef CONFIG_MIGRATION
-> > -/*
-> > - * page migration, thp tail pages can be passed.
-> > - */
-> > -static int migrate_page_add(struct page *page, struct list_head *pagelist,
-> > +static int migrate_folio_add(struct folio *folio, struct list_head *foliolist,
-> >  				unsigned long flags)
-> >  {
-> > -	struct page *head = compound_head(page);
-> >  	/*
-> > -	 * Avoid migrating a page that is shared with others.
-> > +	 * Avoid migrating a folio that is shared with others.
-> >  	 */
-> > -	if ((flags & MPOL_MF_MOVE_ALL) || page_mapcount(head) == 1) {
-> > -		if (!isolate_lru_page(head)) {
-> > -			list_add_tail(&head->lru, pagelist);
-> > -			mod_node_page_state(page_pgdat(head),
-> > -				NR_ISOLATED_ANON + page_is_file_lru(head),
-> > -				thp_nr_pages(head));
-> > +	if ((flags & MPOL_MF_MOVE_ALL) || folio_mapcount(folio) == 1) {
-> One question to the page_mapcount -> folio_mapcount here.
-> 
-> For a large folio with 0 entire mapcount, if the first sub-page and any
-> other sub-page are mapped, page_mapcount(head) == 1 is true while
-> folio_mapcount(folio) == 1 is not.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-We had a good discussion about this in today's THP Cabal meeting [1].  I
-didn't quite check everything that I said was true, so let me summarise
-& correct it now ...
+If thermal_class is not registered with the driver core, there is no way
+to expose the interfaces used by the thermal control framework, so
+prevent thermal zones and cooling devices from being registered in
+that case by returning an error from object registration functions.
 
- - This is a heuristic.  We're trying to see whether this folio is
-   mapped by multiple processes (because if it is, it's probably not
-   worth migrating).  If the heuristic is wrong, it probably doesn't
-   matter _too_ much?
- - A proper heuristic for this would be
-		folio_total_mapcount(folio) == folio_nr_pages(folio)
-   but this would be expensive to calculate as it requires examining
-   512 cachelines for a 2MB page.
- - For a large folio which is smaller than PMD size, we're guaranteed
-   that folio_mapcount() is 0 today.
- - In the meeting I said that page_mapcount() of the head of a THP
-   page was zero; that's not true; I had forgotten that we added in
-   entire_mapcount to the individual page mapcount.
+For this purpose, introduce class_is_registered() that checks the
+private pointer of the given class and returns 'false' if it is NULL,
+which means that the class has not been registered, and use it in the
+thermal framework.
 
-so I now think this should be:
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |    6 ++++++
+ include/linux/device/class.h   |    5 +++++
+ 2 files changed, 11 insertions(+)
 
-	page_mapcount(folio_page(folio, 0))
+Index: linux-pm/include/linux/device/class.h
+===================================================================
+--- linux-pm.orig/include/linux/device/class.h
++++ linux-pm/include/linux/device/class.h
+@@ -82,6 +82,11 @@ struct class_dev_iter {
+ 	const struct device_type	*type;
+ };
+ 
++static inline bool class_is_registered(struct class *class)
++{
++	return !!class->p;
++}
++
+ extern struct kobject *sysfs_dev_block_kobj;
+ extern struct kobject *sysfs_dev_char_kobj;
+ extern int __must_check __class_register(struct class *class,
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -880,6 +880,9 @@ __thermal_cooling_device_register(struct
+ 	    !ops->set_cur_state)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (!class_is_registered(&thermal_class))
++		return ERR_PTR(-ENODEV);
++
+ 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
+@@ -1342,6 +1345,9 @@ thermal_zone_device_register_with_trips(
+ 	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (!class_is_registered(&thermal_class))
++		return ERR_PTR(-ENODEV);
++
+ 	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
+ 	if (!tz)
+ 		return ERR_PTR(-ENOMEM);
 
-with an explanation that checking every page is too heavy-weight.
-Maybe it should be its own function:
 
-static inline int folio_estimated_mapcount(folio)
-{
-	return page_mapcount(folio_page(folio, 0));
-}
 
-with a nice comment explaining what's going on.
-
-[1] https://www.youtube.com/watch?v=A3PoGQQQD3Q is the recording of
-today's meeting.
