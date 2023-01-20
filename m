@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B757867481B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E0674820
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjATAiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S229646AbjATAkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjATAiH (ORCPT
+        with ESMTP id S229616AbjATAkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:38:07 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E257F4A1C8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:38:05 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id z3so2850653pfb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:38:05 -0800 (PST)
+        Thu, 19 Jan 2023 19:40:43 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CA37E692
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:40:41 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id b10so4150603pjo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:40:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=opKKL6+fhG9H3ZnE4M3C01lHGZFgbl9xi06Tl9DFlxo=;
-        b=lIedS74S3tmDvAWKf/pKIZQXH++46nIxIJzGdjRAjE9stYh7oH/dycv4f7V1NWEzz+
-         vrpqcWM/ON5ywALOuqyE/K5lI6vcyOGLyyKtmi+HYl9pmLHQgMyOEmPmfOysBJfi7FtE
-         sXfBhrRutvpoE0oPKPAf4SqWZz4MHXi555J34=
+        bh=sFVdIvvzo/ETapZbTHnKoiKfHn/j96E5/5giRSCHT/Q=;
+        b=b7i2+RwK9hPdPhRuhNwQDc5ekeYQ8BuSoHBwLqngASebWmuy1HGgZjKn8Azys5ZfMV
+         VfY+8xr7v9QZDNwxb3DJ+OX78vZBg5b/ispDLD6iHYuVIg+vZmOqUM+Uu+YQENkVD3K8
+         GbDXNoen7J2f2I7aybB8nIa6N522nKxhQkenk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=opKKL6+fhG9H3ZnE4M3C01lHGZFgbl9xi06Tl9DFlxo=;
-        b=mLFkJ1dXEpr34tMJjK95FmthZ79eTeUtCiZelLaN5zHl+ujwdvBO5bfjJfUBrEhhfB
-         SQnZ1TA/sKZdXOUImIyseFZMT0CErEJ1jh/d5n+fz+FOO8JI+WZmtCVZtE1KLnLD2INw
-         pHHkixLQudUuvAaFQ8ICH5gjrrM9hef8acYGSWsC53Sk37xykbaIWvx+qtmtbVfZ5c4j
-         mWUFXZVoO7EOpKM62dt2r+/zWqIHX2hBobpQk+sTqjRT63mIrJAyq7japBw12KoRsQHF
-         ZnBlEYhpcdfLc/mSqVPE9h+kvgP6VaS9tvnFNlsFyTvFdU7XutQeTBx5f5La30lDWhEB
-         cupQ==
-X-Gm-Message-State: AFqh2koieHJfrH+6h7WkPO6GOOjqZJRo34xyR465cAmwzHkhhcxaCcqw
-        VdtfUXFg7g27rPegof1StShRpA==
-X-Google-Smtp-Source: AMrXdXvDaBmAz43jKve14VMT5yvVg1paSSfHL+s3Uhw4JeU7qrDP9f2UUmfnfH3+wY9g4cAEosDVgw==
-X-Received: by 2002:a62:aa0c:0:b0:58d:af0c:92f with SMTP id e12-20020a62aa0c000000b0058daf0c092fmr12442131pff.27.1674175085334;
-        Thu, 19 Jan 2023 16:38:05 -0800 (PST)
+        bh=sFVdIvvzo/ETapZbTHnKoiKfHn/j96E5/5giRSCHT/Q=;
+        b=DZpvNs5q1FBWFo+p7+2oC+M7Yd5cyGqaihbZqfoFYJeajUQPQCZ+RSZpkg718m7jjB
+         DLzPJXQecj6WHt9CuD/DtbJYxGp3koKY4f68AkcS4upHJSuUJMkMR1+y9cCskZDBvhSW
+         ZeNIzs+f7Cye2UCw9zejLU9IPHKZ3W4+G/eD6ihFmAMrLCVEqELo+obGPQ9h6ym3hEjm
+         DMaOQ9igFXVwB2Su8O4QpfWstFdrDefbRLAgkyKDMxnYJBk+/6+BEsPl7R8d+wW/2uez
+         q27VU/R4TPG9e95BwByZscFDYFAsVP4O+d0xwO8jqgh4MR/eIfkzrrLfjLmujIymOLGj
+         k41g==
+X-Gm-Message-State: AFqh2koIVPSeVgyh8GmrPcjLMfdj5V6BGvc9bLasonMgu/qkcd6Zxs29
+        HygiPgr5s8t7bGOpqQphKxVsVA==
+X-Google-Smtp-Source: AMrXdXv7pylFHOs3hcd85th2qDd1Mgc6nRCCmWLDNzyscDG+u+mxW82jHU3aLqsYpfnAU/bDqdra8g==
+X-Received: by 2002:a05:6a21:99a7:b0:b2:5cf9:817b with SMTP id ve39-20020a056a2199a700b000b25cf9817bmr18329080pzb.5.1674175241235;
+        Thu, 19 Jan 2023 16:40:41 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b00582388bd80csm24696882pfj.83.2023.01.19.16.38.04
+        by smtp.gmail.com with ESMTPSA id t25-20020a62d159000000b0056bd1bf4243sm9814718pfl.53.2023.01.19.16.40.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 16:38:04 -0800 (PST)
-Date:   Thu, 19 Jan 2023 16:38:03 -0800
+        Thu, 19 Jan 2023 16:40:40 -0800 (PST)
+Date:   Thu, 19 Jan 2023 16:40:40 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -76,15 +76,14 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v5 01/39] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <202301191638.E3E75FEC1D@keescook>
+Subject: Re: [PATCH v5 02/39] x86/shstk: Add Kconfig option for shadow stack
+Message-ID: <202301191640.DE1E4D3@keescook>
 References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-2-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-3-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-2-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230119212317.8324-3-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -95,10 +94,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:22:39PM -0800, Rick Edgecombe wrote:
+On Thu, Jan 19, 2023 at 01:22:40PM -0800, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Introduce a new document on Control-flow Enforcement Technology (CET).
+> Shadow stack provides protection for applications against function return
+> address corruption. It is active when the processor supports it, the
+> kernel has CONFIG_X86_SHADOW_STACK enabled, and the application is built
+> for the feature. This is only implemented for the 64-bit kernel. When it
+> is enabled, legacy non-shadow stack applications continue to work, but
+> without protection.
+> 
+> Since there is another feature that utilizes CET (Kernel IBT) that will
+> share implementation with shadow stacks, create CONFIG_CET to signify
+> that at least one CET feature is configured.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
