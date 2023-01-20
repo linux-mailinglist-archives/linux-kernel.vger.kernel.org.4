@@ -2,179 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AFA675CF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E868F675CF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjATSpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S230408AbjATSrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjATSp0 (ORCPT
+        with ESMTP id S230381AbjATSqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:45:26 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70980A19B7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:45:22 -0800 (PST)
-Received: from TimeMachine.lan (adsl-dyn97.91-127-229.t-com.sk [91.127.229.97])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 7338B3F424;
-        Fri, 20 Jan 2023 19:45:20 +0100 (CET)
-From:   Martin Botka <martin.botka@somainline.org>
-To:     martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/3] regulator: axp20x: Add support for AXP313a variant
-Date:   Fri, 20 Jan 2023 19:44:59 +0100
-Message-Id: <20230120184500.1899814-4-martin.botka@somainline.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120184500.1899814-1-martin.botka@somainline.org>
-References: <20230120184500.1899814-1-martin.botka@somainline.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 13:46:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA956FD29;
+        Fri, 20 Jan 2023 10:46:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BD3BB82793;
+        Fri, 20 Jan 2023 18:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05F7CC433D2;
+        Fri, 20 Jan 2023 18:46:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674240412;
+        bh=qgmVGhk7ebaz/HhDm5NfJBCHN0VVopGRs7nDDqtp0Ug=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=StK2FBam2ep9Pu5d6nhYAkeYZiDp/L4lpdjAkxXCan5iSvyIp1Dc+hoPZq5KtN7Kx
+         bY3b0Jf6y4nongvdG09+ZqiKlU6hbSBFaXpqvxy5Z/yA0ttU8x0yAy0ztDefPSJqxI
+         3GeZKBl1pPXbDOaZucUF7kR3doiq2G4FuwaglFdOLCFxMDI4ZpV2tTm7LI1UCwmv3Q
+         ZxiLKb1D69biJjCPzehhXq4b6k+Ek8vgHn1sY4LFyU3Z7+bSXQIJO/zMjaTsiw6B0F
+         NmVwCnltN03lauYLDpLBlx3DInWG3J7T95FfAgrPGZTowET4OH/SfGXUtsyBzOvu+d
+         opnnqTS8J80ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7BEEE54D2B;
+        Fri, 20 Jan 2023 18:46:51 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools fixes for v6.2: 3rd batch
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230119171510.166368-1-acme@kernel.org>
+References: <20230119171510.166368-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230119171510.166368-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.2-3-2023-01-19
+X-PR-Tracked-Commit-Id: 3d9c07c4cfc06cf7927cd00c04dffd1165d03c53
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4a0c7a6831a0aa56db78a80f5a3e1ad5412d0fa8
+Message-Id: <167424041193.21297.9460299615366986566.pr-tracker-bot@kernel.org>
+Date:   Fri, 20 Jan 2023 18:46:51 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Sohom Datta <sohomdatta1+git@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AXP313a is your typical I2C controlled PMIC, although in a lighter
-fashion compared to the other X-Powers PMICs: it has only three DCDC
-rails, three LDOs, and no battery charging support.
+The pull request you sent on Thu, 19 Jan 2023 14:15:10 -0300:
 
-The AXP313a datasheet does not describe a register to change the DCDC
-switching frequency, and talks of it being fixed at 3 MHz. The BSP
-driver hints at a register being able to change that, but we haven't
-verified that, so leave that one out. It can be added later, if needed
-and/or required.
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.2-3-2023-01-19
 
-The third LDO, RTCLDO, is fixed, and cannot even be turned on or off,
-programmatically. On top of that, its voltage is customisable (either
-1.8V or 3.3V), which we cannot describe easily using the existing
-regulator wrapper functions. This should be fixed properly, using
-regulator-{min,max}-microvolt in the DT, but this requires more changes
-to the code. As some other PMICs (AXP2xx, AXP803) seem to paper over the
-same problem as well, we follow suit here and pretend it's a fixed 1.8V
-regulator. A proper fix can follow later. The BSP code seems to ignore
-this regulator altogether.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4a0c7a6831a0aa56db78a80f5a3e1ad5412d0fa8
 
-Describe the AXP313A's voltage settings and switch registers, how the
-voltages are encoded, and connect this to the MFD device via its
-regulator ID.
+Thank you!
 
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/regulator/axp20x-regulator.c | 60 ++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index d260c442b788..3087bc98694f 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -134,6 +134,11 @@
- #define AXP22X_PWR_OUT_DLDO4_MASK	BIT_MASK(6)
- #define AXP22X_PWR_OUT_ALDO3_MASK	BIT_MASK(7)
- 
-+#define AXP313A_DCDC1_NUM_VOLTAGES	107
-+#define AXP313A_DCDC23_NUM_VOLTAGES	88
-+#define AXP313A_DCDC_V_OUT_MASK		GENMASK(6, 0)
-+#define AXP313A_LDO_V_OUT_MASK		GENMASK(4, 0)
-+
- #define AXP803_PWR_OUT_DCDC1_MASK	BIT_MASK(0)
- #define AXP803_PWR_OUT_DCDC2_MASK	BIT_MASK(1)
- #define AXP803_PWR_OUT_DCDC3_MASK	BIT_MASK(2)
-@@ -638,6 +643,48 @@ static const struct regulator_desc axp22x_drivevbus_regulator = {
- 	.ops		= &axp20x_ops_sw,
- };
- 
-+static const struct linear_range axp313a_dcdc1_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0,  70,  10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71,  87,  20000),
-+	REGULATOR_LINEAR_RANGE(1600000, 88, 106, 100000),
-+};
-+
-+static const struct linear_range axp313a_dcdc2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0, 70, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71, 87, 20000),
-+};
-+
-+/*
-+ * This is deviating from the datasheet. The values here are taken from the
-+ * BSP driver and have been confirmed by measurements.
-+ */
-+static const struct linear_range axp313a_dcdc3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000,   0,  70, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 71, 102, 20000),
-+};
-+
-+static const struct regulator_desc axp313a_regulators[] = {
-+	AXP_DESC_RANGES(AXP313A, DCDC1, "dcdc1", "vin1",
-+			axp313a_dcdc1_ranges, AXP313A_DCDC1_NUM_VOLTAGES,
-+			AXP313A_DCDC1_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(0)),
-+	AXP_DESC_RANGES(AXP313A, DCDC2, "dcdc2", "vin2",
-+			axp313a_dcdc2_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-+			AXP313A_DCDC2_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(1)),
-+	AXP_DESC_RANGES(AXP313A, DCDC3, "dcdc3", "vin3",
-+			axp313a_dcdc3_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-+			AXP313A_DCDC3_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-+			AXP313A_OUTPUT_CONTROL, BIT(2)),
-+	AXP_DESC(AXP313A, LDO1, "ldo1", "vin1", 500, 3500, 100,
-+		 AXP313A_ALDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-+		 AXP313A_OUTPUT_CONTROL, BIT(3)),
-+	AXP_DESC(AXP313A, LDO2, "ldo2", "vin1", 500, 3500, 100,
-+		 AXP313A_DLDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-+		 AXP313A_OUTPUT_CONTROL, BIT(4)),
-+	AXP_DESC_FIXED(AXP313A, RTC_LDO, "rtc-ldo", "vin1", 1800),
-+};
-+
- /* DCDC ranges shared with AXP813 */
- static const struct linear_range axp803_dcdc234_ranges[] = {
- 	REGULATOR_LINEAR_RANGE(500000,
-@@ -1040,6 +1087,15 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- 		def = 3000;
- 		step = 150;
- 		break;
-+	case AXP313A_ID:
-+		/* The DCDC PWM frequency seems to be fixed to 3 MHz. */
-+		if (dcdcfreq != 3000000 && dcdcfreq != 0) {
-+			dev_err(&pdev->dev,
-+				"DCDC frequency on AXP313a is fixed to 3 MHz.\n");
-+			return -EINVAL;
-+		}
-+
-+		return 0;
- 	default:
- 		dev_err(&pdev->dev,
- 			"Setting DCDC frequency for unsupported AXP variant\n");
-@@ -1232,6 +1288,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
- 		drivevbus = of_property_read_bool(pdev->dev.parent->of_node,
- 						  "x-powers,drive-vbus-en");
- 		break;
-+	case AXP313A_ID:
-+		regulators = axp313a_regulators;
-+		nregulators = AXP313A_REG_ID_MAX;
-+		break;
- 	case AXP803_ID:
- 		regulators = axp803_regulators;
- 		nregulators = AXP803_REG_ID_MAX;
 -- 
-2.39.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
