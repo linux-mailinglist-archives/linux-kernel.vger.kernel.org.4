@@ -2,138 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F41E675F20
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D329F675F25
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjATUw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S229707AbjATUyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjATUw4 (ORCPT
+        with ESMTP id S229454AbjATUyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:52:56 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CB89771;
-        Fri, 20 Jan 2023 12:52:54 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id x7so5113757qtv.13;
-        Fri, 20 Jan 2023 12:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4YE+s5X2faO+oNvk5Zur/4aie0pupo0tvZpYYK61fck=;
-        b=V0zyASfriUPFws6w7byT4ZFBoa40/J1+JfEdlIo84bAtK6+QaCh2iiSEO8iysVM6v1
-         CBXE4E2HnDkAfh8h2q3n0N9TB0HX6S3FXVoMmMZl8txw9dX43RXQNcHsqrIq60vMWzOH
-         lr4RUpQ6rjEkN/Mopr5BPSXmImw8d3zm2jKNSjdpu7NTTdFitcFOy6lCbzn7I8OuGbig
-         FlmP3knfkGvsj1YTresbpRBJpfY4zZ2hhrJsQGGQibznbHPd1Tiy7gbNcq3PxrNI9m0G
-         2mXJ9PM1nT4GMDYZEc/ecCKA/Tukj5yxNIMBgsSApXdVBi3UyLAU2WMG666ozYNrXhWx
-         irYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4YE+s5X2faO+oNvk5Zur/4aie0pupo0tvZpYYK61fck=;
-        b=sJSBPe9w6S7VT9Zlq8//Gjs6EylmEGPQkyLoaIj5FwcnESAqluq5bAsUZygk1+BcEa
-         +Ng+I35pn7JLAKKNC1CM16TQk83u641xYvfwp1rPNOoAIKNjvUQeRDWtbFNPZtpezl4L
-         abSpj20WMRvrFWFkn50qv6ez8/EuI38iXnVmy28AbCffrpRG/H8ZVv+YKuitPEvwcwUR
-         /LoPDifQ5qsDhw9jfGiSDYFcqnGujYxBq7M8jiY24dB/QzoANEm4T0fY61C/+Zhh8dyo
-         LTnWzp8oUEdXXfx/Ole/ewrl4e1hUkvIp37cadb+ZC7ZlWRz04KpaTz3zWd0TkRVDK2U
-         WVZw==
-X-Gm-Message-State: AFqh2ko14jTv2m8B20v0t4sXD/4EyanyF1NHvdbpoxB37YZE4yNQr9S2
-        8ucW1rRB0118+weuvuPWN6A2rwvlosQ=
-X-Google-Smtp-Source: AMrXdXvY9EytmieB+K34iSci8Ih2uasXzCsPnH0ZoVDLaTByHoHGIG74SXHDYxmGhoqGoQ+kbBZomw==
-X-Received: by 2002:a05:622a:5a91:b0:3b6:414f:c2ba with SMTP id fz17-20020a05622a5a9100b003b6414fc2bamr23374386qtb.38.1674247972954;
-        Fri, 20 Jan 2023 12:52:52 -0800 (PST)
-Received: from localhost.localdomain (bras-base-rdwyon0600w-grc-14-76-71-123-7.dsl.bell.ca. [76.71.123.7])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05620a2a0500b006fcc437c2e8sm27381717qkp.44.2023.01.20.12.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 12:52:52 -0800 (PST)
-Sender: John Kacur <jkacur@gmail.com>
-From:   John Kacur <jkacur@redhat.com>
-To:     RT <linux-rt-users@vger.kernel.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia Poulin <kcarcia@redhat.com>,
-        John Kacur <jkacur@redhat.com>
-Subject: [ANNOUNCE] rt-tests-2.5
-Date:   Fri, 20 Jan 2023 15:52:20 -0500
-Message-Id: <20230120205220.26218-1-jkacur@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Fri, 20 Jan 2023 15:54:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0C54AA7F;
+        Fri, 20 Jan 2023 12:54:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C372A62060;
+        Fri, 20 Jan 2023 20:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88308C433EF;
+        Fri, 20 Jan 2023 20:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674248074;
+        bh=/vxzMc3pnw1lKVTUfCrVCZGqQ7pAoScnbYrmonrrXA8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=KOQe+DgGwqbWKW3XmouWcQ8VZVGACK5qEwmd1CtwaqUUf9TOoSKIaaeQYfdfkL1v3
+         B8mvi8/EdipeyXnOLx3d0dMgSQTmBKdqSEPaink6Q3OR0XbvuMesYXhUgb8Jnd24hA
+         q+Lv/N96PyKRt3ACGF7KNBhDxnypTkAD4fpH5FaEHrIVM/vViVrMdo6LstPzPuLYW8
+         ZGGs2f1MnFcy4Qj2Od9TBmiOqRbHbjjpU/I/olqXgFsq+RKz637+kI2/BNr3rnNtt5
+         iR/itkAejyrck6pE8nw2Mh0nGOkEx1cqTzV9GtcD3QAYuSznVE9KJ7/P7pm+u987sV
+         kZ6ef7BodNG+Q==
+Message-ID: <d5dc64435fb82f17e79ae20a370e90914a291ea9.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: don't free files unconditionally in
+ __nfsd_file_cache_purge
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Ruben Vestergaard <rubenv@drcmr.dk>,
+        Torkil Svensgaard <torkil@drcmr.dk>,
+        Shachar Kagan <skagan@nvidia.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Fri, 20 Jan 2023 15:54:32 -0500
+In-Reply-To: <C04F7C2C-848A-47C5-9C4E-9B9E5E82BAFF@oracle.com>
+References: <20230120195215.42243-1-jlayton@kernel.org>
+         <C04F7C2C-848A-47C5-9C4E-9B9E5E82BAFF@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We haven't had a release in awhile. There aren't a large amount of
-changes here but two significant changes include a fix from John Stultz
-to prevent threads from being affined when -a isn't set, and an enhancement
-from Crystal Wood that adds nanosecond resolution to oslat. Sebastian
-Siewior added a change for determining the number of active CPUs on a system, since calling numa_num_task_cpus() seemed to be giving him inaccurate numbers on certain machines. There are also some clean-ups from Leah Leshchinsky and myself.
+On Fri, 2023-01-20 at 20:21 +0000, Chuck Lever III wrote:
+>=20
+> > On Jan 20, 2023, at 2:52 PM, Jeff Layton <jlayton@kernel.org> wrote:
+> >=20
+> > nfsd_file_cache_purge is called when the server is shutting down, in
+> > which case, tearing things down is generally fine, but it also gets
+> > called when the exports cache is flushed.
+>=20
+> Yeah... cache flush is probably the case we've been missing.
+>=20
+>=20
+> > Instead of walking the cache and freeing everything unconditionally,
+> > handle it the same as when we have a notification of conflicting access=
+.
+> >=20
+> > Fixes: ac3a2585f018 ("nfsd: rework refcounting in filecache")
+> > Reported-by: Ruben Vestergaard <rubenv@drcmr.dk>
+> > Reported-by: Torkil Svensgaard <torkil@drcmr.dk>
+> > Reported-by: Shachar Kagan <skagan@nvidia.com>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> > fs/nfsd/filecache.c | 61 +++++++++++++++++++++++++++------------------
+> > 1 file changed, 37 insertions(+), 24 deletions(-)
+> >=20
+> > v2: use the same method to purge entries from the cache as we do when
+> >    there is a notification of conflicting access.
+> >=20
+> > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > index 58ac93e7e680..397ae212b98d 100644
+> > --- a/fs/nfsd/filecache.c
+> > +++ b/fs/nfsd/filecache.c
+> > @@ -661,6 +661,40 @@ static struct shrinker	nfsd_file_shrinker =3D {
+> > 	.seeks =3D 1,
+> > };
+> >=20
+> > +/**
+> > + * maybe_queue_nfsd_file - try to unhash and queue a nfsd_file to be f=
+reed
+> > + * @nf: nfsd_file to attempt to queue
+> > + * @dispose: private list to queue successfully-put objects
+> > + *
+> > + * Unhash an nfsd_file, try to get a reference to it, and then put tha=
+t
+> > + * reference. If it's the last reference, queue it to the dispose list=
+.
+> > + *
+> > + * The caller MUST hold the rcu_read_lock() !
+>=20
+> __nfsd_file_cache_purge() isn't holding rcu_read_lock(), it's
+> holding the nfsd_mutex. Is this comment incorrect, or is it just
+> too specific? Or did I miss something obvious?
+>=20
 
-Enjoy!
+It's implicitly taken by rhashtable_walk_start and released by
+rhashtable_walk_stop.
 
-Bug reports and patches are always welcome.
+FWIW, it'd be nice if there were a lockdep_assert_held equivalent for
+the rcu_read_lock() here, but I didn't see one of those. There is a
+rcu_read_lock_held(), but I didn't see a good way to get that to compile
+out when lockdep was disabled.
 
-John Kacur <jkacur@redhat.com>
+>=20
+> > + */
+> > +static void
+> > +maybe_queue_nfsd_file(struct nfsd_file *nf, struct list_head *dispose)
+>=20
+> I prefer the name nfsd_file_try_to_queue() or nfsd_file_try_to_dispose().
+> nfsd_file_ should be the prefix where possible. Unless you're
+> redriving, I can fix that.
+>=20
+>=20
 
-To fetch
+Rename at will.
 
-Clone
-git://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-https://kernel.googlesource.com/pub/scm/utils/rt-tests/rt-tests.git
+> > +{
+> > +	int decrement =3D 1;
+> > +
+> > +	/* If we raced with someone else unhashing, ignore it */
+> > +	if (!nfsd_file_unhash(nf))
+> > +		return;
+> > +
+> > +	/* If we can't get a reference, ignore it */
+> > +	if (!nfsd_file_get(nf))
+> > +		return;
+> > +
+> > +	/* Extra decrement if we remove from the LRU */
+> > +	if (nfsd_file_lru_remove(nf))
+> > +		++decrement;
+> > +
+> > +	/* If refcount goes to 0, then put on the dispose list */
+> > +	if (refcount_sub_and_test(decrement, &nf->nf_ref)) {
+> > +		list_add(&nf->nf_lru, dispose);
+> > +		trace_nfsd_file_closing(nf);
+> > +	}
+> > +}
+> > +
+> > /**
+> >  * nfsd_file_queue_for_close: try to close out any open nfsd_files for =
+an inode
+> >  * @inode:   inode on which to close out nfsd_files
+> > @@ -688,30 +722,12 @@ nfsd_file_queue_for_close(struct inode *inode, st=
+ruct list_head *dispose)
+> >=20
+> > 	rcu_read_lock();
+> > 	do {
+> > -		int decrement =3D 1;
+> > -
+> > 		nf =3D rhashtable_lookup(&nfsd_file_rhash_tbl, &key,
+> > 				       nfsd_file_rhash_params);
+> > 		if (!nf)
+> > 			break;
+> >=20
+> > -		/* If we raced with someone else unhashing, ignore it */
+> > -		if (!nfsd_file_unhash(nf))
+> > -			continue;
+> > -
+> > -		/* If we can't get a reference, ignore it */
+> > -		if (!nfsd_file_get(nf))
+> > -			continue;
+> > -
+> > -		/* Extra decrement if we remove from the LRU */
+> > -		if (nfsd_file_lru_remove(nf))
+> > -			++decrement;
+> > -
+> > -		/* If refcount goes to 0, then put on the dispose list */
+> > -		if (refcount_sub_and_test(decrement, &nf->nf_ref)) {
+> > -			list_add(&nf->nf_lru, dispose);
+> > -			trace_nfsd_file_closing(nf);
+> > -		}
+> > +		maybe_queue_nfsd_file(nf, dispose);
+> > 	} while (1);
+> > 	rcu_read_unlock();
+> > }
+> > @@ -928,11 +944,8 @@ __nfsd_file_cache_purge(struct net *net)
+> >=20
+> > 		nf =3D rhashtable_walk_next(&iter);
+> > 		while (!IS_ERR_OR_NULL(nf)) {
+> > -			if (!net || nf->nf_net =3D=3D net) {
+> > -				nfsd_file_unhash(nf);
+> > -				nfsd_file_lru_remove(nf);
+> > -				list_add(&nf->nf_lru, &dispose);
+> > -			}
+> > +			if (!net || nf->nf_net =3D=3D net)
+> > +				maybe_queue_nfsd_file(nf, &dispose);
+> > 			nf =3D rhashtable_walk_next(&iter);
+> > 		}
+> >=20
+> > --=20
+> > 2.39.0
+> >=20
+>=20
+> --
+> Chuck Lever
+>=20
+>=20
+>=20
 
-Branch: main
-
-Tag: v2.5
-
-Tarballs are available here:
-https://kernel.org/pub/linux/utils/rt-tests
-
-Older version tarballs are available here:
-https://kernel.org/pub/linux/utils/rt-tests/older
-
-
-Crystal Wood (1):
-  oslat: Add command line option for bucket width
-
-John Kacur (7):
-  rt-tests: Remove arbitrary num of threads limits
-  rt-tests: hackbench: Add error checking to connect and getsockname
-  rt-tests: hackbench: Fix compile comparison of different signed ints
-  rt-tests: hackbench: Fix compile warning about fall through
-  rt-tests: rt_numa.h: Remove unused paramter max_cpus
-  rt-tests: hwlatdetect: Fix incorrect comment about testduration
-  rt-tests: Change to version v2.5
-
-John Stultz (1):
-  cyclictest: Fix threads being affined even when -a isn't set
-
-Leah Leshchinsky (2):
-  rt-tests: hwlatdetect.py Covert to f-strings
-  rt-tests: hwlatdetect: Update to integer division
-
-Sebastian Andrzej Siewior (1):
-  rt-numa: Use a reasonable default max CPU value.
-
- Makefile                       |   2 +-
- src/cyclictest/cyclictest.c    |  10 +--
- src/cyclictest/rt_numa.h       |   3 +-
- src/hackbench/hackbench.c      |  17 +++--
- src/hwlatdetect/hwlatdetect.py |  79 +++++++++++------------
- src/lib/rt-numa.c              |  11 +++-
- src/oslat/oslat.8              |   9 ++-
- src/oslat/oslat.c              | 110 +++++++++++++++++++++++----------
- src/pmqtest/pmqtest.c          |   2 +-
- src/ptsematest/ptsematest.c    |   2 +-
- src/sigwaittest/sigwaittest.c  |   2 +-
- src/svsematest/svsematest.c    |   2 +-
- 12 files changed, 158 insertions(+), 91 deletions(-)
+--=20
+Jeff Layton <jlayton@kernel.org>
