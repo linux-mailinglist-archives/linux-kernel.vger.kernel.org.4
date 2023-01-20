@@ -2,82 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3722A675DD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D526F675DDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjATTTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S230031AbjATTUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjATTTn (ORCPT
+        with ESMTP id S229702AbjATTUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:19:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B95EBCE32
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:18:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674242333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w+iEmqgi2xG1bd5OetUWtWkkvH6CIkfAlH9mAdhcmUY=;
-        b=GhRIWgansrgZaRcgEm7Dudh/lcM6lbsbuwlX8iZdCzms539tAYvrVGKR/qsoAJXiZQuN5o
-        fHk2evXmU16unzAmHsxRQXEC+k4cx9myu6sLqO1hJ/iNYoUIPuYNjcKiZi5SPl7bRnUpVZ
-        tYASa1cukI3UnlKIOwUndJCKipvzs88=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-574--LfyQgVcOqum_snKdJpVRw-1; Fri, 20 Jan 2023 14:18:47 -0500
-X-MC-Unique: -LfyQgVcOqum_snKdJpVRw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A509101A521;
-        Fri, 20 Jan 2023 19:18:47 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CB7A22166B2A;
-        Fri, 20 Jan 2023 19:18:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y8rkjYn7HY/IwHrL@casper.infradead.org>
-References: <Y8rkjYn7HY/IwHrL@casper.infradead.org> <20230120175556.3556978-1-dhowells@redhat.com> <20230120175556.3556978-9-dhowells@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v7 8/8] mm: Renumber FOLL_GET and FOLL_PIN down
+        Fri, 20 Jan 2023 14:20:22 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C1E6FD2A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id x4so4734148pfj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGyt6CUdmtm2ioRKnF8I31iR5Kv2QPHBMLPFSaYDNiY=;
+        b=Uu5CA7ojWufnZge0bmJujGF0GkpDKBVBcpU8xWM4Q0rxz/aT0RAyOpA1DHBDMPbVFN
+         tqUjNMfa3Aif+GgOpT8Q+nf25/sXFy7XS5A1bpe7NXC9AG09PWDFNgVwd3N4AL4mEvjv
+         uK6rJDTix7y5/wRAdoMLSZqftlfVqyVo6OkYU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGyt6CUdmtm2ioRKnF8I31iR5Kv2QPHBMLPFSaYDNiY=;
+        b=p1FE3/yJqlGygUVsYXNlHLf3UxTcQYyb3Wp3T1eg9tVA5ihl31K4DjQTfCkoomC7vG
+         djYCY1kSLYbpd+duQ4qRYlkJnq60C/YU8mefGaQvvWGpWDyPHUr0jB+N0XLgXwkTdXEv
+         C6j61tCMWjgPxZLp6j5SKvqkTb+3NMLaSReiQbly2kg3zJm7dHge0bcYj1pVE88fCtCz
+         IDplufy2R01BSOWfP5Vf8wzhgAhSntU1v7vGy9+z3VBc7WCNnbb81lcjDEcmMEVwlJeN
+         9KqIBxPqtCi4Eyhn4l7CReh+0qcrZl6wYvxVu3ZRlX268qdgVlca+aPs1Kqz+qC9HJf6
+         7wAg==
+X-Gm-Message-State: AFqh2kq693lGYOOvio7Q9U0Okh33J98/RjElGKNtHajLm5r4hEOq9WVA
+        zjnkxqWepIScwqI9yxzKMRzsxg==
+X-Google-Smtp-Source: AMrXdXuyTIAN7HmAtV4HD1P3My5ps1sTBJQbBVFpT8W/R685exOGUTBZBi+w0yjPJR+F6KcbCZ6lsg==
+X-Received: by 2002:a05:6a00:3025:b0:58d:a683:bb2f with SMTP id ay37-20020a056a00302500b0058da683bb2fmr18456253pfb.23.1674242417297;
+        Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 3-20020a621503000000b00581c741f95csm24490646pfv.46.2023.01.20.11.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 11:19:50 -0800 (PST)
+Date:   Fri, 20 Jan 2023 11:19:36 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v5 00/39] Shadow stacks for userspace
+Message-ID: <202301201118.6A55DE336@keescook>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119142602.97b24f3cdba75f20f97786d3@linux-foundation.org>
+ <b6d88208b987c9cbbdb194b344d2a537dbd76914.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3560195.1674242325.1@warthog.procyon.org.uk>
-Date:   Fri, 20 Jan 2023 19:18:45 +0000
-Message-ID: <3560196.1674242325@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6d88208b987c9cbbdb194b344d2a537dbd76914.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
+On Fri, Jan 20, 2023 at 05:27:30PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-01-19 at 14:26 -0800, Andrew Morton wrote:
+> > On Thu, 19 Jan 2023 13:22:38 -0800 Rick Edgecombe <
+> > rick.p.edgecombe@intel.com> wrote:
+> > 
+> > > SHSTK
+> > 
+> > Sounds like me trying to swear in Russian while drunk.
+> > 
+> > Is there any chance of s/shstk/shadow_stack/g?
+> 
+> I'm fine with the name change. I think shstk got debated and picked
+> early in the history of the series before I got involved. "shstk" is
+> nice and short, but it's not completely clear what it is unless you
+> already know about shadow stack. So there is a tradeoff of clarity and
+> line length/wrapping. Does anyone else have any strong opinions?
 
-> Although I was hoping you'd renumber some of the others since we
-> currently have gaps at 0x200, 0x400, 0x1000, and 0x4000 as well
-> as the 0x40 you're using here.
+I prefer SHSTK because it specifically means x86's hardware shadow
+stack from CET. Lots of things can (and have) implemented things called
+"shadow stack".
 
-Since the other patches don't require this one, I can renumber them all and
-send it directly to Andrew.
-
-David
-
+-- 
+Kees Cook
