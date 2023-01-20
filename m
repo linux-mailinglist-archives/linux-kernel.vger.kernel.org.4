@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6FA6760CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4086C676126
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjATWu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S230090AbjATXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:01:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjATWu4 (ORCPT
+        with ESMTP id S229556AbjATXBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:50:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1807970293;
-        Fri, 20 Jan 2023 14:50:11 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q8so5121505wmo.5;
-        Fri, 20 Jan 2023 14:50:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-id:mime-version:references:message-id:in-reply-to:subject
-         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TBg2ZGSLJCHCe4StnuS4Rf2XAsBlx+T2xK8kBvKv+5I=;
-        b=SJ7Ngi78KdWr+dxt92Brtb7mMmMsDrdUtcVnXudTPfxsCxacHixF+sq839NSklew4L
-         GzGHgchDYxFk0G5Aax4ap0njAnvnowwwFrbRZY0iOLvW8bDJiso09wqMc6s/6B8ab5ZJ
-         J45WrKTY1F0Ha7DZSBpIvTopG7OorcjJ3xNyQ1KBDG7NalXcVbaZMlt3YM19syr7fYnm
-         6Sani86aF9mm2Qe0S1SUv0LJ6t/0xtgsGcndZfKI52r9uLzob9AefVKTJ3uKBaOzz06C
-         To94OMUcIUNQ4NZTmRnyJFv1Q6nH9EarFCEeT46nMi3tTBkkVhs3SiQvAWEyKuqlcncf
-         CxAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-id:mime-version:references:message-id:in-reply-to:subject
-         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TBg2ZGSLJCHCe4StnuS4Rf2XAsBlx+T2xK8kBvKv+5I=;
-        b=ysbONUR8/PDTouraaogxxsrJ0Iiq+cyKnPG63ZZugBEB4Tq4/iEaZiUji7Pz/0/09b
-         iS4mVpSkaHONaYmDiLrZNmbipllshynasi+i2eUutziFXXQP7p3RoCWGNyS9UDoQBRSz
-         resWEQXQkyWR8MueADgIS3EF59h0edORkh76KXhDKknKz2xkO4CruOq6nTUhBT4y48lC
-         jL5ymhNtSwKuzUCZz4fPeetYNmgRxFhQMH20GWb9d85JAtpol1f11KfGk3FghClQ7dEu
-         eCNdCPpy15tWG9v37lD6bd2Tmj3Oo536wOeAEOJoVlUdrB85438SQfaF/OPQYBJWXKZ7
-         tzEQ==
-X-Gm-Message-State: AFqh2kq6nJ2m1rEJAvjnF2r++OLWNahesINRmgPqWvtnTQ61pfVORaDO
-        QjSDUCtmizZKQAMhdnwbMGHYKsCqq96bYDwY
-X-Google-Smtp-Source: AMrXdXtn/n4mw/1xYuM53NkndS8FqUOcqZ1AW1INz0Q8ktjH/XJksS8iILG8ofDkgnklJ9s1+mi1/g==
-X-Received: by 2002:a05:600c:444b:b0:3da:fd06:a6f1 with SMTP id v11-20020a05600c444b00b003dafd06a6f1mr15392053wmn.31.1674254955845;
-        Fri, 20 Jan 2023 14:49:15 -0800 (PST)
-Received: from fedora.36 ([78.10.206.44])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b003d9aa76dc6asm4974827wmq.0.2023.01.20.14.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 14:49:15 -0800 (PST)
-Date:   Fri, 20 Jan 2023 23:49:10 +0100 (CET)
-From:   =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-cc:     =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: sound: audio-graph-port: Add capture and
- playback
-In-Reply-To: <87lelxlt18.wl-kuninori.morimoto.gx@renesas.com>
-Message-ID: <c6b1ad16-894d-e9a4-1fd1-cc94ec11df7@student.agh.edu.pl>
-References: <20230120011744.550701-1-mchl.grzlk@gmail.com> <87lelxlt18.wl-kuninori.morimoto.gx@renesas.com>
+        Fri, 20 Jan 2023 18:01:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7DC138;
+        Fri, 20 Jan 2023 15:01:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 288A4620DA;
+        Fri, 20 Jan 2023 22:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13245C4339B;
+        Fri, 20 Jan 2023 22:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674255039;
+        bh=MEdkFA0CPMoJscWoRwMiBqN7i9caRkJzCfAwCleyJBM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Cri+LDWeo4rXCVffkOhl0j+sWK07Fp2yQcqaMuEawSDbifPcfQUJZuVEQWJLwa1HD
+         c424ZkNCraz6HaYhRNELpNgqjlXO55voAttvTzJ3pUB3I8WZiB5QEl+YiqgHGMHRq7
+         tzbemNT+uETzFml8ak36pciA7JA1Arzq9ku0HJ5qlauwJ9q3rSe8VnLOq+dqXYneRR
+         fNSEuNUopH8Py9GqYLW+crM1AboGkbO3eTrJDdrjPv6mb3QejrYQzOgaFNICoKwdXj
+         kwmolb2aWC5kgblDsSfi1k4a3g2qMD1NYFGeauvNsp7tSGj/rp5CW2scUwxWvSvZh3
+         jv019LHBM3XTw==
+Date:   Fri, 20 Jan 2023 16:50:36 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
+Message-ID: <20230120225036.GA675763@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463809024-776833584-1674254459=:3790"
-Content-ID: <5b8b88f9-a34b-dacf-ccb7-9b5973b44de3@student.agh.edu.pl>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113171409.30470-25-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Fri, Jan 13, 2023 at 08:14:06PM +0300, Serge Semin wrote:
+> Since the DW PCIe RP/EP driver is about to be updated to register the DW
+> eDMA-based DMA-engine the drivers build modes must be synchronized.
+> Currently the DW PCIe RP/EP driver is always built as a builtin module.
+> Meanwhile the DW eDMA driver can be built as a loadable module. Thus in
+> the later case the kernel with DW PCIe controllers support will fail to be
+> linked due to lacking the DW eDMA probe/remove symbols. At the same time
+> forcibly selecting the DW eDMA driver from the DW PCIe RP/EP kconfig will
+> effectively eliminate the tristate type of the former driver fixing it to
+> just the builtin kernel module.
+> 
+> Seeing the DW eDMA engine isn't that often met built into the DW PCIe
+> Root-ports and End-points let's convert the DW eDMA driver config to being
+> more flexible instead of just forcibly selecting the DW eDMA kconfig. In
+> order to do that first the DW eDMA PCIe driver config should be converted
+> to being depended from the DW eDMA core config instead of selecting the
+> one. Second the DW eDMA probe and remove symbols should be referenced only
+> if they are reachable by the caller. Thus the user will be able to build
+> the DW eDMA core driver with any type, meanwhile the dependent code will
+> be either restricted to the same build type (e.g. DW eDMA PCIe driver if
+> DW eDMA driver is built as a loadable module) or just won't be able to use
+> the eDMA engine registration/de-registration functionality (e.g. DW PCIe
+> RP/EP driver if DW eDMA driver is built as a loadable module).
 
----1463809024-776833584-1674254459=:3790
-Content-Type: text/plain; charset=ISO-8859-2; format=flowed
-Content-Transfer-Encoding: 8BIT
-Content-ID: <71d82d96-8152-10ea-ddc-26c14e852aa@student.agh.edu.pl>
+I'm trying to write the merge commit log, and I understand the linking
+issue, but I'm having a hard time figuring out what the user-visible
+scenarios are here.
 
-Hi Kuninori,
+I assume there's something that works when CONFIG_PCIE_DW=y and
+CONFIG_DW_EDMA_PCIE=y but does *not* work when CONFIG_PCIE_DW=y and
+CONFIG_DW_EDMA_PCIE=m?
 
-Thanks for quick reply.
+If both scenarios worked the same, I would think the existing
+dw_edma_pcie_probe() would be enough, and you wouldn't need to call
+dw_pcie_edma_detect() from dw_pcie_host_init() and dw_pcie_ep_init().
 
-On Fri, 20 Jan 2023, Kuninori Morimoto wrote:
-
->
-> Hi Micha³
->
-> Thank you for your patch
->
->> Running 'make DT_SCHEMA_FILES=renesas,rsnd.yaml dt_binding_check'
->> gives following warning:
->>
->> bindings/sound/renesas,rsnd.example.dtb:
->> sound@ec500000: port:endpoint: Unevaluated properties are not allowed
->> ('capture', 'playback' were unexpected)
->>         From schema: bindings/sound/renesas,rsnd.yaml
->
-> Now I'm posting the patch for it.
->
-> 	https://lore.kernel.org/r/87358hj2ub.wl-kuninori.morimoto.gx@renesas.com
-
-Thanks also for pointing that out, I should have given more time to
-searching for existing patches.
-
-Best regards,
-Micha³
----1463809024-776833584-1674254459=:3790--
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v8:
+> - This is a new patch added on v8 stage of the series in order to fix
+>   the tbot-reported build issues. (@tbot)
+> ---
+>  drivers/dma/dw-edma/Kconfig | 5 ++++-
+>  include/linux/dma/edma.h    | 2 +-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/Kconfig b/drivers/dma/dw-edma/Kconfig
+> index 7ff17b2db6a1..2b6f2679508d 100644
+> --- a/drivers/dma/dw-edma/Kconfig
+> +++ b/drivers/dma/dw-edma/Kconfig
+> @@ -9,11 +9,14 @@ config DW_EDMA
+>  	  Support the Synopsys DesignWare eDMA controller, normally
+>  	  implemented on endpoints SoCs.
+>  
+> +if DW_EDMA
+> +
+>  config DW_EDMA_PCIE
+>  	tristate "Synopsys DesignWare eDMA PCIe driver"
+>  	depends on PCI && PCI_MSI
+> -	select DW_EDMA
+>  	help
+>  	  Provides a glue-logic between the Synopsys DesignWare
+>  	  eDMA controller and an endpoint PCIe device. This also serves
+>  	  as a reference design to whom desires to use this IP.
+> +
+> +endif # DW_EDMA
+> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> index 08833f12b386..c062c8db472c 100644
+> --- a/include/linux/dma/edma.h
+> +++ b/include/linux/dma/edma.h
+> @@ -101,7 +101,7 @@ struct dw_edma_chip {
+>  };
+>  
+>  /* Export to the platform drivers */
+> -#if IS_ENABLED(CONFIG_DW_EDMA)
+> +#if IS_REACHABLE(CONFIG_DW_EDMA)
+>  int dw_edma_probe(struct dw_edma_chip *chip);
+>  int dw_edma_remove(struct dw_edma_chip *chip);
+>  #else
+> -- 
+> 2.39.0
+> 
+> 
