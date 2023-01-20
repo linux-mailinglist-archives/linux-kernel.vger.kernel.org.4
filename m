@@ -2,144 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C53675BEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BD2675BEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjATRqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S230153AbjATRrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjATRqo (ORCPT
+        with ESMTP id S229942AbjATRrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:46:44 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025560C91
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:46:42 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso4266889wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:46:42 -0800 (PST)
+        Fri, 20 Jan 2023 12:47:24 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70C558645
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:47:22 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id v13so7626555eda.11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:47:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fBcm1ksuIfBBKtt3kd68+qKTCAhQjKc2GeFln1kH0Fs=;
-        b=uC97fJdEdReXs/6LQ44/N5YU6UhfpImjScLii/d7y/l6lqpcp1OFIzEa2B+vBbUTwz
-         radFrAbksW3Tc6IDchGvfZtC5eqLMf4X7xWOEOGtEUHK8tTpdirX1LPzmIl9uASzMq5P
-         fgjPGm+IVLsTsp6eicWw7s7C5tFus1+UaU4y7zKHDkPvpqeYZWHBog2dd8GhzUbhKuly
-         8W+ybcOHur7xhYxUKD8kw9zNAg176VR4pIoPC1Ro0KAhra8+J7qs6AB4Ig4o8Kt62EhI
-         EhL/ITiMuzG9c97Ab0EPQHj9JXIUUNbHgXeH9Aw0KQQxmI8Uo5aGjLLEWEOztoASCxhd
-         n2SQ==
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BipnOyO2jsAkSmzvNbujWDpxdaTEf2MUiztSdhwIYZM=;
+        b=Bd3FjursiOsjI69j3RURLqlVLWzxWtZw1tS9m3pap8RceZvgWm6SQ18OSQOwxnZbR5
+         95CZzqiuQtlbzDTw2+kXJfHS47PqWgeBCNsJUrBetsIVxT7d35ITORG35757jkfXMExY
+         AMS2ZeC+x8/ZpqzWF+fvfradiRNEznbCJqmEI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fBcm1ksuIfBBKtt3kd68+qKTCAhQjKc2GeFln1kH0Fs=;
-        b=2XVxo4c92YYnPWSay1r7FnbyD3Y9k72xKMgSZes6TaMRI5gblCXe/pwnFCr545nGOf
-         sMGN5Nn8jj0R26C1CMyo9CHbuKKY1TBVdjtPQIzcWAvGBMmK1MxDbQgVPoEvylKBXZ+h
-         Kw6wve+c4XoadQ+jKe7WH3YVNHsfOpQoMIA5ScpDdCEHfC8GScsFvBAJ1CUl1wxQW096
-         TZNQapjJw9Gr+ZWB21YqwAbpr1RXPtU9LPdS4FROnIH0YncwtM86RBJfgclGAwTzNlfn
-         djKG06PUaxzFZGHderMBQu4cu8sKSgDrhjs/VSrAFGI9WuOHCKU2hW2T7EBB0kGH+nqo
-         YPNg==
-X-Gm-Message-State: AFqh2ko5UWD2o0J/E/KOjFBFVaMaMrYwmsfwxGzwrwMVkxwfnNzNLVaU
-        RU+hYo07BrD5jpoCnj0CG1iICQ==
-X-Google-Smtp-Source: AMrXdXuePYcSfXcIeuXvqcdDTQP+BLAqWpMAXhPRzj8IjU39ZcetyMdIOSrGWxAcetf1ZRHKnD2uVQ==
-X-Received: by 2002:a05:600c:3296:b0:3cf:82b9:2fe6 with SMTP id t22-20020a05600c329600b003cf82b92fe6mr15865983wmp.8.1674236801199;
-        Fri, 20 Jan 2023 09:46:41 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id hg8-20020a05600c538800b003d974076f13sm2879682wmb.3.2023.01.20.09.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 09:46:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] pinctrl: dt-bindings: qcom: bindings for v6.3
-Date:   Fri, 20 Jan 2023 18:46:31 +0100
-Message-Id: <20230120174631.353345-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=BipnOyO2jsAkSmzvNbujWDpxdaTEf2MUiztSdhwIYZM=;
+        b=hP2vaiq0ymwi0xmHxopbU9uGnkk3GesDK5VwsbooNpcqSHY4dtnYmhc6W3O3+F0bVx
+         xBF7u5psrw1ZtpHeAFYCR98lCX+tPZHn2HcRnnukruOeDM4F2P6EG57jBAKC2JRntGUR
+         +4KdOVLf3CDAJesScd7AxpJh+ymhHA9CcUQ91bio+OHW7R2SFo2y6nmSrUyUF2ZtwvRW
+         TAzC/vuU6OzOXoKl47gybubolJBya8uP5GziURW/PtBkVHnc0V18eCAdX8XIuj5B90DX
+         66eawN2XjTfBGa6YxgcB2GktdGJu0N4z0B+hfArtXwdBGeb5IlMTGED+Ey2+n568XYY0
+         kfkQ==
+X-Gm-Message-State: AFqh2ko6ddGShExGApded334fWDRu324axbeYqA9+V1Lgt33luogo26q
+        jYyyFEwOTrtSUbmIj/VVXGqEKGZA2Vh67I/fqMdgew==
+X-Google-Smtp-Source: AMrXdXtTqlcT7UkNlFBypYAC/4a4mGUM44HYZB7Bo3ZplyiQ8KH3qBRlCAOatXHxjolMvMR8xpieQN103+X9bl+aHh4=
+X-Received: by 2002:a05:6402:1396:b0:49b:52b4:83ca with SMTP id
+ b22-20020a056402139600b0049b52b483camr1773177edv.225.1674236841244; Fri, 20
+ Jan 2023 09:47:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com>
+ <20230101175740.1010258-12-dario.binacchi@amarulasolutions.com> <Y8VgzyNxGpqSvJ2b@linaro.org>
+In-Reply-To: <Y8VgzyNxGpqSvJ2b@linaro.org>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Fri, 20 Jan 2023 18:47:10 +0100
+Message-ID: <CABGWkvrmKzPHozcB6Wn94sG50qEsR8rK-p32eP127XPBJ7xe0A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 11/11] arm64: dts: imx8mn: add clocks description
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, angelo@amarulasolutions.com,
+        michael@amarulasolutions.com, tommaso.merciai@amarulasolutions.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-amarula@amarulasolutions.com, anthony@amarulasolutions.com,
+        jagan@amarulasolutions.com, Abel Vesa <abelvesa@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>, Li Jun <jun.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+Hi,
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+On Mon, Jan 16, 2023 at 3:36 PM Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> On 23-01-01 18:57:40, Dario Binacchi wrote:
+> > The patch creates a unique node for each clock in the imx8mn clock
+> > control module (CCM).
+> >
+> > To ensure backwards compatibility it was not possible to separate the
+> > changes to the device tree from those applied to the clocks setup code.
+> > In doing so, all clocks are initialized from the device tree and the
+> > legacy setup code with hardwired parameters is removed.
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> > (no changes since v1)
+> >
+> >  .../boot/dts/freescale/imx8mn-clocks.dtsi     | 1885 +++++++++++++++++
+> >  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   54 +-
+> >  drivers/clk/imx/clk-imx8mn.c                  |  714 ++-----
+> >  3 files changed, 2086 insertions(+), 567 deletions(-)
+> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
+> > new file mode 100644
+> > index 000000000000..21e02ea996d0
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
+> > @@ -0,0 +1,1885 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Device Tree Source for imx8mn clock data
+> > + *
+> > + * Copyright (c) 2022 Amarula Solutions
+> > + *
+> > + * Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > + */
+> > +
+> > +/ {
+> > +     osc_32k: clock-osc-32k {
+> > +             compatible = "fixed-clock";
+> > +             #clock-cells = <0>;
+> > +             clock-frequency = <32768>;
+> > +             clock-output-names = "osc_32k";
+> > +     };
+> > +
+>
+> [...]
+>
+> > +
+> > +     clk_audio_pll2_bypass: clock-audio-pll2-bypass@14 {
+> > +             compatible = "fsl,imx8mn-mux-clock";
+> > +             #clock-cells = <0>;
+> > +             clocks = <&clk_audio_pll2>, <&clk_audio_pll2_ref_sel>;
+> > +             fsl,anatop = <&anatop 0x14>;
+> > +             fsl,bit-shift = <16>;
+> > +             fsl,set-rate-parent;
+>
+> NACK. I'm sorry, but this creates a huge effort on maintaining the
+> bindings.
 
-are available in the Git repository at:
+IMHO I don't think that's the point. Rather, is it correct to keep adding
+platforms always replicating the same code that makes use of hardwired
+parameters? When I thought about the development of this series I
+thought it could be an opportunity to reverse the trend. In the direction
+suggested by the linux kernel development policies.The benefits of using the
+device tree have been proven for quite some time now.
+The 03/11 and 04/11 patches of the series make a list of the legacy code that
+has been added over time (functions with names that are sometimes unclear)
+and that with the progressive use of the device tree would be removed.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/qcom-pinctrl-6.3
+As written in the cover letter, I am available to add the necessary DT
+bindings to
+the series.
 
-for you to fetch changes up to 5b8c304c94d79f44aea8ee273ce70ca380804156:
+Plus the vendor specific properties will keep increasing.
+>
+> I don't think Rob and Krzysztof will be OK with this either.
 
-  dt-bindings: pinctrl: qcom,pmic-mpp: Rename "mpp" child node names to "-pins$" (2023-01-20 18:43:06 +0100)
+I hope instead that they agree with me. I didn't answer right away as
+I was waiting
+for their opinion. And I keep hoping for their response. And any other
+recipients of
+the series as well.
 
-----------------------------------------------------------------
-Qualcomm pinctrl Devicetree bindings changes for v6.3
+By the way, I add Tero Kristo and Toni Lindgren as their work done for
+the TI clock
+subsystem has been a great help for me in the implementation of this series.
 
-Set of cleanups and fixes for Qualcomm pin controller bindings, to match
-existing DTS and correct the schema.
+Thanks and regards,
+Dario
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (8):
-      dt-bindings: pinctrl: qcom,sdm845-pinctrl: add GPIO hogs
-      dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: correct pins pattern
-      dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: add input-enable and bias-bus-hold
-      dt-bindings: pinctrl: qcom,sm6350-tlmm: add gpio-line-names
-      dt-bindings: pinctrl: qcom,sm8350-tlmm: add gpio-line-names
-      dt-bindings: pinctrl: qcom,sm6350-tlmm: correct pins pattern
-      dt-bindings: pinctrl: qcom,sm8350-tlmm: correct pins pattern
-      dt-bindings: pinctrl: qcom: allow nine interrupts on SM6350
+>
+>
+> > +             clock-output-names = "audio_pll2_bypass";
+> > +     };
+> > +
+> > +     clk_audio_pll2_out: clock-audio-pll2-out@14 {
+> > +             compatible = "fsl,imx8mn-gate-clock";
+> > +             #clock-cells = <0>;
+> > +             clocks = <&clk_audio_pll2_bypass>;
+> > +             fsl,anatop = <&anatop 0x14>;
+> > +             fsl,bit-shift = <13>;
+> > +             clock-output-names = "audio_pll2_out";
+> > +     };
+> > +
+>
+> [...]
+>
+> > --
+> > 2.32.0
+> >
 
-Rob Herring (1):
-      dt-bindings: pinctrl: qcom,pmic-mpp: Rename "mpp" child node names to "-pins$"
 
- .../bindings/pinctrl/qcom,ipq6018-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,ipq8074-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,mdm9607-tlmm.yaml        |  4 +++-
- .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8226-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8660-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8909-tlmm.yaml        |  4 +++-
- .../bindings/pinctrl/qcom,msm8916-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8953-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8960-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8974-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8976-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8994-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8996-pinctrl.yaml     |  4 +++-
- .../bindings/pinctrl/qcom,msm8998-pinctrl.yaml     |  4 +++-
- .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |  4 ++--
- .../bindings/pinctrl/qcom,qcm2290-tlmm.yaml        |  4 +++-
- .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml      |  4 +++-
- .../bindings/pinctrl/qcom,sc7180-pinctrl.yaml      |  4 +++-
- .../bindings/pinctrl/qcom,sc8180x-tlmm.yaml        |  4 +++-
- .../pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml   |  8 +++----
- .../bindings/pinctrl/qcom,sc8280xp-tlmm.yaml       |  4 +++-
- .../bindings/pinctrl/qcom,sdm630-pinctrl.yaml      |  4 +++-
- .../bindings/pinctrl/qcom,sdm670-tlmm.yaml         |  4 +++-
- .../bindings/pinctrl/qcom,sdm845-pinctrl.yaml      | 15 +++++++++++-
- .../bindings/pinctrl/qcom,sdx55-pinctrl.yaml       |  4 +++-
- .../bindings/pinctrl/qcom,sdx65-tlmm.yaml          |  4 +++-
- .../bindings/pinctrl/qcom,sm6115-tlmm.yaml         |  4 +++-
- .../bindings/pinctrl/qcom,sm6125-tlmm.yaml         |  4 +++-
- .../bindings/pinctrl/qcom,sm6350-tlmm.yaml         | 27 ++++++++++++++++++----
- .../bindings/pinctrl/qcom,sm6375-tlmm.yaml         |  4 +++-
- .../bindings/pinctrl/qcom,sm8150-pinctrl.yaml      |  4 +++-
- .../bindings/pinctrl/qcom,sm8250-pinctrl.yaml      |  4 +++-
- .../bindings/pinctrl/qcom,sm8350-tlmm.yaml         | 15 +++++++++---
- .../bindings/pinctrl/qcom,sm8450-tlmm.yaml         |  4 +++-
- .../bindings/pinctrl/qcom,tlmm-common.yaml         |  5 ++--
- 36 files changed, 147 insertions(+), 47 deletions(-)
+
+-- 
+
+Dario Binacchi
+
+Senior Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
