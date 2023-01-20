@@ -2,481 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC2E674C45
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EBE674C48
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjATF2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S231437AbjATF2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjATF1g (ORCPT
+        with ESMTP id S230023AbjATF1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:27:36 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC51AD19;
-        Thu, 19 Jan 2023 21:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674192139; x=1705728139;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TfK4ca6B6xPl1GH63jV1rAXSQ5nbz5Ja/oJWlrUW5K0=;
-  b=VhK4Xxp8Qggt/vHNT9IYDf/zl8gbdSnZ6Nkfwy2UlavhhFZ071oyCP3r
-   T4tKi62mq7PiFYLkA7ysj5bf0Q76GX95Vx/NS4R9R66R6wd1WrxWeZ6yN
-   RGWtY1K0KvJcI0CXg95K2kzFs0Abldhd6i3OK1jur36rT8XRtJI2NAsjS
-   J3dJwcFMmAZmi565QkPBTP6CSVCzZXfOCvlifceKv0PJonY4Amp4bPPYk
-   i+Wgl09V4P7CphxmRfsR3KamWFxXRUkSoZfuprhykDexnc75YEbjTkScT
-   9UYMO29MFpQPQSLfLuqmM+HEWFPJ/fn1anyAuC/QT8ni7/r4Zea+Qm8n0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
-   d="scan'208";a="196648435"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jan 2023 22:22:18 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 19 Jan 2023 22:22:18 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 22:22:12 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>
-Subject: [Patch net-next v2 2/2] net: dsa: microchip: add support for credit based shaper
-Date:   Fri, 20 Jan 2023 10:51:35 +0530
-Message-ID: <20230120052135.32120-3-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230120052135.32120-1-arun.ramadoss@microchip.com>
-References: <20230120052135.32120-1-arun.ramadoss@microchip.com>
+        Fri, 20 Jan 2023 00:27:55 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13C4ABCB;
+        Thu, 19 Jan 2023 21:23:16 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id i12so3155144qvs.2;
+        Thu, 19 Jan 2023 21:23:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WHPXPC0BMX6sTs60Cw/eJV++Bo/jj1HUB4gDhIXLxjc=;
+        b=y4e+82k89Fc9lHpt69n0XF2PVgrSWKz4iSysAmiFBjXAWNIwZ6ZDOrgFU1l3C6pX/e
+         ejyOkToUJgTqnCpL0/Jp5SltSjB/9CVELfvStOi3GADnprDlGWognv3bchIg3cA6+5tc
+         c6WWb7E1TODMGzWn4Xe75VLPrJp1XJ0YHG48+Pqi85kY1oxY/KX7c12gIHjzZcn1TAYd
+         aDbWPI9MOzwdsHj7HBjqvyjMsbwQD/sWGueLMQ0QpnjKzdpJxf+I2WxCa9RqiPlFHo2I
+         sOAtOdZ9cmFem+N6aIEMIWxi7K3s2JfFz6PKavMDFgc/2Ctc/T4+/L3y9BtyKACjVQzk
+         8yVw==
+X-Gm-Message-State: AFqh2kovqd1LIbmQwv0MDJZtwSXeuFfyyvC8CKrwOzA/Ln7gdUJf7mlW
+        UVvpLyILrZijtEDCcLZUpX3olUEQA/aE2qFR
+X-Google-Smtp-Source: AMrXdXur3UYcJqIQnvqtkk3dTTuzhe2hJHvV5HBY+uFXJ94Y7/MAi18vNtaPzwOYQmt0O7aAgg7AcQ==
+X-Received: by 2002:a0c:e042:0:b0:4c7:6119:a7fc with SMTP id y2-20020a0ce042000000b004c76119a7fcmr49954520qvk.40.1674192195045;
+        Thu, 19 Jan 2023 21:23:15 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05620a28ce00b007062139ecb3sm13990130qkp.95.2023.01.19.21.23.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 21:23:14 -0800 (PST)
+Date:   Thu, 19 Jan 2023 23:23:18 -0600
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
+ checking BTF IDs
+Message-ID: <Y8olRi9SjcyNtam0@maniforge.lan>
+References: <20230119235833.2948341-1-void@manifault.com>
+ <20230119235833.2948341-3-void@manifault.com>
+ <20230120045815.4b7dc6obdt4uzy6a@apollo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120045815.4b7dc6obdt4uzy6a@apollo>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KSZ9477, KSZ9567, KSZ9563, KSZ8563 and LAN937x supports Credit based
-shaper. To differentiate the chip supporting cbs, tc_cbs_supported
-flag is introduced in ksz_chip_data.
-And KSZ series has 16bit Credit increment registers whereas LAN937x has
-24bit register. The value to be programmed in the credit increment is
-determined using the successive multiplication method to convert decimal
-fraction to hexadecimal fraction.
-For example: if idleslope is 10000 and sendslope is -90000, then
-bandwidth is 10000 - (-90000) = 100000.
-The 10% bandwidth of 100Mbps means 10/100 = 0.1(decimal). This value has
-to be converted to hexa.
-1) 0.1 * 16 = 1.6  --> fraction 0.6 Carry = 1 (MSB)
-2) 0.6 * 16 = 9.6  --> fraction 0.6 Carry = 9
-3) 0.6 * 16 = 9.6  --> fraction 0.6 Carry = 9
-4) 0.6 * 16 = 9.6  --> fraction 0.6 Carry = 9
-5) 0.6 * 16 = 9.6  --> fraction 0.6 Carry = 9
-6) 0.6 * 16 = 9.6  --> fraction 0.6 Carry = 9 (LSB)
-Now 0.1(decimal) becomes 0.199999(Hex).
-If it is LAN937x, 24 bit value will be programmed to Credit Inc
-register, 0x199999. For others 16 bit value will be prgrammed, 0x1999.
+On Fri, Jan 20, 2023 at 10:28:15AM +0530, Kumar Kartikeya Dwivedi wrote:
+> On Fri, Jan 20, 2023 at 05:28:27AM IST, David Vernet wrote:
+> > When validating BTF types for KF_TRUSTED_ARGS kfuncs, the verifier
+> > currently enforces that the top-level type must match when calling
+> > the kfunc. In other words, the verifier does not allow the BPF program
+> > to pass a bitwise equivalent struct, despite it being functionally safe.
+> > For example, if you have the following type:
+> >
+> > struct  nf_conn___init {
+> > 	struct nf_conn ct;
+> > };
+> >
+> > It would be safe to pass a struct nf_conn___init to a kfunc expecting a
+> > struct nf_conn.
+> 
+> Just running bpf_nf selftest would have shown this is false.
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
-v1 -> v2
-- checking the divide by zero error in cinc_cal
----
- drivers/net/dsa/microchip/ksz9477.c      |   7 ++
- drivers/net/dsa/microchip/ksz9477.h      |   1 +
- drivers/net/dsa/microchip/ksz9477_reg.h  |  27 +-----
- drivers/net/dsa/microchip/ksz_common.c   | 112 +++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_common.h   |  20 ++++
- drivers/net/dsa/microchip/lan937x.h      |   1 +
- drivers/net/dsa/microchip/lan937x_main.c |   5 +
- drivers/net/dsa/microchip/lan937x_reg.h  |   3 +
- 8 files changed, 151 insertions(+), 25 deletions(-)
+And I feel silly, because I did run them, and could have sworn they
+passed...looking now at the change_status_after_alloc testcase I see
+you're of course correct. Very poor example, thank you for pointing it
+out.
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 6526c3c204bb..fd93e4595c2c 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -1184,6 +1184,13 @@ u32 ksz9477_get_port_addr(int port, int offset)
- 	return PORT_CTRL_ADDR(port, offset);
- }
- 
-+int ksz9477_tc_cbs_set_cinc(struct ksz_device *dev, int port, u32 val)
-+{
-+	val = val >> 8;
-+
-+	return ksz_pwrite16(dev, port, REG_PORT_MTI_CREDIT_INCREMENT, val);
-+}
-+
- int ksz9477_switch_init(struct ksz_device *dev)
- {
- 	u8 data8;
-diff --git a/drivers/net/dsa/microchip/ksz9477.h b/drivers/net/dsa/microchip/ksz9477.h
-index 2554cb63d326..b6f7e3c46e3f 100644
---- a/drivers/net/dsa/microchip/ksz9477.h
-+++ b/drivers/net/dsa/microchip/ksz9477.h
-@@ -51,6 +51,7 @@ int ksz9477_mdb_del(struct ksz_device *dev, int port,
- 		    const struct switchdev_obj_port_mdb *mdb, struct dsa_db db);
- int ksz9477_change_mtu(struct ksz_device *dev, int port, int mtu);
- void ksz9477_config_cpu_port(struct dsa_switch *ds);
-+int ksz9477_tc_cbs_set_cinc(struct ksz_device *dev, int port, u32 val);
- int ksz9477_enable_stp_addr(struct ksz_device *dev);
- int ksz9477_reset_switch(struct ksz_device *dev);
- int ksz9477_dsa_init(struct ksz_device *dev);
-diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
-index b433a529cfec..cba3dba58bc3 100644
---- a/drivers/net/dsa/microchip/ksz9477_reg.h
-+++ b/drivers/net/dsa/microchip/ksz9477_reg.h
-@@ -1484,33 +1484,10 @@
- 
- /* 9 - Shaping */
- 
--#define REG_PORT_MTI_QUEUE_INDEX__4	0x0900
-+#define REG_PORT_MTI_QUEUE_CTRL_0__4   0x0904
- 
--#define REG_PORT_MTI_QUEUE_CTRL_0__4	0x0904
-+#define MTI_PVID_REPLACE               BIT(0)
- 
--#define MTI_PVID_REPLACE		BIT(0)
--
--#define REG_PORT_MTI_QUEUE_CTRL_0	0x0914
--
--#define MTI_SCHEDULE_MODE_M		0x3
--#define MTI_SCHEDULE_MODE_S		6
--#define MTI_SCHEDULE_STRICT_PRIO	0
--#define MTI_SCHEDULE_WRR		2
--#define MTI_SHAPING_M			0x3
--#define MTI_SHAPING_S			4
--#define MTI_SHAPING_OFF			0
--#define MTI_SHAPING_SRP			1
--#define MTI_SHAPING_TIME_AWARE		2
--
--#define REG_PORT_MTI_QUEUE_CTRL_1	0x0915
--
--#define MTI_TX_RATIO_M			(BIT(7) - 1)
--
--#define REG_PORT_MTI_QUEUE_CTRL_2__2	0x0916
--#define REG_PORT_MTI_HI_WATER_MARK	0x0916
--#define REG_PORT_MTI_QUEUE_CTRL_3__2	0x0918
--#define REG_PORT_MTI_LO_WATER_MARK	0x0918
--#define REG_PORT_MTI_QUEUE_CTRL_4__2	0x091A
- #define REG_PORT_MTI_CREDIT_INCREMENT	0x091A
- 
- /* A - QM */
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index fbb107754057..b72a2c4c3e5c 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -23,6 +23,7 @@
- #include <linux/of_net.h>
- #include <linux/micrel_phy.h>
- #include <net/dsa.h>
-+#include <net/pkt_cls.h>
- #include <net/switchdev.h>
- 
- #include "ksz_common.h"
-@@ -31,6 +32,10 @@
- #include "ksz9477.h"
- #include "lan937x.h"
- 
-+#define KSZ_CBS_ENABLE ((MTI_SCHEDULE_STRICT_PRIO << MTI_SCHEDULE_MODE_S) | \
-+			(MTI_SHAPING_SRP << MTI_SHAPING_S))
-+#define KSZ_CBS_DISABLE ((MTI_SCHEDULE_WRR << MTI_SCHEDULE_MODE_S) |\
-+			 (MTI_SHAPING_OFF << MTI_SHAPING_S))
- #define MIB_COUNTER_NUM 0x20
- 
- struct ksz_stats_raw {
-@@ -250,6 +255,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
- 	.change_mtu = ksz9477_change_mtu,
- 	.phylink_mac_link_up = ksz9477_phylink_mac_link_up,
- 	.config_cpu_port = ksz9477_config_cpu_port,
-+	.tc_cbs_set_cinc = ksz9477_tc_cbs_set_cinc,
- 	.enable_stp_addr = ksz9477_enable_stp_addr,
- 	.reset = ksz9477_reset_switch,
- 	.init = ksz9477_switch_init,
-@@ -286,6 +292,7 @@ static const struct ksz_dev_ops lan937x_dev_ops = {
- 	.change_mtu = lan937x_change_mtu,
- 	.phylink_mac_link_up = ksz9477_phylink_mac_link_up,
- 	.config_cpu_port = lan937x_config_cpu_port,
-+	.tc_cbs_set_cinc = lan937x_tc_cbs_set_cinc,
- 	.enable_stp_addr = ksz9477_enable_stp_addr,
- 	.reset = lan937x_reset_switch,
- 	.init = lan937x_switch_init,
-@@ -1081,6 +1088,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 3,		/* total port count */
- 		.port_nirqs = 3,
- 		.num_tx_queues = 4,
-+		.tc_cbs_supported = true,
- 		.ops = &ksz9477_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1219,6 +1227,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 7,		/* total physical port count */
- 		.port_nirqs = 4,
- 		.num_tx_queues = 4,
-+		.tc_cbs_supported = true,
- 		.ops = &ksz9477_dev_ops,
- 		.phy_errata_9477 = true,
- 		.mib_names = ksz9477_mib_names,
-@@ -1342,6 +1351,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 3,		/* total port count */
- 		.port_nirqs = 3,
- 		.num_tx_queues = 4,
-+		.tc_cbs_supported = true,
- 		.ops = &ksz9477_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1368,6 +1378,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 7,		/* total physical port count */
- 		.port_nirqs = 3,
- 		.num_tx_queues = 4,
-+		.tc_cbs_supported = true,
- 		.ops = &ksz9477_dev_ops,
- 		.phy_errata_9477 = true,
- 		.mib_names = ksz9477_mib_names,
-@@ -1399,6 +1410,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 5,		/* total physical port count */
- 		.port_nirqs = 6,
- 		.num_tx_queues = 8,
-+		.tc_cbs_supported = true,
- 		.ops = &lan937x_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1424,6 +1436,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 6,		/* total physical port count */
- 		.port_nirqs = 6,
- 		.num_tx_queues = 8,
-+		.tc_cbs_supported = true,
- 		.ops = &lan937x_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1449,6 +1462,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 8,		/* total physical port count */
- 		.port_nirqs = 6,
- 		.num_tx_queues = 8,
-+		.tc_cbs_supported = true,
- 		.ops = &lan937x_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1478,6 +1492,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 5,		/* total physical port count */
- 		.port_nirqs = 6,
- 		.num_tx_queues = 8,
-+		.tc_cbs_supported = true,
- 		.ops = &lan937x_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -1507,6 +1522,7 @@ const struct ksz_chip_data ksz_switch_chips[] = {
- 		.port_cnt = 8,		/* total physical port count */
- 		.port_nirqs = 6,
- 		.num_tx_queues = 8,
-+		.tc_cbs_supported = true,
- 		.ops = &lan937x_dev_ops,
- 		.mib_names = ksz9477_mib_names,
- 		.mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-@@ -2982,6 +2998,101 @@ static int ksz_switch_detect(struct ksz_device *dev)
- 	return 0;
- }
- 
-+/* Bandwidth is calculated by idle slope/transmission speed. Then the Bandwidth
-+ * is converted to Hex-decimal using the successive multiplication method. On
-+ * every step, integer part is taken and decimal part is carry forwarded.
-+ */
-+static int cinc_cal(s32 idle_slope, s32 send_slope, u32 *bw)
-+{
-+	u32 cinc = 0;
-+	u32 txrate;
-+	u32 rate;
-+	u8 temp;
-+	u8 i;
-+
-+	txrate = idle_slope - send_slope;
-+
-+	if (!txrate)
-+		return -EINVAL;
-+
-+	rate = idle_slope;
-+
-+	/* 24 bit register */
-+	for (i = 0; i < 6; i++) {
-+		rate = rate * 16;
-+
-+		temp = rate / txrate;
-+
-+		rate %= txrate;
-+
-+		cinc = ((cinc << 4) | temp);
-+	}
-+
-+	*bw = cinc;
-+
-+	return 0;
-+}
-+
-+static int ksz_setup_tc_cbs(struct dsa_switch *ds, int port,
-+			    struct tc_cbs_qopt_offload *qopt)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	int ret;
-+	u32 bw;
-+
-+	if (!dev->info->tc_cbs_supported)
-+		return -EOPNOTSUPP;
-+
-+	if (qopt->queue > dev->info->num_tx_queues)
-+		return -EINVAL;
-+
-+	/* Queue Selection */
-+	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, qopt->queue);
-+	if (ret)
-+		return ret;
-+
-+	if (!qopt->enable)
-+		return ksz_pwrite8(dev, port, REG_PORT_MTI_QUEUE_CTRL_0,
-+				   KSZ_CBS_DISABLE);
-+
-+	/* High Credit */
-+	ret = ksz_pwrite16(dev, port, REG_PORT_MTI_HI_WATER_MARK,
-+			   qopt->hicredit);
-+	if (ret)
-+		return ret;
-+
-+	/* Low Credit */
-+	ret = ksz_pwrite16(dev, port, REG_PORT_MTI_LO_WATER_MARK,
-+			   qopt->locredit);
-+	if (ret)
-+		return ret;
-+
-+	/* Credit Increment Register */
-+	ret = cinc_cal(qopt->idleslope, qopt->sendslope, &bw);
-+	if (ret)
-+		return ret;
-+
-+	if (dev->dev_ops->tc_cbs_set_cinc) {
-+		ret = dev->dev_ops->tc_cbs_set_cinc(dev, port, bw);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return ksz_pwrite8(dev, port, REG_PORT_MTI_QUEUE_CTRL_0,
-+			   KSZ_CBS_ENABLE);
-+}
-+
-+static int ksz_setup_tc(struct dsa_switch *ds, int port,
-+			enum tc_setup_type type, void *type_data)
-+{
-+	switch (type) {
-+	case TC_SETUP_QDISC_CBS:
-+		return ksz_setup_tc_cbs(ds, port, type_data);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static const struct dsa_switch_ops ksz_switch_ops = {
- 	.get_tag_protocol	= ksz_get_tag_protocol,
- 	.connect_tag_protocol   = ksz_connect_tag_protocol,
-@@ -3024,6 +3135,7 @@ static const struct dsa_switch_ops ksz_switch_ops = {
- 	.port_hwtstamp_set	= ksz_hwtstamp_set,
- 	.port_txtstamp		= ksz_port_txtstamp,
- 	.port_rxtstamp		= ksz_port_rxtstamp,
-+	.port_setup_tc		= ksz_setup_tc,
- };
- 
- struct ksz_device *ksz_switch_alloc(struct device *base, void *priv)
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 1a00143b0345..d2d5761d58e9 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -50,6 +50,7 @@ struct ksz_chip_data {
- 	int port_cnt;
- 	u8 port_nirqs;
- 	u8 num_tx_queues;
-+	bool tc_cbs_supported;
- 	const struct ksz_dev_ops *ops;
- 	bool phy_errata_9477;
- 	bool ksz87xx_eee_link_erratum;
-@@ -354,6 +355,7 @@ struct ksz_dev_ops {
- 				    struct phy_device *phydev, int speed,
- 				    int duplex, bool tx_pause, bool rx_pause);
- 	void (*setup_rgmii_delay)(struct ksz_device *dev, int port);
-+	int (*tc_cbs_set_cinc)(struct ksz_device *dev, int port, u32 val);
- 	void (*config_cpu_port)(struct dsa_switch *ds);
- 	int (*enable_stp_addr)(struct ksz_device *dev);
- 	int (*reset)(struct ksz_device *dev);
-@@ -647,6 +649,24 @@ static inline int is_lan937x(struct ksz_device *dev)
- #define KSZ8_LEGAL_PACKET_SIZE		1518
- #define KSZ9477_MAX_FRAME_SIZE		9000
- 
-+/* CBS related registers */
-+#define REG_PORT_MTI_QUEUE_INDEX__4	0x0900
-+
-+#define REG_PORT_MTI_QUEUE_CTRL_0	0x0914
-+
-+#define MTI_SCHEDULE_MODE_M		0x3
-+#define MTI_SCHEDULE_MODE_S		6
-+#define MTI_SCHEDULE_STRICT_PRIO	0
-+#define MTI_SCHEDULE_WRR		2
-+#define MTI_SHAPING_M			0x3
-+#define MTI_SHAPING_S			4
-+#define MTI_SHAPING_OFF			0
-+#define MTI_SHAPING_SRP			1
-+#define MTI_SHAPING_TIME_AWARE		2
-+
-+#define REG_PORT_MTI_HI_WATER_MARK	0x0916
-+#define REG_PORT_MTI_LO_WATER_MARK	0x0918
-+
- /* Regmap tables generation */
- #define KSZ_SPI_OP_RD		3
- #define KSZ_SPI_OP_WR		2
-diff --git a/drivers/net/dsa/microchip/lan937x.h b/drivers/net/dsa/microchip/lan937x.h
-index 8e9e66d6728d..3388d91dbc44 100644
---- a/drivers/net/dsa/microchip/lan937x.h
-+++ b/drivers/net/dsa/microchip/lan937x.h
-@@ -20,4 +20,5 @@ void lan937x_phylink_get_caps(struct ksz_device *dev, int port,
- 			      struct phylink_config *config);
- void lan937x_setup_rgmii_delay(struct ksz_device *dev, int port);
- int lan937x_set_ageing_time(struct ksz_device *dev, unsigned int msecs);
-+int lan937x_tc_cbs_set_cinc(struct ksz_device *dev, int port, u32 val);
- #endif
-diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
-index 923388f87996..399a3905e6ca 100644
---- a/drivers/net/dsa/microchip/lan937x_main.c
-+++ b/drivers/net/dsa/microchip/lan937x_main.c
-@@ -340,6 +340,11 @@ void lan937x_setup_rgmii_delay(struct ksz_device *dev, int port)
- 	}
- }
- 
-+int lan937x_tc_cbs_set_cinc(struct ksz_device *dev, int port, u32 val)
-+{
-+	return ksz_pwrite32(dev, port, REG_PORT_MTI_CREDIT_INCREMENT, val);
-+}
-+
- int lan937x_switch_init(struct ksz_device *dev)
- {
- 	dev->port_mask = (1 << dev->info->port_cnt) - 1;
-diff --git a/drivers/net/dsa/microchip/lan937x_reg.h b/drivers/net/dsa/microchip/lan937x_reg.h
-index 5bc16a4c4441..45b606b6429f 100644
---- a/drivers/net/dsa/microchip/lan937x_reg.h
-+++ b/drivers/net/dsa/microchip/lan937x_reg.h
-@@ -185,6 +185,9 @@
- 
- #define P_PRIO_CTRL			REG_PORT_MRI_PRIO_CTRL
- 
-+/* 9 - Shaping */
-+#define REG_PORT_MTI_CREDIT_INCREMENT	0x091C
-+
- /* The port number as per the datasheet */
- #define RGMII_2_PORT_NUM		5
- #define RGMII_1_PORT_NUM		6
--- 
-2.36.1
+> 
+> > Being able to do this will be useful for certain types
+> > of kfunc / kptrs enabled by BPF. For example, in a follow-on patch, a
+> > series of kfuncs will be added which allow programs to do bitwise
+> > queries on cpumasks that are either allocated by the program (in which
+> > case they'll be a 'struct bpf_cpumask' type that wraps a cpumask_t as
+> > its first element), or a cpumask that was allocated by the main kernel
+> > (in which case it will just be a straight cpumask_t, as in
+> >  task->cpus_ptr).
+> >
+> > Having the two types of cpumasks allows us to distinguish between the
+> > two for when a cpumask is read-only vs. mutatable. A struct bpf_cpumask
+> > can be mutated by e.g. bpf_cpumask_clear(), whereas a regular cpumask_t
+> > cannot be. On the other hand, a struct bpf_cpumask can of course be
+> > queried in the exact same manner as a cpumask_t, with e.g.
+> > bpf_cpumask_test_cpu().
+> >
+> > If we were to enforce that top level types match, then a user that's
+> > passing a struct bpf_cpumask to a read-only cpumask_t argument would
+> > have to cast with something like bpf_cast_to_kern_ctx() (which itself
+> > would need to be updated to expect the alias, and currently it only
+> > accommodates a single alias per prog type). Additionally, not specifying
+> > KF_TRUSTED_ARGS is not an option, as some kfuncs take one argument as a
+> > struct bpf_cpumask *, and another as a struct cpumask *
+> > (i.e. cpumask_t).
+> >
+> > In order to enable this, this patch relaxes the constraint that a
+> > KF_TRUSTED_ARGS kfunc must have strict type matching. In order to
+> > try and be conservative and match existing behavior / expectations, this
+> > patch also enforces strict type checking for acquire kfuncs. We were
+> > already enforcing it for release kfuncs, so this should also improve the
+> > consistency of the semantics for kfuncs.
+> >
+> 
+> What you want is to simply follow type at off = 0 (but still enforce the off = 0
+> requirement). This is something which is currently done for bpf_sk_release (for
+> struct sk_common) in check_reg_type, but it is not safe in general to just open
+> this up for all cases. I suggest encoding this particular requirement in the
+> argument, and simply using triple underscore variant of the type for the special
+> 'read_only' requirement. This will allow you to use same type in your BPF C
+> program, while allowing verifier to see them as two different types in kfunc
+> parameters. Then just relax type following for the particular argument so that
+> one can pass cpumask_t___ro to kfunc expecting cpumask_t (but only at off = 0,
+> it just visits first member after failing match on top level type). off = 0
+> check is still necessary.
 
+Sigh, yeah, another ___ workaround but I agree it's probably the best we
+can do for now, and in general seems pretty useful. Obviously preferable
+to this patch which just doesn't work. Alexei, are you OK with this? If
+so, I'll take this approach for v2.
+
+> 
+> So offset checks still need to be according to OBJ_RELEASE but you can relax
+> strict_type_match bool for the particular arg when calling btf_struct_ids_match.
+> 
+> All code in your tests will then deal with a cpumask_t type only, including in
+> kfunc declarations. Same as bpf_nf selftests which don't cast from/to
+> nf_conn___init and only deal with nf_conn pointers even though semantics differ
+> depending on how it is used and passed around. Overall more convenient and
+> simple to use.
