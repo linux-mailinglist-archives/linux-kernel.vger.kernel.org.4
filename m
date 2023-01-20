@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9479767522E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8690B675265
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjATKPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S229590AbjATK1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjATKPt (ORCPT
+        with ESMTP id S229470AbjATK1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:15:49 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868518B745;
-        Fri, 20 Jan 2023 02:15:47 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K8mlKC019162;
-        Fri, 20 Jan 2023 10:15:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=a6svtfIvYv3akzhOfmXqJAQU9di2xir7IaHZxcotou8=;
- b=XooNRP1u3uf+kpbp3K7RyhGj29WWZFrUO0bOwalz9TFiVJpHw8A/KNNO2JwofS810mO+
- EqpsT9smNGQGx6aUquTqrM5YDsEKFtX6eAhSFNRwr/pR2RakaSjcy6bOUPStQXcwCuV0
- 2hx08U2IgvCDv79PlSDzADV5lCy+rkmp/Uv+HZrASNXAeOOjgVrQjIX8m96FNCYf5ugp
- 1Uchpr5TraUsWLsAoPJSUSFy8usQ8Nxq1g0VOIY6QNJnYNSFevE0pqQbIcRmOWZzJhJa
- XcXzD5rER9YDIsR4jcAVmDJ+03AcOHgidcicZZQle3ihMZVHFjyXq7+85Ly1IpjdLMK+ 3A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6wbsbmx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 10:15:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KAFdto016567
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 10:15:39 GMT
-Received: from [10.216.24.162] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 02:15:35 -0800
-Message-ID: <fb6ef6e8-ed00-6139-1988-0c082c92c99b@quicinc.com>
-Date:   Fri, 20 Jan 2023 15:45:32 +0530
+        Fri, 20 Jan 2023 05:27:17 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01277BAF1F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:50 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id k16so3637685wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=e4mt5lGPeAiHXoegntNYO5GB6SA6d9P+daV7EOX7KxE=;
+        b=fUjHtccIWB0vyjuM9shK7iOBnKRcjVRyDKG0+xnJ/+VnAf+laV6pKo7tbZ3ksh8PvH
+         DTpqVBt9YxlTy9n6MPUwHXfZ17dkV9yIPWutuUoJu1xJKHVVNMqdVkVp71GC8ya2gIrM
+         eKdkevkw7tLtIFyHILfqruPo7R105xSjIPdWcI+57E+FGKb1pzNud70c4jQxXTrpbH5g
+         0MuACQyEH65XIdgQYsrV8x7ILK0SztEBKHhA8qS4PiGT/5AJcMjRPWZSU7O7U19qxeM6
+         AqiHyd94dI/VIZPCUrv69g6vEPxL73eyTPX7/XkYMkKowY3ofeEkr6zxH/d9UwiJo5pd
+         XOnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4mt5lGPeAiHXoegntNYO5GB6SA6d9P+daV7EOX7KxE=;
+        b=Zb2mDe2kbDy1H/gcMn2IUyBb2qMvFDeE7g8iTjVHmvX/LwL1i6UpU5PzKefcGnp5ap
+         MY0kFO0AGEFZfJqH4t5wd+D5W2Pb9O+1mW64u73hixC0XIsW5P8BImAscVS3myZRalpU
+         wZ4asXRFdk5UwfL1FozajGaoiEi4Hi6VFggY88ycDG4ibiKifCAJGC019iu2VONtXRGE
+         23Wb0lV/jFL8YMyRPOtq6sfX78/AceK8VlWnLFjIUzpFdAFd8EEyH2vPJ6jC4KBzKap8
+         2Eo0RgS7F3ypGJIwf43f1J63zE27Jre31PXGGjPy+j52j5rzpPzSDzJ5MXcTcee2gDru
+         D7zw==
+X-Gm-Message-State: AFqh2kpxs9d2HIcmmBmqBrmSW8fdUzCnA8ow/FuPt98yG6B88jnDWsYE
+        Wxrlf3/wc6Fu3yWzp1rvBCXGgQ==
+X-Google-Smtp-Source: AMrXdXurHyG2XSMT/oqWAcqCqisVjbAkEuwYynC+zJ20Z/Wc3RoAgIV4gZyyioyzciWoE/Yk0mgjTg==
+X-Received: by 2002:a05:600c:3ac8:b0:3da:f67c:aca6 with SMTP id d8-20020a05600c3ac800b003daf67caca6mr13518984wms.34.1674210407420;
+        Fri, 20 Jan 2023 02:26:47 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id z4-20020a05600c0a0400b003db01178b62sm2095567wmp.40.2023.01.20.02.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 02:26:46 -0800 (PST)
+References: <20230116091637.272923-1-jbrunet@baylibre.com>
+ <20230116091637.272923-3-jbrunet@baylibre.com> <Y8dhUwIMb4tTeqWN@lunn.ch>
+ <1jmt6eye1m.fsf@starbuckisacylon.baylibre.com> <Y8l7Rc9Vde9J45ij@lunn.ch>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] net: mdio: add amlogic gxl mdio mux support
+Date:   Fri, 20 Jan 2023 11:16:20 +0100
+In-reply-to: <Y8l7Rc9Vde9J45ij@lunn.ch>
+Message-ID: <1jcz79wlgc.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] soc: qcom: socinfo: Add sysfs attributes for fields
- in v2-v6
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, Trilok Soni <quic_tsoni@quicinc.com>,
-        "Shiraz Hashim" <quic_shashim@quicinc.com>,
-        <quic_kaushalk@quicinc.com>
-References: <20230111082141.18109-1-quic_namajain@quicinc.com>
- <20230111082141.18109-3-quic_namajain@quicinc.com>
- <08ffedc3-3104-18fc-4813-287eccd1fdca@linaro.org>
- <b623e046-8dbc-3a07-7e16-d22b762c4122@quicinc.com>
- <a501ead8-7376-6d7d-251a-c468b9759f30@linaro.org>
-From:   Naman Jain <quic_namajain@quicinc.com>
-In-Reply-To: <a501ead8-7376-6d7d-251a-c468b9759f30@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XYX0RtgzaZMR9UefQRtuKvRUmyyR_6EV
-X-Proofpoint-GUID: XYX0RtgzaZMR9UefQRtuKvRUmyyR_6EV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_06,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 impostorscore=0 priorityscore=1501
- bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200097
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,396 +77,100 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/19/2023 4:29 PM, Dmitry Baryshkov wrote:
-> On 19/01/2023 11:39, Naman Jain wrote:
->> Thanks Dmitry for reviewing the patches. Sorry, for replying late on 
->> your email, I wanted to collect all the information, before I do it.
->>
->> On 1/12/2023 4:49 AM, Dmitry Baryshkov wrote:
->>> On 11/01/2023 10:21, Naman Jain wrote:
->>>> Add support in sysfs custom attributes for fields in socinfo version
->>>> v2-v6. This is to support SoC based operations in userland scripts
->>>> and test scripts. Also, add name mappings for hw-platform type to
->>>> make the sysfs information more descriptive.
->>>
->>> Please include a patch documenting your additions to 
->>> Documentation/ABI/testing/sysfs-devices-soc. Please describe 
->>> usecases for new attributes and their applicability to non-Qualcomm 
->>> boards.
->>>
->>
->> The fields added here, are applicable to Qualcomm boards only. I can 
->> include in the same file sysfs-devices-soc, mentioning the same that 
->> it is Qcom specific, or I can create a new file for this, 
->> sysfs-devices-soc-qcom, however you suggest. Mentioning the use 
->> cases, later in the mail.
+On Thu 19 Jan 2023 at 18:17, Andrew Lunn <andrew@lunn.ch> wrote:
+
+>> >> +
+>> >> +	/* Set the internal phy id */
+>> >> +	writel_relaxed(FIELD_PREP(REG2_PHYID, 0x110181),
+>> >> +		       priv->regs + ETH_REG2);
+>> >
+>> > So how does this play with what Heiner has been reporting recently?
+>> 
+>> What Heiner reported recently is related to the g12 family, not the gxl
+>> which this driver address.
+>> 
+>> That being said, the g12 does things in a similar way - the glue
+>> is just a bit different:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/mdio/mdio-mux-meson-g12a.c?h=v6.2-rc4#n165
+>> 
+>> > What is the reset default? Who determined this value?
+>> 
+>> It's the problem, the reset value is 0. That is why GXL does work with the
+>> internal PHY if the bootloader has not initialized it before the kernel
+>> comes up ... and there is no guarantee that it will.
+>> 
+>> The phy id value is arbitrary, same as the address. They match what AML
+>> is using internally.
 >
-> So, you are extending the generic SoC interface with the 
-> vendor-specific interfaces. There must be a file describing them in a 
-> generic enough way that other vendors can apply for their boards too.
->
-> Note, that /sys/devices/soc applies to SoC level, not the board level. 
-> Generally I think that you should export your data through a more 
-> generic data path, e.g. /sys/firmware.
-
-
-Understood, will keep that in mind.
-
-
->
->>
->>
->>> Note, that testing scripts can access debugfs entries without any 
->>> issues.
->>
->>
->> Yes, that is right. Thanks.
->>
->>
->>>
->>>>
->>>> Signed-off-by: Naman Jain <quic_namajain@quicinc.com>
->>>> ---
->>>>   drivers/soc/qcom/socinfo.c | 181 
->>>> +++++++++++++++++++++++++++++++++++++
->>>>   1 file changed, 181 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
->>>> index 251c0fd94962..ff92064c2246 100644
->>>> --- a/drivers/soc/qcom/socinfo.c
->>>> +++ b/drivers/soc/qcom/socinfo.c
->>>> @@ -41,6 +41,52 @@
->>>>    */
->>>>   #define SMEM_HW_SW_BUILD_ID            137
->>>>   +enum {
->>>> +    HW_PLATFORM_UNKNOWN = 0,
->>>> +    HW_PLATFORM_SURF = 1,
->>>> +    HW_PLATFORM_FFA = 2,
->>>> +    HW_PLATFORM_FLUID = 3,
->>>> +    HW_PLATFORM_SVLTE_FFA = 4,
->>>> +    HW_PLATFORM_SVLTE_SURF = 5,
->>>> +    HW_PLATFORM_MTP_MDM = 7,
->>>> +    HW_PLATFORM_MTP = 8,
->>>> +    HW_PLATFORM_LIQUID = 9,
->>>> +    HW_PLATFORM_DRAGON = 10,
->>>> +    HW_PLATFORM_QRD = 11,
->>>> +    HW_PLATFORM_HRD = 13,
->>>> +    HW_PLATFORM_DTV = 14,
->>>> +    HW_PLATFORM_RCM = 21,
->>>> +    HW_PLATFORM_STP = 23,
->>>> +    HW_PLATFORM_SBC = 24,
->>>> +    HW_PLATFORM_HDK = 31,
->>>> +    HW_PLATFORM_ATP = 33,
->>>> +    HW_PLATFORM_IDP = 34,
->>>> +    HW_PLATFORM_INVALID
->>>> +};
->>>> +
->>>> +static const char * const hw_platform[] = {
->>>> +    [HW_PLATFORM_UNKNOWN] = "Unknown",
->>>> +    [HW_PLATFORM_SURF] = "Surf",
->>>> +    [HW_PLATFORM_FFA] = "FFA",
->>>> +    [HW_PLATFORM_FLUID] = "Fluid",
->>>> +    [HW_PLATFORM_SVLTE_FFA] = "SVLTE_FFA",
->>>> +    [HW_PLATFORM_SVLTE_SURF] = "SLVTE_SURF",
->>>> +    [HW_PLATFORM_MTP_MDM] = "MDM_MTP_NO_DISPLAY",
->>>> +    [HW_PLATFORM_MTP] = "MTP",
->>>> +    [HW_PLATFORM_RCM] = "RCM",
->>>> +    [HW_PLATFORM_LIQUID] = "Liquid",
->>>> +    [HW_PLATFORM_DRAGON] = "Dragon",
->>>> +    [HW_PLATFORM_QRD] = "QRD",
->>>> +    [HW_PLATFORM_HRD] = "HRD",
->>>> +    [HW_PLATFORM_DTV] = "DTV",
->>>> +    [HW_PLATFORM_STP] = "STP",
->>>> +    [HW_PLATFORM_SBC] = "SBC",
->>>> +    [HW_PLATFORM_HDK] = "HDK",
->>>> +    [HW_PLATFORM_ATP] = "ATP",
->>>> +    [HW_PLATFORM_IDP] = "IDP",
->>>> +    [HW_PLATFORM_INVALID] = "Invalid",
->>>> +};
->>>
->>> This is not a property of the SoC. It is a property of the device. 
->>> As such it should not be part of /sys/bus/soc devices.
->>
->>
->> I understand your point. The Socinfo structure as such on Qualcomm 
->> SoC gives not just SoC related information but also many other info 
->> like serial number, platform subtype etc. Now in order to support the 
->> usecases below, we are proposing sysfs interface extension, as we 
->> can't use debugfs interface in production/end user devices due to 
->> debugfs access restrictions.
->
-> "The vendor does it in this way" doesn't give you a right to repurpose 
-> the ABI.
-
-
-Got it.
-
-
->
->>
->> Use cases:
->>
->> 1. In post-boot shell scripts, for various chip specific operations, 
->> that are relevant to that particular chip/board only:
->>
->>      a. Setting kernel parameters using sysfs interfaces etc.
->
-> If the parameter is common to all devices of some kind, it should be 
-> set by the driver using the data in the DTS. See, how this is managed 
-> for PHY tunings. You can not expect for the userspace to function in 
-> any particular way. The whole userspace might be a single /bin/bash 
-> executing commands and/or scripts. And still the device should 
-> function _properly_.
-
-
-OK.
-
-
->
->>
->>      b. Enabling particular traces, logs
->
-> This should not depend on the device type. If you have something 
-> hw-specific, check the particular device instance rather than checking 
-> the board kind.
-
-
-Got it.
-
-
->
->>
->>      c. Changing permissions to certain paths
->
-> Excuse me, what paths? Permissions have nothing to do with the board 
-> kind.
-
-
-I think, the solution to these type of use-cases, would fall under the 
-umbrella of your previous comment " If you have something hw-specific, 
-check the particular device instance rather than checking the board 
-kind.". Thanks.
-
-
->
->>
->>      d. Start a userspace service, and pass custom parameters to it 
->> on the fly
->
-> I think this also depends on the hardware availability rather than the 
-> board properties.
-
-
-OK.
-
-
->
->>
->>      e. Set certain device properties using setprop
->
-> Android specifics. Please formulate this in a generic way.
-
-
-Will do.
-
-
->
->>
->>      f. Miscellaneous things like DCC (Data Capture and Compare 
->> Engine) etc.
->
-> Please expand this, you can not expect one to know what is DCC and how 
-> it is used.
->
->>
->> 2. In userspace services, that depend on SoC information, for its 
->> configuration. Eg: Audio, Connectivity services use these.
->
-> This is handled using the device ids, models, etc.. Please see, how 
-> this is handled by other software (hint: ALSA UCM, pulseaudio) instead 
-> of inventing something vendor-specific.
-
-
-Noted.
-
-
->
->>
->> 3. adb needs device serial number, sensors need SoC information to 
->> decide its configuration.
->
-> Already available via /proc/cmdline thanks for your bootloader.
-
-
-Noted. Thanks
-
-
->
->>
->>
->>>
->>> You can find board description in /sys/firmware/devicetree/base/model
->>
->>
->> Thanks for pointing this out. This is giving useful information on 
->> the chip and hw_platform, but the problem is that we need other 
->> fields as well, which we may want to use. Hence the ask.
->>
->> model = "Qualcomm Technologies, Inc. Kalama MTP";
->
-> Generally I think that Qualcomm's socinfo is a kind of firmware 
-> interface, so you can probably extend /sys/firmware to provide this 
-> kind of information.
-
-
-OK, will check. Thanks.
-
-
->
->>
->>
->>>
->>>> +
->>>>   #ifdef CONFIG_DEBUG_FS
->>>>   #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
->>>>   #define SMEM_IMAGE_VERSION_SIZE                4096
->>>> @@ -368,6 +414,140 @@ static const struct soc_id soc_id[] = {
->>>>       { qcom_board_id(QRU1062) },
->>>>   };
->>>>   +/* sysfs attributes */
->>>> +#define ATTR_DEFINE(param) \
->>>> +    static DEVICE_ATTR(param, 0644, qcom_get_##param, NULL)
->>>> +
->>>> +/* Version 2 */
->>>> +static ssize_t
->>>> +qcom_get_raw_id(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    return scnprintf(buf, PAGE_SIZE, "%u\n",
->>>> +             le32_to_cpu(soc_info->raw_id));
->>>> +}
->>>> +ATTR_DEFINE(raw_id);
->>>> +
->>>> +static ssize_t
->>>> +qcom_get_raw_version(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    return scnprintf(buf, PAGE_SIZE, "%u\n",
->>>> +             le32_to_cpu(soc_info->raw_ver));
->>>> +}
->>>> +ATTR_DEFINE(raw_version);
->>>
->>> Why are they raw? can you unraw them?
->>>
->>> Whose version and id are these attributes referring to?
->>
->>
->> So basically, when we call them raw, it essentially means that it is 
->> not parsed as such (different bits may be giving different 
->> information, and the whole value may mean nothing).
->>
->> *version* refers to the chip version, which can be like v1, v2, v1.1 
->> etc in real terms. Its raw value is used to map it to one of these 
->> versions. *id* is used as chip ID for QC SoCs for using JTAG. It is 
->> different than the soc_id that we have.
->
-> Unraw the values.
->
->>
->>
->>>
->>>> +
->>>> +/* Version 3 */
->>>> +static ssize_t
->>>> +qcom_get_hw_platform(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    uint32_t hw_plat = le32_to_cpu(soc_info->hw_plat);
->>>> +
->>>> +    hw_plat = (hw_plat >= HW_PLATFORM_INVALID) ? 
->>>> HW_PLATFORM_INVALID : hw_plat;
->>>> +    return scnprintf(buf, PAGE_SIZE, "%-.32s\n",
->>>> +            hw_platform[hw_plat]);
->>>> +}
->>>> +ATTR_DEFINE(hw_platform);
->>>> +
->>>> +/* Version 4 */
->>>> +static ssize_t
->>>> +qcom_get_platform_version(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    return scnprintf(buf, PAGE_SIZE, "%u\n",
->>>> +             le32_to_cpu(soc_info->plat_ver));
->>>> +}
->>>> +ATTR_DEFINE(platform_version);
->>>> +
->>>> +/* Version 5 */
->>>> +static ssize_t
->>>> +qcom_get_accessory_chip(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    return scnprintf(buf, PAGE_SIZE, "%u\n",
->>>> +            le32_to_cpu(soc_info->accessory_chip));
->>>> +}
->>>> +ATTR_DEFINE(accessory_chip);
->>>
->>> If this an _accessory_ chip, there should be a separate soc device 
->>> describing it, rather than stuffing information into the soc0.
->>>
->>
->> This is used as a boolean currently to tell us whether SoC has an 
->> accessory chip or not.
->
-> SoC doesn't have accessory chip. It the board having the accessory (to 
-> the main SoC) or not.
->
-> Also, please do not use 'currently' for the sysfs files. They are ABI. 
-> And changing ABI is a painful process which might be not available at 
-> all. So once you export something through the sysfs, it is written in 
-> stone. Not 'currently, to be changed later'.
+> Please document where these values have come from. In the future we
+> might need to point a finger when it all goes horribly wrong.
 >
 
-My bad. That may have been just a word, that I use frequently. Totally 
-got your point.
+OK
 
-
->>
->>
->>>> +
->>>> +/* Version 6 */
->>>> +static ssize_t
->>>> +qcom_get_platform_subtype_id(struct device *dev,
->>>> +        struct device_attribute *attr,
->>>> +        char *buf)
->>>> +{
->>>> +    return scnprintf(buf, PAGE_SIZE, "%u\n",
->>>> +             le32_to_cpu(soc_info->hw_plat_subtype));
->>>> +}
->>>> +ATTR_DEFINE(platform_subtype_id);
->>>
->>> Again, this is the board property, not an SoC one.
->>
->>
->> Same justification as one of my previous comments.
+>> They have been kept to avoid making a mess if a vendor bootloader is
+>> used with the mainline kernel, I guess.
+>> 
+>> I suppose any value could be used here, as long as it matches the value
+>> in the PHY driver:
+>> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/meson-gxl.c?h=v6.2-rc4#n253
 >
-> Same comment. /sys/bus/soc exists to export information about, you 
-> guess, SoC. If you want to export information about the board, please 
-> find a better way.
+> Some Marvell Ethernet switches with integrated PHYs have IDs with the
+> vendor part set to Marvell, but the lower part is 0. The date sheet
+> even says this is deliberate, you need to look at some other register
+> in the switches address space to determine what the part is. That
+> works O.K in the vendor crap monolithic driver, but not for Linux
+> which separates the drivers up. So we have to intercept the reads and
+> fill in the lower part. And we have no real knowledge if the PHYs are
+> all the same, or there are differences. So we put in the switch ID,
+> and the PHY driver then has an entry per switch. That gives us some
+> future wiggle room if we find the PHYs are actually different.
 >
+> Is there any indication in the datasheets that the PHY is the exact
+> same one as in the g12? Are we really safe to reuse this value between
+> different SoCs?
+
+There is zero information about the PHY in the datasheet.
+The gxl and g12 don't use the same ID values.
+The PHY ip is very similar but slightly different between the 2.
+(see https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/meson-gxl.c)
+
+My guess is the g12 as another version of the IP, with some bug fixed.
+The integration (clocking scheme mostly) is also different, which is why
+the mux/glue is different.
+
+>
+> I actually find it an odd feature. Does the datasheet say anything
+> about Why you can set the ID in software? The ID describes the
+> hardware, and software configuration should not be able to change the
+> hardware in any meaningful way.
+
+Again, zero information. 
+It is a bought IP (similar to the Rockchip judging by the PHY driver).
+I'm not surprised the provider of the IP would make the ID
+easy to configure. AML chose to keep that configurable through the glue,
+instead of fixing it. This is how it is.
+
+>
+>> >> +	/* Enable the internal phy */
+>> >> +	val |= REG3_PHYEN;
+>> >> +	writel_relaxed(val, priv->regs + ETH_REG3);
+>> >> +	writel_relaxed(0, priv->regs + ETH_REG4);
+>> >> +
+>> >> +	/* The phy needs a bit of time to come up */
+>> >> +	mdelay(10);
+>> >
+>> > What do you mean by 'come up'? Not link up i assume. But maybe it will
+>> > not respond to MDIO requests?
+>> 
+>> Yes this MDIO multiplexer is also the glue that provides power and
+>> clocks to the internal PHY. Once the internal PHY is selected, it needs
+>> a bit a of time before it is usuable. 
+>
+> O.K, please reword it to indicate power up, not link up.
 >
 
-Thanks Dmitry for reviewing. Understood your points. Let us re-evaluate, 
-what fields are coming under SoC, what are required and why, and we will 
-start the discussion again with the new requirements, if any.
+Sure
 
-
-Regards,
-
-Naman Jain
-
-
+>      Andrew
