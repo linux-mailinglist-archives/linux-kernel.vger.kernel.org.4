@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B32675A1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C16675A4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjATQhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S230365AbjATQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjATQhj (ORCPT
+        with ESMTP id S229612AbjATQmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:37:39 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405A702AE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674232632; x=1705768632;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=O6wpBdznok9WWQi6tGstvlF0qyv4xAofY8+th1qvITo=;
-  b=Tbg/QMdVZcpQNP80PSuKiLpGJRukw/hJhXLi7hyQHZK/IXe5+Q4Y3pIx
-   4G07n+ZTf2Is6tMJVx8wqE638cgEtzX1jyP9h96LZGGZJKFayRr8h26d0
-   gBMAwsN57ixyxb9JMdtMwC0x2rjmDX+BTYtErlsiLd0OKx81o4a6H6CRC
-   qqWpAaa0+Ro6iTHPha6ZVJp1JS/fZ7VdUp6t1fbYMiyYpegZIBr4QSn+t
-   wKenz3Xu0Yr1WQGvdeO6RO0kjS9VamO7tuCn3C2vSP9jf1Iz9/I6HqYs9
-   aln++fxeu5XjkP+bujVE0cJGdtkNaPugQZ+wMTSBxHhvfvD6chA1I6Y2w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309190331"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="309190331"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:29:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="638203235"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="638203235"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 08:29:12 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        v9fs-developer@lists.sourceforge.net,
-        alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH v1 3/6] virtio 9p: Fix an overflow
-In-Reply-To: <20230120074817-mutt-send-email-mst@kernel.org>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-4-alexander.shishkin@linux.intel.com>
- <20230120074817-mutt-send-email-mst@kernel.org>
-Date:   Fri, 20 Jan 2023 18:29:11 +0200
-Message-ID: <871qnpqieg.fsf@ubik.fi.intel.com>
+        Fri, 20 Jan 2023 11:42:08 -0500
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 798BF1D912;
+        Fri, 20 Jan 2023 08:41:51 -0800 (PST)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id A51385EB02;
+        Fri, 20 Jan 2023 17:30:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1674232242;
+        bh=1Hm9JvE6zCSxspANs5FzdEjNIvxAPC+z+v4A9kHmkBY=;
+        h=From:To:CC:Subject:Date:From;
+        b=kJhAKyCsClb1q3HK8dUVP5HzjcNZ7uYz5V3HUaTojRQptjPXjT5GT+1GoSxg00X9E
+         ij77Y1kJBSo6vsmxcVHAl/FMiwu5BBcSZbbyLL2PZUweTMujS/r0X5GcmP5ivSApzt
+         FUSa8fedfA4I9SHQqtXSNbUaTPMSmpPXMoWm7wbbMNyLCRYIiUUAEZe2k4KJJJEqrK
+         TctbCaeWD4Qq7nPsaaNGjpGRTQkw3Py1P8LAdm1kiskDMWAs5HY6WyS12ESD90JIW7
+         rNic/NMc4YX4n+ommxSxmG70Rng3oWcf1FPz5m/CMOlvJz4aDsANvT9ctk67ND2Ok0
+         i3eDrL9e2f56g==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.21; Fri, 20 Jan 2023 17:30:38 +0100
+Received: from localhost.localdomain (172.16.51.22) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.21 via Frontend Transport; Fri, 20 Jan 2023 17:30:37 +0100
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V3 1/4] dt-bindings: arm: fsl: Add PDK2, PicoITX and DRC02 boards for the DHCOM i.MX6ULL SoM
+Date:   Fri, 20 Jan 2023 17:29:12 +0100
+Message-ID: <20230120162915.12699-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Michael S. Tsirkin" <mst@redhat.com> writes:
+Add DH electronics DHCOM PDK2, PicoITX and DRC02 boards
+for the DHCOM i.MX6ULL SoM.
 
-> On Thu, Jan 19, 2023 at 03:57:18PM +0200, Alexander Shishkin wrote:
->> From: Andi Kleen <ak@linux.intel.com>
->> 
->> diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
->> index 3c27ffb781e3..a78e4d80e5ba 100644
->> --- a/net/9p/trans_virtio.c
->> +++ b/net/9p/trans_virtio.c
->> @@ -629,7 +629,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
->>  		err = -EINVAL;
->>  		goto out_free_vq;
->>  	}
->> -	tag = kzalloc(tag_len + 1, GFP_KERNEL);
->> +	tag = kzalloc((u32)tag_len + 1, GFP_KERNEL);
->>  	if (!tag) {
->>  		err = -ENOMEM;
->>  		goto out_free_vq;
->
-> Hmm are you sure there's a difference in behaviour? I thought C will just
-> extend the integer to int.
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: kernel@dh-electronics.com
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+To: linux-arm-kernel@lists.infradead.org
+---
+V2: - Add Acked-by tag
+V3: - No changes
+---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Actually, you're right, integer promotion would extend the original
-expression to int. I'll drop this patch also.
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 3ba354578e8f..5fa51e63975f 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -645,6 +645,16 @@ properties:
+           - const: armadeus,imx6ull-opos6ul     # OPOS6UL (i.MX6ULL) SoM
+           - const: fsl,imx6ull
+ 
++      - description: i.MX6ULL DHCOM SoM based Boards
++        items:
++          - enum:
++              - dh,imx6ull-dhcom-pdk2
++              - dh,imx6ull-dhcom-picoitx
++              - dh,imx6ull-dhcom-drc02
++          - const: dh,imx6ull-dhcom-som # The DHCOR is soldered on the DHCOM
++          - const: dh,imx6ull-dhcor-som
++          - const: fsl,imx6ull
++
+       - description: i.MX6ULL PHYTEC phyBOARD-Segin
+         items:
+           - enum:
+-- 
+2.11.0
 
-Thanks,
---
-Alex
