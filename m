@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4667580A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EF067580C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjATPEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S231279AbjATPE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjATPEH (ORCPT
+        with ESMTP id S230024AbjATPEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:04:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D647DF96
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:03:20 -0800 (PST)
+        Fri, 20 Jan 2023 10:04:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0D7CCC1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:03:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674226999;
+        s=mimecast20190719; t=1674227013;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JV/ESkSwVKzhkko42aCx2p6hA+p3ybUeT3T+J1aTWFk=;
-        b=J5ALeAYwCS0mgLtuxWdUdQcOzRVo1I/kkXGEZ2RbAKNo4WnFSaaRKCos22MUAjDwN3mnjQ
-        Uclpe2zc4/YbozVzhMgM8/xco8Uw2oNJmoK0ZAazuMs/uwweHAz3ziT7C1o3U3/DE3z0aD
-        za7AGfru0Jz8v/iSLYCdpkUYEpmvF9I=
+        bh=6iRsFgdyFm9aCh9hJwwja26lzouAKLjx2fwTp+CTHC4=;
+        b=NeBGpfJuLOkvMoRl6iRI/RQzWMebyjXrhuvP/kniEbjccQ0kxvmIiEPg5Van3hOi73TXky
+        r74zGYPbgeIbjTC6Oq0sYQjJ9DtLtGg4nOXVvrKB36mbQ/yQRzU6U+ghvUeBVVeJmhElgN
+        WJLn1hZL1rYbn7qflw1SbAbP40s6nsU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-hTSGCuu2PG2YUUno0xEQkw-1; Fri, 20 Jan 2023 10:03:18 -0500
-X-MC-Unique: hTSGCuu2PG2YUUno0xEQkw-1
+ us-mta-133-0x9ArX0hPPaHNE5UgIfsEQ-1; Fri, 20 Jan 2023 10:03:26 -0500
+X-MC-Unique: 0x9ArX0hPPaHNE5UgIfsEQ-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 164F8181E3F2;
-        Fri, 20 Jan 2023 15:03:17 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACE998588E7;
+        Fri, 20 Jan 2023 15:03:25 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.22.32.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 69408492B02;
-        Fri, 20 Jan 2023 15:03:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A5AA8492B03;
+        Fri, 20 Jan 2023 15:03:20 +0000 (UTC)
 From:   Wander Lairson Costa <wander@redhat.com>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -49,11 +49,12 @@ To:     Ingo Molnar <mingo@redhat.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Oleg Nesterov <oleg@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>,
@@ -61,10 +62,9 @@ To:     Ingo Molnar <mingo@redhat.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Andrei Vagin <avagin@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Cc:     Paul McKenney <paulmck@kernel.org>
-Subject: [PATCH v2 1/4] sched/task: Add the put_task_struct_atomic_safe function
-Date:   Fri, 20 Jan 2023 12:02:39 -0300
-Message-Id: <20230120150246.20797-2-wander@redhat.com>
+Subject: [PATCH v2 2/4] sched/deadline: fix inactive_task_timer splat
+Date:   Fri, 20 Jan 2023 12:02:40 -0300
+Message-Id: <20230120150246.20797-3-wander@redhat.com>
 In-Reply-To: <20230120150246.20797-1-wander@redhat.com>
 References: <20230120150246.20797-1-wander@redhat.com>
 MIME-Version: 1.0
@@ -80,78 +80,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With PREEMPT_RT, it is unsafe to call put_task_struct() in atomic
-contexts because it indirectly acquires sleeping locks.
-
-Introduce put_task_struct_atomic_safe(), which schedules
-__put_task_struct() through call_rcu() when the kernel is compiled with
+inactive_task_timer() executes in interrupt (atomic) context. It calls
+put_task_struct(), which indirectly acquires sleeping locks under
 PREEMPT_RT.
 
-A more natural approach would use a workqueue, but since
-in PREEMPT_RT we can't allocate dynamic memory from atomic context,
-the code would become more complex because we would need to put the
-work_struct instance in the task_struct and initialize it when we
-allocate a new task_struct.
+Below is an example of a splat that happened in a test environment:
+
+ CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
+ Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
+ Call Trace:
+ dump_stack_lvl+0x57/0x7d
+ mark_lock_irq.cold+0x33/0xba
+ ? stack_trace_save+0x4b/0x70
+ ? save_trace+0x55/0x150
+ mark_lock+0x1e7/0x400
+ mark_usage+0x11d/0x140
+ __lock_acquire+0x30d/0x930
+ lock_acquire.part.0+0x9c/0x210
+ ? refill_obj_stock+0x3d/0x3a0
+ ? rcu_read_lock_sched_held+0x3f/0x70
+ ? trace_lock_acquire+0x38/0x140
+ ? lock_acquire+0x30/0x80
+ ? refill_obj_stock+0x3d/0x3a0
+ rt_spin_lock+0x27/0xe0
+ ? refill_obj_stock+0x3d/0x3a0
+ refill_obj_stock+0x3d/0x3a0
+ ? inactive_task_timer+0x1ad/0x340
+ kmem_cache_free+0x357/0x560
+ inactive_task_timer+0x1ad/0x340
+ ? switched_from_dl+0x2d0/0x2d0
+ __run_hrtimer+0x8a/0x1a0
+ __hrtimer_run_queues+0x91/0x130
+ hrtimer_interrupt+0x10f/0x220
+ __sysvec_apic_timer_interrupt+0x7b/0xd0
+ sysvec_apic_timer_interrupt+0x4f/0xd0
+ ? asm_sysvec_apic_timer_interrupt+0xa/0x20
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+ RIP: 0033:0x7fff196bf6f5
+
+Use put_task_struct_atomic_safe() instead.
 
 Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Cc: Paul McKenney <paulmck@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/sched/task.h | 21 +++++++++++++++++++++
- kernel/fork.c              |  8 ++++++++
- 2 files changed, 29 insertions(+)
+ kernel/sched/deadline.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index 357e0068497c..80b4c5812563 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -127,6 +127,27 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 0d97d54276cc..03400c61a994 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1442,7 +1442,7 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
+ 	dl_se->dl_non_contending = 0;
+ unlock:
+ 	task_rq_unlock(rq, p, &rf);
+-	put_task_struct(p);
++	put_task_struct_atomic_safe(p);
  
- void put_task_struct_rcu_user(struct task_struct *task);
- 
-+extern void __delayed_put_task_struct(struct rcu_head *rhp);
-+
-+static inline void put_task_struct_atomic_safe(struct task_struct *task)
-+{
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		/*
-+		 * Decrement the refcount explicitly to avoid unnecessarily
-+		 * calling call_rcu.
-+		 */
-+		if (refcount_dec_and_test(&task->usage))
-+			/*
-+			 * under PREEMPT_RT, we can't call put_task_struct
-+			 * in atomic context because it will indirectly
-+			 * acquire sleeping locks.
-+			 */
-+			call_rcu(&task->rcu, __delayed_put_task_struct);
-+	} else {
-+		put_task_struct(task);
-+	}
-+}
-+
- /* Free all architecture-specific resources held by a thread. */
- void release_thread(struct task_struct *dead_task);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9f7fe3541897..3d7a4e9311b3 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -859,6 +859,14 @@ void __put_task_struct(struct task_struct *tsk)
+ 	return HRTIMER_NORESTART;
  }
- EXPORT_SYMBOL_GPL(__put_task_struct);
- 
-+void __delayed_put_task_struct(struct rcu_head *rhp)
-+{
-+	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-+
-+	__put_task_struct(task);
-+}
-+EXPORT_SYMBOL_GPL(__delayed_put_task_struct);
-+
- void __init __weak arch_task_cache_init(void) { }
- 
- /*
 -- 
 2.39.0
 
