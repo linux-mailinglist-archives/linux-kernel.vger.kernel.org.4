@@ -2,110 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5EA67494A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C9B674951
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjATCWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:22:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S229708AbjATCYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjATCWU (ORCPT
+        with ESMTP id S229447AbjATCYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:22:20 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1889F3A2;
-        Thu, 19 Jan 2023 18:22:19 -0800 (PST)
+        Thu, 19 Jan 2023 21:24:20 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96443A1007;
+        Thu, 19 Jan 2023 18:24:19 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id x7so3159076qtv.13;
+        Thu, 19 Jan 2023 18:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nXmrGuDkn2/Eo83iFxWHgNA7AWXWKN7q1/fDzp0dVyE=;
+        b=kDK20ncsOnJblkAwd0Y2Y59cRIL8dXnF51upa4ooOnHX1wQqX5ftBtnDYkiI/Ae06M
+         O9EC9eif/MuMYtFZV1lv6hxt1qW/daZXI84Cfd3fVgwCF5++3HWYeNc8a4AQ1Msd2HgR
+         0rUk339PKVfWEvaGynHDn/OXou0xTF8O6qWOli6Prs6phF8O6aI9W6ur6Q6wyAXPKq+K
+         xksp6hoTxHm8qWWXSfxa68JNytzXV+AXbFHCcrxnkwiKgbOiNlO63r0xUhy3ZES1LXXy
+         T2k9wPS8tOQGlrAQ9zTZXi98iBbGK+SxyQx/qM2oV0MH8GgY8jwHy7XC5e+3u9TwTHVK
+         vKJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nXmrGuDkn2/Eo83iFxWHgNA7AWXWKN7q1/fDzp0dVyE=;
+        b=eCr5SgwGK5hLoU05JzKZ6U7VzybvimJkQKL58In6G2fYNgZMZ9x9OJj7hcf+WJ5Mka
+         w0aln9WtTXwSvjFk9Yq1pPUYDttQHlZ3f8L/9Wq++BzLXoUrMt3WRuvc9nYlN+qJxvJP
+         ZSmO//HS6Tc1oogDQbIkdxkaZ+MvZDzCGebyaRdL7KxLYOedUFwLC97c1ZDFN+1jxj0w
+         CdyGAic95v83xFB0ZXxahfwsENUKiCGfXCgeceINbJ+D/+nIP0e2owIOzKBhEn9fLoRo
+         V0oPSC5xg4hhHRJcJYxA7gYNee21BubmJjP64t8ahBP+7ZeIv7B+CaIZMzHQUK43onBT
+         a0oQ==
+X-Gm-Message-State: AFqh2kqNmWkkwWpMuZlw0UpGdpAxI4hDkuVsHbXx3Z4zxi1xyaeAWOeo
+        gk7Yv+AFG7g8et88YZW7BNFcpF6G1ThqFQ==
+X-Google-Smtp-Source: AMrXdXuRJTYkO5Xq8fcDUzUWWm7txooBhHo39gDtPiGOOe5Xv1z+JrHpgHoezV9t7zVStSP5Jqhq1Q==
+X-Received: by 2002:ac8:4c8e:0:b0:3b6:4998:67a1 with SMTP id j14-20020ac84c8e000000b003b6499867a1mr12358612qtv.37.1674181458642;
+        Thu, 19 Jan 2023 18:24:18 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id m20-20020ac866d4000000b003a6a7a20575sm19755088qtp.73.2023.01.19.18.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 18:24:17 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B750E5C0098;
-        Thu, 19 Jan 2023 21:22:18 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 21:22:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674181338; x=1674267738; bh=tziaenBgZf
-        HXo7o+JSgvpsIssnOOcpkmBFnl2VxkDts=; b=BpeqyBOTJh/85zUDp7G8ONolva
-        JmAWtWXMaRakSKR/0fg7y9JLM16mUWhhv5Vut6Xgk0ahOWq+FGmrv793cT93ZTU3
-        UNEFj9/r9UhAHkT6rpL/xY0/JTg3RkgaOJmAlubnANdC+/05L5pfhJMtQKlktbPb
-        RnkfQp24zNV+ZshfXCcg8rd9/k/FTXfFhrhniKGREGJubK4hUX/B2xXd58JELm2I
-        9DgvERSCbwTT61pb+cGSuzMZQ2pOtYGVqFB4j6FivcQKpd54tWZQbBR+kPF+LQrh
-        691yc0uH1wKUJ++JylHE+vqQxlDmdxOHgrAK6SpWNAYY1/hohFh5cQ1sPWmA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674181338; x=1674267738; bh=tziaenBgZfHXo7o+JSgvpsIssnOO
-        cpkmBFnl2VxkDts=; b=HiGHG2Htaij2b0kSaad4LHPX8Ho4pxGB1Zq2TIOMMOLz
-        f5WIMRkE0VpLXFzNkv42R05ilUEPqPx7DP1GbOOP8tE1VErvS+Og0HndM1ONQkWL
-        28fvAiEUS4GV/5nsFMryCV4oQdSVy4YZ1WK9o5Xt833EbpaBXbgmytKucqnV7+iA
-        el8ozZbf+WzRz/QEoeqOFUR40yz+PuqEsinlNd4tFxqnn8zmWyfEi8keF1mcgLqH
-        EEq3iIBkfwvX2S8YTw2U7fEuTp8fQjkbowWShtipqWDI5FFBXqaLXaByr5QoRrGb
-        WzIekC/0ko81HUJ8bOPbjRQCfYf5bJI+z9mYFZ9xrQ==
-X-ME-Sender: <xms:2frJY_gJjMR3HtFS3jIZbFrsy3yHmg7tzIJpqMiuMp0o-riHTNQ6yg>
-    <xme:2frJY8AqKwnv7gNrAxOU0GDuZNyrLYHVq-nLhvho8THfKDW9CuO2xluzmYMCsjyv-
-    Jg84QFPOatugCXzEQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddggeeiucetufdoteggodetrfdotf
+        by mailauth.nyi.internal (Postfix) with ESMTP id 7026227C0054;
+        Thu, 19 Jan 2023 21:24:17 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 19 Jan 2023 21:24:17 -0500
+X-ME-Sender: <xms:T_vJYzHnHDTMCt8jto_nWcNHcvjGpgV4RvXPMPNFrTftwxZEnGSO0g>
+    <xme:T_vJYwWSJg8VNuVpXyE8E2reWX4XQdWPyjlmAe0rSjk1q18okkcj0DuHJBzrJMq-h
+    2BHgZrbF3-2z5tXPw>
+X-ME-Received: <xmr:T_vJY1ICmQQtrLyW94m-OCcuioCpWG_JQYMNIQrE8vXtpfI-eCbh1FtbvSc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhepudfftddvveekfffgteffffeuveegjeelgefhffejtdehtdfhlefgkeef
-    hfefkeeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:2frJY_ELKpBQTA3OJmVhRti6tBxHzWjOiPcWKDgJLp9LOeJtUM10Sw>
-    <xmx:2frJY8QHsW2Zyyg9SkczDzPT62nyM5BqYzqS3LZupaeN1rUu6cGBrg>
-    <xmx:2frJY8wqTh7Ibo-8ScquDcuXRRVuzjql4OPg4K2igyiflLx4fzlW9w>
-    <xmx:2vrJY4eh512gab0pYBFER73nNcuTj-Q63tJUL8O6KdrpKRVdhpJRUg>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AF0861700089; Thu, 19 Jan 2023 21:22:17 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <7734c165-5918-4677-b8d4-f7d5a3ed37d5@app.fastmail.com>
-In-Reply-To: <20230110042533.12894-1-clayc@hpe.com>
-References: <20230110042533.12894-1-clayc@hpe.com>
-Date:   Fri, 20 Jan 2023 12:51:54 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     clayc@hpe.com, linux-kernel@vger.kernel.org, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        verdun@hpe.com, nick.hawkins@hpe.com,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Olof Johansson" <olof@lixom.net>
-Subject: Re: [PATCH 0/5] ARM: Add GXP SROM Support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:T_vJYxEVt_E7yCBMkNlpdHT5QTmouUaZCHkbiwwgo9SMC9f1ypeHcg>
+    <xmx:T_vJY5UC0c1dPYjN1YJ_6DhJnOJXFkqidaO7l8UjxcPRdnOLR2EW0w>
+    <xmx:T_vJY8OTkoLcYoXpmUowRiLOhXTP7VGD0CwmQXGUfkwXJRtYYKhXQw>
+    <xmx:UfvJYwNwPTJ1_44JcBxyGjDYBTUUeNqEoQQDIfCiiaDhhOipxIQ6KAhvHfQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Jan 2023 21:24:14 -0500 (EST)
+Date:   Thu, 19 Jan 2023 18:23:49 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
+        gwan-gyeong.mun@intel.com, max.byungchul.park@gmail.com,
+        longman@redhat.com
+Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
+Message-ID: <Y8n7NdFl9WEbGXH1@boqun-archlinux>
+References: <Y8mZHKJV4FH17vGn@boqun-archlinux>
+ <1674179505-26987-1-git-send-email-byungchul.park@lge.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1674179505-26987-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 20, 2023 at 10:51:45AM +0900, Byungchul Park wrote:
+> Boqun wrote:
+> > On Thu, Jan 19, 2023 at 01:33:58PM +0000, Matthew Wilcox wrote:
+> > > On Thu, Jan 19, 2023 at 03:23:08PM +0900, Byungchul Park wrote:
+> > > > Boqun wrote:
+> > > > > *Looks like the DEPT dependency graph doesn't handle the
+> > > > > fair/unfair readers as lockdep current does. Which bring the
+> > > > > next question.
+> > > > 
+> > > > No. DEPT works better for unfair read. It works based on wait/event. So
+> > > > read_lock() is considered a potential wait waiting on write_unlock()
+> > > > while write_lock() is considered a potential wait waiting on either
+> > > > write_unlock() or read_unlock(). DEPT is working perfect for it.
+> > > > 
+> > > > For fair read (maybe you meant queued read lock), I think the case
+> > > > should be handled in the same way as normal lock. I might get it wrong.
+> > > > Please let me know if I miss something.
+> > > 
+> > > From the lockdep/DEPT point of view, the question is whether:
+> > > 
+> > >	read_lock(A)
+> > >	read_lock(A)
+> > > 
+> > > can deadlock if a writer comes in between the two acquisitions and
+> > > sleeps waiting on A to be released.  A fair lock will block new
+> > > readers when a writer is waiting, while an unfair lock will allow
+> > > new readers even while a writer is waiting.
+> > > 
+> > 
+> > To be more accurate, a fair reader will wait if there is a writer
+> > waiting for other reader (fair or not) to unlock, and an unfair reader
+> > won't.
+> 
+> What a kind guys, both of you! Thanks.
+> 
+> I asked to check if there are other subtle things than this. Fortunately,
+> I already understand what you guys shared.
+> 
+> > In kernel there are read/write locks that can have both fair and unfair
+> > readers (e.g. queued rwlock). Regarding deadlocks,
+> > 
+> > 	T0		T1		T2
+> > 	--		--		--
+> > 	fair_read_lock(A);
+> > 			write_lock(B);
+> > 					write_lock(A);
+> > 	write_lock(B);
+> > 			unfair_read_lock(A);
+> 
+> With the DEPT's point of view (let me re-write the scenario):
+> 
+> 	T0		T1		T2
+> 	--		--		--
+> 	fair_read_lock(A);
+> 			write_lock(B);
+> 					write_lock(A);
+> 	write_lock(B);
+> 			unfair_read_lock(A);
+> 	write_unlock(B);
+> 	read_unlock(A);
+> 			read_unlock(A);
+> 			write_unlock(B);
+> 					write_unlock(A);
+> 
+> T0: read_unlock(A) cannot happen if write_lock(B) is stuck by a B owner
+>     not doing either write_unlock(B) or read_unlock(B). In other words:
+> 
+>       1. read_unlock(A) happening depends on write_unlock(B) happening.
+>       2. read_unlock(A) happening depends on read_unlock(B) happening.
+> 
+> T1: write_unlock(B) cannot happen if unfair_read_lock(A) is stuck by a A
+>     owner not doing write_unlock(A). In other words:
+> 
+>       3. write_unlock(B) happening depends on write_unlock(A) happening.
+> 
+> 1, 2 and 3 give the following dependencies:
+> 
+>     1. read_unlock(A) -> write_unlock(B)
+>     2. read_unlock(A) -> read_unlock(B)
+>     3. write_unlock(B) -> write_unlock(A)
+> 
+> There's no circular dependency so it's safe. DEPT doesn't report this.
+> 
+> > the above is not a deadlock, since T1's unfair reader can "steal" the
+> > lock. However the following is a deadlock:
+> > 
+> > 	T0		T1		T2
+> > 	--		--		--
+> > 	unfair_read_lock(A);
+> > 			write_lock(B);
+> > 					write_lock(A);
+> > 	write_lock(B);
+> > 			fair_read_lock(A);
+> > 
+> > , since T'1 fair reader will wait.
+> 
+> With the DEPT's point of view (let me re-write the scenario):
+> 
+> 	T0		T1		T2
+> 	--		--		--
+> 	unfair_read_lock(A);
+> 			write_lock(B);
+> 					write_lock(A);
+> 	write_lock(B);
+> 			fair_read_lock(A);
+> 	write_unlock(B);
+> 	read_unlock(A);
+> 			read_unlock(A);
+> 			write_unlock(B);
+> 					write_unlock(A);
+> 
+> T0: read_unlock(A) cannot happen if write_lock(B) is stuck by a B owner
+>     not doing either write_unlock(B) or read_unlock(B). In other words:
+> 
+>       1. read_unlock(A) happening depends on write_unlock(B) happening.
+>       2. read_unlock(A) happening depends on read_unlock(B) happening.
+> 
+> T1: write_unlock(B) cannot happen if fair_read_lock(A) is stuck by a A
+>     owner not doing either write_unlock(A) or read_unlock(A). In other
+>     words:
+> 
+>       3. write_unlock(B) happening depends on write_unlock(A) happening.
+>       4. write_unlock(B) happening depends on read_unlock(A) happening.
+> 
+> 1, 2, 3 and 4 give the following dependencies:
+> 
+>     1. read_unlock(A) -> write_unlock(B)
+>     2. read_unlock(A) -> read_unlock(B)
+>     3. write_unlock(B) -> write_unlock(A)
+>     4. write_unlock(B) -> read_unlock(A)
+> 
+> With 1 and 4, there's a circular dependency so DEPT definitely report
+> this as a problem.
+> 
+> REMIND: DEPT focuses on waits and events.
 
+Do you have the test cases showing DEPT can detect this?
 
-On Tue, 10 Jan 2023, at 14:55, clayc@hpe.com wrote:
-> From: Clay Chang <clayc@hpe.com>
->
-> The GXP SROM control register can be used to configure LPC related
-> legacy I/O registers. Currently only the SROM RAM Offset Register
-> (vromoff) is exported.
+Regards,
+Boqun
 
-What exact behaviour does vromoff influence? You mention I/O registers,
-but RAM offset feels like it may be related to MEM or FWH LPC cycles
-instead?
-
-I'm trying to understand whether we can find some common ground with
-controlling e.g. Aspeed's BMCs LPC peripherals based on Arnd's query[1],
-but the description is a bit too vague right now for me to be able to do
-that.
-
-[1] https://lore.kernel.org/all/66ef9643-b47e-428d-892d-7c1cbd358a5d@app.fastmail.com/
-
-Andrew
+> 
+> > FWIW, lockdep is able to catch this (figuring out which is deadlock and
+> > which is not) since two years ago, plus other trivial deadlock detection
+> > for read/write locks. Needless to say, if lib/lock-selftests.c was given
+> > a try, one could find it out on one's own.
+> > 
+> > Regards,
+> > Boqun
+> > 
