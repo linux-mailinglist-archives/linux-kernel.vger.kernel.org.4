@@ -2,172 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BC9675051
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A216750A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjATJLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S230166AbjATJVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjATJLN (ORCPT
+        with ESMTP id S230168AbjATJVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:11:13 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237238F7E1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:10:34 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id q125so5076614vsb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:10:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZaS2jFjKgJPIvOoi38x6xVSa304xRVXmBfQSeerAQY=;
-        b=oS34Rc5HqDn0y15rqvi/SJ7g/YzvXWq0oxQW3beFjIl1h0f2A1Hbkc6cYkGT/Qt9u7
-         I2whoZrl78YFDiKZsS3Gp8hoc/MAtStyl8kT501tDSnjzejpUcrEAKrWvfWqqQCKhXn9
-         BYvMzs3RTYs3I0fetVg4f0ujpF21vjBQ16sLDg1U8mo9AT2mWcgZ0yQC0k5VhelwF06a
-         qLDRvDv7lVwx+PDEZtqTJ7YDDYNidzpcHtOf4XQfIQ9kNj2WfW8+nkCBq619uUKy0jGQ
-         Jc6Y/SDX6V5/Z4L2J2ZrQgwmMY3PW96vmVnGwxDWhfQMQGTnSw+ZKu1K1MfE8GsC/20c
-         cvDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZaS2jFjKgJPIvOoi38x6xVSa304xRVXmBfQSeerAQY=;
-        b=z5xmB/MYoHOED1NLWNcsYtekdcC6VEm5dRSGZRcbmuut/A+typDc5Qd2sM7Cq+trf9
-         LhQ7yInjS+V371k5ZLRaXU+X6oGhBvfd/84PDZnun1QNHi6/tANX78mggeEtvAn2EZZ7
-         L0r4jRCqZWLtxfvIMg7tj9ekqlauM1pXiRHABV5iD0PhiziNb/YZPKUowkHIlfyE9c44
-         rjg10M4iXXaoZFCqN4jt2AbKiE1jl9jiIxdsZmooyjXdlDG2+kh68Qf8ajk7csiw8bmU
-         DO7qSt8LDAB03f7184nQdC/wACDag9db37eiHNL51hYIStErRQwxTFQO3wdRGgmdDOtU
-         pbqg==
-X-Gm-Message-State: AFqh2koiS8TaCBDQtIhnYLIKWNE9r+btPlkBaIN4eLDEPkMDQisK8pFj
-        vRlZwoNViZl4CqHLeRSuU09rCgSRHvlfouleUnkVew==
-X-Google-Smtp-Source: AMrXdXuoNgBQTMIHd+dvijVuebGsbNf80ukIzQIavSmHvcpNOwe/UwQI7TD7lVbOmJjHW7p96DCDvNBXfraxk5DyG7M=
-X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
- a26-20020a67f2da000000b003d3d90c5ef2mr2358807vsn.17.1674205804654; Fri, 20
- Jan 2023 01:10:04 -0800 (PST)
+        Fri, 20 Jan 2023 04:21:02 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77146A327
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:20:58 -0800 (PST)
+Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 034F440D4004;
+        Fri, 20 Jan 2023 09:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 034F440D4004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1674205863;
+        bh=UTt+tHsj42HOFpnyUfg6hKr4i6wD1HxdMR25Jv6eyNE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lMqevCYj2IT5hFXSvTK0gttjZCRW1fsnD2DU1j8yY7aYcZ3GUKHOzr/9rSPez3+Qw
+         ddH38d1Q/IqgdHC3Fr/cZOEXxlxbzRWNimDduQC0nUCDfbDg/cN5ZNVWNdxrw6i3TK
+         mmg6Pk1iWgTDC6qVfR3rWsqYxTsEjWajH0fCElY4=
+From:   Vladislav Efanov <VEfanov@ispras.ru>
+To:     Jan Kara <jack@suse.com>
+Cc:     Vladislav Efanov <VEfanov@ispras.ru>, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] udf: Check return code from udf_update_extents
+Date:   Fri, 20 Jan 2023 12:10:28 +0300
+Message-Id: <20230120091028.1591622-1-VEfanov@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230118140825.242544-1-brgl@bgdev.pl> <20230118140825.242544-3-brgl@bgdev.pl>
- <4f65001a-b442-7425-dfa3-b1e9be81d566@linaro.org>
-In-Reply-To: <4f65001a-b442-7425-dfa3-b1e9be81d566@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 20 Jan 2023 10:09:53 +0100
-Message-ID: <CAMRc=MfnBF3Bnez7w+twmn8bzCk3HRRSq69mJ3NpSrQeQqpPDA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: add a driver for sa8775p
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 3:45 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 18.01.2023 15:08, Bartosz Golaszewski wrote:
-> > From: Shazad Hussain <quic_shazhuss@quicinc.com>
-> >
-> > Introduce QTI SA8775P-specific interconnect driver.
-> >
-> > Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> > [Bartosz: made the driver ready for upstream]
-> > Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  drivers/interconnect/qcom/Kconfig   |    9 +
-> >  drivers/interconnect/qcom/Makefile  |    2 +
-> >  drivers/interconnect/qcom/sa8775p.c | 2541 +++++++++++++++++++++++++++
-> >  3 files changed, 2552 insertions(+)
-> >  create mode 100644 drivers/interconnect/qcom/sa8775p.c
-> >
-> > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> > index cd689b782f97..3132a03ca974 100644
-> > --- a/drivers/interconnect/qcom/Kconfig
-> > +++ b/drivers/interconnect/qcom/Kconfig
-> > @@ -92,6 +92,15 @@ config INTERCONNECT_QCOM_RPMH_POSSIBLE
-> >  config INTERCONNECT_QCOM_RPMH
-> >       tristate
-> >
-> > +config INTERCONNECT_QCOM_SA8775P
-> > +     tristate "Qualcomm SA8775P interconnect driver"
-> > +     depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> > +     select INTERCONNECT_QCOM_RPMH
-> > +     select INTERCONNECT_QCOM_BCM_VOTER
-> > +     help
-> > +       This is a driver for the Qualcomm Network-on-Chip on sa8775p-based
-> > +       platforms.
-> > +
-> >  config INTERCONNECT_QCOM_SC7180
-> >       tristate "Qualcomm SC7180 interconnect driver"
-> >       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> > diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-> > index 3fd4c2713c4a..75df2cf64c0b 100644
-> > --- a/drivers/interconnect/qcom/Makefile
-> > +++ b/drivers/interconnect/qcom/Makefile
-> > @@ -13,6 +13,7 @@ qnoc-qcm2290-objs                   := qcm2290.o
-> >  qnoc-qcs404-objs                     := qcs404.o
-> >  qnoc-qdu1000-objs                    := qdu1000.o
-> >  icc-rpmh-obj                         := icc-rpmh.o
-> > +qnoc-sa8775p-objs                    := sa8775p.o
-> >  qnoc-sc7180-objs                     := sc7180.o
-> >  qnoc-sc7280-objs                        := sc7280.o
-> >  qnoc-sc8180x-objs                    := sc8180x.o
-> > @@ -39,6 +40,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_QCM2290) += qnoc-qcm2290.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_QDU1000) += qnoc-qdu1000.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_RPMH) += icc-rpmh.o
-> > +obj-$(CONFIG_INTERCONNECT_QCOM_SA8775P) += qnoc-sa8775p.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC7180) += qnoc-sc7180.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC7280) += qnoc-sc7280.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC8180X) += qnoc-sc8180x.o
-> > diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
-> > new file mode 100644
-> > index 000000000000..da21cc31a580
-> > --- /dev/null
-> > +++ b/drivers/interconnect/qcom/sa8775p.c
-> > @@ -0,0 +1,2541 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2021-2022, Qualcomm Innovation Center, Inc. All rights reserved.
-> > + * Copyright (c) 2023, Linaro Limited
-> > + */
-> > +
-> > +#include <linux/device.h>
-> > +#include <linux/interconnect.h>
-> > +#include <linux/interconnect-provider.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_platform.h>
-> > +#include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
-> > +
-> > +#include "bcm-voter.h"
-> > +#include "icc-rpmh.h"
-> > +
-> > +#define SA8775P_MASTER_GPU_TCU                               0
-> Other drivers move these to socname.h
->
+udf_add_aext() does not create new extent and returns ENOSPC if new
+block was not created by udf_bitmap_new_block(). The caller,
+udf_insert_aext(), does not check this return code and returns OK to
+its caller(udf_update_extents). Finally the error is being lost. So
+an inconsistency in inode.i_size and extents length becomes.
 
-Why would they do it if the symbols are not meant to be used outside
-of the driver?
+Later this inconsistency leads to WARNING:
 
-> Otherwise, this lgtm:
->
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->
+WARNING: CPU: 3 PID: 1104 at fs/udf/truncate.c:226
+        udf_truncate_extents+0x7e0/0x8e0 fs/udf/truncate.c:226
 
-[...]
+RIP: 0010:udf_truncate_extents+0x7e0/0x8e0 fs/udf/truncate.c:226
+Call Trace:
+ udf_write_failed.isra.0+0x173/0x1c0 fs/udf/inode.c:179
+ udf_write_begin+0x8d/0xb0 fs/udf/inode.c:214
+ generic_perform_write+0x20a/0x4e0 mm/filemap.c:3333
+ __generic_file_write_iter+0x252/0x610 mm/filemap.c:3462
+ udf_file_write_iter+0x2cc/0x4e0 fs/udf/file.c:168
+ call_write_iter include/linux/fs.h:1904 [inline]
+ new_sync_write+0x42c/0x660 fs/read_write.c:518
+ vfs_write+0x75b/0xa40 fs/read_write.c:605
 
-Bart
+Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+---
+ fs/udf/inode.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/fs/udf/inode.c b/fs/udf/inode.c
+index 34e416327dd4..74b8695f23ca 100644
+--- a/fs/udf/inode.c
++++ b/fs/udf/inode.c
+@@ -64,7 +64,7 @@ static void udf_split_extents(struct inode *, int *, int, udf_pblk_t,
+ static void udf_prealloc_extents(struct inode *, int, int,
+ 				 struct kernel_long_ad *, int *);
+ static void udf_merge_extents(struct inode *, struct kernel_long_ad *, int *);
+-static void udf_update_extents(struct inode *, struct kernel_long_ad *, int,
++static int udf_update_extents(struct inode *, struct kernel_long_ad *, int,
+ 			       int, struct extent_position *);
+ static int udf_get_block(struct inode *, sector_t, struct buffer_head *, int);
+ 
+@@ -876,7 +876,11 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
+ 	/* write back the new extents, inserting new extents if the new number
+ 	 * of extents is greater than the old number, and deleting extents if
+ 	 * the new number of extents is less than the old number */
+-	udf_update_extents(inode, laarr, startnum, endnum, &prev_epos);
++	if (udf_update_extents(inode, laarr, startnum, endnum, &prev_epos) < 0) {
++		udf_debug("udf_update_extents rc != 0");
++		*err = -ENOSPC;
++		goto out_free;
++	}
+ 
+ 	newblock = udf_get_pblock(inode->i_sb, newblocknum,
+ 				iinfo->i_location.partitionReferenceNum, 0);
+@@ -1159,21 +1163,26 @@ static void udf_merge_extents(struct inode *inode, struct kernel_long_ad *laarr,
+ 	}
+ }
+ 
+-static void udf_update_extents(struct inode *inode, struct kernel_long_ad *laarr,
++static int udf_update_extents(struct inode *inode, struct kernel_long_ad *laarr,
+ 			       int startnum, int endnum,
+ 			       struct extent_position *epos)
+ {
+ 	int start = 0, i;
+ 	struct kernel_lb_addr tmploc;
+ 	uint32_t tmplen;
++	int rc;
+ 
+ 	if (startnum > endnum) {
+ 		for (i = 0; i < (startnum - endnum); i++)
+ 			udf_delete_aext(inode, *epos);
+ 	} else if (startnum < endnum) {
+ 		for (i = 0; i < (endnum - startnum); i++) {
+-			udf_insert_aext(inode, *epos, laarr[i].extLocation,
++			rc = udf_insert_aext(inode, *epos, laarr[i].extLocation,
+ 					laarr[i].extLength);
++			if (rc < 0) {
++				udf_debug("udfd_insert_aext.rc = %d", rc);
++				return rc;
++			}
+ 			udf_next_aext(inode, epos, &laarr[i].extLocation,
+ 				      &laarr[i].extLength, 1);
+ 			start++;
+@@ -1185,6 +1194,7 @@ static void udf_update_extents(struct inode *inode, struct kernel_long_ad *laarr
+ 		udf_write_aext(inode, epos, &laarr[i].extLocation,
+ 			       laarr[i].extLength, 1);
+ 	}
++	return 0;
+ }
+ 
+ struct buffer_head *udf_bread(struct inode *inode, udf_pblk_t block,
+@@ -2209,6 +2219,7 @@ static int8_t udf_insert_aext(struct inode *inode, struct extent_position epos,
+ 	struct kernel_lb_addr oeloc;
+ 	uint32_t oelen;
+ 	int8_t etype;
++	int rc;
+ 
+ 	if (epos.bh)
+ 		get_bh(epos.bh);
+@@ -2218,7 +2229,12 @@ static int8_t udf_insert_aext(struct inode *inode, struct extent_position epos,
+ 		neloc = oeloc;
+ 		nelen = (etype << 30) | oelen;
+ 	}
+-	udf_add_aext(inode, &epos, &neloc, nelen, 1);
++	rc = udf_add_aext(inode, &epos, &neloc, nelen, 1);
++	if (rc) {
++		udf_debug("udf_add_aext.rc = %d", rc);
++		brelse(epos.bh);
++		return rc;
++	}
+ 	brelse(epos.bh);
+ 
+ 	return (nelen >> 30);
+-- 
+2.34.1
+
