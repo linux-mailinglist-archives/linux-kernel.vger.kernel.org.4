@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A562675065
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041A667506E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjATJNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S229977AbjATJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjATJNh (ORCPT
+        with ESMTP id S230007AbjATJOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:13:37 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628ED93706;
-        Fri, 20 Jan 2023 01:13:10 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5375186wmb.2;
-        Fri, 20 Jan 2023 01:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ux8y6Cx3Fu1EDV86Is7psjeM9rNqa+KOawGSAK6XGIk=;
-        b=JUgOOzKNnW0nTnbNzRK1+tRYnthmcPUqJTN+A6ZkCo+/vW3HP/to4oXcN9oRUgUPuY
-         0aE27/2P042xOIud6eaSEm2xttT0WWA6ZGzhHP8fe/3ka3kGNjvFWwduztFn4bPog1VJ
-         MbJo00GcJ4R9qQbSXvZQoRyUPSfdAKla7HSCjTa7YNEF5FbsDGhC40jHcZ/Tt97Z4QFI
-         8Cb9lOI7oyDHhMa9Wi71iihLbRljnKGcTFP46jTJpYVW3NV+dr5t/pIJAb9vKBezfU4b
-         7jeQfJQ/1pbTsNH/WipPasrCfHSm+ivPa3lknfnKn/03vXV5MUQwm1w65+s4L9Eirfmx
-         LcAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ux8y6Cx3Fu1EDV86Is7psjeM9rNqa+KOawGSAK6XGIk=;
-        b=265E1Jt6AOBf3IGD5kUgdC2eBxRD0oXkbSbh+qoBqm6PuWQ+UQnsTJz7MvPEBiu4MP
-         9Vcdg4zVM6lLlvLRH0rGps2FsY6ddLUIVE8Ae3vrBwONgbwX4Ul5LdYgIx5Y40TsSZYM
-         UfUorksSYQj2NnPj+u/UlOMe0BG1r5VFX/zcGbwF7VATdI3BgyJnR9quSC5VnQIdfF0B
-         L/G2tb/ax8krRJLOAn4ebkstUF2VIrCVANPEwDNkKQy3VtYlrzYoKkzWaqIdwh7TDzCA
-         X89y+IMo/Nsotq1RLiJTDZAeDPHN5j0cr/+X6AMwE8i5zOUd/RBPew1J3ni61C6vb5k1
-         WQqA==
-X-Gm-Message-State: AFqh2kpavgz/7JfVx5L8N/bWF+nQJ3LAYPOindWfFzbdePGgwmzAlSUi
-        KleAeitM++6EF75qBdovico=
-X-Google-Smtp-Source: AMrXdXujUNuBhbykArz4bplt23suFeP7EOY/IXTXm6XfPcIkfmHck7sImTIaeoiTw84iE4TZKAXfMw==
-X-Received: by 2002:a05:600c:4256:b0:3da:2a78:d7a3 with SMTP id r22-20020a05600c425600b003da2a78d7a3mr12824255wmm.33.1674205985529;
-        Fri, 20 Jan 2023 01:13:05 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm1789231wmq.28.2023.01.20.01.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 01:13:05 -0800 (PST)
-Date:   Fri, 20 Jan 2023 12:13:02 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next 4/8] net: microchip: sparx5: Add TC support for
- IS0 VCAP
-Message-ID: <Y8pbHvJpvuIuCXws@kadam>
-References: <20230120090831.20032-1-steen.hegelund@microchip.com>
- <20230120090831.20032-5-steen.hegelund@microchip.com>
+        Fri, 20 Jan 2023 04:14:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882B68CE51
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674206075; x=1705742075;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xvTomK/hbjH7NXy9omXHyjfcFvO+Y+rIhBj/IBSAx60=;
+  b=LVWQoFTLrlpYvCfhvXC1Dcvb5Khwbd7WVp7ba/fsIaOj0J7TnQBnYebw
+   2knqHU/phwTsws8S3R9qlsQadkEMPAyhq9rKCfZccygLbA5axb1CsDECq
+   vb15SvQnFMVuLl3vcHxqLTcJxUmc6CXwOm4rGr4RAZCcqtMB5gBleVCFX
+   ITFic04x0vSspKzOaSXTaFv+MRLLHzEDzQjGv1SR8808OuJ7b7Z0a80jQ
+   /Lqr9OvsGSlcCXrqEXYxjHBAaKexZVpb2xRkWFlncm3B9JSQ+mPEc3y19
+   PXpAB/4wM8/Fn0kT2aBuANsSb7LwNBuWFpiLPmQUwQgumCdpoV63gPPRV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="326817739"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="326817739"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:13:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905901336"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="905901336"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jan 2023 01:13:52 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pInT5-0002QA-2i;
+        Fri, 20 Jan 2023 09:13:51 +0000
+Date:   Fri, 20 Jan 2023 17:13:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ aa81cb9d9723694bb18359adbef7964030758dba
+Message-ID: <63ca5b43.k6f5v0aOesDFRean%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120090831.20032-5-steen.hegelund@microchip.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:08:27AM +0100, Steen Hegelund wrote:
-> -/* Add a rule counter action - only IS2 is considered for now */
-> +/* Add a rule counter action */
->  static int sparx5_tc_add_rule_counter(struct vcap_admin *admin,
->  				      struct vcap_rule *vrule)
->  {
-> -	int err;
-> +	int err = 0;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: aa81cb9d9723694bb18359adbef7964030758dba  x86/fpu: Replace zero-length array in struct xregs_state with flexible-array member
 
-Don't initialize.
+elapsed time: 722m
 
->  
-> -	err = vcap_rule_mod_action_u32(vrule, VCAP_AF_CNT_ID, vrule->id);
-> -	if (err)
-> -		return err;
-> +	if (admin->vtype == VCAP_TYPE_IS2) {
-> +		err = vcap_rule_mod_action_u32(vrule, VCAP_AF_CNT_ID,
-> +					       vrule->id);
-> +		if (err)
-> +			return err;
-> +		vcap_rule_set_counter_id(vrule, vrule->id);
-> +	}
->  
-> -	vcap_rule_set_counter_id(vrule, vrule->id);
->  	return err;
+configs tested: 51
+configs skipped: 61
 
-return 0;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  }
+gcc tested configs:
+x86_64                            allnoconfig
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-bpf
+x86_64                              defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                               rhel-8.3
+i386                          randconfig-a005
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+um                           x86_64_defconfig
+um                             i386_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+s390                             allyesconfig
+arm                              allyesconfig
+alpha                               defconfig
+sh                          rsk7269_defconfig
+powerpc                       maple_defconfig
+ia64                                defconfig
+sh                        sh7757lcr_defconfig
+openrisc                  or1klitex_defconfig
 
-regards,
-dan carpenter
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                          rhel-8.3-rust
+riscv                randconfig-r042-20230119
+s390                 randconfig-r044-20230119
+hexagon              randconfig-r041-20230119
+hexagon              randconfig-r045-20230119
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
