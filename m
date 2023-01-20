@@ -2,151 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C85675C52
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C38675C54
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjATR6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S230055AbjATR6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjATR6f (ORCPT
+        with ESMTP id S230484AbjATR6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:58:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8F9798FC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:58:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A7D62048
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 17:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257C1C433EF;
-        Fri, 20 Jan 2023 17:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674237485;
-        bh=/ZdyZhBxfOiGdCU2uFEVnfOTiSOQJAMC3RsZpA+qcbA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=a32/TknIp0rKVFV9cvYjMpjcnZrh+drImZ5Sxd5znvfjz37y19tqBau4VtmbhPmOw
-         4cdpjH46mfw4XKibyB94f+QHqDVoZdevDwvDZeFVjACsv6FF3Pf0f66JwSQV9A3Aod
-         fho0GQw6HoznnnOHF1ReOzO9nTb80qFwMPbXoLjTHQKG2GsPLOkyMuf/NcKI5TEaTY
-         nWdOT9uWtGfFZIlHrFnOP4Y1Q29Y+NCm+i6uYmiPTIs3hBcQs9pNiGAo/N4DsPePQ4
-         qUEwQM1xxn714wYeAE4WhkxOiL/igHJOKMPF/KR8jZx/acCvSgMgw8ULZvwq4I3B8o
-         a5gSoOZ5rLihA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C155C5C17DC; Fri, 20 Jan 2023 09:58:04 -0800 (PST)
-Date:   Fri, 20 Jan 2023 09:58:04 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230120175804.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
- <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8hclxuhpGm+krkz@rowland.harvard.edu>
- <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8q6v3BZ8dlyoTxo@rowland.harvard.edu>
+        Fri, 20 Jan 2023 12:58:36 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4BC8C932;
+        Fri, 20 Jan 2023 09:58:09 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x4so4565440pfj.1;
+        Fri, 20 Jan 2023 09:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cx84QmywTvFoBakCztnkOurn2Q9lhNaHfIWPrd7Q84U=;
+        b=DskurABhQLJuIsPo613aAntE6w4RfZEmj4v2B0zetdkQEUfNmAP4U9r1PN7AusGb9G
+         c6WjTk5VqsK5hcQXUVByj/rSQhtDXX8+dzqxmTPWhCTnTxpTbcC7rUIFiKhWawqOvtq/
+         l0wTbUc1NgCZstw8nz1YvIt5mNjOhlqK0cy6GUNaoekcmWNZ9QvyzarHE94RLpdQJ/1U
+         FpzHzuzPurr84svjGZxSEpUqwwrLKSHnnxeoBhTQEgirttQKfHOF+BjOGVW83WbRZF7n
+         RadtgtI+BXtfKRtriT166WVIOv17T5meCfScvx+LcQKOeTqyORT7OQncoEDmbWVfmvfk
+         ufzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cx84QmywTvFoBakCztnkOurn2Q9lhNaHfIWPrd7Q84U=;
+        b=oYw9IUEfWtpPpi5onWf6eBReLFQP7dqOrNvvIC31Bsu6Xyh8nU2AqxvZ6zU/dUd3IW
+         wxaUfDZghWsLUL6Vao7v1oWUwVeTgALgoNcFeOK/85DFUMKqw9B2xOsAPvusU6bgQ+C+
+         XymaWYEvElMCjM+l8xpyVEif6mM0nJr3RJGU8qeuxVA6hWygZceShXTtqFGKNu8vE7tr
+         l4niVF3gUPz8Nb6ZwBGOzP5sEu3c4VkML0jkJ/Z2r7YZnlp97Zpv2PAr4b7wPTPzs0HL
+         mGcNrDhYMfanLQURv5/LHYypEG4Gr48uivFAOpfvAO3d+mSddmvAbLQ5gt9rPnj9DfOv
+         IrDQ==
+X-Gm-Message-State: AFqh2koNlYi2By7buKD6MzDK/iXX6dQQMutUy/MXG2RikpkU3VaZEDOG
+        cuf8775e3jmrCLcy6sjowUM=
+X-Google-Smtp-Source: AMrXdXuNCFeAx/JDqDGATqUS4LoHQSEsTB/HVSUwk9iEp7PfUVH49hkjaXEgNYJj8SORa5YfjMebvw==
+X-Received: by 2002:a62:5287:0:b0:58b:453e:77e0 with SMTP id g129-20020a625287000000b0058b453e77e0mr14575557pfb.20.1674237488327;
+        Fri, 20 Jan 2023 09:58:08 -0800 (PST)
+Received: from [10.14.5.12] ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id z37-20020a056a001da500b0058e1a104ca9sm1368853pfw.107.2023.01.20.09.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 09:58:07 -0800 (PST)
+Message-ID: <c45aa954-0931-1829-459f-8771faf05173@gmail.com>
+Date:   Fri, 20 Jan 2023 09:58:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8q6v3BZ8dlyoTxo@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net-next v1 2/4] net: phy: micrel: add EEE configuration
+ support for KSZ9477 variants of PHYs
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+References: <20230119131821.3832456-1-o.rempel@pengutronix.de>
+ <20230119131821.3832456-3-o.rempel@pengutronix.de>
+ <6a02c93f-e854-bb8e-2172-2c2537f9d800@gmail.com>
+ <20230120055514.GI6162@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230120055514.GI6162@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:01:03AM -0500, Alan Stern wrote:
-> On Wed, Jan 18, 2023 at 04:02:14PM -0800, Paul E. McKenney wrote:
-> > There are pairs of per-CPU counters.  One pair (->srcu_lock_count[])
-> > counts the number of srcu_down_read() operations that took place on
-> > that CPU and another pair (->srcu_unlock_count[]) counts the number
-> > of srcu_down_read() operations that took place on that CPU.  There is
-> > an ->srcu_idx that selects which of the ->srcu_lock_count[] elements
-> > should be incremented by srcu_down_read().  Of course, srcu_down_read()
-> > returns the value of ->srcu_idx that it used so that the matching
-> > srcu_up_read() will use that same index when incrementing its CPU's
-> > ->srcu_unlock_count[].
-> > 
-> > Grace periods go something like this:
-> > 
-> > 1.	Sum up the ->srcu_unlock_count[!ssp->srcu_idx] counters.
-> > 
-> > 2.	smp_mb().
-> > 
-> > 3.	Sum up the ->srcu_unlock_count[!ssp->srcu_idx] counters.
+
+
+On 1/19/2023 9:55 PM, Oleksij Rempel wrote:
+> On Thu, Jan 19, 2023 at 11:25:42AM -0800, Florian Fainelli wrote:
+>> On 1/19/23 05:18, Oleksij Rempel wrote:
+>>> KSZ9477 variants of PHYs are not completely compatible with generic
+>>> phy_ethtool_get/set_eee() handlers. For example MDIO_PCS_EEE_ABLE acts
+>>> like a mirror of MDIO_AN_EEE_ADV register. If MDIO_AN_EEE_ADV set to 0,
+>>> MDIO_PCS_EEE_ABLE will be 0 too. It means, if we do
+>>> "ethtool --set-eee lan2 eee off", we won't be able to enable it again.
+>>>
+>>> With this patch, instead of reading MDIO_PCS_EEE_ABLE register, the
+>>> driver will provide proper abilities.
+>>
+>> We have hooks in place already for PHY drivers with the form of the read_mmd
+>> and write_mmd callbacks, did this somehow not work for you?
+>>
+>> Below is an example:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d88fd1b546ff19c8040cfaea76bf16aed1c5a0bb
+>>
+>> (here the register location is non-standard but the bit definitions within
+>> that register are following the standard).
 > 
-> Presumably you meant to write "lock" here, not "unlock".
+> It will work for this PHY, but not allow to complete support for AR8035.
+> AR8035 provides support for "SmartEEE" where  tx_lpi_enabled and
+> tx_lpi_timer are optionally handled by the PHY, not by MAC.
 
-You are quite right, and apologies for my confusion.
-
-> > 4.	If the sums are not equal, retry from #1.
-> > 
-> > 5.	smp_mb().
-> > 
-> > 6.	WRITE_ONCE(ssp->srcu_idx, !ssp->srcu_idx);
-> > 
-> > 7.	smp_mb().
-> > 
-> > 8.	Same loop as #1-4.
-> > 
-> > So similar to r/w semaphores, but with two separate distributed counts.
-> > This means that the number of readers need not go to zero at any given
-> > point in time, consistent with the need to wait only on old readers.
-> 
-> Reasoning from first principles, I deduce the following:
-> 
-> You didn't describe exactly how srcu_down_read() and srcu_up_read() 
-> work.  Evidently the unlock increment in srcu_up_read() should have 
-> release semantics, to prevent accesses from escaping out the end of the 
-> critical section.  But the lock increment in srcu_down_read() has to be 
-> stronger than an acquire; to prevent accesses in the critical section 
-> escaping out the start, the increment has to be followed by smp_mb().
-
-You got it!  There is some work going on to see if srcu_read_lock()'s
-smp_mb() can be weakened to pure release, but we will see.
-
-> The smp_mb() fences in steps 5 and 7 appear to be completely 
-> unnecessary.
-
-For correctness, agreed.  Their purpose is instead forward progress.
-One can argue that step 5 is redundant due to control dependency, but
-control dependencies are fragile, and as you say below, this code is
-nowhere near a fastpath.
-
-> Provided an smp_mb() is added at the very start and end of the grace 
-> period, the memory barrier in step 2 and its copy in step 8 can be 
-> demoted to smp_rmb().
-
-This might need to be smp_mb() to allow srcu_read_unlock() to be
-demoted to release ordering.  Work in progress.
-
-> These changes would be small optimizations at best, and you may consider 
-> them unimportant in view of the fact that grace periods often last quite 
-> a long time.
-
-Agreed, keeping it simple and obvious is important on this code, which
-is nowhere near a fastpath.  The case of srcu_read_unlock() is another
-thing altogether.
-
-							Thanx, Paul
+Not sure I understand your reply here, this would appear to be a 
+limitation that exists regardless of the current API defined, does that 
+mean that you can make use of the phy_driver::{read,write}_mmd function 
+calls and you will make a v2 that uses them, or something else entirely?
+-- 
+Florian
