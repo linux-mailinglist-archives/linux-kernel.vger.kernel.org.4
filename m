@@ -2,130 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFF6675D1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE33675D20
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjATSww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S229851AbjATSxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATSwu (ORCPT
+        with ESMTP id S229555AbjATSxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:52:50 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E54ABEB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:49 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id s67so4831058pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPfy+reM6AKfPj+P9Rafnu4Ibypa0LESref2+wODD18=;
-        b=Qfzg23MVKgyve2XBzoW31NlYobIFWVOHHhwhcxalDk919SMGtf0YJaHtxZMf1d6Ji3
-         4kmpjikIrJlw3ahROk+iqBz3xm4E5b8+wOCe8Y2OD9DuMHBpV0bPHaDe6nWFE4ZUt+RE
-         IbjV9G8LXvyOHLU3mO5csO9PXC5pYbXfGAgBgGh1ZijJsBfuNsS0xomY2QZuLqi4xJFI
-         69aQdSdznYDRBBSGBz64fiG/Tth12IfyMbr0gpjdtopykXPMh5FejbsR1l9SumXbwwVj
-         i4yXq2VEpOfK7TunocUMGhyjljpG5oQLInecNKf09hsbPsmErfOtYsue28Ccdw8rX3Hj
-         ubsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FPfy+reM6AKfPj+P9Rafnu4Ibypa0LESref2+wODD18=;
-        b=DMl/4Gq/VH6CPiX5qeA3iGEPgjMT9dG6fICtjrDE1wqasRiupMkVm3tHEr3I/dQFH9
-         5CDUkAKXBJYqZjaY/AkqrFfKgye39uKNwX0rRULv7aSpR367hlgPbw2J22CNUSP7v/8A
-         5b/XSI8o+32bpaVZzYGpr8EwsERUxDTBQupsV7WtPzya3IohQ6Gz/dKsKq22kYxbnIiE
-         kI1CIU2Xaw2zZTOD1lLHmQg3voGQf5dOquwdrWRL3lWPG/X8KNIwlB6FDNwICDNLCPOo
-         MOVkaeZnocyQtWO1PoaSOM9p5oSfYbF+bkBUDU7D+AircfQPKXKbEvlq2Rpo2YOMQuxR
-         gRbA==
-X-Gm-Message-State: AFqh2kqCLQe/oB4hymlPjmyIRBOErVGZVuHIObhkN6un2OFamCmjBBY6
-        QOCa666K3h2kCtsqNiYO7p0RHVG9oOAkBw5+bTtA
-X-Google-Smtp-Source: AMrXdXv6XdC27v9Qt7fHt//RR9OOqJAxF6QqxrildvdTUbBXmQAvsFo9EGfhk/9ydU1jbeskiocoXCzAHBK0epOqvSo=
-X-Received: by 2002:a05:6a00:f07:b0:577:62a8:f7a1 with SMTP id
- cr7-20020a056a000f0700b0057762a8f7a1mr1561601pfb.2.1674240769040; Fri, 20 Jan
- 2023 10:52:49 -0800 (PST)
+        Fri, 20 Jan 2023 13:53:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B89660C80;
+        Fri, 20 Jan 2023 10:53:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0894E11FB;
+        Fri, 20 Jan 2023 10:53:49 -0800 (PST)
+Received: from [192.168.255.158] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8790B3F445;
+        Fri, 20 Jan 2023 10:53:04 -0800 (PST)
+Message-ID: <eee85ad6-bc78-0693-c182-4a53410af054@arm.com>
+Date:   Fri, 20 Jan 2023 18:53:00 +0000
 MIME-Version: 1.0
-References: <cover.1673989212.git.rgb@redhat.com> <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
- <5680172.DvuYhMxLoT@x2>
-In-Reply-To: <5680172.DvuYhMxLoT@x2>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 20 Jan 2023 13:52:37 -0500
-Message-ID: <CAHC9VhQbSCxmSbLFJZidAr952uHt-KktfRRJN3Lr+uDSCzHtfQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] fanotify,audit: Allow audit to use the full
- permission event response
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>
+Cc:     mingo@kernel.org, peterz@infradead.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+ <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+ <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+ <20230118164820.r37yfigmwwdske4r@airbuntu>
+ <CAKfTPtBX=tA2mDdbMP+R5fOZkH-P3AORgTk=ozXLRrP2Hz7kVg@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtBX=tA2mDdbMP+R5fOZkH-P3AORgTk=ozXLRrP2Hz7kVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 1:34 PM Steve Grubb <sgrubb@redhat.com> wrote:
->
-> Hello Richard,
->
-> I built a new kernel and tested this with old and new user space. It is
-> working as advertised. The only thing I'm wondering about is why we have 3F
-> as the default value when no additional info was sent? Would it be better to
-> just make it 0?
+On 19/01/2023 10:08, Vincent Guittot wrote:
+> On Wed, 18 Jan 2023 at 17:48, Qais Yousef <qyousef@layalina.io> wrote:
+>>
+>> On 01/18/23 09:15, Vincent Guittot wrote:
+>>> On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>>>
+>>>> On 16/01/2023 12:23, Vincent Guittot wrote:
+>>>>> On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>>>>>
+>>>>>> On 13/01/2023 14:40, Vincent Guittot wrote:
 
-...
+[...]
 
-> On Tuesday, January 17, 2023 4:14:07 PM EST Richard Guy Briggs wrote:
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index d1fb821de104..3133c4175c15 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2877,10 +2878,19 @@ void __audit_log_kern_module(char *name)
-> >       context->type = AUDIT_KERN_MODULE;
-> >  }
-> >
-> > -void __audit_fanotify(u32 response)
-> > +void __audit_fanotify(u32 response, struct
-> > fanotify_response_info_audit_rule *friar) {
-> > -     audit_log(audit_context(), GFP_KERNEL,
-> > -             AUDIT_FANOTIFY, "resp=%u", response);
-> > +     /* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
-> > +     if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> > +             audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > +                       "resp=%u fan_type=%u fan_info=3F subj_trust=2
-> obj_trust=2",
-> > +                       response, FAN_RESPONSE_INFO_NONE);
-> > +             return;
-> > +     }
+>>>>>> In task_fits_cpu() `utilization and performance (better uclamp)
+>>>>>> requirements` term was used. I assume it's the same thing here?
+>>>>>>
+>>>>>>> +             if (fits > 0)
+>>>>>>>                       return cpu;
+>>>>>>> +             /*
+>>>>>>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+>>>>>>> +              * for the CPU with highest performance capacity.
+>>>>>>                                             ^^^^^^^^^^^^^^^^^^^^
+>>>>>>
+>>>>>> Do we use a new CPU capacity value `performance capacity (1)` here?
+>>>>>>
+>>>>>> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+>>>>>>
+>>>>>> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+>>>>>> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+>>>>>> to return -1. Shouldn't (1) and (2) be the same?
+>>>>>
+>>>>> I'm all in favor of both being capacity_orig_of(cpu) -
+>>>>> thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+>>>>
+>>>> I think we need a handy name for this new capacity value, which seems to
+>>>> be `capacity_orig - capacity reduced by thermal`. And we should either
+>>>> use `thermal_load_avg` or `thermal pressure` for the latter part. And
+>>>> then we should use this consistently in all these places:
+>>>> util_fits_cpu(), feec(), sic().
+>>>
+>>> Ok, let me change this everywhere
+>>
+>> I'm not keen on this :-/
+>>
+>> Changing this everywhere could have implications beyond our simple capabilities
+>> of testing now :(
 
-(I'm working under the assumption that the "fan_info=3F" in the record
-above is what Steve was referring to in his comment.)
+It's actually not everywhere. I'm aware of 2 occurrences now in which we
+use 'cap_orig - th_pressure': in feec()/compute_energy() (commit
+489f16459e00 "sched/fair: Take thermal pressure into account while
+estimating energy") and now also in util_fits_cpu().
 
-I vaguely recall Richard commenting on this in the past, although
-maybe not ... my thought is that the "3F" is simply the hex encoded
-"?" character in ASCII ('man 7 ascii' is your friend).  I suppose the
-question is what to do in the FAN_RESPONSE_INFO_NONE case.
+>> Current choice (in util_fits_cpu()) was based on a direct feedback from Xuewen.
 
-Historically when we had a missing field we would follow the "field=?"
-pattern, but I don't recall doing that for a field which was
-potentially hex encoded, is there an existing case where we use "?"
-for a field that is hex encoded?  If so, we can swap out the "3F" for
-a more obvious "?".
+I went through these ~40 emails in the '[PATCH] sched: Take thermal
+pressure into account when determine rt fits capacity' thread (1):
 
-However, another option might be to simply output the current
-AUDIT_FANOTIFY record format in the FAN_RESPONSE_INFO_NONE case, e.g.
-only "resp=%u".  This is a little against the usual guidance of
-"fields should not disappear from a record", but considering that
-userspace will always need to support the original resp-only format
-for compatibility reasons this may be an option.
+https://lkml.kernel.org/r/20220407051932.4071-1-xuewen.yan@unisoc.com
 
---
-paul-moore.com
+and the '[PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+migration margin' (2):
+
+https://lkml.kernel.org/r/20220629194632.1117723-2-qais.yousef@arm.com
+
+There is this email from Xuewen in (1):
+
+https://lkml.kernel.org/r/CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com
+
+in which he mentioned that he prefers th_pressure but this was a CapInv
+prototype in update_cpu_capacity() (the whole discussion was about
+th_pressure in rt_task_fits_capacity()) rather than util_fits_cpu().
+
+Maybe I missed something more directly related to util_fits_cpu()?
+
+>> I think we should discuss how we can improve the situation instead rather than
+>> worry about consistency. I don't think we can be consistent without doing some
+>> improvements on thermal pressure response time.
+
+I'm fine with discussing this next Wednesday.
+
+We just have to watch out for v4 of this patch which uses `cap_orig -
+thermal_load_avg()` in sic().
+
+>> A separate proposal patch to invoke some testing and discussion is fine by me.
+>>
+>> Better keep it a separate work item please?
+> 
+> Ok, I'm going to keep the current use of arch_scale_thermal_pressure
+> and thermal_load_avg for this patch
+
+OK.
