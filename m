@@ -2,90 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956F967579D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B97F675780
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjATOn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S230070AbjATOkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjATOnY (ORCPT
+        with ESMTP id S229852AbjATOkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:43:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA05D05F9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674225633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q9nhE1NTwmfnVWve8AVaEOn2Xi0Qdr1U6uub8XxZ9tg=;
-        b=Wmnkhd6zmZ2F4OPXTY4JwDCp7kqEgysKSdwrJoadcmUHbCYWoDZZjoAqehhldAfXffTKY5
-        8d7xVQWmFFdbM/E800kd3i6l3pM/X/0FWAuezB65Xt1D48IWsAQQ7hfqgHI65lua04imzj
-        FHO1/lMFHXcsNDtJtKsbTjUQWRTx0kE=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-RCXY-B3cPN2Fei7DUaPk0Q-1; Fri, 20 Jan 2023 09:37:22 -0500
-X-MC-Unique: RCXY-B3cPN2Fei7DUaPk0Q-1
-Received: by mail-ot1-f71.google.com with SMTP id a4-20020a9d5c84000000b00686ab49309fso497978oti.19
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:37:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q9nhE1NTwmfnVWve8AVaEOn2Xi0Qdr1U6uub8XxZ9tg=;
-        b=FYp+UTTht7XFVItJTX5XwmfXlbz7HUav5QuJ76ELqoF7xUVe/KHE2UC9SKQKzFNxEq
-         5dOVNAEi5Uj40UohbUsz5GTxBMLEskTOgj+8jUj9McSEMFM7wbcWp15OvA216OrEiSwr
-         uVL9zrAI2DP1ZWW0Q+oC9N5fO6cV1wM+Se9HY8DqkwwCwe+3b2KEgghfOXRwm1Kxpisc
-         WCNeC7CWRZ10RJHqz+EC0BBNeWZrCQaFK+JqqTj2sOXfFpJwD8beHboj+zhLAMIAS3n2
-         XY3nR+QBLagiDdZI2Ja+OHnDfdQvy/2q2tyonYz4oBHJMJV9Y1U575lw9NsYui/IhPLW
-         RdQQ==
-X-Gm-Message-State: AFqh2krASXkeRVW2RMQo3JoMGV2G6iCXATWq8dE1sFBNmVPhT9NAsShk
-        aPK0YTxryDljYqPjKMvxq8fCMdRQZcJMHm4quFQD5rY8o95PI/F6HagwHEsqgxrCwC/B5fd6fDT
-        PzYmwQyc9mcQsJw+nTorweOAP
-X-Received: by 2002:a05:6870:670b:b0:15e:ee5d:8696 with SMTP id gb11-20020a056870670b00b0015eee5d8696mr8538133oab.54.1674225441691;
-        Fri, 20 Jan 2023 06:37:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvmxHEs7IOvDmv8B1cEtpfFCbjcPfnzN4JydFfzpBKL4PxeXf4/AeFJ0ZIFP0QhuQtGCobjzQ==
-X-Received: by 2002:a05:6870:670b:b0:15e:ee5d:8696 with SMTP id gb11-20020a056870670b00b0015eee5d8696mr8538105oab.54.1674225441379;
-        Fri, 20 Jan 2023 06:37:21 -0800 (PST)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id t17-20020a056871055100b001447602267esm21583208oal.41.2023.01.20.06.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 06:37:20 -0800 (PST)
-Date:   Fri, 20 Jan 2023 08:37:17 -0600
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        quic_shazhuss@quicinc.com
-Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <20230120143717.ikbcb6x7wl4yy5d7@halaney-x13s>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-3-quic_kriskura@quicinc.com>
- <20230119220942.ja5gbo3t3fl63gpy@halaney-x13s>
- <8f32c2e5-2743-1017-6a33-4849021c5287@quicinc.com>
+        Fri, 20 Jan 2023 09:40:04 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3128CFD2D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674225567; x=1705761567;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tzlAUmOT7JvkxNZu7rMwCeceSX0aTfOKIK/6l3oMHyI=;
+  b=Ejd5rBFT9fC+eCDm0u83Ahg0crsZ8SDs7ZTPVdlQpuIm35pthzWBvVkm
+   iLhrhQRKPfGWcf5riRHH8G4W57diA46XKQNx87IfVaT+DYTM4LdaLFaju
+   7YPTseC4H8dMOuyS95oV05Q2tf1PlpwKFsXbtOSITzSSWW3t0SiQYayv8
+   I4uHrqA6cYnXvTr22Eblht0J2TkEPTMJHhzwLVMjBm6VhyiqG75EQQBwV
+   4LQbKPnwmyOLS6UQeoYC6k2d9i4F6TEdMMwfqLGbue8exrh9gYGXA46lG
+   GMIXiBFZpmAxLrxTVgCbt8OhgPGDEJvk/IptqQIv5/zGEvZwGVA46VuVk
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669100400"; 
+   d="scan'208";a="196713293"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 07:38:10 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 20 Jan 2023 07:38:10 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Fri, 20 Jan 2023 07:38:09 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+CC:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/7] MPFS system controller/mailbox fixes
+Date:   Fri, 20 Jan 2023 14:37:28 +0000
+Message-ID: <20230120143734.3438755-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f32c2e5-2743-1017-6a33-4849021c5287@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,216 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 07:25:57AM +0530, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 1/20/2023 3:39 AM, Andrew Halaney wrote:
-> > On Sun, Jan 15, 2023 at 05:11:43PM +0530, Krishna Kurapati wrote:
-> > > Currently the DWC3 driver supports only single port controller
-> > > which requires at most one HS and one SS PHY.
-> > > 
-> > > But the DWC3 USB controller can be connected to multiple ports and
-> > > each port can have their own PHYs. Each port of the multiport
-> > > controller can either be HS+SS capable or HS only capable
-> > > Proper quantification of them is required to modify GUSB2PHYCFG
-> > > and GUSB3PIPECTL registers appropriately.
-> > > 
-> > > Add support for detecting, obtaining and configuring phy's supported
-> > > by a multiport controller and limit the max number of ports
-> > > supported to 4.
-> > > 
-> > > Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > ---
-> > >   drivers/usb/dwc3/core.c | 304 +++++++++++++++++++++++++++++-----------
-> > >   drivers/usb/dwc3/core.h |  15 +-
-> > >   drivers/usb/dwc3/drd.c  |  14 +-
-> > >   3 files changed, 244 insertions(+), 89 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 476b63618511..7e0a9a598dfd 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > 
-> > <snip>
-> > 
-> > > @@ -1575,6 +1690,21 @@ static void dwc3_get_properties(struct dwc3 *dwc)
-> > >   	dwc->dis_split_quirk = device_property_read_bool(dev,
-> > >   				"snps,dis-split-quirk");
-> > > +
-> > > +	/*
-> > > +	 * If no mulitport properties are defined, default
-> > > +	 * the port count to '1'.
-> > > +	 */
-> > > +	ret = device_property_read_u32(dev, "num-ports",
-> > > +				&dwc->num_ports);
-> > > +	if (ret)
-> > > +		dwc->num_ports = 1;
-> > > +
-> > > +	ret = device_property_read_u32(dev, "num-ss-ports",
-> > > +				&dwc->num_ss_ports);
-> > > +	if (ret)
-> > > +		dwc->num_ss_ports = 1;
-> > 
-> > By using this DT property instead of using the number of each phy type you
-> > find you can get into situations where you're writing DWC3_GUSB2PHYCFG, etc,
-> > when there's no phy to go along with it.
-> > 
-> Hi Andrew,
-> 
->  Thanks for the review. Yes, this decoupling is still there and its fine I
-> believe.
-> 
-> > I ran into this when testing on sa8540p-ride, which only uses one of the
-> > ports on the multiport controller. I didn't enable the other phys (not
-> > sure if that was smart or not) and overrode phy-names/phys, but did not
-> > override num-ports/num-ss-ports, which resulted in that. Nothing bad
-> > happened on a quick test.. but I thought I'd highlight that as another
-> > downside of decoupling this value from the number of phys you grab.
-> > 
-> If we do not override phy-names or num-ports/num-ss-ports info in DT, they
-> are just defaulted to '1' and as per the current logic only port-1 registers
-> must be configured. Isn't that the case happening ?
-> 
+Hey Jassi, all,
 
-In my dts I'm inheriting from the sc8280xp.dtsi usb_2 phandle you've created!
-So unless I override them I get this from your sc8280xp.dtsi:
+Here are some fixes for the system controller on PolarFire SoC that I
+ran into while implementing support for using the system controller to
+re-program the FPGA. A few are just minor bits that I fixed in passing,
+but the bulk of the patchset is changes to how the mailbox figures out
+if a "service" has completed.
 
-+                       usb_2_dwc3: usb@a400000 {
-+                               compatible = "snps,dwc3";
-+                               reg = <0 0x0a400000 0 0xcd00>;
-+                               interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-+                               iommus = <&apps_smmu 0x800 0x0>;
-+                               num-ports = <4>;
-+                               num-ss-ports = <2>;
-+                               phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
-+                                       <&usb_2_hsphy1>, <&usb_2_qmpphy1>,
-+                                       <&usb_2_hsphy2>,
-+                                       <&usb_2_hsphy3>;
-+                               phy-names = "usb2-phy_port0", "usb3-phy_port0",
-+                                               "usb2-phy_port1", "usb3-phy_port1",
-+                                               "usb2-phy_port2",
-+                                               "usb2-phy_port3";
-+                       };
+Prior to implementing this particular functionality, the services
+requested from the system controller, via its mailbox interface, always
+triggered an interrupt when the system controller was finished with
+the service.
 
-Since this board only uses one port of the multiport controller, I
-redefined phys/phy-names to indicate that. I figured that was more
-desireable than enabling unnecessary phys. Without overriding
-num-ports/num-ss-ports all the for loops in this patch would act like
-the values were 4 and 2 respectively, writing to DWC3_GUSB2PHYCFG
-multiple times etc as well as look for the multiport phy-names and fail
-to actually get any phys. Hope that makes sense!
+Unfortunately some of the services used to validate the FPGA images
+before programming them do not trigger an interrupt if they fail.
+For example, the service that checks whether an FPGA image is actually
+a newer version than what is already programmed, does not trigger an
+interrupt, unless the image is actually newer than the one currently
+programmed. If it has an earlier version, no interrupt is triggered
+and a status is set in the system controller's status register to
+signify the reason for the failure.
 
-> > Here's a patch enabling sa8540p-ride, I'd love if you'd add it to the
-> > series (probably needs clean up after review, and will definitely need
-> > alteration after you update the dt-binding again). If not I'll continue
-> > to test/review so please CC me!:
-> > 
-> > 
-> Sure, I can add this patch (probably will add the other phy's too) during
-> the final submission.
+In order to differentiate between the service succeeding & the system
+controller being inoperative or otherwise unable to function, I had to
+switch the controller to poll a busy bit in the system controller's
+registers to see if it has completed a service.
+This makes sense anyway, as the interrupt corresponds to "data ready"
+rather than "tx done", so I have changed the mailbox controller driver
+to do that & left the interrupt solely for signalling data ready.
+It just so happened that all of the services that I had worked with and
+tested up to this point were "infallible" & did not set a status, so the
+particular code paths were never tested.
 
-I don't have a great understanding of the mapping of the phys to
-physical connections (as well as what registers like DWC3_GUSB2PHYCFG do),
-so if it makes more sense to enable all the relevant SoC phys, write
-those registers in the DWC3 IP, etc, and only use one of the actual
-board outputs then feel free. I think this is a good example of "what if
-a board designer only uses a single port of the multiport IP" imo.
+Jassi, the mailbox and soc patches depend on each other, as the change
+in what the interrupt is used for requires changing the client driver's
+behaviour too, as mbox_send_message() will now return when the system
+controller is no longer busy rather than when the data is ready.
+I'm happy to send the lot via the soc tree with your Ack and/or reivew,
+if that also works you?
 
-> 
-> >  From dcb27d07f079194ebd7efe1c9bec64da78beb290 Mon Sep 17 00:00:00 2001
-> > From: Andrew Halaney <ahalaney@redhat.com>
-> > Date: Thu, 19 Jan 2023 14:53:38 -0600
-> > Subject: [PATCH] arm64: dts: qcom: sa8540p-ride: Enable usb_2
-> > Content-type: text/plain
-> > 
-> > There is now support for the multiport USB controller this uses
-> > so enable it.
-> > 
-> > The board only has a single port hooked up (despite it being wired up to
-> > the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
-> > which by default on boot is selected to mux properly. Grab the gpio
-> > controlling that and ensure it stays in the right position so USB 2.0
-> > continues to be routed from the external port to the SoC.
-> > 
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 24 +++++++++++++++++++++++
-> >   1 file changed, 24 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > index 97957f3baa64..56d4f43faa1e 100644
-> > --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > @@ -246,6 +246,21 @@ &usb_0_qmpphy {
-> >   	status = "okay";
-> >   };
-> > +&usb_2 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&usb2_en_state>;
-> > +
-> > +	status = "okay";
-> > +};
-> > +
-> > +&usb_2_dwc3 {
-> > +	dr_mode = "host";
-> > +	num-ports = <1>;
-> > +	num-ss-ports = <1>;
-> 
-> More over, if this is a multiport controller and you are using only port-1,
-> it is as good as a single port controller I believe and the normal DT
-> convention must work. Adding these properties as "1" is not required as the
-> driver logic defaults them to "1" if they are not found.
+Secondly, I have a question about what to do if a service does fail, but
+not due to a timeout - eg the above example where the "new" image for
+the FPGA is actually older than the one that currently exists.
+Ideally, if a service fails due to something other than the transaction
+timing out, I would go and read the status registers to see what the
+cause of failure was.
+I could not find a function in the mailbox framework that allows the
+client to request that sort of information from the client. Trying to
+do something with the auxiliary bus, or exporting some function to a
+device specific header seemed like a circumvention of the mailbox
+framework.
+Do you think it would be a good idea to implement something like
+mbox_client_peek_status(struct mbox_chan *chan, void *data) to allow
+clients to request this type of information?
 
-See above comment about inheriting from sc8280xp.dtsi and needing to
-override their values.
-
-> 
-> Just to add a point here (as I was not clear in DT Binding description, My
-> bad), the num-ports and num-ss-ports must indicate the HS/SS Phys present on
-> HW whether they are used in DT or not. Just to cover all cases which user
-> can use [1].
-> 
-> []1:
-> https://lore.kernel.org/all/4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com/
-
-Ok, if you're going with that approach of "must indicate the HS/SS Phys
-present on HW whether they are used in the DT or not" (/me assumes DT
-here means on the board and not an incorrect coding of the DT) then I
-suppose I should not have overridden anything but phys/phy-names to
-indicate that I'm only using the first port (and used the multiport
-phy-names convention). It looks like in that link you also mention that
-it is ok to write to DWC3_GUSB2PHYCFG and friends even if the phy isn't
-defined, which was my concern and reasoning above for overriding
-num-ports/num-ss-ports.
+It'd certainly allow me to report the actual errors to the drivers
+implementing the service & make better decisions there about how to
+proceed.
+Perhaps I have missed some way of doing this kind of thing that (should
+have been) staring me in the face!
 
 Thanks,
-Andrew
+Conor.
 
-> 
-> Regards,
-> Krishna,
-> 
-> > +	phy-names = "usb2-phy", "usb3-phy";
-> > +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
-> > +};
-> > +
-> >   &usb_2_hsphy0 {
-> >   	vdda-pll-supply = <&vreg_l5a>;
-> >   	vdda18-supply = <&vreg_l7g>;
-> > @@ -313,4 +328,13 @@ wake-pins {
-> >   			bias-pull-up;
-> >   		};
-> >   	};
-> > +
-> > +	usb2_en_state: usb2-en-state {
-> > +		/* TS3USB221A USB2.0 mux select */
-> > +		pins = "gpio24";
-> > +		function = "gpio";
-> > +		drive-strength = <2>;
-> > +		bias-disable;
-> > +		output-low;
-> > +	};
-> >   };
-> 
+Changes in v2:
+- up the timeout to 30 seconds, as required for services like image
+  validation, which may vary significantly in execution time
+- fixed a typo!
+
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Jassi Brar <jassisinghbrar@gmail.com>
+CC: linux-riscv@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
+
+Conor Dooley (7):
+  mailbox: mpfs: fix an incorrect mask width
+  mailbox: mpfs: switch to txdone_poll
+  mailbox: mpfs: ditch a useless busy check
+  soc: microchip: mpfs: fix some horrible alignment
+  soc: microchip: mpfs: use a consistent completion timeout
+  soc: microchip: mpfs: simplify error handling in
+    mpfs_blocking_transaction()
+  soc: microchip: mpfs: handle timeouts and failed services differently
+
+ drivers/mailbox/mailbox-mpfs.c              | 25 ++++++----
+ drivers/soc/microchip/mpfs-sys-controller.c | 52 ++++++++++++++-------
+ 2 files changed, 51 insertions(+), 26 deletions(-)
+
+
+base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
+-- 
+2.39.0
 
