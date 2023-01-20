@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4928E67492E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8AC674930
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjATCGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S229898AbjATCHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjATCGj (ORCPT
+        with ESMTP id S229568AbjATCHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:06:39 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4EBA8395;
-        Thu, 19 Jan 2023 18:06:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 19 Jan 2023 21:07:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5FA5780;
+        Thu, 19 Jan 2023 18:07:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NyjXq2XDlz4xHV;
-        Fri, 20 Jan 2023 13:06:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674180395;
-        bh=UtRB6E0wN2erVA9ouuQuDSVey2aH1kMgxHSkIFViH0A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=L+meNp7m0hF8Y4dsW9/76cHIk7uKgRk/3AuWiJUGhqsTXpNYphfs75QW4Qgd/ikXm
-         5vbTYDXsbCw7SN6HcyVbt+gJSqkPQQ+bWwItCNer0ODSAoKA6jiZIHQT1pyQtUPR+l
-         271vbDxi+E6FviO6tZhvGLncPjwnQO2C6K1fhKy1Qc0gQEjrTfzpwQeE49EK7WmLzw
-         jyCR+r1Eifc5ZzaYzoH11gi5e7arYErweylA3yayk/NuS0oEQ/kiTkJbBYC9v7aA9Q
-         uZwkTH12EnvqhPQFNOfxuFUXhRPzDmZrY4TnPCcjmMbIIrbuM8EiixNxLkeUyliFW7
-         z82zA2dI94ZFA==
-Date:   Fri, 20 Jan 2023 13:06:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     Ofir Bitton <obitton@habana.ai>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the accel tree
-Message-ID: <20230120130634.61c3e857@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7067E61DD6;
+        Fri, 20 Jan 2023 02:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFE0C433EF;
+        Fri, 20 Jan 2023 02:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674180449;
+        bh=OHBGrZDS9hYZ63xAQOgXs0txuOMdKJTNhNwlzli36zY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YTPbThVNWK36wc5fhugZEj3dN20uYbPQj7oqWbo6/3N4Wh9OTpkOzpwwagGM5hhqT
+         y1jpadu4XfDN6XdaT32gg2VOfKiGc72rVYCs/Dnm/Cn/xQXAWQvf+Vzk21kjNJap2S
+         9S2DtiE6g+su/ecIxt3OTgJ4uyf33uSugwspf4LnqLM3YZ3BAftC/nQKyQQwhBoKaX
+         b8i3BvbW2Fxv5yx8LyH9aETnnM+qjFOdEyh8niCknK0sH6Oh+GqEKaHTUpQGpb4GWb
+         bVXlsfQilxFgQFsuRvRuLZ4ICfxPb4myQ0vCEXmQCJSA0XP1PjwFTb0Zg4IDvziXTn
+         2hOBDN5P980OA==
+Date:   Thu, 19 Jan 2023 18:07:27 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Li Lingfeng <lilingfeng3@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        tj@kernel.org, axboe@kernel.dk, akpm@linux-foundation.org,
+        jack@suse.cz, bingjingc@synology.com, james.smart@broadcom.com,
+        houtao1@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH-next v3] lib: parser: optimize match_NUMER apis to use
+ local array
+Message-ID: <Y8n3Xxh+Rqo9vWHx@sol.localdomain>
+References: <20230120021304.5773-1-lilingfeng3@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A=2_9B9N4uqEOp8GZ4PgI5V";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120021304.5773-1-lilingfeng3@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 20, 2023 at 10:13:04AM +0800, Li Lingfeng wrote:
+> [PATCH-next v3] lib: parser: optimize match_NUMER apis to use
 
-Hi all,
+NUMER => NUMBER
 
-After merging the accel tree, today's linux-next build (htmldocs)
-produced this warning:
+> Memory will be allocated to store substring_t in match_strdup(), which means
+> the caller of match_strdup() may need to be scheduled out to wait for reclaiming
+> memory.
 
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected in=
-dentation.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote=
- ends without a blank line; unexpected unindent.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected in=
-dentation.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote=
- ends without a blank line; unexpected unindent.
+Text in commit messages should be wrapped at 72 columns.
 
-Introduced by commit
+> @@ -163,18 +169,16 @@ static int match_number(substring_t *s, int *result, int base)
+>   */
+>  static int match_u64int(substring_t *s, u64 *result, int base)
+>  {
+> -	char *buf;
+> +	char buf[NUMBER_BUF_LEN];
+>  	int ret;
+>  	u64 val;
+>  
+> -	buf = match_strdup(s);
+> -	if (!buf)
+> -		return -ENOMEM;
+> -
+> +	if ((s->to - s->from) >= NUMBER_BUF_LEN)
+> +		return -ERANGE;
+> +	match_strlcpy(buf, s, NUMBER_BUF_LEN);
 
-  0a14c331682f ("habanalabs: update device status sysfs documentation")
+As I requested on v2, the return value of match_strlcpy() should be used instead
+of checking '((s->to - s->from) >= NUMBER_BUF_LEN'.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ9yoACgkQAVBC80lX
-0GymPAf+IOpHfof0/LYaZr6N49uaVkMlA1DewjifwnvQDpErjx9a0kLAd7C4CSu3
-pY57JLjHyCIm2lScdr+Cqx5z6zAj4sPlZMM0v040yCkaloTEIhFFoTW1q37s4im6
-DkrhyFOGX0VHQnkJyygrR0mGVD2F5plzhM2aYV6gMCMGTcycC2Z+uarPiqn2PdDr
-nFSddSoUCRv1BSGMy3J5IhM2OMFfJu0amuCLmA45xza3J+ecYpw+J8jjgDnyT9Fv
-O857stTeu/+GQ3mhaSHHazY6p3yTh1pYvOfHH3QqH3e0DCjI715hdfjAyGMUYa1W
-DA69ZD0keGRO+UF6agLPa8rY/zdDZg==
-=yTyW
------END PGP SIGNATURE-----
-
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V--
+- Eric
