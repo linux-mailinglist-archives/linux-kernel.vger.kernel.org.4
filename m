@@ -2,169 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBA8675A33
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693F7675A40
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjATQlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S229877AbjATQlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjATQlB (ORCPT
+        with ESMTP id S230365AbjATQlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:41:01 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2897AB9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:41:00 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id dw9so6108989pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:41:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Dug0yTxCp+eWKDK5G8TD/37FZQw5LWkxB2o6dVF2fs=;
-        b=LuCQVk+PIu+b14JunqNk/F7UzLUP/9GGJh/U1K/8MOuPR2AdROuguQl75Q8+uXEeyW
-         8hsrSsA8I6zOXIPJFbbwQ0HNgyuhTp3gX6KgKtFMjthZIfvmPQqGz1DGkvhHs55Ohg8F
-         Q08kB8ApIYJ4IBaMjNOLKmnGCohR17wPMPGZ9HVSIyCU22ntOwFIM6Wa/AWTrOL7ZAEK
-         zgUfSwUM+rR4hzZCuxrQ/R1lt3uqx2kXEFA1jHkEkNMxC1UyVgWw5kk2caAWDSa5oX6N
-         QAfyH79iRhXh58dB1eFZ8h0krwWXt/iKDMLqHv+WvY1J3nsWuXMF/nbAxFPClhml+Z/A
-         c07Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Dug0yTxCp+eWKDK5G8TD/37FZQw5LWkxB2o6dVF2fs=;
-        b=s6zeu3yVCdPvjqx0GGwRdkQBQqU4m6PaW0L//EAKx2x9/57+p4d/Zkbqs7gY4gOjGJ
-         sC8200scIEtUDCdQ+xCd3517dz1up3ygEV/RhrrJ1LRMnAgCCz7PYwEXEaJbxjL+H5q3
-         ffzwXnhCQtk3vM9EIY/lyhq+P/3ikh8AMBcp/napVI4i9P6LuvBrnzGnw8Ak8l7dQ6o+
-         IBLLjdOun4xcyA6p+OWgJyuN/z8tzQJMIbTLP/e5Pcld9UMAGF6QR1mATV1QQVRzexeq
-         1wNKkv9MGIlolk3690mU47TmQ0TADh0IqmKgRmyPpizq3kKyJqysiniUXcF4hgMKewpj
-         AGQQ==
-X-Gm-Message-State: AFqh2kqLm+9N7Kr5YUAPaXQ0s6dlxe0nNJ7WHRl0WXHoXlcRRNh0SQVB
-        kT+q/ge6gvprRsHsebZE+r0BbQ==
-X-Google-Smtp-Source: AMrXdXvwWdNPAPAF8UxRTsgHqn40PKQFZvGXeCSFJn5ZyOS5jsUniT/7u/n0z55pGLEOuSrm+Vtvog==
-X-Received: by 2002:a17:90a:6905:b0:229:f4e9:75c7 with SMTP id r5-20020a17090a690500b00229f4e975c7mr293720pjj.0.1674232859561;
-        Fri, 20 Jan 2023 08:40:59 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id gn24-20020a17090ac79800b001ef8ab65052sm1752488pjb.11.2023.01.20.08.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 08:40:58 -0800 (PST)
-Date:   Fri, 20 Jan 2023 16:40:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dionna Glaze <dionnaglaze@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 1/2] kvm: sev: Add SEV-SNP guest request throttling
-Message-ID: <Y8rEFpbMV58yJIKy@google.com>
-References: <20230119213426.379312-1-dionnaglaze@google.com>
- <20230119213426.379312-2-dionnaglaze@google.com>
+        Fri, 20 Jan 2023 11:41:36 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF9E39CD5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674232891; x=1705768891;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=O6hXbtgh6Uq7IHfnbRaJzZU+JzJyUzqxHcKuTZ5XDnI=;
+  b=MR9xSx8WwffASMSgUw6+0H1q4B4yrU5s+Ya2wSIG5Gs1+JOatdMbdKnr
+   9RNCqOs9QRYtywm32X8Rsn0sh3D1lzVWwRI5fueSocm2sO0yZTX7+jeSy
+   BBg7GPC16c0R5K8X0WByYVFap5U8tDbWBeKkChHjDCwWjXiKW0sh/Z73M
+   ry4wQ9gzeUUQWkq60nLKTn/0tQJKOuxIsViL0I0A88P3bSeaiOgl5LpAM
+   QzrpNzXfvjJKsgzhEiGFR82FBPMK8hzc+BiLdg+XAVffrl7WzB+YsnMtp
+   hDQai5EXsh2Bcz2WY2U4fJnIEM82tKnuK7lp2I6giSzjmNr3dpRC7J1Gq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="352874603"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="352874603"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:41:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="906017161"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="906017161"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jan 2023 08:41:28 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH v1 4/6] virtio console: Harden control message handling
+In-Reply-To: <20230120074120-mutt-send-email-mst@kernel.org>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-5-alexander.shishkin@linux.intel.com>
+ <Y8lgIS+jygB7SGrn@kroah.com>
+ <20230120074120-mutt-send-email-mst@kernel.org>
+Date:   Fri, 20 Jan 2023 18:41:27 +0200
+Message-ID: <87y1pxp39k.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119213426.379312-2-dionnaglaze@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD folks, unless y'all object to the concept itself, can this be tacked onto the
-SNP series?  Responsibility for responding to feedback and making changes can still
-be punted to Dionna (or whoever), I just get briefly confused every time this series
-is posted because I think it's addressing a problem that needs attention _now_.
+"Michael S. Tsirkin" <mst@redhat.com> writes:
 
-On Thu, Jan 19, 2023, Dionna Glaze wrote:
-> The AMD-SP is a precious resource that doesn't have a scheduler other
-> than a mutex lock queue. To avoid customers from causing a DoS, a
-> module_param-set rate limit is added with a default of 2 requests
-> per 2 seconds.
-> 
-> These defaults were chosen empirically with a the assumption that
-> current server-grade SEV-SNP machines will rarely exceed 128 VMs under
-> usual circumstance.
-> 
-> The throttling code is 2 << 32 given that invalid length is 1 and 2 is
-> the next available code. This was suggested by Tom Lendacky, and will
-> be included in a new revision of the GHCB specification.
+> On Thu, Jan 19, 2023 at 04:22:09PM +0100, Greg Kroah-Hartman wrote:
+>> On Thu, Jan 19, 2023 at 03:57:19PM +0200, Alexander Shishkin wrote:
+>> > In handle_control_message(), we look at the ->event field twice, which
+>> > gives a malicious VMM a window in which to switch it from PORT_ADD to
+>> > PORT_REMOVE, triggering a null dereference further down the line:
+>> 
+>> How is the other VMM have full control over the full message here?
+>> Shouldn't this all have been copied into our local memory if we are
+>> going to be poking around in it?  Like I mentioned in my other review,
+>> copy it all once and then parse it.  Don't try to mess with individual
+>> fields one at a time otherwise that way lies madness...
+>> 
+>> thanks,
+>> 
+>> greg k-h
+>
+> I agree and in fact, it is *already* copied since with malicious
+> device we generally use a bounce buffer.
 
-Why does throttling just punt back to the guest?  E.g. why not exit to userspace
-and let userspace stall the vCPU?  Is the guest expected to schedule out the task
-that's trying to make the request?
+Right, but the code should probably be able to handle bad input on its
+own, or what do you think?
 
-> @@ -158,6 +158,7 @@ struct snp_psc_desc {
->  
->  /* Guest message request error code */
->  #define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
-> +#define SNP_GUEST_REQ_THROTTLED		(((u64)2) << 32)
+> Having said that, the patch is actually a cleanup, e.g. it's clearer
+> to byte-swap only once.
+> Just don't oversell it as a security thing.
 
-Someone please add macros to define the shift and generate error codes, the above
-is way too hard to read for such a simple concept.  E.g. I want to see something
-like
+Well, security was the original motivation, so that's what it said in
+the commit message. But we settled on [0] yesterday with Greg, which
+would replace this patch and 2/6.
 
- #define SNP_GUEST_REQ_INVALID_LEN	SNP_GUEST_REQ_ERROR_CODE(1)
+[0] https://lore.kernel.org/all/87a62eqo4h.fsf@ubik.fi.intel.com/
 
->  #define GHCB_MSR_TERM_REQ		0x100
->  #define GHCB_MSR_TERM_REASON_SET_POS	12
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index d0e58cffd1ed..cd9372ce6fc2 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -58,6 +58,14 @@ module_param_named(sev_es, sev_es_enabled, bool, 0444);
->  /* enable/disable SEV-SNP support */
->  static bool sev_snp_enabled = true;
->  module_param_named(sev_snp, sev_snp_enabled, bool, 0444);
-> +
-> +/* Throttle guest requests to a burst # per this many seconds */
-> +unsigned int guest_request_throttle_s = 2;
-
-"seconds" seems like to coarse of a granularity, e.g. if userspace wants to allow
-one request every half-second.  Why not go with milliseconds?  As a bonus, the (IMO)
-odd "s" gets replaced with the more intuitive "ms".
-
-That said, I wonder if this should be a per-VM capability, not a module param.
-Since the throttling is per VM and not per user, making it a module param doesn't
-prevent a malicious user or even a compromised VMM from spamming the PSP, e.g. just
-spin up a big pile o' VMs.
-
-> +module_param(guest_request_throttle_s, int, 0444);
-> +
-> +/* Throttle guest requests to this many per the above many seconds */
-> +unsigned int guest_request_throttle_burst = 2;
-> +module_param(guest_request_throttle_burst, int, 0444);
->  #else
->  #define sev_enabled false
->  #define sev_es_enabled false
-> @@ -333,6 +341,9 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  			goto e_free;
->  
->  		mutex_init(&sev->guest_req_lock);
-> +		ratelimit_state_init(&sev->snp_guest_msg_rs,
-> +				guest_request_throttle_s * HZ,
-> +				guest_request_throttle_burst);
->  		ret = sev_snp_init(&argp->error, false);
->  	} else {
->  		ret = sev_platform_init(&argp->error);
-> @@ -3595,6 +3606,14 @@ static void snp_cleanup_guest_buf(struct sev_data_snp_guest_request *data, unsig
->  		*rc = SEV_RET_INVALID_ADDRESS;
->  }
->  
-> +static bool snp_throttle_guest_request(struct kvm_sev_info *sev) {
-
-Curly brace goes on its own line for functions.
-
-> +	if (__ratelimit(&sev->snp_guest_msg_rs))
-> +		return false;
-> +
-> +	pr_info_ratelimited("svm: too many guest message requests\n");
-
-Drop the printk, it doesn't help understand _which_ guest is being throttled.
-If userspace really wants to get notified, then KVM should exit to userspace
-instead of throttling manually.
+Regards,
+--
+Alex
