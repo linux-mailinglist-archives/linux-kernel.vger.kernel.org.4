@@ -2,44 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CF7674FBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE9C674FB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjATIth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S229613AbjATItI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjATItf (ORCPT
+        with ESMTP id S229448AbjATItH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:49:35 -0500
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C979E81
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:49:33 -0800 (PST)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 30K8mb9x020394;
-        Fri, 20 Jan 2023 16:48:37 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 20 Jan 2023 16:48:35 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [RFC PATCH] kernel/locking: introduce stack_handle for tracing the callstack
-Date:   Fri, 20 Jan 2023 16:48:22 +0800
-Message-ID: <1674204502-32123-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 20 Jan 2023 03:49:07 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A974960;
+        Fri, 20 Jan 2023 00:49:05 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pIn53-002oea-Ri; Fri, 20 Jan 2023 09:49:01 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pIn53-000p3c-GA; Fri, 20 Jan 2023 09:49:01 +0100
+Message-ID: <c1d233b9-bc85-dce9-ffa0-eb3170602c6c@physik.fu-berlin.de>
+Date:   Fri, 20 Jan 2023 09:49:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 30K8mb9x020394
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Calculating array sizes in C - was: Re: Build
+ regressions/improvements in v6.2-rc1
+To:     "Michael.Karcher" <Michael.Karcher@fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
+        linux-xtensa@linux-xtensa.org,
+        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20221227082932.798359-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
+ <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de>
+ <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
+ <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de>
+ <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com>
+ <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de>
+ <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com>
+ <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de>
+ <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de>
+Content-Language: en-US
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,102 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Hi Michael!
 
-When deadlock happens, sometimes it is hard to know how the owner get the lock
-especially the owner is running when snapshot(ramdump). Introduce stack_handle
-to record the trace.
+On 1/19/23 23:11, Michael.Karcher wrote:
+> I suggest to file a bug against gcc complaining about a "spurious warning",
+> and using "-Werror -Wno-error-sizeof-pointer-div" until gcc is adapted to
+> not emit the warning about the pointer division if the result is not used.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/rwsem.h  |  9 ++++++++-
- kernel/locking/rwsem.c | 18 ++++++++++++++++++
- 2 files changed, 26 insertions(+), 1 deletion(-)
+Could you post a kernel patch for that? I would be happy to test it on my
+SH-7785CLR board. Also, I'm going to file a bug report against GCC.
 
-diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
-index efa5c32..ad4c591 100644
---- a/include/linux/rwsem.h
-+++ b/include/linux/rwsem.h
-@@ -16,6 +16,11 @@
- #include <linux/atomic.h>
- #include <linux/err.h>
- 
-+#define CONFIG_TRACE_RWSEMS
-+#ifdef CONFIG_TRACE_RWSEMS
-+typedef u32 depot_stack_handle_t;
-+#endif
-+
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- # define __RWSEM_DEP_MAP_INIT(lockname)			\
- 	.dep_map = {					\
-@@ -31,7 +36,6 @@
- #ifdef CONFIG_RWSEM_SPIN_ON_OWNER
- #include <linux/osq_lock.h>
- #endif
--
- /*
-  * For an uncontended rwsem, count and owner are the only fields a task
-  * needs to touch when acquiring the rwsem. So they are put next to each
-@@ -60,6 +64,9 @@ struct rw_semaphore {
- #ifdef CONFIG_DEBUG_RWSEMS
- 	void *magic;
- #endif
-+#ifdef CONFIG_TRACE_RWSEMS
-+	depot_stack_handle_t trace_handle;
-+#endif
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- 	struct lockdep_map	dep_map;
- #endif
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 4487359..a12766e 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -28,6 +28,7 @@
- #include <linux/rwsem.h>
- #include <linux/atomic.h>
- #include <trace/events/lock.h>
-+#include <linux/stacktrace.h>
- 
- #ifndef CONFIG_PREEMPT_RT
- #include "lock_events.h"
-@@ -74,6 +75,7 @@
- 		list_empty(&(sem)->wait_list) ? "" : "not "))	\
- 			debug_locks_off();			\
- 	} while (0)
-+#define MAX_TRACE		16
- #else
- # define DEBUG_RWSEMS_WARN_ON(c, sem)
- #endif
-@@ -174,6 +176,9 @@ static inline void __rwsem_set_reader_owned(struct rw_semaphore *sem,
- 		(atomic_long_read(&sem->owner) & RWSEM_NONSPINNABLE);
- 
- 	atomic_long_set(&sem->owner, val);
-+#ifdef CONFIG_TRACE_RWSEMS
-+	sem->trace_handle = owner ? set_track_prepare() : NULL;
-+#endif
- }
- 
- static inline void rwsem_set_reader_owned(struct rw_semaphore *sem)
-@@ -397,6 +402,19 @@ enum rwsem_wake_type {
- 	return false;
- }
- 
-+#ifdef CONFIG_TRACE_RWSEMS
-+static inline depot_stack_handle_t set_track_prepare(void)
-+{
-+	depot_stack_handle_t trace_handle;
-+	unsigned long entries[MAX_TRACE];
-+	unsigned int nr_entries;
-+
-+	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-+	trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-+
-+	return trace_handle;
-+}
-+#endif
- /*
-  * handle the lock release when processes blocked on it that can now run
-  * - if we come here from up_xxxx(), then the RWSEM_FLAG_WAITERS bit must
+Adrian
+
 -- 
-1.9.1
+  .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
