@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFCF674932
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B148F674935
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjATCJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S229562AbjATCKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjATCJb (ORCPT
+        with ESMTP id S229473AbjATCKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:09:31 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079CA1A0;
-        Thu, 19 Jan 2023 18:09:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nyjc8529xz4xHV;
-        Fri, 20 Jan 2023 13:09:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674180568;
-        bh=5v66ofCrkJZhwu8nWLQSSFBEbMU/Ef/xua4Jd/IYozU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GUlnd2i0/UDXOKkvMic9LJSxurdPNnj6woxMoy1vYh9kTU42wL9zabD14EEiBWsd9
-         6l/mJyui9s+zpLPUGQ7iQgpp4uDx8S0Aywqhqy3y7jJsuFK6i/9CykMpqA2/wLp8Ga
-         A7HAQBpgMd5QoVePUmMckxEULjZhi1pFq6s9G+darZSfITfLe9x7ypUardyOZrRrpT
-         Am0diNuHOI8uCvVg1GQaGik1PYjAZcMfJzaN/ma2DhWg8qfrmdXiU0xgQgkv2xe8G8
-         4Nvh8jY1NK6S9fMdyLel/Tue/xekjFJ3wfvZD/y4L12Rv2DD4uUM2Dc/Vln0tyuKF0
-         3HGVJ8p1/kH/Q==
-Date:   Fri, 20 Jan 2023 13:09:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Aaron Lewis <aaronlewis@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the kvm-x86 tree
-Message-ID: <20230120130927.3100f935@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YV=vQxprrYLgPCGt08wsGHK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 19 Jan 2023 21:10:11 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB626B5;
+        Thu, 19 Jan 2023 18:10:10 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id CFAD25C0045;
+        Thu, 19 Jan 2023 21:10:07 -0500 (EST)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Thu, 19 Jan 2023 21:10:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674180607; x=1674267007; bh=pnns9lOh0+
+        GIdk6jiwVH0+nJnurmy6WQSI2jQ7YKUHE=; b=RtvdCubr/5zbN6z4f11I+/dx0h
+        cE9T/jhovRak6vKBLpnbET178ecRA6JBVxpC3M1wcq0VYeOfsxlFyIysqMvNi6u7
+        hi1zmb7U40dcpIeT5jRSA6x9MIA1tT/7senzJdttTEiq/7zcshqznVaB2biJdtOi
+        tcALXd+hVgRzg9pSwP1q1rWtILjCYbGG3O8ArETqXjvxDxHg01hGTLpaUbKNncO0
+        mbwOwrurZ2Knx2Drhwih7riU/ZF2VRNYVDJyNUA+0kmelr2RwTG/91U15P0Y4dwg
+        rVavxeAn7uWpKoDRaGloi0XBCVuLerlaNe+hehRDO/G8snWWK7xkqWLP7exA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674180607; x=1674267007; bh=pnns9lOh0+GIdk6jiwVH0+nJnurm
+        y6WQSI2jQ7YKUHE=; b=jmXdcuw1So6AdCt0QM5o0UMBMZ6lJVXsk1P2RqB5uWJB
+        iS/q/7teKVKsxaf7ltLapeDQPQ/cm3YJPVGn/4tXwaRzeyDK2iPcH5EhKVzb8mdT
+        F0avdag1JDCYjV+M5SnPdzxFS7igio/hc/0UXqZfNGR5sw5o0BykOKfKJ7KFMahh
+        oveHStpsr/v8Xlvt/KksS2vjYn2Exzfd56lEUionTIryQb1tWZJlmjqbtz+P7cse
+        R+o0o2nhMlYBOJW1fQaxXhEprft4GqRCNUB6odoC8wrST6ITDBR6reOUPCwVwC/F
+        oNIVrcUreZUtx6hz5x6FNOo9Ya7g2wO1ZXWurXbA9Q==
+X-ME-Sender: <xms:_vfJY74skrozPaNqFM06HFI83YyNE3mS7_Lu02aucCOb0mCogLRmuA>
+    <xme:_vfJYw7djQ-ap10FZU1kFjeWovDgszTjU0P9h2Xc5tA85IxI-TyMn4DVYudcu_Yk8
+    g5NqQJ5L9FfUl94HA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:_vfJYycLSviNEoJStpLaTBLS0fsqQDwIuKIlb6frvV1sh_UEcZ2X6A>
+    <xmx:_vfJY8I1Y5wNMmb5Faq82aVsN_qVyZkZRxdDfNsk9Xq0cNt64oIReg>
+    <xmx:_vfJY_Lzpb8YUiFhPmyFyVUDb82gopNuzQAM3qa8-jjF6_Y00-_PNQ>
+    <xmx:__fJY389_LTzCQhSMVZ5A4831SAzl_eHHBMgIf1KVdMQ_g-QiNdvzw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA8DC1700090; Thu, 19 Jan 2023 21:10:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <f5423719-6d12-407a-85e6-896fe97c723c@app.fastmail.com>
+In-Reply-To: <202301191715319948743@zte.com.cn>
+References: <202301191715319948743@zte.com.cn>
+Date:   Fri, 20 Jan 2023 12:39:46 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     ye.xingchen@zte.com.cn, brendan.higgins@linux.dev
+Cc:     "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Joel Stanley" <joel@jms.id.au>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/YV=vQxprrYLgPCGt08wsGHK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the kvm-x86 tree, today's linux-next build (htmldocs)
-produced this warning:
+On Thu, 19 Jan 2023, at 19:45, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Documentation/virt/kvm/api.rst:5070: ERROR: Unexpected indentation.
-
-Introduced by commit
-
-  651daa44b11c ("kvm: x86/pmu: Introduce masked events to the pmu event fil=
-ter")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YV=vQxprrYLgPCGt08wsGHK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ99cACgkQAVBC80lX
-0Gx50wf+LdJPiMjod6rmkLzOIVM4tYSgp13RXJnEs2OT58qEC8IWyekiGk4Udh5c
-XQlXbK0nzeRoQNLzj43ZKENGBUsepwKvSr2M4Q26905nv6GnpkyB+nXI732XCfkH
-GMDHkhJG4G6Awb8bIPsaALAoc3D0C8w//zfmXkEW9kP1UZhb7uo7SCmvdMAaob5m
-GRiS63Q+FsHDgpzBY2D75Bc06lxmcnMIivvv6a97sJAm+0Oqzjmc0P1/lJT1MWdl
-H+//hMKjs9PautjEBtSJl9mKr1miGU/m+mGiKRE1JPJtOTPGLjZSy20RQl3/o1Al
-HIG9uiQBe+WQXL6oBXqA71tccXnrzw==
-=Gkut
------END PGP SIGNATURE-----
-
---Sig_/YV=vQxprrYLgPCGt08wsGHK--
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
