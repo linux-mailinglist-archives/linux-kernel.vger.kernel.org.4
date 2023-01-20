@@ -2,496 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49C467490E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861A9674918
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjATBwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S229775AbjATB4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjATBwe (ORCPT
+        with ESMTP id S229460AbjATB4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:52:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FDFA83BD;
-        Thu, 19 Jan 2023 17:52:27 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C6D8A514;
-        Fri, 20 Jan 2023 02:52:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674179545;
-        bh=Y9N1ZZUgP++U8NcvHHlFlw+SI4xXIzYAFyZUwjSdFwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t9BCnqif2glX1rTAgRbOjq9qJAK6ivWIzM6JStbxzqSVMDyfMjVbc6WuQz6SU8/Is
-         /6eObbMYCrwWetpXHIR4+dIVH+45FCDtmEK90ew0TUduGhznsqwXrXk7NdaX+MUlMk
-         w3NQwbpukJDXq10cRIBw3QOh4kirXwgKsLQDYeCU=
-Date:   Fri, 20 Jan 2023 03:52:22 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-Subject: Re: [PATCH v5 6/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Message-ID: <Y8nz1inld2Hwdc5i@pendragon.ideasonboard.com>
-References: <20230119115503.268693-1-umang.jain@ideasonboard.com>
- <20230119115503.268693-7-umang.jain@ideasonboard.com>
+        Thu, 19 Jan 2023 20:56:21 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7114A203;
+        Thu, 19 Jan 2023 17:56:20 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K1qXsS010072;
+        Fri, 20 Jan 2023 01:56:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Uf9p3UpQ/W8ioiTKiv21qSXA80sKShiSGLbzcGVnSTw=;
+ b=NsdYt4BB5zJmVFb0QSH9o4QgcKgxVhmfbFAhOZ4Epu/v1CKqMCZtxQRDmRlsBhNmPROv
+ zsNY3dpBXUtPFYKalmaeGip2ptGqe81oIvnUeKDaOu0zh7vrPhEtePeh48zIvDaAssUA
+ FJeJdXrPn8+yxuV3Rh1VFI2c7fw+mePV+iviBUd9lnGZfx5HRc6/OoGEiSTnVUz86L2j
+ BRMpw378ESgFUvnmULqkLNgDyyDCNK4Z/EDD47J0pcb7ZGQQHAO/XUTOuId74VJdX9Cf
+ B4D2BSxSrNPWNEKi5i8RGmwaEzLx4jIc6XnXr1S6/9mOhN1PGIYbH5aztVuLQmYUK9Pa 1w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6yksjnt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 01:56:09 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30K1u8mU019952
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 01:56:08 GMT
+Received: from [10.216.23.61] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 17:56:01 -0800
+Message-ID: <8f32c2e5-2743-1017-6a33-4849021c5287@quicinc.com>
+Date:   Fri, 20 Jan 2023 07:25:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230119115503.268693-7-umang.jain@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-3-quic_kriskura@quicinc.com>
+ <20230119220942.ja5gbo3t3fl63gpy@halaney-x13s>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230119220942.ja5gbo3t3fl63gpy@halaney-x13s>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fvz2KVQP9MnYTqPrvVNa5aW0BeTIz-5L
+X-Proofpoint-ORIG-GUID: fvz2KVQP9MnYTqPrvVNa5aW0BeTIz-5L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_16,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301200014
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
 
-Thank you for the patch.
 
-On Thu, Jan 19, 2023 at 05:25:03PM +0530, Umang Jain wrote:
-> The devices that the vchiq interface registers(bcm2835-audio,
-
-Missing space before '('.
-
-> bcm2835-camera) are implemented and exposed by the VC04 firmware.
-> The device tree describes the VC04 itself with the resources
-> required to communicate with it through a mailbox interface. However,
-> the vchiq interface registers these devices as platform devices. This
-> also means the specific drivers for these devices are also getting
-
-Drop one of the two "also".
-
-> registered as platform drivers. This is not correct and a blatant
-> abuse of platform device/driver.
+On 1/20/2023 3:39 AM, Andrew Halaney wrote:
+> On Sun, Jan 15, 2023 at 05:11:43PM +0530, Krishna Kurapati wrote:
+>> Currently the DWC3 driver supports only single port controller
+>> which requires at most one HS and one SS PHY.
+>>
+>> But the DWC3 USB controller can be connected to multiple ports and
+>> each port can have their own PHYs. Each port of the multiport
+>> controller can either be HS+SS capable or HS only capable
+>> Proper quantification of them is required to modify GUSB2PHYCFG
+>> and GUSB3PIPECTL registers appropriately.
+>>
+>> Add support for detecting, obtaining and configuring phy's supported
+>> by a multiport controller and limit the max number of ports
+>> supported to 4.
+>>
+>> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 304 +++++++++++++++++++++++++++++-----------
+>>   drivers/usb/dwc3/core.h |  15 +-
+>>   drivers/usb/dwc3/drd.c  |  14 +-
+>>   3 files changed, 244 insertions(+), 89 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 476b63618511..7e0a9a598dfd 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
 > 
-> Replace the platform device/driver model with a standard device driver
-> model. A custom bus_type, vchiq_bus_type, is created in the vchiq
-> interface which matches the devices to their specific device drivers
-> thereby, establishing driver binding. A struct vchiq_device wraps the
-> struct device for each device being registered on the bus by the vchiq
-> interface.
+> <snip>
 > 
-> Each device registered will expose a 'name' read-only device attribute
-> in sysfs (/sys/bus/vchiq-bus/devices). New devices and drivers can be
-> added by registering on vchiq_bus_type and adding a corresponding
-> device name entry in the static list of devices, vchiq_devices. There
-> is currently no way to enumerate the VCHIQ devices that are available
-> from the firmware.
+>> @@ -1575,6 +1690,21 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>   	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>   				"snps,dis-split-quirk");
+>>   
+>> +
+>> +	/*
+>> +	 * If no mulitport properties are defined, default
+>> +	 * the port count to '1'.
+>> +	 */
+>> +	ret = device_property_read_u32(dev, "num-ports",
+>> +				&dwc->num_ports);
+>> +	if (ret)
+>> +		dwc->num_ports = 1;
+>> +
+>> +	ret = device_property_read_u32(dev, "num-ss-ports",
+>> +				&dwc->num_ss_ports);
+>> +	if (ret)
+>> +		dwc->num_ss_ports = 1;
+> 
+> By using this DT property instead of using the number of each phy type you
+> find you can get into situations where you're writing DWC3_GUSB2PHYCFG, etc,
+> when there's no phy to go along with it.
+> 
+Hi Andrew,
 
-Greg, I don't know if you've followed the conversation in earlier mail
-threads, so I'll try to summarize it here.
+  Thanks for the review. Yes, this decoupling is still there and its 
+fine I believe.
 
-There are two layers involved: the VCHIQ layer, which has two clients
-(audio and MMAL), and the MMAL layer, which has multiple clients
-(camera, codec, ISP). The reason for this is that audio and mmal are
-separate hardware, while camera, codec and ISP share some hardware
-blocks.
+> I ran into this when testing on sa8540p-ride, which only uses one of the
+> ports on the multiport controller. I didn't enable the other phys (not
+> sure if that was smart or not) and overrode phy-names/phys, but did not
+> override num-ports/num-ss-ports, which resulted in that. Nothing bad
+> happened on a quick test.. but I thought I'd highlight that as another
+> downside of decoupling this value from the number of phys you grab.
+> 
+If we do not override phy-names or num-ports/num-ss-ports info in DT, 
+they are just defaulted to '1' and as per the current logic only port-1 
+registers must be configured. Isn't that the case happening ?
 
-The VCHIQ layer provides a mailbox API to its clients to communicate
-with the firmware, and the MMAL layer provides another API implemented
-on top of the VCHIQ layer. Neither APIs offer a way to discover devices
-dynamically (that's not a feature implemented by the firmware). We've
-decided that implementing two buses would be overkill, so Umang went for
-a single vchiq_bus_type. The only value it provides is to stop abusing
-platform_device. That's pretty much it.
+> Here's a patch enabling sa8540p-ride, I'd love if you'd add it to the
+> series (probably needs clean up after review, and will definitely need
+> alteration after you update the dt-binding again). If not I'll continue
+> to test/review so please CC me!:
+> 
+> 
+Sure, I can add this patch (probably will add the other phy's too) 
+during the final submission.
 
-Given the above explanation, do you still think the additional
-complexity introduced by the vchiq bus type is worth it (it more or less
-duplicates a small subset of the platform bus type implementation), and
-are you fine with a single bus type, even if it doesn't exactly match
-the firmware layers ?
-
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>  From dcb27d07f079194ebd7efe1c9bec64da78beb290 Mon Sep 17 00:00:00 2001
+> From: Andrew Halaney <ahalaney@redhat.com>
+> Date: Thu, 19 Jan 2023 14:53:38 -0600
+> Subject: [PATCH] arm64: dts: qcom: sa8540p-ride: Enable usb_2
+> Content-type: text/plain
+> 
+> There is now support for the multiport USB controller this uses
+> so enable it.
+> 
+> The board only has a single port hooked up (despite it being wired up to
+> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+> which by default on boot is selected to mux properly. Grab the gpio
+> controlling that and ensure it stays in the right position so USB 2.0
+> continues to be routed from the external port to the SoC.
+> 
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 > ---
->  .../vc04_services/bcm2835-audio/bcm2835.c     |  19 ++-
->  .../bcm2835-camera/bcm2835-camera.c           |  17 ++-
->  .../interface/vchiq_arm/vchiq_arm.c           | 121 +++++++++++++++---
->  .../interface/vchiq_arm/vchiq_arm.h           |   1 +
->  4 files changed, 117 insertions(+), 41 deletions(-)
+>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 24 +++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
 > 
-> diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> index 00bc898b0189..9f3af84f5d5d 100644
-> --- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> +++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> @@ -1,12 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /* Copyright 2011 Broadcom Corporation.  All rights reserved. */
->  
-> -#include <linux/platform_device.h>
-> -
->  #include <linux/init.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
->  
-> +#include "../interface/vchiq_arm/vchiq_arm.h"
->  #include "bcm2835.h"
->  
->  static bool enable_hdmi;
-> @@ -268,9 +267,8 @@ static int snd_add_child_devices(struct device *device, u32 numchans)
->  	return 0;
->  }
->  
-> -static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_probe(struct device *dev)
->  {
-> -	struct device *dev = &pdev->dev;
->  	int err;
->  
->  	if (num_channels <= 0 || num_channels > MAX_SUBSTREAMS) {
-> @@ -292,30 +290,29 @@ static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
->  
->  #ifdef CONFIG_PM
->  
-> -static int snd_bcm2835_alsa_suspend(struct platform_device *pdev,
-> +static int snd_bcm2835_alsa_suspend(struct device *pdev,
->  				    pm_message_t state)
->  {
->  	return 0;
->  }
->  
-> -static int snd_bcm2835_alsa_resume(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_resume(struct device *pdev)
->  {
->  	return 0;
->  }
->  
->  #endif
->  
-> -static struct platform_driver bcm2835_alsa_driver = {
-> +static struct device_driver bcm2835_alsa_driver = {
->  	.probe = snd_bcm2835_alsa_probe,
->  #ifdef CONFIG_PM
->  	.suspend = snd_bcm2835_alsa_suspend,
->  	.resume = snd_bcm2835_alsa_resume,
->  #endif
-> -	.driver = {
-> -		.name = "bcm2835_audio",
-> -	},
-> +	.name = "bcm2835_audio",
-> +	.bus = &vchiq_bus_type,
->  };
-> -module_platform_driver(bcm2835_alsa_driver);
-> +module_driver(bcm2835_alsa_driver, driver_register, driver_unregister);
-
-Shouldn't you create a struct vchiq_device that wraps struct device, a
-struct vchiq_driver that wraps struct device_driver, and a
-module_vchiq_driver() macro ? It shouldn't be up to individual drivers
-to deal with the plumbing.
-
->  
->  MODULE_AUTHOR("Dom Cobley");
->  MODULE_DESCRIPTION("Alsa driver for BCM2835 chip");
-> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> index 4f81765912ea..199a49f9ec1e 100644
-> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> @@ -24,8 +24,8 @@
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-common.h>
->  #include <linux/delay.h>
-> -#include <linux/platform_device.h>
->  
-> +#include "../interface/vchiq_arm/vchiq_arm.h"
->  #include "../vchiq-mmal/mmal-common.h"
->  #include "../vchiq-mmal/mmal-encodings.h"
->  #include "../vchiq-mmal/mmal-vchiq.h"
-> @@ -1841,7 +1841,7 @@ static struct v4l2_format default_v4l2_format = {
->  	.fmt.pix.sizeimage = 1024 * 768,
->  };
->  
-> -static int bcm2835_mmal_probe(struct platform_device *pdev)
-> +static int bcm2835_mmal_probe(struct device *device)
->  {
->  	int ret;
->  	struct bcm2835_mmal_dev *dev;
-> @@ -1896,7 +1896,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->  						       &camera_instance);
->  		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
->  		if (ret) {
-> -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-> +			dev_err(device, "%s: could not register V4L2 device: %d\n",
->  				__func__, ret);
->  			goto free_dev;
->  		}
-> @@ -1976,7 +1976,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> -static int bcm2835_mmal_remove(struct platform_device *pdev)
-> +static int bcm2835_mmal_remove(struct device *device)
->  {
->  	int camera;
->  	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-> @@ -1990,15 +1990,14 @@ static int bcm2835_mmal_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static struct platform_driver bcm2835_camera_driver = {
-> +static struct device_driver bcm2835_camera_driver = {
-> +	.name		= "bcm2835-camera",
->  	.probe		= bcm2835_mmal_probe,
->  	.remove		= bcm2835_mmal_remove,
-> -	.driver		= {
-> -		.name	= "bcm2835-camera",
-> -	},
-> +	.bus		= &vchiq_bus_type,
->  };
->  
-> -module_platform_driver(bcm2835_camera_driver)
-> +module_driver(bcm2835_camera_driver, driver_register, driver_unregister)
->  
->  MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
->  MODULE_AUTHOR("Vincent Sanders");
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index 22de23f3af02..86c8e5df7cf6 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -12,6 +12,8 @@
->  #include <linux/cdev.h>
->  #include <linux/fs.h>
->  #include <linux/device.h>
-> +#include <linux/device/bus.h>
-> +#include <linux/string.h>
->  #include <linux/mm.h>
->  #include <linux/highmem.h>
->  #include <linux/pagemap.h>
-> @@ -65,9 +67,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
->  DEFINE_SPINLOCK(msg_queue_spinlock);
->  struct vchiq_state g_state;
->  
-> -static struct platform_device *bcm2835_camera;
-> -static struct platform_device *bcm2835_audio;
-> -
->  struct vchiq_drvdata {
->  	const unsigned int cache_line_size;
->  	struct rpi_firmware *fw;
-> @@ -132,6 +131,51 @@ struct vchiq_pagelist_info {
->  	unsigned int scatterlist_mapped;
->  };
->  
-> +struct vchiq_device {
-> +	const char *name;
-> +	struct device dev;
-> +};
-
-Ah there we go :-) Move this structure to a header file that drivers can
-include. I'd name it vchiq_device.h. The code below should go to
-vchiq_device.c.
-
-I would also move the dev field first.
-
+> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> index 97957f3baa64..56d4f43faa1e 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> @@ -246,6 +246,21 @@ &usb_0_qmpphy {
+>   	status = "okay";
+>   };
+>   
+> +&usb_2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&usb2_en_state>;
 > +
-> +static ssize_t vchiq_dev_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	struct vchiq_device *device = container_of(dev, struct vchiq_device, dev);
-> +
-> +	return sprintf(buf, "%s", device->name);
-> +}
-> +
-> +static DEVICE_ATTR_RO(vchiq_dev);
-> +
-> +static struct attribute *vchiq_dev_attrs[] = {
-> +	&dev_attr_vchiq_dev.attr,
-> +	NULL
+> +	status = "okay";
 > +};
 > +
-> +ATTRIBUTE_GROUPS(vchiq_dev);
-> +
-> +static const struct device_type vchiq_device_type = {
-> +	.groups         = vchiq_dev_groups
-> +};
-> +
-> +static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv)
-> +{
-> +	if (dev->bus == &vchiq_bus_type &&
-> +	    strcmp(dev_name(dev), drv->name) == 0)
-> +		return 1;
-> +	return 0;
-> +}
-> +
-> +struct bus_type vchiq_bus_type = {
-> +	.name   = "vchiq-bus",
-> +	.match  = vchiq_bus_type_match,
-> +};
-> +EXPORT_SYMBOL(vchiq_bus_type);
+> +&usb_2_dwc3 {
+> +	dr_mode = "host";
+> +	num-ports = <1>;
+> +	num-ss-ports = <1>;
 
-EXPORT_SYMBOL_GPL ?
+More over, if this is a multiport controller and you are using only 
+port-1, it is as good as a single port controller I believe and the 
+normal DT convention must work. Adding these properties as "1" is not 
+required as the driver logic defaults them to "1" if they are not found.
 
-> +
-> +static const char *const vchiq_devices[] = {
-> +	"bcm2835_audio",
-> +	"bcm2835-camera",
-> +};
+Just to add a point here (as I was not clear in DT Binding description, 
+My bad), the num-ports and num-ss-ports must indicate the HS/SS Phys 
+present on HW whether they are used in DT or not. Just to cover all 
+cases which user can use [1].
 
-This however should stay in this file.
+[]1: 
+https://lore.kernel.org/all/4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com/
 
-> +
->  static void __iomem *g_regs;
->  /* This value is the size of the L2 cache lines as understood by the
->   * VPU firmware, which determines the required alignment of the
-> @@ -1763,26 +1807,52 @@ static const struct of_device_id vchiq_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, vchiq_of_match);
->  
-> -static struct platform_device *
-> +static void
-> +vchiq_release_device(struct device *dev)
-> +{
-> +	struct vchiq_device *device;
-> +
-> +	device = container_of(dev, struct vchiq_device, dev);
-> +	kfree(device);
-> +}
-> +
-> +static int
->  vchiq_register_child(struct platform_device *pdev, const char *name)
-
-Pass a struct device * for the first argument, you don't need a platform
-device. I'd also name the function vchiq_register_device, and rename the
-pdev parameter to parent.
-
->  {
-> -	struct platform_device_info pdevinfo;
-> -	struct platform_device *child;
-> +	struct vchiq_device *device = NULL;
-> +	int ret;
->  
-> -	memset(&pdevinfo, 0, sizeof(pdevinfo));
-> +	device = kzalloc(sizeof(*device), GFP_KERNEL);
-> +	if (!device)
-> +		return -ENOMEM;
->  
-> -	pdevinfo.parent = &pdev->dev;
-> -	pdevinfo.name = name;
-> -	pdevinfo.id = PLATFORM_DEVID_NONE;
-> -	pdevinfo.dma_mask = DMA_BIT_MASK(32);
-> +	device->name = name;
-> +	device->dev.init_name = name;
-> +	device->dev.parent = &pdev->dev;
-> +	device->dev.bus = &vchiq_bus_type;
-> +	device->dev.type = &vchiq_device_type;
-> +	device->dev.release = vchiq_release_device;
-> +
-> +	ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
-
-Do vchiq devices perform DMA ?
-
-> +	if (ret < 0) {
-> +		vchiq_release_device(&device->dev);
-> +		return ret;
-> +	}
->  
-> -	child = platform_device_register_full(&pdevinfo);
-> -	if (IS_ERR(child)) {
-> -		dev_warn(&pdev->dev, "%s not registered\n", name);
-> -		child = NULL;
-> +	ret = device_register(&device->dev);
-> +	if (ret) {
-> +		put_device(&device->dev);
-> +		return -EINVAL;
->  	}
->  
-> -	return child;
-> +	return 0;
-> +}
-> +
-> +static int
-> +vchiq_unregister_child(struct device *dev, void *data)
-> +{
-> +	device_unregister(dev);
-> +	return 0;
->  }
->  
->  static int vchiq_probe(struct platform_device *pdev)
-> @@ -1790,7 +1860,7 @@ static int vchiq_probe(struct platform_device *pdev)
->  	struct device_node *fw_node;
->  	const struct of_device_id *of_id;
->  	struct vchiq_drvdata *drvdata;
-> -	int err;
-> +	int i, err;
-
-i can be an unsigned int.
-
->  
->  	of_id = of_match_node(vchiq_of_match, pdev->dev.of_node);
->  	drvdata = (struct vchiq_drvdata *)of_id->data;
-> @@ -1832,8 +1902,12 @@ static int vchiq_probe(struct platform_device *pdev)
->  		goto error_exit;
->  	}
->  
-> -	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
-> -	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
-> +	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-> +		err = vchiq_register_child(pdev, vchiq_devices[i]);
-> +		if (!err)
-> +			dev_err(&pdev->dev, "Failed to register %s vchiq device\n",
-> +				vchiq_devices[i]);
-> +	}
->  
->  	return 0;
->  
-> @@ -1845,8 +1919,8 @@ static int vchiq_probe(struct platform_device *pdev)
->  
->  static int vchiq_remove(struct platform_device *pdev)
->  {
-> -	platform_device_unregister(bcm2835_audio);
-> -	platform_device_unregister(bcm2835_camera);
-> +	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_unregister_child);
-> +
->  	vchiq_debugfs_deinit();
->  	vchiq_deregister_chrdev();
->  
-> @@ -1866,6 +1940,10 @@ static int __init vchiq_driver_init(void)
->  {
->  	int ret;
->  
-> +	ret = bus_register(&vchiq_bus_type);
-> +	if (ret)
-> +		pr_err("Failed to register %s\n", vchiq_bus_type.name);
-
-This should be a fatal error, you should return an error value.
-
-> +
->  	ret = platform_driver_register(&vchiq_driver);
->  	if (ret)
->  		pr_err("Failed to register vchiq driver\n");
-> @@ -1876,6 +1954,7 @@ module_init(vchiq_driver_init);
->  
->  static void __exit vchiq_driver_exit(void)
->  {
-> +	bus_unregister(&vchiq_bus_type);
->  	platform_driver_unregister(&vchiq_driver);
->  }
->  module_exit(vchiq_driver_exit);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-> index 2fb31f9b527f..98c3af32774a 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
-> @@ -81,6 +81,7 @@ extern int vchiq_susp_log_level;
->  
->  extern spinlock_t msg_queue_spinlock;
->  extern struct vchiq_state g_state;
-> +extern struct bus_type vchiq_bus_type;
->  
->  extern struct vchiq_state *
->  vchiq_get_state(void);
-
--- 
 Regards,
+Krishna,
 
-Laurent Pinchart
+> +	phy-names = "usb2-phy", "usb3-phy";
+> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
+> +};
+> +
+>   &usb_2_hsphy0 {
+>   	vdda-pll-supply = <&vreg_l5a>;
+>   	vdda18-supply = <&vreg_l7g>;
+> @@ -313,4 +328,13 @@ wake-pins {
+>   			bias-pull-up;
+>   		};
+>   	};
+> +
+> +	usb2_en_state: usb2-en-state {
+> +		/* TS3USB221A USB2.0 mux select */
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +		output-low;
+> +	};
+>   };
