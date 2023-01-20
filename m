@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53978674870
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB2B674874
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjATBA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S229867AbjATBBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjATBAy (ORCPT
+        with ESMTP id S229866AbjATBBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:00:54 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6A7A1028;
-        Thu, 19 Jan 2023 17:00:53 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 09667514;
-        Fri, 20 Jan 2023 02:00:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674176451;
-        bh=tUHR1lm0/GiTPaTojG05os0odntRdSE/TwVOXS1mhn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dF+3LpDxK/DyIVL3yWXfMQDpoa2AGbvzYy3oWKEbDRjx+Y2RXq5r9DCxSIu+68QTh
-         2Vlseywog6UJIKMSkZlADSlYg8pEQu0HIHMV4tKpdmN/ETM1zlH1oKzD63h5pTYBqF
-         VZOt9sWYmFMWVtyLwPO9h24f+2zUmQThHtR12qz0=
-Date:   Fri, 20 Jan 2023 03:00:48 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-Message-ID: <Y8nnwIqah3O9QfIU@pendragon.ideasonboard.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com>
- <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
- <Y8lHqd9FlxiXTLuW@kroah.com>
- <CAMEGJJ1oZ9XFw0609PrEABAgDwvapbc3hG4hJ=vBekUOepdiWw@mail.gmail.com>
- <Y8lS5eBliYw5EHBb@kadam>
- <CAMEGJJ2b1KFQY1m1eTcvf8_kGBBTjzrBD2i_M2uR+6v4gEcbVQ@mail.gmail.com>
- <Y8lVvHMIYeSOLM5q@kadam>
- <Y8nl++1Mjd7xLqZe@pendragon.ideasonboard.com>
+        Thu, 19 Jan 2023 20:01:25 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A49A45EC
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:01:20 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id v23so4012114plo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QFsgarPNbICqKMSVZVyYMOF+g+3QXwsXtzOcayGvoi4=;
+        b=A9WplzbOSCG6EUOsIJ7kol0hQb5oYSpseab3h1cbCZlz1ZHfA317/hf0oOx902fJYd
+         pHxs1xgWKKIz2MDnngJf2LmYabDdDddSS796KfBajBl5UhpiBrj6VMDoPHJU5IfhqNLp
+         8983YP9wsnceP1umAtc4itnxZVRMm3gbrbjGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QFsgarPNbICqKMSVZVyYMOF+g+3QXwsXtzOcayGvoi4=;
+        b=cAUCI/lRUbz3tPK1EKga8+jCUS7ILR4Q7WlIQkJ0jxqORsKQv0PKRUSv2WeEztiehY
+         9/SZDXE4d+zgKXVKrliQJW3qDttSpudFK0KcgznnQoR4Eh+E3MgYlJ6jW/a9/8usQKFA
+         jT0gGfF5R0DWx14TX/Cypl1os80ZtkLUG0LGVbMf4ZmgEJV2lcyZJfLO2Qt6U2uvvgX7
+         sJsGn3F42IUA1f8nC4cEMTultEAFFAtqhthdBVQxyTmnmvO4yaZjY3/EHLpYLXWtb8bJ
+         uu3qVoD9Se+9m73wNocBFSS/TV2lT5YyTg7JYhbsFEB/IiF//jn8w333o+rpgvcj8ncd
+         JW3Q==
+X-Gm-Message-State: AFqh2krh34N7+Bed387wBYuM9+99i0dVwu/jAmqdLO7sPiWDrIyt1Gsb
+        /3KIUO0Us7ObZddnvmNNTyjbsg==
+X-Google-Smtp-Source: AMrXdXvb9cDkGke9zAyCgTEMw6x2BXISM0o26YyZuQdkPa8eazpgLD3hpkP3EYi76Rast6AtsdUb7w==
+X-Received: by 2002:a05:6a20:9c8b:b0:b8:bc13:c838 with SMTP id mj11-20020a056a209c8b00b000b8bc13c838mr13594445pzb.53.1674176479784;
+        Thu, 19 Jan 2023 17:01:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h4-20020aa79f44000000b0056d7cc80ea4sm10783612pfr.110.2023.01.19.17.01.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 17:01:19 -0800 (PST)
+Date:   Thu, 19 Jan 2023 17:01:18 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v5 19/39] mm: Fixup places that call pte_mkwrite()
+ directly
+Message-ID: <202301191701.ADBD82708A@keescook>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-20-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8nl++1Mjd7xLqZe@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119212317.8324-20-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 02:53:17AM +0200, Laurent Pinchart wrote:
-> On Thu, Jan 19, 2023 at 05:37:48PM +0300, Dan Carpenter wrote:
-> > On Thu, Jan 19, 2023 at 02:31:50PM +0000, Phil Elwell wrote:
-> > > On Thu, 19 Jan 2023 at 14:25, Dan Carpenter wrote:
-> > > > On Thu, Jan 19, 2023 at 01:47:44PM +0000, Phil Elwell wrote:
-> > > > > > > I understand the desire to remove the custom logging. I don't welcome
-> > > > > > > the loss of flexibility that comes with such a strategy
-> > > > > >
-> > > > > > What "loss of flexibility"?  You now have access to the full dynamic
-> > > > > > debugging facilities that all of the rest of the kernel has.  What is
-> > > > > > lacking?
-> > > > >
-> > > > > Perhaps I've missed something, either in this patch set or the kernel
-> > > > > as a whole, but how is one supposed to set different logging levels on
-> > > > > different facilities within a driver/module, or even for the module as
-> > > > > a whole?
-> > > >
-> > > > Yeah.  You will be still able to do that and more besides after the
-> > > > transition.  Cleaning this up makes the code better in every way.
-> > > >
-> > > > Documentation/admin-guide/dynamic-debug-howto.rst
-> > > 
-> > > Are you saying this patch set gets us to that point?
-> > 
-> > Yes.  The patch has some issues, but yes.
+On Thu, Jan 19, 2023 at 01:22:57PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> I think I'm missing something too then. Dynamic debug provides the
-> ability to easily switch dev_dbg() messages on and off at runtime, but
-> it doesn't provide, as far as I'm aware, log levels or log categories.
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
-> Log levels are currently used by the vchiq code to suppress messages
-> below a certain level. Kernel log levels are not an exact replacement,
-> as the messages still end up in the kernel log (except for debug
-> messages).
+> With the introduction of shadow stack memory there are two ways a pte can
+> be writable: regular writable memory and shadow stack memory.
 > 
-> Log categories are used to group messages in categories and control
-> their log level per category. As far as I know, dynamic debug doesn't
-> provide any such feature.
+> In past patches, maybe_mkwrite() has been updated to apply pte_mkwrite()
+> or pte_mkwrite_shstk() depending on the VMA flag. This covers most cases
+> where a PTE is made writable. However, there are places where pte_mkwrite()
+> is called directly and the logic should now also create a shadow stack PTE
+> in the case of a shadow stack VMA.
+> 
+> - do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE
+>   directly and call pte_mkwrite(). Teach it about pte_mkwrite_shstk()
+> 
+> - When userfaultfd is creating a PTE after userspace handles the fault
+>   it calls pte_mkwrite() directly. Teach it about pte_mkwrite_shstk()
+> 
+> To make the code cleaner, introduce is_shstk_write() which simplifies
+> checking for VM_WRITE | VM_SHADOW_STACK together.
+> 
+> In other cases where pte_mkwrite() is called directly, the VMA will not
+> be VM_SHADOW_STACK, and so shadow stack memory should not be created.
+>  - In the case of pte_savedwrite(), shadow stack VMA's are excluded.
+>  - In the case of the "dirty_accountable" optimization in mprotect(),
+>    shadow stack VMA's won't be VM_SHARED, so it is not necessary.
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-After a bit more research (which I should have done before replying,
-sorry), it looks like dynamic debug has support for classes, which are
-used by, for instance, the DRM logging infrastructure (see
-include/drm/drm_print.h). I don't see that being wired up to dev_*()
-print macros though, am I missing something, or would vchiq need to keep
-using custom logging macros (with dynamic debug used as a backend,
-replacing the current custom implementation) to make use of this feature
-?
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Regards,
-
-Laurent Pinchart
+Kees Cook
