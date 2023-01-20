@@ -2,218 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260DA6758E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF246758E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjATPjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
+        id S230374AbjATPlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjATPj2 (ORCPT
+        with ESMTP id S229723AbjATPlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:39:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7EECD230
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:39:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5704261FCB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3426C433D2;
-        Fri, 20 Jan 2023 15:39:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674229149;
-        bh=35pOKRd8qD+HeafWSMGR6evjgCaHzeVFUQd9TUQ9uVg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Gjt/vu8h2cuy7OlfTOaVTCCzCEYx4egCAF/yQUkzi1DfRtusMJqZnewYicXqICipr
-         bWLwMLFf6oXZ1/EBwewa9hufwLcSOt+PbotGyMDJD7/YGsHLkaAIZkxeQDZbj3+v6A
-         2jCWT7VJO6huZSspIQbzNcA2k2E2T2k6SZo8y6654C/kahgYAoSr32e34Mtda/dWDn
-         1Ah2iWnUuJrd2bB3O6erFoePPVe9T8cfoyW5jVrG9nMSkDhbC6LG9jalQOhHm85PvG
-         06pKKPprlLzKs1C53FIbD6ZGG6nzNIrZ8NCZAh/15/8lUNg7MHM+As0qLy7PMkZyh4
-         GjgEodxKjQATQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 469C75C0DFC; Fri, 20 Jan 2023 07:39:09 -0800 (PST)
-Date:   Fri, 20 Jan 2023 07:39:09 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230120153909.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
- <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
+        Fri, 20 Jan 2023 10:41:03 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464180BB6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:40:45 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id m15so2882801ilq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:40:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWZZyEASnVJeDNF1yNLqxhUJXWQQRy8pnWrzIYnrXKE=;
+        b=v2V3ahcwOyuebwYuu9dRu7UT8QxS8g94SXGFFKxIyCBqAbk2llyobeFPWj5Awzp1qK
+         hyFTDrKlLj0HTzsuVN0Ycdxcns3gvZ7iqlYGkwPE2i5qvSixBE4o0cfm+EEi1B5j0JK6
+         ri82Hp2zJUo/yb/sbEGQLhndTz2ilFTLxLp4O1EpOrAyXL/ALrRKupl+oJM1y3NRFE9w
+         uKjWYSkQL4ktfGdUg9UY01GzXNAu42C2JMxhoW87zWGYXh3QEyHSrhPd46XOC8A+z9GY
+         eDuwuA9oIBHqazOS+DFeQff3wzNLoBTwTZ+LeSOqKS9M1AVp0XJ8FxZuFv7tDnv25Sqq
+         3nSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WWZZyEASnVJeDNF1yNLqxhUJXWQQRy8pnWrzIYnrXKE=;
+        b=LABQc/E8IgOC6BwS1liPoNlVxGaN31YTuXnispMn5P/Q6nNzczJjJH6+gPb7Msa4Nk
+         nGuWRQaaUh9yFkFGRjl00uN32nSxbhzPygAhBaozwcduenq0o+vruXEwjb4i+ebnw/6L
+         ML7kkbm6GnBrKDj2hbuNBygWq+vERuvyvcAL7eG2VDQovDlBAo47AqMhdehY2QQpLXAn
+         bQKXqQbyTTRpXrNT1W2mlRUWrp6DzruWRv6/u6QMGA9qGb7C3V4U17N6IhX2CfLSVXbC
+         5Redg3Sl/WmOYFuiDc5sACvTx/bW+SvSMCU//4C+s9yXQaAZfqMXVo0E9e+2te1PB+R2
+         EbKQ==
+X-Gm-Message-State: AFqh2kp5U/zGkRriAcMi+LJtCM7PEVsT5BUs090lt++dm6V4YDElJ0ba
+        7APhq5RTFyS2a8BTd7RsMTPlo5KSMqaol+zv
+X-Google-Smtp-Source: AMrXdXvqr1gf6LsriZhblEuwsV/ojwQoD+SuMayTzyNfyKJSMR0jJ5jvc3wSVt0hqkM81B1PB2EQbw==
+X-Received: by 2002:a92:c5d1:0:b0:30d:9eea:e51 with SMTP id s17-20020a92c5d1000000b0030d9eea0e51mr2273147ilt.1.1674229245097;
+        Fri, 20 Jan 2023 07:40:45 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id b11-20020a02a58b000000b003a60e5a2638sm1886075jam.94.2023.01.20.07.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 07:40:44 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, josef@toxicpanda.com,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230117070806.3857142-1-yukuai1@huaweicloud.com>
+References: <20230117070806.3857142-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH v4 0/5] blk-iocost: random bugfix
+Message-Id: <167422924424.669768.14436700036484270833.b4-ty@kernel.dk>
+Date:   Fri, 20 Jan 2023 08:40:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-78c63
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:43:10AM +0100, Jonas Oberhauser wrote:
+
+On Tue, 17 Jan 2023 15:08:01 +0800, Yu Kuai wrote:
+> changes in v4:
+>  - a litter code optimization to make it easier to understand in patch
+>  4.
 > 
+> changes in v3:
+>  - move some patches into separate patchset
+>  - don't return other error number for match_u64() in patch 1
+>  - instead of checking user input separately, set page directly if
+>  'bps + IOC_PAGE_SIZE' will overflow.
 > 
-> On 1/19/2023 10:53 PM, Paul E. McKenney wrote:
-> > On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
-> > > On Thu, Jan 19, 2023 at 10:41:07AM -0800, Paul E. McKenney wrote:
-> > > > In contrast, this actually needs srcu_down_read() and srcu_up_read():
-> > > > 
-> > > > ------------------------------------------------------------------------
-> > > > 
-> > > > C C-srcu-nest-6
-> > > > 
-> > > > (*
-> > > >   * Result: Never
-> > > >   *
-> > > >   * Flag unbalanced-srcu-locking
-> > > >   * This would be valid for srcu_down_read() and srcu_up_read().
-> > > >   *)
-> > > > 
-> > > > {}
-> > > > 
-> > > > P0(int *x, int *y, struct srcu_struct *s1, int *idx)
-> > > > {
-> > > > 	int r2;
-> > > > 	int r3;
-> > > > 
-> > > > 	r3 = srcu_down_read(s1);
-> > > > 	WRITE_ONCE(*idx, r3);
-> > > > 	r2 = READ_ONCE(*y);
-> > > > }
-> > > > 
-> > > > P1(int *x, int *y, struct srcu_struct *s1, int *idx)
-> > > > {
-> > > > 	int r1;
-> > > > 	int r3;
-> > > > 
-> > > > 	r1 = READ_ONCE(*x);
-> > > > 	r3 = READ_ONCE(*idx);
-> > > > 	srcu_up_read(s1, r3);
-> > > > }
-> > > > 
-> > > > P2(int *x, int *y, struct srcu_struct *s1)
-> > > > {
-> > > > 	WRITE_ONCE(*y, 1);
-> > > > 	synchronize_srcu(s1);
-> > > > 	WRITE_ONCE(*x, 1);
-> > > > }
-> > > > 
-> > > > locations [0:r1]
-> > > > exists (1:r1=1 /\ 0:r2=0)
-> > > I modified this litmus test by adding a flag variable with an
-> > > smp_store_release in P0, an smp_load_acquire in P1, and a filter clause
-> > > to ensure that P1 reads the flag and idx from P1.
-> 
-> This sounds like good style.
-> I suppose this is already flagged as mismatched srcu_unlock(), in case you
-> accidentally read from the initial write?
+> [...]
 
-It might, except that a filter clause excludes this case.  Here is the
-updated test:
+Applied, thanks!
 
-C C-srcu-nest-6
+[1/5] blk-iocost: check return value of match_u64()
+      commit: 7b6a2c89052bfaf750260691dee29c2e457c0929
+[2/5] blk-iocost: don't allow to configure bio based device
+      commit: 204a9e1eeb4b72cd260274f14e521162b130a978
+[3/5] blk-iocost: read params inside lock in sysfs apis
+      commit: 7b810b50390b53c2a81051adce8fcbff3200fc74
+[4/5] blk-iocost: fix divide by 0 error in calc_lcoefs()
+      commit: 4e952a32301a77faea0d36c540ae16847cf2a8ee
+[5/5] blk-iocost: change div64_u64 to DIV64_U64_ROUND_UP in ioc_refresh_params()
+      commit: ad5572498be17b800e75bc36f7d810dd3b673802
 
-(*
- * Result: Never
- *
- * This would be valid for srcu_down_read() and srcu_up_read().
- *)
+Best regards,
+-- 
+Jens Axboe
 
-{}
 
-P0(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-{
-	int r2;
-	int r3;
 
-	r3 = srcu_down_read(s1);
-	WRITE_ONCE(*idx, r3);
-	r2 = READ_ONCE(*y);
-	smp_store_release(f, 1);
-}
-
-P1(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-{
-	int r1;
-	int r3;
-	int r4;
-
-	r4 = smp_load_acquire(f);
-	r1 = READ_ONCE(*x);
-	r3 = READ_ONCE(*idx);
-	srcu_up_read(s1, r3);
-}
-
-P2(int *x, int *y, struct srcu_struct *s1)
-{
-	WRITE_ONCE(*y, 1);
-	synchronize_srcu(s1);
-	WRITE_ONCE(*x, 1);
-}
-
-locations [0:r1]
-filter (1:r4=1)
-exists (1:r1=1 /\ 0:r2=0)
-
-> > > It turns out that the idea of removing rf edges from Srcu-unlock events
-> > > doesn't work well.  The missing edges mess up herd's calculation of the
-> > > fr relation and the coherence axiom.  So I've gone back to filtering
-> > > those edges out of carry-dep.
-> > > 
-> > > Also, Boqun's suggestion for flagging ordinary accesses to SRCU
-> > > structures no longer works, because the lock and unlock operations now
-> > > _are_ normal accesses.  I removed that check too, but it shouldn't hurt
-> > > much because I don't expect to encounter litmus tests that try to read
-> > > or write srcu_structs directly.
-> > Agreed.  I for one would definitely have something to say about an
-> > SRCU-usage patch that directly manipulated a srcu_struct structure!  ;-)
-> 
-> Wouldn't the point of having it being flagged be that herd (or similar
-> tools) would be having something to say long before it has to reach your
-> pair of eyes?
-
-That would of course be even better.
-
-> I don't think Boqun's patch is hard to repair.
-> Besides the issue you mention, I think it's also missing Sync-srcu, which
-> seems to be linked by loc based on its first argument.
-> 
-> How about something like this?
-> 
-> let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock |
-> Sync-srcu   flag ~empty ~[ALL_LOCKS | IW] ; loc ; [ALL-LOCKS] as
-> mixed-lock-accesses
-> 
-> If you're using something that isn't a lock or intial write on the same location as a lock, you get the flag.
-
-Wouldn't that unconditionally complain about the first srcu_read_lock()
-in a given process?  Or am I misreading those statements?
-
-							Thanx, Paul
