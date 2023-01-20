@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A901D675920
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F74675924
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjATPxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S231585AbjATPxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjATPxB (ORCPT
+        with ESMTP id S231586AbjATPxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:53:01 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567CCC5F3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:52:54 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id vw16so14966278ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h+mqBGsnYsfl5gbovrDBJk+/D271yS+3EShU67BT0kY=;
-        b=IcQYS0lvoxoro5y7K43hy/acP9jHBPu0brkvfuI4E7Q0Wtryp29okS9/Uezmzd3Cui
-         qExTaxw9TdbHn7mt7HFqveQgVmmpQMwU6dgYab5uYY5805pJ31iiYDnRMB7CfSec0/hs
-         vuhcJj74Bd22sWK8LhifrFLwYDVowOffCOThSmmlWgungPVb3/UvDNywPa1cZdKJAeTu
-         GHCbojgKSKN6xXGhVYR7jS3pdEmMAEtE6QnaFJtJGVGhmOYB3kZrCqE2r+EnSQ5qQvlF
-         XGhaB4HFqhxFI/fMR3E/i+MgHflVYZ8aq26+96x3KReW6aWElwAyQK1hzRetf3oC6AGh
-         a8rg==
+        Fri, 20 Jan 2023 10:53:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510B137B64
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674229980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=igRXIH+KqtPVXJtkAoq115yd3HwhwLpxiRSIxfxWSGI=;
+        b=hCI5YTcAC26AbTAcaxdkiW6KnCRw0YIyGeAdyTButJoJGaN6lwgny8vyPb+tn2me5OmmI6
+        J16qGVo6jtfN7cDZImVeDM82gtESiE4HOtCI3qSzd7rzZWKxov9RKRQfOX4DplMcMpr3PY
+        G8RWTMLEzqJFTi4vAgpNRV/yEXjiUEM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-132-mV5MoWCBNMOamsMcPzLjwQ-1; Fri, 20 Jan 2023 10:52:58 -0500
+X-MC-Unique: mV5MoWCBNMOamsMcPzLjwQ-1
+Received: by mail-qt1-f200.google.com with SMTP id r24-20020ac85e98000000b003b68b691996so2570306qtx.13
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:52:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+mqBGsnYsfl5gbovrDBJk+/D271yS+3EShU67BT0kY=;
-        b=JC4gKBc/W9746PfQKWmgW2zTVPbB/U2Vslx+59nxfx4QXr0nIMN+ELKr12/G7LXS3T
-         Aftrkm9RpfhIRZ7J3EOSm16V/GFijYYZGDTfEBZZyGgq/uninUOJKZ1imw3O0R6FCPrj
-         aKj7rG5nHsD2g7GmFVxT6IisEIa3HNpJttmmOdkEsvYnEY3Tzu1S2QIWg9IFFQ7Wr13S
-         uQrmVxQSiEOTenby85erw2wvL3wo97GCRTTRwc1l1iyhDZ4/cYwlZx5aqfRpwafyWJwV
-         Iz7Q4QMk8PioBR0jYRyiYVjwDWyKmn1dqOW9QK1rsJc917RsgPVjddVNtQ1d9wni8ERN
-         KQMQ==
-X-Gm-Message-State: AFqh2koEkFHebl5GXZoDJXBFoALAJIfU9tAhmtHLS6oXIKQWZWwONREv
-        rYXriniDEso0RvrslwtLiKIMIA==
-X-Google-Smtp-Source: AMrXdXsLp/wCVL3ZEsscdFsVZKVcxKnzJ8LoiGJFJ/YfIWBALz0XMOSU1Ik26apw9EcLDd1OUqrwPw==
-X-Received: by 2002:a17:906:6b8f:b0:877:74e6:67a4 with SMTP id l15-20020a1709066b8f00b0087774e667a4mr6151980ejr.47.1674229972637;
-        Fri, 20 Jan 2023 07:52:52 -0800 (PST)
-Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id p5-20020a17090653c500b007ae32daf4b9sm18126480ejo.106.2023.01.20.07.52.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 07:52:52 -0800 (PST)
-Message-ID: <98a87f2d-f6c3-1dd6-36b1-095e47a87aaa@mind.be>
-Date:   Fri, 20 Jan 2023 16:52:51 +0100
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=igRXIH+KqtPVXJtkAoq115yd3HwhwLpxiRSIxfxWSGI=;
+        b=oOFV7SypE1a3QoWhKbPQ72Hv4uLBhThMfXqcfg7XqrhlUFncgz8Mucmgdd1siElGyS
+         hg5HQK8+MQpw4xeQFwltiQ0z/I7i1k63aGFf4SC64CDsYeM1iKVawDRXi9YgtG0BxXKJ
+         9zz0NLBcbFzsKKAHwX0QuDT5ZVZo9/hN9uKjsihP9Tpx2GJpUunSIq4SYaG7HjZOkyjV
+         uPPWIjegBm+7c7/EqPOOAv8w4HUNcr72KZ5H+o4kmcSRVyxDCaEe8Guh2i6G2He+R1hb
+         nbPSxFgaOCSOU6Op4aOXa+n2jCzSD9X/xlZHiO6sDvEKr0wxaRmLGxlPUrGWKgLB2mw1
+         qJOA==
+X-Gm-Message-State: AFqh2koVkxq+lz+JzK8pi2fCIsvfJanQTJX6mYZFyzyJNPF5ly6ZnA56
+        8YS0oPaHDkIGj6JqT7XtvXCcuy2/ELiMRcOmQyCt9M8DVL2Mwd9aQFDcuaNEsF4cm6wF78gWT6u
+        1xIvaOd//DwfCFSmEGVnuDIna
+X-Received: by 2002:ac8:4b47:0:b0:3b6:309e:dfdd with SMTP id e7-20020ac84b47000000b003b6309edfddmr19870935qts.22.1674229978211;
+        Fri, 20 Jan 2023 07:52:58 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtdo7Hfy2es6zdIjkULHuEJSHDAOgEAmuVI0UTr9GypQCgiKhHLlF4vksDCI9Keu1CiG42pfQ==
+X-Received: by 2002:ac8:4b47:0:b0:3b6:309e:dfdd with SMTP id e7-20020ac84b47000000b003b6309edfddmr19870913qts.22.1674229978005;
+        Fri, 20 Jan 2023 07:52:58 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id fu28-20020a05622a5d9c00b003a7f3c4dcdfsm20707767qtb.47.2023.01.20.07.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 07:52:57 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, mingo@redhat.com,
+        vishalc@linux.vnet.ibm.com, peterz@infradead.org,
+        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
+        vincent.guittot@linaro.org, ritesh.list@gmail.com
+Subject: Re: [RESEND PATCH] sched/debug: Put sched/domains files under the
+ verbose flag
+In-Reply-To: <20230119150758.880189-1-pauld@redhat.com>
+References: <20230119150758.880189-1-pauld@redhat.com>
+Date:   Fri, 20 Jan 2023 15:52:55 +0000
+Message-ID: <xhsmh1qnpi4o8.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 2/2] leds: lp55xx: configure internal charge pump
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, krzysztof.kozlowski@linaro.org,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110092342.24132-1-maarten.zanders@mind.be>
- <20230110092342.24132-3-maarten.zanders@mind.be>
- <Y8qdX7QIQntPWuuA@google.com>
-From:   Maarten Zanders <maarten.zanders@mind.be>
-In-Reply-To: <Y8qdX7QIQntPWuuA@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,37 +78,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>   
->> +	pdata->charge_pump_mode = LP55XX_CP_AUTO;
->> +	ret = of_property_read_string(np, "ti,charge-pump-mode", &pm);
->> +	if (!ret) {
->> +		for (cp_mode = LP55XX_CP_OFF;
->> +		     cp_mode < ARRAY_SIZE(charge_pump_modes);
->> +		     cp_mode++) {
->> +			if (!strcasecmp(pm, charge_pump_modes[cp_mode])) {
->> +				pdata->charge_pump_mode = cp_mode;
->> +				break;
->> +			}
->> +		}
->> +	}
-> A little over-engineered, no?
+On 19/01/23 10:07, Phil Auld wrote:
+> The debug files under sched/domains can take a long time to regenerate,
+> especially when updates are done one at a time. Move these files under
+> the sched verbose debug flag. Allow changes to verbose to trigger
+> generation of the files. This lets a user batch the updates but still
+> have the information available.  The detailed topology printk messages
+> are also under verbose.
 >
-> Why not make the property a numerical value, then simply:
+> Discussion that lead to this approach can be found in the link below.
 >
->    ret = of_property_read_u32(np, "ti,charge-pump-mode", &pdata->charge_pump_mode);
->    if (ret)
->            data->charge_pump_mode = LP55XX_CP_AUTO;
+> Simplified code to maintain use of debugfs bool routines suggested by
+> Michael Ellerman <mpe@ellerman.id.au>.
 >
-> Elevates the requirement for the crumby indexed array of strings above.
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
+
+Small nits below, other than that:
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+
+> @@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
+>       if (!debugfs_sched)
+>               return;
 >
-> Remainder looks sane enough.
+> +	if (!sched_debug_verbose)
+> +		return;
+> +
+>       if (!cpumask_available(sd_sysctl_cpus)) {
+>               if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
+>                       return;
+>               cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
+>       }
+>
+> -	if (!sd_dentry)
+> +	if (!sd_dentry) {
+>               sd_dentry = debugfs_create_dir("domains", debugfs_sched);
+>
+> +		/* rebuild sd_sysclt_cpus if empty since it gets cleared below */
+                           ^^^^^^^^^^^^^^
+Nit: sd_sysctl_cpus
 
-Thanks for your feedback.
+> +		if (cpumask_first(sd_sysctl_cpus) >=  nr_cpu_ids)
 
-I won't argue that your implementation isn't far more simple. The idea 
-was to have an elaborate and clear and obvious devicetree, but that can 
-also be achieved by moving constants into 
-/includes/dt-bindings/leds/leds-lp55xx.h. Would that be more acceptable?
+Use cpumask_empty() instead?
 
-Maarten
+> +			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
+> +	}
+> +
+>       for_each_cpu(cpu, sd_sysctl_cpus) {
+>               struct sched_domain *sd;
+>               struct dentry *d_cpu;
+> --
+> 2.31.1
+
