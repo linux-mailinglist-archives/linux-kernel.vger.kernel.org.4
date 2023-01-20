@@ -2,45 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F5E675A0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A3C675A34
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjATQeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S229547AbjATQlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjATQeI (ORCPT
+        with ESMTP id S230084AbjATQlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:34:08 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0D0486C124
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:33:38 -0800 (PST)
-Received: (qmail 38719 invoked by uid 1000); 20 Jan 2023 11:32:04 -0500
-Date:   Fri, 20 Jan 2023 11:32:04 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
- <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
- <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
+        Fri, 20 Jan 2023 11:41:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC1F758
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674232810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4sa2kw4N+EbeMvCkIPchCu6oDfnzvOZL2pa2xR/ZSFc=;
+        b=XxTFiFxZRgSRUId3b3xP/WlrKpiyJBvCP6cUM7U9IcDZ+QwcedOH/X6TFrIPCNC4FjEygj
+        5+M3/7wdwRyfhdYy8be4LzYDaxiHgWOPPOBv/Yc14JeJSsm3xTXBkaAsXX4w5Ktsh/ZaLC
+        vQbtzK5Xr3pHEM2IAQfpgGPQYnSIjF4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-hXXltTvEOE6UVgGb0Gik3w-1; Fri, 20 Jan 2023 11:33:32 -0500
+X-MC-Unique: hXXltTvEOE6UVgGb0Gik3w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 848E5811E6E;
+        Fri, 20 Jan 2023 16:33:31 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A263140EBF6;
+        Fri, 20 Jan 2023 16:33:31 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     pauld@redhat.com, gregkh@linuxfoundation.org, mingo@redhat.com,
+        peterz@infradead.org, ritesh.list@gmail.com,
+        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
+        vincent.guittot@linaro.org, vishalc@linux.vnet.ibm.com,
+        vschneid@redhat.com
+Subject: [PATCH v2] sched/debug: Put sched/domains files under the verbose flag
+Date:   Fri, 20 Jan 2023 11:33:30 -0500
+Message-Id: <20230120163330.1334128-1-pauld@redhat.com>
+In-Reply-To: <20230119150758.880189-1-pauld@redhat.com>
+References: <20230119150758.880189-1-pauld@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,84 +64,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 12:12:50PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/19/2023 9:06 PM, Alan Stern wrote:
-> > That's backward logic.  Being strong isn't the reason the fences are
-> > A-cumulative.  Indeed, the model could have been written not to assume
-> > that strong fences are A-cumulative.
-> 
-> It's not just the model, it's also how strong fences are introduced in the
-> documentation.
+The debug files under sched/domains can take a long time to regenerate,
+especially when updates are done one at a time. Move these files under
+the sched verbose debug flag. Allow changes to verbose to trigger
+generation of the files. This lets a user batch the updates but still
+have the information available.  The detailed topology printk messages
+are also under verbose.
 
-The documentation can be updated.
+Discussion that lead to this approach can be found in the link below.
 
-> I agree though that you could decouple the notion of strong from
-> A-cumulativity.
-> But would anyone want a strong fence that is not A-cumulative?
+Simplified code to maintain use of debugfs bool routines suggested by
+Michael Ellerman <mpe@ellerman.id.au>.
 
-Why would anyone want a weak fence that isn't A-cumulative?  :-)
-Architecture designers sometimes do strange things...
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
+---
 
-> It's a bit like asking in C11 for a barrier that has the sequential
-> consistency guarantee of appearing in the global order S, but doesn't have
-> release or acquire semantics. Yes you could define that, but would it really
-> make sense?
+ v2: fix comment typo and use cpumask_empty()
 
-You're still missing the point.  The important aspect of the fences in 
-cumul-fence is that they are A-cumulative, not whether they are strong.
-You're fixating on an irrelevancy.
+ kernel/sched/debug.c | 52 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 3 deletions(-)
 
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index 1637b65ba07a..0b2340a79b65 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -280,6 +280,45 @@ static const struct file_operations sched_dynamic_fops = {
+ 
+ __read_mostly bool sched_debug_verbose;
+ 
++#ifdef CONFIG_SMP
++static struct dentry           *sd_dentry;
++
++
++static ssize_t sched_verbose_write(struct file *filp, const char __user *ubuf,
++				  size_t cnt, loff_t *ppos)
++{
++	ssize_t result;
++	bool orig;
++
++	cpus_read_lock();
++	mutex_lock(&sched_domains_mutex);
++
++	orig = sched_debug_verbose;
++	result = debugfs_write_file_bool(filp, ubuf, cnt, ppos);
++
++	if (sched_debug_verbose && !orig)
++		update_sched_domain_debugfs();
++	else if (!sched_debug_verbose && orig) {
++		debugfs_remove(sd_dentry);
++		sd_dentry = NULL;
++	}
++
++	mutex_unlock(&sched_domains_mutex);
++	cpus_read_unlock();
++
++	return result;
++}
++#else
++#define sched_verbose_write debugfs_write_file_bool
++#endif
++
++static const struct file_operations sched_verbose_fops = {
++	.read =         debugfs_read_file_bool,
++	.write =        sched_verbose_write,
++	.open =         simple_open,
++	.llseek =       default_llseek,
++};
++
+ static const struct seq_operations sched_debug_sops;
+ 
+ static int sched_debug_open(struct inode *inode, struct file *filp)
+@@ -303,7 +342,7 @@ static __init int sched_init_debug(void)
+ 	debugfs_sched = debugfs_create_dir("sched", NULL);
+ 
+ 	debugfs_create_file("features", 0644, debugfs_sched, NULL, &sched_feat_fops);
+-	debugfs_create_bool("verbose", 0644, debugfs_sched, &sched_debug_verbose);
++	debugfs_create_file_unsafe("verbose", 0644, debugfs_sched, &sched_debug_verbose, &sched_verbose_fops);
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+ 	debugfs_create_file("preempt", 0644, debugfs_sched, NULL, &sched_dynamic_fops);
+ #endif
+@@ -345,7 +384,6 @@ late_initcall(sched_init_debug);
+ #ifdef CONFIG_SMP
+ 
+ static cpumask_var_t		sd_sysctl_cpus;
+-static struct dentry		*sd_dentry;
+ 
+ static int sd_flags_show(struct seq_file *m, void *v)
+ {
+@@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
+ 	if (!debugfs_sched)
+ 		return;
+ 
++	if (!sched_debug_verbose)
++		return;
++
+ 	if (!cpumask_available(sd_sysctl_cpus)) {
+ 		if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
+ 			return;
+ 		cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
+ 	}
+ 
+-	if (!sd_dentry)
++	if (!sd_dentry) {
+ 		sd_dentry = debugfs_create_dir("domains", debugfs_sched);
+ 
++		/* rebuild sd_sysctl_cpus if empty since it gets cleared below */
++		if (cpumask_empty(sd_sysctl_cpus))
++			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
++	}
++
+ 	for_each_cpu(cpu, sd_sysctl_cpus) {
+ 		struct sched_domain *sd;
+ 		struct dentry *d_cpu;
+-- 
+2.31.1
 
-> > This may be so, but I would like to point out that the memory model was
-> > not particularly designed to be as short or as simple as possible, but
-> > more to reflect transparently the intuitions that kernel programmers
-> > have about the ways ordering should work in the kernel.  It may very
-> > well include redundancies as a result.  I don't think that's a bad
-> > point.
-> 
-> I agree that sometimes redundancies have value. But I think having, where
-> possible, a kind of minimal responsibility principle where each fence
-> appears in as few relations as possible also has value.
-> I've seen that when I try to help people in my team learn to use LKMM: they
-> see a specific type of fence and get stuck for a while chasing one of its
-> uses. For example, they may chase a long prop link using the only strong
-> fence in the example somewhere in the middle, which will then later turn out
-> to be a dead-end because what they need to use is pb.
-
-People who make that particular mistake should take a lesson from it: 
-The presence of a strong fence should point them toward looking for an 
-application of pb before looking at prop, because pb is is based on the 
-special properties of strong fences whereas prop is not.
-
-> For someone who doesn't know that we never need to rely on that use to get
-> ordering, it basically doubles the amount of time spent looking at the graph
-> and chasing definitions. And for very good reasons there already are alot of
-> definitions even when redundancies are eliminated.
-
-IMO, people who try to use the memory model this way need to develop a 
-good understanding of it first.  (Although perhaps carrying out these 
-sorts of exercises is _how_ people develop their understanding...)  I 
-don't regard it as a bad thing that by making a mistake through pursuing 
-a redundant pathway, people can deepen their understanding.  That's how 
-one learns.
-
-> Perhaps I would say that including these redundancies is good for
-> understanding why the formalization makes sense, but excluding them is
-> better for actually using the formalization.
-> This includes both when looking at code while having a printout of the model
-> next to you, but also when trying to reason about LKMM itself (e.g., what
-> one might do when changes are made to LKMM and one wants to check that they
-> interact well with the existing parts of LKMM).
-
-Not necessarily so.  You might _want_ a change to affect one of the 
-redundant paths but not the other.
-
-> I think in the long term, increasing the usability is more important than
-> the obvious correctness. But maybe I'm biased because I'm mostly on the user
-> side of LKMM :D
-
-No doubt I'm guilty of having my own set of biases...
-
-Alan
