@@ -2,220 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9CA676017
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9139867601B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjATWUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S230036AbjATWWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjATWTz (ORCPT
+        with ESMTP id S229553AbjATWWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:19:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AD4762C2;
-        Fri, 20 Jan 2023 14:19:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A48AFB82A95;
-        Fri, 20 Jan 2023 22:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3130C4339B;
-        Fri, 20 Jan 2023 22:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674253190;
-        bh=HvcNM2UjecQL348bqHAOm445agwCIVqQtDTv2S/yEmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pDTcPNR6BXuGBjP48njVINKN5F4mgJzV2lu2lU+SiajKyiN1d9pouPWpoFT+XvXmP
-         p1moDyoN+5EFFREdr0oR4/QtuhG0eBg+nfymIU51LXQZjPtt4+tZSHc8kRvTMIesNi
-         N5TKxI/AuyFae1Pod78Qp6VO3XsbPnvU8SMAyKuj05xhg6Y+YN1BhQDju7OUbzYhdT
-         zrRiBZSrl4uuJw5bUXrzdOKEZfhl6OF9parCd9H83GKLEDxvijBfUR5wsISatx4H2+
-         evuGZ2pTnCHVocTM/YFfyfwP75KRtLMYIFTqZYgGjd6DKGo1p0Ps0At4i/ddziPeOm
-         JETqPRmVwe03Q==
-Date:   Fri, 20 Jan 2023 22:19:47 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v7 25/64] crypto: ccp: Add support to initialize the
- AMD-SP for SEV-SNP
-Message-ID: <Y8sTg3gI879qzDMV@kernel.org>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-26-michael.roth@amd.com>
- <Y7BWGvGj/Ky8RctP@kernel.org>
- <5bb741b8-8daa-028d-d920-826e1396dd87@amd.com>
+        Fri, 20 Jan 2023 17:22:11 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22E7762DE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:22:08 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NzDL86PR3z9v7Jk
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 06:14:08 +0800 (CST)
+Received: from [10.81.218.54] (unknown [10.81.218.54])
+        by APP2 (Coremail) with SMTP id GxC2BwDnuWDtE8tjkDexAA--.5719S2;
+        Fri, 20 Jan 2023 23:21:44 +0100 (CET)
+Message-ID: <a4cf8b8e-2527-545a-7175-a2ca4d7028c4@huaweicloud.com>
+Date:   Fri, 20 Jan 2023 23:21:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5bb741b8-8daa-028d-d920-826e1396dd87@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+To:     paulmck@kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
+ <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+ <20230120154709.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20230120154709.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwDnuWDtE8tjkDexAA--.5719S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw13JF4kXw13XrWfXw1rtFb_yoWxGFyrpF
+        Z5tFyFywnrAr17uFn2v3W7try0yry8Ka15Xrn5Xry8Zws0gFn3urySgw1a9F43Cr1fJr4q
+        vr4YqasxZa4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9vb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2
+        xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
+        Jr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:40:29PM -0600, Kalra, Ashish wrote:
-> Hello Jarkko,
-> 
-> On 12/31/2022 9:32 AM, Jarkko Sakkinen wrote:
-> > On Wed, Dec 14, 2022 at 01:40:17PM -0600, Michael Roth wrote:
-> > > From: Brijesh Singh <brijesh.singh@amd.com>
-> > > 
-> > > Before SNP VMs can be launched, the platform must be appropriately
-> > > configured and initialized. Platform initialization is accomplished via
-> > > the SNP_INIT command. Make sure to do a WBINVD and issue DF_FLUSH
-> > > command to prepare for the first SNP guest launch after INIT.
-> > > 
-> > > During the execution of SNP_INIT command, the firmware configures
-> > > and enables SNP security policy enforcement in many system components.
-> > > Some system components write to regions of memory reserved by early
-> > > x86 firmware (e.g. UEFI). Other system components write to regions
-> > > provided by the operation system, hypervisor, or x86 firmware.
-> > > Such system components can only write to HV-fixed pages or Default
-> > > pages. They will error when attempting to write to other page states
-> > > after SNP_INIT enables their SNP enforcement.
-> > > 
-> > > Starting in SNP firmware v1.52, the SNP_INIT_EX command takes a list of
-> > > system physical address ranges to convert into the HV-fixed page states
-> > > during the RMP initialization. If INIT_RMP is 1, hypervisors should
-> > > provide all system physical address ranges that the hypervisor will
-> > > never assign to a guest until the next RMP re-initialization.
-> > > For instance, the memory that UEFI reserves should be included in the
-> > > range list. This allows system components that occasionally write to
-> > > memory (e.g. logging to UEFI reserved regions) to not fail due to
-> > > RMP initialization and SNP enablement.
-> > > 
-> > > Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
-> > > Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> > > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> > > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > > ---
-> > >   drivers/crypto/ccp/sev-dev.c | 225 +++++++++++++++++++++++++++++++++++
-> > >   drivers/crypto/ccp/sev-dev.h |   2 +
-> > >   include/linux/psp-sev.h      |  17 +++
-> > >   3 files changed, 244 insertions(+)
-> > > 
-> > > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> > > index 9d84720a41d7..af20420bd6c2 100644
-> > > --- a/drivers/crypto/ccp/sev-dev.c
-> > > +++ b/drivers/crypto/ccp/sev-dev.c
-> > > @@ -26,6 +26,7 @@
-> > >   #include <linux/fs_struct.h>
-> > >   #include <asm/smp.h>
-> > > +#include <asm/e820/types.h>
-> > >   #include "psp-dev.h"
-> > >   #include "sev-dev.h"
-> > > @@ -34,6 +35,10 @@
-> > >   #define SEV_FW_FILE		"amd/sev.fw"
-> > >   #define SEV_FW_NAME_SIZE	64
-> > > +/* Minimum firmware version required for the SEV-SNP support */
-> > > +#define SNP_MIN_API_MAJOR	1
-> > > +#define SNP_MIN_API_MINOR	51
-> > > +
-> > >   static DEFINE_MUTEX(sev_cmd_mutex);
-> > >   static struct sev_misc_dev *misc_dev;
-> > > @@ -76,6 +81,13 @@ static void *sev_es_tmr;
-> > >   #define NV_LENGTH (32 * 1024)
-> > >   static void *sev_init_ex_buffer;
-> > > +/*
-> > > + * SEV_DATA_RANGE_LIST:
-> > > + *   Array containing range of pages that firmware transitions to HV-fixed
-> > > + *   page state.
-> > > + */
-> > > +struct sev_data_range_list *snp_range_list;
-> > > +
-> > >   static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
-> > >   {
-> > >   	struct sev_device *sev = psp_master->sev_data;
-> > > @@ -830,6 +842,186 @@ static int sev_update_firmware(struct device *dev)
-> > >   	return ret;
-> > >   }
-> > > +static void snp_set_hsave_pa(void *arg)
-> > > +{
-> > > +	wrmsrl(MSR_VM_HSAVE_PA, 0);
-> > > +}
-> > > +
-> > > +static int snp_filter_reserved_mem_regions(struct resource *rs, void *arg)
-> > > +{
-> > > +	struct sev_data_range_list *range_list = arg;
-> > > +	struct sev_data_range *range = &range_list->ranges[range_list->num_elements];
-> > > +	size_t size;
-> > > +
-> > > +	if ((range_list->num_elements * sizeof(struct sev_data_range) +
-> > > +	     sizeof(struct sev_data_range_list)) > PAGE_SIZE)
-> > > +		return -E2BIG;
-> > > +
-> > > +	switch (rs->desc) {
-> > > +	case E820_TYPE_RESERVED:
-> > > +	case E820_TYPE_PMEM:
-> > > +	case E820_TYPE_ACPI:
-> > > +		range->base = rs->start & PAGE_MASK;
-> > > +		size = (rs->end + 1) - rs->start;
-> > > +		range->page_count = size >> PAGE_SHIFT;
-> > > +		range_list->num_elements++;
-> > > +		break;
-> > > +	default:
-> > > +		break;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int __sev_snp_init_locked(int *error)
-> > > +{
-> > > +	struct psp_device *psp = psp_master;
-> > > +	struct sev_data_snp_init_ex data;
-> > > +	struct sev_device *sev;
-> > > +	int rc = 0;
-> > > +
-> > > +	if (!psp || !psp->sev_data)
-> > > +		return -ENODEV;
-> > > +
-> > > +	sev = psp->sev_data;
-> > > +
-> > > +	if (sev->snp_initialized)
-> > > +		return 0;
-> > 
-> > Shouldn't this follow this check:
-> > 
-> >          if (sev->state == SEV_STATE_INIT) {
-> >                  /* debug printk about possible incorrect call order */
-> >                  return -ENODEV;
-> >          }
-> > 
-> > It is game over for SNP, if SEV_CMD_INIT{_EX} got first, which means that
-> > this should not proceed.
-> 
-> 
-> But, how will SEV_CMD_INIT_EX happen before as sev_pci_init() which is
-> invoked during CCP module load/initialization, will first try to do
-> sev_snp_init() if SNP is supported, before it invokes sev_platform_init() to
-> do SEV firmware initialization ?
 
-Because the symbol is exported outside the driver to be called by other
-subsystems, you need to have a santiy check for the call order, as it
-is a hardware constraint. Otherwise, any unconsidered change in either
-side could unknowingily break the kernel.
 
-Alternatively, you could choose not to export sev_snp_init(). It is
-supported by the fact that the call in sev_guest_init() is does nothing
-useful (for the reasons you already wrote).
+On 1/20/2023 4:47 PM, Paul E. McKenney wrote:
+> On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
+>>
+>> On 1/19/2023 7:41 PM, Paul E. McKenney wrote:
+>>> On Thu, Jan 19, 2023 at 02:39:01PM +0100, Jonas Oberhauser wrote:
+>>>> On 1/19/2023 1:11 AM, Paul E. McKenney wrote:
+>>>>> On Wed, Jan 18, 2023 at 10:24:50PM +0100, Jonas Oberhauser wrote:
+>>>>>> What I was thinking of is more something like this:
+>>>>>>
+>>>>>> P0{
+>>>>>>       idx1 = srcu_down(&ss);
+>>>>>>       srcu_up(&ss,idx1);
+>>>>>> }
+>>>>>>
+>>>>>> P1{
+>>>>>>        idx2 = srcu_down(&ss);
+>>>>>>        srcu_up(&ss,idx2)
+>>>>>> }
+>>>>> And srcu_read_lock() and srcu_read_unlock() already do this.
+>>>> I think I left out too much from my example.
+>>>> And filling in the details led me down a bit of a rabbit hole of confusion
+>>>> for a while.
+>>>> But here's what I ended up with:
+>>>>
+>>>>
+>>>> P0{
+>>>>       idx1 = srcu_down(&ss);
+>>>>       store_rel(p1, true);
+>>>>
+>>>>
+>>>>       shared cs
+>>>>
+>>>>       R x == ?
+>>>>
+>>>>       while (! load_acq(p2));
+>>>>       R idx2 == idx1 // for some reason, we got lucky!
+>>>>       srcu_up(&ss,idx1);
+>>> Although the current Linux-kernel implementation happens to be fine with
+>>> this sort of abuse, I am quite happy to tell people "Don't do that!"
+>>> And you can do this with srcu_read_lock() and srcu_read_unlock().
+>>> In contrast, this actually needs srcu_down_read() and srcu_up_read():
+>> My point/clarification request wasn't about whether you could write that
+>> code with read_lock() and read_unlock(), but what it would/should mean for
+>> the operational and axiomatic models.
+>> As I wrote later in the mail, for the operational model it is quite clear
+>> that x==1 should be allowed for lock() and unlock(), but would probably be
+>> forbidden for down() and up().
+> Agreed, the math might say something or another about doing something
+> with the srcu_read_lock() or srcu_down_read() return values (other than
+> passing them to srcu_read_unlock() or srcu_up_read(), respectively),
+> but such somethings are excluded by convention.
+>
+> So it would be nice for LKMM to complain about such abuse, but not
+> at all mandatory.
 
-BR, Jarkko
+I think at the very least it would be nice if the convention was written 
+down somewhere.
+
+>> My clarification request is whether that difference in the probable
+>> operational model should be reflected in the axiomatic model (as I first
+>> suspected based on the word "semaphore" being dropped a lot), or whether
+>> it's just due to abuse (i.e., yes the axiomatic model and operational model
+>> might be different here, but you're not allowed to look).
+> For the moment, I am taking the door labeled "abuse".
+>
+> Maybe someday someone will come up with a valid use case, but they have
+> to prove it first.  ;-)
+
+Luckily, I currently don't have a stake in this :D
+I currently don't think it's necessary to take a peek at cookies before 
+deciding whether it should be used or not, since the decision can't 
+depend on the value of the cookie anyways.
+
+>
+>> Which brings us to the next point:
+>>
+>>> Could you please review the remainder to see what remains given the
+>>> usage restrictions that I called out above?
+>> Perhaps we could say that reading an index without using it later is
+>> forbidden?
+>>
+>> flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+>> thrown-srcu-cookie-on-floor
+>>
+>> So if there is an srcu_down() that produces a cookie that is read by some
+>> read R, and R doesn't then pass that value into an srcu_up(), the
+>> srcu-warranty is voided.
+> I like the general idea, but I am dazed and confused by this "flag"
+> statement.
+
+Too bad, I was aiming for dazed and amazed. Ah well, I'll take what I 
+can get.
+
+> Ah, separate down/up tags could make this "flag" statement at least
+> somewhat less dazing and confusing.
+
+Let me use up/down names and also fix the statement a little bit in 
+analogy to the other issue we had with the rf from the other subthread.
+
+let  use-cookie = (data|[~(Srcu-up|Srcu-unlock)] ; rfe)* ; data
+
+flag ~empty [Srcu-down] ; use-cookie; [~Srcu-up] ; rf ; [~ domain(use-cookie;[Srcu-up])] as thrown-srcu-cookie-on-floor
+
+Here use-cookie is essentially just a name for the relation we used 
+before to see where the cookie is being used in the end when defining 
+how to match srcu events: it links (among other things) an srcu-down to 
+every store that stores the cookie produced by that srcu-down,
+and every read that reads such a cookie to the srcu_up() that uses the 
+cookie returned by that read. (Because of how srcu's up() and down() are 
+currently formalized, those two happen to be the same thing, but maybe 
+it helps thinking of them as seperate for now).
+
+Then the relation
+
+[Srcu-down] ; use-cookie ; [~Srcu-up] ; rf ; [~ domain(use-cookie;[Srcu-up])]
+
+links an event X to an event R exactly in the following case:
+
+  X ->use-cookie W ->rf R
+  and X \in Srcu-down, W \not\in Srcu-up, and R \not\in domain(use-cookie;[Srcu-up])
+
+meaning X is an srcu_down(), and its cookie is stored by the write W, 
+and R is a read that looks at the cookie (it reads from W), but(!) the 
+cookie read by R is never used by any srcu_up().
+
+More precisely, imagine that in contrast to what I just claimed, the 
+cookie read by R would actually be used in some srcu_up() event U.
+Then R would be linked by use-cookie to U; we would have
+   R ->use-cookie U
+   and U \in Srcu-up
+which we could rewrite as
+   R ->use-cookie;[Srcu-up] U
+
+Now because R appears on the left-hand-side of the relation with some 
+event (here U), R is in the domain(*) of this relation :
+   R \in domain(use-cookie;[Srcu-up])
+which is a contradiction.
+
+In other words, the relation would be non-empty (= the flag is raised) 
+exactly when there is a read R that reads a cookie produced by some 
+srcu_down() event X, but the return value of that read is never used as 
+input to srcu_up().
+This seems to be exactly the "drop on the floor" metaphor you mentioned 
+(and from my own experience I know it's bad to drop cookies on the floor).
+
+does that make it more clear why it might be a reasonable formalization 
+of that principle?
+jonas
+
+(*anyways I hope so, I always mix up domain and range, but I think 
+domain is the left side and range the right side. I can also barely keep 
+apart reft and light though, so...)
+
+
