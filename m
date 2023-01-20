@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C889675511
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAB06754E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjATM4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S230198AbjATMrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjATM4O (ORCPT
+        with ESMTP id S229540AbjATMrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:56:14 -0500
-X-Greylist: delayed 614 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 Jan 2023 04:56:09 PST
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 366215FD4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 04:56:08 -0800 (PST)
-Received: from asem-TANK-H61.asem.intra ([151.1.184.193])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id IqmFpgGfF6DTZIqmTpKxFZ; Fri, 20 Jan 2023 13:46:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1674218765; bh=clriM8z2Ncxi4fAOWxWB+jvP5/EzqBX4gQWuMCxv8Rc=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=lapgEq5sABIekSkKB7RRhsJtMtwhjbDABv5/vkkYXQiX8pNUKyz688adxNjhZ2zzJ
-         aBS4Ulqu+3DE6/nbW90rOT/SeyxCCmfDnHD57Fz1ft0NLYNPIo6/wK74/FpmK6j6Ez
-         I1H3UMADDinPvpzsDIA5TBF46lJW8FnQbYr84rawt+tD+U5rbSAjmEWNMpiOnYb8Bz
-         a/67B8Ppmt9tSQnZGBhArZ13tsWmgYtJ07g7G3mwner/ATveXd+Nltr95+S9pWfBxQ
-         nKEvvdR7B3U2+9Ri4EWpiqCt8mBkReScTn15GJ6iZ6xBjGlBRpaqLQTN9wpR+Evb84
-         8S8mbSSQvGUbw==
-From:   Luca Ellero <l.ellero@asem.it>
-To:     dmitry.torokhov@gmail.com, daniel@zonque.org,
-        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, mkl@pengutronix.de,
-        miquel.raynal@bootlin.com, imre.deak@nokia.com,
-        luca.ellero@brickedbrain.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Ellero <l.ellero@asem.it>
-Subject: [PATCH 3/3] Input: ads7846 - don't check penirq immediately for 7845
-Date:   Fri, 20 Jan 2023 13:45:44 +0100
-Message-Id: <20230120124544.5993-4-l.ellero@asem.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230120124544.5993-1-l.ellero@asem.it>
-References: <20230120124544.5993-1-l.ellero@asem.it>
+        Fri, 20 Jan 2023 07:47:13 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06681BC2;
+        Fri, 20 Jan 2023 04:47:12 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KCX71f029448;
+        Fri, 20 Jan 2023 12:47:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=JzX+rtg+HZuJiDwfuJ8Do11GcSMBCSLI9yEvqazh47E=;
+ b=peQdyfjWJsnDOnoEnKOAwSo3cucozcJqsB947+rYRo5kwKfXCH7m0jhKNuQ5ez3QLIou
+ 6jwS9wJ3GfInPZacnPJpC9AvIK3eUi1TtEe++PpZVliPwGmdFA0rLTFO1C5lgdHjVaWX
+ +YN5AZHXIf+Cy6YgZpqudok+C9aBj5eqfAU5mLm4jueUzfe8CIpUoHsriRmuMqzZ9Fnv
+ BvCxET86NE5DPuCsyXPd2w+kEu7utm5yPer4TWu1UuO0H3EHZQzrPfb0L2FUXD1iR2Z2
+ AFJooqNvKLOT0lqyNTepR7VuS5gfMSbMvczy31MmiFg/c05BLOLAEnx3XjCbUjcji8WU zA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6wbsbxy7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 12:47:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KCl4Ke029528
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 12:47:04 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 20 Jan 2023 04:46:59 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v5 0/6] Add resets for ADSP based audio clock controller driver
+Date:   Fri, 20 Jan 2023 18:16:40 +0530
+Message-ID: <1674218806-7711-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfOvKTel4AMy9mgv2aDCh+FC7Vu9mcAlOTWAUNZhZU3ZJd12ZBlI7VzbaTcXCOZ0luEXUJl0JhyM9KQ/248BtB5tDHZOdHYGEgfz3HnguekQ22mR8Tt6a
- U1MwQVQYjkiSBPu8dWNrN1A2ctYlGtJLNfvZ7yLoCDZ1tUIscrw5ky5NfNtAc53lhgMPfvpq26SsA5VISmW43Yj3LV7y8NEL73caQY0TEqgUr6kMPqT/8oPK
- nwS+lkVWYQe1qC5JJG6j9K2qXTjdM8lRAgvyneJ8joTW/WUm0midKwpucCxUJrMO/9y6SkFmW+SoQSl3EHO/HhBZY01/DBxuSdHJO6SpTaaV42ZvMlI1kn5H
- AwEbFl/Bf9nIpaJ7mzERFwg+dTIqy3ZTKSghLT1lClMrnsUM+ktd/YvvP+M+cF5NhdDW4ox97kko00FFiMVIi9c/8HYRROlqkUwOXdRddg5QYVqv7cOhELwA
- eVJSpM6/z9zW52gHDqQrfxs4H96S0/FJmPXcB9gx8dnNC3RsxciOi1sU2Qi6m7GeuQfwomipWai94uzfBUiKmkT5Qvwk/2L1oJG9aQY+dECVsi5laKRji+yp
- Q8LMq6Nx90Vfo4bHCPL/ATaX
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GTXD0lSssPkQvaRwYHZe80-wcdkj5d1i
+X-Proofpoint-GUID: GTXD0lSssPkQvaRwYHZe80-wcdkj5d1i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_08,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=802 malwarescore=0 impostorscore=0 priorityscore=1501
+ bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301200120
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To discard false readings, one should use "ti,penirq-recheck-delay-usecs".
-Checking get_pendown_state() at the beginning, most of the time fails
-causing malfunctioning.
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
 
-Signed-off-by: Luca Ellero <l.ellero@asem.it>
----
- drivers/input/touchscreen/ads7846.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Changes since v4:
+    -- Update Fixes tag in Merge lpasscc into lpass_aon patch.
+    -- Revert removal of clk_regmap structure in Merge lpasscc into lpass_aon patch.
 
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index 15da1047a577..17f11bce8113 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -843,14 +843,8 @@ static void ads7846_report_state(struct ads7846 *ts)
- 	if (x == MAX_12BIT)
- 		x = 0;
- 
--	if (ts->model == 7843) {
-+	if (ts->model == 7843 || ts->model == 7845) {
- 		Rt = ts->pressure_max / 2;
--	} else if (ts->model == 7845) {
--		if (get_pendown_state(ts))
--			Rt = ts->pressure_max / 2;
--		else
--			Rt = 0;
--		dev_vdbg(&ts->spi->dev, "x/y: %d/%d, PD %d\n", x, y, Rt);
- 	} else if (likely(x && z1)) {
- 		/* compute touch pressure resistance using equation #2 */
- 		Rt = z2;
+Changes since v3:
+    -- Remove duplicate clock resets patch.
+    -- Add binding headers for q6 clocks.
+    -- Create new patch for merging lpasscc q6 clocks into lpass_aon.
+    -- Create new patches for handling conflicts of ADSP and bypass solution.
+
+Changes since v2:
+    -- Revert removing qdsp6ss clock control.
+    -- Add Conditional check for qdsp6ss clock registration.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
+
+Srinivasa Rao Mandadapu (6):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: lpassaudiocc-sc7280: Add binding headers for
+    lpasscc
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpasscorecc-sc7280: Skip lpasscorecc registration
+  clk: qcom: lpassaudiocc-sc7280: Merge lpasscc into lpass_aon
+  clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
+
+ .../devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml    |  7 +++++++
+ drivers/clk/qcom/lpassaudiocc-sc7280.c                    | 15 ++++++++++-----
+ drivers/clk/qcom/lpasscc-sc7280.c                         | 12 +++++++-----
+ drivers/clk/qcom/lpasscorecc-sc7280.c                     |  3 +++
+ include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h      |  2 ++
+ 5 files changed, 29 insertions(+), 10 deletions(-)
+
 -- 
-2.25.1
+2.7.4
 
