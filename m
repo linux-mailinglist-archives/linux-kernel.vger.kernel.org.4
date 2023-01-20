@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCED674887
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DF667488C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjATBFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S229630AbjATBGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjATBFH (ORCPT
+        with ESMTP id S229583AbjATBGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:05:07 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCD7A25BD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:05:05 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g68so2975282pgc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:05:05 -0800 (PST)
+        Thu, 19 Jan 2023 20:06:01 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708A2A5005
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:05:59 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id w2so2847563pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:05:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i74/kf5lW4kHShv6Z0Gp0/LN6JGTfz3NMfEeR3zBQxE=;
-        b=GoRuHyDu314b5alYHUqIeA4iwWnqKmRTPgguZQu8m2BT54UuOxDL2kD8d4kJgWM1ZZ
-         qR3Y/TV93KcQuVawLIeJk45pD9kgXh3Y53HiV5J2dnsTHM5SquPA0uJmVsLTHdPprrB1
-         MEB1h7QwFkRO7g3dd+FRCu0LANZ3c5XVoOY6o=
+        bh=H4TW/mMX9vHUYk3yGya6Na5dTq4l6jC7NCx7bdr4o80=;
+        b=GHEBYWM71KcqC5IMJtDotYmMWZ2J1cCxD2jT1NDnzRmtQPHNkrdKXu9KjsOV4/duvV
+         wNgaKj9Yp8D/ruJ1/qexuBysFjsKCivy+xErk/QBXiw97XYk+sixdofMmVpLdB7VM9gr
+         jEi7DAuX79LAOWY3nGHtcd0xDRVRA3hLKB2sY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i74/kf5lW4kHShv6Z0Gp0/LN6JGTfz3NMfEeR3zBQxE=;
-        b=P+OwZErO6I/nzv+z6LyBqeNFvyp8UjOU7wSYPdqllwc4zVxzR74oKNgirCylJnPj17
-         nh0FJUeExCcWz231QnD3fMWq1gbpS7RVKtG00ws8I2wo+pwKpIBC7xj9w79Q2jrpcYLV
-         WHSA4iRuoHn0160JkZiaPaKu/zmQbNjdQB0paf3ZjWMesBIHieyFcMnKUrKLecSMLpiJ
-         8SPloGcR5r/IQ+xMMKYBMgheLqXhLv4Tlr8Zi6mwSVusStewbpHFZa0V5ZiPF+kFF7/W
-         p4rQP72W+9QqY4FH6rlmukd0k2ucNuJ+O522q2tur9xPUGwa31Cuta+bypKPS62L55r9
-         h2Gw==
-X-Gm-Message-State: AFqh2kqOCPaTzAjYEZh66nYazibMcbgYZgO49Ei+znFwBkHA8QGIV+1m
-        Uytb+Tpv2gtgad82paN7725bZg==
-X-Google-Smtp-Source: AMrXdXtMzGgnTJkwmf6Dly8CjbEie3lwTxkUFFJtUk22J72Xgx8sc8ANi2hfM+4eU7Ti83oRSH8YRw==
-X-Received: by 2002:aa7:8718:0:b0:576:14a4:b76a with SMTP id b24-20020aa78718000000b0057614a4b76amr11737546pfo.34.1674176705426;
-        Thu, 19 Jan 2023 17:05:05 -0800 (PST)
+        bh=H4TW/mMX9vHUYk3yGya6Na5dTq4l6jC7NCx7bdr4o80=;
+        b=Yv/kDFynf2ifczBC0XowJPYVlTbwDapfMHCf62fXBGrtmwCZI7EA03c9zH95YJiKgY
+         oe88trgcDjuklHl8Tma10UQwtXUqOIMmytZS3Crd0esmx4d/WG3WGun9ThJtQaJRfDvG
+         2SWJJkiox4UuEY7UnjyGHxHg5GfxhTiQFG/IWrwWHt/m8blDJa+1Ww8IgL0CXHCNSmLx
+         4NhAZZZdsOhW81TFHs/K1AidiVrdJ66xuFL9vwvBDmD4Ponk5tuOAQgLfrrRG2S4oIaw
+         PTk5uWtvWHvwrY9g81ZE/vkctazULd+OiE1j5YodK0ti+tX69Aqm2jB0j9RBb/BmMUTr
+         Dd7g==
+X-Gm-Message-State: AFqh2kqLzvK9UPkIAt/oMo5W0oIcOmJTQFBc/w3V7w/3SdAwJ6DKoLFR
+        SGs5I3ONAG/5Q2jrdZVj3GPdKg==
+X-Google-Smtp-Source: AMrXdXsmLKX2r49mhsSf2hD4QP2t7yFQlbPA7Kf3OI6gCpsn1iW3fXxhIAxFlAdIDjUI7XgTM7f2Bw==
+X-Received: by 2002:a62:1c93:0:b0:583:3adc:baed with SMTP id c141-20020a621c93000000b005833adcbaedmr14702073pfc.8.1674176758779;
+        Thu, 19 Jan 2023 17:05:58 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b18-20020aa78ed2000000b0058bbe1240easm12025111pfr.190.2023.01.19.17.05.04
+        by smtp.gmail.com with ESMTPSA id e8-20020aa79808000000b005897f5436c0sm19809081pfl.118.2023.01.19.17.05.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:05:04 -0800 (PST)
-Date:   Thu, 19 Jan 2023 17:05:04 -0800
+        Thu, 19 Jan 2023 17:05:58 -0800 (PST)
+Date:   Thu, 19 Jan 2023 17:05:57 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -76,35 +76,50 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v5 27/39] x86/shstk: Add user-mode shadow stack support
-Message-ID: <202301191705.E64F62342D@keescook>
+Subject: Re: [PATCH v5 29/39] x86/shstk: Introduce routines modifying shstk
+Message-ID: <202301191705.9D4E6EA@keescook>
 References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-28-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-30-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-28-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230119212317.8324-30-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:23:05PM -0800, Rick Edgecombe wrote:
+On Thu, Jan 19, 2023 at 01:23:07PM -0800, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Introduce basic shadow stack enabling/disabling/allocation routines.
-> A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
-> and has a fixed size of min(RLIMIT_STACK, 4GB).
+> Shadow stacks are normally written to via CALL/RET or specific CET
+> instructions like RSTORSSP/SAVEPREVSSP. However during some Linux
+> operations the kernel will need to write to directly using the ring-0 only
+> WRUSS instruction.
 > 
-> Keep the task's shadow stack address and size in thread_struct. This will
-> be copied when cloning new threads, but needs to be cleared during exec,
-> so add a function to do this.
+> A shadow stack restore token marks a restore point of the shadow stack, and
+> the address in a token must point directly above the token, which is within
+> the same shadow stack. This is distinctively different from other pointers
+> on the shadow stack, since those pointers point to executable code area.
 > 
-> Do not support IA32 emulation or x32.
+> Introduce token setup and verify routines. Also introduce WRUSS, which is
+> a kernel-mode instruction but writes directly to user shadow stack.
+> 
+> In future patches that enable shadow stack to work with signals, the kernel
+> will need something to denote the point in the stack where sigreturn may be
+> called. This will prevent attackers calling sigreturn at arbitrary places
+> in the stack, in order to help prevent SROP attacks.
+> 
+> To do this, something that can only be written by the kernel needs to be
+> placed on the shadow stack. This can be accomplished by setting bit 63 in
+> the frame written to the shadow stack. Userspace return addresses can't
+> have this bit set as it is in the kernel range. It is also can't be a
+> valid restore token.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
