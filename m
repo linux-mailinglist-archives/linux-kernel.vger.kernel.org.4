@@ -2,137 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAF2675E65
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B44675E6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjATTtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S229888AbjATTvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjATTtK (ORCPT
+        with ESMTP id S229645AbjATTvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:49:10 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B897A6779E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:49:04 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id q5so1121955wrv.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1fLfhP+Gt35sMsNmrxRVX9NnAlPOzN2tCmzAKeG25c=;
-        b=fKL1gUuQQfN6lRf5NSg53u6eZGlPjqy4XoEJ5j3qxOPk/2Hu6yEAVzixdXJRaTDZHl
-         sz5xMdaT8RP5E85DS1uxDdK46TTWtLtnZ/x4Xs92L+JUCAI+PZUV5kkrFflkbEX7H5oE
-         xuCXDPnhzCKaEB2yXbzOmKW8xXB/KiD0OSHJ3h8CmSMpFUtMubbkDXZVrb7dEdDAI+uy
-         0qOPjtjNkVtu+ry4neyo6eB/N6RdaP32R9YnfWq3p1kn/tZtx2r2WpeQBuAugU1vn2YH
-         Em765RcL91Qhe6XjlgouI94lBmYTsv15xUwAwpqV0q32yxOFM0TivIHU0+9efciVircU
-         QuQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U1fLfhP+Gt35sMsNmrxRVX9NnAlPOzN2tCmzAKeG25c=;
-        b=OLaF9iun+4bKQl0RSRiINJwq5/yAg4blle1lmH7qCYL10HZne2L99eMReuzm+DzaUV
-         pRYnhYr85q0EuqCfrV+6V54SnaTE3F0d0qU6hSUmbhMMiDEMHoMVNVjF0zZKdTqRuUF5
-         DSav/fNx7BxFKZhXFq6HFiFuOi+Z8lGCHhx+bwBmfaBzcCSZ0MOGhRiLe5T9WsY9fsd4
-         jcYN2GB/yyrHso5MoL63EhmkrR0NrbArinBr1fMPM7UgUZWbcT6++3n0yMDiJXjjpb78
-         DaHUKDf4Vbu/uTaqDkYQgby/+/8zE1lc8VnHNZzis/Ff2qDn+QuDzKv8/QHxXcnjMV/B
-         elcg==
-X-Gm-Message-State: AFqh2kps6WlcaswgmY1gAl38lR45NNznXvZObOYPZUgkM2IBMXf1DOCp
-        95pGHbtbJMuPrHpe3MyP8gp7Cg==
-X-Google-Smtp-Source: AMrXdXsVJMYNom7SLj5vM30I7jS3ShXNULJqDkSHssTAjPTH021Au/32dCYHSiwtt6csRhcWs5mYGw==
-X-Received: by 2002:a5d:6282:0:b0:2bf:9516:d295 with SMTP id k2-20020a5d6282000000b002bf9516d295mr1510192wru.22.1674244143346;
-        Fri, 20 Jan 2023 11:49:03 -0800 (PST)
-Received: from localhost.localdomain (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id l29-20020adfa39d000000b002bf95500254sm878921wrb.64.2023.01.20.11.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 11:49:02 -0800 (PST)
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Qais Yousef <qyousef@layalina.io>
-Subject: [PATCH v2] sched: cpuset: Don't rebuild sched domains on suspend-resume
-Date:   Fri, 20 Jan 2023 19:48:22 +0000
-Message-Id: <20230120194822.962958-1-qyousef@layalina.io>
-X-Mailer: git-send-email 2.25.1
+        Fri, 20 Jan 2023 14:51:09 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1365AD05
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:51:05 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 3D4D424044D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 20:51:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1674244264; bh=DoLlNqdYYDrx3cWG1cEGhU8LlUk6QEkblKYrhTuVxnY=;
+        h=Date:Subject:To:Cc:From:From;
+        b=Dp6KwOK3pg/SHLzUXiUlMJtxMpCAO15SkGEDi2v6VcpevJaja5STBw4roTiISKvch
+         XP3M6niaAiVcBRbAzApVj0q0tbYmLs2Kpqof1sJiz+TNpejk4Gp34wmCJiHlWJCBL1
+         FJ9Zyafm2tnNryfheir7SMMUu6M2CfBdujeqfrhM53VkQ+nnOjzd043v2KSID26f+3
+         takvrmZvxhjiA6EgUvWksWOA93PEFVC8A5SRLFXclQjfgkH/9ZRoMKiSU0gLRZrmLP
+         iWtGrr2URPeak71sB1lDQYWVC5ULnrleGrGgZ2rup6q6+MYaPSQBAXTZ7ozTRJnDyH
+         Th161fshnDr/A==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Nz98y1p9pz9rxH;
+        Fri, 20 Jan 2023 20:50:58 +0100 (CET)
+Message-ID: <6fd769f9-da0e-c4a8-dc0e-a1e464c2d9fc@posteo.de>
+Date:   Fri, 20 Jan 2023 19:50:57 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards
+ support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Denis Pauk <pauk.denis@gmail.com>
+Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
+        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
+        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
+        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
+        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@rebtoor.com,
+        metalcaedes@gmail.com, michael@theoddone.net,
+        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sst@poczta.fm, to.eivind@gmail.com,
+        torvic9@mailbox.org
+References: <20230111212241.7456-1-pauk.denis@gmail.com>
+ <20230111212241.7456-2-pauk.denis@gmail.com>
+ <20230115161224.GA1246527@roeck-us.net>
+Content-Language: de-DE
+From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
+In-Reply-To: <20230115161224.GA1246527@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-enabled rebuilding sched domain on cpuset and hotplug operations to
-correct deadline accounting.
+Is it just me, or is the support for my mainboard "TUF GAMING X670E-PLUS 
+WIFI" now implemented into the latest "linux-next" kernel (I verified 
+this by looking at the source code at /drivers/hwmon/nct6775-core.c), 
+but the actual patch that contains the NCT6799D driver is still missing?
 
-Rebuilding sched domain is a slow operation and we see 10+ ms delay on
-suspend-resume because of that.
+I had to patch my linux-next kernel with the patch from 
+https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/ 
+to get it working.
 
-Since nothing is expected to change on suspend-resume operation; skip
-rebuilding the sched domains to regain the time lost.
+Otherwise the nct6775 module refuses to recognize my sensor chip.
 
-Debugged-by: Rick Yiu <rickyiu@google.com>
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
+Thanks,
+Sebastian
 
-    Changes in v2:
-    
-    	* Remove redundant check in update_tasks_root_domain() (Thanks Waiman)
-    
-    v1 link:
-    
-    	https://lore.kernel.org/lkml/20221216233501.gh6m75e7s66dmjgo@airbuntu/
-
- kernel/cgroup/cpuset.c  | 3 +++
- kernel/sched/deadline.c | 3 +++
- 2 files changed, 6 insertions(+)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index a29c0b13706b..9a45f083459c 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1088,6 +1088,9 @@ static void rebuild_root_domains(void)
- 	lockdep_assert_cpus_held();
- 	lockdep_assert_held(&sched_domains_mutex);
- 
-+	if (cpuhp_tasks_frozen)
-+		return;
-+
- 	rcu_read_lock();
- 
- 	/*
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 0d97d54276cc..42c1143a3956 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2575,6 +2575,9 @@ void dl_clear_root_domain(struct root_domain *rd)
- {
- 	unsigned long flags;
- 
-+	if (cpuhp_tasks_frozen)
-+		return;
-+
- 	raw_spin_lock_irqsave(&rd->dl_bw.lock, flags);
- 	rd->dl_bw.total_bw = 0;
- 	raw_spin_unlock_irqrestore(&rd->dl_bw.lock, flags);
--- 
-2.25.1
-
+Am 15.01.23 um 17:12 schrieb Guenter Roeck:
+> On Wed, Jan 11, 2023 at 11:22:41PM +0200, Denis Pauk wrote:
+>> Boards such as:
+>>    "EX-B660M-V5 PRO D4",
+>>    "PRIME B650-PLUS",
+>>    "PRIME B650M-A",
+>>    "PRIME B650M-A AX",
+>>    "PRIME B650M-A II",
+>>    "PRIME B650M-A WIFI",
+>>    "PRIME B650M-A WIFI II",
+>>    "PRIME B660M-A D4",
+>>    "PRIME B660M-A WIFI D4",
+>>    "PRIME X670-P",
+>>    "PRIME X670-P WIFI",
+>>    "PRIME X670E-PRO WIFI",
+>>    "Pro B660M-C-D4",
+>>    "ProArt B660-CREATOR D4",
+>>    "ProArt X670E-CREATOR WIFI",
+>>    "ROG CROSSHAIR X670E EXTREME",
+>>    "ROG CROSSHAIR X670E GENE",
+>>    "ROG CROSSHAIR X670E HERO",
+>>    "ROG MAXIMUS XIII EXTREME GLACIAL",
+>>    "ROG MAXIMUS Z690 EXTREME",
+>>    "ROG MAXIMUS Z690 EXTREME GLACIAL",
+>>    "ROG STRIX B650-A GAMING WIFI",
+>>    "ROG STRIX B650E-E GAMING WIFI",
+>>    "ROG STRIX B650E-F GAMING WIFI",
+>>    "ROG STRIX B650E-I GAMING WIFI",
+>>    "ROG STRIX B660-A GAMING WIFI D4",
+>>    "ROG STRIX B660-F GAMING WIFI",
+>>    "ROG STRIX B660-G GAMING WIFI",
+>>    "ROG STRIX B660-I GAMING WIFI",
+>>    "ROG STRIX X670E-A GAMING WIFI",
+>>    "ROG STRIX X670E-E GAMING WIFI",
+>>    "ROG STRIX X670E-F GAMING WIFI",
+>>    "ROG STRIX X670E-I GAMING WIFI",
+>>    "ROG STRIX Z590-A GAMING WIFI II",
+>>    "ROG STRIX Z690-A GAMING WIFI D4",
+>>    "TUF GAMING B650-PLUS",
+>>    "TUF GAMING B650-PLUS WIFI",
+>>    "TUF GAMING B650M-PLUS",
+>>    "TUF GAMING B650M-PLUS WIFI",
+>>    "TUF GAMING B660M-PLUS WIFI",
+>>    "TUF GAMING X670E-PLUS",
+>>    "TUF GAMING X670E-PLUS WIFI",
+>>    "TUF GAMING Z590-PLUS WIFI",
+>> have got a NCT6799D chip, but by default there's no use of it
+>> because of resource conflict with WMI method.
+>>
+>> This commit adds such boards to the monitoring list with new ACPI device
+>> UID.
+>>
+>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+>> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+>> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
+>> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+>> Tested-by: Jeroen Beerstra <jeroen@beerstra.org>
+>> Tested-by: Slawomir Stepien <sst@poczta.fm>
+> Applied to hwmon-next.
+>
+> Thanks,
+> Guenter
