@@ -2,169 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA60F67524C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6381675254
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjATKXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S229471AbjATKYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjATKXl (ORCPT
+        with ESMTP id S229612AbjATKYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:23:41 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744158B76A;
-        Fri, 20 Jan 2023 02:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CeGv0JtmRE31bDGztcRu8iAtRTnI2gcf4GZAbDeGXW4=; b=EfQaYrQTpC9FZgAc9US9UUa6qO
-        ZhdSTQznBD6VDiTXzgG8ZlpaU2hIhwKHJHmG269zfqliyfIcm+01zSYLyqMSWkOyC2Qo2f4hB4xSv
-        dXtmag26HNKiu7xwd7191QKfvFdedR4z+tFk2bXlNrem7pMXdKnDFQAdwRvgOovyPUJo9VzxH46gg
-        e5GtdKEZ0PuSQayAddqCHFHxJMkJwatPs7l3ZybOctMTRleAHEo/phby55tWZ23hNHbeVcL5JPR62
-        32JA7mFYMgzxeVgNhqTAWtwbptjejO8DhY1S0F8Mog9qxmxJOX3UYzKS6xhWDMi/jutqdEHzxxF4Y
-        juf72uXg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIoYP-001rMS-Oy; Fri, 20 Jan 2023 10:23:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEC95300033;
-        Fri, 20 Jan 2023 11:23:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9AE5E2011D472; Fri, 20 Jan 2023 11:23:24 +0100 (CET)
-Date:   Fri, 20 Jan 2023 11:23:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Gregory Price <gourry.memverge@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
-        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User
- Dispatch Suspension
-Message-ID: <Y8prnDT0YUhEzI8+@hirez.programming.kicks-ass.net>
-References: <20230118201055.147228-1-gregory.price@memverge.com>
- <20230118201055.147228-2-gregory.price@memverge.com>
+        Fri, 20 Jan 2023 05:24:15 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60DD8C91E;
+        Fri, 20 Jan 2023 02:24:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NywPq1Kl2z9v7gS;
+        Fri, 20 Jan 2023 18:16:15 +0800 (CST)
+Received: from [10.206.134.65] (unknown [10.206.134.65])
+        by APP1 (Coremail) with SMTP id LxC2BwBn7gmva8pjQduwAA--.5258S2;
+        Fri, 20 Jan 2023 11:23:54 +0100 (CET)
+Message-ID: <5c65358c-4e77-901b-01bb-5df0d4c50949@huaweicloud.com>
+Date:   Fri, 20 Jan 2023 11:23:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118201055.147228-2-gregory.price@memverge.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     dhowells@redhat.com, davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, ebiggers@kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
+ <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
+ <Y7g7sp6UJJrYKihK@gondor.apana.org.au>
+ <755e1dc9c777fa657ccd948f65f5f33240226c43.camel@huaweicloud.com>
+ <Y8UTghm0Y8U4ndmH@gondor.apana.org.au>
+Content-Language: en-US
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <Y8UTghm0Y8U4ndmH@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwBn7gmva8pjQduwAA--.5258S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYx7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4fWbQACsJ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:10:53PM -0500, Gregory Price wrote:
-> Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
-> modify Syscall User Dispatch to suspend interception when enabled.
+On 1/16/2023 10:06 AM, Herbert Xu wrote:
+> On Mon, Jan 16, 2023 at 09:57:57AM +0100, Roberto Sassu wrote:
+>>
+>> Hi Herbert
+>>
+>> will you take also the second patch?
 > 
-> This is modeled after the SUSPEND_SECCOMP feature, which suspends
-> SECCOMP interposition.  Without doing this, software like CRIU will
-> inject system calls into a process and be intercepted by Syscall
-> User Dispatch, either causing a crash (due to blocked signals) or
-> the delivery of those signals to a ptracer (not the intended behavior).
-> 
-> Since Syscall User Dispatch is not a privileged feature, a check
-> for permissions is not required, however attempting to set this
-> option when CONFIG_CHECKPOINT_RESTORE it not supported should be
-> disallowed, as its intended use is checkpoint/resume.
-> 
-> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+> That's part of David Howells' tree so hopefully he will pick
+> it up soon.
 
-One small nit -- see below, otherwise:
+Hi David
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+could you please take the second patch?
 
-> ---
->  include/linux/ptrace.h               | 2 ++
->  include/uapi/linux/ptrace.h          | 6 +++++-
->  kernel/entry/syscall_user_dispatch.c | 5 +++++
->  kernel/ptrace.c                      | 5 +++++
->  4 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
-> index eaaef3ffec22..461ae5c99d57 100644
-> --- a/include/linux/ptrace.h
-> +++ b/include/linux/ptrace.h
-> @@ -45,6 +45,8 @@ extern int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
->  
->  #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
->  #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
-> +#define PT_SUSPEND_SYSCALL_USER_DISPATCH \
-> +	(PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH << PT_OPT_FLAG_SHIFT)
->  
->  extern long arch_ptrace(struct task_struct *child, long request,
->  			unsigned long addr, unsigned long data);
-> diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-> index 195ae64a8c87..ba9e3f19a22c 100644
-> --- a/include/uapi/linux/ptrace.h
-> +++ b/include/uapi/linux/ptrace.h
-> @@ -146,9 +146,13 @@ struct ptrace_rseq_configuration {
->  /* eventless options */
->  #define PTRACE_O_EXITKILL		(1 << 20)
->  #define PTRACE_O_SUSPEND_SECCOMP	(1 << 21)
-> +#define PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH	(1 << 22)
->  
->  #define PTRACE_O_MASK		(\
-> -	0x000000ff | PTRACE_O_EXITKILL | PTRACE_O_SUSPEND_SECCOMP)
-> +	0x000000ff | \
-> +	PTRACE_O_EXITKILL | \
-> +	PTRACE_O_SUSPEND_SECCOMP | \
-> +	PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)
->  
->  #include <asm/ptrace.h>
->  
-> diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-> index 0b6379adff6b..7607f4598dd8 100644
-> --- a/kernel/entry/syscall_user_dispatch.c
-> +++ b/kernel/entry/syscall_user_dispatch.c
-> @@ -8,6 +8,7 @@
->  #include <linux/uaccess.h>
->  #include <linux/signal.h>
->  #include <linux/elf.h>
-> +#include <linux/ptrace.h>
->  
->  #include <linux/sched/signal.h>
->  #include <linux/sched/task_stack.h>
-> @@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
->  	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
->  	char state;
->  
-> +	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
-> +		unlikely(current->ptrace & PT_SUSPEND_SYSCALL_USER_DISPATCH))
+Thanks
 
-Align with the '(' pleaase.
+Roberto
 
-> +		return false;
-> +
->  	if (likely(instruction_pointer(regs) - sd->offset < sd->len))
->  		return false;
->  
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index 54482193e1ed..a6ad815bd4be 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -370,6 +370,11 @@ static int check_ptrace_options(unsigned long data)
->  	if (data & ~(unsigned long)PTRACE_O_MASK)
->  		return -EINVAL;
->  
-> +	if (unlikely(data & PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)) {
-> +		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTART))
-> +			return -EINVAL;
-> +	}
-> +
->  	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
->  		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
->  		    !IS_ENABLED(CONFIG_SECCOMP))
-> -- 
-> 2.39.0
-> 
