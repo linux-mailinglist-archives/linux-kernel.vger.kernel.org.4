@@ -2,133 +2,448 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C84674D2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3707D674D53
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjATGUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S229629AbjATGYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjATGUb (ORCPT
+        with ESMTP id S229490AbjATGYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:20:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF6981990;
-        Thu, 19 Jan 2023 22:20:30 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K65R0D023947;
-        Fri, 20 Jan 2023 06:20:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=aXKU39OQSaaTWLJC/8fawztHomaVSmHxM7RXlYvCrik=;
- b=BzesppLCkekQqNZFjnhRJX/o7JPv9ECwVqQHSGvJagj7SNdHUBowdbIe7e73xrKEOSkG
- vVgytirZv68oS915r5XadFdac089zsCzkOTyzpqq8JNnNSCqZxRXLi3luC+tkYuIFIY6
- Xejmh1KGVyJHdIiURBu6W4en2qFL8SATWTF4K9uYhfTG77Fpqtn2juwHsSa4yXGhYosB
- GNEJdTrDIaO+2PDI9YdQ4+Yf8a6O8wKWEGcmyuu65szcTzbldHTQc0t5lKURqu86ofKL
- rMRYS/FQmX50NRvxLb0WJXZndGp1M4FVSiclXFYKsYV64H/GF+P9LsUSk/D2w1l2odK+ Tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7ncrr9u7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 06:20:24 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30K65ZNC024749;
-        Fri, 20 Jan 2023 06:20:23 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7ncrr9tr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 06:20:23 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30K63wGR002145;
-        Fri, 20 Jan 2023 06:20:21 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3n3m16ngq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 06:20:21 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30K6KJJS45416740
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Jan 2023 06:20:19 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 391862004B;
-        Fri, 20 Jan 2023 06:20:19 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B048C20040;
-        Fri, 20 Jan 2023 06:20:18 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 20 Jan 2023 06:20:18 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 36414602EB;
-        Fri, 20 Jan 2023 17:20:15 +1100 (AEDT)
-Message-ID: <4466f0800b912d287c1f4c8a4454bf841b819537.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 08/24] powerpc/secvar: Allow backend to populate
- static list of variable names
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, gcwilson@linux.ibm.com
-Date:   Fri, 20 Jan 2023 17:20:14 +1100
-In-Reply-To: <CPVRLZNI6WWQ.1AZVH3NCPCOYL@bobo>
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
-         <20230118061049.1006141-9-ajd@linux.ibm.com>
-         <CPVRLZNI6WWQ.1AZVH3NCPCOYL@bobo>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Fri, 20 Jan 2023 01:24:18 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3C285371;
+        Thu, 19 Jan 2023 22:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674195822; x=1705731822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KCemd+gR6Sk0uJqxe5gyusCcMC7HCWG8y/CVYzAwrTw=;
+  b=b8KIr2f5QToaB+H53BYySkwCEc6JnBOFprKyroceWth9QotAQUbWJDhC
+   /CttzeDuSNDZO9/s9yjE8ZwxXCOg8UV+fCa0jkNft5t23tkM8dpF4Ocxi
+   nUowvefu54eUs2ec2md2kPmA0i+OHTEs8z2Clyw+CcmY4O+9sIExnRwDu
+   lEuQoDZ05wic2Zqobw/BjfWw5XNS7E10M0Nal7S6IQnocm2X57SUTn3HP
+   o+Rh97yrf6CxaLZvUQkudbx0Csm6nyvIBQ8qB85fjWWmFOStkJatHvj+s
+   xSRKnm4V+QwkvfRumszI6FLaiUygqLbdkOblPucd9IHRZHOW5igGGeokS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411745950"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="411745950"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 22:22:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="690943125"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="690943125"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2023 22:22:43 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIknS-0002Gr-2m;
+        Fri, 20 Jan 2023 06:22:42 +0000
+Date:   Fri, 20 Jan 2023 14:22:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used
+ as kptrs
+Message-ID: <202301201454.hTFU2jPK-lkp@intel.com>
+References: <20230119235833.2948341-5-void@manifault.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aHrPUNO-Ia3zFPlc5RxsVvgdddwL6PGR
-X-Proofpoint-GUID: e8XN44HRcOR7wIHSB5opgMG6MT6l5ANr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_03,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- suspectscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015
- impostorscore=0 adultscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301200055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119235833.2948341-5-void@manifault.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-19 at 11:10 +1000, Nicholas Piggin wrote:
-> > diff --git a/arch/powerpc/include/asm/secvar.h
-> > b/arch/powerpc/include/asm/secvar.h
-> > index ebf95386d720..c8bee1834b54 100644
-> > --- a/arch/powerpc/include/asm/secvar.h
-> > +++ b/arch/powerpc/include/asm/secvar.h
-> > @@ -23,6 +23,10 @@ struct secvar_operations {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t (*format)(char =
-*buf);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*max_size)(u64 *ma=
-x_size);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct attribute =
-**config_attrs;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// NULL-terminated array of =
-fixed variable names
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// Only used if get_next() i=
-sn't provided
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char * const *var_name=
-s;
->=20
-> The other way you could go is provide a sysfs_init() ops call here,
-> and export the add_var as a library function that backends can use.
+Hi David,
 
-True, I think I'll keep it as is for now but I'll have a think about
-whether to do that in a later patch.
+Thank you for the patch! Perhaps something to improve:
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230119235833.2948341-5-void%40manifault.com
+patch subject: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used as kptrs
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230120/202301201454.hTFU2jPK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/11541205c58f2226e5ffbc5967317469d65efac6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+        git checkout 11541205c58f2226e5ffbc5967317469d65efac6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/cpumask.c:38:21: warning: no previous prototype for function 'bpf_cpumask_create' [-Wmissing-prototypes]
+   struct bpf_cpumask *bpf_cpumask_create(void)
+                       ^
+   kernel/bpf/cpumask.c:38:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct bpf_cpumask *bpf_cpumask_create(void)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:52:21: warning: no previous prototype for function 'bpf_cpumask_acquire' [-Wmissing-prototypes]
+   struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
+                       ^
+   kernel/bpf/cpumask.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:58:21: warning: no previous prototype for function 'bpf_cpumask_kptr_get' [-Wmissing-prototypes]
+   struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
+                       ^
+   kernel/bpf/cpumask.c:58:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:76:6: warning: no previous prototype for function 'bpf_cpumask_release' [-Wmissing-prototypes]
+   void bpf_cpumask_release(struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_release(struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:88:5: warning: no previous prototype for function 'bpf_cpumask_first' [-Wmissing-prototypes]
+   u32 bpf_cpumask_first(const struct cpumask *cpumask)
+       ^
+   kernel/bpf/cpumask.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 bpf_cpumask_first(const struct cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:93:5: warning: no previous prototype for function 'bpf_cpumask_first_zero' [-Wmissing-prototypes]
+   u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
+       ^
+   kernel/bpf/cpumask.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:98:6: warning: no previous prototype for function 'bpf_cpumask_set_cpu' [-Wmissing-prototypes]
+   void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:98:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:106:6: warning: no previous prototype for function 'bpf_cpumask_clear_cpu' [-Wmissing-prototypes]
+   void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:114:6: warning: no previous prototype for function 'bpf_cpumask_test_cpu' [-Wmissing-prototypes]
+   bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:122:6: warning: no previous prototype for function 'bpf_cpumask_test_and_set_cpu' [-Wmissing-prototypes]
+   bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:130:6: warning: no previous prototype for function 'bpf_cpumask_test_and_clear_cpu' [-Wmissing-prototypes]
+   bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:130:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:138:6: warning: no previous prototype for function 'bpf_cpumask_setall' [-Wmissing-prototypes]
+   void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:138:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:143:6: warning: no previous prototype for function 'bpf_cpumask_clear' [-Wmissing-prototypes]
+   void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:143:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:148:6: warning: no previous prototype for function 'bpf_cpumask_and' [-Wmissing-prototypes]
+   bool bpf_cpumask_and(struct bpf_cpumask *dst,
+        ^
+   kernel/bpf/cpumask.c:148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_and(struct bpf_cpumask *dst,
+   ^
+   static 
+>> kernel/bpf/cpumask.c:155:6: warning: no previous prototype for function 'bpf_cpumask_or' [-Wmissing-prototypes]
+   void bpf_cpumask_or(struct bpf_cpumask *dst,
+        ^
+   kernel/bpf/cpumask.c:155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_or(struct bpf_cpumask *dst,
+   ^
+   static 
+>> kernel/bpf/cpumask.c:162:6: warning: no previous prototype for function 'bpf_cpumask_xor' [-Wmissing-prototypes]
+   void bpf_cpumask_xor(struct bpf_cpumask *dst,
+        ^
+   kernel/bpf/cpumask.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_xor(struct bpf_cpumask *dst,
+   ^
+   static 
+>> kernel/bpf/cpumask.c:169:6: warning: no previous prototype for function 'bpf_cpumask_equal' [-Wmissing-prototypes]
+   bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
+        ^
+   kernel/bpf/cpumask.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:174:6: warning: no previous prototype for function 'bpf_cpumask_intersects' [-Wmissing-prototypes]
+   bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
+        ^
+   kernel/bpf/cpumask.c:174:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:179:6: warning: no previous prototype for function 'bpf_cpumask_subset' [-Wmissing-prototypes]
+   bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
+        ^
+   kernel/bpf/cpumask.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
+   ^
+   static 
+>> kernel/bpf/cpumask.c:184:6: warning: no previous prototype for function 'bpf_cpumask_empty' [-Wmissing-prototypes]
+   bool bpf_cpumask_empty(const struct cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_empty(const struct cpumask *cpumask)
+   ^
+   static 
+   kernel/bpf/cpumask.c:189:6: warning: no previous prototype for function 'bpf_cpumask_full' [-Wmissing-prototypes]
+   bool bpf_cpumask_full(const struct cpumask *cpumask)
+        ^
+   kernel/bpf/cpumask.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool bpf_cpumask_full(const struct cpumask *cpumask)
+   ^
+   static 
+   kernel/bpf/cpumask.c:194:6: warning: no previous prototype for function 'bpf_cpumask_copy' [-Wmissing-prototypes]
+   void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
+        ^
+   kernel/bpf/cpumask.c:194:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
+   ^
+   static 
+   kernel/bpf/cpumask.c:199:5: warning: no previous prototype for function 'bpf_cpumask_any' [-Wmissing-prototypes]
+   u32 bpf_cpumask_any(const struct cpumask *cpumask)
+       ^
+   kernel/bpf/cpumask.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 bpf_cpumask_any(const struct cpumask *cpumask)
+   ^
+   static 
+   kernel/bpf/cpumask.c:204:5: warning: no previous prototype for function 'bpf_cpumask_any_and' [-Wmissing-prototypes]
+   u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
+       ^
+   kernel/bpf/cpumask.c:204:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
+   ^
+   static 
+   24 warnings generated.
+
+
+vim +/bpf_cpumask_create +38 kernel/bpf/cpumask.c
+
+    37	
+  > 38	struct bpf_cpumask *bpf_cpumask_create(void)
+    39	{
+    40		struct bpf_cpumask *cpumask;
+    41	
+    42		cpumask = bpf_mem_alloc(&bpf_cpumask_ma, sizeof(*cpumask));
+    43		if (!cpumask)
+    44			return NULL;
+    45	
+    46		memset(cpumask, 0, sizeof(*cpumask));
+    47		refcount_set(&cpumask->usage, 1);
+    48	
+    49		return cpumask;
+    50	}
+    51	
+  > 52	struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
+    53	{
+    54		refcount_inc(&cpumask->usage);
+    55		return cpumask;
+    56	}
+    57	
+  > 58	struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
+    59	{
+    60		struct bpf_cpumask *cpumask;
+    61	
+    62		/* The BPF memory allocator frees memory backing its caches in an RCU
+    63		 * callback. Thus, we can safely use RCU to ensure that the cpumask is
+    64		 * safe to read.
+    65		 */
+    66		rcu_read_lock();
+    67	
+    68		cpumask = READ_ONCE(*cpumaskp);
+    69		if (cpumask && !refcount_inc_not_zero(&cpumask->usage))
+    70			cpumask = NULL;
+    71	
+    72		rcu_read_unlock();
+    73		return cpumask;
+    74	}
+    75	
+  > 76	void bpf_cpumask_release(struct bpf_cpumask *cpumask)
+    77	{
+    78		if (!cpumask)
+    79			return;
+    80	
+    81		if (refcount_dec_and_test(&cpumask->usage)) {
+    82			migrate_disable();
+    83			bpf_mem_free(&bpf_cpumask_ma, cpumask);
+    84			migrate_enable();
+    85		}
+    86	}
+    87	
+  > 88	u32 bpf_cpumask_first(const struct cpumask *cpumask)
+    89	{
+    90		return cpumask_first(cpumask);
+    91	}
+    92	
+  > 93	u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
+    94	{
+    95		return cpumask_first_zero(cpumask);
+    96	}
+    97	
+  > 98	void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+    99	{
+   100		if (!cpu_valid(cpu))
+   101			return;
+   102	
+   103		cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
+   104	}
+   105	
+ > 106	void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   107	{
+   108		if (!cpu_valid(cpu))
+   109			return;
+   110	
+   111		cpumask_clear_cpu(cpu, (struct cpumask *)cpumask);
+   112	}
+   113	
+ > 114	bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
+   115	{
+   116		if (!cpu_valid(cpu))
+   117			return false;
+   118	
+   119		return cpumask_test_cpu(cpu, (struct cpumask *)cpumask);
+   120	}
+   121	
+ > 122	bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   123	{
+   124		if (!cpu_valid(cpu))
+   125			return false;
+   126	
+   127		return cpumask_test_and_set_cpu(cpu, (struct cpumask *)cpumask);
+   128	}
+   129	
+ > 130	bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+   131	{
+   132		if (!cpu_valid(cpu))
+   133			return false;
+   134	
+   135		return cpumask_test_and_clear_cpu(cpu, (struct cpumask *)cpumask);
+   136	}
+   137	
+ > 138	void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
+   139	{
+   140		cpumask_setall((struct cpumask *)cpumask);
+   141	}
+   142	
+ > 143	void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
+   144	{
+   145		cpumask_clear((struct cpumask *)cpumask);
+   146	}
+   147	
+ > 148	bool bpf_cpumask_and(struct bpf_cpumask *dst,
+   149			     const struct cpumask *src1,
+   150			     const struct cpumask *src2)
+   151	{
+   152		return cpumask_and((struct cpumask *)dst, src1, src2);
+   153	}
+   154	
+ > 155	void bpf_cpumask_or(struct bpf_cpumask *dst,
+   156			    const struct cpumask *src1,
+   157			    const struct cpumask *src2)
+   158	{
+   159		cpumask_or((struct cpumask *)dst, src1, src2);
+   160	}
+   161	
+ > 162	void bpf_cpumask_xor(struct bpf_cpumask *dst,
+   163			     const struct cpumask *src1,
+   164			     const struct cpumask *src2)
+   165	{
+   166		cpumask_xor((struct cpumask *)dst, src1, src2);
+   167	}
+   168	
+ > 169	bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
+   170	{
+   171		return cpumask_equal(src1, src2);
+   172	}
+   173	
+ > 174	bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
+   175	{
+   176		return cpumask_intersects(src1, src2);
+   177	}
+   178	
+ > 179	bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
+   180	{
+   181		return cpumask_subset(src1, src2);
+   182	}
+   183	
+ > 184	bool bpf_cpumask_empty(const struct cpumask *cpumask)
+   185	{
+   186		return cpumask_empty(cpumask);
+   187	}
+   188	
+ > 189	bool bpf_cpumask_full(const struct cpumask *cpumask)
+   190	{
+   191		return cpumask_full(cpumask);
+   192	}
+   193	
+ > 194	void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
+   195	{
+   196		cpumask_copy((struct cpumask *)dst, src);
+   197	}
+   198	
+ > 199	u32 bpf_cpumask_any(const struct cpumask *cpumask)
+   200	{
+   201		return cpumask_any(cpumask);
+   202	}
+   203	
+ > 204	u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
+   205	{
+   206		return cpumask_any_and(src1, src2);
+   207	}
+   208	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
