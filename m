@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8063C67525A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA9E675267
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjATK0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S229678AbjATK13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjATK0J (ORCPT
+        with ESMTP id S229632AbjATK10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:26:09 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1561490853;
-        Fri, 20 Jan 2023 02:26:07 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KANwNV029681;
-        Fri, 20 Jan 2023 10:26:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=i4So47I99J+eF/7VBWetdMeZwkPJ6zeJAlepJZdXUFI=;
- b=PpgqfgysUaFnRlMwdVw9L8Uv9o8jvP2+8+V2G0THOemL/+j8ZoFRahHTkmlRnhgfGr6E
- fTJN3QsSz3R4VDptN1VUBlnpkwy4t0X4WYGBOrG7IlmKTswFQpZleddsR+P2NLTMUdco
- cH682Ks58QGhJXcsZywMCIBK5m8PfFw3wuu4OWhCerY0+dCrE1EEl1B4VaS6txzKH8qM
- 0ntO7QF3LVGCGL4mZDQifGHHSXWNjeLgeDWDba7FyOaDUhtdIUarmgk2g3h1aMJaYrur
- 7fTPlUdOo7ZB+A/bfT9h17If/N/rj1w0uJ8lFJkWlH/IJEFInLJr03MbaCW+Kxxiokhm sA== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7s5ug151-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 10:26:06 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30K9bHjh013061;
-        Fri, 20 Jan 2023 10:26:04 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n3m16nq2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 10:26:04 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30KAQ08M24248744
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Jan 2023 10:26:00 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A03702007A;
-        Fri, 20 Jan 2023 10:26:00 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1133620079;
-        Fri, 20 Jan 2023 10:26:00 +0000 (GMT)
-Received: from [9.171.74.205] (unknown [9.171.74.205])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 20 Jan 2023 10:25:59 +0000 (GMT)
-Message-ID: <d8fe5146-def7-262d-15cb-0bb965102f3c@de.ibm.com>
-Date:   Fri, 20 Jan 2023 11:25:59 +0100
+        Fri, 20 Jan 2023 05:27:26 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5188B76A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:59 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id v6so12778001ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mSUR+eB/n+Ie+HKL6NSribhGI7dhtvVP+defqFNYRAM=;
+        b=QKsY/7wYUgsJxy1HNf2+uERj8BevvCeoNTPN4R0AbHEk7IIBR50jbMAXQTomKwnd2U
+         bj4zCTNIyUObTakzJvvqzQ5yDNf9GI0HhaYZ4yBx1qd3Zj/kJh/4YCjPswuub/NHBxT6
+         YoPLwdbhCVosqoAOMSQVA3N5MXxRjRbvqVuUfWbW3IR/5sFBdbAs61oWX9BC/6PrnmWW
+         TEeZeavbDNcnksGHGghizOxIdokZlISKmeRAhKcRG3Q/KHoQKBDYI/I5cy1xmxGS41nc
+         gV31my49APblgoAv6uJj17u93AuNJSPPe1Jv9KSzLgaWXQOdtqZdr2m/l4pQYkM4NSOO
+         teWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mSUR+eB/n+Ie+HKL6NSribhGI7dhtvVP+defqFNYRAM=;
+        b=CH7p8XGTeiNpjmbqhBlLwB+6qJzImCl8X+KEYdpH0a5HHY0+Ns/I4/fcFkFunpHpNQ
+         XSqE6NomAUB2bjCOt0d4EcCaUMG3AJzpONDvS0lAcyqSArTubA2UImvzJwslOII88Xje
+         WwXhJahkFMp2C+8zdiotv1wD+bv8f72gV6r0nCA9cfZiR5UGaYDWWQbvPNrnIxrJwet8
+         GEUX3J4eCHdiSQOr5tbJWJeu/qYhT/7PnukEoXkk2I85wdPYGNODcoomEyJDugJw4eW5
+         CjF+pnalvbGOSZnAJo9QJUvsTm0gcB8bBSYzJ+fGg34Q6015i6Elg9bOPcVGzBAGtdY+
+         e10A==
+X-Gm-Message-State: AFqh2kqQE/gddJjuR5PhTa45BuUF6IWIDP7lua4RklyL2puS5ECSi7bq
+        Ydbd5qc43yp5WevLM0lUIDEGGg==
+X-Google-Smtp-Source: AMrXdXtbaWbvW0Lei/lXUMUulEmS7v+iToBg8DvXvqXZeCh2Axm6rk0GP/LQu3Ne50FPFovW2RlitA==
+X-Received: by 2002:a17:906:3a4d:b0:873:393f:1bda with SMTP id a13-20020a1709063a4d00b00873393f1bdamr12359798ejf.47.1674210416817;
+        Fri, 20 Jan 2023 02:26:56 -0800 (PST)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id s17-20020a1709060c1100b0084d21db0691sm17830862ejf.179.2023.01.20.02.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 02:26:56 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v6.2-rc5
+Date:   Fri, 20 Jan 2023 11:26:54 +0100
+Message-Id: <20230120102654.113502-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 0/6] improve AP queue reset processing
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-References: <20230118203111.529766-1-akrowiak@linux.ibm.com>
-Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <20230118203111.529766-1-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xcvKSQdw7tJvFJE9-kS78h9vQndzAVQY
-X-Proofpoint-ORIG-GUID: xcvKSQdw7tJvFJE9-kS78h9vQndzAVQY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_06,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- mlxlogscore=790 clxscore=1011 spamscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200090
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.01.23 um 21:31 schrieb Tony Krowiak:
-> This series introduces several improvements to the function that performs
-> AP queue resets:
-> 
-> * Breaks up reset processing into multiple smaller, more concise functions.
-> 
-> * Use TAPQ to verify completion of a reset in progress rather than mulitple
->    invocations of ZAPQ.
-> 
-> * Check TAPQ response codes when verifying successful completion of ZAPQ.
-> 
-> * Fix erroneous handling of some error response codes.
-> 
-> * Increase the maximum amount of time to wait for successful completion of
->    ZAPQ.
->   
-> Change log v1 => v2:
-> -------------------
-> Remove patch 7/7 to restore original behavior since we don't know whether
-> interrupts are disabled when an unexpected response code is returned from
-> ZAPQ. (Halil)
-> 
-> Tony Krowiak (6):
->    s390/vfio-ap: verify reset complete in separate function
->    s390/vfio_ap: check TAPQ response code when waiting for queue reset
->    s390/vfio_ap: use TAPQ to verify reset in progress completes
->    s390/vfio_ap: verify ZAPQ completion after return of response code
->      zero
->    s390/vfio_ap: fix handling of error response codes
->    s390/vfio_ap: increase max wait time for reset verification
-> 
->   drivers/s390/crypto/vfio_ap_ops.c | 104 +++++++++++++++++++++---------
->   1 file changed, 72 insertions(+), 32 deletions(-)
-> 
+Hi Linus,
 
-Thanks applied and queued for CI and regression runs. Will likely go via s390 tree.
+Here's a PR with a couple of MMC fixes intended for v6.2-rc5. Details about the
+highlights are as usual found in the signed tag.
+
+Please pull this in!
+
+Kind regards
+Ulf Hansson
+
+
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.2-rc2
+
+for you to fetch changes up to 8509419758f2cc28dd05370385af0d91573b76b4:
+
+  mmc: sunxi-mmc: Fix clock refcount imbalance during unbind (2023-01-02 15:57:36 +0100)
+
+----------------------------------------------------------------
+MMC host:
+ - sunxi-mmc: Fix clock refcount imbalance during unbind
+ - sdhci-esdhc-imx: Fix some tuning settings
+
+----------------------------------------------------------------
+Haibo Chen (1):
+      mmc: sdhci-esdhc-imx: correct the tuning start tap and step setting
+
+Samuel Holland (1):
+      mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
+
+ drivers/mmc/host/sdhci-esdhc-imx.c | 22 +++++++++++++++-------
+ drivers/mmc/host/sunxi-mmc.c       |  8 +++++---
+ 2 files changed, 20 insertions(+), 10 deletions(-)
