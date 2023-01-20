@@ -2,141 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7977675F84
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8608D675F87
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjATVPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S229471AbjATVQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjATVPo (ORCPT
+        with ESMTP id S229695AbjATVQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:15:44 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A108A4C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:15:42 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4ff07dae50dso44926407b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NcIIC1O7Zs3rEuEM0nyGO+WgzZl8Vikm1z2RFIGcKb0=;
-        b=fhs5Iuj4i9tYiLtWZSoxdZ7lQeEEve400Bj1Vri0BU6rTFbqMbm9zOTpruHHGJiSv+
-         45iwza4m7m6J/UZxVCr4lOZWhgR3egS25OP/hJ5DF5TxBJPR6a3YEs64lCSotn3bkRIl
-         EpmHRQpEh50uuJCoQCzB/3vOLGZVErgkFlHxQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NcIIC1O7Zs3rEuEM0nyGO+WgzZl8Vikm1z2RFIGcKb0=;
-        b=3OSd2YmrLvvT+0J5wLNlhkS+28UgHrLTViRQYIRCO9jGMGntylgyVAuXYvTrGog9n2
-         Jq9IVjfJ4JJ6B9uuznqakwX0MxBTxOlZdEY9UfPn6ExnHOU4hKJNn3QiirtKSK4kTVIJ
-         5cDXE6XElQ0U7Bua8iV9g9WlNKIZVBVNp4kmMREgp9eVhV3laJXqKwx4LAgJijKKetDv
-         F4ATlBaTy6Mli8/wv1pZoZy/fNHq8KReBPWGLys9inwgiW5bq33lwqM8TPC8LVpaPljS
-         fZ+1r1ZG24Sh+++2dWvVOOsJQ13m75ot/J6FXoUTWmffRNd/MoV83ozwPmdV6jr9dpm4
-         wa/Q==
-X-Gm-Message-State: AFqh2krYUdfKr3EGw/3usovHKWO3DUeMXOmZSp8bweAap6YwOFI7G0CL
-        +2U98AGMnsL6oXmMSesKaFBJRKbK9shexSAwydbi4Q==
-X-Google-Smtp-Source: AMrXdXuzhv476FXH02ilyJSYLORoSx3+kBVAKevbSIn6Qmw3KTvOzqgdIKhThap2Fmmuhb9Bgf50pSjtYaxEVyXLlAg=
-X-Received: by 2002:a0d:e8c9:0:b0:4e0:7220:22fd with SMTP id
- r192-20020a0de8c9000000b004e0722022fdmr2086808ywe.272.1674249341272; Fri, 20
- Jan 2023 13:15:41 -0800 (PST)
+        Fri, 20 Jan 2023 16:16:10 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86101DB94;
+        Fri, 20 Jan 2023 13:16:05 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4A5AF1883A74;
+        Fri, 20 Jan 2023 21:16:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 412112500327;
+        Fri, 20 Jan 2023 21:16:03 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2D75D91201E4; Fri, 20 Jan 2023 21:16:03 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20230112042104.4107253-1-treapking@chromium.org>
- <20230112042104.4107253-2-treapking@chromium.org> <Y8AL8nTcNcl6zX7H@paasikivi.fi.intel.com>
- <CACeCKaeN7KBi30M1fRWhTPgMbxF6=B+KuAS7Ny7+i9qCx+=49Q@mail.gmail.com> <Y8VL/+My+s/PkG9L@paasikivi.fi.intel.com>
-In-Reply-To: <Y8VL/+My+s/PkG9L@paasikivi.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 20 Jan 2023 13:15:30 -0800
-Message-ID: <CACeCKaeaQ+LHsnwdqtTA=O3Q=0dWz8_uNjXoNu5J_u4+HQLMsg@mail.gmail.com>
-Subject: Re: [PATCH v10 1/9] device property: Add remote endpoint to devcon matcher
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
-        Xin Ji <xji@analogixsemi.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
-        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Fri, 20 Jan 2023 22:16:03 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [RFC PATCH net-next 1/5] net: bridge: add dynamic flag to
+ switchdev notifier
+In-Reply-To: <20230119134045.fqdt6zrna5x3iavt@skbuf>
+References: <20230117185714.3058453-1-netdev@kapio-technology.com>
+ <20230117185714.3058453-2-netdev@kapio-technology.com>
+ <20230117230806.ipwcbnq4jcc4qs7z@skbuf>
+ <a3bba3eb856a00b5e5e0c1e2ffe8749a@kapio-technology.com>
+ <20230119093358.gbyka2x4qbxxr43b@skbuf>
+ <20230119134045.fqdt6zrna5x3iavt@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <29501147c96e7e2f06c999410d42e2bf@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 5:07 AM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Prashant,
->
-> On Thu, Jan 12, 2023 at 02:31:45PM -0800, Prashant Malani wrote:
-> > HI Sakari,
-> >
-> > On Thu, Jan 12, 2023 at 5:32 AM Sakari Ailus
-> > <sakari.ailus@linux.intel.com> wrote:
-> > >
-> > > Hi Pin-yen,
-> > >
-> > > On Thu, Jan 12, 2023 at 12:20:56PM +0800, Pin-yen Lin wrote:
-> > > > From: Prashant Malani <pmalani@chromium.org>
-> > > > +             /*
-> > > > +              * Some drivers may register devices for endpoints. Check
-> > > > +              * the remote-endpoints for matches in addition to the remote
-> > > > +              * port parent.
-> > > > +              */
-> > > > +             node = fwnode_graph_get_remote_endpoint(ep);
-> > > > +             if (fwnode_device_is_available(node)) {
-> > > > +                     ret = match(node, con_id, data);
-> > > > +                     if (ret) {
-> > > > +                             if (matches)
-> > > > +                                     matches[count] = ret;
-> > > > +                             count++;
-> > > > +                     }
-> > > > +             }
-> > >
-> > > Aren't you missing fwnode_handle-put(node) here??
-> >
-> > It shouldn't be necessary. We aren't break-ing/continue-ing here,
-> > and fwnode_handle_put(node) is called latter in the loop [1][2]
->
-> It is, but node is overwritten just below this chunk --- before
-> fwnode_handle_put() is called on it.
+On 2023-01-19 14:40, Vladimir Oltean wrote:
+> On Thu, Jan 19, 2023 at 11:33:58AM +0200, Vladimir Oltean wrote:
+>> On Wed, Jan 18, 2023 at 11:14:00PM +0100, netdev@kapio-technology.com 
+>> wrote:
+>> > > > +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
+>> > >
+>> > > Why reverse logic? Why not just name this "is_static" and leave any
+>> > > further interpretations up to the consumer?
+>> >
+>> > My reasoning for this is that the common case is to have static entries,
+>> > thus is_dyn=false, so whenever someone uses a switchdev_notifier_fdb_info
+>> > struct the common case does not need to be entered.
+>> > Otherwise it might also break something when someone uses this struct and if
+>> > it was 'is_static' and they forget to code is_static=true they will get
+>> > dynamic entries without wanting it and it can be hard to find such an error.
+>> 
+>> I'll leave it up to bridge maintainers if this is preferable to 
+>> patching
+>> all callers of SWITCHDEV_FDB_ADD_TO_BRIDGE such that they set 
+>> is_static=true.
+> 
+> Actually, why would you assume that all users of 
+> SWITCHDEV_FDB_ADD_TO_BRIDGE
+> want to add static FDB entries? You can't avoid inspecting the code and
+> making sure that the is_dyn/is_static flag is set correctly either way.
 
-Ack. Thanks for pointing that out. My bad!
-
-Pin-yen, please make this update when you send out a v11.
-
-BR,
-
--Prashant
+Well, up until this patch set there is no option, besides entries from 
+SWITCHDEV_FDB_ADD_TO_BRIDGE events will get the external learned flag 
+set, so they will not be aged by the bridge, and so dynamic entries that 
+way don't make much sense I think. Is that not right?
