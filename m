@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB85D674FA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357CB674FA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjATIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S229575AbjATIo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjATIoW (ORCPT
+        with ESMTP id S229523AbjATIo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:44:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1297CCC3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674204215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ieVgb0wdTbUDgdUwiBcUCrz7AjasaHhJqwRtTkIp84=;
-        b=ViGyrr9r9RuIq3OK2pb8ZkVSoTmzKFGBFv7Brluoaq/8+C8aKF4XoOEAJB5NEJYqOzP2y1
-        0/f2Q9IHbHbyQrJIotWwMfNLvWdIvuSsRpNVsPigjA0f+oYOwkzpmayM/7L6rWDLU2tho1
-        p0OB4rq3Mbfpk4wf5eMu4mdJSeXoKa0=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-413-_2y19hoYM36dLV07yf79ag-1; Fri, 20 Jan 2023 03:43:33 -0500
-X-MC-Unique: _2y19hoYM36dLV07yf79ag-1
-Received: by mail-il1-f197.google.com with SMTP id y5-20020a056e021be500b0030bc4f23f0aso3354810ilv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:43:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2ieVgb0wdTbUDgdUwiBcUCrz7AjasaHhJqwRtTkIp84=;
-        b=VRLQqgoc6otOImPssLq9Tkz+reuPtI2LmWHrwrQLPH0V5Lz9A3pLgA+0qFAI/K05TN
-         vtnV6i6YISLn/ygFeAztgVQU7oMRk8nt8syNqeK/yresYQGnzrMC74YG8E4HR5NkX78G
-         odmDW2N6XNxgpliUFrdYRgyUOhiYfGAnqYaq3nJwolIWBdbCY6bTYEU3OCTelEWV3MrN
-         CPsk7Ru/wRj/+CbW5Co3qN7pSIZBLv6EnO1M3yiOM+KAIau+90o2E6CNXOB4yz05p1v0
-         8kDDqN//yszDTW+EcUkr7ic9CdXw03+bR/UPF5WUrsIz+77dv4wVZ8J7pHSQ0FUfoQMH
-         YfTw==
-X-Gm-Message-State: AFqh2kqP8gVhb8YP3v8dG8/imIbf5x1kGH5Ed1ykCgJU48hJSeCFbcFz
-        1ilHiMm9rP5ycus2YDwCr+pUGxWgy9NubO3HzLS0duYZ/ir4tLdk5Z8yiZvvl8DEyprwuWvG2RP
-        H6+Vna84rEP433X4VEcxsFOQD3GE8YbmwdMT7NDCW
-X-Received: by 2002:a5d:884b:0:b0:704:d851:64ba with SMTP id t11-20020a5d884b000000b00704d85164bamr818293ios.135.1674204212930;
-        Fri, 20 Jan 2023 00:43:32 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuqWj7kT7WAI3DeIVj9rztUM3R8UUxuRsEPXeV6XWDqUb5Yxgs99M9gWUoAq8V02mWEWfIaFyr9o0FeQ5PeRM0=
-X-Received: by 2002:a5d:884b:0:b0:704:d851:64ba with SMTP id
- t11-20020a5d884b000000b00704d85164bamr818292ios.135.1674204212712; Fri, 20
- Jan 2023 00:43:32 -0800 (PST)
+        Fri, 20 Jan 2023 03:44:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6760879E81;
+        Fri, 20 Jan 2023 00:44:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 237ECB8206D;
+        Fri, 20 Jan 2023 08:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74396C4339C;
+        Fri, 20 Jan 2023 08:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674204293;
+        bh=Pr33/bdiK+y0I0R9gvlNXOOi2EdjVDGxeUKichdJAzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Su5hCWuQjgV/o1ATkjY1ko+d1yNh8WgDRRmCRixYc/FdMAkRuSYdSi7pHmRJqm2jj
+         AW8mgxLKAYF++YdRBctCLsIQZSfna7K0qJH10YCCqBC1YAM35sIwlQeHJpaZvhF3KE
+         N6UNWvWi4q9OmAMtgO7zx1Qbdbx7HC4aw8gsrXdskpxi+KYVZWEU5hnjmFnzqzleKO
+         Y3MhoSoOB0v0269Bu2Dye337FxJZ2p0ttSen6tXa+nBa8ZWIJ3v/Ovdch6M/p13J1b
+         VKNK232Q/hGWbkZkNEBjQPwLhHVFPex173U6kCvcNPFMPeX8LuP99jVAlXtse++Tgd
+         n98bJv7/sDOxg==
+Date:   Fri, 20 Jan 2023 09:44:51 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [RESEND PATCH v2 1/2] dt-bindings: i2c: renesas,rzv2m: Fix SoC
+ specific string
+Message-ID: <Y8pUg1wO4ClaesA6@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230117175017.21239-1-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
-References: <20230119211455.498968-1-echanude@redhat.com> <20230119211455.498968-2-echanude@redhat.com>
- <Y8m/ljQUJOefsD6O@ZenIV>
-In-Reply-To: <Y8m/ljQUJOefsD6O@ZenIV>
-From:   Alexander Larsson <alexl@redhat.com>
-Date:   Fri, 20 Jan 2023 09:43:21 +0100
-Message-ID: <CAL7ro1EESqanEQnGnLqd_WvoxL0ybn0XJwtMAFxap=w-a=-Vig@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 1/1] fs/namespace: defer free_mount from namespace_unlock
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Eric Chanudet <echanude@redhat.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Andrew Halaney <ahalaney@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="B56/9tp67dbgWBKK"
+Content-Disposition: inline
+In-Reply-To: <20230117175017.21239-1-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:09 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Thu, Jan 19, 2023 at 04:14:55PM -0500, Eric Chanudet wrote:
-> > From: Alexander Larsson <alexl@redhat.com>
-> >
-> > Use call_rcu to defer releasing the umount'ed or detached filesystem
-> > when calling namepsace_unlock().
-> >
-> > Calling synchronize_rcu_expedited() has a significant cost on RT kernel
-> > that default to rcupdate.rcu_normal_after_boot=1.
-> >
-> > For example, on a 6.2-rt1 kernel:
-> > perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
-> >            0.07464 +- 0.00396 seconds time elapsed  ( +-  5.31% )
-> >
-> > With this change applied:
-> > perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
-> >         0.00162604 +- 0.00000637 seconds time elapsed  ( +-  0.39% )
-> >
-> > Waiting for the grace period before completing the syscall does not seem
-> > mandatory. The struct mount umount'ed are queued up for release in a
-> > separate list and no longer accessible to following syscalls.
->
-> Again, NAK.  If a filesystem is expected to be shut down by umount(2),
-> userland expects it to have been already shut down by the time the
-> syscall returns.
->
-> It's not just visibility in namespace; it's "can I pull the disk out?".
-> Or "can the shutdown get to taking the network down?", for that matter.
 
-In the usecase we're worrying about, all the unmounts are lazy (i.e.
-MNT_DETACH). What about delaying the destroy in that case? That seems
-in line with the expected behaviour of lazy shutdown. I.e. you can't
-rely on it to be settled anyway.
+--B56/9tp67dbgWBKK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 17, 2023 at 05:50:17PM +0000, Fabrizio Castro wrote:
+> The preferred form for Renesas' compatible strings is:
+> "<vendor>,<family>-<module>"
+>=20
+> Somehow the compatible string for the r9a09g011 I2C IP was upstreamed
+> as renesas,i2c-r9a09g011 instead of renesas,r9a09g011-i2c, which
+> is really confusing, especially considering the generic fallback
+> is renesas,rzv2m-i2c.
+>=20
+> The first user of renesas,i2c-r9a09g011 in the kernel is not yet in
+> a kernel release, it will be in v6.1, therefore it can still be
+> fixed in v6.1.
+> Even if we don't fix it before v6.2, I don't think there is any
+> harm in making such a change.
+>=20
+> s/renesas,i2c-r9a09g011/renesas,r9a09g011-i2c/g for consistency.
+>=20
+> Fixes: ba7a4d15e2c4 ("dt-bindings: i2c: Document RZ/V2M I2C controller")
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Applied to for-current, thanks!
 
 
--- 
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- Alexander Larsson                                Red Hat, Inc
-       alexl@redhat.com         alexander.larsson@gmail.com
+--B56/9tp67dbgWBKK
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKVIMACgkQFA3kzBSg
+Kbap8RAAhCPMVOdcA8CClFqW4fB9Qy3NxY9CuuZdaF0Qtn40/iHZqcpZsChuW0GK
++RWusliwlpmK5HRTV6koNxOVqO58JBnmLtcB/VfzCYRvKkd+OF09TpVYNWhMuEiY
+rHdOLt+685qQtFSsHBS4s6u7Yt7fa7WPTrplCIx9sutqIFaKGc/zx6HdhZVfWkmS
+dbTkxHlDK+w1VuvZhVcWugVWDF3iJIRFUuzgsxvKXwhK8m3mxQGRYyMpjoyGIV8+
++SN56fc6UfyyMDAvHgcQSLOyk+yqoMED2OBi33eOh/zrizRfjK5N8tj49RlUuUJw
+WZOq+UwPBzXpE7Jdmf2cbvILMqDPGn2o9J6j+9qA3eNUKvviOj9epI6OmIIkyx7n
+lwAgqYCXSRyIkd9qeu/B49HcwgMtBSjVt7Oer8/d9rCB8qckr88Z01yyEruOeYwp
+XOdROQfwrixxAMSWj3H+ZeHCOKIp2N8e5QxoiSsSPRPUL6udDiNiaeGZqe9zJ7x8
+rd02yRC5V++GqiBzMj5myjCAPrb05COvOrW8h9gPO7woWH7kGNgBm3J7rCVot/K4
+Q0N3T1v1imsVZNNH2EotKpjfrRl6ri5hiMCXcChUzRccwjyGhLFotL3QzCQEwVzJ
+dH7Pc30u25TYjximHzrc3QpY3R2jxBublBJE+aVRL4XHis4bwwU=
+=n2wc
+-----END PGP SIGNATURE-----
+
+--B56/9tp67dbgWBKK--
