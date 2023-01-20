@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FA0675D11
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFF6675D1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjATSvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        id S229934AbjATSww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATSvO (ORCPT
+        with ESMTP id S229379AbjATSwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:51:14 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5396E43A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:51:10 -0800 (PST)
-Received: from [192.168.2.144] (adsl-dyn97.91-127-229.t-com.sk [91.127.229.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F2FB33F3FF;
-        Fri, 20 Jan 2023 19:51:06 +0100 (CET)
-Date:   Fri, 20 Jan 2023 19:51:00 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH v8 1/3] dt-bindings: mfd: x-powers,axp152: Document the
- AXP313a variant
-To:     martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <0DSSOR.MJI95OMO3E8C@somainline.org>
-In-Reply-To: <20230120184500.1899814-2-martin.botka@somainline.org>
-References: <20230120184500.1899814-1-martin.botka@somainline.org>
-        <20230120184500.1899814-2-martin.botka@somainline.org>
-X-Mailer: geary/43.0
+        Fri, 20 Jan 2023 13:52:50 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E54ABEB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:49 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id s67so4831058pgs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FPfy+reM6AKfPj+P9Rafnu4Ibypa0LESref2+wODD18=;
+        b=Qfzg23MVKgyve2XBzoW31NlYobIFWVOHHhwhcxalDk919SMGtf0YJaHtxZMf1d6Ji3
+         4kmpjikIrJlw3ahROk+iqBz3xm4E5b8+wOCe8Y2OD9DuMHBpV0bPHaDe6nWFE4ZUt+RE
+         IbjV9G8LXvyOHLU3mO5csO9PXC5pYbXfGAgBgGh1ZijJsBfuNsS0xomY2QZuLqi4xJFI
+         69aQdSdznYDRBBSGBz64fiG/Tth12IfyMbr0gpjdtopykXPMh5FejbsR1l9SumXbwwVj
+         i4yXq2VEpOfK7TunocUMGhyjljpG5oQLInecNKf09hsbPsmErfOtYsue28Ccdw8rX3Hj
+         ubsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FPfy+reM6AKfPj+P9Rafnu4Ibypa0LESref2+wODD18=;
+        b=DMl/4Gq/VH6CPiX5qeA3iGEPgjMT9dG6fICtjrDE1wqasRiupMkVm3tHEr3I/dQFH9
+         5CDUkAKXBJYqZjaY/AkqrFfKgye39uKNwX0rRULv7aSpR367hlgPbw2J22CNUSP7v/8A
+         5b/XSI8o+32bpaVZzYGpr8EwsERUxDTBQupsV7WtPzya3IohQ6Gz/dKsKq22kYxbnIiE
+         kI1CIU2Xaw2zZTOD1lLHmQg3voGQf5dOquwdrWRL3lWPG/X8KNIwlB6FDNwICDNLCPOo
+         MOVkaeZnocyQtWO1PoaSOM9p5oSfYbF+bkBUDU7D+AircfQPKXKbEvlq2Rpo2YOMQuxR
+         gRbA==
+X-Gm-Message-State: AFqh2kqCLQe/oB4hymlPjmyIRBOErVGZVuHIObhkN6un2OFamCmjBBY6
+        QOCa666K3h2kCtsqNiYO7p0RHVG9oOAkBw5+bTtA
+X-Google-Smtp-Source: AMrXdXv6XdC27v9Qt7fHt//RR9OOqJAxF6QqxrildvdTUbBXmQAvsFo9EGfhk/9ydU1jbeskiocoXCzAHBK0epOqvSo=
+X-Received: by 2002:a05:6a00:f07:b0:577:62a8:f7a1 with SMTP id
+ cr7-20020a056a000f0700b0057762a8f7a1mr1561601pfb.2.1674240769040; Fri, 20 Jan
+ 2023 10:52:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1673989212.git.rgb@redhat.com> <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
+ <5680172.DvuYhMxLoT@x2>
+In-Reply-To: <5680172.DvuYhMxLoT@x2>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 20 Jan 2023 13:52:37 -0500
+Message-ID: <CAHC9VhQbSCxmSbLFJZidAr952uHt-KktfRRJN3Lr+uDSCzHtfQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] fanotify,audit: Allow audit to use the full
+ permission event response
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I forgot to add acked-by on this one from Krzystof.
+On Wed, Jan 18, 2023 at 1:34 PM Steve Grubb <sgrubb@redhat.com> wrote:
+>
+> Hello Richard,
+>
+> I built a new kernel and tested this with old and new user space. It is
+> working as advertised. The only thing I'm wondering about is why we have 3F
+> as the default value when no additional info was sent? Would it be better to
+> just make it 0?
 
-On Fri, Jan 20 2023 at 07:44:57 PM +01:00:00, Martin Botka 
-<martin.botka@somainline.org> wrote:
-> The X-Powers AXP313a is a PMIC used on some devices with the Allwinner
-> H616 or H313 SoC.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git 
-> a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml 
-> b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> index b7a8747d5fa0..e2241cd28445 100644
-> --- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> @@ -88,6 +88,7 @@ properties:
->            - x-powers,axp209
->            - x-powers,axp221
->            - x-powers,axp223
-> +          - x-powers,axp313a
->            - x-powers,axp803
->            - x-powers,axp806
->            - x-powers,axp809
-> --
-> 2.39.0
-> 
+...
 
+> On Tuesday, January 17, 2023 4:14:07 PM EST Richard Guy Briggs wrote:
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index d1fb821de104..3133c4175c15 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -2877,10 +2878,19 @@ void __audit_log_kern_module(char *name)
+> >       context->type = AUDIT_KERN_MODULE;
+> >  }
+> >
+> > -void __audit_fanotify(u32 response)
+> > +void __audit_fanotify(u32 response, struct
+> > fanotify_response_info_audit_rule *friar) {
+> > -     audit_log(audit_context(), GFP_KERNEL,
+> > -             AUDIT_FANOTIFY, "resp=%u", response);
+> > +     /* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
+> > +     if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
+> > +             audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> > +                       "resp=%u fan_type=%u fan_info=3F subj_trust=2
+> obj_trust=2",
+> > +                       response, FAN_RESPONSE_INFO_NONE);
+> > +             return;
+> > +     }
 
+(I'm working under the assumption that the "fan_info=3F" in the record
+above is what Steve was referring to in his comment.)
+
+I vaguely recall Richard commenting on this in the past, although
+maybe not ... my thought is that the "3F" is simply the hex encoded
+"?" character in ASCII ('man 7 ascii' is your friend).  I suppose the
+question is what to do in the FAN_RESPONSE_INFO_NONE case.
+
+Historically when we had a missing field we would follow the "field=?"
+pattern, but I don't recall doing that for a field which was
+potentially hex encoded, is there an existing case where we use "?"
+for a field that is hex encoded?  If so, we can swap out the "3F" for
+a more obvious "?".
+
+However, another option might be to simply output the current
+AUDIT_FANOTIFY record format in the FAN_RESPONSE_INFO_NONE case, e.g.
+only "resp=%u".  This is a little against the usual guidance of
+"fields should not disappear from a record", but considering that
+userspace will always need to support the original resp-only format
+for compatibility reasons this may be an option.
+
+--
+paul-moore.com
