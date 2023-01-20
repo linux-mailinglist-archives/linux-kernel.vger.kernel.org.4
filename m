@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38783674D2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C84674D2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjATGUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S229727AbjATGUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjATGUH (ORCPT
+        with ESMTP id S229553AbjATGUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:20:07 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD5C81990
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:20:05 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r2so3900006wrv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FukrqbXXpPIeLZ7eh5UCg7UdwZT9NdrUQheVraI0Y6A=;
-        b=mCJVpnSrlIaebAaWmPNunZv+RiKZe0WBogdgeZmIZUzXada3jhEQDlgnNO9z0R2SVb
-         Cdb3K+mrjMoE4gH+tfhQphOwo4dRCfvPNWLOfSloE/Ga0BBHshJdco74Br3bHPQzXoty
-         mLuMshCyH14AoUTwGyHd6K78zu4K1Biw3CI6YCk/Rq8EZ2epbFa6UYOZJWwfVmI9paKM
-         H+w6/DNW8ocuUxZHVIZmdsYR1zYLfIkA1kV5ON9Jni5XBVrFxSXSbChtVe6feZI1091Q
-         0fm7F1LG7C3uiAA455xJ/KQrxUKK0j8oVOMZOFbK98sqqOxD27aHYbdldRj+kGS2d7Z2
-         kO1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FukrqbXXpPIeLZ7eh5UCg7UdwZT9NdrUQheVraI0Y6A=;
-        b=kk/UqjTYIG5bQ7PIHB531iBlcxeAe9G98oIY8wjuy/PL9ACTMLVEdeMLZLzp0msDY/
-         O/FlOLSyL/g51RaGgT241dU3Gu9wG7vMl3uRIGkOFL/swe5DMZbPmEZHgmC6/iNRWaEQ
-         df187XDJfrTMZOhbojBGx6m/+HB4owZ4hfCpu2k0nf9/Ptu0kxyiluzTIZCqdKW0YkQN
-         lDEXiynL18+/pC4UE2WlKmQf0dPNmLrEv852YOZCZLnGENPKgUj34rpPdvAXI5VaTjsW
-         1w8r7MeMIdwA0lmuJnEAAKj9U7sS524r6CMt+NgBdAm61S9RVJ2hNSFVT2gDMvLOurBb
-         oUFg==
-X-Gm-Message-State: AFqh2kpjyXTQVBjM7i82H3Gh228oYxwzuT8uh05Hs2+Amw/C97PN8q8j
-        nS1jGDhw088r/29utlpYDAJtpA==
-X-Google-Smtp-Source: AMrXdXu7rBnTkl+OzPYKhfSj+u/eHFubwwda5ssnkDeyEkNyJ/KtDWnEr+pRndShNdY9jdN3zDgxeQ==
-X-Received: by 2002:a5d:457a:0:b0:2bb:e993:6c85 with SMTP id a26-20020a5d457a000000b002bbe9936c85mr11807886wrc.35.1674195603705;
-        Thu, 19 Jan 2023 22:20:03 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q17-20020adff511000000b002366553eca7sm12748428wro.83.2023.01.19.22.20.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 22:20:03 -0800 (PST)
-Message-ID: <cfb9b0f2-a8fa-9bee-a04d-d195d69e4918@linaro.org>
-Date:   Fri, 20 Jan 2023 07:20:01 +0100
+        Fri, 20 Jan 2023 01:20:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF6981990;
+        Thu, 19 Jan 2023 22:20:30 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K65R0D023947;
+        Fri, 20 Jan 2023 06:20:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=aXKU39OQSaaTWLJC/8fawztHomaVSmHxM7RXlYvCrik=;
+ b=BzesppLCkekQqNZFjnhRJX/o7JPv9ECwVqQHSGvJagj7SNdHUBowdbIe7e73xrKEOSkG
+ vVgytirZv68oS915r5XadFdac089zsCzkOTyzpqq8JNnNSCqZxRXLi3luC+tkYuIFIY6
+ Xejmh1KGVyJHdIiURBu6W4en2qFL8SATWTF4K9uYhfTG77Fpqtn2juwHsSa4yXGhYosB
+ GNEJdTrDIaO+2PDI9YdQ4+Yf8a6O8wKWEGcmyuu65szcTzbldHTQc0t5lKURqu86ofKL
+ rMRYS/FQmX50NRvxLb0WJXZndGp1M4FVSiclXFYKsYV64H/GF+P9LsUSk/D2w1l2odK+ Tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7ncrr9u7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 06:20:24 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30K65ZNC024749;
+        Fri, 20 Jan 2023 06:20:23 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7ncrr9tr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 06:20:23 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30K63wGR002145;
+        Fri, 20 Jan 2023 06:20:21 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3n3m16ngq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 06:20:21 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30K6KJJS45416740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Jan 2023 06:20:19 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 391862004B;
+        Fri, 20 Jan 2023 06:20:19 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B048C20040;
+        Fri, 20 Jan 2023 06:20:18 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 20 Jan 2023 06:20:18 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 36414602EB;
+        Fri, 20 Jan 2023 17:20:15 +1100 (AEDT)
+Message-ID: <4466f0800b912d287c1f4c8a4454bf841b819537.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 08/24] powerpc/secvar: Allow backend to populate
+ static list of variable names
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org
+Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        gjoyce@linux.ibm.com, gcwilson@linux.ibm.com
+Date:   Fri, 20 Jan 2023 17:20:14 +1100
+In-Reply-To: <CPVRLZNI6WWQ.1AZVH3NCPCOYL@bobo>
+References: <20230118061049.1006141-1-ajd@linux.ibm.com>
+         <20230118061049.1006141-9-ajd@linux.ibm.com>
+         <CPVRLZNI6WWQ.1AZVH3NCPCOYL@bobo>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2] arm64: defconfig: Enable HDA INTEL config for ARM64
-To:     Mohan Kumar D <mkumard@nvidia.com>, catalin.marinas@arm.com,
-        will@kernel.org, dmitry.baryshkov@linaro.org, shawnguo@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com
-References: <20230117181658.17010-1-mkumard@nvidia.com>
- <e871dae2-58ac-7ad9-c198-c4e90d26c69b@linaro.org>
- <1afa38ad-716f-49f8-efd1-ed37bd8dbf6e@nvidia.com>
- <ec440deb-2970-69b8-e54d-6519c95875a8@linaro.org>
- <35eb1396-b91b-8a7f-6585-30d2f2adcf85@nvidia.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <35eb1396-b91b-8a7f-6585-30d2f2adcf85@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aHrPUNO-Ia3zFPlc5RxsVvgdddwL6PGR
+X-Proofpoint-GUID: e8XN44HRcOR7wIHSB5opgMG6MT6l5ANr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_03,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ impostorscore=0 adultscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301200055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 06:48, Mohan Kumar D wrote:
-> 
-> On 18-01-2023 18:06, Krzysztof Kozlowski wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 18/01/2023 12:46, Mohan Kumar D wrote:
->>> On 18-01-2023 13:04, Krzysztof Kozlowski wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> On 17/01/2023 19:16, Mohan Kumar wrote:
->>>>> Enable CONFIG_SND_HDA_INTEL for NVIDIA PCI based graphics sound card for
->>>>> ARM64 based platforms as Intel PCI driver was used for registering the
->>>>> sound card.
->>>> It's not a part of SoC, not a common device used during debugging or
->>>> development, so I don't think it is reasonable to enable it. We do not
->>>> enable driver just because someone uses them. Otherwise please clarify
->>>> which board has this device embedded (not pluggable by user, but embedded).
->>> This change is required for enabling HDA sound registration for Nvidia
->>> discrete GPU cards based on PCI and pluggable to Nvidia Jetson Platforms.
->> You can plug anything to PCI slot and we do not enable every such PCI
->> adapter.
-> Without this config enabled, the Intel hda audio driver won't be built 
-> and dGPU won't be able to register sound card. Do you have any 
-> suggestion here?
+On Thu, 2023-01-19 at 11:10 +1000, Nicholas Piggin wrote:
+> > diff --git a/arch/powerpc/include/asm/secvar.h
+> > b/arch/powerpc/include/asm/secvar.h
+> > index ebf95386d720..c8bee1834b54 100644
+> > --- a/arch/powerpc/include/asm/secvar.h
+> > +++ b/arch/powerpc/include/asm/secvar.h
+> > @@ -23,6 +23,10 @@ struct secvar_operations {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t (*format)(char =
+*buf);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*max_size)(u64 *ma=
+x_size);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct attribute =
+**config_attrs;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// NULL-terminated array of =
+fixed variable names
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// Only used if get_next() i=
+sn't provided
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char * const *var_name=
+s;
+>=20
+> The other way you could go is provide a sysfs_init() ops call here,
+> and export the add_var as a library function that backends can use.
 
-Without hundreds of other drivers they also won't be built and won't be
-usable. Anyway, this is just defconfig, so it does not matter. You can
-always enable it in your setup, why is this a problem?
+True, I think I'll keep it as is for now but I'll have a think about
+whether to do that in a later patch.
 
-Again, we do not enable drivers for every PCI card.
-
-Best regards,
-Krzysztof
-
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
