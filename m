@@ -2,402 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D88B675864
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423BC675865
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjATPUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S231363AbjATPUm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 Jan 2023 10:20:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjATPUc (ORCPT
+        with ESMTP id S231349AbjATPUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:20:32 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21AFDF944
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:20:26 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Nz38j68ZBz9sSL;
-        Fri, 20 Jan 2023 16:20:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1674228021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XdGTjgHxLkuAm9R++CIRfNtbyu6RO93fJhWZnkRBU8I=;
-        b=FUkOC+AOJHCS0fzYpQZHrILFJSsZRVY2h6ff0FbckgyKgO18SKbd6uqrz5gTanhvKAUvXl
-        hwpW6ZdbqqlsEOkECnQAL2MHfrc84KbA+o1MOep9F037yVH2d2zS0WY84S4VVWeZC32xXU
-        p0q6UV8HA1toTsnPOZRe+EdoZZmiS9AUB9M18ODvg3hPIfWlfeDWgIoYv0cZnYJkUq3Jxu
-        x3neiOKemIe+n3WSmGqD6UoyLf958gIrTA5+WCCggGznqLoNqYBKMxBpyCkAS6/7MDr5C6
-        WeXRYuVXzRsYmcjRXjBpEZHD4ig9yMmzzib3DmyGy2uJM+2nYI4bDgE3t7zcOw==
-Date:   Fri, 20 Jan 2023 16:20:18 +0100
-From:   "Erhard F." <erhard_f@mailbox.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sandipan Das <sandipan.das@amd.com>, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at
- "Loading Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
-Message-ID: <20230120162018.4e48f78c@yea>
-In-Reply-To: <Y8qr62sZF4HevL75@hirez.programming.kicks-ass.net>
-References: <20230119022303.177052e4@yea>
-        <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
-        <Y8lfStnaUFNRxgYu@hirez.programming.kicks-ass.net>
-        <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
-        <Y8p4CnJU6T7+17Sw@hirez.programming.kicks-ass.net>
-        <Y8qr62sZF4HevL75@hirez.programming.kicks-ass.net>
+        Fri, 20 Jan 2023 10:20:37 -0500
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097B3DA135
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:20:31 -0800 (PST)
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay05.hostedemail.com (Postfix) with ESMTP id 436D040EA0;
+        Fri, 20 Jan 2023 15:20:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id EC03580012;
+        Fri, 20 Jan 2023 15:20:27 +0000 (UTC)
+Message-ID: <a3278d71ff653fc4560004041e88b85aa6c317d0.camel@perches.com>
+Subject: Re: [PATCH v4 0/3] checkpatch.pl: warn about discouraged tags and
+ missing Link: tags
+From:   Joe Perches <joe@perches.com>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 20 Jan 2023 07:20:26 -0800
+In-Reply-To: <cover.1674217480.git.linux@leemhuis.info>
+References: <cover.1670152844.git.kai@dev.carbon-project.org>
+         <cover.1674217480.git.linux@leemhuis.info>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: pztd4m9df7ono1oz3zbn7s1dtubu8byf
-X-MBO-RS-ID: a51ba47983a6a9a7749
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: EC03580012
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Rspamd-Server: rspamout03
+X-Stat-Signature: mq45ssaa1wyt6wzwy3si8sioxcdijxum
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+InloTelwLFOCX7E3izLiKAlfPYfGM9Zs=
+X-HE-Tag: 1674228027-382225
+X-HE-Meta: U2FsdGVkX1/XdT+PMeAPR0BitOZi+Yc1azXnLLWH6Oz1GZEs+Y2/cnA2Pbn7Z/DJwFkWAbhJslfEO5ItZ9vfCg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 15:57:47 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, 2023-01-20 at 13:35 +0100, Thorsten Leemhuis wrote:
+> Hi, please consider the following checkpatch.pl patches for review.
+> 
+> The first two changes make checkpatch.pl check for a few mistakes wrt to
+> links to bug reports Linus recently complained about a few times.
+> Avoiding those is also important for my regression tracking efforts a
+> lot, as the automated tracking performed by regzbot relies on the proper
+> usage of the Link: tag.
+> 
+> The third patch fixes a few small oddities noticed in existing code
+> during review of the two changes.
 
-> diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-> index f4b87f08f5c5..29832c338cdc 100644
-> --- a/arch/x86/include/asm/text-patching.h
-> +++ b/arch/x86/include/asm/text-patching.h
-> @@ -184,6 +184,37 @@ void int3_emulate_ret(struct pt_regs *regs)
->  	unsigned long ip = int3_emulate_pop(regs);
->  	int3_emulate_jmp(regs, ip);
->  }
-> +
-> +static __always_inline
-> +void int3_emulate_jcc(struct pt_regs *regs, u8 cc, unsigned long ip, unsigned long disp)
-> +{
-> +	static const unsigned long jcc_mask[6] = {
-> +		[0] = X86_EFLAGS_OF,
-> +		[1] = X86_EFLAGS_CF,
-> +		[2] = X86_EFLAGS_ZF,
-> +		[3] = X86_EFLAGS_CF | X86_EFLAGS_ZF,
-> +		[4] = X86_EFLAGS_SF,
-> +		[5] = X86_EFLAGS_PF,
-> +	};
-> +
-> +	bool invert = cc & 1;
-> +	bool match;
-> +
-> +	if (cc < 0xc) {
-> +		match = regs->flags & jcc_mask[cc >> 1];
-> +	} else {
-> +		match = ((regs->flags & X86_EFLAGS_SF) >> X86_EFLAGS_SF_BIT) ^
-> +			((regs->flags & X86_EFLAGS_OF) >> X86_EFLAGS_OF_BIT);
-> +		if (cc >= 0xe)
-> +			match = match || (regs->flags & X86_EFLAGS_ZF);
-> +	}
-> +
-> +	if ((match && !invert) || (!match && invert))
-> +		ip += disp;
-> +
-> +	int3_emulate_jmp(regs, ip);
-> +}
-> +
->  #endif /* !CONFIG_UML_X86 */
->  
->  #endif /* _ASM_X86_TEXT_PATCHING_H */
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index 7d8c3cbde368..cd632a0171b4 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -1772,6 +1772,11 @@ void text_poke_sync(void)
->  	on_each_cpu(do_sync_core, NULL, 1);
->  }
->  
-> +/*
-> + * NOTE: crazy scheme to allow patching Jcc.d32 but not increase the size of
-> + * this thing. When len == 6 everything is prefixed with 0x0f and we map
-> + * opcode to Jcc.d8, using len to distinguish.
-> + */
->  struct text_poke_loc {
->  	/* addr := _stext + rel_addr */
->  	s32 rel_addr;
-> @@ -1893,6 +1898,10 @@ noinstr int poke_int3_handler(struct pt_regs *regs)
->  		int3_emulate_jmp(regs, (long)ip + tp->disp);
->  		break;
->  
-> +	case 0x70 ... 0x7f: /* Jcc */
-> +		int3_emulate_jcc(regs, tp->opcode & 0xf, (long)ip, tp->disp);
-> +		break;
-> +
->  	default:
->  		BUG();
->  	}
-> @@ -1966,16 +1975,26 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
->  	 * Second step: update all but the first byte of the patched range.
->  	 */
->  	for (do_sync = 0, i = 0; i < nr_entries; i++) {
-> -		u8 old[POKE_MAX_OPCODE_SIZE] = { tp[i].old, };
-> +		u8 old[POKE_MAX_OPCODE_SIZE+1] = { tp[i].old, };
-> +		u8 _new[POKE_MAX_OPCODE_SIZE+1];
-> +		const u8 *new = tp[i].text;
->  		int len = tp[i].len;
->  
->  		if (len - INT3_INSN_SIZE > 0) {
->  			memcpy(old + INT3_INSN_SIZE,
->  			       text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
->  			       len - INT3_INSN_SIZE);
-> +
-> +			if (len == 6) {
-> +				_new[0] = 0x0f;
-> +				memcpy(_new + 1, new, 5);
-> +				new = _new;
-> +			}
-> +
->  			text_poke(text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
-> -				  (const char *)tp[i].text + INT3_INSN_SIZE,
-> +				  new + INT3_INSN_SIZE,
->  				  len - INT3_INSN_SIZE);
-> +
->  			do_sync++;
->  		}
->  
-> @@ -2003,8 +2022,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
->  		 * The old instruction is recorded so that the event can be
->  		 * processed forwards or backwards.
->  		 */
-> -		perf_event_text_poke(text_poke_addr(&tp[i]), old, len,
-> -				     tp[i].text, len);
-> +		perf_event_text_poke(text_poke_addr(&tp[i]), old, len, new, len);
->  	}
->  
->  	if (do_sync) {
-> @@ -2021,10 +2039,15 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
->  	 * replacing opcode.
->  	 */
->  	for (do_sync = 0, i = 0; i < nr_entries; i++) {
-> -		if (tp[i].text[0] == INT3_INSN_OPCODE)
-> +		u8 byte = tp[i].text[0];
-> +
-> +		if (tp[i].len == 6)
-> +			byte = 0x0f;
-> +
-> +		if (byte == INT3_INSN_OPCODE)
->  			continue;
->  
-> -		text_poke(text_poke_addr(&tp[i]), tp[i].text, INT3_INSN_SIZE);
-> +		text_poke(text_poke_addr(&tp[i]), &byte, INT3_INSN_SIZE);
->  		do_sync++;
->  	}
->  
-> @@ -2042,9 +2065,11 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
->  			       const void *opcode, size_t len, const void *emulate)
->  {
->  	struct insn insn;
-> -	int ret, i;
-> +	int ret, i = 0;
->  
-> -	memcpy((void *)tp->text, opcode, len);
-> +	if (len == 6)
-> +		i = 1;
-> +	memcpy((void *)tp->text, opcode+i, len-i);
->  	if (!emulate)
->  		emulate = opcode;
->  
-> @@ -2055,6 +2080,13 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
->  	tp->len = len;
->  	tp->opcode = insn.opcode.bytes[0];
->  
-> +	if (is_jcc32(&insn)) {
-> +		/*
-> +		 * Map Jcc.d32 onto Jcc.d8 and use len to distinguish.
-> +		 */
-> +		tp->opcode = insn.opcode.bytes[1] - 0x10;
-> +	}
-> +
->  	switch (tp->opcode) {
->  	case RET_INSN_OPCODE:
->  	case JMP32_INSN_OPCODE:
-> @@ -2071,7 +2103,6 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
->  		BUG_ON(len != insn.length);
->  	}
->  
-> -
->  	switch (tp->opcode) {
->  	case INT3_INSN_OPCODE:
->  	case RET_INSN_OPCODE:
-> @@ -2080,6 +2111,7 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
->  	case CALL_INSN_OPCODE:
->  	case JMP32_INSN_OPCODE:
->  	case JMP8_INSN_OPCODE:
-> +	case 0x70 ... 0x7f: /* Jcc */
->  		tp->disp = insn.immediate.value;
->  		break;
->  
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index b36f3c367cb2..f2b2f7545ecb 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -464,50 +464,26 @@ static void kprobe_emulate_call(struct kprobe *p, struct pt_regs *regs)
->  }
->  NOKPROBE_SYMBOL(kprobe_emulate_call);
->  
-> -static nokprobe_inline
-> -void __kprobe_emulate_jmp(struct kprobe *p, struct pt_regs *regs, bool cond)
-> +static void kprobe_emulate_jmp(struct kprobe *p, struct pt_regs *regs)
->  {
->  	unsigned long ip = regs->ip - INT3_INSN_SIZE + p->ainsn.size;
->  
-> -	if (cond)
-> -		ip += p->ainsn.rel32;
-> +	ip += p->ainsn.rel32;
->  	int3_emulate_jmp(regs, ip);
->  }
-> -
-> -static void kprobe_emulate_jmp(struct kprobe *p, struct pt_regs *regs)
-> -{
-> -	__kprobe_emulate_jmp(p, regs, true);
-> -}
->  NOKPROBE_SYMBOL(kprobe_emulate_jmp);
->  
-> -static const unsigned long jcc_mask[6] = {
-> -	[0] = X86_EFLAGS_OF,
-> -	[1] = X86_EFLAGS_CF,
-> -	[2] = X86_EFLAGS_ZF,
-> -	[3] = X86_EFLAGS_CF | X86_EFLAGS_ZF,
-> -	[4] = X86_EFLAGS_SF,
-> -	[5] = X86_EFLAGS_PF,
-> -};
-> -
->  static void kprobe_emulate_jcc(struct kprobe *p, struct pt_regs *regs)
->  {
-> -	bool invert = p->ainsn.jcc.type & 1;
-> -	bool match;
-> -
-> -	if (p->ainsn.jcc.type < 0xc) {
-> -		match = regs->flags & jcc_mask[p->ainsn.jcc.type >> 1];
-> -	} else {
-> -		match = ((regs->flags & X86_EFLAGS_SF) >> X86_EFLAGS_SF_BIT) ^
-> -			((regs->flags & X86_EFLAGS_OF) >> X86_EFLAGS_OF_BIT);
-> -		if (p->ainsn.jcc.type >= 0xe)
-> -			match = match || (regs->flags & X86_EFLAGS_ZF);
-> -	}
-> -	__kprobe_emulate_jmp(p, regs, (match && !invert) || (!match && invert));
-> +	int3_emulate_jcc(regs, p->ainsn.jcc.type,
-> +			 regs->ip - INT3_INSN_SIZE + p->ainsn.size,
-> +			 p->ainsn.rel32);
->  }
->  NOKPROBE_SYMBOL(kprobe_emulate_jcc);
->  
->  static void kprobe_emulate_loop(struct kprobe *p, struct pt_regs *regs)
->  {
-> +	unsigned long ip = regs->ip - INT3_INSN_SIZE + p->ainsn.size;
->  	bool match;
->  
->  	if (p->ainsn.loop.type != 3) {	/* LOOP* */
-> @@ -535,7 +511,9 @@ static void kprobe_emulate_loop(struct kprobe *p, struct pt_regs *regs)
->  	else if (p->ainsn.loop.type == 1)	/* LOOPE */
->  		match = match && (regs->flags & X86_EFLAGS_ZF);
->  
-> -	__kprobe_emulate_jmp(p, regs, match);
-> +	if (match)
-> +		ip += p->ainsn.rel32;
-> +	int3_emulate_jmp(regs, ip);
->  }
->  NOKPROBE_SYMBOL(kprobe_emulate_loop);
->  
-> diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
-> index 2ebc338980bc..deb909f2b62f 100644
-> --- a/arch/x86/kernel/static_call.c
-> +++ b/arch/x86/kernel/static_call.c
-> @@ -9,6 +9,7 @@ enum insn_type {
->  	NOP = 1,  /* site cond-call */
->  	JMP = 2,  /* tramp / site tail-call */
->  	RET = 3,  /* tramp / site cond-tail-call */
-> +	JCC = 4,
->  };
->  
->  /*
-> @@ -25,12 +26,38 @@ static const u8 xor5rax[] = { 0x2e, 0x2e, 0x2e, 0x31, 0xc0 };
->  
->  static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
->  
-> +static u8 __is_Jcc(u8 *insn) /* Jcc.d32 */
-> +{
-> +	u8 ret = 0;
-> +
-> +	if (insn[0] == 0x0f) {
-> +		u8 tmp = insn[1];
-> +		if ((tmp & 0xf0) == 0x80)
-> +			ret = tmp;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +extern void __static_call_return(void);
-> +
-> +asm (".global __static_call_return\n\t"
-> +     ".type __static_call_return, @function\n\t"
-> +     ASM_FUNC_ALIGN "\n\t"
-> +     "__static_call_return:\n\t"
-> +     "ret; int3\n\t"
-> +     ".size __static_call_return, . - __static_call_return \n\t");
-> +
->  static void __ref __static_call_transform(void *insn, enum insn_type type,
->  					  void *func, bool modinit)
->  {
->  	const void *emulate = NULL;
->  	int size = CALL_INSN_SIZE;
->  	const void *code;
-> +	u8 op, buf[6];
-> +
-> +	if ((type == JMP || type == RET) && (op = __is_Jcc(insn)))
-> +		type = JCC;
->  
->  	switch (type) {
->  	case CALL:
-> @@ -57,6 +84,20 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
->  		else
->  			code = &retinsn;
->  		break;
-> +
-> +	case JCC:
-> +		if (!func) {
-> +			func = __static_call_return;
-> +			if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
-> +				func = x86_return_thunk;
-> +		}
-> +
-> +		buf[0] = 0x0f;
-> +		__text_gen_insn(buf+1, op, insn+1, func, 5);
-> +		code = buf;
-> +		size = 6;
-> +
-> +		break;
->  	}
->  
->  	if (memcmp(insn, code, size) == 0)
-> @@ -79,7 +120,8 @@ static void __static_call_validate(void *insn, bool tail, bool tramp)
->  
->  	if (tail) {
->  		if (opcode == JMP32_INSN_OPCODE ||
-> -		    opcode == RET_INSN_OPCODE)
-> +		    opcode == RET_INSN_OPCODE ||
-> +		    __is_Jcc(insn))
->  			return;
->  	} else {
->  		if (opcode == CALL_INSN_OPCODE ||
+Hey Andrew.  Please forward this patch series upstream.
 
-Success! You nailed it.
+Thanks, Joe
 
-Applied your patch on top of v6.2-rc4 and with that I got ye olde Thinkpad A275 with it's borked custom config + clang -Os(stupid) booting again. No side effects to be seen so far..
+> 
+> Ciao, Thorsten
+> ---
+> v3->v4:
+> - address review feedback from Joe (do not allow leading spaces in
+> matches, check if Link: is actually followed by a URL in one go,
+> and use m{} for matching https://)  (Thorsten)
+> - catch Reported-and-tested-by as well (Thorsten)
+> 
+> v2->v3:
+> - address review feedback from Joe (grammer fixes, use of $herecurr, use
+> of --no-merges in commit log quote) (Thorsten)
+> - warn when people try to add version information to the commit log
+> using code suggested by Joe (Thorsten)
+> - add a patch to make existing code in a nearby area use $herecurr where
+> it should, which Joe noticed during review
+> 
+> v1->v2:
+> - add commit messages explaining the reasoning (Thorsten)
+> - approach the usage of wrong tags with an allow list as suggested by
+> Joe (Thorsten)
+> 
+> Kai Wasserbäch (2):
+>   checkpatch: warn when unknown tags are used for links
+>   checkpatch: warn when Reported-by: is not followed by Link:
+> 
+> Thorsten Leemhuis (1):
+>   checkpatch: use proper way for show problematic line
+> 
+>  scripts/checkpatch.pl | 34 +++++++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
+> 
+> 
+> base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
 
-Many thanks!
-
-Regards,
-Erhard
