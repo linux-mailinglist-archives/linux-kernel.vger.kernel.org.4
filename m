@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30D66748A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C391B6748AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjATBMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S229492AbjATBNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjATBMA (ORCPT
+        with ESMTP id S229500AbjATBNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:12:00 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B06A4DBE2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:11:59 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i1so2890257pfk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:11:59 -0800 (PST)
+        Thu, 19 Jan 2023 20:13:41 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952D2A101D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:13:40 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id bj3so4240240pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLLOuv1S5xTn1rjXYscOd3PZw73M1sWaf11TFHQjeg8=;
-        b=oc7HVVLv88ufQU5NguQWqr8Yr0B+TbXhg3pHSzEF3mb1513AIEvN+qVrl93YRQjYTi
-         JZPwF2tZVOQ0WA5KVzRKqwyqSZJE6bERKsncHfxssopTBFL3Rr28s343sD9KmnDt1ec6
-         N8MHya73KVh3JsGmouPFO9RdobrdGOLt+nSG4hXI+DN8Yjz48Mka8QQeLqTAM9VdN/OS
-         LldSrQ3e5IniqwA7PZ1T1c1mubkhdWVT1fYdx4xwpWsFI+2YQ75JjDIvZRcJRcEa/7ol
-         UUwHH/M6Nl/H+tlIDND9uRJNZEWj2VVUmhiqzGcHaFTHdVvUu5s1XoxuVzQFxC/C15Fp
-         EycA==
+        bh=54Q/TlzbS+DFwNiz661U1uDBhYOWMskoME6kXhL4Rqs=;
+        b=HLXf297OXlmCinyIsALB6Gl5jSu9aSLUcLlqBBsQ+Yosm7cWWS3QTFqHqRsM7VRhNx
+         VlZE1a4yxahq2EeVVG8m0U0BmXEfx0sjbQ9W1xoiOffhHuWz9YdaoVerfYqYBvjKhqQG
+         pc8bbcriyiWhtvqxwaGPgKk3KHYmi5krB1WraueVzNSTMbqvAU2FaSmgwYzFw8F0pqU9
+         9/T8LKYBfX0ZIooNoDAWAMC5V+CfeIGZ2XfGLuyyLISBsbnKXF9bIaQpIeUBwb+8xvsK
+         r+RRECqQ7EPjL7QJ3qB49f2zigxwwey9Qj0So/uCGbNU6Zs8n26H5LqLc0Wa0eVczYAW
+         fdew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KLLOuv1S5xTn1rjXYscOd3PZw73M1sWaf11TFHQjeg8=;
-        b=nmZC6Md9mEc+8782u2ox2jRzQ46ke3IPsOWGdQMpj39HmcvcrcgBnWbBHwi0FpuqLi
-         v2QWV3/gR9k4TL+rBQHAo1/r5/nj0vv4qLS7hbzY3Fp3N/6Oq1PJh6NdD3Uh33YUsOR8
-         AWVjswrFAL1abNR+oLC1xbOnp6JwfzkOBHI1cahuAAzEEgjn0pysBoULe2uPiDKw6/iH
-         YUt0L6+/nRoDoSbfX3qoTQ2ZJ57PqZyVUVDxy9kB1OS5584IkcBHRjOHzX7BKabVSBaB
-         lbm2u0CoEh3B+Oicb/clw7+H2Q+jBwLSC5Pib1hmggNW9Isv97vylx0fK/AFDOHsUXOG
-         Xb0Q==
-X-Gm-Message-State: AFqh2kqVqW8CsyEz7gzYzdN9rRgYHu2bDuIfcCNZNSoOGEHnPUqW5Say
-        knxupDHAZ9sELis8Uuc/jBNawg==
-X-Google-Smtp-Source: AMrXdXtsYDh4XwQKTw1fk+Yq+6SQ99wH8Qs5JDgrnN4pwtbfObWS2/M+QfH5uPvgXUrSV2Ay0gYgfA==
-X-Received: by 2002:aa7:8692:0:b0:582:13b5:d735 with SMTP id d18-20020aa78692000000b0058213b5d735mr18721pfo.0.1674177118583;
-        Thu, 19 Jan 2023 17:11:58 -0800 (PST)
+        bh=54Q/TlzbS+DFwNiz661U1uDBhYOWMskoME6kXhL4Rqs=;
+        b=N3vafm4dzRqKFByJzBQHLxsEm9FGboAPwXAw0NKnhgJv0EZmTSw4wWmSvlrBSsDCOr
+         0aEvTsLl6pRJdi44P5vV+pWriUgOeEjna/c8MUJV2kfBcyREb7DlXr0UDXxwBVMdvW4V
+         e7CuklrDgJcpPiM13qfH04FzzuCDXKHSGOe9O09/7xDIxV/+ALlMAHXXhulYLhrU9zls
+         F7d6SccnTTwNd0A2y7adDdGvCMTy5fV4pqEChYuGYL0BSV4bTyjPxJhBKo+3ExEs6kak
+         S8Dc0wg5i4q/xYLzj+fy0QVYlHE6/B8COJJE0wFh+wZq28ktjtT8h4Y0PjkBxtGc9Fx3
+         RVQQ==
+X-Gm-Message-State: AFqh2kpCjZT4SGvfpWmfIL+SO72d/rLxEPYwGzuECe+lr7bhNJm6ns9e
+        OpGtlXEspCVDYUPhTRrjG3T7rQ==
+X-Google-Smtp-Source: AMrXdXtBmKBoO8bveVA2cTRXrVxI82YkPJo/ltKfaMri16u76lDIMUNYKkiKDLzuUC/IwLzTgxJD+g==
+X-Received: by 2002:a17:903:304b:b0:194:d5ff:3ae3 with SMTP id u11-20020a170903304b00b00194d5ff3ae3mr4716pla.2.1674177219960;
+        Thu, 19 Jan 2023 17:13:39 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id k18-20020a628412000000b0058103f45d9esm21477938pfd.82.2023.01.19.17.11.58
+        by smtp.gmail.com with ESMTPSA id q3-20020a17090311c300b0018c990ce7fesm25677780plh.239.2023.01.19.17.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:11:58 -0800 (PST)
-Date:   Fri, 20 Jan 2023 01:11:54 +0000
+        Thu, 19 Jan 2023 17:13:39 -0800 (PST)
+Date:   Fri, 20 Jan 2023 01:13:35 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Like Xu <like.xu.linux@gmail.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] KVM: x86/cpuid: Use fast return for cpuid "0xa"
- leaf when !enable_pmu
-Message-ID: <Y8nqWl+kOvc8WPdK@google.com>
+Subject: Re: [PATCH v3 0/8] KVM: x86: Add AMD Guest PerfMonV2 PMU support
+Message-ID: <Y8nqv9K/WUqhaBub@google.com>
 References: <20221111102645.82001-1-likexu@tencent.com>
- <20221111102645.82001-9-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111102645.82001-9-likexu@tencent.com>
+In-Reply-To: <20221111102645.82001-1-likexu@tencent.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,11 +73,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Nov 11, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+> Starting with Zen4, core PMU on AMD platforms such as Genoa and
+> Ryzen-7000 will support PerfMonV2, and it is also compatible with
+> legacy PERFCTR_CORE behavior and msr addresses.
 > 
-> Although when !enable_pmu, KVM will have zero-padded kvm_pmu_cap to do
-> subsequent cpuid leaf assignments, one extra branch instruction saves
-> a few subsequent zero-assignment instructions, speeding things up a bit.
+> If you don't have access to the hardware specification, the commits
+> d6d0c7f681fd..7685665c390d for host perf can also bring a quick
+> overview. Its main change is the addition of three msr's equivalent
+> to Intel V2, namely global_ctrl, global_status, global_status_clear.
+> 
+> It is worth noting that this feature is very attractive for reducing the
+> overhead of PMU virtualization, since multiple msr accesses to multiple
+> counters will be replaced by a single access to the global register,
+> plus more accuracy gain when multiple guest counters are used.
 
-I doubt my motivation was performance, I'm guessing I suggested adding the explicit
-!enable_pmu check because relying on kvm_pmu_cap to be zeroed isn't obvious.
+Some minor nits, though I haven't looked at the meat of the series yet.  I'll
+give this a thorough review early next week (unless I'm extra ambitious tomorrow).
