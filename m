@@ -2,238 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7E96751CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF946751DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjATJ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S230466AbjATJ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjATJ5O (ORCPT
+        with ESMTP id S230051AbjATJ5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:57:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6864CAA5EF
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:56:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80C3014BF;
-        Fri, 20 Jan 2023 01:57:26 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 16D093F71A;
-        Fri, 20 Jan 2023 01:56:42 -0800 (PST)
-Date:   Fri, 20 Jan 2023 09:56:32 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, peter.hilber@opensynergy.com,
-        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
-        quic_kshivnan@quicinc.com
-Subject: Re: [PATCH v8 00/17] Introduce a unified API for SCMI Server testing
-Message-ID: <Y8plUOoQu7G9PQXZ@e120937-lin>
-References: <20230118121426.492864-1-cristian.marussi@arm.com>
- <CAKfTPtBUQS9D3nJLD5RPbOAs76ZdGhaX50_ns_Qm3X+UbZb-1w@mail.gmail.com>
+        Fri, 20 Jan 2023 04:57:51 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BEC9028;
+        Fri, 20 Jan 2023 01:57:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5PCjUACeYMR6O3y/YgzV4vR8g0qeDy6mmRm0X3w+etU=; b=UZLTzgFBQJ0CQY6DaI73G+uFss
+        KwqGSOIdxHfJPvAvpX0h5594aYEYuxp9p+5pIYFQiUyoAtjfGblRYGkqNzzC7O97qLGLXKgOA6xcT
+        W2FVpKWX5ry5A3YJ73W5lemSQrX8POUcGFF7oICR8UVyWBARWyply9gPbxYr03MOkT4RNv8a7lsM2
+        GazDd5sT6cIuf+3/HAZqobxVWQ/2ElCMUjfxs3yQvXPFy+TlHZutHnPGN5zaBk3/2GxDDh+Chwiar
+        rw/dMsVd9kwwUKYpn7si4MqeWxgiSIiBAN6g7snkhdi9zBu81hUwPqpAaiLr5X9LZFKT3ZN6B53aD
+        8key49Jw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIo83-000bhg-2d;
+        Fri, 20 Jan 2023 09:56:12 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A8490300750;
+        Fri, 20 Jan 2023 10:56:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 739372133D202; Fri, 20 Jan 2023 10:56:35 +0100 (CET)
+Date:   Fri, 20 Jan 2023 10:56:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, frederic@kernel.org,
+        paulmck@kernel.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
+        andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v3 16/51] cpuidle: Annotate poll_idle()
+Message-ID: <Y8plU/f2WsmGG66H@hirez.programming.kicks-ass.net>
+References: <20230112194314.845371875@infradead.org>
+ <20230112195540.312601331@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtBUQS9D3nJLD5RPbOAs76ZdGhaX50_ns_Qm3X+UbZb-1w@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112195540.312601331@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 09:11:24AM +0100, Vincent Guittot wrote:
-> On Wed, 18 Jan 2023 at 13:15, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> >
-> > Hi all,
-> >
-> > This series aims to introduce a new SCMI unified userspace interface meant
-> > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
-> > from the perspective of the OSPM agent (non-secure world only ...)
-> >
-> > It is proposed as a testing/development facility, it is NOT meant to be a
-> > feature to use in production, but only enabled in Kconfig for test
-> > deployments.
-> >
-> > Currently an SCMI Compliance Suite like the one at [1] can only work by
-> > injecting SCMI messages at the SCMI transport layer using the mailbox test
-> > driver (CONFIG_MAILBOX_TEST) via its few debugfs entries and looking at
-> > the related replies from the SCMI backend Server.
-> >
-> > This approach has a few drawbacks:
-> >
-> > - the SCMI Server under test MUST be reachable through a mailbox based
-> >   SCMI transport: any other SCMI Server placement is not possible (like in
-> >   a VM reachable via SCMI Virtio). In order to cover other placements in
-> >   the current scenario we should write some sort of test driver for each
-> >   and every existent SCMI transport and for any future additional transport
-> >   ...this clearly does not scale.
-> >
-> > - even in the mailbox case the userspace Compliance suite cannot simply
-> >   send and receive bare SCMI messages BUT it has to properly lay them out
-> >   into the shared memory exposed by the mailbox test driver as expected by
-> >   the transport definitions. In other words such a userspace test
-> >   application has to, not only use a proper transport driver for the system
-> >   at hand, but it also has to have a comprehensive knowledge of the
-> >   internals of the underlying transport in order to operate.
-> >
-> > - last but not least, the system under test has to be specifically
-> >   configured and built, in terms of Kconfig and DT, to perform such kind of
-> >   testing, it cannot be used for anything else, which is unfortunate for
-> >   CI/CD deployments.
-> >
-> > This series introduces a new SCMI Raw mode support feature that, when
-> > configured and enabled exposes a new interface in debugfs through which:
-> >
-> > - a userspace application can inject bare SCMI binary messages into the
-> >   SCMI core stack; such messages will be routed by the SCMI regular kernel
-> >   stack to the backend Server using the currently configured transport
-> >   transparently: in other words you can test the SCMI server, no matter
-> >   where it is placed, as long as it is reachable from the currently
-> >   configured SCMI stack.
-> >   Same goes the other way around on the reading path: any SCMI server reply
-> >   can be read as a bare SCMI binary message from the same debugfs path.
-> >
-> > - as a direct consequence of this way of injecting bare messages in the
-> >   middle of the SCMI stack (instead of beneath it at the transport layer)
-> >   the user application has to handle only bare SCMI messages without having
-> >   to worry about the specific underlying transport internals that will be
-> >   taken care of by the SCMI core stack itself using its own machinery,
-> >   without duplicating such logic.
-> >
-> > - a system under test, once configured with SCMI Raw support enabled in
-> >   Kconfig, can be booted without any particular DT change.
-> >
-> > Latest V6 additions:
-> >
-> >  - improved scmi traces for msg dumps to include used channels
-> >  - added a new common SCMI debugfs root fs
-> >  - reworked SCMI Raw debugfs layout
-> >  - added support of a new additional per-channel API that allows a user to
-> >    select a specific egress channel for the message injection (when more
-> >    than one channel is available)
-> >
-> > A quick and trivial example from the shell...reading from a sensor by
-> > injecting a properly crafted packet in raw mode (letting the stack select
-> > the channel):
-> >
-> >         # INJECT THE SENSOR_READING MESSAGE FOR SENSOR ID=1 (binary little endian)
-> >         root@deb-buster-arm64:~# echo -e -n \\x06\\x54\\x00\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00 > /sys/kernel/debug/scmi/0/raw/message
-> >
-> >         # READING BACK THE REPLY...
-> >         root@deb-buster-arm64:~# cat /sys/kernel/debug/scmi/0/raw/message | od --endian=little -t x4
-> >         0000000 00005406 00000000 00000335 00000000
-> >         0000020
-> >
-> > while doing that, since Raw mode makes (partial) use of the regular SCMI
-> > stack, you can observe the messages going through the SCMI stack with the
-> > usual traces:
-> >
-> >               bash-329     [000] ..... 14183.446808: scmi_msg_dump: id=0 ch=10 pt=15 t=cmnd msg_id=06 seq=0000 s=0 pyld=0100000000000000
-> >    irq/35-mhu_db_l-81      [000] ..... 14183.447809: scmi_msg_dump: id=0 ch=10 pt=15 t=resp msg_id=06 seq=0000 s=0 pyld=3503000000000000
-> >
-> > ..trying to read in async when the backend server does NOT supports asyncs:
-> >
-> >         # AN ASYNC SENSOR READING REQUEST...
-> >         root@deb-buster-arm64:~# echo -e -n \\x06\\x54\\x00\\x00\\x01\\x00\\x00\\x00\\x01\\x00\\x00\\x00 > /sys/kernel/debug/scmi/0/raw/message_async
-> >
-> >               bash-329     [000] ..... 16415.938739: scmi_msg_dump: id=0 ch=10 pt=15 t=cmnd msg_id=06 seq=0000 s=0 pyld=0100000001000000
-> >    irq/35-mhu_db_l-81      [000] ..... 16415.944129: scmi_msg_dump: id=0 ch=10 pt=15 t=resp msg_id=06 seq=0000 s=-1 pyld=
-> >
-> >         # RETURNS A STATUS -1 FROM THE SERVER NOT SUPPORTING IT
-> >         root@deb-buster-arm64:~# cat /sys/kernel/debug/scmi/0/raw/message | od --endian=little -t x4
-> >         0000000 00005406 ffffffff
-> >         0000010
-> >
-> > Note that the above example was on a JUNO, BUT exactly the same steps can
-> > be used to reach an SCMI Server living on a VM reachable via virtio as
-> > long as the system under test if properly configured to work with a
-> > virtio transport.
-> >
-> > In a nutshell the exposed API is as follows:
-> >
-> > /sys/kernel/debug/scmi/
-> > `-- 0
-> >     |-- atomic_threshold_us
-> >     |-- instance_name
-> >     |-- raw
-> >     |   |-- channels
-> >     |   |   |-- 0x10
-> >     |   |   |   |-- message
-> >     |   |   |   `-- message_async
-> >     |   |   `-- 0x13
-> >     |   |       |-- message
-> >     |   |       `-- message_async
-> >     |   |-- errors
-> >     |   |-- message
-> >     |   |-- message_async
-> >     |   |-- notification
-> >     |   `-- reset
-> >     `-- transport
-> >         |-- is_atomic
-> >         |-- max_msg_size
-> >         |-- max_rx_timeout_ms
-> >         |-- rx_max_msg
-> >         |-- tx_max_msg
-> >         `-- type
-> >
-> > ... where at the top level:
-> >
-> >  - <N>: a progressive sequence number identifying this SCMI instance, in
-> >    case there are multiple SCMI instance defined
-> >
-> >  - instance_name: can be used (by CI) to identify the SCMI instance <N>
-> >    that you are using through this Raw accessors: it corresponds to the SCMI
-> >    DT top node full name of the underlying SCMI instance
-> >
-> >
-> > ... rooted under /transport:
-> >
-> >  - a bunch of configuration info useful to setup the user application
-> >    expectations in terms of timeouts and message characteristics.
-> >
-> >
-> > ... rooted at /raw (the real SCMI Raw interface :D):
-> >
-> >  - message*: used to send sync/async commands and read back immediate and
-> >    delayed responses (if any)
-> >  - errors: used to report timeout and unexpected replies
-> >  - reset: used to reset the SCMI Raw stack, flushing all queues from
-> >    received messages still pending to be read out (useful to be sure to
-> >    cleanup between test suite runs...)
-> >  - notification: used to read any notification being spit by the system
-> >    (if previously enabled by the user app)
-> >
-> >
-> > ... rooted at /raw/channels/<M>/:
+On Thu, Jan 12, 2023 at 08:43:30PM +0100, Peter Zijlstra wrote:
+> The __cpuidle functions will become a noinstr class, as such they need
+> explicit annotations.
 > 
-
-Hi Vincent,
-
-thanks for trying this out.
-
-> I haven't seen a description of the <M>. I figured out that this is
-> the protocol id to which the channel was associated in DT while
-> testing it but it could be good to describe this somewhere.
-
-Ah, damn yes, I had made a note to myself to add an explicit description
-of how the channel number IDs are chosen, then I forgot :P
-
-I'll add a follow-on patch once is queued.
-
-> Apart from this minor thing, I have tested it with an scmi server
-> embedded in OPTEE and run the scmi compliance tests. Everything works
-> fine using the default mode or using one specific channel.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/cpuidle/poll_state.c |    6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> FWIW
-> Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-> 
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -13,7 +13,10 @@
+>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>  			       struct cpuidle_driver *drv, int index)
+>  {
+> -	u64 time_start = local_clock();
+> +	u64 time_start;
+> +
+> +	instrumentation_begin();
+> +	time_start = local_clock();
+>  
+>  	dev->poll_time_limit = false;
+>  
+> @@ -39,6 +42,7 @@ static int __cpuidle poll_idle(struct cp
+>  	raw_local_irq_disable();
+>  
+>  	current_clr_polling();
+> +	instrumentation_end();
+>  
+>  	return index;
+>  }
 
-Thanks,
-Cristian
+Pff, this patch is garbage. However wrote it didn't have his brain
+engaged :/
 
+Something like the below fixes it, but I still need to build me funny
+configs like ia64 and paravirt to see if I didn't wreck me something...
+
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a78e73da4a74..70c07e11caa6 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -215,7 +215,7 @@ static void __init cyc2ns_init_secondary_cpus(void)
+ /*
+  * Scheduler clock - returns current time in nanosec units.
+  */
+-u64 native_sched_clock(void)
++noinstr u64 native_sched_clock(void)
+ {
+ 	if (static_branch_likely(&__use_tsc)) {
+ 		u64 tsc_now = rdtsc();
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 500d1720421e..0b00f21cefe3 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -426,7 +426,7 @@ void cpuidle_reflect(struct cpuidle_device *dev, int index)
+  * @dev:   the cpuidle device
+  *
+  */
+-u64 cpuidle_poll_time(struct cpuidle_driver *drv,
++__cpuidle u64 cpuidle_poll_time(struct cpuidle_driver *drv,
+ 		      struct cpuidle_device *dev)
+ {
+ 	int i;
+diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+index d25ec52846e6..bdcfeaecd228 100644
+--- a/drivers/cpuidle/poll_state.c
++++ b/drivers/cpuidle/poll_state.c
+@@ -15,7 +15,6 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+ {
+ 	u64 time_start;
+ 
+-	instrumentation_begin();
+ 	time_start = local_clock();
+ 
+ 	dev->poll_time_limit = false;
+@@ -42,7 +41,6 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+ 	raw_local_irq_disable();
+ 
+ 	current_clr_polling();
+-	instrumentation_end();
+ 
+ 	return index;
+ }
+diff --git a/include/linux/sched/clock.h b/include/linux/sched/clock.h
+index 867d588314e0..7960f0769884 100644
+--- a/include/linux/sched/clock.h
++++ b/include/linux/sched/clock.h
+@@ -45,7 +45,7 @@ static inline u64 cpu_clock(int cpu)
+ 	return sched_clock();
+ }
+ 
+-static inline u64 local_clock(void)
++static __always_inline u64 local_clock(void)
+ {
+ 	return sched_clock();
+ }
+@@ -79,7 +79,7 @@ static inline u64 cpu_clock(int cpu)
+ 	return sched_clock_cpu(cpu);
+ }
+ 
+-static inline u64 local_clock(void)
++static __always_inline u64 local_clock(void)
+ {
+ 	return sched_clock_cpu(raw_smp_processor_id());
+ }
+diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
+index e374c0c923da..6b3b0559e53c 100644
+--- a/kernel/sched/clock.c
++++ b/kernel/sched/clock.c
+@@ -260,7 +260,7 @@ notrace static inline u64 wrap_max(u64 x, u64 y)
+  *  - filter out backward motion
+  *  - use the GTOD tick value to create a window to filter crazy TSC values
+  */
+-notrace static u64 sched_clock_local(struct sched_clock_data *scd)
++noinstr static u64 sched_clock_local(struct sched_clock_data *scd)
+ {
+ 	u64 now, clock, old_clock, min_clock, max_clock, gtod;
+ 	s64 delta;
+@@ -287,7 +287,7 @@ notrace static u64 sched_clock_local(struct sched_clock_data *scd)
+ 	clock = wrap_max(clock, min_clock);
+ 	clock = wrap_min(clock, max_clock);
+ 
+-	if (!try_cmpxchg64(&scd->clock, &old_clock, clock))
++	if (!arch_try_cmpxchg64(&scd->clock, &old_clock, clock))
+ 		goto again;
+ 
+ 	return clock;
+@@ -360,7 +360,7 @@ notrace static u64 sched_clock_remote(struct sched_clock_data *scd)
+  *
+  * See cpu_clock().
+  */
+-notrace u64 sched_clock_cpu(int cpu)
++noinstr u64 sched_clock_cpu(int cpu)
+ {
+ 	struct sched_clock_data *scd;
+ 	u64 clock;
