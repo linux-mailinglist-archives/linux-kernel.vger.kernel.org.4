@@ -2,108 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE746759DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070C46759EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjATQ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S230117AbjATQ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjATQ0V (ORCPT
+        with ESMTP id S230090AbjATQ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:26:21 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1267F8B33C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:26:17 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id e8so4542126qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:26:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TnOBM38jwZ+FGGTAxzVN5OdFQ/WcRS5JKv2Bru4tdr8=;
-        b=uDhE2Fr6pAyRvn4tBict9MP4d2ra+jv8S9DMqUwr+GSL64JdbxrXZf6Cx76qgUDgM2
-         mYadOfTh1BOW0ZZL4VHqwiQUZIdM/5Rc3h9ML0BxmsXHOu3iivCixvZ7E1CPE7A2EL//
-         W0g0krEFMSuAUmt+GX0lICCqV3ZC2x4Ir8pnOAbr828oPDT3skVRpBnTNwqfZ/SoK32M
-         siSbDnUIolNxfFXlSz/nRoBA/2vPTHZyIPjYll/Qj0mQBzAAdzHl1HyGN90Bz9XmZL93
-         tgsKjxeaFpir0zolamftaNQK7KI7NYBmV6Ln6VP5kzxUoKFQo9rfBNvEjdx6IQGQ5EXD
-         YSIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TnOBM38jwZ+FGGTAxzVN5OdFQ/WcRS5JKv2Bru4tdr8=;
-        b=EvymGTuGVe/KRCACMK9U6l1NKaZDvflzaom1Io10XVyXVyUPYzodA0zO1gDekvA7r8
-         6YMPEpkC57WitTAzC5O7RsRlVWMyERmy71VXKVDezF7Ex3omIWREwywYp9+cb5YzSXVi
-         /8cNfJQJP5U7DAzlRJiC6Yh4cEnHO757k5s5TCR4f1HGXZjaS4bUN6CI9lZu+fjNNSYd
-         aC/dM24ARqeGDWosd6GccK250bHwKVewImg88cYOkAhnMsHiWztKjUb/5QXcDJG0xtfm
-         qnsa1+mZdrSTWwtpsCDVGxwvS3E8byxkUGthnUrA3Cbg/6tnKP0LkcIs8rq1hIJCdCFa
-         i9Pw==
-X-Gm-Message-State: AFqh2koTML8j4qZkzrnq5gBzwIXskGG3tuhPZEQkFFYH7DST5qAxqOR5
-        r+dPR9OkfpS3TSKOAPzRo0bSZQ==
-X-Google-Smtp-Source: AMrXdXsz7Cy1NvVEbD0H6s/6ZOaOGvpMhPl03HSUFX0J7J162UZn/nrSDAhQjnwgCVYcqTca3bmzqg==
-X-Received: by 2002:a05:622a:4a83:b0:3a8:55c:a893 with SMTP id fw3-20020a05622a4a8300b003a8055ca893mr23602349qtb.0.1674231976245;
-        Fri, 20 Jan 2023 08:26:16 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bbe8])
-        by smtp.gmail.com with ESMTPSA id ca24-20020a05622a1f1800b003b697038179sm1564546qtb.35.2023.01.20.08.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 08:26:15 -0800 (PST)
-Date:   Fri, 20 Jan 2023 11:27:12 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v6 1/3] workingset: refactor LRU refault to expose
- refault recency check
-Message-ID: <Y8rA4C6qnT5InHGc@cmpxchg.org>
-References: <20230117195959.29768-1-nphamcs@gmail.com>
- <20230117195959.29768-2-nphamcs@gmail.com>
- <Y8qmaqpAFko+gI3h@bfoster>
+        Fri, 20 Jan 2023 11:28:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BC66E40E;
+        Fri, 20 Jan 2023 08:28:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD7E6B82915;
+        Fri, 20 Jan 2023 16:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8FFC4339C;
+        Fri, 20 Jan 2023 16:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674232096;
+        bh=9/RPi6pw/xT0UDVDrxKzKczKe5NeWC2HStFjAAbJdwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a05c2Oiwc60gejDflrrUiHDnmFq+dGW+gEGrdZf46xm0VB3gv/xVALs2UKSsIpZw+
+         MB/YZ7eo4j1tOtfI17S4joyKCdFodVzc07PrRkDyUFZeb+HoGEvjHFQBISERlLKATj
+         eYF7hlDE6mpF0dbIP4N05E5vaNfapDfNtxSpRZAZ0/xeG5+1vcRgNJSyJr3tvprg67
+         wWeB/EhC97VCNLhwtqQOCaUT84dc6CS9vE76Ub4QxnoD7e3cJqDdWYDt2maSXUe+fI
+         Uc0dvRgO6jTvYixqvLCvu/OnNAUZqkSAkX0hwUWokq2aQ0UZgRBF9XBfsx1Jq482cP
+         qQPwdTDJavRPA==
+Date:   Fri, 20 Jan 2023 16:28:09 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv5 05/10] mfd: rk808: split into core and i2c
+Message-ID: <Y8rBGdddgjTfm/gU@google.com>
+References: <20230109172723.60304-1-sebastian.reichel@collabora.com>
+ <20230109172723.60304-6-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8qmaqpAFko+gI3h@bfoster>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230109172723.60304-6-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 09:34:18AM -0500, Brian Foster wrote:
-> On Tue, Jan 17, 2023 at 11:59:57AM -0800, Nhat Pham wrote:
-> > +	int memcgid;
-> > +	struct pglist_data *pgdat;
-> > +	unsigned long token;
-> > +
-> > +	unpack_shadow(shadow, &memcgid, &pgdat, &token, workingset);
-> > +	eviction_memcg = mem_cgroup_from_id(memcgid);
-> > +
-> > +	lruvec = mem_cgroup_lruvec(eviction_memcg, pgdat);
-> > +	lrugen = &lruvec->lrugen;
-> > +
-> > +	min_seq = READ_ONCE(lrugen->min_seq[file]);
-> > +	return !((token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)));
+On Mon, 09 Jan 2023, Sebastian Reichel wrote:
+
+> Split rk808 into a core and an i2c part in preperation for
+> SPI support.
 > 
-> I think this might be more readable without the double negative.
-> 
-> Also it looks like this logic is pulled from lru_gen_refault(). Any
-> reason the caller isn't refactored to use this helper, similar to how
-> workingset_refault() is modified? It seems like a potential landmine to
-> duplicate the logic here for cachestat purposes and somewhere else for
-> actual workingset management.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/Kconfig                   |   2 +-
+>  drivers/input/misc/Kconfig            |   2 +-
+>  drivers/mfd/Kconfig                   |   7 +-
+>  drivers/mfd/Makefile                  |   3 +-
+>  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+>  drivers/mfd/rk8xx-i2c.c               | 209 ++++++++++++++++++++++++++
+>  drivers/pinctrl/Kconfig               |   2 +-
+>  drivers/power/supply/Kconfig          |   2 +-
+>  drivers/regulator/Kconfig             |   2 +-
+>  drivers/rtc/Kconfig                   |   2 +-
+>  include/linux/mfd/rk808.h             |   6 +
+>  sound/soc/codecs/Kconfig              |   2 +-
+>  12 files changed, 265 insertions(+), 183 deletions(-)
+>  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+>  create mode 100644 drivers/mfd/rk8xx-i2c.c
 
-The initial version was refactored. Yu explicitly requested it be
-duplicated [1] to cut down on some boiler plate.
+[...]
 
-I have to agree with Brian on this one, though. The factored version
-is better for maintenance than duplicating the core logic here. Even
-if it ends up a bit more boiler plate - it's harder to screw that up,
-and easier to catch at compile time, than the duplicates diverging.
+> diff --git a/drivers/mfd/rk8xx-i2c.c b/drivers/mfd/rk8xx-i2c.c
+> new file mode 100644
+> index 000000000000..7babb0e1e64c
+> --- /dev/null
+> +++ b/drivers/mfd/rk8xx-i2c.c
 
-[1] https://lore.kernel.org/lkml/CAOUHufZKTqoD2rFwrX9-eCknBmeWqP88rZ7X7A_5KHHbGBUP=A@mail.gmail.com/
+[...]
+
+> +static int rk8xx_i2c_get_variant(struct i2c_client *client)
+> +{
+> +	u8 pmic_id_msb, pmic_id_lsb;
+> +	int msb, lsb;
+> +
+> +	if (of_device_is_compatible(client->dev.of_node, "rockchip,rk817") ||
+> +	    of_device_is_compatible(client->dev.of_node, "rockchip,rk809")) {
+> +		pmic_id_msb = RK817_ID_MSB;
+> +		pmic_id_lsb = RK817_ID_LSB;
+> +	} else {
+> +		pmic_id_msb = RK808_ID_MSB;
+> +		pmic_id_lsb = RK808_ID_LSB;
+> +	}
+
+Appreciate that this is probably old code, but it would be better do to
+device matching with OF match.
+
+> +	/* Read chip variant */
+> +	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
+> +	if (msb < 0)
+> +		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
+> +
+> +	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
+> +	if (lsb < 0)
+> +		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
+> +
+> +	return ((msb << 8) | lsb) & RK8XX_ID_MSK;
+
+So this device provides the ability to dynamically read the chip IDs,
+but in order to do so, you need to know what chip you're operating on?
+Why wouldn't they always put the chip IDs in the same place!  I
+understand this is just the variant, but still ...
+
+> +static int rk8xx_i2c_probe(struct i2c_client *client)
+> +{
+> +	const struct regmap_config *regmap_cfg;
+> +	struct regmap *regmap;
+> +	int variant;
+> +
+> +	variant = rk8xx_i2c_get_variant(client);
+> +	if (variant < 0)
+> +		return variant;
+> +
+> +	switch (variant) {
+> +	case RK805_ID:
+> +		regmap_cfg = &rk805_regmap_config;
+> +		break;
+> +	case RK808_ID:
+> +		regmap_cfg = &rk808_regmap_config;
+> +		break;
+> +	case RK818_ID:
+> +		regmap_cfg = &rk818_regmap_config;
+> +		break;
+> +	case RK809_ID:
+> +	case RK817_ID:
+> +		regmap_cfg = &rk817_regmap_config;
+> +		break;
+> +	default:
+> +		return dev_err_probe(&client->dev, -EINVAL, "Unsupported RK8XX ID %x\n", variant);
+> +	}
+
+All of this stuff could be passed through the OF match API.
+
+> +
+> +	regmap = devm_regmap_init_i2c(client, regmap_cfg);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(&client->dev, PTR_ERR(regmap),
+> +				     "regmap initialization failed\n");
+> +
+> +	return rk8xx_probe(&client->dev, variant, client->irq, regmap);
+> +}
+> +
+> +static void rk8xx_i2c_shutdown(struct i2c_client *client)
+> +{
+> +	rk8xx_shutdown(&client->dev);
+> +}
+> +
+> +static int __maybe_unused rk8xx_i2c_suspend(struct device *dev)
+> +{
+> +	return rk8xx_suspend(dev);
+> +}
+> +
+> +static int __maybe_unused rk8xx_i2c_resume(struct device *dev)
+> +{
+> +	return rk8xx_resume(dev);
+> +}
+> +static SIMPLE_DEV_PM_OPS(rk8xx_i2c_pm_ops, rk8xx_i2c_suspend, rk8xx_i2c_resume);
+
+Why not place the exported functions straight into the MACRO?
+
+> +static const struct of_device_id rk8xx_i2c_of_match[] = {
+> +	{ .compatible = "rockchip,rk805" },
+> +	{ .compatible = "rockchip,rk808" },
+> +	{ .compatible = "rockchip,rk809" },
+> +	{ .compatible = "rockchip,rk817" },
+> +	{ .compatible = "rockchip,rk818" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, rk8xx_i2c_of_match);
+> +
+> +static struct i2c_driver rk8xx_i2c_driver = {
+> +	.driver = {
+> +		.name = "rk8xx-i2c",
+> +		.of_match_table = rk8xx_i2c_of_match,
+> +		.pm = &rk8xx_i2c_pm_ops,
+> +	},
+> +	.probe_new = rk8xx_i2c_probe,
+> +	.shutdown  = rk8xx_i2c_shutdown,
+> +};
+> +module_i2c_driver(rk8xx_i2c_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
+> +MODULE_AUTHOR("Zhang Qing <zhangqing@rock-chips.com>");
+> +MODULE_AUTHOR("Wadim Egorov <w.egorov@phytec.de>");
+> +MODULE_DESCRIPTION("RK8xx I2C PMIC driver");
+
+-- 
+Lee Jones [李琼斯]
