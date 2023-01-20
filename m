@@ -2,166 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2812D674E7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA535674E8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjATHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S231176AbjATHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjATHnv (ORCPT
+        with ESMTP id S230473AbjATHpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:43:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB997DFAA;
-        Thu, 19 Jan 2023 23:43:49 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K7JfAb027594;
-        Fri, 20 Jan 2023 07:43:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=DkjetBvNyupAHj8KhGylZIP4X9T8JCN3PLJ/4RRN4zc=;
- b=QKTuzhB3tbIEqykyYDxEhB+WKJyo4pe3wNzAql1+/BIQ3eh/ETnFLc0sCrSg2kSGefe7
- i1QZ8zvqpFZjH+m59d2BoUsnubCC5RlI43+AF34jLWN6fDyV/JQ9XqLdyfpOJ5pAOR19
- /kMktxPpSQd8Ku5rcgYe5torIGdoaziBA4d0BwyhlSIJebCKj/drov0jy2ly3ju5H1nv
- 85Z7LflXYWgAftRFE46FfncRnAf5Vkm0c0Zw67o0NsLRTizSYxoicXVEV1SHesTc+vSK
- d9GRyrplcRbjrFaRT3E7gtjtDPpJoD0vfIsnjMg4Omjslb8MKxBo26S+A2kv4kZDE/hb DQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7pfj8ck8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 07:43:41 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JLDIIN025743;
-        Fri, 20 Jan 2023 07:43:39 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3n3m16dkgy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 07:43:39 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30K7haXP23855480
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Jan 2023 07:43:36 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 988E520043;
-        Fri, 20 Jan 2023 07:43:36 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D9A220040;
-        Fri, 20 Jan 2023 07:43:36 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 20 Jan 2023 07:43:36 +0000 (GMT)
-Received: from jarvis-ozlabs-ibm-com.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6F235609C3;
-        Fri, 20 Jan 2023 18:43:30 +1100 (AEDT)
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        ruscur@russell.cc, zohar@linux.ibm.com, mpe@ellerman.id.au,
-        gjoyce@linux.ibm.com, sudhakar@linux.ibm.com, bgray@linux.ibm.com,
-        erichte@linux.ibm.com, joel@jms.id.au
-Subject: [PATCH v4 24/24] integrity/powerpc: Support loading keys from pseries secvar
-Date:   Fri, 20 Jan 2023 18:43:06 +1100
-Message-Id: <20230120074306.1326298-25-ajd@linux.ibm.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120074306.1326298-1-ajd@linux.ibm.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+        Fri, 20 Jan 2023 02:45:41 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7558B755
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:44:54 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k16so3327424wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:44:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=drfFdgpb4YkUjSwdoc9Z5a3O+ognmoqBbo2eF6alSdU=;
+        b=e+mfRRxTfGW5YTv/Rk9ZBMpWJa9fMCCQ17hOT/s5m2unxnuD9/dQh529Rr8DacQ8/9
+         Pyn4ZGgPU0hBpE4SZEuuurb0zU1EOSM3CGagMFIn+q7stgDJm3j+dM3p5zO7GSu+Kp/1
+         Vl6gjh8CuC7mH346RLr42h9JUD5657RToSf8famYSTfsPFxiucbg+DLVP1EYB0SX5PeB
+         Nia+5KEjroz2gFWuMsvL+Nf++pfSdjOXfB+ohS03PZRyUTWwM6F/cTpEBWLt7Q3oHZ34
+         OunY3n/J6VouQ5NEnAJP60JSmc8OdVhgFHg1vhcqS1+5+2qCjwPZcurLVSIwbbWMl0YP
+         k+rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=drfFdgpb4YkUjSwdoc9Z5a3O+ognmoqBbo2eF6alSdU=;
+        b=LtT4Pi8OUq4MWz0kgt+8yixRjWSUXoEBmxX4E8BvlebacB7/x29gqWVHUfOtxvbZYf
+         ks08oUiF4m1oElNqbRmLsVE5ceKDeSSAQ750Ykvyvyzx0mH1cvVKhEiz1vuKEvI8vLxg
+         LDMEtfi7ApQGrUbi3o83HYBzbkZFHf7eaYvjCg8LLLSbhfrtM77f6qOvHHz4TJ6wZg5O
+         hYzBFOYwt+PZ3xM6Ir41ibpnmcxIRUF5V0amX5bKZ9gKc3S84WI7pMNi51rSsufHrtdg
+         HxAY/sydwNHRNZhdB0TG0C/5xSvMYs468SDaUT1U76KRQF0DeHISpGfd67j8xJ/Qd4d4
+         HIHg==
+X-Gm-Message-State: AFqh2krmq5W9oABQczKn64OP/n3W60nTIQ4KoAXOwvwkUvzYm3xm5YUt
+        Zg+e/olqXgah36b+oGN257n+aQ==
+X-Google-Smtp-Source: AMrXdXul6atu6mzYQTY69VMfekx6QHfoNRoaaWTtrahYGNQRtASVGIqsSfmGvRdAjKSkA656+k/cyA==
+X-Received: by 2002:a05:600c:4c21:b0:3cf:900c:de6b with SMTP id d33-20020a05600c4c2100b003cf900cde6bmr12667812wmp.15.1674200673849;
+        Thu, 19 Jan 2023 23:44:33 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003c71358a42dsm1893276wms.18.2023.01.19.23.44.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 23:44:33 -0800 (PST)
+Message-ID: <b277b67c-bd00-a543-1945-f986134a78f7@linaro.org>
+Date:   Fri, 20 Jan 2023 08:44:31 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
+ <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
+ <60766c7b-abb2-3afb-aa16-0e1385b88a73@linaro.org>
+ <CAFGrd9rtO0B2XWEEU6gtv39PndjdjLL6tbRWimWT3RvLu1GFrQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFGrd9rtO0B2XWEEU6gtv39PndjdjLL6tbRWimWT3RvLu1GFrQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Qm1zgF_EukHmA95Zx8ly3KCZV9BOTRcV
-X-Proofpoint-GUID: Qm1zgF_EukHmA95Zx8ly3KCZV9BOTRcV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_04,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 suspectscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell Currey <ruscur@russell.cc>
+On 19/01/2023 20:18, Alexandre Mergnat wrote:
+> Le jeu. 19 janv. 2023 à 17:49, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> a écrit :
+>>
+>> On 19/01/2023 17:28, Alexandre Mergnat wrote:
+>>>       { .compatible = "micron,spi-authenta", .data = &spidev_of_check },
+>>> +     { .compatible = "mediatek,genio", .data = &spidev_of_check },
+>>
+>> Please run scripts/checkpatch.pl and fix reported warnings.
+> 
+> Actually I did.
+> I saw: "WARNING: DT compatible string "mediatek,genio" appears
+> un-documented -- check ./Documentation/devicetree/bindings/"
+> But there are no bindings for spidev. 
 
-The secvar object format is only in the device tree under powernv.
-We now have an API call to retrieve it in a generic way, so we should
-use that instead of having to handle the DT here.
+There are. Just some other people were as well ignoring warnings. What
+is the purpose of having tools if people keep ignoring the warnings, sigh...
 
-Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
-The object format is expected to be the same, so there shouldn't be any
-functional differences between objects retrieved from powernv and
-pseries.
 
-Signed-off-by: Russell Currey <ruscur@russell.cc>
-Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-
----
-
-v3: New patch
-
-v4: Pass format buffer size (stefanb, npiggin)
----
- .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-index dee51606d5f4..d4ce91bf3fec 100644
---- a/security/integrity/platform_certs/load_powerpc.c
-+++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -10,7 +10,6 @@
- #include <linux/cred.h>
- #include <linux/err.h>
- #include <linux/slab.h>
--#include <linux/of.h>
- #include <asm/secure_boot.h>
- #include <asm/secvar.h>
- #include "keyring_handler.h"
-@@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
- 	void *db = NULL, *dbx = NULL;
- 	u64 dbsize = 0, dbxsize = 0;
- 	int rc = 0;
--	struct device_node *node;
-+	ssize_t len;
-+	char buf[32];
- 
- 	if (!secvar_ops)
- 		return -ENODEV;
- 
--	/* The following only applies for the edk2-compat backend. */
--	node = of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
--	if (!node)
-+	len = secvar_ops->format(buf, 32);
-+	if (len <= 0)
- 		return -ENODEV;
- 
-+	// Check for known secure boot implementations from OPAL or PLPKS
-+	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf)) {
-+		pr_err("Unsupported secvar implementation \"%s\", not loading certs\n", buf);
-+		return -ENODEV;
-+	}
-+
- 	/*
- 	 * Get db, and dbx. They might not exist, so it isn't an error if we
- 	 * can't get them.
-@@ -103,8 +108,6 @@ static int __init load_powerpc_certs(void)
- 		kfree(dbx);
- 	}
- 
--	of_node_put(node);
--
- 	return rc;
- }
- late_initcall(load_powerpc_certs);
--- 
-2.39.0
+Best regards,
+Krzysztof
 
