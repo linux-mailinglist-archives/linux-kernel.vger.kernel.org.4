@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFD3675243
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F47675247
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjATKVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S229875AbjATKXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjATKVw (ORCPT
+        with ESMTP id S229543AbjATKXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:21:52 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC364617D;
-        Fri, 20 Jan 2023 02:21:51 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pIoWd-002BGR-8C; Fri, 20 Jan 2023 18:21:36 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 20 Jan 2023 18:21:35 +0800
-Date:   Fri, 20 Jan 2023 18:21:35 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] crypto: stm32/hash: Support Ux500 hash
-Message-ID: <Y8prL1fzhdf1jEyT@gondor.apana.org.au>
-References: <20221227-ux500-stm32-hash-v2-0-bc443bc44ca4@linaro.org>
- <20221227-ux500-stm32-hash-v2-5-bc443bc44ca4@linaro.org>
+        Fri, 20 Jan 2023 05:23:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7DE8BA93
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:23:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAE0561EFF
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1E4C433EF;
+        Fri, 20 Jan 2023 10:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674210198;
+        bh=4DqJuaqYnQUzbKI9fdDrJ0+L9YbU5DcdCL9EUTYH51Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=de5qBTzjZ6upncynJLhZCDPDup/eo1j5JNxaK9aCISufhpvNxj5V1j6XiHbaSCPIn
+         yCbDzD+xumNWbtnAPPbizV6vdAAfpInoil7jg/oa3xPht9Ck6KhOWj6/UO/8JfX/Q8
+         nox8Rq+qeb0KFdIoJ9l8+7IxyGqomfL8ZjlLIHE0=
+Date:   Fri, 20 Jan 2023 11:23:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, hch@lst.de, jgg@nvidia.com,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 6/8] iommu: Retire bus ops
+Message-ID: <Y8prk3YD/dMvxTOz@kroah.com>
+References: <cover.1673978700.git.robin.murphy@arm.com>
+ <a2db51f8f417bbe0032e2c4231579f8c4ce9a089.1673978700.git.robin.murphy@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221227-ux500-stm32-hash-v2-5-bc443bc44ca4@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a2db51f8f417bbe0032e2c4231579f8c4ce9a089.1673978700.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 08:19:16PM +0100, Linus Walleij wrote:
->  
-> +static void stm32_hash_emptymsg_fallback(struct ahash_request *req)
-> +{
-> +	struct crypto_ahash *ahash = crypto_ahash_reqtfm(req);
-> +	struct stm32_hash_ctx *ctx = crypto_ahash_ctx(ahash);
-> +	struct stm32_hash_request_ctx *rctx = ahash_request_ctx(req);
-> +	struct stm32_hash_dev *hdev = rctx->hdev;
-> +	struct crypto_shash *xtfm;
-> +	struct shash_desc *sdesc;
-> +	size_t len;
-> +	int ret;
-> +
-> +	dev_dbg(hdev->dev, "use fallback message size 0 key size %d\n",
-> +		ctx->keylen);
-> +	xtfm = crypto_alloc_shash(crypto_ahash_alg_name(ahash),
-> +				  0, CRYPTO_ALG_NEED_FALLBACK);
-> +	if (IS_ERR(xtfm)) {
-> +		dev_err(hdev->dev, "failed to allocate synchronous fallback\n");
-> +		return;
-> +	}
-> +
-> +	len = sizeof(*sdesc) + crypto_shash_descsize(xtfm);
-> +	sdesc = kmalloc(len, GFP_KERNEL);
-> +	if (!sdesc)
-> +		goto err_hashkey_sdesc;
-> +	sdesc->tfm = xtfm;
-> +
-> +	if (ctx->keylen) {
-> +		ret = crypto_shash_setkey(xtfm, ctx->key, ctx->keylen);
-> +		if (ret) {
-> +			dev_err(hdev->dev, "failed to set key ret=%d\n", ret);
-> +			goto err_hashkey;
-> +		}
-> +	}
-> +
-> +	ret = crypto_shash_init(sdesc);
-> +	if (ret) {
-> +		dev_err(hdev->dev, "shash init error ret=%d\n", ret);
-> +		goto err_hashkey;
-> +	}
-> +
-> +	ret = crypto_shash_finup(sdesc, NULL, 0, rctx->digest);
-> +	if (ret)
-> +		dev_err(hdev->dev, "shash finup error\n");
-> +err_hashkey:
-> +	kfree(sdesc);
-> +err_hashkey_sdesc:
-> +	crypto_free_shash(xtfm);
-> +}
+On Thu, Jan 19, 2023 at 07:18:24PM +0000, Robin Murphy wrote:
+> With the rest of the API internals converted, it's time to finally
+> tackle probe_device and how we bootstrap the per-device ops association
+> to begin with. This ends up being disappointingly straightforward, since
+> fwspec users are already doing it in order to find their of_xlate
+> callback, and it works out that we can easily do the equivalent for
+> other drivers too. Then shuffle the remaining awareness of iommu_ops
+> into the couple of core headers that still need it, and breathe a sigh
+> of relief...
+> 
+> Ding dong the bus ops are gone!
+> 
+> CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> CC: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-Calling crypto_alloc_shash is not allowed in this context.  For
-example, we might have been called down from the block layer due to
-swapping.  Even if you intermediate this with kernel threads, it
-still doesn't change the nature of the dead-lock.
+Nice work!
 
-So if you need a fallback for zero-length messages, just allocate
-it unconditionally in the init_tfm function.
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
