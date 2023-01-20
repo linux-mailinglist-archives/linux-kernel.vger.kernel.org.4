@@ -2,172 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91579674A80
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB60674A84
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjATEMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S229898AbjATEQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjATEMq (ORCPT
+        with ESMTP id S229450AbjATEQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:12:46 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70787288
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:12:44 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id z4-20020a17090a170400b00226d331390cso3744877pjd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZBnQ7FD+GLFKN6GXmu4W2t9vwDu0xXnpxWvY6mSeA4s=;
-        b=GsnOqDuuuICAhwmSxLZkEbc4GIABzMFjiDPuIH/bQ5WMoHXo5BbbWqMazvzHnikncc
-         muE1u2CXH3woyNa48//09jrS1p9/TqHtkja+aBAwh10zUZeb+NOCOJRt3DrCDUqGN7Rw
-         FjV/QyOL6/wQJuaWdwJZbXcUA6mpIrzYAcc+v85Rv9Ji7mb3aPF5NIniOyw+Sd/YLOg2
-         gm4ZJfU2Jy0n4zFYXiSmbdQloItyFzojQ0c1guiYnDUbugXPtJcHP9BKkPXQ5/Xkd2uh
-         UsQTdDU/o6nfnLHJUTKWaYMwwJFl2d+I6xcc486TozAPPll4m7AWo8OTkcEbCNCeOzzG
-         t4JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZBnQ7FD+GLFKN6GXmu4W2t9vwDu0xXnpxWvY6mSeA4s=;
-        b=vtG6ykfvWCT4g0T4bleQT1178N1pX9Xv34dxGUsHVBJvj6hW7Y+RFC43MEAgzAJGp5
-         MoUXzkE67FyxGkCi3NNwUPTg7g+RrZHaRlLcTMDQMk1RylaWIvUwbc17VfGCS3jNsyTA
-         3TqFl5Z97VGa+2IdwkdN3H3Gr/4gSRnNZyOYcOoqBr4xmFAzgsAxaY5UtnBgw+kjWK3a
-         xs+RD2c8NH39VDpbShYinwtDZBWMgE7KGrmoRg5NyvNmr/MC6bdAOQ5g4jLOFHnWnvOq
-         N3OUwdLD7MDZOItX6hA4pZB0s/VaoGSXh5n4F/yf3VZbZVILmwSfhKGgbry4Y++KKaHq
-         DFAw==
-X-Gm-Message-State: AFqh2krMNvYMgtuax/ft73NAzuT3H0CxsibFQG/JNy6KtLvXuZaPmH0u
-        LhjzdVpleWtO9zf6CiYLI/SN6w==
-X-Google-Smtp-Source: AMrXdXvGWwocmW2GztUyCgO7sw8uqS9q9xXK8/YoSzrW+R1YNdEW6fp+dQE3czlRWd87oRr9t0SKUA==
-X-Received: by 2002:a05:6a21:6daa:b0:b8:5c45:a6dd with SMTP id wl42-20020a056a216daa00b000b85c45a6ddmr4383320pzb.3.1674187964164;
-        Thu, 19 Jan 2023 20:12:44 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x16-20020a634a10000000b004812f798a37sm19532884pga.60.2023.01.19.20.12.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 20:12:43 -0800 (PST)
-Message-ID: <af6f6d3d-b6ea-be46-d907-73fa4aea7b80@kernel.dk>
-Date:   Thu, 19 Jan 2023 21:12:42 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Phoronix pts fio io_uring test regression report on upstream v6.1
- and v5.15
+        Thu, 19 Jan 2023 23:16:41 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01E893FA;
+        Thu, 19 Jan 2023 20:16:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FzOKWwOEQAXKWswgzfzWlUsJio1tKQvlCgzTYFVRynoBJez/akBbR9bnAfw45k5D81H9P910hf7FThD+SeHX5zCThlaRnq45jU0zYIXnCuxZTaJySGGq16ETEGB88ly/SIKNbnJ1S87/Fv2i+z4oGjRsVV/8Rh9L9TK8WKM7VVHU0hwRegiYXBcrgnvS/pcJPo2poUuLaKvGhtEuDlczusoMyQX/vcckzz6cBSk+7OBUD4n/CuIjzt6sXFDoAYX4EaP64Agu6+i1RUghl4qytg/U1FGZuscYD13naKTcSPZvalPRwraB9Jj0jgBfr5vEtVNTZ70IPpn/iTMhfO3GAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LoGX+A8j37Lhz5LRM6rbNdW0qABbpt+z/tE8Ty8GPmY=;
+ b=JAGeZsz+yLjGkZ/P751vAi3DFXnoYhSyFBujzqYKDecWU7AkWI/zcHz6sVJ6Xdwm+rGFr7LBvL57FeidG3ZdmrGJmPM/uT1jx0957dasDXtzUwZtyBj/f5PhsSCIuCZ0OUPxAkC+Q6Di6QVXFxiDaYwo4m4FegenubsQ2qtzpHcSh/LgLrfDqwLDnFW5WeV+gWkKXDJZUFAZQdfwlvTj0GW/Yie4qgtSZ/SvPY1C86GTMLRAna9a/EYE89qK5V1F2cdLeDcqpS4w4ScZkYDMeyirzlQCk+67ZvzCxEBxFjInkMtBlS7nn/wodTmWRi6qtY6XrUSlXa8RVehYR8M3mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LoGX+A8j37Lhz5LRM6rbNdW0qABbpt+z/tE8Ty8GPmY=;
+ b=Dt8XsfRtKx51w3xcBW1xsKOybklYaytPtskwblBJnp53ETCVGJMUphZdr1qm3Jw8iIL8gAdWxfNVo0r0fwUZ2IlR0JwPdT79GQvJx9kmTQHxjmJm5ZZWKW2wTs2Sfas7EQMZ0b5rlDUMIIdYxf206zN6wQB+ueQkNp1OWjlaAts=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by SN7PR12MB8060.namprd12.prod.outlook.com (2603:10b6:806:343::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Fri, 20 Jan
+ 2023 04:16:36 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.5986.018; Fri, 20 Jan 2023
+ 04:16:36 +0000
+Message-ID: <39061ae2-e8a2-c3c1-7909-9bcb030a16de@amd.com>
+Date:   Fri, 20 Jan 2023 09:46:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 6/6] Documentation: amd_pstate: Update amd_pstate
+ status sysfs for guided
 Content-Language: en-US
-To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>,
-        io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, linux-kernel@vger.kernel.org
-References: <20230119213655.2528828-1-saeed.mirzamohammadi@oracle.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230119213655.2528828-1-saeed.mirzamohammadi@oracle.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, santosh.shukla@amd.com,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>, Perry.Yuan@amd.com,
+        Mario.Limonciello@amd.com, Ananth Narayan <ananth.narayan@amd.com>,
+        gautham.shenoy@amd.com
+References: <20230119115017.10188-1-wyes.karny@amd.com>
+ <20230119115017.10188-7-wyes.karny@amd.com>
+ <13f7a493-d1b6-481b-63a5-64080a4aee90@gmail.com>
+From:   Wyes Karny <wyes.karny@amd.com>
+In-Reply-To: <13f7a493-d1b6-481b-63a5-64080a4aee90@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-ClientProxiedBy: PN3PR01CA0010.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::11) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SN7PR12MB8060:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31603a1c-0740-4681-d9d0-08dafa9d1e81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CzOsjRhkKk7981uUs8GweWcyQzbptaR28d3/imHf9AUvdMQ8qga88o0goEe/I0+jBgZasjNppSHCK9rG2PSqaQZk9yUUkYiyw4xRgqaINQtxgSF7aYaIZKu+MyzUDPOJlwvYKt+sv9p+5EgWTWn0NA2eDNft2yJT2uTWUTdxk5dNwseyzyo3qGeppRk2TjRalpxZL2HM00Wpx1g8NN/AuaYeIXjZSek2WV+OVFqq0NIS23L1estfCPcaqDyVqnAkfO3A8PKKhKmvbZoyeEcZ3AAKWZOqzD0E/NpsXwh1mHgKsiWX8NxaxANFFQ8fmdW6LKKYzywzJzpC9VJmQZqZVNxSFeakIpCfOfXJ2R8WrBhC0COX51uKm0dB0lLISkBAzEVE5oEypl3Rn2JAJGjhW17jBDzIhjXxLjg1YG2zUkgPaAOM9QTmEjvPManUQ2Mej1j/G0oN2mD4vFpD4++04JGGRonr00DgI7xHTeXo4KXjTxND0m0UR7YDi0BmIM0POS4zN359gOHUiSbsVYUK4UF28P0svDWCWZeELAjAEVcYLcJ18ui03qPgUaGBIYY+/yRzjSXS2DsIFMiZyAoIwYkqNBCQB/iW/bPzLBdm3RnQ5g9BDPFopFXLeqPrGXEVkHeO8UJhvQ5JDW6MXQTAolmLk3Pf7hkHnsi0rig7KerrFDSGAgAorIjgpXDpuDTYQSRc73G4j2F2SktXBH1w8uUiT4EAZ3SaQ5Y10QIi8ZM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(366004)(396003)(451199015)(36756003)(31686004)(478600001)(86362001)(31696002)(66556008)(66476007)(15650500001)(66946007)(7416002)(4744005)(2906002)(44832011)(8936002)(5660300002)(38100700002)(316002)(54906003)(6666004)(53546011)(6486002)(6506007)(8676002)(186003)(4326008)(6916009)(41300700001)(26005)(83380400001)(6512007)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlNmbWxQeFpsSnBoZHBJejJHSCs3TnBrekhtTXJBOXZRM2RVOTQ5bjVZZnVN?=
+ =?utf-8?B?RUNTVzhqUFprRFdZMVlIcG5OaW9yYzRVdnNpMlBpd2tvQWxpMUhGMWhxbW1v?=
+ =?utf-8?B?b0l3bmhTak1hcFFZK3RXS0owQkIzUmx0SGN2bDRUS1QyWEVHakhHSUVxcnRi?=
+ =?utf-8?B?VHhHTnlaWi9GTjBiSXVpUFJBTlFrMmNoNnpDK0VQdG5CWWhFUC9uUlBFY2Z1?=
+ =?utf-8?B?Z092Y3VWMWM4MHZsRlZxMWRXK0w1Q2dNQ2FXN1kxNCt4dU1DSHpaUzljMFRt?=
+ =?utf-8?B?L20xaXk1MmJzaTJId2lUNnhLdmRIUzZObkpwblpwRGVWK1Q1dlRDWkx6UW1p?=
+ =?utf-8?B?Rys1bzl4TmJNbkhDQnIyei9NbjI3cEcxMEFRWTlIejNYK255NjZWeldSZ1ZN?=
+ =?utf-8?B?WDk0VkQyWjRYd0ppcFlRS3NFSlI4VWRxZHFHaUJpM1d4WWF2cGVjQlEvT2tj?=
+ =?utf-8?B?UjNPOHdhZzBIZW1XZFYzY3N6QXdZNWszM29uTnhjVHhFVUl2cDc4Tm5ueEhO?=
+ =?utf-8?B?ZXR6N29VdEYxZjI2THd6VGdzZ2VxK3RqU0hiYUtyTzg2UjM2Qm95a3V4ZEN5?=
+ =?utf-8?B?OE4yRThXS1FCR2sxV0RXU3ZuQVI4Mk1LQmhvMDVlQVFBc0E3ZFJxZGFLcjUy?=
+ =?utf-8?B?ZGJ6NFBUb0J5dkZKSFNvbjNHWlIza3lGMlBKN0U0V3B0aGRxWmhla01MWnNh?=
+ =?utf-8?B?VDFxZ0RzWlpib1VGY3ZITEl1bWdiUFJZNFBrU2N1WE1SN3pjSk9uY2p4WURn?=
+ =?utf-8?B?UWpOVlhiSmc3aklqVllrVnBreFpKS3loakVLSk9sRThiTzVnSDBIbW93REp3?=
+ =?utf-8?B?cFN6VFhLYWxXQlU4VnFHM3kydFJucGZTeXVBYU9YcTlOZWREWTVRV3FEcVIv?=
+ =?utf-8?B?Z1p2ckpIYWZnR1I4Q2Y2a0NWdmFYdzJqWjJVUVZTRTdOY0xOZ1pHUHBIZDJu?=
+ =?utf-8?B?bUFjeTdPdGhCaGxHdDZtZXM4RmVtNGJzd3dvbmdGOFNaVjBnaHpnbzFDSDBF?=
+ =?utf-8?B?QUhaQU1DcDZrQTFrUFNZVWI2YnJndVpsN2d1M3RUL0hzZ1FCYVN3bjBOeVZj?=
+ =?utf-8?B?VTBxZlRZb0s2VmtCKytJMlVGdE9pWlFXQUdmeldLNEJuNlVkT21MV0VoZFdq?=
+ =?utf-8?B?T1BGcTN4Mmk5V1FnYVI0NVhTRnI0clFWN0lHOVBxMTNLNjRVUEIxanZDYzVa?=
+ =?utf-8?B?NFBNd2xBUkc5NUp5YzRvUmVDSVFsand2d0hXTEFDdkRJVWpHZlJXT3hPRmJs?=
+ =?utf-8?B?N3JsY3VZNmJNUks4VWRxQVdJUlJ1c0ZpbmFSazY1MUtkRk1NcE5xaXl0SlEx?=
+ =?utf-8?B?d1pxa2ZrVnhKSkFQTlBlKzdVaVlRNXV0K2E2VGJ6Tk1PcVZ1bUZrTXVLdzF3?=
+ =?utf-8?B?MHhpcGZIM0dsZmMrNmVYdS95S2JLY1l4TjlXRGtRU1ZLa2hzSVBWdWVXS1N1?=
+ =?utf-8?B?SDZLbko2Ym44OWo2NXpmNTc1ak5TV0FDVUtYekZoVnV1eFRTTVpLc3hGY29I?=
+ =?utf-8?B?VStNdldQRjh3R0E4YmJJcU1QUFF5bUFiVncvMFJMS245YkhDVDJjWnZuWTRO?=
+ =?utf-8?B?djZHZ2FGUmp2ZkZ5aXlaYXlZTytEQ0VzQVFzOHhuMGFRQXBkWGhBVkJlMHlx?=
+ =?utf-8?B?M0phTU9oZmJhQU81YytrbFE2Y0tsSllxeVJ3OS82MkZLUFVhUGpCVDl5T1pk?=
+ =?utf-8?B?Ym1lQ1Y1WFNMZGNjR0dUWjd0RFlScTRLWUFoTTliQ2w2ekJFeXJlWTViREpo?=
+ =?utf-8?B?SEJPclc1QUlrcG5xSzBwSkpxSEhUNDk1Sjh6TEQwQWhUbmh0L09EQUdXTUVV?=
+ =?utf-8?B?VDR6NHM2YjFjd1dOb3VndXppbzRPR1lJL2ZYSXJOMDNlMjMzbkNkbjdSZUhz?=
+ =?utf-8?B?OXozdmllcXVIUFhlTUMzSS9ud1FESmR2UjE0YmtFWitMb1pyN1lBMmZHQ0Zn?=
+ =?utf-8?B?WjZKcTBsU3VCbGo0QkdTT292alB4M0o0bjlsUlBlVDIzL29tVXNYQU4zSWxH?=
+ =?utf-8?B?b3NWbG1IM0ZZU2kzcnpKQnp5R0VBS2R1SUg1cWZUTmdFUWpvbGFYQVg0MnVV?=
+ =?utf-8?B?Z0NDMDBlTnlqWDRnTWhuRU1sZWhrcDZ5MUdDaitablNzSXlpZFNNcjl4QmJR?=
+ =?utf-8?Q?bThuo5S55Sl/2Y5BcDEM9eIsW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31603a1c-0740-4681-d9d0-08dafa9d1e81
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 04:16:35.8888
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EF8q7vd0oOHZ53kC5lQZUsQeD0Z6+Xj/CupUqseAWRcTJ9o3Fwcd2w5uINH3w1j4mvo7+PBbwWqOL/sVRZ8D7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8060
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 2:36?PM, Saeed Mirzamohammadi wrote:
-> Hello,
->  
-> I'm reporting a performance regression after the commit below on
-> phoronix pts/fio test and with the config that is added in the end of
-> this email:
+
+
+On 1/19/2023 6:00 PM, Bagas Sanjaya wrote:
+> On 1/19/23 18:50, Wyes Karny wrote:
+>> +- In autonomous mode, platform ignores the desired performance level request
+>> +  and takes into account only the values set to the Minimum requested
+>> +  performance, Maximum requested performance and Energy Performance Preference
+>> +  registers.
 > 
-> Link: https://lore.kernel.org/all/20210913131123.597544850@linuxfoundation.org/
+> "minimum, maximum, and energy performance registers."
+
+Thanks for reviewing! Will update.
+
 > 
-> commit 7b3188e7ed54102a5dcc73d07727f41fb528f7c8
-> Author: Jens Axboe axboe@kernel.dk
-> Date:   Mon Aug 30 19:37:41 2021 -0600
->  
->     io_uring: IORING_OP_WRITE needs hash_reg_file set
->  
-> We observed regression on the latest v6.1.y and v5.15.y upstream
-> kernels (Haven't tested other stable kernels). We noticed that
-> performance regression improved 45% after the revert of the commit
-> above.
->  
-> All of the benchmarks below have experienced around ~45% regression.
-> phoronix-pts-fio-1.15.0-RandomWrite-EngineIO_uring-BufferedNo-DirectYes-BlockSize4KB-MB-s_xfs
-> phoronix-pts-fio-1.15.0-SequentialWrite-EngineIO_uring-BufferedNo-DirectYes-BlockSize4KB-MB-s_xfs
-> phoronix-pts-fio-1.15.0-SequentialWrite-EngineIO_uring-BufferedYes-DirectNo-BlockSize4KB-MB-s_xfs
->  
-> We tend to see this regression on 4KB BlockSize tests.
->  
-> We tried out changing force_async but that has no effect on the
-> result. Also, backported a modified version of the patch mentioned
-> here (https://lkml.org/lkml/2022/7/20/854) but that didn't affect
-> performance.
->  
-> Do you have any suggestions on any fixes or what else we can try to
-> narrow down the issue?
-
-This is really mostly by design - the previous approach of not hashing
-buffered writes on regular files would cause a lot of inode lock
-contention due to lots of threads hammering on that.
-
-That said, for XFS, we don't need to serialize on O_DIRECT writes. Don't
-think we currently have a way to detect this as it isn't really
-advertised. Something like the below might work, with the caveat that
-this is totally untested.
-
-
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 595a5bcf46b9..85fdc6f2efa4 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -1171,7 +1171,8 @@ xfs_file_open(
- {
- 	if (xfs_is_shutdown(XFS_M(inode->i_sb)))
- 		return -EIO;
--	file->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
-+	file->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC |
-+			FMODE_ODIRECT_PARALLEL;
- 	return generic_file_open(inode, file);
- }
- 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c1769a2c5d70..8541b9e53c2d 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -166,6 +166,9 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
- /* File supports DIRECT IO */
- #define	FMODE_CAN_ODIRECT	((__force fmode_t)0x400000)
- 
-+/* File supports parallel O_DIRECT writes */
-+#define	FMODE_ODIRECT_PARALLEL	((__force fmode_t)0x800000)
-+
- /* File was opened by fanotify and shouldn't generate fanotify events */
- #define FMODE_NONOTIFY		((__force fmode_t)0x4000000)
- 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index e680685e8a00..1409f6f69b13 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -424,7 +424,12 @@ static void io_prep_async_work(struct io_kiocb *req)
- 		req->flags |= io_file_get_flags(req->file) << REQ_F_SUPPORT_NOWAIT_BIT;
- 
- 	if (req->flags & REQ_F_ISREG) {
--		if (def->hash_reg_file || (ctx->flags & IORING_SETUP_IOPOLL))
-+		bool should_hash = def->hash_reg_file;
-+
-+		if (should_hash && (req->file->f_flags & O_DIRECT) &&
-+		    (req->file->f_mode & FMODE_ODIRECT_PARALLEL))
-+			should_hash = false;
-+		if (should_hash || (ctx->flags & IORING_SETUP_IOPOLL))
- 			io_wq_hash_work(&req->work, file_inode(req->file));
- 	} else if (!req->file || !S_ISBLK(file_inode(req->file)->i_mode)) {
- 		if (def->unbound_nonreg_file)
+>> +- In non-autonomous mode, platform gets desired performance level
+>> +  from OS directly through Desired Performance Register.
+>> +- In guided-autonomous mode, platform sets operating performance level
+>> +  autonomously according to the current workload and within the limits set by
+>> +  OS through min and max performance registers.
+>>  
+> 
+> The rest is LGTM.
+> 
 
 -- 
-Jens Axboe
-
+Thanks & Regards,
+Wyes
