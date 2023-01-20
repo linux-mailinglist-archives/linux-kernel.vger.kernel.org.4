@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BAE674CCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C440B674CCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjATFvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S231462AbjATFvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjATFuq (ORCPT
+        with ESMTP id S231447AbjATFuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:50:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126FE193E9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:50:45 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pIkIU-0007Ki-6a; Fri, 20 Jan 2023 06:50:42 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pIkIS-0000mw-1a; Fri, 20 Jan 2023 06:50:40 +0100
-Date:   Fri, 20 Jan 2023 06:50:40 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/4] net: phy: micrel: add EEE configuration
- support for KSZ9477 variants of PHYs
-Message-ID: <20230120055040.GH6162@pengutronix.de>
-References: <20230119131821.3832456-1-o.rempel@pengutronix.de>
- <20230119131821.3832456-3-o.rempel@pengutronix.de>
- <Y8lO+2JojN8zOkkY@lunn.ch>
+        Fri, 20 Jan 2023 00:50:51 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833542B63D;
+        Thu, 19 Jan 2023 21:50:45 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id x7so3401952qtv.13;
+        Thu, 19 Jan 2023 21:50:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NG5+tmHyXpekUMb9UX3El+JSGlQkPkl7YXC+PKgRDIY=;
+        b=yBueUWs1jYG+VAYxy3oP7mnl2L+tYaXa0Bd3D4cKxswCoxiCNfVcL5OlKxq+QMOTo0
+         KNiRvcHZn6J8AQaWlx6c9tGvYyQ+ucro3z4Lj8z/+0/oZRtEmyf1ef6Pk8vcAcVx+A05
+         QSpSUVqoRKf2rHb+1yrasCOxo02XH6pEAl8ceE5V2Z3kA9LAQRvayyxDySlfXcu+Gn4O
+         abtyHhP4EyGR1967gNzErlnbi0OmzzwQOx6h5NSZ9EmGk8X6wfTMw2m3r2uX7WnyV4SQ
+         ZbbzAQVjwyk6N9B4Lt9F3e77HQn3WK4SakVxb1L+9urYa35XlZHvS4f5iTAOny35PlAM
+         cwBA==
+X-Gm-Message-State: AFqh2kqrhf291WoW63Z0jmexSgDpKJ635MJ5LH7XSU4mdgrUobddgndx
+        ZclKPTJ/LeCvUtTty6dR172HEk9GkCu3sNWs
+X-Google-Smtp-Source: AMrXdXsDhXBDSR6nXmUJJJ2NzMUaG8CTeoDyeZthF9qrJ0dkw1WuDb7LoXRu337Kk68lGRVN1CfDbg==
+X-Received: by 2002:ac8:760b:0:b0:3b6:8bc3:a09c with SMTP id t11-20020ac8760b000000b003b68bc3a09cmr8984984qtq.25.1674193844510;
+        Thu, 19 Jan 2023 21:50:44 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
+        by smtp.gmail.com with ESMTPSA id do26-20020a05620a2b1a00b0070648cf78bdsm11319963qkb.54.2023.01.19.21.50.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 21:50:44 -0800 (PST)
+Date:   Thu, 19 Jan 2023 23:50:47 -0600
+From:   David Vernet <void@manifault.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used
+ as kptrs
+Message-ID: <Y8ort5rBVuHD6cdt@maniforge.lan>
+References: <20230119235833.2948341-1-void@manifault.com>
+ <20230119235833.2948341-5-void@manifault.com>
+ <20230120054823.bldnkx5tl3jxejm3@MacBook-Pro-6.local.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8lO+2JojN8zOkkY@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120054823.bldnkx5tl3jxejm3@MacBook-Pro-6.local.dhcp.thefacebook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:08:59PM +0100, Andrew Lunn wrote:
-> > +static int ksz9477_get_eee_caps(struct phy_device *phydev,
-> > +				struct ethtool_eee *data)
-> > +{
-> > +	int val;
-> > +
-> > +	/* At least on KSZ8563 (which has same PHY_ID as KSZ9477), the
-> > +	 * MDIO_PCS_EEE_ABLE register is a mirror of MDIO_AN_EEE_ADV register.
-> > +	 * So, we need to provide this information by driver.
-> > +	 */
-> > +	data->supported = SUPPORTED_100baseT_Full;
-> > +
-> > +	/* KSZ8563 is able to advertise not supported MDIO_EEE_1000T.
-> > +	 * We need to test if the PHY is 1Gbit capable.
-> > +	 */
-> > +	val = phy_read(phydev, MII_BMSR);
-> > +	if (val < 0)
-> > +		return val;
-> > +
-> > +	if (val & BMSR_ERCAP)
-> > +		data->supported |= SUPPORTED_1000baseT_Full;
+On Thu, Jan 19, 2023 at 09:48:23PM -0800, Alexei Starovoitov wrote:
+> On Thu, Jan 19, 2023 at 05:58:29PM -0600, David Vernet wrote:
+> > silently check for and ignore these cases at runtime. When we have e.g.
+> > per-argument kfunc flags, it might be helpful to add another KF_CPU-type
+> > flag that specifies that the verifier should validate that it's a valid
+> > CPU.
 > 
-> This works, but you could also look at phydev->supported and see if
-> one of the 1G modes is listed. That should be faster, since there is
-> no MDIO transaction involved. Not that this is on any sort of hot
-> path.
+> ...
+> 
+> > +void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+> > +{
+> > +	if (!cpu_valid(cpu))
+> > +		return;
+> > +
+> > +	cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
+> > +}
+> 
+> ...
+> 
+> > +void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
+> > +{
+> > +	if (!cpu_valid(cpu))
+> > +		return;
+> 
+> I don't think we'll be able to get rid of this with KF_CPU or special suffix.
+> The argument might be a variable and not a constant at the verification time.
+> We would have to allow passing unknown vars otherwise the UX will be too restrictive,
+> so this run-time check would have to stay.
 
-ack. Sounds good.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Makes sense. We'll just leave it as is then and document that passing in
+cpu >= nr_cpus is silently ignored for any kfunc taking a cpu argument.
