@@ -2,170 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D40675ABC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02327675ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjATRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S230286AbjATRFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATRER (ORCPT
+        with ESMTP id S229556AbjATRFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:04:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0817495C;
-        Fri, 20 Jan 2023 09:04:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DE6CB82851;
-        Fri, 20 Jan 2023 17:04:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF18C433EF;
-        Fri, 20 Jan 2023 17:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674234249;
-        bh=MZB2AJVHjaHKKeWv8HiYKeBwBR2FnNdfcEnwPVnHAB4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QTtleG8XR6r12kK9VbmjD7Ile2P1Ge+RZO57nCKiT9yf7jX1kZ+Z2htIh53Yuyvuo
-         MDOoYxWq5i+JU/S4uOqYXnD5UGOL3KYqOWZeQG+31s6oR0+nNiDMkEzEPyf5AkCmai
-         toiwsHFiGzGyL5JHWNDJYCwMopDTqgGcd3Z5pZfurfQavdduUOAOYuViIj2nJTVGUI
-         bfbO6jauKLseAZ1bqEIDmHYlUndX1EoeMz1gV4rjK+Xn3Wb2g32hkpGqw4VhgXzdfS
-         pUuUJf0AmGkDyU4nBOCAaO2pZ4zjsqXB9RM1Ia56dA82UTEX0YsnFw4pCn0cQIYizF
-         l3NIMAsZYzghw==
-Received: by mail-lj1-f173.google.com with SMTP id z7so6172503ljz.4;
-        Fri, 20 Jan 2023 09:04:09 -0800 (PST)
-X-Gm-Message-State: AFqh2krI1Xrn9p9rtKHw8culVvyAUtNXKDRw4VOQgJMjeTD8a5fQ7x90
-        qI0RKzPInXkD0iZNmvvXDhp+qQk5h+p7TJLxLbM=
-X-Google-Smtp-Source: AMrXdXtPd4uwRkyODiNjHUxB3oPWipLVksXHKche4TR40TcNMRllk0B00VMifauy+ir4u0XDhhGsAxckV3Is1ateNzY=
-X-Received: by 2002:a2e:7d04:0:b0:285:3383:6635 with SMTP id
- y4-20020a2e7d04000000b0028533836635mr1186691ljc.323.1674234247847; Fri, 20
- Jan 2023 09:04:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118204728.1876249-1-song@kernel.org> <20230118220812.dvztwhlmliypefha@treble>
- <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com> <20230120064215.cdyfbjlas5noxam6@treble>
-In-Reply-To: <20230120064215.cdyfbjlas5noxam6@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 20 Jan 2023 09:03:55 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW75hr5kp85X3C45u071PyUHQ8NG0dnOajTc9O976wN0vg@mail.gmail.com>
-Message-ID: <CAPhsuW75hr5kp85X3C45u071PyUHQ8NG0dnOajTc9O976wN0vg@mail.gmail.com>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module removal
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, joe.lawrence@redhat.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 12:05:04 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E94D7495C;
+        Fri, 20 Jan 2023 09:05:03 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 5D3D33200A46;
+        Fri, 20 Jan 2023 12:05:01 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 12:05:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674234300; x=
+        1674320700; bh=YXir1cBKVSIl8ncpYdIhv313q6EHddedfJlIGmxdQ48=; b=j
+        0K/SidyWGRubZXkXPnrsLz5CVySWPQULowlDXUz6HY1MaFN/D4LsuOcGTMy6oAOy
+        9pUHEBw4fLHSEJP3rwO4DFW80gEVGwvGsFf4R1Oo+Ny8/D2ySBhbXJK89Fu89kPg
+        2oJZKpmjpghLVS3RQP4p0IZqG5FGtcRXtJdFc5AvqIJIOZELmbDiQp8zohlOf3wH
+        BQpy2ZcIg/NRxqJiaEjDsck0mwp6xbq4mGb7YeGnvMcDTI8+byRSDyh0aFQfkrC5
+        MFwTmadSGVVhJYOpxLEUxwpXDi0gVBJaZzusUpGn6r2flXD9fcaZrdFaBWuwMzPV
+        PAStBxMywbMPUrSi8F2kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674234300; x=
+        1674320700; bh=YXir1cBKVSIl8ncpYdIhv313q6EHddedfJlIGmxdQ48=; b=C
+        MknTjwegB1X/8av4QkyxN7bM1FGuYJSuE/HQruTFttXJzE1w4SBCy3HDpkYolOGs
+        iE4FZjdZGMinnYysNs+5GRdq0b79kZ7k95UavTuRRVbknHLqyXjEE+97ZnxN4+Nm
+        Kzt62o7tq+a65P9Non0UZfyHxDGs94Ye+Y+l4QK+Ard1sd1Wrp4T/QF+v8Ke2jsZ
+        MuAZEL4o1beL80y3H8zaj5UbjX5Eo/fb89aYQH57tgOccVzrUno0y5Dbf17x3cyW
+        /Tsis+X6GJsl35eXxyc8nwUzbgG11zPmYkVrMCptR83Sy8d3fBNZWMiAVJ2hVsYJ
+        Sxz3eZWy/qup6wBeV1ugg==
+X-ME-Sender: <xms:usnKY9DDWOO1TbiUwWKN4wMlTkIgSymB87bFgcCOJx-25CwJzyvdUA>
+    <xme:usnKY7hbbrgWzWEtEanTgoBG1iRKRFjHfYoubEqGdQPmCIRGC8UjGT458pXS0yh7y
+    -ZIsH2HmHtJXuYbmoo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:usnKY4m1ZMIO0sagwSwcUAnazWKJB8-UJkAL4nxKYLIun1aaYF0Pyw>
+    <xmx:usnKY3zNKa0SBYpjno7jpxY2VsRH-Q5qqvFhn5p1vjjSw9KoYJ6fpA>
+    <xmx:usnKYySq_XvVHO2CFShTw8eXQd0-jbHe_iwRcO8MmLfdV0M9twZDUw>
+    <xmx:vMnKY7RFLwGz9Au1jewjf4t8UD_4RhNXA7Haog3YJU4lFiwLen8sRQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AC226B60086; Fri, 20 Jan 2023 12:04:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <ea4cb121-97e9-4365-861a-b3635fd34721@app.fastmail.com>
+In-Reply-To: <20230113054807.GA23179@lst.de>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
+ <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
+ <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com>
+ <CA+V-a8u6jvR=EDeE3mAbDr6-06NoBJ7mwmi_Y9qVyHT+aC-9rg@mail.gmail.com>
+ <45d6eb0c-cbe3-4a83-aa12-3483638473ae@app.fastmail.com>
+ <20230110070144.GG10289@lst.de>
+ <02988e70-b099-46fd-b260-2d537c50543a@app.fastmail.com>
+ <20230113054807.GA23179@lst.de>
+Date:   Fri, 20 Jan 2023 18:04:37 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christoph Hellwig" <hch@lst.de>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Philipp Tomsich" <philipp.tomsich@vrull.eu>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Atish Patra" <atishp@rivosinc.com>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Tsukasa OI" <research_trasio@irq.a4lg.com>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Mayuresh Chitale" <mchitale@ventanamicro.com>,
+        "Will Deacon" <will@kernel.org>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using function
+ pointers for cache management
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:42 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On Fri, Jan 13, 2023, at 06:48, Christoph Hellwig wrote:
+> On Tue, Jan 10, 2023 at 04:03:06PM +0100, Arnd Bergmann wrote:
+>> I looked at all the implementations now and put them in a table[1]
+>> to see what the differences are. The only bit that I think needs
+>> discussion is the dma_sync_single_for_device(DMA_FROM_DEVICE) op
+>> that I mentioned above. I see that arm64, csky, powerpc, riscv
+>> and parisc all write out at least partical cache lines first to
+>> avoid losing dirty data in the part that is not written by the
+>> device[2][3], while the other ones don't[4].=20
 >
-> On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
-> > On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> > >
-> > > On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
-> > > > From: Miroslav Benes <mbenes@suse.cz>
-> > > >
-> > > > Josh reported a bug:
-> > > >
-> > > >   When the object to be patched is a module, and that module is
-> > > >   rmmod'ed and reloaded, it fails to load with:
-> > > >
-> > > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > > >
-> > > >   The livepatch module has a relocation which references a symbol
-> > > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > > >   tries to replace the old relocation with a new one, it sees that
-> > > >   the previous one is nonzero and it errors out.
-> > > >
-> > > >   On ppc64le, we have a similar issue:
-> > > >
-> > > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> > > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >
-> > > Shouldn't there also be a fix for this powerpc issue?
-> >
-> > There was a working version, but it was not very clean. We couldn't agree
-> > on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
-> > s390?) first [1].
->
-> Sorry for coming in late, I was on leave so I missed a lot of the
-> discussions on previous versions.  The decision to leave powerpc broken
-> wasn't clear from reading the commit message.  The bug is mentioned, and
-> the fix is implied, but surprisingly there's no fix.
->
-> I agree that the powerpc fix should be in a separate patch, but I still
-> don't feel comfortable merging the x86 fix without the corresponding
-> powerpc fix.
->
-> powerpc is a major arch and not a second-class citizen.  If we don't fix
-> it now then it'll probably never get fixed until it blows up in the real
-> world.
->
-> For powerpc, instead of clearing, how about just "fixing" the warning
-> site, something like so (untested)?
+> I'm tempted to declare [4] buggy until proof of the inverse.
 
-This version looks reasonable to me.
+Having looked at this some more, I see that the powerpc
+version is a bit problematic here as well: this one
+flushes the partial cache lines before and after the
+DMA transfer, while only invalidating the full
+cache lines. If a partical cache line gets written
+to by the CPU while the buffer is owned by the device,
+this means that the received data from the device is
+immediately overwritten by the second flush.
 
-Thanks,
-Song
+The arm64 and riscv behavior of doing a flush before
+and an invalidate after the DMA seems a bit more
+appropriate, as that ends up keeping the DMA
+data but discarding anything written by the CPU.
 
+Obviously there is no winning either way if the same
+cache line gets written by both CPU and device, I'm
+just trying to figure out what behavior we actually
+want here.
+
+The best I can think of so far is:
+
+- flush the partial cache lines before the DMA,
+  as powerpc does, and just invalidate the full
+  cache lines
+
+- only invalidate but not clean/flush after the
+  DMA. This is the arm64 behavior
+
+- warn when flushing partial cache lines
+  if dma_debug is enabled.
+
+>> I also see that at least arc, arm, mips and riscv all want
+>> CPU specific cache management operations to be registered
+>> at boot time. While Russell had some concerns about your
+>> suggestion to generalize the arm version, we could start
+>> by moving the abstracted riscv version into
+>> kernel/dma/direct.c and make sure it can be shared with
+>> at least mips and arc, provided that we can agree on the
+>> DMA_FROM_DEVICE behavior.
 >
-> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-> index 1096d6b3a62c..1a12463ba674 100644
-> --- a/arch/powerpc/kernel/module_64.c
-> +++ b/arch/powerpc/kernel/module_64.c
-> @@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+> Yes, I'd really like to start out with a common version and then
+> move bits over.  There's also some interesting bits about handling
+> highmem for architectures that needs virtual addresss for flushing
+> that might be worth sharing, too.
 >
->  /* We expect a noop next: if it is, replace it with instruction to
->     restore r2. */
-> -static int restore_r2(const char *name, u32 *instruction, struct module *me)
-> +static int restore_r2(const char *name, u32 *instruction, struct module *me,
-> +                     bool klp_sym)
->  {
->         u32 *prev_insn = instruction - 1;
-> +       u32 insn_val = *instruction;
+> Th=D1=96s should be a new file in kernel/dma/ as it's not only used by
+> dma-direct but also by dma-iommu, and to keep the code nicely
+> separated.
 >
->         if (is_mprofile_ftrace_call(name))
->                 return 1;
-> @@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
->         if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
->                 return 1;
->
-> -       if (*instruction != PPC_RAW_NOP()) {
-> +       /*
-> +        * For a livepatch relocation, the restore r2 instruction might have
-> +        * been previously written if the relocation references a symbol in a
-> +        * module which was unloaded and is now being reloaded.  In that case,
-> +        * skip the warning and instruction write.
-> +        */
-> +       if (klp_sym && insn_val == PPC_INST_LD_TOC)
-> +               return 0;
-> +
-> +       if (insn_val != PPC_RAW_NOP()) {
->                 pr_err("%s: Expected nop after call, got %08x at %pS\n",
-> -                       me->name, *instruction, instruction);
-> +                       me->name, insn_val, instruction);
->                 return 0;
->         }
->
-> @@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
->                                 if (!value)
->                                         return -ENOENT;
->                                 if (!restore_r2(strtab + sym->st_name,
-> -                                                       (u32 *)location + 1, me))
-> +                                               (u32 *)location + 1, me,
-> +                                               sym->st_shndx == SHN_LIVEPATCH))
->                                         return -ENOEXEC;
->                         } else
->                                 value += local_entry_offset(sym);
+> Can you give it a go?
+
+I started this at the beginning of the week but couldn't
+finish it at all, but still plan to get back to it
+next week.
+
+Aside from the question for how to handle flush vs invalidate
+on DMA_FROM_DEVICE, I'm still trying to figure out how to
+best handle highmem with architecture specific cache management
+operations. The easy approach would be to leave that up
+to the architecture, passing only a physical address to
+the flush function. A nicer interface might be to move the
+loop over highmem pages out into common code, flush
+lowmem pages by virtual addresss, and have a separate
+callback for highmem pages that takes a page pointer,
+like
+
+struct dma_cache_ops {
+        void (*dma_cache_wback_inv)(void *start, unsigned long sz);
+        void (*dma_cache_inv)(void *start, unsigned long sz);
+        void (*dma_cache_wback)(void *start, unsigned long sz);
+#ifdef CONFIG_HIGHMEM
+        void (*dma_cache_wback_inv_high_page)(struct page *, size_t star=
+t, unsigned long sz);
+        void (*dma_cache_inv_high_page)(struct page *, size_t start, uns=
+igned long sz);
+        void (*dma_cache_wback_high_page)(struct page *, size_t start, u=
+nsigned long sz);
+#endif
+};
+
+Let me know if you have a preference here, before I spend
+too much time on something we don't want in the end.
+
+     Arnd
