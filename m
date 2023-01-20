@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2E2675FC1
+	by mail.lfdr.de (Postfix) with ESMTP id 8F85B675FC2
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjATVwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S229741AbjATVwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATVwH (ORCPT
+        with ESMTP id S229711AbjATVwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:52:07 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD8280BB0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:06 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id jc17-20020a17090325d100b00194dd8a6c27so2226462plb.17
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:06 -0800 (PST)
+        Fri, 20 Jan 2023 16:52:09 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1119380BB1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:08 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id f22-20020a056a00239600b0058d956679f5so2979194pfc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YCPP50mHftdrkugDIMlvr2wVSqJJApexnFpETZnZzW0=;
-        b=X2M3rLR8vE1RJwS+2TFg3bJfcAv1ZEiCKtOeRX3Sf4mSKLfxZ3t3KAPoklBYwfEcKI
-         EmAsLcJ/hIo4heDlEs9welo47sawB/Eo0Vpv4d6Q/jZbJf90hzatyjqbrgpVXIo+ejbV
-         fYDTz6zjP516fwJluTNzxdTQsnYI17CmNOg2gGS/6hcI23talU83VobSxbEItki7RTWj
-         q9kz/sdP8N/8iOccbv26GYJz40n8ZJpbpisso2l1zFRPr2/4cyxLW3rUmidobVoJXFC+
-         cotAj2tx/1UjVOM/fUgd/EZCJPx5XDGoeC4b00ePABOpJVGS5iIuIqrsSv//QHbEw8sP
-         klBw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSxrMzG1Hv7pdQ1Ytw036hc1FJB6QyL44T06ZBbgDu4=;
+        b=DGNmPG5xe76kN+gBDq5mU0YsgJej+WFDU/Tvr3GYRdJ5GgTvQ+csWUH6fEI6DSEp7T
+         rT7NXuhVTAUCsGI5hm6oy8KY3yBz3Qyx0R3PtD08QCfq6iBmHRqhPPj8Ly4jfV8j7gZp
+         2hlnw1qCkBdZDlMYRHXcaDmlQy+PX9wGTSKrM7F+l+DP62zubLRIDXVMGlmGhXggtOPT
+         YbXWRp+CKmbd0glr2I9mleU9HE0JuQPVts+BWfaLhQw3oxFpjM2XdiprknUIJK296KFt
+         sytBP0DCk+F+yp98jBnfto7x1qF3yuxWQ1Fj2bvxLilOJ4FzHCS5C2Z0LreUpipW+o/b
+         /IAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YCPP50mHftdrkugDIMlvr2wVSqJJApexnFpETZnZzW0=;
-        b=W9ROEN/ZM9xxcuqS0ZsmBq1r4/Jm971caZc/OKJoXNK4pNg12myUnvwSKwAKQweVmY
-         fvYvhhlRTUnW+GwB6N7lIivulawJLnungEwYvn9BmyE6sOCOgBHQR4oYtCdKnR2sRHwj
-         X1GYn6G3uxitSIyhiYR7Y9JXPVqJr3aFWIfN71TELlJQFNiIho07uBojxtPeoPbCx3DJ
-         zfsaQFZ+Cm6TIrKCjkGWZXNZdRzvEhDYC2Sfwb0+S8JYQq7ieX/332Ld3T5rfrSOEml1
-         FmirBIrSoobMROzckYG1niir4lakOFvuZHSSwygmUnNUa5Wi3frt5TEkR50Eaw4IzzW2
-         TGaw==
-X-Gm-Message-State: AFqh2kqQa+q4yt5K6iJkrjpmZ33DbtNjmQ2G5d9TxdaSdB4fMwZ0QCky
-        5ecMOuTiHgni9G4c5fy9OnlWIcliNuHHsms5Hw==
-X-Google-Smtp-Source: AMrXdXtv8orWqEiUIxO0YpcfUv4PPEQN1V5nRM+6ZfzbWGgCdEEYoc2uTbgZX9HHNdbeGovIKZN067GE15XoA5mWYw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSxrMzG1Hv7pdQ1Ytw036hc1FJB6QyL44T06ZBbgDu4=;
+        b=R2NKs4O/Bqj9UfArbESpSEA2A27V93yZEMfofL/2JMPgRXyyGL4t/jyF0pYZOX3DmW
+         88PCIbU+MyJxw7iQZZUKh4eHfFhB2uz1A6zkGfvbiHQvXde3RZSyMHSjryOFiNzKjzq9
+         RNZsK4xrYtYoolSnIhWs/0HQsSQALmTZHvuxoHiU3CGFG6VG6Fx1Cz352SzZmzC2Q0NN
+         rZZWAMIjzo3UalKxroB0mF61BCw7NeKMg9NKjZllCslMPkqwpRVXoZTWh3xRUhhUZ/Y4
+         ycjbK7I9ZSv/lvRC+41ryG5Wj91jpZdDo+kfUnujNCEa47e3rr/o0ZMLTY+uw2b8rYEq
+         Yp9A==
+X-Gm-Message-State: AFqh2kp9Fes8IQnbclQpi6NLb8ZV83OrG+Fmp5OITEAoSizldpTY/YXl
+        Khk9MV2YtUZ2tsKiDZb9mX5EPKVRzvz5TEEFJA==
+X-Google-Smtp-Source: AMrXdXvRQYSwAtryjO3/9NuhUBXCtmfhNrGdDeWz28VwYmz1ZWFq5gSbOxfizxdka/O+/85ZxAhGpIIv7A0KjtrMHw==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:902:aa01:b0:194:4edf:b178 with
- SMTP id be1-20020a170902aa0100b001944edfb178mr1541674plb.4.1674251526054;
- Fri, 20 Jan 2023 13:52:06 -0800 (PST)
-Date:   Fri, 20 Jan 2023 21:48:53 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a17:902:8694:b0:189:6889:c30a with
+ SMTP id g20-20020a170902869400b001896889c30amr1672842plo.6.1674251527474;
+ Fri, 20 Jan 2023 13:52:07 -0800 (PST)
+Date:   Fri, 20 Jan 2023 21:48:54 +0000
+In-Reply-To: <20230120214857.835931-1-dionnaglaze@google.com>
 Mime-Version: 1.0
+References: <20230120214857.835931-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230120214857.835931-1-dionnaglaze@google.com>
-Subject: [PATCH v12 0/3] Add throttling detection to sev-guest
+Message-ID: <20230120214857.835931-2-dionnaglaze@google.com>
+Subject: [PATCH v12 1/3] crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirsky <luto@kernel.org>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Borislav Petkov <Borislav.Petkov@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -65,88 +76,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The guest request synchronous API from SEV-SNP VMs to the host's security
-processor consumes a global resource. For this reason, AMD's docs
-recommend that the host implements a throttling mechanism. In order for
-the guest to know it's been throttled and should try its request again,
-we need some good-faith communication from the host that the request
-has been throttled.
+From: Peter Gonda <pgonda@google.com>
 
-These patches work with the existing /dev/sev-guest ABI to detect a
-throttling code.
+The PSP can return a "firmware error" code of -1 in circumstances where
+the PSP is not actually called. To make this protocol unambiguous, the
+value is named SEV_RET_NO_FW_CALL.
 
-Changes from v11:
-  * Squashed all type changing patches into 1 that modifies both sev-guest
-    and x86/kernel/sev.c.
-  * Removed fw_err field from sev-guest command struct (renamed exitinfo2).
-Changes from v10:
-  * Added sev_guestreq_err_t typedef early in chain to change a signature
-    acress x86/sev and virt/coco/sev-guest in a single change. This makes
-    all patches build. I have 3 cleanup patches to change the type and
-    subsequently remove the typedef.
-  * Changed exitinfo2 initial undefined value back to 0xff since Thomas
-    indicated that a firmware error is only 16 bits.
-Changes from v9:
-  * Rebased on v6.2-rc3
-Changes from v8:
-  * Added documentation changes.
-  * Changed commit messages to use passive voice.
-  * Simplified control flow for __sev_platform_init_locked.
-Changes from v7:
-  * Replaced handle_guest_request arguments msg_ver and fw_err with a
-    pointer to the snp_guest_request_ioctl argument struct.
-Changes from v6:
-  * Rebased on the IV reuse fix patch
-  * renamed rate_hz to rate_s and fixed its MODULE_PARM_DESC to use the
-    correct variable name.
-  * Changed sleep_timeout_interrutible (not defined) to
-    schedule_timeout_interruptible.
-Changes from v5:
-  * Fixed commit prefix text
-  * Added all get_maintainers.pl folks to commits' Cc tags
-  * Changed SET_RET_NO_FW_CALL commit's metadata to show pgonda signs
-    off and is the author.
-Changes from v4:
-  * Clarified comment on SEV_RET_NO_FW_CALL
-  * Changed ratelimit loop to use sleep_timeout_interruptible
-Changes from v3:
-  * sev-guest ratelimits itself to one request twice a second.
-  * Fixed a type signature to use u64 instead of unsigned int
-  * Set *exitinfo2 unconditionally after the ghcb_hv_call.
-Changes from v2:
-  * Codified the non-firmware-call firmware error code as (u32)-1.
-  * Changed sev_issue_guest_request unsigned long *fw_err argument to
-    u64 *exitinfo2 to more accurately and type-safely describe the
-    value that it outputs.
-  * Changed sev_issue_guest_request to always set its exitinfo2
-    argument to either the non-firmware-call error code, the
-    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
-    success. This fixes a bug that returned uninitialized kernel stack
-    memory to the user when there is no error.
-  * Changed the throttle behavior to retry in the driver instead of
-    returning -EAGAIN, due to possible message sequence number reuse
-    on different message contents.
+Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Andy Lutomirsky <luto@kernel.org>
+Cc: John Allen <john.allen@amd.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Borislav Petkov <Borislav.Petkov@amd.com>
 
-Changes from v1:
-  * Changed throttle error code to 2
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ Documentation/virt/coco/sev-guest.rst |  2 +-
+ drivers/crypto/ccp/sev-dev.c          | 22 ++++++++++++++--------
+ include/uapi/linux/psp-sev.h          |  7 +++++++
+ 3 files changed, 22 insertions(+), 9 deletions(-)
 
-Dionna Glaze (2):
-  x86/sev: Change snp_guest_issue_request's fw_err
-  virt: sev-guest: interpret VMM errors from guest request
-
-Peter Gonda (1):
-  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
-
- Documentation/virt/coco/sev-guest.rst   | 21 ++++---
- arch/x86/include/asm/sev-common.h       |  3 -
- arch/x86/include/asm/sev.h              |  4 +-
- arch/x86/kernel/sev.c                   | 13 +++--
- drivers/crypto/ccp/sev-dev.c            | 22 ++++---
- drivers/virt/coco/sev-guest/sev-guest.c | 77 +++++++++++++++++--------
- include/uapi/linux/psp-sev.h            |  7 +++
- include/uapi/linux/sev-guest.h          | 18 +++++-
- 8 files changed, 114 insertions(+), 51 deletions(-)
-
+diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
+index bf593e88cfd9..e76393e389eb 100644
+--- a/Documentation/virt/coco/sev-guest.rst
++++ b/Documentation/virt/coco/sev-guest.rst
+@@ -41,7 +41,7 @@ The guest ioctl should be issued on a file descriptor of the /dev/sev-guest devi
+ The ioctl accepts struct snp_user_guest_request. The input and output structure is
+ specified through the req_data and resp_data field respectively. If the ioctl fails
+ to execute due to a firmware error, then fw_err code will be set otherwise the
+-fw_err will be set to 0x00000000000000ff.
++fw_err will be set to 0x00000000ffffffff, i.e., the lower 32-bits are -1.
+ 
+ The firmware checks that the message sequence counter is one greater than
+ the guests message sequence counter. If guest driver fails to increment message
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 06fc7156c04f..ac205f78a595 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -440,12 +440,19 @@ static int __sev_init_ex_locked(int *error)
+ 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+ }
+ 
++static inline int __sev_do_init_locked(int *psp_ret)
++{
++	if (sev_init_ex_buffer)
++		return __sev_init_ex_locked(psp_ret);
++	else
++		return __sev_init_locked(psp_ret);
++}
++
+ static int __sev_platform_init_locked(int *error)
+ {
+ 	struct psp_device *psp = psp_master;
+ 	struct sev_device *sev;
+-	int rc = 0, psp_ret = -1;
+-	int (*init_function)(int *error);
++	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+ 
+ 	if (!psp || !psp->sev_data)
+ 		return -ENODEV;
+@@ -456,15 +463,12 @@ static int __sev_platform_init_locked(int *error)
+ 		return 0;
+ 
+ 	if (sev_init_ex_buffer) {
+-		init_function = __sev_init_ex_locked;
+ 		rc = sev_read_init_ex_file();
+ 		if (rc)
+ 			return rc;
+-	} else {
+-		init_function = __sev_init_locked;
+ 	}
+ 
+-	rc = init_function(&psp_ret);
++	rc = __sev_do_init_locked(&psp_ret);
+ 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
+ 		/*
+ 		 * Initialization command returned an integrity check failure
+@@ -473,9 +477,11 @@ static int __sev_platform_init_locked(int *error)
+ 		 * initialization function should succeed by replacing the state
+ 		 * with a reset state.
+ 		 */
+-		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
+-		rc = init_function(&psp_ret);
++		dev_err(sev->dev,
++"SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
++		rc = __sev_do_init_locked(&psp_ret);
+ 	}
++
+ 	if (error)
+ 		*error = psp_ret;
+ 
+diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
+index 91b4c63d5cbf..e8cfb8bde0d7 100644
+--- a/include/uapi/linux/psp-sev.h
++++ b/include/uapi/linux/psp-sev.h
+@@ -36,6 +36,13 @@ enum {
+  * SEV Firmware status code
+  */
+ typedef enum {
++	/*
++	 * This error code is not in the SEV spec but is added to convey that
++	 * there was an error that prevented the SEV Firmware from being called.
++	 * The SEV API error codes are 16 bits, so the -1 value will not overlap
++	 * with possible values from the specification.
++	 */
++	SEV_RET_NO_FW_CALL = -1,
+ 	SEV_RET_SUCCESS = 0,
+ 	SEV_RET_INVALID_PLATFORM_STATE,
+ 	SEV_RET_INVALID_GUEST_STATE,
 -- 
 2.39.0.246.g2a6d74b583-goog
 
