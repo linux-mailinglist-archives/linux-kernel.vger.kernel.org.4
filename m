@@ -2,140 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D5E675791
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21267675797
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjATOk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S231237AbjATOle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjATOk4 (ORCPT
+        with ESMTP id S231223AbjATOl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:40:56 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBD73EEB;
-        Fri, 20 Jan 2023 06:40:28 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C048D32001BB;
-        Fri, 20 Jan 2023 09:39:42 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 20 Jan 2023 09:39:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674225582; x=1674311982; bh=b4JAJuHxNJ
-        8crP6ZpOzWWYxWeuwbnT4P0qgnOUpQ0sI=; b=YpFFzP3VF+EXJCLmreWeBNB9+S
-        zXHxKLgMbyNmk2z1VW6q3MxEpkproMFd2XZHbXRd3jw7BKH62BZ93qlWPB+r0tXx
-        GbwZZiyJYZEEWYvt4HcxdsEFFE0lLPObyPr5B8oNMr3YVFJBRj3K66+vhYhzgKs/
-        5dTWdr/9s8iHSN5+5qnrtbJQ3yCMUPDerYNJ22YIVdBWtYejl55VlFikFlwBAIdo
-        1wu/6qiuRfisnPQUn7IDstOQzwRZ2OY2tSeeOoDTrwQg/xL5G/zQs6vtRhpzL8DP
-        Fgdfpbi3GAg9bHuV1lTDVypQ9y4jxRbq1AJ3/5km73+LEObdAHBrQILTSssg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674225582; x=1674311982; bh=b4JAJuHxNJ8crP6ZpOzWWYxWeuwb
-        nT4P0qgnOUpQ0sI=; b=kbkcGpBlS3kIUHVyg0NKren2v+0ZPixCVs0IHEcgFATv
-        /fQDNaGmP5X5P5h19GU2fpwPD1TBW43CHnULxpe+taXxBuiCTAP66XHB1kbw6jVU
-        ktB2N/kXAJKDCtVduL7kHyROWsuKfnhUkBDg1JaaVGYEVshIvkSzyvmQ3Mz0kecY
-        j2mWceXUaRQVegdU9GN/rHa5HlAqyOMZNLltfaUy/sfmk+CWX6cHgoxSueBp0J0i
-        2XczKB1dd7jUSKpZNSGrbGTRUNLi1oRczjpT0oY63IskbhcNKGcpIFxZpm+iiMB0
-        rt1VsRAiJTzs0z272UUCumVGSuTlMg9TxL0SPQ1sQQ==
-X-ME-Sender: <xms:rafKY_kguGhvxY4s77V4bRvXYVPX-TaLHxAX5Rsi2yUO58HcQO4Zkw>
-    <xme:rafKYy3ch5_10fEpPqLPk4skitRZpBS9nUdMMeG_5dV4W4jXI0yFlKr084ITGsZVL
-    lGqbdsXwXqxi2OVO80>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:rafKY1qFhfPcjqcn3SzgSs11DqXRM8WcWlI7Gu-Kicl7WOeQSyzCNQ>
-    <xmx:rafKY3kPhOW_docLyMAkp_w_hKPx7gxrnaYtchGBbzvFANsfGIZ4qA>
-    <xmx:rafKY90Q8cyQNciYnFYz9TNs_bgG3H33QbPAoO9563ztIP9MXp_W6Q>
-    <xmx:rqfKY83B478JlCxC4F7tHYbChgHt68Lo8MC5zaI3n4bvh6M-xJx_5w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5EF90B60086; Fri, 20 Jan 2023 09:39:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <aa4d68b2-b5b5-4c17-a44f-7c6db443ea4c@app.fastmail.com>
-In-Reply-To: <20230120141002.2442-10-ysionneau@kalray.eu>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-10-ysionneau@kalray.eu>
-Date:   Fri, 20 Jan 2023 15:39:22 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Yann Sionneau" <ysionneau@kalray.eu>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Oleg Nesterov" <oleg@redhat.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Waiman Long" <longman@redhat.com>,
-        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "Eric Paris" <eparis@redhat.com>,
-        "Christian Brauner" <brauner@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Jules Maselbas" <jmaselbas@kalray.eu>,
-        "Guillaume Thouvenin" <gthouvenin@kalray.eu>,
-        "Clement Leger" <clement@clement-leger.fr>,
-        "Vincent Chardon" <vincent.chardon@elsys-design.com>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        "Julian Vetter" <jvetter@kalray.eu>,
-        "Samuel Jones" <sjones@kalray.eu>,
-        "Ashley Lesdalons" <alesdalons@kalray.eu>,
-        "Thomas Costis" <tcostis@kalray.eu>,
-        "Marius Gligor" <mgligor@kalray.eu>,
-        "Jonathan Borne" <jborne@kalray.eu>,
-        "Julien Villette" <jvillette@kalray.eu>,
-        "Luc Michel" <lmichel@kalray.eu>,
-        "Louis Morhet" <lmorhet@kalray.eu>,
-        "Julien Hascoet" <jhascoet@kalray.eu>,
-        "Jean-Christophe Pince" <jcpince@gmail.com>,
-        "Guillaume Missonnier" <gmissonnier@kalray.eu>,
-        "Alex Michon" <amichon@kalray.eu>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <git@xen0n.name>,
-        "Shaokun Zhang" <zhangshaokun@hisilicon.com>,
-        "John Garry" <john.garry@huawei.com>,
-        "Guangbin Huang" <huangguangbin2@huawei.com>,
-        "Bharat Bhushan" <bbhushan2@marvell.com>,
-        "Bibo Mao" <maobibo@loongson.cn>,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        "Qi Liu" <liuqi115@huawei.com>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Janosch Frank" <frankja@linux.ibm.com>,
-        "Alexey Dobriyan" <adobriyan@gmail.com>
-Cc:     "Benjamin Mugnier" <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 09/31] kvx: Add build infrastructure
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Fri, 20 Jan 2023 09:41:27 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C95BCD0DBE;
+        Fri, 20 Jan 2023 06:41:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B57C168F;
+        Fri, 20 Jan 2023 06:40:17 -0800 (PST)
+Received: from [10.57.47.220] (unknown [10.57.47.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B2FB3F67D;
+        Fri, 20 Jan 2023 06:39:32 -0800 (PST)
+Message-ID: <72843540-fe25-d805-df76-3a3556fb5774@arm.com>
+Date:   Fri, 20 Jan 2023 14:39:30 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/8] perf cs_etm: Basic support for virtual/kernel
+ timestamps
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        leo.yan@linaro.org, mike.leach@linaro.org, sgoutham@marvell.com,
+        gcherian@marvell.com, lcherian@marvell.com, bbhushan2@marvell.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230119154308.3815108-1-james.clark@arm.com>
+ <Y8l20EOD6vtvJw83@kernel.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <Y8l20EOD6vtvJw83@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,20 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023, at 15:09, Yann Sionneau wrote:
->      - Fix clean target raising an error from gcc (LIBGCC)
 
-I had not noticed this on v1 but:
 
-> +# Link with libgcc to get __div* builtins.
-> +LIBGCC	:= $(shell $(CC) $(DEFAULT_OPTS) --print-libgcc-file-name)
+On 19/01/2023 16:58, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Jan 19, 2023 at 03:42:59PM +0000, James Clark escreveu:
+>> Changes since v3:
+>>
+>>   * Scale time estimates by INSTR_PER_NS, rather than assuming 1
+>>     instruction = 1ns
+>>   * Add a new commit that fixes some issues around timestamps going
+>>     backwards
+>>   * Use nanoseconds inside cs-etm-decoder.c, rather than storing the
+>>     raw time values and converting when a sample is synthesized. This
+>>     simplifies some of the code like estimating the first timestamp.
+> 
+> I would check this myself, but since Suzuki had some review comments and
+> you may consider a v5, please check this:
+> 
+> Cover: ./v4_20230119_james_clark_perf_cs_etm_basic_support_for_virtual_kernel_timestamps.cover
+>  Link: https://lore.kernel.org/r/20230119154308.3815108-1-james.clark@arm.com
+>        git checkout -b v4_20230119_james_clark_arm_com 69b41ac87e4a664de78a395ff97166f0b2943210
+>        git am ./v4_20230119_james_clark_perf_cs_etm_basic_support_for_virtual_kernel_timestamps.mbx
+> [acme@quaco perf]$        git am ./v4_20230119_james_clark_perf_cs_etm_basic_support_for_virtual_kernel_timestamps.mbx
+> Applying: perf: Remove duplication around EVENT_SOURCE_DEVICE_PATH
+> error: patch failed: tools/perf/util/pmu.c:1993
+> error: tools/perf/util/pmu.c: patch does not apply
+> error: patch failed: tools/perf/util/pmu.h:259
+> error: tools/perf/util/pmu.h: patch does not apply
+> Patch failed at 0001 perf: Remove duplication around EVENT_SOURCE_DEVICE_PATH
+> hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> When you have resolved this problem, run "git am --continue".
+> If you prefer to skip this patch, run "git am --skip" instead.
+> To restore the original branch and stop patching, run "git am --abort".
+> [acme@quaco perf]$
+> 
+> Probably a conflict with one of these:
+> 
+> [acme@quaco perf]$ git log --oneline -5 tools/perf/util/pmu.c
+> acef233b7ca749fd perf pmu: Add #slots literal support for arm64
+> 336b92da1aa4228a perf tool: Move pmus list variable to a new file
+> 49bd97c28b7e7f01 perf tools: Use dedicated non-atomic clear/set bit helpers
+> e5c6109f4813246a perf list: Reorganize to use callbacks to allow honouring command line options
+> eb2d4514a5971444 perf pmu: Restructure print_pmu_events() to avoid memory allocations
+> [acme@quaco perf]$
+> 
+> Update to my perf/core branch or even tmp.perf/core which is newer but
+> still needs the full set of container build tests.
 
-It's better to copy the bits of libgcc that you actually need
-than to include the whole thing. The kernel is in a weird
-state that is neither freestanding nor the normal libc based
-environment, so we generally want full control over what is
-used. This is particularly important for 32-bit architectures
-that do not want the 64-bit division, but there are probably
-enough other cases as well.
+Oops I must have just missed the latest perf/core update. I fixed the
+conflict and sent a v5, and decided to not make any changes for Suzuki's
+comments.
 
-     Arnd
+Thanks
+James
