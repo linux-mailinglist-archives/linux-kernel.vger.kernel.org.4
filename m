@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFFA6759C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E250E6759C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjATQVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S230002AbjATQVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjATQVH (ORCPT
+        with ESMTP id S229981AbjATQVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:21:07 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60C44B483;
-        Fri, 20 Jan 2023 08:20:40 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b3so8869646lfv.2;
-        Fri, 20 Jan 2023 08:20:40 -0800 (PST)
+        Fri, 20 Jan 2023 11:21:16 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7AD56482
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:20:55 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4c24993965eso79088297b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:20:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIyD0F5Y9Z3DpMXzhOW/VfaSYPRIBHl6F02SOb8HbsU=;
-        b=HciAGZ4tVEY9GjcwAvtBl/e6tp2r0tPckvrJyjobHizCob8HpFH8a7NoL43/wANiOh
-         pVsp/Qjc9ZVA2RnTBAjiNzwDezratqNU3WJAxmB/BxDKWb9jD4Le/uYhZ1b45pi1sa5a
-         aE0CKhURBnbHaW23T0vg/VDQbMUN5mqHrI3t+Zt2AU0r8BLSUQriq0w89QoavBvU3HIa
-         QPJU8G2fkLXuBDPQU+her73SxZ9tZ7Qu4B0PW7ANDy/1y1EXI92ETk+AEkwfhl9v3TN3
-         eEWHT1XuEjhv1w5bwvfnq2rJQ3vW/6KkWmQjII1/QDgIPN6cjSmXxfaUWiJOQtIuNMCa
-         yAfw==
+        bh=mfgPoshwuIu4b/1jDgs3cdlztQz/vsY4EyScZyBxABE=;
+        b=a3fpOXPWNViHSb5VK8vv6GJ9OmjGr4J4zqU4T6ftPkVNCscUsuTtDDXL5UD9ux6sdV
+         C0Qm2jvON+yzeEaRn5EGinE0oa53S+FAHBxJzKLsuFtanPw31pELeAvEJoY/yaBISJcM
+         oZyV2Lj9bVOFMBWicMFpowezChEy/etWrkR++6jVuHqIjnOtt+gvWs/hH0z9I+hVbxLK
+         DdHjJ3jcS58ULiPGvEyZtKwUEI8IP12OcCaoFotUfcap+K1AkIWIglgZwi5rcdiqfHFL
+         rPSSgGWeY5keQ2LWcVC+CM7q02imT0drV8318cIgX8BCEYEkWOEzW/6DbkrmOLaX3cWG
+         1G+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PIyD0F5Y9Z3DpMXzhOW/VfaSYPRIBHl6F02SOb8HbsU=;
-        b=cjAKBqNoDGw7W0ID5lCfkrAl/oJr7c4VHn4LipZzDrRfCHzxaFyZb6O6WwFdpfCeoY
-         HTv5s0RmtcAPz1g0jgt5lH7sdSmJUULH3YhgXUTO5uoDoszAtibUyHfCmkuE/NgyztYA
-         IWbFmbNj3LXggVweQD2ml7b2Z4yt6XUk7lCDiCjoPXyS0qitdFPxpVOa7aaTzQrkTC5H
-         aoWZ2qWzltcc9foWREAlkTaLbI0g10xIRkMeR0m8Rw43zUSHgKlNqEVJzDMY6zIxlCDr
-         9yi9kgCUc5WXhtJ3gImc+lRBmRauSOFpSH63XIFZ5Bk749Wf1rOt1faE9Eb1VLHfMirr
-         HKHg==
-X-Gm-Message-State: AFqh2kpdqYy8SQ904ZJLxp1tG6CVw5ixZXQt0mDTA5lwbfjfCXgCGzHi
-        vzkdsEpxT3yn0G5CTZEMXzeFcuATO+s03cGO5p8=
-X-Google-Smtp-Source: AMrXdXvxyAbJ/Kt/Wt6XKbtre4dYgzO2D0CHmJSOcGbGowbfv2Df5ZxmABPtWktJGYFR7INpFmUsJRRur+zphKlst1k=
-X-Received: by 2002:ac2:55bb:0:b0:4cc:73ff:6d3f with SMTP id
- y27-20020ac255bb000000b004cc73ff6d3fmr1247500lfg.35.1674231638576; Fri, 20
- Jan 2023 08:20:38 -0800 (PST)
+        bh=mfgPoshwuIu4b/1jDgs3cdlztQz/vsY4EyScZyBxABE=;
+        b=H3BBLjc9wUgUlyEBxuiBd2V3LcRKrwcFIRb0nA3FHNrbC64KxkZiRW7uo3DxW4Yxf+
+         tvkaJRvolTyZFHXJ1PujaHxNgbm9yDkiVMa6DoKOz+ARrc6LJLDtYQk2vzO/avD01/Ec
+         3NNbZ0wA9l2RdXH9u/rufNjMxfS/grhm+gu4z4x/igOuJuQa2zSsFGx6CqQtFQZL2n2h
+         ShCUsu+uV4XzuzbFNXqnQ+ez0jGRVko8TQ5POwaA+Ptm9s723m94Nsg1T6YHumCtJilN
+         PqfmYAAL5nzkmG9XHr1pTm9xwfF4bp53FrjTb+sr6Q+s04yXG0k9Nut/T8ODwNLZSZJZ
+         WLuQ==
+X-Gm-Message-State: AFqh2kpwdAahoqjfeGt6h0DIIHV8I9PBaJjPutTmHIbayybNzzYrGTMc
+        E3wX4EOLGFKTXUKOQNnI/liVQzm7oJ5e9vauMO95+g==
+X-Google-Smtp-Source: AMrXdXvNN5DOlSBxjqhx1vO405B++97EByJYfshx6Ib0y61OUe+J+zmBSfLMkdUumg4HC6CkMKiKUEscqc4n/PQFmVk=
+X-Received: by 2002:a0d:d484:0:b0:4dc:4113:f224 with SMTP id
+ w126-20020a0dd484000000b004dc4113f224mr2100604ywd.455.1674231654470; Fri, 20
+ Jan 2023 08:20:54 -0800 (PST)
 MIME-Version: 1.0
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <Y8pcIjGsikDeGqoU@amd.com>
- <CA+icZUWP_uYr5B6d_xms5gpCRmNCx46KwukmZyuuTdEPawKUyA@mail.gmail.com> <0a1ae8e9-ab0e-038a-084f-240f73489010@linuxfoundation.org>
-In-Reply-To: <0a1ae8e9-ab0e-038a-084f-240f73489010@linuxfoundation.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 20 Jan 2023 17:20:01 +0100
-Message-ID: <CA+icZUVgt422h2nOfhjyahMF2yX_Eon613Ep7=gJ5XRWDAMkmw@mail.gmail.com>
-Subject: Re: [PATCH] selftests: amd-pstate: Don't delete source files via Makefile
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Huang Rui <ray.huang@amd.com>, Doug Smythies <dsmythies@telus.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8k+syJu7elWAjRj@dhcp22.suse.cz> <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+In-Reply-To: <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 20 Jan 2023 08:20:43 -0800
+Message-ID: <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,62 +86,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 5:15 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On 1/20/23 09:11, Sedat Dilek wrote:
-> > On Fri, Jan 20, 2023 at 10:17 AM Huang Rui <ray.huang@amd.com> wrote:
-> >>
-> >> On Fri, Jan 20, 2023 at 01:54:01PM +0800, Doug Smythies wrote:
-> >>> Revert the portion of a recent Makefile change that incorrectly
-> >>> deletes source files when doing "make clean".
+> On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
+> > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
+> > > > a list and free them in groups using one call_rcu() call per group.
+> > >
+> > > After some more clarification I can understand how call_rcu might not be
+> > > super happy about thousands of callbacks to be invoked and I do agree
+> > > that this is not really optimal.
+> > >
+> > > On the other hand I do not like this solution much either.
+> > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
+> > > much with processes with a huge number of vmas either. It would still be
+> > > in housands of callbacks to be scheduled without a good reason.
+> > >
+> > > Instead, are there any other cases than remove_vma that need this
+> > > batching? We could easily just link all the vmas into linked list and
+> > > use a single call_rcu instead, no? This would both simplify the
+> > > implementation, remove the scaling issue as well and we do not have to
+> > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+> >
+> > Yes, I agree the solution is not stellar. I wanted something simple
+> > but this is probably too simple. OTOH keeping all dead vm_area_structs
+> > on the list without hooking up a shrinker (additional complexity) does
+> > not sound too appealing either.
 >
-> Ooo. That is bad.
->
-> >>>
-> >>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-> >>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> >>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> >>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> >>
-> >> (+ Shuah and linux-kselftest mailing list)
-> >>
-> >> Thanks for fix!
-> >>
-> >> Acked-by: Huang Rui <ray.huang@amd.com>
-> >>
-> >
-> > [ I already replied - but with these important CCs ]
-> >
-> > Hi Doug,
-> >
-> > Thanks for the patch!
-> >
-> > Small nit, I saw this with:
->
-> What did you see and should that be fixed as well.
->
-> >
-> > $ make -C tools/ clean
-> >
-> > Otherwise:
-> >
-> > Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-> >
->
-> Send me the revised patch with all the right CCs and I will pull
-> this right away.
->
+> I suspect you have missed my idea. I do not really want to keep the list
+> around or any shrinker. It is dead simple. Collect all vmas in
+> remove_vma and then call_rcu the whole list at once after the whole list
+> (be it from exit_mmap or remove_mt). See?
 
-Hi Shuah,
+Yes, I understood your idea but keeping dead objects until the process
+exits even when the system is low on memory (no shrinkers attached)
+seems too wasteful. If we do this I would advocate for attaching a
+shrinker.
 
-that was my original posting...
-
-Subject: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
-https://lore.kernel.org/all/CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com/
-
-...and should contain all CCs I got with scripts/get_maintainer.pl.
-
-Is that OK?
-
-BR,
--Sedat-
+>
+> --
+> Michal Hocko
+> SUSE Labs
