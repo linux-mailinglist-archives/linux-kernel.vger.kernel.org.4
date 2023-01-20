@@ -2,108 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3D36757EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6693B675801
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjATPAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S230286AbjATPBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjATPAJ (ORCPT
+        with ESMTP id S229590AbjATPBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:00:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE2641B72;
-        Fri, 20 Jan 2023 07:00:07 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KEx1X8000559;
-        Fri, 20 Jan 2023 14:59:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3HrTy6KRH0c8nn8RZz4UfVbeho7HoRu2+7rX1+TKX6o=;
- b=NrU0ke3Gq12txpQ4inx0oalb6FODLnpl/63NNfyMI4fRK915a1sfFJm+ZGTnSS6XUrmu
- 6JDQbXXMyz+2t8MbTxD29cp9Xpd5/s2d9L7019nVyU9S0p6FtIO7AXRxqP4O+Em0crSd
- TRf3FojLW1/lbKiJeWDql6YEtTvYMF7NuF1wFVFgVcjgtQdR9uXTE32YwyPGz6DGz0eG
- 2VX9BXcRazJ0GM4DZHR4jJ1+58AiC4pLsm+wo+SNYERuIBSLfmp2ZDR4NQdZENhSDlHA
- 8HgUC93d+ZbYBetZ7ze5TMKhAmDbckmxTTKJqbn6+ZPeA9+uTO0p7cuJZFybsIlviJzj 8w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7c28hwv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:59:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KExfev006092
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:59:41 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 06:59:40 -0800
-Message-ID: <8a5c3cc6-c1e5-b6c4-e69d-441cf3a1fa7d@quicinc.com>
-Date:   Fri, 20 Jan 2023 07:59:39 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH linux-next 1/3] Documentation: accel: escape wildcard in
- special file path
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux KVM <kvm@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-CC:     Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ofir Bitton <obitton@habana.ai>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230120123534.137413-1-bagasdotme@gmail.com>
- <20230120123534.137413-2-bagasdotme@gmail.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230120123534.137413-2-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: c49osEI-LfEgRsTJD9aA3ZchrnIv8A_-
-X-Proofpoint-ORIG-GUID: c49osEI-LfEgRsTJD9aA3ZchrnIv8A_-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_09,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=954
- clxscore=1011 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200142
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 10:01:37 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD5741B72;
+        Fri, 20 Jan 2023 07:01:36 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 64F0B320077A;
+        Fri, 20 Jan 2023 10:01:33 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 10:01:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674226892; x=1674313292; bh=1/i8XkaZ2k
+        WH/ANJugw9+lV13XFt/Z3piuqR1SILJ8I=; b=Z7ILUxnUEkzDx9iXK5m79/Qfx6
+        5NgR1h7GaZSs6m6EjGhB0T2JyLonAq8QbFo+zMdp+sskyZqCcQN4J4MCKdJrvyfA
+        /Zo/6LiA3eGCe2G6FQaiwRiamDyIYyyBsM8EJkVXknTRIEy5lxOjr8jdj6oXA1cx
+        7H9gGJWGdYNzHnIbeA5V+uqFjz8OHl1jLoaORBjHV+IiuGNpspQ+dRbLsVKOcXmw
+        pybet8+YyK0Pu1iSXizlB0CFOzrqdvJ4JF3UksO8pdnRNeb2Um/Alt0yZzVj1gXv
+        mGDyU2VjAxeLzFSgn56X3lP5U2gT7i7xaZfY+hFG/i+QEtPClr0MyyqtGxeQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674226892; x=1674313292; bh=1/i8XkaZ2kWH/ANJugw9+lV13XFt
+        /Z3piuqR1SILJ8I=; b=AScM23Xt6qrpZI1KEsWsxYOn46MGu0a4483EASgzUxif
+        KYkOY2m52kcdjHCovknnMnYQJ99X6orCBhmLWS5xVQNF19oVu15lFoonVHv2dog0
+        MlegsyeEhaQHG7sDEAMLF52WrEfHd41pMMUH5jWBBBIgD5r/yVwPNdvoZLVRvCZs
+        XG5nbVuootxqzspKIpkBHJUrA/jQbdScKeazemZDA0PLBUbUKMeHPhT8dTcZfYa1
+        vMGiw2YIYuERhKpZr0F8jFDtOWVZmYE5EkKJ3QGc89GGjO2vTN5126Ne8Xy8EYkt
+        yE05gOqaELiKxFdzrS/8jcqdrHeyoZrmDrqh11FfTw==
+X-ME-Sender: <xms:y6zKY1--FxFV5WM_dvH3L-jhvDJdkUv2VKNjqycw8wsWi1kY60t_Hg>
+    <xme:y6zKY5uEr8VwywOYKxxuRFHA2t7uhUz8er2Qni3FDxgSf42PnIomr8bT4uWQPMrSj
+    vl6wYFssrKwy6qpeIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:y6zKYzAQI32j9NDjRfMqwyTzyHZ7gpDAsgcrznJyKaxYWkjqDKkMig>
+    <xmx:y6zKY5dwnJnhoe3QJUqC8kllrSTTegH2oqUNSRINTZtDGCG_doy8wg>
+    <xmx:y6zKY6NeO-4u4ZZ4r7o7F71zTnD9XHdwpsJ3MbruCFIRzX2R-IamTw>
+    <xmx:zKzKY0uSG_2mGZuS71TMJo-MA0P9EOIrBzWmkXOZx-9ZotVtWq1S0w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 786ABB60086; Fri, 20 Jan 2023 10:01:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <9965e2d1-bae8-4ce7-911c-783c772e9ff1@app.fastmail.com>
+In-Reply-To: <20230120145316.GA4155@tellis.lin.mbt.kalray.eu>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-10-ysionneau@kalray.eu>
+ <aa4d68b2-b5b5-4c17-a44f-7c6db443ea4c@app.fastmail.com>
+ <20230120145316.GA4155@tellis.lin.mbt.kalray.eu>
+Date:   Fri, 20 Jan 2023 16:01:11 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jules Maselbas" <jmaselbas@kalray.eu>
+Cc:     "Yann Sionneau" <ysionneau@kalray.eu>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Waiman Long" <longman@redhat.com>,
+        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        "Eric Paris" <eparis@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Guillaume Thouvenin" <gthouvenin@kalray.eu>,
+        "Clement Leger" <clement@clement-leger.fr>,
+        "Vincent Chardon" <vincent.chardon@elsys-design.com>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        "Julian Vetter" <jvetter@kalray.eu>,
+        "Samuel Jones" <sjones@kalray.eu>,
+        "Ashley Lesdalons" <alesdalons@kalray.eu>,
+        "Thomas Costis" <tcostis@kalray.eu>,
+        "Marius Gligor" <mgligor@kalray.eu>,
+        "Jonathan Borne" <jborne@kalray.eu>,
+        "Julien Villette" <jvillette@kalray.eu>,
+        "Luc Michel" <lmichel@kalray.eu>,
+        "Louis Morhet" <lmorhet@kalray.eu>,
+        "Julien Hascoet" <jhascoet@kalray.eu>,
+        "Jean-Christophe Pince" <jcpince@gmail.com>,
+        "Guillaume Missonnier" <gmissonnier@kalray.eu>,
+        "Alex Michon" <amichon@kalray.eu>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <git@xen0n.name>,
+        "Shaokun Zhang" <zhangshaokun@hisilicon.com>,
+        "John Garry" <john.garry@huawei.com>,
+        "Guangbin Huang" <huangguangbin2@huawei.com>,
+        "Bharat Bhushan" <bbhushan2@marvell.com>,
+        "Bibo Mao" <maobibo@loongson.cn>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        "Qi Liu" <liuqi115@huawei.com>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        "Alexey Dobriyan" <adobriyan@gmail.com>,
+        "Benjamin Mugnier" <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 09/31] kvx: Add build infrastructure
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/2023 5:35 AM, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warning then merging accel tree:
-> 
-> Documentation/accel/introduction.rst:72: WARNING: Inline emphasis start-string without end-string.
-> 
-> Sphinx confuses the file wildcards with inline emphasis (italics), hence
-> the warning.
-> 
-> Fix the warning by escaping wildcards.
-> 
-> Link: https://lore.kernel.org/linux-next/20230120132116.21de1104@canb.auug.org.au/
-> Fixes: f65c5dac207322 ("docs: accel: Fix debugfs path")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On Fri, Jan 20, 2023, at 15:53, Jules Maselbas wrote:
+> On Fri, Jan 20, 2023 at 03:39:22PM +0100, Arnd Bergmann wrote:
+>> On Fri, Jan 20, 2023, at 15:09, Yann Sionneau wrote:
+>> >      - Fix clean target raising an error from gcc (LIBGCC)
+>> 
+>> I had not noticed this on v1 but:
+>> 
+>> > +# Link with libgcc to get __div* builtins.
+>> > +LIBGCC	:= $(shell $(CC) $(DEFAULT_OPTS) --print-libgcc-file-name)
+>> 
+>> It's better to copy the bits of libgcc that you actually need
+>> than to include the whole thing. The kernel is in a weird
+> It was initialy using KCONFIG_CFLAGS which do not contains valid options
+> when invoking the clean target.
+>
+> I am not exactly sure what's needed by gcc for --print-libgcc-file-name,
+> my guess is that only the -march option matters, I will double check
+> internally with compiler peoples.
+>
+>> state that is neither freestanding nor the normal libc based
+>> environment, so we generally want full control over what is
+>> used. This is particularly important for 32-bit architectures
+>> that do not want the 64-bit division, but there are probably
+>> enough other cases as well.
 
-Thanks for addressing this before I even saw the warning report.
+To clarify: I meant you should not include libgcc.a at all but
+add the minimum set of required files as arch/kvx/lib/*.S.
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+     Arnd
