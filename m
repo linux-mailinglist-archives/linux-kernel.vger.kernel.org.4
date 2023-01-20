@@ -2,172 +2,578 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66ED5674FFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEB2675004
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjATI5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S229729AbjATI5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjATI5I (ORCPT
+        with ESMTP id S229696AbjATI5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:57:08 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F6A367C5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:57:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EC76D228C7;
-        Fri, 20 Jan 2023 08:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674205025; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vf+9QXYLPJFKQAebMwH94HpP9CqaExp96hDaRf0LikI=;
-        b=ap7yzgie765OI2Bjiskk0swmdw8q/Ou6CT5XVIRkSLlVe5E+RT0kuCHyv/2AIoIYIEnLB5
-        Z9p2hGnzGzzEXqut/Md5QNH6oIk/Zt/OlGvoNT0oLI/FDz8CFTSaEpCPpQwGnvJZwLRiSx
-        42nNzYO/6O3hOaN3vqGTPTTv9nCU1vY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D637913251;
-        Fri, 20 Jan 2023 08:57:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4Z1MNGFXymOZIAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 20 Jan 2023 08:57:05 +0000
-Date:   Fri, 20 Jan 2023 09:57:05 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <Y8pXYebD300t2uqU@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-40-surenb@google.com>
- <Y8bFdB47JT/luMld@dhcp22.suse.cz>
- <CAJuCfpHVYW5aBVmT0vwn+j=m=Jo2KhSTzgVtxSEusUZJdzetUA@mail.gmail.com>
- <Y8fApgKJaTs9nrPO@dhcp22.suse.cz>
- <CAJuCfpERMyQc96Z5Qn9RFK0UD7fNugZE4DujFs4xqFWM8T6EqA@mail.gmail.com>
- <20230118183447.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <CAJuCfpHZuKq45FL1gs+=rx5s2AOaZ9TPC1bdAWjYzfkrOABTOw@mail.gmail.com>
- <Y8k8/vPGXBvyHLJE@dhcp22.suse.cz>
- <20230119191707.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 20 Jan 2023 03:57:33 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE0B891DD
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:57:30 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id q8so3429744wmo.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2ma8ri/fvOjudv1di7H2KN9Gz0M4eTsVpNbhKuamBk=;
+        b=nTeq3hcBDHDOgoVT2gEpHIUkAgbfjJJBd7zeW9BoQ7Bjoi5d5ijnfkFRh4aE4MdxWh
+         h+YaUpH/8NLcqTSiH8/GIle6igiAqVxI40cNh9WBRAQ6dUVALBK3oCrUf/sT5dLPE4xO
+         QXLcCpK8U7nF7Gcy4Pr8JySV8lmNC8YlZ6Lnw3cyuAAzBNWHXY4L+479YDSnPYhIJIRe
+         +sFLK9xkkS5ZiMAiUSoj37lfqKObeW8ccPs4oREIIomA/paDXISKmprwoAcyhefC+EcF
+         cgC9JztMjs0TlSv+GNU8yMWV91bBH3+Fx09CbbdyGXng1FM3HzW7dC7c6Cc/TLFigY6g
+         nSlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z2ma8ri/fvOjudv1di7H2KN9Gz0M4eTsVpNbhKuamBk=;
+        b=bS1gYEPTGghWV5mZuPrg1aiMh2veXjSUYnhVOY993xh4axm2v1D+h4nF4tjArcuVTo
+         mrm6pPUTO7MRvHo66QSKOwAvF41REP2CYG87tz//8oc00IKLnc8Rw7yypeDCsTFRM2nD
+         zDYcIoO3ptEVQDZJCoW32eWkOKB2CFLxs4u9sAhPxuD8NQ3Q2V/gxdbmVqJeQDeCi5A9
+         T11hiviygb8oV8xac3GkATUieIGIcCP7+/XRacRn/kU/TybWy7ftyL3KjKUJZtl5CSFX
+         g9dzkmPnZXCt3/MrhMQCtKcHtu8mQh+yRdMU2O23rj7tpZqaGPrLATP696wygjQeGAfT
+         EOzA==
+X-Gm-Message-State: AFqh2kp5izPS4RdKueYYFNCgFxlgYj2xUjWIkEYZ0/x1NMoQYe0fiPPF
+        4ukmaMnYLQ+RmXZA+JZTDU2pQw==
+X-Google-Smtp-Source: AMrXdXu+ddu9ZagkxkcUQ0mimr//2D6fM8X7k2BIbndTeOCurOXwAgSF9iTnHhccuTrbWAU4Jlrz0Q==
+X-Received: by 2002:a05:600c:34ce:b0:3db:25f:be9e with SMTP id d14-20020a05600c34ce00b003db025fbe9emr13351767wmq.33.1674205048380;
+        Fri, 20 Jan 2023 00:57:28 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1c7912000000b003db00747fdesm1612040wme.15.2023.01.20.00.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 00:57:27 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Markus Pargmann <mpa@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: mmc: drop unneeded quotes
+Date:   Fri, 20 Jan 2023 09:57:21 +0100
+Message-Id: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119191707.GW2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-01-23 11:17:07, Paul E. McKenney wrote:
-> On Thu, Jan 19, 2023 at 01:52:14PM +0100, Michal Hocko wrote:
-> > On Wed 18-01-23 11:01:08, Suren Baghdasaryan wrote:
-> > > On Wed, Jan 18, 2023 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > [...]
-> > > > There are a couple of possibilities here.
-> > > >
-> > > > First, if I am remembering correctly, the time between the call_rcu()
-> > > > and invocation of the corresponding callback was taking multiple seconds,
-> > > > but that was because the kernel was built with CONFIG_LAZY_RCU=y in
-> > > > order to save power by batching RCU work over multiple call_rcu()
-> > > > invocations.  If this is causing a problem for a given call site, the
-> > > > shiny new call_rcu_hurry() can be used instead.  Doing this gets back
-> > > > to the old-school non-laziness, but can of course consume more power.
-> > > 
-> > > That would not be the case because CONFIG_LAZY_RCU was not an option
-> > > at the time I was profiling this issue.
-> > > Laxy RCU would be a great option to replace this patch but
-> > > unfortunately it's not the default behavior, so I would still have to
-> > > implement this batching in case lazy RCU is not enabled.
-> > > 
-> > > >
-> > > > Second, there is a much shorter one-jiffy delay between the call_rcu()
-> > > > and the invocation of the corresponding callback in kernels built with
-> > > > either CONFIG_NO_HZ_FULL=y (but only on CPUs mentioned in the nohz_full
-> > > > or rcu_nocbs kernel boot parameters) or CONFIG_RCU_NOCB_CPU=y (but only
-> > > > on CPUs mentioned in the rcu_nocbs kernel boot parameters).  The purpose
-> > > > of this delay is to avoid lock contention, and so this delay is incurred
-> > > > only on CPUs that are queuing callbacks at a rate exceeding 16K/second.
-> > > > This is reduced to a per-jiffy limit, so on a HZ=1000 system, a CPU
-> > > > invoking call_rcu() at least 16 times within a given jiffy will incur
-> > > > the added delay.  The reason for this delay is the use of a separate
-> > > > ->nocb_bypass list.  As Suren says, this bypass list is used to reduce
-> > > > lock contention on the main ->cblist.  This is not needed in old-school
-> > > > kernels built without either CONFIG_NO_HZ_FULL=y or CONFIG_RCU_NOCB_CPU=y
-> > > > (including most datacenter kernels) because in that case the callbacks
-> > > > enqueued by call_rcu() are touched only by the corresponding CPU, so
-> > > > that there is no need for locks.
-> > > 
-> > > I believe this is the reason in my profiled case.
-> > > 
-> > > >
-> > > > Third, if you are instead seeing multiple milliseconds of CPU consumed by
-> > > > call_rcu() in the common case (for example, without the aid of interrupts,
-> > > > NMIs, or SMIs), please do let me know.  That sounds to me like a bug.
-> > > 
-> > > I don't think I've seen such a case.
-> > > Thanks for clarifications, Paul!
-> > 
-> > Thanks for the explanation Paul. I have to say this has caught me as a
-> > surprise. There are just not enough details about the benchmark to
-> > understand what is going on but I find it rather surprising that
-> > call_rcu can induce a higher overhead than the actual kmem_cache_free
-> > which is the callback. My naive understanding has been that call_rcu is
-> > really fast way to defer the execution to the RCU safe context to do the
-> > final cleanup.
-> 
-> If I am following along correctly (ha!), then your "induce a higher
-> overhead" should be something like "induce a higher to-kfree() latency".
+Cleanup by removing unneeded quotes from refs and redundant blank lines.
+No functional impact except adjusting to preferred coding style.
 
-Yes, this is expected.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml |  2 +-
+ .../bindings/mmc/amlogic,meson-mx-sdhc.yaml   |  2 +-
+ .../devicetree/bindings/mmc/arasan,sdhci.yaml |  6 ++--
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 22 ++++++------
+ .../bindings/mmc/fsl-imx-esdhc.yaml           |  4 +--
+ .../devicetree/bindings/mmc/fsl-imx-mmc.yaml  |  2 +-
+ .../mmc/microchip,dw-sparx5-sdhci.yaml        |  4 +--
+ .../devicetree/bindings/mmc/mmc-spi-slot.yaml |  2 +-
+ .../devicetree/bindings/mmc/mxs-mmc.yaml      |  2 +-
+ .../bindings/mmc/nvidia,tegra20-sdhci.yaml    | 36 +++++++++----------
+ .../devicetree/bindings/mmc/owl-mmc.yaml      |  2 +-
+ .../bindings/mmc/renesas,mmcif.yaml           |  2 +-
+ .../devicetree/bindings/mmc/renesas,sdhi.yaml |  6 ++--
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |  2 +-
+ .../bindings/mmc/samsung,exynos-dw-mshc.yaml  |  2 +-
+ .../devicetree/bindings/mmc/sunplus,mmc.yaml  |  2 +-
+ .../bindings/mmc/synopsys-dw-mshc-common.yaml |  2 +-
+ 17 files changed, 50 insertions(+), 50 deletions(-)
 
-> Of course, there already is a higher latency-to-kfree via call_rcu()
-> than via a direct call to kfree(), and callback-offload CPUs that are
-> being flooded with callbacks raise that latency a jiffy or so more in
-> order to avoid lock contention.
-> 
-> If this becomes a problem, the callback-offloading code can be a bit
-> smarter about avoiding lock contention, but need to see a real problem
-> before I make that change.  But if there is a real problem I will of
-> course fix it.
-
-I believe that Suren claims that the call_rcu is really visible in the
-exit_mmap case. Time-to-free actual vmas shouldn't really be material
-for that path. If that happens much more later on there could be some
-side effects by an increased memory consumption but that should be
-marginal. How fast exit_mmap really is should only depend on direct
-calls from that path.
-
-But I guess we need some specific numbers from Suren to be sure what is
-going on here.
-
-Thanks!
+diff --git a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
+index 02ecc93417ef..0ccd632d5620 100644
+--- a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Allwinner A10 MMC Controller
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ maintainers:
+   - Chen-Yu Tsai <wens@csie.org>
+diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml b/Documentation/devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml
+index 1c391bec43dc..1a6cda82f296 100644
+--- a/Documentation/devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Amlogic Meson SDHC controller
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ maintainers:
+   - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+index 4053de758db6..8296c34cfa00 100644
+--- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mmc/arasan,sdhci.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mmc/arasan,sdhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Arasan SDHCI Controller
+ 
+@@ -10,7 +10,7 @@ maintainers:
+   - Adrian Hunter <adrian.hunter@intel.com>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml#"
++  - $ref: mmc-controller.yaml#
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+index 8b1a0fdcb5e3..d3dce4d6c168 100644
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -36,43 +36,43 @@ properties:
+ 
+   cdns,phy-input-delay-sd-highspeed:
+     description: Value of the delay in the input path for SD high-speed timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-legacy:
+     description: Value of the delay in the input path for legacy timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-sd-uhs-sdr12:
+     description: Value of the delay in the input path for SD UHS SDR12 timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-sd-uhs-sdr25:
+     description: Value of the delay in the input path for SD UHS SDR25 timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-sd-uhs-sdr50:
+     description: Value of the delay in the input path for SD UHS SDR50 timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-sd-uhs-ddr50:
+     description: Value of the delay in the input path for SD UHS DDR50 timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+   cdns,phy-input-delay-mmc-highspeed:
+     description: Value of the delay in the input path for MMC high-speed timing
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+@@ -83,7 +83,7 @@ properties:
+   # Each delay property represents the fraction of the clock period.
+   # The approximate delay value will be
+   # (<delay property value>/128)*sdmclk_clock_period.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x1f
+ 
+@@ -91,7 +91,7 @@ properties:
+     description: |
+       Value of the delay introduced on the sdclk output for all modes except
+       HS200, HS400 and HS400_ES.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x7f
+ 
+@@ -99,7 +99,7 @@ properties:
+     description: |
+       Value of the delay introduced on the sdclk output for HS200, HS400 and
+       HS400_ES speed modes.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x7f
+ 
+@@ -107,7 +107,7 @@ properties:
+     description: |
+       Value of the delay introduced on the dat_strobe input used in
+       HS400 / HS400_ES speed modes.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
+     maximum: 0x7f
+ 
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index b3289593d5f1..269e0f421407 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Shawn Guo <shawnguo@kernel.org>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ description: |
+   The Enhanced Secure Digital Host Controller on Freescale i.MX family
+@@ -112,7 +112,7 @@ properties:
+     default: 0
+ 
+   voltage-ranges:
+-    $ref: '/schemas/types.yaml#/definitions/uint32-matrix'
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+     description: |
+       Specify the voltage range in case there are software transparent level
+       shifters on the outputs of the controller. Two cells are required, first
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-mmc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-mmc.yaml
+index ffa162722b8e..221f5bc047bd 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-mmc.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Markus Pargmann <mpa@pengutronix.de>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/microchip,dw-sparx5-sdhci.yaml b/Documentation/devicetree/bindings/mmc/microchip,dw-sparx5-sdhci.yaml
+index fa6cfe092fc9..1f63faf17743 100644
+--- a/Documentation/devicetree/bindings/mmc/microchip,dw-sparx5-sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/microchip,dw-sparx5-sdhci.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Microchip Sparx5 Mobile Storage Host Controller
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ maintainers:
+   - Lars Povlsen <lars.povlsen@microchip.com>
+@@ -35,7 +35,7 @@ properties:
+   microchip,clock-delay:
+     description: Delay clock to card to meet setup time requirements.
+       Each step increase by 1.25ns.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 1
+     maximum: 15
+ 
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+index c0662ce9946d..36acc40c7d18 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Ulf Hansson <ulf.hansson@linaro.org>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+   - $ref: /schemas/spi/spi-peripheral-props.yaml
+ 
+ description: |
+diff --git a/Documentation/devicetree/bindings/mmc/mxs-mmc.yaml b/Documentation/devicetree/bindings/mmc/mxs-mmc.yaml
+index bec8f8c71ff2..32e512a68ed6 100644
+--- a/Documentation/devicetree/bindings/mmc/mxs-mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/mxs-mmc.yaml
+@@ -17,7 +17,7 @@ description: |
+   and the properties used by the mxsmmc driver.
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+index fe0270207622..285057523ead 100644
+--- a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+@@ -83,7 +83,7 @@ properties:
+     maxItems: 1
+ 
+   operating-points-v2:
+-    $ref: "/schemas/types.yaml#/definitions/phandle"
++    $ref: /schemas/types.yaml#/definitions/phandle
+ 
+   power-domains:
+     items:
+@@ -100,53 +100,53 @@ properties:
+ 
+       The DQS trim values are only used on controllers which support HS400
+       timing. Only SDMMC4 on Tegra210 and Tegra186 supports HS400.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,default-trim:
+     description: Specify the default outbound clock trimmer value.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,dqs-trim:
+     description: Specify DQS trim value for HS400 timing.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-1v8:
+     description: Specify drive strength calibration offsets for 1.8 V
+       signaling modes.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-1v8-timeout:
+     description: Specify drive strength used as a fallback in case the
+       automatic calibration times out on a 1.8 V signaling mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-3v3:
+     description: Specify drive strength calibration offsets for 3.3 V
+       signaling modes.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-3v3-timeout:
+     description: Specify drive strength used as a fallback in case the
+       automatic calibration times out on a 3.3 V signaling mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-sdr104:
+     description: Specify drive strength calibration offsets for SDR104 mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-down-offset-hs400:
+     description: Specify drive strength calibration offsets for HS400 mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-1v8:
+     description: Specify drive strength calibration offsets for 1.8 V
+       signaling modes.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-1v8-timeout:
+     description: Specify drive strength used as a fallback in case the
+       automatic calibration times out on a 1.8 V signaling mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-3v3:
+     description: Specify drive strength calibration offsets for 3.3 V
+@@ -158,25 +158,25 @@ properties:
+       refer to the reference manual of the SoC for correct values. The SDR104
+       and HS400 timing specific values are used in corresponding modes if
+       specified.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-3v3-timeout:
+     description: Specify drive strength used as a fallback in case the
+       automatic calibration times out on a 3.3 V signaling mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-sdr104:
+     description: Specify drive strength calibration offsets for SDR104 mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,pad-autocal-pull-up-offset-hs400:
+     description: Specify drive strength calibration offsets for HS400 mode.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   nvidia,only-1-8v:
+     description: The presence of this property indicates that the controller
+       operates at a 1.8 V fixed I/O voltage.
+-    $ref: "/schemas/types.yaml#/definitions/flag"
++    $ref: /schemas/types.yaml#/definitions/flag
+ 
+ required:
+   - compatible
+@@ -187,7 +187,7 @@ required:
+   - reset-names
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/owl-mmc.yaml b/Documentation/devicetree/bindings/mmc/owl-mmc.yaml
+index b0d81ebe0f6e..1b7d88ed3799 100644
+--- a/Documentation/devicetree/bindings/mmc/owl-mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/owl-mmc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Actions Semi Owl SoCs SD/MMC/SDIO controller
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ maintainers:
+   - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+diff --git a/Documentation/devicetree/bindings/mmc/renesas,mmcif.yaml b/Documentation/devicetree/bindings/mmc/renesas,mmcif.yaml
+index c36ba561c387..024313b79ec9 100644
+--- a/Documentation/devicetree/bindings/mmc/renesas,mmcif.yaml
++++ b/Documentation/devicetree/bindings/mmc/renesas,mmcif.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Wolfram Sang <wsa+renesas@sang-engineering.com>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+index fa089cbb155b..7756a8687eaf 100644
+--- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
++++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mmc/renesas,sdhi.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mmc/renesas,sdhi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas SDHI SD/MMC controller
+ 
+@@ -112,7 +112,7 @@ properties:
+   max-frequency: true
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+   - if:
+       properties:
+diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+index c7e14b7dba9e..67d7223f74da 100644
+--- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+@@ -14,7 +14,7 @@ description:
+   file and the Rockchip specific extensions.
+ 
+ allOf:
+-  - $ref: "synopsys-dw-mshc-common.yaml#"
++  - $ref: synopsys-dw-mshc-common.yaml#
+ 
+ maintainers:
+   - Heiko Stuebner <heiko@sntech.de>
+diff --git a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+index fdaa18481aa0..6ee78a38bd74 100644
+--- a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+@@ -112,7 +112,7 @@ required:
+   - samsung,dw-mshc-sdr-timing
+ 
+ allOf:
+-  - $ref: "synopsys-dw-mshc-common.yaml#"
++  - $ref: synopsys-dw-mshc-common.yaml#
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml b/Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
+index 23aa8e6b2d70..611687166735 100644
+--- a/Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
+@@ -12,7 +12,7 @@ maintainers:
+   - Li-hao Kuo <lhjeff911@gmail.com>
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml"
++  - $ref: mmc-controller.yaml
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+index 8dfad89c78a7..6f11b2adf103 100644
+--- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
++++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Synopsys Designware Mobile Storage Host Controller Common Properties
+ 
+ allOf:
+-  - $ref: "mmc-controller.yaml#"
++  - $ref: mmc-controller.yaml#
+ 
+ maintainers:
+   - Ulf Hansson <ulf.hansson@linaro.org>
 -- 
-Michal Hocko
-SUSE Labs
+2.34.1
+
