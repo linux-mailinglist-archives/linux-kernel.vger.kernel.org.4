@@ -2,106 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B91674858
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4359667485A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjATAx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S229785AbjATAyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjATAxY (ORCPT
+        with ESMTP id S229481AbjATAyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:53:24 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FAE9AAB9;
-        Thu, 19 Jan 2023 16:53:21 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 17ABE514;
-        Fri, 20 Jan 2023 01:53:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674175998;
-        bh=leFNSZshv+kpPN94K/far0pL9B7KIYKntxiaXNDjR4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JXRMl3TludEwKOM8ACTPCGPZ4KXVAtKd4a3LEYyl3mTLrxbLqBhtSIZedlnTVXzYI
-         R06RARw7I8Ajys8fEhQgvNMUnJWIqimdY5Ofi+CJS0/nTh7lw9mAiUKA8SrYT2UjgC
-         x0wHKgEKCMqDg4UzmmyfJqIsRFssMHj5XFC41gI8=
-Date:   Fri, 20 Jan 2023 02:53:15 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-Message-ID: <Y8nl++1Mjd7xLqZe@pendragon.ideasonboard.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com>
- <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
- <Y8lHqd9FlxiXTLuW@kroah.com>
- <CAMEGJJ1oZ9XFw0609PrEABAgDwvapbc3hG4hJ=vBekUOepdiWw@mail.gmail.com>
- <Y8lS5eBliYw5EHBb@kadam>
- <CAMEGJJ2b1KFQY1m1eTcvf8_kGBBTjzrBD2i_M2uR+6v4gEcbVQ@mail.gmail.com>
- <Y8lVvHMIYeSOLM5q@kadam>
+        Thu, 19 Jan 2023 19:54:11 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DD545F5E;
+        Thu, 19 Jan 2023 16:54:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b7srAW+gtFYq/oOlQokHfZ01Lnsj+6AOdclPYQRY58A=; b=g73EFRFs/Kx1HSPyD+g3KYmgea
+        D3M3eO5Dhwm/B7NRF1N/HsyOSY8mr66ro6noUtju6Ue8zcJqK7vYbqfUbSYetivXS9GpYQvKGFnO0
+        a44YIRu61NBRYHfddZuIjqCX4Q1UCUmqR9BC3gpuQ2HVmpc66pr0hG6n2vMO6nJjoxVZA+CHeJUoz
+        vvh6c5/QsIYEULtjlrtmtxv2A9B+Col+tOomftg7eFTCAfaYGox2YEvhaPYgr3ZfUYHpngn0neZ8R
+        t7Uynm1P/fwsrov8F+qYlAVqJgvvF+18cHTQBI45t4CJhqj+HgHnHApoD3MKrwdNTBHuqiLiev1CM
+        2ci31cUw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIffS-002tur-1N;
+        Fri, 20 Jan 2023 00:54:06 +0000
+Date:   Fri, 20 Jan 2023 00:54:06 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v3 4/4] fs/sysv: Replace kmap() with kmap_local_page()
+Message-ID: <Y8nmLh0cyloTzfAN@ZenIV>
+References: <20230119153232.29750-1-fmdefrancesco@gmail.com>
+ <20230119153232.29750-5-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8lVvHMIYeSOLM5q@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119153232.29750-5-fmdefrancesco@gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 05:37:48PM +0300, Dan Carpenter wrote:
-> On Thu, Jan 19, 2023 at 02:31:50PM +0000, Phil Elwell wrote:
-> > On Thu, 19 Jan 2023 at 14:25, Dan Carpenter wrote:
-> > > On Thu, Jan 19, 2023 at 01:47:44PM +0000, Phil Elwell wrote:
-> > > > > > I understand the desire to remove the custom logging. I don't welcome
-> > > > > > the loss of flexibility that comes with such a strategy
-> > > > >
-> > > > > What "loss of flexibility"?  You now have access to the full dynamic
-> > > > > debugging facilities that all of the rest of the kernel has.  What is
-> > > > > lacking?
-> > > >
-> > > > Perhaps I've missed something, either in this patch set or the kernel
-> > > > as a whole, but how is one supposed to set different logging levels on
-> > > > different facilities within a driver/module, or even for the module as
-> > > > a whole?
-> > >
-> > > Yeah.  You will be still able to do that and more besides after the
-> > > transition.  Cleaning this up makes the code better in every way.
-> > >
-> > > Documentation/admin-guide/dynamic-debug-howto.rst
-> > 
-> > Are you saying this patch set gets us to that point?
-> 
-> Yes.  The patch has some issues, but yes.
+On Thu, Jan 19, 2023 at 04:32:32PM +0100, Fabio M. De Francesco wrote:
+> @@ -228,6 +239,12 @@ int sysv_delete_entry(struct sysv_dir_entry *de, struct page *page)
+>  {
+>  	struct inode *inode = page->mapping->host;
+>  	loff_t pos = page_offset(page) + offset_in_page(de);
+> +	/*
+> +	 * The "de" dentry points somewhere in the same page whose we need the
+> +	 * address of; therefore, we can simply get the base address "kaddr" by
+> +	 * masking the previous with PAGE_MASK.
+> +	 */
+> +	char *kaddr = (char *)((unsigned long)de & PAGE_MASK);
 
-I think I'm missing something too then. Dynamic debug provides the
-ability to easily switch dev_dbg() messages on and off at runtime, but
-it doesn't provide, as far as I'm aware, log levels or log categories.
+er...  ITYM "therefore we can pass de to dir_put_page() and get rid of that kaddr
+thing"...
 
-Log levels are currently used by the vchiq code to suppress messages
-below a certain level. Kernel log levels are not an exact replacement,
-as the messages still end up in the kernel log (except for debug
-messages).
-
-Log categories are used to group messages in categories and control
-their log level per category. As far as I know, dynamic debug doesn't
-provide any such feature.
-
--- 
-Regards,
-
-Laurent Pinchart
+Anyway, with that change the series rebased and applied on top of Christoph's sysv
+patch.
