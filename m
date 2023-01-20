@@ -2,154 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E735F675703
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D04B6756EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjATOZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S230473AbjATOUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjATOYu (ORCPT
+        with ESMTP id S231392AbjATOUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:24:50 -0500
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD41CE215;
-        Fri, 20 Jan 2023 06:24:33 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id rl14so11027497ejb.2;
-        Fri, 20 Jan 2023 06:24:33 -0800 (PST)
+        Fri, 20 Jan 2023 09:20:17 -0500
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8526DB0C
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:19:39 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id kt14so14320298ejc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ilLx6O6YT20nFcUZQCZceyzwkMlq9jdKRHFVcmAsl2w=;
+        b=ayEpP7xMy4TXl7+XiO8ro4Txa0MJS/99a9JhC3ahSwucSr+pp8+JT7uj14K3WxO9Nb
+         RIc5SGeLH1XIKcd+7X4Qcl/YIMwm+VApTHcgrQdFJw8ZP24HqoAMJkxdYH2SeOdQ7XIk
+         nkouY/TYeIKfYx7l6/RoZknFBPgPe+9Lub3HncGUaPxnM0IFo3L4BrrRmi5mm9z62LID
+         ZatLCWTGQ2w0EiSGU4HJCXi0B++LXBaZCcsJrVSL0SqwNLmBepU+2VIp0+kpZI0P+qwU
+         xay2fhZ6JGajmJVUIRxTvYn5cnBBa5kn6gIZ98wCC9K6UC8lhr2FCWuAoqD4ixPId8kd
+         2uvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DdfwY1ZCUGNm1TC4PybUHmSBv1sQgFPf3UXbHXulzOQ=;
-        b=04MxUF7U/5u1Ufg07sNJZ8vrzOJacMtiqDX8IBUaFMGAHRVOLfGPc7/BkvsOS39SSZ
-         5BkjAiTysXwTgeLZAqypzL0GRBbnvjy60IIJrg0pNU0EtU7nDmXYDXOxttcMUEqkh8u0
-         Zop3bxil1YdLOV1q6QKMHnPRZsv+AmOw1RS1CkB4eufgeN+lJ+oz3aTWwE6R/BI86l9i
-         0Qn6v4c6aBAkuV1GTb8kSMwand7O9FycoYpFY95cHJ3ooug7B9wsj6OUzlU9yQ3RyoQx
-         AH8UbzQQFMUvk5EYXFV48R3pjsg9se/Er1R0xi6yTd0HVZoadFN9es+cxehWMXQASrwC
-         tWiw==
-X-Gm-Message-State: AFqh2kqwO+Q7w9MjTtU1++IotjYQsJYgm87jYe1+W4e7qRnbwTXeHVCl
-        lVRtuliluABUV4vKdWMsEEecEh55bA6EAPy1y5hr7bMX
-X-Google-Smtp-Source: AMrXdXsr7bguEIeDU06rlqYGR2KGEYyYa1luvqE4Xdl8XhFn+cU3UuYsR6w2eBH9Bpq9DGjUZEofBCL3iEfO9oqbTV4=
-X-Received: by 2002:a17:906:2c4b:b0:870:3557:160e with SMTP id
- f11-20020a1709062c4b00b008703557160emr1166751ejh.78.1674224016899; Fri, 20
- Jan 2023 06:13:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
- <54674d67-7be3-0abc-4252-e7f4158f56f2@linaro.org> <12134920.O9o76ZdvQC@kreacher>
- <356516181c0f7a6ed1e4e97aabe12d50c7a51bc4.camel@intel.com>
-In-Reply-To: <356516181c0f7a6ed1e4e97aabe12d50c7a51bc4.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 15:13:25 +0100
-Message-ID: <CAJZ5v0iDwdsg0ThC8hU7huVQQUL0e0KX-R8GK5FHe5Q7SG7TRA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ilLx6O6YT20nFcUZQCZceyzwkMlq9jdKRHFVcmAsl2w=;
+        b=CzulfTL2CnCE/BE0kDwS3pvjj1aTswd8dCd63jPPly7GFQy3HTQkswDU73hz6IiTB9
+         wiGDlXe9ZHugqy0WOfeJnRlGhkSdw+OSJlXix8g48EKgQZKBbJkGi6Jdj/utLBCfrAu5
+         K1ARYeQiPovZYMKipEAtF8qYb08hzSEqkM57bTaAgK7OaZEdy1iu5fBuc1WYWf/VNsmg
+         NstcQmz8uNO2nkkRtDiz+1TaJt9lx+lT0aB1eQ53Cw5+5nc4dzSnikm41M07D7fuuXIA
+         eZvzUPjJWpL39j7r/1v6a4Flpm//jOUKQacLneidFIv/Av4XwGdlpBy02SrzMvxB1qmL
+         eLow==
+X-Gm-Message-State: AFqh2kpkYEJr9LM6iCPKvmPiGr41rIPqyUgqWQpDQVH+wcYgu7ZVTMlE
+        WUoOibqbdYfF7CB3nVNqaLboLw==
+X-Google-Smtp-Source: AMrXdXtSS2bkT3pSmtQPIneqvBLkh4z0QahUWsvsrzmDs10I/OhZz7loxD1lwHY6/y7aklLQNAsNlA==
+X-Received: by 2002:a17:906:eb13:b0:869:236c:ac43 with SMTP id mb19-20020a170906eb1300b00869236cac43mr15283207ejb.32.1674224027081;
+        Fri, 20 Jan 2023 06:13:47 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id y20-20020a170906559400b0084d44bff4a2sm15840508ejp.39.2023.01.20.06.13.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 06:13:46 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 20 Jan 2023 15:13:46 +0100
+Message-Id: <CPX2VVT5EUDV.2LH6VI2586F02@otso>
+Subject: Re: [PATCH v3 2/3] phy: qcom-qmp-combo: Add config for SM6350
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>
+Cc:     "Vinod Koul" <vkoul@kernel.org>, "Johan Hovold" <johan@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20221130081430.67831-1-luca.weiss@fairphone.com>
+ <20221130081430.67831-2-luca.weiss@fairphone.com>
+ <Y6xP4YRAp68TfxFi@hovoldconsulting.com> <Y8BIX+js1ircJyb9@matsya>
+ <cf968a25-02f7-d402-530b-eb379b707e54@linaro.org>
+ <CPR2LS3SJQ3I.Z7UY505COG3@otso>
+ <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
+In-Reply-To: <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 3:10 PM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Thu, 2023-01-19 at 18:21 +0100, Rafael J. Wysocki wrote:
-> > On Thursday, January 19, 2023 5:39:29 PM CET Daniel Lezcano wrote:
-> > > On 19/01/2023 16:05, Rafael J. Wysocki wrote:
-> > > > On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
-> > > > <daniel.lezcano@linaro.org> wrote:
-> > > > > On 19/01/2023 14:24, Rafael J. Wysocki wrote:
-> > > > > > On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
-> > > > > > <daniel.lezcano@linaro.org> wrote:
-> > > > > > > On 19/01/2023 13:11, Rafael J. Wysocki wrote:
-> > > > > > > > On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
-> > > > > > > > <daniel.lezcano@linaro.org> wrote:
-> > > > > > > > > On 19/01/2023 08:41, Zhang, Rui wrote:
-> > > > > > > > > > On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano
-> > > > > > > > > > wrote:
-> > > > > > > > > > > If the thermal framework fails to initialize, the
-> > > > > > > > > > > mutex can be used
-> > > > > > > > > > > by
-> > > > > > > > > > > the different functions registering a thermal zone
-> > > > > > > > > > > anyway.
-> > > > > > > > > >
-> > > > > > > > > > Hmm, even with no governors and unregistered thermal
-> > > > > > > > > > sysfs class?
-> > > > > > > > > >
-> > > > > > > > > > IMO, thermal APIs for registering a
-> > > > > > > > > > thermal_zone/cooling_device should
-> > > > > > > > > > yield early if thermal_init fails.
-> > > > > > > > > > For other APIs that relies on a valid
-> > > > > > > > > > thermal_zone_device/thermal_cooling_device pointer,
-> > > > > > > > > > nothing needs to
-> > > > > > > > > > be changed.
-> > > > > > > > > >
-> > > > > > > > > > what do you think?
-> > > > > > > > >
-> > > > > > > > > I think you are right.
-> > > > > > > > >
-> > > > > > > > > It would be nice if we can check if the thermal class
-> > > > > > > > > is registered and
-> > > > > > > > > bail out if not. But there is no function to check that
-> > > > > > > > > AFAICS.
-> > > > > > > > >
-> > > > > > > > > Alternatively we can convert the thermal class static
-> > > > > > > > > structure to a
-> > > > > > > > > pointer and set it to NULL in case of error in
-> > > > > > > > > thermal_init() ?
-> > > > > > > >
-> > > > > > > > It doesn't matter if this is a NULL pointer or a static
-> > > > > > > > object that's
-> > > > > > > > clearly marked as unused.
-> > > > > > >
-> > > > > > > Without introducing another global variable, is it possible
-> > > > > > > to know if
-> > > > > > > the class is used or not ?
-> > > > > >
-> > > > > > If thermal_class.p is cleared to NULL on class_register()
-> > > > > > failures in
-> > > > > > thermal_init() (unfortunately, the driver core doesn't do
-> > > > > > that, but
-> > > > > > maybe it should - let me cut a patch for that), then it can
-> > > > > > be used
-> > > > > > for that.
-> > > > >
-> > > > > It should be in class_unregister() too, right ?
-> > > > >
-> > > > > And is it possible to add a class_is_registered() ? in order to
-> > > > > prevent
-> > > > > accessing class structure internals ?
-> > > >
-> > > > I suppose so.
-> > > >
-> > > > And we'd like it to be used some places like
-> > > > thermal_zone_device_register_with_trips(), wouldn't we?
+On Fri Jan 13, 2023 at 2:01 PM CET, Dmitry Baryshkov wrote:
+> On Fri, 13 Jan 2023 at 14:44, Luca Weiss <luca.weiss@fairphone.com> wrote=
+:
+> >
+> > Hi Dmitry,
+> >
+> > On Thu Jan 12, 2023 at 8:33 PM CET, Dmitry Baryshkov wrote:
+> > > On 12/01/2023 19:50, Vinod Koul wrote:
+> > > > On 28-12-22, 15:17, Johan Hovold wrote:
+> > > >> Luca, Vinod,
+> > > >>
+> > > >> On Wed, Nov 30, 2022 at 09:14:28AM +0100, Luca Weiss wrote:
+> > > >>> Add the tables and config for the combo phy found on SM6350.
+> > > >>>
+> > > >>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > > >>> ---
+> > > >>> Changes since v2:
+> > > >>> * Drop dp_txa/dp_txb changes, not required
+> > > >>> * Fix dp_dp_phy offset
+> > > >>>
+> > > >>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 126 +++++++++++++++=
++++++++
+> > > >>>   1 file changed, 126 insertions(+)
+> > > >>>
+> > > >>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/=
+phy/qualcomm/phy-qcom-qmp-combo.c
+> > > >>> index 77052c66cf70..6ac0c68269dc 100644
+> > > >>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > >>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > >>
+> > > >>> @@ -975,6 +1039,19 @@ static const char * const sc7180_usb3phy_re=
+set_l[] =3D {
+> > > >>>           "phy",
+> > > >>>   };
+> > > >>>
+> > > >>> +static const struct qmp_combo_offsets qmp_combo_offsets_v3 =3D {
+> > > >>> + .com            =3D 0x0000,
+> > > >>> + .txa            =3D 0x1200,
+> > > >>> + .rxa            =3D 0x1400,
+> > > >>> + .txb            =3D 0x1600,
+> > > >>> + .rxb            =3D 0x1800,
+> > > >>> + .usb3_serdes    =3D 0x1000,
+> > > >>> + .usb3_pcs_misc  =3D 0x1a00,
+> > > >>> + .usb3_pcs       =3D 0x1c00,
+> > > >>> + .dp_serdes      =3D 0x1000,
+> > > >>
+> > > >> I would have expected this to be 0x2000 as that's what the older
+> > > >> platforms have been using for the dp serdes table so far. Without =
+access
+> > > >> to any documentation it's hard to tell whether everyone's just bee=
+n
+> > > >> cargo-culting all along or if there's actually something there at =
+offset
+> > > >> 0x2000.
 > > >
-> > > Yes, in thermal_zone_device_register_with_trips() and
-> > > thermal_cooling_device_register().
+> > > usb3_serdes is 0x1000, so dp_serdes equal to 0x1000 is definitely an =
+typo.
+> > >
+> > > Judging from the downstream dtsi, the DP PHY starts at offset 0x2000.=
+ So
+> > > dp_serdes is equal to 0x2000, dp_phy =3D 0x2a00, ln_tx1 =3D 0x2200, l=
+n_tx2 =3D
+> > > 0x2600.
 > >
-> > Something like the patch below I think, because
-> > thermal_cooling_device_register()
-> > is a wrapper around thermal_zone_device_register_with_trips().
+> > Can you share how you got to the 0x2000 offset? You can see my
+> > (potentially wrong) reasoning for 0x1000 a few messages ago[0].
 > >
+> > The only 0x2000-something I could find now while looking at it again is
+> > "#define USB3_DP_PHY_DP_DP_PHY_PD_CTL 0x2a18" which becomes
+> > USB3_DP_DP_PHY_PD_CTL in the driver but this is seemingly not used at
+> > all in my msm-4.19 tree.
 >
-> thermal_zone_device_register() is a wrapper around
-> thermal_zone_device_register_with_trips(), but
-> thermal_cooling_device_register() is not. :)
+> Quite simple: see [1]. DP_PLL is at +0x2000
 >
-> thermal_cooling_device_register() registers a cooling device to thermal
-> class so the class_is_registered() check is still needed.
+> [1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/h=
+eads/android-msm-bramble-4.19-android11-qpr1/qcom/lagoon-sde-pll.dtsi#27
 
-OK, thanks!
+I still disagree from what I see.
+
+E.g. this part of the dp_serdes init table in mainline:
+
+static const struct qmp_phy_init_tbl qmp_v3_dp_serdes_tbl_rbr[] =3D {
+	QMP_PHY_INIT_CFG(QSERDES_V3_COM_HSCLK_SEL, 0x0c),
+
+With this one:
+#define QSERDES_V3_COM_HSCLK_SEL                     0x13c
+
+To write this config qmp->dp_serdes gets used which is set at:
+	qmp->dp_serdes =3D base + offs->dp_serdes;
+
+So if offs->dp_serdes is 0x2000, this write will go to 0x213c.
+
+If we go back to msm-4.19 downstream the equivalent define is
+#define USB3_DP_QSERDES_COM_HSCLK_SEL				0x113c
+
+So there we are at offset 0x1000. And this define is used in
+qcom,qmp-phy-init-seq which I already went to in detail in a previous
+email in this thread.
+
+>
+> Anyway, having DP serdes at the space as USB3 serdes would mean that
+> one would be setting USB3 PLL when trying to enable DP. So I could
+> have said even w/o looking at the dtsi that dp serdes can _not_ be at
+> 0x1000.
+
+I don't know enough about these PHY/DP/etc blocks to say anything there.
+
+>
+> >
+> > Also if you have any idea on how to test it at runtime without actually
+> > having to get all the type-C functionality up I'd be happy to try that.
+> > Unfortunately I believe there's still quite some bits missing to
+> > actually get DP out via the USB-C port - which I imagine would trigger
+> > the PHY setup.
+>
+> Unfortunately, I don't have a recipe to test this.
+
+No worries :)
+
+Regards
+Luca
+
+>
+> >
+> > [0] https://lore.kernel.org/linux-arm-msm/CPDIYQ3SSY3E.I0Y0NMIED0WO@ots=
+o/
+> >
+> > Regards
+> > Luca
+>
+>
+> --=20
+> With best wishes
+> Dmitry
+
