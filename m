@@ -2,152 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCB2675ECC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09305675ECA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjATUQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S230199AbjATUPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjATUQA (ORCPT
+        with ESMTP id S230021AbjATUPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:16:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCB111EB1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674245713;
+        Fri, 20 Jan 2023 15:15:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7167CAED83;
+        Fri, 20 Jan 2023 12:15:17 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E66031EC068B;
+        Fri, 20 Jan 2023 21:15:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674245716;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W+424KJ/4eUBc5hj2I5II2IUgeWEg8+zfHrFyPZ3+UE=;
-        b=gYFfkDTKAhOM/inY1Sa2dbYkmOqBQcvHCnXssjLOe+XgM1Sknx2xrRNngtenHN13VlMe6K
-        qc+fgQ1t0o6ZoEZdPxhCWaJCRsm4JjN0RXOsoBuGZAL9fDdCtmrgV99TMeUerI0mObTssu
-        5g/VKA2ePy4YpJZ0DZIBcDMAoNxFRUs=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-171--ilCNXp6OqKobq1OELsGPw-1; Fri, 20 Jan 2023 15:15:11 -0500
-X-MC-Unique: -ilCNXp6OqKobq1OELsGPw-1
-Received: by mail-pf1-f197.google.com with SMTP id c5-20020aa78805000000b0058d983c708aso2907485pfo.22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:15:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W+424KJ/4eUBc5hj2I5II2IUgeWEg8+zfHrFyPZ3+UE=;
-        b=mPL+eH1SsqkLV3AtejOhkhLRaLRNw+722bMXqnPSGSVtocf0Ndp+e56hJdnnvYZYED
-         GG28Dux7HLwp/1eZwgWLzQKIPbv+2u2TxkKuPiy1KSnRmHDyPhBdYeQiATXRyM75nGBT
-         HpkY9lmh0qAotUGBXN88otQznT7p4D1PJ5gvAGhjjO7nMOTvCPtIMt/U4XqpH3BtLELL
-         4yk0pWS/j/pnsCFo1dnwUHs0QF+H0O5zDOXwdXF2NZ6x7+EywK/VMfzS75ZQUCidth9j
-         Ld0qMYSRvEtTn/+vr8i0P+KzKbIHbbqTNofnpeLfoT1yU8dG8oLqg4iPhvoNPbMW814M
-         Xadg==
-X-Gm-Message-State: AFqh2kqTq2z9y+WZ6NCS0mXJnCUPZwcEZ8LaXaTRt09putdxdIG/Pzm4
-        mXiiEk1qmZdUZ533PjzJRcmhnjEX4odny/k3ISgPljDMtpbY41MwLClycoMXVkVIRPF1FKEAKj7
-        r7VgoCU3usFCp80bAF6Unvgsd8o3J+I54jcH9x4Cx
-X-Received: by 2002:a63:d855:0:b0:4d1:6eb1:f4fd with SMTP id k21-20020a63d855000000b004d16eb1f4fdmr948949pgj.129.1674245710437;
-        Fri, 20 Jan 2023 12:15:10 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtsiX3juA6NTfDqDDF8w2EHftoEn3VGj2gUYhikNqd27sIEVXIyg/QLH7Kyv54F9jKtT1B7LBJjZeqy9c/zKc4=
-X-Received: by 2002:a63:d855:0:b0:4d1:6eb1:f4fd with SMTP id
- k21-20020a63d855000000b004d16eb1f4fdmr948947pgj.129.1674245710191; Fri, 20
- Jan 2023 12:15:10 -0800 (PST)
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=URGCdxWMZB194yM7DqWI/LMbwc4I1xa66tqKx+JFPCM=;
+        b=miS51UW/cZawfDQzsiX5CMN7crQiXDw1rMl2UJLaGR2uSVeW8sv9hplnApztEqWEwfO7Jh
+        PtnaNoT5kqitY/1kkbgEHXWHMNKdN3tDeYyS7c9LYJ+wUXg1qeeL0xx0KfbOxWcG52mFQq
+        4cXVDL/7CFzDHD6zREWhJAQhmU/gqZk=
+Date:   Fri, 20 Jan 2023 21:15:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <Y8r2TjW/R3jymmqT@zn.tnic>
+References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
+ <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-References: <20230120150246.20797-1-wander@redhat.com> <xhsmhy1pxgkwy.mognet@vschneid.remote.csb>
-In-Reply-To: <xhsmhy1pxgkwy.mognet@vschneid.remote.csb>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Fri, 20 Jan 2023 17:14:58 -0300
-Message-ID: <CAAq0SUmt7HmyZes1ujA_TvA0gW9b7fX5moXywAtcpmzAiyfn2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Fix put_task_struct() calls under PREEMPT_RT
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 2:45 PM Valentin Schneider <vschneid@redhat.com> wrote:
->
-> On 20/01/23 at 12:02, Wander Lairson Costa wrote:
-> > put_task_struct() decrements a usage counter and calls
-> > __put_task_struct() if the counter reaches zero.
-> >
-> > __put_task_struct() indirectly acquires a spinlock, which is a sleeping
-> > lock under PREEMPT_RT. Therefore, we can't call put_task_struct() in an
-> > atomic context in RT kernels.
-> >
-> > This patch series introduces put_task_struct_atomic_safe(), which defers
-> > the call to __put_task_struct() to a process context when compiled with
-> > PREEMPT_RT.
-> >
-> > It also fixes known problematic call sites.
-> >
->
-> Browsing around put_task_struct() callsites gives me the impression there
-> are more problematic call sites lurking around, which makes me wonder:
-> should we make the PREEMPT_RT put_task_struct() *always* be done via
-> call_rcu()?
->
+On Thu, Jan 12, 2023 at 01:42:25PM -0800, Michael Kelley wrote:
+> In a AMD SEV-SNP VM using vTOM, devices in MMIO space may be provided by
+> the paravisor and need to be mapped as encrypted.  Provide a function
+> for the hypervisor to specify the address range for such devices.
+> In __ioremap_caller(), map addresses in this range as encrypted.
+> 
+> Only a single range is supported. If multiple devices need to be
+> mapped encrypted, the paravisor must place them within the single
+> contiguous range.
 
-I thought about going on this route, but I was concerned about the
-performance side effects this approach could bring. Another idea I had
-was to check at runtime if we are in a preemptible context. Again,
-this would have a (minor?) performance penalty.
+This already is starting to sound insufficient and hacky. And it also makes
+CC_ATTR_ACCESS_IOAPIC_ENCRYPTED insufficient either.
 
-> The task's stack is actually always freed that way in put_task_stack(), cf.
->
->   e540bf3162e8 ("fork: Only cache the VMAP stack in finish_task_switch()")
->
-> > Changelog:
-> > ==========
-> >
-> > v2:
-> >  * Add the put_task_struct_atomic_safe() function that is responsible for
-> >    handling the conditions to call put_task_struct().
-> >  * Replace put_task_struct() by put_task_struct_atomic_safe() in known
-> >    atomic call sites.
-> >
-> > Wander Lairson Costa (4):
-> >   sched/task: Add the put_task_struct_atomic_safe function
-> >   sched/deadline: fix inactive_task_timer splat
-> >   sched/rt: use put_task_struct_atomic_safe() to avoid potential splat
-> >   sched/core: use put_task_struct_atomic_safe() to avoid potential splat
-> >
-> >  include/linux/sched/task.h | 21 +++++++++++++++++++++
-> >  kernel/fork.c              |  8 ++++++++
-> >  kernel/sched/core.c        |  2 +-
-> >  kernel/sched/deadline.c    |  2 +-
-> >  kernel/sched/rt.c          |  4 ++--
-> >  5 files changed, 33 insertions(+), 4 deletions(-)
-> >
-> > --
-> > 2.39.0
->
+So, the situation we have is, we're a SEV-SNP VM using vTOM. Which means,
+MSR_AMD64_SEV[3] = 1. Or SEV_FEATURES[1], alternatively - same thing.
 
+That MSR cannot be intercepted by the HV and we use it extensively in Linux when
+it runs as a SEV-* guest. And I had asked this before, during review, but why
+aren't you checking this bit above when you wanna do vTOM-specific work?
+
+Because then you can do that check and
+
+1. map the IO-APIC encrypted
+2. map MMIO space of devices from the driver encrypted too
+3. ...
+
+and so on.
+
+And you won't need those other, not as nice things...
+
+Hmmm.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
