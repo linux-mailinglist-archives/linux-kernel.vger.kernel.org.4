@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECD2675EEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061EF675EED
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjATUaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S229986AbjATUb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjATUaQ (ORCPT
+        with ESMTP id S229450AbjATUb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:30:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9590981988;
-        Fri, 20 Jan 2023 12:30:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44494B82A57;
-        Fri, 20 Jan 2023 20:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C82C433EF;
-        Fri, 20 Jan 2023 20:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674246612;
-        bh=MzyLhaguD/F2KdfK/Rr4D39zLsYoYhgkuTcjE6eMGy8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JFSssLD6TVzKUQjdClmg6saIJFtI7jM2/441MzbmG8eGe2HDxMypxAK4Xoi24Q0pU
-         QsYCH/COjT4ajuXpvfsTkX5UbQs2SjPknVA1pN+xr0WOgpPI/e2AHbopIr2u1+X3Rm
-         qDr+RC/6THiBEJLPqhmUwe6wBJhJLre5Ih70R6LNFuyEgNM9b7Vd/Zbk39SFfHp+mx
-         /pJGHINlPLfmhO3t2kWYycli0CPhhxiKCYCnWEveVBlKQNt+g+Pb24vZw0Nr9DaKfr
-         dbw74PbFxbhACF5il/LPw0aI6cXV6IZh72n/N8jYYVNU4ieG/0o3whnCYnn8GMPG69
-         dvi4jUR5i/bXA==
-Received: by mail-vs1-f48.google.com with SMTP id p1so6942084vsr.5;
-        Fri, 20 Jan 2023 12:30:12 -0800 (PST)
-X-Gm-Message-State: AFqh2kpN9RYuTBwfG1vsqPDRE8Okf8AHo1zJNSUEZrmwnuynVDHKZpd3
-        nHBL3PTkzdw+Gwucqka8HC6Idfem2sSE+Y+KKw==
-X-Google-Smtp-Source: AMrXdXsG6irlFQsfgggKr1c5h4xbn7pWIMYAOvP3OeFbZO0RKqovFlw4I28u65DZ1RDkN1g2cazylQt2MeV9uLFwxOA=
-X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
- bk16-20020a056102549000b003b51fe4f1c2mr2235848vsb.0.1674246611773; Fri, 20
- Jan 2023 12:30:11 -0800 (PST)
+        Fri, 20 Jan 2023 15:31:27 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D14E8535A;
+        Fri, 20 Jan 2023 12:31:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674246686; x=1705782686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P7Qo7pDtBTeT6nusdsJikwF6Hz1XK2b6WUGvSCudE2U=;
+  b=X01ro+YCSy2zt1GIg++RaXdcXAmAihvVroiLEWzFUoF5alUtyHucwQBr
+   6Fi0JsUS1uh2OieeG1d7s7rdctVsmXa06HP89Q03Ompb+RB4KWhnDKspy
+   +77frr7OUN4WZj5ClonrQWFbNhon0kk3++Pci8HebMGBM+SVqlf00Wt4+
+   PsjLwkP6yVaMJR3GT3/0d8UfHuXaVpi8PQE90FyOtBZd6uEeyJPQc1xdB
+   /Os8lTZXk1EJRh2+Bc/y3woOR2mirEc68SFWi/klx2dV3Nz+lXgnTFrMG
+   Bxmd28ikYYPUm3qzI2yH56bhGgna72GS8y525z5tGVvJmtu/63glbDGXe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="390196116"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="390196116"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 12:31:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989524455"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="989524455"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Jan 2023 12:31:22 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIy2j-0002uO-23;
+        Fri, 20 Jan 2023 20:31:21 +0000
+Date:   Sat, 21 Jan 2023 04:30:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+Message-ID: <202301210451.KgHMjz0A-lkp@intel.com>
+References: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-References: <20230118193056.673514-1-robh@kernel.org> <20230118193056.673514-2-robh@kernel.org>
- <4eca2695-cb73-eaad-4c8a-82dec923825e@gmail.com>
-In-Reply-To: <4eca2695-cb73-eaad-4c8a-82dec923825e@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 20 Jan 2023 14:30:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
-Message-ID: <CAL_JsqKqiRbBJErkh2Hch+XZyLggGyjYo1rvKWPhxb99pA8mAA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to
- its own schema
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 3:05 PM Johan Jonker <jbx6244@gmail.com> wrote:
->
-> Hi,
->
-> Some alignment at the examples and the unknown extcon property.
->
-> usb@fe800000: 'extcon' does not match any of the regexes
+Hi Bjorn,
 
-Does that go in the wrapper or dwc3 node?:
+I love your patch! Yet something to improve:
 
-arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dtb: usb@fe800000:
-usb@fe800000: Unevaluated properties are not allowed ('extcon' was
-unexpected)
-        From schema:
-/home/rob/proj/linux-dt/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on robh/for-next broonie-sound/for-next linus/master v6.2-rc4]
+[cannot apply to next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-That's the dwc3 node, but the majority are in the wrapper node, so I'm
-going with the majority and leaving this one.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20230119214749.4048933-5-quic_bjorande%40quicinc.com
+patch subject: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+config: arm64-randconfig-r012-20230119 (https://download.01.org/0day-ci/archive/20230121/202301210451.KgHMjz0A-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+        git checkout 75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Rob
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/qcom/sa8295p-adp.dts:502.1-16 Label or path pmm8540a_gpios not found
+>> FATAL ERROR: Syntax error parsing input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
