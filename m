@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA535674E8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0248A674EA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjATHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S230218AbjATHsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjATHpl (ORCPT
+        with ESMTP id S230156AbjATHsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:45:41 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7558B755
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:44:54 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id k16so3327424wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:44:53 -0800 (PST)
+        Fri, 20 Jan 2023 02:48:31 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC5987677
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:48:08 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id b7so4061897wrt.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:48:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=drfFdgpb4YkUjSwdoc9Z5a3O+ognmoqBbo2eF6alSdU=;
-        b=e+mfRRxTfGW5YTv/Rk9ZBMpWJa9fMCCQ17hOT/s5m2unxnuD9/dQh529Rr8DacQ8/9
-         Pyn4ZGgPU0hBpE4SZEuuurb0zU1EOSM3CGagMFIn+q7stgDJm3j+dM3p5zO7GSu+Kp/1
-         Vl6gjh8CuC7mH346RLr42h9JUD5657RToSf8famYSTfsPFxiucbg+DLVP1EYB0SX5PeB
-         Nia+5KEjroz2gFWuMsvL+Nf++pfSdjOXfB+ohS03PZRyUTWwM6F/cTpEBWLt7Q3oHZ34
-         OunY3n/J6VouQ5NEnAJP60JSmc8OdVhgFHg1vhcqS1+5+2qCjwPZcurLVSIwbbWMl0YP
-         k+rw==
+        bh=SUbYG6CNFZkAaSfmbsiOn5ZLfVicT6OQUe0wKNSaOFg=;
+        b=E/gsgiKDlovjPEr1wVqqhP64WUTBcW7LnrIaA4cGorpachmtdKSTBYWEnqah2dt/ro
+         1xumU7oIe5rQIZ6aGhYE5xSJwLTldpojPXW1rqA1+1h/HnlvGwt1yQMMJaWTfnLw+fGJ
+         /jhjZNOe4+iFJYnBW5/8uANdzqMhKWVjryvU9eCf4ZpwED4iiCqNoKE/i7ftjwXzlMUN
+         uQYg8rgLbc27HtpviXGt4mc51RFmQYU6aTIPJ1+GtcDafEg0fhIv9mkBvEfHRoRskB7d
+         0+jHp1P1kPTFwujMCz268zCKy1yN454PEPflBYCbr14i5q4hrSusYofS/dqyeGNzriFe
+         jOBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=drfFdgpb4YkUjSwdoc9Z5a3O+ognmoqBbo2eF6alSdU=;
-        b=LtT4Pi8OUq4MWz0kgt+8yixRjWSUXoEBmxX4E8BvlebacB7/x29gqWVHUfOtxvbZYf
-         ks08oUiF4m1oElNqbRmLsVE5ceKDeSSAQ750Ykvyvyzx0mH1cvVKhEiz1vuKEvI8vLxg
-         LDMEtfi7ApQGrUbi3o83HYBzbkZFHf7eaYvjCg8LLLSbhfrtM77f6qOvHHz4TJ6wZg5O
-         hYzBFOYwt+PZ3xM6Ir41ibpnmcxIRUF5V0amX5bKZ9gKc3S84WI7pMNi51rSsufHrtdg
-         HxAY/sydwNHRNZhdB0TG0C/5xSvMYs468SDaUT1U76KRQF0DeHISpGfd67j8xJ/Qd4d4
-         HIHg==
-X-Gm-Message-State: AFqh2krmq5W9oABQczKn64OP/n3W60nTIQ4KoAXOwvwkUvzYm3xm5YUt
-        Zg+e/olqXgah36b+oGN257n+aQ==
-X-Google-Smtp-Source: AMrXdXul6atu6mzYQTY69VMfekx6QHfoNRoaaWTtrahYGNQRtASVGIqsSfmGvRdAjKSkA656+k/cyA==
-X-Received: by 2002:a05:600c:4c21:b0:3cf:900c:de6b with SMTP id d33-20020a05600c4c2100b003cf900cde6bmr12667812wmp.15.1674200673849;
-        Thu, 19 Jan 2023 23:44:33 -0800 (PST)
+        bh=SUbYG6CNFZkAaSfmbsiOn5ZLfVicT6OQUe0wKNSaOFg=;
+        b=gF4QFhzHKnzKTf+tN0HkuKXpzlBcYWozZf3Z0tk5rn3WygdsvkEbvQ5Ja6rETLBT8M
+         j/Biwqj6tIWnMvE98rlQPqK/0qIrUkAeL+olFjL5zQMVSCdvHZGWbO46OaHm515lkyPp
+         i3Hbq+mPNIqsHLL8xDLDRkrqn+LCGAsRe4KYC3d6gM77w8xT9ZNYwHuNwqxTsIy9fYLH
+         VHmrOLl/APOPdxPNRhG6gmqeUy1XhtJIC8GFYfeIDGdXl0pHwwIicIZvFo81Q3536IQD
+         llyfUQm8zzr2luPTVCLmjAeh3C8zpZp/C18SLAA7UaeHMO1cQffMZ8+Hdi7A8xphn1Zi
+         tE3g==
+X-Gm-Message-State: AFqh2kpykUT8k7bFfKRweEyRuw+g6p5UpJQZqeoJTLm0TlKclsKAwPII
+        CBzux9l3lWbLkHHETJ3Ac9S4Ow==
+X-Google-Smtp-Source: AMrXdXuXFnAh8TD3IFzfCwiyzZGic0IxxbCUXc7p1siPzKJJVl9d52SoYbHlIXsU456hEn0aOzJiQw==
+X-Received: by 2002:a5d:58e8:0:b0:2be:b07:d411 with SMTP id f8-20020a5d58e8000000b002be0b07d411mr11456316wrd.3.1674200825135;
+        Thu, 19 Jan 2023 23:47:05 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003c71358a42dsm1893276wms.18.2023.01.19.23.44.32
+        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm35975719wrj.94.2023.01.19.23.47.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 23:44:33 -0800 (PST)
-Message-ID: <b277b67c-bd00-a543-1945-f986134a78f7@linaro.org>
-Date:   Fri, 20 Jan 2023 08:44:31 +0100
+        Thu, 19 Jan 2023 23:47:04 -0800 (PST)
+Message-ID: <259d738b-5717-8fda-22f0-c61db4660e95@linaro.org>
+Date:   Fri, 20 Jan 2023 08:47:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
@@ -75,8 +75,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,11 +95,12 @@ On 19/01/2023 20:18, Alexandre Mergnat wrote:
 > Actually I did.
 > I saw: "WARNING: DT compatible string "mediatek,genio" appears
 > un-documented -- check ./Documentation/devicetree/bindings/"
-> But there are no bindings for spidev. 
+> But there are no bindings for spidev. I've made some grep on already
+> supported compatible devices like "micron,spi-authenta", but I didn't
+> find documentation to add "mediatek,genio".
 
-There are. Just some other people were as well ignoring warnings. What
-is the purpose of having tools if people keep ignoring the warnings, sigh...
-
+Another point - why is this after "micron"? Don't add entries to the end
+but in order.
 
 Best regards,
 Krzysztof
