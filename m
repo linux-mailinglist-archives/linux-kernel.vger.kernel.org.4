@@ -2,309 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBDB6760C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28D367605F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjATWuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S229852AbjATWra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjATWuJ (ORCPT
+        with ESMTP id S229837AbjATWr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:50:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C359C4DBDF;
-        Fri, 20 Jan 2023 14:49:26 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KLvekf003343;
-        Fri, 20 Jan 2023 22:48:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=w6/aHGaEUJiqoCCNWVVmdNmnpXulOdKevHNVnLS9tfw=;
- b=hMLgkUDpPUW2CE6uo1tfIsnKGboCUqJpscYvRG5uUbLY2GjdFz035TJpdZWFbyKnALUW
- f5W6N3BsRhzaPZH6vcAx8o4SsrE280Luobmll+d60qSp8w2l0lk0AGmQzMqRZLG/F8eP
- 8fXMpd4MgvJVCsKJcHKy384Tx6+TYPzeA/91yU2elqcFo/+C0BBirCSRqBF3jgifKWwy
- Jt4Y50GYPqBo5AntJyDsajwxIcf5R+buOxEZNLFvZtOCZ9RSiDNC+8CSF8I1g2SB16V9
- WtuLtD6x9Q9vOdfSrVK9jYQWhmEnd2s37REYt/bwrhvLSZGLo+nSW7rpI4di0EOeviWL yg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7593uqyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 22:48:13 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KMmC59005805
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 22:48:12 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 20 Jan 2023 14:48:11 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v9 27/27] virt: gunyah: Add ioeventfd
-Date:   Fri, 20 Jan 2023 14:46:26 -0800
-Message-ID: <20230120224627.4053418-28-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120224627.4053418-1-quic_eberman@quicinc.com>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+        Fri, 20 Jan 2023 17:47:28 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9113DC3;
+        Fri, 20 Jan 2023 14:47:27 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-15085b8a2f7so7943746fac.2;
+        Fri, 20 Jan 2023 14:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=59oaZrwvRXnY14aWAU9sGn0E+D4u2rUhDobBE4hDS1Y=;
+        b=CqJW+re5K/hTICdUE3StSMjZhP8NNoHYCP8iwRSNLPVDyRfxpTZZ7XZpCgZOxJTc+P
+         cArBxHgii50uDpzNbzEKELbIH0N5JcGvDLp8E95ny8qHD+XCY8G+YYK03yZAlv8ZZYPK
+         LTC4pbLWqODJamjET6gAmFbsRpAMbiDFqxPjnkTYd44S5HiK8znqVq+m57ojk2VdsSU9
+         Z93fqQQaQTQ94fO9lAX6IaPR0x51DQ2dltBFYEjU5ProGlfE6aDzSziQ8fj6Dy1dYo9Y
+         E+J1YfuSfyS+tXut4W67jIMhdUF65OxlQSIB/y8oioBriAZPJpybDzkupNWF36OyJAhc
+         DkMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=59oaZrwvRXnY14aWAU9sGn0E+D4u2rUhDobBE4hDS1Y=;
+        b=pxD5mLCZ5hzluxTCW3JkvQ8oA6m5PePI/BMHBpNNNisU2ezcnaw1vyia+M3Fk/yVuT
+         EtRF2jgNzYSg0+i2tJM3vzqx76YW5Miyoin9InzO7tk/sDI0Gv3jc8mnR3KmZAxHUlas
+         rYb4acz+kbOhf2+D1v5PBHjnIik8yU2YPq+PKCrD8Lo1uUQs8F4XC55Iu1sCiEzDIbGi
+         mLsHhqg7s72ZygC29B7r44yzxw+cA6KsiuAlrRrCq9gLLKg0dZzAdQxMPv8afwtsB90W
+         kM1/AFknUyL/2JftAsZKC5xEh90RY3pkJrK8y4Q6m6Z0EbPm96Kxc2pzzqReEekCImm6
+         d9qg==
+X-Gm-Message-State: AFqh2ko6qaJdV2Uo+X6zvXqWuU8ZhdzWGHhLOfbGN6EFIlZdGhekKXxk
+        RMAGdIJfP3eAc0oG1AT4IuY=
+X-Google-Smtp-Source: AMrXdXs/ezA2tIeKmtjy82vPGkbLujUocFXfVY/wwoMonyD1aNhoHhE9z1ph69xv3Ro4wUGt/wz7qw==
+X-Received: by 2002:a05:6870:668f:b0:15e:ff37:6fda with SMTP id ge15-20020a056870668f00b0015eff376fdamr14277677oab.14.1674254846899;
+        Fri, 20 Jan 2023 14:47:26 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v11-20020a056870310b00b00144e6ffe9e5sm5912665oaa.47.2023.01.20.14.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 14:47:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <78e1cc2d-eb67-cf78-bb84-95cdab2bfcf0@roeck-us.net>
+Date:   Fri, 20 Jan 2023 14:47:23 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6VKb8RmDFqQGIsBLbynaHrsPWYv04-50
-X-Proofpoint-ORIG-GUID: 6VKb8RmDFqQGIsBLbynaHrsPWYv04-50
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_11,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 mlxscore=0 adultscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301200218
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Remove altmode active state
+ updates
+Content-Language: en-US
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+References: <20230120205827.740900-1-pmalani@chromium.org>
+ <20230120205827.740900-2-pmalani@chromium.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230120205827.740900-2-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow userspace to attach an ioeventfd to an mmio address within the guest.
+On 1/20/23 12:58, Prashant Malani wrote:
+> Since the "active" state for partner altmodes is now being taken care of
+> by the altmode driver itself (specifically, DisplayPort altmode), we
+> no longer need to do so from the port driver. So remove the calls to
+> typec_altmode_update_active() from TCPM.
+> 
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- Documentation/virt/gunyah/vm-manager.rst |  21 +++++
- drivers/virt/gunyah/Kconfig              |   9 ++
- drivers/virt/gunyah/Makefile             |   1 +
- drivers/virt/gunyah/gunyah_ioeventfd.c   | 109 +++++++++++++++++++++++
- include/uapi/linux/gunyah.h              |  10 +++
- 5 files changed, 150 insertions(+)
- create mode 100644 drivers/virt/gunyah/gunyah_ioeventfd.c
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
-index b6cf8db826b8..19ec859a7912 100644
---- a/Documentation/virt/gunyah/vm-manager.rst
-+++ b/Documentation/virt/gunyah/vm-manager.rst
-@@ -164,3 +164,24 @@ the irqfd.label.
- 
- GH_IRQFD_LEVEL configures the corresponding doorbell to behave like a level
- triggered interrupt.
-+
-+Type: "ioeventfd"
-+^^^^^^^^^^^^^^^^^
-+
-+::
-+
-+  struct gh_fn_ioeventfd_arg {
-+	__u64 datamatch;
-+	__u64 addr;        /* legal mmio address */
-+	__u32 len;         /* 1, 2, 4, or 8 bytes */
-+	__s32 fd;
-+  #define GH_IOEVENTFD_DATAMATCH		(1UL << 0)
-+	__u32 flags;
-+  };
-+
-+Attaches an ioeventfd to a legal mmio address within the guest. A guest write
-+in the registered address will signal the provided event instead of triggering
-+an exit on the GH_VCPU_RUN ioctl.
-+
-+If datamatch flag is set, the event will be signaled only if the written value
-+to the registered address is equal to datamatch in struct gh_fn_ioeventfd_arg.
-diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-index 2cde24d429d1..bd8e31184962 100644
---- a/drivers/virt/gunyah/Kconfig
-+++ b/drivers/virt/gunyah/Kconfig
-@@ -35,3 +35,12 @@ config GUNYAH_IRQFD
- 	  on Gunyah virtual machine.
- 
- 	  Say Y/M here if unsure and you want to support Gunyah VMMs.
-+
-+config GUNYAH_IOEVENTFD
-+	tristate "Gunyah ioeventfd interface"
-+	depends on GUNYAH
-+	help
-+	  Enable kernel support for creating ioeventfds which can alert userspace
-+	  when a Gunyah virtual machine accesses a memory address.
-+
-+	  Say Y/M here if unsure and you want to support Gunyah VMMs.
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-index 6cf756bfa3c2..7347b1470491 100644
---- a/drivers/virt/gunyah/Makefile
-+++ b/drivers/virt/gunyah/Makefile
-@@ -8,3 +8,4 @@ obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
- 
- obj-$(CONFIG_GUNYAH_VCPU) += gunyah_vcpu.o
- obj-$(CONFIG_GUNYAH_IRQFD) += gunyah_irqfd.o
-+obj-$(CONFIG_GUNYAH_IOEVENTFD) += gunyah_ioeventfd.o
-diff --git a/drivers/virt/gunyah/gunyah_ioeventfd.c b/drivers/virt/gunyah/gunyah_ioeventfd.c
-new file mode 100644
-index 000000000000..c16a6725fe7e
---- /dev/null
-+++ b/drivers/virt/gunyah/gunyah_ioeventfd.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/eventfd.h>
-+#include <linux/file.h>
-+#include <linux/fs.h>
-+#include <linux/gunyah.h>
-+#include <linux/gunyah_vm_mgr.h>
-+#include <linux/module.h>
-+#include <linux/printk.h>
-+
-+#include <uapi/linux/gunyah.h>
-+
-+struct gunyah_ioeventfd {
-+	struct gunyah_vm_function *f;
-+	struct gunyah_vm_io_handler io_handler;
-+
-+	struct eventfd_ctx *ctx;
-+};
-+
-+static int gh_write_ioeventfd(struct gunyah_vm_io_handler *io_dev, u64 addr, u32 len, u64 data)
-+{
-+	struct gunyah_ioeventfd *iofd = container_of(io_dev, struct gunyah_ioeventfd, io_handler);
-+
-+	eventfd_signal(iofd->ctx, 1);
-+	return 0;
-+}
-+
-+static struct gunyah_vm_io_handler_ops io_ops = {
-+	.write = gh_write_ioeventfd,
-+};
-+
-+static long gunyah_ioeventfd_bind(struct gunyah_vm_function *f)
-+{
-+	struct eventfd_ctx *ctx = NULL;
-+	struct gunyah_ioeventfd *iofd;
-+	const struct gh_fn_ioeventfd_arg *args = &f->fn.ioeventfd;
-+	int ret;
-+
-+	/* must be natural-word sized, or 0 to ignore length */
-+	switch (args->len) {
-+	case 0:
-+	case 1:
-+	case 2:
-+	case 4:
-+	case 8:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/* check for range overflow */
-+	if (args->addr + args->len < args->addr)
-+		return -EINVAL;
-+
-+	/* ioeventfd with no length can't be combined with DATAMATCH */
-+	if (!args->len && (args->flags & GH_IOEVENTFD_DATAMATCH))
-+		return -EINVAL;
-+
-+	ctx = eventfd_ctx_fdget(args->fd);
-+	if (IS_ERR(ctx))
-+		return PTR_ERR(ctx);
-+
-+	iofd = kzalloc(sizeof(*iofd), GFP_KERNEL);
-+	if (!iofd) {
-+		ret = -ENOMEM;
-+		goto err_eventfd;
-+	}
-+
-+	f->data = iofd;
-+	iofd->f = f;
-+
-+	iofd->ctx = ctx;
-+
-+	if (args->flags & GH_IOEVENTFD_DATAMATCH) {
-+		iofd->io_handler.datamatch = true;
-+		iofd->io_handler.len = args->len;
-+		iofd->io_handler.data = args->datamatch;
-+	}
-+	iofd->io_handler.addr = args->addr;
-+	iofd->io_handler.ops = &io_ops;
-+
-+	ret = gh_vm_mgr_add_io_handler(f->ghvm, &iofd->io_handler);
-+	if (ret)
-+		goto err_io_dev_add;
-+
-+	return 0;
-+
-+err_io_dev_add:
-+	kfree(iofd);
-+err_eventfd:
-+	eventfd_ctx_put(ctx);
-+	return ret;
-+}
-+
-+static void gunyah_ioeventfd_release(struct gunyah_vm_function *f)
-+{
-+	struct gunyah_ioeventfd *iofd = f->data;
-+
-+	eventfd_ctx_put(iofd->ctx);
-+	gh_vm_mgr_remove_io_handler(iofd->f->ghvm, &iofd->io_handler);
-+	kfree(iofd);
-+}
-+
-+DECLARE_GUNYAH_VM_FUNCTION_INIT(ioeventfd, gunyah_ioeventfd_bind, gunyah_ioeventfd_release);
-+MODULE_DESCRIPTION("Gunyah ioeventfds");
-+MODULE_LICENSE("GPL");
-diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
-index a947f0317ca9..3cc387f0831a 100644
---- a/include/uapi/linux/gunyah.h
-+++ b/include/uapi/linux/gunyah.h
-@@ -65,11 +65,21 @@ struct gh_fn_irqfd_arg {
- 	__u32 flags;
- };
- 
-+struct gh_fn_ioeventfd_arg {
-+	__u64 datamatch;
-+	__u64 addr;        /* legal mmio address */
-+	__u32 len;         /* 1, 2, 4, or 8 bytes; or 0 to ignore length */
-+	__s32 fd;
-+#define GH_IOEVENTFD_DATAMATCH		(1UL << 0)
-+	__u32 flags;
-+};
-+
- struct gh_vm_function {
- 	char name[GUNYAH_FUNCTION_NAME_SIZE];
- 	union {
- 		struct gh_fn_vcpu_arg vcpu;
- 		struct gh_fn_irqfd_arg irqfd;
-+		struct gh_fn_ioeventfd_arg ioeventfd;
- 		char data[GUNYAH_FUNCTION_MAX_ARG_SIZE];
- 	};
- };
--- 
-2.39.0
+> ---
+> 
+> Changes since v1:
+> - Patch first introduced in v2.
+> 
+>   drivers/usb/typec/tcpm/tcpm.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 904c7b4ce2f0..0f5a9d4db105 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>   			}
+>   			break;
+>   		case CMD_ENTER_MODE:
+> -			if (adev && pdev) {
+> -				typec_altmode_update_active(pdev, true);
+> +			if (adev && pdev)
+>   				*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
+> -			}
+>   			return 0;
+>   		case CMD_EXIT_MODE:
+>   			if (adev && pdev) {
+> -				typec_altmode_update_active(pdev, false);
+>   				/* Back to USB Operation */
+>   				*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
+>   				return 0;
 
