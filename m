@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4A96748FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1399A6748FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjATBmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S229660AbjATBmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjATBmt (ORCPT
+        with ESMTP id S229510AbjATBmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:42:49 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A857241D9;
-        Thu, 19 Jan 2023 17:42:48 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-15ebfdf69adso4812101fac.0;
-        Thu, 19 Jan 2023 17:42:48 -0800 (PST)
+        Thu, 19 Jan 2023 20:42:52 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A9D241D9;
+        Thu, 19 Jan 2023 17:42:50 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so2298013otf.8;
+        Thu, 19 Jan 2023 17:42:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=as+rQjD2NZ3DjEqEhhTfL/YL43Qzpn7OODvQ14Hgoao=;
-        b=TabqGPJ0CZi/7pXLhLTdnkMBbulK/PTU2Y+AAw8TlmqkuSE26YN0Raq0hwdjOCTw8w
-         14rGBSkidmeGaw6UEocsxyeunawrj74CPOFHrs0qkXmnh8/+xHX32c7KRHDqa7XBuHgG
-         7JPAEnoX4AkuQfuZ7v0QmerNwctoDY79iTVDGdWHxM5r52C5zype6BhrdbfvtkJWJPj5
-         BW74b7IZ8qusDanuBx5xKMYz5v0e4T2PXltI7lDtg7tkO/7bn4nKgzVWt0ofngFMXwXi
-         a63QLX/lLlNIVX6cqcfBJi2XsJcEQ7U5LS9ArMuXjJVPdg4k5s0MesK/2XdurhZqYspk
-         XOHQ==
-X-Gm-Message-State: AFqh2kq02Qtr6PjwfNnh25CkNQXzQBSg8WkoN1cj/HauBzZk0OvBzehZ
-        nA52Gs9ht+LBR9dC/iq1sw==
-X-Google-Smtp-Source: AMrXdXsM9AZbNsCKYgA8AuWsupP+79dgYDwWdAfNytrMN/0DIevmyZ0n7VR7h55OmNZ593idK0tMFQ==
-X-Received: by 2002:a05:6870:1690:b0:15f:c9d7:a974 with SMTP id j16-20020a056870169000b0015fc9d7a974mr144156oae.13.1674178967351;
-        Thu, 19 Jan 2023 17:42:47 -0800 (PST)
+        bh=3fa6PPtmv8bHW5qqhtcHqFt8wmFZ+0TFiAlmx2L9q84=;
+        b=3T+ShNdcXLXfnfLcOCcxzpVgmEbKRtpaFgq1LliOGE5QVgfXer4OREA7OVtrk4/ynl
+         5U22Ax5MCxQWHXGhw7NBY72y9uux31S2rOJyaemU2peQTqrSQpQMG/SNaQKYEFU10vPv
+         sfTA7cnaeIL1edRqx5nAXeX5oanxa7CNCB9ddDonL1aQh3MAfchs3bFXgc8A7c8XQnK3
+         Nv3KjHQVs0shWyGvWHFv9uuqDSscEB2AARClJoYR0TlhgW9Uh2S9Wod1qvYvCzsWW7hi
+         fP6ZrffxkN2ut17mwmd3Oso6nZ2WDDEe9eIblr+IHJJMsk+jZh4BQvwji9oc5HyXfT+Y
+         N03Q==
+X-Gm-Message-State: AFqh2koMVgVR5AS0RVnnVrnTP6xrcQJ109Ub2tghTd5kgxAvV7beDdhL
+        wrgqClo91JT40izVHMLNOg==
+X-Google-Smtp-Source: AMrXdXtKmLpq1iI7gLQf60pfLWgE2BZLF1lHU3djaO8Nn2uBr4hptQOjfXMFJ5Pl89bsjX5HNud48w==
+X-Received: by 2002:a9d:7d19:0:b0:670:69ad:3636 with SMTP id v25-20020a9d7d19000000b0067069ad3636mr6282024otn.23.1674178969701;
+        Thu, 19 Jan 2023 17:42:49 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056870310b00b00144e6ffe9e5sm4568117oaa.47.2023.01.19.17.42.44
+        by smtp.gmail.com with ESMTPSA id a20-20020a9d6e94000000b006718a823321sm6329944otr.41.2023.01.19.17.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:42:46 -0800 (PST)
-Received: (nullmailer pid 3131597 invoked by uid 1000);
+        Thu, 19 Jan 2023 17:42:48 -0800 (PST)
+Received: (nullmailer pid 3131600 invoked by uid 1000);
         Fri, 20 Jan 2023 01:42:43 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     robh+dt@kernel.org, alistair@popple.id.au,
-        krzysztof.kozlowski+dt@linaro.org, jk@ozlabs.org,
-        linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, joel@jms.id.au
-In-Reply-To: <20230119174714.1486042-2-eajames@linux.ibm.com>
-References: <20230119174714.1486042-1-eajames@linux.ibm.com>
- <20230119174714.1486042-2-eajames@linux.ibm.com>
-Message-Id: <167417887833.3129440.15631417350339748655.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: fsi: Document the IBM I2C Responder
- virtual FSI master
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        phone-devel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org, iio@vger.kernel.org,
+        Martin Botka <martin.botka@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20230119212632.185881-2-marijn.suijten@somainline.org>
+References: <20230119212632.185881-1-marijn.suijten@somainline.org>
+ <20230119212632.185881-2-marijn.suijten@somainline.org>
+Message-Id: <167417887912.3129483.8810312426567009756.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: Require generic adc-chan
+ name for channel nodes
 Date:   Thu, 19 Jan 2023 19:42:43 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,37 +81,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 19 Jan 2023 11:47:13 -0600, Eddie James wrote:
-> The I2C Responder translates I2C commands to CFAM or SCOM operations,
-> effectively implementing an FSI master.
+On Thu, 19 Jan 2023 22:26:31 +0100, Marijn Suijten wrote:
+> As discussed in [1] it is more convenient to use a generic adc-chan node
+> name for ADC channels while storing a friendly - board-specific instead
+> of PMIC-specific - name in the label, if/when desired to overwrite the
+> channel description already contained (but previously unused) in the
+> driver [2].
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Replace the .* name pattern with the adc-chan literal, but leave the
+> label property optional for bindings to choose to fall back a channel
+> label hardcoded in the driver [2] instead.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+> [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  .../devicetree/bindings/fsi/ibm,i2cr.yaml     | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml
+>  .../bindings/iio/adc/qcom,spmi-vadc.yaml         | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: [error] syntax error: expected <block end>, but found '<block mapping start>' (syntax)
-./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:24:5: [warning] wrong indentation: expected 5 but found 4 (indentation)
-./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:33:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
 
 dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/fsi/ibm,i2cr.example.dts'
-Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: did not find expected key
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/fsi/ibm,i2cr.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: did not find expected key
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml: ignoring, error parsing file
-make: *** [Makefile:1508: dt_binding_check] Error 2
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dtb: adc@3100: 'conn-therm@4f' does not match any of the regexes: '^adc-chan@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dtb: adc@3100: 'conn-therm@147', 'xo-therm@44' do not match any of the regexes: '^adc-chan@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230119174714.1486042-2-eajames@linux.ibm.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230119212632.185881-2-marijn.suijten@somainline.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
