@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C0D674DD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE86674DDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjATHMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S230004AbjATHPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjATHMH (ORCPT
+        with ESMTP id S229764AbjATHPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:12:07 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB5530D7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:11:58 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o17-20020a05600c511100b003db021ef437so2948285wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3+Bkk+XIU7Y4ICBofg74wb2Khfebi4kOszzdZMn3mg=;
-        b=ZafJBSbiARhqyQ+ssIrBJPwCDCTw8hwzqRdhRLUocHV8pBmbdzLVZ8/wzLiVgDdk5r
-         5wtITDv5Fwus1LjK7H0CGSINKU15KVD6KqKeA0GJlalHg2KJkB+Im6Fl905QWItN1QEC
-         v6E695HBTdZRsL5PBBu4HXvbMHMDDNBhdiNljf6hcMRLE0/DeHi+UOVYeK7Zt62iTa3o
-         zp4GmEyDAKCsj4G7M+6BBR0NAmrsXph/uTr5hR+gU1QoXrpxTbQW1GaPGdIMXKuOTucu
-         4M7ONLVBauSkuyAzE0k33L5VaMucqHDtuorCuPU5gf9Vds2Gbud/rrPK8dvCDEo2/ycb
-         omvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i3+Bkk+XIU7Y4ICBofg74wb2Khfebi4kOszzdZMn3mg=;
-        b=ZaBTeOMES+W0FmsqxR+7iKiE4tB51U40g7JydluTzgEFqtOlKh2hSic3c9TmqVl56M
-         VdQY26uVUZFdrhNU8PTR23fl3Mxj4pizY1bjfamEMErbcLjtTMxO7faduYLQ7+P2Q8IC
-         rtKlLEEjqqaOa4CgBqem6S6QirEnuqsw+rd2ACVRhrnOJJ3sK/b9YlVzhTJ204gILqCx
-         KB4ZNfMqt8cCIRv6c3UiuaQnitUwxeh8NqZRF1XG0/B8VemKkf/OOoX1nVv7owSgMKQQ
-         JlrxnfNVfxFlBLsQENTaPLYreKN28N7C1evFCDVuFwMo/24KxI1ehH/FPz+obBTFbHQo
-         vESg==
-X-Gm-Message-State: AFqh2koe2RdQ0vnvUVIOe09wr/fA+nCfTMhGe0NFuAAnGb28dXacvbwP
-        vTT/ZtCfSSOcTHXZYA7KSmAneA==
-X-Google-Smtp-Source: AMrXdXt7+nh8ca7/1yrIp9E/1nrNSGJ4aQFzrZgnmtyQHesPuo7ROe81rlXJlua239KYSzV7UlASFA==
-X-Received: by 2002:a05:600c:4e93:b0:3db:d3f:a91f with SMTP id f19-20020a05600c4e9300b003db0d3fa91fmr10681001wmq.23.1674198716414;
-        Thu, 19 Jan 2023 23:11:56 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l30-20020a05600c1d1e00b003c6b70a4d69sm1386377wms.42.2023.01.19.23.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 23:11:55 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: exynos: drop incorrect power-supplies in P4 Note
-Date:   Fri, 20 Jan 2023 08:11:51 +0100
-Message-Id: <20230120071151.116272-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 20 Jan 2023 02:15:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A84347C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:15:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E45D6B81A74
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E37C433EF;
+        Fri, 20 Jan 2023 07:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674198918;
+        bh=dGwXf0BmH8FB3+W1jC+RE4rVTDz4Q5BheAiK4UorBxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N5/cD8+5/Qo1ZOqM50106fjf6hDtXPzyqTlRT7Fr7HckbdfcicUOztJa/efgae8nu
+         sTND8M5DFHXarP+78nsVn8FvQn+cD0s0mZOtKkfTY8IRoTvsR24i1cNX+RFwHm886+
+         rqlffC+0G3kHaQCIpDod0CZRivBH2YfmpVimDOaA=
+Date:   Fri, 20 Jan 2023 08:15:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
+Message-ID: <Y8o/g9cDZCxmL6yR@kroah.com>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
+ <Y8lfz8C5uvx2w4fC@kroah.com>
+ <87ilh2quto.fsf@ubik.fi.intel.com>
+ <Y8mSs68JfW6t4mjl@kroah.com>
+ <87a62eqo4h.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a62eqo4h.fsf@ubik.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-simple-battery does not have supplies, but it is referenced by charger
-instead:
+On Thu, Jan 19, 2023 at 10:13:18PM +0200, Alexander Shishkin wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> 
+> > Then you need to copy it out once, and then only deal with the local
+> > copy.  Otherwise you have an incomplete snapshot.
+> 
+> Ok, would you be partial to something like this:
+> 
+> >From 1bc9bb84004154376c2a0cf643d53257da6d1cd7 Mon Sep 17 00:00:00 2001
+> From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Date: Thu, 19 Jan 2023 21:59:02 +0200
+> Subject: [PATCH] virtio console: Keep a local copy of the control structure
+> 
+> When handling control messages, instead of peeking at the device memory
+> to obtain bits of the control structure, take a snapshot of it once and
+> use it instead, to prevent it from changing under us. This avoids races
+> between port id validation and control event decoding, which can lead
+> to, for example, a NULL dereference in port removal of a nonexistent
+> port.
+> 
+> The control structure is small enough (8 bytes) that it can be cached
+> directly on the stack.
+> 
+> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Amit Shah <amit@kernel.org>
+> ---
+>  drivers/char/virtio_console.c | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
 
-  exynos4412-p4note-n8010.dtb: battery-cell: 'power-supplies' does not match any of the regexes: '^ocv-capacity-table-[0-9]+$', 'pinctrl-[0-9]+'
+Yes, this looks much better, thanks!
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/exynos4412-p4note.dtsi | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-index 7a515b87bc7c..e41cf3ed362d 100644
---- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-@@ -132,8 +132,6 @@ battery_cell: battery-cell {
- 		precharge-current-microamp = <250000>;
- 		charge-term-current-microamp = <250000>;
- 		constant-charge-voltage-max-microvolt = <4200000>;
--
--		power-supplies = <&power_supply>;
- 	};
- 
- 	i2c-gpio-1 {
--- 
-2.34.1
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
