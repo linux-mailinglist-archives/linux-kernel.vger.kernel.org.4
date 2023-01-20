@@ -2,102 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2F2675725
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0844675731
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjATO3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S230017AbjATOaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjATO3S (ORCPT
+        with ESMTP id S230022AbjATOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:29:18 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB480899;
-        Fri, 20 Jan 2023 06:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
-  t=1674224932; x=1705760932;
-  h=message-id:date:mime-version:from:to:references:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=FkMRWQ83h9RadsNbLD+ZuI0L7IMzva4jSqpOEcCAdeU=;
-  b=T9tAcjJE0lczYrZ1sdgTeIf9NxUNe7cTEBm3AgCumozr7oy9eKa0r5iS
-   EaVnxQzARwbq1jeU56FTw9yEf9tCiguthtLiOlmGzDmGDBqvvnccXRmnG
-   0c0HGGt6s9iiiGiuz4U9fyqBqGreIH93PQOIbKefX0NLInjw/S4jCMOnl
-   E=;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669075200"; 
-   d="scan'208";a="173241907"
-Subject: Re: [PATCH 0/2] [RFC] virtio-rng entropy leak reporting feature
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-e651a362.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 14:28:12 +0000
-Received: from EX13D48EUB003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-e651a362.us-east-1.amazon.com (Postfix) with ESMTPS id 6AFCF81FDA;
-        Fri, 20 Jan 2023 14:28:08 +0000 (UTC)
-Received: from EX19D037EUB003.ant.amazon.com (10.252.61.119) by
- EX13D48EUB003.ant.amazon.com (10.43.166.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Fri, 20 Jan 2023 14:28:07 +0000
-Received: from [192.168.17.83] (10.43.162.56) by EX19D037EUB003.ant.amazon.com
- (10.252.61.119) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.7; Fri, 20 Jan
- 2023 14:28:03 +0000
-Message-ID: <2e0e51a5-d852-241d-3c3a-5440296bc896@amazon.es>
-Date:   Fri, 20 Jan 2023 15:27:58 +0100
+        Fri, 20 Jan 2023 09:30:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772A979297;
+        Fri, 20 Jan 2023 06:29:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8C81B82853;
+        Fri, 20 Jan 2023 14:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237E9C4339B;
+        Fri, 20 Jan 2023 14:29:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="NTHbstKf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1674224971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F9kOqvxWdJiZ6o7rLV7rek2JVGrJsZXSaK0nvleVzCA=;
+        b=NTHbstKfPp3u89snVVs+oFRiOmLj7/9+v4hS84e1+clIoPhsJ2kSbFe1y7Ve3fpUvfhDFY
+        RBcamZ38ta96TPzy+pU4lTKfZ8wbvpW/izzz3c6W+tHXCN5ZL8y0SX+AqrocY7EgB2oo7F
+        1Nc0qLsaQSetYUtiIFFpE6YtUNUcr48=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c179fd18 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 20 Jan 2023 14:29:31 +0000 (UTC)
+Date:   Fri, 20 Jan 2023 15:29:14 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Clement Leger <clement@clement-leger.fr>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>,
+        Marc =?utf-8?B?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Alex Michon <amichon@kalray.eu>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Atish Patra <atishp@atishpatra.org>,
+        Qi Liu <liuqi115@huawei.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 12/31] kvx: Add other common headers
+Message-ID: <Y8qlOpYgDefMPqWH@zx2c4.com>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-13-ysionneau@kalray.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-From:   <bchalios@amazon.es>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <amit@kernel.org>,
-        <graf@amazon.de>, <xmarcalx@amazon.co.uk>
-References: <20230119184349.74072-1-bchalios@amazon.es>
- <Y8qjLolaLbMnDnkw@zx2c4.com>
-In-Reply-To: <Y8qjLolaLbMnDnkw@zx2c4.com>
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D39UWB003.ant.amazon.com (10.43.161.215) To
- EX19D037EUB003.ant.amazon.com (10.252.61.119)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230120141002.2442-13-ysionneau@kalray.eu>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpPbiAxLzIwLzIzIDM6MjAgUE0sICJKYXNvbiBBLiBEb25lbmZlbGQiIDxKYXNvbkB6eDJjNC5j
-b20+IHdyb3RlOgo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUg
-b2YgdGhlIG9yZ2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVu
-dHMgdW5sZXNzIHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50
-IGlzIHNhZmUuCj4gCj4gCj4gCj4gSGkgQmFiaXMsCj4gCj4gQXMgSSBtZW50aW9uZWQgdG8geW91
-IHByaXZhdGVseSB0aGlzIHdlZWssIEknbSBhYm91dCB0byBiZSBvdXQgb2YgdG93biwKPiBzbyBJ
-IHdvbid0IGJlIGFibGUgdG8gbG9vayBhdCB0aGlzIHVudGlsIEknbSBiYWNrIGluIGEgZmV3IHdl
-ZWtzLiBJCj4gYXBwcmVjaWF0ZSB5b3VyIHBhdGllbmNlLgo+IAo+IEJ1dCBhcyBhIGN1cnNvcnkg
-bG9vaywgSSdtIGhhcHB5IHRoYXQgeW91J3ZlIHdyaXR0ZW4gdGhlIGhhcmR3YXJlLXNpZGUKPiBj
-b2RlIGZvciB0aGlzLiBUaGF0J3MgYSBncmVhdCBzdGFydGluZyBwb2ludC4gVGhlIHBsdW1iaW5n
-IGlzIG5vdCBzbwo+IG5pY2UsIHRob3VnaC4gVGhpcyBuZWVkcyB0byBiZSBpbnRlZ3JhdGVkIG1v
-cmUgY2xvc2VseSB3aXRoIHJhbmRvbS5jCj4gaXRzZWxmLCBzaW1pbGFyIHRvIGhvdyB2bWdlbmlk
-IHdvcmtzLgo+IAo+IFdoZW4gSSdtIGJhY2sgaW4gYSBmZXcgd2Vla3MsIEknbGwgc2VlIGlmIEkg
-Y2FuIGVpdGhlciB3cml0ZSBhCj4gZGVzY3JpcHRpb24gb2Ygd2hhdCBJIGhhdmUgaW4gbWluZCwg
-b3Igc2ltcGx5IGludGVncmF0ZSB0aGUgdXNlZnVsCj4gaGFyZHdhcmUgd29yayBoZXJlIGludG8g
-YW4gZXhwYW5kZWQgcGF0Y2ggc2VyaWVzLgo+IAo+IFtQbGVhc2UgZG9uJ3QgbWVyZ2UgYW55dGhp
-bmcgZm9yIG5vdy5dCj4gCj4gSmFzb24KPiAKCkhleSBKYXNvbiwKCkkgYWdyZWUgdGhhdCB0aGUg
-cGx1bWJpbmcgd2l0aCByYW5kb20uYyBuZWVkcyB3b3JrLiBUaGF0J3Mgd2h5IHRoaXMgaXMgYW4g
-UkZDISBUaGF0J3MgdGhlIGtpbmQgb2YgaW5wdXQgSSdtIGxvb2tpbmcgZm9yLgpBcyBJIG1lbnRp
-b24gaW4gdGhlIGNvdmVyIGxldHRlciwgSU1ITywgd2UgbmVlZCB0byBnaXZlIHRvIHJhbmRvbS5j
-IChhbmQgb3RoZXIgcGFydHMgb2YgdGhlIGtlcm5lbCB0aGF0IHRoZXkgbWlnaHQgbmVlZCBpdCkK
-YW4gQVBJIHRvIGRpcmVjdGx5IGFkZCBidWZmZXJzIGluIHRoZSBxdWV1ZSwgc28gdGhhdCB3ZSBh
-dm9pZCB0aGUgcmFjZS1jb25kaXRpb24gaGVyZS4KCkFueSBpZGVhcyBvbiB0aGF0IGZyb250IGFy
-ZSBtb3JlIHRoYW4gd2VsY29tZSBhbmQgbG9va2luZyBmb3J3YXJkIHRvIHRoZW0uCgpDaGVlcnMs
-CkJhYmlzCkFtYXpvbiBTcGFpbiBTZXJ2aWNlcyBzb2NpZWRhZCBsaW1pdGFkYSB1bmlwZXJzb25h
-bCwgQ2FsbGUgUmFtaXJleiBkZSBQcmFkbyA1LCAyODA0NSBNYWRyaWQuIFJlZ2lzdHJvIE1lcmNh
-bnRpbCBkZSBNYWRyaWQgLiBUb21vIDIyNDU4IC4gRm9saW8gMTAyIC4gSG9qYSBNLTQwMTIzNCAu
-IENJRiBCODQ1NzA5MzYK
+Hi Yann,
 
+On Fri, Jan 20, 2023 at 03:09:43PM +0100, Yann Sionneau wrote:
+> +#include <linux/random.h>
+> +#include <linux/version.h>
+> +
+> +extern unsigned long __stack_chk_guard;
+> +
+> +/*
+> + * Initialize the stackprotector canary value.
+> + *
+> + * NOTE: this must only be called from functions that never return,
+> + * and it must always be inlined.
+> + */
+> +static __always_inline void boot_init_stack_canary(void)
+> +{
+> +	unsigned long canary;
+> +
+> +	/* Try to get a semi random initial value. */
+> +	get_random_bytes(&canary, sizeof(canary));
+> +	canary ^= LINUX_VERSION_CODE;
+> +	canary &= CANARY_MASK;
+> +
+> +	current->stack_canary = canary;
+> +	__stack_chk_guard = current->stack_canary;
+> +}
+
+
+You should rewrite this as:
+
+    current->stack_canary = get_random_canary();
+    __stack_chk_guard = current->stack_canary;
+
+which is what the other archs all now do. (They didn't used to, and this
+looks like it's simply based on older code.)
+
+> +#define get_cycles get_cycles
+> +
+> +#include <asm/sfr.h>
+> +#include <asm-generic/timex.h>
+> +
+> +static inline cycles_t get_cycles(void)
+> +{
+> +	return kvx_sfr_get(PM0);
+> +}
+
+Glad to see this CPU has a cycle counter. Out of curiosity, what is
+its resolution?
+
+Also, related, does this CPU happen to have a "RDRAND"-like instruction?
+(I don't know anything about kvx or even what it is.)
+
+Jason
