@@ -2,158 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F73675224
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1808675228
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjATKNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S229668AbjATKOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjATKNj (ORCPT
+        with ESMTP id S229633AbjATKO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:13:39 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A2891E7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:13:38 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nyw9b4Bw3z9y0kg
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 18:05:39 +0800 (CST)
-Received: from [10.48.133.21] (unknown [10.48.133.21])
-        by APP2 (Coremail) with SMTP id GxC2BwDXXWQvacpjZRCvAA--.43987S2;
-        Fri, 20 Jan 2023 11:13:14 +0100 (CET)
-Message-ID: <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 11:13:00 +0100
+        Fri, 20 Jan 2023 05:14:28 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44E8B745
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:14:27 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K6qOGL008272;
+        Fri, 20 Jan 2023 04:14:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=VXW3ZdRjVyLCVgNDVjCBOGupQRcOb3zZOC0nzluO1XA=;
+ b=FKhDZqtDlxWXSy+xQI0Oa4l9wqnu2A5cNZUfxdDtWSyFUYhP3i/hlb+KqHVW+0MljeQx
+ FRpTcB4nxK+z4wK7oHNs+bb3vH63DAN54ZWURtlFyEkJgn15vWwDGhE027roIjXzzaT+
+ Z9Ck6ZRelXwzEpKLShJ1K31YvTy/4Wb3IF9qNGa3R+MYKDxbHf6JONHqVQSyLrPdXqYl
+ fOcStvKfnWZfgxxzHJK4v7jnaB/ULReZDOEPmuO4M6mtYo2VIARHtey1UWnqpVHl4OA6
+ lq4OZjhpu4lUUNQ8zVE4LHObQp0mgnXmPO+NjiowQISFC0GaWBqP+6kjHu4HaxeusKhw RQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n3spxavrx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 04:14:17 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 20 Jan
+ 2023 04:14:15 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
+ Transport; Fri, 20 Jan 2023 04:14:15 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 97EC62A1;
+        Fri, 20 Jan 2023 10:14:15 +0000 (UTC)
+Date:   Fri, 20 Jan 2023 10:14:15 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+CC:     <vkoul@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        <sanyog.r.kale@intel.com>, <yung-chuan.liao@linux.intel.com>
+Subject: Re: [PATCH 1/2] soundwire: bus: Don't filter slave alerts
+Message-ID: <20230120101415.GM36097@ediswmail.ad.cirrus.com>
+References: <20230119165104.3433290-1-ckeepax@opensource.cirrus.com>
+ <db571218-1adb-cb46-5b76-55eaf379f6ca@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
- <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDXXWQvacpjZRCvAA--.43987S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFyxCr4xXw4rJw43XryxXwb_yoW5GrykpF
-        Z5tFZaywnrArn7uw1Iv3Wjqry0v34UJay5Xws5JrW8Aa98WFnIgr1Ig3WYgrZxur4xAr4j
-        qrWYqasrZa1xJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <db571218-1adb-cb46-5b76-55eaf379f6ca@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: HGkg0QzR8W8uqHb_mYHONSGI1lZLqLon
+X-Proofpoint-ORIG-GUID: HGkg0QzR8W8uqHb_mYHONSGI1lZLqLon
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 11:27:14AM -0600, Pierre-Louis Bossart wrote:
+> On 1/19/23 10:51, Charles Keepax wrote:
+> > Currently the SoundWire core will loop handling slave alerts but it will
+> > only handle those present when the alert was first raised. This causes
+> > some issues with the Cadence SoundWire IP, which only generates an IRQ
+> > when alert changes state. This means that if a new alert arrives whilst
+> > old alerts are being handled it will not be handled in the currently
+> > loop and then no further alerts will be processed since alert never
+> > changes state to trigger a new IRQ.
+> > 
+> > Correct this issue by allowing the core to handle all pending alerts in
+> > the IRQ handling loop. The code will still only loop up to
+> > SDW_READ_INTR_CLEAR_RETRY times, so it shouldn't be possible for it get
+> > completely stuck and if you are generating IRQs faster than you can
+> > handle them you likely have bigger problems anyway.
+> 
+> The change makes sense, but it's a bit odd to change the way the
+> interrupts are handled because of a specific design. The bus should be
+> able to deal with various designs, not force a one-size-fits-all policy
+> that may not be quite right in all cases.
+> 
+> Could we have a new flag at the bus level that says that peripheral
+> interrupts are not filtered, and set if for the Intel case?
+> 
+> We could similarly make the SDW_READ_INTR_CLEAR_RETRY constant
+> bus/platform specific. The SoundWire spec mandates that we re-read the
+> status after clearing the interrupt, but it doesn't say how to deal with
+> recurring interrupts.
 
+Perhaps I should have phrased the commit message differently
+here. To be honest I am not really convince the old code makes
+a huge amount of sense. So I would prefer not to add a flag
+enabling the weird behaviour.
 
-On 1/19/2023 7:41 PM, Paul E. McKenney wrote:
-> On Thu, Jan 19, 2023 at 02:39:01PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/19/2023 1:11 AM, Paul E. McKenney wrote:
->>> On Wed, Jan 18, 2023 at 10:24:50PM +0100, Jonas Oberhauser wrote:
->>>> What I was thinking of is more something like this:
->>>>
->>>> P0{
->>>>      idx1 = srcu_down(&ss);
->>>>      srcu_up(&ss,idx1);
->>>> }
->>>>
->>>> P1{
->>>>       idx2 = srcu_down(&ss);
->>>>       srcu_up(&ss,idx2)
->>>> }
->>> And srcu_read_lock() and srcu_read_unlock() already do this.
->> I think I left out too much from my example.
->> And filling in the details led me down a bit of a rabbit hole of confusion
->> for a while.
->> But here's what I ended up with:
->>
->>
->> P0{
->>      idx1 = srcu_down(&ss);
->>      store_rel(p1, true);
->>
->>
->>      shared cs
->>
->>      R x == ?
->>
->>      while (! load_acq(p2));
->>      R idx2 == idx1 // for some reason, we got lucky!
->>      srcu_up(&ss,idx1);
-> Although the current Linux-kernel implementation happens to be fine with
-> this sort of abuse, I am quite happy to tell people "Don't do that!"
-> And you can do this with srcu_read_lock() and srcu_read_unlock().
-> In contrast, this actually needs srcu_down_read() and srcu_up_read():
+I would be of the opinion that there are really two options
+for IRQ handling code like this that make sense:
 
-My point/clarification request wasn't about whether you could write that 
-code with read_lock() and read_unlock(), but what it would/should mean 
-for the operational and axiomatic models.
-As I wrote later in the mail, for the operational model it is quite 
-clear that x==1 should be allowed for lock() and unlock(), but would 
-probably be forbidden for down() and up().
-My clarification request is whether that difference in the probable 
-operational model should be reflected in the axiomatic model (as I first 
-suspected based on the word "semaphore" being dropped a lot), or whether 
-it's just due to abuse (i.e., yes the axiomatic model and operational 
-model might be different here, but you're not allowed to look).
-Which brings us to the next point:
+1) Loop until the IRQs are handled, ie. it is the soundwire
+core's responsibility to make sure all the IRQs are handled
+before moving on.
 
-> Could you please review the remainder to see what remains given the
-> usage restrictions that I called out above?
+2) Just handle the IRQs available when the function is called,
+ie. it is the drivers responsibility to keep calling the core
+until the IRQs are handled.
 
-Perhaps we could say that reading an index without using it later is 
-forbidden?
+That way there is a clearly defined who that is responsible.
+The old code is a weird mix of the two where most of the time
+it is the soundwire core's responsibly to handle recurring
+IRQs unless a new one happens in which case it is the drivers
+responsibilty to recall the core.
 
-flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as 
-thrown-srcu-cookie-on-floor
+Also the new code will still work for drivers that have level
+IRQs and recall the core, without any modification of those
+drivers. So I don't see what anyone would be gaining from the
+old system.
 
-So if there is an srcu_down() that produces a cookie that is read by 
-some read R, and R doesn't then pass that value into an srcu_up(), the 
-srcu-warranty is voided.
+Regarding making the clear retries platform specific that makes
+sense to me but is clearly a separate patch. I will add it onto
+my soundwire todo list.
 
-Perhaps it would also be good to add special tags for Srcu-down and 
-Srcu-up to avoid collisions.
+Thanks,
+Charles
 
-always have fun, jonas
-
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> >  drivers/soundwire/bus.c | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> > index 633d411b64f35..daee2cca94a4d 100644
+> > --- a/drivers/soundwire/bus.c
+> > +++ b/drivers/soundwire/bus.c
+> > @@ -1560,7 +1560,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+> >  	unsigned long port;
+> >  	bool slave_notify;
+> >  	u8 sdca_cascade = 0;
+> > -	u8 buf, buf2[2], _buf, _buf2[2];
+> > +	u8 buf, buf2[2];
+> >  	bool parity_check;
+> >  	bool parity_quirk;
+> >  
+> > @@ -1716,9 +1716,9 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+> >  				"SDW_SCP_INT1 recheck read failed:%d\n", ret);
+> >  			goto io_err;
+> >  		}
+> > -		_buf = ret;
+> > +		buf = ret;
+> >  
+> > -		ret = sdw_nread_no_pm(slave, SDW_SCP_INTSTAT2, 2, _buf2);
+> > +		ret = sdw_nread_no_pm(slave, SDW_SCP_INTSTAT2, 2, buf2);
+> >  		if (ret < 0) {
+> >  			dev_err(&slave->dev,
+> >  				"SDW_SCP_INT2/3 recheck read failed:%d\n", ret);
+> > @@ -1736,12 +1736,8 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+> >  		}
+> >  
+> >  		/*
+> > -		 * Make sure no interrupts are pending, but filter to limit loop
+> > -		 * to interrupts identified in the first status read
+> > +		 * Make sure no interrupts are pending
+> >  		 */
+> > -		buf &= _buf;
+> > -		buf2[0] &= _buf2[0];
+> > -		buf2[1] &= _buf2[1];
+> >  		stat = buf || buf2[0] || buf2[1] || sdca_cascade;
+> >  
+> >  		/*
