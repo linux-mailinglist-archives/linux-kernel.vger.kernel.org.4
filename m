@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28D367605F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6FA6760CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjATWra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S229981AbjATWu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjATWr2 (ORCPT
+        with ESMTP id S229585AbjATWu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:47:28 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9113DC3;
-        Fri, 20 Jan 2023 14:47:27 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-15085b8a2f7so7943746fac.2;
-        Fri, 20 Jan 2023 14:47:27 -0800 (PST)
+        Fri, 20 Jan 2023 17:50:56 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1807970293;
+        Fri, 20 Jan 2023 14:50:11 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q8so5121505wmo.5;
+        Fri, 20 Jan 2023 14:50:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=59oaZrwvRXnY14aWAU9sGn0E+D4u2rUhDobBE4hDS1Y=;
-        b=CqJW+re5K/hTICdUE3StSMjZhP8NNoHYCP8iwRSNLPVDyRfxpTZZ7XZpCgZOxJTc+P
-         cArBxHgii50uDpzNbzEKELbIH0N5JcGvDLp8E95ny8qHD+XCY8G+YYK03yZAlv8ZZYPK
-         LTC4pbLWqODJamjET6gAmFbsRpAMbiDFqxPjnkTYd44S5HiK8znqVq+m57ojk2VdsSU9
-         Z93fqQQaQTQ94fO9lAX6IaPR0x51DQ2dltBFYEjU5ProGlfE6aDzSziQ8fj6Dy1dYo9Y
-         E+J1YfuSfyS+tXut4W67jIMhdUF65OxlQSIB/y8oioBriAZPJpybDzkupNWF36OyJAhc
-         DkMA==
+        h=content-id:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TBg2ZGSLJCHCe4StnuS4Rf2XAsBlx+T2xK8kBvKv+5I=;
+        b=SJ7Ngi78KdWr+dxt92Brtb7mMmMsDrdUtcVnXudTPfxsCxacHixF+sq839NSklew4L
+         GzGHgchDYxFk0G5Aax4ap0njAnvnowwwFrbRZY0iOLvW8bDJiso09wqMc6s/6B8ab5ZJ
+         J45WrKTY1F0Ha7DZSBpIvTopG7OorcjJ3xNyQ1KBDG7NalXcVbaZMlt3YM19syr7fYnm
+         6Sani86aF9mm2Qe0S1SUv0LJ6t/0xtgsGcndZfKI52r9uLzob9AefVKTJ3uKBaOzz06C
+         To94OMUcIUNQ4NZTmRnyJFv1Q6nH9EarFCEeT46nMi3tTBkkVhs3SiQvAWEyKuqlcncf
+         CxAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=59oaZrwvRXnY14aWAU9sGn0E+D4u2rUhDobBE4hDS1Y=;
-        b=pxD5mLCZ5hzluxTCW3JkvQ8oA6m5PePI/BMHBpNNNisU2ezcnaw1vyia+M3Fk/yVuT
-         EtRF2jgNzYSg0+i2tJM3vzqx76YW5Miyoin9InzO7tk/sDI0Gv3jc8mnR3KmZAxHUlas
-         rYb4acz+kbOhf2+D1v5PBHjnIik8yU2YPq+PKCrD8Lo1uUQs8F4XC55Iu1sCiEzDIbGi
-         mLsHhqg7s72ZygC29B7r44yzxw+cA6KsiuAlrRrCq9gLLKg0dZzAdQxMPv8afwtsB90W
-         kM1/AFknUyL/2JftAsZKC5xEh90RY3pkJrK8y4Q6m6Z0EbPm96Kxc2pzzqReEekCImm6
-         d9qg==
-X-Gm-Message-State: AFqh2ko6qaJdV2Uo+X6zvXqWuU8ZhdzWGHhLOfbGN6EFIlZdGhekKXxk
-        RMAGdIJfP3eAc0oG1AT4IuY=
-X-Google-Smtp-Source: AMrXdXs/ezA2tIeKmtjy82vPGkbLujUocFXfVY/wwoMonyD1aNhoHhE9z1ph69xv3Ro4wUGt/wz7qw==
-X-Received: by 2002:a05:6870:668f:b0:15e:ff37:6fda with SMTP id ge15-20020a056870668f00b0015eff376fdamr14277677oab.14.1674254846899;
-        Fri, 20 Jan 2023 14:47:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056870310b00b00144e6ffe9e5sm5912665oaa.47.2023.01.20.14.47.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 14:47:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <78e1cc2d-eb67-cf78-bb84-95cdab2bfcf0@roeck-us.net>
-Date:   Fri, 20 Jan 2023 14:47:23 -0800
+        h=content-id:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TBg2ZGSLJCHCe4StnuS4Rf2XAsBlx+T2xK8kBvKv+5I=;
+        b=ysbONUR8/PDTouraaogxxsrJ0Iiq+cyKnPG63ZZugBEB4Tq4/iEaZiUji7Pz/0/09b
+         iS4mVpSkaHONaYmDiLrZNmbipllshynasi+i2eUutziFXXQP7p3RoCWGNyS9UDoQBRSz
+         resWEQXQkyWR8MueADgIS3EF59h0edORkh76KXhDKknKz2xkO4CruOq6nTUhBT4y48lC
+         jL5ymhNtSwKuzUCZz4fPeetYNmgRxFhQMH20GWb9d85JAtpol1f11KfGk3FghClQ7dEu
+         eCNdCPpy15tWG9v37lD6bd2Tmj3Oo536wOeAEOJoVlUdrB85438SQfaF/OPQYBJWXKZ7
+         tzEQ==
+X-Gm-Message-State: AFqh2kq6nJ2m1rEJAvjnF2r++OLWNahesINRmgPqWvtnTQ61pfVORaDO
+        QjSDUCtmizZKQAMhdnwbMGHYKsCqq96bYDwY
+X-Google-Smtp-Source: AMrXdXtn/n4mw/1xYuM53NkndS8FqUOcqZ1AW1INz0Q8ktjH/XJksS8iILG8ofDkgnklJ9s1+mi1/g==
+X-Received: by 2002:a05:600c:444b:b0:3da:fd06:a6f1 with SMTP id v11-20020a05600c444b00b003dafd06a6f1mr15392053wmn.31.1674254955845;
+        Fri, 20 Jan 2023 14:49:15 -0800 (PST)
+Received: from fedora.36 ([78.10.206.44])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b003d9aa76dc6asm4974827wmq.0.2023.01.20.14.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 14:49:15 -0800 (PST)
+Date:   Fri, 20 Jan 2023 23:49:10 +0100 (CET)
+From:   =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+cc:     =?ISO-8859-2?Q?Micha=B3_Grzelak?= <mchl.grzlk@gmail.com>,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: sound: audio-graph-port: Add capture and
+ playback
+In-Reply-To: <87lelxlt18.wl-kuninori.morimoto.gx@renesas.com>
+Message-ID: <c6b1ad16-894d-e9a4-1fd1-cc94ec11df7@student.agh.edu.pl>
+References: <20230120011744.550701-1-mchl.grzlk@gmail.com> <87lelxlt18.wl-kuninori.morimoto.gx@renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Remove altmode active state
- updates
-Content-Language: en-US
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-References: <20230120205827.740900-1-pmalani@chromium.org>
- <20230120205827.740900-2-pmalani@chromium.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230120205827.740900-2-pmalani@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/mixed; boundary="-1463809024-776833584-1674254459=:3790"
+Content-ID: <5b8b88f9-a34b-dacf-ccb7-9b5973b44de3@student.agh.edu.pl>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,43 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 12:58, Prashant Malani wrote:
-> Since the "active" state for partner altmodes is now being taken care of
-> by the altmode driver itself (specifically, DisplayPort altmode), we
-> no longer need to do so from the port driver. So remove the calls to
-> typec_altmode_update_active() from TCPM.
-> 
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---1463809024-776833584-1674254459=:3790
+Content-Type: text/plain; charset=ISO-8859-2; format=flowed
+Content-Transfer-Encoding: 8BIT
+Content-ID: <71d82d96-8152-10ea-ddc-26c14e852aa@student.agh.edu.pl>
 
-> ---
-> 
-> Changes since v1:
-> - Patch first introduced in v2.
-> 
->   drivers/usb/typec/tcpm/tcpm.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4ce2f0..0f5a9d4db105 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->   			}
->   			break;
->   		case CMD_ENTER_MODE:
-> -			if (adev && pdev) {
-> -				typec_altmode_update_active(pdev, true);
-> +			if (adev && pdev)
->   				*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
-> -			}
->   			return 0;
->   		case CMD_EXIT_MODE:
->   			if (adev && pdev) {
-> -				typec_altmode_update_active(pdev, false);
->   				/* Back to USB Operation */
->   				*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
->   				return 0;
+Hi Kuninori,
 
+Thanks for quick reply.
+
+On Fri, 20 Jan 2023, Kuninori Morimoto wrote:
+
+>
+> Hi Micha³
+>
+> Thank you for your patch
+>
+>> Running 'make DT_SCHEMA_FILES=renesas,rsnd.yaml dt_binding_check'
+>> gives following warning:
+>>
+>> bindings/sound/renesas,rsnd.example.dtb:
+>> sound@ec500000: port:endpoint: Unevaluated properties are not allowed
+>> ('capture', 'playback' were unexpected)
+>>         From schema: bindings/sound/renesas,rsnd.yaml
+>
+> Now I'm posting the patch for it.
+>
+> 	https://lore.kernel.org/r/87358hj2ub.wl-kuninori.morimoto.gx@renesas.com
+
+Thanks also for pointing that out, I should have given more time to
+searching for existing patches.
+
+Best regards,
+Micha³
+---1463809024-776833584-1674254459=:3790--
