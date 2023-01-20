@@ -2,182 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574B56750E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC586750A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjATJXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S230136AbjATJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjATJWT (ORCPT
+        with ESMTP id S230057AbjATJUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:22:19 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D48966D3;
-        Fri, 20 Jan 2023 01:21:39 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 20 Jan 2023 04:20:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C738B420E;
+        Fri, 20 Jan 2023 01:20:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 997906602E8E;
-        Fri, 20 Jan 2023 09:21:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674206483;
-        bh=TXsvpuYEwVayUGP6yTdMIQtVttt74SBr+RVJGfEefQQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KnpU2UKUHHOdVtqDj350MN+FIuePsNaXgLcilcaOUEQsYyFgwXj076hIe2ck5QZDn
-         F/wVTYuThbymeWjdhfV1eTD0OIw3gPkLCvkfeFdNTyah5Q+ESNA0Z7+homEytIGpNz
-         UiPTgMK/Vq6yShR01/rG06xiU3GPpc6+rPWlDiJokY3iedxyU9gB33kGFo5JqfxznM
-         QnOOxIiVHk6d2b5XGAyDRhW4p33pxN0NAhEfSVJyc8pQ+w8HZpwPM+EenqrchXMbI/
-         gnPq1cyIV0VhwWpj5Oemu9xoeluXsOv4u0gn8NszP6I5lGecOaiqZQ4gUkZ5S0vsKh
-         cw43oMzeCUNKw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v4 14/23] clk: mediatek: clk-mt8192: Move CLK_TOP_CSW_F26M_D2 in top_divs
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ED2161E71;
+        Fri, 20 Jan 2023 09:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603D4C433D2;
+        Fri, 20 Jan 2023 09:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674206446;
+        bh=1v/OutS1+ZLLYxLQy361r/IIRHUUsdrfGl3Sl8MfW+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IXH32jb3Xcl43KTKzyPP3yZ2Lu6UFDcWTtSbtfGvQgQKYXQ79alxHXX+ILoQGx2it
+         2s2WbyiCnsUP2jfuDLagPRiNkXhFXoACc3jx6m0wWpn9lFZ7B1EQyRqJKHZ8RFUM7M
+         jQNtfjBTWooqSeC4kneibn93EVSwRR2Ts5MWKjm1DAPFLhFPvXjBB3dCxPaUUMZ88O
+         EVZEFAMN5myQ1zUnnvUsvaAWeNJ4OfYz/D4G8Ix6qdvqjzP0joM1Rhkhs1nFWKw8J6
+         CvdYBcZDXsTJNUbJw6hhR1NfD0vlrEYojYFHeFasAWbfgDq10RoXvtg9ltZfeHRvnX
+         Lskcjl76VKpWg==
 Date:   Fri, 20 Jan 2023 10:20:44 +0100
-Message-Id: <20230120092053.182923-15-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120092053.182923-1-angelogioacchino.delregno@collabora.com>
-References: <20230120092053.182923-1-angelogioacchino.delregno@collabora.com>
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: axxia: use 'struct' for kernel-doc notation
+Message-ID: <Y8pc7K2IWIlMYl6S@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20230113063756.14071-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/5AkXSUbgroXsUIk"
+Content-Disposition: inline
+In-Reply-To: <20230113063756.14071-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver is registered early in clk_mt8192_top_init_early() and
-then again in clk_mt8192_top_probe(): the difference between the
-two is that the early one is probed with CLK_OF_DECLARE_DRIVER and
-the latter is regularly probed as a platform_driver.
 
-Knowing that it is not necessary for this platform to register the
-TOP_CSW_F26M_D2 clock that early, move it to top_divs and register
-it with the others during platform_driver probe for topckgen;
+--/5AkXSUbgroXsUIk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-While at it, since the only reason why the early probe existed was
-to register that clock, remove that entirely - leaving this driver
-to use only platform_driver.
+On Thu, Jan 12, 2023 at 10:37:56PM -0800, Randy Dunlap wrote:
+> Add "struct" to prevent this kernel-doc warning:
+>=20
+> drivers/i2c/busses/i2c-axxia.c:135: warning: cannot understand function p=
+rototype: 'struct axxia_i2c_dev '
+>=20
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Cc: linux-i2c@vger.kernel.org
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Tested-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/clk/mediatek/clk-mt8192.c | 39 ++++++-------------------------
- 1 file changed, 7 insertions(+), 32 deletions(-)
+Applied to for-current, thanks!
 
-diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
-index ea4164c0995e..d012a229274e 100644
---- a/drivers/clk/mediatek/clk-mt8192.c
-+++ b/drivers/clk/mediatek/clk-mt8192.c
-@@ -26,10 +26,6 @@ static const struct mtk_fixed_clk top_fixed_clks[] = {
- 	FIXED_CLK(CLK_TOP_ULPOSC, "ulposc", NULL, 260000000),
- };
- 
--static const struct mtk_fixed_factor top_early_divs[] = {
--	FACTOR(CLK_TOP_CSW_F26M_D2, "csw_f26m_d2", "clk26m", 1, 2),
--};
--
- static const struct mtk_fixed_factor top_divs[] = {
- 	FACTOR_FLAGS(CLK_TOP_MAINPLL_D3, "mainpll_d3", "mainpll", 1, 3, 0),
- 	FACTOR_FLAGS(CLK_TOP_MAINPLL_D4, "mainpll_d4", "mainpll", 1, 4, 0),
-@@ -95,6 +91,7 @@ static const struct mtk_fixed_factor top_divs[] = {
- 	FACTOR(CLK_TOP_OSC_D10, "osc_d10", "ulposc", 1, 10),
- 	FACTOR(CLK_TOP_OSC_D16, "osc_d16", "ulposc", 1, 16),
- 	FACTOR(CLK_TOP_OSC_D20, "osc_d20", "ulposc", 1, 20),
-+	FACTOR(CLK_TOP_CSW_F26M_D2, "csw_f26m_d2", "clk26m", 1, 2),
- 	FACTOR(CLK_TOP_ADSPPLL, "adsppll_ck", "adsppll", 1, 1),
- 	FACTOR_FLAGS(CLK_TOP_UNIVPLL_192M, "univpll_192m", "univpll", 1, 13, 0),
- 	FACTOR_FLAGS(CLK_TOP_UNIVPLL_192M_D2, "univpll_192m_d2", "univpll_192m", 1, 2, 0),
-@@ -1047,27 +1044,6 @@ static const struct mtk_pll_data plls[] = {
- 	      0, 0, 32, 0x0330, 24, 0, 0, 0, 0x0334, 0),
- };
- 
--static struct clk_hw_onecell_data *top_clk_data;
--
--static void clk_mt8192_top_init_early(struct device_node *node)
--{
--	int i;
--
--	top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
--	if (!top_clk_data)
--		return;
--
--	for (i = 0; i < CLK_TOP_NR_CLK; i++)
--		top_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
--
--	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
--
--	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, top_clk_data);
--}
--
--CLK_OF_DECLARE_DRIVER(mt8192_topckgen, "mediatek,mt8192-topckgen",
--		      clk_mt8192_top_init_early);
--
- /* Register mux notifier for MFG mux */
- static int clk_mt8192_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
- {
-@@ -1093,6 +1069,7 @@ static int clk_mt8192_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
- static int clk_mt8192_top_probe(struct platform_device *pdev)
- {
- 	struct device_node *node = pdev->dev.of_node;
-+	struct clk_hw_onecell_data *top_clk_data;
- 	int r;
- 	void __iomem *base;
- 
-@@ -1100,17 +1077,17 @@ static int clk_mt8192_top_probe(struct platform_device *pdev)
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
-+	top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
-+	if (!top_clk_data)
-+		return;
-+
- 	r = mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
- 	if (r)
- 		return r;
- 
--	r = mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
--	if (r)
--		goto unregister_fixed_clks;
--
- 	r = mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
- 	if (r)
--		goto unregister_early_factors;
-+		goto unregister_fixed_clks;
- 
- 	r = mtk_clk_register_muxes(&pdev->dev, top_mtk_muxes,
- 				   ARRAY_SIZE(top_mtk_muxes), node,
-@@ -1156,8 +1133,6 @@ static int clk_mt8192_top_probe(struct platform_device *pdev)
- 	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
- unregister_factors:
- 	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
--unregister_early_factors:
--	mtk_clk_unregister_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
- unregister_fixed_clks:
- 	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
- 				      top_clk_data);
--- 
-2.39.0
+@Krzysztof: I hope you don't mind, I want to send out for-current soon.
 
+
+--/5AkXSUbgroXsUIk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKXOsACgkQFA3kzBSg
+Kbb7KhAAowKWmQzkvA1C8j1jjzAhrMghxpUWbFec8L1kgwSfGSLaFVUEhCJqBQmB
+r0EzJyXfM3DLF2PcX8anRN2E9QvZOOXeoP9dUBjiGopUvnKeLKu9B19OMCdBCnXP
+FaqxB/qvfwP94ptjHDPDMpbO4+JZKY5l61HWP2o9SfUIuc+MdgwbNrNeE2weU/c/
+VKJgU9dP+ZZqARUpJVKB10w8vUL4A6eqFly4BVnm7mgsr3Xk0HgGvMGE2zuBbOOT
+LGI9tkHJGKPmCQRaG031jnjut45VX0TH+nvB4fD1OWEx41+sGJtm7XDoobflAwPw
+fYJanUErSEWSxnHnOPBttwy1Bfo+MNnTWuFQ9S0tJLisNCk73J87LErcAuZn/LGx
+Fa3+TiDIOEYJ9BgW1FXeslAWAA/ZzUsg+frhdYzoQ2kzxh6xyFK5x7amaW28UHS+
+EwWU+X+zgNdYI0EJB4IIDt5XYM5333cWExSa/8lzEP/Omdo9ncnYSqV6mPMpvpCZ
+aytQUP19UG/S5mvjIC7hhQ377smR+anY31IAfcDXI2V2N4EjGNXLKOmKgZq4JekJ
+6krAPfoMTxIY3UIemu1KYbTC1R9r3CJ4x6JAfm5SfxI7MkJG64fPMeT87oSocB+5
+ri3KMBY89VRYK2w350619HQCtnfGfildRQHJ1eVE0KWffTXCjh0=
+=A/Be
+-----END PGP SIGNATURE-----
+
+--/5AkXSUbgroXsUIk--
