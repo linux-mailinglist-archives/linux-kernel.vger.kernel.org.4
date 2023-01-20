@@ -2,160 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AABC675DB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0B3675DB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjATTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S230196AbjATTLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjATTL0 (ORCPT
+        with ESMTP id S230106AbjATTLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:11:26 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B95DBCB;
-        Fri, 20 Jan 2023 11:11:25 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id p185so5252093oif.2;
-        Fri, 20 Jan 2023 11:11:24 -0800 (PST)
+        Fri, 20 Jan 2023 14:11:40 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8768A0FE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:11:37 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id d14so2016439wrr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:11:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BFyYTpVG5ZzCzfnTs8oNkGAEsfN9nPz+uDFLXCK3bOc=;
-        b=Ztw6p5ICi2lkwk8EqwAPw3IqQfXkqMLi7SBoOL1bqe8ExOT/EUCaUmLjxV3oPBf4yY
-         3FNRQEnf3v+ILni/t00bpVIOe+kXTAzEDqZKOVRQrzNNlaiDzcCtWazBZ42hlzH/Xpn2
-         MxTQr7zrtOgFN7yuR283M6S33WxgpVGggsdSvspaAYjemSUBozC9Crfg+MRkBI6xKCbJ
-         +E90pozRoRwAr6CWiPMp8WgFowZMjqEJyvNwjArvdgYACf/sEtEEIBwq58397t1VbtPd
-         6uMMBFrYnNsepKWCFajpnQfEkk8k/D11hzsT8RP2pt5l0lxvPeBNob+LADz81R35e8BE
-         S21Q==
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Q+aLB5M5/TtTEFhcMDlKLReVmNxD7MHhEY2/008DlU=;
+        b=E7t1/+Gnjzurlpr/Yn6EkM1klgtAtjeaa9iuyyqal5uLsl85A71nsHcV5EA8YN/c4q
+         ct0GFvERpjIf6/1GmvemEYA2IhVLf2RKXGH+Yjlse7avRmqkJD7QTI5CtfaPPsv89hFD
+         vA9/8Q9vqMkQgmvhzWh4vc8uCppxObhEpllCqzrCMOl2z04M4K7K/fa09Ec97/lMaP24
+         By/BW1aS2Meunp9N9i/Yctxn4l3KehCL1zD5DBQ8Maz0Hf65N2p1UX0h+q+1N8LdAikL
+         i5HEU9sA9F2xfhaEObOuwpM7nCHcQo/OlFyWFs/9507UwOyn7Q9yV/aRkl4mGO5Kpb+u
+         XuyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BFyYTpVG5ZzCzfnTs8oNkGAEsfN9nPz+uDFLXCK3bOc=;
-        b=DSsNwT/cSHm74I/fOi0+7VCpcJ2zy2gt7nKlFw29ui1+06SKnna3ZR2tIi0T9k5GIM
-         EnMbzcqC7zzH07uthjQE0EGUsnGCXwYjZZ0T96SN5S60LZRuidQs76+5wpNcTUak/+Br
-         6YXmiWqM4Ug/z3IMvv8nd1GDTXcXU5l7kyBl1mEVGs0/ZLoUbi06ztB9uUs8AAFVucfQ
-         CbGpXVTu9QI32kTlMxR5loaHcFwewoY0xt0I/iYw07zprp2JveQLEXr4CDBVa2lQBnGm
-         B5OENUZ4exOCogt3SSyr6152kwywdD9hBJEgJH0jF4bNqZ+uG3SiQtFZantxnEOD4Jxe
-         5+Nw==
-X-Gm-Message-State: AFqh2kpyFXi5kqMxSjv+EnyxRlnWykron2ZplneOeesoGWewtkEsh8Uq
-        RTjI4e/6SECpcHfIEce1xOqfgpg4gcg=
-X-Google-Smtp-Source: AMrXdXtXTrCPMZlTu+cC+8XlgcCVVJtyBbU5CtrCwyWsvX0/7hB7Rmtd51lEkRZkJOuLQ+8i+4g/Sg==
-X-Received: by 2002:a05:6808:3b0:b0:35e:2b7f:daa6 with SMTP id n16-20020a05680803b000b0035e2b7fdaa6mr6789297oie.28.1674241884248;
-        Fri, 20 Jan 2023 11:11:24 -0800 (PST)
-Received: from localhost.localdomain ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id c6-20020aca1c06000000b0035763a9a36csm3684463oic.44.2023.01.20.11.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 11:11:23 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-To:     gregkh@linuxfoundation.org
-Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Gaurav Pathak <gauravpathak129@gmail.com>
-Subject: [PATCH V2] staging: r8188eu: Fix some endian problems
-Date:   Fri, 20 Jan 2023 13:11:19 -0600
-Message-Id: <20230120191119.13163-1-Larry.Finger@lwfinger.net>
-X-Mailer: git-send-email 2.39.0
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Q+aLB5M5/TtTEFhcMDlKLReVmNxD7MHhEY2/008DlU=;
+        b=121jHn2nTFkLKODEI2BFAX0IV4gIukGAAj/G5s9kcIiU+vCvqWieEIPqyJac81lJrm
+         9EpGKiwa/fTgkohXmp5vo2o94NZyLD77tFVme8zNMi56OACgdZJLVGzwfgKf4N0BES6P
+         8zO4kGWHCf7qxxJuyz36FW2Uo3khRBCRdEWL4ZjUYUfnk9MOswOcV/1gOJ9BV9pzY7hw
+         b5mhXCVTwsjw9OtGO+s36RNcA5PanR1QAUuRU/bde8WracDZURnZ+hUQ0mzL1o1Y0QRu
+         q3iwVGM/9OX8gdbQWivh4kjvZiCcuT1CeF+HbEO2ngvGHqfghicB+dmk1qzvuTDSN/5I
+         NBlA==
+X-Gm-Message-State: AFqh2kqGG1MyQyi4eTie36FB60fR+ofR69HRXHuug+z6/fKH/nNTeHJl
+        PwFhT9c2e6Z0Aj7olEmnSXdwIA==
+X-Google-Smtp-Source: AMrXdXviftZrowwMMsIKfyvYN8fMTCkcpKAv8IP621sNth/hnoNpSvxsyCaL1+KiOgAfApfFgJXebA==
+X-Received: by 2002:adf:eacd:0:b0:2bb:f4bf:e763 with SMTP id o13-20020adfeacd000000b002bbf4bfe763mr23954624wrn.51.1674241896145;
+        Fri, 20 Jan 2023 11:11:36 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id g2-20020a5d4882000000b00286ad197346sm36404269wrq.70.2023.01.20.11.11.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 11:11:35 -0800 (PST)
+Message-ID: <59125aa9-ad7c-93d7-1c48-63773fa5a82e@arista.com>
+Date:   Fri, 20 Jan 2023 19:11:29 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/4] crypto: Introduce crypto_pool
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20230118214111.394416-1-dima@arista.com>
+ <20230118214111.394416-2-dima@arista.com>
+ <Y8kSkW4X4vQdFyOl@gondor.apana.org.au>
+ <7c4138b4-e7dd-c9c5-11ac-68be90563cad@arista.com>
+ <Y8pVojWNpvdYpH03@gondor.apana.org.au>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y8pVojWNpvdYpH03@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparse lists the following warnings:
+On 1/20/23 08:49, Herbert Xu wrote:
+> On Thu, Jan 19, 2023 at 06:03:40PM +0000, Dmitry Safonov wrote:
+>>
+>> - net/ipv4/ah4.c could benefit from it: currently it allocates
+>> crypto_alloc_ahash() per every connection, allocating user-specified
+>> hash algorithm with ahash = crypto_alloc_ahash(x->aalg->alg_name, 0, 0),
+>> which are not shared between each other and it doesn't provide
+>> pre-allocated temporary/scratch buffer to calculate hash, so it uses
+>> GFP_ATOMIC in ah_alloc_tmp()
+>> - net/ipv6/ah6.c is copy'n'paste of the above
+>> - net/ipv4/esp4.c and net/ipv6/esp6.c are more-or-less also copy'n'paste
+>> with crypto_alloc_aead() instead of crypto_alloc_ahash()
+> 
+> No they should definitely not switch over to the pool model.  In
+> fact, these provide the correct model that you should follow.
+> 
+> The correct model is to allocate the tfm on the control/slow path,
+> and allocate requests on the fast path (or reuse existing memory,
+> e.g., from the skb).
 
-  CHECK   drivers/staging/r8188eu/core/rtw_mlme.c
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49: warning: incorrect type in
-					 argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    got unsigned short
-					 [assigned] [usertype] media_status_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57: warning: incorrect type in
-					 argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    got unsigned short
-					 [assigned] [usertype] media_status
-  CHECK   drivers/staging/r8188eu/core/rtw_mlme_ext.c
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58: warning: incorrect type
-					 in argument 2 (different base types)
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    expected restricted
-					 __le16 [usertype] mstatus_rpt
-drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    got unsigned short
-					 [assigned] [usertype] media_status
+Ok, I see. Do you think, it's worth having a pool of tfms?
 
-The second argument of rtl8188e_set_FwMediaStatus_cmd() needs to be in CPU
-order, not little-endian; however, when it uses that value to call
-FillH2CCmd_88E() the parameter must be in little-endian order as that
-value will be sent to the firmware. Note that the conversion from LE to CPU
-order was le16_to_cpu() rather than the correct cpu_to_le16.
+If not, I can proceed with TCP-AO patches set and implement pool of
+ahash tfms that will be used only for TCP-MD5 and TCP-AO, does that
+sound good to you?
 
-The definition of FillH2CCmd_88E() is revised, and the proper conversion
-routine is used.
+I see that ahash tfm allocation doesn't eat a lot of memory, rather
+little more than 100 bytes, but even so, I don't see why not saving some
+memory "for free", especially if one can have thousands of keys over
+different sockets. Where there's not much complexity in sharing tfms &
+scratch buffers?
 
-Note that the original code performed one byte swap on the secong argument
-of FillH2CCmd_88E(), and got the correct answer even though the semantics
-were very wrong.
-
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
-Reviewed-by: Dan Carpenter <error27@gmail.com>
-Reported-by: Gaurav Pathak <gauravpathak129@gmail.com>
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
----
-v1 -> v2: Fixed typo in the Reported line.
----
-Greg,
-
-I intended this patch as an example for Gaurav, but as it has not been
-resubmitted, I am sending it to you. If you thing he deserves to be the
-author, then please edit the patch before applying. Thanks, Larry
----
-
- drivers/staging/r8188eu/hal/rtl8188e_cmd.c     | 4 ++--
- drivers/staging/r8188eu/include/rtl8188e_cmd.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-index 8310d7f53982..788904d4655c 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-@@ -193,9 +193,9 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *adapt, u8 Mode)
- 
- }
- 
--void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt)
-+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, u16 mstatus_rpt)
- {
--	u16 mst_rpt = le16_to_cpu(mstatus_rpt);
-+	__le16 mst_rpt = cpu_to_le16(mstatus_rpt);
- 
- 	FillH2CCmd_88E(adapt, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
- }
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_cmd.h b/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-index 1e01c1662f9a..c785cf8ed683 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_cmd.h
-@@ -85,6 +85,6 @@ void rtl8188e_Add_RateATid(struct adapter *padapter, u32 bitmap, u8 arg,
- void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state);
- 
- void CheckFwRsvdPageContent(struct adapter *adapt);
--void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt);
-+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, u16 mstatus_rpt);
- 
- #endif/* __RTL8188E_CMD_H__ */
--- 
-2.39.0
-
+Thanks,
+          Dmitry
