@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC2D67594C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B16675951
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjATPzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S230429AbjATPzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbjATPyo (ORCPT
+        with ESMTP id S231687AbjATPzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:54:44 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B2E5E536
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:54:29 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so6130321wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xSgM6n49EcyShr7fktwdqot3K5AnX5J3htXp++CJjcc=;
-        b=CqA6PkaGMtx+7DxIVeb9sNrO2cMLSAP4jLzXDmtYGVMDnO4n8FKU1XsKN/ScyoB+mP
-         CY8gJO9tKusLityrvFcnX5NQ5qAhbdj/2ixMEGQfCZ4UhVz3yECHfq63a8w+33n8YtkE
-         U3k8drugwg1A7LA21QHPQqRAiB4oeiGJiaRV7z0BH3iN3tMrJp1Nf5wot/i+INxG8V6z
-         RcT1hvLvRc2jRv+ls1Ho2ZWBd68Lx4iJgGGR9qHAI/p9vfL+trU5Zd6/kq2y/ZxTiUxA
-         9mSkRLMIK4hh+rVAZX9MNc5hfmm7xSpXqnH1nv8kcl0bfHn86ORS2QWIGOYCN87s5gii
-         uWgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xSgM6n49EcyShr7fktwdqot3K5AnX5J3htXp++CJjcc=;
-        b=CS7cTGRH0n1hgQYu0NIelk8OPEpDk67t0v5dwBFZ+xiBmnPgyJFojHwy74XcW91l3t
-         VfoeniVzQ0lVoHdG4Nu7U51V23L7wP6ZOkj7aCxwIgm1y9nAWss/dCJB08fWFwbf+9EY
-         Qn6d63n7PCCDGbKB1JXSnGZY04gkbEShtJ82EeY5RopYbL+I7nBcfFGBllZIZ4NBDsFj
-         1Qf4zbBAN+rdcZ2LrMRTb5AIzdUcK/EWI3uQa9W86fdfFKr9lWuR932+iwYJeDaG9u4p
-         EjvWvOO2H8fvltbXNEM7ZSXehJc0QPvwTkv9vRMWit4ZmC01e9AmlnAQuPyfw0ALltkw
-         GT8g==
-X-Gm-Message-State: AFqh2kp8G2QOORbcmWcThUsaWx8TTS+6t9QmR23gC6jJ18YQtdqL/XtV
-        bV1v+r4o6uMFPLG4UWc4+2aNHw==
-X-Google-Smtp-Source: AMrXdXtfWuN/VpvBtso8zJRkonoucoMHvJlt8jabUZsECy6yV9zjjBJaMqPyhxI1boBEX6X3fA8krA==
-X-Received: by 2002:a05:600c:600e:b0:3da:fb0b:849f with SMTP id az14-20020a05600c600e00b003dafb0b849fmr14952401wmb.25.1674230069613;
-        Fri, 20 Jan 2023 07:54:29 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n42-20020a05600c3baa00b003d96efd09b7sm3349596wms.19.2023.01.20.07.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 07:54:29 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 11/11] ARM: dts: exynos: correct HSI2C properties in Exynos5410 Odroid XU
-Date:   Fri, 20 Jan 2023 16:54:04 +0100
-Message-Id: <20230120155404.323386-12-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
-References: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
+        Fri, 20 Jan 2023 10:55:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F82707D8;
+        Fri, 20 Jan 2023 07:54:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1551A61FDA;
+        Fri, 20 Jan 2023 15:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C483C433D2;
+        Fri, 20 Jan 2023 15:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674230079;
+        bh=Lyzp89/oUt/Y+HS78U5nbaABso705ppG1wwrowaJd5k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YTzNIkRBatAMAnoFrKr6O9Jwkv2d6st4V+W1ZmWuVxiNC87cMqqtyzuJVuQLhRLtw
+         cKGiFR7L6u/2Musmn3K/MvZQOXigdfi99RohHyjZ0lPUQvCjoIU30a8d7AmPQmjzXh
+         z3ZIEhVxS/pNlQC72D2tLvOw2PV0BBNMHjNI2VlvsTYcADEAmL1m/rk5i/GTu00hGZ
+         WFGLKP2xM1WzToGPlJhHpgVlv8PWfmV4G1wVLsteXbW17lyd2vOvYx8hy/QU/EJc7A
+         3QNBo6RxY08+fPmZ7HVrmOSYQSdV5WmdKMvVG1oJlJ8G1kK2u7fyQBkHy0ozLjYoGy
+         0bHMZbSjgQluQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 104335C0DFC; Fri, 20 Jan 2023 07:54:39 -0800 (PST)
+Date:   Fri, 20 Jan 2023 07:54:39 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Arjan van de Ven <arjan@linux.intel.com>
+Cc:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com, akpm@osdl.org,
+        tglx@linutronix.de, joel@joelfernandes.org,
+        stern@rowland.harvard.edu, diogo.behrens@huawei.com,
+        jonas.oberhauser@huawei.com, linux-kernel@vger.kernel.org,
+        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
+Message-ID: <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
+ <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HSI2C controller uses clock-frequency and does not have
-i2c-sda-delay.  The properties were copy-pasted from the slower
-S3C-family I2C controller:
+On Fri, Jan 20, 2023 at 06:58:20AM -0800, Arjan van de Ven wrote:
+> On 1/20/2023 5:55 AM, Hernan Ponce de Leon wrote:
+> > From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
+> > 
+> 
+> >   kernel/locking/rtmutex.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> > index 010cf4e6d0b8..7ed9472edd48 100644
+> > --- a/kernel/locking/rtmutex.c
+> > +++ b/kernel/locking/rtmutex.c
+> > @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
+> >   	unsigned long owner, *p = (unsigned long *) &lock->owner;
+> >   	do {
+> > -		owner = *p;
+> > +		owner = READ_ONCE(*p);
+> >   	} while (cmpxchg_relaxed(p, owner,
+> 
+> 
+> I don't see how this makes any difference at all.
+> *p can be read a dozen times and it's fine; cmpxchg has barrier semantics for compilers afaics
 
-  exynos5410-odroidxu.dtb: i2c@12ca0000: Unevaluated properties are not allowed ('samsung,i2c-max-bus-freq', 'samsung,i2c-sda-delay' were unexpected)
+Doing so does suppress a KCSAN warning.  You could also use data_race()
+if it turns out that the volatile semantics would prevent a valuable
+compiler optimization.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/exynos5410-odroidxu.dts | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/exynos5410-odroidxu.dts b/arch/arm/boot/dts/exynos5410-odroidxu.dts
-index d1cbc6b8a570..232561620da2 100644
---- a/arch/arm/boot/dts/exynos5410-odroidxu.dts
-+++ b/arch/arm/boot/dts/exynos5410-odroidxu.dts
-@@ -164,8 +164,7 @@ map2 {
- };
- 
- &hsi2c_4 {
--	samsung,i2c-sda-delay = <100>;
--	samsung,i2c-max-bus-freq = <400000>;
-+	clock-frequency = <400000>;
- 	status = "okay";
- 
- 	usb3503: usb-hub@8 {
--- 
-2.34.1
-
+							Thanx, Paul
