@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC0567571B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042E4675775
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjATO0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S229974AbjATOgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjATO0U (ORCPT
+        with ESMTP id S229608AbjATOgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:26:20 -0500
-Received: from fx408.security-mail.net (smtpout140.security-mail.net [85.31.212.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A7ACD212
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:25:46 -0800 (PST)
-Received: from localhost (fx408.security-mail.net [127.0.0.1])
-        by fx408.security-mail.net (Postfix) with ESMTP id 48F50322A1B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:25:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674224745;
-        bh=eYUpRv2yLPySI51vi5DAjWCsYWmPBnf8Syhks5ETCDc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JroY5HDwcIRneUdI619Ol8t5QFl9pCf8yCzNUsFvi2OtWuSH+QoxxZadRJNK4zY8R
-         eRKyWeHeubUQHVqx9Ai0JrmMsEON8oNwCo6/M4a7czF5xHko/Ual3w7lOjHhSmcPft
-         RpejVMeR7jS7uSM4ObW0YUvmmP3QQtQjuW4Bd+2k=
-Received: from fx408 (fx408.security-mail.net [127.0.0.1]) by
- fx408.security-mail.net (Postfix) with ESMTP id 1677C32292B; Fri, 20 Jan
- 2023 15:25:45 +0100 (CET)
+        Fri, 20 Jan 2023 09:36:04 -0500
+Received: from fx306.security-mail.net (smtpout30.security-mail.net [85.31.212.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86333D05EA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:35:22 -0800 (PST)
+Received: from localhost (fx306.security-mail.net [127.0.0.1])
+        by fx306.security-mail.net (Postfix) with ESMTP id EA87235CF77
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:20:46 +0100 (CET)
+Received: from fx306 (fx306.security-mail.net [127.0.0.1]) by
+ fx306.security-mail.net (Postfix) with ESMTP id 0652B35CD2C; Fri, 20 Jan
+ 2023 15:20:46 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx408.security-mail.net (Postfix) with ESMTPS id 3DE6332290A; Fri, 20 Jan
- 2023 15:25:44 +0100 (CET)
+ fx306.security-mail.net (Postfix) with ESMTPS id 274F235CD14; Fri, 20 Jan
+ 2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 1F50627E0440; Fri, 20 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 8D93B27E043D; Fri, 20 Jan 2023
  15:10:34 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id F319527E0430; Fri, 20 Jan 2023 15:10:33 +0100 (CET)
+ (Postfix) with ESMTP id 525A227E0442; Fri, 20 Jan 2023 15:10:34 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- yxGeHkOiNePH; Fri, 20 Jan 2023 15:10:33 +0100 (CET)
+ fP9ew3IpTsDK; Fri, 20 Jan 2023 15:10:34 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 649FD27E043A; Fri, 20 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id D9D9227E043D; Fri, 20 Jan 2023
  15:10:33 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <314a.63caa468.3c4c4.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu F319527E0430
+Secumail-id: <4023.63caa33d.26329.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 525A227E0442
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223834;
- bh=gTNFuDyH6r+lxTe41/T4vugzB4M5oVyINXWXqFQpB98=;
+ bh=aXD2STzsmn5SV1hfOdG/cXdwsPHfP17MTko4dr9Gtjo=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=AofesSmw+hDNI23+bNmf0TPbKhpx5CIVK0Yt0AFgiti7LtYedwiD8T/W6QLHPJBRJ
- ZRZuJpYcmVlDiRewmE2pxpsmfG7CCN2IYOFPdduDfXxmBxesOfuM1TRHpe9km9sBoC
- shoXl4WFlx3AV0t8GumuhshkDVHJzPvMGo7OUoq0=
+ b=WralGqMba+8KbYihsOnUPw91xmkTXXSm6esg3i+xiykENsFIH/hBAV3cxTbS6+AT5
+ blVaZ9KQFidgY4WTBZNKj7Olz36kJKylp0IdN7MePkn8hRwTd7XyN9y/C578tKPMZA
+ dqOMB7oShxaiqCqn2vBXfoTNlsasV0Yu3mNLULJg=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -115,3804 +108,2419 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 20/31] kvx: Add memory management
-Date:   Fri, 20 Jan 2023 15:09:51 +0100
-Message-ID: <20230120141002.2442-21-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 21/31] kvx: Add system call support
+Date:   Fri, 20 Jan 2023 15:09:52 +0100
+Message-ID: <20230120141002.2442-22-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add memory management support for kvx, including: cache and tlb
-management, page fault handling, ioremap/mmap and streaming dma support.
+Add system call support and related uaccess.h for kvx.
 
 Co-developed-by: Clement Leger <clement@clement-leger.fr>
 Signed-off-by: Clement Leger <clement@clement-leger.fr>
 Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-Co-developed-by: Jean-Christophe Pince <jcpince@gmail.com>
-Signed-off-by: Jean-Christophe Pince <jcpince@gmail.com>
-Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Julien Hascoet <jhascoet@kalray.eu>
-Signed-off-by: Julien Hascoet <jhascoet@kalray.eu>
-Co-developed-by: Louis Morhet <lmorhet@kalray.eu>
-Signed-off-by: Louis Morhet <lmorhet@kalray.eu>
-Co-developed-by: Marc Poulhiès <dkm@kataplop.net>
-Signed-off-by: Marc Poulhiès <dkm@kataplop.net>
+Co-developed-by: Julien Villette <jvillette@kalray.eu>
+Signed-off-by: Julien Villette <jvillette@kalray.eu>
 Co-developed-by: Marius Gligor <mgligor@kalray.eu>
 Signed-off-by: Marius Gligor <mgligor@kalray.eu>
-Co-developed-by: Vincent Chardon <vincent.chardon@elsys-design.com>
-Signed-off-by: Vincent Chardon <vincent.chardon@elsys-design.com>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
 
 Notes:
-    V1 -> V2: removed L2 cache management
+    V1 -> V2:
+     - typo fixes (clober* -> clobber*)
+     - use generic __access_ok
 
- arch/kvx/include/asm/cache.h        |  43 +++
- arch/kvx/include/asm/cacheflush.h   | 158 ++++++++++
- arch/kvx/include/asm/fixmap.h       |  47 +++
- arch/kvx/include/asm/hugetlb.h      |  36 +++
- arch/kvx/include/asm/mem_map.h      |  44 +++
- arch/kvx/include/asm/mmu.h          | 289 ++++++++++++++++++
- arch/kvx/include/asm/mmu_context.h  | 156 ++++++++++
- arch/kvx/include/asm/mmu_stats.h    |  38 +++
- arch/kvx/include/asm/page.h         | 187 ++++++++++++
- arch/kvx/include/asm/page_size.h    |  29 ++
- arch/kvx/include/asm/pgalloc.h      | 101 +++++++
- arch/kvx/include/asm/pgtable-bits.h | 102 +++++++
- arch/kvx/include/asm/pgtable.h      | 451 ++++++++++++++++++++++++++++
- arch/kvx/include/asm/rm_fw.h        |  16 +
- arch/kvx/include/asm/sparsemem.h    |  15 +
- arch/kvx/include/asm/symbols.h      |  16 +
- arch/kvx/include/asm/tlb.h          |  24 ++
- arch/kvx/include/asm/tlb_defs.h     | 131 ++++++++
- arch/kvx/include/asm/tlbflush.h     |  58 ++++
- arch/kvx/include/asm/vmalloc.h      |  10 +
- arch/kvx/mm/cacheflush.c            | 154 ++++++++++
- arch/kvx/mm/dma-mapping.c           |  85 ++++++
- arch/kvx/mm/extable.c               |  24 ++
- arch/kvx/mm/fault.c                 | 264 ++++++++++++++++
- arch/kvx/mm/init.c                  | 277 +++++++++++++++++
- arch/kvx/mm/mmap.c                  |  31 ++
- arch/kvx/mm/mmu.c                   | 202 +++++++++++++
- arch/kvx/mm/mmu_stats.c             |  94 ++++++
- arch/kvx/mm/tlb.c                   | 433 ++++++++++++++++++++++++++
- 29 files changed, 3515 insertions(+)
- create mode 100644 arch/kvx/include/asm/cache.h
- create mode 100644 arch/kvx/include/asm/cacheflush.h
- create mode 100644 arch/kvx/include/asm/fixmap.h
- create mode 100644 arch/kvx/include/asm/hugetlb.h
- create mode 100644 arch/kvx/include/asm/mem_map.h
- create mode 100644 arch/kvx/include/asm/mmu.h
- create mode 100644 arch/kvx/include/asm/mmu_context.h
- create mode 100644 arch/kvx/include/asm/mmu_stats.h
- create mode 100644 arch/kvx/include/asm/page.h
- create mode 100644 arch/kvx/include/asm/page_size.h
- create mode 100644 arch/kvx/include/asm/pgalloc.h
- create mode 100644 arch/kvx/include/asm/pgtable-bits.h
- create mode 100644 arch/kvx/include/asm/pgtable.h
- create mode 100644 arch/kvx/include/asm/rm_fw.h
- create mode 100644 arch/kvx/include/asm/sparsemem.h
- create mode 100644 arch/kvx/include/asm/symbols.h
- create mode 100644 arch/kvx/include/asm/tlb.h
- create mode 100644 arch/kvx/include/asm/tlb_defs.h
- create mode 100644 arch/kvx/include/asm/tlbflush.h
- create mode 100644 arch/kvx/include/asm/vmalloc.h
- create mode 100644 arch/kvx/mm/cacheflush.c
- create mode 100644 arch/kvx/mm/dma-mapping.c
- create mode 100644 arch/kvx/mm/extable.c
- create mode 100644 arch/kvx/mm/fault.c
- create mode 100644 arch/kvx/mm/init.c
- create mode 100644 arch/kvx/mm/mmap.c
- create mode 100644 arch/kvx/mm/mmu.c
- create mode 100644 arch/kvx/mm/mmu_stats.c
- create mode 100644 arch/kvx/mm/tlb.c
+ arch/kvx/include/asm/syscall.h       |   73 ++
+ arch/kvx/include/asm/syscalls.h      |   21 +
+ arch/kvx/include/asm/uaccess.h       |  317 +++++
+ arch/kvx/include/asm/unistd.h        |   11 +
+ arch/kvx/include/uapi/asm/cachectl.h |   25 +
+ arch/kvx/include/uapi/asm/unistd.h   |   16 +
+ arch/kvx/kernel/entry.S              | 1759 ++++++++++++++++++++++++++
+ arch/kvx/kernel/sys_kvx.c            |   58 +
+ arch/kvx/kernel/syscall_table.c      |   19 +
+ 9 files changed, 2299 insertions(+)
+ create mode 100644 arch/kvx/include/asm/syscall.h
+ create mode 100644 arch/kvx/include/asm/syscalls.h
+ create mode 100644 arch/kvx/include/asm/uaccess.h
+ create mode 100644 arch/kvx/include/asm/unistd.h
+ create mode 100644 arch/kvx/include/uapi/asm/cachectl.h
+ create mode 100644 arch/kvx/include/uapi/asm/unistd.h
+ create mode 100644 arch/kvx/kernel/entry.S
+ create mode 100644 arch/kvx/kernel/sys_kvx.c
+ create mode 100644 arch/kvx/kernel/syscall_table.c
 
-diff --git a/arch/kvx/include/asm/cache.h b/arch/kvx/include/asm/cache.h
+diff --git a/arch/kvx/include/asm/syscall.h b/arch/kvx/include/asm/syscall.h
 new file mode 100644
-index 000000000000..a51a68d23cfc
+index 000000000000..a3f6cef73e4a
 --- /dev/null
-+++ b/arch/kvx/include/asm/cache.h
-@@ -0,0 +1,43 @@
++++ b/arch/kvx/include/asm/syscall.h
+@@ -0,0 +1,73 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
 + */
 +
-+#ifndef _ASM_KVX_CACHE_H
-+#define _ASM_KVX_CACHE_H
++#ifndef _ASM_KVX_SYSCALL_H
++#define _ASM_KVX_SYSCALL_H
 +
-+/**
-+ * On kvx I$ and D$ have the same size (16KB).
-+ * Caches are 16K bytes big, VIPT 4-way set associative, true LRU, with 64-byte
-+ * lines. The D$ is also write-through.
-+ */
-+#define KVX_ICACHE_WAY_COUNT	4
-+#define KVX_ICACHE_SET_COUNT	64
-+#define KVX_ICACHE_LINE_SHIFT	6
-+#define KVX_ICACHE_LINE_SIZE	(1 << KVX_ICACHE_LINE_SHIFT)
-+#define KVX_ICACHE_SIZE	\
-+	(KVX_ICACHE_WAY_COUNT * KVX_ICACHE_SET_COUNT * KVX_ICACHE_LINE_SIZE)
++#include <linux/err.h>
++#include <linux/audit.h>
 +
-+/**
-+ * Invalidate the whole I-cache if the size to flush is more than this value
-+ */
-+#define KVX_ICACHE_INVAL_SIZE	(KVX_ICACHE_SIZE)
-+
-+/* D-Cache */
-+#define KVX_DCACHE_WAY_COUNT	4
-+#define KVX_DCACHE_SET_COUNT	64
-+#define KVX_DCACHE_LINE_SHIFT	6
-+#define KVX_DCACHE_LINE_SIZE	(1 << KVX_DCACHE_LINE_SHIFT)
-+#define KVX_DCACHE_SIZE	\
-+	(KVX_DCACHE_WAY_COUNT * KVX_DCACHE_SET_COUNT * KVX_DCACHE_LINE_SIZE)
-+
-+/**
-+ * Same for I-cache
-+ */
-+#define KVX_DCACHE_INVAL_SIZE	(KVX_DCACHE_SIZE)
-+
-+#define L1_CACHE_SHIFT	KVX_DCACHE_LINE_SHIFT
-+#define L1_CACHE_BYTES	KVX_DCACHE_LINE_SIZE
-+
-+#endif	/* _ASM_KVX_CACHE_H */
-diff --git a/arch/kvx/include/asm/cacheflush.h b/arch/kvx/include/asm/cacheflush.h
-new file mode 100644
-index 000000000000..256a201e423a
---- /dev/null
-+++ b/arch/kvx/include/asm/cacheflush.h
-@@ -0,0 +1,158 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ *            Guillaume Thouvenin
-+ *            Marius Gligor
-+ */
-+
-+#ifndef _ASM_KVX_CACHEFLUSH_H
-+#define _ASM_KVX_CACHEFLUSH_H
-+
-+#include <linux/mm.h>
-+#include <linux/io.h>
-+
-+#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-+
-+#define flush_cache_mm(mm)			do { } while (0)
-+#define flush_cache_range(vma, start, end)	do { } while (0)
-+#define flush_cache_dup_mm(mm)			do { } while (0)
-+#define flush_cache_page(vma, vmaddr, pfn)	do { } while (0)
-+
-+#define flush_cache_vmap(start, end)		do { } while (0)
-+#define flush_cache_vunmap(start, end)		do { } while (0)
-+
-+#define flush_dcache_page(page)		do { } while (0)
-+
-+#define flush_dcache_mmap_lock(mapping)         do { } while (0)
-+#define flush_dcache_mmap_unlock(mapping)       do { } while (0)
-+
-+#define l1_inval_dcache_all __builtin_kvx_dinval
-+#define kvx_fence __builtin_kvx_fence
-+#define l1_inval_icache_all __builtin_kvx_iinval
-+
-+int dcache_wb_inval_virt_range(unsigned long vaddr, unsigned long len, bool wb,
-+			       bool inval);
-+void dcache_wb_inval_phys_range(phys_addr_t addr, unsigned long len, bool wb,
-+				bool inval);
-+
-+/*
-+ * The L1 is indexed by virtual addresses and as such, invalidation takes
-+ * virtual addresses as arguments.
-+ */
-+static inline
-+void l1_inval_dcache_range(unsigned long vaddr, unsigned long size)
-+{
-+	unsigned long end = vaddr + size;
-+
-+	/* Then inval L1 */
-+	if (size >= KVX_DCACHE_INVAL_SIZE) {
-+		__builtin_kvx_dinval();
-+		return;
-+	}
-+
-+	vaddr = ALIGN_DOWN(vaddr, KVX_DCACHE_LINE_SIZE);
-+	for (; vaddr < end; vaddr += KVX_DCACHE_LINE_SIZE)
-+		__builtin_kvx_dinvall((void *) vaddr);
-+}
-+
-+static inline
-+void inval_dcache_range(phys_addr_t paddr, unsigned long size)
-+{
-+	l1_inval_dcache_range((unsigned long) phys_to_virt(paddr), size);
-+}
-+
-+static inline
-+void wb_dcache_range(phys_addr_t paddr, unsigned long size)
-+{
-+	/* Fence to ensure all write are committed */
-+	kvx_fence();
-+}
-+
-+static inline
-+void wbinval_dcache_range(phys_addr_t paddr, unsigned long size)
-+{
-+	/* Fence to ensure all write are committed */
-+	kvx_fence();
-+
-+	l1_inval_dcache_range((unsigned long) phys_to_virt(paddr), size);
-+}
-+
-+static inline
-+void l1_inval_icache_range(unsigned long start, unsigned long end)
-+{
-+	unsigned long addr;
-+	unsigned long size = end - start;
-+
-+	if (size >= KVX_ICACHE_INVAL_SIZE) {
-+		__builtin_kvx_iinval();
-+		__builtin_kvx_barrier();
-+		return;
-+	}
-+
-+	start = ALIGN_DOWN(start, KVX_ICACHE_LINE_SIZE);
-+	for (addr = start; addr < end; addr += KVX_ICACHE_LINE_SIZE)
-+		__builtin_kvx_iinvals((void *) addr);
-+
-+	__builtin_kvx_barrier();
-+}
-+
-+static inline
-+void wbinval_icache_range(phys_addr_t paddr, unsigned long size)
-+{
-+	unsigned long vaddr = (unsigned long) phys_to_virt(paddr);
-+
-+	/* Fence to ensure all write are committed */
-+	kvx_fence();
-+
-+	l1_inval_icache_range(vaddr, vaddr + size);
-+}
-+
-+static inline
-+void sync_dcache_icache(unsigned long start, unsigned long end)
-+{
-+	/* Fence to ensure all write are committed */
-+	kvx_fence();
-+	/* Then invalidate the L1 icache */
-+	l1_inval_icache_range(start, end);
-+}
-+
-+static inline
-+void local_flush_icache_range(unsigned long start, unsigned long end)
-+{
-+	sync_dcache_icache(start, end);
-+}
-+
-+#ifdef CONFIG_SMP
-+void flush_icache_range(unsigned long start, unsigned long end);
-+#else
-+#define flush_icache_range local_flush_icache_range
-+#endif
-+
-+static inline
-+void flush_icache_page(struct vm_area_struct *vma, struct page *page)
-+{
-+	unsigned long start = (unsigned long) page_address(page);
-+	unsigned long end = start + PAGE_SIZE;
-+
-+	sync_dcache_icache(start, end);
-+}
-+
-+static inline
-+void flush_icache_user_range(struct vm_area_struct *vma, struct page *page,
-+			     unsigned long vaddr, int len)
-+{
-+	sync_dcache_icache(vaddr, vaddr + len);
-+}
-+
-+#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
-+	do { \
-+		memcpy(dst, src, len); \
-+		if (vma->vm_flags & VM_EXEC) \
-+			flush_icache_user_range(vma, page, vaddr, len); \
-+	} while (0)
-+#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
-+	memcpy(dst, src, len)
-+
-+#endif	/* _ASM_KVX_CACHEFLUSH_H */
-diff --git a/arch/kvx/include/asm/fixmap.h b/arch/kvx/include/asm/fixmap.h
-new file mode 100644
-index 000000000000..3863e410d71d
---- /dev/null
-+++ b/arch/kvx/include/asm/fixmap.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Marius Gligor
-+ */
-+
-+#ifndef _ASM_KVX_FIXMAP_H
-+#define _ASM_KVX_FIXMAP_H
-+
-+/**
-+ * Use the latest available kernel address minus one page.
-+ * This is needed since __fix_to_virt returns
-+ * (FIXADDR_TOP - ((x) << PAGE_SHIFT))
-+ * Due to that, first member will be shifted by 0 and will be equal to
-+ * FIXADDR_TOP.
-+ * Some other architectures simply add a FIX_HOLE at the beginning of
-+ * the fixed_addresses enum (I think ?).
-+ */
-+#define FIXADDR_TOP	(-PAGE_SIZE)
-+
-+#define ASM_FIX_TO_VIRT(IDX) \
-+	(FIXADDR_TOP - ((IDX) << PAGE_SHIFT))
-+
-+#ifndef __ASSEMBLY__
-+#include <asm/page.h>
-+#include <asm/pgtable.h>
-+
-+enum fixed_addresses {
-+	FIX_EARLYCON_MEM_BASE,
-+	FIX_GDB_BARE_DISPLACED_MEM_BASE,
-+	/* Used to access text early in RW mode (jump label) */
-+	FIX_TEXT_PATCH,
-+	__end_of_fixed_addresses
-+};
-+
-+#define FIXADDR_SIZE  (__end_of_fixed_addresses << PAGE_SHIFT)
-+#define FIXADDR_START (FIXADDR_TOP - FIXADDR_SIZE)
-+#define FIXMAP_PAGE_IO (PAGE_KERNEL_DEVICE)
-+
-+void __set_fixmap(enum fixed_addresses idx,
-+				phys_addr_t phys, pgprot_t prot);
-+
-+#include <asm-generic/fixmap.h>
-+#endif /* __ASSEMBLY__ */
-+
-+#endif
-diff --git a/arch/kvx/include/asm/hugetlb.h b/arch/kvx/include/asm/hugetlb.h
-new file mode 100644
-index 000000000000..a5984e8ede7e
---- /dev/null
-+++ b/arch/kvx/include/asm/hugetlb.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_HUGETLB_H
-+#define _ASM_KVX_HUGETLB_H
-+
-+#include <asm/pgtable.h>
-+
-+#define __HAVE_ARCH_HUGE_SET_HUGE_PTE_AT
-+extern void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
-+			    pte_t *ptep, pte_t pte);
-+
-+#define __HAVE_ARCH_HUGE_PTEP_GET_AND_CLEAR
-+extern pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
-+				     unsigned long addr, pte_t *ptep);
-+
-+#define __HAVE_ARCH_HUGE_PTEP_SET_ACCESS_FLAGS
-+extern int huge_ptep_set_access_flags(struct vm_area_struct *vma,
-+				      unsigned long addr, pte_t *ptep,
-+				      pte_t pte, int dirty);
-+
-+#define __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
-+extern void huge_ptep_set_wrprotect(struct mm_struct *mm,
-+				    unsigned long addr, pte_t *ptep);
-+
-+#define __HAVE_ARCH_HUGE_PTEP_CLEAR_FLUSH
-+extern pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
-+				   unsigned long addr, pte_t *ptep);
-+
-+#include <asm-generic/hugetlb.h>
-+
-+#endif /* _ASM_KVX_HUGETLB_H */
-diff --git a/arch/kvx/include/asm/mem_map.h b/arch/kvx/include/asm/mem_map.h
-new file mode 100644
-index 000000000000..ea90144209ce
---- /dev/null
-+++ b/arch/kvx/include/asm/mem_map.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ */
-+
-+#ifndef _ASM_KVX_MEM_MAP_H
-+#define _ASM_KVX_MEM_MAP_H
-+
-+#include <linux/const.h>
-+#include <linux/sizes.h>
-+
-+#include <asm/page.h>
-+#include <asm/fixmap.h>
-+
-+/**
-+ * kvx memory mapping defines
-+ * For more information on memory mapping, please see
-+ * Documentation/kvx/kvx-mmu.txt
-+ *
-+ * All _BASE defines are relative to PAGE_OFFSET
-+ */
-+
-+/* Guard between various memory map zones */
-+#define MAP_GUARD_SIZE	SZ_1G
-+
-+/**
-+ * Kernel direct memory mapping
-+ */
-+#define KERNEL_DIRECT_MEMORY_MAP_BASE	PAGE_OFFSET
-+#define KERNEL_DIRECT_MEMORY_MAP_SIZE	UL(0x1000000000)
-+#define KERNEL_DIRECT_MEMORY_MAP_END \
-+		(KERNEL_DIRECT_MEMORY_MAP_BASE + KERNEL_DIRECT_MEMORY_MAP_SIZE)
-+
-+/**
-+ * Vmalloc mapping (goes from kernel direct memory map up to fixmap start -
-+ * guard size)
-+ */
-+#define KERNEL_VMALLOC_MAP_BASE (KERNEL_DIRECT_MEMORY_MAP_END + MAP_GUARD_SIZE)
-+#define KERNEL_VMALLOC_MAP_SIZE	\
-+		(FIXADDR_START - KERNEL_VMALLOC_MAP_BASE - MAP_GUARD_SIZE)
-+
-+#endif
-diff --git a/arch/kvx/include/asm/mmu.h b/arch/kvx/include/asm/mmu.h
-new file mode 100644
-index 000000000000..09f3fdd66a34
---- /dev/null
-+++ b/arch/kvx/include/asm/mmu.h
-@@ -0,0 +1,289 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ *            Marc Poulhiès
-+ */
-+
-+#ifndef _ASM_KVX_MMU_H
-+#define _ASM_KVX_MMU_H
-+
-+#include <linux/bug.h>
-+#include <linux/types.h>
-+#include <linux/threads.h>
-+
-+#include <asm/page.h>
-+#include <asm/sfr.h>
-+#include <asm/page.h>
-+#include <asm/pgtable-bits.h>
-+#include <asm/tlb_defs.h>
-+
-+/* Virtual addresses can use at most 41 bits */
-+#define MMU_VIRT_BITS		41
-+
-+/*
-+ * See Documentation/kvx/kvx-mmu.txt for details about the division of the
-+ * virtual memory space.
-+ */
-+#if defined(CONFIG_KVX_4K_PAGES)
-+#define MMU_USR_ADDR_BITS	39
-+#else
-+#error "Only 4Ko page size is supported at this time"
-+#endif
-+
-+typedef struct mm_context {
-+	unsigned long end_brk;
-+	unsigned long asn[NR_CPUS];
-+	unsigned long sigpage;
-+} mm_context_t;
-+
-+struct __packed tlb_entry_low {
-+	unsigned int es:2;       /* Entry Status */
-+	unsigned int cp:2;       /* Cache Policy */
-+	unsigned int pa:4;       /* Protection Attributes */
-+	unsigned int r:2;        /* Reserved */
-+	unsigned int ps:2;       /* Page Size */
-+	unsigned int fn:28;      /* Frame Number */
-+};
-+
-+struct __packed tlb_entry_high {
-+	unsigned int asn:9;  /* Address Space Number */
-+	unsigned int g:1;    /* Global Indicator */
-+	unsigned int vs:2;   /* Virtual Space */
-+	unsigned int pn:29;  /* Page Number */
-+};
-+
-+struct kvx_tlb_format {
-+	union {
-+		struct tlb_entry_low tel;
-+		uint64_t tel_val;
-+	};
-+	union {
-+		struct tlb_entry_high teh;
-+		uint64_t teh_val;
-+	};
-+};
-+
-+#define KVX_EMPTY_TLB_ENTRY { .tel_val = 0x0, .teh_val = 0x0 }
-+
-+/* Bit [0:39] of the TLB format corresponds to TLB Entry low */
-+/* Bit [40:80] of the TLB format corresponds to the TLB Entry high */
-+#define kvx_mmu_set_tlb_entry(tlbf) do { \
-+	kvx_sfr_set(TEL, (uint64_t) tlbf.tel_val); \
-+	kvx_sfr_set(TEH, (uint64_t) tlbf.teh_val); \
-+} while (0)
-+
-+#define kvx_mmu_get_tlb_entry(tlbf) do { \
-+	tlbf.tel_val = kvx_sfr_get(TEL); \
-+	tlbf.teh_val = kvx_sfr_get(TEH); \
-+} while (0)
-+
-+/* Use kvx_mmc_ to read a field from MMC value passed as parameter */
-+#define __kvx_mmc(mmc_reg, field) \
-+	kvx_sfr_field_val(mmc_reg, MMC, field)
-+
-+#define kvx_mmc_error(mmc)  __kvx_mmc(mmc, E)
-+#define kvx_mmc_parity(mmc) __kvx_mmc(mmc, PAR)
-+#define kvx_mmc_sb(mmc)     __kvx_mmc(mmc, SB)
-+#define kvx_mmc_ss(mmc)     __kvx_mmc(mmc, SS)
-+#define kvx_mmc_sw(mmc)     __kvx_mmc(mmc, SW)
-+#define kvx_mmc_asn(mmc)    __kvx_mmc(mmc, ASN)
-+
-+#define KVX_TLB_ACCESS_READ 0
-+#define KVX_TLB_ACCESS_WRITE 1
-+#define KVX_TLB_ACCESS_PROBE 2
-+
-+#ifdef CONFIG_KVX_DEBUG_TLB_ACCESS
-+
-+#define KVX_TLB_ACCESS_SIZE (1 << CONFIG_KVX_DEBUG_TLB_ACCESS_BITS)
-+#define KVX_TLB_ACCESS_MASK GENMASK((CONFIG_KVX_DEBUG_TLB_ACCESS_BITS - 1), 0)
-+#define KVX_TLB_ACCESS_GET_IDX(idx) (idx & KVX_TLB_ACCESS_MASK)
-+
-+/* This structure is used to make decoding of MMC easier in gdb */
-+struct mmc_t {
-+	unsigned int asn:9;
-+	unsigned int s: 1;
-+	unsigned int r1: 4;
-+	unsigned int sne: 1;
-+	unsigned int spe: 1;
-+	unsigned int ptc: 2;
-+	unsigned int sw: 4;
-+	unsigned int ss: 6;
-+	unsigned int sb: 1;
-+	unsigned int r2: 1;
-+	unsigned int par: 1;
-+	unsigned int e: 1;
-+};
-+
-+struct __packed kvx_tlb_access_t {
-+	struct kvx_tlb_format entry;  /* 128 bits */
-+	union {
-+		struct mmc_t mmc;
-+		uint32_t mmc_val;
-+	};
-+	uint32_t type;
-+};
-+
-+extern void kvx_update_tlb_access(int type);
-+
-+#else
-+#define kvx_update_tlb_access(type) do {} while (0)
-+#endif
-+
-+static inline void kvx_mmu_readtlb(void)
-+{
-+	kvx_update_tlb_access(KVX_TLB_ACCESS_READ);
-+	asm volatile ("tlbread\n;;");
-+}
-+
-+static inline void kvx_mmu_writetlb(void)
-+{
-+	kvx_update_tlb_access(KVX_TLB_ACCESS_WRITE);
-+	asm volatile ("tlbwrite\n;;");
-+}
-+
-+static inline void kvx_mmu_probetlb(void)
-+{
-+	kvx_update_tlb_access(KVX_TLB_ACCESS_PROBE);
-+	asm volatile ("tlbprobe\n;;");
-+}
-+
-+#define kvx_mmu_add_entry(buffer, way, entry) do { \
-+	kvx_sfr_set_field(MMC, SB, buffer); \
-+	kvx_sfr_set_field(MMC, SW, way); \
-+	kvx_mmu_set_tlb_entry(entry); \
-+	kvx_mmu_writetlb();           \
-+} while (0)
-+
-+#define kvx_mmu_remove_ltlb_entry(way) do { \
-+	struct kvx_tlb_format __invalid_entry = KVX_EMPTY_TLB_ENTRY; \
-+	kvx_mmu_add_entry(MMC_SB_LTLB, way, __invalid_entry); \
-+} while (0)
-+
-+static inline int get_page_size_shift(int ps)
-+{
-+	/*
-+	 * Use the same assembly trick using sbmm to directly get the page size
-+	 * shift using a constant which encodes all page size shifts
-+	 */
-+	return __builtin_kvx_sbmm8(KVX_PS_SHIFT_MATRIX,
-+				  KVX_SBMM_BYTE_SEL << ps);
-+}
-+
-+/*
-+ * 4 bits are used to index the kvx access permissions. Bits are used as
-+ * follow:
-+ *
-+ *   +---------------+------------+-------------+------------+
-+ *   |     Bit 3     |   Bit 2    |   Bit 1     |   Bit 0    |
-+ *   |---------------+------------+-------------+------------|
-+ *   |  _PAGE_GLOBAL | _PAGE_EXEC | _PAGE_WRITE | _PAGE_READ |
-+ *   +---------------+------------+-------------+------------+
-+ *
-+ * If _PAGE_GLOBAL is set then the page belongs to the kernel. Otherwise it
-+ * belongs to the user. When the page belongs to user-space then give the
-+ * same rights to the kernel-space.
-+ * In order to quickly compute policy from this value, we use sbmm instruction.
-+ * The main interest is to avoid an additionnal load and specifically in the
-+ * assembly refill handler.
-+ */
-+static inline u8 get_page_access_perms(u8 policy)
-+{
-+	/* If PAGE_READ is unset, there is no permission for this page */
-+	if (!(policy & (_PAGE_READ >> _PAGE_PERMS_SHIFT)))
-+		return TLB_PA_NA_NA;
-+
-+	/* Discard _PAGE_READ bit to get a linear number in [0,7] */
-+	policy >>= 1;
-+
-+	/* Use sbmm to directly get the page perms */
-+	return __builtin_kvx_sbmm8(KVX_PAGE_PA_MATRIX,
-+				  KVX_SBMM_BYTE_SEL << policy);
-+}
-+
-+static inline struct kvx_tlb_format tlb_mk_entry(
-+	void *paddr,
-+	void *vaddr,
-+	unsigned int ps,
-+	unsigned int global,
-+	unsigned int pa,
-+	unsigned int cp,
-+	unsigned int asn,
-+	unsigned int es)
-+{
-+	struct kvx_tlb_format entry;
-+	u64 mask = ULONG_MAX << get_page_size_shift(ps);
-+
-+	BUG_ON(ps >= (1 << KVX_SFR_TEL_PS_WIDTH));
-+
-+	/*
-+	 * 0 matches the virtual space:
-+	 * - either we are virtualized and the hypervisor will set it
-+	 *   for us when using writetlb
-+	 * - Or we are native and the virtual space is 0
-+	 */
-+	entry.teh_val = TLB_MK_TEH_ENTRY((uintptr_t)vaddr & mask, 0, global,
-+					 asn);
-+	entry.tel_val = TLB_MK_TEL_ENTRY((uintptr_t)paddr, ps, es, cp, pa);
-+
-+	return entry;
-+}
-+
-+static inline unsigned long tlb_entry_phys(struct kvx_tlb_format tlbe)
-+{
-+	return ((unsigned long) tlbe.tel.fn << KVX_SFR_TEL_FN_SHIFT);
-+}
-+
-+static inline unsigned long tlb_entry_virt(struct kvx_tlb_format tlbe)
-+{
-+	return ((unsigned long) tlbe.teh.pn << KVX_SFR_TEH_PN_SHIFT);
-+}
-+
-+static inline unsigned long tlb_entry_size(struct kvx_tlb_format tlbe)
-+{
-+	return BIT(get_page_size_shift(tlbe.tel.ps));
-+}
-+
-+static inline int tlb_entry_overlaps(struct kvx_tlb_format tlbe1,
-+				     struct kvx_tlb_format tlbe2)
-+{
-+	unsigned long start1, end1;
-+	unsigned long start2, end2;
-+
-+	start1 = tlb_entry_virt(tlbe1);
-+	end1 = start1 + tlb_entry_size(tlbe1);
-+
-+	start2 = tlb_entry_virt(tlbe2);
-+	end2 = start2 + tlb_entry_size(tlbe2);
-+
-+	return start1 <= end2 && end1 >= start2;
-+}
-+
-+static inline int tlb_entry_match_addr(struct kvx_tlb_format tlbe,
-+				       unsigned long vaddr)
-+{
-+	/*
-+	 * TLB entries store up to 41 bits so we must truncate the provided
-+	 * address to match teh.pn.
-+	 */
-+	vaddr &= GENMASK(MMU_VIRT_BITS - 1, KVX_SFR_TEH_PN_SHIFT);
-+
-+	return tlb_entry_virt(tlbe) == vaddr;
-+}
-+
-+extern void kvx_mmu_early_setup(void);
-+
-+static inline void paging_init(void) {}
-+
-+void kvx_mmu_ltlb_remove_entry(unsigned long vaddr);
-+void kvx_mmu_ltlb_add_entry(unsigned long vaddr, phys_addr_t paddr,
-+			    pgprot_t flags, unsigned long page_shift);
-+
-+void kvx_mmu_jtlb_add_entry(unsigned long address, pte_t *ptep,
-+			    unsigned int asn);
-+extern void mmu_early_init(void);
-+
-+struct mm_struct;
-+
-+#endif	/* _ASM_KVX_MMU_H */
-diff --git a/arch/kvx/include/asm/mmu_context.h b/arch/kvx/include/asm/mmu_context.h
-new file mode 100644
-index 000000000000..39fa92f1506b
---- /dev/null
-+++ b/arch/kvx/include/asm/mmu_context.h
-@@ -0,0 +1,156 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ */
-+
-+#ifndef __ASM_KVX_MMU_CONTEXT_H
-+#define __ASM_KVX_MMU_CONTEXT_H
-+
-+/*
-+ * Management of the Address Space Number:
-+ * Coolidge architecture provides a 9-bit ASN to tag TLB entries. This can be
-+ * used to allow several entries with the same virtual address (so from
-+ * different process) to be in the TLB at the same time. That means that won't
-+ * necessarily flush the TLB when a context switch occurs and so it will
-+ * improve performances.
-+ */
-+#include <linux/smp.h>
-+
-+#include <asm/mmu.h>
-+#include <asm/sfr_defs.h>
-+#include <asm/tlbflush.h>
-+
-+#include <asm-generic/mm_hooks.h>
-+
-+#define MM_CTXT_ASN_MASK	GENMASK(KVX_SFR_MMC_ASN_WIDTH - 1, 0)
-+#define MM_CTXT_CYCLE_MASK	(~MM_CTXT_ASN_MASK)
-+#define MM_CTXT_NO_ASN		UL(0x0)
-+#define MM_CTXT_FIRST_CYCLE	(MM_CTXT_ASN_MASK + 1)
-+
-+#define mm_asn(mm, cpu)		((mm)->context.asn[cpu])
-+
-+DECLARE_PER_CPU(unsigned long, kvx_asn_cache);
-+#define cpu_asn_cache(cpu) per_cpu(kvx_asn_cache, cpu)
-+
-+static inline void get_new_mmu_context(struct mm_struct *mm, unsigned int cpu)
-+{
-+	unsigned long asn = cpu_asn_cache(cpu);
-+
-+	asn++;
-+	/* Check if we need to start a new cycle */
-+	if ((asn & MM_CTXT_ASN_MASK) == 0) {
-+		pr_debug("%s: start new cycle, flush all tlb\n", __func__);
-+		local_flush_tlb_all();
-+
-+		/*
-+		 * Above check for rollover of 9 bit ASN in 64 bit container.
-+		 * If the container itself wrapped around, set it to a non zero
-+		 * "generation" to distinguish from no context
-+		 */
-+		if (asn == 0)
-+			asn = MM_CTXT_FIRST_CYCLE;
-+	}
-+
-+	cpu_asn_cache(cpu) = asn;
-+	mm_asn(mm, cpu) = asn;
-+
-+	pr_debug("%s: mm = 0x%llx: cpu[%d], cycle: %lu, asn: %lu\n",
-+		 __func__, (unsigned long long)mm, cpu,
-+		(asn & MM_CTXT_CYCLE_MASK) >> KVX_SFR_MMC_ASN_WIDTH,
-+		asn & MM_CTXT_ASN_MASK);
-+}
-+
-+static inline void get_mmu_context(struct mm_struct *mm, unsigned int cpu)
-+{
-+
-+	unsigned long asn = mm_asn(mm, cpu);
-+
-+	/*
-+	 * Move to new ASN if it was not from current alloc-cycle/generation.
-+	 * This is done by ensuring that the generation bits in both
-+	 * mm->context.asn and cpu_asn_cache counter are exactly same.
-+	 *
-+	 * NOTE: this also works for checking if mm has a context since the
-+	 * first alloc-cycle/generation is always '1'. MM_CTXT_NO_ASN value
-+	 * contains cycle '0', and thus it will match.
-+	 */
-+	if ((asn ^ cpu_asn_cache(cpu)) & MM_CTXT_CYCLE_MASK)
-+		get_new_mmu_context(mm, cpu);
-+}
-+
-+static inline void activate_context(struct mm_struct *mm, unsigned int cpu)
-+{
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+
-+	get_mmu_context(mm, cpu);
-+
-+	kvx_sfr_set_field(MMC, ASN, mm_asn(mm, cpu) & MM_CTXT_ASN_MASK);
-+
-+	local_irq_restore(flags);
-+}
-+
-+/**
-+ * Redefining the generic hooks that are:
-+ *   - activate_mm
-+ *   - deactivate_mm
-+ *   - enter_lazy_tlb
-+ *   - init_new_context
-+ *   - destroy_context
-+ *   - switch_mm
-+ */
-+
-+#define activate_mm(prev, next) switch_mm((prev), (next), NULL)
-+#define deactivate_mm(tsk, mm) do { } while (0)
-+#define enter_lazy_tlb(mm, tsk) do { } while (0)
-+
-+static inline int init_new_context(struct task_struct *tsk,
-+				   struct mm_struct *mm)
-+{
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu)
-+		mm_asn(mm, cpu) = MM_CTXT_NO_ASN;
-+
-+	return 0;
-+}
-+
-+static inline void destroy_context(struct mm_struct *mm)
-+{
-+	int cpu = smp_processor_id();
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+	mm_asn(mm, cpu) = MM_CTXT_NO_ASN;
-+	local_irq_restore(flags);
-+}
-+
-+static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-+			     struct task_struct *tsk)
-+{
-+	unsigned int cpu = smp_processor_id();
-+
-+	/**
-+	 * Comment taken from arc, but logic is the same for us:
-+	 *
-+	 * Note that the mm_cpumask is "aggregating" only, we don't clear it
-+	 * for the switched-out task, unlike some other arches.
-+	 * It is used to enlist cpus for sending TLB flush IPIs and not sending
-+	 * it to CPUs where a task once ran-on, could cause stale TLB entry
-+	 * re-use, specially for a multi-threaded task.
-+	 * e.g. T1 runs on C1, migrates to C3. T2 running on C2 munmaps.
-+	 *      For a non-aggregating mm_cpumask, IPI not sent C1, and if T1
-+	 *      were to re-migrate to C1, it could access the unmapped region
-+	 *      via any existing stale TLB entries.
-+	 */
-+	cpumask_set_cpu(cpu, mm_cpumask(next));
-+
-+	if (prev != next)
-+		activate_context(next, cpu);
-+}
-+
-+
-+#endif /* __ASM_KVX_MMU_CONTEXT_H */
-diff --git a/arch/kvx/include/asm/mmu_stats.h b/arch/kvx/include/asm/mmu_stats.h
-new file mode 100644
-index 000000000000..999352dbc1ce
---- /dev/null
-+++ b/arch/kvx/include/asm/mmu_stats.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_MMU_STATS_H
-+#define _ASM_KVX_MMU_STATS_H
-+
-+#ifdef CONFIG_KVX_MMU_STATS
-+#include <linux/percpu.h>
-+
-+struct mmu_refill_stats {
-+	unsigned long count;
-+	unsigned long total;
-+	unsigned long min;
-+	unsigned long max;
-+};
-+
-+enum mmu_refill_type {
-+	MMU_REFILL_TYPE_USER,
-+	MMU_REFILL_TYPE_KERNEL,
-+	MMU_REFILL_TYPE_KERNEL_DIRECT,
-+	MMU_REFILL_TYPE_COUNT,
-+};
-+
-+struct mmu_stats {
-+	struct mmu_refill_stats refill[MMU_REFILL_TYPE_COUNT];
-+	/* keep these fields ordered this way for assembly */
-+	unsigned long cycles_between_refill;
-+	unsigned long last_refill;
-+	unsigned long tlb_flush_all;
-+};
-+
-+DECLARE_PER_CPU(struct mmu_stats, mmu_stats);
-+#endif
-+
-+#endif /* _ASM_KVX_MMU_STATS_H */
-diff --git a/arch/kvx/include/asm/page.h b/arch/kvx/include/asm/page.h
-new file mode 100644
-index 000000000000..cea5f02d12bb
---- /dev/null
-+++ b/arch/kvx/include/asm/page.h
-@@ -0,0 +1,187 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ *            Marius Gligor
-+ */
-+
-+#ifndef _ASM_KVX_PAGE_H
-+#define _ASM_KVX_PAGE_H
-+
-+#include <linux/const.h>
-+
-+#define PAGE_SHIFT		CONFIG_KVX_PAGE_SHIFT
-+#define PAGE_SIZE		_BITUL(PAGE_SHIFT)
-+#define PAGE_MASK		(~(PAGE_SIZE - 1))
-+
-+#define PHYS_OFFSET		CONFIG_KVX_PHYS_OFFSET
-+#define PAGE_OFFSET		CONFIG_KVX_PAGE_OFFSET
-+
-+#define VA_TO_PA_OFFSET		(PHYS_OFFSET - PAGE_OFFSET)
-+#define PA_TO_VA_OFFSET		(PAGE_OFFSET - PHYS_OFFSET)
-+
-+/*
-+ * These macros are specifically written for assembly. They are useful for
-+ * converting symbols above PAGE_OFFSET to their physical addresses.
-+ */
-+#define __PA(x)	((x) + VA_TO_PA_OFFSET)
-+#define __VA(x)	((x) + PA_TO_VA_OFFSET)
-+
-+/*
-+ * PFN starts at 0 if physical address starts at 0x0. As it is not the case
-+ * for the kvx we need to apply an offset to the calculated PFN.
-+ */
-+#define ARCH_PFN_OFFSET	((unsigned long)(PHYS_OFFSET >> PAGE_SHIFT))
-+
-+#if defined(CONFIG_KVX_4K_PAGES)
-+/* Maximum usable bit using 4K pages and current page table layout */
-+#define VA_MAX_BITS	40
-+#define PGDIR_SHIFT     30
-+#define PMD_SHIFT       21
-+#else
-+#error "64K page not supported"
-+#endif
-+
-+/*
-+ * Define _SHIFT, _SIZE and _MASK corresponding of the different page
-+ * sizes supported by kvx.
-+ */
-+#define KVX_PAGE_4K_SHIFT 12
-+#define KVX_PAGE_4K_SIZE  BIT(KVX_PAGE_4K_SHIFT)
-+#define KVX_PAGE_4K_MASK  (~(KVX_PAGE_4K_SIZE - 1))
-+
-+#define KVX_PAGE_64K_SHIFT 16
-+#define KVX_PAGE_64K_SIZE  BIT(KVX_PAGE_64K_SHIFT)
-+#define KVX_PAGE_64K_MASK  (~(KVX_PAGE_64K_SIZE - 1))
-+
-+#define KVX_PAGE_2M_SHIFT 21
-+#define KVX_PAGE_2M_SIZE  BIT(KVX_PAGE_2M_SHIFT)
-+#define KVX_PAGE_2M_MASK  (~(KVX_PAGE_2M_SIZE - 1))
-+
-+#define KVX_PAGE_512M_SHIFT  29
-+#define KVX_PAGE_512M_SIZE  BIT(KVX_PAGE_512M_SHIFT)
-+#define KVX_PAGE_512M_MASK  (~(KVX_PAGE_512M_SIZE - 1))
-+
-+/* Encode all page shift into one 32bit constant for sbmm */
-+#define KVX_PS_SHIFT_MATRIX	((KVX_PAGE_512M_SHIFT << 24) | \
-+				 (KVX_PAGE_2M_SHIFT << 16) | \
-+				 (KVX_PAGE_64K_SHIFT << 8) | \
-+				 (KVX_PAGE_4K_SHIFT))
-+
-+/* Encode all page access policy into one 64bit constant for sbmm */
-+#define KVX_PAGE_PA_MATRIX	((UL(TLB_PA_NA_RWX) << 56) | \
-+				 (UL(TLB_PA_NA_RX) << 48) | \
-+				 (UL(TLB_PA_NA_RW) << 40) | \
-+				 (UL(TLB_PA_NA_R) << 32) | \
-+				 (UL(TLB_PA_RWX_RWX) << 24) | \
-+				 (UL(TLB_PA_RX_RX) << 16) | \
-+				 (UL(TLB_PA_RW_RW) << 8) | \
-+				 (UL(TLB_PA_R_R)))
-+
-+/*
-+ * Select a byte using sbmm8. When shifted by one bit left, we get the next
-+ * byte.
-+ * For instance using this default constant with sbmm yields the value between
-+ * first byte of the double word.
-+ * If constant is shifted by 1, the value is now 0x0000000000000002ULL and this
-+ * yield the second byte and so on, and so on !
-+ */
-+#define KVX_SBMM_BYTE_SEL	0x01
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/string.h>
-+
-+/* Page Global Directory entry */
-+typedef struct {
-+	unsigned long pgd;
-+} pgd_t;
-+
-+/* Page Middle Directory entry */
-+typedef struct {
-+	unsigned long pmd;
-+} pmd_t;
-+
-+/* Page Table entry */
-+typedef struct {
-+	unsigned long pte;
-+} pte_t;
-+
-+/* Protection bits */
-+typedef struct {
-+	unsigned long pgprot;
-+} pgprot_t;
-+
-+typedef struct page *pgtable_t;
-+
-+/**
-+ * Macros to access entry values
-+ */
-+#define pgd_val(x)	((x).pgd)
-+#define pmd_val(x)	((x).pmd)
-+#define pte_val(x)	((x).pte)
-+#define pgprot_val(x)	((x).pgprot)
-+
-+/**
-+ * Macro to create entry from value
-+ */
-+#define __pgd(x)	((pgd_t) { (x) })
-+#define __pmd(x)	((pmd_t) { (x) })
-+#define __pte(x)	((pte_t) { (x) })
-+#define __pgprot(x)	((pgprot_t) { (x) })
-+
-+#define pte_pgprot(x)	__pgprot(pte_val(x) & ~KVX_PFN_MASK)
-+
-+#define __pa(x)	((unsigned long)(x) + VA_TO_PA_OFFSET)
-+#define __va(x)	((void *)((unsigned long) (x) + PA_TO_VA_OFFSET))
-+
-+#define phys_to_pfn(phys)	(PFN_DOWN(phys))
-+#define pfn_to_phys(pfn)	(PFN_PHYS(pfn))
-+
-+#define virt_to_pfn(vaddr)	(phys_to_pfn(__pa(vaddr)))
-+#define pfn_to_virt(pfn)	(__va(pfn_to_phys(pfn)))
-+
-+#define virt_to_page(vaddr)	(pfn_to_page(virt_to_pfn(vaddr)))
-+#define page_to_virt(page)	(pfn_to_virt(page_to_pfn(page)))
-+
-+#define page_to_phys(page)	virt_to_phys(page_to_virt(page))
-+#define phys_to_page(phys)	(pfn_to_page(phys_to_pfn(phys)))
-+
-+#define virt_addr_valid(vaddr)	(pfn_valid(virt_to_pfn(vaddr)))
-+
-+#ifdef CONFIG_FLATMEM
-+static inline bool pfn_valid(unsigned long pfn)
-+{
-+	/* avoid <linux/mm.h> include hell */
-+	extern unsigned long max_mapnr;
-+
-+	return ((pfn >= ARCH_PFN_OFFSET) &&
-+		(pfn < (ARCH_PFN_OFFSET + max_mapnr)));
-+}
-+#endif
-+
-+extern void clear_page(void *to);
-+extern void copy_page(void *to, void *from);
-+
-+static inline void clear_user_page(void *page, unsigned long vaddr,
-+				struct page *pg)
-+{
-+	clear_page(page);
-+}
-+
-+static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
-+				struct page *topage)
-+{
-+	copy_page(to, from);
-+}
-+
-+#define VM_DATA_DEFAULT_FLAGS	(VM_READ | VM_WRITE | \
-+				 VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
-+
-+#include <asm-generic/memory_model.h>
-+#include <asm-generic/getorder.h>
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif	/* _ASM_KVX_PAGE_H */
-diff --git a/arch/kvx/include/asm/page_size.h b/arch/kvx/include/asm/page_size.h
-new file mode 100644
-index 000000000000..2c2850205b50
---- /dev/null
-+++ b/arch/kvx/include/asm/page_size.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_PAGE_SIZE_H
-+#define _ASM_KVX_PAGE_SIZE_H
-+
-+#include <asm/tlb_defs.h>
-+
-+#if defined(CONFIG_HUGETLB_PAGE)
-+#define HUGE_PAGE_SIZE (MMC_PMJ_64K | MMC_PMJ_2M | MMC_PMJ_512M)
-+#else
-+#define HUGE_PAGE_SIZE (0)
-+#endif
-+
-+#if defined(CONFIG_KVX_4K_PAGES)
-+#define TLB_DEFAULT_PS		TLB_PS_4K
-+#define KVX_SUPPORTED_PSIZE	(MMC_PMJ_4K | HUGE_PAGE_SIZE)
-+#elif defined(CONFIG_KVX_64K_PAGES)
-+#define TLB_DEFAULT_PS		TLB_PS_64K
-+#define KVX_SUPPORTED_PSIZE	(MMC_PMJ_64K | HUGE_PAGE_SIZE)
-+#else
-+#error "Unsupported page size"
-+#endif
-+
-+#endif
-diff --git a/arch/kvx/include/asm/pgalloc.h b/arch/kvx/include/asm/pgalloc.h
-new file mode 100644
-index 000000000000..0e654dd1a072
---- /dev/null
-+++ b/arch/kvx/include/asm/pgalloc.h
-@@ -0,0 +1,101 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_PGALLOC_H
-+#define _ASM_KVX_PGALLOC_H
-+
-+#include <linux/mm.h>
-+#include <asm/tlb.h>
-+
-+#define __HAVE_ARCH_PGD_FREE
-+#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
-+
-+static inline void check_pgt_cache(void)
-+{
-+	/*
-+	 * check_pgt_cache() is called to check watermarks from counters that
-+	 * computes the number of pages allocated by cached allocation functions
-+	 * pmd_alloc_one_fast() and pte_alloc_one_fast().
-+	 * Currently we just skip this test.
-+	 */
-+}
-+
-+/**
-+ * PGD
-+ */
-+
-+static inline void
-+pgd_free(struct mm_struct *mm, pgd_t *pgd)
-+{
-+	free_pages((unsigned long) pgd, PAGES_PER_PGD);
-+}
-+
-+static inline
-+pgd_t *pgd_alloc(struct mm_struct *mm)
-+{
-+	pgd_t *pgd;
-+
-+	pgd = (pgd_t *) __get_free_pages(GFP_KERNEL, PAGES_PER_PGD);
-+	if (unlikely(pgd == NULL))
-+		return NULL;
-+
-+	memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
-+
-+	/* Copy kernel mappings */
-+	memcpy(pgd + USER_PTRS_PER_PGD,
-+	       init_mm.pgd + USER_PTRS_PER_PGD,
-+	       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
-+
-+	return pgd;
-+}
-+
-+/**
-+ * PUD
-+ */
-+
-+static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
-+{
-+	unsigned long pfn = virt_to_pfn(pmd);
-+
-+	set_pud(pud, __pud((unsigned long)pfn << PAGE_SHIFT));
-+}
-+
-+/**
-+ * PMD
-+ */
-+
-+static inline void pmd_populate_kernel(struct mm_struct *mm,
-+	pmd_t *pmd, pte_t *pte)
-+{
-+	unsigned long pfn = virt_to_pfn(pte);
-+
-+	set_pmd(pmd, __pmd((unsigned long)pfn << PAGE_SHIFT));
-+}
-+
-+static inline void pmd_populate(struct mm_struct *mm,
-+	pmd_t *pmd, pgtable_t pte)
-+{
-+	unsigned long pfn = virt_to_pfn(page_address(pte));
-+
-+	set_pmd(pmd, __pmd((unsigned long)pfn << PAGE_SHIFT));
-+}
-+
-+#if CONFIG_PGTABLE_LEVELS > 2
-+#define __pmd_free_tlb(tlb, pmd, addr) pmd_free((tlb)->mm, pmd)
-+#endif /* CONFIG_PGTABLE_LEVELS > 2 */
-+
-+/**
-+ * PTE
-+ */
-+
-+#define __pte_free_tlb(tlb, pte, buf)   \
-+do {                                    \
-+	pgtable_pte_page_dtor(pte);         \
-+	tlb_remove_page((tlb), pte);    \
-+} while (0)
-+
-+#endif /* _ASM_KVX_PGALLOC_H */
-diff --git a/arch/kvx/include/asm/pgtable-bits.h b/arch/kvx/include/asm/pgtable-bits.h
-new file mode 100644
-index 000000000000..98ee7d1fbe63
---- /dev/null
-+++ b/arch/kvx/include/asm/pgtable-bits.h
-@@ -0,0 +1,102 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ *            Julian Vetter
-+ */
-+
-+#ifndef _ASM_KVX_PGTABLE_BITS_H
-+#define _ASM_KVX_PGTABLE_BITS_H
-+
-+/*
-+ * Protection bit definition
-+ * As we don't have any HW to handle page table walk, we can define
-+ * our own PTE format. In order to make things easier, we are trying to match
-+ * some parts of $tel and $teh.
-+ *
-+ * PageSZ must be on bit 10 and 11 because it matches the TEL.PS bits. And
-+ * by doing that it is easier in assembly to set the TEL.PS to PageSZ.
-+ * In other words, KVX_PAGE_SZ_SHIFT == KVX_SFR_TEL_PS_SHIFT.
-+ * It is checked by using a BUILD_BUG_ON() in arch/kvx/mm/tlb.c.
-+ *
-+ * Huge bit must be somewhere in the first 12 bits to be able to detect it
-+ * when reading the PMD entry.
-+ *
-+ * KV3-1:
-+ *  +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
-+ *  | 63..23  | 22..13 | 12 | 11..10 | 9 | 8 | 7 | 6 | 5 | 4 | 3..2 | 1 | 0 |
-+ *  +---------+--------+----+--------+---+---+---+---+---+---+------+---+---+
-+ *      PFN     Unused   S    PageSZ   H   G   X   W   R   D    CP    A   P
-+ *
-+ * Note: PFN is 40-bits wide. We use 41-bits to ensure that the upper bit is
-+ *       always set to 0. This is required when shifting PFN to right.
-+ */
-+
-+/* Following shift are used in ASM to easily extract bit */
-+#define _PAGE_PERMS_SHIFT      5
-+#define _PAGE_GLOBAL_SHIFT     8
-+#define _PAGE_HUGE_SHIFT       9
-+
-+#define _PAGE_PRESENT  (1 << 0)    /* Present */
-+#define _PAGE_ACCESSED (1 << 1)    /* Set by tlb refill code on any access */
-+/* Bits 2 - 3 reserved for cache policy */
-+#define _PAGE_DIRTY    (1 << 4)    /* Set by tlb refill code on any write */
-+#define _PAGE_READ     (1 << _PAGE_PERMS_SHIFT)    /* Readable */
-+#define _PAGE_WRITE    (1 << 6)    /* Writable */
-+#define _PAGE_EXEC     (1 << 7)    /* Executable */
-+#define _PAGE_GLOBAL   (1 << _PAGE_GLOBAL_SHIFT)   /* Global */
-+#define _PAGE_HUGE     (1 << _PAGE_HUGE_SHIFT)     /* Huge page */
-+/* Bits 10 - 11 reserved for page size */
-+#define _PAGE_SOFT     (1 << 12)   /* Reserved for software */
-+#define _PAGE_SZ_64K           (TLB_PS_64K << KVX_PAGE_SZ_SHIFT)
-+#define _PAGE_SZ_2M            (TLB_PS_2M << KVX_PAGE_SZ_SHIFT)
-+#define _PAGE_SZ_512M          (TLB_PS_512M << KVX_PAGE_SZ_SHIFT)
-+
-+
-+#define _PAGE_SPECIAL          _PAGE_SOFT
-+
-+/*
-+ * If _PAGE_PRESENT is clear because the user mapped it with PROT_NONE
-+ * pte_present still gives true. Bit[15] of the PTE is used since its unused
-+ * for a PTE entry for kv3-1 (see above)
-+ */
-+#define _PAGE_NONE             (1 << 15)
-+
-+/* Note: mask used in assembly cannot be generated with GENMASK */
-+#define KVX_PFN_SHIFT          23
-+#define KVX_PFN_MASK           (~(((1 << KVX_PFN_SHIFT) - 1)))
-+
-+#define KVX_PAGE_SZ_SHIFT      10
-+#define KVX_PAGE_SZ_MASK       KVX_SFR_TEL_PS_MASK
-+
-+/* Huge page of 64K are hold in PTE table */
-+#define KVX_PAGE_64K_NR_CONT   (1UL << (KVX_PAGE_64K_SHIFT - PAGE_SHIFT))
-+/* Huge page of 512M are hold in PMD table */
-+#define KVX_PAGE_512M_NR_CONT  (1UL << (KVX_PAGE_512M_SHIFT - PMD_SHIFT))
-+
-+#define KVX_PAGE_CP_SHIFT      2
-+#define KVX_PAGE_CP_MASK       KVX_SFR_TEL_CP_MASK
-+
-+
-+#define _PAGE_CACHED   (TLB_CP_W_C << KVX_PAGE_CP_SHIFT)
-+#define _PAGE_UNCACHED (TLB_CP_U_U << KVX_PAGE_CP_SHIFT)
-+#define _PAGE_DEVICE   (TLB_CP_D_U << KVX_PAGE_CP_SHIFT)
-+
-+#define KVX_ACCESS_PERMS_BITS     4
-+#define KVX_ACCESS_PERMS_OFFSET   _PAGE_PERMS_SHIFT
-+#define KVX_ACCESS_PERMS_SIZE     (1 << KVX_ACCESS_PERMS_BITS)
-+
-+#define KVX_ACCESS_PERM_START_BIT KVX_ACCESS_PERMS_OFFSET
-+#define KVX_ACCESS_PERM_STOP_BIT \
-+	(KVX_ACCESS_PERMS_OFFSET + KVX_ACCESS_PERMS_BITS - 1)
-+#define KVX_ACCESS_PERMS_MASK \
-+	GENMASK(KVX_ACCESS_PERM_STOP_BIT, KVX_ACCESS_PERM_START_BIT)
-+#define KVX_ACCESS_PERMS_INDEX(x) \
-+	((unsigned int)(x & KVX_ACCESS_PERMS_MASK) >> KVX_ACCESS_PERMS_OFFSET)
-+
-+/* Bits read, write, exec and global are not preserved across pte_modify() */
-+#define _PAGE_CHG_MASK  (~(unsigned long)(_PAGE_READ | _PAGE_WRITE | \
-+					  _PAGE_EXEC | _PAGE_GLOBAL))
-+
-+#endif
-diff --git a/arch/kvx/include/asm/pgtable.h b/arch/kvx/include/asm/pgtable.h
-new file mode 100644
-index 000000000000..9e36db4d98a7
---- /dev/null
-+++ b/arch/kvx/include/asm/pgtable.h
-@@ -0,0 +1,451 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ *            Marius Gligor
-+ *            Yann Sionneau
-+ */
-+
-+#ifndef _ASM_KVX_PGTABLE_H
-+#define _ASM_KVX_PGTABLE_H
-+
-+#include <linux/mmzone.h>
-+#include <linux/mm_types.h>
-+
-+#include <asm/page.h>
-+#include <asm/pgtable-bits.h>
-+
-+#include <asm-generic/pgtable-nopud.h>
-+
-+#include <asm/mem_map.h>
-+
-+struct mm_struct;
-+struct vm_area_struct;
-+
-+/*
-+ * Hugetlb definitions. All sizes are supported (64 KB, 2 MB and 512 MB).
-+ */
-+#if defined(CONFIG_KVX_4K_PAGES)
-+#define HUGE_MAX_HSTATE		3
-+#elif defined(CONFIG_KVX_64K_PAGES)
-+#define HUGE_MAX_HSTATE		2
-+#else
-+#error "Unsupported page size"
-+#endif
-+
-+#define HPAGE_SHIFT		PMD_SHIFT
-+#define HPAGE_SIZE		BIT(HPAGE_SHIFT)
-+#define HPAGE_MASK		(~(HPAGE_SIZE - 1))
-+#define HUGETLB_PAGE_ORDER	(HPAGE_SHIFT - PAGE_SHIFT)
-+
-+extern pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
-+				vm_flags_t flags);
-+#define arch_make_huge_pte arch_make_huge_pte
-+
-+/* Vmalloc definitions */
-+#define VMALLOC_START	KERNEL_VMALLOC_MAP_BASE
-+#define VMALLOC_END	(VMALLOC_START + KERNEL_VMALLOC_MAP_SIZE - 1)
-+
-+/* Also used by GDB script to go through the page table */
-+#define PGDIR_BITS	(VA_MAX_BITS - PGDIR_SHIFT)
-+#define PMD_BITS	(PGDIR_SHIFT - PMD_SHIFT)
-+#define PTE_BITS	(PMD_SHIFT - PAGE_SHIFT)
-+
-+/* Size of region mapped by a page global directory */
-+#define PGDIR_SIZE      BIT(PGDIR_SHIFT)
-+#define PGDIR_MASK      (~(PGDIR_SIZE - 1))
-+
-+/* Size of region mapped by a page middle directory */
-+#define PMD_SIZE        BIT(PMD_SHIFT)
-+#define PMD_MASK        (~(PMD_SIZE - 1))
-+
-+/* Number of entries in the page global directory */
-+#define PAGES_PER_PGD	2
-+#define PTRS_PER_PGD	(PAGES_PER_PGD * PAGE_SIZE / sizeof(pgd_t))
-+
-+/* Number of entries in the page middle directory */
-+#define PTRS_PER_PMD    (PAGE_SIZE / sizeof(pmd_t))
-+
-+/* Number of entries in the page table */
-+#define PTRS_PER_PTE    (PAGE_SIZE / sizeof(pte_t))
-+
-+#define USER_PTRS_PER_PGD    (TASK_SIZE/PGDIR_SIZE)
-+
-+extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
-+
-+/* Page protection bits */
-+#define _PAGE_BASE		(_PAGE_PRESENT | _PAGE_CACHED)
-+#define _PAGE_KERNEL		(_PAGE_PRESENT | _PAGE_GLOBAL | \
-+				 _PAGE_READ | _PAGE_WRITE)
-+#define _PAGE_KERNEL_EXEC	(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC | \
-+				 _PAGE_GLOBAL | _PAGE_WRITE)
-+#define _PAGE_KERNEL_DEVICE	(_PAGE_KERNEL | _PAGE_DEVICE)
-+#define _PAGE_KERNEL_NOCACHE	(_PAGE_KERNEL | _PAGE_UNCACHED)
-+
-+#define PAGE_NONE		__pgprot(_PAGE_NONE)
-+#define PAGE_READ		__pgprot(_PAGE_BASE | _PAGE_READ)
-+#define PAGE_READ_WRITE		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_WRITE)
-+#define PAGE_READ_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC)
-+#define PAGE_READ_WRITE_EXEC	__pgprot(_PAGE_BASE | _PAGE_READ |	\
-+					 _PAGE_EXEC | _PAGE_WRITE)
-+
-+#define PAGE_KERNEL		__pgprot(_PAGE_KERNEL | _PAGE_CACHED)
-+#define PAGE_KERNEL_EXEC	__pgprot(_PAGE_KERNEL_EXEC)
-+#define PAGE_KERNEL_NOCACHE	__pgprot(_PAGE_KERNEL | _PAGE_UNCACHED)
-+#define PAGE_KERNEL_DEVICE	__pgprot(_PAGE_KERNEL_DEVICE)
-+#define PAGE_KERNEL_RO		__pgprot((_PAGE_KERNEL | _PAGE_CACHED) & ~(_PAGE_WRITE))
-+#define PAGE_KERNEL_ROX		__pgprot(_PAGE_KERNEL_EXEC  & ~(_PAGE_WRITE))
-+
-+#define pgprot_noncached(prot)	(__pgprot((pgprot_val(prot) & ~KVX_PAGE_CP_MASK) | _PAGE_UNCACHED))
-+
-+/*
-+ * ZERO_PAGE is a global shared page that is always zero: used
-+ * for zero-mapped memory areas etc..
-+ */
-+extern struct page *empty_zero_page;
-+#define ZERO_PAGE(vaddr)       (empty_zero_page)
-+
-+
-+/*
-+ * Encode and decode a swap entry. Swap entries are encoded in an arch
-+ * dependent format as follows:
-+ *
-+ *  +--------+----+-------+------+---+---+
-+ *  | 63..16 | 15 | 14..7 | 6..2 | 1 | 0 |
-+ *  +--------+----+-------+------+---+---+
-+ *    offset   0      0     type   0   0
-+ *
-+ * This allows for up to 31 swap files and 1PB per swap file.
-+ */
-+#define __SWP_TYPE_SHIFT        2
-+#define __SWP_TYPE_BITS         5
-+#define __SWP_TYPE_MASK         ((1UL << __SWP_TYPE_BITS) - 1)
-+#define __SWP_OFFSET_SHIFT      16
-+
-+#define MAX_SWAPFILES_CHECK()   \
-+	BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
-+
-+#define __swp_type(x)   (((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
-+#define __swp_offset(x) ((x).val >> __SWP_OFFSET_SHIFT)
-+#define __swp_entry(type, offset) ((swp_entry_t) \
-+	{ ((type) << __SWP_TYPE_SHIFT) | ((offset) << __SWP_OFFSET_SHIFT) })
-+
-+#define __pte_to_swp_entry(pte) ((swp_entry_t) { pte_val(pte) })
-+#define __swp_entry_to_pte(x)   ((pte_t) { (x).val })
-+
-+/*
-+ * PGD definitions:
-+ *   - pgd_ERROR
-+ */
-+#define pgd_ERROR(e) \
-+	pr_err("%s:%d: bad pgd %016lx.\n", __FILE__, __LINE__, pgd_val(e))
-+
-+/*
-+ * PUD
-+ *
-+ * As we manage a three level page table the call to set_pud is used to fill
-+ * PGD.
-+ */
-+static inline void set_pud(pud_t *pudp, pud_t pmd)
-+{
-+	*pudp = pmd;
-+}
-+
-+static inline int pud_none(pud_t pud)
-+{
-+	return pud_val(pud) == 0;
-+}
-+
-+static inline int pud_bad(pud_t pud)
-+{
-+	return pud_none(pud);
-+}
-+static inline int pud_present(pud_t pud)
-+{
-+	return pud_val(pud) != 0;
-+}
-+
-+static inline void pud_clear(pud_t *pud)
-+{
-+	set_pud(pud, __pud(0));
-+}
-+
-+/*
-+ * PMD definitions:
-+ *   - set_pmd
-+ *   - pmd_present
-+ *   - pmd_none
-+ *   - pmd_bad
-+ *   - pmd_clear
-+ *   - pmd_page
-+ */
-+
-+static inline void set_pmd(pmd_t *pmdp, pmd_t pmd)
-+{
-+	*pmdp = pmd;
-+}
-+
-+/* Returns 1 if entry is present */
-+static inline int pmd_present(pmd_t pmd)
-+{
-+	return pmd_val(pmd) != 0;
-+}
-+
-+/* Returns 1 if the corresponding entry has the value 0 */
-+static inline int pmd_none(pmd_t pmd)
-+{
-+	return pmd_val(pmd) == 0;
-+}
-+
-+/* Used to check that a page middle directory entry is valid */
-+static inline int pmd_bad(pmd_t pmd)
-+{
-+	return pmd_none(pmd);
-+}
-+
-+/* Clears the entry to prevent process to use the linear address that
-+ * mapped it.
-+ */
-+static inline void pmd_clear(pmd_t *pmdp)
-+{
-+	set_pmd(pmdp, __pmd(0));
-+}
-+
-+/*
-+ * Returns the address of the descriptor of the page table referred by the
-+ * PMD entry.
-+ */
-+static inline struct page *pmd_page(pmd_t pmd)
-+{
-+	if (pmd_val(pmd) & _PAGE_HUGE)
-+		return pfn_to_page(
-+				(pmd_val(pmd) & KVX_PFN_MASK) >> KVX_PFN_SHIFT);
-+
-+	return pfn_to_page(pmd_val(pmd) >> PAGE_SHIFT);
-+}
-+
-+#define pmd_ERROR(e) \
-+	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
-+
-+static inline pmd_t *pud_pgtable(pud_t pud)
-+{
-+	return (pmd_t *)pfn_to_virt(pud_val(pud) >> PAGE_SHIFT);
-+}
-+
-+static inline struct page *pud_page(pud_t pud)
-+{
-+	return pfn_to_page(pud_val(pud) >> PAGE_SHIFT);
-+}
-+
-+/*
-+ * PTE definitions:
-+ *   - set_pte
-+ *   - set_pte_at
-+ *   - pte_clear
-+ *   - pte_page
-+ *   - pte_pfn
-+ *   - pte_present
-+ *   - pte_none
-+ *   - pte_write
-+ *   - pte_dirty
-+ *   - pte_young
-+ *   - pte_special
-+ *   - pte_mkdirty
-+ *   - pte_mkwrite
-+ *   - pte_mkclean
-+ *   - pte_mkyoung
-+ *   - pte_mkold
-+ *   - pte_mkspecial
-+ *   - pte_wrprotect
-+ */
-+
-+static inline void set_pte(pte_t *ptep, pte_t pteval)
-+{
-+	*ptep = pteval;
-+}
-+
-+static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-+			      pte_t *ptep, pte_t pteval)
-+{
-+	set_pte(ptep, pteval);
-+}
-+
-+#define pte_clear(mm, addr, ptep) set_pte(ptep, __pte(0))
-+
-+/* Constructs a page table entry */
-+static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
-+{
-+	return __pte(((pfn << KVX_PFN_SHIFT) & KVX_PFN_MASK) |
-+		     pgprot_val(prot));
-+}
-+
-+/* Builds a page table entry by combining a page descriptor and a group of
-+ * access rights.
-+ */
-+#define mk_pte(page, prot)	(pfn_pte(page_to_pfn(page), prot))
-+
-+/* Modifies page access rights */
-+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-+{
-+	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
-+}
-+
-+#define pte_page(x)     pfn_to_page(pte_pfn(x))
-+
-+static inline unsigned long pmd_page_vaddr(pmd_t pmd)
-+{
-+	return (unsigned long)pfn_to_virt(pmd_val(pmd) >> PAGE_SHIFT);
-+}
-+
-+/* Yields the page frame number (PFN) of a page table entry */
-+static inline unsigned long pte_pfn(pte_t pte)
-+{
-+	return ((pte_val(pte) & KVX_PFN_MASK) >> KVX_PFN_SHIFT);
-+}
-+
-+static inline int pte_present(pte_t pte)
-+{
-+	return (pte_val(pte) & (_PAGE_PRESENT | _PAGE_NONE));
-+}
-+
-+static inline int pte_none(pte_t pte)
-+{
-+	return (pte_val(pte) == 0);
-+}
-+
-+static inline int pte_write(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_WRITE;
-+}
-+
-+static inline int pte_dirty(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_DIRTY;
-+}
-+
-+static inline int pte_young(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_ACCESSED;
-+}
-+
-+static inline int pte_special(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_SPECIAL;
-+}
-+
-+static inline int pte_huge(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_HUGE;
-+}
-+
-+static inline pte_t pte_mkdirty(pte_t pte)
-+{
-+	return __pte(pte_val(pte) | _PAGE_DIRTY);
-+}
-+
-+static inline pte_t pte_mkwrite(pte_t pte)
-+{
-+	return __pte(pte_val(pte) | _PAGE_WRITE);
-+}
-+
-+static inline pte_t pte_mkclean(pte_t pte)
-+{
-+	return __pte(pte_val(pte) & ~(_PAGE_DIRTY));
-+}
-+
-+static inline pte_t pte_mkyoung(pte_t pte)
-+{
-+	return __pte(pte_val(pte) | _PAGE_ACCESSED);
-+}
-+
-+static inline pte_t pte_mkold(pte_t pte)
-+{
-+	return __pte(pte_val(pte) & ~(_PAGE_ACCESSED));
-+}
-+
-+static inline pte_t pte_mkspecial(pte_t pte)
-+{
-+	return __pte(pte_val(pte) | _PAGE_SPECIAL);
-+}
-+
-+static inline pte_t pte_wrprotect(pte_t pte)
-+{
-+	return __pte(pte_val(pte) & ~(_PAGE_WRITE));
-+}
-+
-+static inline pte_t pte_mkhuge(pte_t pte)
-+{
-+	return __pte(pte_val(pte) | _PAGE_HUGE);
-+}
-+
-+static inline pte_t pte_of_pmd(pmd_t pmd)
-+{
-+	return __pte(pmd_val(pmd));
-+}
-+
-+#define pmd_pfn(pmd)       pte_pfn(pte_of_pmd(pmd))
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+
-+#define pmdp_establish pmdp_establish
-+static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
-+		unsigned long address, pmd_t *pmdp, pmd_t pmd)
-+{
-+	return __pmd(xchg(&pmd_val(*pmdp), pmd_val(pmd)));
-+}
-+
-+static inline int pmd_trans_huge(pmd_t pmd)
-+{
-+	return !!(pmd_val(pmd) & _PAGE_HUGE);
-+}
-+
-+static inline pmd_t pmd_of_pte(pte_t pte)
-+{
-+	return __pmd(pte_val(pte));
-+}
-+
-+
-+#define pmd_mkclean(pmd)      pmd_of_pte(pte_mkclean(pte_of_pmd(pmd)))
-+#define pmd_mkdirty(pmd)      pmd_of_pte(pte_mkdirty(pte_of_pmd(pmd)))
-+#define pmd_mkold(pmd)	      pmd_of_pte(pte_mkold(pte_of_pmd(pmd)))
-+#define pmd_mkwrite(pmd)      pmd_of_pte(pte_mkwrite(pte_of_pmd(pmd)))
-+#define pmd_mkyoung(pmd)      pmd_of_pte(pte_mkyoung(pte_of_pmd(pmd)))
-+#define pmd_modify(pmd, prot) pmd_of_pte(pte_modify(pte_of_pmd(pmd), prot))
-+#define pmd_wrprotect(pmd)    pmd_of_pte(pte_wrprotect(pte_of_pmd(pmd)))
-+
-+static inline pmd_t pmd_mkhuge(pmd_t pmd)
-+{
-+	/* Create a huge page in PMD implies a size of 2 MB */
-+	return __pmd(pmd_val(pmd) |
-+			_PAGE_HUGE | (TLB_PS_2M << KVX_PAGE_SZ_SHIFT));
-+}
-+
-+static inline pmd_t pmd_mkinvalid(pmd_t pmd)
-+{
-+	pmd_val(pmd) &= ~(_PAGE_PRESENT);
-+
-+	return pmd;
-+}
-+
-+#define pmd_dirty(pmd)     pte_dirty(pte_of_pmd(pmd))
-+#define pmd_write(pmd)     pte_write(pte_of_pmd(pmd))
-+#define pmd_young(pmd)     pte_young(pte_of_pmd(pmd))
-+
-+#define mk_pmd(page, prot)  pmd_of_pte(mk_pte(page, prot))
-+
-+static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
-+{
-+	return __pmd(((pfn << KVX_PFN_SHIFT) & KVX_PFN_MASK) |
-+			pgprot_val(prot));
-+}
-+
-+static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
-+			      pmd_t *pmdp, pmd_t pmd)
-+{
-+	*pmdp = pmd;
-+}
-+
-+#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-+
-+#endif	/* _ASM_KVX_PGTABLE_H */
-diff --git a/arch/kvx/include/asm/rm_fw.h b/arch/kvx/include/asm/rm_fw.h
-new file mode 100644
-index 000000000000..f89bdd5915ed
---- /dev/null
-+++ b/arch/kvx/include/asm/rm_fw.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_RM_FW_H
-+#define _ASM_KVX_RM_FW_H
-+
-+#include <linux/sizes.h>
-+
-+#define KVX_RM_ID	16
-+
-+#define RM_FIRMWARE_REGS_SIZE	(SZ_4K)
-+
-+#endif /* _ASM_KVX_RM_FW_H */
-diff --git a/arch/kvx/include/asm/sparsemem.h b/arch/kvx/include/asm/sparsemem.h
-new file mode 100644
-index 000000000000..2f35743f20fb
---- /dev/null
-+++ b/arch/kvx/include/asm/sparsemem.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_SPARSEMEM_H
-+#define _ASM_KVX_SPARSEMEM_H
-+
-+#ifdef CONFIG_SPARSEMEM
-+#define MAX_PHYSMEM_BITS	40
-+#define SECTION_SIZE_BITS	30
-+#endif /* CONFIG_SPARSEMEM */
-+
-+#endif /* _ASM_KVX_SPARSEMEM_H */
-diff --git a/arch/kvx/include/asm/symbols.h b/arch/kvx/include/asm/symbols.h
-new file mode 100644
-index 000000000000..a53c1607979f
---- /dev/null
-+++ b/arch/kvx/include/asm/symbols.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_SYMBOLS_H
-+#define _ASM_KVX_SYMBOLS_H
-+
-+/* Symbols to patch TLB refill handler */
-+extern char kvx_perf_tlb_refill[], kvx_std_tlb_refill[];
-+
-+/* Entry point of the ELF, used to start other PEs in SMP */
-+extern int kvx_start[];
-+
-+#endif
-diff --git a/arch/kvx/include/asm/tlb.h b/arch/kvx/include/asm/tlb.h
-new file mode 100644
-index 000000000000..190b682e1819
---- /dev/null
-+++ b/arch/kvx/include/asm/tlb.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_TLB_H
-+#define _ASM_KVX_TLB_H
-+
-+struct mmu_gather;
-+
-+static void tlb_flush(struct mmu_gather *tlb);
-+
-+int clear_ltlb_entry(unsigned long vaddr);
-+
-+#include <asm-generic/tlb.h>
-+
-+static inline unsigned int pgprot_cache_policy(unsigned long flags)
-+{
-+	return (flags & KVX_PAGE_CP_MASK) >> KVX_PAGE_CP_SHIFT;
-+}
-+
-+#endif /* _ASM_KVX_TLB_H */
-diff --git a/arch/kvx/include/asm/tlb_defs.h b/arch/kvx/include/asm/tlb_defs.h
-new file mode 100644
-index 000000000000..3f5b29cd529e
---- /dev/null
-+++ b/arch/kvx/include/asm/tlb_defs.h
-@@ -0,0 +1,131 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Julian Vetter
-+ *            Guillaume Thouvenin
-+ *            Marius Gligor
-+ */
-+
-+#ifndef _ASM_KVX_TLB_DEFS_H
-+#define _ASM_KVX_TLB_DEFS_H
-+
-+#include <linux/sizes.h>
-+
-+#include <asm/sfr.h>
-+
-+/* Architecture specification */
-+#define MMC_SB_JTLB 0
-+#define MMC_SB_LTLB 1
-+
-+#define MMU_LTLB_SETS 1
-+#define MMU_LTLB_WAYS 16
-+
-+#define MMU_JTLB_SETS 64
-+#define MMU_JTLB_WAYS_SHIFT 2
-+#define MMU_JTLB_WAYS (1 << MMU_JTLB_WAYS_SHIFT)
-+
-+#define MMU_JTLB_ENTRIES	(MMU_JTLB_SETS << MMU_JTLB_WAYS_SHIFT)
-+
-+/* Set is determined using the 6 lsb of virtual page */
-+#define MMU_JTLB_SET_MASK (MMU_JTLB_SETS - 1)
-+#define MMU_JTLB_WAY_MASK (MMU_JTLB_WAYS - 1)
-+
-+/* TLB: Entry Status */
-+#define TLB_ES_INVALID    0
-+#define TLB_ES_PRESENT    1
-+#define TLB_ES_MODIFIED   2
-+#define TLB_ES_A_MODIFIED 3
-+
-+/* TLB: Cache Policy - First value is for data, the second is for instruction
-+ * Symbols are
-+ *   D: device
-+ *   U: uncached
-+ *   W: write through
-+ *   C: cache enabled
-+ */
-+#define TLB_CP_D_U 0
-+#define TLB_CP_U_U 1
-+#define TLB_CP_W_C 2
-+#define TLB_CP_U_C 3
-+
-+/* TLB: Protection Attributes: First value is when PM=0, second is when PM=1
-+ * Symbols are:
-+ *   NA: no access
-+ *   R : read
-+ *   W : write
-+ *   X : execute
-+ */
-+#define TLB_PA_NA_NA   0
-+#define TLB_PA_NA_R    1
-+#define TLB_PA_NA_RW   2
-+#define TLB_PA_NA_RX   3
-+#define TLB_PA_NA_RWX  4
-+#define TLB_PA_R_R     5
-+#define TLB_PA_R_RW    6
-+#define TLB_PA_R_RX    7
-+#define TLB_PA_R_RWX   8
-+#define TLB_PA_RW_RW   9
-+#define TLB_PA_RW_RWX  10
-+#define TLB_PA_RX_RX   11
-+#define TLB_PA_RX_RWX  12
-+#define TLB_PA_RWX_RWX 13
-+
-+/* TLB: Page Size */
-+#define TLB_PS_4K   0
-+#define TLB_PS_64K  1
-+#define TLB_PS_2M   2
-+#define TLB_PS_512M 3
-+
-+#define TLB_G_GLOBAL	1
-+#define TLB_G_USE_ASN	0
-+
-+#define TLB_MK_TEH_ENTRY(_vaddr, _vs, _global, _asn) \
-+	(((_vs) << KVX_SFR_TEH_VS_SHIFT) | \
-+	((_global) << KVX_SFR_TEH_G_SHIFT) | \
-+	((_asn) << KVX_SFR_TEH_ASN_SHIFT) | \
-+	(((_vaddr) >> KVX_SFR_TEH_PN_SHIFT) << KVX_SFR_TEH_PN_SHIFT))
-+
-+#define TLB_MK_TEL_ENTRY(_paddr, _ps, _es, _cp, _pa) \
-+	(((_es) << KVX_SFR_TEL_ES_SHIFT) | \
-+	((_ps) << KVX_SFR_TEL_PS_SHIFT) | \
-+	((_cp) << KVX_SFR_TEL_CP_SHIFT) | \
-+	((_pa) << KVX_SFR_TEL_PA_SHIFT) | \
-+	(((_paddr) >> KVX_SFR_TEL_FN_SHIFT) << KVX_SFR_TEL_FN_SHIFT))
-+
-+
-+/* Refill routine related defines */
-+#define REFILL_PERF_ENTRIES	4
-+#define REFILL_PERF_PAGE_SIZE	SZ_512M
-+
-+/* paddr will be inserted in assembly code */
-+#define REFILL_PERF_TEL_VAL \
-+	TLB_MK_TEL_ENTRY(0, TLB_PS_512M, TLB_ES_A_MODIFIED, TLB_CP_W_C, \
-+			 TLB_PA_NA_RWX)
-+/* vaddr will be inserted in assembly code */
-+#define REFILL_PERF_TEH_VAL	TLB_MK_TEH_ENTRY(0, 0, TLB_G_GLOBAL, 0)
-+
-+/*
-+ * LTLB fixed entry index
-+ */
-+#define LTLB_ENTRY_KERNEL_TEXT	0
-+#define LTLB_ENTRY_GDB_PAGE	1
-+/* Reserve entries for kernel pagination */
-+#define LTLB_KERNEL_RESERVED	2
-+/* This define should reflect the maximum number of fixed LTLB entries */
-+#define LTLB_ENTRY_FIXED_COUNT	(LTLB_KERNEL_RESERVED + REFILL_PERF_ENTRIES)
-+#define LTLB_ENTRY_EARLY_SMEM	LTLB_ENTRY_FIXED_COUNT
-+
-+/* MMC: Protection Trap Cause */
-+#define MMC_PTC_RESERVED 0
-+#define MMC_PTC_READ     1
-+#define MMC_PTC_WRITE    2
-+#define MMC_PTC_EXECUTE  3
-+
-+/* MMC: Page size Mask in JTLB */
-+#define MMC_PMJ_4K   1
-+#define MMC_PMJ_64K  2
-+#define MMC_PMJ_2M   4
-+#define MMC_PMJ_512M 8
-+
-+#endif
-diff --git a/arch/kvx/include/asm/tlbflush.h b/arch/kvx/include/asm/tlbflush.h
-new file mode 100644
-index 000000000000..7d3e50bbc957
---- /dev/null
-+++ b/arch/kvx/include/asm/tlbflush.h
-@@ -0,0 +1,58 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_TLBFLUSH_H
-+#define _ASM_KVX_TLBFLUSH_H
-+
-+#include <linux/sched.h>
-+#include <linux/printk.h>
-+#include <linux/mm_types.h>
-+
-+extern void local_flush_tlb_page(struct vm_area_struct *vma,
-+				 unsigned long addr);
-+extern void local_flush_tlb_all(void);
-+extern void local_flush_tlb_mm(struct mm_struct *mm);
-+extern void local_flush_tlb_range(struct vm_area_struct *vma,
-+				  unsigned long start,
-+				  unsigned long end);
-+extern void local_flush_tlb_kernel_range(unsigned long start,
-+					 unsigned long end);
-+
-+#ifdef CONFIG_SMP
-+extern void smp_flush_tlb_all(void);
-+extern void smp_flush_tlb_mm(struct mm_struct *mm);
-+extern void smp_flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
-+extern void smp_flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
-+			    unsigned long end);
-+extern void smp_flush_tlb_kernel_range(unsigned long start, unsigned long end);
-+
-+static inline void flush_tlb(void)
-+{
-+	smp_flush_tlb_mm(current->mm);
-+}
-+
-+#define flush_tlb_page         smp_flush_tlb_page
-+#define flush_tlb_all          smp_flush_tlb_all
-+#define flush_tlb_mm           smp_flush_tlb_mm
-+#define flush_tlb_range        smp_flush_tlb_range
-+#define flush_tlb_kernel_range smp_flush_tlb_kernel_range
-+
-+#else
-+#define flush_tlb_page         local_flush_tlb_page
-+#define flush_tlb_all          local_flush_tlb_all
-+#define flush_tlb_mm           local_flush_tlb_mm
-+#define flush_tlb_range        local_flush_tlb_range
-+#define flush_tlb_kernel_range local_flush_tlb_kernel_range
-+#endif
-+
-+void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
-+		pmd_t *pmd);
-+
-+void update_mmu_cache(struct vm_area_struct *vma,
-+	unsigned long address, pte_t *ptep);
-+
-+#endif /* _ASM_KVX_TLBFLUSH_H */
-diff --git a/arch/kvx/include/asm/vmalloc.h b/arch/kvx/include/asm/vmalloc.h
-new file mode 100644
-index 000000000000..a07692431108
---- /dev/null
-+++ b/arch/kvx/include/asm/vmalloc.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_VMALLOC_H
-+#define _ASM_KVX_VMALLOC_H
-+
-+#endif /* _ASM_KVX_VMALLOC_H */
-diff --git a/arch/kvx/mm/cacheflush.c b/arch/kvx/mm/cacheflush.c
-new file mode 100644
-index 000000000000..2a632645f980
---- /dev/null
-+++ b/arch/kvx/mm/cacheflush.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/smp.h>
-+#include <linux/hugetlb.h>
-+#include <linux/mm_types.h>
-+
-+#include <asm/cacheflush.h>
-+
-+#ifdef CONFIG_SMP
-+
-+struct flush_data {
-+	unsigned long start;
-+	unsigned long end;
-+};
-+
-+static inline void ipi_flush_icache_range(void *arg)
-+{
-+	struct flush_data *ta = arg;
-+
-+	local_flush_icache_range(ta->start, ta->end);
-+}
-+
-+void flush_icache_range(unsigned long start, unsigned long end)
-+{
-+	struct flush_data data = {
-+		.start = start,
-+		.end = end
-+	};
-+
-+	/* Then invalidate L1 icache on all cpus */
-+	on_each_cpu(ipi_flush_icache_range, &data, 1);
-+}
-+EXPORT_SYMBOL(flush_icache_range);
-+
-+#endif /* CONFIG_SMP */
-+
-+void dcache_wb_inval_phys_range(phys_addr_t addr, unsigned long len, bool wb,
-+				bool inval)
-+{
-+	if (wb && inval) {
-+		wbinval_dcache_range(addr, len);
-+	} else {
-+		if (inval)
-+			inval_dcache_range(addr, len);
-+		if (wb)
-+			wb_dcache_range(addr, len);
-+	}
-+}
-+
-+static inline pte_t *get_ptep(struct mm_struct *mm, unsigned long addr)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	pmd_t *pmd;
-+	pte_t *pte;
-+
-+	pgd = pgd_offset(mm, addr);
-+	if (pgd_none(*pgd))
-+		return NULL;
-+
-+	p4d = p4d_offset(pgd, addr);
-+	if (p4d_none(*p4d))
-+		return NULL;
-+
-+	pud = pud_offset(p4d, addr);
-+	if (pud_none(*pud))
-+		return NULL;
-+
-+	pmd = pmd_offset(pud, addr);
-+	if (pmd_none(*pmd))
-+		return NULL;
-+
-+	if (pmd_huge(*pmd)) {
-+		pte = (pte_t *) pmd;
-+		if (!pte_present(*pte))
-+			return NULL;
-+
-+		return pte;
-+	}
-+
-+	pte = pte_offset_map(pmd, addr);
-+	if (!pte_present(*pte))
-+		return NULL;
-+
-+	return pte;
-+}
-+
-+static unsigned long dcache_wb_inval_virt_to_phys(struct vm_area_struct *vma,
-+						  unsigned long vaddr,
-+						  unsigned long len,
-+						  bool wb, bool inval)
-+{
-+	unsigned long pfn, offset, pgsize;
-+	pte_t *ptep;
-+
-+	ptep = get_ptep(vma->vm_mm, vaddr);
-+	if (!ptep) {
-+		/*
-+		 * Since we did not found a matching pte, return needed
-+		 * length to be aligned on next page boundary
-+		 */
-+		offset = (vaddr & (PAGE_SIZE - 1));
-+		return PAGE_SIZE - offset;
-+	}
-+
-+	/* Handle page sizes correctly */
-+	pgsize = (pte_val(*ptep) & KVX_PAGE_SZ_MASK) >> KVX_PAGE_SZ_SHIFT;
-+	pgsize = (1 << get_page_size_shift(pgsize));
-+
-+	offset = vaddr & (pgsize - 1);
-+	len = min(pgsize - offset, len);
-+	pfn = pte_pfn(*ptep);
-+
-+	dcache_wb_inval_phys_range(PFN_PHYS(pfn) + offset, len, wb, inval);
-+
-+	return len;
-+}
-+
-+int dcache_wb_inval_virt_range(unsigned long vaddr, unsigned long len, bool wb,
-+			       bool inval)
-+{
-+	unsigned long end = vaddr + len;
-+	struct vm_area_struct *vma;
-+	unsigned long rlen;
-+	struct mm_struct *mm = current->mm;
-+
-+	/* necessary for find_vma */
-+	mmap_read_lock(mm);
-+
-+	/*
-+	 * Verify that the specified address region actually belongs to this
-+	 * process.
-+	 */
-+	vma = find_vma(current->mm, vaddr);
-+	if (vma == NULL || vaddr < vma->vm_start || vaddr + len > vma->vm_end) {
-+		mmap_read_unlock(mm);
-+		return -EFAULT;
-+	}
-+
-+	while (vaddr < end) {
-+		rlen = dcache_wb_inval_virt_to_phys(vma, vaddr, len, wb, inval);
-+		len -= rlen;
-+		vaddr += rlen;
-+	}
-+
-+	mmap_read_unlock(mm);
-+
-+	return 0;
-+}
-diff --git a/arch/kvx/mm/dma-mapping.c b/arch/kvx/mm/dma-mapping.c
-new file mode 100644
-index 000000000000..afd9b4983183
---- /dev/null
-+++ b/arch/kvx/mm/dma-mapping.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ *            Jules Maselbas
-+ */
-+
-+#include <linux/dma-mapping.h>
-+#include <linux/iommu.h>
-+
-+#include <asm/cacheflush.h>
-+
-+void arch_dma_prep_coherent(struct page *page, size_t size)
-+{
-+	unsigned long addr = (unsigned long) page_to_phys(page);
-+
-+	/* Flush pending data and invalidate pages */
-+	wbinval_dcache_range(addr, size);
-+}
-+
-+/**
-+ * The implementation of arch should follow the following rules:
-+ *		map		for_cpu		for_device	unmap
-+ * TO_DEV	writeback	none		writeback	none
-+ * FROM_DEV	invalidate	invalidate(*)	invalidate	invalidate(*)
-+ * BIDIR	writeback	invalidate	writeback	invalidate
-+ *
-+ * (*) - only necessary if the CPU speculatively prefetches.
-+ *
-+ * (see https://lkml.org/lkml/2018/5/18/979)
-+ */
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+			      enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_FROM_DEVICE:
-+		inval_dcache_range(paddr, size);
-+		break;
-+
-+	case DMA_TO_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		wb_dcache_range(paddr, size);
-+		break;
-+
-+	default:
-+		BUG();
-+	}
-+}
-+
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+			   enum dma_data_direction dir)
-+{
-+	switch (dir) {
-+	case DMA_TO_DEVICE:
-+		break;
-+	case DMA_FROM_DEVICE:
-+		break;
-+
-+	case DMA_BIDIRECTIONAL:
-+		inval_dcache_range(paddr, size);
-+		break;
-+
-+	default:
-+		BUG();
-+	}
-+}
-+
-+#ifdef CONFIG_IOMMU_DMA
-+void arch_teardown_dma_ops(struct device *dev)
-+{
-+	dev->dma_ops = NULL;
-+}
-+#endif /* CONFIG_IOMMU_DMA*/
-+
-+void arch_setup_dma_ops(struct device *dev,
-+			u64 dma_base,
-+			u64 size,
-+			const struct iommu_ops *iommu,
-+			bool coherent)
-+{
-+	dev->dma_coherent = coherent;
-+	if (iommu)
-+		iommu_setup_dma_ops(dev, dma_base, size);
-+}
-diff --git a/arch/kvx/mm/extable.c b/arch/kvx/mm/extable.c
-new file mode 100644
-index 000000000000..8889a1a90a77
---- /dev/null
-+++ b/arch/kvx/mm/extable.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * derived from arch/riscv/mm/extable.c
-+ *
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+
-+#include <linux/extable.h>
-+#include <linux/module.h>
-+#include <linux/uaccess.h>
-+
-+int fixup_exception(struct pt_regs *regs)
-+{
-+	const struct exception_table_entry *fixup;
-+
-+	fixup = search_exception_tables(regs->spc);
-+	if (fixup) {
-+		regs->spc = fixup->fixup;
-+		return 1;
-+	}
-+	return 0;
-+}
-diff --git a/arch/kvx/mm/fault.c b/arch/kvx/mm/fault.c
-new file mode 100644
-index 000000000000..17f6325f3eab
---- /dev/null
-+++ b/arch/kvx/mm/fault.c
-@@ -0,0 +1,264 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Guillaume Thouvenin
-+ *            Clement Leger
-+ *            Yann Sionneau
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/uaccess.h>
-+#include <linux/kernel.h> // only needed to panic
-+#include <linux/printk.h>
-+#include <linux/perf_event.h>
-+#include <linux/sched.h>
-+#include <linux/sched/debug.h>
-+#include <linux/sched/signal.h>
-+#include <linux/mm.h>
-+
-+#include <asm/mmu.h>
-+#include <asm/traps.h>
 +#include <asm/ptrace.h>
-+#include <asm/pgtable.h>
++
++/* The array of function pointers for syscalls. */
++extern void *sys_call_table[];
++
++void scall_machine_exit(unsigned char value);
++
++/**
++ * syscall_get_nr - find which system call a task is executing
++ * @task:	task of interest, must be blocked
++ * @regs:	task_pt_regs() of @task
++ *
++ * If @task is executing a system call or is at system call
++ * tracing about to attempt one, returns the system call number.
++ * If @task is not executing a system call, i.e. it's blocked
++ * inside the kernel for a fault or signal, returns -1.
++ *
++ * Note this returns int even on 64-bit machines.  Only 32 bits of
++ * system call number can be meaningful.  If the actual arch value
++ * is 64 bits, this truncates to 32 bits so 0xffffffff means -1.
++ *
++ * It's only valid to call this when @task is known to be blocked.
++ */
++static inline int syscall_get_nr(struct task_struct *task, struct pt_regs *regs)
++{
++	if (!in_syscall(regs))
++		return -1;
++
++	return es_sysno(regs);
++}
++
++static inline long syscall_get_error(struct task_struct *task,
++				     struct pt_regs *regs)
++{
++	/* 0 if syscall succeeded, otherwise -Errorcode */
++	return IS_ERR_VALUE(regs->r0) ? regs->r0 : 0;
++}
++
++static inline long syscall_get_return_value(struct task_struct *task,
++					    struct pt_regs *regs)
++{
++	return regs->r0;
++}
++
++static inline int syscall_get_arch(struct task_struct *task)
++{
++	return AUDIT_ARCH_KVX;
++}
++
++static inline void syscall_get_arguments(struct task_struct *task,
++					 struct pt_regs *regs,
++					 unsigned long *args)
++{
++	args[0] = regs->orig_r0;
++	args++;
++	memcpy(args, &regs->r1, 5 * sizeof(args[0]));
++}
++
++int __init setup_syscall_sigreturn_page(void *sigpage_addr);
++
++#endif
+diff --git a/arch/kvx/include/asm/syscalls.h b/arch/kvx/include/asm/syscalls.h
+new file mode 100644
+index 000000000000..beec95ebb97a
+--- /dev/null
++++ b/arch/kvx/include/asm/syscalls.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_SYSCALLS_H
++#define _ASM_KVX_SYSCALLS_H
++
++#include <asm-generic/syscalls.h>
++
++/* We redefine clone in assembly for special slowpath */
++asmlinkage long __sys_clone(unsigned long clone_flags, unsigned long newsp,
++			int __user *parent_tid, int __user *child_tid, int tls);
++
++#define sys_clone __sys_clone
++
++long sys_cachectl(unsigned long addr, unsigned long len, unsigned long cache,
++		  unsigned long flags);
++
++#endif
+diff --git a/arch/kvx/include/asm/uaccess.h b/arch/kvx/include/asm/uaccess.h
+new file mode 100644
+index 000000000000..24f91d75c1dd
+--- /dev/null
++++ b/arch/kvx/include/asm/uaccess.h
+@@ -0,0 +1,317 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * derived from arch/riscv/include/asm/uaccess.h
++ *
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ */
++
++#ifndef _ASM_KVX_UACCESS_H
++#define _ASM_KVX_UACCESS_H
++
++#include <linux/sched.h>
++#include <linux/types.h>
++
++/**
++ * access_ok: - Checks if a user space pointer is valid
++ * @addr: User space pointer to start of block to check
++ * @size: Size of block to check
++ *
++ * Context: User context only.  This function may sleep.
++ *
++ * Checks if a pointer to a block of memory in user space is valid.
++ *
++ * Returns true (nonzero) if the memory block may be valid, false (zero)
++ * if it is definitely invalid.
++ *
++ * Note that, depending on architecture, this function probably just
++ * checks that the pointer is in the user space range - after calling
++ * this function, memory access functions may still return -EFAULT.
++ */
++#define access_ok(addr, size) ({					\
++	__chk_user_ptr(addr);						\
++	likely(__access_ok((addr), (size)));				\
++})
++
++#include <asm-generic/access_ok.h>
++
++/*
++ * The exception table consists of pairs of addresses: the first is the
++ * address of an instruction that is allowed to fault, and the second is
++ * the address at which the program should continue.  No registers are
++ * modified, so it is entirely up to the continuation code to figure out
++ * what to do.
++ *
++ * All the routines below use bits of fixup code that are out of line
++ * with the main instruction path.  This means when everything is well,
++ * we don't even have to jump over them.  Further, they do not intrude
++ * on our cache or TLB entries.
++ */
++
++struct exception_table_entry {
++	unsigned long insn, fixup;
++};
++
++extern int fixup_exception(struct pt_regs *regs);
++
++/**
++ * Assembly defined function (usercopy.S)
++ */
++extern unsigned long
++raw_copy_from_user(void *to, const void __user *from, unsigned long n);
++
++extern unsigned long
++raw_copy_to_user(void __user *to, const void *from, unsigned long n);
++
++extern unsigned long
++asm_clear_user(void __user *to, unsigned long n);
++
++#define __clear_user asm_clear_user
++
++static inline __must_check unsigned long
++clear_user(void __user *to, unsigned long n)
++{
++	might_fault();
++	if (!access_ok(to, n))
++		return n;
++
++	return asm_clear_user(to, n);
++}
++
++extern __must_check long strnlen_user(const char __user *str, long n);
++extern long strncpy_from_user(char *dest, const char __user *src, long count);
++
++#define __enable_user_access()
++#define __disable_user_access()
++
++/**
++ * get_user: - Get a simple variable from user space.
++ * @x:   Variable to store result.
++ * @ptr: Source address, in user space.
++ *
++ * Context: User context only.  This function may sleep.
++ *
++ * This macro copies a single simple variable from user space to kernel
++ * space.  It supports simple types like char and int, but not larger
++ * data types like structures or arrays.
++ *
++ * @ptr must have pointer-to-simple-variable type, and the result of
++ * dereferencing @ptr must be assignable to @x without a cast.
++ *
++ * Returns zero on success, or -EFAULT on error.
++ * On error, the variable @x is set to zero.
++ */
++#define get_user(x, ptr)						\
++({									\
++	long __e = -EFAULT;						\
++	const __typeof__(*(ptr)) __user *__p = (ptr);			\
++	might_fault();							\
++	if (likely(access_ok(__p, sizeof(*__p)))) {			\
++		__e = __get_user(x, __p);				\
++	} else {							\
++		x = 0;							\
++	}								\
++	__e;								\
++})
++
++/**
++ * __get_user: - Get a simple variable from user space, with less checking.
++ * @x:   Variable to store result.
++ * @ptr: Source address, in user space.
++ *
++ * Context: User context only.  This function may sleep.
++ *
++ * This macro copies a single simple variable from user space to kernel
++ * space.  It supports simple types like char and int, but not larger
++ * data types like structures or arrays.
++ *
++ * @ptr must have pointer-to-simple-variable type, and the result of
++ * dereferencing @ptr must be assignable to @x without a cast.
++ *
++ * Caller must check the pointer with access_ok() before calling this
++ * function.
++ *
++ * Returns zero on success, or -EFAULT on error.
++ * On error, the variable @x is set to zero.
++ */
++#define __get_user(x, ptr)						\
++({									\
++	unsigned long __err = 0;					\
++	__chk_user_ptr(ptr);						\
++									\
++	__enable_user_access();						\
++	__get_user_nocheck(x, ptr, __err);				\
++	__disable_user_access();					\
++									\
++	__err;								\
++})
++
++#define __get_user_nocheck(x, ptr, err)					\
++do {									\
++	unsigned long __gu_addr = (unsigned long)(ptr);			\
++	unsigned long __gu_val;						\
++	switch (sizeof(*(ptr))) {					\
++	case 1:								\
++		__get_user_asm("lbz", __gu_val, __gu_addr, err);	\
++		break;							\
++	case 2:								\
++		__get_user_asm("lhz", __gu_val, __gu_addr, err);	\
++		break;							\
++	case 4:								\
++		__get_user_asm("lwz", __gu_val, __gu_addr, err);	\
++		break;							\
++	case 8:								\
++		__get_user_asm("ld", __gu_val, __gu_addr, err);		\
++		break;							\
++	default:							\
++		BUILD_BUG();						\
++	}								\
++	(x) = (__typeof__(*(ptr)))__gu_val;				\
++} while (0)
++
++#define __get_user_asm(op, x, addr, err)				\
++({									\
++	__asm__ __volatile__(						\
++			"1:     "op" %1 = 0[%2]\n"			\
++			"       ;;\n"					\
++			"2:\n"						\
++			".section .fixup,\"ax\"\n"			\
++			"3:     make %0 = 2b\n"				\
++			"	make %1 = 0\n"				\
++			"       ;;\n"					\
++			"       make %0 = %3\n"				\
++			"       igoto %0\n"				\
++			"       ;;\n"					\
++			".previous\n"					\
++			".section __ex_table,\"a\"\n"			\
++			"       .align 8\n"				\
++			"       .dword 1b,3b\n"				\
++			".previous"					\
++			: "=r"(err), "=r"(x)				\
++			: "r"(addr), "i"(-EFAULT), "0"(err));		\
++})
++
++/**
++ * put_user: - Write a simple value into user space.
++ * @x:   Value to copy to user space.
++ * @ptr: Destination address, in user space.
++ *
++ * Context: User context only.  This function may sleep.
++ *
++ * This macro copies a single simple value from kernel space to user
++ * space.  It supports simple types like char and int, but not larger
++ * data types like structures or arrays.
++ *
++ * @ptr must have pointer-to-simple-variable type, and @x must be assignable
++ * to the result of dereferencing @ptr.
++ *
++ * Returns zero on success, or -EFAULT on error.
++ */
++#define put_user(x, ptr)						\
++({									\
++	long __e = -EFAULT;						\
++	__typeof__(*(ptr)) __user *__p = (ptr);				\
++	might_fault();							\
++	if (likely(access_ok(__p, sizeof(*__p)))) {			\
++		__e = __put_user(x, __p);				\
++	}								\
++	__e;								\
++})
++
++/**
++ * __put_user: - Write a simple value into user space, with less checking.
++ * @x:   Value to copy to user space.
++ * @ptr: Destination address, in user space.
++ *
++ * Context: User context only.  This function may sleep.
++ *
++ * This macro copies a single simple value from kernel space to user
++ * space.  It supports simple types like char and int, but not larger
++ * data types like structures or arrays.
++ *
++ * @ptr must have pointer-to-simple-variable type, and @x must be assignable
++ * to the result of dereferencing @ptr.
++ *
++ * Caller must check the pointer with access_ok() before calling this
++ * function.
++ *
++ * Returns zero on success, or -EFAULT on error.
++ */
++#define __put_user(x, ptr)						\
++({									\
++	unsigned long __err = 0;					\
++	__chk_user_ptr(ptr);						\
++									\
++	__enable_user_access();						\
++	__put_user_nocheck(x, ptr, __err);				\
++	__disable_user_access();					\
++									\
++	__err;								\
++})
++
++#define __put_user_nocheck(x, ptr, err)					\
++do {									\
++	unsigned long __pu_addr = (unsigned long)(ptr);			\
++	__typeof__(*(ptr)) __pu_val = (x);				\
++	switch (sizeof(*(ptr))) {					\
++	case 1:								\
++		__put_user_asm("sb", __pu_val, __pu_addr, err);		\
++		break;							\
++	case 2:								\
++		__put_user_asm("sh", __pu_val, __pu_addr, err);		\
++		break;							\
++	case 4:								\
++		__put_user_asm("sw", __pu_val, __pu_addr, err);		\
++		break;							\
++	case 8:								\
++		__put_user_asm("sd", __pu_val, __pu_addr, err);		\
++		break;							\
++	default:							\
++		BUILD_BUG();						\
++	}								\
++} while (0)
++
++#define __put_user_asm(op, x, addr, err)				\
++({									\
++	__asm__ __volatile__(						\
++			"1:     "op" 0[%2], %1\n"			\
++			"       ;;\n"					\
++			"2:\n"						\
++			".section .fixup,\"ax\"\n"			\
++			"3:     make %0 = 2b\n"				\
++			"       ;;\n"					\
++			"       make %0 = %3\n"				\
++			"       igoto %0\n"				\
++			"       ;;\n"					\
++			".previous\n"					\
++			".section __ex_table,\"a\"\n"			\
++			"       .align 8\n"				\
++			"       .dword 1b,3b\n"				\
++			".previous"					\
++			: "=r"(err)					\
++			: "r"(x), "r"(addr), "i"(-EFAULT), "0"(err));	\
++})
++
++#define HAVE_GET_KERNEL_NOFAULT
++
++#define __get_kernel_nofault(dst, src, type, err_label)			\
++do {									\
++	long __kr_err;							\
++									\
++	__get_user_nocheck(*((type *)(dst)), (type *)(src), __kr_err);	\
++	if (unlikely(__kr_err))						\
++		goto err_label;						\
++} while (0)
++
++#define __put_kernel_nofault(dst, src, type, err_label)			\
++do {									\
++	long __kr_err;							\
++									\
++	__put_user_nocheck(*((type *)(src)), (type *)(dst), __kr_err);	\
++	if (unlikely(__kr_err))						\
++		goto err_label;						\
++} while (0)
++
++
++#endif	/* _ASM_KVX_UACCESS_H */
+diff --git a/arch/kvx/include/asm/unistd.h b/arch/kvx/include/asm/unistd.h
+new file mode 100644
+index 000000000000..6cd093dbf2d8
+--- /dev/null
++++ b/arch/kvx/include/asm/unistd.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#define __ARCH_WANT_SYS_CLONE
++
++#include <uapi/asm/unistd.h>
++
++#define NR_syscalls (__NR_syscalls)
+diff --git a/arch/kvx/include/uapi/asm/cachectl.h b/arch/kvx/include/uapi/asm/cachectl.h
+new file mode 100644
+index 000000000000..be0a1aa23cf6
+--- /dev/null
++++ b/arch/kvx/include/uapi/asm/cachectl.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _UAPI_ASM_KVX_CACHECTL_H
++#define _UAPI_ASM_KVX_CACHECTL_H
++
++/*
++ * Cache type for cachectl system call
++ */
++#define CACHECTL_CACHE_DCACHE		(1 << 0)
++
++/*
++ * Flags for cachectl system call
++ */
++#define CACHECTL_FLAG_OP_INVAL		(1 << 0)
++#define CACHECTL_FLAG_OP_WB		(1 << 1)
++#define CACHECTL_FLAG_OP_MASK		(CACHECTL_FLAG_OP_INVAL | \
++					 CACHECTL_FLAG_OP_WB)
++
++#define CACHECTL_FLAG_ADDR_PHYS		(1 << 2)
++
++#endif /* _UAPI_ASM_KVX_CACHECTL_H */
+diff --git a/arch/kvx/include/uapi/asm/unistd.h b/arch/kvx/include/uapi/asm/unistd.h
+new file mode 100644
+index 000000000000..5f86d81dbb76
+--- /dev/null
++++ b/arch/kvx/include/uapi/asm/unistd.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#define __ARCH_WANT_RENAMEAT
++#define __ARCH_WANT_NEW_STAT
++#define __ARCH_WANT_SET_GET_RLIMIT
++#define __ARCH_WANT_SYS_CLONE3
++
++#include <asm-generic/unistd.h>
++
++/* Additional KVX specific syscalls */
++#define __NR_cachectl (__NR_arch_specific_syscall)
++__SYSCALL(__NR_cachectl, sys_cachectl)
+diff --git a/arch/kvx/kernel/entry.S b/arch/kvx/kernel/entry.S
+new file mode 100644
+index 000000000000..e73dc2221c06
+--- /dev/null
++++ b/arch/kvx/kernel/entry.S
+@@ -0,0 +1,1759 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ *            Marius Gligor
++ *            Yann Sionneau
++ *            Julien Villette
++ */
++
++#include <linux/linkage.h>
++
++#include <asm/thread_info.h>
++#include <asm/asm-offsets.h>
++#include <asm/cache.h>
++#include <asm/page.h>
++#include <asm/pgtable-bits.h>
++#include <asm/sys_arch.h>
 +#include <asm/sfr_defs.h>
-+#include <asm/current.h>
-+#include <asm/tlbflush.h>
-+
-+static int handle_vmalloc_fault(uint64_t ea)
-+{
-+	/*
-+	 * Synchronize this task's top level page-table with
-+	 * the 'reference' page table.
-+	 * As we only have 2 or 3 level page table we don't need to
-+	 * deal with other levels.
-+	 */
-+	unsigned long addr = ea & PAGE_MASK;
-+	pgd_t *pgd_k, *pgd;
-+	p4d_t *p4d_k, *p4d;
-+	pud_t *pud_k, *pud;
-+	pmd_t *pmd_k, *pmd;
-+	pte_t *pte_k;
-+
-+	pgd = pgd_offset(current->active_mm, ea);
-+	pgd_k = pgd_offset_k(ea);
-+	if (!pgd_present(*pgd_k))
-+		return 1;
-+	set_pgd(pgd, *pgd_k);
-+
-+	p4d = p4d_offset(pgd, ea);
-+	p4d_k = p4d_offset(pgd_k, ea);
-+	if (!p4d_present(*p4d_k))
-+		return 1;
-+
-+	pud = pud_offset(p4d, ea);
-+	pud_k = pud_offset(p4d_k, ea);
-+	if (!pud_present(*pud_k))
-+		return 1;
-+
-+	pmd = pmd_offset(pud, ea);
-+	pmd_k = pmd_offset(pud_k, ea);
-+	if (!pmd_present(*pmd_k))
-+		return 1;
-+
-+	/* Some other architectures set pmd to synchronize them but
-+	 * as we just synchronized the pgd we don't see how they can
-+	 * be different. Maybe we miss something so in case we
-+	 * put a guard here.
-+	 */
-+	if (pmd_val(*pmd) != pmd_val(*pmd_k))
-+		pr_err("%s: pmd not synchronized (0x%lx != 0x%lx)\n",
-+		       __func__, pmd_val(*pmd), pmd_val(*pmd_k));
-+
-+	pte_k = pte_offset_kernel(pmd_k, ea);
-+	if (!pte_present(*pte_k)) {
-+		pr_err("%s: PTE not present for 0x%llx\n",
-+		       __func__, ea);
-+		return 1;
-+	}
-+
-+	/* We refill the TLB now to avoid to take another nomapping
-+	 * trap.
-+	 */
-+	kvx_mmu_jtlb_add_entry(addr, pte_k, 0);
-+
-+	return 0;
-+}
-+
-+void do_page_fault(uint64_t es, uint64_t ea, struct pt_regs *regs)
-+{
-+	struct mm_struct *mm;
-+	struct vm_area_struct *vma;
-+	unsigned long flags, cause, vma_mask;
-+	int code = SEGV_MAPERR;
-+	vm_fault_t fault;
-+
-+	cause = kvx_sfr_field_val(es, ES, RWX);
-+
-+	/* We fault-in kernel-space virtual memory on-demand. The
-+	 * 'reference' page table is init_mm.pgd.
-+	 */
-+	if (is_vmalloc_addr((void *) ea) && !user_mode(regs)) {
-+		if (handle_vmalloc_fault(ea))
-+			goto no_context;
-+		return;
-+	}
-+
-+	mm = current->mm;
-+
-+	/*
-+	 * If we're in an interrupt or have no user
-+	 * context, we must not take the fault..
-+	 */
-+	if (unlikely(faulthandler_disabled() || !mm))
-+		goto no_context;
-+
-+	/* By default we retry and fault task can be killed */
-+	flags = FAULT_FLAG_DEFAULT;
-+
-+	if (user_mode(regs))
-+		flags |= FAULT_FLAG_USER;
-+
-+	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, ea);
-+
-+retry:
-+	mmap_read_lock(mm);
-+
-+	vma = find_vma(mm, ea);
-+	if (!vma)
-+		goto bad_area;
-+	if (likely(vma->vm_start <= ea))
-+		goto good_area;
-+	if (unlikely(!(vma->vm_flags & VM_GROWSDOWN)))
-+		goto bad_area;
-+	if (unlikely(expand_stack(vma, ea)))
-+		goto bad_area;
-+
-+good_area:
-+	/* Handle access type */
-+	switch (cause) {
-+	case KVX_TRAP_RWX_FETCH:
-+		vma_mask = VM_EXEC;
-+		break;
-+	case KVX_TRAP_RWX_READ:
-+		vma_mask = VM_READ;
-+		break;
-+	case KVX_TRAP_RWX_WRITE:
-+		vma_mask = VM_WRITE;
-+		flags |= FAULT_FLAG_WRITE;
-+		break;
-+	/* Atomic are both read/write */
-+	case KVX_TRAP_RWX_ATOMIC:
-+		vma_mask = VM_WRITE | VM_READ;
-+		flags |= FAULT_FLAG_WRITE;
-+		break;
-+	default:
-+		panic("%s: unhandled cause %lu", __func__, cause);
-+	}
-+
-+	if ((vma->vm_flags & vma_mask) != vma_mask) {
-+		code = SEGV_ACCERR;
-+		goto bad_area;
-+	}
-+
-+	/*
-+	 * If for any reason we can not handle the fault we make sure that
-+	 * we exit gracefully rather then retry endlessly with the same
-+	 * result.
-+	 */
-+	fault = handle_mm_fault(vma, ea, flags, regs);
-+
-+	/*
-+	 * If we need to retry but a fatal signal is pending, handle the
-+	 * signal first. We do not need to release the mmap_sem because it
-+	 * would already be released in __lock_page_or_retry in mm/filemap.c.
-+	 */
-+	if (fault_signal_pending(fault, regs))
-+		return;
-+
-+	if (unlikely(fault & VM_FAULT_ERROR)) {
-+		if (fault & VM_FAULT_OOM)
-+			goto out_of_memory;
-+		else if (fault & VM_FAULT_SIGSEGV)
-+			goto bad_area;
-+		else if (fault & VM_FAULT_SIGBUS)
-+			goto do_sigbus;
-+		BUG();
-+	}
-+
-+	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
-+		flags |= FAULT_FLAG_TRIED;
-+		/* No need to up_read(&mm->mmap_sem) as we would
-+		 * have already released it in __lock_page_or_retry().
-+		 * Look in mm/filemap.c for explanations.
-+		 */
-+		goto retry;
-+	}
-+
-+	/* Fault errors and retry case have been handled nicely */
-+	mmap_read_unlock(mm);
-+	return;
-+
-+bad_area:
-+	mmap_read_unlock(mm);
-+
-+	if (user_mode(regs)) {
-+		user_do_sig(regs, SIGSEGV, code, ea);
-+		return;
-+	}
-+
-+no_context:
-+	/* Are we prepared to handle this kernel fault?
-+	 *
-+	 * (The kernel has valid exception-points in the source
-+	 *  when it accesses user-memory. When it fails in one
-+	 *  of those points, we find it in a table and do a jump
-+	 *  to some fixup code that loads an appropriate error
-+	 *  code)
-+	 */
-+	if (fixup_exception(regs))
-+		return;
-+
-+	/*
-+	 * Oops. The kernel tried to access some bad page. We'll have to
-+	 * terminate things with extreme prejudice.
-+	 */
-+	bust_spinlocks(1);
-+	if (kvx_sfr_field_val(es, ES, HTC) == KVX_TRAP_PROTECTION)
-+		pr_alert(CUT_HERE "Kernel protection trap at virtual address %016llx\n",
-+			 ea);
-+	else {
-+		pr_alert(CUT_HERE "Unable to handle kernel %s at virtual address %016llx\n",
-+			 (ea < PAGE_SIZE) ? "NULL pointer dereference" :
-+			 "paging request", ea);
-+	}
-+	die(regs, ea, "Oops");
-+	bust_spinlocks(0);
-+	make_task_dead(SIGKILL);
-+
-+out_of_memory:
-+	/*
-+	 * We ran out of memory, call the OOM killer, and return the userspace
-+	 * (which will retry the fault, or kill us if we got oom-killed).
-+	 */
-+	mmap_read_unlock(mm);
-+	if (!user_mode(regs))
-+		goto no_context;
-+	pagefault_out_of_memory();
-+	return;
-+
-+do_sigbus:
-+	mmap_read_unlock(mm);
-+	/* Kernel mode? Handle exceptions or die */
-+	if (!user_mode(regs))
-+		goto no_context;
-+
-+	user_do_sig(regs, SIGBUS, BUS_ADRERR, ea);
-+
-+	return;
-+
-+}
-+
-+void do_writetoclean(uint64_t es, uint64_t ea, struct pt_regs *regs)
-+{
-+	panic("%s not implemented", __func__);
-+}
-diff --git a/arch/kvx/mm/init.c b/arch/kvx/mm/init.c
-new file mode 100644
-index 000000000000..bac34bc09eb5
---- /dev/null
-+++ b/arch/kvx/mm/init.c
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ */
-+
-+/* Memblock header depends on types.h but does not include it ! */
-+#include <linux/types.h>
-+#include <linux/memblock.h>
-+#include <linux/mmzone.h>
-+#include <linux/of_fdt.h>
-+#include <linux/sched.h>
-+#include <linux/sizes.h>
-+#include <linux/init.h>
-+#include <linux/initrd.h>
-+#include <linux/pfn.h>
-+#include <linux/mm.h>
-+
-+#include <asm/sections.h>
 +#include <asm/tlb_defs.h>
-+#include <asm/tlbflush.h>
-+#include <asm/fixmap.h>
-+#include <asm/page.h>
++#include <asm/mem_map.h>
++#include <asm/traps.h>
++#include <asm/unistd.h>
 +
-+/*
-+ * On kvx, memory map contains the first 2G of DDR being aliased.
-+ * Full contiguous DDR is located at @[4G - 68G].
-+ * However, to access this DDR in 32bit mode, the first 2G of DDR are
-+ * mirrored from 4G to 2G.
-+ * These first 2G are accessible from all DMAs (included 32 bits one).
-+ *
-+ * Hence, the memory map is the following:
-+ *
-+ * (68G) 0x1100000000-> +-------------+
-+ *                      |             |
-+ *              66G     |(ZONE_NORMAL)|
-+ *                      |             |
-+ *   (6G) 0x180000000-> +-------------+
-+ *                      |             |
-+ *              2G      |(ZONE_DMA32) |
-+ *                      |             |
-+ *   (4G) 0x100000000-> +-------------+ +--+
-+ *                      |             |    |
-+ *              2G      |   (Alias)   |    | 2G Alias
-+ *                      |             |    |
-+ *    (2G) 0x80000000-> +-------------+ <--+
-+ *
-+ * The translation of 64 bits -> 32 bits can then be done using dma-ranges property
-+ * in device-trees.
-+ */
++#define MMU_SET_MASK		((1 << KVX_SFR_MMC_SS_WIDTH) - 1)
 +
-+#define DDR_64BIT_START		(4ULL * SZ_1G)
-+#define DDR_32BIT_ALIAS_SIZE	(2ULL * SZ_1G)
++/* Mask to replicate data from 32bits LSB to MSBs */
++#define REPLICATE_32_MASK 0x0804020108040201
 +
-+#define MAX_DMA32_PFN	PHYS_PFN(DDR_64BIT_START + DDR_32BIT_ALIAS_SIZE)
++#define PS_HWLOOP_ENABLE	(KVX_SFR_PS_HLE_MASK << 32)
++#define PS_HWLOOP_DISABLE	(KVX_SFR_PS_HLE_MASK)
++#define PS_HWLOOP_EN_ET_CLEAR_DAUS_DIS	\
++	(PS_HWLOOP_ENABLE | KVX_SFR_PS_ET_MASK | SFR_SET_VAL_WFXL(PS, DAUS, 0))
++#define PS_ET_CLEAR KVX_SFR_PS_ET_MASK
++#define PS_HLE_EN_IT_EN_ET_CLEAR_DAUS_DIS	\
++		(SFR_SET_VAL_WFXL(PS, HLE, 1) | \
++		SFR_SET_VAL_WFXL(PS, IE, 1) | \
++		SFR_SET_VAL_WFXL(PS, ET, 0) | \
++		SFR_SET_VAL_WFXL(PS, DAUS, 0))
 +
-+pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
++#define PS_IT_DIS		KVX_SFR_PS_IE_MASK
++#define PS_IL_CLEAR		KVX_SFR_PS_IL_WFXL_CLEAR
 +
-+/*
-+ * empty_zero_page is a special page that is used for zero-initialized data and
-+ * COW.
-+ */
-+struct page *empty_zero_page;
-+EXPORT_SYMBOL(empty_zero_page);
++#define MMC_CLEAR_TLB_CLEAR_WAY \
++	(SFR_CLEAR_WFXL(MMC, SB) | SFR_CLEAR_WFXL(MMC, SW))
 +
-+extern char _start[];
-+extern char __kernel_smem_code_start[];
-+extern char __kernel_smem_code_end[];
++#define MMC_SEL_TLB_CLEAR_WAY(__tlb) \
++	(SFR_SET_WFXL(MMC, SB, __tlb) | MMC_CLEAR_TLB_CLEAR_WAY)
++#define MMC_SEL_JTLB_CLEAR_WAY	MMC_SEL_TLB_CLEAR_WAY(MMC_SB_JTLB)
++#define MMC_SEL_LTLB_CLEAR_WAY	MMC_SEL_TLB_CLEAR_WAY(MMC_SB_LTLB)
 +
-+struct kernel_section {
-+	phys_addr_t start;
-+	phys_addr_t end;
-+};
++#define MME_WFXL(_enable)	SFR_SET_VAL_WFXL(PS, MME, _enable)
 +
-+struct kernel_section kernel_sections[] = {
-+	{
-+		.start = (phys_addr_t)__kernel_smem_code_start,
-+		.end = (phys_addr_t)__kernel_smem_code_end
-+	},
-+	{
-+		.start = __pa(_start),
-+		.end = __pa(_end)
-+	}
-+};
++/* Temporary scract system register for trap handling */
++#define TMP_SCRATCH_SR	$sr_pl3
 +
-+static void __init zone_sizes_init(void)
-+{
-+	unsigned long zones_size[MAX_NR_ZONES];
++.altmacro
 +
-+	memset(zones_size, 0, sizeof(zones_size));
++#define TEL_DEFAULT_VALUE  (TLB_ES_A_MODIFIED << KVX_SFR_TEL_ES_SHIFT)
 +
-+	zones_size[ZONE_DMA32] = min(MAX_DMA32_PFN, max_low_pfn);
-+	zones_size[ZONE_NORMAL] = max_low_pfn;
++#define TASK_THREAD_SAVE_AREA_QUAD(__q) \
++				(TASK_THREAD_SAVE_AREA + (__q) * QUAD_REG_SIZE)
 +
-+	free_area_init(zones_size);
-+}
-+
-+#ifdef CONFIG_BLK_DEV_INITRD
-+static void __init setup_initrd(void)
-+{
-+	u64 base = phys_initrd_start;
-+	u64 end = phys_initrd_start + phys_initrd_size;
-+
-+	if (phys_initrd_size == 0) {
-+		pr_info("initrd not found or empty");
-+		return;
-+	}
-+
-+	if (base < memblock_start_of_DRAM() || end > memblock_end_of_DRAM()) {
-+		pr_err("initrd not in accessible memory, disabling it");
-+		phys_initrd_size = 0;
-+		return;
-+	}
-+
-+	pr_info("initrd: 0x%llx - 0x%llx\n", base, end);
-+
-+	memblock_reserve(phys_initrd_start, phys_initrd_size);
-+
-+	/* the generic initrd code expects virtual addresses */
-+	initrd_start = (unsigned long) __va(base);
-+	initrd_end = initrd_start + phys_initrd_size;
-+}
++#ifdef CONFIG_DEBUG_EXCEPTION_STACK
++.section .rodata
++stack_error_panic_str_label:
++	.string "Stack has been messed up !"
 +#endif
 +
-+static phys_addr_t memory_limit = PHYS_ADDR_MAX;
-+
-+static int __init early_mem(char *p)
-+{
-+	if (!p)
-+		return 1;
-+
-+	memory_limit = memparse(p, &p) & PAGE_MASK;
-+	pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
-+
-+	return 0;
-+}
-+early_param("mem", early_mem);
-+
-+static void __init setup_bootmem(void)
-+{
-+	phys_addr_t kernel_start, kernel_end;
-+	phys_addr_t start, end = 0;
-+	u64 i;
-+
-+	init_mm.start_code = (unsigned long)_stext;
-+	init_mm.end_code = (unsigned long)_etext;
-+	init_mm.end_data = (unsigned long)_edata;
-+	init_mm.brk = (unsigned long)_end;
-+
-+	for (i = 0; i < ARRAY_SIZE(kernel_sections); i++) {
-+		kernel_start = kernel_sections[i].start;
-+		kernel_end = kernel_sections[i].end;
-+
-+		memblock_reserve(kernel_start, kernel_end - kernel_start);
-+	}
-+
-+	for_each_mem_range(i, &start, &end) {
-+		pr_info("%15s: memory  : 0x%lx - 0x%lx\n", __func__,
-+			(unsigned long)start,
-+			(unsigned long)end);
-+	}
-+
-+	/* min_low_pfn is the lowest PFN available in the system */
-+	min_low_pfn = PFN_UP(memblock_start_of_DRAM());
-+
-+	/* max_low_pfn indicates the end if NORMAL zone */
-+	max_low_pfn = PFN_DOWN(memblock_end_of_DRAM());
-+
-+	/* Set the maximum number of pages in the system */
-+	set_max_mapnr(max_low_pfn - min_low_pfn);
-+
-+#ifdef CONFIG_BLK_DEV_INITRD
-+	setup_initrd();
++#ifdef CONFIG_KVX_DEBUG_TLB_WRITE
++.section .rodata
++mmc_error_panic_str_label:
++	.string "Failed to write entry to the JTLB (in assembly refill)"
 +#endif
-+
-+	if (memory_limit != PHYS_ADDR_MAX)
-+		memblock_mem_limit_remove_map(memory_limit);
-+
-+	/* Don't reserve the device tree if its builtin */
-+	if (!is_kernel_rodata((unsigned long) initial_boot_params))
-+		early_init_fdt_reserve_self();
-+	early_init_fdt_scan_reserved_mem();
-+
-+	memblock_allow_resize();
-+	memblock_dump_all();
-+}
-+
-+static pmd_t fixmap_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
-+static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss __maybe_unused;
-+
-+void __init early_fixmap_init(void)
-+{
-+	unsigned long vaddr;
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	pmd_t *pmd;
-+
-+	/*
-+	 * Fixed mappings:
-+	 */
-+	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1);
-+	pgd = pgd_offset_pgd(swapper_pg_dir, vaddr);
-+	set_pgd(pgd, __pgd(__pa_symbol(fixmap_pmd)));
-+
-+	p4d = p4d_offset(pgd, vaddr);
-+	pud = pud_offset(p4d, vaddr);
-+	pmd = pmd_offset(pud, vaddr);
-+	set_pmd(pmd, __pmd(__pa_symbol(fixmap_pte)));
-+}
-+
-+void __init setup_arch_memory(void)
-+{
-+	setup_bootmem();
-+	sparse_init();
-+	zone_sizes_init();
-+}
-+
-+void __init mem_init(void)
-+{
-+	memblock_free_all();
-+
-+	/* allocate the zero page */
-+	empty_zero_page = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+	if (!empty_zero_page)
-+		panic("Failed to allocate the empty_zero_page");
-+}
-+
-+void free_initmem(void)
-+{
-+#ifdef CONFIG_POISON_INITMEM
-+	free_initmem_default(0x0);
-+#else
-+	free_initmem_default(-1);
-+#endif
-+}
-+
-+void __set_fixmap(enum fixed_addresses idx,
-+				phys_addr_t phys, pgprot_t flags)
-+{
-+	unsigned long addr = __fix_to_virt(idx);
-+	pte_t *pte;
-+
-+
-+	BUG_ON(idx >= __end_of_fixed_addresses);
-+
-+	pte = &fixmap_pte[pte_index(addr)];
-+
-+	if (pgprot_val(flags)) {
-+		set_pte(pte, pfn_pte(phys_to_pfn(phys), flags));
-+	} else {
-+		/* Remove the fixmap */
-+		pte_clear(&init_mm, addr, pte);
-+	}
-+	local_flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-+}
-+
-+static const pgprot_t protection_map[16] = {
-+	[VM_NONE]					= PAGE_NONE,
-+	[VM_READ]					= PAGE_READ,
-+	[VM_WRITE]					= PAGE_READ,
-+	[VM_WRITE | VM_READ]				= PAGE_READ,
-+	[VM_EXEC]					= PAGE_READ_EXEC,
-+	[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
-+	[VM_EXEC | VM_WRITE]				= PAGE_READ_EXEC,
-+	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_READ_EXEC,
-+	[VM_SHARED]					= PAGE_NONE,
-+	[VM_SHARED | VM_READ]				= PAGE_READ,
-+	[VM_SHARED | VM_WRITE]				= PAGE_READ_WRITE,
-+	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_READ_WRITE,
-+	[VM_SHARED | VM_EXEC]				= PAGE_READ_EXEC,
-+	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READ_EXEC,
-+	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_READ_WRITE_EXEC,
-+	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_READ_WRITE_EXEC
-+};
-+DECLARE_VM_GET_PAGE_PROT
-diff --git a/arch/kvx/mm/mmap.c b/arch/kvx/mm/mmap.c
-new file mode 100644
-index 000000000000..a2225db64438
---- /dev/null
-+++ b/arch/kvx/mm/mmap.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * derived from arch/arm64/mm/mmap.c
-+ *
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifdef CONFIG_STRICT_DEVMEM
-+
-+#include <linux/mm.h>
-+#include <linux/ioport.h>
-+
-+#include <asm/page.h>
-+
-+/*
-+ * devmem_is_allowed() checks to see if /dev/mem access to a certain address
-+ * is valid. The argument is a physical page number.  We mimic x86 here by
-+ * disallowing access to system RAM as well as device-exclusive MMIO regions.
-+ * This effectively disable read()/write() on /dev/mem.
-+ */
-+int devmem_is_allowed(unsigned long pfn)
-+{
-+	if (iomem_is_exclusive(pfn << PAGE_SHIFT))
-+		return 0;
-+	if (!page_is_ram(pfn))
-+		return 1;
-+	return 0;
-+}
-+
-+#endif
-diff --git a/arch/kvx/mm/mmu.c b/arch/kvx/mm/mmu.c
-new file mode 100644
-index 000000000000..9cb11bd2dfdf
---- /dev/null
-+++ b/arch/kvx/mm/mmu.c
-@@ -0,0 +1,202 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ *            Vincent Chardon
-+ *            Jules Maselbas
-+ */
-+
-+#include <linux/cache.h>
-+#include <linux/types.h>
-+#include <linux/irqflags.h>
-+#include <linux/printk.h>
-+#include <linux/percpu.h>
-+#include <linux/kernel.h>
-+#include <linux/spinlock.h>
-+#include <linux/spinlock_types.h>
-+
-+#include <asm/mmu.h>
-+#include <asm/tlb.h>
-+#include <asm/page_size.h>
-+#include <asm/mmu_context.h>
-+
-+#define DUMP_LTLB 0
-+#define DUMP_JTLB 1
-+
-+DEFINE_PER_CPU_ALIGNED(uint8_t[MMU_JTLB_SETS], jtlb_current_set_way);
-+static struct kvx_tlb_format ltlb_entries[MMU_LTLB_WAYS];
-+static unsigned long ltlb_entries_bmp;
-+
-+static int kvx_mmu_ltlb_overlaps(struct kvx_tlb_format tlbe)
-+{
-+	int bit = LTLB_ENTRY_FIXED_COUNT;
-+
-+	for_each_set_bit_from(bit, &ltlb_entries_bmp, MMU_LTLB_WAYS) {
-+		if (tlb_entry_overlaps(tlbe, ltlb_entries[bit]))
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * kvx_mmu_ltlb_add_entry - Add a kernel entry in the LTLB
-+ *
-+ * In order to lock some entries in the LTLB and be always mapped, this
-+ * function can be called with a physical address, a virtual address and
-+ * protection attribute to add an entry into the LTLB. This is mainly for
-+ * performances since there won't be any NOMAPPING traps for these pages.
-+ *
-+ * @vaddr: Virtual address for the entry (must be aligned according to tlb_ps)
-+ * @paddr: Physical address for the entry (must be aligned according to tlb_ps)
-+ * @flags: Protection attributes
-+ * @tlb_ps: Page size attribute for TLB (TLB_PS_*)
-+ */
-+void kvx_mmu_ltlb_add_entry(unsigned long vaddr, phys_addr_t paddr,
-+			    pgprot_t flags, unsigned long tlb_ps)
-+{
-+	unsigned int cp;
-+	unsigned int idx;
-+	unsigned long irqflags;
-+	struct kvx_tlb_format tlbe;
-+	u64 page_size = BIT(get_page_size_shift(tlb_ps));
-+
-+	BUG_ON(!IS_ALIGNED(vaddr, page_size) || !IS_ALIGNED(paddr, page_size));
-+
-+	cp = pgprot_cache_policy(pgprot_val(flags));
-+
-+	tlbe = tlb_mk_entry(
-+		(void *) paddr,
-+		(void *) vaddr,
-+		tlb_ps,
-+		TLB_G_GLOBAL,
-+		TLB_PA_NA_RW,
-+		cp,
-+		0,
-+		TLB_ES_A_MODIFIED);
-+
-+	local_irq_save(irqflags);
-+
-+	if (IS_ENABLED(CONFIG_KVX_DEBUG_TLB_WRITE) &&
-+	    kvx_mmu_ltlb_overlaps(tlbe))
-+		panic("VA %lx overlaps with an existing LTLB mapping", vaddr);
-+
-+	idx = find_next_zero_bit(&ltlb_entries_bmp, MMU_LTLB_WAYS,
-+				 LTLB_ENTRY_FIXED_COUNT);
-+	/* This should never happen */
-+	BUG_ON(idx >= MMU_LTLB_WAYS);
-+	__set_bit(idx, &ltlb_entries_bmp);
-+	ltlb_entries[idx] = tlbe;
-+	kvx_mmu_add_entry(MMC_SB_LTLB, idx, tlbe);
-+
-+	if (kvx_mmc_error(kvx_sfr_get(MMC)))
-+		panic("Failed to write entry to the LTLB");
-+
-+	local_irq_restore(irqflags);
-+}
-+
-+void kvx_mmu_ltlb_remove_entry(unsigned long vaddr)
-+{
-+	int ret, bit = LTLB_ENTRY_FIXED_COUNT;
-+	struct kvx_tlb_format tlbe;
-+
-+	for_each_set_bit_from(bit, &ltlb_entries_bmp, MMU_LTLB_WAYS) {
-+		tlbe = ltlb_entries[bit];
-+		if (tlb_entry_match_addr(tlbe, vaddr)) {
-+			__clear_bit(bit, &ltlb_entries_bmp);
-+			break;
-+		}
-+	}
-+
-+	if (bit == MMU_LTLB_WAYS)
-+		panic("Trying to remove non-existent LTLB entry for addr %lx\n",
-+		      vaddr);
-+
-+	ret = clear_ltlb_entry(vaddr);
-+	if (ret)
-+		panic("Failed to remove LTLB entry for addr %lx\n", vaddr);
-+}
-+
-+/**
-+ * kvx_mmu_jtlb_add_entry - Add an entry into JTLB
-+ *
-+ * JTLB is used both for kernel and user entries.
-+ *
-+ * @address: Virtual address for the entry (must be aligned according to tlb_ps)
-+ * @ptep: pte entry pointer
-+ * @asn: ASN (if pte entry is not global)
-+ */
-+void kvx_mmu_jtlb_add_entry(unsigned long address, pte_t *ptep,
-+			    unsigned int asn)
-+{
-+	unsigned int shifted_addr, set, way;
-+	unsigned long flags, pte_val;
-+	struct kvx_tlb_format tlbe;
-+	unsigned int pa, cp, ps;
-+	phys_addr_t pfn;
-+
-+	pte_val = pte_val(*ptep);
-+
-+	pfn = (phys_addr_t)pte_pfn(*ptep);
-+
-+	asn &= MM_CTXT_ASN_MASK;
-+
-+	/* Set page as accessed */
-+	pte_val(*ptep) |= _PAGE_ACCESSED;
-+
-+	BUILD_BUG_ON(KVX_PAGE_SZ_SHIFT != KVX_SFR_TEL_PS_SHIFT);
-+
-+	ps = (pte_val & KVX_PAGE_SZ_MASK) >> KVX_PAGE_SZ_SHIFT;
-+	pa = get_page_access_perms(KVX_ACCESS_PERMS_INDEX(pte_val));
-+	cp = pgprot_cache_policy(pte_val);
-+
-+	tlbe = tlb_mk_entry(
-+		(void *)pfn_to_phys(pfn),
-+		(void *)address,
-+		ps,
-+		(pte_val & _PAGE_GLOBAL) ? TLB_G_GLOBAL : TLB_G_USE_ASN,
-+		pa,
-+		cp,
-+		asn,
-+		TLB_ES_A_MODIFIED);
-+
-+	shifted_addr = address >> get_page_size_shift(ps);
-+	set = shifted_addr & MMU_JTLB_SET_MASK;
-+
-+	local_irq_save(flags);
-+
-+	if (IS_ENABLED(CONFIG_KVX_DEBUG_TLB_WRITE) &&
-+	    kvx_mmu_ltlb_overlaps(tlbe))
-+		panic("VA %lx overlaps with an existing LTLB mapping", address);
-+
-+	way = get_cpu_var(jtlb_current_set_way)[set]++;
-+	put_cpu_var(jtlb_current_set_way);
-+
-+	way &= MMU_JTLB_WAY_MASK;
-+
-+	kvx_mmu_add_entry(MMC_SB_JTLB, way, tlbe);
-+
-+	if (IS_ENABLED(CONFIG_KVX_DEBUG_TLB_WRITE) &&
-+	    kvx_mmc_error(kvx_sfr_get(MMC)))
-+		panic("Failed to write entry to the JTLB (in update_mmu_cache)");
-+
-+	local_irq_restore(flags);
-+}
-+
-+void __init kvx_mmu_early_setup(void)
-+{
-+	int bit;
-+	struct kvx_tlb_format tlbe;
-+
-+	kvx_mmu_remove_ltlb_entry(LTLB_ENTRY_EARLY_SMEM);
-+
-+	if (raw_smp_processor_id() != 0) {
-+		/* Apply existing ltlb entries starting from first one free */
-+		bit = LTLB_ENTRY_FIXED_COUNT;
-+		for_each_set_bit_from(bit, &ltlb_entries_bmp, MMU_LTLB_WAYS) {
-+			tlbe = ltlb_entries[bit];
-+			kvx_mmu_add_entry(MMC_SB_LTLB, bit, tlbe);
-+		}
-+	}
-+}
-diff --git a/arch/kvx/mm/mmu_stats.c b/arch/kvx/mm/mmu_stats.c
-new file mode 100644
-index 000000000000..e70b7e2dcab1
---- /dev/null
-+++ b/arch/kvx/mm/mmu_stats.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/seq_file.h>
-+#include <linux/debugfs.h>
-+
-+#include <asm/mmu_stats.h>
-+
-+static struct dentry *mmu_stats_debufs;
-+
-+static const char *mmu_refill_types_name[MMU_REFILL_TYPE_COUNT] = {
-+	[MMU_REFILL_TYPE_USER] = "User",
-+	[MMU_REFILL_TYPE_KERNEL] = "Kernel",
-+	[MMU_REFILL_TYPE_KERNEL_DIRECT] = "Kernel Direct"
-+};
-+
-+DEFINE_PER_CPU(struct mmu_stats, mmu_stats);
-+
-+static int mmu_stats_show(struct seq_file *m, void *v)
-+{
-+	int cpu, type;
-+	unsigned long avg = 0, total_refill, efficiency, total_cycles;
-+	struct mmu_stats *stats;
-+	struct mmu_refill_stats *ref_stat;
-+
-+	total_cycles = get_cycles();
-+	for_each_present_cpu(cpu) {
-+		stats = &per_cpu(mmu_stats, cpu);
-+		total_refill = 0;
-+
-+		seq_printf(m, " - CPU %d\n", cpu);
-+		for (type = 0; type < MMU_REFILL_TYPE_COUNT; type++) {
-+			ref_stat = &stats->refill[type];
-+			total_refill += ref_stat->count;
-+			if (ref_stat->count)
-+				avg = ref_stat->total / ref_stat->count;
-+			else
-+				avg = 0;
-+
-+			seq_printf(m,
-+				   "  - %s refill stats:\n"
-+				   "   - count: %lu\n"
-+				   "   - min: %lu\n"
-+				   "   - avg: %lu\n"
-+				   "   - max: %lu\n",
-+				   mmu_refill_types_name[type],
-+				   ref_stat->count,
-+				   ref_stat->min,
-+				   avg,
-+				   ref_stat->max
-+				   );
-+		}
-+
-+		if (total_refill)
-+			avg = stats->cycles_between_refill / total_refill;
-+		else
-+			avg = 0;
-+
-+		seq_printf(m, "  - Average cycles between refill: %lu\n", avg);
-+		seq_printf(m, "  - tlb_flush_all calls: %lu\n",
-+			   stats->tlb_flush_all);
-+		efficiency = stats->cycles_between_refill * 100 /
-+			     stats->last_refill;
-+		seq_printf(m, "  - Efficiency: %lu%%\n", efficiency);
-+	}
-+
-+	return 0;
-+}
-+
-+static int mmu_stats_open(struct inode *inode, struct file *filp)
-+{
-+	return single_open(filp, mmu_stats_show, NULL);
-+}
-+
-+static const struct file_operations mmu_stats_fops = {
-+	.open		= mmu_stats_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+
-+static int __init mmu_stats_debufs_init(void)
-+{
-+	mmu_stats_debufs = debugfs_create_dir("kvx_mmu_debug", NULL);
-+
-+	debugfs_create_file("mmu_stats", 0444, mmu_stats_debufs, NULL,
-+			    &mmu_stats_fops);
-+
-+	return 0;
-+}
-+subsys_initcall(mmu_stats_debufs_init);
-diff --git a/arch/kvx/mm/tlb.c b/arch/kvx/mm/tlb.c
-new file mode 100644
-index 000000000000..9542332fe4d6
---- /dev/null
-+++ b/arch/kvx/mm/tlb.c
-@@ -0,0 +1,433 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
-+ */
-+
-+#include <linux/mmu_context.h>
-+#include <linux/sched.h>
-+
-+#include <asm/tlbflush.h>
-+#include <asm/tlb_defs.h>
-+#include <asm/page_size.h>
-+#include <asm/mmu_stats.h>
-+#include <asm/pgtable.h>
-+#include <asm/tlb.h>
-+
-+/*
-+ * When in kernel, use dummy ASN 42 to be able to catch any problem easily if
-+ * ASN is not restored properly.
-+ */
-+#define KERNEL_DUMMY_ASN	42
-+
-+/* Threshold of page count above which we will regenerate a new ASN */
-+#define ASN_FLUSH_PAGE_THRESHOLD	(MMU_JTLB_ENTRIES)
-+
-+/* Threshold of page count above which we will flush the whole JTLB */
-+#define FLUSH_ALL_PAGE_THRESHOLD	(MMU_JTLB_ENTRIES)
-+
-+DEFINE_PER_CPU(unsigned long, kvx_asn_cache) = MM_CTXT_FIRST_CYCLE;
-+
-+#ifdef CONFIG_KVX_DEBUG_TLB_ACCESS
-+
-+static DEFINE_PER_CPU_ALIGNED(struct kvx_tlb_access_t[KVX_TLB_ACCESS_SIZE],
-+		       kvx_tlb_access_rb);
-+/* Lower bits hold the index and upper ones hold the number of wrapped */
-+static DEFINE_PER_CPU(unsigned int, kvx_tlb_access_idx);
-+
-+void kvx_update_tlb_access(int type)
-+{
-+	unsigned int *idx_ptr = &get_cpu_var(kvx_tlb_access_idx);
-+	unsigned int idx;
-+	struct kvx_tlb_access_t *tab = get_cpu_var(kvx_tlb_access_rb);
-+
-+	idx = KVX_TLB_ACCESS_GET_IDX(*idx_ptr);
-+
-+	kvx_mmu_get_tlb_entry(tab[idx].entry);
-+	tab[idx].mmc_val = kvx_sfr_get(MMC);
-+	tab[idx].type = type;
-+
-+	(*idx_ptr)++;
-+	put_cpu_var(kvx_tlb_access_rb);
-+	put_cpu_var(kvx_tlb_access_idx);
-+};
-+
-+#endif
-+
-+/**
-+ * clear_tlb_entry() - clear an entry in TLB if it exists
-+ * @addr: the address used to set TEH.PN
-+ * @global: is page global or not
-+ * @asn: ASN used if page is not global
-+ * @tlb_type: tlb type (MMC_SB_LTLB or MMC_SB_JTLB)
-+ *
-+ * Preemption must be disabled when calling this function. There is no need to
-+ * invalidate micro TLB because it is invalidated when we write TLB.
-+ *
-+ * Return: 0 if TLB entry was found and deleted properly, -ENOENT if not found
-+ * -EINVAL if found but in incorrect TLB.
-+ *
-+ */
-+static int clear_tlb_entry(unsigned long addr,
-+			   unsigned int global,
-+			   unsigned int asn,
-+			   unsigned int tlb_type)
-+{
-+	struct kvx_tlb_format entry;
-+	unsigned long mmc_val;
-+	int saved_asn, ret = 0;
-+
-+	/* Sanitize ASN */
-+	asn &= MM_CTXT_ASN_MASK;
-+
-+	/* Before probing we need to save the current ASN */
-+	mmc_val = kvx_sfr_get(MMC);
-+	saved_asn = kvx_sfr_field_val(mmc_val, MMC, ASN);
-+	kvx_sfr_set_field(MMC, ASN, asn);
-+
-+	/* Probe is based on PN and ASN. So ES can be anything */
-+	entry = tlb_mk_entry(0, (void *)addr, 0, global, 0, 0, 0,
-+			     TLB_ES_INVALID);
-+	kvx_mmu_set_tlb_entry(entry);
-+
-+	kvx_mmu_probetlb();
-+
-+	mmc_val = kvx_sfr_get(MMC);
-+
-+	if (kvx_mmc_error(mmc_val)) {
-+		if (kvx_mmc_parity(mmc_val)) {
-+			/*
-+			 * This should never happens unless you are bombared by
-+			 * streams of charged particules. If it happens just
-+			 * flush the JTLB and let's continue (but check your
-+			 * environment you are probably not in a safe place).
-+			 */
-+			WARN(1, "%s: parity error during lookup (addr 0x%lx, asn %u). JTLB will be flushed\n",
-+			     __func__, addr, asn);
-+			kvx_sfr_set_field(MMC, PAR, 0);
-+			local_flush_tlb_all();
-+		}
-+
-+		/*
-+		 * else there is no matching entry so just clean the error and
-+		 * restore the ASN before returning.
-+		 */
-+		kvx_sfr_set_field(MMC, E, 0);
-+		ret = -ENOENT;
-+		goto restore_asn;
-+	}
-+
-+	/* We surely don't want to flush another TLB type or we are fried */
-+	if (kvx_mmc_sb(mmc_val) != tlb_type) {
-+		ret = -EINVAL;
-+		goto restore_asn;
-+	}
-+
-+	/*
-+	 * At this point the probe found an entry. TEL and TEH have correct
-+	 * values so we just need to set the entry status to invalid to clear
-+	 * the entry.
-+	 */
-+	kvx_sfr_set_field(TEL, ES, TLB_ES_INVALID);
-+
-+	kvx_mmu_writetlb();
-+
-+	/* Need to read MMC SFR again */
-+	mmc_val = kvx_sfr_get(MMC);
-+	if (kvx_mmc_error(mmc_val))
-+		panic("%s: Failed to clear entry (addr 0x%lx, asn %u)",
-+		      __func__, addr, asn);
-+	else
-+		pr_debug("%s: Entry (addr 0x%lx, asn %u) cleared\n",
-+			__func__, addr, asn);
-+
-+restore_asn:
-+	kvx_sfr_set_field(MMC, ASN, saved_asn);
-+
-+	return ret;
-+}
-+
-+static void clear_jtlb_entry(unsigned long addr,
-+			     unsigned int global,
-+			     unsigned int asn)
-+{
-+	clear_tlb_entry(addr, global, asn, MMC_SB_JTLB);
-+}
-+
-+/**
-+ * clear_ltlb_entry() - Remove a LTLB entry
-+ * @vaddr: Virtual address to be matched against LTLB entries
-+ *
-+ * Return: Same value as clear_tlb_entry
-+ */
-+int clear_ltlb_entry(unsigned long vaddr)
-+{
-+	return clear_tlb_entry(vaddr, TLB_G_GLOBAL, KERNEL_DUMMY_ASN,
-+			       MMC_SB_LTLB);
-+}
-+
-+/* If mm is current we just need to assign the current task a new ASN. By
-+ * doing this all previous TLB entries with the former ASN will be invalidated.
-+ * if mm is not the current one we invalidate the context and when this other
-+ * mm will be swapped in then a new context will be generated.
-+ */
-+void local_flush_tlb_mm(struct mm_struct *mm)
-+{
-+	int cpu = smp_processor_id();
-+
-+	destroy_context(mm);
-+	if (current->active_mm == mm)
-+		activate_context(mm, cpu);
-+}
-+
-+void local_flush_tlb_page(struct vm_area_struct *vma,
-+			  unsigned long addr)
-+{
-+	int cpu = smp_processor_id();
-+	unsigned int current_asn;
-+	struct mm_struct *mm;
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+
-+	mm = vma->vm_mm;
-+	current_asn = mm_asn(mm, cpu);
-+
-+	/* If mm has no context there is nothing to do */
-+	if (current_asn != MM_CTXT_NO_ASN)
-+		clear_jtlb_entry(addr, TLB_G_USE_ASN, current_asn);
-+
-+	local_irq_restore(flags);
-+}
-+
-+void local_flush_tlb_all(void)
-+{
-+	struct kvx_tlb_format tlbe = KVX_EMPTY_TLB_ENTRY;
-+	int set, way;
-+	unsigned long flags;
-+#ifdef CONFIG_KVX_MMU_STATS
-+	struct mmu_stats *stats = &per_cpu(mmu_stats, smp_processor_id());
-+
-+	stats->tlb_flush_all++;
-+#endif
-+
-+	local_irq_save(flags);
-+
-+	/* Select JTLB and prepare TEL (constant) */
-+	kvx_sfr_set(TEL, (uint64_t) tlbe.tel_val);
-+	kvx_sfr_set_field(MMC, SB, MMC_SB_JTLB);
-+
-+	for (set = 0; set < MMU_JTLB_SETS; set++) {
-+		tlbe.teh.pn = set;
-+		for (way = 0; way < MMU_JTLB_WAYS; way++) {
-+			/* Set is selected automatically according to the
-+			 * virtual address.
-+			 * With 4K pages the set is the value of the 6 lower
-+			 * significant bits of the page number.
-+			 */
-+			kvx_sfr_set(TEH, (uint64_t) tlbe.teh_val);
-+			kvx_sfr_set_field(MMC, SW, way);
-+			kvx_mmu_writetlb();
-+
-+			if (kvx_mmc_error(kvx_sfr_get(MMC)))
-+				panic("Failed to initialize JTLB[s:%02d w:%d]",
-+				      set, way);
-+		}
-+	}
-+
-+	local_irq_restore(flags);
-+}
-+
-+void local_flush_tlb_range(struct vm_area_struct *vma,
-+			   unsigned long start,
-+			   unsigned long end)
-+{
-+	const unsigned int cpu = smp_processor_id();
-+	unsigned long flags;
-+	unsigned int current_asn;
-+	unsigned long pages = (end - start) >> PAGE_SHIFT;
-+
-+	if (pages > ASN_FLUSH_PAGE_THRESHOLD) {
-+		local_flush_tlb_mm(vma->vm_mm);
-+		return;
-+	}
-+
-+	start &= PAGE_MASK;
-+
-+	local_irq_save(flags);
-+
-+	current_asn = mm_asn(vma->vm_mm, cpu);
-+	if (current_asn != MM_CTXT_NO_ASN) {
-+		while (start < end) {
-+			clear_jtlb_entry(start, TLB_G_USE_ASN, current_asn);
-+			start += PAGE_SIZE;
-+		}
-+	}
-+
-+	local_irq_restore(flags);
-+}
-+
-+/**
-+ * local_flush_tlb_kernel_range() - flush kernel TLB entries
-+ * @start: start kernel virtual address
-+ * @end: end kernel virtual address
-+ *
-+ * Return: nothing
-+ */
-+void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+{
-+	unsigned long flags;
-+	unsigned long pages = (end - start) >> PAGE_SHIFT;
-+
-+	if (pages > FLUSH_ALL_PAGE_THRESHOLD) {
-+		local_flush_tlb_all();
-+		return;
-+	}
-+
-+	start &= PAGE_MASK;
-+
-+	local_irq_save(flags);
-+
-+	while (start < end) {
-+		clear_jtlb_entry(start, TLB_G_GLOBAL, KERNEL_DUMMY_ASN);
-+		start += PAGE_SIZE;
-+	}
-+
-+	local_irq_restore(flags);
-+}
-+
-+void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
-+		pmd_t *pmd)
-+{
-+	pte_t pte = __pte(pmd_val(*pmd));
-+
-+	/* THP PMD accessors are implemented in terms of PTE */
-+	update_mmu_cache(vma, addr, &pte);
-+}
-+
-+void update_mmu_cache(struct vm_area_struct *vma,
-+	unsigned long address, pte_t *ptep)
-+{
-+	struct mm_struct *mm;
-+	unsigned long asn;
-+	int cpu = smp_processor_id();
-+
-+	if (unlikely(ptep == NULL))
-+		panic("pte should not be NULL\n");
-+
-+	/* Flush any previous TLB entries */
-+	flush_tlb_page(vma, address);
-+
-+	/* No need to add the TLB entry until the process that owns the memory
-+	 * is running.
-+	 */
-+	mm = current->active_mm;
-+	if (vma && (mm != vma->vm_mm))
-+		return;
-+
-+	/*
-+	 * Get the ASN:
-+	 * ASN can have no context if address belongs to kernel space. In
-+	 * fact as pages are global for kernel space the ASN is ignored
-+	 * and can be equal to any value.
-+	 */
-+	asn = mm_asn(mm, cpu);
 +
 +#ifdef CONFIG_KVX_DEBUG_ASN
-+	/*
-+	 * For addresses that belong to user space, the value of the ASN
-+	 * must match the mmc.asn and be non zero
++.section .rodata
++asn_error_panic_str_label:
++	.string "ASN mismatch !"
++#endif
++
++/**
++ * call_trace_hardirqs: hardirqs tracing call
++ * state: State of hardirqs to be reported (on/off)
++ */
++.macro call_trace_hardirqs state
++#ifdef CONFIG_TRACE_IRQFLAGS
++	call trace_hardirqs_\state
++	;;
++#endif
++.endm
++
++/**
++ * disable_interrupts: Disable interrupts
++ * tmp_reg: Temporary register to use for interrupt disabling
++ */
++.macro disable_interrupt tmp_reg
++	make \tmp_reg = KVX_SFR_PS_IE_MASK
++	;;
++	wfxl $ps, \tmp_reg
++	;;
++.endm
++
++/**
++ * call_do_work_pending: Call do_work_pending and set stack argument ($r0)
++ * NOTE: Since do_work_pending requires thread_flags in $r1, they must
++ * be provided in $r1 before calling this macro.
++ * Moreover, do_work_pending expects interrupts to be disabled.
++ */
++.macro call_do_work_pending
++	copyd $r0 = $sp
++	call do_work_pending
++	;;
++.endm
++
++/**
++ * save_quad_regs: Save quad registers in temporary thread area
++ * After call, the quad is saved in task_struct.thread.save_area.
++ * sr_swap_reg is only used as a temporary value and will be
++ * restored after returning from this macro
++ *
++ * quad: 	Quad to saved
++ * sr_swap_reg:	Register used for sr swap and quad saving.
++ */
++.macro save_quad_regs quad sr_swap_reg
++	rswap \sr_swap_reg = $sr
++	;;
++	/* Save registers in save_area */
++	so __PA(TASK_THREAD_SAVE_AREA_QUAD(0))[\sr_swap_reg] = \quad
++	/* Restore register */
++	rswap \sr_swap_reg = $sr
++	;;
++.endm
++
++/**
++ * Switch task when entering kernel if needed.
++ * sp_reg: register which will be used to store original stack pointer when
++ * entering the kernel
++ * task_reg: is a register containing the current task pointer
++ * save_regs_label: label to jump to save register immediately. This label is
++ * used when we are already in kernel execution context.
++ * NOTE: when returning from this macro, we consider that the assembly following
++ * it will be executed only when coming from user space
++ */
++.macro switch_stack sp_reg task_reg save_regs_label
++	get \sp_reg = $sps
++	;;
++	/* Check if $sps.pl bit is 0 (ie in kernel mode)
++	 * if so, then we dont have to switch stack */
++	cb.even \sp_reg? \save_regs_label
++	/* Copy original $sp in a scratch reg */
++	copyd \sp_reg = $sp
++	;;
++	/* restore sp from kernel stack pointer */
++	ld $sp = __PA(TASK_THREAD_KERNEL_SP)[\task_reg]
++	;;
++.endm
++
++/**
++ * Disable MMU using a specified register
++ * scratch_reg: Scratch register to be used for $ps modification (clobbered)
++ * ps_val: Additionnal $ps modifications after returning disabling MMU
++ */
++.macro disable_mmu scratch_reg ps_val=0
++	/* Disable MME in $sps */
++	make \scratch_reg = MME_WFXL(0)
++	;;
++	wfxl $sps = \scratch_reg
++	;;
++	/* Enable DAUS in $ps */
++	make \scratch_reg = SFR_SET_VAL_WFXL(PS, DAUS, 1) | \ps_val
++	;;
++	wfxl $ps = \scratch_reg
++	/* We are now accessing data with MMU disabled */
++	;;
++.endm
++
++/**
++ * Disable MMU when entering exception path
++ * This macro does not require any register since used register will be
++ * restored after use. This can safely be used directly after entering
++ * exceptions.
++ */
++.macro exception_entry_disable_mmu
++	set TMP_SCRATCH_SR = $r0
++	disable_mmu $r0
++	;;
++	get $r0 = TMP_SCRATCH_SR
++	;;
++.endm
++
++/* Save callee registers on stack */
++.macro save_callee
++	sq PT_R18R19[$sp] = $r18r19
++	;;
++	so PT_Q20[$sp] = $r20r21r22r23
++	;;
++	so PT_Q24[$sp] = $r24r25r26r27
++	;;
++	so PT_Q28[$sp] = $r28r29r30r31
++	;;
++.endm
++
++/**
++ * Save registers for entry in kernel space.
++ * sp_reg should point to the original stack pointer when entering kernel space
++ * task_reg is a register containing the current task pointer
++ * both task_reg and sp_reg must be in saved_quad since they have been
++ * clobberred and will be restored when restoring saved_quad.
++ * pt_regs_sp is a single register which will be filled by pt_regs addr.
++ * When "returning" from this macro, hardware loop are enabled and exception
++ * is cleared, allowing to call kernel function without any risk.
++ */
++.macro save_regs_for_exception sp_reg task_reg saved_quad pt_regs_sp
++.if (\saved_quad==$r4r5r6r7 || \saved_quad==$r60r61r62r63)
++.error "saved_quad must not be $r4r5r6r7 or $r60r61r62r63 !"
++.endif
++	/* make some room on stack to save registers */
++	addd $sp = $sp, -(PT_SIZE_ON_STACK)
++	so __PA(PT_Q4-PT_SIZE_ON_STACK)[$sp] = $r4r5r6r7
++	/* Compute physical address of stack to avoid using 64bits immediate */
++	addd $r6 = $sp, VA_TO_PA_OFFSET - (PT_SIZE_ON_STACK)
++	;;
++	so PT_Q60[$r6] = $r60r61r62r63
++	/* Now that $r60r61r62r63 is saved, we can use it for saving
++	 * original stack stored in scratch_reg. Note that we can not
++	 * use the r12r13r14r15 quad to do that because it would
++	 * modify the current $r12/sp ! This is if course not what we
++	 * want and hence we use the freshly saved quad $r60r61r62r63.
++	 *
++	 * Note that we must use scratch_reg before reloading the saved
++	 * quad since the scratch reg is contained in it, so reloading
++	 * it before copying it would overwrite it.
 +	 */
-+	if (address < PAGE_OFFSET) {
-+		unsigned int mmc_asn = kvx_mmc_asn(kvx_sfr_get(MMC));
-+
-+		if (asn == MM_CTXT_NO_ASN)
-+			panic("%s: ASN [%lu] is not properly set for address 0x%lx on CPU %d\n",
-+			      __func__, asn, address, cpu);
-+
-+		if ((asn & MM_CTXT_ASN_MASK) != mmc_asn)
-+			panic("%s: ASN not synchronized with MMC: asn:%lu != mmc.asn:%u\n",
-+			      __func__, (asn & MM_CTXT_ASN_MASK), mmc_asn);
-+	}
++	copyd $r60 = \sp_reg
++	;;
++	/* Reload the saved quad registers to save correct values
++	 * Since we use the scratch reg before that */
++	lo \saved_quad = __PA(TASK_THREAD_SAVE_AREA_QUAD(0))[\task_reg]
++	;;
++	so PT_Q8[$r6] = $r8r9r10r11
++	;;
++	so PT_Q0[$r6] = $r0r1r2r3
++	copyd $r61 = $r13
++	get $r5 = $le
++	;;
++	sq PT_R16R17[$r6] = $r16r17
++	make $r10 = 0x0
++	copyd $r62 = $r14
++	;;
++	so PT_Q32[$r6] = $r32r33r34r35
++	/* Since we are going to enable hardware loop, we must be careful
++	 * and reset le (loop exit) to avoid any exploit and return to
++	 * user with kernel mode */
++	set $le = $r10
++	copyd $r63 = $r15
++	;;
++	so PT_Q36[$r6] = $r36r37r38r39
++	get $r0 = $cs
++	;;
++	so PT_Q40[$r6] = $r40r41r42r43
++	get $r1 = $spc
++	;;
++	so PT_Q44[$r6] = $r44r45r46r47
++	get $r2 = $sps
++	;;
++	so PT_Q48[$r6] = $r48r49r50r51
++	get $r3 = $es
++	;;
++	so PT_Q52[$r6] = $r52r53r54r55
++	get $r7 = $ra
++	;;
++	so PT_Q56[$r6] = $r56r57r58r59
++	get $r4 = $lc
++	;;
++	so PT_Q12[$r6] = $r60r61r62r63
++	copyd $r63 = $r6
++	get $r6 = $ls
++	;;
++	so PT_CS_SPC_SPS_ES[$r63] = $r0r1r2r3
++	;;
++	so PT_LC_LE_LS_RA[$r63] = $r4r5r6r7
++	/* Clear frame pointer */
++	make $fp = 0
++	;;
++	/* Copy regs stack pointer for macro caller */
++	copyd \pt_regs_sp = $sp
++#ifdef CONFIG_DEBUG_EXCEPTION_STACK
++	addd $sp = $sp, -STACK_REG_SIZE
++	;;
++	sd VA_TO_PA_OFFSET[$sp] = $sp
++	;;
 +#endif
++	/* Reenable hwloop, MMU and clear exception taken */
++	make $r8 = PS_HWLOOP_EN_ET_CLEAR_DAUS_DIS
++	;;
++	wfxl $ps, $r8
++	;;
++.endm
 +
-+	kvx_mmu_jtlb_add_entry(address, ptep, asn);
-+}
++/***********************************************************************
++*                Exception vectors trampolines
++***********************************************************************/
++#define exception_trampoline(__type) \
++.section .exception.## __type, "ax", @progbits ;\
++ENTRY(kvx_##__type ##_handler_trampoline): ;\
++	goto kvx_## __type ##_handler ;\
++	;; ;\
++ENDPROC(kvx_ ## __type ## _handler_trampoline) ;\
++.section .early_exception.## __type, "ax", @progbits ;\
++ENTRY(kvx_## __type ##_early_handler): ;\
++1:	nop ;\
++	;; ;\
++	goto 1b ;\
++	;; ;\
++ENDPROC(kvx_ ## __type ## _early_handler)
 +
++exception_trampoline(debug)
++exception_trampoline(trap)
++exception_trampoline(interrupt)
++exception_trampoline(syscall)
++
++#define EXCEPTION_ENTRY(__name) \
++.section .exception.text, "ax", @progbits ;\
++ENTRY(__name)
++
++
++/***********************************************************************
++*                  Common exception return path
++***********************************************************************/
++/**
++ * Restore registers after exception
++ * When entering this macro, $sp must be located right before regs
++ * storage.
++ */
++EXCEPTION_ENTRY(return_from_exception)
++#ifdef CONFIG_DEBUG_EXCEPTION_STACK
++	ld $r1 = 0[$sp]
++	;;
++	sbfd $r1 = $r1, $sp
++	;;
++	cb.deqz $r1, _check_ok
++	;;
++	make $r2 = panic
++	make $r0 = stack_error_panic_str_label
++	;;
++	icall $r2
++	;;
++_check_ok:
++	addd $sp = $sp, STACK_REG_SIZE
++	;;
++#endif
++	get $r11 = $sr
++	/* Load sps value from saved registers */
++	ld $r6 = PT_SPS[$sp]
++	;;
++	/* Disable interrupt to check task flags atomically */
++	disable_interrupt $r60
++	;;
++	/* Check PL bit of sps, if set, then it means we are returning
++	 * to a lower privilege level (ie to user), if so, we need to
++	 * check work pending. If coming from kernel, directly go to
++	 * register restoration */
++	cb.even $r6? _restore_regs
++	ld $r1 = TASK_TI_FLAGS[$r11]
++	;;
++	/* Do we have work pending ? */
++	andd $r5 = $r1, _TIF_WORK_MASK
++	;;
++	/**
++	 * If we do not have work pending (ie $r5 == 0) then we can
++	 * directly jump to _restore_regs without calling do_work_pending
++	 */
++	cb.deqz $r5? _restore_regs
++	;;
++	/*
++	 * Work pending can potentially call a signal handler and then return
++	 * via rt_sigreturn. Return path will be different (restore all regs)
++	 * and hence all registers are needed to be saved.
++	 */
++	save_callee
++	;;
++	call_do_work_pending
++	;;
++#ifdef CONFIG_TRACE_IRQFLAGS
++	/* reload sps value from saved registers */
++	ld $r6 = PT_SPS[$sp]
++	;;
++#endif
++_restore_regs:
++#ifdef CONFIG_TRACE_IRQFLAGS
++	/* Check if IRQs are going to be reenable in next context */
++	andd $r6 = $r6, KVX_SFR_SPS_IE_MASK
++	;;
++	cb.deqz $r6? 1f
++	;;
++	call trace_hardirqs_on
++	;;
++1:
++#endif
++	disable_mmu $r0, PS_HWLOOP_DISABLE
++	;;
++	lo $r0r1r2r3 = __PA(PT_CS_SPC_SPS_ES)[$sp]
++	/* Compute physical address of stack to avoid using 64bits immediate */
++	addd $r11 = $sp, VA_TO_PA_OFFSET
++	;;
++	lo $r4r5r6r7 = PT_LC_LE_LS_RA[$r11]
++	;;
++	lo $r60r61r62r63 = PT_Q60[$r11]
++	;;
++	lo $r56r57r58r59 = PT_Q56[$r11]
++	;;
++	lo $r52r53r54r55 = PT_Q52[$r11]
++	get $r14 = $sps
++	;;
++	lo $r48r49r50r51 = PT_Q48[$r11]
++	/* Generate a mask of ones at each bit where the current $sps
++	 * differs from the $sps to be restored
++	 */
++	xord $r14 = $r2, $r14
++	/* prepare wfxl clear mask on LSBs */
++	notd $r15 = $r2
++	/* prepare wfxl set mask on MSBs */
++	slld $r13 = $r2, 32
++	;;
++	lo $r44r45r46r47 = PT_Q44[$r11]
++	/* Replicate mask of ones on the 32 MSBs */
++	sbmm8 $r14 = $r14, REPLICATE_32_MASK
++	/* Combine the set and clear mask for wfxl */
++	insf  $r13 = $r15, 31, 0
++	;;
++	lo $r40r41r42r43 = PT_Q40[$r11]
++	set $lc = $r4
++	/* Mask to drop identical bits in order to avoid useless
++	 * privilege traps
++	 */
++	andd $r13 = $r13, $r14
++	;;
++	lq $r16r17 = PT_R16R17[$r11]
++	set $le = $r5
++	;;
++	lo $r32r33r34r35 = PT_Q32[$r11]
++	set $ls = $r6
++	;;
++	lo $r36r37r38r39 = PT_Q36[$r11]
++	copyd $r14 = $r11
++	set $ra = $r7
++	;;
++	lo $r8r9r10r11 = PT_Q8[$r14]
++	set $cs = $r0
++	/* MME was disabled by disable_mmu, reenable it before leaving */
++	ord $r13 = $r13, SFR_SET_VAL_WFXL(SPS, MME, 1)
++	;;
++	lo $r4r5r6r7 = PT_Q4[$r14]
++	set $spc = $r1
++	;;
++	lo $r0r1r2r3 = PT_Q0[$r14]
++	/* Store $sps wfxl value in scratch system register */
++	set TMP_SCRATCH_SR = $r13
++	;;
++	lo $r12r13r14r15 = PT_Q12[$r14]
++	rswap $r0 = TMP_SCRATCH_SR
++	;;
++	wfxl $sps = $r0
++	;;
++	/* Finally, restore $r0 value */
++	rswap $r0 = TMP_SCRATCH_SR
++	;;
++	rfe
++	;;
++ENDPROC(return_from_exception)
++
++/***********************************************************************
++*                      Debug handling
++***********************************************************************/
++EXCEPTION_ENTRY(kvx_debug_handler):
++	exception_entry_disable_mmu
++	;;
++	save_quad_regs $r0r1r2r3 $r4
++	;;
++	get $r2 = $sr
++	;;
++	switch_stack $r1 $r2 debug_save_regs
++	;;
++debug_save_regs:
++	save_regs_for_exception $r1 $r2 $r0r1r2r3 $r1
++	;;
++	get $r0 = $ea
++	/* tail-call for return_from_exception */
++	make $r3 = return_from_exception
++	;;
++	set $ra = $r3
++	;;
++	goto debug_handler
++	;;
++ENDPROC(kvx_debug_handler)
++
++/***********************************************************************
++*                      Traps handling
++***********************************************************************/
++/* These labels will be used for instruction patching */
++.global kvx_perf_tlb_refill, kvx_std_tlb_refill
++EXCEPTION_ENTRY(kvx_trap_handler):
++	/* Enable DAUS for physical data access */
++	exception_entry_disable_mmu
++	;;
++	/* Save r3 in a temporary system register to check if the trap is a
++	* nomapping or not */
++	set TMP_SCRATCH_SR = $r3
++	;;
++	get $r3 = $es
++	;;
++	/* Hardware trap cause  */
++	extfz $r3 = $r3, KVX_SFR_END(ES_HTC), KVX_SFR_START(ES_HTC)
++	;;
++	/* Is this a nomapping trap ? */
++	compd.eq $r3 = $r3, KVX_TRAP_NOMAPPING
++	;;
++	/* if nomapping trap, try fast_refill */
++	cb.even $r3? trap_slow_path
++	;;
++	/*
++	 * Fast TLB refill routine
++	 *
++	 * On kvx, we do not have hardware page walking, hence, TLB refill is
++	 * done using the core on no-mapping traps.
++	 * This routine must be as fast as possible to avoid wasting CPU time.
++	 * For that purpose, it is called directly from trap_handle after saving
++	 * only 8 registers ($r0 -> $r7) in a dedicated buffer.
++	 * To avoid taking nomapping while accessing page tables inside this
++	 * refill handler we switch to physical accesses using DAUS.
++	 * Once the switch is done, we save up to 8 registers to compute
++	 * the refill data.
++	 * This allows to avoid computing a complete task switching in order
++	 * to greatly reduce the refill time.
++	 *
++	 * We refill the JTLB which contains 128 sets with 4 way each.
++	 * Currently, the way selection is done using a round robin algorithm.
++	 *
++	 * The refill is using the basic flow:
++	 * 1 -	Enable physical access using DAUS.
++	 * 2 -	Save necessary registers
++	 * 3 -	Walk the page table to find the TLB entry to add (virtual to
++	 *	physical)
++	 * 4 -	Compute the TLB entry to be written (convert PTE to TLB entry)
++	 * 5 - 	Compute the target set (0 -> 127) for the new TLB entry
++	 *	This is done by extracting the 6 lsb of page number
++	 * 6 -	Get the current way to be used which is selected using a
++		simple round robin
++	 * 7 -	Mark PTE entry as _PAGE_ACCESSED (and optionally PAGE_DIRTY)
++	 * 8 -	Commit the new tlb entry
++	 * 9 -  Restore the virtual memory by disabling DAUS.
++	 *
++	 */
++	/* Get current task */
++	rswap $r63 = $sr
++	;;
++#ifdef CONFIG_KVX_MMU_STATS
++	get $r3 = $pm0
++	;;
++	sd __PA(TASK_THREAD_ENTRY_TS)[$r63] = $r3
++	;;
++#endif
++	/* Restore $r3 from temporary system scratch register */
++	get $r3 = TMP_SCRATCH_SR
++	/* Save registers to save $tel, $teh and $mmc */
++	so __PA(TASK_THREAD_SAVE_AREA_QUAD(2))[$r63] = $r8r9r10r11
++	;;
++	get $r8 = $tel
++	/* Save register for refill handler */
++	so __PA(TASK_THREAD_SAVE_AREA_QUAD(1))[$r63] = $r4r5r6r7
++	;;
++	/* Get exception address */
++	get $r0 = $ea
++	/* Save more registers to be comfy */
++	so __PA(TASK_THREAD_SAVE_AREA_QUAD(0))[$r63] = $r0r1r2r3
++	;;
++	get $r9 = $teh
++	;;
++	get $r10 = $mmc
++	;;
++	/* Restore $r63 value */
++	rswap $r63 = $sr
++	/* Check kernel address range */
++	addd $r4 = $r0, -KERNEL_DIRECT_MEMORY_MAP_BASE
++	/* Load task active mm for pgd loading in macro_tlb_refill */
++	ld $r1 = __PA(TASK_ACTIVE_MM)[$r63]
++	;;
++kvx_perf_tlb_refill:
++	/* Check if the address is in the kernel direct memory mapping */
++	compd.ltu $r3 = $r4, KERNEL_DIRECT_MEMORY_MAP_SIZE
++	/* Clear low bits of virtual address to align on page size */
++	andd $r5 = $r0, ~(REFILL_PERF_PAGE_SIZE - 1)
++	/* Create corresponding physical address */
++	addd $r2 = $r4, PHYS_OFFSET
++	;;
++	/* If address is not a kernel one, take the standard path */
++	cb.deqz $r3? kvx_std_tlb_refill
++	/* Prepare $teh value with virtual address and kernel value */
++	ord $r7 = $r5, REFILL_PERF_TEH_VAL
++	;;
++	/* Get $pm0 value as a pseudo random value for LTLB way to use */
++	get $r4 = $pm0
++	/* Clear low bits of physical address to align on page size */
++	andd $r2 = $r2, ~(REFILL_PERF_PAGE_SIZE - 1)
++	/* Prepare value for $mmc wfxl to select LTLB and correct way */
++	make $r5 = MMC_SEL_LTLB_CLEAR_WAY
++	;;
++	/* Keep low bits of timer value */
++	andw $r4 = $r4, (REFILL_PERF_ENTRIES - 1)
++	/* Get current task pointer for register restoration */
++	get $r11 = $sr
++	;;
++	/* Add LTLB base way number for kernel refill way */
++	addw $r4 = $r4, LTLB_KERNEL_RESERVED
++	/* Prepare $tel value with physical address and kernel value */
++	ord $r6 = $r2, REFILL_PERF_TEL_VAL
++	set $teh = $r7
++	;;
++	/* insert way in $mmc wfxl value */
++	insf $r5 = $r4, KVX_SFR_END(MMC_SW) + 32, KVX_SFR_START(MMC_SW) + 32
++	set $tel = $r6
++	;;
++	wfxl $mmc = $r5
++	;;
++	goto do_tlb_write
++	;;
++kvx_std_tlb_refill:
++	/* extract PGD offset */
++	extfz $r3 = $r0, (ASM_PGDIR_SHIFT + ASM_PGDIR_BITS - 1), ASM_PGDIR_SHIFT
++	/* is mm NULL ? if so, use init_mm */
++	cmoved.deqz $r1? $r1 = init_mm
++	;;
++	get $r7 = $pcr
++	/* Load pgd base address into $r1 */
++	ld $r1 = __PA(MM_PGD)[$r1]
++	;;
++	/* Add offset for physical address */
++	addd $r1 = $r1, VA_TO_PA_OFFSET
++	/* Extract processor ID to compute cpu_offset*/
++	extfz $r7 = $r7, KVX_SFR_END(PCR_PID), KVX_SFR_START(PCR_PID)
++	;;
++	/* Load PGD entry offset */
++	ld.xs $r1 = $r3[$r1]
++	/* Load per_cpu_offset */
++#if defined(CONFIG_SMP)
++	make $r5 = __PA(__per_cpu_offset)
++#endif
++	;;
++	/* extract PMD offset*/
++	extfz $r3 = $r0, (ASM_PMD_SHIFT + ASM_PMD_BITS - 1), ASM_PMD_SHIFT
++	/* If pgd entry is null -> out */
++	cb.deqz $r1? refill_err_out
++#if defined(CONFIG_SMP)
++	/* Load cpu offset */
++	ld.xs $r7 = $r7[$r5]
++#else
++	/* Force cpu offset to 0 */
++	make $r7 = 0
++#endif
++	;;
++	/* Load PMD entry offset and keep pointer to the entry for huge page */
++	addx8d $r2 = $r3, $r1
++	ld.xs $r1 = $r3[$r1]
++	;;
++	/* Check if it is a huge page (2Mb or 512Mb in PMD table)*/
++	andd $r6 = $r1, _PAGE_HUGE
++	/* If pmd entry is null -> out */
++	cb.deqz $r1? refill_err_out
++	/* extract PTE offset */
++	extfz $r3 = $r0, (PAGE_SHIFT + 8), PAGE_SHIFT
++	;;
++	/*
++	 * If the page is a huge one we already have set the PTE and the
++	 * pointer to the PTE.
++	 */
++	cb.dnez $r6? is_huge_page
++	;;
++	/* Load PTE entry */
++	ld.xs $r1 = $r3[$r1]
++	addx8d $r2 = $r3, $r1
++	;;
++	/* Check if it is a huge page (64Kb in PTE table) */
++	andd $r6 = $r1, _PAGE_HUGE
++	;;
++	/* Check if PTE entry is for a huge page */
++	cb.dnez $r6? is_huge_page
++	;;
++	/* 4K: Extract set value */
++	extfz $r0 = $r1, (PAGE_SHIFT + KVX_SFR_MMC_SS_WIDTH - 1), PAGE_SHIFT
++	/* 4K: Extract virt page from ea */
++	andd $r4 = $r0, PAGE_MASK
++	;;
++/*
++ * This path expects the following:
++ * - $r0 = set index
++ * - $r1 = pte entry
++ * - $r2 = pte entry address
++ * - $r4 = virtual page address
++ */
++pte_prepared:
++	/* Compute per_cpu_offset + current way of set address */
++	addd $r5 = $r0, $r7
++	/* Get exception cause for access type handling (page dirtying) */
++	get $r7 = $es
++	/* Clear way and select JTLB */
++	make $r6 = MMC_SEL_JTLB_CLEAR_WAY
++	;;
++	/* Load current way to use for current set */
++	lbz $r0 = __PA(jtlb_current_set_way)[$r5]
++	/* Check if the access was a "write" access */
++	andd $r7 = $r7, (KVX_TRAP_RWX_WRITE << KVX_SFR_ES_RWX_SHIFT)
++	;;
++	/* If bit PRESENT of pte entry is 0, then entry is not present */
++	cb.even $r1? refill_err_out
++	/*
++	 * Set the JTLB way in $mmc value, add 32 bits to be in the set part.
++	 * Since we are refilling JTLB, we must make sure we insert only
++	 * relevant bits (ie 2 bits for ways) to avoid using nonexistent ways.
++	 */
++	insf $r6 = $r0, KVX_SFR_START(MMC_SW) + 32 + (MMU_JTLB_WAYS_SHIFT - 1),\
++						KVX_SFR_START(MMC_SW) + 32
++	/* Extract page global bit */
++	extfz $r3 = $r1, _PAGE_GLOBAL_SHIFT, _PAGE_GLOBAL_SHIFT
++	/* Increment way value, note that we do not care about overflow since
++	 * we only use the two lower byte */
++	addd $r0 = $r0, 1
++	;;
++	/* Prepare MMC */
++	wfxl $mmc, $r6
++	;;
++	/* Insert global bit (if any) to its position into $teh value */
++	insf $r4 = $r3, KVX_SFR_TEH_G_SHIFT, KVX_SFR_TEH_G_SHIFT
++	/* If "write" access ($r7 != 0), then set it as dirty */
++	cmoved.dnez $r7? $r7 = _PAGE_DIRTY
++	/* Clear bits not related to FN in the pte entry for TEL writing */
++	andd $r6 = $r1, KVX_PFN_MASK
++	/* Store new way */
++	sb __PA(jtlb_current_set_way)[$r5] = $r0
++	;;
++	/* Extract access perms from pte entry (discard PAGE_READ bit +1) */
++	extfz $r3 = $r1, KVX_ACCESS_PERM_STOP_BIT, KVX_ACCESS_PERM_START_BIT + 1
++	/* Move FN bits to their place */
++	srld $r6 = $r6, KVX_PFN_SHIFT - PAGE_SHIFT
++	/* Extract the page size + cache policy */
++	andd $r0 = $r1, (KVX_PAGE_SZ_MASK | KVX_PAGE_CP_MASK)
++	/* Prepare SBMM value */
++	make $r5 = KVX_SBMM_BYTE_SEL
++	;;
++	/* Add page size + cache policy to $tel value */
++	ord $r6 = $r6, $r0
++	/* Get $mmc to get current ASN */
++	get $r0 = $mmc
++	/* Add _PAGE_ACCESSED bit to PTE entry for writeback */
++	ord $r7 = $r7, _PAGE_ACCESSED
++	;;
++	/* OR PTE value with accessed/dirty flags */
++	ord $r1 = $r1, $r7
++	/* Generate the byte selection for sbmm */
++	slld $r5 = $r5, $r3
++	/* Compute the mask to extract set and mask exception address */
++	make $r7 = KVX_PAGE_PA_MATRIX
++	;;
++	ord $r0 = $r6, TEL_DEFAULT_VALUE
++	/* Add ASN from mmc into future $teh value */
++	insf $r4 = $r0, KVX_SFR_END(MMC_ASN), KVX_SFR_START(MMC_ASN)
++	/* Get the page permission value */
++	sbmm8 $r6 = $r7, $r5
++	/* Check PAGE_READ bit in PTE entry */
++	andd $r3 = $r1, _PAGE_READ
++	;;
++	/* If PAGE_READ bit is not set, set policy as NA_NA */
++	cmoved.deqz $r3? $r6 = TLB_PA_NA_NA
++	;;
++	/* Shift PA to correct position */
++	slld $r6 = $r6, KVX_SFR_TEL_PA_SHIFT
++	set $teh = $r4
++	;;
++	/* Store updated pte entry */
++	sd 0[$r2] = $r1
++	/* Prepare tel */
++	ord $r6 = $r0, $r6
++	/* Get current task pointer for register restoration */
++	get $r11 = $sr
++	;;
++	set $tel = $r6
++	;;
++do_tlb_write:
++	tlbwrite
++	;;
++#ifdef CONFIG_KVX_DEBUG_TLB_WRITE
++	goto mmc_error_check
++	;;
++mmc_error_check_ok:
++#endif
++#ifdef CONFIG_KVX_DEBUG_ASN
++	goto asn_check
++	;;
++asn_check_ok:
++#endif
++	set $tel = $r8
++	/* Restore registers */
++	lo $r4r5r6r7 = __PA(TASK_THREAD_SAVE_AREA_QUAD(1))[$r11]
++	;;
++	set $teh = $r9
++	lo $r0r1r2r3 = __PA(TASK_THREAD_SAVE_AREA_QUAD(0))[$r11]
++	;;
++	set $mmc = $r10
++	;;
++	lo $r8r9r10r11 = __PA(TASK_THREAD_SAVE_AREA_QUAD(2))[$r11]
++	;;
++#ifdef CONFIG_KVX_MMU_STATS
++	/*
++	 * Fence to simulate a direct data dependency after returning from trap
++	 * nomapping handling. This is the worst case that can happen and the
++	 * processor will be stalled waiting for previous loads to complete.
++	 */
++	fence
++	;;
++	get $r4 = $pm0
++	;;
++	get $r0 = $sr
++	;;
++	/* Get cycles measured on trap entry */
++	ld $r1 = __PA(TASK_THREAD_ENTRY_TS)[$r0]
++	;;
++	/* Compute refill time */
++	sbfd $r0 = $r1, $r4
++	;;
 +#ifdef CONFIG_SMP
-+
-+struct tlb_args {
-+	struct vm_area_struct *ta_vma;
-+	unsigned long ta_start;
-+	unsigned long ta_end;
-+};
-+
-+static inline void ipi_flush_tlb_page(void *arg)
-+{
-+	struct tlb_args *ta = arg;
-+
-+	local_flush_tlb_page(ta->ta_vma, ta->ta_start);
-+}
-+
-+void
-+smp_flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
-+{
-+	struct tlb_args ta = {
-+		.ta_vma = vma,
-+		.ta_start = addr
-+	};
-+
-+	on_each_cpu_mask(mm_cpumask(vma->vm_mm), ipi_flush_tlb_page, &ta, 1);
-+}
-+EXPORT_SYMBOL(smp_flush_tlb_page);
-+
-+void
-+smp_flush_tlb_mm(struct mm_struct *mm)
-+{
-+	on_each_cpu_mask(mm_cpumask(mm), (smp_call_func_t)local_flush_tlb_mm,
-+			 mm, 1);
-+}
-+EXPORT_SYMBOL(smp_flush_tlb_mm);
-+
-+static inline void ipi_flush_tlb_range(void *arg)
-+{
-+	struct tlb_args *ta = arg;
-+
-+	local_flush_tlb_range(ta->ta_vma, ta->ta_start, ta->ta_end);
-+}
-+
-+void
-+smp_flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
-+		unsigned long end)
-+{
-+	struct tlb_args ta = {
-+		.ta_vma = vma,
-+		.ta_start = start,
-+		.ta_end = end
-+	};
-+
-+	on_each_cpu_mask(mm_cpumask(vma->vm_mm), ipi_flush_tlb_range, &ta, 1);
-+}
-+EXPORT_SYMBOL(smp_flush_tlb_range);
-+
-+static inline void ipi_flush_tlb_kernel_range(void *arg)
-+{
-+	struct tlb_args *ta = arg;
-+
-+	local_flush_tlb_kernel_range(ta->ta_start, ta->ta_end);
-+}
-+
-+void
-+smp_flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+{
-+	struct tlb_args ta = {
-+		.ta_start = start,
-+		.ta_end = end
-+	};
-+
-+	on_each_cpu(ipi_flush_tlb_kernel_range, &ta, 1);
-+}
-+EXPORT_SYMBOL(smp_flush_tlb_kernel_range);
-+
++	get $r1 = $pcr
++	;;
++	/* Extract processor ID to compute cpu_offset */
++	extfz $r1 = $r1, KVX_SFR_END(PCR_PID), KVX_SFR_START(PCR_PID)
++	make $r2 = __PA(__per_cpu_offset)
++	;;
++	/* Load cpu offset */
++	ld.xs $r1 = $r1[$r2]
++	;;
++	addd $r1 = $r1, __PA(mmu_stats)
++	;;
++#else
++	make $r1 = __PA(mmu_stats)
++	;;
 +#endif
++	/* Load time between refill + last refill cycle */
++	lq $r2r3 = MMU_STATS_CYCLES_BETWEEN_REFILL_OFF[$r1]
++	;;
++	/* Set last update time to current if 0 */
++	cmoved.deqz $r3? $r3 = $r4
++	/* remove current refill time to current cycle */
++	sbfd $r4 = $r0, $r4
++	;;
++	/* Compute time between last refill and current refill */
++	sbfd $r5 = $r3, $r4
++	/* Update last cycle time */
++	copyd $r3 = $r4
++	;;
++	/* Increment total time between refill */
++	addd $r2 = $r2, $r5
++	;;
++	sq MMU_STATS_CYCLES_BETWEEN_REFILL_OFF[$r1] = $r2r3
++	/* Get exception address */
++	get $r4 = $ea
++	;;
++	/* $r2 holds refill type (user/kernel/kernel_direct) */
++	make $r2 = MMU_STATS_REFILL_KERNEL_OFF
++	/* Check if address is a kernel direct mapping one */
++	compd.ltu $r3 = $r4, (KERNEL_DIRECT_MEMORY_MAP_BASE + \
++			      KERNEL_DIRECT_MEMORY_MAP_SIZE)
++	;;
++	cmoved.dnez $r3? $r2 = MMU_STATS_REFILL_KERNEL_DIRECT_OFF
++	/* Check if address is a user (ie below kernel) */
++	compd.ltu $r3 = $r4, KERNEL_DIRECT_MEMORY_MAP_BASE
++	;;
++	cmoved.dnez $r3? $r2 = MMU_STATS_REFILL_USER_OFF
++	;;
++	/* Compute refill struct addr into one reg */
++	addd $r1 = $r2, $r1
++	/* Load refill_struct values */
++	lo $r4r5r6r7 = $r2[$r1]
++	;;
++	/* Increment count */
++	addd $r4 = $r4, 1
++	/* Increment total cycles count */
++	addd $r5 = $r5, $r0
++	;;
++	/* Set min to ~0 if 0 */
++	cmoved.deqz $r6? $r6 = ~0
++	;;
++	/* Compare min and max */
++	compd.ltu $r2 = $r0, $r6
++	compd.gtu $r3 = $r0, $r7
++	;;
++	/* Update min and max*/
++	cmoved.dnez $r2? $r6 = $r0
++	cmoved.dnez $r3? $r7 = $r0
++	;;
++	/* store back all values */
++	so 0[$r1] = $r4r5r6r7
++	;;
++	get $r0 = $sr
++	;;
++	/* Restore clobberred registers */
++	lo $r4r5r6r7 = __PA(TASK_THREAD_SAVE_AREA_QUAD(1))[$r0]
++	;;
++	lo $r0r1r2r3 = __PA(TASK_THREAD_SAVE_AREA_QUAD(0))[$r0]
++	;;
++#endif
++	/* Save $r4 for reenabling mmu and data cache in sps */
++	set TMP_SCRATCH_SR = $r4
++	/* Enable MME in $sps */
++	make $r4 = MME_WFXL(1)
++	;;
++	/* Reenable $mme in $sps */
++	wfxl $sps = $r4
++	;;
++	get $r4 = TMP_SCRATCH_SR
++	;;
++	rfe
++	;;
++
++is_huge_page:
++	/*
++	 * When entering this path:
++	 * - $r0 = $ea
++	 * - $r1 = pte entry
++	 * - $r7 = cpu offset for tlb_current_set_way
++	 *
++	 * From now on, we have the pte value in $r1 so we can extract the page
++	 * size. This value is stored as it is expected by the MMU (ie between
++	 * 0 and 3).
++	 * Note that page size value is located at the same place as in $tel
++	 * and this is checked at build time so we can use TEL_PS defines.
++	 * In this codepath, we will extract the set and mask exception address
++	 * and align virt and phys address with what the hardware expect.
++	 * Indeed, MMU expect lsb of the virtual and physycal address to be 0
++	 * according to page size.
++	 * This means that for 4K pages, the 12 lsb must be 0, for 64K
++	 * pages, the 16 lsb must be 0 and so on.
++	 */
++	extfz $r5 = $r1, KVX_SFR_END(TEL_PS), KVX_SFR_START(TEL_PS)
++	/* Compute the mask to extract set and mask exception address */
++	make $r4 = KVX_PS_SHIFT_MATRIX
++	make $r6 = KVX_SBMM_BYTE_SEL
++	;;
++	/* Generate the byte selection for sbmm */
++	slld $r6 = $r6, $r5
++	;;
++	/* Get the shift value */
++	sbmm8 $r5 = $r4, $r6
++	make $r4 = 0xFFFFFFFFFFFFFFFF
++	;;
++	/* extract TLB set from ea (6 lsb of virtual page) */
++	srld $r5 = $r0, $r5
++	/* Generate ea masking according to page shift */
++	slld $r4 = $r4, $r5
++	;;
++	/* Mask to get the set value */
++	andd $r0 = $r5, MMU_SET_MASK
++	/* Extract virt page from ea */
++	andd $r4 = $r0, $r4
++	;;
++	/* Returned to fast path */
++	goto pte_prepared
++	;;
++
++#ifdef CONFIG_KVX_DEBUG_TLB_WRITE
++mmc_error_check:
++	get $r1 = $mmc
++	;;
++	andd $r1 = $r1, KVX_SFR_MMC_E_MASK
++	;;
++	cb.deqz $r1? mmc_error_check_ok
++	;;
++	make $r0 = mmc_error_panic_str_label
++	goto asm_panic
++	;;
++#endif
++#ifdef CONFIG_KVX_DEBUG_ASN
++/*
++ * When entering this path $r11 = $sr.
++ * WARNING: Do not clobber it here if you don't want to mess up with registers
++ * restoration above.
++ */
++asn_check:
++	get $r1 = $ea
++	;;
++	/* Check if kernel address, if so, there is no ASN */
++	compd.geu $r2 = $r1, PAGE_OFFSET
++	;;
++	cb.dnez $r2? asn_check_ok
++	;;
++	get $r2 = $pcr
++	/* Load active mm addr */
++	ld $r3 = __PA(TASK_ACTIVE_MM)[$r11]
++	;;
++	get $r5 = $mmc
++	/* Extract processor ID to compute cpu_offset*/
++	extfz $r2 = $r2, KVX_SFR_END(PCR_PID), KVX_SFR_START(PCR_PID)
++	addd $r3 = $r3, MM_CTXT_ASN
++	;;
++	extfz $r4 = $r5, KVX_SFR_END(MMC_ASN), KVX_SFR_START(MMC_ASN)
++	addd $r3 = $r3, VA_TO_PA_OFFSET
++	;;
++	/* Load current asn from active_mm */
++	ld.xs $r3 = $r2[$r3]
++	;;
++	/* Error if ASN is not set */
++	cb.deqz $r3? asn_check_err
++	/* Mask $r3 asn cycle part */
++	andd $r5 = $r3, ((1 << KVX_SFR_MMC_ASN_WIDTH) - 1)
++	;;
++	/* Compare asn in $mmc and asn in current task mm */
++	compd.eq $r3 = $r5, $r4
++	;;
++	cb.dnez $r3? asn_check_ok
++	;;
++asn_check_err:
++	/* We are fried, die peacefully */
++	make $r0 = asn_error_panic_str_label
++	goto asm_panic
++	;;
++#endif
++
++#if defined(CONFIG_KVX_DEBUG_ASN) || defined(CONFIG_KVX_DEBUG_TLB_WRITE)
++
++/**
++ * This routine calls panic from assembly after setting appropriate things
++ * $r0 = panic string
++ */
++asm_panic:
++	/*
++	 * Reenable hardware loop and traps (for nomapping) since some functions
++	 * might need it. Moreover, disable DAUS to reenable MMU accesses.
++	 */
++	make $r32 = PS_HWLOOP_EN_ET_CLEAR_DAUS_DIS
++	make $r33 = 0
++	get $r34 = $sr
++	;;
++	/* Clear hw loop exit to disable current loop */
++	set $le = $r33
++	;;
++	wfxl $ps = $r32
++	;;
++	/* Restore kernel stack */
++	ld $r12 = TASK_THREAD_KERNEL_SP[$r34]
++	;;
++	call panic
++	;;
++#endif
++
++/* Error path for TLB refill */
++refill_err_out:
++	get $r2 = $sr
++	;;
++	/* Restore clobbered registers */
++	lo $r8r9r10r11 = __PA(TASK_THREAD_SAVE_AREA_QUAD(2))[$r2]
++	;;
++	lo $r4r5r6r7 = __PA(TASK_THREAD_SAVE_AREA_QUAD(1))[$r2]
++	goto trap_switch_stack
++	;;
++
++/* This path is entered only when the trap is NOT a NOMAPPING */
++trap_slow_path:
++	/* Restore $r3 from temporary scratch system register */
++	get $r3 = TMP_SCRATCH_SR
++	;;
++	save_quad_regs $r0r1r2r3 $r4
++	;;
++	get $r2 = $sr
++	;;
++trap_switch_stack:
++	switch_stack $r1 $r2 trap_save_regs
++	;;
++trap_save_regs:
++	save_regs_for_exception $r1 $r2 $r0r1r2r3 $r2
++	;;
++	get $r1 = $ea
++	/* tail-call for return_from_exception */
++	make $r3 = return_from_exception
++	;;
++	set $ra = $r3
++	;;
++	/* Handler call */
++	get $r0 = $es
++	;;
++	goto trap_handler
++	;;
++ENDPROC(kvx_trap_handler)
++
++/***********************************************************************
++*                      Interrupts handling
++***********************************************************************/
++EXCEPTION_ENTRY(kvx_interrupt_handler):
++	exception_entry_disable_mmu
++	;;
++	save_quad_regs $r0r1r2r3 $r4
++	;;
++	get $r0 = $sr
++	;;
++	switch_stack $r1 $r0 it_save_regs
++	;;
++#ifdef CONFIG_SECURE_DAME_HANDLING
++	/**
++	 * In order to securely Handle Data Asynchronous Memory Error,
++	 * we need to have a correct entry point. This means we do not
++	 * want to handle a user induced DAME interrupt when entering
++	 * kernel.
++	 * In order to do that, we need to do a barrier, which will
++	 * reflect the DAME status in $ilr (if any).
++	 */
++	barrier
++	;;
++#endif
++it_save_regs:
++	save_regs_for_exception $r1 $r0 $r0r1r2r3 $r1
++	;;
++	get $r0 = $ilr
++	;;
++	get $r2 = $ile
++	;;
++	/**
++	 * When an interrupt happens, the processor automatically clears the
++	 * corresponding bit in $ilr. However, as we are using $ilr to get the
++	 * list of irqs we want to handle, we need to add the automatically
++	 * cleared interrupt bit. This is done by getting the interrupt number
++	 * from $es.
++	 */
++	get $r3 = $es
++	make $r4 = 1
++	;;
++	/* Extract interrupt number from $es */
++	extfz $r3 = $r3, KVX_SFR_END(ES_ITN), KVX_SFR_START(ES_ITN)
++	/**
++	 * Mask requests with enabled line since ILR will also contain disabled
++	 * interrupt lines (ie not enabled in $ile) and we want to respect the
++	 * current state of interrupt lines.
++	 */
++	andd $r0 = $r0, $r2
++	;;
++	/* Clear $ilr with bits we are going to handle */
++	wfxl $ilr = $r0
++	slld $r4 = $r4, $r3
++	;;
++	/* OR the irq mask with the current pending irq */
++	ord $r0 = $r0, $r4
++	call do_IRQ
++	;;
++	/* From now on, lower the interrupt level (IL) to allow IT nesting.
++	 * If returning to user, we will call schedule which will reenable
++	 * interrupts by itself when ready.
++	 * If returning to kernel and with CONFIG_PREEMPT, we will call
++	 * preempt_schedule_irq which will do the same.
++	 */
++	make $r0 = PS_IL_CLEAR
++	;;
++	wfxl $ps = $r0
++	;;
++	goto return_from_exception
++	;;
++ENDPROC(kvx_interrupt_handler)
++
++/***********************************************************************
++*                      Syscall handling
++***********************************************************************/
++EXCEPTION_ENTRY(kvx_syscall_handler):
++	/**
++	 * Syscalls are seen as standard func call from ABI POV
++	 * We may use all caller saved register whithout causing havoc
++	 * in the userspace. We need to save callee registers because they
++	 * will be restored when returning from fork.
++	 * Note that r0 -> r11 MUST not be used since they are
++	 * containing syscall parameters !
++	 * During this function, $r38 is the syscall handler address. Hence,
++	 * this register must not be clobberred during function calls (tracing
++	 * for instance.
++	 */
++	disable_mmu $r43
++	;;
++	get $r43 = $es
++	copyd $r52 = $sp
++	copyd $r53 = $tp
++	;;
++	get $r36 = $sr
++	copyd $r54 = $fp
++	copyd $r55 = $r15
++	;;
++	/* Extract syscall number */
++	extfz $r32 = $r43, KVX_SFR_END(ES_SN), KVX_SFR_START(ES_SN)
++	/* Get regs to save on stack */
++	get $r63 = $ra
++	addd $r36 = $r36, VA_TO_PA_OFFSET
++	;;
++	ld $r39 = TASK_TI_FLAGS[$r36]
++	get $r41 = $spc
++	make $r42 = __PA(sys_call_table)
++	;;
++	/* Check for out-of-bound syscall number */
++	sbfd $r50 = $r32, __NR_syscalls
++	/* Compute syscall func addr (ie sys_call_table[$r32])*/
++	ld.xs $r38 = $r32[$r42]
++	get $r42 = $sps
++	;;
++	/* True if trace syscall enable */
++	andd $r37 = $r39, _TIF_SYSCALL_WORK
++	/* Restore kernel stack pointer */
++	ld $sp = TASK_THREAD_KERNEL_SP[$r36]
++	/* If the syscall number is invalid, set invalid handler */
++	cmoved.dlez $r50? $r38 = sys_ni_syscall
++	;;
++	/* Prepare space on stack */
++	addd $sp = $sp, -PT_SIZE_ON_STACK
++	get $r40 = $cs
++	/* Save regs r0 -> r3 in pt_regs for restart & trace if needed */
++	so __PA(PT_Q0 - PT_SIZE_ON_STACK)[$sp] = $r0r1r2r3
++	;;
++	/* Store user stack pointer, frame pointer, thread pointer and r15 */
++	so __PA(PT_Q12)[$sp] = $r52r53r54r55
++	addd $r36 = $sp, VA_TO_PA_OFFSET
++	get $r60 = $lc
++	;;
++#ifdef CONFIG_SECURE_DAME_HANDLING
++	get $r44 = $ilr
++	make $r45 = SFR_CLEAR_WFXL(ILR, IT16);
++	;;
++	/* Extract $ilr.dame bit */
++	extfz $r44 = $r44, KVX_SFR_END(ILR_IT16), KVX_SFR_START(ILR_IT16)
++	/* Save $ilr value */
++	sd PT_ILR[$r36] = $r44
++	/* Clear $ilr.dame */
++	wfxl $ilr = $r45
++	;;
++#endif
++	so PT_CS_SPC_SPS_ES[$r36] = $r40r41r42r43
++	get $r61 = $le
++	make $r43 = 0x0
++	;;
++	/* Reenable hardware loops, IT, exceptions and disable DAUS */
++	make $r44 = PS_HLE_EN_IT_EN_ET_CLEAR_DAUS_DIS
++	get $r62 = $ls
++	/* Save regs r4 -> r7 in pt_regs for restart & trace if needed */
++	so PT_Q4[$r36] = $r4r5r6r7
++	;;
++	/* Clear $le on entry */
++	set $le = $r43
++	/* Save hw loop stuff */
++	so PT_LC_LE_LS_RA[$r36] = $r60r61r62r63
++	/* Clear frame pointer for kernel */
++	make $fp = 0
++	;;
++	/* Enable hwloop and interrupts and MMU
++	 * Note that we have to reenable interrupts after saving context
++	 * to avoid losing registers content */
++	wfxl $ps, $r44
++	;;
++	/* Do we have to trace the syscall ? */
++	cb.dnez $r37? trace_syscall_enter
++	/* Stroe original r0 value */
++	sd PT_ORIG_R0[$sp] = $r0
++	;;
++do_syscall:
++	/* Call the syscall handler */
++	icall $r38
++	;;
++	/*
++	 * rt_sigreturn syscall will not take this exit path (see
++	 * sys_rt_sigreturn for more information).
++	 */
++	/* Reload task flags since the syscall might have generated a signal*/
++	get $r36 = $sr
++	;;
++#ifdef CONFIG_SECURE_DAME_HANDLING
++	/* Barrier to force DAME interrupt to be generated if any pending */
++	barrier
++	;;
++#endif
++	/* Disable interrupt to check task flags atomically */
++	disable_interrupt $r60
++	;;
++	ld $r38 = TASK_TI_FLAGS[$r36]
++	;;
++	andd $r37 = $r38, _TIF_SYSCALL_WORK
++	;;
++	/* Save r0 which was returned from do_scall previously and will be
++	 * clobberred by do_work_pending (and potentially do_syscall_trace_exit
++	 * if tracing is enabled)
++	 * If do_signal is called and that syscall is restarted,
++	 * it will be modified by handle_restart to restore original
++	 * r0 value
++	 */
++	sd PT_Q0[$sp] = $r0
++	/* used to store if trace system */
++	cb.dnez $r37? trace_syscall_exit
++	;;
++check_work_pending:
++	/* Do we have work pending ? */
++	andd $r1 = $r38, _TIF_WORK_MASK
++	;;
++	/* If no work pending, directly continue to ret_to_user */
++	cb.dnez $r1? call_work_pending
++	;;
++ret_to_user:
++	disable_mmu $r60, PS_HWLOOP_DISABLE
++	;;
++	/* Compute $sp virtual address to avoid using 64 bits offset */
++	addd $r15 = $sp, VA_TO_PA_OFFSET
++	;;
++	/* Restore registers */
++	lo $r60r61r62r63 = PT_LC_LE_LS_RA[$r15]
++	get $r33 = $sps
++	;;
++	lo $r40r41r42r43 = PT_CS_SPC_SPS_ES[$r15];
++	set $ra = $r63
++	;;
++	/* Restore syscall arguments since they might be needed for
++	 * syscall restart
++	 */
++	lo $r0r1r2r3 = PT_Q0[$r15]
++	set $cs = $r40
++	/* Generate a mask of ones at each bit where the current $sps
++	 * differs from the $sps to be restored
++	 */
++	xord $r33 = $r42, $r33
++	/* prepare wfxl clear mask on LSBs */
++	notd $r34 = $r42
++	/* prepare wfxl set mask on MSBs */
++	slld $r35 = $r42, 32
++	;;
++	set $lc = $r60
++	/* Replicate mask of ones on the 32 MSBs */
++	sbmm8 $r33 = $r33, REPLICATE_32_MASK
++	/* Combine the set and clear mask for wfxl */
++	insf  $r35 = $r34, 31, 0
++	;;
++	lo $r4r5r6r7 = PT_Q4[$r15]
++	set $le = $r61
++	/* Mask to drop identical bits in order to avoid useless
++	 * privilege traps
++	 */
++	andd $r35 = $r35, $r33
++	;;
++	/* Restore $ilr */
++	ld $r44 = PT_ILR[$r15]
++	set $ls = $r62
++	/* Reenable MMU in $sps */
++	ord $r35 = $r35, SFR_SET_VAL_WFXL(SPS, MME, 1)
++	;;
++	/* Restore user pointer */
++	lo $r12r13r14r15 = PT_Q12[$r15]
++	/* Prepare $r44 as a set mask for $ilr wfxl */
++	slld $r44 = $r44,  32
++	;;
++	/**
++	 * wfxl on $ilr to avoid privilege traps when restoring with set
++	 * Note that we do that after disabling interrupt since we explicitly
++	 * want to serve DAME itnerrupt to the user (ie not in kernel mode).
++	 */
++	wfxl $ilr = $r44
++	;;
++	wfxl $sps = $r35
++	;;
++	set $spc = $r41
++	;;
++	/* TODO: we might have to clear some registers to avoid leaking
++	 * information to user space ! callee saved regs have been
++	 * restored by called function but caller saved regs might
++	 * have been used without being cleared */
++	rfe
++	;;
++
++/* Slow paths handling */
++call_work_pending:
++	/*
++	 * Work pending can potentially call a signal handler and then return
++	 * via rt_sigreturn. Return path will be different (restore all regs)
++	 * and hence all registers are needed to be saved.
++	 */
++	save_callee
++	;;
++	call_do_work_pending
++	;;
++	/* Since we are returning to user, interrupts will be reenabled */
++	call_trace_hardirqs on
++	;;
++	goto ret_to_user
++	;;
++
++trace_syscall_enter:
++	/* Save $r38 (syscall handler) which was computed above */
++	sd PT_R38[$sp] = $r38
++	;;
++	/* do_syscall_trace_enter expect pt_regs and syscall number
++	 * as argument */
++	copyd $r0 = $sp
++	copyd $r1 = $r32
++	;;
++	call do_syscall_trace_enter
++	;;
++	/* Restore r38 (syscall handler) which might has been clobbered by
++	 * do_syscall_trace_enter */
++	ld $r38 = PT_R38[$sp]
++	;;
++	/* if the trace system requested to abort syscall, set $r38 to
++	 * non implemented syscall */
++	cmoved.dnez $r0? $r38 = sys_ni_syscall
++	;;
++	/* Restore registers since the do_syscall_trace_enter call might
++	 * have clobbered them and we need them for the actual syscall
++	 * call */
++	lo $r0r1r2r3 = PT_Q0[$sp]
++	;;
++	lo $r4r5r6r7 = PT_Q4[$sp]
++	;;
++	goto do_syscall
++	;;
++trace_syscall_exit:
++	copyd $r0 = $sp
++	call do_syscall_trace_exit
++	;;
++	/* ptrace_notify might re-enable interrupts, disable them to be sure
++	 * it will not mess up context restoration path */
++	disable_interrupt $r36
++	;;
++	get $r36 = $sr
++	;;
++	ld $r38 = TASK_TI_FLAGS[$r36]
++	goto check_work_pending
++	;;
++ENDPROC(kvx_syscall_handler)
++
++.text
++/**
++ * sys_rt_sigreturn: Special handler for sigreturn
++ * rt_sigreturn is called after invoking a user signal handler (see
++ * user_scall_rt_sigreturn). Since this signal handler can be invoked after
++ * interrupts have been handled, this means we must restore absolutely all user
++ * registers. Normally, this has been done by setup_sigcontext which saved all
++ * user registers on the user stack.
++ * In restore sigcontext, they have been restored onto entry stack (stack to be
++ * restored). However, the standard syscall path do not restore it completely
++ * since only callee-saved registers are restored for fork and al.
++ * Here, we will restore all registers which might have been clobberred.
++ */
++ENTRY(sys_rt_sigreturn)
++	/*
++	 * If syscall tracing is enable (stored in $r37 during syscall
++	 * fastpath), tail-call to trace_exit. If not, tail-call to
++	 * ret_from_kernel.
++	 */
++	cmoved.dnez $r37? $r38 = scall_trace_exit
++	cmoved.deqz $r37? $r38 = ret_from_kernel
++	;;
++	set $ra = $r38
++	;;
++	goto _sys_rt_sigreturn
++	;;
++scall_trace_exit:
++	copyd $r0 = $sp
++	call do_syscall_trace_exit
++	;;
++	goto ret_from_kernel
++	;;
++ENDPROC(sys_rt_sigreturn)
++
++/**
++ * __sys_clone: slow path handler for clone
++ *
++ * Save callee registers (from $r18 to $31) since they are needed for
++ * child process when restoring it.
++ * Indeed, when forking we want it to have the same registers contents
++ * as its parent. These registers will then be restored in
++ * ret_from_fork.
++ * This slow path saves them out of the fast path to avoid bloating all syscall
++ * just for one special case.
++ */
++ENTRY(__sys_clone)
++	save_callee
++	;;
++	/*
++	 * Use goto since we want sys_clone to "ret" to the previous caller.
++	 * This allows to simply go back in the normal syscall fastpath
++	 */
++	goto sys_clone
++	;;
++ENDPROC(__sys_clone)
++/***********************************************************************
++*                      Context switch
++***********************************************************************/
++
++#define SAVE_TCA_REG(__reg_num, __task_reg, __zero_reg1, __zero_reg2) \
++	xso (CTX_SWITCH_TCA_REGS + (__reg_num * TCA_REG_SIZE))[__task_reg] = \
++							$a##__reg_num ;\
++	movetq $a##__reg_num##.lo = __zero_reg1, __zero_reg2 ;\
++	movetq $a##__reg_num##.hi = __zero_reg1, __zero_reg2 ;\
++	;;
++
++.macro save_tca_regs task_reg zero_reg1 zero_reg2
++	SAVE_TCA_REG(0, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(1, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(2, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(3, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(4, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(5, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(6, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(7, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(8, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(9, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(10, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(11, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(12, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(13, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(14, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(15, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(16, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(17, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(18, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(19, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(20, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(21, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(22, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(23, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(24, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(25, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(26, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(27, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(28, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(29, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(30, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(31, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(32, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(33, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(34, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(35, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(36, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(37, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(38, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(39, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(40, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(41, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(42, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(43, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(44, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(45, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(46, \task_reg, \zero_reg1, \zero_reg2)
++	SAVE_TCA_REG(47, \task_reg, \zero_reg1, \zero_reg2)
++.endm
++
++#define RESTORE_TCA_REG(__reg_num, __task_reg) \
++	xlo.u $a##__reg_num = (CTX_SWITCH_TCA_REGS + (__reg_num * TCA_REG_SIZE)) \
++								[__task_reg] ;\
++	;;
++
++.macro restore_tca_regs task_reg
++	RESTORE_TCA_REG(0, \task_reg)
++	RESTORE_TCA_REG(1, \task_reg)
++	RESTORE_TCA_REG(2, \task_reg)
++	RESTORE_TCA_REG(3, \task_reg)
++	RESTORE_TCA_REG(4, \task_reg)
++	RESTORE_TCA_REG(5, \task_reg)
++	RESTORE_TCA_REG(6, \task_reg)
++	RESTORE_TCA_REG(7, \task_reg)
++	RESTORE_TCA_REG(8, \task_reg)
++	RESTORE_TCA_REG(9, \task_reg)
++	RESTORE_TCA_REG(10, \task_reg)
++	RESTORE_TCA_REG(11, \task_reg)
++	RESTORE_TCA_REG(12, \task_reg)
++	RESTORE_TCA_REG(13, \task_reg)
++	RESTORE_TCA_REG(14, \task_reg)
++	RESTORE_TCA_REG(15, \task_reg)
++	RESTORE_TCA_REG(16, \task_reg)
++	RESTORE_TCA_REG(17, \task_reg)
++	RESTORE_TCA_REG(18, \task_reg)
++	RESTORE_TCA_REG(19, \task_reg)
++	RESTORE_TCA_REG(20, \task_reg)
++	RESTORE_TCA_REG(21, \task_reg)
++	RESTORE_TCA_REG(22, \task_reg)
++	RESTORE_TCA_REG(23, \task_reg)
++	RESTORE_TCA_REG(24, \task_reg)
++	RESTORE_TCA_REG(25, \task_reg)
++	RESTORE_TCA_REG(26, \task_reg)
++	RESTORE_TCA_REG(27, \task_reg)
++	RESTORE_TCA_REG(28, \task_reg)
++	RESTORE_TCA_REG(29, \task_reg)
++	RESTORE_TCA_REG(30, \task_reg)
++	RESTORE_TCA_REG(31, \task_reg)
++	RESTORE_TCA_REG(32, \task_reg)
++	RESTORE_TCA_REG(33, \task_reg)
++	RESTORE_TCA_REG(34, \task_reg)
++	RESTORE_TCA_REG(35, \task_reg)
++	RESTORE_TCA_REG(36, \task_reg)
++	RESTORE_TCA_REG(37, \task_reg)
++	RESTORE_TCA_REG(38, \task_reg)
++	RESTORE_TCA_REG(39, \task_reg)
++	RESTORE_TCA_REG(40, \task_reg)
++	RESTORE_TCA_REG(41, \task_reg)
++	RESTORE_TCA_REG(42, \task_reg)
++	RESTORE_TCA_REG(43, \task_reg)
++	RESTORE_TCA_REG(44, \task_reg)
++	RESTORE_TCA_REG(45, \task_reg)
++	RESTORE_TCA_REG(46, \task_reg)
++	RESTORE_TCA_REG(47, \task_reg)
++.endm
++
++.text
++/*
++ * When entering in ret_from_kernel_thread, r20 and r21 where set by
++ * copy_thread and have been restored in switch_to.
++ * These registers contains the values needed to call a function
++ * specified by the switch_to caller (or where set by copy_thread).
++ */
++ENTRY(ret_from_kernel_thread)
++	call schedule_tail
++	;;
++	/* Call fn(arg) */
++	copyd $r0 = $r21
++	;;
++	icall $r20
++	;;
++	goto ret_from_kernel
++	;;
++ENDPROC(ret_from_kernel_thread)
++
++/**
++ * Return from fork.
++ * start_thread will set return stack and pc. Then copy_thread will
++ * take care of the copying logic.
++ * $r20 will then contains 0 if tracing disabled (set by copy_thread)
++ * The mechanism is almost the same as for ret_from_kernel_thread.
++ */
++ENTRY(ret_from_fork)
++	call schedule_tail
++	;;
++	/* $r20 contains 0 if tracing disable */
++	cb.deqz $r20? ret_from_kernel
++	;;
++	copyd $r0 = $sp
++	call do_syscall_trace_exit
++	;;
++ret_from_kernel:
++	/*
++	 * When returning from a fork, the child will take this path.
++	 * Since we did not restore callee in return_from_exception, we
++	 * must do it before.
++	 */
++	lo $r28r29r30r31 = PT_Q28[$sp]
++	;;
++	lo $r24r25r26r27 = PT_Q24[$sp]
++	;;
++	lo $r20r21r22r23 = PT_Q20[$sp]
++	;;
++	lq $r18r19 = PT_R18R19[$sp]
++	;;
++#ifdef CONFIG_DEBUG_EXCEPTION_STACK
++	/**
++	* Debug code expect entry stack to be stored at current $sp.
++	* Make some room and store current $sp to avoid triggering false alarm.
++	*/
++	addd $sp = $sp, -STACK_REG_SIZE
++	;;
++	sd 0[$sp] = $sp
++#endif
++	;;
++	goto return_from_exception
++	;;
++ENDPROC(ret_from_fork)
++
++/*
++ * The callee-saved registers must be saved and restored.
++ * When entering:
++ * - r0 = previous task struct
++ * - r1 = next task struct
++ * Moreover, the parameters for function call (given by copy_thread)
++ * are stored in:
++ * - r20 = Func to call
++ * - r21 = Argument for function
++ */
++ENTRY(__switch_to)
++	sd CTX_SWITCH_FP[$r0] = $fp
++	;;
++	/* Save previous task context */
++	so CTX_SWITCH_Q20[$r0] = $r20r21r22r23
++	;;
++	so CTX_SWITCH_Q24[$r0] = $r24r25r26r27
++	get $r16 = $ra
++	;;
++	so CTX_SWITCH_Q28[$r0] = $r28r29r30r31
++	copyd $r17 = $sp
++	get $r2 = $cs
++	;;
++	so CTX_SWITCH_RA_SP_R18_R19[$r0] = $r16r17r18r19
++	/* Extract XMF bit which means coprocessor was used by user */
++	andd $r3 = $r2, KVX_SFR_CS_XMF_MASK
++	;;
++#ifdef CONFIG_ENABLE_TCA
++	make $r4 = 0
++	make $r5 = 0
++	make $r6 = 1
++	cb.dnez $r3? save_tca_registers
++	/* Check if next task needs TCA registers to be restored */
++	ld $r7 = CTX_SWITCH_TCA_REGS_SAVED[$r1]
++	;;
++check_restore_tca:
++	cb.dnez $r7? restore_tca_registers
++	;;
++restore_fast_path:
++#endif
++	/* Restore next task context */
++	lo $r16r17r18r19 = CTX_SWITCH_RA_SP_R18_R19[$r1]
++	;;
++	lo $r20r21r22r23 = CTX_SWITCH_Q20[$r1]
++	;;
++	lo $r24r25r26r27 = CTX_SWITCH_Q24[$r1]
++	copyd $sp = $r17
++	set $ra = $r16
++	;;
++	lo $r28r29r30r31 = CTX_SWITCH_Q28[$r1]
++	set $sr = $r1
++	;;
++	ld $fp = CTX_SWITCH_FP[$r1]
++	;;
++	ret
++	;;
++#ifdef CONFIG_ENABLE_TCA
++save_tca_registers:
++	save_tca_regs $r0 $r4 $r5
++	;;
++	/* Indicates that we saved the TCA context */
++	sb CTX_SWITCH_TCA_REGS_SAVED[$r0] = $r6
++	goto check_restore_tca
++	;;
++restore_tca_registers:
++	restore_tca_regs $r1
++	;;
++	/* Clear TCA registers saved hint */
++	sb CTX_SWITCH_TCA_REGS_SAVED[$r1] = $r5
++	goto restore_fast_path
++	;;
++#endif
++ENDPROC(__switch_to)
++
++/***********************************************************************
++*          		 Misc functions
++***********************************************************************/
++
++/**
++ * Avoid hardcoding trampoline for rt_sigreturn by using this code and
++ * copying it on user trampoline
++ */
++.pushsection .text
++.global user_scall_rt_sigreturn_end
++ENTRY(user_scall_rt_sigreturn)
++	make $r6 = __NR_rt_sigreturn
++	;;
++	scall $r6
++	;;
++user_scall_rt_sigreturn_end:
++ENDPROC(user_scall_rt_sigreturn)
++.popsection
+diff --git a/arch/kvx/kernel/sys_kvx.c b/arch/kvx/kernel/sys_kvx.c
+new file mode 100644
+index 000000000000..b32a821d76c9
+--- /dev/null
++++ b/arch/kvx/kernel/sys_kvx.c
+@@ -0,0 +1,58 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ */
++
++#include <linux/syscalls.h>
++
++#include <asm/cacheflush.h>
++#include <asm/cachectl.h>
++
++SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
++	unsigned long, prot, unsigned long, flags,
++	unsigned long, fd, off_t, off)
++{
++	/* offset must be a multiple of the page size */
++	if (unlikely(offset_in_page(off) != 0))
++		return -EINVAL;
++
++	/* Unlike mmap2 where the offset is in PAGE_SIZE-byte units, here it
++	 * is in bytes. So we need to use PAGE_SHIFT.
++	 */
++	return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
++}
++
++SYSCALL_DEFINE4(cachectl, unsigned long, addr, unsigned long, len,
++		unsigned long, cache, unsigned long, flags)
++{
++	bool wb = !!(flags & CACHECTL_FLAG_OP_WB);
++	bool inval = !!(flags & CACHECTL_FLAG_OP_INVAL);
++
++	if (len == 0)
++		return 0;
++
++	/* Check for overflow */
++	if (addr + len < addr)
++		return -EFAULT;
++
++	if (cache != CACHECTL_CACHE_DCACHE)
++		return -EINVAL;
++
++	if ((flags & CACHECTL_FLAG_OP_MASK) == 0)
++		return -EINVAL;
++
++	if (flags & CACHECTL_FLAG_ADDR_PHYS) {
++		if (!IS_ENABLED(CONFIG_CACHECTL_UNSAFE_PHYS_OPERATIONS))
++			return -EINVAL;
++
++		if (!capable(CAP_SYS_ADMIN))
++			return -EPERM;
++
++		dcache_wb_inval_phys_range(addr, len, wb, inval);
++		return 0;
++	}
++
++	return dcache_wb_inval_virt_range(addr, len, wb, inval);
++}
+diff --git a/arch/kvx/kernel/syscall_table.c b/arch/kvx/kernel/syscall_table.c
+new file mode 100644
+index 000000000000..7859d25e728d
+--- /dev/null
++++ b/arch/kvx/kernel/syscall_table.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * derived from arch/riscv/kernel/syscall_table.c
++ *
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#include <linux/syscalls.h>
++
++#include <asm/syscalls.h>
++
++#undef __SYSCALL
++#define __SYSCALL(nr, call)	[nr] = (call),
++
++void *sys_call_table[__NR_syscalls] = {
++	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
++#include <asm/unistd.h>
++};
 -- 
 2.37.2
 
