@@ -2,153 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AA4675FB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFAB675FB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjATVl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S229697AbjATVo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATVlz (ORCPT
+        with ESMTP id S229379AbjATVoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:41:55 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA444F344
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:41:54 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NzCRj5n3kz9v7Nc
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 05:33:53 +0800 (CST)
-Received: from [10.81.218.54] (unknown [10.81.218.54])
-        by APP2 (Coremail) with SMTP id GxC2BwAn9119CstjKhmxAA--.5889S2;
-        Fri, 20 Jan 2023 22:41:29 +0100 (CET)
-Message-ID: <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 22:41:14 +0100
+        Fri, 20 Jan 2023 16:44:55 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6869A7F99F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:44:54 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id v5so8301794edc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QV4xUlvMB6Ml94GZ/lP0/1VdW6RK6YzwPsgjf7qgrwQ=;
+        b=iQKAwPM0wYaB3G+O8Te9N2aCGhjICMaONFSIIqU3GNAomdQFeJWurMMTzfF4cPpjkN
+         gCEqSTdfz7V91sipjRt8u25nNnr9znfo/DMO+bqWJPz6uL2Yri0Hk7aCWzKVbS80I1xX
+         Xw91bc8MXh+L6c8pABFFY0zhZoH4v4mz+KY+Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QV4xUlvMB6Ml94GZ/lP0/1VdW6RK6YzwPsgjf7qgrwQ=;
+        b=Bgs4tJzdzEGp3ZnjZJp75ZsDhiHUQ6QXr19wIRpnbvqgXdQePVlW+2Aac+RdvbIc15
+         g69s0wuSE2kT8FYx6beh9jKgIvueDlgFJWXEG+j0gkWGYZgrhJqwSODBuMeEg8HCULHD
+         TzSAtxkHD1HSIOJHiL0VEV92CvMdNeVXojnCdw9l8tvob76l/ClhCpAiPfT9Xw7Tvnz0
+         M1QzmPQz8v9lTmBG24IcvrUDIyc5hlk4ZPEEPq0QLlxLc+3CWBhU8aYSRJ1yx1JhorIr
+         27YkIp+79e84Cat6GuE5M0ni2tXr1LwUPt5aLXl6IKfEaTXErA0mEFgejOJ7Pui1zYRF
+         x7Lw==
+X-Gm-Message-State: AFqh2kpkxJWAPluQjUvMPw94/i3qFyAYwpp1EFdoOLhBHKlPD8SDYWCj
+        JNmn4ndO59t0by3LzVMkZU8P2h2V/E3zRqMEA0U=
+X-Google-Smtp-Source: AMrXdXtk1R2BAsDU1mycgIx1jfL94F/bpWrAyldc8L4L40E21uZ3x6PZ0KAjx4A07afqEcHfHhdScw==
+X-Received: by 2002:aa7:d559:0:b0:492:bf3d:1a16 with SMTP id u25-20020aa7d559000000b00492bf3d1a16mr15827467edr.4.1674251092748;
+        Fri, 20 Jan 2023 13:44:52 -0800 (PST)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id b9-20020a1709063ca900b007c073be0127sm18325359ejh.202.2023.01.20.13.44.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 13:44:51 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id n7so5977776wrx.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:44:50 -0800 (PST)
+X-Received: by 2002:a5d:5965:0:b0:2be:5047:d840 with SMTP id
+ e37-20020a5d5965000000b002be5047d840mr183614wri.646.1674251090648; Fri, 20
+ Jan 2023 13:44:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     paulmck@kernel.org, Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
- <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAn9119CstjKhmxAA--.5889S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF45tw18Xr4kCryxCFyUWrg_yoW8Ww4DpF
-        Wxtw1Skry7ZF1xGwsFqw1Utry8A34Fq3y3J3s8XFZ2y3y5trnaqrn2g3yY9F13G3yxKFWU
-        XryYqFyqy348JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230120114313.2087015-1-john@metanate.com>
+In-Reply-To: <20230120114313.2087015-1-john@metanate.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 20 Jan 2023 13:44:38 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
+Message-ID: <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge connector
+To:     John Keeping <john@metanate.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 1/20/2023 5:18 PM, Alan Stern wrote:
-> On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
->> Perhaps we could say that reading an index without using it later is
->> forbidden?
->>
->> flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
->> thrown-srcu-cookie-on-floor
-> We already flag locks that don't have a matching unlock.
-
-Of course, but as you know this is completely orthogonal.
-
-> I don't see any point in worrying about whatever else happens to the index.
-
-Can you briefly explain how the operational model you have in mind for 
-srcu's up and down allows x==1 (and y==0 and idx1==idx2) in the example 
-I sent before (copied with minor edit below for convenience)?
-
-P0{
-     idx1 = srcu_down(&ss);
-     store_rel(p1, true);
-
-
-     shared cs
-
-     R x == 1
-
-     while (! load_acq(p2));
-     R idx2 == idx1 // for some reason, we got lucky!
-     srcu_up(&ss,idx1);
-}
-
-P1{
-     idx2 = srcu_down(&ss);
-     store_rel(p2, true);
-
-     shared cs
-
-     R y == 0
-
-     while (! load_acq(p1));
-     srcu_up(&ss,idx2);
-}
-
-P2 {
-     W y = 1
-     srcu_sync(&ss);
-     W x = 1
-}
-
-
-I can imagine models that allow this but they aren't pretty. Maybe you 
-have a better operational model?
-
+On Fri, Jan 20, 2023 at 3:43 AM John Keeping <john@metanate.com> wrote:
 >
->> So if there is an srcu_down() that produces a cookie that is read by some
->> read R, and R doesn't then pass that value into an srcu_up(), the
->> srcu-warranty is voided.
-> No, it isn't.
-I quote Paul:
-"If you do anything else at all with it, anything at all, you just 
-voided your SRCU warranty. For that matter, if you just throw that value 
-on the floor and don't pass it to an srcu_up_read() execution, you also 
-just voided your SRCU warranty."
+> Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
+> it") added a helper to set the panel panel orientation early but only
+> connected this for drm_bridge_connector, which constructs a panel bridge
+> with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
+>
+> When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
+> panel_bridge creates its own connector the orientation is not set unless
+> the panel does it in .get_modes which is too late and leads to a warning
+> splat from __drm_mode_object_add() because the device is already
+> registered.
+>
+> Call the necessary function to set add the orientation property when the
+> connector is created so that it is available before the device is
+> registered.
 
-Best wishes,
-jonas
+I have no huge objection to your patch and it looks OK to me. That
+being said, my understanding is that:
 
+1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
+flag is "deprecated".
+
+2. In general, if something about the deprecated method used to work
+and a patch broke it then we should fix it until we can finish fully
+deprecating. However, we should avoid adding new features to the old
+deprecated method and instead encourage people to move to "the
+future".
+
+3. I don't think any of the orientation patches broke the deprecated
+path. Before those patches, nothing used to configure the orientation
+property properly. After those patches, "the future" method (AKA
+DRM_BRIDGE_ATTACH_NO_CONNECTOR) did configure the orientation property
+properly.
+
+...so by those arguments I would say that we shouldn't land your patch
+and that instead you should work to get your drivers moving to
+DRM_BRIDGE_ATTACH_NO_CONNECTOR.
+
+Now, all that being said, your patch adds one line of code and really
+doesn't seem like a big deal. I'd personally be OK with landing it,
+but I'd prefer to hear an opinion from someone more senior in the DRM
+world before doing so. I'm still fairly low on the totem pole. ;-)
+
+
+> Fixes: 15b9ca1641f0 ("drm: Config orientation property if panel provides it")
+
+Maybe remove the "Fixes" tag here. That patch didn't break you, right?
+It just didn't happen to _also_ fix you.
