@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9216675ED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D305675ED6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjATUR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S230298AbjATUSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjATUR4 (ORCPT
+        with ESMTP id S230152AbjATUSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:17:56 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B644707D2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:17:54 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r2so5819501wrv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:17:54 -0800 (PST)
+        Fri, 20 Jan 2023 15:18:14 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F307BF5DB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:06 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id n7so5831066wrx.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EOF6sBpuGhuHA/s9uQZVEpVdnpfpby63eHc5MQV10o=;
-        b=bKw+hyonZwvdOtEcuIAl+Q81FXgLbybNyU7fzkiwmtX4n/ww57YCHua3t++ImQ7tGs
-         tJacpa/4rVctETWyNisGfsSVKCt5KklVHrTAVfTsh+pzrF2UhWE40esDBo5HPX+Npu3b
-         bI7eq2t76QwuhYqqUkfWYBDfxN/K1CgLZXAiuroZwmNSWyiiOm8QYYAj7bJgtS3ll3ua
-         biJaEKlxmu6DRKjBtOzHDyfnoyGxo9DSxuBGRYzHbmVIzQubrvt0tQdYgR5f/DtuNLH1
-         03XrUDOtz1DKoBa6xaagJkFJ9guI0SRB/X1GjZTNDXcezSfHkDD8EizNcu0E215uBG9u
-         N4ag==
+        bh=4oBOra3KNxpaRSP68PMJL5xu9uXddKdpCIitMmZNYSE=;
+        b=CBsQrGnuSh6+NaBDW1SBSpRTpQBE/F0Rg4GJEBjY/08vaqawQjnlallftotbxBbOmW
+         SuGWfGDDBN4MuDvY/swBkwo6JVnuQJdq6sU42z/YOKEUo6D5yL1flMH1RiqjHbkRMmmj
+         Tk00YIjAciXBY8xeHOwrhcl5eFK2kCbDhtKIl6W3doR8FIg9DPqgxrH/ASU/4jfh5zoN
+         UMAPGo16Vvc6Z5RCf0t96koDz8mzrwRcWTndSvisbdbCAT80SWrPOfOE0xIS62JmFrkw
+         1CecAwJR/rztp2/kJVAISF/0sJ7JWa8vng8NRq4moTaqOKbn7jGvE+e4meDFewIKyrWo
+         mUGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7EOF6sBpuGhuHA/s9uQZVEpVdnpfpby63eHc5MQV10o=;
-        b=T0Xg603hr/saU3hoDy/cZ7pNjeWZ6b90elli4XlpDkTlMYYaG04/Ju/9B3xPx7sSTu
-         0xGT5EwSpWsfz8HlEXryJiy1zlBmGywW+vRFoBOUAaFPAYulkzAqMRW39SHaKnhvGVny
-         mOhvRzzmvupkLRx0unAit3JS/EQCKjJERh3HMVAm5shmOVgNqGWVHFoSsELrUDqb2OMJ
-         d2ezHYbK3Z+i3Bz36Hnv4oK4njFcrtCicNhBNiYIsJtZnOx3m1PPMdhvOlkOr0p5CzT4
-         KPmR4qxmJe75WXaO+Psona3zfb6Q0PJcyn8KRdfyk3Fq/K2xnEIarQtOEBUx5Grn+4+c
-         5PoA==
-X-Gm-Message-State: AFqh2koP1bHIJRk1zKm9VCcLRtczQJT7x3xpAwo3gqhXcJmbEleC7XvG
-        JGuas9NobshGgzWzt0jpyZQaAyQGIhU=
-X-Google-Smtp-Source: AMrXdXvmy02qc7sy3ncZEnMW7LArNaX1QryMNXdNAOvnsMjlzXtQkMR/27pkNQpFHpad78FayBBN3A==
-X-Received: by 2002:a05:6000:1088:b0:2be:5295:bd9e with SMTP id y8-20020a056000108800b002be5295bd9emr797718wrw.7.1674245872660;
-        Fri, 20 Jan 2023 12:17:52 -0800 (PST)
+        bh=4oBOra3KNxpaRSP68PMJL5xu9uXddKdpCIitMmZNYSE=;
+        b=i1/sbTW9sLFIgeB9RJ0lLC7iBNpZ0J7N2NbzMAQn96Jzy2Xsqpa8U1vFEDiLGOMMMM
+         XkNz+wMAABiYn1xuBiaMarBkdHQMkS6WpICMgyD6Mgdrm88Pbe5Np4yW9eC3yxtE+sjb
+         KHyf2USi13KYN+W0JePsNHQOnTycb3AQsZqFuwN2jBdQmSgQHU+6G2llooOfD6l8MK3/
+         1wQ0U1vaDNrGhOrFyjAdeoWcwZ/+i/6o9r2+pYHQxMH3q340Cy8j4MLAAH/R9tsE9Mx9
+         dWXAB/xlqifIDeBDF+IMWlvw27Nm1pmq5RfwmeBHkoi3gRZHwWHoWXXSfbU0KN66ZtS8
+         KbVQ==
+X-Gm-Message-State: AFqh2kpkgZIWOiX+i2AUrmdaSIrhEKtJnatLYd1XCIk21EPgyh8UmI91
+        WuEqT6Dhbch9JK8TJk3hhyI=
+X-Google-Smtp-Source: AMrXdXsIFCTq6hEbWWf/o020nkiB199+vRtRtyvkfbZdA/Jadj3+6h4DAkjQMdLGFipxRXGPKq7fKQ==
+X-Received: by 2002:a05:6000:98f:b0:2bd:c6ce:7bee with SMTP id by15-20020a056000098f00b002bdc6ce7beemr3017695wrb.5.1674245884844;
+        Fri, 20 Jan 2023 12:18:04 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm37249409wrj.94.2023.01.20.12.17.51
+        by smtp.gmail.com with ESMTPSA id u24-20020adfa198000000b002bc84c55758sm34844003wru.63.2023.01.20.12.18.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 12:17:52 -0800 (PST)
-Date:   Fri, 20 Jan 2023 21:17:50 +0100
+        Fri, 20 Jan 2023 12:18:04 -0800 (PST)
+Date:   Fri, 20 Jan 2023 21:18:02 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] staging: rtl8192e: Combine three loops to one to init
- tx_pwr_level_...
-Message-ID: <c268ccf158997c65756b7b092ae79cc2b69bd47f.1674244819.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 2/6] staging: rtl8192e: Init tx_pwr_level_cck_a and friends
+ directly
+Message-ID: <9874e99fb9a803be2a89e81e2ecd01ba80398ea1.1674244819.git.philipp.g.hortmann@gmail.com>
 References: <cover.1674244819.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,55 +73,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The arrays EEPROMRfACCKChnl1TxPwLevel, EEPROMRfAOfdmChnlTxPwLevel,
 EEPROMRfCCCKChnl1TxPwLevel, EEPROMRfCOfdmChnlTxPwLevel are initialized to
-zero and never changed. The three loops contain the same code. Only the
-index of the upper named arrays go from 0 to 2. Therefore the three loops
-can be combined to one loop from 0 to 13 which removes useless code.
+zero and never changed. Delete the arrays and set the variables directly
+to zero to avoid CamelCase which is not accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 22 +------------------
- 1 file changed, 1 insertion(+), 21 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 12 ++++--------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   |  4 ----
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 227c13d552fc..7187ee4c75f6 100644
+index 7187ee4c75f6..fdf37c56066c 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -426,7 +426,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 						     0xf0) >> 4;
+@@ -427,14 +427,10 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
  		} else if (priv->epromtype == EEPROM_93C56) {
  
--			for (i = 0; i < 3; i++) {
-+			for (i = 0; i < 14; i++) {
- 				priv->tx_pwr_level_cck_a[i] =
- 					 priv->EEPROMRfACCKChnl1TxPwLevel[0];
- 				priv->tx_pwr_level_ofdm_24g_a[i] =
-@@ -436,26 +436,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 				priv->tx_pwr_level_ofdm_24g_c[i] =
- 					 priv->EEPROMRfCOfdmChnlTxPwLevel[0];
+ 			for (i = 0; i < 14; i++) {
+-				priv->tx_pwr_level_cck_a[i] =
+-					 priv->EEPROMRfACCKChnl1TxPwLevel[0];
+-				priv->tx_pwr_level_ofdm_24g_a[i] =
+-					 priv->EEPROMRfAOfdmChnlTxPwLevel[0];
+-				priv->tx_pwr_level_cck_c[i] =
+-					 priv->EEPROMRfCCCKChnl1TxPwLevel[0];
+-				priv->tx_pwr_level_ofdm_24g_c[i] =
+-					 priv->EEPROMRfCOfdmChnlTxPwLevel[0];
++				priv->tx_pwr_level_cck_a[i] = 0;
++				priv->tx_pwr_level_ofdm_24g_a[i] = 0;
++				priv->tx_pwr_level_cck_c[i] = 0;
++				priv->tx_pwr_level_ofdm_24g_c[i] = 0;
  			}
--			for (i = 3; i < 9; i++) {
--				priv->tx_pwr_level_cck_a[i]  =
--					 priv->EEPROMRfACCKChnl1TxPwLevel[1];
--				priv->tx_pwr_level_ofdm_24g_a[i] =
--					 priv->EEPROMRfAOfdmChnlTxPwLevel[1];
--				priv->tx_pwr_level_cck_c[i] =
--					 priv->EEPROMRfCCCKChnl1TxPwLevel[1];
--				priv->tx_pwr_level_ofdm_24g_c[i] =
--					 priv->EEPROMRfCOfdmChnlTxPwLevel[1];
--			}
--			for (i = 9; i < 14; i++) {
--				priv->tx_pwr_level_cck_a[i]  =
--					 priv->EEPROMRfACCKChnl1TxPwLevel[2];
--				priv->tx_pwr_level_ofdm_24g_a[i] =
--					 priv->EEPROMRfAOfdmChnlTxPwLevel[2];
--				priv->tx_pwr_level_cck_c[i] =
--					 priv->EEPROMRfCCCKChnl1TxPwLevel[2];
--				priv->tx_pwr_level_ofdm_24g_c[i] =
--					 priv->EEPROMRfCOfdmChnlTxPwLevel[2];
--			}
  			priv->legacy_ht_tx_pwr_diff =
  				 priv->eeprom_legacy_ht_tx_pwr_diff;
- 			priv->antenna_tx_pwr_diff[0] = 0;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 11f3f88491b2..596693fbee4c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -423,10 +423,6 @@ struct r8192_priv {
+ 
+ 	u8 eeprom_tx_pwr_level_cck[14];
+ 	u8 eeprom_tx_pwr_level_ofdm24g[14];
+-	u8 EEPROMRfACCKChnl1TxPwLevel[3];
+-	u8 EEPROMRfAOfdmChnlTxPwLevel[3];
+-	u8 EEPROMRfCCCKChnl1TxPwLevel[3];
+-	u8 EEPROMRfCOfdmChnlTxPwLevel[3];
+ 	u16 eeprom_ant_pwr_diff;
+ 	u8 eeprom_thermal_meter;
+ 	u8 eeprom_crystal_cap;
 -- 
 2.39.0
 
