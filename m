@@ -2,84 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7806752FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C5A6752FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjATLFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S229984AbjATLGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjATLFq (ORCPT
+        with ESMTP id S229928AbjATLGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:05:46 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B6BB1ECB;
-        Fri, 20 Jan 2023 03:05:44 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5771A1EC0373;
-        Fri, 20 Jan 2023 12:05:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674212743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DMz1hMX9bIi702U1qUGeKb6wgRmvVReg19Kv4qlT7fk=;
-        b=ViXFRD98djm5tkg3Cd5Expr9eruzSxHLAM0zo29yMexB6w4nmR2/NqT+8hNVHA4eekMbeZ
-        P1zX7DBYHX+EAz/LhT9dgSgT0mqSTvfZxv+WBLVuH/G9ltPvilfioqb3bbq/82E1XZIJ7K
-        l07ploxyyfzfejxRKVYaGZPThp3R5rk=
-Date:   Fri, 20 Jan 2023 12:05:38 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/7] x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
-Message-ID: <Y8p1ghpErykiCYjr@zn.tnic>
-References: <20230110224643.452273-1-kim.phillips@amd.com>
- <20230110224643.452273-4-kim.phillips@amd.com>
- <Y8nvXj0//cImdTJQ@google.com>
+        Fri, 20 Jan 2023 06:06:32 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E1C26589;
+        Fri, 20 Jan 2023 03:06:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1674212791; x=1705748791;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=r4eVcY5PWTSkhuZjkCI/FpAddwZzhCktbJKHEhuYyT4=;
+  b=hBKiuYbO0Fhq9Z6Mx4FlC1yahmtf+/3hZehK6jfnufglMb4OAzqzKbfA
+   DJ4d5sp7GaSGNxHPNjeTZG59AEal/4yapihM648dixB0D/Y+T7Hrcw29H
+   VCtHvA8WMkZBxaaKvRTZ13xbWvv+cQf3eUHp834vmWkE76dupm2B1wlYZ
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jan 2023 03:06:31 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 03:06:31 -0800
+Received: from hu-ahari-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 20 Jan 2023 03:06:25 -0800
+From:   Anjana Hari <quic_ahari@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <bvanassche@acm.org>, <konrad.dybcio@linaro.org>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
+        <quic_rampraka@quicinc.com>, Anjana Hari <quic_ahari@quicinc.com>
+Subject: [PATCH v2 0/1] scsi: ufs: Add hibernation callbacks
+Date:   Fri, 20 Jan 2023 16:36:04 +0530
+Message-ID: <20230120110605.9090-1-quic_ahari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8nvXj0//cImdTJQ@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 01:33:18AM +0000, Sean Christopherson wrote:
-> Is it too late to back this out?  Not a huge deal, but it seems easy enough to
-> clean up.
+This patch adds hibernation callbacks in UFS driver.
+Please take a look and let us know your thoughts.
 
-No, not at all. Lemme zap them from the lineup.
+v1:
+ - Addressed Bart's comments
+ - Moved core and host related changes to single patch
+ - Note to Bart: Regrading the comment to pass "restore" as an
+ argument instead of adding a new member to ufs_hba structure, adding
+ new function argument in core file (ufshcd.c) is forcing us to make
+ changes to other vendor files to fix the compilation errors. Hence
+ we have retained our original change. Please let us know your inputs
+ on this.
 
-Kim, please send a new set like Sean suggests.
+Initial version:
+ - Adds hibernation callbacks - freeze, restore and thaw,
+ required for suspend to disk feature.
 
-Thx.
+Anjana Hari (1):
+  scsi: ufs: Add hibernation callbacks
 
+ drivers/ufs/core/ufshcd.c   | 60 +++++++++++++++++++++++++++++++++++++
+ drivers/ufs/host/ufs-qcom.c |  6 +++-
+ include/ufs/ufshcd.h        |  8 +++++
+ 3 files changed, 73 insertions(+), 1 deletion(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc., is a member of Code Aurora Forum, a Linux Foundation Collaborative Project
 
-https://people.kernel.org/tglx/notes-about-netiquette
