@@ -2,158 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5962675083
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F3D675085
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjATJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S230044AbjATJRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjATJRD (ORCPT
+        with ESMTP id S230029AbjATJR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:17:03 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5B8F6F3;
-        Fri, 20 Jan 2023 01:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674206203; x=1705742203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r/1tiYxPstme1YYSjB4HLjWOG3ITg0Qj8zbeObqH0Nw=;
-  b=cI8SJdEklAc5w1ocZNAYUZZ40CbNq6rRfoEjV2ZpR5vQY/xN8F9kSQMW
-   noEDj77o2JeegfEd1Rd71M1X/AO1us5dnkURHJ/WERFp52vp8xE5DBkMu
-   LDsabtCs2iDfs9IgbkOYcoPpF9nOEiKB537S/TrnFh+z+37ycqi1leBfE
-   Yj7FRl3XFTzPC+A24NbDOJ6uvsY9/GRaFw3aiSZoCUUgAPlb9YwHSue+D
-   GzsNVPihFht93NNfNU55W3N7dKrwLN79bsIAVQUbQ1Mmh0e/MYYM/fTMX
-   9oXG2A3/fFkU/c4lFYcPwIcRfAD6Ylb3/aCxmtvE9sDAzt0woi5V9NU4/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305214952"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="305214952"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:16:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803014429"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="803014429"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2023 01:16:41 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 20 Jan 2023 11:16:40 +0200
-Date:   Fri, 20 Jan 2023 11:16:40 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: Update active state
-Message-ID: <Y8pb+BTd7VJqwLzq@kuha.fi.intel.com>
-References: <20230118031514.1278139-1-pmalani@chromium.org>
- <Y8e+YlKiC6FHdQ5s@kuha.fi.intel.com>
- <CACeCKafPzxYWh5a4xmeggc+4zRou73kHnwV-G5xMfQDheGgGdg@mail.gmail.com>
- <Y8kMsw/wT35KN7VK@kuha.fi.intel.com>
- <CACeCKaceu1KCPtpavBn23qyM29Eacxhm6L9SN78ZQxdzRCOk6Q@mail.gmail.com>
- <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
+        Fri, 20 Jan 2023 04:17:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8D4C14C
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:17:01 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pInVs-00022D-Ic; Fri, 20 Jan 2023 10:16:44 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pInVp-0004z4-60; Fri, 20 Jan 2023 10:16:41 +0100
+Date:   Fri, 20 Jan 2023 10:16:41 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Alibek Omarov <a1ba.omarov@gmail.com>
+Cc:     alexander.sverdlin@siemens.com, macromorgan@hotmail.com,
+        Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?iso-8859-15?Q?St=FCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] drm/rockchip: lvds: add rk3568 support
+Message-ID: <20230120091641.GL24755@pengutronix.de>
+References: <20230119184807.171132-1-a1ba.omarov@gmail.com>
+ <20230119184807.171132-2-a1ba.omarov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACeCKaea_ZtzUZNAHMaDU9ff_BBs6sF_DqqMnkFcW_=_txVL4w@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119184807.171132-2-a1ba.omarov@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 02:12:20AM -0800, Prashant Malani wrote:
-> On Thu, Jan 19, 2023 at 1:55 AM Prashant Malani <pmalani@chromium.org> wrote:
-> >
-> > On Thu, Jan 19, 2023 at 1:26 AM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi Prashant,
-> > >
-> > > On Wed, Jan 18, 2023 at 10:26:21AM -0800, Prashant Malani wrote:
-> > > > Hi Heikki,
-> > > >
-> > > > Thanks for reviewing the patch.
-> > > >
-> > > > On Wed, Jan 18, 2023 at 1:39 AM Heikki Krogerus
-> > > > <heikki.krogerus@linux.intel.com> wrote:
-> > > > >
-> > > > > On Wed, Jan 18, 2023 at 03:15:15AM +0000, Prashant Malani wrote:
-> > > > FWIW, I think we can make the typec_altmode_update_active() calls from
-> > > > our (cros-ec-typec) port driver too, but displayport.c is parsing the header
-> > > > anyway, so it seemed repetitive. Just wanted to clarify the intention here.
-> > >
-> > > The alt modes may have been entered even if there are no drivers for
-> > > them, if for example the PD controller handles the mode entry. In
-> > > those cases the port driver needs to update the active state of the
-> > > partner alt mode.
-> >
-> > Ack. Thanks for explaining the rationale here.
-> >
-> > >
-> > > Since the port drivers have to handle that in some cases, for the sake
-> > > of consistency I thought that they might as well take care of it in
-> > > every case.
-> > >
-> > > On the other hand, it should be safe to do it in both the port driver
-> > > and the altmode driver.
-> > >
-> > > If you prefer that the altmode drivers always do this, I'm not against
-> > > it. But in that case could you patch tcpm.c while at it - in the same
-> > > series:
-> >
-> > Sure, I will send out a v2 with the below diff as Patch 2/2 (I will mark you as
-> > "Suggested-by" but as always LMK if you prefer another way to
-> > denote attribution).
-> >
-> > >
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > > index 904c7b4ce2f0c..0f5a9d4db105a 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
-> > >                         }
-> > >                         break;
-> > >                 case CMD_ENTER_MODE:
-> > > -                       if (adev && pdev) {
-> > > -                               typec_altmode_update_active(pdev, true);
-> > > +                       if (adev && pdev)
-> > >                                 *adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
-> > > -                       }
-> > >                         return 0;
-> > >                 case CMD_EXIT_MODE:
-> > >                         if (adev && pdev) {
-> > > -                               typec_altmode_update_active(pdev, false);
-> > >                                 /* Back to USB Operation */
-> > >                                 *adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
-> > >                                 return 0;
-> > >
-> > > That's the only driver that will definitely always requires the
-> > > altmode drivers, so perhaps it would be good to drop the calls
-> > > from it at the same time.
+On Thu, Jan 19, 2023 at 09:48:03PM +0300, Alibek Omarov wrote:
+> One of the ports of RK3568 can be configured as LVDS, re-using the DSI DPHY
 > 
-> On 2nd thought, would it be safe to drop the calls in tcpm.c ? Following
-> on from your PD controller example above, TCPM might be updating
-> the active state for an altmode which doesn't have an altmode driver
-> registered? Or does it only send out ENTER_MODE for alt modes
-> which have an altmode driver?
+> Signed-off-by: Alibek Omarov <a1ba.omarov@gmail.com>
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_lvds.c | 144 +++++++++++++++++++++--
+>  drivers/gpu/drm/rockchip/rockchip_lvds.h |  10 ++
+>  2 files changed, 147 insertions(+), 7 deletions(-)
 > 
-> (Sorry if this is obvious to TCPM users, but I wanted to confirm before
-> proceeding with a v2).
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_lvds.c b/drivers/gpu/drm/rockchip/rockchip_lvds.c
+> index 68f6ebb33460..83c60240af85 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_lvds.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_lvds.c
+> @@ -433,6 +433,90 @@ static void px30_lvds_encoder_disable(struct drm_encoder *encoder)
+>  	drm_panel_unprepare(lvds->panel);
+>  }
+>  
+> +static int rk3568_lvds_poweron(struct rockchip_lvds *lvds)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_enable(lvds->pclk);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(lvds->dev, "failed to enable lvds pclk %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = pm_runtime_get_sync(lvds->dev);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(lvds->dev, "failed to get pm runtime: %d\n", ret);
+> +		clk_disable(lvds->pclk);
+> +		return ret;
+> +	}
+> +
+> +	/* Enable LVDS mode */
+> +	return regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON2,
+> +				  RK3568_LVDS0_MODE_EN(1),
+> +				  RK3568_LVDS0_MODE_EN(1));
 
-It's not be possible to enter a mode with tcpm.c unless there is
-a driver for the altmode currently. Something has to take care of the
-altmode, and if that something is not the altmode driver it would need
-to be the user space. Right now we don't have an interface for that.
+Isn't this the same as:
 
-In any case, if there's no driver for the altmode, then the partner
-altmode "active" file should not be visible.
+	regmap_write(lvds->grf, RK3568_GRF_VO_CON2, RK3568_LVDS0_MODE_EN(1));
 
-thanks,
+Unless I am missing something I find a plain regmap_write() easier to
+read.
+
+> +}
+> +
+> +static void rk3568_lvds_poweroff(struct rockchip_lvds *lvds)
+> +{
+> +	regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON2,
+> +			   RK3568_LVDS0_MODE_EN(1) | RK3568_LVDS0_P2S_EN(1),
+> +			   RK3568_LVDS0_MODE_EN(0) | RK3568_LVDS0_P2S_EN(0));
+
+Same here:
+
+	regmap_write(lvds->grf, RK3568_GRF_VO_CON2,
+		     RK3568_LVDS0_MODE_EN(0) | RK3568_LVDS0_P2S_EN(0));
+
+What about the RK3568_LVDS0_P2S_EN bit? This is set in probe() and
+cleared here. For symmetry reasons shouldn't it be set in
+rk3568_lvds_poweron() instead?
+
+> +
+> +	pm_runtime_put(lvds->dev);
+> +	clk_disable(lvds->pclk);
+> +}
+> +
+> +static int rk3568_lvds_grf_config(struct drm_encoder *encoder,
+> +				struct drm_display_mode *mode)
+> +{
+> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
+> +
+> +	if (lvds->output != DISPLAY_OUTPUT_LVDS) {
+> +		DRM_DEV_ERROR(lvds->dev, "Unsupported display output %d\n",
+> +			      lvds->output);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Set format */
+> +	return regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON0,
+> +				  RK3568_LVDS0_SELECT(3),
+> +				  RK3568_LVDS0_SELECT(lvds->format));
+
+It seems lvds->format does not match what the register expects. We
+have:
+
+#define LVDS_VESA_24                            0
+#define LVDS_JEIDA_24                           1
+#define LVDS_VESA_18                            2
+#define LVDS_JEIDA_18                           3
+
+According to the reference manual the register expects:
+
+lvdsformat_lvds0_select
+ 2'b00: VESA 24bit
+ 2'b01: JEIDA 24bit
+ 2'b10: JEIDA 18bit
+ 2'b11: VESA 18bit
+
+I only have the RK3568 manual but no PX30 or RK3288 manual, so I can't say if
+they changed the register mapping between the SoCs or if it's wrong on
+the other SoCs as well.
+
+BTW you correctly set the mask to RK3568_LVDS0_SELECT(3), but for the
+PX30 it looks wrong:
+
+	return regmap_update_bits(lvds->grf, PX30_LVDS_GRF_PD_VO_CON1,
+				  PX30_LVDS_FORMAT(lvds->format),
+				  PX30_LVDS_FORMAT(lvds->format));
+
+I really think regmap_write() would be better to use here to avoid such
+things.
+
+> +
+> +static void rk3568_lvds_encoder_enable(struct drm_encoder *encoder)
+> +{
+> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
+> +	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
+
+'mode' is unused.
+
+> +	int ret;
+> +
+> +	drm_panel_prepare(lvds->panel);
+> +
+> +	ret = rk3568_lvds_poweron(lvds);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(lvds->dev, "failed to power on LVDS: %d\n", ret);
+> +		drm_panel_unprepare(lvds->panel);
+> +		return;
+> +	}
+> +
+> +	ret = rk3568_lvds_grf_config(encoder, mode);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(lvds->dev, "failed to configure LVDS: %d\n", ret);
+> +		drm_panel_unprepare(lvds->panel);
+> +		return;
+> +	}
+> +
+> +	drm_panel_enable(lvds->panel);
+> +}
+> +
+> +static void rk3568_lvds_encoder_disable(struct drm_encoder *encoder)
+> +{
+> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
+> +
+> +	drm_panel_disable(lvds->panel);
+> +	rk3568_lvds_poweroff(lvds);
+> +	drm_panel_unprepare(lvds->panel);
+> +}
+> +
+>  static const
+>  struct drm_encoder_helper_funcs rk3288_lvds_encoder_helper_funcs = {
+>  	.enable = rk3288_lvds_encoder_enable,
+> @@ -447,6 +531,13 @@ struct drm_encoder_helper_funcs px30_lvds_encoder_helper_funcs = {
+>  	.atomic_check = rockchip_lvds_encoder_atomic_check,
+>  };
+>  
+> +static const
+> +struct drm_encoder_helper_funcs rk3568_lvds_encoder_helper_funcs = {
+> +	.enable = rk3568_lvds_encoder_enable,
+> +	.disable = rk3568_lvds_encoder_disable,
+> +	.atomic_check = rockchip_lvds_encoder_atomic_check,
+> +};
+> +
+>  static int rk3288_lvds_probe(struct platform_device *pdev,
+>  			     struct rockchip_lvds *lvds)
+>  {
+> @@ -491,6 +582,26 @@ static int rk3288_lvds_probe(struct platform_device *pdev,
+>  	return 0;
+>  }
+>  
+> +static int rockchip_lvds_phy_probe(struct platform_device *pdev,
+> +				   struct rockchip_lvds *lvds)
+> +{
+> +	int ret;
+> +
+> +	lvds->dphy = devm_phy_get(&pdev->dev, "dphy");
+> +	if (IS_ERR(lvds->dphy))
+> +		return PTR_ERR(lvds->dphy);
+> +
+> +	ret = phy_init(lvds->dphy);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = phy_set_mode(lvds->dphy, PHY_MODE_LVDS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return phy_power_on(lvds->dphy);
+> +}
+
+You factor out the steps done for px30 to a separate function in order
+to reuse it on rk3568. You could make a separate patch from this to
+make it easier to understand and to verify that there is no functional
+change involved for the px30.
+
+Sascha
 
 -- 
-heikki
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
