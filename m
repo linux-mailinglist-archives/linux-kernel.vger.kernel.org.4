@@ -2,162 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA6675436
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4568E67543D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjATMLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S230103AbjATMMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjATMLD (ORCPT
+        with ESMTP id S230099AbjATMMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:11:03 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560554A1DC;
-        Fri, 20 Jan 2023 04:10:58 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 355095F94B;
-        Fri, 20 Jan 2023 12:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674216657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uP6HuWs4Kq3jd6tY+JOCJ+EPKnppWkkiTxsD4Mq6eiY=;
-        b=qMaEzy7GI0C2wFVPjItQwsZzRFBmO1CP+fAhAUyYVI2DWnRxwy5BjIzHd9oVpVF3Wfug4y
-        SiGuF/F13zZxZbjsymStbjUj8alsq9eaAFNHT7i2N6mgsMjqVpNHNYNj8z01u7W0kBio2T
-        Ta5br4ghBWubDYgh/+jcjjpuf54l1EM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674216657;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uP6HuWs4Kq3jd6tY+JOCJ+EPKnppWkkiTxsD4Mq6eiY=;
-        b=bBBVAu7fXUhsQyWdSXyxM8fENoFuG/LuY9QEil0Rp3p+EGdnuR/Lr45pvLzKcHb7NUzqdg
-        eAP5vgb7aLOrt3Aw==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        Fri, 20 Jan 2023 07:12:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF990EC6C;
+        Fri, 20 Jan 2023 04:12:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 07CF42C141;
-        Fri, 20 Jan 2023 12:10:57 +0000 (UTC)
-Date:   Fri, 20 Jan 2023 13:10:55 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "Erhard F." <erhard_f@mailbox.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86C8B61DEA;
+        Fri, 20 Jan 2023 12:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 983BCC433EF;
+        Fri, 20 Jan 2023 12:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674216767;
+        bh=bYTCpxpMUaj0u9NVrjzlxJiwlSH7GhZL8wVTYhvi1kk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qoXeMA5IEcu8/YWtvxIdMEIAJOVuAuu0rHb3KldXH7yvXPpMMaipN0ptWsqquCLLr
+         YGpaGwaJkGMl75bP9I0beehAiUZEgbK9RI6zxQnT/xueeKtx7wNbYnc7tRY3496dYc
+         c7czRz4IT1hCuVGnsxUyTrnrmJVVs+18GGWLVZCDpG59qSXolyCdAP7YIdSHSqBx5/
+         UeexsOh/Fq6NppIEkNK24lneWzF3Dfby1XsJyRYL5Kc5TusGA0mDLgghVpG+WQ7bXN
+         oCeL6JDyMeZF8q0zsiEz1X5i+sAE6drGy8w+fNtsWsAEf2i1BNlmEkHRL5MzczBuKk
+         V8FBgyAgoqqsw==
+Date:   Fri, 20 Jan 2023 12:12:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
- disaply code
-Message-ID: <20230120121055.GU16547@kitsune.suse.cz>
-References: <20230119095323.4659-1-msuchanek@suse.de>
- <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
- <20230119103446.GO16547@kitsune.suse.cz>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 2/3] ASoC: codecs: Add support for the Renesas
+ IDT821034 codec
+Message-ID: <Y8qFPBEYJ1gH/Ycv@sirena.org.uk>
+References: <20230120095036.514639-1-herve.codina@bootlin.com>
+ <20230120095036.514639-3-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wlRMvD60qIyTikCQ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230119103446.GO16547@kitsune.suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120095036.514639-3-herve.codina@bootlin.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:34:46AM +0100, Michal Suchánek wrote:
-> Hello,
-> 
-> On Thu, Jan 19, 2023 at 10:24:07AM +0000, Christophe Leroy wrote:
-> > 
-> > 
-> > Le 19/01/2023 à 10:53, Michal Suchanek a écrit :
-> > > The commit 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > > breaks build because of wrong argument to snprintf. That certainly
-> > > avoids the runtime error but is not the intended outcome.
-> > > 
-> > > Also use standard device name format of-display.N for all created
-> > > devices.
-> > > 
-> > > Fixes: 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > > ---
-> > > v2: Update the device name format
-> > > ---
-> > >   drivers/of/platform.c | 12 ++++++++----
-> > >   1 file changed, 8 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > > index f2a5d679a324..8c1b1de22036 100644
-> > > --- a/drivers/of/platform.c
-> > > +++ b/drivers/of/platform.c
-> > > @@ -525,7 +525,9 @@ static int __init of_platform_default_populate_init(void)
-> > >   	if (IS_ENABLED(CONFIG_PPC)) {
-> > >   		struct device_node *boot_display = NULL;
-> > >   		struct platform_device *dev;
-> > > -		int display_number = 1;
-> > > +		int display_number = 0;
-> > > +		char buf[14];
-> > 
-> > Can you declare that in the for block where it is used instead ?
-> 
-> No, there are two for blocks.
-> 
-> > 
-> > > +		char *of_display_format = "of-display.%d";
-> > 
-> > Should be const ?
-> 
-> Yes, could be.
-> 
-> > 
-> > >   		int ret;
-> > >   
-> > >   		/* Check if we have a MacOS display without a node spec */
-> > > @@ -556,7 +558,10 @@ static int __init of_platform_default_populate_init(void)
-> > >   			if (!of_get_property(node, "linux,opened", NULL) ||
-> > >   			    !of_get_property(node, "linux,boot-display", NULL))
-> > >   				continue;
-> > > -			dev = of_platform_device_create(node, "of-display", NULL);
-> > > +			ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-> > > +			if (ret >= sizeof(buf))
-> > > +				continue;
-> > 
-> > 
-> > Can you make buf big enough to avoid that ?
-> 
-> It would be a bit fragile that way.
-> 
-> The buffer would have to theoretically accomodate
-> "of-display.-9223372036854775808", and any change to the format requires
-> recalculating the length, by hand.
-> 
-> Of course, the memory would run out way before allocating that many
-> devices so it's kind of pointless to try and accomodate all possible
-> device numbers.
-> 
-> > 
-> > And by the way could it be called something else than 'buf' ?
-> > 
-> > See exemple here : 
-> > https://elixir.bootlin.com/linux/v6.1/source/drivers/fsi/fsi-occ.c#L690
-> 
-> Yes, that is quite possible. Nonetheless, just like 'ret' generic
-> variable names also work.
 
-And in fact judicious use of short generic variable names is more
-readeable than naming all variables foobar_* as far as I am concerned.
-Of course, YMMV.
+--wlRMvD60qIyTikCQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks
+On Fri, Jan 20, 2023 at 10:50:35AM +0100, Herve Codina wrote:
 
-Michal
+> +static int idt821034_kctrl_gain_put(struct snd_kcontrol *kcontrol,
+> +				    struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct soc_mixer_control *mc = (struct soc_mixer_control *)kcontrol->private_value;
+> +	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+> +	struct idt821034 *idt821034 = snd_soc_component_get_drvdata(component);
+> +	struct idt821034_amp *amp;
+
+> +
+> +	amp->gain = val;
+> +	ret = 0;
+> +end:
+> +	mutex_unlock(&idt821034->mutex);
+> +	return ret;
+
+_put() methods should return 1 if the value changed to generate
+events - if you use the mixer-test selftest it'll spot this and
+other issues for you.
+
+Otherwise this looks fine.
+
+--wlRMvD60qIyTikCQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPKhTsACgkQJNaLcl1U
+h9AQ4Af8De8E5PJEpMZ8aXgoqJ5oNtOF6fOh2uOEQ0Sl+8/7usPM9y8GqpAlyIxy
+09ITOezWYsh9XvhCuHefFVr/Tr7KVbz34OoXwo1XNmzmkWXcezr6PrS1VAb1DaGT
+qdOP6wEG+ei0PqHg6CX+oaRLnsqSVi1ojAbbN9GHAqNDRlXAzJfal0hIZuCUw9cp
+JA9r1B+7/G83PP5UWFXYOydws1OqGg9fsny9D1FfEt1uuVWu/uXfGMAYCg0XeqOD
+0y0yD4PaCUsv4g6Qp+eevMbsTHERfGb2YzjsZf73kE2YacIY4wATPBrt8SnFSYew
+hVXpJFtOdhIyKL+8p1tHnJ0AtZDDYw==
+=nMiM
+-----END PGP SIGNATURE-----
+
+--wlRMvD60qIyTikCQ--
