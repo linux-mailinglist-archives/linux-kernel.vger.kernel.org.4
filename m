@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B930967547A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F063675482
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjATMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S229608AbjATMb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjATMa1 (ORCPT
+        with ESMTP id S229456AbjATMb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:30:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9AE4CE58;
-        Fri, 20 Jan 2023 04:30:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E560B82762;
-        Fri, 20 Jan 2023 12:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B6C5C4339C;
-        Fri, 20 Jan 2023 12:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674217821;
-        bh=71WXQ8JX+KWMcSFzIAQwrZNsJKzSN7MpkuVjbEnIFdM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iyw/GKkXftIoOuq3Ffizq++1TQc+5FLSw+lpg2J/96j643lX2XS/e03MPzYhZmeJm
-         5jCnM2jALWaR47fQ/vwoiX1K6/IYh/XrEHXJmhqeboDTsjVIeJP4qzlwdQMlELlds4
-         W9a9/IWnQqM40L58Az1Mu0TcsKREZwHAxlDlMikF+Jnvexvuf974vBzi6pRF+fr5U4
-         yyhDv5hiZD7cqjBoxiPMpCaaF/qZRj1yZxh5NdKFKiYbamziO5GORDRCRBFXX6t0sf
-         Kc+hgLC++AflMt3p+JOdSBTzWMJ0GYFzcDQXSVy8UewCM6Tkj+oyd5KW51Nwqec2+3
-         9d85k39pb49xA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC700E54D2B;
-        Fri, 20 Jan 2023 12:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 Jan 2023 07:31:28 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8B0BAA7F7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 04:31:27 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05EC31515;
+        Fri, 20 Jan 2023 04:32:09 -0800 (PST)
+Received: from [10.57.89.132] (unknown [10.57.89.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5DF73F8D6;
+        Fri, 20 Jan 2023 04:31:25 -0800 (PST)
+Message-ID: <4a065a3f-d189-711a-e351-73852ed00369@arm.com>
+Date:   Fri, 20 Jan 2023 12:31:21 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 6/8] iommu: Retire bus ops
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     hch@lst.de, jgg@nvidia.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <cover.1673978700.git.robin.murphy@arm.com>
+ <a2db51f8f417bbe0032e2c4231579f8c4ce9a089.1673978700.git.robin.murphy@arm.com>
+ <d798bc7b-a87a-26b2-17e0-48e9c7715abc@linux.intel.com>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <d798bc7b-a87a-26b2-17e0-48e9c7715abc@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/6] Introduce new DCB rewrite table
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167421782096.21057.3566863729140483303.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 Jan 2023 12:30:20 +0000
-References: <20230118210830.2287069-1-daniel.machon@microchip.com>
-In-Reply-To: <20230118210830.2287069-1-daniel.machon@microchip.com>
-To:     Daniel Machon <daniel.machon@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lars.povlsen@microchip.com,
-        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        joe@perches.com, error27@gmail.com, horatiu.vultur@microchip.com,
-        Julia.Lawall@inria.fr, petrm@nvidia.com, vladimir.oltean@nxp.com,
-        maxime.chevallier@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 18 Jan 2023 22:08:24 +0100 you wrote:
-> There is currently no support for per-port egress mapping of priority to PCP and
-> priority to DSCP. Some support for expressing egress mapping of PCP is supported
-> through ip link, with the 'egress-qos-map', however this command only maps
-> priority to PCP, and for vlan interfaces only. DCB APP already has support for
-> per-port ingress mapping of PCP/DEI, DSCP and a bunch of other stuff. So why not
-> take advantage of this fact, and add a new table that does the reverse.
+On 2023-01-20 00:27, Baolu Lu wrote:
+> On 2023/1/20 3:18, Robin Murphy wrote:
+>> +    /*
+>> +     * For FDT-based systems and ACPI IORT/VIOT, drivers register IOMMU
+>> +     * instances with non-NULL fwnodes, and client devices should 
+>> have been
+>> +     * identified with a fwspec by this point. For 
+>> Intel/AMD/s390/PAMU we
+>> +     * can assume a single active driver with global ops, and so grab 
+>> those
+>> +     * from any registered instance, cheekily co-opting the same 
+>> mechanism.
+>> +     */
+>> +    fwspec = dev_iommu_fwspec_get(dev);
+>> +    if (fwspec && fwspec->ops)
+>> +        ops = fwspec->ops;
+>> +    else
+>> +        ops = iommu_ops_from_fwnode(NULL);
 > 
-> [...]
+> I'm imagining if Intel/AMD/s390 drivers need to give up global ops.
+> Is there any way to allow them to make such conversion? I am just
+> thinking about whether this is a hard limitation for these drivers.
 
-Here is the summary with links:
-  - [net-next,v3,1/6] net: dcb: modify dcb_app_add to take list_head ptr as parameter
-    https://git.kernel.org/netdev/net-next/c/34b7074d3fba
-  - [net-next,v3,2/6] net: dcb: add new common function for set/del of app/rewr entries
-    https://git.kernel.org/netdev/net-next/c/30568334b657
-  - [net-next,v3,3/6] net: dcb: add new rewrite table
-    https://git.kernel.org/netdev/net-next/c/622f1b2fae2e
-  - [net-next,v3,4/6] net: dcb: add helper functions to retrieve PCP and DSCP rewrite maps
-    https://git.kernel.org/netdev/net-next/c/1df99338e6d4
-  - [net-next,v3,5/6] net: microchip: sparx5: add support for PCP rewrite
-    https://git.kernel.org/netdev/net-next/c/2234879f4ca1
-  - [net-next,v3,6/6] net: microchip: sparx5: add support for DSCP rewrite
-    https://git.kernel.org/netdev/net-next/c/246c77f666b4
+Yes, they could perhaps bodge into the existing fwnode mechanism, or we 
+could make bigger changes to adapt and generalise the whole 
+instance-registration-token-lookup concept, or if the driver can resolve 
+the correct instance for a device internally, then it could suffice to 
+just have all its device ops share a single common .probe_device 
+implementation that does the right thing.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The comment is merely noting the fact that we can get away without 
+having to worry about those changes just yet, since all the drivers 
+*are* currently still built around the hard constraint of a single set 
+of device ops per bus.
 
-
+Thanks,
+Robin.
