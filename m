@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D8A6759B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74AF6759B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjATQRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S229826AbjATQRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjATQRs (ORCPT
+        with ESMTP id S229776AbjATQRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:17:48 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8CCDB7BB;
-        Fri, 20 Jan 2023 08:17:31 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id mp20so15178265ejc.7;
-        Fri, 20 Jan 2023 08:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oaoP2q5jxU9ldhcqzrgZ3L4zkQjm2DT6Rdi7UTtBpUw=;
-        b=mB9YMobTYsLoR7B7uzDVlkcj+h/F3QR4cZKj1nZZ+q+LiDNmKgo0PqvMi/iSmZnHyM
-         b7cLUPy7ygYHEEC7Wjqyd52ZpU1z2uy5Oh74FntvPiuQNxjiPjNgeHAQuo2yvLYV2pof
-         X0xEAVIkJT8bih7d9p3YV8IXVo6+Jt+JYK5oaQImXzHE4+e9U8JvmbOwRbsKNmGixfVX
-         /xmu00ddxvucT82zARCxesRfhbgMPTsEcunznkjAzcmsAS4a2dZmOq/sLID1EzNvJqj0
-         klphywc0H34nV3fuMjTLl8hLNuvUDQ2mA9NrPgHeUGXt/u1WFY3+ig0QW4ug4z86z1dj
-         pL8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oaoP2q5jxU9ldhcqzrgZ3L4zkQjm2DT6Rdi7UTtBpUw=;
-        b=hZxtsG4eSqbX0fuh7Qo82J6Hvt+bwEt1scIpRK8Wy80Jtcolyi3Rw2DrqvFqPitVf0
-         FaauY5J8wepVyp41OfPUvRHI58hp3Cx50B5MYG++IMHRp2MLqPairdr4KS9DWD/AumzS
-         Jz0PdVAF7Xk/1//VddMQReakv+/9OfhIx+oDXHCbHCs+Ju1mtkz1PhkAPupkZCRaWagX
-         lhVep4eOsHfeMdkBCUqX4vOO7bc3J1KyMPETRvZsZWpF6TzNE4egv4oPRWzT5TLKN/7p
-         Hc1+jhSo61p6ts8XoOz67gbSz4aDcAhTXE9kl3og2NXfyMQYaHn4niiNfoe+bPIWr5xK
-         exbA==
-X-Gm-Message-State: AFqh2kq7WeHDYKsrTfPwyL4I/4qW7vNsAzNEm0CVK/kPfcUbvaZyx7gh
-        WNU767n9mKUiKZqB+Sv6Hiut0L2EbAdGzETSWt0=
-X-Google-Smtp-Source: AMrXdXtTAQ9GntGhptU9kFKiyEH91MsJHHX4poRMEpj7p01pbcBBTK6CkRIec1hPJWwlbY/9Xgvla9yWq2GjfxrWXak=
-X-Received: by 2002:a17:906:cf9b:b0:872:a7ee:f4c7 with SMTP id
- um27-20020a170906cf9b00b00872a7eef4c7mr1493481ejb.378.1674231449760; Fri, 20
- Jan 2023 08:17:29 -0800 (PST)
+        Fri, 20 Jan 2023 11:17:35 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD78DF957;
+        Fri, 20 Jan 2023 08:17:24 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9198C240010;
+        Fri, 20 Jan 2023 16:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674231443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GWFECQymxzugYEZWvea/kOz6siwpomm4LEhQL89Bq5Y=;
+        b=TMaZlsLksagt53yV4HmWugi8Qfz0431i/PZDiX5agSfCImJ8Fqxu3VThwDPOfu8sMPipEJ
+        WdkUqF4papwYk3E7p3kVOUscu1aK/zDuOetetjCv6Lh22L5YHvLPKcp7h/2yMgbXt+xSKr
+        TjKxUwfLcH/iGYtm9QS9c6ixFdcFhCPBR6bjAAj2NryJ5AiWRGHYqUnqvNWJC10Fqfda8Y
+        pTmtlsD1KIydVIs8q/mRD9dzTZqK7sjBCDaX+6XK0ufpJKES79ColclAemU12pBp3eKwt6
+        pQwPE24Lt3x1D3yv2kRMyHm/GGlQzxy1Nt6Bwug+JpQrk6ryiycR7T4QtYH+xg==
+Date:   Fri, 20 Jan 2023 17:17:18 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 0/7] i2c-atr and FPDLink
+Message-ID: <20230120171718.3674af61@booty>
+In-Reply-To: <Y8q6ggmOsygyVdTT@smile.fi.intel.com>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+        <Y8gX0krXayfOa4Hi@smile.fi.intel.com>
+        <bd6d6cc0-4e70-fa31-4b5e-e6bcddf62d36@ideasonboard.com>
+        <Y8gvu/E5EoPqo8J1@smile.fi.intel.com>
+        <20230119094358.010bc826@booty>
+        <Y8q6ggmOsygyVdTT@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230119235833.2948341-1-void@manifault.com> <20230119235833.2948341-3-void@manifault.com>
- <20230120045815.4b7dc6obdt4uzy6a@apollo> <Y8olRi9SjcyNtam0@maniforge.lan>
- <20230120054027.wcj3jxqkx2s2zsxo@MacBook-Pro-6.local.dhcp.thefacebook.com>
- <CAP01T76aNAn2ish+jwFQuMrCk+11Rb_ZmteGe8RsE7ZMy1t4RA@mail.gmail.com>
- <20230120061441.3gifklagiugmkrtd@MacBook-Pro-6.local.dhcp.thefacebook.com>
- <Y8qrt7pdWCS6Gef8@maniforge.lan> <Y8qyovnr2bkEpldc@maniforge.lan>
-In-Reply-To: <Y8qyovnr2bkEpldc@maniforge.lan>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 20 Jan 2023 08:17:18 -0800
-Message-ID: <CAADnVQ+sn9imVimk2DnjxtTfmzddSehT2ucAcatK5rhMTd46fw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
- checking BTF IDs
-To:     David Vernet <void@manifault.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>, Tejun Heo <tj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,46 +77,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 7:26 AM David Vernet <void@manifault.com> wrote:
-> > >
-> > > Yes. Agree. I used unfortunate example in the previous reply with nf_conn___init.
-> > > I meant to say:
-> > >
-> > >  For definition:
-> > >  struct nf_conn_init {
-> > >     struct nf_conn ct;
-> > >  };
-> > >  if a kfunc accepts a pointer to nf_conn it should always accept a pointer to nf_conn_init
-> > >  for both read and write, because in C that's valid and safe type cast.
-> > >
-> > > Meainng that C rules apply.
-> > > Our triple underscore is special, because it's the "same type".
-> > > In the 2nd part of my reply I'm proposing to use the whole suffix "___init" to indicate that.
-> > > I think you're arguing that just "___" part is enough to enforce strict match.
-> > > Matching foo___flavor with foo should not be allowed.
-> > > While passing struct foo_flavor {struct foo;} into a kfunc that accepts 'struct foo'
-> > > is safe.
-> > > If so, I'm fine with such approach.
-> >
-> > Alright, I'll spin v2 to treat any type with name___.* as a disallowed
-> > alias, and update the documentation to mention it. I was originally
-> > going to push back and say that we should just use a single alias like
-> > __nocast to keep things simple, but it doesn't feel generalizable
-> > enough.
->
-> On second thought, unless you guys feel strongly, I'll just check
-> ___init. The resulting code is going to be a lot of tricky string
-> manipulation / math otherwise. Not _terrible_, but I'd prefer to avoid
-> adding it until we have a concrete use-case. And I expect this could be
-> implemented much simpler using something like tags, once gcc has support
-> for it.
+Hi Andy,
 
-There is bpf_core_is_flavor_sep() that makes it easy to check,
-but thinking more about it we probably should stick to strict "___init"
-suffix for now, since flavors can appear in progs too and they
-are equivalent to corresponding types in the kernel.
-The nf_conn___init is kernel only type.
-The verifier sees that bpf_xdp_ct_alloc kfunc returns it,
-but when we export this kfunc to bpf prog it returns nf_conn.
-We probably should pick some other suffix without "___" to distinguish
-from flavors. bpf prog should not use nf_conn___init.
+On Fri, 20 Jan 2023 18:00:02 +0200
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+
+> On Thu, Jan 19, 2023 at 09:43:58AM +0100, Luca Ceresoli wrote:
+> > On Wed, 18 Jan 2023 19:43:23 +0200
+> > Andy Shevchenko <andriy.shevchenko@intel.com> wrote:  
+> > > On Wed, Jan 18, 2023 at 07:28:20PM +0200, Tomi Valkeinen wrote:  
+> > > > On 18/01/2023 18:01, Andy Shevchenko wrote:    
+> > > > > On Wed, Jan 18, 2023 at 02:40:24PM +0200, Tomi Valkeinen wrote:    
+> 
+> ...
+> 
+> > > > Can you clarify what you mean here?
+> > > > 
+> > > > The i2c_clients are not aware of the i2c-atr. They are normal i2c clients.
+> > > > The FPD-Link drivers are aware of the ATR, as the FPD-Link hardware contains
+> > > > the ATR support.    
+> > > 
+> > > Can't that hardware be represented as I2C adapter? In such case the ATR specifics
+> > > can be hidden from the client (drivers).
+> > > 
+> > > I'm worrying about code duplication and other things that leak into drivers as
+> > > ATR callbacks.  
+> > 
+> > Which callbacks do you refer to? i2c_atr_ops? I don't think we can do
+> > without the attach/detach_client ones, it's where the driver-specific
+> > implementation is hooked for the generic ATR infra to call it.
+> > 
+> > However now I noticed the select/deselect ops are still there. IIRC
+> > they are not used by any driver and in the past the plan was to just
+> > remove them. Tomi, do you think there is a good reason to keep them?
+> >   
+> > > It might be that I didn't get how hw exactly functioning on this
+> > > level and why we need those callbacks.  
+> > 
+> > As far as "how hw exactly works", in case you haven't seen that, the
+> > best explanation I was able to give is in my ELCE 2019 talk, at minute
+> > ~22. It's a 2-3 minute watch. The slides have pointers to other talks
+> > and discussion.  
+> 
+> Probably I have missed the URL in the discussion, care to resend?
+
+I hadn't sent any URL :)
+
+Here's the shortcut to go straight to the ATR description:
+https://youtu.be/7hLv6fYAW-E?t=1350
+
+Slides:
+https://elinux.org/images/f/fc/Ceresoli-elce2019-video-serdes-linux.pdf
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
