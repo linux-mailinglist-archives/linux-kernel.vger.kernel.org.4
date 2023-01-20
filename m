@@ -2,181 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6210B6747DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFB36747E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjATANY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S229490AbjATAOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATANS (ORCPT
+        with ESMTP id S229471AbjATAOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:13:18 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B012683E4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:13:16 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id az20so10100810ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2V8Ln6e8tegMHSBR/J0K1l0Tuvgg5sXARNbUfWI/C08=;
-        b=GaQqhxxDs2Yu9TEHYHaW7FaEC5qe3eqdZRboUv1cZObr8UKmpxXD8WDx1MuCfpM1Oi
-         ZTgaKuAIwehs6ElVZnISD0lbgkwrjgP00OZm+aMLCHOeMX2yWo71LLQsA3XSLoJ1H3Lg
-         Nl9H7LVKRJTqrrmefk4OPeU2PyHuKn31+yjWE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2V8Ln6e8tegMHSBR/J0K1l0Tuvgg5sXARNbUfWI/C08=;
-        b=2Dr4IduaEw8ctUrg06TTVJTFGP7wJK8j3zAu3nMzm0qQMTUdWDSXpu/s5svrt88h/b
-         uV1Uhe5hs+Z4pF8Y/e9jPbkIK6nJFlXR/pMqrsLLmiBPJ2+4/+TWfS3b4PIZ8b+QbIU0
-         A5nfFCClQI2UHzQYausWKaohA7b5YIMNpxIuJgVm8vMifW0HTmHX4lM5ZPnyoWaoihXT
-         ZxbreUlzPOn58eezf8Qn2GxJDP8Lhri3uIYG0CI4Nl/Cl4rUoQDJhGDpJzUoomN+KhgE
-         uL1Sl+rVbkTX5/RV5i7IQcfH180EUfB070K91jJpuw8y24hR1ApNoY5jfV3OBdcLaUtE
-         9S3Q==
-X-Gm-Message-State: AFqh2kqRi9E9QyykhXicK8JXvHo5c5NOTCbEfwAvXt0Bc5YV06Va6men
-        k+XcGL4JkLYGG4P2aGP8WQxp3NXIuEaCML/mz3o=
-X-Google-Smtp-Source: AMrXdXsobYt29nZRdkCMRytCJbg29IEODUfcic0wQj3w4y4XVpJxc3WFT3OIs4OYirUOpVf35XsQpA==
-X-Received: by 2002:a17:906:f889:b0:86f:c7df:4a63 with SMTP id lg9-20020a170906f88900b0086fc7df4a63mr12555611ejb.56.1674173594855;
-        Thu, 19 Jan 2023 16:13:14 -0800 (PST)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id ui18-20020a170907c91200b00872c3e8d4e0sm4797639ejc.13.2023.01.19.16.13.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 16:13:14 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id g10so2877210wmo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:13:14 -0800 (PST)
-X-Received: by 2002:a05:600c:180f:b0:3db:d4b:f019 with SMTP id
- n15-20020a05600c180f00b003db0d4bf019mr461234wmp.170.1674173247519; Thu, 19
- Jan 2023 16:07:27 -0800 (PST)
+        Thu, 19 Jan 2023 19:14:01 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E4A296D;
+        Thu, 19 Jan 2023 16:14:00 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JNXlZn026397;
+        Fri, 20 Jan 2023 00:13:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GMbhES6LxIObCeJt1QyYwzV3RDgMMaQuc16tcznbwO0=;
+ b=iJqxP/Lm+YXSnq0QKlSKaqyi5TQuJuvzf5ljxR4Kp2Jhe7GHgQ8wcQAI/3uSzHVxHpol
+ DglkPnECs27nBxPyfPIi3av+jwwd88EtBc/JbpGrXYTMIspFBw8CrSQ3aMAEIYJ5pDuU
+ oSqy0drMY4PX6OwN3FIITERogCldx5FPIat8+Pru1Drbumkbxd1IsSwId1pZiauez9jK
+ jURcBu1jX5nMynvfebT8ttWBSuruXugzQMo0V5o3uNgyuqeUFNkvVDrwthdFMsELBhXY
+ JlzyWuXIH/d5G6yMy81FgUKOIkMgrDAOxa6nWup10O6FU7ykXO9ovWejAwPSiqiPqvAt MQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n70eyje8g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 00:13:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30K0DuYK011975
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 00:13:56 GMT
+Received: from [10.110.55.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 16:13:55 -0800
+Message-ID: <f49c54d9-b9fe-e629-3f94-809cd79a2211@quicinc.com>
+Date:   Thu, 19 Jan 2023 16:13:54 -0800
 MIME-Version: 1.0
-References: <1672193785-11003-1-git-send-email-quic_khsieh@quicinc.com>
- <1672193785-11003-3-git-send-email-quic_khsieh@quicinc.com>
- <CAD=FV=VeBBFTZBjZNhMUBO1uTNKBwcgZM6ehnw3BGmervE7jXA@mail.gmail.com> <CAE-0n50JB211OhA7pqj6U3rfBeeS0ofzY_moE77REmY2awo7bA@mail.gmail.com>
-In-Reply-To: <CAE-0n50JB211OhA7pqj6U3rfBeeS0ofzY_moE77REmY2awo7bA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 19 Jan 2023 16:07:11 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W92EO9+XnRCuBCAePQmH8+CgGQf5ETEtHcRFDkNGhJ0A@mail.gmail.com>
-Message-ID: <CAD=FV=W92EO9+XnRCuBCAePQmH8+CgGQf5ETEtHcRFDkNGhJ0A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] drm/msm/dp: enhance dp controller isr
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, vkoul@kernel.org, daniel@ffwll.ch,
-        airlied@gmail.com, agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/5] usb: gadget: Add remote wakeup capable flag
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1673992507-7823-1-git-send-email-quic_eserrao@quicinc.com>
+ <1673992507-7823-2-git-send-email-quic_eserrao@quicinc.com>
+ <20230119014409.yiw6xlp5cwlmu25s@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230119014409.yiw6xlp5cwlmu25s@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1lBQE6YS7GRMsyQaZ0G5YZ_jtBxeQHfX
+X-Proofpoint-GUID: 1lBQE6YS7GRMsyQaZ0G5YZ_jtBxeQHfX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_16,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ phishscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=930
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301200000
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Wed, Jan 18, 2023 at 2:34 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Doug Anderson (2023-01-18 10:29:59)
-> > Hi,
-> >
-> > On Tue, Dec 27, 2022 at 6:16 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> > > +
-> > >         if (isr & DP_INTR_AUX_ERROR) {
-> > >                 aux->aux_error_num = DP_AUX_ERR_PHY;
-> > >                 dp_catalog_aux_clear_hw_interrupts(aux->catalog);
-> > > +               ret = IRQ_HANDLED;
-> > >         }
-> >
-> > The end result of the above is a weird mix of "if" and "else if" for
-> > no apparent reason. All except one of them just updates the exact same
-> > variable so doing more than one is mostly useless. If you made it
-> > consistently with "else" then the whole thing could be much easier,
-> > like this (untested):
->
-> Totally agreed. I even asked that when I posted the RFC[1]!
->
-> "Can we also simplify the aux handlers to be a big pile of
-> if-else-if conditions that don't overwrite the 'aux_error_num'? That
-> would simplify the patch below."
->
-> > > @@ -425,17 +464,15 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
-> > >
-> > >         /* no interrupts pending, return immediately */
-> > >         if (!isr)
-> > > -               return;
-> > > +               return IRQ_NONE;
-> > >
-> > >         if (!aux->cmd_busy)
-> > > -               return;
-> > > +               return IRQ_NONE;
-> > >
-> > >         if (aux->native)
-> > > -               dp_aux_native_handler(aux, isr);
-> > > +               return dp_aux_native_handler(aux, isr);
-> > >         else
-> > > -               dp_aux_i2c_handler(aux, isr);
-> > > -
-> > > -       complete(&aux->comp);
-> > > +               return dp_aux_i2c_handler(aux, isr);
-> >
-> > Personally, I wouldn't have done it this way. I guess that means I
-> > disagree with Stephen. I'm not dead-set against this way and it's fine
-> > if you want to continue with it. If I were doing it, though, then I
-> > would always return IRQ_HANDLED IF dp_catalog_aux_get_irq() returned
-> > anything non-zero. Why? Officially if dp_catalog_aux_get_irq() returns
-> > something non-zero then you know for sure that there was an interrupt
-> > for this device and officially you have "handled" it by acking it,
-> > since dp_catalog_aux_get_irq() acks all the bits that it returns. That
-> > means that even if dp_aux_native_handler() or dp_aux_i2c_handler()
-> > didn't do anything with the interrupt you at least know that it was
-> > for us (so if the IRQ is shared we properly report back to the IRQ
-> > subsystem) and that it won't keep firing over and over (because we
-> > acked it).
->
-> I'm primarily concerned with irq storms taking down the system. Can that
-> happen here? If not, then returning IRQ_NONE is not really useful. The
-> overall IRQ for DP looks to be level, because the driver requests the
-> IRQ that way. The aux interrupt status bits look to be edge style
-> interrupts though, because the driver acks them in the handler. I guess
-> that means the edges come in and latch into the interrupt status
-> register so the driver has to ack all of them to drop the IRQ level for
-> the overall DP interrupt? If the driver only acked the bits it looked at
-> instead of all interrupt bits in the register, then the level would
-> never go down for the IRQ if an unhandled interrupt bit was present like
-> 'DP_INTR_PLL_UNLOCKED'. That would mean we would hit spurious IRQ
-> handling very quickly if that interrupt bit was ever seen.
->
-> But the driver is acking all interrupts, so probably trying to work
-> IRQ_NONE into this code is not very useful? The only thing it would
-> catch is DP_INTR_PLL_UNLOCKED being set over and over again, which seems
-> unlikely. Of course, why is this driver unmasking interrupt bits it
-> doesn't care about? That may be leading to useless interrupt handling in
-> this driver if some interrupt bit is unmasked but never looked at. Can
-> that be fixed in another patch?
->
-> >
-> > NOTE: I still like having the complete() call in
-> > dp_aux_native_handler() and dp_aux_i2c_handler() and, to me, that part
-> > of this patch is worthwhile. That makes it more obvious that the code
-> > is truly expecting that complete to be called for all error cases as
-> > well as transfer finished.
-> >
->
-> I think it may be required. We don't want to allow DP_INTR_PLL_UNLOCKED
-> to complete() the transfer.
 
-OK, I've tried to code up what I think is the right solution. I'd
-appreciate review and testing.
+On 1/18/2023 5:44 PM, Thinh Nguyen wrote:
+> On Tue, Jan 17, 2023, Elson Roy Serrao wrote:
+>> Add a flag to indicate whether the gadget is capable
+>> of sending remote wakeup to the host.
+>>
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   drivers/usb/gadget/composite.c | 3 +++
+>>   include/linux/usb/gadget.h     | 2 ++
+>>   2 files changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+>> index 403563c..b83963a 100644
+>> --- a/drivers/usb/gadget/composite.c
+>> +++ b/drivers/usb/gadget/composite.c
+>> @@ -965,6 +965,9 @@ static int set_config(struct usb_composite_dev *cdev,
+>>   	else
+>>   		usb_gadget_clear_selfpowered(gadget);
+>>   
+>> +	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
+>> +		gadget->rw_capable = 1;
+> 
+> Some device may not support remote wakeup. gadget->rw_capable should be
+> set and reported by the UDC. May need a gadget ops to enable remote
+> wakeup here.
+> 
+> Thanks,
+> Thinh
+> 
+Not exactly clear on which parameter in UDC decides whether a device 
+supports remote wakeup. Here I have this flag just to indicate whether 
+the connected device is rw capable based on the bmAttributes populated 
+in the config descriptor. If the UDC doesnt have a callback for remote 
+wakeup we have that check when calling the gadget op in udc/core.c (have 
+added a similar check in usb_func_wakeup() also ).
 
-https://lore.kernel.org/r/20230119145248.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid
+int usb_gadget_wakeup(struct usb_gadget *gadget)
+{
+	int ret = 0;
 
--Doug
+	if (!gadget->ops->wakeup) {
+		ret = -EOPNOTSUPP;
+		goto out;
+
+Thanks
+Elson
+
+>> +
+>>   	usb_gadget_vbus_draw(gadget, power);
+>>   	if (result >= 0 && cdev->delayed_status)
+>>   		result = USB_GADGET_DELAYED_STATUS;
+>> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+>> index dc3092c..15785f8 100644
+>> --- a/include/linux/usb/gadget.h
+>> +++ b/include/linux/usb/gadget.h
+>> @@ -385,6 +385,7 @@ struct usb_gadget_ops {
+>>    *	indicates that it supports LPM as per the LPM ECN & errata.
+>>    * @irq: the interrupt number for device controller.
+>>    * @id_number: a unique ID number for ensuring that gadget names are distinct
+>> + * @rw_capable: True if the gadget is capable of sending remote wakeup.
+>>    *
+>>    * Gadgets have a mostly-portable "gadget driver" implementing device
+>>    * functions, handling all usb configurations and interfaces.  Gadget
+>> @@ -446,6 +447,7 @@ struct usb_gadget {
+>>   	unsigned			lpm_capable:1;
+>>   	int				irq;
+>>   	int				id_number;
+>> +	unsigned			rw_capable:1;
+>>   };
+>>   #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+>>   
+>> -- 
+>> 2.7.4
