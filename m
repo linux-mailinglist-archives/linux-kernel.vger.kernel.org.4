@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1E1676153
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89A2676156
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjATXPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S230204AbjATXP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjATXPt (ORCPT
+        with ESMTP id S229975AbjATXPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:15:49 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6E572B8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:47 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id r9so6104315wrw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:47 -0800 (PST)
+        Fri, 20 Jan 2023 18:15:50 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B65D47430
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:49 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h12so2100179wrv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SmpmbTelOLm3GxZGJKc3RpPo4g2mgSJUW4mMTFcNbb8=;
-        b=U/z4QGUZDtiQ8kXnYfkagTBBcN0fw9eIOLR+nRuM9WEZrw5v7ha6npdco/9bTop06c
-         UydrAmz3Ikow3YGkW//kOV9sFv1BQpZc2GDvdgPLcG+Ha9qUIvJ+aG6SIFlm20suGpAi
-         WB2dhUP8/HBRqkOre6bhZR2tNEjFQhHwqVP9zVzAPinhBIXs8rmnwms7rDJPJiMn4cK7
-         7elFOo0Ko6fp1gqKyYhbuyVWBrSqnIQg5OgnKYAZ4S30L7d2/xI3vsFJhYZbxaG0riUs
-         cuu1aOg9YMrB6e1iA3asce1pPxfRrWg2qK4VoNlpnlqw6yYIxGdeAHjVwzr10gQVuYFf
-         FtTg==
+        bh=+GqNUBNPb4FrqrObowiEfJdLlDOURdpHlsNV8vYm+w0=;
+        b=V+dqd01OtC9x9HcxN1eVQup28u1BdorVv9yEq5mIhZebGtanPITQZo87sKVgl8WxGF
+         qtAKzftadJC6ZqrGiA4fKTg8XElnrlZ5kH9Qnc2u7dyZ0O9oHnpCHodx/k3t/VY17uzZ
+         lmdrI8CMrzWbe+oIfRBA/at+MJDZaMsDswa0Gf9k8SADxotas8KISB1cRT2zTCyXSkR6
+         641K/RsuzCiUDZCZ474ILOp/YFl6yftrmEs//G+wh29VNgkdMwSiMs2x+pHuVmxayMgx
+         uIsrNPZOydME0ZEQnZUDYLrIhv9EsIIaOSAe5XhFCV57KbZ6Vb9lzK4Po9nZndELHa+k
+         2IqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SmpmbTelOLm3GxZGJKc3RpPo4g2mgSJUW4mMTFcNbb8=;
-        b=PD4tS2ONVC+uK+vdNcUeHdTbx3UNU/fQlZqocvsTmmmnTSIwWJMWNf4ooh4iU53uMh
-         hg6E8S1T6dBHqeO6BLJw2b/VuJjqy7Dzq68cxngNDWqlNW1H7Wl4w6f57hP2YZZYgnZp
-         2ltf5m4kX+8MqhP3fK278M83SwJqSYStC9dY+XUdccGpTU4m7LnhmSwwLt1GFF+q/X10
-         87yEPzPfZuXM+rW+OjYkAoa5lU7oh6po82DYdVr361hnOjKZ6vTVJYCPEjx+8lYK+PH7
-         4l46L5XRUeQ9r2xM0HbAoVrFw+nyZdFjy1FOeohRx4oElKVgnur3AGK4ohpUgeS7e9+X
-         QzgA==
-X-Gm-Message-State: AFqh2koy0Jz29pwnTPQqsB2JnBUwJSQ65djk8kp/o+D7AE79BnR8/nEe
-        ORx/YWRhbe2Rr+PXZNotEFw0jw==
-X-Google-Smtp-Source: AMrXdXuEaC1/9xNlzYGxPoJX9tujzTdDF++nkLLo8CStyd8MjhEFTzHK64oDhny/U9n1zw9nX+3Esg==
-X-Received: by 2002:a5d:6389:0:b0:2bf:95dc:436b with SMTP id p9-20020a5d6389000000b002bf95dc436bmr1549148wru.59.1674256546148;
-        Fri, 20 Jan 2023 15:15:46 -0800 (PST)
+        bh=+GqNUBNPb4FrqrObowiEfJdLlDOURdpHlsNV8vYm+w0=;
+        b=ck6qGS9z2uobvavIC9JnHLgAOYPZkPmdy86HVobQtNBV0pZBRNVhaHQVso+BMwRqKy
+         13nndZs6G8Gb8zwFbkkb3XHJLGmQnAt5naftEI96JF5Wn/xqLj9qqYmbVlLEmZJ2ULcL
+         mpY9k4luJQlx+ZHXxmGRXZ7FIPk4U4BN7eiyBo4hcqg/5OUyL3kSHTRvJIZQhED3EwBz
+         RgqZyB250m7I876kXRfjBKysk5r8wGltjBq9+XVypdqR8XcX6OSKn3cANTsBifQSXLyb
+         LbRL+LJNhFQi2IWhS6qfgMUGQcgb1sckG27WRFJpEtFQJiy4Yusy+ChsmuJOfKbgP4BT
+         eJvg==
+X-Gm-Message-State: AFqh2krI8kzm5WteMkRDzXi24lH3MW0fbhMdqVDTdOCPKWhzP13rQmrF
+        /b/w6Pwcp299MEXZ/yBYBBrfipC7rRVwtHob
+X-Google-Smtp-Source: AMrXdXvitctFbFhUa7Up0/SYPSpjhYvhHY9dLKo4Cx5DlJWsL/uLN4kf44Hx6rJVlb9hr76LKVKjCg==
+X-Received: by 2002:a5d:4103:0:b0:2be:5408:5d6d with SMTP id l3-20020a5d4103000000b002be54085d6dmr4037839wrp.21.1674256548930;
+        Fri, 20 Jan 2023 15:15:48 -0800 (PST)
 Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm36436828wrx.21.2023.01.20.15.15.44
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm36436828wrx.21.2023.01.20.15.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 15:15:45 -0800 (PST)
+        Fri, 20 Jan 2023 15:15:48 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         rui.zhang@intel.com, christophe.jaillet@wanadoo.fr,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v6 1/3] thermal/acpi: Add ACPI trip point routines
-Date:   Sat, 21 Jan 2023 00:15:28 +0100
-Message-Id: <20230120231530.2368330-2-daniel.lezcano@linaro.org>
+        Amit Kucheria <amitk@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v6 2/3] thermal/drivers/intel: Use generic trip points for intel_pch
+Date:   Sat, 21 Jan 2023 00:15:29 +0100
+Message-Id: <20230120231530.2368330-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
 References: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -76,38 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ACPI specification describes the trip points, the device tree
-bindings as well.
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
-The OF code uses the generic trip point structures.
+Convert the ops content logic into generic trip points and register
+them with the thermal zone.
 
-The ACPI has their own trip points structure and uses the get_trip_*
-ops to retrieve them.
-
-We can do the same as the OF code and create a set of ACPI functions
-to retrieve a trip point description. Having a common code for ACPI
-will help to cleanup the remaining Intel drivers and get rid of the
-get_trip_* functions.
-
-These changes add the ACPI thermal calls to retrieve the basic
-information we need to be reused in the thermal ACPI and Intel
-drivers.
-
-The different ACPI functions have the generic trip point structure
-passed as parameter where it is filled.
-
-This structure aims to be the one used by all the thermal drivers and
-the thermal framework.
-
-After this series, a couple of Intel drivers and the ACPI thermal
-driver will still have their own trip points definition but a new
-series on top of this one will finish the conversion to the generic
-trip point handling.
-
-This series depends on the generic trip point added to the thermal
-framework and available in the thermal/linux-next branch.
-
- https://lkml.org/lkml/2022/10/3/456
+In order to consolidate the code, use the ACPI thermal framework API
+to fill the generic trip point from the ACPI tables.
 
 It has been tested on a Intel i7-8650U - x280 with the INT3400, the
 PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
@@ -116,275 +95,191 @@ Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 Tested-by: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- V6:
-   - Changed the functions name and prototype to return the temperature
-     instead of passing a pointer
-   - Removed the GTSH function as it does not belong to the ACPI standard
-   - Changed hysteresis -> hyst, temperature -> temp
-   - Changed message level info -> debug
-   - Changed error messages
-   - Return -ENODATA error only
-   - Fixed description functions
+   V6:
+     - Propagate the function name change from thermal ACPI
 
- V5:
-   - Fixed GTSH unit conversion, deciK -> milli C
+   V4:
+     - Changed select THERMAL_ACPI if ACPI in order to prevent
+      dependency inconsistency
 
- V3:
-   - Removed too simple wrappers
-   - Changed the API to return an error and check the validity of the value
-   - Removed the comments describing the objects
-   - Added kerneldoc
-   - Made the Kconfig option silent
-   - Set the hysteresis value to zero by default
-
- V2:
-   - Fixed the missing thermal_acpi.c in the patch
+   V3:
+     - The driver Kconfig option selects CONFIG_THERMAL_ACPI
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/Kconfig        |   4 +
- drivers/thermal/Makefile       |   1 +
- drivers/thermal/thermal_acpi.c | 185 +++++++++++++++++++++++++++++++++
- include/linux/thermal.h        |   7 ++
- 4 files changed, 197 insertions(+)
- create mode 100644 drivers/thermal/thermal_acpi.c
+ drivers/thermal/intel/Kconfig             |  1 +
+ drivers/thermal/intel/intel_pch_thermal.c | 88 +++++------------------
+ 2 files changed, 20 insertions(+), 69 deletions(-)
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..eaeb2b2ee6e9 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -76,6 +76,10 @@ config THERMAL_OF
- 	  Say 'Y' here if you need to build thermal infrastructure
- 	  based on device tree.
- 
-+config THERMAL_ACPI
-+       depends on ACPI
-+       bool
-+
- config THERMAL_WRITABLE_TRIPS
- 	bool "Enable writable trip points"
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index f0c845679250..7d68c076c23d 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -75,6 +75,7 @@ config INTEL_BXT_PMIC_THERMAL
+ config INTEL_PCH_THERMAL
+ 	tristate "Intel PCH Thermal Reporting Driver"
+ 	depends on X86 && PCI
++	select THERMAL_ACPI if ACPI
  	help
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 2506c6c8ca83..60f0dfa9aae2 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -13,6 +13,7 @@ thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
- # interface to/from other layers providing sensors
- thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
- thermal_sys-$(CONFIG_THERMAL_OF)		+= thermal_of.o
-+thermal_sys-$(CONFIG_THERMAL_ACPI)		+= thermal_acpi.o
+ 	  Enable this to support thermal reporting on certain intel PCHs.
+ 	  Thermal reporting device will provide temperature reading,
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index dabf11a687a1..5f1568270fc7 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -65,6 +65,8 @@
+ #define WPT_TEMP_OFFSET	(PCH_TEMP_OFFSET * MILLIDEGREE_PER_DEGREE)
+ #define GET_PCH_TEMP(x)	(((x) / 2) + PCH_TEMP_OFFSET)
  
- # governors
- thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)	+= gov_fair_share.o
-diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
-new file mode 100644
-index 000000000000..c72fca44bc86
---- /dev/null
-+++ b/drivers/thermal/thermal_acpi.c
-@@ -0,0 +1,185 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2022 Linaro Limited
-+ *
-+ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ *
-+ * ACPI thermal configuration
-+ */
-+#include <linux/acpi.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/units.h>
-+#include <uapi/linux/thermal.h>
++#define PCH_MAX_TRIPS 3 /* critical, hot, passive */
 +
-+#include "thermal_core.h"
+ /* Amount of time for each cooling delay, 100ms by default for now */
+ static unsigned int delay_timeout = 100;
+ module_param(delay_timeout, int, 0644);
+@@ -82,12 +84,7 @@ struct pch_thermal_device {
+ 	const struct pch_dev_ops *ops;
+ 	struct pci_dev *pdev;
+ 	struct thermal_zone_device *tzd;
+-	int crt_trip_id;
+-	unsigned long crt_temp;
+-	int hot_trip_id;
+-	unsigned long hot_temp;
+-	int psv_trip_id;
+-	unsigned long psv_temp;
++	struct thermal_trip trips[PCH_MAX_TRIPS];
+ 	bool bios_enabled;
+ };
+ 
+@@ -102,33 +99,22 @@ static void pch_wpt_add_acpi_psv_trip(struct pch_thermal_device *ptd,
+ 				      int *nr_trips)
+ {
+ 	struct acpi_device *adev;
+-
+-	ptd->psv_trip_id = -1;
++	int ret;
+ 
+ 	adev = ACPI_COMPANION(&ptd->pdev->dev);
+-	if (adev) {
+-		unsigned long long r;
+-		acpi_status status;
+-
+-		status = acpi_evaluate_integer(adev->handle, "_PSV", NULL,
+-					       &r);
+-		if (ACPI_SUCCESS(status)) {
+-			unsigned long trip_temp;
+-
+-			trip_temp = deci_kelvin_to_millicelsius(r);
+-			if (trip_temp) {
+-				ptd->psv_temp = trip_temp;
+-				ptd->psv_trip_id = *nr_trips;
+-				++(*nr_trips);
+-			}
+-		}
+-	}
++	if (!adev)
++		return;
 +
-+/*
-+ * An hysteresis value below zero is invalid and we can consider a
-+ * value greater than 20°K/°C is invalid too.
-+ */
-+#define HYST_MIN_DECIK	0
-+#define HYST_MAX_DECIK	200
++	ret = thermal_acpi_passive_trip_temp(adev, &ptd->trips[*nr_trips]);
++	if (ret)
++		return;
 +
-+/*
-+ * Minimum temperature for full military grade is 218°K (-55°C) and
-+ * max temperature is 448°K (175°C). We can consider those values as
-+ * the boundaries for the [trips] temperature returned by the
-+ * firmware. Any values out of these boundaries may be considered
-+ * bogus and we can assume the firmware has no data to provide.
-+ */
-+#define TEMP_MIN_DECIK	2180
-+#define TEMP_MAX_DECIK	4480
-+
-+static int thermal_acpi_get_temp(struct acpi_device *adev, char *object_name)
-+{
-+	unsigned long long temp;
-+	acpi_status status;
-+
-+	status = acpi_evaluate_integer(adev->handle, object_name, NULL, &temp);
-+	if (ACPI_FAILURE(status)) {
-+		acpi_handle_debug(adev->handle, "Failed to get temperature object '%s'\n", object_name);
-+		return -ENODATA;
-+	}
-+
-+	if (temp < TEMP_MIN_DECIK || temp >= TEMP_MAX_DECIK) {
-+		acpi_handle_debug(adev->handle, "Invalid value '%llu' returned by '%s'\n", temp, object_name);
-+		return -ENODATA;
-+	}
-+
-+	return (int)temp;
-+}
-+
-+/**
-+ * thermal_acpi_active_trip_temp() - Get the specified active trip point
-+ * @adev: Thermal zone ACPI device object to get the description from
-+ * @trip: Trip point structure to be populated on success
-+ * @id: Active cooling level (0 - 9)
-+ *
-+ * Evaluate the _ACx object for the thermal zone represented by @adev
-+ * to obtain the temperature of the active cooling trip point
-+ * corresponding to the active cooling level given by @id and
-+ * initialize @trip as an active trip point using that temperature
-+ * value.
-+ *
-+ * Return: 
-+ * * 0 - Success
-+ * * -ENODATA - Failed to get the ACPI object, or the value appears to be inconsistent
-+ */
-+int thermal_acpi_active_trip_temp(struct acpi_device *adev,
-+				  struct thermal_trip *trip, int id)
-+{
-+	char name[] = "_AC0";
-+	int temp;
-+
-+	if (id < 0 || id > 9)
-+		return -EINVAL;
-+
-+	name[3] += id;
-+	
-+	temp = thermal_acpi_get_temp(adev, name);
-+	if (temp < 0)
-+		return temp;
-+
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->hysteresis = 0;
-+	trip->type = THERMAL_TRIP_ACTIVE;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_acpi_active_trip_temp);
-+
-+/**
-+ * thermal_acpi_passive_trip_temp() - Get the passive trip point
-+ * @adev: Thermal zone ACPI device object to get the description from
-+ * @trip: Trip point structure to be populated on success
-+ *
-+ * Evaluate the _PSV object for the thermal zone represented by @adev
-+ * to obtain the temperature of the passive cooling trip point and
-+ * initialize @trip as a passive trip point using that temperature
-+ * value.
-+ *
-+ * Return:
-+ * * 0 - Success
-+ * * -ENODATA - Failed to get the ACPI object, or the value appears to be inconsistent
-+ */
-+int thermal_acpi_passive_trip_temp(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	int temp;
-+
-+	temp = thermal_acpi_get_temp(adev, "_PSV");
-+	if (temp < 0)
-+		return temp;
-+
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->hysteresis = 0;
-+	trip->type = THERMAL_TRIP_PASSIVE;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_acpi_passive_trip_temp);
-+
-+/**
-+ * thermal_acpi_hot_trip_temp() - Get the near critical trip point
-+ * @adev: the ACPI device to get the description from
-+ * @trip: a &struct thermal_trip to be filled if the function succeed
-+ *
-+ * Evaluate the _HOT object for the thermal zone represented by @adev
-+ * to obtain the temperature of the trip point at which the system is
-+ * expected to be put into the S4 sleep state and initialize @trip as
-+ * a hot trip point using that temperature value.
-+ *
-+ * Return:
-+ * * 0 - Success
-+ * * -ENODATA - Failed to get the ACPI object, or the value appears to be inconsistent
-+ */
-+int thermal_acpi_hot_trip_temp(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	int temp;
-+
-+	temp = thermal_acpi_get_temp(adev, "_HOT");
-+	if (temp < 0)
-+		return temp;
-+
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->hysteresis = 0;
-+	trip->type = THERMAL_TRIP_HOT;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_acpi_hot_trip_temp);
-+
-+/**
-+ * thermal_acpi_critical_trip_temp() - Get the critical trip point
-+ * @adev: the ACPI device to get the description from
-+ * @trip: a &struct thermal_trip to be filled if the function succeed
-+ *
-+ * Evaluate the _CRT object for the thermal zone represented by @adev
-+ * to obtain the temperature of the critical cooling trip point and
-+ * initialize @trip as a critical trip point using that temperature
-+ * value.
-+ *
-+ * Return:
-+ * * 0 - Success
-+ * * -ENODATA - Failed to get the ACPI object, or the value appears to be inconsistent
-+ */
-+int thermal_acpi_critical_trip_temp(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	int temp;
-+
-+	temp = thermal_acpi_get_temp(adev, "_CRT");
-+	if (temp < 0)
-+		return temp;
-+
-+	/*
-+	 * The hysteresis value has no sense here because critical
-+	 * trip point has no u-turn
-+	 */
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->hysteresis = 0;
-+	trip->type = THERMAL_TRIP_CRITICAL;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_acpi_critical_trip_temp);
-+
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 30353e4b1424..2aee1f0d5fac 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -334,6 +334,13 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
++	++(*nr_trips);
+ }
+ #else
+ static void pch_wpt_add_acpi_psv_trip(struct pch_thermal_device *ptd,
+ 				      int *nr_trips)
+ {
+-	ptd->psv_trip_id = -1;
+ 
  }
  #endif
+@@ -163,21 +149,19 @@ static int pch_wpt_init(struct pch_thermal_device *ptd, int *nr_trips)
+ 	}
  
-+#ifdef CONFIG_THERMAL_ACPI
-+int thermal_acpi_critical_trip_temp(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_hot_trip_temp(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_passive_trip_temp(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_active_trip_temp(struct acpi_device *adev, struct thermal_trip *trip, int id);
-+#endif
-+
- int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			    struct thermal_trip *trip);
- int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+ read_trips:
+-	ptd->crt_trip_id = -1;
+ 	trip_temp = readw(ptd->hw_base + WPT_CTT);
+ 	trip_temp &= 0x1FF;
+ 	if (trip_temp) {
+-		ptd->crt_temp = GET_WPT_TEMP(trip_temp);
+-		ptd->crt_trip_id = 0;
++		ptd->trips[*nr_trips].temperature = GET_WPT_TEMP(trip_temp);
++		ptd->trips[*nr_trips].type = THERMAL_TRIP_CRITICAL;
+ 		++(*nr_trips);
+ 	}
+ 
+-	ptd->hot_trip_id = -1;
+ 	trip_temp = readw(ptd->hw_base + WPT_PHL);
+ 	trip_temp &= 0x1FF;
+ 	if (trip_temp) {
+-		ptd->hot_temp = GET_WPT_TEMP(trip_temp);
+-		ptd->hot_trip_id = *nr_trips;
++		ptd->trips[*nr_trips].temperature = GET_WPT_TEMP(trip_temp);
++		ptd->trips[*nr_trips].type = THERMAL_TRIP_HOT;
+ 		++(*nr_trips);
+ 	}
+ 
+@@ -298,39 +282,6 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+ 	return	ptd->ops->get_temp(ptd, temp);
+ }
+ 
+-static int pch_get_trip_type(struct thermal_zone_device *tzd, int trip,
+-			     enum thermal_trip_type *type)
+-{
+-	struct pch_thermal_device *ptd = tzd->devdata;
+-
+-	if (ptd->crt_trip_id == trip)
+-		*type = THERMAL_TRIP_CRITICAL;
+-	else if (ptd->hot_trip_id == trip)
+-		*type = THERMAL_TRIP_HOT;
+-	else if (ptd->psv_trip_id == trip)
+-		*type = THERMAL_TRIP_PASSIVE;
+-	else
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+-static int pch_get_trip_temp(struct thermal_zone_device *tzd, int trip, int *temp)
+-{
+-	struct pch_thermal_device *ptd = tzd->devdata;
+-
+-	if (ptd->crt_trip_id == trip)
+-		*temp = ptd->crt_temp;
+-	else if (ptd->hot_trip_id == trip)
+-		*temp = ptd->hot_temp;
+-	else if (ptd->psv_trip_id == trip)
+-		*temp = ptd->psv_temp;
+-	else
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+ static void pch_critical(struct thermal_zone_device *tzd)
+ {
+ 	dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
+@@ -338,8 +289,6 @@ static void pch_critical(struct thermal_zone_device *tzd)
+ 
+ static struct thermal_zone_device_ops tzd_ops = {
+ 	.get_temp = pch_thermal_get_temp,
+-	.get_trip_type = pch_get_trip_type,
+-	.get_trip_temp = pch_get_trip_temp,
+ 	.critical = pch_critical,
+ };
+ 
+@@ -423,8 +372,9 @@ static int intel_pch_thermal_probe(struct pci_dev *pdev,
+ 	if (err)
+ 		goto error_cleanup;
+ 
+-	ptd->tzd = thermal_zone_device_register(bi->name, nr_trips, 0, ptd,
+-						&tzd_ops, NULL, 0, 0);
++	ptd->tzd = thermal_zone_device_register_with_trips(bi->name, ptd->trips,
++							   nr_trips, 0, ptd,
++							   &tzd_ops, NULL, 0, 0);
+ 	if (IS_ERR(ptd->tzd)) {
+ 		dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
+ 			bi->name);
 -- 
 2.34.1
 
