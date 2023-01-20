@@ -2,132 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DD0675D22
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA864675D2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjATSxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S229653AbjATS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjATSxU (ORCPT
+        with ESMTP id S229461AbjATS4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:53:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B4FB771
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674240756;
+        Fri, 20 Jan 2023 13:56:09 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179166C12C;
+        Fri, 20 Jan 2023 10:56:05 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 956681EC0682;
+        Fri, 20 Jan 2023 19:56:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674240963;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LLA0P2Oo0NSyC29FxsEUtLQkfAdXpwLv+bHSoAALBfc=;
-        b=NsxQIerPoAxO4tTnJVEdHv8B1GNgwZxd61CI3zbQUlE+0xQ+LmliRD5x2BVd8xbMaKpJiQ
-        c14HNFBpzSRhkqPNjwLEYq3j0Jua/n6HVSeBgkTyu6AmkynXHpunFen0GGR9GXWEy+MW6f
-        r0mvxOjH8npBCG0jc5C4+AWT15uc+r4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-343-ngM-D7yoNP2JDxTVX0VeAA-1; Fri, 20 Jan 2023 13:52:35 -0500
-X-MC-Unique: ngM-D7yoNP2JDxTVX0VeAA-1
-Received: by mail-qv1-f72.google.com with SMTP id lv8-20020a056214578800b0053477624294so2890987qvb.22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:52:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LLA0P2Oo0NSyC29FxsEUtLQkfAdXpwLv+bHSoAALBfc=;
-        b=qLaJKkEiDENYqCmAzjIELsxxzl8/BZLisW/HfmL/l5oUe8ouVFwm3btdc0jRVCVXt5
-         jZ57z8TPFEeTebK0CT2tfhV+4JZs7MS7EQ84DgIKI8PndMTEUPxxZGe6j6zJgA3EGz/G
-         ifpBnGkD5SJL7cCEQithcojHE3GEjDkFmRNqKmsh0H/nZIvetm4tPi7mVD+FGxY7+v12
-         qLu5T0OHCwQts35/TQV832ZX2TiYZ7b9h31J0lnBWxoMSE7pSy4wtY30krDpOFoCCrC3
-         kew7wR9N4xezL7HziuQ+XR/G/RSUnBQ679WLb/aLb0uX+KLg3qhELH3ytkYYG730TgOt
-         O6Zg==
-X-Gm-Message-State: AFqh2krKnnn3qcTScJgvNkxjEBh111ilzbkFYVzc7tA75WDJ1OX+I5e7
-        3OuzEBm5Aax0npzsRQKgVRvu6c5MYAioQLJHJ+iXwLqFnthLgx5KFIRnK/5Vzak8ZGqGM7HESfw
-        DFnh91AXsPSTNwpDPm+Yvb3PL
-X-Received: by 2002:a0c:e7ca:0:b0:537:4b24:7fba with SMTP id c10-20020a0ce7ca000000b005374b247fbamr2704054qvo.28.1674240754715;
-        Fri, 20 Jan 2023 10:52:34 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt/+92+YuFUWrLFI6DSkbz2bjUdyl+N/U/fZqMKdgKCs/hwOTOdimPPjygjVc9xJzylT3w3qg==
-X-Received: by 2002:a0c:e7ca:0:b0:537:4b24:7fba with SMTP id c10-20020a0ce7ca000000b005374b247fbamr2704035qvo.28.1674240754479;
-        Fri, 20 Jan 2023 10:52:34 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05620a290400b007069fde14a6sm7549789qkp.25.2023.01.20.10.52.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 10:52:33 -0800 (PST)
-Date:   Fri, 20 Jan 2023 13:53:36 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v6 1/3] workingset: refactor LRU refault to expose
- refault recency check
-Message-ID: <Y8rjMHXNH8KVKapZ@bfoster>
-References: <20230117195959.29768-1-nphamcs@gmail.com>
- <20230117195959.29768-2-nphamcs@gmail.com>
- <Y8qmaqpAFko+gI3h@bfoster>
- <Y8rA4C6qnT5InHGc@cmpxchg.org>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nNdhkNTHsvTW1v9Je9j5xMnmdfrjN9ZvkDa4cJMrLxE=;
+        b=IjjRnqRKu6QaNTF3MMG/a9bqezfBraHl6lJvJZBwxln/lQItXFr6zSkja7hi6F7+F3/FE3
+        OcG9MdTx9uE6WKyzChH83Q0qDKcdxh55tuzYHqRnyhdgWQUW2QrMwCdWKBu6eDEbQ+kFhW
+        4rN5vsFELNRIE+48QuW53DWVSbTouic=
+Date:   Fri, 20 Jan 2023 19:56:03 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
+        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v6 03/17] EDAC/qcom: Do not pass llcc_driv_data as
+ edac_device_ctl_info's pvt_info
+Message-ID: <Y8rjw/VLXICtK0hO@zn.tnic>
+References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+ <20230118150904.26913-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8rA4C6qnT5InHGc@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230118150904.26913-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:27:12AM -0500, Johannes Weiner wrote:
-> On Fri, Jan 20, 2023 at 09:34:18AM -0500, Brian Foster wrote:
-> > On Tue, Jan 17, 2023 at 11:59:57AM -0800, Nhat Pham wrote:
-> > > +	int memcgid;
-> > > +	struct pglist_data *pgdat;
-> > > +	unsigned long token;
-> > > +
-> > > +	unpack_shadow(shadow, &memcgid, &pgdat, &token, workingset);
-> > > +	eviction_memcg = mem_cgroup_from_id(memcgid);
-> > > +
-> > > +	lruvec = mem_cgroup_lruvec(eviction_memcg, pgdat);
-> > > +	lrugen = &lruvec->lrugen;
-> > > +
-> > > +	min_seq = READ_ONCE(lrugen->min_seq[file]);
-> > > +	return !((token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)));
-> > 
-> > I think this might be more readable without the double negative.
-> > 
-> > Also it looks like this logic is pulled from lru_gen_refault(). Any
-> > reason the caller isn't refactored to use this helper, similar to how
-> > workingset_refault() is modified? It seems like a potential landmine to
-> > duplicate the logic here for cachestat purposes and somewhere else for
-> > actual workingset management.
+On Wed, Jan 18, 2023 at 08:38:50PM +0530, Manivannan Sadhasivam wrote:
+> The memory for "llcc_driv_data" is allocated by the LLCC driver. But when
+> it is passed as "pvt_info" to the EDAC core, it will get freed during the
+> qcom_edac driver release. So when the qcom_edac driver gets probed again,
+> it will try to use the freed data leading to the use-after-free bug.
 > 
-> The initial version was refactored. Yu explicitly requested it be
-> duplicated [1] to cut down on some boiler plate.
+> Hence, do not pass "llcc_driv_data" as pvt_info but rather reference it
+> using the "platform_data" in the qcom_edac driver.
 > 
+> Cc: <stable@vger.kernel.org> # 4.20
+> Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
+> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> Reported-by: Steev Klimaszewski <steev@kali.org>
+> Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/edac/qcom_edac.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Ah, sorry for missing the previous discussion. TBH I wasn't terribly
-comfortable reviewing this one until I had made enough passes at the
-second patch..
+Applied, thanks.
 
-> I have to agree with Brian on this one, though. The factored version
-> is better for maintenance than duplicating the core logic here. Even
-> if it ends up a bit more boiler plate - it's harder to screw that up,
-> and easier to catch at compile time, than the duplicates diverging.
-> 
+-- 
+Regards/Gruss,
+    Boris.
 
-It seems more elegant to me, FWIW. Glad I'm not totally off the rails at
-least. ;) But I'll defer to those who know the code better and the
-author, so that's just my .02. I don't want to cause this to go around
-in circles..
-
-Brian
-
-> [1] https://lore.kernel.org/lkml/CAOUHufZKTqoD2rFwrX9-eCknBmeWqP88rZ7X7A_5KHHbGBUP=A@mail.gmail.com/
-> 
-
+https://people.kernel.org/tglx/notes-about-netiquette
