@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65088675167
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FDC675175
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjATJnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S229494AbjATJqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjATJnv (ORCPT
+        with ESMTP id S229776AbjATJqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:43:51 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626327698
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:43:49 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NyvWD6KJjz9y5YQ
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 17:35:52 +0800 (CST)
-Received: from [10.48.133.21] (unknown [10.48.133.21])
-        by APP1 (Coremail) with SMTP id LxC2BwD3fAgxYspjOrqwAA--.5131S2;
-        Fri, 20 Jan 2023 10:43:24 +0100 (CET)
-Message-ID: <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 10:43:10 +0100
+        Fri, 20 Jan 2023 04:46:09 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9B07AF17
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:46:08 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h16so4294671wrz.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:46:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsY3N5w/OcuIb37vMvk7tYxNViydXZA0c/CHmVvoNOo=;
+        b=CLZIyAwQPLhK2AxK27j6A6njGog/a2p4aS79YR9wE4GKVD+dwv/7AlHUBNt8aQsIGo
+         /cQH9GianjLCNV9/ankI533Tm3aUqjyjEKh5g2/Ut0g/Ee/sQ21/Ww48Ya0G2z4vSkTA
+         /3LQrIEDUN0SfJL48+K2Dx2+8MO6JqU+ShhlgcvtbAqV7/Z3rf7zE3AYbJSYK7a/daqn
+         YyM+cneeVpNvpm0sgUCpVkp7IYAKwXpv23Iw7mOawy4pE6HdnLVinEM+fDDR0q0nA0Wv
+         iMQ8OKyVx5EP5gAqFGTXWx2tQu848yqiAqs7yqy5/n6TYRRRqnevZyIiiIFamyhkGVSQ
+         +bEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nsY3N5w/OcuIb37vMvk7tYxNViydXZA0c/CHmVvoNOo=;
+        b=JjzdJLuEhCa3xIgRi1x6Z8XtvbosNjYklW49s09obt9BOnW4ODN3kwBCSy/4oA6nMC
+         Se3HkEipEODdULT3u/O1iExXUpFXR1E5QXcw3pmbBEuLi4LovDlyW1Qi3qjztcHnTUp1
+         fshcLCNpfEwP2uBr1xjwVMnSPhEJg9y5l1dJt2ninUS3Du4m6WlV5Cx5uCQykc3O6c7/
+         MOnEhAybiQfjhh89Ly4dmNWNiCaHpplMxMMbsRreU270jhHE3TAk987S6FxM77gKx+Qr
+         UE0W79Kj1mR5J2LDxAk8H/83tW4sQmSfQg6Ka2RTi69XsgfBrbLO1K1tDJ3se42djDGD
+         NfJA==
+X-Gm-Message-State: AFqh2krEKyqwf3H0PxgV5my4G52d8tyQCc7ZNhVbZ5K/k9VEZ8g0KwGf
+        +9Rwcg6RcauttHSFw+ME30shgQ==
+X-Google-Smtp-Source: AMrXdXvyT9hQzOoOVCprmqSF4N4hkPCiVWjbkYVZURild1qzZrpIlziAHbPHLBqJQPPZmE9kvU1gEw==
+X-Received: by 2002:a05:6000:1a8f:b0:2be:3fa7:ab4e with SMTP id f15-20020a0560001a8f00b002be3fa7ab4emr6333419wry.38.1674207966518;
+        Fri, 20 Jan 2023 01:46:06 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b002bc83b85180sm637714wro.114.2023.01.20.01.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 01:46:05 -0800 (PST)
+References: <20230116074214.2326-1-yu.tu@amlogic.com>
+ <20230116074214.2326-3-yu.tu@amlogic.com>
+ <1jedrqyd3w.fsf@starbuckisacylon.baylibre.com>
+ <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
+        "qi . duan" <qi.duan@amlogic.com>
+Subject: Re: [PATCH V6 2/3] clk: meson: S4: add support for Amlogic S4 SoC
+ PLL clock driver
+Date:   Fri, 20 Jan 2023 10:43:24 +0100
+In-reply-to: <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
+Message-ID: <1j1qnpy1wh.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
- <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwD3fAgxYspjOrqwAA--.5131S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFy7KFyfGw47ZF18uF1DAwb_yoW5Xw4UpF
-        W3Kay7Wr4DJrnagrnFgw1UuryFga1rWr1DZrn8XFWrArnIvw1rJFy7Kr1Fkry3ZrW7Cw42
-        qF42vFZ3Ja4UZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,89 +84,146 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Fri 20 Jan 2023 at 10:58, Yu Tu <yu.tu@amlogic.com> wrote:
 
-On 1/19/2023 10:53 PM, Paul E. McKenney wrote:
-> On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
->> On Thu, Jan 19, 2023 at 10:41:07AM -0800, Paul E. McKenney wrote:
->>> In contrast, this actually needs srcu_down_read() and srcu_up_read():
+> Hi Jerome,
+>
+> On 2023/1/19 19:20, Jerome Brunet wrote:
+>> [ EXTERNAL EMAIL ]
+>> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
+>> 
+>>> Add the S4 PLL clock controller driver in the s4 SoC family.
 >>>
->>> ------------------------------------------------------------------------
->>>
->>> C C-srcu-nest-6
->>>
->>> (*
->>>   * Result: Never
->>>   *
->>>   * Flag unbalanced-srcu-locking
->>>   * This would be valid for srcu_down_read() and srcu_up_read().
->>>   *)
->>>
->>> {}
->>>
->>> P0(int *x, int *y, struct srcu_struct *s1, int *idx)
->>> {
->>> 	int r2;
->>> 	int r3;
->>>
->>> 	r3 = srcu_down_read(s1);
->>> 	WRITE_ONCE(*idx, r3);
->>> 	r2 = READ_ONCE(*y);
->>> }
->>>
->>> P1(int *x, int *y, struct srcu_struct *s1, int *idx)
->>> {
->>> 	int r1;
->>> 	int r3;
->>>
->>> 	r1 = READ_ONCE(*x);
->>> 	r3 = READ_ONCE(*idx);
->>> 	srcu_up_read(s1, r3);
->>> }
->>>
->>> P2(int *x, int *y, struct srcu_struct *s1)
->>> {
->>> 	WRITE_ONCE(*y, 1);
->>> 	synchronize_srcu(s1);
->>> 	WRITE_ONCE(*x, 1);
->>> }
->>>
->>> locations [0:r1]
->>> exists (1:r1=1 /\ 0:r2=0)
->> I modified this litmus test by adding a flag variable with an
->> smp_store_release in P0, an smp_load_acquire in P1, and a filter clause
->> to ensure that P1 reads the flag and idx from P1.
+>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>> ---
+>> [...]
+>> 
+>>> +
+>>> +static struct clk_regmap s4_fclk_div2 = {
+>>> +	.data = &(struct clk_regmap_gate_data){
+>>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>>> +		.bit_idx = 24,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "fclk_div2",
+>>> +		.ops = &clk_regmap_gate_ro_ops,
+>> On the previous SoC, these fixed divider gate were not read-only.
+>> They are marked as critical when necessary, with the appropriate
+>> comment.
+>> Why is it different on the s4 ?
+>
+> In fact, this part of the SOC is no different from the previous G12a/b and
+> so on.
+>
+> I remember that my first version was made according to G12A, and I changed
+> this way under your suggestion.
+>
+> Maybe you were busy and forgot. For me, this mode and the previous g12a
+> mode function is ok. I can do either. So now how do you decide to go that
+> way?
 
-This sounds like good style.
-I suppose this is already flagged as mismatched srcu_unlock(), in case 
-you accidentally read from the initial write?
+No I did not forgot.
+I told you that cannot put CRITICAL (or IGNORE_USED) without explaining
+why. I stand by this. Same goes for RO ops. 
 
->> It turns out that the idea of removing rf edges from Srcu-unlock events
->> doesn't work well.  The missing edges mess up herd's calculation of the
->> fr relation and the coherence axiom.  So I've gone back to filtering
->> those edges out of carry-dep.
->>
->> Also, Boqun's suggestion for flagging ordinary accesses to SRCU
->> structures no longer works, because the lock and unlock operations now
->> _are_ normal accesses.  I removed that check too, but it shouldn't hurt
->> much because I don't expect to encounter litmus tests that try to read
->> or write srcu_structs directly.
-> Agreed.  I for one would definitely have something to say about an
-> SRCU-usage patch that directly manipulated a srcu_struct structure!  ;-)
-
-Wouldn't the point of having it being flagged be that herd (or similar 
-tools) would be having something to say long before it has to reach your 
-pair of eyes?
-I don't think Boqun's patch is hard to repair.
-Besides the issue you mention, I think it's also missing Sync-srcu, 
-which seems to be linked by loc based on its first argument.
-
-How about something like this?
-
-let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock | 
-Sync-srcu   flag ~empty ~[ALL_LOCKS | IW] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
-
-If you're using something that isn't a lock or intial write on the same location as a lock, you get the flag.
-
-Best wishes,
-   jonas
+>
+>> 
+>>> +		.parent_hws = (const struct clk_hw *[]) {
+>>> +			&s4_fclk_div2_div.hw
+>>> +		},
+>>> +		.num_parents = 1,
+>>> +	},
+>>> +};
+>>> +
+>> [...]
+>> 
+>>> +#ifndef __MESON_S4_PLL_H__
+>>> +#define __MESON_S4_PLL_H__
+>>> +
+>>> +/* ANA_CTRL - Registers
+>>> + * REG_BASE:  REGISTER_BASE_ADDR = 0xfe008000
+>> This multi-line comment style is wrong in clk/
+>> REG_BASE is not used so I'm not sure this is useful
+>
+> I will remove REG_BASE and  change this format in next version.
+>
+>> 
+>>> + */
+>>> +#define ANACTRL_FIXPLL_CTRL0                       0x040
+>>> +#define ANACTRL_FIXPLL_CTRL1                       0x044
+>>> +#define ANACTRL_FIXPLL_CTRL2                       0x048
+>>> +#define ANACTRL_FIXPLL_CTRL3                       0x04c
+>>> +#define ANACTRL_FIXPLL_CTRL4                       0x050
+>>> +#define ANACTRL_FIXPLL_CTRL5                       0x054
+>>> +#define ANACTRL_FIXPLL_CTRL6                       0x058
+>>> +#define ANACTRL_FIXPLL_STS                         0x05c
+>>> +#define ANACTRL_GP0PLL_CTRL0                       0x080
+>>> +#define ANACTRL_GP0PLL_CTRL1                       0x084
+>>> +#define ANACTRL_GP0PLL_CTRL2                       0x088
+>>> +#define ANACTRL_GP0PLL_CTRL3                       0x08c
+>>> +#define ANACTRL_GP0PLL_CTRL4                       0x090
+>>> +#define ANACTRL_GP0PLL_CTRL5                       0x094
+>>> +#define ANACTRL_GP0PLL_CTRL6                       0x098
+>>> +#define ANACTRL_GP0PLL_STS                         0x09c
+>>> +#define ANACTRL_HIFIPLL_CTRL0                      0x100
+>>> +#define ANACTRL_HIFIPLL_CTRL1                      0x104
+>>> +#define ANACTRL_HIFIPLL_CTRL2                      0x108
+>>> +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
+>>> +#define ANACTRL_HIFIPLL_CTRL4                      0x110
+>>> +#define ANACTRL_HIFIPLL_CTRL5                      0x114
+>>> +#define ANACTRL_HIFIPLL_CTRL6                      0x118
+>>> +#define ANACTRL_HIFIPLL_STS                        0x11c
+>>> +#define ANACTRL_MPLL_CTRL0                         0x180
+>>> +#define ANACTRL_MPLL_CTRL1                         0x184
+>>> +#define ANACTRL_MPLL_CTRL2                         0x188
+>>> +#define ANACTRL_MPLL_CTRL3                         0x18c
+>>> +#define ANACTRL_MPLL_CTRL4                         0x190
+>>> +#define ANACTRL_MPLL_CTRL5                         0x194
+>>> +#define ANACTRL_MPLL_CTRL6                         0x198
+>>> +#define ANACTRL_MPLL_CTRL7                         0x19c
+>>> +#define ANACTRL_MPLL_CTRL8                         0x1a0
+>>> +#define ANACTRL_MPLL_STS                           0x1a4
+>>> +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
+>>> +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
+>>> +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
+>>> +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
+>>> +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
+>>> +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
+>>> +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
+>>> +#define ANACTRL_HDMIPLL_STS                        0x1dc
+>>> +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
+>>> +
+>>> +/*
+>>> + * CLKID index values
+>>> + *
+>>> + * These indices are entirely contrived and do not map onto the hardware.
+>>> + * It has now been decided to expose everything by default in the DT header:
+>>> + * include/dt-bindings/clock/axg-clkc.h. Only the clocks ids we don't want
+>>> + * to expose, such as the internal muxes and dividers of composite clocks,
+>>> + * will remain defined here.
+>>> + */
+>>> +#define CLKID_FIXED_PLL_DCO		0
+>>> +#define CLKID_FCLK_DIV2_DIV		2
+>>> +#define CLKID_FCLK_DIV3_DIV		4
+>>> +#define CLKID_FCLK_DIV4_DIV		6
+>>> +#define CLKID_FCLK_DIV5_DIV		8
+>>> +#define CLKID_FCLK_DIV7_DIV		10
+>>> +#define CLKID_FCLK_DIV2P5_DIV		12
+>>> +#define CLKID_GP0_PLL_DCO		14
+>>> +#define CLKID_HIFI_PLL_DCO		16
+>>> +#define CLKID_HDMI_PLL_DCO		18
+>>> +#define CLKID_HDMI_PLL_OD		19
+>>> +#define CLKID_MPLL_50M_DIV		21
+>>> +#define CLKID_MPLL_PREDIV		23
+>>> +#define CLKID_MPLL0_DIV			24
+>>> +#define CLKID_MPLL1_DIV			26
+>>> +#define CLKID_MPLL2_DIV			28
+>>> +#define CLKID_MPLL3_DIV			30
+>>> +
+>>> +#define NR_PLL_CLKS			32
+>>> +/* include the CLKIDs that have been made part of the DT binding */
+>>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>>> +
+>>> +#endif /* __MESON_S4_PLL_H__ */
+>> 
 
