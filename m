@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7085675349
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E53F67534D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjATLPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S229725AbjATLQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjATLP1 (ORCPT
+        with ESMTP id S229456AbjATLQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:15:27 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF90619C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:15:27 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E1AB96602D25;
-        Fri, 20 Jan 2023 11:15:24 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674213325;
-        bh=pk0IDna2rdFOCASraCLd7evCkGbMHFk7ARo77hGlbMo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K2MOTQvLN7GOlV57FsPI26ZCkig6YDHIcebXCASlOI+Dtrp0mjLBJCY6iy95WiFvl
-         1mnskzibbi3R6xOjsgp1d8CLmRCYv94hF8xjwpcWPQ0xSHRc90X2XsfYNBxL+HZuJ3
-         IJ+qtg9RzoV6K81BA87zEV9pQWcsZEKN2ysjtGynroVr7hYF2hsqD4Q5JC6iAltSmB
-         xwnSWQrafRZ0QtcA/Psi//KI3ntUbP0OInTF52KXaU44UkekjRDP3Wge9BUTRne+Lg
-         EV8p4arvjD/f0WjC8EAc6Qb+OW7TF5akWw32mYkdQbtjYvMMTaMzk/G/cqgeFLTnfI
-         QftUW5bfliLTw==
-Message-ID: <8f7bda23-7063-d2ff-9b5d-b1604052a502@collabora.com>
-Date:   Fri, 20 Jan 2023 12:15:23 +0100
+        Fri, 20 Jan 2023 06:16:37 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9613584
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:16:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=42EMRJMW6nNuF6BXb3kFW7xC22CWnWGpsMibscJgfIk=; b=cdMqF0a+Pi72ZepiPeVSSHAQP6
+        NEia3ZpFUj4JypIWo2PdIQjirddJY5YthAro07qBI2xpm7uA/7ZDcDmnwt9L0w90tNp0yjNxX5VHy
+        YAJdC7LYQV5sx8ysTpTcb2g9cgEbAIdZbWd22zwrhMcrXcZwAuXyfoct5c+iesfXsgSG1XQkAh9PP
+        PCaenUf5Qem1S6JS2Yr2VILgevYYS5RWqdqglKpQFpzpwqk9H1ZVKT0gRJJHVyqixBhfkWZ5lOmZR
+        NtzOi+wvJdWoReOtrfSBf7poIscO4pPWdc54wzfMpjSq9aOm0Cnu9XmPiuTJUHRpwIJW7r/3AbrkK
+        1GbJinFw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIpNk-001tNv-1Z; Fri, 20 Jan 2023 11:16:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F12D530036B;
+        Fri, 20 Jan 2023 12:16:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D66B72009E43D; Fri, 20 Jan 2023 12:16:26 +0100 (CET)
+Date:   Fri, 20 Jan 2023 12:16:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     "Erhard F." <erhard_f@mailbox.org>, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>
+Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at
+ "Loading Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
+Message-ID: <Y8p4CnJU6T7+17Sw@hirez.programming.kicks-ass.net>
+References: <20230119022303.177052e4@yea>
+ <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
+ <Y8lfStnaUFNRxgYu@hirez.programming.kicks-ass.net>
+ <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 2/3] iommu/sound: Use component_match_add_of helper
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Takashi Iwai <tiwai@suse.com>, Will Deacon <will@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
-        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230119191040.1637739-1-sean.anderson@seco.com>
- <20230119191040.1637739-3-sean.anderson@seco.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230119191040.1637739-3-sean.anderson@seco.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/01/23 20:10, Sean Anderson ha scritto:
-> Convert users of component_match_add_release with component_release_of
-> and component_compare_of to component_match_add_of.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
+On Fri, Jan 20, 2023 at 11:20:53AM +0530, Sandipan Das wrote:
 
+> With the combination of defconfig+kvm_guest.config+localyesconfig, the only
+> thing that made a difference was the compiler optimization choice. The kernel
+> boots up with CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y but not with
+> CONFIG_CC_OPTIMIZE_FOR_SIZE=y. Both Clang 15 and 16 kernel builds are affected.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+*groan*..
 
+0000000000000350 <amd_pmu_add_event>:
+350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
+355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
+35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
+363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
 
+and static_call() can't deal with Jcc, I wonder why we've not seen that
+before -- this isn't totally idiotic code-gen and esp. clang is known to
+do this (see the retpoline thing).
+
+Let me see if I can do something about that.
