@@ -2,118 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E268E675423
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2B6675434
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjATMIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229501AbjATMKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjATMI2 (ORCPT
+        with ESMTP id S230051AbjATMKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:08:28 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BFF4A1DC;
-        Fri, 20 Jan 2023 04:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674216507; x=1705752507;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AZ/jvlZjDAGzwVeZ5n8u21laCDo/f+erT+mJrrLfC7E=;
-  b=Z60xQK/Ak8OOa45s6jDFuGp/Um+pmnOICvCuhkceSPRQrcHoQB6XicW9
-   CrXZnkj5pR63xF14LnCOli6dDEE4zoLI7A443s8z/un8V8HDJzf1RPMwf
-   CvrVQlPhkFE1bsqddvF0AyX/5aYiugsFBZHEPz5loixqOHNADSYsMsAHL
-   4gI6Kljohn8e9d3Ej4YJqyzUft94A5kHPnIpKbOWoy1794M9KCjuupg+s
-   Qj0SCYN92d5QcJNWJHEtt77MUQVgARuQiotNT7pxc7RhoBIxCe5Pk3MoT
-   6ekBEWhe4pOuPg+iybM4sCbOuBxohOQbyh0TpQb3Ey0+FCIoVklgyodNX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323255751"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="323255751"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 04:08:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="834392629"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="834392629"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2023 04:08:24 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 50A4A36D; Fri, 20 Jan 2023 14:08:59 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Steve French <stfrench@microsoft.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
-Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] cifs: Get rid of unneeded conditional in the smb2_get_aead_req()
-Date:   Fri, 20 Jan 2023 14:08:57 +0200
-Message-Id: <20230120120857.60444-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Fri, 20 Jan 2023 07:10:48 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B7E10AAC;
+        Fri, 20 Jan 2023 04:10:47 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k18so5152066pll.5;
+        Fri, 20 Jan 2023 04:10:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EKSavZcLgXER2Rs1R2Q0x8yB6aB9z1+lbShiy/SvYys=;
+        b=Zo3Ysk2ltDD5uVeoi1c0r1TnX+tcTOrp//osdZN4GUTjtHCDNpK9CstlqX3zrjJ0Ym
+         GH9wl0Qh30NS/KzHGFrgBPnFaHfD92XXY79ka7WAhzkOgxjZQCEWWTjIabhPc8GNXevO
+         ZzgCLIPk8vRxGjh3bu0cHEKz3cnoAocU12o6MwpGL7Aj0cViuVitSgaUNart0P1PkDId
+         RvvkRy5XqpVFkmKy8rgeiHtBZXg4uPatXC5HQCId1EWn7rBKAEvuAw/taaeX1aZyJFSx
+         Tx5713hXdgE7EyQMSHIxebs50ZJrVNtQXhzFxxLMWSIGbJYQ0CdUfTUPXMymD3pJbCH9
+         JHUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EKSavZcLgXER2Rs1R2Q0x8yB6aB9z1+lbShiy/SvYys=;
+        b=w1XboK6NnjUuJgeB/ra3HPHeefapl1gdbEeWygcMKcpDZ6e1SuuMq0kne3n5fvpWuc
+         kQjL8eULVaoPh/mkhhK0cIiKvbOr1Tv7OUMtTGhboCsunKObHJJFQUvBKBTF2S+6fEe4
+         ozhg70fMonykoEuV0BrMKFy/nQo3ZefJQ48nrVze0FDIVAnm+0pWgGRYQXGMxfknImTj
+         KDeUk4j3fPlcdfzd69af1HJ866EobucekeuYr5Er6FzuCewQptO/i7JK0ezCTF4Wm68J
+         H/7ezOLEVozQy14d6RfxtAR25wlN8gZVOLuPQsRxuoN9nSS3iCU7ISzl8hyLQ0iCQ/yi
+         Mtag==
+X-Gm-Message-State: AFqh2kq3kbZd/SRboZ1V7rXfmEVdbGEFEoJ9WIN1k8JrI5n/VMVwLDW9
+        pQ8Cx06c/yE2/cEVlcafmek=
+X-Google-Smtp-Source: AMrXdXspfd5ZJN1kn8YC0qz+35IV6j45HHmp/5WR4FbgQ3/MFKaCAjof+44x8SVDjo5vAh+Uvo+H9A==
+X-Received: by 2002:a05:6a21:9993:b0:b6:1425:55df with SMTP id ve19-20020a056a21999300b000b6142555dfmr19047879pzb.59.1674216646665;
+        Fri, 20 Jan 2023 04:10:46 -0800 (PST)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id r30-20020aa7989e000000b0058e12bbb560sm1594542pfl.15.2023.01.20.04.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 04:10:46 -0800 (PST)
+Date:   Fri, 20 Jan 2023 20:10:39 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] dt-bindings: leds: backlight: Add Kinetic KTZ8866
+ backlight
+Message-ID: <Y8qEv9pUVA+1beTt@Gentoo>
+References: <20230120094728.19967-1-lujianhua000@gmail.com>
+ <a9c47e2f-aacb-4c8f-3a0b-67274ef15376@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a9c47e2f-aacb-4c8f-3a0b-67274ef15376@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the smb2_get_aead_req() the skip variable is used only for
-the very first iteration of the two nested loops, which means
-it's basically in invariant to those loops. Hence, instead of
-using conditional on each iteration, unconditionally assing
-the 'skip' variable before the loops and at the end of the
-inner loop.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- fs/cifs/smb2ops.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 519e6124d73d..7fcb79ce6a94 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -4280,6 +4280,12 @@ static void *smb2_get_aead_req(struct crypto_aead *tfm, const struct smb_rqst *r
- 	sg_init_table(*sgl, num_sgs);
- 	sg = *sgl;
- 
-+	/*
-+	 * The first rqst has a transform header where the
-+	 * first 20 bytes are not part of the encrypted blob.
-+	 */
-+	skip = 20;
-+
- 	/* Assumes the first rqst has a transform header as the first iov.
- 	 * I.e.
- 	 * rqst[0].rq_iov[0]  is transform header
-@@ -4287,17 +4293,15 @@ static void *smb2_get_aead_req(struct crypto_aead *tfm, const struct smb_rqst *r
- 	 * rqst[1+].rq_iov[0+] data to be encrypted/decrypted
- 	 */
- 	for (i = 0; i < num_rqst; i++) {
--		/*
--		 * The first rqst has a transform header where the
--		 * first 20 bytes are not part of the encrypted blob.
--		 */
- 		for (j = 0; j < rqst[i].rq_nvec; j++) {
- 			struct kvec *iov = &rqst[i].rq_iov[j];
- 
--			skip = (i == 0) && (j == 0) ? 20 : 0;
- 			addr = (unsigned long)iov->iov_base + skip;
- 			len = iov->iov_len - skip;
- 			sg = cifs_sg_set_buf(sg, (void *)addr, len);
-+
-+			/* See the above comment on the 'skip' assignment */
-+			skip = 0;
- 		}
- 		for (j = 0; j < rqst[i].rq_npages; j++) {
- 			rqst_page_get_length(&rqst[i], j, &len, &off);
--- 
-2.39.0
-
+On Fri, Jan 20, 2023 at 11:18:56AM +0100, Krzysztof Kozlowski wrote:
+> On 20/01/2023 10:47, Jianhua Lu wrote:
+> > Add Kinetic KTZ8866 backlight binding documentation.
+> > 
+> > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> > ---
+> > Changes in v2:
+> >   - Remove "items" between "compatible" and "const: kinetic,ktz8866".
+> >   - Change "additionalProperties" to "unevaluatedProperties".
+> > 
+> > Changes in v3:
+> >   - Add Krzysztof's R-b.
+> > 
+> > Changes in v4:
+> >   - Drop Krzysztof's R-b.
+> >   - Add some new properties.
+> > 
+> > Changes in v5:
+> >   - Add missing enum under property description.
+> >   - Rename uncorrect properties.
+> > 
+> > Changes in v6:
+> >   - Correct wrong property suffix and description.
+> > 
+> > Changes in v7:
+> >   - Add vddpos and vddeg supply.
+> >   - Use enable-gpios instead of defining enable pin.
+> > 
+> >  .../leds/backlight/kinetic,ktz8866.yaml       | 74 +++++++++++++++++++
+> >  1 file changed, 74 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+> > new file mode 100644
+> > index 000000000000..b1d0ade0dfb6
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+> > @@ -0,0 +1,74 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Kinetic Technologies KTZ8866 backlight
+> > +
+> > +maintainers:
+> > +  - Jianhua Lu <lujianhua000@gmail.com>
+> > +
+> > +description: |
+> > +  The Kinetic Technologies KTZ8866 is a high efficiency 6-channels-current-sinks
+> > +  led backlight with dual lcd bias power.
+> > +  https://www.kinet-ic.com/ktz8866/
+> > +
+> > +allOf:
+> > +  - $ref: common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: kinetic,ktz8866
+> > +
+> > +  vddpos-supply:
+> > +    description: positive boost supply regulator.
+> > +
+> > +  vddneg-supply:
+> > +    description: negative boost supply regulator.
+> > +
+> > +  enable-gpios:
+> > +    description: GPIO to use to enable/disable the backlight (HWEN pin).
+> > +    maxItems: 1
+> > +
+> > +  current-num-sinks:
+> > +    description: number of the LED current sinks' channels.
+> > +    enum: [1, 2, 3, 4, 5, 6]
+> > +
+> > +  current-ramping-time-ms:
+> > +    description: LED current ramping time in milliseconds.
+> > +    enum: [2, 4, 8, 16, 32, 64, 128, 192, 256, 320, 384, 448, 512, 576, 640]
+> 
+> kinetic,current-ramp-delay-ms
+> 
+> > +
+> > +  led-ramping-time-ms:
+> 
+> kinetic,led-enable-ramp-delay-ms
+> 
+> So both are similar to existing regulator properties.
+> 
+reasonable suggestion.
+> Best regards,
+> Krzysztof
+> 
