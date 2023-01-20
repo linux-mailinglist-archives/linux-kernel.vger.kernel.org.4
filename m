@@ -2,109 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577786757BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2576757C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjATOs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S230427AbjATOyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjATOsZ (ORCPT
+        with ESMTP id S229723AbjATOyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:48:25 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56D813B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:48:08 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id h184so2526603iof.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I+Lc/1zOs9zVjQHKhj/q3DPuDq0fsxu5KJBIa3ZgDz0=;
-        b=F6X/fBBtix+tLsbTSnmQZblZI3+ehsb1ZUayIZ6I2ExQpuL80xT5jFJkMf1Fh94JXC
-         xuQ9vJbWyYb+oBcnF7dJVQcN/Lq5BY3ZUiawFiBzoX60GrqlrBHQK69XoGBJISplSsF/
-         brIPj4QARDswce3X5hytAR4K03JCq/Ly2i7iftF1I4WZNOGNbLHfsQDoE6QLJEZkJVOG
-         EvApY9owntBQtHv6eYJravOJGSxgfIXwJFCPVQ2vv2tLyhWZnTcpyGeJYmA9NPf++M5Z
-         df0vwbwUKnrrmcnMjr7PQxFxRgTU11yCPhdywoW4ZNzhrfA4uIvxwFu+YQsd/anHFn/d
-         WPQQ==
+        Fri, 20 Jan 2023 09:54:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5CA45BD8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674226390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUOjGmTFXC4DMVmZa6wjPRMDEu/y7poMMIu/vvuBRrM=;
+        b=DwxUWvsH55vVzOAFA4PBiJG5j66QaF32Vm0d9bIkp2HpDU90zHKdfb/93soaXRXsbcc8py
+        OzVZakhj5SYZybGpoqGprfk/l9hk4VHhhFueRlxVdLTyONkE0QdNbO/YUGPB6Qunc9/hl0
+        IuQgjxJxEJiisLMEWWMg22fq7zmvRT4=
+Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
+ [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-6-m5VUdmQuPjGDs3fVJKBeRA-1; Fri, 20 Jan 2023 09:53:09 -0500
+X-MC-Unique: m5VUdmQuPjGDs3fVJKBeRA-1
+Received: by mail-vk1-f198.google.com with SMTP id d130-20020a1f9b88000000b003b87d0db0d9so1745372vke.15
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:53:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I+Lc/1zOs9zVjQHKhj/q3DPuDq0fsxu5KJBIa3ZgDz0=;
-        b=7pFTUSU1Fk9K+YfN8Vf8SOJSU4wf+kcfoj5N3yuTpHpLdenBzb5GT9fyiwzwGztNz+
-         9hc4il1eiCqg++RSyMo5E0ziIMCjlIbaEKVmMqN7HXakrGEUhbW/jpqdRWLGWKGocWPk
-         IvNDrPH6Y4xjMeM/6gPZArlW84dZmtAO0QE72j8An8jnwZfwapsfQoXoGe/f4lN+DC5R
-         iSVyl2axXWH84iyx/Hg5QpyCveEUEYe36zIg87jg/e1D2Y+kUNprVev5NnzOoUllJHqe
-         VSNAcQjZ61j3wDQZSRWWbRv3/kqKRRFv9ygiBXZm1k4UI6XfL/UouViqQNDxpEs+HGfy
-         t51A==
-X-Gm-Message-State: AFqh2kqLByi3cuWvLz1eRLTp/DBFRC9Tf005CfT4vGoQCGvvRUyBTQ64
-        uW1aECEknntKq5bcoxhOhz8Lwg==
-X-Google-Smtp-Source: AMrXdXtogZictV695TbJaegK+gXCUVsi8+6MjiLwTLota9MRj8LYfKhopUAqkym/uuBc3G2GkaqIPA==
-X-Received: by 2002:a6b:8fcd:0:b0:704:d16d:4a59 with SMTP id r196-20020a6b8fcd000000b00704d16d4a59mr1985073iod.2.1674226087274;
-        Fri, 20 Jan 2023 06:48:07 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id c72-20020a02964e000000b00363d6918540sm12159847jai.171.2023.01.20.06.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 06:48:06 -0800 (PST)
-Message-ID: <37406789-0743-0d34-e8b2-f0d456833df6@kernel.dk>
-Date:   Fri, 20 Jan 2023 07:48:04 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AUOjGmTFXC4DMVmZa6wjPRMDEu/y7poMMIu/vvuBRrM=;
+        b=Kre7yTknBIeIlPgs59WfxeAocezai/dXHB1h/93et6B8L2YbgEeXjWXwyhGMGXAPcv
+         kvbg3GuU5LWolQoqgaSbB9xRKfnVhY8Fp9LfWgElAzWF/iLNd+x1OwFvUWd0iRtqrbF9
+         pHuVWVr3vxN8AclLHf14283CagTkKOuIH2s2NKTNkOoV3nmnV8w+hmEXhLluHr3Wjkuy
+         +CP787luayOZt3fLexb9t0bQ4fcUZL0hakmeKX7DVOKyQpRWUF7TraBlzPYbGBWe6UoC
+         ZwbNAkn3J9Yd0QDRP/L/RITNtBx8qHtJzlNnyzg84ll1g6EsoW0Az77M+ZBvoiT+qpKf
+         RGyw==
+X-Gm-Message-State: AFqh2kpXXMDPqbNwoEp2Jf1TqJsjx3ECw8ZDUZvJ+4IJ8bgOXgCO6g51
+        JXZtLizoCxWUXFPjBTvA3BXsOOF/47+y0JFFxuIZ/wcUmfchqeF/jAtSETHmU2qBFyNrZRBYc6H
+        tMftX7rWDwMrMjtZsHY2PykHe
+X-Received: by 2002:a05:6102:6c4:b0:3d3:c6b6:f6cb with SMTP id m4-20020a05610206c400b003d3c6b6f6cbmr10110932vsg.33.1674226388596;
+        Fri, 20 Jan 2023 06:53:08 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuKEI5wlPM5iwQbylwxVk98E9UP/R/7m4X/rvDyrG3sF/GyxINJUK4YDTd8CcGLUnyV8nbN3A==
+X-Received: by 2002:a05:6102:6c4:b0:3d3:c6b6:f6cb with SMTP id m4-20020a05610206c400b003d3c6b6f6cbmr10110884vsg.33.1674226388173;
+        Fri, 20 Jan 2023 06:53:08 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b0070638ad5986sm12859313qkp.85.2023.01.20.06.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 06:53:07 -0800 (PST)
+Date:   Fri, 20 Jan 2023 09:53:05 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
+Message-ID: <Y8qq0dKIJBshua+X@x1n>
+References: <20230109064519.3555250-1-usama.anjum@collabora.com>
+ <20230109064519.3555250-2-usama.anjum@collabora.com>
+ <Y8gkY8OlnOwvlkj4@x1n>
+ <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com>
+ <Y8lxW5YtD6MX61WD@x1n>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Pavel Machek <pavel@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
- <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com> <Y8krsVFguwWLy+zT@duo.ucw.cz>
- <Y8lCspFtQ0wg6uCy@uudg.org> <Y8mwF0m+M1+e/fz/@eldamar.lan>
- <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk> <Y8oNTkUVDr7iQWzp@uudg.org>
- <c427d686-c850-4195-011b-93f51faa176d@kernel.dk>
- <20230120100117.desy327bamo7khrv@carbon.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230120100117.desy327bamo7khrv@carbon.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8lxW5YtD6MX61WD@x1n>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 3:01 AM, Daniel Wagner wrote:
-> On Thu, Jan 19, 2023 at 08:49:28PM -0700, Jens Axboe wrote:
->> I do wonder why I didn't see this in testing - the kernel build bot was
->> also happy with it... But anyway, should be an easy fix.
+On Thu, Jan 19, 2023 at 11:35:39AM -0500, Peter Xu wrote:
+> On Thu, Jan 19, 2023 at 08:09:52PM +0500, Muhammad Usama Anjum wrote:
 > 
-> This is caused by the RT patch set, so you wouldn't see it without all the RT
-> patches applied :)
+> [...]
+> 
+> > >> @@ -497,80 +498,93 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+> > >>  
+> > >>  	/* take the reference before dropping the mmap_lock */
+> > >>  	userfaultfd_ctx_get(ctx);
+> > >> +	if (ctx->async) {
+> > > 
+> > > Firstly, please consider not touching the existing code/indent as much as
+> > > what this patch did.  Hopefully we can keep the major part of sync uffd be
+> > > there with its git log, it also helps reviewing your code.  You can add the
+> > > async block before that, handle the fault and return just earlier.
+> > This is possible. Will do in next revision.
+> > 
+> > > 
+> > > And, I think this is a bit too late because we're going to return with
+> > > VM_FAULT_RETRY here, while maybe we don't need to retry at all here because
+> > > we're going to resolve the page fault immediately.
+> > > 
+> > > I assume you added this because you wanted userfaultfd_ctx_get() to make
+> > > sure the uffd context will not go away from under us, but it's not needed
+> > > if we're still holding the mmap read lock.  I'd expect for async mode we
+> > > don't really need to release it at all.
+> > I'll have to check the what should be returned here. We should return
+> > something which shows that the fault has been resolved.
+> 
+> VM_FAULT_NOPAGE may be the best to describe it, but I guess it shouldn't
+> have a difference here if to just return zero.  And, I guess you don't even
+> need to worry on the retval here because I think you can leverage do_wp_page.
+> More below.
+> 
+> > 
+> > > 
+> > >> +		// Resolve page fault of this page
+> > > 
+> > > Please use "/* ... */" as that's the common pattern of commenting in the
+> > > Linux kernel, at least what I see in mm/.
+> > Will do.
+> > 
+> > > 
+> > >> +		unsigned long addr = (ctx->features & UFFD_FEATURE_EXACT_ADDRESS) ?
+> > >> +				      vmf->real_address : vmf->address;
+> > >> +		struct vm_area_struct *dst_vma = find_vma(ctx->mm, addr);
+> > >> +		size_t s = PAGE_SIZE;
+> > > 
+> > > This is weird - if we want async uffd-wp, let's consider huge page from the
+> > > 1st day.
+> > > 
+> > >> +
+> > >> +		if (dst_vma->vm_flags & VM_HUGEPAGE) {
+> > > 
+> > > VM_HUGEPAGE is only a hint.  It doesn't mean this page is always a huge
+> > > page.  For anon, we can have thp wr-protected as a whole, not happening for
+> > > !anon because we'll split already.
+> > > 
+> > > For anon, if a write happens to a thp being uffd-wp-ed, we'll keep that pmd
+> > > wr-protected and report the uffd message.  The pmd split happens when the
+> > > user invokes UFFDIO_WRITEPROTECT on the small page.  I think it'll stop
+> > > working for async uffd-wp because we're going to resolve the page faults
+> > > right away.
+> > > 
+> > > So for async uffd-wp (note: this will be different from hugetlb), you may
+> > > want to consider having a pre-requisite patch to change wp_huge_pmd()
+> > > behavior: rather than calling handle_userfault(), IIUC you can also just
+> > > fallback to the split path right below (__split_huge_pmd) so the thp will
+> > > split now even before the uffd message is generated.
+> > I'll make the changes and make this. I wasn't aware that the thp is being
+> > broken in the UFFD WP. At this time, I'm not sure if thp will be handled by
+> > handle_userfault() in one go. Probably it will as the length is stored in
+> > the vmf.
+> 
+> Yes I think THP can actually be handled in one go with uffd-wp anon (even
+> if vmf doesn't store any length because page fault is about address only
+> not length, afaict).  E.g. thp firstly get wr-protected in thp size, then
+> when unprotect the user app sends UFFDIO_WRITEPROTECT(wp=false) with a
+> range covering the whole thp.
+> 
+> But AFAIU that should be quite rare because most uffd-wp scenarios are
+> latency sensitive, resolving page faults in large chunk definitely enlarges
+> that.  It could happen though when it's not resolving an immediate page
+> fault, so it could happen in the background.
+> 
+> So after a second thought, a safer approach is we only go to the split path
+> if async is enabled, in wp_huge_pmd().  Then it doesn't need to be a
+> pre-requisite patch too, it can be part of the major patch to implement the
+> uffd-wp async mode.
+> 
+> > 
+> > > 
+> > > I think it should be transparent to the user and it'll start working for
+> > > you with async uffd-wp here, because it means when reaching
+> > > handle_userfault, it should not be possible to have thp at all since they
+> > > should have all split up.
+> > > 
+> > >> +			s = HPAGE_SIZE;
+> > >> +			addr &= HPAGE_MASK;
+> > >> +		}
+> > >>  
+> > >> -	init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+> > >> -	uwq.wq.private = current;
+> > >> -	uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+> > >> -				reason, ctx->features);
+> > >> -	uwq.ctx = ctx;
+> > >> -	uwq.waken = false;
+> > >> -
+> > >> -	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+> > >> +		ret = mwriteprotect_range(ctx->mm, addr, s, false, &ctx->mmap_changing);
+> > > 
+> > > This is an overkill - we're pretty sure it's a single page, no need to call
+> > > a range function here.
+> > Probably change_pte_range() should be used here to directly remove the WP here?
+> 
+> Here we can persue the best performance, or we can also persue the easist
+> way to implement.  I think the best we can have is we don't release either
+> the mmap read lock _and_ the pgtable lock, so we resolve the page fault
+> completely here.  But that requires more code changes.
+> 
+> So far an probably intermediate (and very easy to implement) solution is:
+> 
+> (1) Remap the pte (vmf->pte) and retake the lock (vmf->ptl).  Note: you
+>     need to move the chunk to be before mmap read lock released first,
+>     because we'll need that to make sure pgtable lock and the pgtable page
+>     being still exist at the first place.
+> 
+> (2) If *vmf->pte != vmf->orig_pte, it means the pgtable changed, retry
+>     (with VM_FAULT_NOPAGE).  We must have orig_pte set btw in this path.
+> 
+> (2) Remove the uffd-wp bit if it's set (and it must be set, because we
+>     checked again on orig_pte with pgtable lock held).
+> 
+> (3) Invoke do_wp_page() again with the same vmf.
+> 
+> This will focus the resolution on the single page and resolve CoW in one
+> shot if needed.  We may need to redo the map/lock of pte* but I suppose it
+> won't hurt a lot if we just modified the fields anyway, so we can leave
+> that for later.
 
-Ahhhh, I totally missed the 'rt' part of the subject. Thanks, at least it
-makes sense to me now :-)
+I just noticed it's actually quite straigtforward to just not fall into
+handle_userfault at all.  It can be as simple as:
+
+---8<---
+diff --git a/mm/memory.c b/mm/memory.c
+index 4000e9f017e0..09aab434654c 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+
+        if (likely(!unshare)) {
+                if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+-                       pte_unmap_unlock(vmf->pte, vmf->ptl);
+-                       return handle_userfault(vmf, VM_UFFD_WP);
++                       if (userfaultfd_uffd_wp_async(vma)) {
++                               /*
++                                * Nothing needed (cache flush, TLB
++                                * invalidations, etc.) because we're only
++                                * removing the uffd-wp bit, which is
++                                * completely invisible to the user.
++                                * This falls through to possible CoW.
++                                */
++                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
++                                          pte_clear_uffd_wp(*vmf->pte));
++                       } else {
++                               pte_unmap_unlock(vmf->pte, vmf->ptl);
++                               return handle_userfault(vmf, VM_UFFD_WP);
++                       }
+                }
+---8<---
+
+Similar thing will be needed for hugetlb if that'll be supported.
+
+One thing worth mention is, I think for async wp it doesn't need to be
+restricted by UFFD_USER_MODE_ONLY, because comparing to the sync messages
+it has no risk of being utilized for malicious purposes.
+
+> 
+> [...]
+> 
+> > > Then when the app wants to wr-protect in async mode, it simply goes ahead
+> > > with UFFDIO_WRITEPROTECT(wp=true), it'll happen exactly the same as when it
+> > > was sync mode.  It's only the pf handling procedure that's different (along
+> > > with how the fault is reported - rather than as a message but it'll be
+> > > consolidated into the soft-dirty bit).
+> > PF handling will resovle the fault after un-setting the _PAGE_*_UFFD_WP on
+> > the page. I'm not changing the soft-dirty bit. It is too delicate (if you
+> > get the joke).
+> 
+> It's unfortunate that the old soft-dirty solution didn't go through easily.
+> Soft-dirty still covers something that uffd-wp cannot do right now, e.g. on
+> tracking mostly any type of pte mappings.  Uffd-wp can so far only track
+> fully ram backed pages like shmem or hugetlb for files but not any random
+> page cache.  Hopefully it still works at least for your use case, or it's
+> time to rethink otherwise.
+> 
+> > 
+> > > 
+> > >>  
+> > >>  	if (mode_wp && mode_dontwake)
+> > >>  		return -EINVAL;
+> > >> @@ -2126,6 +2143,7 @@ static int new_userfaultfd(int flags)
+> > >>  	ctx->flags = flags;
+> > >>  	ctx->features = 0;
+> > >>  	ctx->released = false;
+> > >> +	ctx->async = false;
+> > >>  	atomic_set(&ctx->mmap_changing, 0);
+> > >>  	ctx->mm = current->mm;
+> > >>  	/* prevent the mm struct to be freed */
+> > >> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+> > >> index 005e5e306266..b89665653861 100644
+> > >> --- a/include/uapi/linux/userfaultfd.h
+> > >> +++ b/include/uapi/linux/userfaultfd.h
+> > >> @@ -284,6 +284,11 @@ struct uffdio_writeprotect {
+> > >>   * UFFDIO_WRITEPROTECT_MODE_DONTWAKE: set the flag to avoid waking up
+> > >>   * any wait thread after the operation succeeds.
+> > >>   *
+> > >> + * UFFDIO_WRITEPROTECT_MODE_ASYNC_WP: set the flag to write protect a
+> > >> + * range, the flag is unset automatically when the page is written.
+> > >> + * This is used to track which pages have been written to from the
+> > >> + * time the memory was write protected.
+> > >> + *
+> > >>   * NOTE: Write protecting a region (WP=1) is unrelated to page faults,
+> > >>   * therefore DONTWAKE flag is meaningless with WP=1.  Removing write
+> > >>   * protection (WP=0) in response to a page fault wakes the faulting
+> > >> @@ -291,6 +296,7 @@ struct uffdio_writeprotect {
+> > >>   */
+> > >>  #define UFFDIO_WRITEPROTECT_MODE_WP		((__u64)1<<0)
+> > >>  #define UFFDIO_WRITEPROTECT_MODE_DONTWAKE	((__u64)1<<1)
+> > >> +#define UFFDIO_WRITEPROTECT_MODE_ASYNC_WP	((__u64)1<<2)
+> > >>  	__u64 mode;
+> > >>  };
+> > >>  
+> > >> -- 
+> > >> 2.30.2
+> > >>
+> > > 
+> > 
+> > I should have added Suggested-by: Peter Xy <peterx@redhat.com> to this
+> > patch. I'll add in the next revision if you don't object.
+> 
+> I'm fine with it.  If so, please do s/Xy/Xu/.
+> 
+> > 
+> > I've started working on next revision. I'll reply to other highly valuable
+> > review emails a bit later.
+> 
+> Thanks,
+> 
+> -- 
+> Peter Xu
 
 -- 
-Jens Axboe
-
+Peter Xu
 
