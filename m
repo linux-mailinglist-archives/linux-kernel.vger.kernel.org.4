@@ -2,213 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FE2675E00
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5343D675E17
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjATT01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S230266AbjATT3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjATT0Y (ORCPT
+        with ESMTP id S230290AbjATT3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:26:24 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F3D88D3;
-        Fri, 20 Jan 2023 11:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=Hqia+NJ2QC41heYLi0dUCzudrgUsuC/RibFBeRL/VTE=; b=Nfquy
-        pxJ5APteHJ9Ee87rK2D8vicN6ZLnqLUEUWJ9RUN/jFnGWkrXh2ScdSzSQdS5ntDt6IOdLS02jpETE
-        ZXX+iQZOXbhWA+euupZrvN0yJB32vsOYUOdbyjvBAY7tsnX/YPgR1gFEJ5OWL8ywYffrR9Id4pt+w
-        XOAXOTzmlZRC4imNEq0k5UaLG+QfolJsIrxN24F7BIyxrN5deILBhAjcs4TIpvBgyTUN+l2CmZsRP
-        ds/rqKb3a4mB4PAK0HMmRcekUkmz1H0HkTsnt4QxrAJ1IOG5clAWS/THrKbJSnZT3FS634Dr6FIc6
-        n6DNvHpclHrXDY3pVZB0rGwviKnLQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pIx1I-00013J-Oc;
-        Fri, 20 Jan 2023 19:25:48 +0000
-Date:   Fri, 20 Jan 2023 19:25:47 +0000
-From:   John Keeping <john@metanate.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: gadget: Move kstrtox() out of lock
-Message-ID: <Y8rqu7osxWsdN/PA@donbot>
-References: <20230120182434.24245-1-andriy.shevchenko@linux.intel.com>
+        Fri, 20 Jan 2023 14:29:45 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BAB40CB;
+        Fri, 20 Jan 2023 11:29:44 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <mkarcher@zedat.fu-berlin.de>)
+          id 1pIx54-002uuw-Fd; Fri, 20 Jan 2023 20:29:42 +0100
+Received: from pd9f631ca.dip0.t-ipconnect.de ([217.246.49.202] helo=[192.168.144.87])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <kernel@mkarcher.dialup.fu-berlin.de>)
+          id 1pIx54-002Kos-8o; Fri, 20 Jan 2023 20:29:42 +0100
+Content-Type: multipart/mixed; boundary="------------noR0LwKfcoz0L7zbRzJSPHS4"
+Message-ID: <def16c9b-7bb1-a454-0896-b063a9e85964@fu-berlin.de>
+Date:   Fri, 20 Jan 2023 20:29:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120182434.24245-1-andriy.shevchenko@linux.intel.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Calculating array sizes in C - was: Re: Build
+ regressions/improvements in v6.2-rc1
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20221227082932.798359-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
+ <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de>
+ <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
+ <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de>
+ <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com>
+ <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de>
+ <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com>
+ <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de>
+ <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de>
+ <c1d233b9-bc85-dce9-ffa0-eb3170602c6c@physik.fu-berlin.de>
+From:   Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+In-Reply-To: <c1d233b9-bc85-dce9-ffa0-eb3170602c6c@physik.fu-berlin.de>
+X-Original-Sender: kernel@mkarcher.dialup.fu-berlin.de
+X-Originating-IP: 217.246.49.202
+X-ZEDAT-Hint: A
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 08:24:34PM +0200, Andy Shevchenko wrote:
-> The kstrtox() calls operate on local (to the function) variables and do
-> not need to be serialized. We may call them out of the lock.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This is a multi-part message in MIME format.
+--------------noR0LwKfcoz0L7zbRzJSPHS4
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Reviewed-by: John Keeping <john@metanate.com>
+Hello Adrian,
+> Could you post a kernel patch for that? I would be happy to test it on my
+> SH-7785CLR board. Also, I'm going to file a bug report against GCC.
 
-> ---
->  drivers/usb/gadget/configfs.c | 72 +++++++++++++++++------------------
->  1 file changed, 36 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 78e7353e397b..63dc15b4f6d8 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -808,15 +808,15 @@ static ssize_t webusb_use_store(struct config_item *item, const char *page,
->  	int ret;
->  	bool use;
->  
-> -	mutex_lock(&gi->lock);
->  	ret = kstrtobool(page, &use);
-> -	if (!ret) {
-> -		gi->use_webusb = use;
-> -		ret = len;
-> -	}
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&gi->lock);
-> +	gi->use_webusb = use;
->  	mutex_unlock(&gi->lock);
->  
-> -	return ret;
-> +	return len;
->  }
->  
->  static ssize_t webusb_bcdVersion_show(struct config_item *item, char *page)
-> @@ -832,10 +832,12 @@ static ssize_t webusb_bcdVersion_store(struct config_item *item,
->  	u16 bcdVersion;
->  	int ret;
->  
-> -	mutex_lock(&gi->lock);
->  	ret = kstrtou16(page, 0, &bcdVersion);
->  	if (ret)
-> -		goto out;
-> +		return ret;
-> +
-> +	mutex_lock(&gi->lock);
-> +
->  	ret = is_valid_bcd(bcdVersion);
->  	if (ret)
->  		goto out;
-> @@ -862,15 +864,15 @@ static ssize_t webusb_bVendorCode_store(struct config_item *item,
->  	int ret;
->  	u8 b_vendor_code;
->  
-> -	mutex_lock(&gi->lock);
->  	ret = kstrtou8(page, 0, &b_vendor_code);
-> -	if (!ret) {
-> -		gi->b_webusb_vendor_code = b_vendor_code;
-> -		ret = len;
-> -	}
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&gi->lock);
-> +	gi->b_webusb_vendor_code = b_vendor_code;
->  	mutex_unlock(&gi->lock);
->  
-> -	return ret;
-> +	return len;
->  }
->  
->  static ssize_t webusb_landingPage_show(struct config_item *item, char *page)
-> @@ -956,15 +958,15 @@ static ssize_t os_desc_use_store(struct config_item *item, const char *page,
->  	int ret;
->  	bool use;
->  
-> -	mutex_lock(&gi->lock);
->  	ret = kstrtobool(page, &use);
-> -	if (!ret) {
-> -		gi->use_os_desc = use;
-> -		ret = len;
-> -	}
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&gi->lock);
-> +	gi->use_os_desc = use;
->  	mutex_unlock(&gi->lock);
->  
-> -	return ret;
-> +	return len;
->  }
->  
->  static ssize_t os_desc_b_vendor_code_show(struct config_item *item, char *page)
-> @@ -980,15 +982,15 @@ static ssize_t os_desc_b_vendor_code_store(struct config_item *item,
->  	int ret;
->  	u8 b_vendor_code;
->  
-> -	mutex_lock(&gi->lock);
->  	ret = kstrtou8(page, 0, &b_vendor_code);
-> -	if (!ret) {
-> -		gi->b_vendor_code = b_vendor_code;
-> -		ret = len;
-> -	}
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&gi->lock);
-> +	gi->b_vendor_code = b_vendor_code;
->  	mutex_unlock(&gi->lock);
->  
-> -	return ret;
-> +	return len;
->  }
->  
->  static ssize_t os_desc_qw_sign_show(struct config_item *item, char *page)
-> @@ -1113,15 +1115,15 @@ static ssize_t ext_prop_type_store(struct config_item *item,
->  	u8 type;
->  	int ret;
->  
-> -	if (desc->opts_mutex)
-> -		mutex_lock(desc->opts_mutex);
->  	ret = kstrtou8(page, 0, &type);
->  	if (ret)
-> -		goto end;
-> -	if (type < USB_EXT_PROP_UNICODE || type > USB_EXT_PROP_UNICODE_MULTI) {
-> -		ret = -EINVAL;
-> -		goto end;
-> -	}
-> +		return ret;
-> +
-> +	if (type < USB_EXT_PROP_UNICODE || type > USB_EXT_PROP_UNICODE_MULTI)
-> +		return -EINVAL;
-> +
-> +	if (desc->opts_mutex)
-> +		mutex_lock(desc->opts_mutex);
->  
->  	if ((ext_prop->type == USB_EXT_PROP_BINARY ||
->  	    ext_prop->type == USB_EXT_PROP_LE32 ||
-> @@ -1138,12 +1140,10 @@ static ssize_t ext_prop_type_store(struct config_item *item,
->  		   type == USB_EXT_PROP_BE32))
->  		ext_prop->data_len >>= 1;
->  	ext_prop->type = type;
-> -	ret = len;
->  
-> -end:
->  	if (desc->opts_mutex)
->  		mutex_unlock(desc->opts_mutex);
-> -	return ret;
-> +	return len;
->  }
->  
->  static ssize_t ext_prop_data_show(struct config_item *item, char *page)
-> -- 
-> 2.39.0
-> 
+I filed the bug already. It's 
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483.
+
+The diff is attached. It's published as CC0 in case anyone considers 
+this trivial change copyrightable. This patch prevents this one specific 
+warning from being upgraded to "error" even if you configure the kernel 
+to use "-Werror". It still keeps it active as warning, though.
+
+Kind regards,
+   Michael Karcher
+
+--------------noR0LwKfcoz0L7zbRzJSPHS4
+Content-Type: text/plain; charset=UTF-8; name="werror.diff"
+Content-Disposition: attachment; filename="werror.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKaW5kZXggZTA5ZmUxMDBlZmIyLi5i
+NGNkMDc1YzZhMTkgMTAwNjQ0Ci0tLSBhL01ha2VmaWxlCisrKyBiL01ha2VmaWxlCkBAIC04
+NzAsNyArODcwLDcgQEAgc3RhY2twLWZsYWdzLSQoQ09ORklHX1NUQUNLUFJPVEVDVE9SX1NU
+Uk9ORykgICAgICA6PSAtZnN0YWNrLXByb3RlY3Rvci1zdHJvbmcKIAogS0JVSUxEX0NGTEFH
+UyArPSAkKHN0YWNrcC1mbGFncy15KQogCi1LQlVJTERfQ1BQRkxBR1MtJChDT05GSUdfV0VS
+Uk9SKSArPSAtV2Vycm9yCitLQlVJTERfQ1BQRkxBR1MtJChDT05GSUdfV0VSUk9SKSArPSAt
+V2Vycm9yIC1Xbm8tZXJyb3I9c2l6ZW9mLXBvaW50ZXItZGl2CiBLQlVJTERfQ1BQRkxBR1Mg
+Kz0gJChLQlVJTERfQ1BQRkxBR1MteSkKIEtCVUlMRF9DRkxBR1MtJChDT05GSUdfQ0NfTk9f
+QVJSQVlfQk9VTkRTKSArPSAtV25vLWFycmF5LWJvdW5kcwogCg==
+
+--------------noR0LwKfcoz0L7zbRzJSPHS4--
