@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BB16759A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3756759A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjATQP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S229720AbjATQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATQP1 (ORCPT
+        with ESMTP id S229459AbjATQPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:15:27 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BE0C4E93
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:15:21 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id b15so792760ils.11
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:15:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8q+osopjEj5UV3uSdXLaRXg7Go12BXAi8Q5kyHgZLzM=;
-        b=AvojiM0Z1FRoMv0sAipWHK+54Fg8PZXAKfISB4C9WyAKPAvjwXHfeH+LSUTxtlOAWQ
-         myoIXkt4/lNWpHyWJtNLLXTL+LwhS3Sih0egnSdWC1hH5S9xpZBDDilfQgaLEE2XagKG
-         WbO/aEilF+o2KsrDwkAsa8F87oT69of4q4WEQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8q+osopjEj5UV3uSdXLaRXg7Go12BXAi8Q5kyHgZLzM=;
-        b=57cD1v4CrPubmEjijpXB+RnYEgRStnpc8XRPdezw/jz/+BT8bgYdywXF/vOlPRIl5w
-         hMAkoJ6HYwOqkMFqD62UAdEQBYY7DCyO8L+GxJjp937VuRxuNPBTuAwpd66HImjyI0g/
-         /qF76Vt2p7jr2zzrYmTFzJCMyoU6Q7sz1nONV7JD+aDK4nKLUU+I56wG5PboAgspZwKp
-         9QDC1QZd8zA9s96VLz6uu/67sydWgKfn8rjBeraC+BJjq9daQ0ypITRVJMzs2x2p9OU1
-         Xyd6y4AYybM8SCpv+JpD10ipDEHlI19gDJY+7gxYHUMtCit5f76MeFFLdWjusEnLbqtl
-         s55Q==
-X-Gm-Message-State: AFqh2kpvRVvclUelL/JmeHvEfVpoRB3wOHy4wyJrW+PuLsurre0k8V0v
-        P7Nr4l4kcz44PlgrMpSSQEI0JA==
-X-Google-Smtp-Source: AMrXdXukx36xY+oeMJ8jlQhSlgQ7DFkkSJM08imR7xKNmkF/kWguHew/k1ksNW9KAW0MdVAa6UXkAg==
-X-Received: by 2002:a92:d3c2:0:b0:30f:4feb:50c7 with SMTP id c2-20020a92d3c2000000b0030f4feb50c7mr434920ilh.3.1674231320300;
-        Fri, 20 Jan 2023 08:15:20 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p16-20020a92d290000000b00302632f0d20sm475827ilp.67.2023.01.20.08.15.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 08:15:19 -0800 (PST)
-Message-ID: <0a1ae8e9-ab0e-038a-084f-240f73489010@linuxfoundation.org>
-Date:   Fri, 20 Jan 2023 09:15:17 -0700
+        Fri, 20 Jan 2023 11:15:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD714CFD26
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:15:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF68261FEE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF27C433EF;
+        Fri, 20 Jan 2023 16:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674231332;
+        bh=xXhXTMxKo1OimWhu5kAmuS7msRdZk/rgYF7+cW7gPUo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PyNdK4+sMXqBpM+1o3ehi3YOjmG+iE6TzHr9++A47JmF7uCy6h6CeC3i8EMb9a8bM
+         aTrwxgvx+5Ilz7h+x+K9TcfZ9VPOOL7AN+weUn/rv/N8igGfP2JcmajFeyy4rNCbxe
+         h/hdBlYPi6cXKrZD2qwYuEP+VcdLZ6HMFb8jERwGLi8ndxWnVicz7lEWszOXgDZWE2
+         N3rJin88Ic6noDJuF39OMct0JpQxBdrb5/+cj97DlrH3ZY/WN2zLVC8I2ffcLmkpze
+         jtys26uLJfLaLi5ASygftfDE7IKTsqZQkjN+f64tIyQ0xKvIDOOGCjjBycxviI41lD
+         cs4bOj5/eBE/A==
+Date:   Fri, 20 Jan 2023 16:15:27 +0000
+From:   Will Deacon <will@kernel.org>
+To:     joro@8bytes.org
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        kernel-team@android.com
+Subject: [GIT PULL] iommu/arm-smmu: Updates for 6.3
+Message-ID: <20230120161527.GA22266@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: amd-pstate: Don't delete source files via
- Makefile
-To:     sedat.dilek@gmail.com, Huang Rui <ray.huang@amd.com>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
- <Y8pcIjGsikDeGqoU@amd.com>
- <CA+icZUWP_uYr5B6d_xms5gpCRmNCx46KwukmZyuuTdEPawKUyA@mail.gmail.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CA+icZUWP_uYr5B6d_xms5gpCRmNCx46KwukmZyuuTdEPawKUyA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +54,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 09:11, Sedat Dilek wrote:
-> On Fri, Jan 20, 2023 at 10:17 AM Huang Rui <ray.huang@amd.com> wrote:
->>
->> On Fri, Jan 20, 2023 at 01:54:01PM +0800, Doug Smythies wrote:
->>> Revert the portion of a recent Makefile change that incorrectly
->>> deletes source files when doing "make clean".
+Hi Joerg,
 
-Ooo. That is bad.
+Please pull these arm-smmu updates for 6.3. The only changes relate to
+device-tree bindings and their use within the driver -- summary in the
+tag.
 
->>>
->>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
->>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
->>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
->>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
->>
->> (+ Shuah and linux-kselftest mailing list)
->>
->> Thanks for fix!
->>
->> Acked-by: Huang Rui <ray.huang@amd.com>
->>
-> 
-> [ I already replied - but with these important CCs ]
-> 
-> Hi Doug,
-> 
-> Thanks for the patch!
-> 
-> Small nit, I saw this with:
+!! NOTE !!
+To avoid conflicts with the fixes I sent previously [1], I based this
+branch on top of the fixes tag. However, when I did a test pull I
+noticed that you seem to have cherry-picked the changes from my earlier
+fixes tag rather than pulling them in directly, so if you pull this one
+as-is then we'll get duplicate commits in the tree. How would you like
+to resolve this?
 
-What did you see and should that be fixed as well.
+If you decide to go ahead and cherry-pick things again, then a linearised
+history (since I've got a merge) is:
 
-> 
-> $ make -C tools/ clean
-> 
-> Otherwise:
-> 
-> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-> 
+1d6316e50572 iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
+4fef70ad65f6 iommu/arm-smmu-qcom: Add SM8150 DPU compatible
+c940c8787929 dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
+7caf324fac0b dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+3a3f20bae0ce dt-bindings: arm-smmu: disallow clocks when not used
+e3fed6861d86 dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
+58499c0fd22c dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
+5cc1842372bf dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
 
-Send me the revised patch with all the right CCs and I will pull
-this right away.
+Please let me know if you need a hand with any of this.
 
-thanks,
--- Shuah
+Cheers,
 
+Will
+
+[1] https://lore.kernel.org/linux-iommu/20230113110318.GA12771@willie-the-truck/
+
+--->8
+
+The following changes since commit f1ba05a70f7df4e2e4d2d7fed2d4e63a1e700660:
+
+  iommu/arm-smmu-v3: Don't unregister on shutdown (2023-01-11 12:20:00 +0000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
+
+for you to fetch changes up to c9911d6c9bd03655e6c100d7465546d89799e960:
+
+  Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates (2023-01-20 15:14:36 +0000)
+
+----------------------------------------------------------------
+Arm SMMU updates for 6.3
+
+- Device-tree binding updates:
+  * Cater for three power domains on SM6375
+  * Document existing compatible strings for Qualcomm SoCs
+  * Tighten up clocks description for platform-specific compatible strings
+
+- Enable Qualcomm workarounds for some additional platforms that need them
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+
+Bjorn Andersson (1):
+      iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
+
+Konrad Dybcio (1):
+      dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
+
+Krzysztof Kozlowski (1):
+      dt-bindings: arm-smmu: disallow clocks when not used
+
+Luca Weiss (1):
+      dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
+
+Marijn Suijten (2):
+      dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
+      iommu/arm-smmu-qcom: Add SM8150 DPU compatible
+
+Martin Botka (1):
+      dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
+
+Will Deacon (1):
+      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml        | 56 +++++++++++++++++++++-
+ .../devicetree/bindings/iommu/qcom,iommu.txt       |  1 +
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |  2 +
+ 3 files changed, 58 insertions(+), 1 deletion(-)
