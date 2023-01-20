@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFC5675D54
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E80675D57
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjATTCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S229988AbjATTCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjATTCf (ORCPT
+        with ESMTP id S230004AbjATTCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:02:35 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BC4CC5C9;
-        Fri, 20 Jan 2023 11:02:32 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id n2so4430181qvo.1;
-        Fri, 20 Jan 2023 11:02:32 -0800 (PST)
+        Fri, 20 Jan 2023 14:02:40 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81072BF8A5;
+        Fri, 20 Jan 2023 11:02:33 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-15ebfdf69adso7367248fac.0;
+        Fri, 20 Jan 2023 11:02:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O/0h0heB6R7vr68pBP8mp0KNKIM3bG6DI1Vn2wipkYU=;
-        b=kEqwe/PUsz08w5m0iF19xnZtx1fg80HTYcBEMVXbIWsvSG5mO6585xZiAizKMT98S7
-         nY4ut/1oDiPiY8HqS40JbqcdJ+emuoXQwg6XmJKEwZOB60TGgGl3iydQ7fuoYn0SsS7k
-         KY5DVucmMuoaWV5NrbFJuEvnqODTA0LxoFyZUoKhBmTu1TpEeyk7CXZ8TLzWRGTc3/rP
-         fBjUrYxutoNlZPJfYgw26JOdoSB7aSWg6Rbx1DJpviuThuUFphoK5On5YNAeasguHYab
-         xuC4aKsjyYQW3FfUI7NwsCCwyWGccRZorJpbnPbTmsu3vNm7bJJ13l0K2dJbkS0qjnEN
-         KlaQ==
+        bh=q6gBQQgTi4K3Y99K1tsHxOMMy9BG9zhs5uBNfgpAj1A=;
+        b=EgIBICgKIBipBfwSWWMa8ggl7BQSSomW1dcuUEpM8OqWVn78MmHecIUszpyI1Y9V8h
+         cqRDoGlGHzxS3qgJsWwjNBSHAWGPEjwuDbiiSKCiWBLXbDcxGFhktrH6W/2y1kWUe8zu
+         lYTr27JxgKASsC67XkOUa2uOxgb4Tuq5RpiGk5H71gOXb8clRQthKzpM1jAYSoL0BxNO
+         63XW9c/LefvLWLgYF0A8UPD0U+H05/VwgEHUH4hX2KEhnlZ32fJDtnL+5kS4yUCgs2BG
+         gf8GmMCIfpc0Fkv/v6OcPNex6ahR8c0m82IueUtNUkZZqGTgGcYVg2fRXD175xWaRZXJ
+         cLDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O/0h0heB6R7vr68pBP8mp0KNKIM3bG6DI1Vn2wipkYU=;
-        b=s1eS99MrH/Khnsjme2cExFgv74bFn/O6Ct4Yody6JkzCAOy8m8ey9h852Ock4iBsLt
-         kBwNQT2b9PvnL9nKT6pK0PtSK41KN11FPJgqUFI/okFKEDJO/HcxY4qsN8MVaF8ONn/M
-         BWBUdrLPum2xNlE0StOgSVwYXwiK6gqpG05wd39PSNt2VVpbBJQLB3yuGoxLxdiFtv4b
-         ivf4Wzvin/pf0l2u1zKclIBPqQ0tmwk6p4nbF0JsHqVRqxk+p2hKj3/NTrzmT+nuEKcQ
-         7UCSWOzZyH52RYGwQ94XDdwwq9EYrhHnW8pWpuw5wDhRRw/zf3j/NmbIBOJZ99TPrtrs
-         cGbA==
-X-Gm-Message-State: AFqh2krLfruUgYeuVUmNlh0xz6i4qxHhQUR8tYVxiq6+FW9BPhuXJUlL
-        lRzROWgc+JwfM7AKa2x9G+o=
-X-Google-Smtp-Source: AMrXdXvGOJhrvjWOZszWDXp/4qWhkm8VfESaKs465MCmfTqIeKR8Xh8PfZedyemS+LkHGNAM4dSPBQ==
-X-Received: by 2002:a0c:ea2c:0:b0:532:1fc2:9ad5 with SMTP id t12-20020a0cea2c000000b005321fc29ad5mr50095693qvp.0.1674241351099;
-        Fri, 20 Jan 2023 11:02:31 -0800 (PST)
+        bh=q6gBQQgTi4K3Y99K1tsHxOMMy9BG9zhs5uBNfgpAj1A=;
+        b=SRk7ftl9jI07Bu5ndPdJ7L+BqgCpxzjkcoKIrEyVc6OUuEmm7uaWBGjYWV807/BAPL
+         ZAPDhxJA5K7XuWsUMWmmWSUYm3A3gGgFjPHvnIJ6tyGBuwIN1KJab0DsOchiKLfBYBvi
+         bkIYYTLeZVAb9w5ltYXdbjxM1NjCWnQuSFSOvXqCiis8H9dxOWZN3kh47OxrT7mG02tH
+         yEYRyoFpcgxKV6g662EDPseUGdHkJ+LtB0n+4q185VFpEqMfDLSjsYLXLfHhpFXaEwUC
+         5qBFwSksW0dCghc9XyA6vp9CVB+On89CbGViWnMrT3Jg6NaEMN5ovRWHfLJphccqwPxD
+         Hruw==
+X-Gm-Message-State: AFqh2koTUv7rykgzSHV17gaf74AhXyDu/t6rGG/Zr6HsEvbb1l2cNs4a
+        /n+arfmgxZATsv3H6LTlm0o=
+X-Google-Smtp-Source: AMrXdXsfVnfCWclXty8MjyIts8pscLYhQIZ1F1otPOxetglspQ4E28CZd1ifr07mW2iZUK2DaQQSxg==
+X-Received: by 2002:a05:6870:ed49:b0:144:57b1:c8cf with SMTP id ex9-20020a056870ed4900b0014457b1c8cfmr8460943oab.47.1674241353197;
+        Fri, 20 Jan 2023 11:02:33 -0800 (PST)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y13-20020a37f60d000000b006fa2b1c3c1esm10379806qkj.58.2023.01.20.11.02.29
+        by smtp.gmail.com with ESMTPSA id y13-20020a37f60d000000b006fa2b1c3c1esm10379806qkj.58.2023.01.20.11.02.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 11:02:30 -0800 (PST)
+        Fri, 20 Jan 2023 11:02:32 -0800 (PST)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -62,9 +62,9 @@ Cc:     Brian Norris <computersforpeace@gmail.com>,
         <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH 4/6] rtc: brcmstb-waketimer: rename irq to wake_irq
-Date:   Fri, 20 Jan 2023 11:01:45 -0800
-Message-Id: <20230120190147.718976-5-opendmb@gmail.com>
+Subject: [PATCH 5/6] dt-bindings: rtc: brcm,brcmstb-waketimer: add alarm interrupt
+Date:   Fri, 20 Jan 2023 11:01:46 -0800
+Message-Id: <20230120190147.718976-6-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230120190147.718976-1-opendmb@gmail.com>
 References: <20230120190147.718976-1-opendmb@gmail.com>
@@ -80,84 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for adding a second interrupt to service RTC
-interrupts, the existing interrupt is renamed from the generic
-'irq' to 'wake_irq' to more clearly convey its role.
-
-It is also converted to an unsigned int.
-
-Finally, the driver message that outputs the IRQ number when
-registered is removed since devm_rtc_register_device() already
-provides a report of registration and the interrupts can be
-found in /proc/interrupts.
+A second interrupt can optionally be specified for this device
+to be used for generating RTC alarm interrupts.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- drivers/rtc/rtc-brcmstb-waketimer.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ .../bindings/rtc/brcm,brcmstb-waketimer.yaml  | 22 ++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index c791e92532b8..e25f9fcd6ed1 100644
---- a/drivers/rtc/rtc-brcmstb-waketimer.c
-+++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -27,7 +27,7 @@ struct brcmstb_waketmr {
- 	struct rtc_device *rtc;
- 	struct device *dev;
- 	void __iomem *base;
--	int irq;
-+	unsigned int wake_irq;
- 	struct notifier_block reboot_notifier;
- 	struct clk *clk;
- 	u32 rate;
-@@ -117,7 +117,7 @@ static int brcmstb_waketmr_prepare_suspend(struct brcmstb_waketmr *timer)
- 	int ret = 0;
+diff --git a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
+index 9fe079917a98..a9199f299a68 100644
+--- a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
++++ b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
+@@ -11,7 +11,8 @@ maintainers:
  
- 	if (device_may_wakeup(dev)) {
--		ret = enable_irq_wake(timer->irq);
-+		ret = enable_irq_wake(timer->wake_irq);
- 		if (ret) {
- 			dev_err(dev, "failed to enable wake-up interrupt\n");
- 			return ret;
-@@ -246,9 +246,10 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	 */
- 	device_init_wakeup(dev, true);
+ description:
+   The Broadcom STB wake-up timer provides a 27Mhz resolution timer, with the
+-  ability to wake up the system from low-power suspend/standby modes.
++  ability to wake up the system from low-power suspend/standby modes and
++  optionally generate RTC alarm interrupts.
  
--	timer->irq = platform_get_irq(pdev, 0);
--	if (timer->irq < 0)
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
- 		return -ENODEV;
-+	timer->wake_irq = (unsigned int)ret;
+ allOf:
+   - $ref: "rtc.yaml#"
+@@ -24,8 +25,14 @@ properties:
+     maxItems: 1
  
- 	timer->clk = devm_clk_get(dev, NULL);
- 	if (!IS_ERR(timer->clk)) {
-@@ -263,7 +264,7 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 		timer->clk = NULL;
- 	}
+   interrupts:
+-    description: the TIMER interrupt
+-    maxItems: 1
++    minItems: 1
++    items:
++      - description: the TIMER interrupt
++      - description: the ALARM interrupt
++    description:
++      The TIMER interrupt wakes the system from low-power suspend/standby modes.
++      An ALARM interrupt may be specified to interrupt the CPU when an RTC alarm
++      is enabled.
  
--	ret = devm_request_irq(dev, timer->irq, brcmstb_waketmr_irq, 0,
-+	ret = devm_request_irq(dev, timer->wake_irq, brcmstb_waketmr_irq, 0,
- 			       "brcmstb-waketimer", timer);
- 	if (ret < 0)
- 		goto err_clk;
-@@ -278,8 +279,6 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_notifier;
- 
--	dev_info(dev, "registered, with irq %d\n", timer->irq);
--
- 	return 0;
- 
- err_notifier:
-@@ -317,7 +316,7 @@ static int brcmstb_waketmr_resume(struct device *dev)
- 	if (!device_may_wakeup(dev))
- 		return 0;
- 
--	ret = disable_irq_wake(timer->irq);
-+	ret = disable_irq_wake(timer->wake_irq);
- 
- 	brcmstb_waketmr_clear_alarm(timer);
- 
+   clocks:
+     description: clock reference in the 27MHz domain
+@@ -42,3 +49,12 @@ examples:
+         interrupt-parent = <&aon_pm_l2_intc>;
+         clocks = <&upg_fixed>;
+     };
++
++  - |
++    rtc@f041a080 {
++        compatible = "brcm,brcmstb-waketimer";
++        reg = <0xf041a080 0x14>;
++        interrupts-extended = <&aon_pm_l2_intc 0x04>,
++                              <&upg_aux_aon_intr2_intc 0x08>;
++        clocks = <&upg_fixed>;
++    };
 -- 
 2.25.1
 
