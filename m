@@ -2,176 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF831675807
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA7E675815
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjATPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S229689AbjATPFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjATPDr (ORCPT
+        with ESMTP id S229907AbjATPFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:03:47 -0500
-Received: from fx303.security-mail.net (mxout.security-mail.net [85.31.212.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02729A83AE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:03:44 -0800 (PST)
-Received: from localhost (fx303.security-mail.net [127.0.0.1])
-        by fx303.security-mail.net (Postfix) with ESMTP id 79EA130F7DB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:03:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674227023;
-        bh=UZzOxuculcf7mxi4XmJ6gsSDrAJaXvR6pX1yVHvffJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=kW7THbefwaBqq3E4MyuQwmr90ax0hQkfpZy6Np3+KLY3cc++QhhhKVSBM30a+UOn3
-         oVqxEdH813kxvM5hlQNOTi/eFMG7llCjnSgPz33v8ttiDqA7igP87DRmjQ5TQyl3qe
-         Cuf5U3fBQ82LLZmM8yVtNzEzjGSKIOEazPF0sfpI=
-Received: from fx303 (fx303.security-mail.net [127.0.0.1]) by
- fx303.security-mail.net (Postfix) with ESMTP id 3221030F720; Fri, 20 Jan
- 2023 16:03:43 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx303.security-mail.net (Postfix) with ESMTPS id 7CF1230F79F; Fri, 20 Jan
- 2023 16:03:42 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 5696027E043A; Fri, 20 Jan 2023
- 16:03:42 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 36BE627E0437; Fri, 20 Jan 2023 16:03:42 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- 9zSUTNBWOY1C; Fri, 20 Jan 2023 16:03:42 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id D59A827E0430; Fri, 20 Jan 2023
- 16:03:41 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <7f21.63caad4e.7b828.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 36BE627E0437
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674227022;
- bh=C7HrnI5K8lMVKwfpvR2iIg1M1ljeou+P3mCJSMAG91Q=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=WDWoyVMbIMPbJepmJq7lETaMqJi8dXSis3WDlHnimStL/D6LcNyVKEyhwC0exaLEa
- /yI1hmzBWA0vpQxL61VK4pLGSFjwDaBXqRRCN+CNJkpmnVhmZT4IznmM53SL6OKcDp
- hoqf7NRBZhx1q/JOV6km7TyZQI9nicecKIciSZ5I=
-Date:   Fri, 20 Jan 2023 16:03:40 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Clement Leger <clement@clement-leger.fr>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Alex Michon <amichon@kalray.eu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 09/31] kvx: Add build infrastructure
-Message-ID: <20230120150340.GA5952@tellis.lin.mbt.kalray.eu>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-10-ysionneau@kalray.eu>
- <aa4d68b2-b5b5-4c17-a44f-7c6db443ea4c@app.fastmail.com>
- <20230120145316.GA4155@tellis.lin.mbt.kalray.eu>
- <9965e2d1-bae8-4ce7-911c-783c772e9ff1@app.fastmail.com>
+        Fri, 20 Jan 2023 10:05:32 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C888B7CCC1;
+        Fri, 20 Jan 2023 07:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674227131; x=1705763131;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Zn183ElO1bl64Y4pVPfF7h7rDHD+/IuJAJiKiAAXWvc=;
+  b=F/0vIVpVwojTbSAlnf2veNQ3B7J09FMvOPCmAYS/wa+rX8SN9SZwu//F
+   g27XxVYnlUsdx8FXerODDMbpDy6DaRZaL3aC3GBItoxhEjMNzDFtHNiMt
+   gvgmlJVnNEP3sGPBrIwWceEyFKJkIBKb8AVshNFSBOJ73fvqW5FZIHANP
+   iVzvG5cOsXYXT/hrVZKdA7hfxloRxb3FbQ66Vi9qQSaP6b5AJQrI2+/j4
+   0FepJEMCN/xG818aDRDF7mWx8VZKknMtjjRbh1vquc0Zww9VUHaUasmQP
+   5mBp8p7uwepP1pp8+fqrWjgLBj8/WSx/YTOj53x+s05xlsCUlb6HjWlXj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="309169480"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="309169480"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 07:05:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784532388"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="784532388"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2023 07:05:30 -0800
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     alex.williamson@redhat.com, pbonzini@redhat.com,
+        mjrosato@linux.ibm.com
+Cc:     yi.l.liu@intel.com, jgg@nvidia.com, kevin.tian@intel.com,
+        cohuck@redhat.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kvm/vfio: Fix potential deadlock on vfio group_lock
+Date:   Fri, 20 Jan 2023 07:05:28 -0800
+Message-Id: <20230120150528.471752-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <9965e2d1-bae8-4ce7-911c-783c772e9ff1@app.fastmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 04:01:11PM +0100, Arnd Bergmann wrote:
-> On Fri, Jan 20, 2023, at 15:53, Jules Maselbas wrote:
-> > On Fri, Jan 20, 2023 at 03:39:22PM +0100, Arnd Bergmann wrote:
-> >> On Fri, Jan 20, 2023, at 15:09, Yann Sionneau wrote:
-> >> >      - Fix clean target raising an error from gcc (LIBGCC)
-> >> 
-> >> I had not noticed this on v1 but:
-> >> 
-> >> > +# Link with libgcc to get __div* builtins.
-> >> > +LIBGCC	:= $(shell $(CC) $(DEFAULT_OPTS) --print-libgcc-file-name)
-> >> 
-> >> It's better to copy the bits of libgcc that you actually need
-> >> than to include the whole thing. The kernel is in a weird
-> > It was initialy using KCONFIG_CFLAGS which do not contains valid options
-> > when invoking the clean target.
-> >
-> > I am not exactly sure what's needed by gcc for --print-libgcc-file-name,
-> > my guess is that only the -march option matters, I will double check
-> > internally with compiler peoples.
-> >
-> >> state that is neither freestanding nor the normal libc based
-> >> environment, so we generally want full control over what is
-> >> used. This is particularly important for 32-bit architectures
-> >> that do not want the 64-bit division, but there are probably
-> >> enough other cases as well.
-> 
-> To clarify: I meant you should not include libgcc.a at all but
-> add the minimum set of required files as arch/kvx/lib/*.S.
-Thanks for clarifying :)
+Currently it is possible that the final put of a KVM reference comes from
+vfio during its device close operation.  This occurs while the vfio group
+lock is held; however, if the vfio device is still in the kvm device list,
+then the following call chain could result in a deadlock:
 
+VFIO holds group->group_lock/group_rwsem
+  -> kvm_put_kvm
+   -> kvm_destroy_vm
+    -> kvm_destroy_devices
+     -> kvm_vfio_destroy
+      -> kvm_vfio_file_set_kvm
+       -> vfio_file_set_kvm
+        -> try to hold group->group_lock/group_rwsem
 
--- Jules
+The key function is the kvm_destroy_devices() which triggers destroy cb
+of kvm_device_ops. It calls back to vfio and try to hold group_lock. So
+if this path doesn't call back to vfio, this dead lock would be fixed.
+Actually, there is a way for it. KVM provides another point to free the
+kvm-vfio device which is the point when the device file descriptor is
+closed. This can be achieved by providing the release cb instead of the
+destroy cb. Also rename kvm_vfio_destroy() to be kvm_vfio_release().
 
+	/*
+	 * Destroy is responsible for freeing dev.
+	 *
+	 * Destroy may be called before or after destructors are called
+	 * on emulated I/O regions, depending on whether a reference is
+	 * held by a vcpu or other kvm component that gets destroyed
+	 * after the emulated I/O.
+	 */
+	void (*destroy)(struct kvm_device *dev);
 
+	/*
+	 * Release is an alternative method to free the device. It is
+	 * called when the device file descriptor is closed. Once
+	 * release is called, the destroy method will not be called
+	 * anymore as the device is removed from the device list of
+	 * the VM. kvm->lock is held.
+	 */
+	void (*release)(struct kvm_device *dev);
 
+Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
+Reported-by: Alex Williamson <alex.williamson@redhat.com>
+Suggested-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ virt/kvm/vfio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
+index 495ceabffe88..e94f3ea718e5 100644
+--- a/virt/kvm/vfio.c
++++ b/virt/kvm/vfio.c
+@@ -336,7 +336,7 @@ static int kvm_vfio_has_attr(struct kvm_device *dev,
+ 	return -ENXIO;
+ }
+ 
+-static void kvm_vfio_destroy(struct kvm_device *dev)
++static void kvm_vfio_release(struct kvm_device *dev)
+ {
+ 	struct kvm_vfio *kv = dev->private;
+ 	struct kvm_vfio_group *kvg, *tmp;
+@@ -363,7 +363,7 @@ static int kvm_vfio_create(struct kvm_device *dev, u32 type);
+ static struct kvm_device_ops kvm_vfio_ops = {
+ 	.name = "kvm-vfio",
+ 	.create = kvm_vfio_create,
+-	.destroy = kvm_vfio_destroy,
++	.release = kvm_vfio_release,
+ 	.set_attr = kvm_vfio_set_attr,
+ 	.has_attr = kvm_vfio_has_attr,
+ };
+-- 
+2.34.1
 
